@@ -21,6 +21,11 @@ Attribute VB_Name = "Triton_Center"
 '
 Option Explicit
 
+Sub ProcessGlobals()
+CameraAltitude = 10
+ElevatorShafts = 4
+
+End Sub
 Sub Process118to129()
 Dim FloorHeight As Single
 Dim FloorAltitude As Single
@@ -709,13 +714,13 @@ For i = -1 To BottomFloor Step -1
 End Sub
 
 Sub ProcessFloorHeights()
-Dim Height As Single
+Dim height As Single
 i = 0
 For i = BottomFloor To TopFloor
 DoEvents
-Height = 25 + CrawlSpaceHeight
-If i = 1 Then Height = Height * 2
-FloorHeightTable(i, 1) = Height
+height = 25 + CrawlSpaceHeight
+If i = 1 Then height = height * 2
+FloorHeightTable(i, 1) = height
 Next i
 
 End Sub
