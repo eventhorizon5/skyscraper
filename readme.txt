@@ -1,4 +1,4 @@
-Skyscraper version 0.95 - Beta
+Skyscraper version 0.95b - Beta
 ©2003 Ryan Thoryk
 http://www.tliquest.net/skyscraper
 http://sourceforge.net/projects/skyscraper
@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 Release Notes
 ------------------------------
 
-Note - starting with this version (0.95), the TrueVision 3D 6.1 engine needs to be installed. Version 0.94 required TrueVision3D 6.0 and releases prior to 0.93 used version 6.0-RC3.
+Note - starting with this version (0.95b), the TrueVision 3D 6.2 engine needs to be installed. Version 0.95 required TrueVision3D 6.1b, Version 0.94 required 6.0 and releases prior to 0.93 used version 6.0-RC3.
 
 Skyscraper is a 3D virtual building simulator written in Visual Basic 6.0 using the
 TrueVision3D graphics library which can be found at http://www.truevision3d.com.

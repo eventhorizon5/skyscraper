@@ -513,7 +513,7 @@ Begin VB.Form Sim
    End
    Begin VB.Label Label2 
       BackColor       =   &H80000007&
-      ForeColor       =   &H8000000E&
+      ForeColor       =   &H80000009&
       Height          =   1215
       Left            =   120
       TabIndex        =   1
@@ -522,7 +522,7 @@ Begin VB.Form Sim
    End
    Begin VB.Label Label1 
       BackColor       =   &H80000007&
-      ForeColor       =   &H8000000E&
+      ForeColor       =   &H80000009&
       Height          =   1815
       Left            =   120
       TabIndex        =   0
@@ -535,7 +535,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.95 Beta
+'Skycraper 0.95b Beta
 'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
