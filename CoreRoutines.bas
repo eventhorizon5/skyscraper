@@ -56,7 +56,7 @@ Global ElevatorDoorR(40) As TVMesh
 Global Stairs(-10 To 138) As TVMesh
 Global CallButtonsUp(40) As TVMesh
 Global CallButtonsDown(40) As TVMesh
-Global StairDoor(-11 To 138) As TVMesh
+Global StairDoor(1 To 4) As TVMesh
 Global Light As TVLightEngine
 Global MatFactory As New TVMaterialFactory
 Global LightID As Integer
@@ -233,9 +233,9 @@ Call ProcessFloors
   Shafts4(i).Enable False
   Next i
   
-  For i = -11 To 138
-  StairDoor(i).Enable False
-  Next i
+  'For i = -11 To 138
+  'StairDoor(i).Enable False
+  'Next i
   
   For i = 1 To 40
     Plaque(i).Enable False
@@ -362,6 +362,11 @@ Set ElevatorDoorR(i54) = Nothing
 'Sleep 10
 Next i54
 
+For i = 1 To 4
+Scene.DestroyMesh StairDoor(i)
+Set StairDoor(i) = Nothing
+Next i
+
 'Sleep 100
 
 'Create blank meshes
@@ -376,102 +381,107 @@ Set CallButtonsUp(i54) = Scene.CreateMeshBuilder("CallButtonsUp" + Str$(i54))
 Set CallButtonsDown(i54) = Scene.CreateMeshBuilder("CallButtonsDown" + Str$(i54))
 Next i54
 
+For i = 1 To 4
+Set StairDoor(i) = New TVMesh
+Set StairDoor(i) = Scene.CreateMeshBuilder("StairDoor " + Str$(i))
+Next i
+
 'Generate objects for floors
 
 
 If FloorID = 1 Then
-Call ProcessRealtime(FloorID, 5, 1, True, False, True, True, True, True, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 5, 2, True, False, True, True, True, True, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 1, 3, True, False, True, True, True, True, True, True, True, True, True, True)
-Call ProcessRealtime(FloorID, 1, 4, True, False, True, True, True, True, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 5, 1, True, True, True, True, True, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 5, 2, True, True, True, True, True, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 1, 3, True, True, True, True, True, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 1, 4, True, True, True, True, True, True, True, True, True, True, True)
 End If
 
 If FloorID = 2 Or FloorID = 39 Then
-Call ProcessRealtime(FloorID, 5, 1, True, False, True, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 5, 2, True, False, True, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 3, True, False, False, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 4, True, False, True, True, True, True, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 5, 1, True, True, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 5, 2, True, True, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 3, True, False, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 4, True, True, True, True, True, True, True, True, True, True, True)
 End If
 If FloorID > 2 And FloorID < 39 Then
-Call ProcessRealtime(FloorID, 5, 1, True, False, False, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 5, 2, True, False, True, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 3, True, False, False, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 4, True, False, True, True, True, True, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 5, 1, True, False, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 5, 2, True, True, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 3, True, False, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 4, True, True, True, True, True, True, True, True, True, True, True)
 End If
 
 If FloorID = 40 Or FloorID = 79 Then
-Call ProcessRealtime(FloorID, 5, 1, True, False, True, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 3, False, False, True, True, True, True, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 5, 1, True, True, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 3, False, True, True, True, True, True, True, True, True, True, True)
 End If
 If FloorID > 40 And FloorID < 79 Then
-Call ProcessRealtime(FloorID, 5, 1, True, False, False, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 3, False, False, True, True, True, True, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 5, 1, True, False, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 3, False, True, True, True, True, True, True, True, True, True, True)
 End If
 If FloorID >= 40 And FloorID <= 51 Then
-Call ProcessRealtime(FloorID, 5, 2, True, False, True, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 5, 2, True, True, False, False, False, False, False, False, False, False, False)
 End If
 If FloorID <= 79 And FloorID > 51 Then
-Call ProcessRealtime(FloorID, 5, 2, True, False, False, True, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 5, 2, True, False, True, False, False, False, False, False, False, False, False)
 End If
        
 If FloorID >= 82 And FloorID <= 98 Then
-Call ProcessRealtime(FloorID, 2, 1, True, False, False, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 2, True, False, False, True, False, False, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 2, 1, True, False, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 2, True, False, True, False, False, True, True, True, True, True, True)
 End If
 If FloorID >= 102 And FloorID < 114 Then
-Call ProcessRealtime(FloorID, 2, 1, True, False, True, False, False, False, True, True, True, True, True, True)
-Call ProcessRealtime(FloorID, 2, 2, True, False, False, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 1, True, True, False, False, False, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 2, 2, True, False, False, False, False, False, False, False, False, False, False)
 End If
 If FloorID = 81 Or FloorID = 99 Then
-Call ProcessRealtime(FloorID, 2, 1, True, False, False, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 2, True, False, False, True, False, False, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 2, 1, True, False, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 2, True, False, True, False, False, True, True, True, True, True, True)
 End If
 If FloorID = 100 Then
-Call ProcessRealtime(FloorID, 2, 1, True, False, False, False, False, False, True, True, True, True, True, True)
-Call ProcessRealtime(FloorID, 2, 2, True, False, False, True, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 1, True, False, False, False, False, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 2, 2, True, False, True, False, False, False, False, False, False, False, False)
 End If
 If FloorID = 114 Then
-Call ProcessRealtime(FloorID, 2, 1, True, False, True, False, False, False, True, True, True, True, True, True)
-Call ProcessRealtime(FloorID, 2, 2, True, False, False, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 1, True, True, False, False, False, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 2, 2, True, False, False, False, False, False, False, False, False, False, False)
 End If
 If FloorID = 101 Then
-Call ProcessRealtime(FloorID, 2, 1, True, False, True, False, False, False, True, True, True, True, True, True)
-Call ProcessRealtime(FloorID, 2, 2, True, False, False, True, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 1, True, True, False, False, False, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 2, 2, True, False, True, False, False, False, False, False, False, False, False)
 End If
  
 If FloorID >= 118 And FloorID <= 129 Then
-Call ProcessRealtime(FloorID, 2, 1, False, True, True, False, False, False, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 2, 1, False, True, False, False, False, True, True, True, True, True, True)
 End If
 
 If FloorID = 80 Then
-Call ProcessRealtime(FloorID, 2, 1, True, False, True, True, True, True, True, True, True, True, True, True)
-Call ProcessRealtime(FloorID, 2, 2, True, False, True, True, True, True, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 2, 1, True, True, True, True, True, True, True, True, True, True, True)
+Call ProcessRealtime(FloorID, 2, 2, True, True, True, True, True, True, True, True, True, True, True)
 End If
 
 If FloorID = 115 Then
-Call ProcessRealtime(FloorID, 2, 1, True, False, True, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 2, True, False, True, True, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 1, True, True, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 2, True, True, True, False, False, False, False, False, False, False, False)
 End If
 
 If FloorID = 116 Then
-Call ProcessRealtime(FloorID, 2, 1, True, False, True, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 2, True, False, True, True, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 1, True, True, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 2, True, True, True, False, False, False, False, False, False, False, False)
 End If
 
 If FloorID = 117 Then
-Call ProcessRealtime(FloorID, 2, 1, True, False, True, False, False, False, False, False, False, False, False, False)
-Call ProcessRealtime(FloorID, 2, 2, True, False, True, True, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 1, True, True, False, False, False, False, False, False, False, False, False)
+Call ProcessRealtime(FloorID, 2, 2, True, True, True, False, False, False, False, False, False, False, False)
 End If
 
-If FloorID = 130 Then Call ProcessRealtime(FloorID, 5, 1, False, False, True, False, False, False, False, False, False, False, False, False)
-If FloorID = 131 Then Call ProcessRealtime(FloorID, 5, 1, False, False, True, False, False, False, False, False, False, False, False, False)
-If FloorID = 132 Then Call ProcessRealtime(FloorID, 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
-If FloorID = 133 Then Call ProcessRealtime(FloorID, 5, 1, False, False, True, False, False, False, False, False, False, False, False, False)
-If FloorID = 134 Then Call ProcessRealtime(FloorID, 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
-If FloorID = 135 Then Call ProcessRealtime(FloorID, 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
-If FloorID = 136 Then Call ProcessRealtime(FloorID, 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
-If FloorID = 137 Then Call ProcessRealtime(FloorID, 7, 1, False, False, True, False, False, False, False, False, False, False, False, False)
-If FloorID = 138 Then Call ProcessRealtime(FloorID, 7, 1, False, False, True, False, False, False, False, False, False, False, False, False)
+If FloorID = 130 Then Call ProcessRealtime(FloorID, 5, 1, False, True, False, False, False, False, False, False, False, False, False)
+If FloorID = 131 Then Call ProcessRealtime(FloorID, 5, 1, False, True, False, False, False, False, False, False, False, False, False)
+If FloorID = 132 Then Call ProcessRealtime(FloorID, 5, 1, False, True, True, True, True, False, False, False, False, False, False)
+If FloorID = 133 Then Call ProcessRealtime(FloorID, 5, 1, False, True, False, False, False, False, False, False, False, False, False)
+If FloorID = 134 Then Call ProcessRealtime(FloorID, 5, 1, False, True, True, True, True, False, False, False, False, False, False)
+If FloorID = 135 Then Call ProcessRealtime(FloorID, 5, 1, False, True, True, True, True, False, False, False, False, False, False)
+If FloorID = 136 Then Call ProcessRealtime(FloorID, 5, 1, False, True, True, True, True, False, False, False, False, False, False)
+If FloorID = 137 Then Call ProcessRealtime(FloorID, 7, 1, False, True, False, False, False, False, False, False, False, False, False)
+If FloorID = 138 Then Call ProcessRealtime(FloorID, 7, 1, False, True, False, False, False, False, False, False, False, False, False)
 
 End Sub
 
@@ -502,10 +512,6 @@ Set Shafts3(i) = New TVMesh
 Set Shafts4(i) = New TVMesh
 Next i
 
-For i = -11 To 138
-Set StairDoor(i) = New TVMesh
-Next i
-
 For i = 1 To 40
 Set Elevator(i) = New TVMesh
 Set FloorIndicator(i) = New TVMesh
@@ -528,7 +534,7 @@ Set Light = New TVLightEngine
   
 Sim.Label1.Caption = "Skyscraper 0.95 Beta - Build" + Str$(App.Revision) + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "©2003 Ryan Thoryk" + vbCrLf
-Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on November 3, 2003" + vbCrLf + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on November 20, 2003" + vbCrLf + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "software, and you are welcome to redistribute it under certain" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "conditions. For details, see the file gpl.txt" + vbCrLf
@@ -568,10 +574,6 @@ Sim.Label2.Caption = "Initializing TrueVision3D..."
   Set Shafts2(i) = Scene.CreateMeshBuilder("Shafts2 " + Str$(i))
   Set Shafts3(i) = Scene.CreateMeshBuilder("Shafts3 " + Str$(i))
   Set Shafts4(i) = Scene.CreateMeshBuilder("Shafts4 " + Str$(i))
-  Next i
-  
-  For i = -11 To 138
-  Set StairDoor(i) = Scene.CreateMeshBuilder("StairDoor " + Str$(i))
   Next i
   
   For i = 1 To 40
@@ -760,7 +762,10 @@ LineTest = lineend
     If Shafts3(CameraFloor).IsMeshEnabled = True Then If Shafts3(CameraFloor).IsMeshEnabled = True Then If Shafts3(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If Shafts4(CameraFloor).IsMeshEnabled = True Then If Shafts4(CameraFloor).IsMeshEnabled = True Then If Shafts4(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If ShaftsFloor(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-    If StairDoor(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    
+    For i50 = 1 To 4
+    If StairDoor(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    Next i50
 
 'Object Collision
 On Error GoTo MethodFix
@@ -1000,10 +1005,10 @@ For i = -1 To -10 Step -1
     Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight), (10 * 0.086), ((FloorHeight) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight), (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
-    Call DrawElevatorWalls(Int(i), 5, 1, True, False, False, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 3, True, False, False, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 4, True, False, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 1, True, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 3, True, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 4, True, False, False, False, False, False, False, False, False, False, False)
     
     Next i
         
@@ -1066,35 +1071,16 @@ Sim.Label2.Caption = "Processing Lobby..."
     Room(i).AddFloor GetTex("Ceiling1"), 52.5, -46.25, 90.5, 0, FloorHeight - 0.1, ((90.5 - 52.5) * 0.086), (46.25 * 0.08)
     Room(i).AddFloor GetTex("Ceiling1"), -12.5, -46.25, 12.5, 0, FloorHeight - 0.1, ((12.5 * 2) * 0.086), (46.25 * 0.08)
     
-    'End of Mezzanine
-    
-    'External.AddWall GetTex("LobbyFront"), -160, -150, 160, -150, (FloorHeight * 3), 0, 3, 1
-    'External.AddWall GetTex("LobbyFront"), 160, -150, 160, 150, (FloorHeight * 3), 0, 3, 1
-    'External.AddWall GetTex("LobbyFront"), 160, 150, -160, 150, (FloorHeight * 3), 0, 3, 1
-    'External.AddWall GetTex("LobbyFront"), -160, 150, -160, -150, (FloorHeight * 3), 0, 3, 1
-              
     Room(i).AddWall GetTex("LobbyFront"), -160 + 0.1, -150 + 0.1, 160 - 0.1, -150 + 0.1, (FloorHeight * 3), 0, 3, 1
     Room(i).AddWall GetTex("LobbyFront"), 160 - 0.1, -150 + 0.1, 160 - 0.1, 150 - 0.1, (FloorHeight * 3), 0, 3, 1
     Room(i).AddWall GetTex("LobbyFront"), 160 - 0.1, 150 - 0.1, -160 + 0.1, 150 - 0.1, (FloorHeight * 3), 0, 3, 1
     Room(i).AddWall GetTex("LobbyFront"), -160 + 0.1, 150 - 0.1, -160 + 0.1, -150 + 0.1, (FloorHeight * 3), 0, 3, 1
                   
     'always make sure this call is also in the ProcessFloors sub, but under the DrawElevatorShafts name
-    Call DrawElevatorWalls(Int(i), 5, 1, True, False, True, True, True, True, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 5, 2, True, False, True, True, True, True, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 1, 3, True, False, True, True, True, True, True, True, True, True, True, True)
-    Call DrawElevatorWalls(Int(i), 1, 4, True, False, True, True, True, True, True, True, True, True, True, True)
-    
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight * 3), 0, ((46.25 - 40.3) * 0.086), ((FloorHeight * 3) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight * 3), 0, (2.5 * 0.086), ((FloorHeight * 3) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight * 3), 0, (16.25 * 0.086), ((FloorHeight * 3) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight * 3), 0, (20 * 0.086), ((FloorHeight * 3) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight * 3), 0, (20 * 0.086), ((FloorHeight * 3) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight * 3), 0, (10 * 0.086), ((FloorHeight * 3) * 0.086)
-    
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, FloorHeight, (FloorHeight * 2), (10.3 * 0.086), (FloorHeight * 0.086)
+    Call DrawElevatorWalls(Int(i), 5, 1, True, True, True, True, True, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 2, True, True, True, True, True, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 1, 3, True, True, True, True, True, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 1, 4, True, True, True, True, True, True, True, True, True, True, True)
     
     'Ceiling
     Room(i).AddFloor GetTex("Ceiling1"), -160, -150, 160, -46.25, (FloorHeight * 3) - 0.5, ((160 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1172,16 +1158,16 @@ Sub Process2to39()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
     If i = 2 Or i = 39 Then
-    Call DrawElevatorWalls(Int(i), 5, 1, True, False, True, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 5, 2, True, False, True, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 3, True, False, False, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 4, True, False, True, True, True, True, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 5, 1, True, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 2, True, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 3, True, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 4, True, True, True, True, True, True, True, True, True, True, True)
     End If
     If i <> 2 And i <> 39 Then
-    Call DrawElevatorWalls(Int(i), 5, 1, True, False, False, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 5, 2, True, False, True, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 3, True, False, False, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 4, True, False, True, True, True, True, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 5, 1, True, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 2, True, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 3, True, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 4, True, True, True, True, True, True, True, True, True, True, True)
     End If
     
     'Room(I) Walls
@@ -1346,23 +1332,23 @@ Sub Process40to79()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
-    If i = 40 Then Call DrawElevatorWalls(Int(i), 2, 4, False, False, False, False, False, False, False, False, False, False, False, False)
+    If i = 40 Then Call DrawElevatorWalls(Int(i), 2, 4, False, False, False, False, False, False, False, False, False, False, False)
     
     If i = 40 Or i = 79 Then
-    Call DrawElevatorWalls(Int(i), 5, 1, True, False, True, False, False, False, False, False, False, False, False, False)
-    'Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 3, False, False, True, True, True, True, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 5, 1, True, True, False, False, False, False, False, False, False, False, False)
+    'Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 3, False, True, True, True, True, True, True, True, True, True, True)
     End If
     If i <> 40 And i <> 79 Then
-    Call DrawElevatorWalls(Int(i), 5, 1, True, False, False, False, False, False, False, False, False, False, False, False)
-    'Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 3, False, False, True, True, True, True, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 5, 1, True, False, False, False, False, False, False, False, False, False, False)
+    'Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 3, False, True, True, True, True, True, True, True, True, True, True)
     End If
     If i <= 51 Then
-    Call DrawElevatorWalls(Int(i), 5, 2, True, False, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 2, True, True, False, False, False, False, False, False, False, False, False)
     End If
     If i > 51 Then
-    Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, True, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 2, True, False, True, False, False, False, False, False, False, False, False)
     End If
     
     'Room(I) Walls
@@ -1516,32 +1502,32 @@ Sub Process81to114()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
        
     'If i = 80 Then
-    'Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, True, True, True, True, True, True, True, True, True)
-    'Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, True, True, True, True, True, True, True, True, True)
+    'Call DrawElevatorWalls(Int(i), 2, 1, True, True, True, True, True, True, True, True, True, True, True)
+    'Call DrawElevatorWalls(Int(i), 2, 2, True, True, True, True, True, True, True, True, True, True, True)
     'End If
     If i >= 82 And i <= 98 Then
-    Call DrawElevatorWalls(Int(i), 2, 1, True, False, False, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, True, False, False, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 2, 1, True, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, False, False, True, True, True, True, True, True)
     End If
     If i >= 102 And i < 114 Then
-    Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, False, False, False, True, True, True, True, True, True)
-    Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, False, False, False, False, False, False, False, False)
     End If
     If i = 81 Or i = 99 Then
-    Call DrawElevatorWalls(Int(i), 2, 1, True, False, False, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, True, False, False, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 2, 1, True, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, False, False, True, True, True, True, True, True)
     End If
     If i = 100 Then
-    Call DrawElevatorWalls(Int(i), 2, 1, True, False, False, False, False, False, True, True, True, True, True, True)
-    Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, True, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 1, True, False, False, False, False, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, False, False, False, False, False, False, False, False)
     End If
     If i = 114 Then
-    Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, False, False, False, True, True, True, True, True, True)
-    Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, False, False, False, False, False, False, False, False)
     End If
     If i = 101 Then
-    Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, False, False, False, True, True, True, True, True, True)
-    Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, True, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, False, False, False, False, False, False, False, False)
     End If
     
     'Right Hallways, Right Wall
@@ -1686,10 +1672,10 @@ Sub Process118to129()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
     'If i = 118 Or i = 129 Then
-    Call DrawElevatorWalls(Int(i), 2, 1, False, True, True, False, False, False, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 2, 1, False, True, False, False, False, True, True, True, True, True, True)
     'End If
     'If i >= 119 And i <= 128 Then
-    'Call DrawElevatorWalls(Int(i), 2, 1, False, True, False, False, False, False, True, True, True, True, True, True)
+    'Call DrawElevatorWalls(Int(i), 2, 1, False, False, False, False, False, True, True, True, True, True, True)
     'End If
     
     'Room(I) Walls
@@ -1840,10 +1826,10 @@ Sub ProcessOtherFloors()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
        
-    Call DrawElevatorWalls(Int(i), 2, 3, False, False, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 3, False, False, False, False, False, False, False, False, False, False, False)
     
-    Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, True, True, True, True, True, True, True, True, True)
-    Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, True, True, True, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 2, 1, True, True, True, True, True, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 2, 2, True, True, True, True, True, True, True, True, True, True, True)
 
 
 'Floor 115
@@ -1894,8 +1880,8 @@ Sub ProcessOtherFloors()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
        
-    Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, True, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 2, True, True, True, False, False, False, False, False, False, False, False)
     
     
 'Floor 116
@@ -1946,8 +1932,8 @@ Sub ProcessOtherFloors()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
        
-    Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, True, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 2, True, True, True, False, False, False, False, False, False, False, False)
   
 'Floor 117
     i = 117
@@ -1997,8 +1983,8 @@ Sub ProcessOtherFloors()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
        
-    Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, False, False, False, False, False, False, False, False, False)
-    Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, False, False, False, False, False, False, False, False)
     
 
 'Floor 130
@@ -2049,7 +2035,7 @@ Sub ProcessOtherFloors()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
-    Call DrawElevatorWalls(Int(i), 2, 1, False, False, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 1, False, True, False, False, False, False, False, False, False, False, False)
     
     
 End Sub
@@ -2225,7 +2211,7 @@ Sub ProcessOtherFloors2()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
-    Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 1, False, True, False, False, False, False, False, False, False, False, False)
     
     
 'Floor 132
@@ -2276,7 +2262,7 @@ Sub ProcessOtherFloors2()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
-    Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 1, False, True, True, True, True, False, False, False, False, False, False)
     
     
 'Floor 133
@@ -2327,7 +2313,7 @@ Sub ProcessOtherFloors2()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
-    Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 1, False, True, False, False, False, False, False, False, False, False, False)
     
     'Room(I) Walls
     Room(i).AddWall GetTex("Wall3"), -85, 60, 85, 60, 25, (i * FloorHeight) + FloorHeight, 9, 1
@@ -2363,7 +2349,7 @@ Sub ProcessOtherFloors2()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
-    Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 1, False, True, True, True, True, False, False, False, False, False, False)
        
 
 'Floor 135
@@ -2394,7 +2380,7 @@ Sub ProcessOtherFloors2()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
-    Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 1, False, True, True, True, True, False, False, False, False, False, False)
          
 
 'Floor 136
@@ -2445,7 +2431,7 @@ Sub ProcessOtherFloors2()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
-    Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 5, 1, False, True, True, True, True, False, False, False, False, False, False)
    
     
 'Floor 137
@@ -2503,7 +2489,7 @@ Sub ProcessOtherFloors2()
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
-    Call DrawElevatorWalls(Int(i), 7, 1, False, False, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 7, 1, False, True, False, False, False, False, False, False, False, False, False)
         
 
 'Roof Layout
@@ -2528,7 +2514,7 @@ i = 138
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), (FloorHeight * 0.086)
     'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
-    Call DrawElevatorWalls(Int(i), 7, 1, False, False, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 7, 1, False, True, False, False, False, False, False, False, False, False, False)
 
 End Sub
 
@@ -3022,14 +3008,14 @@ If Elevator(i50).GetPosition.Y > FloorHeight And ElevatorFloor(i50) < 2 Then Flo
 Next i50
 
 'Stair doors used to speed up stairway
-i50 = CameraFloor
-If CameraFloor = 1 Then i50 = -1
-If CameraFloor > -10 Then StairDoor(i50 - 1).Enable True
-If CameraFloor < 138 Then StairDoor(i50 + 1).Enable True
-StairDoor(i50).Enable True
-If CameraFloor = 1 Then StairDoor(0).Enable True: StairDoor(2).Enable True
-If CameraFloor > 2 Then StairDoor(i50 - 2).Enable False
-If CameraFloor < 137 Then StairDoor(i50 + 2).Enable False
+'i50 = CameraFloor
+'If CameraFloor = 1 Then i50 = -1
+'If CameraFloor > -10 Then StairDoor(i50 - 1).Enable True
+'If CameraFloor < 138 Then StairDoor(i50 + 1).Enable True
+'StairDoor(i50).Enable True
+'If CameraFloor = 1 Then StairDoor(0).Enable True: StairDoor(2).Enable True
+'If CameraFloor > 2 Then StairDoor(i50 - 2).Enable False
+'If CameraFloor < 137 Then StairDoor(i50 + 2).Enable False
 
 DebugPanel.Label1.Caption = FloorIndicatorText(1)
 DebugPanel.Label2.Caption = FloorIndicatorText(2)
@@ -3087,7 +3073,19 @@ CameraFloor2 = ((Camera.GetPosition.Y - 10) / FloorHeight) - 1
 If Camera.GetPosition.X < -12.5 And Camera.GetPosition.X > -32.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30 Then
 InStairwell = True
 Else
+If Camera.GetPosition.X < 52.5 And Camera.GetPosition.X > 32.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30 Then
+InStairwell = True
+Else
+If Camera.GetPosition.X < -90.5 And Camera.GetPosition.X > -110.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30 Then
+InStairwell = True
+Else
+If Camera.GetPosition.X < -130.5 And Camera.GetPosition.X > -110.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30 Then
+InStairwell = True
+Else
 InStairwell = False
+End If
+End If
+End If
 End If
 
 If CameraFloor = 137 Then
@@ -3309,9 +3307,21 @@ GoTo EndShafts
 End If
 End If
 
-If CameraFloor >= 1 And CameraFloor <= 39 Then
+'Automatic Shaft Enable/Disable
+    
+    Dim SectionNum As Single
+    If InStairwell = True Then GoTo EndShafts
+    
+    If CameraFloor >= -10 And CameraFloor <= 39 Then SectionNum = 1
+    If CameraFloor >= 40 And CameraFloor <= 79 Then SectionNum = 2
+    If CameraFloor >= 80 And CameraFloor <= 117 Then SectionNum = 3
+    If CameraFloor >= 118 And CameraFloor <= 130 Then SectionNum = 4
+    If CameraFloor >= 131 And CameraFloor <= 136 Then SectionNum = 5
+    If CameraFloor >= 137 Then SectionNum = 6
+    
+    If SectionNum = 1 Then
     'right shaft (the one with the stairs)
-    If Camera.GetPosition.X > -52.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 0 And InElevator = False Then
+    If Camera.GetPosition.X > -52.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 0 And InElevator = False Then
     For i50 = -10 To 138
     Shafts1(i50).Enable True
     Next i50
@@ -3322,7 +3332,7 @@ If CameraFloor >= 1 And CameraFloor <= 39 Then
     Shafts2(i50).Enable True
     Next i50
     Else
-    If Camera.GetPosition.X > -130.5 And Camera.GetPosition.X < -90.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 46.25 And InElevator = False Then
+    If Camera.GetPosition.X > -130.5 And Camera.GetPosition.X < -90.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 46.25 And InElevator = False Then
     For i50 = -10 To 138
     Shafts3(i50).Enable True
     Next i50
@@ -3342,10 +3352,10 @@ If CameraFloor >= 1 And CameraFloor <= 39 Then
     End If
     End If
     End If
+    End If
     
-End If
-If CameraFloor >= 40 And CameraFloor <= 79 Then
-    If Camera.GetPosition.X > -52.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 0 And InElevator = False Then
+    If SectionNum = 2 Then
+    If Camera.GetPosition.X > -52.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 0 And InElevator = False Then
     For i50 = -10 To 138
     Shafts1(i50).Enable True
     Next i50
@@ -3355,7 +3365,7 @@ If CameraFloor >= 40 And CameraFloor <= 79 Then
     Shafts2(i50).Enable True
     Next i50
     Else
-    If Camera.GetPosition.X > -110.5 And Camera.GetPosition.X < -90.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 46.25 And InElevator = False Then
+    If Camera.GetPosition.X > -110.5 And Camera.GetPosition.X < -90.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 46.25 And InElevator = False Then
     For i50 = -10 To 138
     Shafts3(i50).Enable True
     Next i50
@@ -3375,9 +3385,10 @@ If CameraFloor >= 40 And CameraFloor <= 79 Then
     End If
     End If
     End If
-End If
-If CameraFloor >= 80 And CameraFloor <= 117 Then
-    If Camera.GetPosition.X > -52.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 46.25 And InElevator = False Then
+    End If
+    
+    If SectionNum = 3 Then
+    If Camera.GetPosition.X > -52.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 46.25 And InElevator = False Then
     For i50 = -10 To 138
     Shafts1(i50).Enable True
     Next i50
@@ -3394,9 +3405,10 @@ If CameraFloor >= 80 And CameraFloor <= 117 Then
     Next i50
     End If
     End If
-End If
-If CameraFloor >= 118 And CameraFloor <= 130 Then
-    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 46.25 And InElevator = False Then
+    End If
+    
+    If SectionNum = 4 Then
+    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 46.25 And InElevator = False Then
     For i50 = -10 To 138
     Shafts1(i50).Enable True
     Next i50
@@ -3413,9 +3425,10 @@ If CameraFloor >= 118 And CameraFloor <= 130 Then
     Next i50
     End If
     End If
-End If
-If CameraFloor >= 131 And CameraFloor <= 136 Then
-    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 0 And InElevator = False Then
+    End If
+    
+    If SectionNum = 5 Then
+    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 0 And InElevator = False Then
     For i50 = -10 To 138
     Shafts1(i50).Enable True
     Next i50
@@ -3431,9 +3444,10 @@ If CameraFloor >= 131 And CameraFloor <= 136 Then
     Next i50
     End If
     End If
-End If
-If CameraFloor >= 137 Then
-    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < -15.42 And InElevator = False Then
+    End If
+    
+    If SectionNum = 6 Then
+    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -15.42 And InElevator = False Then
     For i50 = -10 To 138
     Shafts1(i50).Enable True
     Next i50
@@ -3441,9 +3455,9 @@ If CameraFloor >= 137 Then
     For i50 = -10 To 138
     Shafts1(i50).Enable False
     Next i50
-    'End If
     End If
-End If
+    End If
+
 EndShafts:
 
     linestart = Camera.GetPosition
@@ -3454,7 +3468,9 @@ EndShafts:
  If tmpMouseB1 <> 0 Then
         'If FloorIndicator1.Collision=True
         
-        StairDoor(CameraFloor).SetCollisionEnable True
+        For i50 = 1 To 4
+        StairDoor(i50).SetCollisionEnable True
+        Next i50
         
         Room(CameraFloor).SetCollisionEnable False
         External.SetCollisionEnable False
@@ -3719,9 +3735,18 @@ End Sub
 Sub StairsLoop()
     Dim RiserHeight As Single
     RiserHeight = FloorHeight / 16
+    Dim ShaftNum As Integer
+    Dim ShaftLeft As Single
+    Dim ShaftRight As Single
 
+For ShaftNum = 1 To 4
+    If ShaftNum = 1 Then ShaftLeft = 12.5: ShaftRight = 32.5
+    If ShaftNum = 2 Then ShaftLeft = -52.5: ShaftRight = -32.5
+    If ShaftNum = 3 Then ShaftLeft = 90.5: ShaftRight = 110.5
+    If ShaftNum = 4 Then ShaftLeft = -130.5: ShaftRight = -110.5
+    
 'Stairs Movement
-      If Camera.GetPosition.X <= -12.5 And Camera.GetPosition.X > -12.5 - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.Y = (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 15) + PartialFloor Then
+      If Camera.GetPosition.X <= -ShaftLeft And Camera.GetPosition.X > -ShaftLeft - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.Y = (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 15) + PartialFloor Then
       Room(CameraFloor).Enable False
       For i51 = 1 To 40
       ElevatorDoorL(i51).Enable False
@@ -3764,9 +3789,9 @@ Sub StairsLoop()
       If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable True
     Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + PartialFloor, Camera.GetPosition.z
     End If
-    If Camera.GetPosition.X <= -12.5 And Camera.GetPosition.X > -12.5 - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.Y = (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 1) + PartialFloor Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft And Camera.GetPosition.X > -ShaftLeft - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.Y = (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 1) + PartialFloor Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + PartialFloor, Camera.GetPosition.z
    
-    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 7.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.Y = (CameraFloor * FloorHeight) + FloorHeight + 10 + PartialFloor Then
+    If Camera.GetPosition.X <= -ShaftLeft - 6 And Camera.GetPosition.X > -ShaftLeft - 7.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.Y = (CameraFloor * FloorHeight) + FloorHeight + 10 + PartialFloor Then
       Room(CameraFloor).Enable False
       For i51 = 1 To 40
       ElevatorDoorL(i51).Enable False
@@ -3811,53 +3836,44 @@ Sub StairsLoop()
     Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 15) + PartialFloor, Camera.GetPosition.z
     End If
     If Camera.GetPosition.Y <> 10 Then
-    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 7.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.Y = (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 14) + PartialFloor Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 15) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 7.5 And Camera.GetPosition.X > -12.5 - 9 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 14) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 9 And Camera.GetPosition.X > -12.5 - 10.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 13) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 10.5 And Camera.GetPosition.X > -12.5 - 12 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 12) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 12 And Camera.GetPosition.X > -12.5 - 13.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 11) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 13.5 And Camera.GetPosition.X > -12.5 - 15 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 10) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 15 And Camera.GetPosition.X > -12.5 - 16 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 9) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 6 And Camera.GetPosition.X > -ShaftLeft - 7.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.Y = (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 14) + PartialFloor Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 15) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 7.5 And Camera.GetPosition.X > -ShaftLeft - 9 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 14) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 9 And Camera.GetPosition.X > -ShaftLeft - 10.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 13) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 10.5 And Camera.GetPosition.X > -ShaftLeft - 12 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 12) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 12 And Camera.GetPosition.X > -ShaftLeft - 13.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 11) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 13.5 And Camera.GetPosition.X > -ShaftLeft - 15 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 10) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 15 And Camera.GetPosition.X > -ShaftLeft - 16 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 9) + PartialFloor, Camera.GetPosition.z
     End If
     If Camera.GetPosition.Y = 10 And PartialFloor = -(FloorHeight * 2) Then PartialFloor = 0
-    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 7.5 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 And PartialFloor = 0 And Camera.GetPosition.Y = 10 Then PartialFloor = -(FloorHeight * 2)
-    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 7.5 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 1) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 7.5 And Camera.GetPosition.X > -12.5 - 9 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 2) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 9 And Camera.GetPosition.X > -12.5 - 10.5 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 3) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 10.5 And Camera.GetPosition.X > -12.5 - 12 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 4) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 12 And Camera.GetPosition.X > -12.5 - 13.5 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 5) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 13.5 And Camera.GetPosition.X > -12.5 - 15 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 6) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 15 And Camera.GetPosition.X > -12.5 - 16 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 7) + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.X <= -12.5 - 16 And Camera.GetPosition.X > -12.5 - 20 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 8) + PartialFloor, Camera.GetPosition.z
-    
+    If Camera.GetPosition.X <= -ShaftLeft - 6 And Camera.GetPosition.X > -ShaftLeft - 7.5 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 And PartialFloor = 0 And Camera.GetPosition.Y = 10 Then PartialFloor = -(FloorHeight * 2)
+    If Camera.GetPosition.X <= -ShaftLeft - 6 And Camera.GetPosition.X > -ShaftLeft - 7.5 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 1) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 7.5 And Camera.GetPosition.X > -ShaftLeft - 9 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 2) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 9 And Camera.GetPosition.X > -ShaftLeft - 10.5 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 3) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 10.5 And Camera.GetPosition.X > -ShaftLeft - 12 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 4) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 12 And Camera.GetPosition.X > -ShaftLeft - 13.5 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 5) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 13.5 And Camera.GetPosition.X > -ShaftLeft - 15 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 6) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 15 And Camera.GetPosition.X > -ShaftLeft - 16 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 7) + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -ShaftLeft - 16 And Camera.GetPosition.X > -ShaftLeft - 20 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 8) + PartialFloor, Camera.GetPosition.z
+
+Next ShaftNum
+
 End Sub
 
 Sub ProcessMisc()
 DoEvents
  
-
-    Shafts1(1).AddWall GetTex("BrickTexture"), -12.5, -30.85, -32.5, -30.85, (FloorHeight * 3), 0, 2, 2
-    For i = 2 To 138
-    Shafts1(i).AddWall GetTex("BrickTexture"), -12.5, -30.85, -32.5, -30.85, 25, (FloorHeight * i) + FloorHeight, 2, 2
-    Next i
-    For i = 2 To 136
-    Shafts2(i).AddWall GetTex("BrickTexture"), 12.5, -30.85, 32.5, -30.85, 25, (FloorHeight * i) + FloorHeight, 2, 2
-    Next i
-    
-    'Stairway Doors for other floors
-    For i = -10 To 138
-    If i = 1 Then i = 2
-    If i < 2 Then StairDoor(i).AddWall GetTex("StairsDoor2"), -3.9, 0, 3.9, 0, 19.5, (i * FloorHeight) + FloorHeight, 1, 1
-    If i >= 2 Then StairDoor(i).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, (i * FloorHeight) + FloorHeight, 1, 1
-    StairDoor(i).SetMeshName ("DoorSB " + Str$(i))
-    StairDoor(i).SetRotation 0, 1.56, 0
-    StairDoor(i).SetPosition -12.8, 0, -36.4
-    Next i
-    
     'Shafts.AddWall GetTex("Ceiling1"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight * 138) + FloorHeight, 0, 2, 139 * 2
         
-    Stairs(-10).AddWall GetTex("Concrete"), -12.5 - 6, -46.25, -12.5 - 6, -46.25 + 7.71, (FloorHeight - 6), (FloorHeight * -10), (7.71 * 0.086), (FloorHeight * 0.086)
-    Stairs(138).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 6, -30.5, (FloorHeight), (138 * FloorHeight) + FloorHeight, (7.71 * 0.086), (FloorHeight * 0.086)
+    For i = 1 To 4
+        If i = 1 Or i = 3 Then
+        Stairs(-10).AddWall GetTex("Concrete"), -12.5 - 6, -46.25, -12.5 - 6, -46.25 + 7.71, (FloorHeight - 6), (FloorHeight * -10), (7.71 * 0.086), (FloorHeight * 0.086)
+        Stairs(138).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 6, -30.5, (FloorHeight), (138 * FloorHeight) + FloorHeight, (7.71 * 0.086), (FloorHeight * 0.086)
+        End If
+        If i = 2 Or i = 4 Then
+        Stairs(-10).AddWall GetTex("Concrete"), 12.5 + 6, -46.25, 12.5 + 6, -46.25 + 7.71, (FloorHeight - 6), (FloorHeight * -10), (7.71 * 0.086), (FloorHeight * 0.086)
+        Stairs(138).AddWall GetTex("Concrete"), 12.5 + 6, -46.25 + 7.71, 12.5 + 6, -30.5, (FloorHeight), (138 * FloorHeight) + FloorHeight, (7.71 * 0.086), (FloorHeight * 0.086)
+        End If
+    Next i
     
     'Shafts.AddFloor GetTex("BrickTexture"), -60, -150, 60, 150, (138 * FloorHeight) + FloorHeight, 10, 10
 
@@ -4237,11 +4253,11 @@ Sub ProcessStairs()
     If ShaftNum = 2 Then ShaftLeft = -52.5: ShaftRight = -32.5
     If ShaftNum = 3 Then ShaftLeft = 90.5: ShaftRight = 110.5
     If ShaftNum = 4 Then ShaftLeft = -130.5: ShaftRight = -110.5
-
-    For i = -10 To -1
+    
+    For i = -10 To -2
     'Stairwell Walls
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -46.25 + 0.1, -ShaftLeft - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -ShaftRight, -ShaftLeft - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -32.5, -ShaftLeft - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -ShaftRight + 0.1, -46.25 + 0.1, -ShaftRight + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -46.25 + 0.1, -ShaftRight, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -30 - 1, -ShaftRight, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
@@ -4291,13 +4307,13 @@ Sub ProcessStairs()
     'Stairs(i).AddWall GetTex("Button" + Mid$(Str$(i), 2)), -ShaftLeft - 0.51, -42.5, -ShaftLeft - 0.51, -44.5, 1.5, ((i * FloorHeight) + FloorHeight) + 9.5, 1, 1
     'If i >= 2 And i <= 79 Then Stairs(i).AddWall GetTex("FloorSignOffices"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
     Next i
-        
+
 i = 1
 'Stairs on the first floor, section 1
  
     'Stairwell Walls
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -46.25 + 0.1, -ShaftLeft - 0.5, -40.3, (FloorHeight * 3), 0, ((46.25 - 40.3) * 0.086), ((FloorHeight * 3) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -ShaftRight, -ShaftLeft - 0.5, -30, (FloorHeight * 3), 0, (2.5 * 0.086), ((FloorHeight * 3) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -32.5, -ShaftLeft - 0.5, -30, (FloorHeight * 3), 0, (2.5 * 0.086), ((FloorHeight * 3) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -ShaftRight + 0.1, -46.25 + 0.1, -ShaftRight + 0.1, -30 - 1, (FloorHeight * 3), 0, (16.25 * 0.086), ((FloorHeight * 3) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -46.25 + 0.1, -ShaftRight, -46.25 + 0.1, (FloorHeight * 3), 0, (20 * 0.086), ((FloorHeight * 3) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -30 - 1, -ShaftRight, -30 - 1, (FloorHeight * 3), 0, (20 * 0.086), ((FloorHeight * 3) * 0.086)
@@ -4440,7 +4456,7 @@ If ShaftNum = 4 Then Endfloor = 39
     
     'Stairwell Walls
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -46.25 + 0.1, -ShaftLeft - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -ShaftRight, -ShaftLeft - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -32.5, -ShaftLeft - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -ShaftRight + 0.1, -46.25 + 0.1, -ShaftRight + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -46.25 + 0.1, -ShaftRight, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -30 - 1, -ShaftRight, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
