@@ -1,6 +1,6 @@
 Attribute VB_Name = "SimCore"
 'Skyscraper 1.1 Alpha - Simulator core
-'Copyright ©2004 Ryan Thoryk
+'Copyright ©2005 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
 'Contact - ryan@tliquest.net
@@ -252,10 +252,10 @@ For i = -Basements To TotalFloors
 Floor(i).DisableFloor
 Next i
 Floor(CameraStartFloor).EnableFloor
-Floor(CameraStartFloor + 1).EnableFloor
-Floor(CameraStartFloor + 2).EnableFloor
-Floor(CameraStartFloor + 3).EnableFloor
-Floor(CameraStartFloor - 1).EnableFloor
+'Floor(CameraStartFloor + 1).EnableFloor
+'Floor(CameraStartFloor + 2).EnableFloor
+'Floor(CameraStartFloor + 3).EnableFloor
+'Floor(CameraStartFloor - 1).EnableFloor
 
 'Create skybox
 Atmos.SkyBox_SetTexture GetTex("SkyFront"), GetTex("SkyBack"), GetTex("SkyLeft"), GetTex("SkyRight"), GetTex("SkyTop"), GetTex("SkyBottom")
@@ -289,13 +289,13 @@ Dest.Cls
 Dest.Print vbCrLf
 Dest.Print Spc(2); "Skyscraper " + LTrim(Str$(App.Major)) + "." + LTrim(Str$(App.Minor)) + " Alpha - Build" + Str$(App.Revision)
 Dest.Print Spc(2); "Powered by SBSE " + LTrim(Str$(App.Major - 1)) + "." + LTrim(Str$(App.Minor))
-Dest.Print Spc(2); "Compiled on December 14, 2004" + vbCrLf
+Dest.Print Spc(2); "Compiled on January 1, 2005" + vbCrLf
 Dest.Print Spc(2); "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free"
 Dest.Print Spc(2); "software, and you are welcome to redistribute it under certain"
 Dest.Print Spc(2); "conditions. For details, see the file gpl.txt"
 Dest.Print Spc(2); "Build number counting has been done since version 0.7" + vbCrLf
-Dest.Print Spc(2); "Skyscraper ©2003-2004 Ryan Thoryk"
-Dest.Print Spc(2); "Scalable Building Simulation Engine ©2004 Ryan Thoryk" + vbCrLf
+Dest.Print Spc(2); "Skyscraper ©2003-2005 Ryan Thoryk"
+Dest.Print Spc(2); "Scalable Building Simulation Engine ©2004-2005 Ryan Thoryk" + vbCrLf
 
 End Sub
 
