@@ -31,76 +31,81 @@ Attribute VB_Exposed = False
 'along with this program; if not, write to the Free Software
 'Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-Public Room As TVMesh
+Public Level As TVMesh
 Public CrawlSpace As TVMesh
-Public CrawlSpaceShaft1 As TVMesh
-Public CrawlSpaceShaft2 As TVMesh
-Public CrawlSpaceShaft3 As TVMesh
-Public CrawlSpaceShaft4 As TVMesh
-Public Shafts1 As TVMesh
-Public Shafts2 As TVMesh
-Public Shafts3 As TVMesh
-Public Shafts4 As TVMesh
 Public ShaftsFloor As TVMesh
-Public Stairs As TVMesh
-Private FakeStairDoor(1 To 4) As TVMesh
-Private Objects(150) As TVMesh
+Public CrawlSpaceShaft() As TVMesh
+Public Shafts() As TVMesh
+Public Stairs() As TVMesh
+Private FakeStairDoor() As TVMesh
+Private Objects() As TVMesh
 Public Enabled As Boolean
-Public StairDataTable As Boolean
-Public FloorHeightTable As Boolean
-Public FloorNameTable As Boolean
+'Public StairDataTable As Boolean
 Public Number As Integer
-
-Public Function GetName() As String
-'Returns the string name of the specified floor
-GetFloorName = FloorNameTable(Floor)
-End Function
-
-Public Sub SetName(FName As String)
-'Sets the specified floor's name
-FloorNameTable(Floor) = FName
-End Sub
-
-Public Function GetAltitude(Floor As Integer) As Single
-'Gets altitude (Y) value of floor
-
-GetFloorAltitude = FloorHeightTable(Floor, 0)
-
-End Function
-
-Public Function GetHeight() As Single
-'Get height of floor from the floor height table
-GetFloorHeight = FloorHeightTable(Floor, 1)
-
-End Function
-
-Public Sub SetHeight(Height As Single)
-'Set height of floor in the floor height table
-FloorHeightTable(Floor, 1) = Height
-
-End Sub
+Public FloorName As String
+Public FloorAltitude As Single
+Public FloorHeight As Single
+Public CrawlSpaceHeight As Single
 
 Public Sub SetCameraFloor()
-'Moves camera to specified floor (sets altitude to the floor's altitude plus 10)
-Camera.SetPosition Camera.GetPosition.X, GetFloorAltitude(Floor) + 10, Camera.GetPosition.X
+'Moves camera to specified floor (sets altitude to the floor's altitude plus CameraAltitude)
+Camera.SetPosition Camera.GetPosition.X, FloorAltitude + CameraAltitude, Camera.GetPosition.X
+End Sub
+
+Public Sub AddFloor(Texture As String, x1 As Single, z1 As Single, x2 As Single, z2 As Single, voffset As Single, tw As Single, th As Single)
+'Adds a floor with the specified dimensions and vertical offset
+Level.AddFloor GetTex(Texture), x1, z1, x2, z2, FloorAltitude + voffset, tw, th
+End Sub
+
+Public Sub AddWall(Texture As String, x1 As Single, z1 As Single, x2 As Single, z2 As Single, height As Single, voffset As Single, tw As Single, th As Single)
+'Adds a wall with the specified dimensions
+Level.AddWall GetTex(Texture), x1, z1, x2, z2, height, FloorAltitude + voffset, tw, th
+End Sub
+
+Sub CreateWallBox(TextureName As String, WidthX As Single, LengthZ As Single, CenterX As Single, CenterZ As Single, CSpace As Boolean, ResX As Single, ResY As Single)
+Dim height As Single
+Dim WallHeight As Single
+Dim x1 As Single
+Dim x2 As Single
+Dim z1 As Single
+Dim z2 As Single
+height = FloorAltitude
+WallHeight = FloorHeight - CrawlSpaceHeight
+If CSpace = True Then
+    height = WallHeight
+    WallHeight = CrawlSpaceHeight
+End If
+x1 = CenterX - (WidthX / 2)
+x2 = CenterX + (WidthX / 2)
+z1 = CenterZ - (LengthZ / 2)
+z1 = CenterZ + (LengthZ / 2)
+
+Level.AddWall GetTex(TextureName), x1, z1, x2, z1, WallHeight, height, (WidthX * (0.086 * ResX)), ResY
+Level.AddWall GetTex(TextureName), x2, z1, x2, z2, WallHeight, height, (WidthX * (0.086 * ResX)), ResY
+Level.AddWall GetTex(TextureName), x2, z2, x1, z2, WallHeight, height, (WidthX * (0.086 * ResX)), ResY
+Level.AddWall GetTex(TextureName), x1, z2, x1, z1, WallHeight, height, (WidthX * (0.086 * ResX)), ResY
 
 End Sub
 
-Public Sub Init(Num As Integer)
+Private Sub Class_Initialize(Num As Integer)
 'Set floor's object number
 Number = Num
+'size shaft arrays accordingly
+ReDim CrawlSpaceShaft(elevatorshafts)
+ReDim Shafts(elevatorshafts)
 
 'Create and name new meshes
-Set Room = Scene.CreateMeshBuilder("Room " + Str$(Number))
+Set Level = Scene.CreateMeshBuilder("Level " + Str$(Number))
 Set CrawlSpace = Scene.CreateMeshBuilder("CrawlSpace " + Str$(Number))
-Set CrawlSpaceShaft1 = Scene.CreateMeshBuilder("CrawlSpaceShaft1 " + Str$(Number))
-Set CrawlSpaceShaft2 = Scene.CreateMeshBuilder("CrawlSpaceShaft2 " + Str$(Number))
-Set CrawlSpaceShaft3 = Scene.CreateMeshBuilder("CrawlSpaceShaft3 " + Str$(Number))
-Set CrawlSpaceShaft4 = Scene.CreateMeshBuilder("CrawlSpaceShaft4 " + Str$(Number))
 Set ShaftsFloor = Scene.CreateMeshBuilder("ShaftsFloor " + Str$(Number))
-Set Shafts1 = Scene.CreateMeshBuilder("Shafts1 " + Str$(Number))
-Set Shafts2 = Scene.CreateMeshBuilder("Shafts2 " + Str$(Number))
-Set Shafts3 = Scene.CreateMeshBuilder("Shafts3 " + Str$(Number))
-Set Shafts4 = Scene.CreateMeshBuilder("Shafts4 " + Str$(Number))
+Dim i As Integer
+For i = 1 To elevatorshafts
+Set CrawlSpaceShaft(i) = Scene.CreateMeshBuilder("CrawlSpaceShaft" + LTrim(Str$(i)) + " " + Str$(Number))
+Set Shafts(i) = Scene.CreateMeshBuilder("Shafts" + LTrim(Str$(i)) + " " + Str$(Number))
+Next i
+
+End Sub
+
+Private Sub Class_Terminate()
 
 End Sub
