@@ -1053,3 +1053,7 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private Sub Command1_Click()
+Elevator(Slider2.Value).GotoFloor = Slider1.Value
+Elevator(Slider2.Value).MoveElevator = True
+End Sub
