@@ -46,19 +46,19 @@ Public DownQueue As String 'down call queue
 Public QueuePositionDirection As Integer 'queue processing direction
 Public PauseQueueSearch As Boolean 'pause queue processor
 Public ElevatorSpeed As Single 'maximum elevator speed
-Public ElevatorFineTuneSpeed As Single 'elevator finetune speed
 Public ElevatorFloor As Integer 'current elevator floor
 Public ElevatorSync As Boolean 'true if user should move with elevator
 Public ElevatorMusic As TVSoundWave3D
 Public ElevatorSounds As TVSoundWave3D
+Public MoveElevator As Boolean 'Tells elevator to start going to specified floor
 Public GotoFloor As Integer 'floor to go to
-Public MoveElevator As Boolean 'set to true if elevator should go to floor specified in GotoFloor
 Public OpenDoor As Integer '1=open doors, -1=close doors
 Public Acceleration As Single 'percentage of speed increase
+Private ElevWait As Boolean
 
 'Internal elevator simulation data
 Private ElevatorStart As Single 'elevator vertical starting location
-Private DoorsClosed As Boolean 'elevator door state
+Private DoorsOpen As Boolean 'elevator door state
 Private ElevatorDirection As Integer '-1=down, 1=up, 0=stopped
 Private DistanceToTravel As Single 'distance in Y to travel
 Private Destination As Single 'elevator destination Y value
@@ -240,7 +240,7 @@ On Error GoTo ErrorHandler
 
 Sim.WaitTimer(Number).Enabled = True
 
-DoorsClosed = False
+DoorsOpen = True
 
 Exit Sub
 ErrorHandler:
@@ -256,20 +256,7 @@ On Error GoTo ErrorHandler
 
 
 
-DoorsClosed = True
-
-Exit Sub
-ErrorHandler:
-   MsgBox "An error occurred in the elevator simulation subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
-   End
-End Sub
-
-Private Sub FineTune()
-'Slow fine-tuning movement to line up with floor specified in GotoFloor
-
-On Error GoTo ErrorHandler
-
-
+DoorsOpen = False
 
 Exit Sub
 ErrorHandler:
@@ -279,14 +266,13 @@ End Sub
 
 Private Sub MoveElevatorToFloor()
 'Main processing routine; sends elevator to floor specified in GotoFloor
+Static IsRunning As Boolean
 
 'On Error GoTo ErrorHandler
 
-'use frame limiter for elevator also
-If FrameLimiter = True Then Call SlowToFPS(FrameRate)
+If IsRunning = True Then GoTo LoopStart
 
-'exit if elevator is already moving
-If ElevatorDirection <> 0 Then Exit Sub
+IsRunning = True
 
 'get elevator's current Y position
 ElevatorStart = ElevatorMesh.GetPosition.Y
@@ -298,7 +284,7 @@ ElevatorFloor = GetElevatorFloor
 If ElevatorFloor = GotoFloor Then Call OpenDoors: Exit Sub
 
 'close doors if open
-If DoorsClosed = False Then Call CloseDoors
+If DoorsOpen = True Then Call CloseDoors
 
 'Determine direction
 If GotoFloor < ElevatorFloor Then ElevatorDirection = -1
@@ -308,6 +294,8 @@ If GotoFloor > ElevatorFloor Then ElevatorDirection = 1
 DistanceToTravel = Abs(Abs(Floor(GotoFloor).FloorAltitude) - Abs(ElevatorStart))
 Destination = Floor(GotoFloor).FloorAltitude
 CalculateStoppingDistance = True
+
+ElevatorSync = True '*******Temporary
 
 'If user is riding this elevator, then turn off floor
 If ElevatorSync = True Then
@@ -329,7 +317,8 @@ End If
 'Get first rate increment value
 ElevatorRate = ElevatorDirection * (ElevatorSpeed * Acceleration)
 
-Do While Abs(ElevatorRate) <> 0
+LoopStart:
+
 'Movement sound
 If ElevatorSounds.PlayState = TV_PLAYSTATE_ENDED And Brakes = False Then
     ElevatorSounds.Load App.Path + "\data\elevmove.wav"
@@ -337,7 +326,6 @@ If ElevatorSounds.PlayState = TV_PLAYSTATE_ENDED And Brakes = False Then
     ElevatorSounds.Play
 End If
 
-'MsgBox (ElevatorMesh.GetPosition.Y)
 'move elevator objects and camera
 ElevatorMesh.MoveRelative 0, ElevatorRate / ElevatorSpeed, 0
 If ElevatorSync = True Then Camera.SetPosition Camera.GetPosition.X, ElevatorMesh.GetPosition.Y + CameraDefAltitude, Camera.GetPosition.z
@@ -348,20 +336,20 @@ Plaque.MoveRelative 0, ElevatorRate / ElevatorSpeed, 0
 ElevatorSounds.SetPosition ElevatorMesh.GetPosition.X / SoundDivisor, ElevatorMesh.GetPosition.Y / SoundDivisor, ElevatorMesh.GetPosition.z / SoundDivisor
 ElevatorSounds.maxDistance = SoundMaxDistance
 
-'MsgBox (ElevatorRate)
 'change speeds
 If ElevatorDirection = 1 Then ElevatorRate = ElevatorRate + (ElevatorSpeed * Acceleration)
 If ElevatorDirection = -1 Then ElevatorRate = ElevatorRate - (ElevatorSpeed * Acceleration)
 
 If ElevatorDirection = 1 And ElevatorRate > ElevatorSpeed Then ElevatorRate = ElevatorSpeed
 If ElevatorDirection = -1 And ElevatorRate < -ElevatorSpeed Then ElevatorRate = -ElevatorSpeed
-If ElevatorDirection = 1 And Brakes = True And ElevatorRate < 0 Then ElevatorRate = 0
-If ElevatorDirection = -1 And Brakes = True And ElevatorRate > 0 Then ElevatorRate = 0
-
-If Abs(ElevatorRate) = ElevatorSpeed Then CalculateStoppingDistance = False
+If ElevatorDirection = 1 And Brakes = True And ElevatorRate > 0 Then ElevatorRate = 0
+If ElevatorDirection = -1 And Brakes = True And ElevatorRate < 0 Then ElevatorRate = 0
 
 'get distance needed to stop elevator
-If CalculateStoppingDistance = True Then StoppingDistance = ElevatorMesh.GetPosition.Y - ElevatorStart
+If CalculateStoppingDistance = True And ElevatorDirection = 1 Then StoppingDistance = ElevatorMesh.GetPosition.Y - ElevatorStart
+If CalculateStoppingDistance = True And ElevatorDirection = -1 Then StoppingDistance = ElevatorStart - ElevatorMesh.GetPosition.Y
+
+If Abs(ElevatorRate) = ElevatorSpeed Then CalculateStoppingDistance = False
 
 If Brakes = False And ElevatorDirection = 1 And ElevatorMesh.GetPosition.Y >= Destination - StoppingDistance Then
     CalculateStoppingDistance = False
@@ -395,8 +383,7 @@ If Brakes = False And ElevatorDirection = -1 And ElevatorMesh.GetPosition.Y <= D
     End If
 End If
 
-DoEvents
-Loop
+If Abs(ElevatorRate) <> 0 Then Exit Sub
 
 ElevatorRate = 0
 ElevatorDirection = 0
@@ -404,6 +391,8 @@ Brakes = False
 Destination = 0
 DistanceToTravel = 0
 ElevatorStart = 0
+IsRunning = False
+MoveElevator = False
 Call GetElevatorFloor
 Call OpenDoors
 
@@ -450,7 +439,7 @@ OpenDoor = 0
 On Error GoTo ErrorHandler
 
 
-DoorsClosed = False
+DoorsOpen = True
 
 Exit Sub
 ErrorHandler:
@@ -494,5 +483,4 @@ If OpenDoor = -1 Then Call CloseDoors
 If OpenDoor = 2 Then Call OpenDoorsEmergency
 
 If MoveElevator = True Then Call MoveElevatorToFloor
-
 End Sub
