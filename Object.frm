@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form Object 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Object Manager"
@@ -269,7 +269,6 @@ Private Sub Command1_Click()
    End If
 
 i = 500
-Set Objects(i) = New TVMesh
 Set Objects(i) = Scene.CreateMeshBuilder("Objects " + Str$(i))
 
 'Call Init_Objects(Floor, 79)
@@ -358,7 +357,7 @@ If Option3.Value = True Then Objects(500).ScaleMesh Objects(500).GetMeshScale.X,
 End Sub
 
 Private Sub Command9_Click()
-Text1.Text = "i = 0 + (150 * (Floor - 1))" + vbCrLf + "Call Init_Objects(Floor, 0)" + vbCrLf + "Objects(i).LoadXFile App.Path + """ + File1.Path + "\" + File1.FileName + """, True" + vbCrLf + "Objects(i).SetRotation " + Str$(Objects(500).GetRotation.X) + "," + Str$(Objects(500).GetRotation.Y) + "," + Str$(Objects(500).GetRotation.z) + vbCrLf + "Objects(i).ScaleMesh " + Str$(Objects(500).GetMeshScale.X) + "," + Str$(Objects(500).GetMeshScale.Y) + "," + Str$(Objects(500).GetMeshScale.z) + vbCrLf + "Objects(i).SetPosition " + Str$(Objects(500).GetPosition.X) + ", Floor + " + Str$(Objects(500).GetPosition.Y - ((CameraFloorExact - FloorHeight) / FloorHeight)) + "," + Str$(Objects(500).GetPosition.z) + vbCrLf
+Text1.Text = "i = 0 + (150 * (Floor - 1))" + vbCrLf + "Call Init_Objects(Floor, 0)" + vbCrLf + "Objects(i).LoadXFile App.Path + """ + File1.Path + "\" + File1.FileName + """, True" + vbCrLf + "Objects(i).SetRotation " + Str$(Objects(500).GetRotation.X) + "," + Str$(Objects(500).GetRotation.Y) + "," + Str$(Objects(500).GetRotation.z) + vbCrLf + "Objects(i).ScaleMesh " + Str$(Objects(500).GetMeshScale.X) + "," + Str$(Objects(500).GetMeshScale.Y) + "," + Str$(Objects(500).GetMeshScale.z) + vbCrLf + "Objects(i).SetPosition " + Str$(Objects(500).GetPosition.X) + ", Floor + " + Str$(Objects(500).GetPosition.Y - ((CameraFloor2 - FloorHeight) / FloorHeight)) + "," + Str$(Objects(500).GetPosition.z) + vbCrLf
 End Sub
 
 Private Sub Dir1_Change()
