@@ -64,6 +64,10 @@ Public IntroMesh As TVMesh 'introduction mesh
 Public Buttons() As TVMesh 'elevator buttons
 Public ElevatorSpeed As Single 'elevator speed
 Public ElevatorFineTuneSpeed As Single 'elevator finetune speed
+Public FrameLimiter As Boolean 'frame limiter toggle
+Public RenderOnly As Boolean 'skip sim processing and only render graphics
+Public InputOnly As Boolean 'skip sim processing and only run input and rendering code
+Public IsFalling As Boolean 'make user fall
 
 'External calls
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
@@ -206,6 +210,7 @@ Call Triton_LoadTextures
 Call Triton_ProcessBasement
 Call Triton_ProcessFloors
 
+'Start main processing timer
 Sim.MainTimer.Enabled = True
 
 Exit Sub
@@ -232,6 +237,24 @@ Dest.Print Spc(2); "Scalable Building Simulation Engine ©2004 Ryan Thoryk" + vbC
 End Sub
 
 Public Sub MainLoop()
+On Error Resume Next
+
+'Calls frame limiter function, which sets the max frame rate
+'note - the frame rate determines elevator speed, walking speed, etc
+'In order to raise it, elevator timers and walking speed must both be changed
+If FrameLimiter = True Then SlowToFPS (20)
+
+'If RenderOnly is true, skip processing code and run only
+'the frame renderer code
+If RenderOnly = True Then GoTo Render
+
+'If InputOnly is true, skip processing code and run only
+'the input detection code and renderer code
+If InputOnly = True Then GoTo InputOnly
+
+InputOnly:
+    Call GetInput
+
 Render:
     'If IntroOn = True Then Call Intro
     
@@ -243,3 +266,68 @@ Render:
     DoEvents
 
 End Sub
+
+Private Sub GetInput()
+'*** First movement system
+     
+      Dim KeepAltitude As Single
+      
+      'If Inp.IsKeyPressed(TV_KEY_UP) = True And Focused = True Then
+      If Inp.IsKeyPressed(TV_KEY_UP) = True Then
+      KeepAltitude = Camera.GetPosition.Y
+      If Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.MoveRelative 0.7, 0, 0
+      If Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.MoveRelative 1.4, 0, 0
+      If Camera.GetPosition.Y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.X, KeepAltitude, Camera.GetPosition.z
+      End If
+      
+      'If Inp.IsKeyPressed(TV_KEY_DOWN) = True And Focused = True Then
+      If Inp.IsKeyPressed(TV_KEY_DOWN) = True Then
+      KeepAltitude = Camera.GetPosition.Y
+      If Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.MoveRelative -0.7, 0, 0
+      If Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.MoveRelative -1.4, 0, 0
+      If Camera.GetPosition.Y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.X, KeepAltitude, Camera.GetPosition.z
+      End If
+      
+      'If Inp.IsKeyPressed(TV_KEY_RIGHT) = True And Focused = True Then Camera.RotateY 0.07
+      'If Inp.IsKeyPressed(TV_KEY_LEFT) = True And Focused = True Then Camera.RotateY -0.07
+      If Inp.IsKeyPressed(TV_KEY_RIGHT) = True And Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.RotateY 0.07
+      If Inp.IsKeyPressed(TV_KEY_LEFT) = True And Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.RotateY -0.07
+      If Inp.IsKeyPressed(TV_KEY_RIGHT) = True And Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.RotateY 0.14
+      If Inp.IsKeyPressed(TV_KEY_LEFT) = True And Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.RotateY -0.14
+      'If Inp.IsKeyPressed(TV_KEY_PAGEUP) = True And Focused = True Then Camera.RotateX -0.006
+      'If Inp.IsKeyPressed(TV_KEY_PAGEDOWN) = True And Focused = True Then Camera.RotateX 0.006
+      If Inp.IsKeyPressed(TV_KEY_PAGEUP) = True And Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.RotateX -0.006
+      If Inp.IsKeyPressed(TV_KEY_PAGEUP) = True And Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.RotateX -0.012
+      If Inp.IsKeyPressed(TV_KEY_PAGEDOWN) = True And Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.RotateX 0.006
+      If Inp.IsKeyPressed(TV_KEY_PAGEDOWN) = True And Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.RotateX 0.012
+      
+      'If Inp.IsKeyPressed(TV_KEY_HOME) = True And Focused = True Then Camera.MoveRelative 0, 1, 0
+      'If Inp.IsKeyPressed(TV_KEY_END) = True And Focused = True Then Camera.MoveRelative 0, -1, 0
+      If Inp.IsKeyPressed(TV_KEY_HOME) = True And Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.MoveRelative 0, 1, 0
+      If Inp.IsKeyPressed(TV_KEY_HOME) = True And Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.MoveRelative 0, 2, 0
+      If Inp.IsKeyPressed(TV_KEY_END) = True And Inp.IsKeyPressed(TV_KEY_Z) = False And EnableCollisions = False Then Camera.MoveRelative 0, -1, 0
+      If Inp.IsKeyPressed(TV_KEY_END) = True And Inp.IsKeyPressed(TV_KEY_Z) = True And EnableCollisions = False Then Camera.MoveRelative 0, -2, 0
+      'If Inp.IsKeyPressed(TV_KEY_1) = True And Focused = True Then ElevatorDirection = 1
+      'If Inp.IsKeyPressed(TV_KEY_2) = True And Focused = True Then ElevatorDirection = -1
+      'If Inp.IsKeyPressed(TV_KEY_3) = True And Focused = True Then OpenElevator(ElevatorNumber) = 1
+      'If Inp.IsKeyPressed(TV_KEY_4) = True And Focused = True Then OpenElevator(ElevatorNumber) = -1
+      'If Inp.IsKeyPressed(TV_KEY_5) = True And Focused = True Then Call ElevatorMusic.Play
+      'If Inp.IsKeyPressed(TV_KEY_6) = True And Focused = True Then Call ElevatorMusic.Stop_
+      If Inp.IsKeyPressed(TV_KEY_SPACE) = True Then Camera.SetRotation 0, 0, 0
+      'If Inp.IsKeyPressed(TV_KEY_6) = True Then MsgBox (Str$(Camera.GetLookAt.X) + Str$(Camera.GetLookAt.Y) + Str$(Camera.GetLookAt.z))
+      If Inp.IsKeyPressed(TV_KEY_7) = True Then IsFalling = True
+      
+      'If Inp.IsKeyPressed(TV_KEY_F1) = True And Focused = True Then TV.ScreenShot (App.Path + "\shot.bmp")
+      If Inp.IsKeyPressed(TV_KEY_F1) = True Then TV.ScreenShot (App.Path + "\shot.bmp")
+End Sub
+
+Sub SlowToFPS(ByVal FrameRate As Long)
+Dim lngTicksPerFrame As Long
+Static lngOldTickCount As Long
+lngTicksPerFrame = 1000 / FrameRate
+While GetTickCount() < lngOldTickCount
+Sleep 5
+Wend
+lngOldTickCount = GetTickCount() + lngTicksPerFrame
+End Sub
+
