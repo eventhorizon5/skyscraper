@@ -2293,13 +2293,10 @@ End If
 If Floor = 133 Or Floor = 134 Then
 i = 79 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 79)
-Objects(i).LoadXFile App.Path + "\objects\swimpool.x", True
-'Objects(i).SetMaterial 0
-'Objects(i).SetColor (RGBA(10, 10, 10, 1))
-Objects(i).SetRotation 0, -1.58, 0
+Objects(i).Load3DSMesh App.Path + "\objects\swimpool.3ds", , True, , True, True
+Objects(i).SetRotation 0, 0, 0
 Objects(i).ScaleMesh 0.2, 0.2, 0.2
-'Objects(i).SetTexture GetTex("ColumnTex")
-Objects(i).SetPosition 0, 0 + ((134 * FloorHeight) + FloorHeight), 92
+Objects(i).SetPosition 6.643, -1 + ((134 * FloorHeight) + FloorHeight), 95
 'Objects(i).Optimize
 End If
 
