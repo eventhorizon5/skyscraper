@@ -1,8 +1,8 @@
 Sim = 209, 120, 847, 666, C, 0, 0, 0, 0, C
 DebugPanel = 257, 115, 902, 691, C, 0, 0, 0, 0, C
 API = 259, 112, 865, 688, C
-Triton_Center = 182, 100, 794, 676, 
+Triton_Center = 136, 156, 748, 732, C
 SimCore = 237, 116, 782, 692, C
-ElevatorObject = 120, 96, 752, 672, 
+ElevatorObject = 120, 97, 752, 672, C
 FloorObject = 118, 140, 710, 716, C
 FileIO = 165, 113, 763, 689, C
