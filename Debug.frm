@@ -3,7 +3,7 @@ Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form DebugPanel 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "SkyScraper 0.96 Beta - Simulator Control Panel"
-   ClientHeight    =   5280
+   ClientHeight    =   5355
    ClientLeft      =   1770
    ClientTop       =   1710
    ClientWidth     =   6930
@@ -13,8 +13,59 @@ Begin VB.Form DebugPanel
    LinkTopic       =   "Form2"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   5280
+   ScaleHeight     =   5355
    ScaleWidth      =   6930
+   Begin VB.CommandButton Command11 
+      Caption         =   "Enqueue Down"
+      Height          =   255
+      Left            =   3720
+      TabIndex        =   72
+      Top             =   5040
+      Width           =   1335
+   End
+   Begin VB.CommandButton Command10 
+      Caption         =   "Enqueue Up"
+      Height          =   255
+      Left            =   3720
+      TabIndex        =   71
+      Top             =   4800
+      Width           =   1335
+   End
+   Begin VB.CommandButton Command18 
+      Caption         =   "Destroy Stairs"
+      Height          =   255
+      Left            =   5760
+      TabIndex        =   66
+      Top             =   840
+      Width           =   1095
+   End
+   Begin VB.CheckBox Check14 
+      Caption         =   "Buildings"
+      Height          =   255
+      Left            =   5040
+      TabIndex        =   70
+      Top             =   1155
+      Value           =   1  'Checked
+      Width           =   1695
+   End
+   Begin VB.CheckBox Check13 
+      Caption         =   "Landscape"
+      Height          =   255
+      Left            =   5040
+      TabIndex        =   69
+      Top             =   1395
+      Value           =   1  'Checked
+      Width           =   1695
+   End
+   Begin VB.CheckBox Check8 
+      Caption         =   "Shaft Front"
+      Height          =   255
+      Left            =   5040
+      TabIndex        =   68
+      Top             =   1635
+      Value           =   1  'Checked
+      Width           =   1695
+   End
    Begin VB.Timer Timer1 
       Enabled         =   0   'False
       Interval        =   100
@@ -22,26 +73,18 @@ Begin VB.Form DebugPanel
       Top             =   0
    End
    Begin VB.CommandButton Command19 
-      Caption         =   "Stairs On"
+      Caption         =   "Create Stairs"
       Height          =   255
       Left            =   4680
-      TabIndex        =   73
-      Top             =   1560
-      Width           =   855
-   End
-   Begin VB.CommandButton Command18 
-      Caption         =   "Stairs Off"
-      Height          =   255
-      Left            =   5640
-      TabIndex        =   72
-      Top             =   1560
-      Width           =   855
+      TabIndex        =   67
+      Top             =   840
+      Width           =   1095
    End
    Begin VB.CheckBox Check12 
       Caption         =   "Automatic Shafts"
       Height          =   255
       Left            =   5040
-      TabIndex        =   71
+      TabIndex        =   65
       Top             =   3555
       Value           =   1  'Checked
       Width           =   1575
@@ -50,7 +93,7 @@ Begin VB.Form DebugPanel
       Caption         =   "Main Sim Processing"
       Height          =   255
       Left            =   5040
-      TabIndex        =   70
+      TabIndex        =   64
       Top             =   3315
       Value           =   1  'Checked
       Width           =   1815
@@ -59,7 +102,7 @@ Begin VB.Form DebugPanel
       Caption         =   "Frame Limiter"
       Height          =   255
       Left            =   5040
-      TabIndex        =   69
+      TabIndex        =   63
       Top             =   3075
       Value           =   1  'Checked
       Width           =   1575
@@ -68,15 +111,15 @@ Begin VB.Form DebugPanel
       Caption         =   "Add Object"
       Height          =   375
       Left            =   120
-      TabIndex        =   67
-      Top             =   4800
+      TabIndex        =   61
+      Top             =   4845
       Width           =   1455
    End
    Begin VB.CommandButton Command16 
       Caption         =   "Init Realtime"
       Height          =   375
-      Left            =   5160
-      TabIndex        =   66
+      Left            =   5400
+      TabIndex        =   60
       Top             =   4800
       Width           =   1215
    End
@@ -84,56 +127,24 @@ Begin VB.Form DebugPanel
       Caption         =   "Call Buttons"
       Height          =   255
       Left            =   5040
-      TabIndex        =   35
+      TabIndex        =   29
       Top             =   1875
       Value           =   1  'Checked
       Width           =   1695
-   End
-   Begin VB.CommandButton Command13 
-      Caption         =   "Land Off"
-      Height          =   255
-      Left            =   5640
-      TabIndex        =   34
-      Top             =   1320
-      Width           =   855
-   End
-   Begin VB.CommandButton Command12 
-      Caption         =   "Land On"
-      Height          =   255
-      Left            =   4680
-      TabIndex        =   33
-      Top             =   1320
-      Width           =   855
    End
    Begin VB.CheckBox Check4 
       Caption         =   "Collision Detection"
       Height          =   255
       Left            =   5040
-      TabIndex        =   32
+      TabIndex        =   28
       Top             =   2115
       Value           =   1  'Checked
       Width           =   1695
    End
-   Begin VB.CommandButton Command15 
-      Caption         =   "Bldgs Off"
-      Height          =   255
-      Left            =   5640
-      TabIndex        =   31
-      Top             =   1080
-      Width           =   855
-   End
-   Begin VB.CommandButton Command14 
-      Caption         =   "Bldgs On"
-      Height          =   255
-      Left            =   4680
-      TabIndex        =   30
-      Top             =   1080
-      Width           =   855
-   End
    Begin MSComctlLib.Slider Slider2 
       Height          =   495
       Left            =   0
-      TabIndex        =   20
+      TabIndex        =   18
       Top             =   3840
       Width           =   1695
       _ExtentX        =   2990
@@ -144,22 +155,6 @@ Begin VB.Form DebugPanel
       SelStart        =   1
       TickFrequency   =   3
       Value           =   1
-   End
-   Begin VB.CommandButton Command11 
-      Caption         =   "Shaftf Off"
-      Height          =   255
-      Left            =   5640
-      TabIndex        =   19
-      Top             =   840
-      Width           =   855
-   End
-   Begin VB.CommandButton Command10 
-      Caption         =   "Shaftf On"
-      Height          =   255
-      Left            =   4680
-      TabIndex        =   18
-      Top             =   840
-      Width           =   855
    End
    Begin VB.CommandButton Command9 
       Caption         =   "Close Elevator"
@@ -178,20 +173,20 @@ Begin VB.Form DebugPanel
       Width           =   855
    End
    Begin VB.CommandButton Command7 
-      Caption         =   "Shafts Off"
+      Caption         =   "All Shafts Off"
       Height          =   255
-      Left            =   5640
+      Left            =   5760
       TabIndex        =   15
       Top             =   600
-      Width           =   855
+      Width           =   1095
    End
    Begin VB.CommandButton Command6 
-      Caption         =   "Shafts On"
+      Caption         =   "All Shafts On"
       Height          =   255
       Left            =   4680
       TabIndex        =   14
       Top             =   600
-      Width           =   855
+      Width           =   1095
    End
    Begin VB.CommandButton Command5 
       Caption         =   "Recreate Objects"
@@ -222,9 +217,9 @@ Begin VB.Form DebugPanel
    Begin VB.CommandButton Command3 
       Caption         =   "Goto M"
       Height          =   375
-      Left            =   3360
+      Left            =   2640
       TabIndex        =   9
-      Top             =   4800
+      Top             =   4845
       Width           =   975
    End
    Begin VB.CheckBox Check1 
@@ -283,9 +278,9 @@ Begin VB.Form DebugPanel
    Begin VB.CommandButton Command1 
       Caption         =   "Go"
       Height          =   375
-      Left            =   1920
+      Left            =   1680
       TabIndex        =   2
-      Top             =   4800
+      Top             =   4845
       Width           =   855
    End
    Begin MSComctlLib.Slider Slider1 
@@ -317,7 +312,7 @@ Begin VB.Form DebugPanel
       Caption         =   "Elevator floor indicators - click for queue information"
       Height          =   255
       Left            =   105
-      TabIndex        =   68
+      TabIndex        =   62
       Top             =   1995
       Width           =   4695
    End
@@ -335,7 +330,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   4320
-      TabIndex        =   65
+      TabIndex        =   59
       Top             =   3360
       Width           =   495
    End
@@ -353,7 +348,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   3840
-      TabIndex        =   64
+      TabIndex        =   58
       Top             =   3360
       Width           =   495
    End
@@ -371,7 +366,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   3360
-      TabIndex        =   63
+      TabIndex        =   57
       Top             =   3360
       Width           =   495
    End
@@ -389,7 +384,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   2880
-      TabIndex        =   62
+      TabIndex        =   56
       Top             =   3360
       Width           =   495
    End
@@ -407,7 +402,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   2400
-      TabIndex        =   61
+      TabIndex        =   55
       Top             =   3360
       Width           =   495
    End
@@ -425,7 +420,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   1920
-      TabIndex        =   60
+      TabIndex        =   54
       Top             =   3360
       Width           =   495
    End
@@ -443,7 +438,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   1440
-      TabIndex        =   59
+      TabIndex        =   53
       Top             =   3360
       Width           =   495
    End
@@ -461,7 +456,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   960
-      TabIndex        =   58
+      TabIndex        =   52
       Top             =   3360
       Width           =   495
    End
@@ -479,7 +474,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   480
-      TabIndex        =   57
+      TabIndex        =   51
       Top             =   3360
       Width           =   495
    End
@@ -497,7 +492,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   0
-      TabIndex        =   56
+      TabIndex        =   50
       Top             =   3360
       Width           =   495
    End
@@ -515,7 +510,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   4320
-      TabIndex        =   55
+      TabIndex        =   49
       Top             =   3000
       Width           =   495
    End
@@ -533,7 +528,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   3840
-      TabIndex        =   54
+      TabIndex        =   48
       Top             =   3000
       Width           =   495
    End
@@ -551,7 +546,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   3360
-      TabIndex        =   53
+      TabIndex        =   47
       Top             =   3000
       Width           =   495
    End
@@ -569,7 +564,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   2880
-      TabIndex        =   52
+      TabIndex        =   46
       Top             =   3000
       Width           =   495
    End
@@ -587,7 +582,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   2400
-      TabIndex        =   51
+      TabIndex        =   45
       Top             =   3000
       Width           =   495
    End
@@ -605,7 +600,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   1920
-      TabIndex        =   50
+      TabIndex        =   44
       Top             =   3000
       Width           =   495
    End
@@ -623,7 +618,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   1440
-      TabIndex        =   49
+      TabIndex        =   43
       Top             =   3000
       Width           =   495
    End
@@ -641,7 +636,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   960
-      TabIndex        =   48
+      TabIndex        =   42
       Top             =   3000
       Width           =   495
    End
@@ -659,7 +654,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   480
-      TabIndex        =   47
+      TabIndex        =   41
       Top             =   3000
       Width           =   495
    End
@@ -677,7 +672,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   0
-      TabIndex        =   46
+      TabIndex        =   40
       Top             =   3000
       Width           =   495
    End
@@ -695,7 +690,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   4320
-      TabIndex        =   45
+      TabIndex        =   39
       Top             =   2640
       Width           =   495
    End
@@ -713,7 +708,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   3840
-      TabIndex        =   44
+      TabIndex        =   38
       Top             =   2640
       Width           =   495
    End
@@ -731,7 +726,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   3360
-      TabIndex        =   43
+      TabIndex        =   37
       Top             =   2640
       Width           =   495
    End
@@ -749,7 +744,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   2880
-      TabIndex        =   42
+      TabIndex        =   36
       Top             =   2640
       Width           =   495
    End
@@ -767,7 +762,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   2400
-      TabIndex        =   41
+      TabIndex        =   35
       Top             =   2640
       Width           =   495
    End
@@ -785,7 +780,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   1920
-      TabIndex        =   40
+      TabIndex        =   34
       Top             =   2640
       Width           =   495
    End
@@ -803,7 +798,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   1440
-      TabIndex        =   39
+      TabIndex        =   33
       Top             =   2640
       Width           =   495
    End
@@ -821,7 +816,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   960
-      TabIndex        =   38
+      TabIndex        =   32
       Top             =   2640
       Width           =   495
    End
@@ -839,7 +834,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   480
-      TabIndex        =   37
+      TabIndex        =   31
       Top             =   2640
       Width           =   495
    End
@@ -857,7 +852,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   0
-      TabIndex        =   36
+      TabIndex        =   30
       Top             =   2640
       Width           =   495
    End
@@ -875,7 +870,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   4320
-      TabIndex        =   29
+      TabIndex        =   27
       Top             =   2280
       Width           =   495
    End
@@ -893,7 +888,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   3840
-      TabIndex        =   28
+      TabIndex        =   26
       Top             =   2280
       Width           =   495
    End
@@ -911,7 +906,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   3360
-      TabIndex        =   27
+      TabIndex        =   25
       Top             =   2280
       Width           =   495
    End
@@ -929,7 +924,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   2880
-      TabIndex        =   26
+      TabIndex        =   24
       Top             =   2280
       Width           =   495
    End
@@ -947,7 +942,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   2400
-      TabIndex        =   25
+      TabIndex        =   23
       Top             =   2280
       Width           =   495
    End
@@ -965,7 +960,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   1920
-      TabIndex        =   24
+      TabIndex        =   22
       Top             =   2280
       Width           =   495
    End
@@ -983,7 +978,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   1440
-      TabIndex        =   23
+      TabIndex        =   21
       Top             =   2280
       Width           =   495
    End
@@ -1001,7 +996,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   960
-      TabIndex        =   22
+      TabIndex        =   20
       Top             =   2280
       Width           =   495
    End
@@ -1019,7 +1014,7 @@ Begin VB.Form DebugPanel
       EndProperty
       Height          =   375
       Left            =   480
-      TabIndex        =   21
+      TabIndex        =   19
       Top             =   2280
       Width           =   495
    End
@@ -1080,6 +1075,16 @@ End Sub
 
 
 
+Private Sub Check13_Click()
+If Check13.Value = 1 Then Landscape.Enable True
+If Check13.Value = 0 Then Landscape.Enable False
+End Sub
+
+Private Sub Check14_Click()
+If Check14.Value = 1 Then Buildings.Enable True
+If Check14.Value = 0 Then Buildings.Enable False
+End Sub
+
 Private Sub Check2_Click()
 If Check2.Value = 1 Then External.Enable True
 If Check2.Value = 0 Then External.Enable False
@@ -1131,6 +1136,11 @@ End Sub
 
 
 
+Private Sub Check8_Click()
+If Check8.Value = 1 Then ShaftsFloor(CameraFloor).Enable True
+If Check8.Value = 0 Then ShaftsFloor(CameraFloor).Enable False
+End Sub
+
 Private Sub Command1_Click()
 ElevatorNumber = Slider2.Value
 'If Check9.Value = 1 Then ElevatorSync(ElevatorNumber) = True Else ElevatorSync(ElevatorNumber) = False
@@ -1139,13 +1149,6 @@ GotoFloor(ElevatorNumber) = Slider1.Value
 If GotoFloor(ElevatorNumber) = 1 Then GotoFloor(ElevatorNumber) = -1
 End Sub
 
-Private Sub Command10_Click()
-ShaftsFloor(CameraFloor).Enable True
-End Sub
-
-Private Sub Command11_Click()
-ShaftsFloor(CameraFloor).Enable False
-End Sub
 
 
 Private Sub Command12_Click()
@@ -1162,6 +1165,14 @@ End Sub
 
 Private Sub Command15_Click()
 Buildings.Enable False
+End Sub
+
+Private Sub Command10_Click()
+Call AddRoute(Slider1.Value, Slider2.Value, 1)
+End Sub
+
+Private Sub Command11_Click()
+Call AddRoute(Slider1.Value, Slider2.Value, -1)
 End Sub
 
 Private Sub Command16_Click()
@@ -1425,4 +1436,10 @@ If ElevatorInsDoorL(1).IsMeshEnabled = True Then Check6.Value = 1
 If ElevatorInsDoorL(1).IsMeshEnabled = False Then Check6.Value = 0
 If ElevatorDoorL(1).IsMeshEnabled = True Then Check7.Value = 1
 If ElevatorDoorL(1).IsMeshEnabled = False Then Check7.Value = 0
+If ShaftsFloor(CameraFloor).IsMeshEnabled = True Then Check8.Value = 1
+If ShaftsFloor(CameraFloor).IsMeshEnabled = False Then Check8.Value = 0
+If Landscape.IsMeshEnabled = True Then Check13.Value = 1
+If Landscape.IsMeshEnabled = False Then Check13.Value = 0
+If Buildings.IsMeshEnabled = True Then Check13.Value = 1
+If Buildings.IsMeshEnabled = False Then Check13.Value = 0
 End Sub
