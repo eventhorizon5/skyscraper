@@ -533,7 +533,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.96 Beta
+'Skycraper 0.97 Beta - Simulation Window
 'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -618,10 +618,10 @@ Public Sub DrawMenu()
     If b(i) = True Then RollOnTexture = i
   Next i
 End Sub
-Public Function IsOnButton(X, Y, X2, Y2) As Boolean
+Public Function IsOnButton(X, Y, x2, Y2) As Boolean
   IsOnButton = False
   If mx > X Then
-    If mx < X2 Then
+    If mx < x2 Then
       If my > Y Then
         If my < Y2 Then
           IsOnButton = True
@@ -1058,6 +1058,7 @@ Sim.ScaleHeight = 504
         Set scr = Nothing
         Set Screen = Nothing
         Sim.Refresh
+        'start simulator
         Start
         Exit Sub
     End If

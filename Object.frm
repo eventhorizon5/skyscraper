@@ -309,7 +309,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.96 Beta
+'Skycraper 0.97 Beta - Object Manager
 'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -529,8 +529,8 @@ Junk = Objects(ObjectIndex).IsMeshEnabled
 
 'Code Generation
 OutText = "i = " + LTrim(Str$(ObjectIndex)) + " + (150 * (Floor - 1))" + vbCrLf + "Call Init_Objects(Floor, " + LTrim(Str$(ObjectIndex)) + ")" + vbCrLf + "Objects(i).Load3DSMesh App.Path + """ + File1.Path + "\" + File1.FileName + """, , True, , True, True" + vbCrLf + "Objects(i).SetRotation " + Str$(Objects(ObjectIndex).GetRotation.X) + "," + Str$(Objects(ObjectIndex).GetRotation.Y) + "," + Str$(Objects(ObjectIndex).GetRotation.z) + vbCrLf + "Objects(i).ScaleMesh " + Str$(Objects(ObjectIndex).GetMeshScale.X) + "," + Str$(Objects(ObjectIndex).GetMeshScale.Y) + "," + Str$(Objects(ObjectIndex).GetMeshScale.z) + vbCrLf + "Objects(i).SetPosition " + Str$(Objects(ObjectIndex).GetPosition.X) + ", "
-If CameraFloor > 1 Then OutText = OutText + "(Floor * FloorHeight) + FloorHeight + "
-OutText = OutText + Str$(Objects(ObjectIndex).GetPosition.Y - ((CameraFloor * FloorHeight) + FloorHeight)) + "," + Str$(Objects(ObjectIndex).GetPosition.z) + vbCrLf
+If CameraFloor > 1 Then OutText = OutText + "FloorAltitude + "
+OutText = OutText + Str$(Objects(ObjectIndex).GetPosition.Y - GetFloorAltitude(CameraFloor)) + "," + Str$(Objects(ObjectIndex).GetPosition.z) + vbCrLf
 If Text1.Text <> OutText Then Text1.Text = OutText
 Exit Sub
 ErrorHandler:
