@@ -334,7 +334,67 @@ Call ProcessFloors
   'Shafts.Enable False
   'Elevator1.Enable False
   
-
+  Print "Optimizing Meshes.";
+  For i = 1 To 138
+  Print ".";
+  Room(i).Optimize
+  Stairs(i).Optimize
+  ShaftsFloor(i).Optimize
+  Shafts1(i).Optimize
+  Shafts2(i).Optimize
+  Next i
+  Print "."
+  For i = -1 To 138
+  Print ".";
+  ElevatorDoor1L(i).Optimize
+  ElevatorDoor1R(i).Optimize
+  ElevatorDoor2L(i).Optimize
+  ElevatorDoor2R(i).Optimize
+  ElevatorDoor3L(i).Optimize
+  ElevatorDoor3R(i).Optimize
+  ElevatorDoor4L(i).Optimize
+  ElevatorDoor4R(i).Optimize
+  ElevatorDoor5L(i).Optimize
+  ElevatorDoor5R(i).Optimize
+  ElevatorDoor6L(i).Optimize
+  ElevatorDoor6R(i).Optimize
+  ElevatorDoor7L(i).Optimize
+  ElevatorDoor7R(i).Optimize
+  ElevatorDoor8L(i).Optimize
+  ElevatorDoor8R(i).Optimize
+  ElevatorDoor9L(i).Optimize
+  ElevatorDoor9R(i).Optimize
+  ElevatorDoor10L(i).Optimize
+  ElevatorDoor10R(i).Optimize
+  Buttons1(i).Optimize
+  Buttons2(i).Optimize
+  Buttons3(i).Optimize
+  Buttons4(i).Optimize
+  Buttons5(i).Optimize
+  Buttons6(i).Optimize
+  Buttons7(i).Optimize
+  Buttons8(i).Optimize
+  Buttons9(i).Optimize
+  Buttons10(i).Optimize
+  Next i
+  Print ".";
+  External.Optimize
+  Print ".";
+  For i = 1 To 10
+  Elevator(i).Optimize
+  ElevatorInsDoorL(i).Optimize
+  ElevatorInsDoorR(i).Optimize
+  Plaque(i).Optimize
+  Print ".";
+  ElevatorInsDoorL(i).Optimize
+  Print ".";
+  ElevatorInsDoorR(i).Optimize
+  Next i
+  Print ".";
+  Buildings.Optimize
+  
+  Print "Done"
+  
   'ElevatorMusic.Loop_ = True
   'Call ElevatorMusic.Play
   
