@@ -62,8 +62,22 @@ th2 = th
 'Sizing formulas from version 1.0
 If tw = 0 Then tw2 = (Abs(x1) + Abs(x2)) * 0.086
 If th = 0 Then tw2 = (Abs(z1) + Abs(z2)) * 0.08
-
+MsgBox (tw2)
 Level.AddFloor GetTex(Texture), x1, z1, x2, z2, FloorAltitude + voffset, tw2, th2
+End Sub
+
+Public Sub AddCrawlSpaceFloor(Texture As String, x1 As Single, z1 As Single, x2 As Single, z2 As Single, voffset As Single, tw As Single, th As Single)
+'Adds a floor with the specified dimensions and vertical offset
+Dim tw2 As Single
+Dim th2 As Single
+tw2 = tw
+th2 = th
+
+'Sizing formulas from version 1.0
+If tw = 0 Then tw2 = (Abs(x1) + Abs(x2)) * 0.086
+If th = 0 Then tw2 = (Abs(z1) + Abs(z2)) * 0.08
+
+Level.AddFloor GetTex(Texture), x1, z1, x2, z2, FloorAltitude + FloorHeight + voffset, tw2, th2
 End Sub
 
 Public Sub AddWall(Texture As String, x1 As Single, z1 As Single, x2 As Single, z2 As Single, height As Single, voffset As Single, tw As Single, th As Single)
@@ -78,6 +92,20 @@ If tw = 0 Then tw2 = (Abs(x1) + Abs(x2)) * 0.086
 If th = 0 Then tw2 = (Abs(z1) + Abs(z2)) * 0.08
 
 Level.AddWall GetTex(Texture), x1, z1, x2, z2, height, FloorAltitude + voffset, tw2, th2
+End Sub
+
+Public Sub AddCrawlSpaceWall(Texture As String, x1 As Single, z1 As Single, x2 As Single, z2 As Single, height As Single, voffset As Single, tw As Single, th As Single)
+'Adds a wall with the specified dimensions
+Dim tw2 As Single
+Dim th2 As Single
+tw2 = tw
+th2 = th
+
+'Sizing formulas from version 1.0
+If tw = 0 Then tw2 = (Abs(x1) + Abs(x2)) * 0.086
+If th = 0 Then tw2 = (Abs(z1) + Abs(z2)) * 0.08
+
+Level.AddWall GetTex(Texture), x1, z1, x2, z2, height, FloorAltitude + FloorHeight + voffset, tw2, th2
 End Sub
 
 Sub CreateWallBox(TextureName As String, WidthX As Single, LengthZ As Single, CenterX As Single, CenterZ As Single, CSpace As Boolean, ResX As Single, ResY As Single)
