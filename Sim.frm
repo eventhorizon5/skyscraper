@@ -944,7 +944,7 @@ End Sub
 
 
 Public Sub Form_Load()
-'On Error Resume Next
+On Error GoTo ErrorHandler
 Sim.ScaleWidth = 671
 Sim.ScaleMode = 3
 Sim.ScaleHeight = 504
@@ -1068,6 +1068,11 @@ Sim.ScaleHeight = 504
     Set Effect = Nothing
   MainMusic.Stop_
   End
+  
+ErrorHandler:
+   MsgBox "An error occurred loading and initializing the TrueVision3D graphics engine." + vbCrLf + "Skyscraper requires TrueVision3D 6.2 to be installed." + vbCrLf + "It can be obtained at http://www.truevision3d.com" + vbCrLf + "Make sure it is installed properly and that all the libraries exist." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
+
 End Sub
 
 Private Sub Form_LostFocus()
