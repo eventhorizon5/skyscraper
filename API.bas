@@ -63,7 +63,7 @@ Dim total As Single
 For curfloor = BottomFloor To TopFloor
 DoEvents
 total = GetFloorAltitude(curfloor)
-If Camera.GetPosition.Y >= total And Camera.GetPosition.Y <= total + GetFloorHeight(curfloor) Then Exit For
+If Camera.GetPosition.Y >= total And Camera.GetPosition.Y < total + GetFloorHeight(curfloor) Then Exit For
 Next curfloor
 
 GetCameraFloor = curfloor
@@ -73,35 +73,29 @@ End Function
 Function GetElevatorFloor(Number As Integer) As Integer
 'Determine what floor the specified elevator is on
 Dim curfloor As Integer
-Dim total As Single
 
 'Find the upper and lower bounds of each floor, then see if the
 'elevator altitude is within the bounds
 For curfloor = BottomFloor To TopFloor
 DoEvents
-total = GetFloorAltitude(curfloor)
-If Elevator(Number).GetPosition.Y >= total And Elevator(Number).GetPosition.Y <= total + GetFloorHeight(curfloor) Then Exit For
+If Elevator(Number).GetPosition.Y >= GetFloorAltitude(curfloor) And Elevator(Number).GetPosition.Y < GetFloorAltitude(curfloor) + GetFloorHeight(curfloor) Then Exit For
 Next curfloor
 
 GetElevatorFloor = curfloor
-
 End Function
 
 Function GetFloorExact(Number As Single) As Single
 'Determine what floor the specified altitude is part of
 Dim curfloor As Integer
-Dim total As Single
 
 'Find the upper and lower bounds of each floor, then see if the
 'altitude is within the bounds
 For curfloor = BottomFloor To TopFloor
 DoEvents
-total = GetFloorAltitude(curfloor)
-If Number >= total And Number <= total + GetFloorHeight(curfloor) Then Exit For
+If Number >= GetFloorAltitude(curfloor) And Number < GetFloorAltitude(curfloor) + GetFloorHeight(curfloor) Then Exit For
 Next curfloor
 
 GetFloorExact = curfloor + ((Number - GetFloorAltitude(curfloor)) / GetFloorHeight(curfloor))
-
 End Function
 
 Sub SetCameraFloor(Floor As Integer)
