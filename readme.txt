@@ -1,4 +1,4 @@
-Skyscraper version 0.9 - Beta
+Skyscraper version 0.91 - Beta
 ©2003 Ryan Thoryk
 http://www.tliquest.net/skyscraper
 
@@ -39,9 +39,10 @@ Important keys used in the game:
 F1 - to take a screenshot (saves as c:\shot.bmp)
 PgUp - Look upwards (warning - there's alignment problems with this)
 PgDown - Look downwards (same problem with above)
-Home - Float upwards
+Home - Float upwards (jump if collision detection is on)
 End - Float downwards
 Space - Straight out viewpoint
+Z - Run (hold down Z while moving)
 
 Current building floor layout:
 
@@ -62,9 +63,6 @@ M - Mezzanine inside the 3 story lobby
 136 - balcony of the 135th floor ballroom
 137 - Mechanical
 138 - Roof w/Heliport and radio/tv towers
-
-
-Note - if you're getting poor performance in the lobby, click the "Remove Objects" button.
 
 
  
