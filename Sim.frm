@@ -1,7 +1,6 @@
 VERSION 5.00
 Begin VB.Form Sim 
    BackColor       =   &H80000007&
-   BorderStyle     =   1  'Fixed Single
    Caption         =   "SkyScraper"
    ClientHeight    =   7920
    ClientLeft      =   2025
@@ -9,10 +8,9 @@ Begin VB.Form Sim
    ClientWidth     =   10440
    Icon            =   "Sim.frx":0000
    LinkTopic       =   "Form1"
-   MaxButton       =   0   'False
-   MinButton       =   0   'False
    ScaleHeight     =   7920
    ScaleWidth      =   10440
+   StartUpPosition =   2  'CenterScreen
    Begin VB.Timer IntroMusic 
       Enabled         =   0   'False
       Interval        =   10
@@ -1083,20 +1081,13 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
 isRunning = False
 End Sub
 
+Private Sub Form_Resize()
+TV.ResizeDevice
+End Sub
+
 Private Sub Form_Unload(Cancel As Integer)
 
-    'Set Listener = Nothing
-    Set SoundEngine = Nothing
-    Set TV = Nothing
-    Set Scene = Nothing
-    Set External = Nothing
-    'Set Shafts = Nothing
-    For i = 1 To 40
-    Set Elevator(i) = Nothing
-    'Set ElevatorMusic(i) = Nothing
-    Set ElevatorSounds(i) = Nothing
-    Next i
-    
+    Call CleanUp
     End
 End Sub
 
