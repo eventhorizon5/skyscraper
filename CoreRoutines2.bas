@@ -1,5 +1,5 @@
 Attribute VB_Name = "CoreRoutines2"
-'Skycraper 0.95b Beta
+'Skycraper 0.96 Beta
 'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -2524,3 +2524,14 @@ If Floor = 138 Then
 End If
 
 End Sub
+
+Function IsEven(Number As Integer)
+
+'If number divides evenly, return true
+If Number / 2 = Int(Number / 2) Then
+    IsEven = True
+Else
+    IsEven = False
+End If
+
+End Function
