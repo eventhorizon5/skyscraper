@@ -1,6 +1,6 @@
 Attribute VB_Name = "Triton_Center"
-'Skyscraper 1.1 Alpha
-'Copyright ©2004 Ryan Thoryk
+'Skyscraper 1.1 Alpha - Triton Center Code
+'Copyright ©2005 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
 'Contact - ryan@tliquest.net
