@@ -40,51 +40,76 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.6 Alpha
-'Created by Ryan Thoryk
+'Skycraper 0.7 Alpha
+'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
+
+'This program is free software; you can redistribute it and/or
+'modify it under the terms of the GNU General Public License
+'as published by the Free Software Foundation; either version 2
+'of the License, or (at your option) any later version.
+
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'GNU General Public License for more details.
+
+'You should have received a copy of the GNU General Public License
+'along with this program; if not, write to the Free Software
+'Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 Option Explicit
 
 
 
 Private Sub ElevatorTimer_Timer()
-ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
+ElevatorFloor = (Elevator1.GetPosition.Y - 25) / 25
       If ElevatorFloor < 1 Then ElevatorFloor = 1
       
-      If ElevatorDirection <> 0 Then CameraFloor = (Camera.GetPosition.y - 25 - 10) / 25
+      If InStairwell = False Then CameraFloor = (Camera.GetPosition.Y - 25 - 10) / 25
       If CameraFloor < 1 Then CameraFloor = 1
       
-      If GotoFloor <> 0 And GotoFloor > CurrentFloor And ElevatorDirection = 0 And ElevatorDoorL(ElevatorFloor).GetPosition.z <= 0 Then
+      If GotoFloor = ElevatorFloor - 1 Then CurrentFloor = ElevatorFloor
+
+      If GotoFloor <> 0 And GotoFloor > CurrentFloor And ElevatorDirection = 0 And ElevatorDoorL(ElevatorFloor2).GetPosition.z <= 0 Then
       ElevatorDirection = 1
       OriginalLocation = CurrentFloorExact
       DistanceToTravel = ((GotoFloor * 25) + 25) - ((CurrentFloorExact * 25) + 25)
       If ElevatorSync = True Then
       Room(CameraFloor).Enable False
-      ElevatorDoorL(CameraFloor).Enable False
-      ElevatorDoorR(CameraFloor).Enable False
+      ElevatorDoorL(CameraFloor2).Enable False
+      ElevatorDoorR(CameraFloor2).Enable False
+      DestroyObjects (CameraFloor)
+      ShaftsFloor(CameraFloor).Enable False
+      Atmos.SkyBox_Enable False
       Stairs(CameraFloor).Enable False
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
       End If
       End If
-      If GotoFloor <> 0 And GotoFloor < CurrentFloor And ElevatorDirection = 0 And ElevatorDoorL(ElevatorFloor).GetPosition.z <= 0 Then
+      If GotoFloor <> 0 And GotoFloor < CurrentFloor And ElevatorDirection = 0 And ElevatorDoorL(ElevatorFloor2).GetPosition.z <= 0 Then
       ElevatorDirection = -1
       OriginalLocation = CurrentFloorExact
       DistanceToTravel = ((CurrentFloorExact * 25) + 25) - ((GotoFloor * 25) + 25)
       If ElevatorSync = True Then
       Room(CameraFloor).Enable False
-      ElevatorDoorL(CameraFloor).Enable False
-      ElevatorDoorR(CameraFloor).Enable False
+      ElevatorDoorL(CameraFloor2).Enable False
+      ElevatorDoorR(CameraFloor2).Enable False
+      DestroyObjects (CameraFloor)
+      ShaftsFloor(CameraFloor).Enable False
+      Atmos.SkyBox_Enable False
       Stairs(CameraFloor).Enable False
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
       End If
       End If
       
-       CurrentFloor = Int((elevator1start.y - 25) / 25)
-       CurrentFloorExact = (elevator1start.y - 25) / 25
-       Form2.Text1.Text = "Sound Location=7.75,20,7 " + vbCrLf + "Elevator Floor=" + Str$(ElevatorFloor) + vbCrLf + "Camera Floor=" + Str$(CameraFloor) + vbCrLf + "Current Location= " + Str$(Int(Camera.GetPosition.x)) + "," + Str$(Int(Camera.GetPosition.y)) + "," + Str$(Int(Camera.GetPosition.z)) + vbCrLf + "Distance to Travel=" + Str$(DistanceToTravel) + vbCrLf + "Destination=" + Str$(Destination) + vbCrLf + "Rate=" + Str$(ElevatorEnable / 5)
+       CurrentFloor = Int((elevator1start.Y - 25) / 25)
+       CurrentFloorExact = (elevator1start.Y - 25) / 25
+       'CurrentFloor = (Elevator1.GetPosition.y / 25) - 1
+       'CurrentFloorExact = Int((Elevator1.GetPosition.y / 25) - 1)
+
+       'Form2.Text1.Text = "Sound Location=7.75,20,7 " + vbCrLf + "Elevator Floor=" + Str$(ElevatorFloor) + vbCrLf + "Camera Floor=" + Str$(CameraFloor) + vbCrLf + "Current Location= " + Str$(Int(Camera.GetPosition.x)) + "," + Str$(Int(Camera.GetPosition.y)) + "," + Str$(Int(Camera.GetPosition.z)) + vbCrLf + "Distance to Travel=" + Str$(DistanceToTravel) + vbCrLf + "Destination=" + Str$(Destination) + vbCrLf + "Rate=" + Str$(ElevatorEnable / 5)
         
         If ElevatorEnable >= 0 And ElevatorDirection = 1 Then
         'sound
@@ -95,7 +120,7 @@ ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
         Elevator1Sounds.maxDistance = 100
         Call Elevator1Sounds.SetConeOrientation(0, 0, 90)
         Elevator1Sounds.ConeOutsideVolume = 0
-        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.y + 20, -23)
+        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.Y + 20, -23)
         Elevator1Sounds.Play
         ElevatorCheck = 1
         End If
@@ -109,13 +134,13 @@ ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
         Elevator1DoorL.MoveRelative 0, (ElevatorEnable / 5), 0
         Elevator1DoorR.MoveRelative 0, (ElevatorEnable / 5), 0
         If ElevatorSync = True Then Camera.MoveRelative 0, (ElevatorEnable / 5), 0
-        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
-        ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
+        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
+        'ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
         ElevatorEnable = ElevatorEnable + 0.25
         If ElevatorEnable <= 15 Then StoppingDistance = CurrentFloorExact - OriginalLocation + 0.4
         If ElevatorEnable > 15 Then ElevatorEnable = 15
         Destination = ((OriginalLocation * 25) + 25) + DistanceToTravel - 35
-        If GotoFloor <> 0 And elevator1start.y >= (Destination - (StoppingDistance * 25) + 25) Then ElevatorDirection = -1: ElevatorCheck = 0
+        If GotoFloor <> 0 And elevator1start.Y >= (Destination - (StoppingDistance * 25) + 25) Then ElevatorDirection = -1: ElevatorCheck = 0
         End If
       
         If ElevatorEnable > 0 And ElevatorDirection = -1 Then
@@ -136,8 +161,8 @@ ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
         Elevator1DoorR.MoveRelative 0, (ElevatorEnable / 5), 0
         If ElevatorSync = True Then Camera.MoveRelative 0, (ElevatorEnable / 5), 0
         
-        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
-        ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
+        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
+        'ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
         ElevatorEnable = ElevatorEnable - 0.25
         If ElevatorEnable < 0 Then ElevatorEnable = 0
         If ElevatorEnable = 0 Then ElevatorDirection = 0
@@ -152,7 +177,7 @@ ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
         Elevator1Sounds.maxDistance = 100
         Call Elevator1Sounds.SetConeOrientation(0, 0, 90)
         Elevator1Sounds.ConeOutsideVolume = 0
-        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.y + 20, -23)
+        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.Y + 20, -23)
         Elevator1Sounds.Play
         ElevatorCheck = 1
         End If
@@ -165,13 +190,13 @@ ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
         Elevator1DoorL.MoveRelative 0, (ElevatorEnable / 5), 0
         Elevator1DoorR.MoveRelative 0, (ElevatorEnable / 5), 0
         If ElevatorSync = True Then Camera.MoveRelative 0, (ElevatorEnable / 5), 0
-        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
-        ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
+        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
+        'ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
         ElevatorEnable = ElevatorEnable - 0.25
         If ElevatorEnable >= -15 Then StoppingDistance = OriginalLocation - CurrentFloorExact
         If ElevatorEnable < -15 Then ElevatorEnable = -15
         Destination = ((OriginalLocation * 25) + 25) - DistanceToTravel
-        If GotoFloor <> 0 And elevator1start.y <= (Destination + (StoppingDistance * 25) + 25) Then ElevatorDirection = 1: ElevatorCheck = 0
+        If GotoFloor <> 0 And elevator1start.Y <= (Destination + (StoppingDistance * 25) + 25) Then ElevatorDirection = 1: ElevatorCheck = 0
         End If
       
         If ElevatorEnable < 0 And ElevatorDirection = 1 Then
@@ -189,20 +214,24 @@ ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
         Elevator1DoorL.MoveRelative 0, (ElevatorEnable / 5), 0
         Elevator1DoorR.MoveRelative 0, (ElevatorEnable / 5), 0
         If ElevatorSync = True Then Camera.MoveRelative 0, (ElevatorEnable / 5), 0
-        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
-        ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
+        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
+        'ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
         ElevatorEnable = ElevatorEnable + 0.25
         If ElevatorEnable > 0 Then ElevatorEnable = 0
         If ElevatorEnable = 0 Then ElevatorDirection = 0
         If GotoFloor <> 0 Then ElevatorCheck = 0: FineTune = True
         End If
       
-      If FineTune = True And ElevatorEnable = 0 And elevator1start.y > (GotoFloor * 25) + 25 + -0.3 And elevator1start.y < (GotoFloor * 25) + 25 + 0.3 Then
+      If FineTune = True And ElevatorEnable = 0 And elevator1start.Y > (GotoFloor * 25) + 25 + -0.3 And elevator1start.Y < (GotoFloor * 25) + 25 + 0.3 Then
       FineTune = False
       Room(CameraFloor).Enable True
-      ElevatorDoorL(CameraFloor).Enable True
-      ElevatorDoorR(CameraFloor).Enable True
+      ElevatorDoorL(CameraFloor2).Enable True
+      ElevatorDoorR(CameraFloor2).Enable True
+      ShaftsFloor(CameraFloor).Enable True
       Stairs(CameraFloor).Enable True
+      Atmos.SkyBox_Enable True
+      If CameraFloor = 137 Then Shafts.Enable True
+      InitObjectsForFloor (CameraFloor)
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable True
       GotoFloor = 0
@@ -212,8 +241,8 @@ ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
       ElevatorCheck2 = 0
       ElevatorCheck3 = 0
       ElevatorCheck4 = 0
-      If CameraFloor > 1 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10, Camera.GetPosition.z
-      If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.x, 10, Camera.GetPosition.z
+      If CameraFloor > 1 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10, Camera.GetPosition.z
+      If CameraFloor = 1 And FloorIndicator <> "M" Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
       End If
       
       If FineTune = True Then
@@ -222,13 +251,13 @@ ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
       Elevator1Sounds.Play
       ElevatorCheck3 = 1
       End If
-      If elevator1start.y < (GotoFloor * 25) + 25 Then
+      If elevator1start.Y < (GotoFloor * 25) + 25 Then
       Elevator1.MoveRelative 0, 0.2, 0
       Elevator1DoorL.MoveRelative 0, 0.2, 0
       Elevator1DoorR.MoveRelative 0, 0.2, 0
       If ElevatorSync = True Then Camera.MoveRelative 0, 0.2, 0
       End If
-      If elevator1start.y > (GotoFloor * 25) + 25 Then
+      If elevator1start.Y > (GotoFloor * 25) + 25 Then
       Elevator1.MoveRelative 0, -0.2, 0
       Elevator1DoorL.MoveRelative 0, -0.2, 0
       Elevator1DoorR.MoveRelative 0, -0.2, 0
@@ -237,7 +266,7 @@ ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
       End If
       
       If OpenElevator = 1 Then
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z >= 4 Then OpenElevator = 0: GoTo OpenElevator1
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z >= 4 Then OpenElevator = 0: GoTo OpenElevator1
       If ElevatorCheck4 = 0 Then
         If Elevator1Sounds.PlayState = TV_PLAYSTATE_PLAYING Then
         Elevator1Sounds.Stop_
@@ -248,33 +277,33 @@ ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
         Elevator1Sounds.maxDistance = 1000
         Call Elevator1Sounds.SetConeOrientation(0, -5, 0)
         Elevator1Sounds.ConeOutsideVolume = 0
-        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.y, -23)
+        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.Y, -23)
         Elevator1Sounds.Play
         ElevatorCheck4 = 1
       End If
       OpenElevatorLoc = OpenElevatorLoc + 0.02
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z > 1 Then OpenElevator = 2
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z > 1 Then OpenElevator = 2
 OpenElevator1:
       End If
       
       If OpenElevator = 2 Then
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z > 3 Then OpenElevator = 3
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z > 3 Then OpenElevator = 3
       End If
       
       If OpenElevator = 3 Then
       ElevatorCheck4 = 0
       OpenElevatorLoc = OpenElevatorLoc - 0.02
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z < 7 And OpenElevatorLoc = 0 Then OpenElevatorLoc = 0.02
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z < 7 And OpenElevatorLoc = 0 Then OpenElevatorLoc = 0.02
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
       If OpenElevatorLoc <= 0 Then
@@ -285,7 +314,7 @@ OpenElevator1:
       End If
       
       If OpenElevator = -1 Then
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z <= 0 Then OpenElevator = 0: GoTo OpenElevator2
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z <= 0 Then OpenElevator = 0: GoTo OpenElevator2
       If ElevatorCheck4 = 0 Then
         If Elevator1Sounds.PlayState = TV_PLAYSTATE_PLAYING Then
         Elevator1Sounds.Stop_
@@ -296,42 +325,42 @@ OpenElevator1:
         Elevator1Sounds.maxDistance = 1000
         Call Elevator1Sounds.SetConeOrientation(0, 0, 90)
         Elevator1Sounds.ConeOutsideVolume = 0
-        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.y, -23)
+        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.Y, -23)
         Elevator1Sounds.Play
         ElevatorCheck4 = 1
       End If
       OpenElevatorLoc = OpenElevatorLoc - 0.02
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z < 3 Then OpenElevator = -2
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z < 3 Then OpenElevator = -2
 OpenElevator2:
       End If
       
       If OpenElevator = -2 Then
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z < 1 Then OpenElevator = -3
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z < 1 Then OpenElevator = -3
       End If
       
       If OpenElevator = -3 Then
       ElevatorCheck4 = 0
       OpenElevatorLoc = OpenElevatorLoc + 0.02
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z > 0 And OpenElevatorLoc >= 0 Then OpenElevatorLoc = -0.02
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z > 0 And OpenElevatorLoc >= 0 Then OpenElevatorLoc = -0.02
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
       If OpenElevatorLoc >= 0 Then
       OpenElevator = 0
       OpenElevatorLoc = 0
-      Elevator1DoorL.SetPosition Elevator1DoorL.GetPosition.x, Elevator1DoorL.GetPosition.y, 0
-      Elevator1DoorR.SetPosition Elevator1DoorR.GetPosition.x, Elevator1DoorR.GetPosition.y, 0
-      ElevatorDoorL(ElevatorFloor).SetPosition ElevatorDoorL(ElevatorFloor).GetPosition.x, ElevatorDoorL(ElevatorFloor).GetPosition.y, 0
-      ElevatorDoorR(ElevatorFloor).SetPosition ElevatorDoorR(ElevatorFloor).GetPosition.x, ElevatorDoorR(ElevatorFloor).GetPosition.y, 0
+      Elevator1DoorL.SetPosition Elevator1DoorL.GetPosition.X, Elevator1DoorL.GetPosition.Y, 0
+      Elevator1DoorR.SetPosition Elevator1DoorR.GetPosition.X, Elevator1DoorR.GetPosition.Y, 0
+      ElevatorDoorL(ElevatorFloor2).SetPosition ElevatorDoorL(ElevatorFloor2).GetPosition.X, ElevatorDoorL(ElevatorFloor2).GetPosition.Y, 0
+      ElevatorDoorR(ElevatorFloor2).SetPosition ElevatorDoorR(ElevatorFloor2).GetPosition.X, ElevatorDoorR(ElevatorFloor2).GetPosition.Y, 0
       End If
       End If
       
@@ -342,6 +371,10 @@ End Sub
 Private Sub Form_GotFocus()
 Focused = True
 End Sub
+
+
+
+
 
 Sub Init_Simulator()
 'On Error GoTo ErrorHandler
@@ -354,9 +387,12 @@ Set Mesh = New TVMesh
 Set External = New TVMesh
 For i = 1 To 138
 Set Room(i) = New TVMesh
+Set Stairs(i) = New TVMesh
+Set ShaftsFloor(i) = New TVMesh
+Next i
+For i = -1 To 138
 Set ElevatorDoorL(i) = New TVMesh
 Set ElevatorDoorR(i) = New TVMesh
-Set Stairs(i) = New TVMesh
 Next i
 Set Shafts = New TVMesh
 Set Elevator1 = New TVMesh
@@ -367,17 +403,27 @@ Set Camera = New TVCamera
 
 Set TextureFactory = New TVTextureFactory
 Set SoundEngine = New TV3DMedia.TVSoundEngine
-Set ElevatorMusic = New TV3DMedia.TVSoundWave3D
+'Set ElevatorMusic = New TV3DMedia.TVSoundWave3D
 Set Elevator1Sounds = New TV3DMedia.TVSoundWave3D
+Set Light = New TVLightEngine
 
-Print "Skyscraper 0.6 Alpha"
-  
+
+   
+Print " "
+Print "Skyscraper 0.7b Alpha"
+Print "©2003 Ryan Thoryk"
+Print " "
+Print "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free"
+Print "software, and you are welcome to redistribute it under certain"
+Print "conditions. For details, see the file gpl.txt"
+Print " "
+
   If TV.ShowDriverDialog = False Then End
    DoEvents
    '2. Initialize the engine with the selected mode
    TV.SetSearchDirectory App.Path
 Print "Initializing TrueVision3D..."
-   'TV.Initialize Me.hWnd
+   'TV.Initialize Form1.hWnd
     TV.Init3DWindowedMode Form1.hWnd
     'TV.Init3DFullscreen 640, 480, 16
 
@@ -389,14 +435,18 @@ Print "TrueVision3D Initialized"
   Set External = Scene.CreateMeshBuilder("External")
   For i = 1 To 138
   Set Room(i) = Scene.CreateMeshBuilder("Room " + Str$(i))
+  Set Stairs(i) = Scene.CreateMeshBuilder("Stairs " + Str$(i))
+  Set ShaftsFloor(i) = Scene.CreateMeshBuilder("ShaftsFloor " + Str$(i))
+  Next i
+  For i = -1 To 138
   Set ElevatorDoorL(i) = Scene.CreateMeshBuilder("ElevatorDoorL " + Str$(i))
   Set ElevatorDoorR(i) = Scene.CreateMeshBuilder("ElevatorDoorR " + Str$(i))
-  Set Stairs(i) = Scene.CreateMeshBuilder("Stairs " + Str$(i))
   Next i
   Set Shafts = Scene.CreateMeshBuilder("Shafts")
   Set Elevator1 = Scene.CreateMeshBuilder("Elevator1")
   Set Elevator1DoorL = Scene.CreateMeshBuilder("Elevator1DoorL")
   Set Elevator1DoorR = Scene.CreateMeshBuilder("Elevator1DoorR")
+  
   
 Print "Mesh Areas Created"
   Scene.SetViewFrustum 90, 10000
@@ -426,7 +476,8 @@ Print "Mesh Areas Created"
   TextureFactory.LoadTexture "right.bmp", "SkyRight"
   TextureFactory.LoadTexture "front.bmp", "SkyFront"
   TextureFactory.LoadTexture "back.bmp", "SkyBack"
-    
+  TextureFactory.LoadTexture App.Path + "\objects\benedeti.jpg", "ColumnTex", , , TV_COLORKEY_NO
+
    
 Print "Textures Loaded"
       
@@ -437,478 +488,52 @@ Print "Textures Loaded"
 Print "Sound Initialized"
 
     'Load the file into the classes.
-    ElevatorMusic.Load App.Path + "\elevmusic3.wav"
+    'ElevatorMusic.Load App.Path + "\elevmusic3.wav"
     'ElevatorMusic.Load App.Path + "\elevmusic2.wav"
-Print "Music Loaded"
+'Print "Music Loaded"
     'Set sound properties.
-    ElevatorMusic.Volume = -300
-    ElevatorMusic.maxDistance = 1000
-    Call ElevatorMusic.SetConeOrientation(0, 0, 90)
-    ElevatorMusic.ConeOutsideVolume = -300
-    Call ElevatorMusic.SetPosition(-20.25, 20, -23)
+    'ElevatorMusic.Volume = -300
+    'ElevatorMusic.maxDistance = 1000
+    'Call ElevatorMusic.SetConeOrientation(0, 0, 90)
+    'ElevatorMusic.ConeOutsideVolume = -300
+    'Call ElevatorMusic.SetPosition(-20.25, 20, -23)
     'Call ElevatorMusic.SetPosition(0, 10, 0)
     'Setup the 3D listener.
-    Set Listener = SoundEngine.Get3DListener
+    'Set Listener = SoundEngine.Get3DListener
     'Call Listener.SetPosition(picDraw.ScaleWidth / 2, 0, picDraw.ScaleHeight / 2)
     'Call Listener.SetPosition(0, 0, 0)
-    Listener.rolloffFactor = 0.1
+    'Listener.rolloffFactor = 0.1
     'Listener.distanceFactor = 50
+Print "Loading 3D Objects..."
 End Sub
 
 Sub ProcessFloors()
     'Elevator Mesh are 19 feet in from the north, 51 feet in from the west and are 8 feet wide
     'Lobby
-Print "Processing Main Floor..."
-    i = 1
-    Room(i).AddFloor GetTex("Marble4"), -160, -150, 160, 150, 0, 50, 31
-    
-    External.AddWall GetTex("LobbyFront"), -160, -150, 160, -150, 75, 0, 3, 1
-    External.AddWall GetTex("LobbyFront"), 160, -150, 160, 150, 75, 0, 3, 1
-    External.AddWall GetTex("LobbyFront"), 160, 150, -160, 150, 75, 0, 3, 1
-    External.AddWall GetTex("LobbyFront"), -160, 150, -160, -150, 75, 0, 3, 1
-          
-    'Elevators
-    Shafts.AddWall GetTex("Wall2"), -32.5, -46.25, -12.5, -46.25, 25, 0, 2, 2
-    'Shafts.AddWall GetTex("Wall2"), -12.5, -46.25, -12.5, 46.25, 25, 0, 8, 2
-    'cut side wall start
-    Shafts.AddWall GetTex("Wall2"), -12.5, -46.25, -12.5, -30, 25, 0, 0.8, 2
-    Shafts.AddWall GetTex("Wall2"), -12.5, -16, -12.5, 46.25, 25, 0, 4, 2
-    Shafts.AddWall GetTex("Wall2"), -12.5, -30, -12.5, -16, 5.5, 19.5, 0.8, 0.44
-    'cut side wall end
-    Shafts.AddWall GetTex("Wall2"), -12.5, 46.25, -32.5, 46.25, 25, 0, 2, 2
-    Shafts.AddWall GetTex("Wall2"), -32.5, 46.25, -32.5, -46.25, 25, 0, 8, 2
-    
-    Shafts.AddWall GetTex("Wall2"), 32.5, -46.25, 12.5, -46.25, 25, 0, 2, 2
-    Shafts.AddWall GetTex("Wall2"), 12.5, -46.25, 12.5, 46.25, 25, 0, 8, 2
-    'cut side wall start
-    'Shafts.AddWall GetTex("Wall2"), 12.5, -46.25, 12.5, -30, 25, 0, 1, 2
-    'Shafts.AddWall GetTex("Wall2"), 12.5, -16, 12.5, 46.25, 25, 0, 4, 2
-    'cut side wall end
-    Shafts.AddWall GetTex("Wall2"), 12.5, 46.25, 32.5, 46.25, 25, 0, 2, 2
-    Shafts.AddWall GetTex("Wall2"), 32.5, 46.25, 32.5, -46.25, 25, 0, 8, 2
-    
-    Shafts.AddWall GetTex("Wall2"), -32.5, -46.25, -12.5, -46.25, 25, 25, 2, 2
-    Shafts.AddWall GetTex("Wall2"), -12.5, -46.25, -12.5, 46.25, 25, 25, 8, 2
-    Shafts.AddWall GetTex("Wall2"), -12.5, 46.25, -32.5, 46.25, 25, 25, 2, 2
-    Shafts.AddWall GetTex("Wall2"), -32.5, 46.25, -32.5, -46.25, 25, 25, 8, 2
-    
-    Shafts.AddWall GetTex("Wall2"), 32.5, -46.25, 12.5, -46.25, 25, 25, 2, 2
-    Shafts.AddWall GetTex("Wall2"), 12.5, -46.25, 12.5, 46.25, 25, 25, 8, 2
-    Shafts.AddWall GetTex("Wall2"), 12.5, 46.25, 32.5, 46.25, 25, 25, 2, 2
-    Shafts.AddWall GetTex("Wall2"), 32.5, 46.25, 32.5, -46.25, 25, 25, 8, 2
-    
-    Shafts.AddWall GetTex("Wall2"), -32.5, -46.25, -12.5, -46.25, 25, 50, 2, 2
-    Shafts.AddWall GetTex("Wall2"), -12.5, -46.25, -12.5, 46.25, 25, 50, 8, 2
-    Shafts.AddWall GetTex("Wall2"), -12.5, 46.25, -32.5, 46.25, 25, 50, 2, 2
-    Shafts.AddWall GetTex("Wall2"), -32.5, 46.25, -32.5, -46.25, 25, 50, 8, 2
-    
-    Shafts.AddWall GetTex("Wall2"), 32.5, -46.25, 12.5, -46.25, 25, 50, 2, 2
-    Shafts.AddWall GetTex("Wall2"), 12.5, -46.25, 12.5, 46.25, 25, 50, 8, 2
-    Shafts.AddWall GetTex("Wall2"), 12.5, 46.25, 32.5, 46.25, 25, 50, 2, 2
-    Shafts.AddWall GetTex("Wall2"), 32.5, 46.25, 32.5, -46.25, 25, 50, 8, 2
-    
-    'Ceiling
-    Room(i).AddFloor GetTex("Ceiling1"), -160, -150, 160, -46.25, (i * 25) + 49.5, 10, 5
-    Room(i).AddFloor GetTex("Ceiling1"), -160, 46.25, 160, 150, (i * 25) + 49.5, 10, 5
-    Room(i).AddFloor GetTex("Ceiling1"), -160, -46.25, -32.5, 46.25, (i * 25) + 49.5, 3, 5
-    Room(i).AddFloor GetTex("Ceiling1"), 32.5, -46.25, 160, 46.25, (i * 25) + 49.5, 3, 5
-    Room(i).AddFloor GetTex("Ceiling1"), -12.5, -46.25, 12.5, 46.25, (i * 25) + 49.5, 2, 5
-    
-    
+Call ProcessLobby
 'GoTo 2
 Print "Processing Floors 2 to 39...";
-
-    'Floors 2 to 39
-    For i = 2 To 39
-    Print ".";
-    'Mesh.AddFloor GetTex("Granite"), -160, -150, 160, 150, (I * 25) + 25, 10, 10
-    Room(i).AddFloor GetTex("Granite"), -160, -150, 160, -46.25, (i * 25) + 25, 30, 5
-    Room(i).AddFloor GetTex("Granite"), -160, 46.25, 160, 150, (i * 25) + 25, 30, 5
-    Room(i).AddFloor GetTex("Granite"), -160, -46.25, -32.5, 46.25, (i * 25) + 25, 11, 10
-    Room(i).AddFloor GetTex("Granite"), 32.5, -46.25, 160, 46.25, (i * 25) + 25, 11, 10
-    Room(i).AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 46.25, (i * 25) + 25, 2, 10
-    
-    Room(i).AddFloor GetTex("Marble3"), -160, -150, 160, -46.25, (i * 25) + 49.5, 30, 5
-    Room(i).AddFloor GetTex("Marble3"), -160, 46.25, 160, 150, (i * 25) + 49.5, 30, 5
-    Room(i).AddFloor GetTex("Marble3"), -160, -46.25, -32.5, 46.25, (i * 25) + 49.5, 11, 10
-    Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 160, 46.25, (i * 25) + 49.5, 11, 10
-    Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 46.25, (i * 25) + 49.5, 2, 10
-    
-    External.AddWall GetTex("MainWindows"), -160, -150, 160, -150, 25, (i * 25) + 25, 7.6, 1
-    External.AddWall GetTex("MainWindows"), 160, -150, 160, 150, 25, (i * 25) + 25, 7, 1
-    External.AddWall GetTex("MainWindows"), 160, 150, -160, 150, 25, (i * 25) + 25, 7.6, 1
-    External.AddWall GetTex("MainWindows"), -160, 150, -160, -150, 25, (i * 25) + 25, 7, 1
-    
-    'Elevators
-    Shafts.AddWall GetTex("Wall1"), -32.5, -46.25, -12.5, -46.25, 25, (i * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, 46.25, 25, (I * 25) + 25, 3, 2
-    'cut side wall start
-    Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -30, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), -12.5, -16, -12.5, 46.25, 25, (i * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("Wall1"), -12.5, -30, -12.5, -16, 5.5, (i * 25) + 25 + 19.5, 0.8, 0.44
-    'cut side wall end
-    Shafts.AddWall GetTex("Wall1"), -12.5, 46.25, -32.5, 46.25, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), -32.5, 46.25, -32.5, -46.25, 25, (i * 25) + 25, 3, 2
-    
-    Shafts.AddWall GetTex("Wall1"), 32.5, -46.25, 12.5, -46.25, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), 12.5, -46.25, 12.5, 46.25, 25, (i * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("Wall1"), 12.5, 46.25, 32.5, 46.25, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), 32.5, 46.25, 32.5, -46.25, 25, (i * 25) + 25, 3, 2
-    
-    'Room(I) Walls
-    Room(i).AddWall GetTex("Wall3"), -160, -71.3, 160, -71.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), -160, 71.3, 160, 71.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -160, 46.3, -32.5, 46.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 32.5, 46.3, 160, 46.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -160, -46.3, -32.5, -46.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 32.5, -46.3, 160, -46.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -96, -71.3, -96, -150, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), -96, 71.3, -96, 150, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -32, -71.3, -32, -150, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), -32, 71.3, -32, 150, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), 32, -71.3, 32, -150, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 32, 71.3, 32, 150, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), 96, -71.3, 96, -150, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 96, 71.3, 96, 150, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), 96, -46.3, 96, 46.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), -96, -46.3, -96, 46.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -160, 0, -32, 0, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 160, 0, 32, 0, 25, (i * 25) + 25, 2, 1
-    
-    Next i
-Print "done"
-    'Landings
-    External.AddFloor GetTex("BrickTexture"), -160, -150, -135, 150, (40 * 25) + 25, 10, 10
-    External.AddFloor GetTex("BrickTexture"), 160, -150, 135, 150, (40 * 25) + 25, 10, 10
+Call Process2to39
 'GoTo 2
-
 Print "Processing Floors 40 to 79";
-    'Floors 40 to 79 (minus 14 feet on both sides where 20=8 feet)
-    For i = 40 To 79
-    Print ".";
-    'Mesh.AddFloor GetTex("Granite"), -135, -150, 135, 150, (I * 25) + 25, 10, 10
-    Room(i).AddFloor GetTex("Granite"), -135, -150, 135, -46.25, (i * 25) + 25, 10, 3
-    Room(i).AddFloor GetTex("Granite"), -135, 30.83, 135, 150, (i * 25) + 25, 10, 3
-    Room(i).AddFloor GetTex("Granite"), -135, -46.25, -32.5, 30.83, (i * 25) + 25, 3, 3
-    Room(i).AddFloor GetTex("Granite"), 32.5, -46.25, 135, 30.83, (i * 25) + 25, 3, 3
-    Room(i).AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 30.83, (i * 25) + 25, 1, 3
-    
-    Room(i).AddFloor GetTex("Marble3"), -135, -150, 135, -46.25, (i * 25) + 49.5, 10, 3
-    Room(i).AddFloor GetTex("Marble3"), -135, 30.83, 135, 150, (i * 25) + 49.5, 10, 3
-    Room(i).AddFloor GetTex("Marble3"), -135, -46.25, -32.5, 30.83, (i * 25) + 49.5, 3, 3
-    Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 135, 30.83, (i * 25) + 49.5, 3, 3
-    Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 30.83, (i * 25) + 49.5, 1, 3
-   
-    External.AddWall GetTex("MainWindows"), -135, -150, 135, -150, 25, (i * 25) + 25, 6.5, 1
-    External.AddWall GetTex("MainWindows"), 135, -150, 135, 150, 25, (i * 25) + 25, 7, 1
-    External.AddWall GetTex("MainWindows"), 135, 150, -135, 150, 25, (i * 25) + 25, 6.5, 1
-    External.AddWall GetTex("MainWindows"), -135, 150, -135, -150, 25, (i * 25) + 25, 7, 1
-    
-    'Elevators
-    Shafts.AddWall GetTex("Wall1"), -32.5, -46.25, -12.5, -46.25, 25, (i * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, 30.83, 25, (I * 25) + 25, 3, 2
-    'cut side wall start
-    Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -30, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), -12.5, -16, -12.5, 30.83, 25, (i * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("Wall1"), -12.5, -30, -12.5, -16, 5.5, (i * 25) + 25 + 19.5, 0.8, 0.44
-    'cut side wall end
-    Shafts.AddWall GetTex("Wall1"), -12.5, 30.83, -32.5, 30.83, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), -32.5, 30.83, -32.5, -46.25, 25, (i * 25) + 25, 3, 2
-    
-    Shafts.AddWall GetTex("Wall1"), 32.5, -46.25, 12.5, -46.25, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), 12.5, -46.25, 12.5, 30.83, 25, (i * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("Wall1"), 12.5, 30.83, 32.5, 30.83, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), 32.5, 30.83, 32.5, -46.25, 25, (i * 25) + 25, 3, 2
-    
-    'Room(I) Walls
-    Room(i).AddWall GetTex("Wall3"), -135, -71.3, 135, -71.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), -135, 55.83, 135, 55.83, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -135, 30.83, -32.5, 30.83, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 32.5, 30.83, 135, 30.83, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -135, -46.3, -32.5, -46.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 32.5, -46.3, 135, -46.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -81, -71.3, -81, -150, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), -81, 55.83, -81, 150, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -27, -71.3, -27, -150, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), -27, 55.83, -27, 150, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), 27, -71.3, 27, -150, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 27, 55.83, 27, 150, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), 81, -71.3, 81, -150, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 81, 55.83, 81, 150, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), 81, -46.3, 81, 30.83, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), -81, -46.3, -81, 30.83, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -135, 0, -32, 0, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 135, 0, 32, 0, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -135, -71.3, 135, -71.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), -135, 102, 135, 102, 25, (i * 25) + 25, 2, 1
-    
-    Next i
-Print "done"
-    
-    External.AddFloor GetTex("BrickTexture"), -135, -150, -110, 150, (80 * 25) + 25, 10, 10
-    External.AddFloor GetTex("BrickTexture"), 135, -150, 110, 150, (80 * 25) + 25, 10, 10
-    
+Call Process40to79
 Print "Processing Floors 80 to 117";
-    'Floors 80 to 117
-    For i = 80 To 117
-    Print ".";
-    'Mesh.AddFloor GetTex("Granite"), -110, -150, 110, 150, (I * 25) + 25, 10, 10
-    Room(i).AddFloor GetTex("Granite"), -110, -150, 110, -46.25, (i * 25) + 25, 10, 3
-    Room(i).AddFloor GetTex("Granite"), -110, 9, 110, 150, (i * 25) + 25, 10, 3
-    Room(i).AddFloor GetTex("Granite"), -110, -46.25, -32.5, 9, (i * 25) + 25, 3, 3
-    Room(i).AddFloor GetTex("Granite"), 32.5, -46.25, 110, 9, (i * 25) + 25, 3, 3
-    Room(i).AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 9, (i * 25) + 25, 1, 3
-    
-    Room(i).AddFloor GetTex("Marble3"), -110, -150, 110, -46.25, (i * 25) + 49.5, 10, 3
-    Room(i).AddFloor GetTex("Marble3"), -110, 9, 110, 150, (i * 25) + 49.5, 10, 3
-    Room(i).AddFloor GetTex("Marble3"), -110, -46.25, -32.5, 9, (i * 25) + 49.5, 3, 3
-    Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 110, 9, (i * 25) + 49.5, 3, 3
-    Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 9, (i * 25) + 49.5, 1, 3
-    
-    External.AddWall GetTex("MainWindows"), -110, -150, 110, -150, 25, (i * 25) + 25, 5, 1
-    External.AddWall GetTex("MainWindows"), 110, -150, 110, 150, 25, (i * 25) + 25, 7, 1
-    External.AddWall GetTex("MainWindows"), 110, 150, -110, 150, 25, (i * 25) + 25, 5, 1
-    External.AddWall GetTex("MainWindows"), -110, 150, -110, -150, 25, (i * 25) + 25, 7, 1
-    
-    'Elevators
-    
-    Shafts.AddWall GetTex("Wall1"), -32.5, -46.25, -12.5, -46.25, 25, (i * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, 15.41, 25, (I * 25) + 25, 3, 2
-    'cut side wall start
-    Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -30, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), -12.5, -16, -12.5, 15.41, 25, (i * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("Wall1"), -12.5, -30, -12.5, -16, 5.5, (i * 25) + 25 + 19.5, 0.8, 0.44
-    'cut side wall end
-    Shafts.AddWall GetTex("Wall1"), -12.5, 15.41, -32.5, 15.41, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), -32.5, 15.41, -32.5, -46.25, 25, (i * 25) + 25, 3, 2
-    
-    Shafts.AddWall GetTex("Wall1"), 32.5, -46.25, 12.5, -46.25, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), 12.5, -46.25, 12.5, 15.41, 25, (i * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("Wall1"), 12.5, 15.41, 32.5, 15.41, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), 32.5, 15.41, 32.5, -46.25, 25, (i * 25) + 25, 3, 2
-    
-    'Room(I) Walls
-    Room(i).AddWall GetTex("Wall3"), -70, -71.3, -12.5, -71.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 12.5, -71.3, 70, -71.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -70, 40, -12.5, 40, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 12.5, 40, 70, 40, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -70, 15.41, -32.5, 15.41, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 32.5, 15.41, 70, 15.41, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -70, -46.3, -32.5, -46.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 32.5, -46.3, 70, -46.3, 25, (i * 25) + 25, 2, 1
-        
-    Room(i).AddWall GetTex("Wall3"), -70, -71.3, -70, -46.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 70, -71.3, 70, -46.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -70, 15.41, -70, 40, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 70, 15.41, 70, 40, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -12.5, 150, -12.5, 40, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 12.5, 150, 12.5, 40, 25, (i * 25) + 25, 2, 1
-    Room(i).AddWall GetTex("Wall3"), -12.5, -150, -12.5, -71.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 12.5, -150, 12.5, -71.3, 25, (i * 25) + 25, 2, 1
-    
-    'Individual Rooms
-    Room(i).AddWall GetTex("Wall3"), -110, 120, -12.5, 120, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 110, 120, 12.5, 120, 25, (i * 25) + 25, 2, 1
-    Room(i).AddWall GetTex("Wall3"), -110, 90, -12.5, 90, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 110, 90, 12.5, 90, 25, (i * 25) + 25, 2, 1
-    Room(i).AddWall GetTex("Wall3"), -110, 40, -70, 40, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 110, 40, 70, 40, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -110, -110, -12.5, -110, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 110, -110, 12.5, -110, 25, (i * 25) + 25, 2, 1
-    Room(i).AddWall GetTex("Wall3"), -110, -46.3, -70, -46.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 110, -46.3, 70, -46.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -110, -10, -32.5, -10, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 110, -10, 32.5, -10, 25, (i * 25) + 25, 2, 1
-    
-    
-    Next i
-Print "done"
-    External.AddFloor GetTex("BrickTexture"), -110, -150, -85, 150, (118 * 25) + 25, 10, 10
-    External.AddFloor GetTex("BrickTexture"), 110, -150, 85, 150, (118 * 25) + 25, 10, 10
-    
+Call Process80to117
 Print "Processing Floors 118 to 134";
-    'Floors 118 to 134 (minus 10 feet)
-    For i = 118 To 134
-    Print ".";
-    'Mesh.AddFloor GetTex("Granite"), -85, -150, 85, 150, (I * 25) + 25, 10, 10
-    Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * 25) + 25, 10, 3
-    Room(i).AddFloor GetTex("Granite"), -85, 0, 85, 150, (i * 25) + 25, 10, 3
-    Room(i).AddFloor GetTex("Granite"), -85, -46.25, -32.5, 0, (i * 25) + 25, 3, 3
-    Room(i).AddFloor GetTex("Granite"), 32.5, -46.25, 85, 0, (i * 25) + 25, 3, 3
-    Room(i).AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 0, (i * 25) + 25, 1, 3
-    
-    Room(i).AddFloor GetTex("Marble3"), -85, -150, 85, -46.25, (i * 25) + 49.5, 10, 3
-    Room(i).AddFloor GetTex("Marble3"), -85, 0, 85, 150, (i * 25) + 49.5, 10, 3
-    Room(i).AddFloor GetTex("Marble3"), -85, -46.25, -32.5, 0, (i * 25) + 49.5, 3, 3
-    Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 85, 0, (i * 25) + 49.5, 3, 3
-    Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 0, (i * 25) + 49.5, 1, 3
-     
-    External.AddWall GetTex("MainWindows"), -85, -150, 85, -150, 25, (i * 25) + 25, 4, 1
-    External.AddWall GetTex("MainWindows"), 85, -150, 85, 150, 25, (i * 25) + 25, 7, 1
-    External.AddWall GetTex("MainWindows"), 85, 150, -85, 150, 25, (i * 25) + 25, 4, 1
-    External.AddWall GetTex("MainWindows"), -85, 150, -85, -150, 25, (i * 25) + 25, 7, 1
-    
-    'Elevators
-    Shafts.AddWall GetTex("Wall1"), -32.5, -46.25, -12.5, -46.25, 25, (i * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, 0, 25, (I * 25) + 25, 3, 2
-    'cut side wall start
-    Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -30, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), -12.5, -16, -12.5, 0, 25, (i * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("Wall1"), -12.5, -30, -12.5, -16, 5.5, (i * 25) + 25 + 19.5, 0.8, 0.44
-    'cut side wall end
-    Shafts.AddWall GetTex("Wall1"), -12.5, 0, -32.5, 0, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), -32.5, 0, -32.5, -46.25, 25, (i * 25) + 25, 3, 2
-    
-    Shafts.AddWall GetTex("Wall1"), 32.5, -46.25, 12.5, -46.25, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), 12.5, -46.25, 12.5, 0, 25, (i * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("Wall1"), 12.5, 0, 32.5, 0, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), 32.5, 0, 32.5, -46.25, 25, (i * 25) + 25, 3, 2
-    
-    'Room(I) Walls
-    Room(i).AddWall GetTex("Wall3"), -50, -71.3, -12.5, -71.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 12.5, -71.3, 50, -71.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -50, 25, -12.5, 25, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 12.5, 25, 50, 25, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -50, 0, -32.5, 0, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 32.5, 0, 50, 0, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -50, -46.3, -32.5, -46.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 32.5, -46.3, 50, -46.3, 25, (i * 25) + 25, 2, 1
-        
-    Room(i).AddWall GetTex("Wall3"), -50, -71.3, -50, -46.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 50, -71.3, 50, -46.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -50, 0, -50, 25, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 50, 0, 50, 25, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -12.5, 150, -12.5, 25, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 12.5, 150, 12.5, 25, 25, (i * 25) + 25, 2, 1
-    Room(i).AddWall GetTex("Wall3"), -12.5, -150, -12.5, -71.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 12.5, -150, 12.5, -71.3, 25, (i * 25) + 25, 2, 1
-    
-    'Individual Rooms
-    Room(i).AddWall GetTex("Wall3"), -85, 90, -12.5, 90, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 85, 90, 12.5, 90, 25, (i * 25) + 25, 2, 1
-    Room(i).AddWall GetTex("Wall3"), -85, 120, -12.5, 120, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 85, 120, 12.5, 120, 25, (i * 25) + 25, 2, 1
-    Room(i).AddWall GetTex("Wall3"), -85, 60, -12.5, 60, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 85, 60, 12.5, 60, 25, (i * 25) + 25, 2, 1
-    Room(i).AddWall GetTex("Wall3"), -85, 25, -50, 25, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 85, 25, 50, 25, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -85, -110, -12.5, -110, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 85, -110, 12.5, -110, 25, (i * 25) + 25, 2, 1
-    Room(i).AddWall GetTex("Wall3"), -85, -46.3, -50, -46.3, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 85, -46.3, 50, -46.3, 25, (i * 25) + 25, 2, 1
-    
-    Room(i).AddWall GetTex("Wall3"), -85, -10, -32.5, -10, 25, (i * 25) + 25, 9, 1
-    Room(i).AddWall GetTex("Wall3"), 85, -10, 32.5, -10, 25, (i * 25) + 25, 2, 1
-    
-    Next i
-Print "done"
-    External.AddFloor GetTex("BrickTexture"), -85, -150, -60, 150, (135 * 25) + 25, 10, 10
-    External.AddFloor GetTex("BrickTexture"), 85, -150, 60, 150, (135 * 25) + 25, 10, 10
-    
-Print "Processing Floors 135 to 137";
-    'Floors 135 to 137 (minus 6 feet)
-    For i = 135 To 137
-    Print ".";
-    'Mesh.AddFloor GetTex("Granite"), -60, -150, 60, 150, (I * 25) + 25, 10, 10
-    Room(i).AddFloor GetTex("Granite"), -60, -150, 60, -46.25, (i * 25) + 25, 8, 3.8
-    Room(i).AddFloor GetTex("Granite"), -60, -15.42, 60, 150, (i * 25) + 25, 8, 8.6
-    Room(i).AddFloor GetTex("Granite"), -60, -46.25, -32.5, -15.42, (i * 25) + 25, 1.4, 2.4
-    Room(i).AddFloor GetTex("Granite"), 12.5, -46.25, 60, -15.42, (i * 25) + 25, 1.4, 2.4
-    Room(i).AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, -15.42, (i * 25) + 25, 2, 2.4
-    
-    Room(i).AddFloor GetTex("Marble3"), -60, -150, 60, -46.25, (i * 25) + 49.5, 8, 3.8
-    Room(i).AddFloor GetTex("Marble3"), -60, -15.42, 60, 150, (i * 25) + 49.5, 8, 8.6
-    Room(i).AddFloor GetTex("Marble3"), -60, -46.25, -32.5, -15.42, (i * 25) + 49.5, 1.4, 2.4
-    Room(i).AddFloor GetTex("Marble3"), 12.5, -46.25, 60, -15.42, (i * 25) + 49.5, 1.4, 2.4
-    Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, -15.42, (i * 25) + 49.5, 2, 2.4
-    
-    External.AddWall GetTex("MainWindows"), -60, -150, 60, -150, 25, (i * 25) + 25, 3, 1
-    External.AddWall GetTex("MainWindows"), 60, -150, 60, 150, 25, (i * 25) + 25, 7, 1
-    External.AddWall GetTex("MainWindows"), 60, 150, -60, 150, 25, (i * 25) + 25, 3, 1
-    External.AddWall GetTex("MainWindows"), -60, 150, -60, -150, 25, (i * 25) + 25, 7, 1
-    
-    'Elevators
-    Shafts.AddWall GetTex("Wall1"), -32.5, -46.25, -12.5, -46.25, 25, (i * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -15.42, 25, (I * 25) + 25, 3, 2
-    'cut side wall start
-    Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -30, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), -12.5, -16, -12.5, -15.42, 25, (i * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("Wall1"), -12.5, -30, -12.5, -16, 5.5, (i * 25) + 25 + 19.5, 0.8, 0.44
-    'cut side wall end
-    Shafts.AddWall GetTex("Wall1"), -12.5, -15.42, -32.5, -15.42, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("Wall1"), -32.5, -15.42, -32.5, -46.25, 25, (i * 25) + 25, 3, 2
-    
-    'Shafts.AddWall GetTex("Wall1"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("Wall1"), 12.5, -46.25, 12.5, -15.42, 25, (I * 25) + 25, 3, 2
-    'Shafts.AddWall GetTex("Wall1"), 12.5, -15.42, 32.5, -15.42, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("Wall1"), 32.5, -15.42, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
-    
-    Next i
-Print "done"
+Call Process118to132
+Call ProcessOtherFloors
 
 
-'Roof Layout
-'Mesh.AddFloor GetTex("Granite"), -60, -150, 60, 150, (I * 25) + 25, 10, 10
-i = 138
-    Room(i).AddFloor GetTex("BrickTexture"), -60, -150, 60, -46.25, (i * 25) + 25, 8, 3.8
-    Room(i).AddFloor GetTex("BrickTexture"), -60, -15.42, 60, 150, (i * 25) + 25, 8, 8.6
-    Room(i).AddFloor GetTex("BrickTexture"), -60, -46.25, -32.5, -15.42, (i * 25) + 25, 1.4, 2.4
-    Room(i).AddFloor GetTex("BrickTexture"), 12.5, -46.25, 60, -15.42, (i * 25) + 25, 1.4, 2.4
-    Room(i).AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, -15.42, (i * 25) + 25, 2, 2.4
-    
-    Room(i).AddFloor GetTex("BrickTexture"), -32.5, -46.25, -12.5, -15.42, (i * 25) + 50.1, 2, 2.4
-    
-    'Elevators
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, -46.25, -12.5, -46.25, 25, (i * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), -12.5, -46.25, -12.5, -15.42, 25, (I * 25) + 25, 3, 2
-    'cut side wall start
-    Shafts.AddWall GetTex("BrickTexture"), -12.5, -46.25, -12.5, -30, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), -12.5, -16, -12.5, -15.42, 25, (i * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), -12.5, -30, -12.5, -16, 5.5, (i * 25) + 25 + 19.5, 0.8, 0.44
-    'cut side wall end
-    Shafts.AddWall GetTex("BrickTexture"), -12.5, -15.42, -32.5, -15.42, 25, (i * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, -15.42, -32.5, -46.25, 25, (i * 25) + 25, 3, 2
-    
 2
 
-    Shafts.AddWall GetTex("Wall3"), -12.5, -30.85, -32.5, -30.85, (25 * 139) + 25, 0, 1, 139
-    Shafts.AddWall GetTex("Wall3"), 12.5, -30.85, 32.5, -30.85, (25 * 135) + 25, 0, 1, 139
+    Shafts.AddWall GetTex("BrickTexture"), -12.5, -30.85, -32.5, -30.85, (25 * 139) + 25, 0, 1, 139
+    Shafts.AddWall GetTex("BrickTexture"), 12.5, -30.85, 32.5, -30.85, (25 * 137) + 25, 0, 1, 139
     
-    Shafts.AddWall GetTex("Wall3"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (25 * 138) + 25, 0, 1, 139
+    'Shafts.AddWall GetTex("Ceiling1"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (25 * 138) + 25, 0, 2, 139 * 2
         
-    Shafts.AddWall GetTex("Wall3"), -12.5 - 6, -46.25, -12.5 - 6, -46.25 + 7.71, 22, 0, 1, 1
+    Stairs(1).AddWall GetTex("Ceiling1"), -12.5 - 6, -46.25, -12.5 - 6, -46.25 + 7.71, 22, 0, 2, 2
         
-    Shafts.AddFloor GetTex("Wood2"), -12.5 - 6, -46.25 + 7.71, -12 - 20, -30.85, (138 * 25) + 25, 1, 1
+    Stairs(138).AddFloor GetTex("Wood2"), -12.5 - 6, -46.25 + 7.71, -12 - 20, -30.85, (138 * 25) + 25, 1, 1
     
     'Shafts.AddFloor GetTex("BrickTexture"), -60, -150, 60, 150, (138 * 25) + 25, 10, 10
 
@@ -927,8 +552,10 @@ i = 138
     Elevator1DoorL.AddWall GetTex("ElevDoors"), -12.6, -19.05, -12.6, -22.95, 19.5, 0.1, 1, 1
     Elevator1DoorR.AddWall GetTex("ElevDoors"), -12.6, -23.05, -12.6, -27.05, 19.5, 0.1, 1, 1
     'Exterior Doors
-    ElevatorDoorL(1).AddWall GetTex("ElevDoors"), -12.55, -19.05, -12.55, -22.95, 19.6, 0, 1, 1
-    ElevatorDoorR(1).AddWall GetTex("ElevDoors"), -12.55, -23.05, -12.55, -27.05, 19.6, 0, 1, 1
+    ElevatorDoorL(-1).AddWall GetTex("ElevDoors"), -12.55, -19.05, -12.55, -22.95, 19.6, 0, 1, 1
+    ElevatorDoorR(-1).AddWall GetTex("ElevDoors"), -12.55, -23.05, -12.55, -27.05, 19.6, 0, 1, 1
+    ElevatorDoorL(0).AddWall GetTex("ElevDoors"), -12.55, -19.05, -12.55, -22.95, 19.6, 27, 1, 1
+    ElevatorDoorR(0).AddWall GetTex("ElevDoors"), -12.55, -23.05, -12.55, -27.05, 19.6, 27, 1, 1
     For i = 2 To 138
     ElevatorDoorL(i).AddWall GetTex("ElevDoors"), -12.55, -19, -12.55, -23, 19.6, (i * 25) + 25, 1, 1
     ElevatorDoorR(i).AddWall GetTex("ElevDoors"), -12.55, -23, -12.55, -27, 19.6, (i * 25) + 25, 1, 1
@@ -940,6 +567,8 @@ i = 138
     
     Room(1).AddWall GetTex("ElevExtPanels"), -12.5, -16, -12.5, -19, 19.6, 0, 0.5, 1
     Room(1).AddWall GetTex("ElevExtPanels"), -12.5, -30, -12.5, -27, 19.6, 0, 0.5, 1
+    Room(1).AddWall GetTex("ElevExtPanels"), -12.5, -16, -12.5, -19, 19.6, 27, 0.5, 1
+    Room(1).AddWall GetTex("ElevExtPanels"), -12.5, -30, -12.5, -27, 19.6, 27, 0.5, 1
     
     Print "Processing Stairs...";
     
@@ -1073,7 +702,7 @@ Call ProcessFloors
     
     '4 : Old movement system startposition stuff
     'Camera.SetCameraPosition 0, 10, 0
-    Camera.SetPosition 0, 10, 90
+    Camera.SetPosition 0, 10, 130
     'Camera.SetPosition 0, 1000, 2000
     'Camera.SetCameraLookAt 0, 10, 1
     Camera.SetLookAt 0, 10, -90
@@ -1096,25 +725,60 @@ Call ProcessFloors
   'Room.Enable False
   For i = 1 To 138
   Room(i).Enable False
+  Stairs(i).Enable False
+  ShaftsFloor(i).Enable False
+  Next i
+  For i = -1 To 138
   ElevatorDoorL(i).Enable False
   ElevatorDoorR(i).Enable False
-  Stairs(i).Enable False
   Next i
-  
   Room(1).Enable True
-  ElevatorDoorL(1).Enable True
-  ElevatorDoorR(1).Enable True
+  ElevatorDoorL(-1).Enable True
+  ElevatorDoorR(-1).Enable True
   Stairs(1).Enable True
+  ShaftsFloor(1).Enable True
   
+'Lights
+'MatFactory.CreateMaterialQuick 0.2, 0.2, 0.2, 1, "Mat"
+'MatFactory.SetDiffuse GetMat("Mat"), 1, 1, 1, 1
+'External.SetMaterial GetMat("Mat")
+'Mesh.ComputeNormals
+'LightD.Type = D3DLIGHT_POINT
+'LightD.Position = Vector(0, 10, -130)
+'LightD.Range = 20
+'LightD.Ambient = DXColor(0, 0, 300, 1)
+'LightD.diffuse = DXColor(0, 0, 300, 1)
+'LightD.Attenuation0 = 1
+'LightD.Attenuation1 = 1
+'LightD.Attenuation2 = 1
+'Light.CreateLight LightD
+
   'External.Enable False
   'Shafts.Enable False
   'Elevator1.Enable False
-  'Room.Optimize
-  'External.Optimize
-  'Shafts.Optimize
-  'Elevator1.Optimize
+  Print "Optimizing Meshes.";
+  For i = 1 To 138
+  Room(i).Optimize
+  Stairs(i).Optimize
+  Next i
+  Print ".";
+  For i = -1 To 138
+  ElevatorDoorL(i).Optimize
+  ElevatorDoorR(i).Optimize
+  Next i
+  Print ".";
+  External.Optimize
+  Print ".";
+  Shafts.Optimize
+  Print ".";
+  Elevator1.Optimize
+  Print ".";
+  Elevator1DoorL.Optimize
+  Print ".";
+  Elevator1DoorR.Optimize
+  Print "Done"
   
-  ElevatorMusic.Loop_ = True
+  'ElevatorMusic.Loop_ = True
   'Call ElevatorMusic.Play
   
   Atmos.SkyBox_SetTexture GetTex("SkyFront"), GetTex("SkyBack"), GetTex("SkyLeft"), GetTex("SkyRight"), GetTex("SkyTop"), GetTex("SkyBottom")
@@ -1148,22 +812,199 @@ isRunning = False
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-Set ElevatorMusic = Nothing
+'Set ElevatorMusic = Nothing
 Set Elevator1Sounds = Nothing
 
-    Set Listener = Nothing
+    'Set Listener = Nothing
     Set SoundEngine = Nothing
     End
 End Sub
 
 Private Sub MainTimer_Timer()
 
+'Simple Frame Limiter
+
+'If TV.GetFPS > 20 And GotoFloor = 0 Then
+'MainTimer.Interval = (TV.GetFPS - 20) * 1.5
+'End If
+If GotoFloor <> 0 Then
+MainTimer.Interval = 45
+Else
+'End If
+'If TV.GetFPS < 20 Then
+MainTimer.Interval = 1
+End If
+
+
+Dim a As Single
+''update lights
+'a = a + TV.TimeElapsed * 0.001
+'      LightD.Position = Vector(0, 10, Sin(a) * 50 + 50)
+'      Light.UpdateLight 1, LightD
+      
+      
+'Update the floor indicator
+If FloorIndicator <> "M" Then FloorIndicator = CameraFloor
+Form2.Label1.Caption = FloorIndicator
+If Camera.GetPosition.Y > 27 And CameraFloor < 2 Then
+FloorIndicator = "M"
+Else
+FloorIndicator = 1
+End If
+
+ElevatorFloor2 = ((Elevator1.GetPosition.Y - 10) / 25) - 1
+CameraFloor2 = ((Camera.GetPosition.Y - 10) / 25) - 1
+
+'this determines if the person is inside the stairwell shaft or not, and sets a variable accordingly.
+If Camera.GetPosition.X < -12.5 And Camera.GetPosition.X > -32.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30 Then
+InStairwell = True
+Else
+InStairwell = False
+End If
+
+'floors 135 and 136 are combined. this simply makes sure that they are off when not in use :)
+If CameraFloor <> 136 And CameraFloor <> 135 Then
+Room(136).Enable False
+ElevatorDoorL(136).Enable False
+ElevatorDoorR(136).Enable False
+Room(135).Enable False
+ElevatorDoorL(135).Enable False
+ElevatorDoorR(135).Enable False
+ShaftsFloor(135).Enable False
+ShaftsFloor(136).Enable False
+Else
+If CameraFloor = 136 Or CameraFloor = 135 Then
+    If GotoFloor = 0 And InStairwell = False Then
+    Room(136).Enable True
+    ElevatorDoorL(136).Enable True
+    ElevatorDoorR(136).Enable True
+    Room(135).Enable True
+    ElevatorDoorL(135).Enable True
+    ElevatorDoorR(135).Enable True
+    ShaftsFloor(135).Enable True
+    ShaftsFloor(136).Enable True
+    End If
+End If
+End If
+'This section turns on and off the external mesh (outside windows, not inside windows), based on the camera's current location
+If CameraFloor >= 1 And CameraFloor <= 39 Then
+    If Camera.GetPosition.X < -160 Or Camera.GetPosition.X > 160 Or Camera.GetPosition.z < -150 Or Camera.GetPosition.z > 150 Then
+    External.Enable True
+    Else
+    External.Enable False
+    End If
+End If
+If CameraFloor >= 40 And CameraFloor <= 79 Then
+    If Camera.GetPosition.X < -135 Or Camera.GetPosition.X > 135 Or Camera.GetPosition.z < -150 Or Camera.GetPosition.z > 150 Then
+    External.Enable True
+    Else
+    External.Enable False
+    End If
+End If
+If CameraFloor >= 80 And CameraFloor <= 117 Then
+    If Camera.GetPosition.X < -110 Or Camera.GetPosition.X > 110 Or Camera.GetPosition.z < -150 Or Camera.GetPosition.z > 150 Then
+    External.Enable True
+    Else
+    External.Enable False
+    End If
+End If
+If CameraFloor >= 118 And CameraFloor <= 134 Then
+    If Camera.GetPosition.X < -85 Or Camera.GetPosition.X > 85 Or Camera.GetPosition.z < -150 Or Camera.GetPosition.z > 150 Then
+    External.Enable True
+    Else
+    External.Enable False
+    End If
+End If
+If CameraFloor >= 135 And CameraFloor <= 138 Then
+    If Camera.GetPosition.X < -60 Or Camera.GetPosition.X > 60 Or Camera.GetPosition.z < -150 Or Camera.GetPosition.z > 150 Then
+    External.Enable True
+    Else
+    External.Enable False
+    End If
+End If
+
+'This section turns on and off the Shafts mesh (inside the elevator and pipe shafts) when the camera is located inside them.
+If CameraFloor = ElevatorFloor And Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < -16 And CameraFloor <> 137 Then
+Shafts.Enable False
+'Atmos.SkyBox_Enable False
+GoTo EndShafts
+Else
+'Atmos.SkyBox_Enable True
+End If
+
+If CameraFloor = 137 Then GoTo EndShafts
+If GotoFloor <> 0 Then GoTo EndShafts
+
+If CameraFloor >= 1 And CameraFloor <= 39 Then
+    'right shaft (the one with the stairs)
+    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 46.25 Then
+    Shafts.Enable True
+    Else
+    'left shaft (the one with the pipe shaft)
+    If Camera.GetPosition.X > 12.5 And Camera.GetPosition.X < 32.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 46.25 Then
+    Shafts.Enable True
+    Else
+    Shafts.Enable False
+    End If
+    End If
+    
+End If
+If CameraFloor >= 40 And CameraFloor <= 79 Then
+    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 30.83 Then
+    Shafts.Enable True
+    Else
+    'left shaft (the one with the pipe shaft)
+    If Camera.GetPosition.X > 12.5 And Camera.GetPosition.X < 32.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 30.83 Then
+    Shafts.Enable True
+    Else
+    Shafts.Enable False
+    End If
+    End If
+End If
+If CameraFloor >= 80 And CameraFloor <= 117 Then
+    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 15.41 Then
+    Shafts.Enable True
+    Else
+    'left shaft (the one with the pipe shaft)
+    If Camera.GetPosition.X > 12.5 And Camera.GetPosition.X < 32.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 15.41 Then
+    Shafts.Enable True
+    Else
+    Shafts.Enable False
+    End If
+    End If
+End If
+If CameraFloor >= 118 And CameraFloor <= 134 Then
+    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < 0 Then
+    Shafts.Enable True
+    Else
+    'left shaft (the one with the pipe shaft)
+    If Camera.GetPosition.X > 12.5 And Camera.GetPosition.X < 32.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < 0 Then
+    Shafts.Enable True
+    Else
+    Shafts.Enable False
+    End If
+    End If
+End If
+If CameraFloor >= 135 And CameraFloor <= 138 Then
+    If Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < -15.42 Then
+    Shafts.Enable True
+    Else
+    'left shaft (the one with the pipe shaft)
+    If Camera.GetPosition.X > 12.5 And Camera.GetPosition.X < 32.5 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -15.42 Then
+    Shafts.Enable True
+    Else
+    Shafts.Enable False
+    End If
+    End If
+End If
+EndShafts:
+
     linestart = Camera.GetPosition
     elevator1start = Elevator1.GetPosition
 
     TV.Clear
-    Call Listener.SetPosition(Camera.GetPosition.x, Camera.GetPosition.y, Camera.GetPosition.z)
-    Call ElevatorMusic.GetPosition(ListenerDirection.x, ListenerDirection.y, ListenerDirection.z)
+    'Call Listener.SetPosition(Camera.GetPosition.X, Camera.GetPosition.Y, Camera.GetPosition.z)
+    'Call ElevatorMusic.GetPosition(ListenerDirection.X, ListenerDirection.Y, ListenerDirection.z)
     'Call Camera.GetRotation(ListenerDirection.x, ListenerDirection.y, ListenerDirection.z)
     'Call Listener.SetOrientation(ListenerDirection.x, Camera.GetPosition.y, ListenerDirection.z, Camera.GetPosition.x, Camera.GetPosition.y, Camera.GetPosition.z)
     'Call Listener.SetOrientation(ListenerDirection.x, Camera.GetPosition.y, ListenerDirection.z, Camera.GetPosition.x, Camera.GetPosition.y, Camera.GetPosition.z)
@@ -1173,15 +1014,15 @@ Private Sub MainTimer_Timer()
 
 
       If Inp.IsKeyPressed(TV_KEY_UP) = True Then
-      KeepAltitude = Camera.GetPosition.y
+      KeepAltitude = Camera.GetPosition.Y
       Camera.MoveRelative 0.7, 0, 0
-      If Camera.GetPosition.y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.x, KeepAltitude, Camera.GetPosition.z
+      If Camera.GetPosition.Y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.X, KeepAltitude, Camera.GetPosition.z
       End If
       
       If Inp.IsKeyPressed(TV_KEY_DOWN) = True Then
-      KeepAltitude = Camera.GetPosition.y
+      KeepAltitude = Camera.GetPosition.Y
       Camera.MoveRelative -0.7, 0, 0
-      If Camera.GetPosition.y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.x, KeepAltitude, Camera.GetPosition.z
+      If Camera.GetPosition.Y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.X, KeepAltitude, Camera.GetPosition.z
       End If
       
       If Inp.IsKeyPressed(TV_KEY_RIGHT) = True Then Camera.RotateY 0.05
@@ -1277,16 +1118,18 @@ Private Sub MainTimer_Timer()
       If Inp.IsKeyPressed(TV_KEY_PAGEUP) = True Then Camera.RotateX -0.006
       If Inp.IsKeyPressed(TV_KEY_PAGEDOWN) = True Then Camera.RotateX 0.006
       
-      'If Inp.IsKeyPressed(TV_KEY_HOME) = True Then Camera.MoveRelative 0, 1, 0
-      'If Inp.IsKeyPressed(TV_KEY_END) = True Then Camera.MoveRelative 0, -1, 0
+      If Inp.IsKeyPressed(TV_KEY_HOME) = True Then Camera.MoveRelative 0, 1, 0
+      If Inp.IsKeyPressed(TV_KEY_END) = True Then Camera.MoveRelative 0, -1, 0
       'If Inp.IsKeyPressed(TV_KEY_1) = True Then ElevatorDirection = 1
       'If Inp.IsKeyPressed(TV_KEY_2) = True Then ElevatorDirection = -1
       If Inp.IsKeyPressed(TV_KEY_3) = True Then OpenElevator = 1
       If Inp.IsKeyPressed(TV_KEY_4) = True Then OpenElevator = -1
-      If Inp.IsKeyPressed(TV_KEY_5) = True Then Call ElevatorMusic.Play
-      If Inp.IsKeyPressed(TV_KEY_6) = True Then Call ElevatorMusic.Stop_
-      If Inp.IsKeyPressed(TV_KEY_8) = True Then MsgBox (PartialFloor)
-      
+      'If Inp.IsKeyPressed(TV_KEY_5) = True Then Call ElevatorMusic.Play
+      'If Inp.IsKeyPressed(TV_KEY_6) = True Then Call ElevatorMusic.Stop_
+      'If Inp.IsKeyPressed(TV_KEY_8) = True Then External.SetBlendingMode (TV_BLEND_ALPHA): External.SetColor RGBA(1, 1, 1, 0.1)
+      'If Inp.IsKeyPressed(TV_KEY_G) = True Then Objects(55 + (100 * (2 - 1))).SetRotation 0, Objects(55 + (100 * (2 - 1))).GetRotation.Y + 0.01, 0
+      'If Inp.IsKeyPressed(TV_KEY_H) = True Then Objects(55 + (100 * (2 - 1))).SetRotation 0, Objects(55 + (100 * (2 - 1))).GetRotation.Y - 0.01, 0
+      'If Inp.IsKeyPressed(TV_KEY_J) = True Then MsgBox (Objects(55 + (100 * (2 - 1))).GetRotation.Y)
       
         'Inp.GetMouseState MousePositionX, MousePositionY
       'MsgBox (Str$(MousePositionX) + "," + Str$(MousePositionY))
@@ -1299,42 +1142,51 @@ Private Sub MainTimer_Timer()
         
       If Inp.IsKeyPressed(TV_KEY_F1) = True Then TV.ScreenShot ("c:\shot.bmp")
       
-      ElevatorFloor = (Elevator1.GetPosition.y - 25) / 25
+      ElevatorFloor = (Elevator1.GetPosition.Y - 25) / 25
       If ElevatorFloor < 1 Then ElevatorFloor = 1
       
-      If ElevatorDirection <> 0 Then CameraFloor = (Camera.GetPosition.y - 25 - 10) / 25
+      If InStairwell = False Then CameraFloor = (Camera.GetPosition.Y - 25 - 10) / 25
       If CameraFloor < 1 Then CameraFloor = 1
       
-      If GotoFloor <> 0 And GotoFloor > CurrentFloor And ElevatorDirection = 0 And ElevatorDoorL(ElevatorFloor).GetPosition.z <= 0 Then
+      If GotoFloor <> 0 And GotoFloor > CurrentFloor And ElevatorDirection = 0 And ElevatorDoorL(ElevatorFloor2).GetPosition.z <= 0 Then
       ElevatorDirection = 1
       OriginalLocation = CurrentFloorExact
       DistanceToTravel = ((GotoFloor * 25) + 25) - ((CurrentFloorExact * 25) + 25)
       If ElevatorSync = True Then
       Room(CameraFloor).Enable False
-      ElevatorDoorL(CameraFloor).Enable False
-      ElevatorDoorR(CameraFloor).Enable False
+      ElevatorDoorL(CameraFloor2).Enable False
+      ElevatorDoorR(CameraFloor2).Enable False
       Stairs(CameraFloor).Enable False
+      ShaftsFloor(CameraFloor).Enable False
+      Atmos.SkyBox_Enable False
+      DestroyObjects (CameraFloor)
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
       End If
       End If
-      If GotoFloor <> 0 And GotoFloor < CurrentFloor And ElevatorDirection = 0 And ElevatorDoorL(ElevatorFloor).GetPosition.z <= 0 Then
+      If GotoFloor <> 0 And GotoFloor < CurrentFloor And ElevatorDirection = 0 And ElevatorDoorL(ElevatorFloor2).GetPosition.z <= 0 Then
       ElevatorDirection = -1
       OriginalLocation = CurrentFloorExact
       DistanceToTravel = ((CurrentFloorExact * 25) + 25) - ((GotoFloor * 25) + 25)
       If ElevatorSync = True Then
       Room(CameraFloor).Enable False
-      ElevatorDoorL(CameraFloor).Enable False
-      ElevatorDoorR(CameraFloor).Enable False
+      ElevatorDoorL(CameraFloor2).Enable False
+      ElevatorDoorR(CameraFloor2).Enable False
+      ShaftsFloor(CameraFloor).Enable False
+      Atmos.SkyBox_Enable False
       Stairs(CameraFloor).Enable False
+      DestroyObjects (CameraFloor)
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
       End If
       End If
       
-       CurrentFloor = Int((elevator1start.y - 25) / 25)
-       CurrentFloorExact = (elevator1start.y - 25) / 25
-       Form2.Text1.Text = "Sound Location=7.75,20,7 " + vbCrLf + "Elevator Floor=" + Str$(ElevatorFloor) + vbCrLf + "Camera Floor=" + Str$(CameraFloor) + vbCrLf + "Current Location= " + Str$(Int(Camera.GetPosition.x)) + "," + Str$(Int(Camera.GetPosition.y)) + "," + Str$(Int(Camera.GetPosition.z)) + vbCrLf + "Distance to Travel=" + Str$(DistanceToTravel) + vbCrLf + "Destination=" + Str$(Destination) + vbCrLf + "Rate=" + Str$(ElevatorEnable / 5)
+       CurrentFloor = Int((elevator1start.Y - 25) / 25)
+       CurrentFloorExact = (elevator1start.Y - 25) / 25
+       'CurrentFloor = (Elevator1.GetPosition.y / 25) - 1
+       'CurrentFloorExact = Int((Elevator1.GetPosition.y / 25) - 1)
+
+       Form2.Text1.Text = "Sound Location=7.75,20,7 " + vbCrLf + "Elevator Floor=" + Str$(ElevatorFloor) + vbCrLf + "Camera Floor=" + Str$(CameraFloor) + vbCrLf + "Current Location= " + Str$(Int(Camera.GetPosition.X)) + "," + Str$(Int(Camera.GetPosition.Y)) + "," + Str$(Int(Camera.GetPosition.z)) + vbCrLf + "GotoFloor=" + Str$(GotoFloor) + vbCrLf + "DistancetoDest=" + Str$(Abs(GotoFloor - CurrentFloor)) + vbCrLf + "Rate=" + Str$(ElevatorEnable / 5)
         
         If ElevatorEnable >= 0 And ElevatorDirection = 1 Then
         'sound
@@ -1345,7 +1197,7 @@ Private Sub MainTimer_Timer()
         Elevator1Sounds.maxDistance = 100
         Call Elevator1Sounds.SetConeOrientation(0, 0, 90)
         Elevator1Sounds.ConeOutsideVolume = 0
-        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.y + 20, -23)
+        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.Y + 20, -23)
         Elevator1Sounds.Play
         ElevatorCheck = 1
         End If
@@ -1359,13 +1211,13 @@ Private Sub MainTimer_Timer()
         Elevator1DoorL.MoveRelative 0, (ElevatorEnable / 5), 0
         Elevator1DoorR.MoveRelative 0, (ElevatorEnable / 5), 0
         If ElevatorSync = True Then Camera.MoveRelative 0, (ElevatorEnable / 5), 0
-        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
-        ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
+        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
+        'ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
         ElevatorEnable = ElevatorEnable + 0.25
         If ElevatorEnable <= 15 Then StoppingDistance = CurrentFloorExact - OriginalLocation + 0.4
         If ElevatorEnable > 15 Then ElevatorEnable = 15
         Destination = ((OriginalLocation * 25) + 25) + DistanceToTravel - 35
-        If GotoFloor <> 0 And elevator1start.y >= (Destination - (StoppingDistance * 25) + 25) Then ElevatorDirection = -1: ElevatorCheck = 0
+        If GotoFloor <> 0 And elevator1start.Y >= (Destination - (StoppingDistance * 25) + 25) Then ElevatorDirection = -1: ElevatorCheck = 0
         End If
       
         If ElevatorEnable > 0 And ElevatorDirection = -1 Then
@@ -1386,8 +1238,8 @@ Private Sub MainTimer_Timer()
         Elevator1DoorR.MoveRelative 0, (ElevatorEnable / 5), 0
         If ElevatorSync = True Then Camera.MoveRelative 0, (ElevatorEnable / 5), 0
         
-        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
-        ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
+        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
+        'ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
         ElevatorEnable = ElevatorEnable - 0.25
         If ElevatorEnable < 0 Then ElevatorEnable = 0
         If ElevatorEnable = 0 Then ElevatorDirection = 0
@@ -1402,7 +1254,7 @@ Private Sub MainTimer_Timer()
         Elevator1Sounds.maxDistance = 100
         Call Elevator1Sounds.SetConeOrientation(0, 0, 90)
         Elevator1Sounds.ConeOutsideVolume = 0
-        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.y + 20, -23)
+        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.Y + 20, -23)
         Elevator1Sounds.Play
         ElevatorCheck = 1
         End If
@@ -1415,13 +1267,13 @@ Private Sub MainTimer_Timer()
         Elevator1DoorL.MoveRelative 0, (ElevatorEnable / 5), 0
         Elevator1DoorR.MoveRelative 0, (ElevatorEnable / 5), 0
         If ElevatorSync = True Then Camera.MoveRelative 0, (ElevatorEnable / 5), 0
-        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
-        ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
+        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
+        'ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
         ElevatorEnable = ElevatorEnable - 0.25
         If ElevatorEnable >= -15 Then StoppingDistance = OriginalLocation - CurrentFloorExact
         If ElevatorEnable < -15 Then ElevatorEnable = -15
         Destination = ((OriginalLocation * 25) + 25) - DistanceToTravel
-        If GotoFloor <> 0 And elevator1start.y <= (Destination + (StoppingDistance * 25) + 25) Then ElevatorDirection = 1: ElevatorCheck = 0
+        If GotoFloor <> 0 And elevator1start.Y <= (Destination + (StoppingDistance * 25) + 25) Then ElevatorDirection = 1: ElevatorCheck = 0
         End If
       
         If ElevatorEnable < 0 And ElevatorDirection = 1 Then
@@ -1439,20 +1291,25 @@ Private Sub MainTimer_Timer()
         Elevator1DoorL.MoveRelative 0, (ElevatorEnable / 5), 0
         Elevator1DoorR.MoveRelative 0, (ElevatorEnable / 5), 0
         If ElevatorSync = True Then Camera.MoveRelative 0, (ElevatorEnable / 5), 0
-        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
-        ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.y + 20, -23
+        Elevator1Sounds.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
+        'ElevatorMusic.SetPosition -20.25, Elevator1.GetPosition.Y + 20, -23
         ElevatorEnable = ElevatorEnable + 0.25
         If ElevatorEnable > 0 Then ElevatorEnable = 0
         If ElevatorEnable = 0 Then ElevatorDirection = 0
         If GotoFloor <> 0 Then ElevatorCheck = 0: FineTune = True
         End If
       
-      If FineTune = True And ElevatorEnable = 0 And elevator1start.y > (GotoFloor * 25) + 25 + -0.3 And elevator1start.y < (GotoFloor * 25) + 25 + 0.3 Then
+      If FineTune = True And ElevatorEnable = 0 And elevator1start.Y > (GotoFloor * 25) + 25 + -0.3 And elevator1start.Y < (GotoFloor * 25) + 25 + 0.3 Then
       FineTune = False
       Room(CameraFloor).Enable True
-      ElevatorDoorL(CameraFloor).Enable True
-      ElevatorDoorR(CameraFloor).Enable True
+      ElevatorDoorL(CameraFloor2).Enable True
+      ElevatorDoorR(CameraFloor2).Enable True
+      ShaftsFloor(CameraFloor).Enable True
       Stairs(CameraFloor).Enable True
+      Atmos.SkyBox_Enable True
+      InitObjectsForFloor (CameraFloor)
+      If CameraFloor = 137 Then Shafts.Enable True
+      
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable True
       GotoFloor = 0
@@ -1461,8 +1318,8 @@ Private Sub MainTimer_Timer()
       ElevatorCheck2 = 0
       ElevatorCheck3 = 0
       ElevatorCheck4 = 0
-      If CameraFloor > 1 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10, Camera.GetPosition.z
-      If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.x, 10, Camera.GetPosition.z
+      If CameraFloor > 1 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10, Camera.GetPosition.z
+      If CameraFloor = 1 And FloorIndicator <> "M" Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
       End If
       
       If FineTune = True Then
@@ -1471,13 +1328,13 @@ Private Sub MainTimer_Timer()
       Elevator1Sounds.Play
       ElevatorCheck3 = 1
       End If
-      If elevator1start.y < (GotoFloor * 25) + 25 Then
+      If elevator1start.Y < (GotoFloor * 25) + 25 Then
       Elevator1.MoveRelative 0, 0.2, 0
       Elevator1DoorL.MoveRelative 0, 0.2, 0
       Elevator1DoorR.MoveRelative 0, 0.2, 0
       If ElevatorSync = True Then Camera.MoveRelative 0, 0.2, 0
       End If
-      If elevator1start.y > (GotoFloor * 25) + 25 Then
+      If elevator1start.Y > (GotoFloor * 25) + 25 Then
       Elevator1.MoveRelative 0, -0.2, 0
       Elevator1DoorL.MoveRelative 0, -0.2, 0
       Elevator1DoorR.MoveRelative 0, -0.2, 0
@@ -1486,7 +1343,7 @@ Private Sub MainTimer_Timer()
       End If
       
       If OpenElevator = 1 Then
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z >= 4 Then OpenElevator = 0: GoTo OpenElevator1
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z >= 4 Then OpenElevator = 0: GoTo OpenElevator1
       If ElevatorCheck4 = 0 Then
         If Elevator1Sounds.PlayState = TV_PLAYSTATE_PLAYING Then
         Elevator1Sounds.Stop_
@@ -1497,33 +1354,33 @@ Private Sub MainTimer_Timer()
         Elevator1Sounds.maxDistance = 1000
         Call Elevator1Sounds.SetConeOrientation(0, -5, 0)
         Elevator1Sounds.ConeOutsideVolume = 0
-        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.y, -23)
+        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.Y, -23)
         Elevator1Sounds.Play
         ElevatorCheck4 = 1
       End If
       OpenElevatorLoc = OpenElevatorLoc + 0.02
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z > 1 Then OpenElevator = 2
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z > 1 Then OpenElevator = 2
 OpenElevator1:
       End If
       
       If OpenElevator = 2 Then
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z > 3 Then OpenElevator = 3
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z > 3 Then OpenElevator = 3
       End If
       
       If OpenElevator = 3 Then
       ElevatorCheck4 = 0
       OpenElevatorLoc = OpenElevatorLoc - 0.02
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z < 7 And OpenElevatorLoc = 0 Then OpenElevatorLoc = 0.02
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z < 7 And OpenElevatorLoc = 0 Then OpenElevatorLoc = 0.02
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
       If OpenElevatorLoc <= 0 Then
@@ -1534,7 +1391,7 @@ OpenElevator1:
       End If
       
       If OpenElevator = -1 Then
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z <= 0 Then OpenElevator = 0: GoTo OpenElevator2
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z <= 0 Then OpenElevator = 0: GoTo OpenElevator2
       If ElevatorCheck4 = 0 Then
         If Elevator1Sounds.PlayState = TV_PLAYSTATE_PLAYING Then
         Elevator1Sounds.Stop_
@@ -1545,72 +1402,84 @@ OpenElevator1:
         Elevator1Sounds.maxDistance = 1000
         Call Elevator1Sounds.SetConeOrientation(0, 0, 90)
         Elevator1Sounds.ConeOutsideVolume = 0
-        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.y, -23)
+        Call Elevator1Sounds.SetPosition(-20.25, Elevator1.GetPosition.Y, -23)
         Elevator1Sounds.Play
         ElevatorCheck4 = 1
       End If
       OpenElevatorLoc = OpenElevatorLoc - 0.02
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z < 3 Then OpenElevator = -2
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z < 3 Then OpenElevator = -2
 OpenElevator2:
       End If
       
       If OpenElevator = -2 Then
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z < 1 Then OpenElevator = -3
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z < 1 Then OpenElevator = -3
       End If
       
       If OpenElevator = -3 Then
       ElevatorCheck4 = 0
       OpenElevatorLoc = OpenElevatorLoc + 0.02
-      If ElevatorDoorL(ElevatorFloor).GetPosition.z > 0 And OpenElevatorLoc >= 0 Then OpenElevatorLoc = -0.02
-      ElevatorDoorL(ElevatorFloor).MoveRelative OpenElevatorLoc, 0, 0
-      ElevatorDoorR(ElevatorFloor).MoveRelative -OpenElevatorLoc, 0, 0
+      If ElevatorDoorL(ElevatorFloor2).GetPosition.z > 0 And OpenElevatorLoc >= 0 Then OpenElevatorLoc = -0.02
+      ElevatorDoorL(ElevatorFloor2).MoveRelative OpenElevatorLoc, 0, 0
+      ElevatorDoorR(ElevatorFloor2).MoveRelative -OpenElevatorLoc, 0, 0
       Elevator1DoorL.MoveRelative OpenElevatorLoc, 0, 0
       Elevator1DoorR.MoveRelative -OpenElevatorLoc, 0, 0
       If OpenElevatorLoc >= 0 Then
       OpenElevator = 0
       OpenElevatorLoc = 0
-      Elevator1DoorL.SetPosition Elevator1DoorL.GetPosition.x, Elevator1DoorL.GetPosition.y, 0
-      Elevator1DoorR.SetPosition Elevator1DoorR.GetPosition.x, Elevator1DoorR.GetPosition.y, 0
-      ElevatorDoorL(ElevatorFloor).SetPosition ElevatorDoorL(ElevatorFloor).GetPosition.x, ElevatorDoorL(ElevatorFloor).GetPosition.y, 0
-      ElevatorDoorR(ElevatorFloor).SetPosition ElevatorDoorR(ElevatorFloor).GetPosition.x, ElevatorDoorR(ElevatorFloor).GetPosition.y, 0
+      Elevator1DoorL.SetPosition Elevator1DoorL.GetPosition.X, Elevator1DoorL.GetPosition.Y, 0
+      Elevator1DoorR.SetPosition Elevator1DoorR.GetPosition.X, Elevator1DoorR.GetPosition.Y, 0
+      ElevatorDoorL(ElevatorFloor2).SetPosition ElevatorDoorL(ElevatorFloor2).GetPosition.X, ElevatorDoorL(ElevatorFloor2).GetPosition.Y, 0
+      ElevatorDoorR(ElevatorFloor2).SetPosition ElevatorDoorR(ElevatorFloor2).GetPosition.X, ElevatorDoorR(ElevatorFloor2).GetPosition.Y, 0
       End If
       End If
       
       lineend = Camera.GetPosition
       
        'Stairs Movement
-    If Camera.GetPosition.x <= -12.5 And Camera.GetPosition.x > -12.5 - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.y = (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor Then
+    If Camera.GetPosition.X <= -12.5 And Camera.GetPosition.X > -12.5 - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.Y = (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor Then
       Room(CameraFloor).Enable False
-      ElevatorDoorL(CameraFloor).Enable False
-      ElevatorDoorR(CameraFloor).Enable False
+      ElevatorDoorL(CameraFloor2).Enable False
+      ElevatorDoorR(CameraFloor2).Enable False
+      ShaftsFloor(CameraFloor).Enable False
+      Atmos.SkyBox_Enable False
+      DestroyObjects (CameraFloor)
       'Stairs(CameraFloor).Enable False
+      
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
     If CameraFloor >= 2 Then CameraFloor = CameraFloor + 1
     If CameraFloor = 1 Then PartialFloor = PartialFloor + 25
     If CameraFloor = 1 And PartialFloor >= 25 Then PartialFloor = 0: CameraFloor = 2
       Room(CameraFloor).Enable True
-      ElevatorDoorL(CameraFloor).Enable True
-      ElevatorDoorR(CameraFloor).Enable True
+      ElevatorDoorL(CameraFloor2).Enable True
+      ElevatorDoorR(CameraFloor2).Enable True
+      ShaftsFloor(CameraFloor).Enable True
       Stairs(CameraFloor).Enable True
+      Atmos.SkyBox_Enable True
+      InitObjectsForFloor (CameraFloor)
+      If CameraFloor = 137 Then Shafts.Enable True
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable True
-    Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + PartialFloor, Camera.GetPosition.z
+    Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + PartialFloor, Camera.GetPosition.z
     End If
-    If Camera.GetPosition.x <= -12.5 And Camera.GetPosition.x > -12.5 - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.y = (CameraFloor * 25) + 25 + 10 + 2 + PartialFloor Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 And Camera.GetPosition.X > -12.5 - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.Y = (CameraFloor * 25) + 25 + 10 + 2 + PartialFloor Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + PartialFloor, Camera.GetPosition.z
    
-    If Camera.GetPosition.x <= -12.5 - 6 And Camera.GetPosition.x > -12.5 - 8 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.y = (CameraFloor * 25) + 25 + 10 + PartialFloor Then
+    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 8 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.Y = (CameraFloor * 25) + 25 + 10 + PartialFloor Then
       Room(CameraFloor).Enable False
-      ElevatorDoorL(CameraFloor).Enable False
-      ElevatorDoorR(CameraFloor).Enable False
+      ElevatorDoorL(CameraFloor2).Enable False
+      ElevatorDoorR(CameraFloor2).Enable False
+      ShaftsFloor(CameraFloor).Enable False
+      Atmos.SkyBox_Enable False
+      DestroyObjects (CameraFloor)
+      
       'Stairs(CameraFloor).Enable False
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
@@ -1619,197 +1488,201 @@ OpenElevator2:
     If CameraFloor = 1 And PartialFloor <= -50 Then PartialFloor = -50
     If CameraFloor > 2 Then CameraFloor = CameraFloor - 1
      Room(CameraFloor).Enable True
-      ElevatorDoorL(CameraFloor).Enable True
-      ElevatorDoorR(CameraFloor).Enable True
+      ElevatorDoorL(CameraFloor2).Enable True
+      ElevatorDoorR(CameraFloor2).Enable True
+      ShaftsFloor(CameraFloor).Enable True
       Stairs(CameraFloor).Enable True
+      Atmos.SkyBox_Enable True
+      InitObjectsForFloor (CameraFloor)
+      If CameraFloor = 137 Then Shafts.Enable True
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable True
-    Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor, Camera.GetPosition.z
+    Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor, Camera.GetPosition.z
     End If
-    If Camera.GetPosition.y <> 10 Then
-    If Camera.GetPosition.x <= -12.5 - 6 And Camera.GetPosition.x > -12.5 - 8 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.y = (CameraFloor * 25) + 25 + 10 + 20 + PartialFloor Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 8 And Camera.GetPosition.x > -12.5 - 10 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 20 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 10 And Camera.GetPosition.x > -12.5 - 12 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 18 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 12 And Camera.GetPosition.x > -12.5 - 14 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 16 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 14 And Camera.GetPosition.x > -12.5 - 16 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 14 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.Y <> 10 Then
+    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 8 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.Y = (CameraFloor * 25) + 25 + 10 + 20 + PartialFloor Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 8 And Camera.GetPosition.X > -12.5 - 10 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 20 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 10 And Camera.GetPosition.X > -12.5 - 12 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 18 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 12 And Camera.GetPosition.X > -12.5 - 14 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 16 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 14 And Camera.GetPosition.X > -12.5 - 16 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 14 + PartialFloor, Camera.GetPosition.z
     End If
-    If Camera.GetPosition.y = 10 And PartialFloor = -50 Then PartialFloor = 0
-    If Camera.GetPosition.x <= -12.5 - 6 And Camera.GetPosition.x > -12.5 - 8 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 And PartialFloor = 0 And Camera.GetPosition.y = 10 Then PartialFloor = -50
-    If Camera.GetPosition.x <= -12.5 - 6 And Camera.GetPosition.x > -12.5 - 8 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 2 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 8 And Camera.GetPosition.x > -12.5 - 10 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 4 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 10 And Camera.GetPosition.x > -12.5 - 12 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 6 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 12 And Camera.GetPosition.x > -12.5 - 14 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 8 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 14 And Camera.GetPosition.x > -12.5 - 16 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 10 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 16 And Camera.GetPosition.x > -12.5 - 20 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 12 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.Y = 10 And PartialFloor = -50 Then PartialFloor = 0
+    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 8 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 And PartialFloor = 0 And Camera.GetPosition.Y = 10 Then PartialFloor = -50
+    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 8 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 2 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 8 And Camera.GetPosition.X > -12.5 - 10 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 4 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 10 And Camera.GetPosition.X > -12.5 - 12 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 6 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 12 And Camera.GetPosition.X > -12.5 - 14 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 8 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 14 And Camera.GetPosition.X > -12.5 - 16 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 10 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 16 And Camera.GetPosition.X > -12.5 - 20 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 12 + PartialFloor, Camera.GetPosition.z
     
       
 GoTo CollisionEnd
 
     'Elevator1 Collision
     
-    LineTest.x = lineend.x + 2
-    LineTest.y = lineend.y
+    LineTest.X = lineend.X + 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If Elevator1.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x - 2
-    LineTest.y = lineend.y
+    If Elevator1.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X - 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If Elevator1.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If Elevator1.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z + 2
-    If Elevator1.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If Elevator1.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z - 2
-    If Elevator1.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
+    If Elevator1.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
         
  'ElevatorDoorL Collision
     
-    LineTest.x = lineend.x + 2
-    LineTest.y = lineend.y
+    LineTest.X = lineend.X + 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If ElevatorDoorL(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x - 2
-    LineTest.y = lineend.y
+    If ElevatorDoorL(CameraFloor2).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X - 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If ElevatorDoorL(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If ElevatorDoorL(CameraFloor2).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z + 2
-    If ElevatorDoorL(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If ElevatorDoorL(CameraFloor2).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z - 2
-    If ElevatorDoorL(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoorL(CameraFloor2).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
        
 'ElevatorDoorR Collision
     
-    LineTest.x = lineend.x + 2
-    LineTest.y = lineend.y
+    LineTest.X = lineend.X + 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If ElevatorDoorR(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x - 2
-    LineTest.y = lineend.y
+    If ElevatorDoorR(CameraFloor2).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X - 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If ElevatorDoorR(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If ElevatorDoorR(CameraFloor2).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z + 2
-    If ElevatorDoorR(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If ElevatorDoorR(CameraFloor2).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z - 2
-    If ElevatorDoorR(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoorR(CameraFloor2).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
         
 'Room Collision
     
-    LineTest.x = lineend.x + 2
-    LineTest.y = lineend.y
+    LineTest.X = lineend.X + 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x - 2
-    LineTest.y = lineend.y
+    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X - 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z + 2
-    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z - 2
-    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
+    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
             
 'Shafts Collision
     
-    LineTest.x = Camera.GetPosition.x + 2
-    LineTest.y = Camera.GetPosition.y
+    LineTest.X = Camera.GetPosition.X + 2
+    LineTest.Y = Camera.GetPosition.Y
     LineTest.z = Camera.GetPosition.z + 2
-    LineTest2.x = Camera.GetPosition.x - 2
-    LineTest2.y = Camera.GetPosition.y
+    LineTest2.X = Camera.GetPosition.X - 2
+    LineTest2.Y = Camera.GetPosition.Y
     LineTest2.z = Camera.GetPosition.z + 2
-    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = Camera.GetPosition.x + 2
-    LineTest.y = Camera.GetPosition.y
+    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = Camera.GetPosition.X + 2
+    LineTest.Y = Camera.GetPosition.Y
     LineTest.z = Camera.GetPosition.z - 2
-    LineTest2.x = Camera.GetPosition.x - 2
-    LineTest2.y = Camera.GetPosition.y
+    LineTest2.X = Camera.GetPosition.X - 2
+    LineTest2.Y = Camera.GetPosition.Y
     LineTest2.z = Camera.GetPosition.z - 2
     'If Inp.IsKeyPressed(TV_KEY_7) = True Then Shafts.AddWall GetTex("Wood2"), LineTest.x, LineTest.z, LineTest2.x, LineTest2.z, 25
-    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = Camera.GetPosition.x + 2
-    LineTest.y = Camera.GetPosition.y
+    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = Camera.GetPosition.X + 2
+    LineTest.Y = Camera.GetPosition.Y
     LineTest.z = Camera.GetPosition.z + 2
-    LineTest2.x = Camera.GetPosition.x + 2
-    LineTest2.y = Camera.GetPosition.y
+    LineTest2.X = Camera.GetPosition.X + 2
+    LineTest2.Y = Camera.GetPosition.Y
     LineTest2.z = Camera.GetPosition.z - 2
-    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
-    LineTest.x = Camera.GetPosition.x - 2
-    LineTest.y = Camera.GetPosition.y
+    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    LineTest.X = Camera.GetPosition.X - 2
+    LineTest.Y = Camera.GetPosition.Y
     LineTest.z = Camera.GetPosition.z + 2
-    LineTest2.x = Camera.GetPosition.x - 2
-    LineTest2.y = Camera.GetPosition.y
+    LineTest2.X = Camera.GetPosition.X - 2
+    LineTest2.Y = Camera.GetPosition.Y
     LineTest2.z = Camera.GetPosition.z - 2
-    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
+    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     
        
 'Elevator1DoorL Collision
     
-    LineTest.x = lineend.x + 2
-    LineTest.y = lineend.y
+    LineTest.X = lineend.X + 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If Elevator1DoorL.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x - 2
-    LineTest.y = lineend.y
+    If Elevator1DoorL.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X - 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If Elevator1DoorL.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If Elevator1DoorL.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z + 2
-    If Elevator1DoorL.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If Elevator1DoorL.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z - 2
-    If Elevator1DoorL.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
+    If Elevator1DoorL.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
         
 'Elevator1DoorR Collision
     
-    LineTest.x = lineend.x + 2
-    LineTest.y = lineend.y
+    LineTest.X = lineend.X + 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If Elevator1DoorR.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x - 2
-    LineTest.y = lineend.y
+    If Elevator1DoorR.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X - 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If Elevator1DoorR.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If Elevator1DoorR.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z + 2
-    If Elevator1DoorR.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If Elevator1DoorR.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z - 2
-    If Elevator1DoorR.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
+    If Elevator1DoorR.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
         
 'External Collision
     
-    LineTest.x = lineend.x + 2
-    LineTest.y = lineend.y
+    LineTest.X = lineend.X + 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x - 2
-    LineTest.y = lineend.y
+    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X - 2
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z
-    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.x, Camera.GetPosition.y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z + 2
-    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
-    LineTest.x = lineend.x
-    LineTest.y = lineend.y
+    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    LineTest.X = lineend.X
+    LineTest.Y = lineend.Y
     LineTest.z = lineend.z - 2
-    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.x, Camera.GetPosition.y, linestart.z: GoTo CollisionEnd
+    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
             
     'If External.Collision(linestart, lineend, TV_TESTTYPE_ACCURATETESTING) = True Then
     '    Camera.SetPosition linestart.x, linestart.y, linestart.z
@@ -1835,10 +1708,14 @@ End Sub
 
 Sub StairsTimer_Timer()
  'Stairs Movement
-    If Camera.GetPosition.x <= -12.5 And Camera.GetPosition.x > -12.5 - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.y = (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor Then
+    If Camera.GetPosition.X <= -12.5 And Camera.GetPosition.X > -12.5 - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.Y = (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor Then
       Room(CameraFloor).Enable False
-      ElevatorDoorL(CameraFloor).Enable False
-      ElevatorDoorR(CameraFloor).Enable False
+      ElevatorDoorL(CameraFloor2).Enable False
+      ElevatorDoorR(CameraFloor2).Enable False
+      ShaftsFloor(CameraFloor).Enable False
+      Atmos.SkyBox_Enable False
+      DestroyObjects (CameraFloor)
+      
       'Stairs(CameraFloor).Enable False
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
@@ -1846,19 +1723,27 @@ Sub StairsTimer_Timer()
     If CameraFloor = 1 Then PartialFloor = PartialFloor + 25
     If CameraFloor = 1 And PartialFloor >= 25 Then PartialFloor = 0: CameraFloor = 2
       Room(CameraFloor).Enable True
-      ElevatorDoorL(CameraFloor).Enable True
-      ElevatorDoorR(CameraFloor).Enable True
+      ElevatorDoorL(CameraFloor2).Enable True
+      ElevatorDoorR(CameraFloor2).Enable True
+      ShaftsFloor(CameraFloor).Enable True
       Stairs(CameraFloor).Enable True
+      Atmos.SkyBox_Enable True
+      InitObjectsForFloor (CameraFloor)
+      If CameraFloor = 137 Then Shafts.Enable True
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable True
-    Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + PartialFloor, Camera.GetPosition.z
+    Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + PartialFloor, Camera.GetPosition.z
     End If
-    If Camera.GetPosition.x <= -12.5 And Camera.GetPosition.x > -12.5 - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.y = (CameraFloor * 25) + 25 + 10 + 2 + PartialFloor Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 And Camera.GetPosition.X > -12.5 - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.Y = (CameraFloor * 25) + 25 + 10 + 2 + PartialFloor Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + PartialFloor, Camera.GetPosition.z
    
-    If Camera.GetPosition.x <= -12.5 - 6 And Camera.GetPosition.x > -12.5 - 8 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.y = (CameraFloor * 25) + 25 + 10 + PartialFloor Then
+    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 8 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.Y = (CameraFloor * 25) + 25 + 10 + PartialFloor Then
       Room(CameraFloor).Enable False
-      ElevatorDoorL(CameraFloor).Enable False
-      ElevatorDoorR(CameraFloor).Enable False
+      ElevatorDoorL(CameraFloor2).Enable False
+      ElevatorDoorR(CameraFloor2).Enable False
+      ShaftsFloor(CameraFloor).Enable False
+      Atmos.SkyBox_Enable False
+      DestroyObjects (CameraFloor)
+      
       'Stairs(CameraFloor).Enable False
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
@@ -1867,28 +1752,32 @@ Sub StairsTimer_Timer()
     If CameraFloor = 1 And PartialFloor <= -50 Then PartialFloor = -50
     If CameraFloor > 2 Then CameraFloor = CameraFloor - 1
      Room(CameraFloor).Enable True
-      ElevatorDoorL(CameraFloor).Enable True
-      ElevatorDoorR(CameraFloor).Enable True
+      ElevatorDoorL(CameraFloor2).Enable True
+      ElevatorDoorR(CameraFloor2).Enable True
+      ShaftsFloor(CameraFloor).Enable True
       Stairs(CameraFloor).Enable True
+      Atmos.SkyBox_Enable True
+      InitObjectsForFloor (CameraFloor)
+      If CameraFloor = 137 Then Shafts.Enable True
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
       If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable True
-    Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor, Camera.GetPosition.z
+    Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor, Camera.GetPosition.z
     End If
-    If Camera.GetPosition.y <> 10 Then
-    If Camera.GetPosition.x <= -12.5 - 6 And Camera.GetPosition.x > -12.5 - 8 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.y = (CameraFloor * 25) + 25 + 10 + 20 + PartialFloor Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 8 And Camera.GetPosition.x > -12.5 - 10 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 20 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 10 And Camera.GetPosition.x > -12.5 - 12 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 18 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 12 And Camera.GetPosition.x > -12.5 - 14 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 16 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 14 And Camera.GetPosition.x > -12.5 - 16 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 14 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.Y <> 10 Then
+    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 8 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 And Camera.GetPosition.Y = (CameraFloor * 25) + 25 + 10 + 20 + PartialFloor Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 22 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 8 And Camera.GetPosition.X > -12.5 - 10 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 20 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 10 And Camera.GetPosition.X > -12.5 - 12 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 18 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 12 And Camera.GetPosition.X > -12.5 - 14 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 16 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 14 And Camera.GetPosition.X > -12.5 - 16 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -46.25 + 7.71 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 14 + PartialFloor, Camera.GetPosition.z
     End If
-    If Camera.GetPosition.y = 10 And PartialFloor = -50 Then PartialFloor = 0
-    If Camera.GetPosition.x <= -12.5 - 6 And Camera.GetPosition.x > -12.5 - 8 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 And PartialFloor = 0 And Camera.GetPosition.y = 10 Then PartialFloor = -50
-    If Camera.GetPosition.x <= -12.5 - 6 And Camera.GetPosition.x > -12.5 - 8 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 2 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 8 And Camera.GetPosition.x > -12.5 - 10 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 4 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 10 And Camera.GetPosition.x > -12.5 - 12 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 6 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 12 And Camera.GetPosition.x > -12.5 - 14 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 8 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 14 And Camera.GetPosition.x > -12.5 - 16 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 10 + PartialFloor, Camera.GetPosition.z
-    If Camera.GetPosition.x <= -12.5 - 16 And Camera.GetPosition.x > -12.5 - 20 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.x, (CameraFloor * 25) + 25 + 10 + 12 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.Y = 10 And PartialFloor = -50 Then PartialFloor = 0
+    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 8 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 And PartialFloor = 0 And Camera.GetPosition.Y = 10 Then PartialFloor = -50
+    If Camera.GetPosition.X <= -12.5 - 6 And Camera.GetPosition.X > -12.5 - 8 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 2 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 8 And Camera.GetPosition.X > -12.5 - 10 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 4 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 10 And Camera.GetPosition.X > -12.5 - 12 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 6 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 12 And Camera.GetPosition.X > -12.5 - 14 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 8 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 14 And Camera.GetPosition.X > -12.5 - 16 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 10 + PartialFloor, Camera.GetPosition.z
+    If Camera.GetPosition.X <= -12.5 - 16 And Camera.GetPosition.X > -12.5 - 20 And Camera.GetPosition.z > -46.25 + 7.71 And Camera.GetPosition.z < -30.85 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10 + 12 + PartialFloor, Camera.GetPosition.z
     
  End Sub
 
