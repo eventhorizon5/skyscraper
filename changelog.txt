@@ -1,10 +1,19 @@
 Changelog starts after 0.94 release
 
-Version 0.97
+Pre-version 1.1
 -------------
 -massive code rewrites
 -new modules created, old ones deleted
 -API created
+
+Version 1.0
+1.0 is being released now due to the massive overhauls and redesigns that have
+rendered the main development Skyscraper tree unstable, and uncompilable at the moment.
+1.0 is not complete in any way, and is still a primitive release.
+1.0 is a fork of the stable 0.96 code, while the 0.97 code (renamed 1.1 alpha) is under development.
+-----------
+-fixed up shaft and pipe shaft issues
+-bundled with new installer
 
 Version 0.96 (build 161)
 -------------
