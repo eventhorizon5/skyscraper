@@ -17,6 +17,8 @@ Attribute VB_Name = "Globals"
 'along with this program; if not, write to the Free Software
 'Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+'2/15/03 - Code amount - 79 pages
+
 'Building title - "Triton Center"
 '
 
@@ -27,17 +29,20 @@ Global External As TVMesh
 Global Room(138) As TVMesh
 Global Shafts As TVMesh
 Global ShaftsFloor(138) As TVMesh
+Global Buttons(-1 To 138) As TVMesh
 Global Elevator1 As TVMesh
+Global FloorIndicator1 As TVMesh
 Global Elevator1DoorL As TVMesh
 Global Elevator1DoorR As TVMesh
 Global ElevatorDoorL(-1 To 138) As TVMesh
 Global ElevatorDoorR(-1 To 138) As TVMesh
 Global Stairs(138) As TVMesh
+Global CallButtons As TVMesh
 Global Light As TVLightEngine
 Global MatFactory As New TVMaterialFactory
 Global LightID As Integer
 Global LightD As D3DLIGHT8
-
+Global Plaque As TVMesh
 
 Global SoundEngine As TVSoundEngine
 Global ElevatorMusic As TVSoundWave3D
@@ -81,7 +86,8 @@ Global ElevatorCheck As Integer
 Global ElevatorCheck2 As Integer
 Global ElevatorCheck3 As Integer
 Global ElevatorCheck4 As Integer
-
+Global X As Integer
+Global CollisionResult As TVCollisionResult
 
 Global GotoFloor As Single
 Global CurrentFloor As Integer
@@ -99,7 +105,16 @@ Global InStairwell As Boolean
 Global FloorIndicator As String
 Global ElevatorFloor2 As Integer
 Global CameraFloor2 As Integer
-
+Global FloorIndicatorPic As String
+Global FloorIndicatorPicOld As String
 '3D Objects
 Global Objects(150 * 138) As TVMesh
+Global FileName As String
+Global OpeningDoor As Integer
+Global ClosingDoor As Integer
+Global DoorNumber As Integer
+Global DoorRotated As Integer
 
+Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
+Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
+Declare Function GetTickCount Lib "kernel32.dll" () As Long
