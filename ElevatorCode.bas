@@ -855,7 +855,8 @@ Next i52
 End Sub
 
 Sub ElevatorLoop(Number As Integer)
-On Error Resume Next
+On Error GoTo ErrorHandler
+If DebugPanel.Check11.Value = 0 Then Exit Sub
 
 Call ProcessCallQueue(Number)
 
@@ -879,6 +880,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       If ElevatorSync(Number) = True Then
       Call DeleteStairDoors
       Room(CameraFloor).Enable False
+      CrawlSpace(CameraFloor).Enable False
+      If CameraFloor > -10 Then CrawlSpace(CameraFloor - 1).Enable False
       For ElevTemp(Number) = 1 To 40
       CallButtonsUp(ElevTemp(Number)).Enable False
       CallButtonsDown(ElevTemp(Number)).Enable False
@@ -906,6 +909,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       If ElevatorSync(Number) = True Then
       Call DeleteStairDoors
       Room(CameraFloor).Enable False
+      CrawlSpace(CameraFloor).Enable False
+      If CameraFloor > -10 Then CrawlSpace(CameraFloor - 1).Enable False
       For ElevTemp(Number) = 1 To 40
       CallButtonsUp(ElevTemp(Number)).Enable False
       CallButtonsDown(ElevTemp(Number)).Enable False
@@ -937,11 +942,6 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         If ElevatorSounds(Number).PlayState <> TV_PLAYSTATE_PLAYING And ElevatorCheck(Number) = 0 And GotoFloor(Number) <> ElevatorFloor(Number) Then
         ElevatorSounds(Number).Loop_ = False
         ElevatorSounds(Number).Load App.Path + "\data\elevstart.wav"
-        ElevatorSounds(Number).Volume = 0
-        'ElevatorSounds(Number).maxDistance = 100
-        'Call ElevatorSounds(Number).SetConeOrientation(0, 0, 90)
-        'ElevatorSounds(Number).ConeOutsideVolume = 0
-        'Call ElevatorSounds(Number).SetPosition(-20.25, Elevator1(Number).GetPosition.Y + 20, -23)
         ElevatorSounds(Number).Play
         ElevatorCheck(Number) = 1
         End If
@@ -956,12 +956,12 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorInsDoorR(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         FloorIndicator(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Plaque(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
+        ElevatorSounds(Number).SetPosition Elevator(Number).GetPosition.X / SoundDivisor, Elevator(Number).GetPosition.Y / SoundDivisor, Elevator(Number).GetPosition.z / SoundDivisor
+        ElevatorSounds(Number).maxDistance = SoundMaxDistance
         For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Next ElevTemp(Number)
         If ElevatorSync(Number) = True Then Camera.MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
-        'ElevatorSounds(Number).SetPosition -20.25, Elevator(Number).GetPosition.Y + 20, -23
-        ''ElevatorMusic(Number).SetPosition -20.25, Elevator(Number).GetPosition.Y + 20, -23
         ElevatorEnable(Number) = ElevatorEnable(Number) + 0.25
         If ElevatorEnable(Number) <= 15 Then StoppingDistance(Number) = CurrentFloorExact(Number) - OriginalLocation(Number) + 0.4
         If ElevatorEnable(Number) > 15 Then ElevatorEnable(Number) = 15
@@ -987,13 +987,13 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorInsDoorR(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         FloorIndicator(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Plaque(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
+        ElevatorSounds(Number).SetPosition Elevator(Number).GetPosition.X / SoundDivisor, Elevator(Number).GetPosition.Y / SoundDivisor, Elevator(Number).GetPosition.z / SoundDivisor
+        ElevatorSounds(Number).maxDistance = SoundMaxDistance
         For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Next ElevTemp(Number)
         If ElevatorSync(Number) = True Then Camera.MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         
-        'ElevatorSounds(Number).SetPosition -20.25, Elevator(Number).GetPosition.Y + 20, -23
-        ''ElevatorMusic(Number).SetPosition -20.25, Elevator(Number).GetPosition.Y + 20, -23
         ElevatorEnable(Number) = ElevatorEnable(Number) - 0.25
         If ElevatorEnable(Number) < 0 Then ElevatorEnable(Number) = 0
         If ElevatorEnable(Number) = 0 Then ElevatorDirection(Number) = 0
@@ -1004,11 +1004,6 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         If ElevatorSounds(Number).PlayState <> TV_PLAYSTATE_PLAYING And ElevatorCheck(Number) = 0 Then
         ElevatorSounds(Number).Loop_ = False
         ElevatorSounds(Number).Load App.Path + "\data\elevstart.wav"
-        ElevatorSounds(Number).Volume = 0
-        'ElevatorSounds(Number).maxDistance = 100
-        'Call ElevatorSounds(Number).SetConeOrientation(0, 0, 90)
-        'ElevatorSounds(Number).ConeOutsideVolume = 0
-        'Call ElevatorSounds(Number).SetPosition(-20.25, Elevator(Number).GetPosition.Y + 20, -23)
         ElevatorSounds(Number).Play
         ElevatorCheck(Number) = 1
         End If
@@ -1022,12 +1017,12 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorInsDoorR(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         FloorIndicator(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Plaque(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
+        ElevatorSounds(Number).SetPosition Elevator(Number).GetPosition.X / SoundDivisor, Elevator(Number).GetPosition.Y / SoundDivisor, Elevator(Number).GetPosition.z / SoundDivisor
+        ElevatorSounds(Number).maxDistance = SoundMaxDistance
         For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Next ElevTemp(Number)
         If ElevatorSync(Number) = True Then Camera.MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
-        'ElevatorSounds(Number).SetPosition -20.25, Elevator(Number).GetPosition.Y + 20, -23
-        ''ElevatorMusic(Number).SetPosition -20.25, Elevator(Number).GetPosition.Y + 20, -23
         ElevatorEnable(Number) = ElevatorEnable(Number) - 0.25
         If ElevatorEnable(Number) >= -15 Then StoppingDistance(Number) = OriginalLocation(Number) - CurrentFloorExact(Number)
         If ElevatorEnable(Number) < -15 Then ElevatorEnable(Number) = -15
@@ -1051,12 +1046,12 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorInsDoorR(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         FloorIndicator(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Plaque(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
+        ElevatorSounds(Number).SetPosition Elevator(Number).GetPosition.X / SoundDivisor, Elevator(Number).GetPosition.Y / SoundDivisor, Elevator(Number).GetPosition.z / SoundDivisor
+        ElevatorSounds(Number).maxDistance = SoundMaxDistance
         For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Next ElevTemp(Number)
         If ElevatorSync(Number) = True Then Camera.MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
-        'ElevatorSounds(Number).SetPosition -20.25, Elevator(Number).GetPosition.Y + 20, -23
-        ''ElevatorMusic(Number).SetPosition -20.25, Elevator(Number).GetPosition.Y + 20, -23
         ElevatorEnable(Number) = ElevatorEnable(Number) + 0.25
         If ElevatorEnable(Number) > 0 Then ElevatorEnable(Number) = 0
         If ElevatorEnable(Number) = 0 Then ElevatorDirection(Number) = 0
@@ -1066,6 +1061,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       If FineTune(Number) = True And ElevatorEnable(Number) = 0 And elevatorstart(Number).Y > (GotoFloor(Number) * FloorHeight) + FloorHeight + -0.3 And elevatorstart(Number).Y < (GotoFloor(Number) * FloorHeight) + FloorHeight + 0.3 Then
       FineTune(Number) = False
       Room(CameraFloor).Enable True
+      CrawlSpace(CameraFloor).Enable True
+      If CameraFloor > -10 Then CrawlSpace(CameraFloor - 1).Enable True
       If ElevatorSync(Number) = True Then
       For ElevTemp(Number) = 1 To 40
       ElevatorDoorL(ElevTemp(Number)).Enable True
@@ -1112,6 +1109,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorInsDoorL(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
       ElevatorInsDoorR(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
       Plaque(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
+      ElevatorSounds(Number).SetPosition Elevator(Number).GetPosition.X / SoundDivisor, Elevator(Number).GetPosition.Y / SoundDivisor, Elevator(Number).GetPosition.z / SoundDivisor
+        ElevatorSounds(Number).maxDistance = SoundMaxDistance
         For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, ElevatorFineTuneSpeed, 0
         Next ElevTemp(Number)
@@ -1123,6 +1122,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorInsDoorL(Number).MoveRelative 0, -ElevatorFineTuneSpeed, 0
       ElevatorInsDoorR(Number).MoveRelative 0, -ElevatorFineTuneSpeed, 0
       Plaque(Number).MoveRelative 0, -ElevatorFineTuneSpeed, 0
+      ElevatorSounds(Number).SetPosition Elevator(Number).GetPosition.X / SoundDivisor, Elevator(Number).GetPosition.Y / SoundDivisor, Elevator(Number).GetPosition.z / SoundDivisor
+        ElevatorSounds(Number).maxDistance = SoundMaxDistance
         For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, -ElevatorFineTuneSpeed, 0
         Next ElevTemp(Number)
@@ -1149,11 +1150,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         End If
         ElevatorSounds(Number).Loop_ = False
         ElevatorSounds(Number).Load App.Path + "\data\elevatoropen.wav"
-        ElevatorSounds(Number).Volume = 0
-        'ElevatorSounds(Number).maxDistance = 1000
-        'Call ElevatorSounds(Number).SetConeOrientation(0, -5, 0)
-        'ElevatorSounds(Number).ConeOutsideVolume = 0
-        'Call ElevatorSounds(Number).SetPosition(-20.25, Elevator(Number).GetPosition.Y, -23)
+        ElevatorSounds(Number).SetPosition Elevator(Number).GetPosition.X / SoundDivisor, Elevator(Number).GetPosition.Y / SoundDivisor, Elevator(Number).GetPosition.z / SoundDivisor
+        ElevatorSounds(Number).maxDistance = SoundMaxDistance
         ElevatorSounds(Number).Play
         ElevatorCheck4(Number) = 1
       End If
@@ -1243,11 +1241,6 @@ OpenElevator1:
         End If
         ElevatorSounds(Number).Loop_ = False
         ElevatorSounds(Number).Load App.Path + "\data\elevatorclose.wav"
-        ElevatorSounds(Number).Volume = 0
-        'ElevatorSounds(Number).maxDistance = 1000
-        'Call ElevatorSounds(Number).SetConeOrientation(0, 0, 90)
-        'ElevatorSounds(Number).ConeOutsideVolume = 0
-        'Call ElevatorSounds(Number).SetPosition(-20.25, Elevator(Number).GetPosition.Y, -23)
         ElevatorSounds(Number).Play
         ElevatorCheck4(Number) = 1
       End If
@@ -1288,7 +1281,10 @@ OpenElevator2:
       ElevatorDoorR(Number).SetPosition ElevatorDoorR(Number).GetPosition.X, ElevatorDoorR(Number).GetPosition.Y, 0
       End If
       End If
-      
+Exit Sub
+ErrorHandler:
+   MsgBox "An error occurred in the elevator simulation subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
     
 End Sub
 
