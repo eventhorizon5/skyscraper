@@ -436,10 +436,29 @@ If FloorID = -10 Then q = -11
     If ShaftNum = 4 Then PipeShaft(4).AddWall GetTex("BrickTexture"), -(ShaftLeft + WallOffset), -46.25, -(ShaftLeft + WallOffset), -30, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
         
     'pipeshaft tops
-    'If ShaftNum = 1 And FloorID = 137 Then PipeShaft(1).AddWall GetTex("BrickTexture"), ShaftLeft, -46.25, ShaftRight, -30, (q * FloorHeight) + (FloorHeight * 3) - 0.1, 20 * 0.086, 2
-    If ShaftNum = 3 And FloorID = 79 Then PipeShaft(3).AddFloor GetTex("BrickTexture"), ShaftLeft, -46.25, ShaftRight, -30, (q * FloorHeight) + (FloorHeight * 3) - 0.1, 20 * 0.086, 2
-    If ShaftNum = 2 And FloorID = 117 Then PipeShaft(2).AddFloor GetTex("BrickTexture"), -ShaftLeft, -46.25, -ShaftRight, -30, (q * FloorHeight) + (FloorHeight * 3) - 0.1, 20 * 0.086, 2
-    If ShaftNum = 4 And FloorID = 39 Then PipeShaft(4).AddFloor GetTex("BrickTexture"), -ShaftLeft, -46.25, -ShaftRight, -30, (q * FloorHeight) + (FloorHeight * 3) - 0.1, 20 * 0.086, 2
+    If ShaftNum = 1 And FloorID = 136 Then CrawlSpaceShaft1(137).AddWall GetTex("BrickTexture"), ShaftLeft, -46.25, ShaftRight, -30, (q * FloorHeight) + (FloorHeight * 2) - 0.05, 20 * 0.086, 2
+    If ShaftNum = 3 And FloorID = 79 Then PipeShaft(3).AddFloor GetTex("BrickTexture"), ShaftLeft, -46.25, ShaftRight, -30, (q * FloorHeight) + (FloorHeight * 3) - 0.05, 20 * 0.086, 2
+    If ShaftNum = 2 And FloorID = 117 Then PipeShaft(2).AddFloor GetTex("BrickTexture"), -ShaftLeft, -46.25, -ShaftRight, -30, (q * FloorHeight) + (FloorHeight * 3) - 0.05, 20 * 0.086, 2
+    If ShaftNum = 4 And FloorID = 39 Then PipeShaft(4).AddFloor GetTex("BrickTexture"), -ShaftLeft, -46.25, -ShaftRight, -30, (q * FloorHeight) + (FloorHeight * 3) - 0.05, 20 * 0.086, 2
+    
+    'Crawlspace Elevator Walls
+    If FloorID <> 1 Then
+        If JoinShafts = False Then CrawlSpace(FloorID).AddWall GetTex("BrickTexture"), -(ShaftRight + WallOffset), -46.25 - WallOffset, -(ShaftRight + WallOffset), ShaftEnd + WallOffset, FloorHeight - 25, (FloorID * FloorHeight) + FloorHeight + 25, (46.25 + ShaftEnd) * 0.086, 1
+        CrawlSpace(FloorID).AddWall GetTex("BrickTexture"), -(ShaftLeft - WallOffset), -46.25 - WallOffset, -(ShaftLeft - WallOffset), ShaftEnd + WallOffset, FloorHeight - 25, (FloorID * FloorHeight) + FloorHeight + 25, (46.25 + ShaftEnd) * 0.086, 1
+        If JoinShafts = False Then CrawlSpace(FloorID).AddWall GetTex("BrickTexture"), ShaftRight + WallOffset, -46.25 - WallOffset, ShaftRight + WallOffset, ShaftEnd + WallOffset, FloorHeight - 25, (FloorID * FloorHeight) + FloorHeight + 25, (46.25 + ShaftEnd) * 0.086, 1
+        CrawlSpace(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft - WallOffset, -46.25 - WallOffset, ShaftLeft - WallOffset, ShaftEnd + WallOffset, FloorHeight - 25, (FloorID * FloorHeight) + FloorHeight + 25, (46.25 + ShaftEnd) * 0.086, 1
+    If ShaftNum = 1 Or ShaftNum = 3 Then
+        CrawlSpace(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft - WallOffset, ShaftEnd + WallOffset, ShaftRight + WallOffset, ShaftEnd + WallOffset, FloorHeight - 25, (FloorID * FloorHeight) + FloorHeight + 25, (ShaftRight - ShaftLeft) * 0.086, 1
+        CrawlSpace(FloorID).AddWall GetTex("BrickTexture"), -(ShaftLeft - WallOffset), ShaftEnd + WallOffset, -(ShaftRight + WallOffset), ShaftEnd + WallOffset, FloorHeight - 25, (FloorID * FloorHeight) + FloorHeight + 25, (ShaftRight - ShaftLeft) * 0.086, 1
+        CrawlSpace(FloorID).AddWall GetTex("BrickTexture"), -(ShaftLeft - WallOffset), -46.25 - WallOffset, -(ShaftRight + WallOffset), -46.25 - WallOffset, FloorHeight - 25, (FloorID * FloorHeight) + FloorHeight + 25, (ShaftRight - ShaftLeft) * 0.086, 1
+    End If
+    
+    If ShaftNum = 2 Or ShaftNum = 4 Then
+        CrawlSpace(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, ShaftEnd - WallOffset, ShaftRight - WallOffset, ShaftEnd - WallOffset, FloorHeight - 25, (FloorID * FloorHeight) + FloorHeight + 25, (ShaftRight - ShaftLeft) * 0.086, 1
+        CrawlSpace(FloorID).AddWall GetTex("BrickTexture"), -(ShaftLeft + WallOffset), ShaftEnd - WallOffset, -(ShaftRight - WallOffset), ShaftEnd - WallOffset, FloorHeight - 25, (FloorID * FloorHeight) + FloorHeight + 25, (ShaftRight - ShaftLeft) * 0.086, 1
+        CrawlSpace(FloorID).AddWall GetTex("BrickTexture"), (ShaftLeft + WallOffset), -46.25 + WallOffset, (ShaftRight - WallOffset), -46.25 + WallOffset, FloorHeight - 25, (FloorID * FloorHeight) + FloorHeight + 25, (ShaftRight - ShaftLeft) * 0.086, 1
+    End If
+    End If
     
     Call DrawCrawlSpaces(FloorID, ShaftNum)
     
