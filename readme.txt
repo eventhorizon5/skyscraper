@@ -1,4 +1,4 @@
-Skyscraper version 0.7 - Alpha
+Skyscraper version 0.8 - Alpha
 ©2003 Ryan Thoryk
 http://www.tliquest.net/skyscraper
 
@@ -51,14 +51,20 @@ Current building floor layout:
 M - Mezzanine inside the 3 story lobby
 2-39 - Offices, section 1
 40-79 - Office, section 2
-80-117 - Residential, section 1
-118-130 - Residential, section 2
-131-133 - Maintenance
+80 - Residential Skylobby
+81-99 - Hotel
+100-114 - Apartments
+115-117 - Residential service floors and maintenance
+118-129 - Condos
+130-131 - Machinery/Electrical
+132 - Observatory
+133 - Maintenance/Water Tanks
 134 - Pool and recreation area
-135 - 2 story ballroom
-136 - balcony inside the 135th floor ballroom
-137 - Maintenance
-138 - Roof w/Heliport
+135 - 2 story ballroom with surrounding balcony
+136 - balcony of the 135th floor ballroom
+137 - Mechanical
+138 - Roof w/Heliport and radio/tv towers
+
 
 Note - if you're getting poor performance in the lobby, click the "Remove Objects" button.
 
