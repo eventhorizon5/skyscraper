@@ -70,9 +70,9 @@ Public InStairwell As Boolean 'true if user is in a stairwell
 Public ElevatorNumber As Integer 'number of currently selected elevator
 Public MoveElevator() As Boolean 'tells timers to start moving specified elevator
 Public MoveElevatorFloor() As Integer 'floor to move elevator to
-Global SoundDivisor As Integer
-Global SoundMaxDistance As Integer
-Global FrameRate As Integer
+Public SoundDivisor As Integer
+Public SoundMaxDistance As Integer
+Public FrameRate As Integer
 
 'Camera initialization
 Public CameraStartFloor As Integer 'starting floor
@@ -87,7 +87,7 @@ Public Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
 Public Declare Function GetTickCount Lib "kernel32.dll" () As Long
 
 'Level Editor
-Global DesignLevelGrid() As String
+Public DesignLevelGrid() As String
 
 
 Public Sub Start(FileName As String, InitTV As Boolean, DestObject As Object)
@@ -289,7 +289,7 @@ Dest.Cls
 Dest.Print vbCrLf
 Dest.Print Spc(2); "Skyscraper " + LTrim(Str$(App.Major)) + "." + LTrim(Str$(App.Minor)) + " Alpha - Build" + Str$(App.Revision)
 Dest.Print Spc(2); "Powered by SBSE " + LTrim(Str$(App.Major - 1)) + "." + LTrim(Str$(App.Minor))
-Dest.Print Spc(2); "Compiled on October 17, 2004" + vbCrLf
+Dest.Print Spc(2); "Compiled on December 14, 2004" + vbCrLf
 Dest.Print Spc(2); "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free"
 Dest.Print Spc(2); "software, and you are welcome to redistribute it under certain"
 Dest.Print Spc(2); "conditions. For details, see the file gpl.txt"
