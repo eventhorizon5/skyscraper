@@ -506,7 +506,7 @@ Call ProcessOtherFloors2
 Sim.Label2.Caption = "Initializing Lobby... "
 Call InitRealtime(0)
 Call InitObjectsForFloor(0)
- 
+
 Sim.Label2.Caption = "Processing Outside... "
 Call ProcessOutside
 Sim.Label2.Caption = "Processing Elevators... "
@@ -532,6 +532,7 @@ BottomFloor = -10
 
 Call Init_Simulator
 Call ProcessFloorHeights
+Call CalculateFloorAltitudes
 Call ProcessFloors
 Call ProcessFloorNames
 
