@@ -1,6 +1,8 @@
-Skyscraper version 0.91 - Beta
+Skyscraper version 0.92 - Beta
 ©2003 Ryan Thoryk
 http://www.tliquest.net/skyscraper
+http://sourceforge.net/projects/skyscraper
+email: ryan@tliquest.net
 
 Legal Notice
 ------------------------------
@@ -30,8 +32,14 @@ which originally got it's inspiration from the 137-story Glass Tower in the movi
 Inferno, and 7 South Dearborn, a 112-story proposed building for downtown Chicago.
 Original models (2D and 3D) of the Triton Center were made in MyHouse for Windows 6.5.
 The building's features and locations of equipment currently don't aim to be 100% accurate
-or even realistic, for example, the single stairwell for the whole building.  These might
-be changed in newer models of the Triton Center, but we'll see.
+or even realistic, but they might be changed in newer models of the Triton Center.
+
+This release, version 0.92, contains 40 elevators, redesigned floor layouts, redesigned elevator
+floor assignments, crawlspaces between each floor, multiple pipe shafts, multiple stairwells, 
+many bugfixes, some adjustable variables (like elevator speed, height of crawlspaces, etc), code
+cleanups, speed optimizations, and more.
+
+--------------------
 
 Important keys used in the game:
 5 - play elevator music (disabled in this release)

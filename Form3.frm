@@ -16,9 +16,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.91 Beta
+'Skycraper 0.92 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
+'http://sourceforge.net/projects/skyscraper
 
 'This program is free software; you can redistribute it and/or
 'modify it under the terms of the GNU General Public License
