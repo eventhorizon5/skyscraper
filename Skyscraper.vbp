@@ -13,6 +13,7 @@ Module=Triton_Center; src\Triton_Center.bas
 Module=SimCore; src\SimCore.bas
 Class=ElevatorObject; src\Elevator.cls
 Class=FloorObject; src\Floor.cls
+Module=FileIO; src\FileIO.bas
 IconForm="Sim"
 Startup="Sim"
 HelpFile=""

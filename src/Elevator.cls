@@ -46,6 +46,7 @@ Public DownQueue As String 'down call queue
 
 Option Explicit
 
+
 Public Sub Initialize(Num As Integer)
 Number = Num
 
@@ -58,6 +59,51 @@ Set Plaque = Scene.CreateMeshBuilder("Plaque" + Str$(Number))
 Set CallButtonsUp = Scene.CreateMeshBuilder("CallButtonsUp" + Str$(Number))
 Set CallButtonsDown = Scene.CreateMeshBuilder("CallButtonsDown" + Str$(Number))
 
+End Sub
+
+Public Sub CreateElevator(x As Single, y As Single, Level As Integer, Direction As Integer)
+'Creates elevator at specified location and floor
+'x is the horiz position where the door is
+'y is the northmost position
+
+'Direction: 0=x is left side, 1=x is right side
+
+Dim V As Integer
+ElevatorMesh.SetPosition x, Floor(Level).FloorAltitude, y
+FloorIndicator.SetPosition x, Floor(Level).FloorAltitude, y
+Plaque.SetPosition x, Floor(Level).FloorAltitude, y
+ElevatorInsDoorL.SetPosition x, Floor(Level).FloorAltitude, y
+ElevatorInsDoorR.SetPosition x, Floor(Level).FloorAltitude, y
+
+If Direction = 0 Then V = 1
+If Direction = 1 Then V = -1
+
+    'Elevator
+    ElevatorMesh.AddFloor GetTex("Wood2"), V * 15.5, 0, 0, -13.9, 0.1, 1, 1
+    ElevatorMesh.AddFloor GetTex("Elev1"), V * 15.5, 0, 0, -13.9, 19.5, 2, 2
+    ElevatorMesh.AddWall GetTex("Wood1"), V * 15.5, 0, 0, 0, 19.5, 0.1, 2, 2
+    ElevatorMesh.AddWall GetTex("Wood1"), V * 15.5, -13.9, 0, -13.9, 19.5, 0.1, 2, 2
+    ElevatorMesh.AddWall GetTex("Wood1"), V * 15.5, -13.9, V * 15.5, 0, 19.5, 0.1, 2, 2
+
+    'Floor Indicator
+    FloorIndicator.AddWall GetTex("ButtonL"), V * 0.16, -0.5, V * 0.16, -2.5, 1.5, 16, -1, 1
+    
+    'Button Panel
+    ElevatorMesh.AddWall GetTex("ElevExtPanels"), V * 0.16, -0.3, V * 0.16, -2.7, 7, 6, 1, 1
+    
+    'Plaque
+    Plaque.AddWall GetTex("Plaque"), V * 0.16, -0.3, V * 0.16, -2.7, 1, 13, -1, 1
+    Plaque.SetBlendingMode (TV_BLEND_ALPHA)
+    Plaque.SetColor RGBA(1, 1, 1, 0.1)
+    
+    'Interior Panels
+    ElevatorMesh.AddWall GetTex("Marble3"), V * 0.15, -14, V * 0.15, -11, 19.5, 0.1, 1, 1
+    ElevatorMesh.AddWall GetTex("Marble3"), V * 0.15, 0, V * 0.15, -3, 19.5, 0.1, 1, 1
+    
+    'Interior Doors
+    ElevatorInsDoorL.AddWall GetTex("ElevDoors"), V * 0.1, -10.95, V * 0.1, -7.05, 19.5, 0.1, 1, 1
+    ElevatorInsDoorR.AddWall GetTex("ElevDoors"), V * 0.1, -6.95, V * 0.1, -2.95, 19.5, 0.1, 1, 1
+    
 End Sub
 
 Private Sub Class_Terminate()
@@ -149,6 +195,7 @@ End If
 End Sub
 
 Sub Alarm()
+'code for the elevator alarm goes here
 
 End Sub
 
