@@ -1,5 +1,5 @@
 Attribute VB_Name = "ElevatorCode"
-'Skycraper 0.96 Beta
+'Skycraper 0.97 Beta - Elevator simulation code
 'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -56,7 +56,7 @@ If QueuePositionDirection(Number) = 1 Then
         OpenElevator(Number) = -1
         If InElevator = True Then ElevatorSync(Number) = True
         If Floor <> 0 Then GotoFloor(Number) = Floor
-        If Floor = 0 Then GotoFloor(Number) = 0.01
+        If Floor = 0 Then GotoFloor(Number) = 0.001
         Exit Sub
     End If
     Loop
@@ -77,7 +77,7 @@ If QueuePositionDirection(Number) = -1 Then
         OpenElevator(Number) = -1
         If InElevator = True Then ElevatorSync(Number) = True
         If Floor <> 0 Then GotoFloor(Number) = Floor
-        If Floor = 0 Then GotoFloor(Number) = 0.01
+        If Floor = 0 Then GotoFloor(Number) = 0.001
         Exit Sub
     End If
     Loop
@@ -400,7 +400,6 @@ End If
  
  If ElevatorFloor(Number) <> Floor Then
  ElevatorSync(Number) = False
- If Floor = 1 Then Floor = -1
  Call AddRoute(Floor, Number, Direction)
  Exit Sub
  End If
@@ -475,8 +474,8 @@ If Number = 1 Then
     Call ElevatorButton(102, "102", Number, 44)
     Call ElevatorButton(103, "103", Number, 45)
     
-    Call ElevatorButton(-1, "L", Number, 46)
-    Call ElevatorButton(0, "M", Number, 47)
+    Call ElevatorButton(0, "L", Number, 46)
+    Call ElevatorButton(1, "M", Number, 47)
     Call ElevatorButton(2, "2", Number, 48)
     Call ElevatorButton(39, "39", Number, 49)
     Call ElevatorButton(40, "40", Number, 50)
@@ -491,8 +490,8 @@ If Number >= 2 And Number <= 4 Then
     Call ElevatorButton(134, "134", Number, 23)
     Call ElevatorButton(132, "132", Number, 28)
     Call ElevatorButton(80, "80", Number, 33)
-    Call ElevatorButton(0, "M", Number, 38)
-    Call ElevatorButton(-1, "L", Number, 43)
+    Call ElevatorButton(1, "M", Number, 38)
+    Call ElevatorButton(0, "L", Number, 43)
 
 End If
 
@@ -600,7 +599,7 @@ If Number = 11 Then
     Call ElevatorButton(9, "9", Number, 49)
     Call ElevatorButton(10, "10", Number, 50)
     
-    Call ElevatorButton(-1, "L", Number, 51)
+    Call ElevatorButton(0, "L", Number, 51)
     Call ElevatorButton(2, "2", Number, 52)
     Call ElevatorButton(3, "3", Number, 53)
     Call ElevatorButton(4, "4", Number, 54)
@@ -669,7 +668,7 @@ If Number = 12 Then
     Call ElevatorButton(58, "58", Number, 49)
     Call ElevatorButton(59, "59", Number, 50)
     
-    Call ElevatorButton(-1, "L", Number, 51)
+    Call ElevatorButton(0, "L", Number, 51)
     Call ElevatorButton(51, "51", Number, 52)
     Call ElevatorButton(52, "52", Number, 53)
     Call ElevatorButton(53, "53", Number, 54)
@@ -680,7 +679,7 @@ End If
 If Number = 13 Or Number = 14 Then
 
     Call ElevatorButton(80, "80", Number, 28)
-    Call ElevatorButton(-1, "L", Number, 33)
+    Call ElevatorButton(0, "L", Number, 33)
     
 End If
 
@@ -768,7 +767,7 @@ If Number >= 21 And Number <= 30 Then
     Call ElevatorButton(43, "43", Number, 44)
     Call ElevatorButton(44, "44", Number, 45)
     
-    Call ElevatorButton(-1, "L", Number, 48)
+    Call ElevatorButton(0, "L", Number, 48)
     
 End If
 
@@ -820,7 +819,7 @@ If Number >= 31 And Number <= 40 Then
     Call ElevatorButton(5, "5", Number, 44)
     Call ElevatorButton(6, "6", Number, 45)
     
-    Call ElevatorButton(-1, "L", Number, 48)
+    Call ElevatorButton(0, "L", Number, 48)
     
 End If
 End Sub
@@ -830,7 +829,6 @@ If InElevator = False Then Exit Sub
 'collision routine for checking if an elevator button is pressed
 
 For i52 = -11 To 144
-If i52 = 1 Then i52 = 2
 
 If CollisionResult.GetCollisionMesh.GetMeshName = Buttons(i52).GetMeshName Then
     If i52 > 138 Then
@@ -855,6 +853,11 @@ Next i52
 End Sub
 
 Sub ElevatorLoop(Number As Integer)
+Dim FloorHeight As Single
+Dim FloorAltitude As Single
+FloorHeight = GetFloorHeight(Number)
+FloorAltitude = GetFloorAltitude(Number)
+
 On Error GoTo ErrorHandler
 If DebugPanel.Check11.Value = 0 Then Exit Sub
 
@@ -865,23 +868,19 @@ If ElevatorEnable(Number) = 0 And GotoFloor(Number) = 0 And OpenElevator(Number)
 elevatorstart(Number) = Elevator(Number).GetPosition
 
 'Find the floor that the elevator's on
-ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHeight
-      
-      'If elevator goes below floor 2, then set elevatorfloor as 1
-      If ElevatorFloor(Number) < 1 Then ElevatorFloor(Number) = 1
+ElevatorFloor(Number) = GetElevatorFloor(Number)
       
       If GotoFloor(Number) = ElevatorFloor(Number) - 1 Then CurrentFloor(Number) = ElevatorFloor(Number)
 
-      'If GotoFloor(Number) <> 0 And GotoFloor(Number) > CurrentFloor(Number) And ElevatorDirection(Number) = 0 And ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z <= 0 Then
       If GotoFloor(Number) <> 0 And GotoFloor(Number) > CurrentFloor(Number) And ElevatorDirection(Number) = 0 And ElevatorDoorL(Number).GetPosition.z <= 0 Then
       ElevatorDirection(Number) = 1
       OriginalLocation(Number) = CurrentFloorExact(Number)
-      DistanceToTravel(Number) = ((GotoFloor(Number) * FloorHeight) + FloorHeight) - ((CurrentFloorExact(Number) * FloorHeight) + FloorHeight)
+      DistanceToTravel(Number) = GetFloorAltitude(Int(GotoFloor(Number))) - GetFloorAltitude(Int(CurrentFloorExact(Number)))
       If ElevatorSync(Number) = True Then
       Call DeleteStairDoors
       Room(CameraFloor).Enable False
       CrawlSpace(CameraFloor).Enable False
-      If CameraFloor > -10 Then CrawlSpace(CameraFloor - 1).Enable False
+      If CameraFloor > BottomFloor Then CrawlSpace(CameraFloor - 1).Enable False
       For ElevTemp(Number) = 1 To 40
       CallButtonsUp(ElevTemp(Number)).Enable False
       CallButtonsDown(ElevTemp(Number)).Enable False
@@ -896,21 +895,20 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       Buildings.Enable False
       Landscape.Enable False
       If StairDataTable(CameraFloor) = True Then DeleteStairs (CameraFloor)
-      If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
-      If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
+      If CameraFloor < TopFloor And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
+      If CameraFloor > BottomFloor And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
       End If
       End If
-      'If GotoFloor(Number) <> 0 And GotoFloor(Number) < CurrentFloor(Number) And ElevatorDirection(Number) = 0 And ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z <= 0 Then
       If GotoFloor(Number) <> 0 And GotoFloor(Number) < CurrentFloor(Number) And ElevatorDirection(Number) = 0 And ElevatorDoorL(Number).GetPosition.z <= 0 Then
       Elevator(Number).Enable True
       ElevatorDirection(Number) = -1
       OriginalLocation(Number) = CurrentFloorExact(Number)
-      DistanceToTravel(Number) = ((CurrentFloorExact(Number) * FloorHeight) + FloorHeight) - ((GotoFloor(Number) * FloorHeight) + FloorHeight)
+      DistanceToTravel(Number) = GetFloorAltitude(Int(CurrentFloorExact(Number))) - GetFloorAltitude(Int(GotoFloor(Number)))
       If ElevatorSync(Number) = True Then
       Call DeleteStairDoors
       Room(CameraFloor).Enable False
       CrawlSpace(CameraFloor).Enable False
-      If CameraFloor > -10 Then CrawlSpace(CameraFloor - 1).Enable False
+      If CameraFloor > BottomFloor Then CrawlSpace(CameraFloor - 1).Enable False
       For ElevTemp(Number) = 1 To 40
       CallButtonsUp(ElevTemp(Number)).Enable False
       CallButtonsDown(ElevTemp(Number)).Enable False
@@ -925,17 +923,13 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       Buildings.Enable False
       Landscape.Enable False
       If StairDataTable(CameraFloor) = True Then DeleteStairs (CameraFloor)
-      If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
-      If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
+      If CameraFloor < TopFloor And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
+      If CameraFloor > BottomFloor And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
       End If
       End If
       
-       CurrentFloor(Number) = Int((elevatorstart(Number).Y - FloorHeight) / FloorHeight)
-       CurrentFloorExact(Number) = (elevatorstart(Number).Y - FloorHeight) / FloorHeight
-       'CurrentFloor(Number) = (Elevator(Number).GetPosition.y / FloorHeight) - 1
-       'CurrentFloorExact(Number) = Int((Elevator(Number).GetPosition.y / FloorHeight) - 1)
-
-       'DebugPanel.Text1.Text = "Sound Location=7.75,20,7 " + vbCrLf + "Elevator Floor=" + Str$(ElevatorFloor(Number)) + vbCrLf + "Camera Floor=" + Str$(CameraFloor) + vbCrLf + "Current Location= " + Str$(Int(Camera.GetPosition.x)) + "," + Str$(Int(Camera.GetPosition.y)) + "," + Str$(Int(Camera.GetPosition.z)) + vbCrLf + "Distance to Travel=" + Str$(DistanceToTravel(Number)) + vbCrLf + "Destination=" + Str$(Destination) + vbCrLf + "Rate=" + Str$(ElevatorEnable(Number) / 5)
+       CurrentFloorExact(Number) = GetFloorExact(elevatorstart(Number).Y)
+       CurrentFloor(Number) = Int(CurrentFloorExact(Number))
         
         If ElevatorEnable(Number) >= 0 And ElevatorDirection(Number) = 1 Then
         'sound
@@ -965,8 +959,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorEnable(Number) = ElevatorEnable(Number) + 0.25
         If ElevatorEnable(Number) <= 15 Then StoppingDistance(Number) = CurrentFloorExact(Number) - OriginalLocation(Number) + 0.4
         If ElevatorEnable(Number) > 15 Then ElevatorEnable(Number) = 15
-        Destination(Number) = ((OriginalLocation(Number) * FloorHeight) + FloorHeight) + DistanceToTravel(Number) - 40
-        If GotoFloor(Number) <> 0 And elevatorstart(Number).Y >= (Destination(Number) - (StoppingDistance(Number) * FloorHeight) + FloorHeight) Then ElevatorDirection(Number) = -1: ElevatorCheck(Number) = 0
+        Destination(Number) = GetFloorExact(OriginalLocation(Number)) + DistanceToTravel(Number) - 40
+        If GotoFloor(Number) <> 0 And elevatorstart(Number).Y >= Destination(Number) - GetFloorExact(StoppingDistance(Number)) Then ElevatorDirection(Number) = -1: ElevatorCheck(Number) = 0
         End If
       
         If ElevatorEnable(Number) > 0 And ElevatorDirection(Number) = -1 Then
@@ -1026,8 +1020,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorEnable(Number) = ElevatorEnable(Number) - 0.25
         If ElevatorEnable(Number) >= -15 Then StoppingDistance(Number) = OriginalLocation(Number) - CurrentFloorExact(Number)
         If ElevatorEnable(Number) < -15 Then ElevatorEnable(Number) = -15
-        Destination(Number) = ((OriginalLocation(Number) * FloorHeight) + FloorHeight) - DistanceToTravel(Number) - 15
-        If GotoFloor(Number) <> 0 And elevatorstart(Number).Y <= (Destination(Number) + (StoppingDistance(Number) * FloorHeight) + FloorHeight) Then ElevatorDirection(Number) = 1: ElevatorCheck(Number) = 0
+        Destination(Number) = GetFloorExact(OriginalLocation(Number)) - DistanceToTravel(Number) - 15
+        If GotoFloor(Number) <> 0 And elevatorstart(Number).Y <= Destination(Number) + GetFloorExact(StoppingDistance(Number)) Then ElevatorDirection(Number) = 1: ElevatorCheck(Number) = 0
         End If
       
         If ElevatorEnable(Number) < 0 And ElevatorDirection(Number) = 1 Then
@@ -1058,11 +1052,11 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         If GotoFloor(Number) <> 0 Then ElevatorCheck(Number) = 0: FineTune(Number) = True
         End If
       
-      If FineTune(Number) = True And ElevatorEnable(Number) = 0 And elevatorstart(Number).Y > (GotoFloor(Number) * FloorHeight) + FloorHeight + -0.3 And elevatorstart(Number).Y < (GotoFloor(Number) * FloorHeight) + FloorHeight + 0.3 Then
+      If FineTune(Number) = True And ElevatorEnable(Number) = 0 And elevatorstart(Number).Y > GetFloorExact(GotoFloor(Number)) + -0.3 And elevatorstart(Number).Y < (GotoFloor(Number) * FloorHeight) + FloorHeight + 0.3 Then
       FineTune(Number) = False
       Room(CameraFloor).Enable True
       CrawlSpace(CameraFloor).Enable True
-      If CameraFloor > -10 Then CrawlSpace(CameraFloor - 1).Enable True
+      If CameraFloor > BottomFloor Then CrawlSpace(CameraFloor - 1).Enable True
       If ElevatorSync(Number) = True Then
       For ElevTemp(Number) = 1 To 40
       ElevatorDoorL(ElevTemp(Number)).Enable True
@@ -1080,8 +1074,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       'If CameraFloor = 137 Then Shafts.Enable True
       Call InitRealtime(CameraFloor)
       InitObjectsForFloor (CameraFloor)
-      'If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = False Then CreateStairs (CameraFloor + 1)
-      'If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = False Then CreateStairs (CameraFloor - 1)
+      'If CameraFloor < TopFloor And StairDataTable(CameraFloor + 1) = False Then CreateStairs (CameraFloor + 1)
+      'If CameraFloor > BottomFloor And StairDataTable(CameraFloor - 1) = False Then CreateStairs (CameraFloor - 1)
       End If
       GotoFloor(Number) = 0
       OpenElevator(Number) = 1
@@ -1089,9 +1083,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorCheck2(Number) = 0
       ElevatorCheck3(Number) = 0
       ElevatorCheck4(Number) = 0
-      If CameraFloor > -10 And ElevatorSync(Number) = True Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z
-      If CameraFloor = 1 And ElevatorSync(Number) = True And FloorIndicatorText(Number) <> "M" Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
-      If CameraFloor = 1 And ElevatorSync(Number) = True And FloorIndicatorText(Number) = "M" Then Camera.SetPosition Camera.GetPosition.X, 10 + FloorHeight, Camera.GetPosition.z
+      If CameraFloor > BottomFloor And ElevatorSync(Number) = True Then Camera.SetPosition Camera.GetPosition.X, GetFloorAltitude(CameraFloor) + 10, Camera.GetPosition.z
       End If
       
       If FineTune(Number) = True Then
@@ -1104,7 +1096,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         'Next ElevTemp(Number)
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(GotoFloor(Number)).SetColor RGBA(1, 1, 1, 1)
       End If
-      If elevatorstart(Number).Y < (GotoFloor(Number) * FloorHeight) + FloorHeight Then
+      If elevatorstart(Number).Y < GetFloorExact(GotoFloor(Number)) Then
       Elevator(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
       ElevatorInsDoorL(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
       ElevatorInsDoorR(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
@@ -1117,7 +1109,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         FloorIndicator(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
         If ElevatorSync(Number) = True Then Camera.MoveRelative 0, ElevatorFineTuneSpeed, 0
       End If
-      If elevatorstart(Number).Y > (GotoFloor(Number) * FloorHeight) + FloorHeight Then
+      If elevatorstart(Number).Y > GetFloorExact(GotoFloor(Number)) Then
       Elevator(Number).MoveRelative 0, -ElevatorFineTuneSpeed, 0
       ElevatorInsDoorL(Number).MoveRelative 0, -ElevatorFineTuneSpeed, 0
       ElevatorInsDoorR(Number).MoveRelative 0, -ElevatorFineTuneSpeed, 0
@@ -1138,11 +1130,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       Dim jyy As Integer
       jxx = CameraFloor
       jyy = ElevatorFloor(Number)
-      If CameraFloor = 1 And Camera.GetPosition.Y > FloorHeight And Camera.GetPosition.Y < FloorHeight * 3 Then jxx = 0
-      If ElevatorFloor(Number) = 1 And FloorIndicatorText(Number) = "M" Then jyy = 0
       If jxx <> jyy Then OpenElevator(Number) = 0: Exit Sub
       
-      'If ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z >= 4 Then OpenElevator(Number) = 0: GoTo OpenElevator1
       If ElevatorDoorL(Number).GetPosition.z >= 4 Then OpenElevator(Number) = 0: GoTo OpenElevator1
       If ElevatorCheck4(Number) = 0 Then
         If ElevatorSounds(Number).PlayState = TV_PLAYSTATE_PLAYING Then
@@ -1160,7 +1149,6 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorDoorR(Number).MoveRelative -OpenElevatorLoc(Number), 0, 0
       ElevatorInsDoorL(Number).MoveRelative OpenElevatorLoc(Number), 0, 0
       ElevatorInsDoorR(Number).MoveRelative -OpenElevatorLoc(Number), 0, 0
-      'If ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z > 1 Then OpenElevator(Number) = 2
       If ElevatorDoorL(Number).GetPosition.z > 1 Then OpenElevator(Number) = 2
 OpenElevator1:
       End If
@@ -1170,14 +1158,12 @@ OpenElevator1:
       ElevatorDoorR(Number).MoveRelative -OpenElevatorLoc(Number), 0, 0
       ElevatorInsDoorL(Number).MoveRelative OpenElevatorLoc(Number), 0, 0
       ElevatorInsDoorR(Number).MoveRelative -OpenElevatorLoc(Number), 0, 0
-      'If ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z > 3 Then OpenElevator(Number) = 3
       If ElevatorDoorL(Number).GetPosition.z > 3 Then OpenElevator(Number) = 3
       End If
       
       If OpenElevator(Number) = 3 Then
       ElevatorCheck4(Number) = 0
       OpenElevatorLoc(Number) = OpenElevatorLoc(Number) - 0.02
-      'If ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z < 7 And OpenElevatorLoc(Number) = 0 Then OpenElevatorLoc(Number) = 0.02
       If ElevatorDoorL(Number).GetPosition.z < 7 And OpenElevatorLoc(Number) = 0 Then OpenElevatorLoc(Number) = 0.02
       ElevatorDoorL(Number).MoveRelative OpenElevatorLoc(Number), 0, 0
       ElevatorDoorR(Number).MoveRelative -OpenElevatorLoc(Number), 0, 0
@@ -1233,7 +1219,6 @@ OpenElevator1:
       
       If GotoFloor(Number) = 0 Then PauseQueueSearch(Number) = False
       
-      'If ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z <= 0 Then OpenElevator(Number) = 0: GoTo OpenElevator2
       If ElevatorDoorL(Number).GetPosition.z <= 0 Then OpenElevator(Number) = 0: GoTo OpenElevator2
       If ElevatorCheck4(Number) = 0 Then
         If ElevatorSounds(Number).PlayState = TV_PLAYSTATE_PLAYING Then
@@ -1249,7 +1234,6 @@ OpenElevator1:
       ElevatorDoorR(Number).MoveRelative -OpenElevatorLoc(Number), 0, 0
       ElevatorInsDoorL(Number).MoveRelative OpenElevatorLoc(Number), 0, 0
       ElevatorInsDoorR(Number).MoveRelative -OpenElevatorLoc(Number), 0, 0
-      'If ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z < 3 Then OpenElevator(Number) = -2
       If ElevatorDoorL(Number).GetPosition.z < 3 Then OpenElevator(Number) = -2
 OpenElevator2:
       End If
@@ -1259,14 +1243,12 @@ OpenElevator2:
       ElevatorDoorR(Number).MoveRelative -OpenElevatorLoc(Number), 0, 0
       ElevatorInsDoorL(Number).MoveRelative OpenElevatorLoc(Number), 0, 0
       ElevatorInsDoorR(Number).MoveRelative -OpenElevatorLoc(Number), 0, 0
-      'If ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z < 1 Then OpenElevator(Number) = -3
       If ElevatorDoorL(Number).GetPosition.z < 1 Then OpenElevator(Number) = -3
       End If
       
       If OpenElevator(Number) = -3 Then
       ElevatorCheck4(Number) = 0
       OpenElevatorLoc(Number) = OpenElevatorLoc(Number) + 0.02
-      'If ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z > 0 And OpenElevatorLoc(Number) >= 0 Then OpenElevatorLoc(Number) = -0.02
       If ElevatorDoorL(Number).GetPosition.z > 0 And OpenElevatorLoc(Number) >= 0 Then OpenElevatorLoc(Number) = -0.02
       ElevatorDoorL(Number).MoveRelative OpenElevatorLoc(Number), 0, 0
       ElevatorDoorR(Number).MoveRelative -OpenElevatorLoc(Number), 0, 0
