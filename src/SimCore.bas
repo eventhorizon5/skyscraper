@@ -45,7 +45,7 @@ Public MainMusic As TVSoundMP3
 Public CameraDefAltitude As Single 'default vertical offset of camera from each floor
 Public Gravity As Single 'gravity variable for physics algorithms
 Public Dest As Object 'Output object for visual simulation, usually a form
-Public isRunning As Boolean 'is sim engine running?
+Public IsRunning As Boolean 'is sim engine running?
 Public EnableCollisions As Boolean 'turns collisions on/off
 Public ElevatorShafts As Integer 'number of elevator shafts
 Public TotalFloors As Integer 'number of above-ground floors including 0
@@ -100,7 +100,7 @@ ElevatorNumber = 1
 
 'Set frame rate
 FrameRate = 20
-FrameLimiter = True
+FrameLimiter = False
 
 'Set output object
 Set Dest = DestObject
@@ -122,7 +122,7 @@ Sleep 2000
 Dest.Print Spc(2); "Initializing TrueVision3D..."
 DoEvents
 
-isRunning = True
+IsRunning = True
 'EnableCollisions = True
 
 'Initialize TrueVision engine objects if specified
@@ -289,7 +289,7 @@ Dest.Cls
 Dest.Print vbCrLf
 Dest.Print Spc(2); "Skyscraper " + LTrim(Str$(App.Major)) + "." + LTrim(Str$(App.Minor)) + " Alpha - Build" + Str$(App.Revision)
 Dest.Print Spc(2); "Powered by SBSE " + LTrim(Str$(App.Major - 1)) + "." + LTrim(Str$(App.Minor))
-Dest.Print Spc(2); "Compiled on August 19, 2004" + vbCrLf
+Dest.Print Spc(2); "Compiled on October 17, 2004" + vbCrLf
 Dest.Print Spc(2); "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free"
 Dest.Print Spc(2); "software, and you are welcome to redistribute it under certain"
 Dest.Print Spc(2); "conditions. For details, see the file gpl.txt"
@@ -337,7 +337,7 @@ Render:
 End Sub
 
 Private Sub Render()
-'Truevision3D rendering code
+'Truevision3D screen rendering code
 
 TV.Clear
 Atmos.Atmosphere_Render
@@ -413,6 +413,20 @@ While GetTickCount() < lngOldTickCount
 Wend
 
 lngOldTickCount = GetTickCount() + lngTicksPerFrame
+
+End Sub
+
+Public Sub Wait(ByVal Milliseconds As Long)
+'Pauses code for specified amount of time; similar to sleep but doesn't pause
+'entire application
+
+Static lngOldTickCount As Long
+
+lngOldTickCount = GetTickCount() + Milliseconds
+
+While GetTickCount() < lngOldTickCount
+    DoEvents
+Wend
 
 End Sub
 
