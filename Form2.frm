@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form Form2 
-   Caption         =   "SkyScraper 0.3 Alpha"
+   Caption         =   "SkyScraper 0.4 Alpha"
    ClientHeight    =   3195
    ClientLeft      =   60
    ClientTop       =   345
