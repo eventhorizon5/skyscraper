@@ -357,343 +357,343 @@ Begin VB.Form Sim
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   49
-      Interval        =   1
+      Interval        =   100
       Left            =   6600
       Top             =   3720
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   48
-      Interval        =   1
+      Interval        =   100
       Left            =   6000
       Top             =   3720
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   47
-      Interval        =   1
+      Interval        =   100
       Left            =   5400
       Top             =   3720
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   46
-      Interval        =   1
+      Interval        =   100
       Left            =   4800
       Top             =   3720
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   45
-      Interval        =   1
+      Interval        =   100
       Left            =   4200
       Top             =   3720
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   44
-      Interval        =   1
+      Interval        =   100
       Left            =   3600
       Top             =   3720
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   43
-      Interval        =   1
+      Interval        =   100
       Left            =   3000
       Top             =   3720
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   42
-      Interval        =   1
+      Interval        =   100
       Left            =   2400
       Top             =   3720
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   41
-      Interval        =   1
+      Interval        =   100
       Left            =   1800
       Top             =   3720
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   40
-      Interval        =   1
+      Interval        =   100
       Left            =   1200
       Top             =   3720
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   39
-      Interval        =   1
+      Interval        =   100
       Left            =   6600
       Top             =   3240
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   38
-      Interval        =   1
+      Interval        =   100
       Left            =   6000
       Top             =   3240
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   37
-      Interval        =   1
+      Interval        =   100
       Left            =   5400
       Top             =   3240
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   36
-      Interval        =   1
+      Interval        =   100
       Left            =   4800
       Top             =   3240
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   35
-      Interval        =   1
+      Interval        =   100
       Left            =   4200
       Top             =   3240
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   34
-      Interval        =   1
+      Interval        =   100
       Left            =   3600
       Top             =   3240
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   33
-      Interval        =   1
+      Interval        =   100
       Left            =   3000
       Top             =   3240
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   32
-      Interval        =   1
+      Interval        =   100
       Left            =   2400
       Top             =   3240
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   31
-      Interval        =   1
+      Interval        =   100
       Left            =   1800
       Top             =   3240
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   30
-      Interval        =   1
+      Interval        =   100
       Left            =   1200
       Top             =   3240
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   29
-      Interval        =   1
+      Interval        =   100
       Left            =   6600
       Top             =   2760
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   28
-      Interval        =   1
+      Interval        =   100
       Left            =   6000
       Top             =   2760
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   27
-      Interval        =   1
+      Interval        =   100
       Left            =   5400
       Top             =   2760
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   26
-      Interval        =   1
+      Interval        =   100
       Left            =   4800
       Top             =   2760
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   25
-      Interval        =   1
+      Interval        =   100
       Left            =   4200
       Top             =   2760
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   24
-      Interval        =   1
+      Interval        =   100
       Left            =   3600
       Top             =   2760
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   23
-      Interval        =   1
+      Interval        =   100
       Left            =   3000
       Top             =   2760
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   22
-      Interval        =   1
+      Interval        =   100
       Left            =   2400
       Top             =   2760
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   21
-      Interval        =   1
+      Interval        =   100
       Left            =   1800
       Top             =   2760
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   20
-      Interval        =   1
+      Interval        =   100
       Left            =   1200
       Top             =   2760
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   19
-      Interval        =   1
+      Interval        =   100
       Left            =   6600
       Top             =   2280
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   18
-      Interval        =   1
+      Interval        =   100
       Left            =   6000
       Top             =   2280
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   17
-      Interval        =   1
+      Interval        =   100
       Left            =   5400
       Top             =   2280
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   16
-      Interval        =   1
+      Interval        =   100
       Left            =   4800
       Top             =   2280
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   15
-      Interval        =   1
+      Interval        =   100
       Left            =   4200
       Top             =   2280
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   14
-      Interval        =   1
+      Interval        =   100
       Left            =   3600
       Top             =   2280
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   13
-      Interval        =   1
+      Interval        =   100
       Left            =   3000
       Top             =   2280
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   12
-      Interval        =   1
+      Interval        =   100
       Left            =   2400
       Top             =   2280
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   11
-      Interval        =   1
+      Interval        =   100
       Left            =   1800
       Top             =   2280
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   10
-      Interval        =   1
+      Interval        =   100
       Left            =   1200
       Top             =   2280
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   9
-      Interval        =   1
+      Interval        =   100
       Left            =   6600
       Top             =   1800
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   8
-      Interval        =   1
+      Interval        =   100
       Left            =   6000
       Top             =   1800
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   7
-      Interval        =   1
+      Interval        =   100
       Left            =   5400
       Top             =   1800
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   6
-      Interval        =   1
+      Interval        =   100
       Left            =   4800
       Top             =   1800
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   5
-      Interval        =   1
+      Interval        =   100
       Left            =   4200
       Top             =   1800
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   4
-      Interval        =   1
+      Interval        =   100
       Left            =   3600
       Top             =   1800
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   3
-      Interval        =   1
+      Interval        =   100
       Left            =   3000
       Top             =   1800
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   2
-      Interval        =   1
+      Interval        =   100
       Left            =   2400
       Top             =   1800
    End
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   1
-      Interval        =   1
+      Interval        =   100
       Left            =   1800
       Top             =   1800
    End
@@ -712,7 +712,7 @@ Begin VB.Form Sim
    Begin VB.Timer ElevatorTimer 
       Enabled         =   0   'False
       Index           =   0
-      Interval        =   1
+      Interval        =   100
       Left            =   1200
       Top             =   1800
    End
@@ -928,6 +928,10 @@ Fin = 1
     'scr.DrawText "Y = " & blahmy, 10, 25, RGBA(1, 0, 0, 1), "menu"
 End Sub
 
+Private Sub ElevatorTimer_Timer(Index As Integer)
+If Index + 1 <= Elevators Then Call Elevator(Index + 1).MonitorLoop
+End Sub
+
 Private Sub Form_GotFocus()
 'Focused = True
 End Sub
@@ -1095,3 +1099,6 @@ Private Sub MainTimer_Timer()
 Call MainLoop
 End Sub
 
+Private Sub WaitTimer_Timer(Index As Integer)
+Elevator(Index).OpenDoor = -1
+End Sub
