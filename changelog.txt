@@ -1,3 +1,8 @@
+Version 0.95b (build 144)
+-------------
+-minor code changes
+-adapted for the new TrueVision3D 6.2 engine
+
 Version 0.95 (build 140)
 ------------
 Changelog begins during 0.95 development.

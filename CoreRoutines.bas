@@ -1,5 +1,5 @@
 Attribute VB_Name = "CoreRoutines"
-'Skycraper 0.95 Beta
+'Skycraper 0.95b Beta
 'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -549,7 +549,7 @@ Set Light = New TVLightEngine
 
 'If TV.ShowDriverDialog = False Then End
   
-Sim.Label1.Caption = "Skyscraper " + Str$(App.Major) + "." + Right(Str$(App.Minor), 2) + " Beta - Build" + Str$(App.Revision) + vbCrLf
+Sim.Label1.Caption = "Skyscraper " + Str$(App.Major) + "." + LTrim(Str$(App.Minor)) + "b Beta - Build" + Str$(App.Revision) + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "©2004 Ryan Thoryk" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on January 2, 2004" + vbCrLf + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf

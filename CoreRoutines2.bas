@@ -1,5 +1,5 @@
 Attribute VB_Name = "CoreRoutines2"
-'Skycraper 0.95 Beta
+'Skycraper 0.95b Beta
 'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
