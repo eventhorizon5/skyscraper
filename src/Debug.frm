@@ -170,7 +170,7 @@ Begin VB.Form DebugPanel
    End
    Begin VB.Timer Timer1 
       Enabled         =   0   'False
-      Interval        =   100
+      Interval        =   10
       Left            =   0
       Top             =   0
    End
@@ -200,7 +200,7 @@ Begin VB.Form DebugPanel
       Value           =   1  'Checked
       Width           =   1815
    End
-   Begin VB.CheckBox Check10 
+   Begin VB.CheckBox chkFrameLimiter 
       Caption         =   "Frame Limiter"
       Height          =   255
       Left            =   5040
@@ -348,7 +348,7 @@ Begin VB.Form DebugPanel
       Top             =   1995
       Width           =   4695
    End
-   Begin VB.Label Label40 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -361,12 +361,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   40
       Left            =   4320
       TabIndex        =   52
       Top             =   3360
       Width           =   495
    End
-   Begin VB.Label Label39 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -379,12 +380,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   39
       Left            =   3840
       TabIndex        =   51
       Top             =   3360
       Width           =   495
    End
-   Begin VB.Label Label38 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -397,12 +399,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   38
       Left            =   3360
       TabIndex        =   50
       Top             =   3360
       Width           =   495
    End
-   Begin VB.Label Label37 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -415,12 +418,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   37
       Left            =   2880
       TabIndex        =   49
       Top             =   3360
       Width           =   495
    End
-   Begin VB.Label Label36 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -433,12 +437,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   36
       Left            =   2400
       TabIndex        =   48
       Top             =   3360
       Width           =   495
    End
-   Begin VB.Label Label35 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -451,12 +456,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   35
       Left            =   1920
       TabIndex        =   47
       Top             =   3360
       Width           =   495
    End
-   Begin VB.Label Label34 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -469,12 +475,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   34
       Left            =   1440
       TabIndex        =   46
       Top             =   3360
       Width           =   495
    End
-   Begin VB.Label Label33 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -487,12 +494,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   33
       Left            =   960
       TabIndex        =   45
       Top             =   3360
       Width           =   495
    End
-   Begin VB.Label Label32 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -505,12 +513,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   32
       Left            =   480
       TabIndex        =   44
       Top             =   3360
       Width           =   495
    End
-   Begin VB.Label Label31 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -523,12 +532,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   31
       Left            =   0
       TabIndex        =   43
       Top             =   3360
       Width           =   495
    End
-   Begin VB.Label Label30 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -541,12 +551,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   30
       Left            =   4320
       TabIndex        =   42
       Top             =   3000
       Width           =   495
    End
-   Begin VB.Label Label29 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -559,12 +570,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   29
       Left            =   3840
       TabIndex        =   41
       Top             =   3000
       Width           =   495
    End
-   Begin VB.Label Label28 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -577,12 +589,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   28
       Left            =   3360
       TabIndex        =   40
       Top             =   3000
       Width           =   495
    End
-   Begin VB.Label Label27 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -595,12 +608,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   27
       Left            =   2880
       TabIndex        =   39
       Top             =   3000
       Width           =   495
    End
-   Begin VB.Label Label26 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -613,12 +627,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   26
       Left            =   2400
       TabIndex        =   38
       Top             =   3000
       Width           =   495
    End
-   Begin VB.Label Label25 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -631,12 +646,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   25
       Left            =   1920
       TabIndex        =   37
       Top             =   3000
       Width           =   495
    End
-   Begin VB.Label Label24 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -649,12 +665,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   24
       Left            =   1440
       TabIndex        =   36
       Top             =   3000
       Width           =   495
    End
-   Begin VB.Label Label23 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -667,12 +684,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   23
       Left            =   960
       TabIndex        =   35
       Top             =   3000
       Width           =   495
    End
-   Begin VB.Label Label22 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -685,12 +703,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   22
       Left            =   480
       TabIndex        =   34
       Top             =   3000
       Width           =   495
    End
-   Begin VB.Label Label21 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -703,12 +722,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   21
       Left            =   0
       TabIndex        =   33
       Top             =   3000
       Width           =   495
    End
-   Begin VB.Label Label20 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -721,12 +741,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   20
       Left            =   4320
       TabIndex        =   32
       Top             =   2640
       Width           =   495
    End
-   Begin VB.Label Label19 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -739,12 +760,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   19
       Left            =   3840
       TabIndex        =   31
       Top             =   2640
       Width           =   495
    End
-   Begin VB.Label Label18 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -757,12 +779,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   18
       Left            =   3360
       TabIndex        =   30
       Top             =   2640
       Width           =   495
    End
-   Begin VB.Label Label17 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -775,12 +798,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   17
       Left            =   2880
       TabIndex        =   29
       Top             =   2640
       Width           =   495
    End
-   Begin VB.Label Label16 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -793,12 +817,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   16
       Left            =   2400
       TabIndex        =   28
       Top             =   2640
       Width           =   495
    End
-   Begin VB.Label Label15 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -811,12 +836,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   15
       Left            =   1920
       TabIndex        =   27
       Top             =   2640
       Width           =   495
    End
-   Begin VB.Label Label14 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -829,12 +855,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   14
       Left            =   1440
       TabIndex        =   26
       Top             =   2640
       Width           =   495
    End
-   Begin VB.Label Label13 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -847,12 +874,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   13
       Left            =   960
       TabIndex        =   25
       Top             =   2640
       Width           =   495
    End
-   Begin VB.Label Label12 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -865,12 +893,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   12
       Left            =   480
       TabIndex        =   24
       Top             =   2640
       Width           =   495
    End
-   Begin VB.Label Label11 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -883,12 +912,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   11
       Left            =   0
       TabIndex        =   23
       Top             =   2640
       Width           =   495
    End
-   Begin VB.Label Label10 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -901,12 +931,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   10
       Left            =   4320
       TabIndex        =   20
       Top             =   2280
       Width           =   495
    End
-   Begin VB.Label Label9 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -919,12 +950,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   9
       Left            =   3840
       TabIndex        =   19
       Top             =   2280
       Width           =   495
    End
-   Begin VB.Label Label8 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -937,12 +969,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   8
       Left            =   3360
       TabIndex        =   18
       Top             =   2280
       Width           =   495
    End
-   Begin VB.Label Label7 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -955,12 +988,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   7
       Left            =   2880
       TabIndex        =   17
       Top             =   2280
       Width           =   495
    End
-   Begin VB.Label Label6 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -973,12 +1007,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   6
       Left            =   2400
       TabIndex        =   16
       Top             =   2280
       Width           =   495
    End
-   Begin VB.Label Label5 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -991,12 +1026,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   5
       Left            =   1920
       TabIndex        =   15
       Top             =   2280
       Width           =   495
    End
-   Begin VB.Label Label4 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -1009,12 +1045,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   4
       Left            =   1440
       TabIndex        =   14
       Top             =   2280
       Width           =   495
    End
-   Begin VB.Label Label3 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -1027,12 +1064,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   3
       Left            =   960
       TabIndex        =   13
       Top             =   2280
       Width           =   495
    End
-   Begin VB.Label Label2 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -1045,12 +1083,13 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   2
       Left            =   480
       TabIndex        =   12
       Top             =   2280
       Width           =   495
    End
-   Begin VB.Label Label1 
+   Begin VB.Label Indicator 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -1063,6 +1102,7 @@ Begin VB.Form DebugPanel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
+      Index           =   1
       Left            =   0
       TabIndex        =   6
       Top             =   2280
@@ -1100,8 +1140,23 @@ Elevator(Slider2.Value).GotoFloor = Slider1.Value
 Elevator(Slider2.Value).MoveElevator = True
 End Sub
 
+Private Sub Command10_Click()
+Elevator(Slider2.Value).AddRoute Slider1.Value, 1
+End Sub
+
+Private Sub Command11_Click()
+Elevator(Slider2.Value).AddRoute Slider1.Value, -1
+End Sub
+
 Private Sub Command12_Click()
 Elevator(Slider2.Value).OpenDoor = 2
+End Sub
+
+Private Sub Command2_Click()
+If Elevator(Slider2.Value).GotoFloor <> CameraFloor Then
+    Elevator(Slider2.Value).GotoFloor = CameraFloor
+    Elevator(Slider2.Value).MoveElevator = True
+End If
 End Sub
 
 Private Sub Command3_Click()
@@ -1114,4 +1169,13 @@ End Sub
 
 Private Sub Command9_Click()
 Elevator(Slider2.Value).OpenDoor = -1
+End Sub
+
+Private Sub Timer1_Timer()
+If chkFrameLimiter.Value = 1 Then FrameLimiter = True Else FrameLimiter = False
+Dim i As Integer
+For i = 1 To Elevators
+If i <= 40 Then Indicator(i).Caption = LTrim(Str$(Elevator(i).GetElevatorFloor))
+Next i
+
 End Sub

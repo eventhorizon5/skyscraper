@@ -99,8 +99,8 @@ Public Sub Start(FileName As String, InitTV As Boolean, DestObject As Object)
 ElevatorNumber = 1
 
 'Set frame rate
-FrameRate = 20
-FrameLimiter = False
+FrameRate = 30
+FrameLimiter = True
 
 'Set output object
 Set Dest = DestObject
@@ -275,6 +275,7 @@ For i = 0 To Elevators - 1
 Next i
 
 DebugPanel.Enabled = True
+DebugPanel.Timer1.Enabled = True
 
 Exit Sub
 

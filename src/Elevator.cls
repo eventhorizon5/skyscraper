@@ -149,6 +149,7 @@ End Sub
 
 Public Sub AddRoute(FloorID As Integer, Direction As Integer)
 'Add call route to elevator routing table, in sorted order
+'Direction values - 1=up, -1=down
 
 Dim Position As Long
 Dim Position2 As Long
