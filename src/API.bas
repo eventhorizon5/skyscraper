@@ -22,16 +22,16 @@ Attribute VB_Name = "API"
 
 Option Explicit
 
-'Function IsEven(Number As Integer) As Boolean
-''Determine if the passed number is even.
-''If number divides evenly, return true
-'If Number / 2 = Int(Number / 2) Then
-'    IsEven = True
-'Else
-'    IsEven = False
-'End If
+Function IsEven(Number As Integer) As Boolean
 
-'End Function
+'Determine if the passed number is even.
+'If number divides evenly, return true
+If Number / 2 = Int(Number / 2) Then
+    IsEven = True
+Else
+    IsEven = False
+End If
+End Function
 
 'Function GetCameraFloor() As Integer
 ''Determine what floor the camera is on

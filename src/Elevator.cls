@@ -41,6 +41,9 @@ Public ElevatorInsDoorR As TVMesh 'right inside door
 Public Plaque As TVMesh 'plaque
 Public CallButtonsUp As TVMesh 'up call button
 Public CallButtonsDown As TVMesh 'down call button
+Public UpQueue As String 'up call queue
+Public DownQueue As String 'down call queue
+
 Option Explicit
 
 Public Sub Initialize(Num As Integer)
@@ -66,3 +69,86 @@ Private Sub Class_Terminate()
 'Set CallButtonsUp = Nothing
 'Set CallButtonsDown = Nothing
 End Sub
+
+Sub AddRoute(Floor As Integer, Direction As Integer)
+'Add call route to elevator routing table, in sorted order
+
+Dim Position As Long
+Dim Position2 As Long
+Dim TempString As String
+Dim TempString2 As String
+
+If Direction = 1 Then
+    Position = 1
+    If UpQueue = "" Then UpQueue = LTrim(Str$(Floor)) + ",": If QueuePositionDirection = 0 Then PauseQueueSearch = False: Exit Sub
+    Do
+    Position2 = InStr(Position, UpQueue, ",")
+    If Position2 = 0 Then Position2 = Len(UpQueue) + 1
+    'Find the 2 numbers that the new number should go between
+    If Val(Mid$(UpQueue, Position, Position2 - 1)) = Floor Then Exit Sub
+    If Val(Mid$(UpQueue, Position, Position2 - 1)) < Floor And Mid$(UpQueue, Position, Position2 - 1) <> "" Then Position = Position2 + 1: GoTo SkipIt
+    If Val(Mid$(UpQueue, Position, Position2 - 1)) > Floor Or Mid$(UpQueue, Position, Position2 - 1) = "" Then
+        'break queue into 2 strings
+        TempString = Left$(UpQueue, Position - 1)
+        TempString2 = Mid$(UpQueue, Position)
+        'Insert new number between 2 strings
+        UpQueue = TempString + LTrim(Str$(Floor)) + "," + TempString2
+        PauseQueueSearch(Number) = False
+        Exit Sub
+    End If
+SkipIt:
+    Loop
+End If
+
+If Direction = -1 Then
+    Position = 1
+    If DownQueue = "" Then DownQueue = LTrim(Str$(Floor)) + ",": If QueuePositionDirection = 0 Then PauseQueueSearch = False: Exit Sub
+    Do
+    Position2 = InStr(Position, DownQueue, ",")
+    If Position2 = 0 Then Position2 = Len(DownQueue) + 1
+    'Find the 2 numbers that the new number should go between
+    If Val(Mid$(DownQueue, Position, Position2 - 1)) = Floor Then Exit Sub
+    If Val(Mid$(DownQueue, Position, Position2 - 1)) < Floor And Mid$(DownQueue, Position, Position2 - 1) <> "" Then Position = Position2 + 1: GoTo SkipIt2
+    If Val(Mid$(DownQueue, Position, Position2 - 1)) > Floor Or Mid$(DownQueue, Position, Position2 - 1) = "" Then
+        'break queue into 2 strings
+        TempString = Left$(DownQueue, Position - 1)
+        TempString2 = Mid$(DownQueue, Position)
+        'Insert new number between 2 strings
+        DownQueue = TempString + LTrim(Str$(Floor)) + "," + TempString2
+        PauseQueueSearch = False
+        Exit Sub
+    End If
+SkipIt2:
+    Loop
+End If
+
+End Sub
+
+Sub DeleteRoute(Floor As Integer, Direction As Integer)
+'Delete call route from elevator routing table
+
+Dim Position As Long
+Dim Position2 As Long
+
+If Direction = 1 Then
+    'break string in 2; 1 before and 1 after number searched for
+    Position = InStr(1, UpQueue, LTrim(Str$(Floor)) + ",")
+    Position2 = InStr(Position, UpQueue, ",")
+    'join 2 strings, eliminating old number
+    UpQueue = Left$(UpQueue, Position - 1) + Mid$(UpQueue, Position2 + 1)
+End If
+
+If Direction = -1 Then
+    'break string in 2; 1 before and 1 after number searched for
+    Position = InStr(1, DownQueue, LTrim(Str$(Floor)) + ",")
+    Position2 = InStr(Position, DownQueue, ",")
+    'join 2 strings, eliminating old number
+    DownQueue = Left$(DownQueue, Position - 1) + Mid$(DownQueue, Position2 + 1)
+End If
+
+End Sub
+
+Sub Alarm()
+
+End Sub
+
