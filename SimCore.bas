@@ -1494,7 +1494,7 @@ Dim ShaftRight As Single
 If SectionNum = 1 Then TextureName = "Wall2"
 If SectionNum > 1 And SectionNum < 7 Then TextureName = "Wall1"
 If SectionNum = 7 Then TextureName = "BrickTexture"
-If FloorID = 0 Then TextureName = "Wall2"
+If FloorID = 0 Or FloorID = 1 Then TextureName = "Wall2"
 
 If ShaftNum = 1 Then ShaftLeft = 12.5: ShaftRight = 32.5
 If ShaftNum = 2 Then ShaftLeft = 52.5: ShaftRight = 32.5
@@ -1952,6 +1952,8 @@ End Sub
 Sub InitRealtime(FloorID As Integer)
 'Initialize realtime objects
 
+On Error GoTo ErrorHandler
+
 'Destroy meshes
 For i54 = 1 To 40
 CallButtonsUp(i54).Enable False
@@ -1980,7 +1982,6 @@ Set CallButtonsDown(i54) = Scene.CreateMeshBuilder("CallButtonsDown" + Str$(i54)
 Next i54
 
 'Generate objects for floors
-
 
 If FloorID = 0 Then
 Call ProcessRealtime(FloorID, 5, 1, True, True, True, True, True, False, False, False, False, False, False)
@@ -2076,10 +2077,17 @@ If FloorID = 136 Then Call ProcessRealtime(FloorID, 5, 1, False, True, True, Tru
 If FloorID = 137 Then Call ProcessRealtime(FloorID, 7, 1, False, True, False, False, False, False, False, False, False, False, False)
 If FloorID = 138 Then Call ProcessRealtime(FloorID, 7, 1, False, True, False, False, False, False, False, False, False, False, False)
 
+Exit Sub
+
+ErrorHandler:
+   MsgBox "An error occurred while initializing the realtime subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
 End Sub
 
 Sub ProcessRealtime(FloorID As Integer, SectionNum As Integer, ShaftNum As Integer, JoinShafts As Boolean, e1 As Boolean, e2 As Boolean, e3 As Boolean, e4 As Boolean, e5 As Boolean, e6 As Boolean, e7 As Boolean, e8 As Boolean, e9 As Boolean, e10 As Boolean)
 'This subroutine is similar to the DrawElevatorWalls routines, and it is designed to create the external elevator doors and other objects in realtime.
+
+On Error GoTo ErrorHandler
 
 Dim FloorHeight As Single
 Dim FloorAltitude As Single
@@ -2109,11 +2117,8 @@ If ShaftNum = 2 Or ShaftNum = 4 Then WallOffset = -0.05: WallOffset2 = 0.01
 'Call Button Panels
     'original height offset - 8.5
     If e1 = True And ShaftNum = 1 Then CallButtonsDown(1).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18, -(ShaftLeft - WallOffset2), -17, 1.5, 8 + FloorAltitude, 1, 1: CallButtonsUp(1).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18, -(ShaftLeft - WallOffset2), -17, 1.5, 9.5 + FloorAltitude, 1, 1
-    If e1 = True And ShaftNum = 1 And FloorID = 1 Then CallButtonsDown(1).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18, -(ShaftLeft - WallOffset2), -17, 1.5, 8 + (0 * FloorHeight) + FloorHeight, 1, 1: CallButtonsUp(1).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18, -(ShaftLeft - WallOffset2), -17, 1.5, 9.5 + (0 * FloorHeight) + FloorHeight, 1, 1
     If e3 = True And ShaftNum = 1 Then CallButtonsDown(3).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -16 + (15 * 1), -(ShaftLeft - WallOffset2), -15 + (15 * 1), 1.5, 8 + FloorAltitude, 1, 1: CallButtonsUp(3).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -16 + (15 * 1), -(ShaftLeft - WallOffset2), -15 + (15 * 1), 1.5, 9.5 + FloorAltitude, 1, 1
-    If e3 = True And ShaftNum = 1 And FloorID = 1 Then CallButtonsDown(3).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -16 + (15 * 1), -(ShaftLeft - WallOffset2), -15 + (15 * 1), 1.5, 8 + (0 * FloorHeight) + FloorHeight, 1, 1: CallButtonsUp(3).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -16 + (15 * 1), -(ShaftLeft - WallOffset2), -15 + (15 * 1), 1.5, 9.5 + (0 * FloorHeight) + FloorHeight, 1, 1
     If e4 = True And ShaftNum = 1 Then CallButtonsDown(4).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -31 + (15 * 1), (ShaftLeft - WallOffset2), -30 + (15 * 1), 1.5, 8 + FloorAltitude, 1, 1: CallButtonsUp(4).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -31 + (15 * 1), (ShaftLeft - WallOffset2), -30 + (15 * 1), 1.5, 9.5 + FloorAltitude, 1, 1
-    If e4 = True And ShaftNum = 1 And FloorID = 1 Then CallButtonsDown(4).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -31 + (15 * 1), (ShaftLeft - WallOffset2), -30 + (15 * 1), 1.5, 8 + (0 * FloorHeight) + FloorHeight, 1, 1: CallButtonsUp(4).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -31 + (15 * 1), (ShaftLeft - WallOffset2), -30 + (15 * 1), 1.5, 9.5 + (0 * FloorHeight) + FloorHeight, 1, 1
     If e6 = True And ShaftNum = 1 Then CallButtonsDown(6).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -16 + (15 * 2), (ShaftLeft - WallOffset2), -15 + (15 * 2), 1.5, 8 + FloorAltitude, 1, 1: CallButtonsUp(6).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -16 + (15 * 2), (ShaftLeft - WallOffset2), -15 + (15 * 2), 1.5, 9.5 + FloorAltitude, 1, 1
     If e7 = True And ShaftNum = 1 Then CallButtonsDown(7).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -31 + (15 * 3), -(ShaftLeft - WallOffset2), -30 + (15 * 3), 1.5, 8 + FloorAltitude, 1, 1: CallButtonsUp(7).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -31 + (15 * 3), -(ShaftLeft - WallOffset2), -30 + (15 * 3), 1.5, 9.5 + FloorAltitude, 1, 1
     
@@ -2230,7 +2235,11 @@ Call CreateStairDoors(FloorID)
 If StairDataTable(FloorID) = False Then CreateStairs (FloorID)
 If FloorID < TopFloor And StairDataTable(FloorID + 1) = False Then CreateStairs (CameraFloor + 1)
 If FloorID > BottomFloor And StairDataTable(FloorID - 1) = False Then CreateStairs (CameraFloor - 1)
-                
+        
+Exit Sub
+ErrorHandler:
+   MsgBox "An error occurred in the realtime subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
 End Sub
 
 Sub Init_Objects(Floor As Integer, ObjectIndex As Integer)
@@ -2407,7 +2416,7 @@ If ShaftNum = 4 Then Endfloor = 39
     If FloorID = 136 Then TextureName = "FloorSignBalcony"
     If FloorID = 137 Then TextureName = "FloorSignMechanical"
     If FloorID = 138 Then TextureName = "FloorSignRoof"
-    Stairs(FloorID).AddWall GetTex(TextureName), -(ShaftLeft + 0.52), -42.5, -(ShaftLeft + 0.52), -44.5, 0.5, 9 + 0.3, 1, 1
+    If FloorID >= 0 Then Stairs(FloorID).AddWall GetTex(TextureName), -(ShaftLeft + 0.52), -42.5, -(ShaftLeft + 0.52), -44.5, 0.5, 9 + 0.3, 1, 1
     End If
     
 Next ShaftNum
