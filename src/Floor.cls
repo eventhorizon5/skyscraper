@@ -168,3 +168,10 @@ Private Sub Class_Terminate()
 
 End Sub
 
+Public Sub EnableFloor()
+Level.Enable True
+End Sub
+
+Public Sub DisableFloor()
+Level.Enable False
+End Sub
