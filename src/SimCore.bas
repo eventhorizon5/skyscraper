@@ -42,14 +42,13 @@ Public Camera As TVCamera 'main first-person view camera
 Public MainMusic As TVSoundMP3
 
 'Global Simulation Data
-Public CameraDefAltitude As Single 'default vertical offset of camera
+Public CameraDefAltitude As Single 'default vertical offset of camera from each floor
 Public Gravity As Single 'gravity variable for physics algorithms
 Public Dest As Object 'Output object for visual simulation, usually a form
 Public isRunning As Boolean 'is sim engine running?
 Public EnableCollisions As Boolean 'turns collisions on/off
 Public ElevatorShafts As Integer 'number of elevator shafts
-Public TotalFloors As Integer 'number of above-ground floors
-Public StartFloor As Integer 'starting floor
+Public TotalFloors As Integer 'number of above-ground floors including 0
 Public Basements As Integer 'number of basement floors
 Public Elevators As Integer 'number of elevators
 Public PipeShafts As Integer 'number of pipe shafts
@@ -62,12 +61,20 @@ Public External As TVMesh 'external walls for building
 Public Landscape As TVMesh 'outside landscape
 Public IntroMesh As TVMesh 'introduction mesh
 Public Buttons() As TVMesh 'elevator buttons
-Public ElevatorSpeed As Single 'elevator speed
-Public ElevatorFineTuneSpeed As Single 'elevator finetune speed
 Public FrameLimiter As Boolean 'frame limiter toggle
 Public RenderOnly As Boolean 'skip sim processing and only render graphics
 Public InputOnly As Boolean 'skip sim processing and only run input and rendering code
 Public IsFalling As Boolean 'make user fall
+Public CameraFloor As Integer 'floor camera's on
+Public InStairwell As Boolean 'true if user is in a stairwell
+Public ElevatorNumber As Integer 'number of currently selected elevator
+
+'Camera initialization
+Public CameraStartFloor As Integer 'starting floor
+Public CameraStartPositionX As Single
+Public CameraStartPositionZ As Single
+Public CameraStartDirection As D3DVECTOR
+Public CameraStartRotation As D3DVECTOR
 
 'External calls
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
@@ -78,6 +85,9 @@ Public Sub Start(FileName As String, InitTV As Boolean, DestObject As Object)
 'Start simulator - this replaces old init_simulator function
 
 'On Error GoTo ErrorHandler
+
+'set default starting elevator
+ElevatorNumber = 1
 
 'Set output object
 Set Dest = DestObject
@@ -96,7 +106,7 @@ Dest.Print Spc(2); "Initializing TrueVision3D..."
 DoEvents
 
 isRunning = True
-EnableCollisions = True
+'EnableCollisions = True
 
 'Initialize TrueVision engine objects if specified
 If InitTV = True Then
@@ -211,6 +221,34 @@ Call LoadBuilding(FileName)
 'Load Elevators
 Call LoadElevators(FileName)
 
+'Set up main camera
+Camera.SetPosition CameraStartPositionX, Floor(CameraStartFloor).FloorAltitude + CameraDefAltitude, CameraStartPositionZ
+Camera.SetLookAt CameraStartDirection.X, CameraStartDirection.Y, CameraStartDirection.z
+Camera.SetRotation CameraStartRotation.X, CameraStartRotation.Y, CameraStartRotation.z
+
+'Turn on/off objects
+Buildings.Enable True
+Landscape.Enable True
+External.Enable True
+
+For i = -Basements To TotalFloors
+Floor(i).DisableFloor
+Next i
+Floor(CameraStartFloor).EnableFloor
+Floor(CameraStartFloor + 1).EnableFloor
+Floor(CameraStartFloor + 2).EnableFloor
+Floor(CameraStartFloor + 3).EnableFloor
+Floor(CameraStartFloor - 1).EnableFloor
+
+'Create skybox
+Atmos.SkyBox_SetTexture GetTex("SkyFront"), GetTex("SkyBack"), GetTex("SkyLeft"), GetTex("SkyRight"), GetTex("SkyTop"), GetTex("SkyBottom")
+Atmos.SkyBox_Enable True
+
+'Stop music and fade in
+Sim.IntroMusic.Enabled = False
+MainMusic.Stop_
+Effect.FadeIn 1500
+
 'Start main processing timer
 Sim.MainTimer.Enabled = True
 
@@ -227,7 +265,7 @@ Dest.Cls
 Dest.Print vbCrLf
 Dest.Print Spc(2); "Skyscraper " + LTrim(Str$(App.Major)) + "." + LTrim(Str$(App.Minor)) + " Alpha - Build" + Str$(App.Revision)
 Dest.Print Spc(2); "Powered by SBSE " + LTrim(Str$(App.Major - 1)) + "." + LTrim(Str$(App.Minor))
-Dest.Print Spc(2); "Compiled on July 21, 2004" + vbCrLf
+Dest.Print Spc(2); "Compiled on August 19, 2004" + vbCrLf
 Dest.Print Spc(2); "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free"
 Dest.Print Spc(2); "software, and you are welcome to redistribute it under certain"
 Dest.Print Spc(2); "conditions. For details, see the file gpl.txt"
@@ -238,6 +276,7 @@ Dest.Print Spc(2); "Scalable Building Simulation Engine ©2004 Ryan Thoryk" + vbC
 End Sub
 
 Public Sub MainLoop()
+Dim i As Integer
 On Error Resume Next
 
 'Calls frame limiter function, which sets the max frame rate
@@ -252,6 +291,14 @@ If RenderOnly = True Then GoTo Render
 'If InputOnly is true, skip processing code and run only
 'the input detection code and renderer code
 If InputOnly = True Then GoTo InputOnly
+
+'Determine floor that the camera is on, if the camera is not in the stairwell
+If InStairwell = False Then
+    For i = -Basements To TotalFloors
+        DoEvents
+        If Camera.GetPosition.Y >= Floor(i).FloorAltitude And Camera.GetPosition.Y < Floor(i + 1).FloorAltitude Then CameraFloor = i
+    Next i
+End If
 
 InputOnly:
     Call GetInput
@@ -275,18 +322,18 @@ Private Sub GetInput()
       
       'If Inp.IsKeyPressed(TV_KEY_UP) = True And Focused = True Then
       If Inp.IsKeyPressed(TV_KEY_UP) = True Then
-      KeepAltitude = Camera.GetPosition.y
+      KeepAltitude = Camera.GetPosition.Y
       If Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.MoveRelative 0.7, 0, 0
       If Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.MoveRelative 1.4, 0, 0
-      If Camera.GetPosition.y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.x, KeepAltitude, Camera.GetPosition.z
+      If Camera.GetPosition.Y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.X, KeepAltitude, Camera.GetPosition.z
       End If
       
       'If Inp.IsKeyPressed(TV_KEY_DOWN) = True And Focused = True Then
       If Inp.IsKeyPressed(TV_KEY_DOWN) = True Then
-      KeepAltitude = Camera.GetPosition.y
+      KeepAltitude = Camera.GetPosition.Y
       If Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.MoveRelative -0.7, 0, 0
       If Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.MoveRelative -1.4, 0, 0
-      If Camera.GetPosition.y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.x, KeepAltitude, Camera.GetPosition.z
+      If Camera.GetPosition.Y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.X, KeepAltitude, Camera.GetPosition.z
       End If
       
       'If Inp.IsKeyPressed(TV_KEY_RIGHT) = True And Focused = True Then Camera.RotateY 0.07
