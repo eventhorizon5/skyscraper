@@ -86,6 +86,10 @@ Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
 Public Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
 Public Declare Function GetTickCount Lib "kernel32.dll" () As Long
 
+'Level Editor
+Global DesignLevelGrid() As String
+
+
 Public Sub Start(FileName As String, InitTV As Boolean, DestObject As Object)
 'Start simulator - this replaces old init_simulator function
 
