@@ -593,7 +593,7 @@ Set Light = New TVLightEngine
   
 Sim.Label1.Caption = "Skyscraper " + LTrim(Str$(App.Major)) + "." + LTrim(Str$(App.Minor)) + " Beta - Build" + Str$(App.Revision) + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "©2004 Ryan Thoryk" + vbCrLf
-Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on May 3, 2004" + vbCrLf + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on May 4, 2004" + vbCrLf + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "software, and you are welcome to redistribute it under certain" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "conditions. For details, see the file gpl.txt" + vbCrLf
@@ -787,7 +787,6 @@ Sub CheckCollisions()
 Dim jxx As Single
  'Main collision code
 LineTest = lineend
- 
  If lineend.X > linestart.X Then LineTest.X = lineend.X + 2
  If lineend.X < linestart.X Then LineTest.X = lineend.X - 2
  If lineend.z > linestart.z Then LineTest.z = lineend.z + 2
@@ -796,6 +795,10 @@ LineTest = lineend
 'Turn on collisions
         Room(CameraFloor).SetCollisionEnable True
         CrawlSpace(CameraFloor).SetCollisionEnable True
+        PipeShaft(1).SetCollisionEnable True
+        PipeShaft(2).SetCollisionEnable True
+        PipeShaft(3).SetCollisionEnable True
+        PipeShaft(4).SetCollisionEnable True
         Buildings.SetCollisionEnable True
         Landscape.SetCollisionEnable True
         External.SetCollisionEnable True
@@ -811,16 +814,13 @@ LineTest = lineend
         ElevatorDoorL(jxx).SetCollisionEnable True
         ElevatorDoorR(jxx).SetCollisionEnable True
         Next jxx
-        Stairs(CameraFloor).SetCollisionEnable True
-        
+        If StairDataTable(CameraFloor) = True Then Stairs(CameraFloor).SetCollisionEnable True
         
  'Elevator Collision
  For jxx = 1 To 40
- 
     If Elevator(jxx).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If ElevatorInsDoorL(jxx).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If ElevatorInsDoorR(jxx).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-        
  Next jxx
     
  'Collision code for all other objects
@@ -832,7 +832,7 @@ LineTest = lineend
     If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If CrawlSpace(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-    If Stairs(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If StairDataTable(CameraFloor) = True Then If Stairs(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If Buildings.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If Landscape.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If Shafts1(CameraFloor).IsMeshEnabled = True Then If Shafts1(CameraFloor).IsMeshEnabled = True Then If Shafts1(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
@@ -842,7 +842,8 @@ LineTest = lineend
     If ShaftsFloor(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     
     For jxx = 1 To 4
-    If StairDoor(jxx).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If StairDataTable(CameraFloor) = True Then If StairDoor(jxx).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If PipeShaft(jxx).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     Next jxx
 
 'Object Collision
@@ -862,6 +863,10 @@ CollisionEnd:
 'Turn off collisions
         Room(CameraFloor).SetCollisionEnable False
         CrawlSpace(CameraFloor).SetCollisionEnable False
+        PipeShaft(1).SetCollisionEnable False
+        PipeShaft(2).SetCollisionEnable False
+        PipeShaft(3).SetCollisionEnable False
+        PipeShaft(4).SetCollisionEnable False
         External.SetCollisionEnable False
         Buildings.SetCollisionEnable False
         Landscape.SetCollisionEnable False
@@ -877,7 +882,7 @@ CollisionEnd:
         ElevatorDoorL(jxx).SetCollisionEnable False
         ElevatorDoorR(jxx).SetCollisionEnable False
         Next jxx
-        Stairs(CameraFloor).SetCollisionEnable False
+        If StairDataTable(CameraFloor) = True Then Stairs(CameraFloor).SetCollisionEnable False
         
 End Sub
 
@@ -1118,7 +1123,7 @@ Sub ProcessFloors()
 Call ProcessBasement
 Call ProcessLobby
 Call Process2to39
-Call Process40to79
+Call Process41to79
 Call Process81to114
 Call Process118to129
 Call ProcessOtherFloors
@@ -1355,12 +1360,12 @@ Sub Process2to39()
     Next i
 
 End Sub
-Sub Process40to79()
+Sub Process41to79()
     
-    'Floors 40 to 79 (minus 14 feet on both sides where 20=8 feet)
-    For i = 40 To 79
+    'Floors 41 to 79 (minus 14 feet on both sides where 20=8 feet)
+    For i = 41 To 79
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 40 to 79... " + Str$(Int(((i - 40) / (79 - 40)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 41 to 79... " + Str$(Int(((i - 40) / (79 - 40)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -135, -150, 135, -46.25, (i * FloorHeight) + FloorHeight, ((135 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1408,14 +1413,12 @@ Sub Process40to79()
     CrawlSpace(i).AddWall GetTex("BrickTexture"), 135, 150, -135, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((135 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     CrawlSpace(i).AddWall GetTex("BrickTexture"), -135, 150, -135, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    If i = 40 Then Call DrawElevatorWalls(Int(i), 2, 4, False, False, False, False, False, False, False, False, False, False, False)
-    
-    If i = 40 Or i = 79 Then
+    If i = 79 Then
     Call DrawElevatorWalls(Int(i), 5, 1, True, True, False, False, False, False, False, False, False, False, False)
     'Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 2, 3, False, True, True, True, True, True, True, True, True, True, True)
     End If
-    If i <> 40 And i <> 79 Then
+    If i <> 79 Then
     Call DrawElevatorWalls(Int(i), 5, 1, True, False, False, False, False, False, False, False, False, False, False)
     'Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 2, 3, False, True, True, True, True, True, True, True, True, True, True)
@@ -1831,31 +1834,187 @@ End Sub
 
 Sub ProcessOtherFloors()
 
+'Floor 40
+    
+    i = 40
+    DoEvents
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    
+    'Floor
+    Room(i).AddFloor GetTex("Granite"), -135, -150, 135, -46.25, (i * FloorHeight) + FloorHeight, ((135 * 2) * 0.086), ((150 - 46.25) * 0.08)
+    Room(i).AddFloor GetTex("Granite"), -135, 46.25, 135, 150, (i * FloorHeight) + FloorHeight, ((135 * 2) * 0.086), ((150 - 46.25) * 0.08)
+    Room(i).AddFloor GetTex("Granite"), -90.5, -46.25, -52.5, 46.25, (i * FloorHeight) + FloorHeight, ((90.5 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
+    Room(i).AddFloor GetTex("Granite"), 52.5, -46.25, 90.5, 46.25, (i * FloorHeight) + FloorHeight, ((90.5 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
+    Room(i).AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 0, (i * FloorHeight) + FloorHeight, ((12.5 * 2) * 0.086), (46.25 * 0.08)
+    Room(i).AddFloor GetTex("Granite"), -52.5, 0, 52.5, 46.25, (i * FloorHeight) + FloorHeight, ((52.5 * 2) * 0.086), (46.25 * 0.08)
+    Room(i).AddFloor GetTex("Granite"), -135, -46.25, -130.5, 46.25, (i * FloorHeight) + FloorHeight, ((135 - 130.5) * 0.086), ((46.25 * 2) * 0.08)
+    Room(i).AddFloor GetTex("Granite"), 135, -46.25, 130.5, 46.25, (i * FloorHeight) + FloorHeight, ((135 - 130.5) * 0.086), ((46.25 * 2) * 0.08)
+    
+    'Ceiling
+    Room(i).AddFloor GetTex("Marble3"), -135, -150, 135, -46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((135 * 2) * 0.086), ((150 - 46.25) * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), -135, 46.25, 135, 150, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((135 * 2) * 0.086), ((150 - 46.25) * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), -90.5, -46.25, -52.5, 46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((90.5 - 52.5) * 0.086), ((46.25 + 46.25) * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), 52.5, -46.25, 90.5, 46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((90.5 + 52.5) * 0.086), ((46.25 + 46.25) * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((12.5 * 2) * 0.086), (46.25 * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), -52.5, 0, 52.5, 46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((52.5 * 2) * 0.086), (46.25 * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), -135, -46.25, -130.5, 46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((135 - 130.5) * 0.086), ((46.25 + 46.25) * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), 135, -46.25, 130.5, 46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((135 - 130.5) * 0.086), ((46.25 + 46.25) * 0.08)
+    
+    'Crawlspace bottom
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -135, -150, 135, -46.25, (i * FloorHeight) + (FloorHeight + 25), ((135 * 2) * 0.086), ((150 - 46.25) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -135, 46.25, 135, 150, (i * FloorHeight) + (FloorHeight + 25), ((135 * 2) * 0.086), ((150 - 46.25) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -90.5, -46.25, -52.5, 46.25, (i * FloorHeight) + (FloorHeight + 25), ((90.5 - 52.5) * 0.086), ((46.25 + 46.25) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), 52.5, -46.25, 90.5, 46.25, (i * FloorHeight) + (FloorHeight + 25), ((90.5 + 52.5) * 0.086), ((46.25 + 46.25) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, 0, (i * FloorHeight) + (FloorHeight + 25), ((12.5 * 2) * 0.086), (46.25 * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -52.5, 0, 52.5, 46.25, (i * FloorHeight) + (FloorHeight + 25), ((52.5 * 2) * 0.086), (46.25 * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -135, -46.25, -130.5, 46.25, (i * FloorHeight) + (FloorHeight + 25), ((135 - 130.5) * 0.086), ((46.25 + 46.25) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), 135, -46.25, 130.5, 46.25, (i * FloorHeight) + (FloorHeight + 25), ((135 - 130.5) * 0.086), ((46.25 + 46.25) * 0.08)
+    
+    'Crawlspace top
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -135, -150, 135, -46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((135 * 2) * 0.086), ((150 - 46.25) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -135, 46.25, 135, 150, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((135 * 2) * 0.086), ((150 - 46.25) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -90.5, -46.25, -52.5, 46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((90.5 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), 52.5, -46.25, 90.5, 46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((90.5 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, 0, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((12.5 * 2) * 0.086), (46.25 * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -52.5, 0, 52.5, 46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((52.5 * 2) * 0.086), (46.25 * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -135, -46.25, -110.5, 46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((135 - 110.5) * 0.086), ((46.25 * 2) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), 135, -46.25, 110.5, 46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((135 - 110.5) * 0.086), ((46.25 * 2) * 0.08)
+    
+    'Crawlspace walls
+    CrawlSpace(i).AddWall GetTex("BrickTexture"), -135, -150, 135, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((135 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
+    CrawlSpace(i).AddWall GetTex("BrickTexture"), 135, -150, 135, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
+    CrawlSpace(i).AddWall GetTex("BrickTexture"), 135, 150, -135, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((135 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
+    CrawlSpace(i).AddWall GetTex("BrickTexture"), -135, 150, -135, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
+
+    Call DrawElevatorWalls(Int(i), 2, 4, False, False, False, False, False, False, False, False, False, False, False)
+    
+    Call DrawElevatorWalls(Int(i), 5, 1, True, True, False, False, False, False, False, False, False, False, False)
+    Call DrawElevatorWalls(Int(i), 2, 3, False, True, True, True, True, True, True, True, True, True, True)
+    Call DrawElevatorWalls(Int(i), 5, 2, True, True, False, False, False, False, False, False, False, False, False)
+    
+    'Room(I) Walls
+    
+    'top walls
+    Room(i).AddWall GetTex("Wall3"), -135, -71.3, -90.5, -71.3, 19.5, (i * FloorHeight) + FloorHeight, ((135 - 90.5) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -70, -71.3, 70, -71.3, 19.5, (i * FloorHeight) + FloorHeight, ((70 * 2) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 135, -71.3, 90.5, -71.3, 19.5, (i * FloorHeight) + FloorHeight, ((135 - 90.5) * 0.086), (19.5 * 0.08)
+    
+    Room(i).AddWall GetTex("Wall3"), -135, -71.3, -90.5, -71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((135 - 90.5) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -70, -71.3, 70, -71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((70 * 2) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 135, -71.3, 90.5, -71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((135 - 90.5) * 0.086), (5.5 * 0.08)
+    
+    'bottom walls
+    Room(i).AddWall GetTex("Wall3"), -135, 71.3, -90.5, 71.3, 19.5, (i * FloorHeight) + FloorHeight, ((135 - 90.5) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -70, 71.3, 70, 71.3, 19.5, (i * FloorHeight) + FloorHeight, ((70 * 2) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 135, 71.3, 90.5, 71.3, 19.5, (i * FloorHeight) + FloorHeight, ((135 - 90.5) * 0.086), (19.5 * 0.08)
+    
+    Room(i).AddWall GetTex("Wall3"), -135, 71.3, -90.5, 71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((135 - 90.5) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -70, 71.3, 70, 71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((70 * 2) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 135, 71.3, 90.5, 71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((135 - 90.5) * 0.086), (5.5 * 0.08)
+    
+    Room(i).AddWall GetTex("Wall3"), -70, -46.25, -61.25 - 3.9, -46.25, 25, (i * FloorHeight) + FloorHeight, ((70 - 61.25 - 3.9) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), -61.25 + 3.9, -46.25, -52.5, -46.25, 25, (i * FloorHeight) + FloorHeight, ((61.25 - 52.5 - 3.9) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), 70, -46.25, 61.25 + 3.9, -46.25, 25, (i * FloorHeight) + FloorHeight, ((70 - 61.25 - 3.9) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), 61.25 - 3.9, -46.25, 52.5, -46.25, 25, (i * FloorHeight) + FloorHeight, ((61.25 - 52.5) * 0.086), 1
+    
+    Room(i).AddWall GetTex("Wall3"), -70, -46.25, -52.5, -46.25, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((70 - 52.5) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 52.5, -46.25, 70, -46.25, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((70 - 52.5) * 0.086), (5.5 * 0.08)
+    
+    'service rooms
+    Room(i).AddWall GetTex("Wall3"), 70, -46.25, 70, 46.25, 25, (i * FloorHeight) + FloorHeight, ((46.25 - 20) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), 70, -15, 52.5, -15, 25, (i * FloorHeight) + FloorHeight, ((50 - 32.5) * 0.086), 1
+    
+    Room(i).AddWall GetTex("Wall3"), -70, -46.25, -70, 46.25, 25, (i * FloorHeight) + FloorHeight, ((46.25 * 2) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), -70, -15, -52.5, -15, 25, (i * FloorHeight) + FloorHeight, ((70 - 52.5) * 0.086), 1
+    
+    'left hallway
+    Room(i).AddWall GetTex("Wall3"), 70, -150, 70, -130 - 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((150 - 130 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 70, -130 + 3.9, 70, -90 - 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((130 - 3.9 - 90 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 70, -90 + 3.9, 70, -71.3, 19.5, (i * FloorHeight) + FloorHeight, ((90 - 71.3 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 90.5, -150, 90.5, -130 - 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((150 - 130 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 90.5, -130 + 3.9, 90.5, -90 - 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((130 - 3.9 - 90 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 90.5, -90 + 3.9, 90.5, -71.3, 19.5, (i * FloorHeight) + FloorHeight, ((90 - 71.3 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 70, 150, 70, 130 + 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((150 - 130 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 70, 130 - 3.9, 70, 90 + 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((130 - 90 - 3.9 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 70, 90 - 3.9, 70, 71.3, 19.5, (i * FloorHeight) + FloorHeight, ((90 - 70 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 90.5, 150, 90.5, 130 + 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((150 - 130 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 90.5, 130 - 3.9, 90.5, 90 + 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((130 - 3.9 - 90 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 90.5, 90 - 3.9, 90.5, 71.3, 19.5, (i * FloorHeight) + FloorHeight, ((90 - 71.3 - 3.9) * 0.086), (19.5 * 0.08)
+    
+    Room(i).AddWall GetTex("Wall3"), 70, -150, 70, -71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((150 - 71.3) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 90.5, -150, 90.5, -71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((150 - 71.3) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 70, 150, 70, 71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((150 - 71.3) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 90.5, 150, 90.5, 71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((150 - 71.3) * 0.086), (5.5 * 0.08)
+    
+    'right hallway
+    Room(i).AddWall GetTex("Wall3"), -70, -150, -70, -130 - 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((150 - 130 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -70, -130 + 3.9, -70, -90 - 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((130 - 90 - 3.9 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -70, -90 + 3.9, -70, -71.3, 19.5, (i * FloorHeight) + FloorHeight, ((90 - 71.3 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -90.5, -150, -90.5, -130 - 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((150 - 130 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -90.5, -130 + 3.9, -90.5, -90 - 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((130 - 90 - 3.9 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -90.5, -90 + 3.9, -90.5, -71.3, 19.5, (i * FloorHeight) + FloorHeight, ((90 - 71.3 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -70, 150, -70, 130 + 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((150 - 130 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -70, 130 - 3.9, -70, 90 + 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((130 - 90 - 3.9 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -70, 90 - 3.9, -70, 71.3, 19.5, (i * FloorHeight) + FloorHeight, ((90 - 71.3 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -90.5, 150, -90.5, 130 + 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((150 - 130 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -90.5, 130 - 3.9, -90.5, 90 + 3.9, 19.5, (i * FloorHeight) + FloorHeight, ((130 - 3.9 - 90 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -90.5, 90 - 3.9, -90.5, 71.3, 19.5, (i * FloorHeight) + FloorHeight, ((90 - 71.3 - 3.9) * 0.086), (19.5 * 0.08)
+    
+    Room(i).AddWall GetTex("Wall3"), -70, -150, -70, -71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((150 - 71.3) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -90.5, -150, -90.5, -71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((150 - 71.3) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -70, 150, -70, 71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((150 - 71.3) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -90.5, 150, -90.5, 71.3, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((150 - 71.3) * 0.086), (5.5 * 0.08)
+    
+    'middle hallway extension
+    Room(i).AddWall GetTex("Wall3"), -12.5, 0, -12.5, 46.25, 25, (i * FloorHeight) + FloorHeight, (46.25 * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), 12.5, 0, 12.5, 46.25, 25, (i * FloorHeight) + FloorHeight, (46.25 * 0.086), 1
+    
+    'bottom middle walls
+    Room(i).AddWall GetTex("Wall3"), -70, 46.25, -22.5 - 3.9, 46.25, 19.5, (i * FloorHeight) + FloorHeight, ((70 - 22.5 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), -22.5 + 3.9, 46.25, -12.5, 46.25, 19.5, (i * FloorHeight) + FloorHeight, ((22.5 - 3.9 - 12.5) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 70, 46.25, 22.5 + 3.9, 46.25, 19.5, (i * FloorHeight) + FloorHeight, ((70 - 22.5 - 3.9) * 0.086), (19.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 22.5 - 3.9, 46.25, 12.5, 46.25, 19.5, (i * FloorHeight) + FloorHeight, ((22.5 - 3.9 - 12.5) * 0.086), (19.5 * 0.08)
+    
+    Room(i).AddWall GetTex("Wall3"), -70, 46.25, -12.5, 46.25, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((70 - 12.5) * 0.086), (5.5 * 0.08)
+    Room(i).AddWall GetTex("Wall3"), 12.5, 46.25, 70, 46.25, 5.5, (i * FloorHeight) + FloorHeight + 19.5, ((70 - 12.5) * 0.086), (5.5 * 0.08)
+    
+    'Rooms
+    Room(i).AddWall GetTex("Wall3"), -135, -110, -90.5, -110, 25, (i * FloorHeight) + FloorHeight, ((135 - 90.5) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), -135, 110, -90.5, 110, 25, (i * FloorHeight) + FloorHeight, ((135 - 90.5) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), -70, -110, 70, -110, 25, (i * FloorHeight) + FloorHeight, ((70 * 2) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), -70, 110, 70, 110, 25, (i * FloorHeight) + FloorHeight, ((70 * 2) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), 135, -110, 90.5, -110, 25, (i * FloorHeight) + FloorHeight, ((135 - 90.5) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), 135, 110, 90.5, 110, 25, (i * FloorHeight) + FloorHeight, ((135 - 90.5) * 0.086), 1
+    
+    Room(i).AddWall GetTex("Wall3"), 0, -71.3, 0, -150, 25, (i * FloorHeight) + FloorHeight, ((150 - 71.3) * 0.086), 1
+    Room(i).AddWall GetTex("Wall3"), 0, 71.3, 0, 150, 25, (i * FloorHeight) + FloorHeight, ((150 - 71.3) * 0.086), 1
+    
+
 'Floor 80
     i = 80
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -110, -150, 110, -46.25, (i * FloorHeight) + FloorHeight, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
     Room(i).AddFloor GetTex("Granite"), -110, 46.25, 110, 150, (i * FloorHeight) + FloorHeight, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
     Room(i).AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 46.25, (i * FloorHeight) + FloorHeight, ((12.5 * 2) * 0.086), ((46.25 * 2) * 0.08)
-    Room(i).AddFloor GetTex("Granite"), -110, -46.25, -52.5, 46.25, (i * FloorHeight) + FloorHeight, ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
-    Room(i).AddFloor GetTex("Granite"), 110, -46.25, 52.5, 46.25, (i * FloorHeight) + FloorHeight, ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
+    'Room(i).AddFloor GetTex("Granite"), -110, -46.25, -110.5, 46.25, (i * FloorHeight) + FloorHeight, ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
+    'Room(i).AddFloor GetTex("Granite"), 110, -46.25, 110.5, 46.25, (i * FloorHeight) + FloorHeight, ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
     
     'Ceiling
     Room(i).AddFloor GetTex("Marble3"), -110, -150, 110, -46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
     Room(i).AddFloor GetTex("Marble3"), -110, 46.25, 110, 150, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((12.5 * 2) * 0.086), ((46.25 * 2) * 0.08)
-    Room(i).AddFloor GetTex("Marble3"), -110, -46.25, -52.5, 46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
-    Room(i).AddFloor GetTex("Marble3"), 110, -46.25, 52.5, 46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
+    'Room(i).AddFloor GetTex("Marble3"), -110, -46.25, -110.5, 46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
+    'Room(i).AddFloor GetTex("Marble3"), 110, -46.25, 110.5, 46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
     
     'Crawlspace bottom
     CrawlSpace(i).AddFloor GetTex("BrickTexture"), -110, -150, 110, -46.25, (i * FloorHeight) + (FloorHeight + 25), ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
     CrawlSpace(i).AddFloor GetTex("BrickTexture"), -110, 46.25, 110, 150, (i * FloorHeight) + (FloorHeight + 25), ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
     CrawlSpace(i).AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, 46.25, (i * FloorHeight) + (FloorHeight + 25), ((12.5 * 2) * 0.086), ((46.25 * 2) * 0.08)
-    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -110, -46.25, -52.5, 46.25, (i * FloorHeight) + (FloorHeight + 25), ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
-    CrawlSpace(i).AddFloor GetTex("BrickTexture"), 110, -46.25, 52.5, 46.25, (i * FloorHeight) + (FloorHeight + 25), ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
+    'CrawlSpace(i).AddFloor GetTex("BrickTexture"), -110, -46.25, -110.5, 46.25, (i * FloorHeight) + (FloorHeight + 25), ((110 - 110.5) * 0.086), ((46.25 * 2) * 0.08)
+    'CrawlSpace(i).AddFloor GetTex("BrickTexture"), 110, -46.25, 110.5, 46.25, (i * FloorHeight) + (FloorHeight + 25), ((110 - 110.5) * 0.086), ((46.25 * 2) * 0.08)
     
     'Crawlspace top
     CrawlSpace(i).AddFloor GetTex("BrickTexture"), -110, -150, 110, -46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1879,7 +2038,7 @@ Sub ProcessOtherFloors()
 'Floor 115
     i = 115
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -110, -150, 110, -46.25, (i * FloorHeight) + FloorHeight, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1922,7 +2081,7 @@ Sub ProcessOtherFloors()
 'Floor 116
     i = 116
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -110, -150, 110, -46.25, (i * FloorHeight) + FloorHeight, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1964,7 +2123,7 @@ Sub ProcessOtherFloors()
 'Floor 117
     i = 117
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -110, -150, 110, -46.25, (i * FloorHeight) + FloorHeight, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1991,8 +2150,8 @@ Sub ProcessOtherFloors()
     CrawlSpace(i).AddFloor GetTex("BrickTexture"), -110, -150, 110, -46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
     CrawlSpace(i).AddFloor GetTex("BrickTexture"), -110, 46.25, 110, 150, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
     CrawlSpace(i).AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, 46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((12.5 * 2) * 0.086), ((46.25 * 2) * 0.08)
-    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -110, -46.25, -52.5, 46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
-    CrawlSpace(i).AddFloor GetTex("BrickTexture"), 110, -46.25, 52.5, 46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((110 - 52.5) * 0.086), ((46.25 * 2) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), -110, -46.25, -32.5, 46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((110 - 32.5) * 0.086), ((46.25 * 2) * 0.08)
+    CrawlSpace(i).AddFloor GetTex("BrickTexture"), 110, -46.25, 32.5, 46.25, (i * FloorHeight) + (FloorHeight + 24.9) + (FloorHeight - 25), ((110 - 32.5) * 0.086), ((46.25 * 2) * 0.08)
     
     'Crawlspace walls
     CrawlSpace(i).AddWall GetTex("BrickTexture"), -110, -150, 110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
@@ -2007,7 +2166,7 @@ Sub ProcessOtherFloors()
 'Floor 130
     i = 130
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2177,7 +2336,7 @@ Sub ProcessOtherFloors2()
 'Floor 131
     i = 131
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2219,7 +2378,7 @@ Sub ProcessOtherFloors2()
 'Floor 132
     i = 132
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2261,7 +2420,7 @@ Sub ProcessOtherFloors2()
 'Floor 133
     i = 133
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2306,7 +2465,7 @@ Sub ProcessOtherFloors2()
 'Floor 134
     i = 134
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
     Room(i).AddFloor GetTex("Granite"), -85, -46.25, -32.5, 0, (i * FloorHeight) + FloorHeight, ((85 - 32.5) * 0.086), (46.25 * 0.08)
@@ -2350,7 +2509,7 @@ Sub ProcessOtherFloors2()
 'Floor 135
     i = 135
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -60, -150, 60, -46.25, (i * FloorHeight) + FloorHeight, ((60 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2372,7 +2531,7 @@ Sub ProcessOtherFloors2()
 'Floor 136
     i = 136
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -60, -150, 60, -46.25, (i * FloorHeight) + FloorHeight, ((60 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2414,7 +2573,7 @@ Sub ProcessOtherFloors2()
 'Floor 137
     i = 137
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("BrickTexture"), -60, -150, 60, -46.25, (i * FloorHeight) + FloorHeight, ((60 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2463,7 +2622,7 @@ Sub ProcessOtherFloors2()
 'Roof Layout
 i = 138
     DoEvents
-    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40, 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     Room(i).AddFloor GetTex("BrickTexture"), -60, -150, 60, -46.25, (i * FloorHeight) + FloorHeight, ((60 * 2) * 0.086), ((150 - 46.25) * 0.08)
     Room(i).AddFloor GetTex("BrickTexture"), -60, -15.42, 60, 150, (i * FloorHeight) + FloorHeight, ((60 * 2) * 0.086), ((150 - 15.42) * 0.08)
@@ -2693,50 +2852,62 @@ DoEvents
     'Other Towers
     
     '*** Building directly south of the Triton Center
-    Buildings.AddWall GetTex("Windows11"), -160, 400, 160, 400, 32 * 15, 0, 10, 15
-    Buildings.AddWall GetTex("Windows11"), -160, 600, 160, 600, 32 * 15, 0, 10, 15
-    Buildings.AddWall GetTex("Windows11"), -160, 400, -160, 600, 32 * 15, 0, 10, 15
-    Buildings.AddWall GetTex("Windows11"), 160, 400, 160, 600, 32 * 15, 0, 10, 15
+    Buildings.AddWall GetTex("Windows11"), -160, 400, 160, 400, 32 * 15, 0, (160 * 2) * 0.02, 15
+    Buildings.AddWall GetTex("Windows11"), -160, 600, 160, 600, 32 * 15, 0, (160 * 2) * 0.02, 15
+    Buildings.AddWall GetTex("Windows11"), -160, 400, -160, 600, 32 * 15, 0, (600 - 400) * 0.02, 15
+    Buildings.AddWall GetTex("Windows11"), 160, 400, 160, 600, 32 * 15, 0, (600 - 400) * 0.02, 15
     Buildings.AddFloor GetTex("Concrete"), -160, 400, 160, 600, 32 * 15, 30, 30
     
     '*** Building directly west of the Triton Center
-    Buildings.AddWall GetTex("Windows11"), 470, -150, 320, -150, 30 * 36, 0, 4, 36
-    Buildings.AddWall GetTex("Windows11"), 470, 150, 320, 150, 30 * 36, 0, 4, 36
-    Buildings.AddWall GetTex("Windows11"), 470, -150, 470, 150, 30 * 36, 0, 4, 36
-    Buildings.AddWall GetTex("Windows11"), 320, -150, 320, 150, 30 * 36, 0, 4, 36
+    Buildings.AddWall GetTex("Windows11"), 470, -150, 320, -150, 30 * 36, 0, (470 - 320) * 0.02, 36
+    Buildings.AddWall GetTex("Windows11"), 470, 150, 320, 150, 30 * 36, 0, (470 - 320) * 0.02, 36
+    Buildings.AddWall GetTex("Windows11"), 470, -150, 470, 150, 30 * 36, 0, (150 * 2) * 0.02, 36
+    Buildings.AddWall GetTex("Windows11"), 320, -150, 320, 150, 30 * 36, 0, (150 * 2) * 0.02, 36
     Buildings.AddFloor GetTex("Concrete"), 470, -150, 320, 150, 30 * 36, 30, 30
     
     '*** 2 Buildings directly west of the Triton Center
-    Buildings.AddWall GetTex("Windows11"), 820, -125, 600, -125, 35 * 86, 0, 4, 86
-    Buildings.AddWall GetTex("Windows11"), 820, 125, 600, 125, 35 * 86, 0, 4, 86
-    Buildings.AddWall GetTex("Windows11"), 820, -125, 820, 125, 35 * 86, 0, 4, 86
-    Buildings.AddWall GetTex("Windows11"), 600, -125, 600, 125, 35 * 86, 0, 4, 86
+    Buildings.AddWall GetTex("Windows11"), 820, -125, 600, -125, 35 * 86, 0, (820 - 600) * 0.02, 86
+    Buildings.AddWall GetTex("Windows11"), 820, 125, 600, 125, 35 * 86, 0, (820 - 600) * 0.02, 86
+    Buildings.AddWall GetTex("Windows11"), 820, -125, 820, 125, 35 * 86, 0, (125 * 2) * 0.02, 86
+    Buildings.AddWall GetTex("Windows11"), 600, -125, 600, 125, 35 * 86, 0, (125 * 2) * 0.02, 86
     Buildings.AddFloor GetTex("Concrete"), 820, -125, 600, 125, 35 * 86, 30, 30
     
     '*** Building directly east of the Triton Center
-    Buildings.AddWall GetTex("Windows11"), -400, -100, -250, -100, 32 * 45, 0, 4, 45
-    Buildings.AddWall GetTex("Windows11"), -400, 100, -250, 100, 32 * 45, 0, 4, 45
-    Buildings.AddWall GetTex("Windows11"), -400, -100, -400, 100, 32 * 45, 0, 4, 45
-    Buildings.AddWall GetTex("Windows11"), -250, -100, -250, 100, 32 * 45, 0, 4, 45
+    Buildings.AddWall GetTex("Windows11"), -400, -100, -250, -100, 32 * 45, 0, (400 - 250) * 0.02, 45
+    Buildings.AddWall GetTex("Windows11"), -400, 100, -250, 100, 32 * 45, 0, (400 - 250) * 0.02, 45
+    Buildings.AddWall GetTex("Windows11"), -400, -100, -400, 100, 32 * 45, 0, (100 * 2) * 0.02, 45
+    Buildings.AddWall GetTex("Windows11"), -250, -100, -250, 100, 32 * 45, 0, (100 * 2) * 0.02, 45
     Buildings.AddFloor GetTex("Concrete"), -400, -100, -250, 100, 32 * 45, 30, 30
     
     '*** 3 buildings west of the Triton Center
     
-    Buildings.AddWall GetTex("Windows11"), 1300, -100, 970, -100, 32 * 25, 0, 2, 25
-    Buildings.AddWall GetTex("Windows11"), 1300, 100, 970, 100, 32 * 25, 0, 2, 25
-    Buildings.AddWall GetTex("Windows11"), 1300, -100, 1300, 100, 32 * 25, 0, 4, 25
-    Buildings.AddWall GetTex("Windows11"), 970, -100, 970, 100, 32 * 25, 0, 4, 25
+    Buildings.AddWall GetTex("Windows11"), 1300, -100, 970, -100, 32 * 25, 0, (1300 - 970) * 0.02, 25
+    Buildings.AddWall GetTex("Windows11"), 1300, 100, 970, 100, 32 * 25, 0, (1300 - 970) * 0.02, 25
+    Buildings.AddWall GetTex("Windows11"), 1300, -100, 1300, 100, 32 * 25, 0, (100 * 2) * 0.02, 25
+    Buildings.AddWall GetTex("Windows11"), 970, -100, 970, 100, 32 * 25, 0, (100 * 2) * 0.02, 25
     Buildings.AddFloor GetTex("Concrete"), 1300, -100, 970, 100, 32 * 25, 30, 30
     
     '*** 2 buildings east of the Triton Center
     
-    Buildings.AddWall GetTex("Windows11"), -820, -100, -650, -100, 32 * 65, 0, 2, 65
-    Buildings.AddWall GetTex("Windows11"), -820, 100, -650, 100, 32 * 65, 0, 2, 65
-    Buildings.AddWall GetTex("Windows11"), -820, -100, -820, 100, 32 * 65, 0, 4, 65
-    Buildings.AddWall GetTex("Windows11"), -650, -100, -650, 100, 32 * 65, 0, 4, 65
+    Buildings.AddWall GetTex("Windows11"), -820, -100, -650, -100, 32 * 65, 0, (820 - 650) * 0.02, 65
+    Buildings.AddWall GetTex("Windows11"), -820, 100, -650, 100, 32 * 65, 0, (820 - 650) * 0.02, 65
+    Buildings.AddWall GetTex("Windows11"), -820, -100, -820, 100, 32 * 65, 0, (100 * 2) * 0.02, 65
+    Buildings.AddWall GetTex("Windows11"), -650, -100, -650, 100, 32 * 65, 0, (100 * 2) * 0.02, 65
     Buildings.AddFloor GetTex("Concrete"), -820, -100, -650, 100, 32 * 65, 30, 30
     
+    '*** 1 south, 1 east
+    Buildings.AddWall GetTex("Windows11"), -400, 400, -250, 400, 32 * 12, 0, (400 - 250) * 0.02, 12
+    Buildings.AddWall GetTex("Windows11"), -400, 600, -250, 600, 32 * 12, 0, (400 - 250) * 0.02, 12
+    Buildings.AddWall GetTex("Windows11"), -400, 400, -400, 600, 32 * 12, 0, (600 - 400) * 0.02, 12
+    Buildings.AddWall GetTex("Windows11"), -250, 400, -250, 600, 32 * 12, 0, (600 - 400) * 0.02, 12
+    Buildings.AddFloor GetTex("Concrete"), -400, 400, -250, 600, 32 * 12, 30, 30
     
+    '*** 1 south, 2 east
+    Buildings.AddTriangle GetTex("Windows11"), -650, 0, 400, -870, 32 * 45, 500, -650, 0, 600, (600 - 400) * 0.02, 45
+    Buildings.AddTriangle GetTex("Windows11"), -1090, 0, 400, -870, 32 * 45, 500, -1090, 0, 600, (600 - 400) * 0.02, 45
+    Buildings.AddTriangle GetTex("Windows11"), -650, 0, 400, -870, 32 * 45, 500, -1090, 0, 400, (1090 - 650) * 0.02, 45
+    Buildings.AddTriangle GetTex("Windows11"), -650, 0, 600, -870, 32 * 45, 500, -1090, 0, 600, (1090 - 650) * 0.02, 45
+        
     External.AddWall GetTex("LobbyFront"), -160, -150, 160, -150, (FloorHeight * 3), 0, 3, 1
     External.AddWall GetTex("LobbyFront"), 160, -150, 160, 150, (FloorHeight * 3), 0, 3, 1
     External.AddWall GetTex("LobbyFront"), 160, 150, -160, 150, (FloorHeight * 3), 0, 3, 1
@@ -2744,44 +2915,44 @@ DoEvents
 
 For i = 2 To 39
 DoEvents
-    External.AddWall GetTex("MainWindows"), -160, -150, 160, -150, FloorHeight, (i * FloorHeight) + FloorHeight, 7.6, 1
-    External.AddWall GetTex("MainWindows"), 160, -150, 160, 150, FloorHeight, (i * FloorHeight) + FloorHeight, 7, 1
-    External.AddWall GetTex("MainWindows"), 160, 150, -160, 150, FloorHeight, (i * FloorHeight) + FloorHeight, 7.6, 1
-    External.AddWall GetTex("MainWindows"), -160, 150, -160, -150, FloorHeight, (i * FloorHeight) + FloorHeight, 7, 1
+    External.AddWall GetTex("MainWindows"), -160, -150, 160, -150, FloorHeight, (i * FloorHeight) + FloorHeight, (160 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), 160, -150, 160, 150, FloorHeight, (i * FloorHeight) + FloorHeight, (150 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), 160, 150, -160, 150, FloorHeight, (i * FloorHeight) + FloorHeight, (160 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), -160, 150, -160, -150, FloorHeight, (i * FloorHeight) + FloorHeight, (150 * 2) * 0.023, 1
 Next i
 
 
 For i = 40 To 79
 DoEvents
-    External.AddWall GetTex("MainWindows"), -135, -150, 135, -150, FloorHeight, (i * FloorHeight) + FloorHeight, 6.5, 1
-    External.AddWall GetTex("MainWindows"), 135, -150, 135, 150, FloorHeight, (i * FloorHeight) + FloorHeight, 7, 1
-    External.AddWall GetTex("MainWindows"), 135, 150, -135, 150, FloorHeight, (i * FloorHeight) + FloorHeight, 6.5, 1
-    External.AddWall GetTex("MainWindows"), -135, 150, -135, -150, FloorHeight, (i * FloorHeight) + FloorHeight, 7, 1
+    External.AddWall GetTex("MainWindows"), -135, -150, 135, -150, FloorHeight, (i * FloorHeight) + FloorHeight, (135 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), 135, -150, 135, 150, FloorHeight, (i * FloorHeight) + FloorHeight, (150 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), 135, 150, -135, 150, FloorHeight, (i * FloorHeight) + FloorHeight, (135 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), -135, 150, -135, -150, FloorHeight, (i * FloorHeight) + FloorHeight, (150 * 2) * 0.023, 1
 Next i
 
 For i = 80 To 117
 DoEvents
-    External.AddWall GetTex("MainWindows"), -110, -150, 110, -150, FloorHeight, (i * FloorHeight) + FloorHeight, 5, 1
-    External.AddWall GetTex("MainWindows"), 110, -150, 110, 150, FloorHeight, (i * FloorHeight) + FloorHeight, 7, 1
-    External.AddWall GetTex("MainWindows"), 110, 150, -110, 150, FloorHeight, (i * FloorHeight) + FloorHeight, 5, 1
-    External.AddWall GetTex("MainWindows"), -110, 150, -110, -150, FloorHeight, (i * FloorHeight) + FloorHeight, 7, 1
+    External.AddWall GetTex("MainWindows"), -110, -150, 110, -150, FloorHeight, (i * FloorHeight) + FloorHeight, (110 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), 110, -150, 110, 150, FloorHeight, (i * FloorHeight) + FloorHeight, (150 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), 110, 150, -110, 150, FloorHeight, (i * FloorHeight) + FloorHeight, (110 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), -110, 150, -110, -150, FloorHeight, (i * FloorHeight) + FloorHeight, (150 * 2) * 0.023, 1
 Next i
     
 For i = 118 To 134
 DoEvents
-    External.AddWall GetTex("MainWindows"), -85, -150, 85, -150, FloorHeight, (i * FloorHeight) + FloorHeight, 4, 1
-    External.AddWall GetTex("MainWindows"), 85, -150, 85, 150, FloorHeight, (i * FloorHeight) + FloorHeight, 7, 1
-    External.AddWall GetTex("MainWindows"), 85, 150, -85, 150, FloorHeight, (i * FloorHeight) + FloorHeight, 4, 1
-    External.AddWall GetTex("MainWindows"), -85, 150, -85, -150, FloorHeight, (i * FloorHeight) + FloorHeight, 7, 1
+    External.AddWall GetTex("MainWindows"), -85, -150, 85, -150, FloorHeight, (i * FloorHeight) + FloorHeight, (85 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), 85, -150, 85, 150, FloorHeight, (i * FloorHeight) + FloorHeight, (150 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), 85, 150, -85, 150, FloorHeight, (i * FloorHeight) + FloorHeight, (85 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), -85, 150, -85, -150, FloorHeight, (i * FloorHeight) + FloorHeight, (150 * 2) * 0.023, 1
   
 Next i
 
 For i = 135 To 136
 DoEvents
-    External.AddWall GetTex("MainWindows"), -60, -150, 60, -150, FloorHeight, (i * FloorHeight) + FloorHeight, 3, 1
-    External.AddWall GetTex("MainWindows"), 60, -150, 60, 150, FloorHeight, (i * FloorHeight) + FloorHeight, 7, 1
-    External.AddWall GetTex("MainWindows"), 60, 150, -60, 150, FloorHeight, (i * FloorHeight) + FloorHeight, 3, 1
-    External.AddWall GetTex("MainWindows"), -60, 150, -60, -150, FloorHeight, (i * FloorHeight) + FloorHeight, 7, 1
+    External.AddWall GetTex("MainWindows"), -60, -150, 60, -150, FloorHeight, (i * FloorHeight) + FloorHeight, (60 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), 60, -150, 60, 150, FloorHeight, (i * FloorHeight) + FloorHeight, (150 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), 60, 150, -60, 150, FloorHeight, (i * FloorHeight) + FloorHeight, (60 * 2) * 0.023, 1
+    External.AddWall GetTex("MainWindows"), -60, 150, -60, -150, FloorHeight, (i * FloorHeight) + FloorHeight, (150 * 2) * 0.023, 1
 Next i
 
 i = 137
