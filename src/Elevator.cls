@@ -43,6 +43,10 @@ Public CallButtonsUp As TVMesh 'up call button
 Public CallButtonsDown As TVMesh 'down call button
 Public UpQueue As String 'up call queue
 Public DownQueue As String 'down call queue
+Public QueuePositionDirection As Integer 'queue processing direction
+Public PauseQueueSearch As Boolean 'pause queue processor
+Public ElevatorSpeed As Single 'elevator speed
+Public ElevatorFineTuneSpeed As Single 'elevator finetune speed
 
 Option Explicit
 
@@ -61,7 +65,7 @@ Set CallButtonsDown = Scene.CreateMeshBuilder("CallButtonsDown" + Str$(Number))
 
 End Sub
 
-Public Sub CreateElevator(x As Single, y As Single, Level As Integer, Direction As Integer)
+Public Sub CreateElevator(X As Single, Y As Single, FloorID As Integer, Direction As Integer)
 'Creates elevator at specified location and floor
 'x is the horiz position where the door is
 'y is the northmost position
@@ -69,11 +73,11 @@ Public Sub CreateElevator(x As Single, y As Single, Level As Integer, Direction 
 'Direction: 0=x is left side, 1=x is right side
 
 Dim V As Integer
-ElevatorMesh.SetPosition x, Floor(Level).FloorAltitude, y
-FloorIndicator.SetPosition x, Floor(Level).FloorAltitude, y
-Plaque.SetPosition x, Floor(Level).FloorAltitude, y
-ElevatorInsDoorL.SetPosition x, Floor(Level).FloorAltitude, y
-ElevatorInsDoorR.SetPosition x, Floor(Level).FloorAltitude, y
+ElevatorMesh.SetPosition X, Floor(FloorID).FloorAltitude, Y
+FloorIndicator.SetPosition X, Floor(FloorID).FloorAltitude, Y
+Plaque.SetPosition X, Floor(FloorID).FloorAltitude, Y
+ElevatorInsDoorL.SetPosition X, Floor(FloorID).FloorAltitude, Y
+ElevatorInsDoorR.SetPosition X, Floor(FloorID).FloorAltitude, Y
 
 If Direction = 0 Then V = 1
 If Direction = 1 Then V = -1
@@ -116,7 +120,7 @@ Private Sub Class_Terminate()
 'Set CallButtonsDown = Nothing
 End Sub
 
-Sub AddRoute(Floor As Integer, Direction As Integer)
+Sub AddRoute(FloorID As Integer, Direction As Integer)
 'Add call route to elevator routing table, in sorted order
 
 Dim Position As Long
@@ -126,20 +130,20 @@ Dim TempString2 As String
 
 If Direction = 1 Then
     Position = 1
-    If UpQueue = "" Then UpQueue = LTrim(Str$(Floor)) + ",": If QueuePositionDirection = 0 Then PauseQueueSearch = False: Exit Sub
+    If UpQueue = "" Then UpQueue = LTrim(Str$(FloorID)) + ",": If QueuePositionDirection = 0 Then PauseQueueSearch = False: Exit Sub
     Do
     Position2 = InStr(Position, UpQueue, ",")
     If Position2 = 0 Then Position2 = Len(UpQueue) + 1
     'Find the 2 numbers that the new number should go between
-    If Val(Mid$(UpQueue, Position, Position2 - 1)) = Floor Then Exit Sub
-    If Val(Mid$(UpQueue, Position, Position2 - 1)) < Floor And Mid$(UpQueue, Position, Position2 - 1) <> "" Then Position = Position2 + 1: GoTo SkipIt
-    If Val(Mid$(UpQueue, Position, Position2 - 1)) > Floor Or Mid$(UpQueue, Position, Position2 - 1) = "" Then
+    If Val(Mid$(UpQueue, Position, Position2 - 1)) = FloorID Then Exit Sub
+    If Val(Mid$(UpQueue, Position, Position2 - 1)) < FloorID And Mid$(UpQueue, Position, Position2 - 1) <> "" Then Position = Position2 + 1: GoTo SkipIt
+    If Val(Mid$(UpQueue, Position, Position2 - 1)) > FloorID Or Mid$(UpQueue, Position, Position2 - 1) = "" Then
         'break queue into 2 strings
         TempString = Left$(UpQueue, Position - 1)
         TempString2 = Mid$(UpQueue, Position)
         'Insert new number between 2 strings
-        UpQueue = TempString + LTrim(Str$(Floor)) + "," + TempString2
-        PauseQueueSearch(Number) = False
+        UpQueue = TempString + LTrim(Str$(FloorID)) + "," + TempString2
+        PauseQueueSearch = False
         Exit Sub
     End If
 SkipIt:
@@ -148,19 +152,19 @@ End If
 
 If Direction = -1 Then
     Position = 1
-    If DownQueue = "" Then DownQueue = LTrim(Str$(Floor)) + ",": If QueuePositionDirection = 0 Then PauseQueueSearch = False: Exit Sub
+    If DownQueue = "" Then DownQueue = LTrim(Str$(FloorID)) + ",": If QueuePositionDirection = 0 Then PauseQueueSearch = False: Exit Sub
     Do
     Position2 = InStr(Position, DownQueue, ",")
     If Position2 = 0 Then Position2 = Len(DownQueue) + 1
     'Find the 2 numbers that the new number should go between
-    If Val(Mid$(DownQueue, Position, Position2 - 1)) = Floor Then Exit Sub
-    If Val(Mid$(DownQueue, Position, Position2 - 1)) < Floor And Mid$(DownQueue, Position, Position2 - 1) <> "" Then Position = Position2 + 1: GoTo SkipIt2
-    If Val(Mid$(DownQueue, Position, Position2 - 1)) > Floor Or Mid$(DownQueue, Position, Position2 - 1) = "" Then
+    If Val(Mid$(DownQueue, Position, Position2 - 1)) = FloorID Then Exit Sub
+    If Val(Mid$(DownQueue, Position, Position2 - 1)) < FloorID And Mid$(DownQueue, Position, Position2 - 1) <> "" Then Position = Position2 + 1: GoTo SkipIt2
+    If Val(Mid$(DownQueue, Position, Position2 - 1)) > FloorID Or Mid$(DownQueue, Position, Position2 - 1) = "" Then
         'break queue into 2 strings
         TempString = Left$(DownQueue, Position - 1)
         TempString2 = Mid$(DownQueue, Position)
         'Insert new number between 2 strings
-        DownQueue = TempString + LTrim(Str$(Floor)) + "," + TempString2
+        DownQueue = TempString + LTrim(Str$(FloorID)) + "," + TempString2
         PauseQueueSearch = False
         Exit Sub
     End If
@@ -170,7 +174,7 @@ End If
 
 End Sub
 
-Sub DeleteRoute(Floor As Integer, Direction As Integer)
+Sub DeleteRoute(FloorID As Integer, Direction As Integer)
 'Delete call route from elevator routing table
 
 Dim Position As Long
@@ -178,7 +182,7 @@ Dim Position2 As Long
 
 If Direction = 1 Then
     'break string in 2; 1 before and 1 after number searched for
-    Position = InStr(1, UpQueue, LTrim(Str$(Floor)) + ",")
+    Position = InStr(1, UpQueue, LTrim(Str$(FloorID)) + ",")
     Position2 = InStr(Position, UpQueue, ",")
     'join 2 strings, eliminating old number
     UpQueue = Left$(UpQueue, Position - 1) + Mid$(UpQueue, Position2 + 1)
@@ -186,7 +190,7 @@ End If
 
 If Direction = -1 Then
     'break string in 2; 1 before and 1 after number searched for
-    Position = InStr(1, DownQueue, LTrim(Str$(Floor)) + ",")
+    Position = InStr(1, DownQueue, LTrim(Str$(FloorID)) + ",")
     Position2 = InStr(Position, DownQueue, ",")
     'join 2 strings, eliminating old number
     DownQueue = Left$(DownQueue, Position - 1) + Mid$(DownQueue, Position2 + 1)
@@ -194,8 +198,12 @@ End If
 
 End Sub
 
-Sub Alarm()
+Public Sub Alarm()
 'code for the elevator alarm goes here
+
+End Sub
+
+Public Sub CallElevator(FloorID As Integer, Direction As Integer)
 
 End Sub
 
