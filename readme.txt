@@ -1,4 +1,4 @@
-Skyscraper version 0.96 - Beta
+Skyscraper version 0.97 - Beta
 ©2004 Ryan Thoryk
 http://www.tliquest.net/skyscraper
 http://sourceforge.net/projects/skyscraper
