@@ -1,5 +1,5 @@
 Attribute VB_Name = "ElevatorCode"
-'Skycraper 0.93 Beta
+'Skycraper 0.94 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -20,25 +20,30 @@ Attribute VB_Name = "ElevatorCode"
 'Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 Option Explicit
+Sub AddRoute(Floor As Integer, Number As Integer, Direction As Integer)
+If RouteDirection(Number) = 0 Then RouteDirection(Number) = Direction
 
+End Sub
+Sub DeleteRoute(Floor As Integer, Number As Integer, Direction As Integer)
 
+End Sub
+Sub StopElevator(Number As Integer)
 
+End Sub
+Sub Alarm(Number As Integer)
+
+End Sub
+Sub CallElevator(Floor As Integer, Section As Integer, Direction As Integer)
+'This subroutine is used to autoselect an elevator in the specified section
+'The direction value is set by what button the user presses on the call button panel
+
+End Sub
 Sub DrawElevatorButtons(Number As Integer)
 ButtonsEnabled = True
 
+'New button handling code
 For i54 = -11 To 144
-'Buttons(i54).Enable False
-Scene.DestroyMesh Buttons(i54)
-Set Buttons(i54) = Nothing
-'Sleep 10
-Next i54
-
-'Sleep 100
-
-For i54 = -11 To 144
-Set Buttons(i54) = New TVMesh
-Set Buttons(i54) = Scene.CreateMeshBuilder("Buttons " + Str$(i54))
-'Buttons(i54).SetPosition 0, Elevator(Number).GetPosition.Y, 0
+Buttons(i54).ResetMesh
 Buttons(i54).SetPosition 0, 0, 0
 Buttons(i54).SetRotation 0, 0, 0
 Next i54
@@ -3278,13 +3283,13 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
        'CurrentFloor(Number) = (Elevator(Number).GetPosition.y / FloorHeight) - 1
        'CurrentFloorExact(Number) = Int((Elevator(Number).GetPosition.y / FloorHeight) - 1)
 
-       'Form2.Text1.Text = "Sound Location=7.75,20,7 " + vbCrLf + "Elevator Floor=" + Str$(ElevatorFloor(Number)) + vbCrLf + "Camera Floor=" + Str$(CameraFloor) + vbCrLf + "Current Location= " + Str$(Int(Camera.GetPosition.x)) + "," + Str$(Int(Camera.GetPosition.y)) + "," + Str$(Int(Camera.GetPosition.z)) + vbCrLf + "Distance to Travel=" + Str$(DistanceToTravel(Number)) + vbCrLf + "Destination=" + Str$(Destination) + vbCrLf + "Rate=" + Str$(ElevatorEnable(Number) / 5)
+       'DebugPanel.Text1.Text = "Sound Location=7.75,20,7 " + vbCrLf + "Elevator Floor=" + Str$(ElevatorFloor(Number)) + vbCrLf + "Camera Floor=" + Str$(CameraFloor) + vbCrLf + "Current Location= " + Str$(Int(Camera.GetPosition.x)) + "," + Str$(Int(Camera.GetPosition.y)) + "," + Str$(Int(Camera.GetPosition.z)) + vbCrLf + "Distance to Travel=" + Str$(DistanceToTravel(Number)) + vbCrLf + "Destination=" + Str$(Destination) + vbCrLf + "Rate=" + Str$(ElevatorEnable(Number) / 5)
         
         If ElevatorEnable(Number) >= 0 And ElevatorDirection(Number) = 1 Then
         'sound
         If ElevatorSounds(Number).PlayState <> TV_PLAYSTATE_PLAYING And ElevatorCheck(Number) = 0 And GotoFloor(Number) <> ElevatorFloor(Number) Then
         ElevatorSounds(Number).Loop_ = False
-        ElevatorSounds(Number).Load App.Path + "\elevstart.wav"
+        ElevatorSounds(Number).Load App.Path + "\data\elevstart.wav"
         ElevatorSounds(Number).Volume = 0
         'ElevatorSounds(Number).maxDistance = 100
         'Call ElevatorSounds(Number).SetConeOrientation(0, 0, 90)
@@ -3294,7 +3299,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorCheck(Number) = 1
         End If
         If ElevatorSounds(Number).PlayState = TV_PLAYSTATE_ENDED And ElevatorCheck(Number) = 1 Then
-        ElevatorSounds(Number).Load App.Path + "\elevmove.wav"
+        ElevatorSounds(Number).Load App.Path + "\data\elevmove.wav"
         ElevatorSounds(Number).Loop_ = True
         ElevatorSounds(Number).Play
         End If
@@ -3325,7 +3330,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         End If
         If ElevatorSounds(Number).PlayState <> TV_PLAYSTATE_PLAYING And ElevatorCheck2(Number) = 0 And FineTune(Number) = False Then
         ElevatorSounds(Number).Loop_ = False
-        ElevatorSounds(Number).Load App.Path + "\elevstop.wav"
+        ElevatorSounds(Number).Load App.Path + "\data\elevstop.wav"
         ElevatorSounds(Number).Play
         ElevatorCheck2(Number) = 1
         End If
@@ -3351,7 +3356,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         If ElevatorEnable(Number) <= 0 And ElevatorDirection(Number) = -1 Then
         If ElevatorSounds(Number).PlayState <> TV_PLAYSTATE_PLAYING And ElevatorCheck(Number) = 0 Then
         ElevatorSounds(Number).Loop_ = False
-        ElevatorSounds(Number).Load App.Path + "\elevstart.wav"
+        ElevatorSounds(Number).Load App.Path + "\data\elevstart.wav"
         ElevatorSounds(Number).Volume = 0
         'ElevatorSounds(Number).maxDistance = 100
         'Call ElevatorSounds(Number).SetConeOrientation(0, 0, 90)
@@ -3361,7 +3366,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorCheck(Number) = 1
         End If
         If ElevatorSounds(Number).PlayState = TV_PLAYSTATE_ENDED And ElevatorCheck(Number) = 1 Then
-        ElevatorSounds(Number).Load App.Path + "\elevmove.wav"
+        ElevatorSounds(Number).Load App.Path + "\data\elevmove.wav"
         ElevatorSounds(Number).Loop_ = True
         ElevatorSounds(Number).Play
         End If
@@ -3390,7 +3395,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         End If
         If ElevatorSounds(Number).PlayState <> TV_PLAYSTATE_PLAYING And ElevatorCheck2(Number) = 0 And FineTune(Number) = False Then
         ElevatorSounds(Number).Loop_ = False
-        ElevatorSounds(Number).Load App.Path + "\elevstop.wav"
+        ElevatorSounds(Number).Load App.Path + "\data\elevstop.wav"
         ElevatorSounds(Number).Play
         ElevatorCheck2(Number) = 1
         End If
@@ -3443,7 +3448,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       
       If FineTune(Number) = True Then
       If ElevatorCheck3(Number) = 0 Then
-      ElevatorSounds(Number).Load App.Path + "\ding1.wav"
+      ElevatorSounds(Number).Load App.Path + "\data\ding1.wav"
       ElevatorSounds(Number).Play
       ElevatorCheck3(Number) = 1
         For ElevTemp(Number) = -11 To 144
@@ -3482,7 +3487,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorSounds(Number).Stop_
         End If
         ElevatorSounds(Number).Loop_ = False
-        ElevatorSounds(Number).Load App.Path + "\elevatoropen.wav"
+        ElevatorSounds(Number).Load App.Path + "\data\elevatoropen.wav"
         ElevatorSounds(Number).Volume = 0
         'ElevatorSounds(Number).maxDistance = 1000
         'Call ElevatorSounds(Number).SetConeOrientation(0, -5, 0)
@@ -3522,46 +3527,46 @@ OpenElevator1:
       If OpenElevatorLoc(Number) <= 0 Then
       OpenElevator(Number) = 0
       OpenElevatorLoc(Number) = 0
-      If Number = 1 Then Form1.Timer1.Enabled = True
-      If Number = 2 Then Form1.Timer2.Enabled = True
-      If Number = 3 Then Form1.Timer3.Enabled = True
-      If Number = 4 Then Form1.Timer4.Enabled = True
-      If Number = 5 Then Form1.Timer5.Enabled = True
-      If Number = 6 Then Form1.Timer6.Enabled = True
-      If Number = 7 Then Form1.Timer7.Enabled = True
-      If Number = 8 Then Form1.Timer8.Enabled = True
-      If Number = 9 Then Form1.Timer9.Enabled = True
-      If Number = 10 Then Form1.Timer10.Enabled = True
-      If Number = 11 Then Form1.Timer11.Enabled = True
-      If Number = 12 Then Form1.Timer12.Enabled = True
-      If Number = 13 Then Form1.Timer13.Enabled = True
-      If Number = 14 Then Form1.Timer14.Enabled = True
-      If Number = 15 Then Form1.Timer15.Enabled = True
-      If Number = 16 Then Form1.Timer16.Enabled = True
-      If Number = 17 Then Form1.Timer17.Enabled = True
-      If Number = 18 Then Form1.Timer18.Enabled = True
-      If Number = 19 Then Form1.Timer19.Enabled = True
-      If Number = 20 Then Form1.Timer20.Enabled = True
-      If Number = 21 Then Form1.Timer21.Enabled = True
-      If Number = 22 Then Form1.Timer22.Enabled = True
-      If Number = 23 Then Form1.Timer23.Enabled = True
-      If Number = 24 Then Form1.Timer24.Enabled = True
-      If Number = 25 Then Form1.Timer25.Enabled = True
-      If Number = 26 Then Form1.Timer26.Enabled = True
-      If Number = 27 Then Form1.Timer27.Enabled = True
-      If Number = 28 Then Form1.Timer28.Enabled = True
-      If Number = 29 Then Form1.Timer29.Enabled = True
-      If Number = 30 Then Form1.Timer30.Enabled = True
-      If Number = 31 Then Form1.Timer31.Enabled = True
-      If Number = 32 Then Form1.Timer32.Enabled = True
-      If Number = 33 Then Form1.Timer33.Enabled = True
-      If Number = 34 Then Form1.Timer34.Enabled = True
-      If Number = 35 Then Form1.Timer35.Enabled = True
-      If Number = 36 Then Form1.Timer36.Enabled = True
-      If Number = 37 Then Form1.Timer37.Enabled = True
-      If Number = 38 Then Form1.Timer38.Enabled = True
-      If Number = 39 Then Form1.Timer39.Enabled = True
-      If Number = 40 Then Form1.Timer40.Enabled = True
+      If Number = 1 Then Sim.Timer1.Enabled = True
+      If Number = 2 Then Sim.Timer2.Enabled = True
+      If Number = 3 Then Sim.Timer3.Enabled = True
+      If Number = 4 Then Sim.Timer4.Enabled = True
+      If Number = 5 Then Sim.Timer5.Enabled = True
+      If Number = 6 Then Sim.Timer6.Enabled = True
+      If Number = 7 Then Sim.Timer7.Enabled = True
+      If Number = 8 Then Sim.Timer8.Enabled = True
+      If Number = 9 Then Sim.Timer9.Enabled = True
+      If Number = 10 Then Sim.Timer10.Enabled = True
+      If Number = 11 Then Sim.Timer11.Enabled = True
+      If Number = 12 Then Sim.Timer12.Enabled = True
+      If Number = 13 Then Sim.Timer13.Enabled = True
+      If Number = 14 Then Sim.Timer14.Enabled = True
+      If Number = 15 Then Sim.Timer15.Enabled = True
+      If Number = 16 Then Sim.Timer16.Enabled = True
+      If Number = 17 Then Sim.Timer17.Enabled = True
+      If Number = 18 Then Sim.Timer18.Enabled = True
+      If Number = 19 Then Sim.Timer19.Enabled = True
+      If Number = 20 Then Sim.Timer20.Enabled = True
+      If Number = 21 Then Sim.Timer21.Enabled = True
+      If Number = 22 Then Sim.Timer22.Enabled = True
+      If Number = 23 Then Sim.Timer23.Enabled = True
+      If Number = 24 Then Sim.Timer24.Enabled = True
+      If Number = 25 Then Sim.Timer25.Enabled = True
+      If Number = 26 Then Sim.Timer26.Enabled = True
+      If Number = 27 Then Sim.Timer27.Enabled = True
+      If Number = 28 Then Sim.Timer28.Enabled = True
+      If Number = 29 Then Sim.Timer29.Enabled = True
+      If Number = 30 Then Sim.Timer30.Enabled = True
+      If Number = 31 Then Sim.Timer31.Enabled = True
+      If Number = 32 Then Sim.Timer32.Enabled = True
+      If Number = 33 Then Sim.Timer33.Enabled = True
+      If Number = 34 Then Sim.Timer34.Enabled = True
+      If Number = 35 Then Sim.Timer35.Enabled = True
+      If Number = 36 Then Sim.Timer36.Enabled = True
+      If Number = 37 Then Sim.Timer37.Enabled = True
+      If Number = 38 Then Sim.Timer38.Enabled = True
+      If Number = 39 Then Sim.Timer39.Enabled = True
+      If Number = 40 Then Sim.Timer40.Enabled = True
       End If
       End If
       
@@ -3573,7 +3578,7 @@ OpenElevator1:
         ElevatorSounds(Number).Stop_
         End If
         ElevatorSounds(Number).Loop_ = False
-        ElevatorSounds(Number).Load App.Path + "\elevatorclose.wav"
+        ElevatorSounds(Number).Load App.Path + "\data\elevatorclose.wav"
         ElevatorSounds(Number).Volume = 0
         'ElevatorSounds(Number).maxDistance = 1000
         'Call ElevatorSounds(Number).SetConeOrientation(0, 0, 90)
