@@ -34,9 +34,11 @@ Basements = 10
 Elevators = 40
 PipeShafts = 4
 StairsNum = 4
-ElevatorSpeed = 8
-ElevatorFineTuneSpeed = 0.15
-StartFloor = 0
+CameraStartFloor = 0
+CameraStartPositionX = 0
+CameraStartPositionZ = -130
+CameraStartDirection = Vector(0, 10, 90)
+CameraStartRotation = Vector(0, 0, 0)
 End Sub
 
 Public Sub Triton_LoadTextures()
@@ -420,10 +422,336 @@ AltitudeCheck = AltitudeCheck + .FloorHeight + .CrawlSpaceHeight
         
     End With
 Next i
+    
+For i = 41 To 79
+    DoEvents
+    With Floor(i)
+    
+    'Floor
+    .AddFloor "Granite", 135, 150, -135, 46.25, 0, 0, 0
+    .AddFloor "Granite", 135, -46.25, -135, -150, 0, 0, 0
+    .AddFloor "Granite", 90.5, 46.25, 52.5, -46.25, 0, 0, 0
+    .AddFloor "Granite", -52.5, 46.25, -90.5, -46.25, 0, 0, 0
+    .AddFloor "Granite", 12.5, 46.25, -12.5, 0, 0, 0, 0
+    .AddFloor "Granite", 52.5, 0, 52.5, 46.25, 0, 0, 0
+    .AddFloor "Granite", 135, 46.25, 110.5, -46.25, 0, 0, 0
+    .AddFloor "Granite", -135, 46.25, -110.5, -46.25, 0, 0, 0
+    
+    'Ceiling
+    .AddFloor "Marble3", 135, 150, -135, 46.25, .FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", 135, -46.25, -135, -150, .FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", 90.5, 46.25, 52.5, -46.25, .FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", -52.5, 46.25, -90.5, -46.25, .FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", 12.5, 46.25, -12.5, 0, .FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", 52.5, 0, -52.5, -46.25, .FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", 135, 46.25, 110.5, -46.25, .FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", -135, 46.25, -110.5, -46.25, .FloorHeight - 0.5, 0, 0
+    
+    'Crawlspace bottom
+    .AddCrawlSpaceFloor "BrickTexture", 135, 150, -135, 46.25, 0, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 135, -46.25, -135, -150, 0, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 90.5, 46.25, 52.5, -46.25, 0, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", -52.5, 46.25, -90.5, -46.25, 0, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 12.5, 46.25, -12.5, 0, 0, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 52.5, 0, -52.5, -46.25, 0, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 135, 46.25, 110.5, -46.25, 0, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", -135, 46.25, -110.5, -46.25, 0, 0, 0
+    
+    'Crawlspace top
+    .AddCrawlSpaceFloor "BrickTexture", 135, 150, -135, 46.25, .CrawlSpaceHeight - 0.05, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 135, -46.25, -135, -150, .CrawlSpaceHeight - 0.05, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 90.5, 46.25, 52.5, -46.25, .CrawlSpaceHeight - 0.05, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", -52.5, 46.25, -90.5, -46.25, .CrawlSpaceHeight - 0.05, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 12.5, 46.25, -12.5, 0, .CrawlSpaceHeight - 0.05, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 52.5, 0, -52.5, -46.25, .CrawlSpaceHeight - 0.05, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 135, 46.25, 110.5, -46.25, .CrawlSpaceHeight - 0.05, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", -135, 46.25, -110.5, -46.25, .CrawlSpaceHeight - 0.05, 0, 0
+    
+    'Crawlspace walls
+    .AddCrawlSpaceWall "BrickTexture", 135, 150, -135, 150, .CrawlSpaceHeight, 0, 0, 0
+    .AddCrawlSpaceWall "BrickTexture", -135, 150, -135, -150, .CrawlSpaceHeight, 0, 0, 0
+    .AddCrawlSpaceWall "BrickTexture", -135, -150, 135, -150, .CrawlSpaceHeight, 0, 0, 0
+    .AddCrawlSpaceWall "BrickTexture", 135, -150, 135, 150, .CrawlSpaceHeight, 0, 0, 0
+
+    'If i = 79 Then
+    'Call DrawElevatorWalls(Int(i), 5, 1, True, True, False, False, False, False, False, False, False, False, False)
+    ''Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False)
+    'Call DrawElevatorWalls(Int(i), 2, 3, False, True, True, True, True, True, True, True, True, True, True)
+    'End If
+    'If i <> 79 Then
+    'Call DrawElevatorWalls(Int(i), 5, 1, True, False, False, False, False, False, False, False, False, False, False)
+    ''Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False)
+    'Call DrawElevatorWalls(Int(i), 2, 3, False, True, True, True, True, True, True, True, True, True, True)
+    'End If
+    'If i <= 51 Then
+    'Call DrawElevatorWalls(Int(i), 5, 2, True, True, False, False, False, False, False, False, False, False, False)
+    'End If
+    'If i > 51 Then
+    'Call DrawElevatorWalls(Int(i), 5, 2, True, False, True, False, False, False, False, False, False, False, False)
+    'End If
+    
+    'Room(I) Walls
+    
+    'top walls
+    .AddWall "Wall3", 135, 71.3, 90.5, 71.3, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, 71.3, -70, 71.3, 19.5, 0, 0, 0
+    .AddWall "Wall3", -135, 71.3, -90.5, 71.3, 19.5, 0, 0, 0
+    
+    .AddWall "Wall3", 135, 71.3, 90.5, 71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", 70, 71.3, -70, 71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", -135, 71.3, -90.5, 71.3, 5.5, 0, 0, 0
+    
+    'bottom walls
+    .AddWall "Wall3", 135, -71.3, 90.5, -71.3, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, -71.3, -70, -71.3, 19.5, 0, 0, 0
+    .AddWall "Wall3", -135, -71.3, -90.5, -71.3, 19.5, 0, 0, 0
+    
+    .AddWall "Wall3", 135, -71.3, 90.5, -71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", 70, -71.3, -70, -71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", -135, -71.3, -90.5, -71.3, 5.5, 0, 0, 0
+    
+    .AddWall "Wall3", 70, 46.25, 61.25 + 3.9, 46.25, 25, 0, 0, 0
+    .AddWall "Wall3", 61.25 - 3.9, 46.25, 52.5, 46.25, 25, 0, 0, 0
+    .AddWall "Wall3", -70, 46.25, -61.25 - 3.9, 46.25, 25, 0, 0, 0
+    .AddWall "Wall3", -61.25 + 3.9, 46.25, -52.5, 46.25, 25, 0, 0, 0
+    
+    .AddWall "Wall3", 70, 46.25, 52.5, 46.25, 5.5, 0, 0, 0
+    .AddWall "Wall3", -52.5, 46.25, -70, 46.25, 5.5, 0, 0, 0
+    
+    'service rooms
+    .AddWall "Wall3", -70, 46.25, -70, -46.25, 25, 0, 0, 0
+    .AddWall "Wall3", -70, 15, -52.5, 15, 25, 0, 0, 0
+    
+    .AddWall "Wall3", 70, 46.25, 70, -46.25, 25, 0, 0, 0
+    .AddWall "Wall3", 70, 15, 52.5, 15, 25, 0, 0, 0
+    
+    'left hallway
+    .AddWall "Wall3", -70, 150, -70, 130 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, 130 - 3.9, -70, 90 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, 90 - 3.9, -70, 71.3, 19.5, 0, 0, 0
+    .AddWall "Wall3", -90.5, 150, -90.5, 130 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -90.5, 130 - 3.9, -90.5, 90 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -90.5, 90 - 3.9, -90.5, 71.3, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, -150, -70, -130 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, -130 + 3.9, -70, -90 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, -90 + 3.9, -70, -71.3, 19.5, 0, 0, 0
+    .AddWall "Wall3", -90.5, -150, -90.5, -130 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -90.5, -130 + 3.9, -90.5, -90 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -90.5, -90 + 3.9, -90.5, -71.3, 19.5, 0, 0, 0
+    
+    .AddWall "Wall3", -70, 150, -70, 71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", -90.5, 150, -90.5, 71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", -70, -150, -70, -71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", -90.5, -150, -90.5, -71.3, 5.5, 0, 0, 0
+    
+    'right hallway
+    .AddWall "Wall3", 70, 150, 70, 130 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, 130 - 3.9, 70, 90 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, 90 - 3.9, 70, 71.3, 19.5, 0, 0, 0
+    .AddWall "Wall3", 90.5, 150, 90.5, 130 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 90.5, 130 - 3.9, 90.5, 90 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 90.5, 90 - 3.9, 90.5, 71.3, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, -150, 70, -130 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, -130 + 3.9, 70, -90 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, -90 + 3.9, 70, -71.3, 19.5, 0, 0, 0
+    .AddWall "Wall3", 90.5, -150, 90.5, -130 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 90.5, -130 + 3.9, 90.5, -90 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 90.5, -90 + 3.9, 90.5, -71.3, 19.5, 0, 0, 0
+    
+    .AddWall "Wall3", 70, 150, 70, 71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", 90.5, 150, 90.5, 71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", 70, -150, 70, -71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", 90.5, -150, 90.5, -71.3, 5.5, 0, 0, 0
+    
+    'middle hallway extension
+    .AddWall "Wall3", 12.5, 0, 12.5, -46.25, 25, 0, 0, 0
+    .AddWall "Wall3", -12.5, 0, -12.5, -46.25, 25, 0, 0, 0
+    
+    'bottom middle walls
+    .AddWall "Wall3", 70, -46.25, 22.5 + 3.9, -46.25, 19.5, 0, 0, 0
+    .AddWall "Wall3", 22.5 - 3.9, -46.25, 12.5, -46.25, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, -46.25, -22.5 - 3.9, -46.25, 19.5, 0, 0, 0
+    .AddWall "Wall3", -22.5 + 3.9, -46.25, -12.5, -46.25, 19.5, 0, 0, 0
+    
+    .AddWall "Wall3", 70, -46.25, 12.5, -46.25, 5.5, 0, 0, 0
+    .AddWall "Wall3", -12.5, -46.25, -70, -46.25, 5.5, 0, 0, 0
+    
+    'Rooms
+    .AddWall "Wall3", 135, 110, 90.5, 110, 25, 0, 0, 0
+    .AddWall "Wall3", 135, -110, 90.5, -110, 25, 0, 0, 0
+    .AddWall "Wall3", 70, 110, -70, 110, 25, 0, 0, 0
+    .AddWall "Wall3", 70, -110, -70, -110, 25, 0, 0, 0
+    .AddWall "Wall3", -135, 110, -90.5, 110, 25, 0, 0, 0
+    .AddWall "Wall3", -135, -110, -90.5, -110, 25, 0, 0, 0
+    
+    .AddWall "Wall3", 0, -71.3, 0, -150, 25, 0, 0, 0
+    .AddWall "Wall3", 0, 71.3, 0, 150, 25, 0, 0, 0
+    
+    End With
+Next i
+
+For i = 81 To 114
+    DoEvents
+    With Floor(i)
+    
+        'Floor
+    .AddFloor "Granite", 110, 150, -110, 46.25, 0, 0, 0
+    .AddFloor "Granite", 110, -46.25, -110, -150, 0, 0, 0
+    .AddFloor "Granite", 12.5, 46.25, -12.5, -46.25, 0, 0, 0
+    .AddFloor "Granite", 110, 46.25, 52.5, -46.25, 0, 0, 0
+    .AddFloor "Granite", -110, 46.25, -52.5, -46.25, 0, 0, 0
+    
+    'Ceiling
+    .AddFloor "Marble3", 110, 150, -110, 46.25, FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", 110, -46.25, -110, -150, FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", 12.5, 46.25, -12.5, -46.25, FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", 110, 46.25, 52.5, -46.25, FloorHeight - 0.5, 0, 0
+    .AddFloor "Marble3", -110, 46.25, -52.5, -46.25, FloorHeight - 0.5, 0, 0
+    
+    'Crawlspace bottom
+    .AddCrawlSpaceFloor "Granite", 110, 150, -110, 46.25, 0, 0, 0
+    .AddCrawlSpaceFloor "Granite", 110, -46.25, -110, -150, 0, 0, 0
+    .AddCrawlSpaceFloor "Granite", 12.5, 46.25, -12.5, -46.25, 0, 0, 0
+    .AddCrawlSpaceFloor "Granite", 110, 46.25, 52.5, -46.25, 0, 0, 0
+    .AddCrawlSpaceFloor "Granite", -110, 46.25, -52.5, -46.25, 0, 0, 0
+    
+    'Crawlspace top
+    .AddCrawlSpaceFloor "BrickTexture", 110, 150, -110, 46.25, CrawlSpaceHeight, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 110, -46.25, -110, -150, CrawlSpaceHeight, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 12.5, 46.25, -12.5, -46.25, CrawlSpaceHeight, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", 110, 46.25, 52.5, -46.25, CrawlSpaceHeight, 0, 0
+    .AddCrawlSpaceFloor "BrickTexture", -110, 46.25, -52.5, -46.25, CrawlSpaceHeight, 0, 0
+    
+    'Crawlspace walls
+    .AddCrawlSpaceWall "BrickTexture", 110, 150, -110, 150, CrawlSpaceHeight, 0, 0, 0
+    .AddCrawlSpaceWall "BrickTexture", -110, 150, -110, -150, CrawlSpaceHeight, 0, 0, 0
+    .AddCrawlSpaceWall "BrickTexture", -110, -150, 110, -150, CrawlSpaceHeight, 0, 0, 0
+    .AddCrawlSpaceWall "BrickTexture", 110, -150, 110, 150, CrawlSpaceHeight, 0, 0, 0
+
+    'If i >= 82 And i <= 98 Then
+    'Call DrawElevatorWalls(Int(i), 2, 1, True, False, False, False, False, False, False, False, False, False, False)
+    'Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, False, False, True, True, True, True, True, True)
+    'End If
+    'If i >= 102 And i < 114 Then
+    'Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, True, True, True, True, True, True)
+    'Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, False, False, False, False, False, False, False, False)
+    'End If
+    'If i = 81 Or i = 99 Then
+    'Call DrawElevatorWalls(Int(i), 2, 1, True, False, False, False, False, False, False, False, False, False, False)
+    'Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, False, False, True, True, True, True, True, True)
+    'End If
+    'If i = 100 Then
+    'Call DrawElevatorWalls(Int(i), 2, 1, True, False, False, False, False, True, True, True, True, True, True)
+    'Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, False, False, False, False, False, False, False, False)
+    'End If
+    'If i = 114 Then
+    'Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, True, True, True, True, True, True)
+    'Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, False, False, False, False, False, False, False, False)
+    'End If
+    'If i = 101 Then
+    'Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, True, True, True, True, True, True)
+    'Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, False, False, False, False, False, False, False, False)
+    'End If
+    
+    'Right Hallways, Right Wall
+    .AddWall "Wall3", 70, 150, 70, -150, 5.5, 0, 0, 0
+    .AddWall "Wall3", 70, 150, 70, 118 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, 118 - 3.9, 70, 102 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, 102 - 3.9, 70, 60 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, 60 - 3.9, 70, -27 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, -27 - 3.9, 70, -66 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, -66 - 3.9, 70, -102 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, -102 - 3.9, 70, -116 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 70, -116 - 3.9, 70, -150, 19.5, 0, 0, 0
+    
+    'Left Hallways, Left Wall
+    .AddWall "Wall3", -70, 150, -70, -150, 5.5, 0, 0, 0
+    .AddWall "Wall3", -70, 150, -70, 118 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, 118 - 3.9, -70, 102 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, 102 - 3.9, -70, 60 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, 60 - 3.9, -70, -27 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, -27 - 3.9, -70, -66 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, -66 - 3.9, -70, -102 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, -102 - 3.9, -70, -116 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -70, -116 - 3.9, -70, -150, 19.5, 0, 0, 0
+    
+    'center bottom hallway, right wall
+    .AddWall "Wall3", 12.5, -150, 12.5, -71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", 12.5, -150, 12.5, -118 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 12.5, -118 + 3.9, 12.5, -102 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 12.5, -102 + 3.9, 12.5, -71.3, 19.5, 0, 0, 0
+    
+    'center bottom hallway, left wall
+    .AddWall "Wall3", -12.5, -150, -12.5, -71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", -12.5, -150, -12.5, -118 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -12.5, -118 + 3.9, -12.5, -102 - 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -12.5, -102 + 3.9, -12.5, -71.3, 19.5, 0, 0, 0
+    
+    'center top hallway, right wall
+    .AddWall "Wall3", 12.5, 150, 12.5, 71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", 12.5, 150, 12.5, 118 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 12.5, 118 - 3.9, 12.5, 102 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", 12.5, 102 - 3.9, 12.5, 71.3, 19.5, 0, 0, 0
+    
+    'center top hallway, left wall
+    .AddWall "Wall3", -12.5, 150, -12.5, 71.3, 5.5, 0, 0, 0
+    .AddWall "Wall3", -12.5, 150, -12.5, 118 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -12.5, 118 - 3.9, -12.5, 102 + 3.9, 19.5, 0, 0, 0
+    .AddWall "Wall3", -12.5, 102 - 3.9, -12.5, 71.3, 19.5, 0, 0, 0
+    
+    'Individual Rooms
+    .AddWall "Wall3", 110, -110, 70, -110, 25, 0, 0, 0
+    .AddWall "Wall3", 50, -110, 12.5, -110, 25, 0, 0, 0
+    .AddWall "Wall3", -110, -110, -70, -110, 25, 0, 0, 0
+    .AddWall "Wall3", -50, -110, -12.5, -110, 25, 0, 0, 0
+    
+    .AddWall "Wall3", 110, -71.3, 70, -71.3, 25, 0, 0, 0
+    .AddWall "Wall3", 50, -71.3, 12.5, -71.3, 25, 0, 0, 0
+    .AddWall "Wall3", -110, -71.3, -70, -71.3, 25, 0, 0, 0
+    .AddWall "Wall3", -12.5, -71.3, -50, -71.3, 25, 0, 0, 0
+    
+    .AddWall "Wall3", 110, 110, 70, 110, 25, 0, 0, 0
+    .AddWall "Wall3", 50, 110, 12.5, 110, 25, 0, 0, 0
+    .AddWall "Wall3", -110, 110, -70, 110, 25, 0, 0, 0
+    .AddWall "Wall3", -50, 110, -12.5, 110, 25, 0, 0, 0
+    
+    .AddWall "Wall3", 110, 71.3, 70, 71.3, 25, 0, 0, 0
+    .AddWall "Wall3", 50, 71.3, 12.5, 71.3, 25, 0, 0, 0
+    .AddWall "Wall3", -110, 71.3, -70, 71.3, 25, 0, 0, 0
+    .AddWall "Wall3", -12.5, 71.3, -50, 71.3, 25, 0, 0, 0
+    
+    .AddWall "Wall3", 110, -46.25, 70, -46.25, 25, 0, 0, 0
+    .AddWall "Wall3", -110, -46.25, -70, -46.25, 25, 0, 0, 0
+    
+    'Room(i).AddWall "Wall3", 110, -20, 70, -20, 25, 0, 0, 0
+    'Room(i).AddWall "Wall3", -110, -20, -70, -20, 25, 0, 0, 0
+    
+    .AddWall "Wall3", 110, 5, 70, 5, 25, 0, 0, 0
+    .AddWall "Wall3", -110, 5, -70, 5, 25, 0, 0, 0
+    
+    'Left Bottom Hallway, Right Wall (no doors)
+    .AddWall "Wall3", -50, -71.3, -50, -150, 25, 0, 0, 0
+    
+    'Right Bottom Hallway, Left Wall (no doors)
+    .AddWall "Wall3", 50, -71.3, 50, -150, 25, 0, 0, 0
+    
+    'Left Top Hallway, Right Wall (no doors)
+    .AddWall "Wall3", -50, 71.3, -50, 150, 25, 0, 0, 0
+    
+    'Right Top Hallway, Left Wall (no doors)
+    .AddWall "Wall3", 50, 71.3, 50, 150, 25, 0, 0, 0
+        
+    End With
+    Next i
 
 End Sub
 
 Sub Triton_ProcessElevators()
+Dim i As Integer
+For i = 1 To 40
+Elevator(i).ElevatorSpeed = 8
+Elevator(i).ElevatorFineTuneSpeed = 0.15
+Next i
 
 Elevator(1).CreateElevator 12.5, 30, 0, 0
 Elevator(2).CreateElevator -12.5, 30, 0, 1
