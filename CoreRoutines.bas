@@ -1,5 +1,5 @@
 Attribute VB_Name = "CoreRoutines"
-'Skycraper 0.94 Beta
+'Skycraper 0.95 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -54,7 +54,8 @@ Global ElevatorInsDoorR(40) As TVMesh '-update
 Global ElevatorDoorL(40) As TVMesh
 Global ElevatorDoorR(40) As TVMesh
 Global Stairs(-10 To 138) As TVMesh
-Global CallButtons(40) As TVMesh
+Global CallButtonsUp(40) As TVMesh
+Global CallButtonsDown(40) As TVMesh
 Global StairDoor(-11 To 138) As TVMesh
 Global Light As TVLightEngine
 Global MatFactory As New TVMaterialFactory
@@ -176,10 +177,12 @@ Global ElevatorFineTuneSpeed As Single
 Global CallingStairDoors As Boolean
 Global SelectedObject As String
 Global MainMusic As TVSoundMP3
-Global RouteDirection(40) As Integer
-Global FloorRoutes(40, 300) As Integer
-Global DirectionRoutes(40, 300) As Integer
 
+Global CallQueue(1, 40, -10 To 138) As Boolean 'values are - direction, elevator number, floor
+Global QueuePositionDirection(40) As Integer
+Global QueuePositionFloor(40) As Integer
+Global PauseQueueSearch(40) As Boolean
+Global QueueMonitor(40) As Integer
 Sub Start()
 ElevatorNumber = 1
 FloorHeight = 32
@@ -342,13 +345,16 @@ Sub InitRealtime(FloorID As Integer)
 
 'Destroy meshes
 For i54 = 1 To 40
-CallButtons(i54).Enable False
+CallButtonsUp(i54).Enable False
+CallButtonsDown(i54).Enable False
 'ElevatorDoorL(i54).Enable False
 'ElevatorDoorR(i54).Enable False
-Scene.DestroyMesh CallButtons(i54)
+Scene.DestroyMesh CallButtonsUp(i54)
+Scene.DestroyMesh CallButtonsDown(i54)
 Scene.DestroyMesh ElevatorDoorL(i54)
 Scene.DestroyMesh ElevatorDoorR(i54)
-Set CallButtons(i54) = Nothing
+Set CallButtonsUp(i54) = Nothing
+Set CallButtonsDown(i54) = Nothing
 Set ElevatorDoorL(i54) = Nothing
 Set ElevatorDoorR(i54) = Nothing
 'Sleep 10
@@ -360,10 +366,12 @@ Next i54
 For i54 = 1 To 40
 Set ElevatorDoorL(i54) = New TVMesh
 Set ElevatorDoorR(i54) = New TVMesh
-Set CallButtons(i54) = New TVMesh
+Set CallButtonsUp(i54) = New TVMesh
+Set CallButtonsDown(i54) = New TVMesh
 Set ElevatorDoorL(i54) = Scene.CreateMeshBuilder("ElevatorDoorL" + Str$(i54))
 Set ElevatorDoorR(i54) = Scene.CreateMeshBuilder("ElevatorDoorR" + Str$(i54))
-Set CallButtons(i54) = Scene.CreateMeshBuilder("CallButtons" + Str$(i54))
+Set CallButtonsUp(i54) = Scene.CreateMeshBuilder("CallButtonsUp" + Str$(i54))
+Set CallButtonsDown(i54) = Scene.CreateMeshBuilder("CallButtonsDown" + Str$(i54))
 Next i54
 
 'Generate objects for floors
@@ -504,7 +512,8 @@ Set ElevatorInsDoorR(i) = New TVMesh
 'Set ElevatorMusic(i) = New TV3DMedia.TVSoundWave3D
 Set ElevatorSounds(i) = New TV3DMedia.TVSoundWave3D
 Set Plaque(i) = New TVMesh
-Set CallButtons(i) = New TVMesh
+Set CallButtonsUp(i) = New TVMesh
+Set CallButtonsDown(i) = New TVMesh
 Next i
 
 Set Camera = New TVCamera
@@ -515,9 +524,9 @@ Set Light = New TVLightEngine
 
 'If TV.ShowDriverDialog = False Then End
   
-Sim.Label1.Caption = "Skyscraper 0.94 Beta - Build" + Str$(App.Revision) + vbCrLf
+Sim.Label1.Caption = "Skyscraper 0.95 Beta - Build" + Str$(App.Revision) + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "©2003 Ryan Thoryk" + vbCrLf
-Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on October 13, 2003" + vbCrLf + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on November 1, 2003" + vbCrLf + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "software, and you are welcome to redistribute it under certain" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "conditions. For details, see the file gpl.txt" + vbCrLf
@@ -570,7 +579,8 @@ Sim.Label2.Caption = "Initializing TrueVision3D..."
   Set ElevatorInsDoorL(i) = Scene.CreateMeshBuilder("ElevatorInsDoorL" + Str$(i))
   Set ElevatorInsDoorR(i) = Scene.CreateMeshBuilder("ElevatorInsDoorR" + Str$(i))
   Set Plaque(i) = Scene.CreateMeshBuilder("Plaque" + Str$(i))
-  Set CallButtons(i) = Scene.CreateMeshBuilder("CallButtons" + Str$(i))
+  Set CallButtonsUp(i) = Scene.CreateMeshBuilder("CallButtonsUp" + Str$(i))
+  Set CallButtonsDown(i) = Scene.CreateMeshBuilder("CallButtonsDown" + Str$(i))
   Next i
   Set Buildings = Scene.CreateMeshBuilder("Buildings")
   Set External = Scene.CreateMeshBuilder("External")
@@ -2113,7 +2123,8 @@ Room(CameraFloor).Enable True
       Next i51
       ShaftsFloor(CameraFloor).Enable True
       For i51 = 1 To 40
-      CallButtons(i51).Enable True
+      CallButtonsUp(i51).Enable True
+      CallButtonsDown(i51).Enable True
       Next i51
       Stairs(CameraFloor).Enable True
       Atmos.SkyBox_Enable True
@@ -3486,39 +3497,51 @@ EndShafts:
         If CollisionResult.IsCollision Then
         Call CheckElevatorButtons
             For i50 = 1 To 40
-            If CollisionResult.GetCollisionMesh.GetMeshName = CallButtons(i50).GetMeshName Then
+            Dim CallElevatorTemp As Boolean
+            Dim Direction As Integer
                 
-                'use other elevators if they're closer
+            If CollisionResult.GetCollisionMesh.GetMeshName = CallButtonsUp(i50).GetMeshName Then CallElevatorTemp = True: Direction = 1
+            If CollisionResult.GetCollisionMesh.GetMeshName = CallButtonsDown(i50).GetMeshName Then CallElevatorTemp = True: Direction = 0
+            
+            If CallElevatorTemp = True Then
+                CallElevatorTemp = False
+                
+                'Elevator Sections:
+                'Section Num - Elev Nums
+                '1 - 1
+                '2 - 2,3,4
+                '3 - 5,6,7,8,9,10
+                '4 - 11
+                '5 - 12
+                '6 - 13
+                '7 - 14
+                '8 - 15,17,19
+                '9 - 16,18,20
+                '10 - 21,23,25,27,29
+                '11 - 22,24,26,28,30
+                '12 - 31,33,35,37,39
+                '13 - 32,34,36,38,40
+                
                 j50 = i50
-                'If i50 = 3 And Abs(ElevatorFloor(3) - CameraFloor) > Abs(ElevatorFloor(4) - CameraFloor) Then j50 = 4
-                'If i50 = 4 And Abs(ElevatorFloor(4) - CameraFloor) > Abs(ElevatorFloor(3) - CameraFloor) Then j50 = 3
-                'If i50 = 5 And Abs(ElevatorFloor(5) - CameraFloor) > Abs(ElevatorFloor(6) - CameraFloor) Then j50 = 6
-                'If i50 = 6 And Abs(ElevatorFloor(6) - CameraFloor) > Abs(ElevatorFloor(5) - CameraFloor) Then j50 = 5
-                'If i50 = 7 And Abs(ElevatorFloor(7) - CameraFloor) > Abs(ElevatorFloor(8) - CameraFloor) Then j50 = 8
-                'If i50 = 8 And Abs(ElevatorFloor(8) - CameraFloor) > Abs(ElevatorFloor(7) - CameraFloor) Then j50 = 7
-                'If i50 = 9 And Abs(ElevatorFloor(9) - CameraFloor) > Abs(ElevatorFloor(10) - CameraFloor) Then j50 = 10
-                'If i50 = 10 And Abs(ElevatorFloor(10) - CameraFloor) > Abs(ElevatorFloor(9) - CameraFloor) Then j50 = 9
+                Dim Section As Integer
                 
-                If ElevatorFloor(j50) <> CameraFloor Then
-                ElevatorSync(j50) = False
-                OpenElevator(j50) = -1
-                GotoFloor(j50) = CameraFloor
-                    If GotoFloor(j50) = 1 Then GotoFloor(j50) = -1
-                GoTo EndCall
-                End If
-                If ElevatorFloor(j50) = 1 And Camera.GetPosition.Y > FloorHeight And FloorIndicatorText(j50) <> "M" Then
-                ElevatorSync(j50) = False
-                OpenElevator(j50) = -1
-                GotoFloor(j50) = 0.1
-                GoTo EndCall
-                End If
-                If ElevatorFloor(j50) = 1 And Camera.GetPosition.Y < FloorHeight And FloorIndicatorText(j50) = "M" Then
-                ElevatorSync(j50) = False
-                OpenElevator(j50) = -1
-                GotoFloor(j50) = 0.1
-                GoTo EndCall
-                End If
-                OpenElevator(j50) = 1
+                'Get section number
+                If j50 = 1 Then Section = 1
+                If j50 >= 2 And j50 <= 4 Then Section = 2
+                If j50 >= 5 And j50 <= 10 Then Section = 3
+                If j50 = 11 Then Section = 4
+                If j50 = 12 Then Section = 5
+                If j50 = 13 Then Section = 6
+                If j50 = 14 Then Section = 7
+                If j50 = 15 Or j50 = 17 Or j50 = 19 Then Section = 8
+                If j50 = 16 Or j50 = 18 Or j50 = 20 Then Section = 9
+                If j50 = 21 Or j50 = 23 Or j50 = 25 Or j50 = 27 Or j50 = 29 Then Section = 10
+                If j50 = 22 Or j50 = 24 Or j50 = 26 Or j50 = 28 Or j50 = 30 Then Section = 11
+                If j50 = 31 Or j50 = 33 Or j50 = 35 Or j50 = 37 Or j50 = 39 Then Section = 12
+                If j50 = 32 Or j50 = 34 Or j50 = 36 Or j50 = 38 Or j50 = 40 Then Section = 13
+                
+                Call CallElevator(CameraFloor, Section, Direction)
+               
             End If
 EndCall:
             Next i50
@@ -3702,7 +3725,8 @@ Sub StairsLoop()
       ElevatorDoorR(i51).Enable False
       Next i51
       For i51 = 1 To 40
-      CallButtons(i51).Enable False
+      CallButtonsUp(i51).Enable False
+      CallButtonsDown(i51).Enable False
       Next i51
       ShaftsFloor(CameraFloor).Enable False
       Atmos.SkyBox_Enable False
@@ -3747,7 +3771,8 @@ Sub StairsLoop()
       Next i51
       ShaftsFloor(CameraFloor).Enable False
       For i51 = 1 To 40
-      CallButtons(i51).Enable False
+      CallButtonsUp(i51).Enable False
+      CallButtonsDown(i51).Enable False
       Next i51
       Atmos.SkyBox_Enable False
       DestroyObjects (CameraFloor)
@@ -4130,6 +4155,10 @@ DoEvents
     Elevator(18).SetPosition Elevator(8).GetPosition.X, (80 * FloorHeight) + FloorHeight, Elevator(8).GetPosition.z
     Elevator(19).SetPosition Elevator(9).GetPosition.X, (80 * FloorHeight) + FloorHeight, Elevator(9).GetPosition.z
     Elevator(20).SetPosition Elevator(10).GetPosition.X, (80 * FloorHeight) + FloorHeight, Elevator(10).GetPosition.z
+    ElevatorFloor(1) = 1
+    ElevatorFloor(2) = 1
+    ElevatorFloor(3) = 1
+    ElevatorFloor(4) = 1
     ElevatorFloor(5) = 80
     ElevatorFloor(6) = 80
     ElevatorFloor(7) = 80
@@ -4142,7 +4171,26 @@ DoEvents
     ElevatorFloor(18) = 80
     ElevatorFloor(19) = 80
     ElevatorFloor(20) = 80
-    
+    ElevatorFloor(21) = 1
+    ElevatorFloor(22) = 1
+    ElevatorFloor(23) = 1
+    ElevatorFloor(24) = 1
+    ElevatorFloor(25) = 1
+    ElevatorFloor(26) = 1
+    ElevatorFloor(27) = 1
+    ElevatorFloor(28) = 1
+    ElevatorFloor(29) = 1
+    ElevatorFloor(30) = 1
+    ElevatorFloor(31) = 1
+    ElevatorFloor(32) = 1
+    ElevatorFloor(33) = 1
+    ElevatorFloor(34) = 1
+    ElevatorFloor(35) = 1
+    ElevatorFloor(36) = 1
+    ElevatorFloor(37) = 1
+    ElevatorFloor(38) = 1
+    ElevatorFloor(39) = 1
+    ElevatorFloor(40) = 1
     ElevatorInsDoorL(5).SetPosition ElevatorInsDoorL(5).GetPosition.X, (80 * FloorHeight) + FloorHeight, ElevatorInsDoorL(5).GetPosition.z
     ElevatorInsDoorL(6).SetPosition ElevatorInsDoorL(6).GetPosition.X, (80 * FloorHeight) + FloorHeight, ElevatorInsDoorL(6).GetPosition.z
     ElevatorInsDoorL(7).SetPosition ElevatorInsDoorL(7).GetPosition.X, (80 * FloorHeight) + FloorHeight, ElevatorInsDoorL(7).GetPosition.z
