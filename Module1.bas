@@ -1,16 +1,44 @@
-Attribute VB_Name = "Module1"
+Attribute VB_Name = "Globals"
+'Skycraper 0.7 Alpha
+'Copyright (C) 2003 Ryan Thoryk
+'http://www.tliquest.net/skyscraper
+
+'This program is free software; you can redistribute it and/or
+'modify it under the terms of the GNU General Public License
+'as published by the Free Software Foundation; either version 2
+'of the License, or (at your option) any later version.
+
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'GNU General Public License for more details.
+
+'You should have received a copy of the GNU General Public License
+'along with this program; if not, write to the Free Software
+'Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+'Building title - "Triton Center"
+'
+
 Global TV As TVEngine
 Global Scene As TVScene
 Global Mesh As TVMesh
 Global External As TVMesh
 Global Room(138) As TVMesh
 Global Shafts As TVMesh
+Global ShaftsFloor(138) As TVMesh
 Global Elevator1 As TVMesh
 Global Elevator1DoorL As TVMesh
 Global Elevator1DoorR As TVMesh
-Global ElevatorDoorL(138) As TVMesh
-Global ElevatorDoorR(138) As TVMesh
+Global ElevatorDoorL(-1 To 138) As TVMesh
+Global ElevatorDoorR(-1 To 138) As TVMesh
 Global Stairs(138) As TVMesh
+Global Light As TVLightEngine
+Global MatFactory As New TVMaterialFactory
+Global LightID As Integer
+Global LightD As D3DLIGHT8
+
+
 Global SoundEngine As TVSoundEngine
 Global ElevatorMusic As TVSoundWave3D
 Global Elevator1Sounds As TVSoundWave3D
@@ -44,7 +72,8 @@ Global elevator1start As D3DVECTOR
 Global isRunning As Boolean
 Global Camera As TVCamera
 Global ColRes As TV_COLLISIONRESULT
-Global i As Integer
+Global i As Single
+Global j As Single
 Global ElevatorEnable As Single
 Global ElevatorDirection As Integer '1=up -1=down
 Global OpenElevatorLoc As Single
@@ -54,7 +83,7 @@ Global ElevatorCheck3 As Integer
 Global ElevatorCheck4 As Integer
 
 
-Global GotoFloor As Integer
+Global GotoFloor As Single
 Global CurrentFloor As Integer
 Global CurrentFloorExact As Single
 Global DistanceToTravel As Single
@@ -66,4 +95,11 @@ Global OpenElevator As Integer '1=open -1=close
 Global ElevatorFloor As Integer
 Global CameraFloor As Integer
 Global PartialFloor As Single
+Global InStairwell As Boolean
+Global FloorIndicator As String
+Global ElevatorFloor2 As Integer
+Global CameraFloor2 As Integer
+
+'3D Objects
+Global Objects(150 * 138) As TVMesh
 
