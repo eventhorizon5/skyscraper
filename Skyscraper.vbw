@@ -1,6 +1,6 @@
 Sim = 209, 120, 847, 666, C, 0, 0, 0, 0, C
 DebugPanel = 257, 115, 902, 691, C, 0, 0, 0, 0, C
-Triton_Center = 141, 138, 753, 714, C
+Triton_Center = 172, 146, 784, 722, C
 SimCore = 122, 83, 811, 699, C
 ElevatorObject = 120, 97, 752, 672, C
 FloorObject = 118, 140, 710, 716, C

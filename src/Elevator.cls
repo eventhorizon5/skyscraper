@@ -55,6 +55,7 @@ Public GotoFloor As Integer 'floor to go to
 Public OpenDoor As Integer '1=open doors, -1=close doors
 Public Acceleration As Single 'percentage of speed increase
 Private ElevWait As Boolean
+Public OpenSpeed As Single ' elevator opening/closing speed
 
 'Internal elevator simulation data
 Private ElevatorStart As Single 'elevator vertical starting location
@@ -66,6 +67,8 @@ Private ElevatorRate As Single
 Private StoppingDistance As Single
 Private CalculateStoppingDistance As Boolean
 Private Brakes As Boolean
+Private ElevatorDoorSpeed As Single
+Private ElevatorDoorPos As Single 'original elevator door position
 
 Option Explicit
 
@@ -234,12 +237,74 @@ End Sub
 
 Private Sub OpenDoors()
 'Opens elevator doors
-OpenDoor = 0
+
+Static IsRunning As Boolean
+
+If IsRunning = True Then GoTo LoopStart
+IsRunning = True
 
 On Error GoTo ErrorHandler
 
+Static OpenChange As Single
+OpenChange = OpenSpeed / 50
+
+'Get elevator starting position
+ElevatorDoorPos = ElevatorMesh.GetPosition.z
+
+'Play elevator opening sound
+If ElevatorSounds.PlayState = TV_PLAYSTATE_PLAYING Then
+    ElevatorSounds.Stop_
+End If
+ElevatorSounds.Loop_ = False
+ElevatorSounds.Load App.Path + "\data\elevatoropen.wav"
+ElevatorSounds.SetPosition ElevatorMesh.GetPosition.X / SoundDivisor, ElevatorMesh.GetPosition.Y / SoundDivisor, ElevatorMesh.GetPosition.z / SoundDivisor
+ElevatorSounds.maxDistance = SoundMaxDistance
+ElevatorSounds.Play
+
+ElevatorDoorSpeed = 0
+
+LoopStart:
+
+'Speed up doors
+If ElevatorDoorPos - ElevatorInsDoorL.GetPosition.z <= 1 Then
+    DoEvents
+    ElevatorDoorSpeed = ElevatorDoorSpeed + OpenChange
+    'ElevatorDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+    'ElevatorDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+    Exit Sub
+End If
+
+'Normal door movement
+If ElevatorDoorPos - ElevatorInsDoorL.GetPosition.z <= 3 Then
+      DoEvents
+      'ElevatorDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+      'ElevatorDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+      ElevatorInsDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+      ElevatorInsDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+      Exit Sub
+End If
+
+'Slow down doors
+If ElevatorDoorSpeed > 0 Then
+    DoEvents
+    ElevatorDoorSpeed = ElevatorDoorSpeed - OpenChange
+    'ElevatorDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+    'ElevatorDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+    Exit Sub
+End If
+
+'reset values
+ElevatorDoorSpeed = 0
+OpenDoor = 0
+
+'turn on autoclose timer
 Sim.WaitTimer(Number).Enabled = True
 
+'the doors are open now
 DoorsOpen = True
 
 Exit Sub
@@ -250,10 +315,63 @@ End Sub
 
 Private Sub CloseDoors()
 'Closes elevator doors
-OpenDoor = 0
+
+Static IsRunning As Boolean
+If IsRunning = True Then GoTo LoopStart
+IsRunning = True
 
 On Error GoTo ErrorHandler
 
+Static OpenChange As Single
+OpenChange = OpenSpeed / 50
+
+'Play elevator closing sound
+If ElevatorSounds.PlayState = TV_PLAYSTATE_PLAYING Then
+    ElevatorSounds.Stop_
+End If
+ElevatorSounds.Loop_ = False
+ElevatorSounds.Load App.Path + "\data\elevatorclose.wav"
+ElevatorSounds.Play
+
+ElevatorDoorSpeed = 0
+
+LoopStart:
+
+'Speed up doors
+If ElevatorDoorPos - ElevatorInsDoorL.GetPosition.z > 3 Then
+    DoEvents
+    ElevatorDoorSpeed = ElevatorDoorSpeed + OpenChange
+    'ElevatorDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+    'ElevatorDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+    Exit Sub
+End If
+
+'Normal door movement
+If ElevatorDoorPos - ElevatorInsDoorL.GetPosition.z > 1 Then
+      DoEvents
+      'ElevatorDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+      'ElevatorDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+      ElevatorInsDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+      ElevatorInsDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+      Exit Sub
+End If
+
+'Slow down doors
+If ElevatorDoorSpeed > 0 Then
+    DoEvents
+    ElevatorDoorSpeed = ElevatorDoorSpeed - OpenChange
+    'ElevatorDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+    'ElevatorDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+    Exit Sub
+End If
+
+'reset values
+ElevatorDoorSpeed = 0
+OpenDoor = 0
 
 
 DoorsOpen = False
@@ -434,11 +552,61 @@ Public Sub OpenDoorsEmergency()
 'Simulates manually prying doors open.
 'Slowly opens the elevator doors no matter where elevator is.
 'If lined up with shaft doors, then opens the shaft doors also
-OpenDoor = 0
+
+Static IsRunning As Boolean
+
+If IsRunning = True Then GoTo LoopStart
+IsRunning = True
 
 On Error GoTo ErrorHandler
 
+Static OpenChange As Single
+OpenChange = 0.001
 
+'Get elevator starting position
+ElevatorDoorPos = ElevatorMesh.GetPosition.z
+
+ElevatorDoorSpeed = 0
+
+LoopStart:
+
+'Speed up doors
+If ElevatorDoorPos - ElevatorInsDoorL.GetPosition.z <= 0.2 Then
+    DoEvents
+    ElevatorDoorSpeed = ElevatorDoorSpeed + OpenChange
+    'ElevatorDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+    'ElevatorDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+    Exit Sub
+End If
+
+'Normal door movement
+If ElevatorDoorPos - ElevatorInsDoorL.GetPosition.z <= 4.5 Then
+      DoEvents
+      'ElevatorDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+      'ElevatorDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+      ElevatorInsDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+      ElevatorInsDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+      Exit Sub
+End If
+
+'Slow down doors
+If ElevatorDoorSpeed > 0 Then
+    DoEvents
+    ElevatorDoorSpeed = ElevatorDoorSpeed - OpenChange
+    'ElevatorDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+    'ElevatorDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorL.MoveRelative -ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorR.MoveRelative ElevatorDoorSpeed, 0, 0
+    Exit Sub
+End If
+
+'reset values
+ElevatorDoorSpeed = 0
+OpenDoor = 0
+
+'the doors are open now
 DoorsOpen = True
 
 Exit Sub
@@ -481,6 +649,70 @@ Public Sub MonitorLoop()
 If OpenDoor = 1 Then Call OpenDoors
 If OpenDoor = -1 Then Call CloseDoors
 If OpenDoor = 2 Then Call OpenDoorsEmergency
+If OpenDoor = -2 Then Call CloseDoorsEmergency
 
 If MoveElevator = True Then Call MoveElevatorToFloor
+End Sub
+
+Private Sub CloseDoorsEmergency()
+'Simulates manually closing doors.
+'Slowly closes the elevator doors no matter where elevator is.
+'If lined up with shaft doors, then closes the shaft doors also
+
+Static IsRunning As Boolean
+If IsRunning = True Then GoTo LoopStart
+IsRunning = True
+
+On Error GoTo ErrorHandler
+
+Static OpenChange As Single
+OpenChange = 0.001
+
+ElevatorDoorSpeed = 0
+
+LoopStart:
+
+'Speed up doors
+If ElevatorDoorPos - ElevatorInsDoorL.GetPosition.z > 4.5 Then
+    DoEvents
+    ElevatorDoorSpeed = ElevatorDoorSpeed + OpenChange
+    'ElevatorDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+    'ElevatorDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+    Exit Sub
+End If
+
+'Normal door movement
+If ElevatorDoorPos - ElevatorInsDoorL.GetPosition.z > 0.2 Then
+      DoEvents
+      'ElevatorDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+      'ElevatorDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+      ElevatorInsDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+      ElevatorInsDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+      Exit Sub
+End If
+
+'Slow down doors
+If ElevatorDoorSpeed > 0 Then
+    DoEvents
+    ElevatorDoorSpeed = ElevatorDoorSpeed - OpenChange
+    'ElevatorDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+    'ElevatorDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorL.MoveRelative ElevatorDoorSpeed, 0, 0
+    ElevatorInsDoorR.MoveRelative -ElevatorDoorSpeed, 0, 0
+    Exit Sub
+End If
+
+'reset values
+ElevatorDoorSpeed = 0
+OpenDoor = 0
+
+
+DoorsOpen = False
+Exit Sub
+
+ErrorHandler:
+   MsgBox "An error occurred in the elevator simulation subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
 End Sub
