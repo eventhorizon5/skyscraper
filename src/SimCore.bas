@@ -68,6 +68,11 @@ Public IsFalling As Boolean 'make user fall
 Public CameraFloor As Integer 'floor camera's on
 Public InStairwell As Boolean 'true if user is in a stairwell
 Public ElevatorNumber As Integer 'number of currently selected elevator
+Public MoveElevator() As Boolean 'tells timers to start moving specified elevator
+Public MoveElevatorFloor() As Integer 'floor to move elevator to
+Global SoundDivisor As Integer
+Global SoundMaxDistance As Integer
+Global FrameRate As Integer
 
 'Camera initialization
 Public CameraStartFloor As Integer 'starting floor
@@ -89,9 +94,17 @@ Public Sub Start(FileName As String, InitTV As Boolean, DestObject As Object)
 'set default starting elevator
 ElevatorNumber = 1
 
+'Set frame rate
+FrameRate = 20
+FrameLimiter = True
+
 'Set output object
 Set Dest = DestObject
 Dest.ScaleMode = 1
+
+'temporary static values
+SoundDivisor = 10
+SoundMaxDistance = 1000
 
 'Print banner
 Dest.ForeColor = RGB(255, 255, 255)
@@ -252,6 +265,13 @@ Effect.FadeIn 1500
 'Start main processing timer
 Sim.MainTimer.Enabled = True
 
+'Start elevator timers
+For i = 0 To Elevators - 1
+    Sim.ElevatorTimer(i).Enabled = True
+Next i
+
+DebugPanel.Enabled = True
+
 Exit Sub
 
 ErrorHandler:
@@ -282,7 +302,7 @@ On Error Resume Next
 'Calls frame limiter function, which sets the max frame rate
 'note - the frame rate determines elevator speed, walking speed, etc
 'In order to raise it, elevator timers and walking speed must both be changed
-If FrameLimiter = True Then SlowToFPS (20)
+If FrameLimiter = True Then SlowToFPS (FrameRate)
 
 'If RenderOnly is true, skip processing code and run only
 'the frame renderer code
@@ -293,25 +313,33 @@ If RenderOnly = True Then GoTo Render
 If InputOnly = True Then GoTo InputOnly
 
 'Determine floor that the camera is on, if the camera is not in the stairwell
-If InStairwell = False Then
-    For i = -Basements To TotalFloors
-        DoEvents
-        If Camera.GetPosition.Y >= Floor(i).FloorAltitude And Camera.GetPosition.Y < Floor(i + 1).FloorAltitude Then CameraFloor = i
-    Next i
-End If
+'If InStairwell = False Then
+'    For i = -Basements To TotalFloors
+'        DoEvents
+'        If i < TotalFloors Then
+'            If Camera.GetPosition.Y >= Floor(i).FloorAltitude And Camera.GetPosition.Y < Floor(i + 1).FloorAltitude Then CameraFloor = i
+'        End If
+'        If i = TotalFloors And Camera.GetPosition.Y >= Floor(i).FloorAltitude Then CameraFloor = i
+'    Next i
+'End If
 
 InputOnly:
     Call GetInput
 
 Render:
     'If IntroOn = True Then Call Intro
-    
-    'On Error Resume Next
-    TV.Clear
-    Atmos.Atmosphere_Render
-    Scene.RenderAllMeshes
-    TV.RenderToScreen
-    DoEvents
+    Call Render
+
+End Sub
+
+Private Sub Render()
+'Truevision3D rendering code
+
+TV.Clear
+Atmos.Atmosphere_Render
+Scene.RenderAllMeshes
+TV.RenderToScreen
+DoEvents
 
 End Sub
 
@@ -369,14 +397,19 @@ Private Sub GetInput()
       If Inp.IsKeyPressed(TV_KEY_F1) = True Then TV.ScreenShot (App.Path + "\shot.bmp")
 End Sub
 
-Private Sub SlowToFPS(ByVal FrameRate As Long)
+Public Sub SlowToFPS(ByVal FrameRate As Long)
 Dim lngTicksPerFrame As Long
 Static lngOldTickCount As Long
+
+'find how long each frame is in milliseconds
 lngTicksPerFrame = 1000 / FrameRate
+
 While GetTickCount() < lngOldTickCount
-Sleep 5
+    Sleep 5
 Wend
+
 lngOldTickCount = GetTickCount() + lngTicksPerFrame
+
 End Sub
 
 Public Function IsEven(Number As Integer) As Boolean
@@ -391,6 +424,8 @@ End Function
 
 Public Function AutoSize(n1 As Single, n2 As Single, iswidth As Boolean) As Single
 'Texture autosizing formulas
+'If any of the texture parameters are 0, then automatically size the
+'texture using the Skyscraper 1.0 sizing algorithms
 
 If (n1 < 0 And n2 < 0) Or (n1 >= 0 And n2 >= 0) Then
 'if numbers have the same sign

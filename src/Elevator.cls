@@ -45,8 +45,27 @@ Public UpQueue As String 'up call queue
 Public DownQueue As String 'down call queue
 Public QueuePositionDirection As Integer 'queue processing direction
 Public PauseQueueSearch As Boolean 'pause queue processor
-Public ElevatorSpeed As Single 'elevator speed
+Public ElevatorSpeed As Single 'maximum elevator speed
 Public ElevatorFineTuneSpeed As Single 'elevator finetune speed
+Public ElevatorFloor As Integer 'current elevator floor
+Public ElevatorSync As Boolean 'true if user should move with elevator
+Public ElevatorMusic As TVSoundWave3D
+Public ElevatorSounds As TVSoundWave3D
+Public GotoFloor As Integer 'floor to go to
+Public MoveElevator As Boolean 'set to true if elevator should go to floor specified in GotoFloor
+Public OpenDoor As Integer '1=open doors, -1=close doors
+Public Acceleration As Single 'percentage of speed increase
+
+'Internal elevator simulation data
+Private ElevatorStart As Single 'elevator vertical starting location
+Private DoorsClosed As Boolean 'elevator door state
+Private ElevatorDirection As Integer '-1=down, 1=up, 0=stopped
+Private DistanceToTravel As Single 'distance in Y to travel
+Private Destination As Single 'elevator destination Y value
+Private ElevatorRate As Single
+Private StoppingDistance As Single
+Private CalculateStoppingDistance As Boolean
+Private Brakes As Boolean
 
 Option Explicit
 
@@ -62,6 +81,8 @@ Set ElevatorInsDoorR = Scene.CreateMeshBuilder("ElevatorInsDoorR" + Str$(Number)
 Set Plaque = Scene.CreateMeshBuilder("Plaque" + Str$(Number))
 Set CallButtonsUp = Scene.CreateMeshBuilder("CallButtonsUp" + Str$(Number))
 Set CallButtonsDown = Scene.CreateMeshBuilder("CallButtonsDown" + Str$(Number))
+'Set ElevatorMusic = New TV3DMedia.TVSoundWave3D
+Set ElevatorSounds = New TV3DMedia.TVSoundWave3D
 
 End Sub
 
@@ -90,13 +111,16 @@ If Direction = 1 Then V = -1
     ElevatorMesh.AddWall GetTex("Wood1"), V * 15.5, -13.9, V * 15.5, 0, 19.5, 0.1, 2, 2
 
     'Floor Indicator
-    FloorIndicator.AddWall GetTex("ButtonL"), V * 0.16, -0.5, V * 0.16, -2.5, 1.5, 16, -1, 1
+    If Direction = 0 Then FloorIndicator.AddWall GetTex("ButtonL"), V * 0.16, -0.5, V * 0.16, -2.5, 1.5, 16, -1, 1
+    If Direction = 1 Then FloorIndicator.AddWall GetTex("ButtonL"), V * 0.16, -13.9 + 0.5, V * 0.16, -13.9 + 2.5, 1.5, 16, -1, 1
     
     'Button Panel
-    ElevatorMesh.AddWall GetTex("ElevExtPanels"), V * 0.16, -0.3, V * 0.16, -2.7, 7, 6, 1, 1
+    If Direction = 0 Then ElevatorMesh.AddWall GetTex("ElevExtPanels"), V * 0.16, -0.3, V * 0.16, -2.7, 7, 6, 1, 1
+    If Direction = 1 Then ElevatorMesh.AddWall GetTex("ElevExtPanels"), V * 0.16, -13.9 + 0.3, V * 0.16, -13.9 + 2.7, 7, 6, 1, 1
     
     'Plaque
-    Plaque.AddWall GetTex("Plaque"), V * 0.16, -0.3, V * 0.16, -2.7, 1, 13, -1, 1
+    If Direction = 0 Then Plaque.AddWall GetTex("Plaque"), V * 0.16, -0.3, V * 0.16, -2.7, 1, 13, -1, 1
+    If Direction = 1 Then Plaque.AddWall GetTex("Plaque"), V * 0.16, -13.9 + 0.3, V * 0.16, -13.9 + 2.7, 1, 13, -1, 1
     Plaque.SetBlendingMode (TV_BLEND_ALPHA)
     Plaque.SetColor RGBA(1, 1, 1, 0.1)
     
@@ -120,7 +144,7 @@ Private Sub Class_Terminate()
 'Set CallButtonsDown = Nothing
 End Sub
 
-Sub AddRoute(FloorID As Integer, Direction As Integer)
+Public Sub AddRoute(FloorID As Integer, Direction As Integer)
 'Add call route to elevator routing table, in sorted order
 
 Dim Position As Long
@@ -174,7 +198,7 @@ End If
 
 End Sub
 
-Sub DeleteRoute(FloorID As Integer, Direction As Integer)
+Public Sub DeleteRoute(FloorID As Integer, Direction As Integer)
 'Delete call route from elevator routing table
 
 Dim Position As Long
@@ -204,6 +228,271 @@ Public Sub Alarm()
 End Sub
 
 Public Sub CallElevator(FloorID As Integer, Direction As Integer)
+'Calls elevator from specified floor, and gives desired direction to travel
 
 End Sub
 
+Private Sub OpenDoors()
+'Opens elevator doors
+OpenDoor = 0
+
+On Error GoTo ErrorHandler
+
+Sim.WaitTimer(Number).Enabled = True
+
+DoorsClosed = False
+
+Exit Sub
+ErrorHandler:
+   MsgBox "An error occurred in the elevator simulation subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
+End Sub
+
+Private Sub CloseDoors()
+'Closes elevator doors
+OpenDoor = 0
+
+On Error GoTo ErrorHandler
+
+
+
+DoorsClosed = True
+
+Exit Sub
+ErrorHandler:
+   MsgBox "An error occurred in the elevator simulation subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
+End Sub
+
+Private Sub FineTune()
+'Slow fine-tuning movement to line up with floor specified in GotoFloor
+
+On Error GoTo ErrorHandler
+
+
+
+Exit Sub
+ErrorHandler:
+   MsgBox "An error occurred in the elevator simulation subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
+End Sub
+
+Private Sub MoveElevatorToFloor()
+'Main processing routine; sends elevator to floor specified in GotoFloor
+
+'On Error GoTo ErrorHandler
+
+'use frame limiter for elevator also
+If FrameLimiter = True Then Call SlowToFPS(FrameRate)
+
+'exit if elevator is already moving
+If ElevatorDirection <> 0 Then Exit Sub
+
+'get elevator's current Y position
+ElevatorStart = ElevatorMesh.GetPosition.Y
+
+'get elevator's current floor
+ElevatorFloor = GetElevatorFloor
+
+'If elevator is already on specified floor, open doors and exit
+If ElevatorFloor = GotoFloor Then Call OpenDoors: Exit Sub
+
+'close doors if open
+If DoorsClosed = False Then Call CloseDoors
+
+'Determine direction
+If GotoFloor < ElevatorFloor Then ElevatorDirection = -1
+If GotoFloor > ElevatorFloor Then ElevatorDirection = 1
+
+'Determine distance to destination floor
+DistanceToTravel = Abs(Abs(Floor(GotoFloor).FloorAltitude) - Abs(ElevatorStart))
+Destination = Floor(GotoFloor).FloorAltitude
+CalculateStoppingDistance = True
+
+'If user is riding this elevator, then turn off floor
+If ElevatorSync = True Then
+    Floor(CameraFloor).DisableFloor
+End If
+
+'Turn off sky, buildings, and landscape
+Atmos.SkyBox_Enable False
+Buildings.Enable False
+Landscape.Enable False
+
+'Play starting sound
+If ElevatorSounds.PlayState <> TV_PLAYSTATE_PLAYING Then
+    ElevatorSounds.Loop_ = False
+    ElevatorSounds.Load App.Path + "\data\elevstart.wav"
+    ElevatorSounds.Play
+End If
+
+'Get first rate increment value
+ElevatorRate = ElevatorDirection * (ElevatorSpeed * Acceleration)
+
+Do While Abs(ElevatorRate) <> 0
+'Movement sound
+If ElevatorSounds.PlayState = TV_PLAYSTATE_ENDED And Brakes = False Then
+    ElevatorSounds.Load App.Path + "\data\elevmove.wav"
+    ElevatorSounds.Loop_ = True
+    ElevatorSounds.Play
+End If
+
+'MsgBox (ElevatorMesh.GetPosition.Y)
+'move elevator objects and camera
+ElevatorMesh.MoveRelative 0, ElevatorRate / ElevatorSpeed, 0
+If ElevatorSync = True Then Camera.SetPosition Camera.GetPosition.X, ElevatorMesh.GetPosition.Y + CameraDefAltitude, Camera.GetPosition.z
+ElevatorInsDoorL.MoveRelative 0, ElevatorRate / ElevatorSpeed, 0
+ElevatorInsDoorR.MoveRelative 0, ElevatorRate / ElevatorSpeed, 0
+FloorIndicator.MoveRelative 0, ElevatorRate / ElevatorSpeed, 0
+Plaque.MoveRelative 0, ElevatorRate / ElevatorSpeed, 0
+ElevatorSounds.SetPosition ElevatorMesh.GetPosition.X / SoundDivisor, ElevatorMesh.GetPosition.Y / SoundDivisor, ElevatorMesh.GetPosition.z / SoundDivisor
+ElevatorSounds.maxDistance = SoundMaxDistance
+
+'MsgBox (ElevatorRate)
+'change speeds
+If ElevatorDirection = 1 Then ElevatorRate = ElevatorRate + (ElevatorSpeed * Acceleration)
+If ElevatorDirection = -1 Then ElevatorRate = ElevatorRate - (ElevatorSpeed * Acceleration)
+
+If ElevatorDirection = 1 And ElevatorRate > ElevatorSpeed Then ElevatorRate = ElevatorSpeed
+If ElevatorDirection = -1 And ElevatorRate < -ElevatorSpeed Then ElevatorRate = -ElevatorSpeed
+If ElevatorDirection = 1 And Brakes = True And ElevatorRate < 0 Then ElevatorRate = 0
+If ElevatorDirection = -1 And Brakes = True And ElevatorRate > 0 Then ElevatorRate = 0
+
+If Abs(ElevatorRate) = ElevatorSpeed Then CalculateStoppingDistance = False
+
+'get distance needed to stop elevator
+If CalculateStoppingDistance = True Then StoppingDistance = ElevatorMesh.GetPosition.Y - ElevatorStart
+
+If Brakes = False And ElevatorDirection = 1 And ElevatorMesh.GetPosition.Y >= Destination - StoppingDistance Then
+    CalculateStoppingDistance = False
+    'slow down elevator
+    ElevatorDirection = -1
+    Brakes = True
+    If ElevatorSounds.PlayState = TV_PLAYSTATE_PLAYING Then
+        ElevatorSounds.Loop_ = False
+        ElevatorSounds.Stop_
+    End If
+    If ElevatorSounds.PlayState <> TV_PLAYSTATE_PLAYING Then
+        ElevatorSounds.Loop_ = False
+        ElevatorSounds.Load App.Path + "\data\elevstop.wav"
+        ElevatorSounds.Play
+    End If
+End If
+
+If Brakes = False And ElevatorDirection = -1 And ElevatorMesh.GetPosition.Y <= Destination + StoppingDistance Then
+    CalculateStoppingDistance = False
+    'slow down elevator
+    ElevatorDirection = 1
+    Brakes = True
+    If ElevatorSounds.PlayState = TV_PLAYSTATE_PLAYING Then
+        ElevatorSounds.Loop_ = False
+        ElevatorSounds.Stop_
+    End If
+    If ElevatorSounds.PlayState <> TV_PLAYSTATE_PLAYING Then
+        ElevatorSounds.Loop_ = False
+        ElevatorSounds.Load App.Path + "\data\elevstop.wav"
+        ElevatorSounds.Play
+    End If
+End If
+
+DoEvents
+Loop
+
+ElevatorRate = 0
+ElevatorDirection = 0
+Brakes = False
+Destination = 0
+DistanceToTravel = 0
+ElevatorStart = 0
+Call GetElevatorFloor
+Call OpenDoors
+
+'Turn on floor
+If ElevatorSync = True Then
+    Call Floor(GotoFloor).EnableFloor
+End If
+
+'Turn on sky, buildings, and landscape
+Atmos.SkyBox_Enable True
+Buildings.Enable True
+Landscape.Enable True
+
+Exit Sub
+ErrorHandler:
+   MsgBox "An error occurred in the elevator simulation subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
+End Sub
+
+Public Sub StopElevator()
+'Tells elevator to stop moving, no matter where it is
+
+On Error GoTo ErrorHandler
+
+
+
+Exit Sub
+ErrorHandler:
+   MsgBox "An error occurred in the elevator simulation subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
+End Sub
+
+Public Sub OpenHatch()
+'Opens the elevator's upper escape hatch, allowing access to the shaft
+
+End Sub
+
+Public Sub OpenDoorsEmergency()
+'Simulates manually prying doors open.
+'Slowly opens the elevator doors no matter where elevator is.
+'If lined up with shaft doors, then opens the shaft doors also
+OpenDoor = 0
+
+On Error GoTo ErrorHandler
+
+
+DoorsClosed = False
+
+Exit Sub
+ErrorHandler:
+   MsgBox "An error occurred in the elevator simulation subsystem." + vbCrLf + vbCrLf + "Error source: " + Err.Source + vbCrLf + "Description: " + Err.Description, vbCritical
+   End
+End Sub
+
+Public Sub OpenShaftDoors(FloorID As Integer)
+'Simulates manually opening shaft doors
+'Slowly opens the shaft's elevator doors no matter where elevator is.
+'Cannot be used with OpenDoorsEmergency.
+'This is if the elevator is not lined up with the shaft doors,
+'and the user needs to open the shaft doors, usually while on top of elevator.
+OpenDoor = 0
+
+End Sub
+
+Public Sub ProcessCallQueue()
+'Processes the elevator's call queue, and sends elevators to called floors
+
+End Sub
+
+Public Function GetElevatorFloor() As Integer
+'Determine floor that the elevator is on
+Dim i As Integer
+For i = -Basements To TotalFloors
+    DoEvents
+    If i < TotalFloors Then
+        If ElevatorMesh.GetPosition.Y >= Floor(i).FloorAltitude And ElevatorMesh.GetPosition.Y < Floor(i + 1).FloorAltitude Then GetElevatorFloor = i: Exit Function
+    End If
+    If i = TotalFloors And ElevatorMesh.GetPosition.Y >= Floor(i).FloorAltitude Then GetElevatorFloor = i
+Next i
+
+End Function
+
+Public Sub MonitorLoop()
+'Monitors elevator and starts actions if needed
+
+If OpenDoor = 1 Then Call OpenDoors
+If OpenDoor = -1 Then Call CloseDoors
+If OpenDoor = 2 Then Call OpenDoorsEmergency
+
+If MoveElevator = True Then Call MoveElevatorToFloor
+
+End Sub
