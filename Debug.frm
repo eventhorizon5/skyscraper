@@ -13,13 +13,6 @@ Begin VB.Form DebugPanel
    MinButton       =   0   'False
    ScaleHeight     =   5280
    ScaleWidth      =   6870
-   Begin VB.CommandButton Command18 
-      Height          =   255
-      Left            =   4560
-      TabIndex        =   69
-      Top             =   240
-      Width           =   375
-   End
    Begin VB.CommandButton Command17 
       Caption         =   "Add Object"
       Height          =   375
@@ -1101,7 +1094,7 @@ End Sub
 
 Private Sub Command1_Click()
 ElevatorNumber = Slider2.Value
-If Check9.Value = 1 Then ElevatorSync(ElevatorNumber) = True Else ElevatorSync(ElevatorNumber) = False
+'If Check9.Value = 1 Then ElevatorSync(ElevatorNumber) = True Else ElevatorSync(ElevatorNumber) = False
 OpenElevator(ElevatorNumber) = -1
 GotoFloor(ElevatorNumber) = Slider1.Value
 If GotoFloor(ElevatorNumber) = 1 Then GotoFloor(ElevatorNumber) = -1
@@ -1140,22 +1133,6 @@ Private Sub Command17_Click()
 Object.Visible = True
 End Sub
 
-Private Sub Command18_Click()
-Dim Number As Integer
-Number = 20
-Dim ShaftLeft As Integer
-ShaftLeft = 52.5
-
-For i54 = -11 To 144
-Buttons(i54).ResetMesh
-Buttons(i54).SetPosition 0, 0, 0
-Buttons(i54).SetRotation 0, 0, 0
-Next i54
-
-Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-Buttons(80).AddWall GetTex("Button80"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-
-End Sub
 
 Private Sub Command2_Click()
 ElevatorNumber = Slider2.Value
