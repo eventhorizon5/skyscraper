@@ -1,6 +1,6 @@
 Attribute VB_Name = "FileIO"
 'Skyscraper 1.1 Alpha - File I/O processing routines
-'Copyright ©2004 Ryan Thoryk
+'Copyright ©2005 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
 'Contact - ryan@tliquest.net

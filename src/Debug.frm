@@ -1075,7 +1075,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 'Skyscraper 1.1 Alpha - Debug Panel
-'Copyright ©2004 Ryan Thoryk
+'Copyright ©2005 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
 
