@@ -39,7 +39,9 @@ QueueMonitor(Number) = 5
 Call DeleteRoute(QueuePositionFloor(Number), Number, QueuePositionDirection(Number))
 OpenElevator(Number) = -1
 If InElevator = True Then ElevatorSync(Number) = True
-GotoFloor(Number) = QueuePositionFloor(Number)
+If QueuePositionFloor(Number) <> 0 Then GotoFloor(Number) = QueuePositionFloor(Number)
+If QueuePositionFloor(Number) = 0 Then GotoFloor(Number) = 0.01
+
 End If
 
 End Sub
@@ -147,7 +149,7 @@ If Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(40) - Floor) And Abs(Elev
 If Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(32) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(34) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(36) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(38) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 40
 End If
  
- If ElevatorFloor(Number) <> CameraFloor Then
+ If ElevatorFloor(Number) <> Floor Then
  ElevatorSync(Number) = False
  If Floor = 1 Then Floor = -1
  Call AddRoute(Floor, Number, Direction)
@@ -3597,6 +3599,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorCheck4(Number) = 0
       If CameraFloor > -10 And ElevatorSync(Number) = True Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z
       If CameraFloor = 1 And ElevatorSync(Number) = True And FloorIndicatorText(Number) <> "M" Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
+      If CameraFloor = 1 And ElevatorSync(Number) = True And FloorIndicatorText(Number) = "M" Then Camera.SetPosition Camera.GetPosition.X, 10 + FloorHeight, Camera.GetPosition.z
       End If
       
       If FineTune(Number) = True Then
@@ -3634,6 +3637,15 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       End If
       
       If OpenElevator(Number) = 1 Then
+      
+      Dim jxx As Integer
+      Dim jyy As Integer
+      jxx = CameraFloor
+      jyy = ElevatorFloor(Number)
+      If CameraFloor = 1 And Camera.GetPosition.Y > FloorHeight And Camera.GetPosition.Y < FloorHeight * 3 Then jxx = 0
+      If ElevatorFloor(Number) = 1 And FloorIndicatorText(Number) = "M" Then jyy = 0
+      If jxx <> jyy Then OpenElevator(Number) = 0: Exit Sub
+      
       'If ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z >= 4 Then OpenElevator(Number) = 0: GoTo OpenElevator1
       If ElevatorDoorL(Number).GetPosition.z >= 4 Then OpenElevator(Number) = 0: GoTo OpenElevator1
       If ElevatorCheck4(Number) = 0 Then
