@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form DebugPanel 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "SkyScraper 0.96 Beta - Simulator Control Panel"
@@ -84,7 +84,7 @@ Begin VB.Form DebugPanel
       Height          =   495
       Left            =   0
       TabIndex        =   21
-      Top             =   3600
+      Top             =   3840
       Width           =   1695
       _ExtentX        =   2990
       _ExtentY        =   873
@@ -116,7 +116,7 @@ Begin VB.Form DebugPanel
       Height          =   495
       Left            =   3960
       TabIndex        =   18
-      Top             =   3600
+      Top             =   3840
       Width           =   855
    End
    Begin VB.CommandButton Command8 
@@ -124,7 +124,7 @@ Begin VB.Form DebugPanel
       Height          =   495
       Left            =   3120
       TabIndex        =   17
-      Top             =   3600
+      Top             =   3840
       Width           =   855
    End
    Begin VB.CommandButton Command7 
@@ -176,7 +176,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   3360
       TabIndex        =   10
-      Top             =   4680
+      Top             =   4800
       Width           =   975
    End
    Begin VB.CheckBox Check1 
@@ -193,7 +193,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   1800
       TabIndex        =   8
-      Top             =   3720
+      Top             =   3840
       Width           =   1215
    End
    Begin VB.CheckBox Check8 
@@ -246,14 +246,14 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   1920
       TabIndex        =   2
-      Top             =   4680
+      Top             =   4800
       Width           =   855
    End
    Begin MSComctlLib.Slider Slider1 
       Height          =   510
       Left            =   120
       TabIndex        =   1
-      Top             =   4200
+      Top             =   4320
       Width           =   4335
       _ExtentX        =   7646
       _ExtentY        =   900
@@ -274,6 +274,15 @@ Begin VB.Form DebugPanel
       Top             =   120
       Width           =   4335
    End
+   Begin VB.Label Label41 
+      Alignment       =   2  'Center
+      Caption         =   "Elevator floor indicators - click for queue information"
+      Height          =   255
+      Left            =   105
+      TabIndex        =   69
+      Top             =   1995
+      Width           =   4695
+   End
    Begin VB.Label Label40 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
@@ -289,7 +298,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   4320
       TabIndex        =   66
-      Top             =   3120
+      Top             =   3360
       Width           =   495
    End
    Begin VB.Label Label39 
@@ -307,7 +316,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   3840
       TabIndex        =   65
-      Top             =   3120
+      Top             =   3360
       Width           =   495
    End
    Begin VB.Label Label38 
@@ -325,7 +334,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   3360
       TabIndex        =   64
-      Top             =   3120
+      Top             =   3360
       Width           =   495
    End
    Begin VB.Label Label37 
@@ -343,7 +352,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   2880
       TabIndex        =   63
-      Top             =   3120
+      Top             =   3360
       Width           =   495
    End
    Begin VB.Label Label36 
@@ -361,7 +370,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   2400
       TabIndex        =   62
-      Top             =   3120
+      Top             =   3360
       Width           =   495
    End
    Begin VB.Label Label35 
@@ -379,7 +388,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   1920
       TabIndex        =   61
-      Top             =   3120
+      Top             =   3360
       Width           =   495
    End
    Begin VB.Label Label34 
@@ -397,7 +406,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   1440
       TabIndex        =   60
-      Top             =   3120
+      Top             =   3360
       Width           =   495
    End
    Begin VB.Label Label33 
@@ -415,7 +424,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   960
       TabIndex        =   59
-      Top             =   3120
+      Top             =   3360
       Width           =   495
    End
    Begin VB.Label Label32 
@@ -433,7 +442,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   480
       TabIndex        =   58
-      Top             =   3120
+      Top             =   3360
       Width           =   495
    End
    Begin VB.Label Label31 
@@ -451,7 +460,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   0
       TabIndex        =   57
-      Top             =   3120
+      Top             =   3360
       Width           =   495
    End
    Begin VB.Label Label30 
@@ -469,7 +478,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   4320
       TabIndex        =   56
-      Top             =   2760
+      Top             =   3000
       Width           =   495
    End
    Begin VB.Label Label29 
@@ -487,7 +496,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   3840
       TabIndex        =   55
-      Top             =   2760
+      Top             =   3000
       Width           =   495
    End
    Begin VB.Label Label28 
@@ -505,7 +514,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   3360
       TabIndex        =   54
-      Top             =   2760
+      Top             =   3000
       Width           =   495
    End
    Begin VB.Label Label27 
@@ -523,7 +532,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   2880
       TabIndex        =   53
-      Top             =   2760
+      Top             =   3000
       Width           =   495
    End
    Begin VB.Label Label26 
@@ -541,7 +550,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   2400
       TabIndex        =   52
-      Top             =   2760
+      Top             =   3000
       Width           =   495
    End
    Begin VB.Label Label25 
@@ -559,7 +568,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   1920
       TabIndex        =   51
-      Top             =   2760
+      Top             =   3000
       Width           =   495
    End
    Begin VB.Label Label24 
@@ -577,7 +586,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   1440
       TabIndex        =   50
-      Top             =   2760
+      Top             =   3000
       Width           =   495
    End
    Begin VB.Label Label23 
@@ -595,7 +604,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   960
       TabIndex        =   49
-      Top             =   2760
+      Top             =   3000
       Width           =   495
    End
    Begin VB.Label Label22 
@@ -613,7 +622,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   480
       TabIndex        =   48
-      Top             =   2760
+      Top             =   3000
       Width           =   495
    End
    Begin VB.Label Label21 
@@ -631,7 +640,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   0
       TabIndex        =   47
-      Top             =   2760
+      Top             =   3000
       Width           =   495
    End
    Begin VB.Label Label20 
@@ -649,7 +658,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   4320
       TabIndex        =   46
-      Top             =   2400
+      Top             =   2640
       Width           =   495
    End
    Begin VB.Label Label19 
@@ -667,7 +676,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   3840
       TabIndex        =   45
-      Top             =   2400
+      Top             =   2640
       Width           =   495
    End
    Begin VB.Label Label18 
@@ -685,7 +694,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   3360
       TabIndex        =   44
-      Top             =   2400
+      Top             =   2640
       Width           =   495
    End
    Begin VB.Label Label17 
@@ -703,7 +712,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   2880
       TabIndex        =   43
-      Top             =   2400
+      Top             =   2640
       Width           =   495
    End
    Begin VB.Label Label16 
@@ -721,7 +730,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   2400
       TabIndex        =   42
-      Top             =   2400
+      Top             =   2640
       Width           =   495
    End
    Begin VB.Label Label15 
@@ -739,7 +748,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   1920
       TabIndex        =   41
-      Top             =   2400
+      Top             =   2640
       Width           =   495
    End
    Begin VB.Label Label14 
@@ -757,7 +766,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   1440
       TabIndex        =   40
-      Top             =   2400
+      Top             =   2640
       Width           =   495
    End
    Begin VB.Label Label13 
@@ -775,7 +784,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   960
       TabIndex        =   39
-      Top             =   2400
+      Top             =   2640
       Width           =   495
    End
    Begin VB.Label Label12 
@@ -793,7 +802,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   480
       TabIndex        =   38
-      Top             =   2400
+      Top             =   2640
       Width           =   495
    End
    Begin VB.Label Label11 
@@ -811,7 +820,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   0
       TabIndex        =   37
-      Top             =   2400
+      Top             =   2640
       Width           =   495
    End
    Begin VB.Label Label10 
@@ -829,7 +838,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   4320
       TabIndex        =   30
-      Top             =   2040
+      Top             =   2280
       Width           =   495
    End
    Begin VB.Label Label9 
@@ -847,7 +856,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   3840
       TabIndex        =   29
-      Top             =   2040
+      Top             =   2280
       Width           =   495
    End
    Begin VB.Label Label8 
@@ -865,7 +874,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   3360
       TabIndex        =   28
-      Top             =   2040
+      Top             =   2280
       Width           =   495
    End
    Begin VB.Label Label7 
@@ -883,7 +892,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   2880
       TabIndex        =   27
-      Top             =   2040
+      Top             =   2280
       Width           =   495
    End
    Begin VB.Label Label6 
@@ -901,7 +910,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   2400
       TabIndex        =   26
-      Top             =   2040
+      Top             =   2280
       Width           =   495
    End
    Begin VB.Label Label5 
@@ -919,7 +928,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   1920
       TabIndex        =   25
-      Top             =   2040
+      Top             =   2280
       Width           =   495
    End
    Begin VB.Label Label4 
@@ -937,7 +946,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   1440
       TabIndex        =   24
-      Top             =   2040
+      Top             =   2280
       Width           =   495
    End
    Begin VB.Label Label3 
@@ -955,7 +964,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   960
       TabIndex        =   23
-      Top             =   2040
+      Top             =   2280
       Width           =   495
    End
    Begin VB.Label Label2 
@@ -973,7 +982,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   480
       TabIndex        =   22
-      Top             =   2040
+      Top             =   2280
       Width           =   495
    End
    Begin VB.Label Label1 
@@ -991,7 +1000,7 @@ Begin VB.Form DebugPanel
       Height          =   375
       Left            =   0
       TabIndex        =   11
-      Top             =   2040
+      Top             =   2280
       Width           =   495
    End
 End
@@ -1021,6 +1030,9 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Public Sub ShowQueues(Number As Integer)
+MsgBox ("Elevator " + LTrim(Str$(Number)) + "'s queues:" + vbCrLf + "Up: " + UpQueue(Number) + vbCrLf + "Down: " + DownQueue(Number))
+End Sub
 
 Private Sub Check1_Click()
 If Check1.Value = 1 Then Atmos.SkyBox_Enable True
@@ -1189,5 +1201,165 @@ End Sub
 Private Sub Command9_Click()
 ElevatorNumber = Slider2.Value
 OpenElevator(ElevatorNumber) = -1
+End Sub
+
+Private Sub Label1_Click()
+ShowQueues (1)
+End Sub
+
+Private Sub Label2_Click()
+ShowQueues (2)
+End Sub
+
+Private Sub Label3_Click()
+ShowQueues (3)
+End Sub
+
+Private Sub Label4_Click()
+ShowQueues (4)
+End Sub
+
+Private Sub Label5_Click()
+ShowQueues (5)
+End Sub
+
+Private Sub Label6_Click()
+ShowQueues (6)
+End Sub
+
+Private Sub Label7_Click()
+ShowQueues (7)
+End Sub
+
+Private Sub Label8_Click()
+ShowQueues (8)
+End Sub
+
+Private Sub Label9_Click()
+ShowQueues (9)
+End Sub
+
+Private Sub Label10_Click()
+ShowQueues (10)
+End Sub
+
+Private Sub Label11_Click()
+ShowQueues (11)
+End Sub
+
+Private Sub Label12_Click()
+ShowQueues (12)
+End Sub
+
+Private Sub Label13_Click()
+ShowQueues (13)
+End Sub
+
+Private Sub Label14_Click()
+ShowQueues (14)
+End Sub
+
+Private Sub Label15_Click()
+ShowQueues (15)
+End Sub
+
+Private Sub Label16_Click()
+ShowQueues (16)
+End Sub
+
+Private Sub Label17_Click()
+ShowQueues (17)
+End Sub
+
+Private Sub Label18_Click()
+ShowQueues (18)
+End Sub
+
+Private Sub Label19_Click()
+ShowQueues (19)
+End Sub
+
+Private Sub Label20_Click()
+ShowQueues (20)
+End Sub
+
+Private Sub Label21_Click()
+ShowQueues (21)
+End Sub
+
+Private Sub Label22_Click()
+ShowQueues (22)
+End Sub
+
+Private Sub Label23_Click()
+ShowQueues (23)
+End Sub
+
+Private Sub Label24_Click()
+ShowQueues (24)
+End Sub
+
+Private Sub Label25_Click()
+ShowQueues (25)
+End Sub
+
+Private Sub Label26_Click()
+ShowQueues (26)
+End Sub
+
+Private Sub Label27_Click()
+ShowQueues (27)
+End Sub
+
+Private Sub Label28_Click()
+ShowQueues (28)
+End Sub
+
+Private Sub Label29_Click()
+ShowQueues (29)
+End Sub
+
+Private Sub Label30_Click()
+ShowQueues (30)
+End Sub
+
+Private Sub Label31_Click()
+ShowQueues (31)
+End Sub
+
+Private Sub Label32_Click()
+ShowQueues (32)
+End Sub
+
+Private Sub Label33_Click()
+ShowQueues (33)
+End Sub
+
+Private Sub Label34_Click()
+ShowQueues (34)
+End Sub
+
+Private Sub Label35_Click()
+ShowQueues (35)
+End Sub
+
+Private Sub Label36_Click()
+ShowQueues (36)
+End Sub
+
+Private Sub Label37_Click()
+ShowQueues (37)
+End Sub
+
+Private Sub Label38_Click()
+ShowQueues (38)
+End Sub
+
+Private Sub Label39_Click()
+ShowQueues (39)
+End Sub
+
+Private Sub Label40_Click()
+ShowQueues (40)
 End Sub
 
