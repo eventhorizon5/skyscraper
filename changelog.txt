@@ -5,6 +5,7 @@ Pre-version 1.1
 -massive code rewrites
 -new modules created, old ones deleted
 -API created
+-building designer created
 
 Version 1.0
 1.0 is being released now due to the massive overhauls and redesigns that have
