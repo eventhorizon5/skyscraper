@@ -179,6 +179,7 @@ Sub Alarm(Number As Integer)
 
 End Sub
 Sub CallElevator(Floor As Integer, Section As Integer, Direction As Integer)
+
 'This subroutine is used to autoselect an elevator in the specified section
 'The direction value is set by what button the user presses on the call button panel
 
