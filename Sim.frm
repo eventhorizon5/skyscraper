@@ -21,181 +21,181 @@ Begin VB.Form Sim
    End
    Begin VB.Timer Timer31 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   1200
       Top             =   5400
    End
    Begin VB.Timer Timer32 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   1800
       Top             =   5400
    End
    Begin VB.Timer Timer33 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   2400
       Top             =   5400
    End
    Begin VB.Timer Timer34 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   3000
       Top             =   5400
    End
    Begin VB.Timer Timer35 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   3600
       Top             =   5400
    End
    Begin VB.Timer Timer36 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   4200
       Top             =   5400
    End
    Begin VB.Timer Timer37 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   4800
       Top             =   5400
    End
    Begin VB.Timer Timer38 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   5400
       Top             =   5400
    End
    Begin VB.Timer Timer39 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   6000
       Top             =   5400
    End
    Begin VB.Timer Timer40 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   6600
       Top             =   5400
    End
    Begin VB.Timer Timer21 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   1200
       Top             =   4920
    End
    Begin VB.Timer Timer22 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   1800
       Top             =   4920
    End
    Begin VB.Timer Timer23 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   2400
       Top             =   4920
    End
    Begin VB.Timer Timer24 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   3000
       Top             =   4920
    End
    Begin VB.Timer Timer25 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   3600
       Top             =   4920
    End
    Begin VB.Timer Timer26 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   4200
       Top             =   4920
    End
    Begin VB.Timer Timer27 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   4800
       Top             =   4920
    End
    Begin VB.Timer Timer28 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   5400
       Top             =   4920
    End
    Begin VB.Timer Timer29 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   6000
       Top             =   4920
    End
    Begin VB.Timer Timer30 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   6600
       Top             =   4920
    End
    Begin VB.Timer Timer11 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   1200
       Top             =   4440
    End
    Begin VB.Timer Timer12 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   1800
       Top             =   4440
    End
    Begin VB.Timer Timer13 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   2400
       Top             =   4440
    End
    Begin VB.Timer Timer14 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   3000
       Top             =   4440
    End
    Begin VB.Timer Timer15 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   3600
       Top             =   4440
    End
    Begin VB.Timer Timer16 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   4200
       Top             =   4440
    End
    Begin VB.Timer Timer17 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   4800
       Top             =   4440
    End
    Begin VB.Timer Timer18 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   5400
       Top             =   4440
    End
    Begin VB.Timer Timer19 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   6000
       Top             =   4440
    End
    Begin VB.Timer Timer20 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   6600
       Top             =   4440
    End
@@ -381,55 +381,55 @@ Begin VB.Form Sim
    End
    Begin VB.Timer Timer10 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   6600
       Top             =   3960
    End
    Begin VB.Timer Timer9 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   6000
       Top             =   3960
    End
    Begin VB.Timer Timer8 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   5400
       Top             =   3960
    End
    Begin VB.Timer Timer7 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   4800
       Top             =   3960
    End
    Begin VB.Timer Timer6 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   4200
       Top             =   3960
    End
    Begin VB.Timer Timer5 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   3600
       Top             =   3960
    End
    Begin VB.Timer Timer4 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   3000
       Top             =   3960
    End
    Begin VB.Timer Timer3 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   2400
       Top             =   3960
    End
    Begin VB.Timer Timer2 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   1800
       Top             =   3960
    End
@@ -507,7 +507,7 @@ Begin VB.Form Sim
    End
    Begin VB.Timer Timer1 
       Enabled         =   0   'False
-      Interval        =   5000
+      Interval        =   10000
       Left            =   1200
       Top             =   3960
    End
@@ -535,7 +535,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.94 Beta
+'Skycraper 0.95 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper

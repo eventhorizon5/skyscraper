@@ -1,5 +1,5 @@
 Attribute VB_Name = "ElevatorCode"
-'Skycraper 0.94 Beta
+'Skycraper 0.95 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -20,11 +20,45 @@ Attribute VB_Name = "ElevatorCode"
 'Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 Option Explicit
-Sub AddRoute(Floor As Integer, Number As Integer, Direction As Integer)
-If RouteDirection(Number) = 0 Then RouteDirection(Number) = Direction
+Sub ProcessCallQueue(Number As Integer)
+
+If PauseQueueSearch(Number) = True Or QueueMonitor(Number) <= 0 Then Exit Sub
+
+'This code handles a 3-dimensional array that stores a calling queue in the form of boolean values.
+'The code continuously scans the queues up and down for call requests, and if it finds one, calls elevator
+If QueuePositionDirection(Number) = 1 Then QueuePositionFloor(Number) = QueuePositionFloor(Number) + 1
+If QueuePositionDirection(Number) = 0 Then QueuePositionFloor(Number) = QueuePositionFloor(Number) - 1
+If QueuePositionFloor(Number) = 138 Then QueuePositionDirection(Number) = 0: QueueMonitor(Number) = QueueMonitor(Number) - 1
+If QueuePositionFloor(Number) = -10 Then QueuePositionDirection(Number) = 1: QueueMonitor(Number) = QueueMonitor(Number) - 1
+
+'If Number = 39 And QueuePositionFloor(39) = 7 Then MsgBox (CallQueue(QueuePositionDirection(Number), Number, QueuePositionFloor(Number)))
+
+If CallQueue(QueuePositionDirection(Number), Number, QueuePositionFloor(Number)) = True Then
+PauseQueueSearch(Number) = True
+QueueMonitor(Number) = 5
+Call DeleteRoute(QueuePositionFloor(Number), Number, QueuePositionDirection(Number))
+OpenElevator(Number) = -1
+If InElevator = True Then ElevatorSync(Number) = True
+GotoFloor(Number) = QueuePositionFloor(Number)
+End If
 
 End Sub
+Sub AddRoute(Floor As Integer, Number As Integer, Direction As Integer)
+'Add call route to elevator routing table
+
+CallQueue(Direction, Number, Floor) = True
+If QueueMonitor(Number) = 0 Then
+QueuePositionDirection(Number) = Direction
+If Direction = 1 Then QueuePositionFloor(Number) = Floor - 1
+If Direction = 0 Then QueuePositionFloor(Number) = Floor + 1
+End If
+
+QueueMonitor(Number) = 5
+End Sub
 Sub DeleteRoute(Floor As Integer, Number As Integer, Direction As Integer)
+'Delete call route from elevator routing table
+
+CallQueue(Direction, Number, Floor) = False
 
 End Sub
 Sub StopElevator(Number As Integer)
@@ -37,6 +71,108 @@ Sub CallElevator(Floor As Integer, Section As Integer, Direction As Integer)
 'This subroutine is used to autoselect an elevator in the specified section
 'The direction value is set by what button the user presses on the call button panel
 
+'Elevator Sections:
+'Section Num - Elev Nums
+'1 - 1
+'2 - 2,3,4
+'3 - 5,6,7,8,9,10
+'4 - 11
+'5 - 12
+'6 - 13
+'7 - 14
+'8 - 15,17,19
+'9 - 16,18,20
+'10 - 21,23,25,27,29
+'11 - 22,24,26,28,30
+'12 - 31,33,35,37,39
+'13 - 32,34,36,38,40
+
+Dim Number As Integer
+
+'Autoselect closest elevator in section (if applicable)
+If Section = 1 Then Number = 1
+If Section = 2 Then
+If Abs(ElevatorFloor(2) - Floor) <= Abs(ElevatorFloor(3) - Floor) And Abs(ElevatorFloor(2) - Floor) <= Abs(ElevatorFloor(4) - Floor) Then Number = 2
+If Abs(ElevatorFloor(3) - Floor) <= Abs(ElevatorFloor(4) - Floor) And Abs(ElevatorFloor(3) - Floor) <= Abs(ElevatorFloor(2) - Floor) Then Number = 3
+If Abs(ElevatorFloor(4) - Floor) <= Abs(ElevatorFloor(2) - Floor) And Abs(ElevatorFloor(4) - Floor) <= Abs(ElevatorFloor(3) - Floor) Then Number = 4
+End If
+If Section = 3 Then
+If Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(10) - Floor) Then Number = 5
+If Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(5) - Floor) Then Number = 6
+If Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(6) - Floor) Then Number = 7
+If Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(7) - Floor) Then Number = 8
+If Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(8) - Floor) Then Number = 9
+If Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(9) - Floor) Then Number = 10
+End If
+If Section = 4 Then Number = 4
+If Section = 5 Then Number = 5
+If Section = 6 Then Number = 6
+If Section = 7 Then Number = 7
+If Section = 8 Then
+If Abs(ElevatorFloor(15) - Floor) <= Abs(ElevatorFloor(17) - Floor) And Abs(ElevatorFloor(15) - Floor) <= Abs(ElevatorFloor(19) - Floor) Then Number = 15
+If Abs(ElevatorFloor(17) - Floor) <= Abs(ElevatorFloor(19) - Floor) And Abs(ElevatorFloor(17) - Floor) <= Abs(ElevatorFloor(15) - Floor) Then Number = 17
+If Abs(ElevatorFloor(19) - Floor) <= Abs(ElevatorFloor(15) - Floor) And Abs(ElevatorFloor(19) - Floor) <= Abs(ElevatorFloor(17) - Floor) Then Number = 19
+End If
+If Section = 9 Then
+If Abs(ElevatorFloor(16) - Floor) <= Abs(ElevatorFloor(18) - Floor) And Abs(ElevatorFloor(16) - Floor) <= Abs(ElevatorFloor(20) - Floor) Then Number = 16
+If Abs(ElevatorFloor(18) - Floor) <= Abs(ElevatorFloor(20) - Floor) And Abs(ElevatorFloor(18) - Floor) <= Abs(ElevatorFloor(16) - Floor) Then Number = 18
+If Abs(ElevatorFloor(20) - Floor) <= Abs(ElevatorFloor(16) - Floor) And Abs(ElevatorFloor(20) - Floor) <= Abs(ElevatorFloor(18) - Floor) Then Number = 20
+End If
+If Section = 10 Then
+If Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(23) - Floor) And Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(25) - Floor) And Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(27) - Floor) And Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(29) - Floor) Then Number = 21
+If Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(25) - Floor) And Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(27) - Floor) And Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(29) - Floor) And Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(21) - Floor) Then Number = 23
+If Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(27) - Floor) And Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(29) - Floor) And Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(21) - Floor) And Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(23) - Floor) Then Number = 25
+If Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(29) - Floor) And Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(21) - Floor) And Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(23) - Floor) And Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(25) - Floor) Then Number = 27
+If Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(21) - Floor) And Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(23) - Floor) And Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(25) - Floor) And Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(27) - Floor) Then Number = 29
+End If
+If Section = 11 Then
+If Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(24) - Floor) And Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(26) - Floor) And Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(28) - Floor) And Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(30) - Floor) Then Number = 22
+If Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(26) - Floor) And Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(28) - Floor) And Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(30) - Floor) And Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(22) - Floor) Then Number = 24
+If Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(28) - Floor) And Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(30) - Floor) And Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(22) - Floor) And Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(24) - Floor) Then Number = 26
+If Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(30) - Floor) And Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(22) - Floor) And Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(24) - Floor) And Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(26) - Floor) Then Number = 28
+If Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(22) - Floor) And Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(24) - Floor) And Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(26) - Floor) And Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(28) - Floor) Then Number = 30
+End If
+If Section = 12 Then
+If Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(33) - Floor) And Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(35) - Floor) And Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(37) - Floor) And Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(39) - Floor) Then Number = 31
+If Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(35) - Floor) And Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(37) - Floor) And Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(39) - Floor) And Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(31) - Floor) Then Number = 33
+If Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(37) - Floor) And Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(39) - Floor) And Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(31) - Floor) And Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(33) - Floor) Then Number = 35
+If Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(39) - Floor) And Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(31) - Floor) And Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(33) - Floor) And Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(35) - Floor) Then Number = 37
+If Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(31) - Floor) And Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(33) - Floor) And Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(35) - Floor) And Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(37) - Floor) Then Number = 39
+End If
+If Section = 13 Then
+If Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(34) - Floor) And Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(36) - Floor) And Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(38) - Floor) And Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(40) - Floor) Then Number = 32
+If Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(36) - Floor) And Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(38) - Floor) And Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(40) - Floor) And Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(32) - Floor) Then Number = 34
+If Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(38) - Floor) And Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(40) - Floor) And Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(32) - Floor) And Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(34) - Floor) Then Number = 36
+If Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(40) - Floor) And Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(32) - Floor) And Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(34) - Floor) And Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(36) - Floor) Then Number = 38
+If Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(32) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(34) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(36) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(38) - Floor) Then Number = 40
+End If
+ 
+ MsgBox (Str$(ElevatorFloor(Number)) + ", " + Str$(CameraFloor))
+ 
+ If ElevatorFloor(Number) <> CameraFloor Then
+ MsgBox ("Hello")
+ ElevatorSync(Number) = False
+ If Floor = 1 Then Floor = -1
+ Call AddRoute(Floor, Number, Direction)
+ Exit Sub
+ End If
+ 
+ 'Fix these:
+ 
+ 'If Floor = 1 And Camera.GetPosition.Y > FloorHeight And FloorIndicatorText(Number) <> "M" Then
+ 'ElevatorSync(j50) = False
+ 'OpenElevator(j50) = -1
+ 'GotoFloor(j50) = 0.1
+ 'Exit Sub
+ 'End If
+ 
+ 'If Floor = 1 And Camera.GetPosition.Y < FloorHeight And FloorIndicatorText(j50) = "M" Then
+ 'ElevatorSync(j50) = False
+ 'OpenElevator(j50) = -1
+ 'GotoFloor(j50) = 0.1
+ 'Exit Sub
+ 'End If
+ OpenElevator(Number) = 1
 End Sub
 Sub DrawElevatorButtons(Number As Integer)
 ButtonsEnabled = True
@@ -2724,24 +2860,31 @@ If i52 = 1 Then i52 = 2
 
 If CollisionResult.GetCollisionMesh.GetMeshName = Buttons(i52).GetMeshName Then
     If i52 > 138 Then
-        If i52 = 139 Then OpenElevator(ElevatorNumber) = 1
-        If i52 = 140 Then OpenElevator(ElevatorNumber) = -1
-        If i52 = 142 And GotoFloor(ElevatorNumber) < ElevatorFloor(ElevatorNumber) And GotoFloor(ElevatorNumber) <> 0 Then
-            Buttons(i52).SetColor RGBA(1, 1, 0, 1)
-            GotoFloor(ElevatorNumber) = CurrentFloorExact(ElevatorNumber) - 1
-            FineTune(ElevatorNumber) = True
-        End If
-        If i52 = 142 And GotoFloor(ElevatorNumber) > ElevatorFloor(ElevatorNumber) And GotoFloor(ElevatorNumber) <> 0 Then
-            Buttons(i52).SetColor RGBA(1, 1, 0, 1)
-            GotoFloor(ElevatorNumber) = CurrentFloorExact(ElevatorNumber) + 1
-            FineTune(ElevatorNumber) = True
-        End If
+        If i52 = 139 Then OpenElevator(ElevatorNumber) = 1 'Open button
+        If i52 = 140 Then OpenElevator(ElevatorNumber) = -1 'Close button
+        'If i52=141 then Call DeleteRoute(QueuePositionDirection(ElevatorNumber) 'Cancel button
+        If i52 = 142 Then Call StopElevator(ElevatorNumber) 'Stop button
+        If i52 = 143 Then Call Alarm(ElevatorNumber) 'Alarm button
+        'If i52 = 142 And GotoFloor(ElevatorNumber) < ElevatorFloor(ElevatorNumber) And GotoFloor(ElevatorNumber) <> 0 Then
+        '    Buttons(i52).SetColor RGBA(1, 1, 0, 1)
+        '    GotoFloor(ElevatorNumber) = CurrentFloorExact(ElevatorNumber) - 1
+        '    FineTune(ElevatorNumber) = True
+        'End If
+        'If i52 = 142 And GotoFloor(ElevatorNumber) > ElevatorFloor(ElevatorNumber) And GotoFloor(ElevatorNumber) <> 0 Then
+        '    Buttons(i52).SetColor RGBA(1, 1, 0, 1)
+        '    GotoFloor(ElevatorNumber) = CurrentFloorExact(ElevatorNumber) + 1
+        '    FineTune(ElevatorNumber) = True
+        'End If
         Exit Sub
     End If
     Buttons(i52).SetColor RGBA(1, 1, 0, 1)
     ElevatorSync(ElevatorNumber) = True
-    OpenElevator(ElevatorNumber) = -1
-    GotoFloor(ElevatorNumber) = i52
+    'OpenElevator(ElevatorNumber) = -1
+    'GotoFloor(ElevatorNumber) = i52
+    Dim Direction As Integer
+    If i52 < ElevatorFloor(ElevatorNumber) Then Direction = 0
+    If i52 > ElevatorFloor(ElevatorNumber) Then Direction = 1
+    Call AddRoute(Int(i52), ElevatorNumber, Direction)
 End If
 
 Next i52
@@ -3217,8 +3360,10 @@ End If
    
 End Sub
 
-Sub ElevatorLoop(Number As Single)
+Sub ElevatorLoop(Number As Integer)
 On Error Resume Next
+
+Call ProcessCallQueue(Number)
 
 If ElevatorEnable(Number) = 0 And GotoFloor(Number) = 0 And OpenElevator(Number) = 0 And FineTune(Number) = False Then Exit Sub
 
@@ -3240,7 +3385,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       If ElevatorSync(Number) = True Then
       Room(CameraFloor).Enable False
       For ElevTemp(Number) = 1 To 40
-      CallButtons(ElevTemp(Number)).Enable False
+      CallButtonsUp(ElevTemp(Number)).Enable False
+      CallButtonsDown(ElevTemp(Number)).Enable False
       Next ElevTemp(Number)
       For ElevTemp(Number) = 1 To 40
       ElevatorDoorL(ElevTemp(Number)).Enable False
@@ -3263,7 +3409,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       If ElevatorSync(Number) = True Then
       Room(CameraFloor).Enable False
       For ElevTemp(Number) = 1 To 40
-      CallButtons(ElevTemp(Number)).Enable False
+      CallButtonsUp(ElevTemp(Number)).Enable False
+      CallButtonsDown(ElevTemp(Number)).Enable False
       Next ElevTemp(Number)
       For ElevTemp(Number) = 1 To 40
       ElevatorDoorL(ElevTemp(Number)).Enable False
@@ -3425,7 +3572,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorDoorR(ElevTemp(Number)).Enable True
       Next ElevTemp(Number)
       For ElevTemp(Number) = 1 To 40
-      CallButtons(ElevTemp(Number)).Enable True
+      CallButtonsUp(ElevTemp(Number)).Enable True
+      CallButtonsDown(ElevTemp(Number)).Enable True
       Next ElevTemp(Number)
       ShaftsFloor(CameraFloor).Enable True
       Stairs(CameraFloor).Enable True
@@ -3451,9 +3599,10 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorSounds(Number).Load App.Path + "\data\ding1.wav"
       ElevatorSounds(Number).Play
       ElevatorCheck3(Number) = 1
-        For ElevTemp(Number) = -11 To 144
-        If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).SetColor RGBA(1, 1, 1, 1)
-        Next ElevTemp(Number)
+        'For ElevTemp(Number) = -11 To 144
+        'If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).SetColor RGBA(1, 1, 1, 1)
+        'Next ElevTemp(Number)
+        If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(GotoFloor(Number)).SetColor RGBA(1, 1, 1, 1)
       End If
       If elevatorstart(Number).Y < (GotoFloor(Number) * FloorHeight) + FloorHeight Then
       Elevator(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
@@ -3571,6 +3720,9 @@ OpenElevator1:
       End If
       
       If OpenElevator(Number) = -1 Then
+      
+      If GotoFloor(Number) = 0 Then PauseQueueSearch(Number) = False
+      
       'If ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z <= 0 Then OpenElevator(Number) = 0: GoTo OpenElevator2
       If ElevatorDoorL(Number).GetPosition.z <= 0 Then OpenElevator(Number) = 0: GoTo OpenElevator2
       If ElevatorCheck4(Number) = 0 Then
