@@ -1,5 +1,5 @@
 Attribute VB_Name = "CoreRoutines2"
-'Skycraper 0.92 Beta
+'Skycraper 0.93 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -32,6 +32,8 @@ Sub DrawElevatorWalls(FloorID As Integer, SectionNum As Integer, ShaftNum As Int
 'Openshaft determines if the pipe shaft door(s) should be created for that floor
 
 Dim q
+Dim WallOffset As Single
+
 'SectionNum determines the length of the shafts
 '1 = originally lobby (5 elevators each w/lobby tex)
 '2 = originally 2-39 (5 elevators each w/room tex)
@@ -40,6 +42,8 @@ Dim q
 '5 = originally 118-134 (2 elevators each)
 '6 = originally 135-136 (1 elevator each)
 '7 = originally 137-138 (1 elevator each w/brick texture)
+
+'WallOffset is the distance between the walls and the elevator itself
 
 Dim TextureName As String
 Dim ShaftEnd As Single
@@ -56,8 +60,21 @@ If ShaftNum = 2 Then ShaftLeft = 52.5: ShaftRight = 32.5
 If ShaftNum = 3 Then ShaftLeft = 90.5: ShaftRight = 110.5
 If ShaftNum = 4 Then ShaftLeft = 130.5: ShaftRight = 110.5
 
+If ShaftNum = 1 Or ShaftNum = 3 Then WallOffset = 0.05
+If ShaftNum = 2 Or ShaftNum = 4 Then WallOffset = -0.05
+
 q = FloorID
 If FloorID = 1 Then q = -1
+If FloorID = -1 Then q = -2
+If FloorID = -2 Then q = -3
+If FloorID = -3 Then q = -4
+If FloorID = -4 Then q = -5
+If FloorID = -5 Then q = -6
+If FloorID = -6 Then q = -7
+If FloorID = -7 Then q = -8
+If FloorID = -8 Then q = -9
+If FloorID = -9 Then q = -10
+If FloorID = -10 Then q = -11
 
         'wall left of stairs
         If ShaftNum = 1 Then
@@ -68,119 +85,119 @@ If FloorID = 1 Then q = -1
         'wall between stairs and 1st elevator
         If e1 = True Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -32.5, -ShaftLeft, -30, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -32.5, -ShaftLeft - 0.05, -30.5, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -32.5, -ShaftLeft - 0.05, -30.5, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -32.5, -ShaftLeft - WallOffset, -30.5, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -32.5, -ShaftLeft - WallOffset, -30.5, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
         Else
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -32.5, -ShaftLeft, -16, 19.5, (q * FloorHeight) + FloorHeight, (16.5 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -32.5, -ShaftLeft - 0.05, -16, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -32.5, -ShaftLeft - 0.05, -16, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -32.5, -ShaftLeft - WallOffset, -16, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -32.5, -ShaftLeft - WallOffset, -16, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
         End If
         'wall on left, after 2nd elevator
         If e2 = True Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -46.25, ShaftLeft, -30, 19.5, (q * FloorHeight) + FloorHeight, (16.25 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, -30, 19.5, (q * FloorHeight) + FloorHeight, (16.25 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, -30, 19.5, (q * FloorHeight) + FloorHeight, (16.25 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, -30, 19.5, (q * FloorHeight) + FloorHeight, (16.25 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, -30, 19.5, (q * FloorHeight) + FloorHeight, (16.25 * 0.086), (19.5 * 0.08)
         Else
             If SectionNum < 7 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -46.25, ShaftLeft, -16, 19.5, (q * FloorHeight) + FloorHeight, (30 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, -16, 19.5, (q * FloorHeight) + FloorHeight, (30 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, -16, 19.5, (q * FloorHeight) + FloorHeight, (30 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, -16, 19.5, (q * FloorHeight) + FloorHeight, (30 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, -16, 19.5, (q * FloorHeight) + FloorHeight, (30 * 0.086), (19.5 * 0.08)
             End If
         End If
         'wall between 1st and 3rd elevator
         If e3 = True Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -16, -ShaftLeft, -15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -16, -ShaftLeft - 0.05, -15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -16, -ShaftLeft - 0.05, -15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -16, -ShaftLeft - WallOffset, -15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -16, -ShaftLeft - WallOffset, -15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
         Else
             If SectionNum < 6 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -16, -ShaftLeft, -1, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -16, -ShaftLeft - 0.05, -1, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -16, -ShaftLeft - 0.05, -1, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -16, -ShaftLeft - WallOffset, -1, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -16, -ShaftLeft - WallOffset, -1, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
             End If
         End If
         'wall between 3rd and 5th elevator
         If e5 = True Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -1, -ShaftLeft, 0, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -1, -ShaftLeft - 0.05, 0, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -1, -ShaftLeft - 0.05, 0, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -1, -ShaftLeft - WallOffset, 0, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -1, -ShaftLeft - WallOffset, 0, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
         Else
             If SectionNum < 5 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -1, -ShaftLeft, 14, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex(TextureName), -ShaftLeft - 0.05, -1, -ShaftLeft - 0.05, 14, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex(TextureName), -ShaftLeft - 0.05, -1, -ShaftLeft - 0.05, 14, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -1, -ShaftLeft - WallOffset, 14, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -1, -ShaftLeft - WallOffset, 14, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
             End If
         End If
         'wall between 5th and 7th elevator
         If e7 = True Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, 14, -ShaftLeft, 15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 14, -ShaftLeft - 0.05, 15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 14, -ShaftLeft - 0.05, 15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 14, -ShaftLeft - WallOffset, 15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 14, -ShaftLeft - WallOffset, 15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
         Else
             If SectionNum < 4 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, 14, -ShaftLeft, 29, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 14, -ShaftLeft - 0.05, 29, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 14, -ShaftLeft - 0.05, 29, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 14, -ShaftLeft - WallOffset, 29, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 14, -ShaftLeft - WallOffset, 29, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
             End If
         End If
         'wall between 7th and 9th elevator
         If e9 = True Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, 29, -ShaftLeft, 30, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 29, -ShaftLeft - 0.05, 30, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 29, -ShaftLeft - 0.05, 30, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 29, -ShaftLeft - WallOffset, 30, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 29, -ShaftLeft - WallOffset, 30, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
         Else
             If SectionNum < 3 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, 29, -ShaftLeft, 44, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 29, -ShaftLeft - 0.05, 44, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 29, -ShaftLeft - 0.05, 44, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 29, -ShaftLeft - WallOffset, 44, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 29, -ShaftLeft - WallOffset, 44, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
             End If
         End If
         'wall between 2nd and 4th elevator
         If e4 = True Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -16, ShaftLeft, -15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -16, ShaftLeft + 0.05, -15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -16, ShaftLeft + 0.05, -15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -16, ShaftLeft + WallOffset, -15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -16, ShaftLeft + WallOffset, -15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
         Else
             If SectionNum < 6 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -16, ShaftLeft, -1, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -16, ShaftLeft + 0.05, -1, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -16, ShaftLeft + 0.05, -1, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -16, ShaftLeft + WallOffset, -1, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -16, ShaftLeft + WallOffset, -1, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
             End If
         End If
         'wall between 4th and 6th elevator
         If e6 = True Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -1, ShaftLeft, 0, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -1, ShaftLeft + 0.05, 0, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -1, ShaftLeft + 0.05, 0, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -1, ShaftLeft + WallOffset, 0, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -1, ShaftLeft + WallOffset, 0, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
         Else
             If SectionNum < 5 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -1, ShaftLeft, 14, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -1, ShaftLeft + 0.05, 14, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -1, ShaftLeft + 0.05, 14, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -1, ShaftLeft + WallOffset, 14, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -1, ShaftLeft + WallOffset, 14, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
             End If
         End If
         'wall between 6th and 8th elevator
         If e8 = True Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, 14, ShaftLeft, 15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 14, ShaftLeft + 0.05, 15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 14, ShaftLeft + 0.05, 15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 14, ShaftLeft + WallOffset, 15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 14, ShaftLeft + WallOffset, 15, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
         Else
             If SectionNum < 4 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, 14, ShaftLeft, 29, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 14, ShaftLeft + 0.05, 29, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 14, ShaftLeft + 0.05, 29, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 14, ShaftLeft + WallOffset, 29, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 14, ShaftLeft + WallOffset, 29, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
             End If
         End If
         'wall between 8th and 10th elevator
         If e10 = True Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, 29, ShaftLeft, 30, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 29, ShaftLeft + 0.05, 30, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 29, ShaftLeft + 0.05, 30, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 29, ShaftLeft + WallOffset, 30, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 29, ShaftLeft + WallOffset, 30, 19.5, (q * FloorHeight) + FloorHeight, (1 * 0.086), (19.5 * 0.08)
         Else
             If SectionNum < 3 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, 29, ShaftLeft, 44, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 29, ShaftLeft + 0.05, 44, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 29, ShaftLeft + 0.05, 44, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 29, ShaftLeft + WallOffset, 44, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 29, ShaftLeft + WallOffset, 44, 19.5, (q * FloorHeight) + FloorHeight, (15 * 0.086), (19.5 * 0.08)
             End If
         End If
         
@@ -192,13 +209,13 @@ If FloorID = 1 Then q = -1
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -32.5, -ShaftLeft, -30, 19.5, FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -16, -ShaftLeft, 0, 19.5, FloorHeight, (16 * 0.086), (19.5 * 0.08)
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -46.25, -ShaftLeft, 0, (FloorHeight - 19.5), FloorHeight + 19.5, (92.5 * 0.086), (19.5 * 0.08)
-                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -32.5, -ShaftLeft - 0.05, -30.5, 19.5, FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
-                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -16, -ShaftLeft - 0.05, 0, 19.5, FloorHeight, (16 * 0.086), (19.5 * 0.08)
-                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -30.5, -ShaftLeft - 0.05, 0, (FloorHeight - 19.5), FloorHeight + 19.5, (76.25 * 0.086), (19.5 * 0.08)
+                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -32.5, -ShaftLeft - WallOffset, -30.5, 19.5, FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
+                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -16, -ShaftLeft - WallOffset, 0, 19.5, FloorHeight, (16 * 0.086), (19.5 * 0.08)
+                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -30.5, -ShaftLeft - WallOffset, 0, (FloorHeight - 19.5), FloorHeight + 19.5, (76.25 * 0.086), (19.5 * 0.08)
             End If
             If ShaftNum = 3 Or ShaftNum = 4 Then
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -46.25, -ShaftLeft, 46.25, FloorHeight, FloorHeight, (92.5 * 0.086), (23 * 0.08)
-                Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -46.25, -ShaftLeft - 0.05, 46.25, FloorHeight, FloorHeight, (92.5 * 0.086), (23 * 0.08)
+                Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -46.25, -ShaftLeft - WallOffset, 46.25, FloorHeight, FloorHeight, (92.5 * 0.086), (23 * 0.08)
             End If
             
             'left side
@@ -206,12 +223,12 @@ If FloorID = 1 Then q = -1
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -46.25, ShaftLeft, -30, 19.5, FloorHeight, (16.25 * 0.086), (19.5 * 0.08)
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -16, ShaftLeft, 0, 19.5, FloorHeight, (16 * 0.086), (19.5 * 0.08)
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -46.25, ShaftLeft, 0, (FloorHeight - 19.5), FloorHeight + 19.5, (92.5 * 0.086), (19.5 * 0.08)
-            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -16, ShaftLeft + 0.05, 0, 19.5, FloorHeight, (16 * 0.086), (19.5 * 0.08)
-            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, 0, (FloorHeight - 19.5), FloorHeight + 19.5, (92.5 * 0.086), (19.5 * 0.08)
+            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -16, ShaftLeft + WallOffset, 0, 19.5, FloorHeight, (16 * 0.086), (19.5 * 0.08)
+            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, 0, (FloorHeight - 19.5), FloorHeight + 19.5, (92.5 * 0.086), (19.5 * 0.08)
             End If
             If ShaftNum = 3 Or ShaftNum = 4 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -46.25, ShaftLeft, 46.25, FloorHeight, FloorHeight, (92.5 * 0.086), (23 * 0.08)
-            Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, 46.25, FloorHeight, FloorHeight, (92.5 * 0.086), (23 * 0.08)
+            Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, 46.25, FloorHeight, FloorHeight, (92.5 * 0.086), (23 * 0.08)
             End If
         End If
         
@@ -263,13 +280,13 @@ If FloorID = 1 Then q = -1
         'this section places the wall that extends to the end of the shaft, according to where the last elevator is
         If SectionNum = 7 Then
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -16, -ShaftLeft, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((16 + ShaftEnd) * 0.086), (19.5 * 0.08)
-        Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -16, -ShaftLeft - 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((16 + ShaftEnd) * 0.086), (19.5 * 0.08)
+        Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -16, -ShaftLeft - WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((16 + ShaftEnd) * 0.086), (19.5 * 0.08)
         End If
         If SectionNum = 6 Then
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -16, -ShaftLeft, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((16 + ShaftEnd) * 0.086), (19.5 * 0.08)
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -16, ShaftLeft, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((16 + ShaftEnd) * 0.086), (19.5 * 0.08)
-        Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -16, -ShaftLeft - 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((16 + ShaftEnd) * 0.086), (19.5 * 0.08)
-        Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -16, ShaftLeft + 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((16 + ShaftEnd) * 0.086), (19.5 * 0.08)
+        Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -16, -ShaftLeft - WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((16 + ShaftEnd) * 0.086), (19.5 * 0.08)
+        Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -16, ShaftLeft + WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((16 + ShaftEnd) * 0.086), (19.5 * 0.08)
         End If
         If SectionNum = 5 Then
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -1, -ShaftLeft, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((ShaftLeft + ShaftEnd) * 0.086), (19.5 * 0.08)
@@ -287,62 +304,62 @@ If FloorID = 1 Then q = -1
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, 14, -ShaftLeft, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-14 + ShaftEnd) * 0.086), (19.5 * 0.08)
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, 14, ShaftLeft, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-14 + ShaftEnd) * 0.086), (19.5 * 0.08)
             If ShaftNum = 1 Or ShaftNum = 2 Then
-            Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 14, -ShaftLeft - 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-14 + ShaftEnd) * 0.086), (19.5 * 0.08)
-            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 14, ShaftLeft + 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-14 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 14, -ShaftLeft - WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-14 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 14, ShaftLeft + WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-14 + ShaftEnd) * 0.086), (19.5 * 0.08)
             End If
             If ShaftNum = 3 Or ShaftNum = 4 Then
-            Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 14, -ShaftLeft - 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-14 + ShaftEnd) * 0.086), (19.5 * 0.08)
-            Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 14, ShaftLeft + 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-14 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 14, -ShaftLeft - WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-14 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 14, ShaftLeft + WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-14 + ShaftEnd) * 0.086), (19.5 * 0.08)
             End If
         End If
         If SectionNum = 3 Then
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, 29, -ShaftLeft, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-29 + ShaftEnd) * 0.086), (19.5 * 0.08)
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, 29, ShaftLeft, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-29 + ShaftEnd) * 0.086), (19.5 * 0.08)
             If ShaftNum = 1 Or ShaftNum = 2 Then
-            Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 29, -ShaftLeft - 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-29 + ShaftEnd) * 0.086), (19.5 * 0.08)
-            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 29, ShaftLeft + 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-29 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 29, -ShaftLeft - WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-29 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 29, ShaftLeft + WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-29 + ShaftEnd) * 0.086), (19.5 * 0.08)
             End If
             If ShaftNum = 3 Or ShaftNum = 4 Then
-            Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 29, -ShaftLeft - 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-29 + ShaftEnd) * 0.086), (19.5 * 0.08)
-            Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 29, ShaftLeft + 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-29 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 29, -ShaftLeft - WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-29 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 29, ShaftLeft + WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-29 + ShaftEnd) * 0.086), (19.5 * 0.08)
             End If
         End If
         If SectionNum <= 2 Then
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, 44, -ShaftLeft, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-44 + ShaftEnd) * 0.086), (19.5 * 0.08)
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, 44, ShaftLeft, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-44 + ShaftEnd) * 0.086), (19.5 * 0.08)
             If ShaftNum = 1 Or ShaftNum = 2 Then
-            Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 44, -ShaftLeft - 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-44 + ShaftEnd) * 0.086), (19.5 * 0.08)
-            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 44, ShaftLeft + 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-44 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 44, -ShaftLeft - WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-44 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 44, ShaftLeft + WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-44 + ShaftEnd) * 0.086), (19.5 * 0.08)
             End If
             If ShaftNum = 3 Or ShaftNum = 4 Then
-            Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 44, -ShaftLeft - 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-44 + ShaftEnd) * 0.086), (19.5 * 0.08)
-            Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, 44, ShaftLeft + 0.05, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-44 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 44, -ShaftLeft - WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-44 + ShaftEnd) * 0.086), (19.5 * 0.08)
+            Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, 44, ShaftLeft + WallOffset, ShaftEnd, 19.5, (q * FloorHeight) + FloorHeight, ((-44 + ShaftEnd) * 0.086), (19.5 * 0.08)
             End If
         End If
         
         'walls above
         If FloorID <> 1 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -46.25, -ShaftLeft, ShaftEnd, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, ((46.25 + ShaftEnd) * 0.086), ((FloorHeight - 19.5) * 0.08)
-            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -30.5, -ShaftLeft - 0.05, ShaftEnd, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, ((30 + ShaftEnd) * 0.086), ((FloorHeight - 19.5) * 0.08)
-            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -30.5, -ShaftLeft - 0.05, ShaftEnd, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, ((30 + ShaftEnd) * 0.086), ((FloorHeight - 19.5) * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -30.5, -ShaftLeft - WallOffset, ShaftEnd, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, ((30 + ShaftEnd) * 0.086), ((FloorHeight - 19.5) * 0.08)
+            If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -30.5, -ShaftLeft - WallOffset, ShaftEnd, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, ((30 + ShaftEnd) * 0.086), ((FloorHeight - 19.5) * 0.08)
             If SectionNum <> 7 Then
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -46.25, ShaftLeft, ShaftEnd, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, ((46.25 + ShaftEnd) * 0.086), ((FloorHeight - 19.5) * 0.08)
-                If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, ShaftEnd, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, ((46.25 + ShaftEnd) * 0.086), ((FloorHeight - 19.5) * 0.08)
-                If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, ShaftEnd, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, ((46.25 + ShaftEnd) * 0.086), ((FloorHeight - 19.5) * 0.08)
+                If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, ShaftEnd, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, ((46.25 + ShaftEnd) * 0.086), ((FloorHeight - 19.5) * 0.08)
+                If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, ShaftEnd, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, ((46.25 + ShaftEnd) * 0.086), ((FloorHeight - 19.5) * 0.08)
             End If
         End If
         If FloorID = 1 Then
             If ShaftNum = 3 Or ShaftNum = 4 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -46.25, -ShaftLeft, 46.25, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 92.5 * 0.086, ((FloorHeight - 19.5) * 0.08)
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -46.25, ShaftLeft, 46.25, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 92.5 * 0.086, ((FloorHeight - 19.5) * 0.08)
-            Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -30.5, -ShaftLeft - 0.05, 46.25, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 76.25 * 0.086, ((FloorHeight - 19.5) * 0.08)
-            Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, 46.25, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 92.5 * 0.086, ((FloorHeight - 19.5) * 0.08)
+            Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -30.5, -ShaftLeft - WallOffset, 46.25, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 76.25 * 0.086, ((FloorHeight - 19.5) * 0.08)
+            Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, 46.25, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 92.5 * 0.086, ((FloorHeight - 19.5) * 0.08)
             End If
             If ShaftNum = 1 Or ShaftNum = 2 Then
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -46.25, -ShaftLeft, 0, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 92.5 * 0.086, ((FloorHeight - 19.5) * 0.08)
             ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -46.25, ShaftLeft, 0, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 92.5 * 0.086, ((FloorHeight - 19.5) * 0.08)
-            Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, -30.5, -ShaftLeft - 0.05, 0, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 76.25 * 0.086, ((FloorHeight - 19.5) * 0.08)
-            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, 0, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 92.5 * 0.086, ((FloorHeight - 19.5) * 0.08)
+            Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -30.5, -ShaftLeft - WallOffset, 0, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 76.25 * 0.086, ((FloorHeight - 19.5) * 0.08)
+            Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, 0, (FloorHeight - 19.5), 19.5 + (q * FloorHeight) + FloorHeight, 92.5 * 0.086, ((FloorHeight - 19.5) * 0.08)
             End If
         End If
     'other parts
@@ -352,26 +369,26 @@ If FloorID = 1 Then q = -1
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftRight, -46.25, ShaftRight, -34, 10, (q * FloorHeight) + FloorHeight + 15, 12.25 * 0.086, 10 * 0.08
         ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftRight, -46.25, ShaftRight, -34, 8, (q * FloorHeight) + FloorHeight, 12.25 * 0.086, 8 * 0.08
         If ShaftNum = 1 Or ShaftNum = 2 Then
-        Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), -46.25, (ShaftRight - 0.05), -43, FloorHeight, (q * FloorHeight) + FloorHeight, 3.25 * 0.086, 2
-        Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), -46.25, (ShaftRight - 0.05), -34, 10, (q * FloorHeight) + FloorHeight + 15, 12.25 * 0.086, 10 * 0.08
-        Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), -46.25, (ShaftRight - 0.05), -34, 8, (q * FloorHeight) + FloorHeight, 12.25 * 0.086, 8 * 0.08
+        Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), -46.25, (ShaftRight - WallOffset), -43, FloorHeight, (q * FloorHeight) + FloorHeight, 3.25 * 0.086, 2
+        Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), -46.25, (ShaftRight - WallOffset), -34, 10, (q * FloorHeight) + FloorHeight + 15, 12.25 * 0.086, 10 * 0.08
+        Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), -46.25, (ShaftRight - WallOffset), -34, 8, (q * FloorHeight) + FloorHeight, 12.25 * 0.086, 8 * 0.08
         End If
         If ShaftNum = 3 Or ShaftNum = 4 Then
-        Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), -46.25, (ShaftRight - 0.05), -43, FloorHeight, (q * FloorHeight) + FloorHeight, 3.25 * 0.086, 2
-        Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), -46.25, (ShaftRight - 0.05), -34, 10, (q * FloorHeight) + FloorHeight + 15, 12.25 * 0.086, 10 * 0.08
-        Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), -46.25, (ShaftRight - 0.05), -34, 8, (q * FloorHeight) + FloorHeight, 12.25 * 0.086, 8 * 0.08
+        Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), -46.25, (ShaftRight - WallOffset), -43, FloorHeight, (q * FloorHeight) + FloorHeight, 3.25 * 0.086, 2
+        Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), -46.25, (ShaftRight - WallOffset), -34, 10, (q * FloorHeight) + FloorHeight + 15, 12.25 * 0.086, 10 * 0.08
+        Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), -46.25, (ShaftRight - WallOffset), -34, 8, (q * FloorHeight) + FloorHeight, 12.25 * 0.086, 8 * 0.08
         End If
     End If
     
     If SectionNum <> 7 Then
     ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftRight, -46.25, ShaftLeft, -46.25, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
-    If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftRight, -46.25 + 0.05, ShaftLeft, -46.25 + 0.05, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
-    If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftRight, -46.25 + 0.05, ShaftLeft, -46.25 + 0.05, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
+    If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftRight, -46.25 + WallOffset, ShaftLeft, -46.25 + WallOffset, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
+    If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftRight, -46.25 + WallOffset, ShaftLeft, -46.25 + WallOffset, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
     End If
     
     ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftRight, -46.25, -ShaftLeft, -46.25, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
-    If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight, -30 + 0.05, -ShaftLeft, -30 + 0.05, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
-    If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight, -30 + 0.05, -ShaftLeft, -30 + 0.05, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
+    If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight, -30 + WallOffset, -ShaftLeft, -30 + WallOffset, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
+    If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight, -30 + WallOffset, -ShaftLeft, -30 + WallOffset, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
             
             If FloorID = 1 Then
                 If ShaftNum = 3 Or ShaftNum = 4 Then
@@ -383,14 +400,14 @@ If FloorID = 1 Then q = -1
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -46.25, -ShaftRight, -46.25, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, 46.25, -ShaftRight, 46.25, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
                 'ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftRight, 46.25, -ShaftRight, -46.25, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
-                Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, 46.25, FloorHeight, (FloorHeight * 2), 92.5 * 0.086, 2
-                Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 46.25, -ShaftLeft - 0.05, -30.5, FloorHeight, (FloorHeight * 2), 16.25 * 0.086, 2
-                Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, -46.25 + 0.05, ShaftRight, -46.25 + 0.05, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
-                Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, 46.25 - 0.05, ShaftRight, 46.25 - 0.05, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
-                'Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), 46.25, (ShaftRight - 0.05), -46.25, (FloorHeight * 2), FloorHeight, 92.5 * 0.086, 4
-                Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, -30 + 0.05, -ShaftRight, -30 + 0.05, (FloorHeight * 2), FloorHeight, 20 * 0.086, 2
-                Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, 46.25 - 0.05, -ShaftRight, 46.25 - 0.05, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
-                'Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight + 0.05, 46.25, -ShaftRight + 0.05, -30.5, (FloorHeight * 2), FloorHeight, 16.25 * 0.086, 4
+                Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, 46.25, FloorHeight, (FloorHeight * 2), 92.5 * 0.086, 2
+                Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 46.25, -ShaftLeft - WallOffset, -30.5, FloorHeight, (FloorHeight * 2), 16.25 * 0.086, 2
+                Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, -46.25 + WallOffset, ShaftRight, -46.25 + WallOffset, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
+                Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, 46.25 - WallOffset, ShaftRight, 46.25 - WallOffset, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
+                'Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), 46.25, (ShaftRight - WallOffset), -46.25, (FloorHeight * 2), FloorHeight, 92.5 * 0.086, 4
+                Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, -30 + WallOffset, -ShaftRight, -30 + WallOffset, (FloorHeight * 2), FloorHeight, 20 * 0.086, 2
+                Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, 46.25 - WallOffset, -ShaftRight, 46.25 - WallOffset, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
+                'Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight + WallOffset, 46.25, -ShaftRight + WallOffset, -30.5, (FloorHeight * 2), FloorHeight, 16.25 * 0.086, 4
                 End If
                 
                 If ShaftNum = 1 Or ShaftNum = 2 Then
@@ -402,48 +419,48 @@ If FloorID = 1 Then q = -1
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -46.25, -ShaftRight, -46.25, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, 0, -ShaftRight, 0, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
                 'ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftRight, 0, -ShaftRight, -46.25, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
-                Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + 0.05, -46.25, ShaftLeft + 0.05, 0, FloorHeight, (FloorHeight * 2), 92.5 * 0.086, 2
-                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - 0.05, 0, -ShaftLeft - 0.05, -30.5, FloorHeight, (FloorHeight * 2), 16.25 * 0.086, 2
-                Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, -46.25 + 0.05, ShaftRight, -46.25 + 0.05, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
-                Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, 0 - 0.05, ShaftRight, 0 - 0.05, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
-                'Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), 0, (ShaftRight - 0.05), -46.25, (FloorHeight * 2), FloorHeight, 92.5 * 0.086, 4
-                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, -30 + 0.05, -ShaftRight, -30 + 0.05, (FloorHeight * 2), FloorHeight, 20 * 0.086, 2
-                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, 0 - 0.05, -ShaftRight, 0 - 0.05, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
-                'Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight + 0.05, 0, -ShaftRight + 0.05, -30.5, (FloorHeight * 2), FloorHeight, 16.25 * 0.086, 4
+                Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft + WallOffset, -46.25, ShaftLeft + WallOffset, 0, FloorHeight, (FloorHeight * 2), 92.5 * 0.086, 2
+                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, 0, -ShaftLeft - WallOffset, -30.5, FloorHeight, (FloorHeight * 2), 16.25 * 0.086, 2
+                Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, -46.25 + WallOffset, ShaftRight, -46.25 + WallOffset, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
+                Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, 0 - WallOffset, ShaftRight, 0 - WallOffset, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
+                'Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), 0, (ShaftRight - WallOffset), -46.25, (FloorHeight * 2), FloorHeight, 92.5 * 0.086, 4
+                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, -30 + WallOffset, -ShaftRight, -30 + WallOffset, (FloorHeight * 2), FloorHeight, 20 * 0.086, 2
+                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, 0 - WallOffset, -ShaftRight, 0 - WallOffset, (FloorHeight * 2), FloorHeight, 20 * 0.086, 4
+                'Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight + WallOffset, 0, -ShaftRight + WallOffset, -30.5, (FloorHeight * 2), FloorHeight, 16.25 * 0.086, 4
                 End If
             End If
                 
             'Main shaft area
             If SectionNum <> 7 Then
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, ShaftEnd, ShaftRight, ShaftEnd, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
-                If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, ShaftEnd - 0.05, ShaftRight, ShaftEnd - 0.05, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
-                If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, ShaftEnd - 0.05, ShaftRight, ShaftEnd - 0.05, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
+                If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, ShaftEnd - WallOffset, ShaftRight, ShaftEnd - WallOffset, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
+                If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), ShaftLeft, ShaftEnd - WallOffset, ShaftRight, ShaftEnd - WallOffset, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
                 If OpenShaft = False And JoinShafts = False Then
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftRight, ShaftEnd, ShaftRight, -46.25, FloorHeight, (q * FloorHeight) + FloorHeight, (46.25 + ShaftEnd) * 0.086, 2
-                If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), ShaftEnd, (ShaftRight - 0.05), -46.25, FloorHeight, (q * FloorHeight) + FloorHeight, (46.25 + ShaftEnd) * 0.086, 2
-                If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), ShaftEnd, (ShaftRight - 0.05), -46.25, FloorHeight, (q * FloorHeight) + FloorHeight, (46.25 + ShaftEnd) * 0.086, 2
+                If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), ShaftEnd, (ShaftRight - WallOffset), -46.25, FloorHeight, (q * FloorHeight) + FloorHeight, (46.25 + ShaftEnd) * 0.086, 2
+                If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), ShaftEnd, (ShaftRight - WallOffset), -46.25, FloorHeight, (q * FloorHeight) + FloorHeight, (46.25 + ShaftEnd) * 0.086, 2
                 End If
                 If OpenShaft = True And JoinShafts = False Then
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftRight, ShaftEnd, ShaftRight, -34, FloorHeight, (q * FloorHeight) + FloorHeight, (34 + ShaftEnd) * 0.086, 2
-                If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), ShaftEnd, (ShaftRight - 0.05), -34, FloorHeight, (q * FloorHeight) + FloorHeight, (34 + ShaftEnd) * 0.086, 2
-                If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - 0.05), ShaftEnd, (ShaftRight - 0.05), -34, FloorHeight, (q * FloorHeight) + FloorHeight, (34 + ShaftEnd) * 0.086, 2
+                If ShaftNum = 1 Or ShaftNum = 2 Then Shafts2(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), ShaftEnd, (ShaftRight - WallOffset), -34, FloorHeight, (q * FloorHeight) + FloorHeight, (34 + ShaftEnd) * 0.086, 2
+                If ShaftNum = 3 Or ShaftNum = 4 Then Shafts4(FloorID).AddWall GetTex("BrickTexture"), (ShaftRight - WallOffset), ShaftEnd, (ShaftRight - WallOffset), -34, FloorHeight, (q * FloorHeight) + FloorHeight, (34 + ShaftEnd) * 0.086, 2
                 End If
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, ShaftEnd, -ShaftRight, ShaftEnd, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
                 If JoinShafts = False Then ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftRight, ShaftEnd, -ShaftRight, -46.25, FloorHeight, (q * FloorHeight) + FloorHeight, (46.25 + ShaftEnd) * 0.086, 2
                 If ShaftNum = 1 Or ShaftNum = 2 Then
-                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, ShaftEnd - 0.05, -ShaftRight, ShaftEnd - 0.05, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
-                    If JoinShafts = False Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight + 0.05, ShaftEnd, -ShaftRight + 0.05, -30.5, FloorHeight, (q * FloorHeight) + FloorHeight, (30 + ShaftEnd) * 0.086, 2
+                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, ShaftEnd - WallOffset, -ShaftRight, ShaftEnd - WallOffset, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
+                    If JoinShafts = False Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight + WallOffset, ShaftEnd, -ShaftRight + WallOffset, -30.5, FloorHeight, (q * FloorHeight) + FloorHeight, (30 + ShaftEnd) * 0.086, 2
                 End If
                 If ShaftNum = 3 Or ShaftNum = 4 Then
-                Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, ShaftEnd - 0.05, -ShaftRight, ShaftEnd - 0.05, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
-                    If JoinShafts = False Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight + 0.05, ShaftEnd, -ShaftRight + 0.05, -30.5, FloorHeight, (q * FloorHeight) + FloorHeight, (30 + ShaftEnd) * 0.086, 2
+                Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, ShaftEnd - WallOffset, -ShaftRight, ShaftEnd - WallOffset, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
+                    If JoinShafts = False Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight + WallOffset, ShaftEnd, -ShaftRight + WallOffset, -30.5, FloorHeight, (q * FloorHeight) + FloorHeight, (30 + ShaftEnd) * 0.086, 2
                 End If
             End If
             If SectionNum = 7 Then
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, ShaftEnd, -ShaftRight, ShaftEnd, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
                 ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftRight, ShaftEnd, -ShaftRight, -46.25, FloorHeight, (q * FloorHeight) + FloorHeight, (46.25 + ShaftEnd) * 0.086, 2
-                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, ShaftEnd - 0.05, -ShaftRight, ShaftEnd - 0.05, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
-                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight + 0.05, ShaftEnd, -ShaftRight + 0.05, -30.5, FloorHeight, (q * FloorHeight) + FloorHeight, (30 + ShaftEnd) * 0.086, 2
+                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft, ShaftEnd - WallOffset, -ShaftRight, ShaftEnd - WallOffset, FloorHeight, (q * FloorHeight) + FloorHeight, 20 * 0.086, 2
+                Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftRight + WallOffset, ShaftEnd, -ShaftRight + WallOffset, -30.5, FloorHeight, (q * FloorHeight) + FloorHeight, (30 + ShaftEnd) * 0.086, 2
             End If
     
     Call DrawElevatorWalls2(FloorID, SectionNum, ShaftNum, JoinShafts, OpenShaft, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10)
@@ -454,6 +471,7 @@ Dim TextureName As String
 Dim ShaftEnd As Single
 Dim ShaftLeft As Single
 Dim ShaftRight As Single
+Dim WallOffset As Single
 Dim q
 
 If SectionNum = 1 Then TextureName = "Wall2"
@@ -466,8 +484,21 @@ If ShaftNum = 2 Then ShaftLeft = 52.5: ShaftRight = 32.5
 If ShaftNum = 3 Then ShaftLeft = 90.5: ShaftRight = 110.5
 If ShaftNum = 4 Then ShaftLeft = 130.5: ShaftRight = 110.5
 
+If ShaftNum = 1 Or ShaftNum = 3 Then WallOffset = 0.05
+If ShaftNum = 2 Or ShaftNum = 4 Then WallOffset = -0.05
+
 q = FloorID
 If FloorID = 1 Then q = -1
+If FloorID = -1 Then q = -2
+If FloorID = -2 Then q = -3
+If FloorID = -3 Then q = -4
+If FloorID = -4 Then q = -5
+If FloorID = -5 Then q = -6
+If FloorID = -6 Then q = -7
+If FloorID = -7 Then q = -8
+If FloorID = -8 Then q = -9
+If FloorID = -9 Then q = -10
+If FloorID = -10 Then q = -11
 
 If SectionNum <= 2 Then ShaftEnd = 46.25
         If SectionNum = 3 Then ShaftEnd = 30.83
@@ -477,44 +508,44 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
        
 'Exterior Doors
     If q = -1 Then
-        If e1 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16, -(ShaftLeft + 0.05), -30, 19.6, 0, 1, 1
-        If e1 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts3(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16, -(ShaftLeft + 0.05), -30, 19.6, 0, 1, 1
+        If e1 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16, -(ShaftLeft + WallOffset), -30, 19.6, 0, 1, 1
+        If e1 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts3(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16, -(ShaftLeft + WallOffset), -30, 19.6, 0, 1, 1
         
-        If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16, -(ShaftLeft + 0.05), -30, 19.6, FloorHeight, 1, 1
+        If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16, -(ShaftLeft + WallOffset), -30, 19.6, FloorHeight, 1, 1
         
-        If e2 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05) + 0.05, -16, (ShaftLeft + 0.05) + 0.05, -30, 19.6, 0, 1, 1
-        If e2 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05) + 0.05, -16, (ShaftLeft + 0.05) + 0.05, -30, 19.6, 0, 1, 1
+        If e2 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset) + WallOffset, -16, (ShaftLeft + WallOffset) + WallOffset, -30, 19.6, 0, 1, 1
+        If e2 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset) + WallOffset, -16, (ShaftLeft + WallOffset) + WallOffset, -30, 19.6, 0, 1, 1
         
         If ShaftNum = 1 Then
-        Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16, (ShaftLeft + 0.05), -30, 19.6, FloorHeight, 1, 1
+        Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16, (ShaftLeft + WallOffset), -30, 19.6, FloorHeight, 1, 1
         End If
         If ShaftNum = 2 Then
-        Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16, (ShaftLeft + 0.05), -30, 19.6, FloorHeight, 1, 1
+        Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16, (ShaftLeft + WallOffset), -30, 19.6, FloorHeight, 1, 1
         End If
         
-        If e3 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 1), -(ShaftLeft + 0.05), -30 + (15 * 1), 19.6, 0, 1, 1
-        If e3 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts3(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 1), -(ShaftLeft + 0.05), -30 + (15 * 1), 19.6, 0, 1, 1
+        If e3 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 1), -(ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, 0, 1, 1
+        If e3 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts3(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 1), -(ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, 0, 1, 1
         
-        If e4 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 1), (ShaftLeft + 0.05), -30 + (15 * 1), 19.6, 0, 1, 1
-        If e4 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts4(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 1), (ShaftLeft + 0.05), -30 + (15 * 1), 19.6, 0, 1, 1
+        If e4 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 1), (ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, 0, 1, 1
+        If e4 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts4(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 1), (ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, 0, 1, 1
         
-        If e5 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 2), -(ShaftLeft + 0.05), -30 + (15 * 2), 19.6, 0, 1, 1
-        If e5 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts3(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 2), -(ShaftLeft + 0.05), -30 + (15 * 2), 19.6, 0, 1, 1
+        If e5 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 2), -(ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, 0, 1, 1
+        If e5 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts3(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 2), -(ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, 0, 1, 1
         
-        If e6 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 2), (ShaftLeft + 0.05), -30 + (15 * 2), 19.6, 0, 1, 1
-        If e6 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts4(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 2), (ShaftLeft + 0.05), -30 + (15 * 2), 19.6, 0, 1, 1
+        If e6 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 2), (ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, 0, 1, 1
+        If e6 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts4(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 2), (ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, 0, 1, 1
         
-        If e7 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 3), -(ShaftLeft + 0.05), -30 + (15 * 3), 19.6, 0, 1, 1
-        If e7 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts3(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 3), -(ShaftLeft + 0.05), -30 + (15 * 3), 19.6, 0, 1, 1
+        If e7 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 3), -(ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, 0, 1, 1
+        If e7 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts3(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 3), -(ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, 0, 1, 1
         
-        If e8 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 3), (ShaftLeft + 0.05), -30 + (15 * 3), 19.6, 0, 1, 1
-        If e8 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts4(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 3), (ShaftLeft + 0.05), -30 + (15 * 3), 19.6, 0, 1, 1
+        If e8 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 3), (ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, 0, 1, 1
+        If e8 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts4(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 3), (ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, 0, 1, 1
         
-        If e9 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 4), -(ShaftLeft + 0.05), -30 + (15 * 4), 19.6, 0, 1, 1
-        If e9 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts3(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 4), -(ShaftLeft + 0.05), -30 + (15 * 4), 19.6, 0, 1, 1
+        If e9 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts1(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 4), -(ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, 0, 1, 1
+        If e9 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts3(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 4), -(ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, 0, 1, 1
         
-        If e10 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 4), (ShaftLeft + 0.05), -30 + (15 * 4), 19.6, 0, 1, 1
-        If e10 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts4(1).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 4), (ShaftLeft + 0.05), -30 + (15 * 4), 19.6, 0, 1, 1
+        If e10 = True And (ShaftNum = 1 Or ShaftNum = 2) Then Shafts2(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 4), (ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, 0, 1, 1
+        If e10 = True And (ShaftNum = 3 Or ShaftNum = 4) Then Shafts4(1).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 4), (ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, 0, 1, 1
         
         'elev 1
         If e1 = True Then
@@ -579,16 +610,16 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
     
     If e1 = True Then
     If ShaftNum = 1 Then
-    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16, -(ShaftLeft + 0.05), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16, -(ShaftLeft + WallOffset), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 2 Then
-    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16, -(ShaftLeft + 0.05), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16, -(ShaftLeft + WallOffset), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 3 Then
-    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16, -(ShaftLeft + 0.05), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16, -(ShaftLeft + WallOffset), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 4 Then
-    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16, -(ShaftLeft + 0.05), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16, -(ShaftLeft + WallOffset), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     
     Room(FloorID).AddWall GetTex("ElevExtPanels"), -ShaftLeft, -16, -ShaftLeft, -19, 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
@@ -597,16 +628,16 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
     
     If e2 = True Then
     If ShaftNum = 1 Then
-    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16, (ShaftLeft + 0.05), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16, (ShaftLeft + WallOffset), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 2 Then
-    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16, (ShaftLeft + 0.05), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16, (ShaftLeft + WallOffset), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 3 Then
-    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16, (ShaftLeft + 0.05), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16, (ShaftLeft + WallOffset), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 4 Then
-    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16, (ShaftLeft + 0.05), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16, (ShaftLeft + WallOffset), -30, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     
     'elev 2
@@ -616,16 +647,16 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
     
     If e3 = True Then
     If ShaftNum = 1 Then
-    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 1), -(ShaftLeft + 0.05), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 1), -(ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 2 Then
-    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 1), -(ShaftLeft + 0.05), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 1), -(ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 3 Then
-    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 1), -(ShaftLeft + 0.05), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 1), -(ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 4 Then
-    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 1), -(ShaftLeft + 0.05), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 1), -(ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     Room(FloorID).AddWall GetTex("ElevExtPanels"), -ShaftLeft, -16 + (15 * 1), -ShaftLeft, -19 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
     Room(FloorID).AddWall GetTex("ElevExtPanels"), -ShaftLeft, -30 + (15 * 1), -ShaftLeft, -27 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
@@ -633,16 +664,16 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
     
     If e4 = True Then
     If ShaftNum = 1 Then
-    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 1), (ShaftLeft + 0.05), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 1), (ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 2 Then
-    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 1), (ShaftLeft + 0.05), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 1), (ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 3 Then
-    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 1), (ShaftLeft + 0.05), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 1), (ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 4 Then
-    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 1), (ShaftLeft + 0.05), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 1), (ShaftLeft + WallOffset), -30 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     Room(FloorID).AddWall GetTex("ElevExtPanels"), ShaftLeft, -16 + (15 * 1), ShaftLeft, -19 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
     Room(FloorID).AddWall GetTex("ElevExtPanels"), ShaftLeft, -30 + (15 * 1), ShaftLeft, -27 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
@@ -650,16 +681,16 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
     
     If e5 = True Then
     If ShaftNum = 1 Then
-    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 2), -(ShaftLeft + 0.05), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 2), -(ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 2 Then
-    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 2), -(ShaftLeft + 0.05), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 2), -(ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 3 Then
-    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 2), -(ShaftLeft + 0.05), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 2), -(ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 4 Then
-    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 2), -(ShaftLeft + 0.05), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 2), -(ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     Room(FloorID).AddWall GetTex("ElevExtPanels"), -ShaftLeft, -16 + (15 * 2), -ShaftLeft, -19 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
     Room(FloorID).AddWall GetTex("ElevExtPanels"), -ShaftLeft, -30 + (15 * 2), -ShaftLeft, -27 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
@@ -667,16 +698,16 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
     
     If e6 = True Then
     If ShaftNum = 1 Then
-    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 2), (ShaftLeft + 0.05), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 2), (ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 2 Then
-    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 2), (ShaftLeft + 0.05), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 2), (ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 3 Then
-    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 2), (ShaftLeft + 0.05), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 2), (ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 4 Then
-    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 2), (ShaftLeft + 0.05), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 2), (ShaftLeft + WallOffset), -30 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     Room(FloorID).AddWall GetTex("ElevExtPanels"), ShaftLeft, -16 + (15 * 2), ShaftLeft, -19 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
     Room(FloorID).AddWall GetTex("ElevExtPanels"), ShaftLeft, -30 + (15 * 2), ShaftLeft, -27 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
@@ -684,16 +715,16 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
     
     If e7 = True Then
     If ShaftNum = 1 Then
-    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 3), -(ShaftLeft + 0.05), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 3), -(ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 2 Then
-    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 3), -(ShaftLeft + 0.05), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 3), -(ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 3 Then
-    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 3), -(ShaftLeft + 0.05), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 3), -(ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 4 Then
-    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 3), -(ShaftLeft + 0.05), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 3), -(ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     Room(FloorID).AddWall GetTex("ElevExtPanels"), -ShaftLeft, -16 + (15 * 3), -ShaftLeft, -19 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
     Room(FloorID).AddWall GetTex("ElevExtPanels"), -ShaftLeft, -30 + (15 * 3), -ShaftLeft, -27 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
@@ -701,16 +732,16 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
     
     If e8 = True Then
     If ShaftNum = 1 Then
-    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 3), (ShaftLeft + 0.05), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 3), (ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 2 Then
-    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 3), (ShaftLeft + 0.05), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 3), (ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 3 Then
-    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 3), (ShaftLeft + 0.05), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 3), (ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 4 Then
-    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 3), (ShaftLeft + 0.05), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 3), (ShaftLeft + WallOffset), -30 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     Room(FloorID).AddWall GetTex("ElevExtPanels"), ShaftLeft, -16 + (15 * 3), ShaftLeft, -19 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
     Room(FloorID).AddWall GetTex("ElevExtPanels"), ShaftLeft, -30 + (15 * 3), ShaftLeft, -27 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
@@ -718,16 +749,16 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
     
     If e9 = True Then
     If ShaftNum = 1 Then
-    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 4), -(ShaftLeft + 0.05), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 4), -(ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 2 Then
-    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 4), -(ShaftLeft + 0.05), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts1(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 4), -(ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 3 Then
-    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 4), -(ShaftLeft + 0.05), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 4), -(ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 4 Then
-    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -16 + (15 * 4), -(ShaftLeft + 0.05), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts3(FloorID).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -16 + (15 * 4), -(ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     Room(FloorID).AddWall GetTex("ElevExtPanels"), -ShaftLeft, -16 + (15 * 4), -ShaftLeft, -19 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
     Room(FloorID).AddWall GetTex("ElevExtPanels"), -ShaftLeft, -30 + (15 * 4), -ShaftLeft, -27 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
@@ -735,16 +766,16 @@ If SectionNum <= 2 Then ShaftEnd = 46.25
     
     If e10 = True Then
     If ShaftNum = 1 Then
-    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 4), (ShaftLeft + 0.05), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 4), (ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 2 Then
-    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 4), (ShaftLeft + 0.05), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts2(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 4), (ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 3 Then
-    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 4), (ShaftLeft + 0.05), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 4), (ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     If ShaftNum = 4 Then
-    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -16 + (15 * 4), (ShaftLeft + 0.05), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+    Shafts4(FloorID).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -16 + (15 * 4), (ShaftLeft + WallOffset), -30 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
     End If
     Room(FloorID).AddWall GetTex("ElevExtPanels"), ShaftLeft, -16 + (15 * 4), ShaftLeft, -19 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
     Room(FloorID).AddWall GetTex("ElevExtPanels"), ShaftLeft, -30 + (15 * 4), ShaftLeft, -27 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 0.5, 1
@@ -758,6 +789,8 @@ Sub ProcessRealtime(FloorID As Integer, SectionNum As Integer, ShaftNum As Integ
 Dim ShaftEnd As Single
 Dim ShaftLeft As Single
 Dim ShaftRight As Single
+Dim WallOffset As Single
+Dim WallOffset2 As Single
 Dim q As Integer
 
 q = FloorID
@@ -774,167 +807,170 @@ If SectionNum = 4 Then ShaftEnd = 15.41
 If SectionNum = 5 Then ShaftEnd = 0
 If SectionNum >= 6 Then ShaftEnd = -15.42
 
+If ShaftNum = 1 Or ShaftNum = 3 Then WallOffset = 0.05: WallOffset2 = 0.01
+If ShaftNum = 2 Or ShaftNum = 4 Then WallOffset = -0.05: WallOffset2 = 0.01
+
 'Call Button Panels
-    If e1 = True And ShaftNum = 1 Then CallButtons(1).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18, -(ShaftLeft - 0.01), -17, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e1 = True And ShaftNum = 1 And FloorID = 1 Then CallButtons(1).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18, -(ShaftLeft - 0.01), -17, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
-    If e2 = True And ShaftNum = 1 Then CallButtons(2).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29, (ShaftLeft - 0.01), -28, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e2 = True And ShaftNum = 1 And FloorID = 1 Then CallButtons(2).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29, (ShaftLeft - 0.01), -28, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
-    If e3 = True And ShaftNum = 1 Then CallButtons(3).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18 + (15 * 1), -(ShaftLeft - 0.01), -17 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e4 = True And ShaftNum = 1 Then CallButtons(4).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29 + (15 * 1), (ShaftLeft - 0.01), -28 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e5 = True And ShaftNum = 1 Then CallButtons(5).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18 + (15 * 2), -(ShaftLeft - 0.01), -17 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e6 = True And ShaftNum = 1 Then CallButtons(6).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29 + (15 * 2), (ShaftLeft - 0.01), -28 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e7 = True And ShaftNum = 1 Then CallButtons(7).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18 + (15 * 3), -(ShaftLeft - 0.01), -17 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e8 = True And ShaftNum = 1 Then CallButtons(8).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29 + (15 * 3), (ShaftLeft - 0.01), -28 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e9 = True And ShaftNum = 1 Then CallButtons(9).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18 + (15 * 4), -(ShaftLeft - 0.01), -17 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e10 = True And ShaftNum = 1 Then CallButtons(10).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29 + (15 * 4), (ShaftLeft - 0.01), -28 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e1 = True And ShaftNum = 1 Then CallButtons(1).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18, -(ShaftLeft - WallOffset2), -17, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e1 = True And ShaftNum = 1 And FloorID = 1 Then CallButtons(1).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18, -(ShaftLeft - WallOffset2), -17, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
+    If e2 = True And ShaftNum = 1 Then CallButtons(2).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29, (ShaftLeft - WallOffset2), -28, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e2 = True And ShaftNum = 1 And FloorID = 1 Then CallButtons(2).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29, (ShaftLeft - WallOffset2), -28, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
+    If e3 = True And ShaftNum = 1 Then CallButtons(3).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18 + (15 * 1), -(ShaftLeft - WallOffset2), -17 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e4 = True And ShaftNum = 1 Then CallButtons(4).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29 + (15 * 1), (ShaftLeft - WallOffset2), -28 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e5 = True And ShaftNum = 1 Then CallButtons(5).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18 + (15 * 2), -(ShaftLeft - WallOffset2), -17 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e6 = True And ShaftNum = 1 Then CallButtons(6).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29 + (15 * 2), (ShaftLeft - WallOffset2), -28 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e7 = True And ShaftNum = 1 Then CallButtons(7).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18 + (15 * 3), -(ShaftLeft - WallOffset2), -17 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e8 = True And ShaftNum = 1 Then CallButtons(8).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29 + (15 * 3), (ShaftLeft - WallOffset2), -28 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e9 = True And ShaftNum = 1 Then CallButtons(9).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18 + (15 * 4), -(ShaftLeft - WallOffset2), -17 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e10 = True And ShaftNum = 1 Then CallButtons(10).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29 + (15 * 4), (ShaftLeft - WallOffset2), -28 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
     
-    If e2 = True And ShaftNum = 2 Then CallButtons(12).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18, (ShaftLeft + 0.01), -17, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    'If e2 = True And ShaftNum = 2 And FloorID = 1 Then CallButtons(12).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18, (ShaftLeft + 0.01), -17, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
-    If e1 = True And ShaftNum = 2 Then CallButtons(11).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29, -(ShaftLeft + 0.01), -28, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    'If e1 = True And ShaftNum = 2 And FloorID = 1 Then CallButtons(11).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29, -(ShaftLeft + 0.01), -28, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
-    If e4 = True And ShaftNum = 2 Then CallButtons(14).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18 + (15 * 1), (ShaftLeft + 0.01), -17 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e3 = True And ShaftNum = 2 Then CallButtons(13).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29 + (15 * 1), -(ShaftLeft + 0.01), -28 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e6 = True And ShaftNum = 2 Then CallButtons(16).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18 + (15 * 2), (ShaftLeft + 0.01), -17 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e5 = True And ShaftNum = 2 Then CallButtons(15).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29 + (15 * 2), -(ShaftLeft + 0.01), -28 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e8 = True And ShaftNum = 2 Then CallButtons(18).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18 + (15 * 3), (ShaftLeft + 0.01), -17 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e7 = True And ShaftNum = 2 Then CallButtons(17).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29 + (15 * 3), -(ShaftLeft + 0.01), -28 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e10 = True And ShaftNum = 2 Then CallButtons(20).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18 + (15 * 4), (ShaftLeft + 0.01), -17 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e9 = True And ShaftNum = 2 Then CallButtons(19).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29 + (15 * 4), -(ShaftLeft + 0.01), -28 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e2 = True And ShaftNum = 2 Then CallButtons(12).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18, (ShaftLeft + WallOffset2), -17, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    'If e2 = True And ShaftNum = 2 And FloorID = 1 Then CallButtons(12).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18, (ShaftLeft + WallOffset2), -17, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
+    If e1 = True And ShaftNum = 2 Then CallButtons(11).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29, -(ShaftLeft + WallOffset2), -28, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    'If e1 = True And ShaftNum = 2 And FloorID = 1 Then CallButtons(11).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29, -(ShaftLeft + WallOffset2), -28, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
+    If e4 = True And ShaftNum = 2 Then CallButtons(14).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18 + (15 * 1), (ShaftLeft + WallOffset2), -17 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e3 = True And ShaftNum = 2 Then CallButtons(13).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29 + (15 * 1), -(ShaftLeft + WallOffset2), -28 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e6 = True And ShaftNum = 2 Then CallButtons(16).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18 + (15 * 2), (ShaftLeft + WallOffset2), -17 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e5 = True And ShaftNum = 2 Then CallButtons(15).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29 + (15 * 2), -(ShaftLeft + WallOffset2), -28 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e8 = True And ShaftNum = 2 Then CallButtons(18).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18 + (15 * 3), (ShaftLeft + WallOffset2), -17 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e7 = True And ShaftNum = 2 Then CallButtons(17).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29 + (15 * 3), -(ShaftLeft + WallOffset2), -28 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e10 = True And ShaftNum = 2 Then CallButtons(20).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18 + (15 * 4), (ShaftLeft + WallOffset2), -17 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e9 = True And ShaftNum = 2 Then CallButtons(19).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29 + (15 * 4), -(ShaftLeft + WallOffset2), -28 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
     
     
-    If e1 = True And ShaftNum = 3 Then CallButtons(21).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18, -(ShaftLeft - 0.01), -17, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    'If e1 = True And ShaftNum = 3 And FloorID = 1 Then CallButtons(21).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18, -(ShaftLeft - 0.01), -17, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
-    If e2 = True And ShaftNum = 3 Then CallButtons(22).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29, (ShaftLeft - 0.01), -28, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    'If e2 = True And ShaftNum = 3 And FloorID = 1 Then CallButtons(22).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29, (ShaftLeft - 0.01), -28, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
-    If e3 = True And ShaftNum = 3 Then CallButtons(23).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18 + (15 * 1), -(ShaftLeft - 0.01), -17 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e4 = True And ShaftNum = 3 Then CallButtons(24).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29 + (15 * 1), (ShaftLeft - 0.01), -28 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e5 = True And ShaftNum = 3 Then CallButtons(25).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18 + (15 * 2), -(ShaftLeft - 0.01), -17 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e6 = True And ShaftNum = 3 Then CallButtons(26).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29 + (15 * 2), (ShaftLeft - 0.01), -28 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e7 = True And ShaftNum = 3 Then CallButtons(27).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18 + (15 * 3), -(ShaftLeft - 0.01), -17 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e8 = True And ShaftNum = 3 Then CallButtons(28).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29 + (15 * 3), (ShaftLeft - 0.01), -28 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e9 = True And ShaftNum = 3 Then CallButtons(29).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - 0.01), -18 + (15 * 4), -(ShaftLeft - 0.01), -17 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e10 = True And ShaftNum = 3 Then CallButtons(30).AddWall GetTex("CallButtonsTex"), (ShaftLeft - 0.01), -29 + (15 * 4), (ShaftLeft - 0.01), -28 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e1 = True And ShaftNum = 3 Then CallButtons(21).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18, -(ShaftLeft - WallOffset2), -17, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    'If e1 = True And ShaftNum = 3 And FloorID = 1 Then CallButtons(21).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18, -(ShaftLeft - WallOffset2), -17, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
+    If e2 = True And ShaftNum = 3 Then CallButtons(22).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29, (ShaftLeft - WallOffset2), -28, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    'If e2 = True And ShaftNum = 3 And FloorID = 1 Then CallButtons(22).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29, (ShaftLeft - WallOffset2), -28, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
+    If e3 = True And ShaftNum = 3 Then CallButtons(23).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18 + (15 * 1), -(ShaftLeft - WallOffset2), -17 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e4 = True And ShaftNum = 3 Then CallButtons(24).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29 + (15 * 1), (ShaftLeft - WallOffset2), -28 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e5 = True And ShaftNum = 3 Then CallButtons(25).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18 + (15 * 2), -(ShaftLeft - WallOffset2), -17 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e6 = True And ShaftNum = 3 Then CallButtons(26).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29 + (15 * 2), (ShaftLeft - WallOffset2), -28 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e7 = True And ShaftNum = 3 Then CallButtons(27).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18 + (15 * 3), -(ShaftLeft - WallOffset2), -17 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e8 = True And ShaftNum = 3 Then CallButtons(28).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29 + (15 * 3), (ShaftLeft - WallOffset2), -28 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e9 = True And ShaftNum = 3 Then CallButtons(29).AddWall GetTex("CallButtonsTex"), -(ShaftLeft - WallOffset2), -18 + (15 * 4), -(ShaftLeft - WallOffset2), -17 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e10 = True And ShaftNum = 3 Then CallButtons(30).AddWall GetTex("CallButtonsTex"), (ShaftLeft - WallOffset2), -29 + (15 * 4), (ShaftLeft - WallOffset2), -28 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
     
-    If e2 = True And ShaftNum = 4 Then CallButtons(32).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18, (ShaftLeft + 0.01), -17, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    'If e2 = True And ShaftNum = 4 And FloorID = 1 Then CallButtons(32).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18, (ShaftLeft + 0.01), -17, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
-    If e1 = True And ShaftNum = 4 Then CallButtons(31).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29, -(ShaftLeft + 0.01), -28, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    'If e1 = True And ShaftNum = 4 And FloorID = 1 Then CallButtons(31).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29, -(ShaftLeft + 0.01), -28, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
-    If e4 = True And ShaftNum = 4 Then CallButtons(34).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18 + (15 * 1), (ShaftLeft + 0.01), -17 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e3 = True And ShaftNum = 4 Then CallButtons(33).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29 + (15 * 1), -(ShaftLeft + 0.01), -28 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e6 = True And ShaftNum = 4 Then CallButtons(36).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18 + (15 * 2), (ShaftLeft + 0.01), -17 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e5 = True And ShaftNum = 4 Then CallButtons(35).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29 + (15 * 2), -(ShaftLeft + 0.01), -28 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e8 = True And ShaftNum = 4 Then CallButtons(38).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18 + (15 * 3), (ShaftLeft + 0.01), -17 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e7 = True And ShaftNum = 4 Then CallButtons(37).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29 + (15 * 3), -(ShaftLeft + 0.01), -28 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e10 = True And ShaftNum = 4 Then CallButtons(40).AddWall GetTex("CallButtonsTex"), (ShaftLeft + 0.01), -18 + (15 * 4), (ShaftLeft + 0.01), -17 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
-    If e9 = True And ShaftNum = 4 Then CallButtons(39).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + 0.01), -29 + (15 * 4), -(ShaftLeft + 0.01), -28 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e2 = True And ShaftNum = 4 Then CallButtons(32).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18, (ShaftLeft + WallOffset2), -17, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    'If e2 = True And ShaftNum = 4 And FloorID = 1 Then CallButtons(32).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18, (ShaftLeft + WallOffset2), -17, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
+    If e1 = True And ShaftNum = 4 Then CallButtons(31).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29, -(ShaftLeft + WallOffset2), -28, 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    'If e1 = True And ShaftNum = 4 And FloorID = 1 Then CallButtons(31).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29, -(ShaftLeft + WallOffset2), -28, 1.5, 8.5 + (0 * FloorHeight) + FloorHeight, 1, 1
+    If e4 = True And ShaftNum = 4 Then CallButtons(34).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18 + (15 * 1), (ShaftLeft + WallOffset2), -17 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e3 = True And ShaftNum = 4 Then CallButtons(33).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29 + (15 * 1), -(ShaftLeft + WallOffset2), -28 + (15 * 1), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e6 = True And ShaftNum = 4 Then CallButtons(36).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18 + (15 * 2), (ShaftLeft + WallOffset2), -17 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e5 = True And ShaftNum = 4 Then CallButtons(35).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29 + (15 * 2), -(ShaftLeft + WallOffset2), -28 + (15 * 2), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e8 = True And ShaftNum = 4 Then CallButtons(38).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18 + (15 * 3), (ShaftLeft + WallOffset2), -17 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e7 = True And ShaftNum = 4 Then CallButtons(37).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29 + (15 * 3), -(ShaftLeft + WallOffset2), -28 + (15 * 3), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e10 = True And ShaftNum = 4 Then CallButtons(40).AddWall GetTex("CallButtonsTex"), (ShaftLeft + WallOffset2), -18 + (15 * 4), (ShaftLeft + WallOffset2), -17 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
+    If e9 = True And ShaftNum = 4 Then CallButtons(39).AddWall GetTex("CallButtonsTex"), -(ShaftLeft + WallOffset2), -29 + (15 * 4), -(ShaftLeft + WallOffset2), -28 + (15 * 4), 1.5, 8.5 + (q * FloorHeight) + FloorHeight, 1, 1
 
 
-        If e1 = True And ShaftNum = 1 Then ElevatorDoorL(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05, -(ShaftLeft + 0.05), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e1 = True And ShaftNum = 1 Then ElevatorDoorR(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05, -(ShaftLeft + 0.05), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e1 = True And ShaftNum = 2 Then ElevatorDoorL(11).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05, -(ShaftLeft + 0.05), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e1 = True And ShaftNum = 2 Then ElevatorDoorR(11).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05, -(ShaftLeft + 0.05), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e1 = True And ShaftNum = 3 Then ElevatorDoorL(21).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05, -(ShaftLeft + 0.05), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e1 = True And ShaftNum = 3 Then ElevatorDoorR(21).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05, -(ShaftLeft + 0.05), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e1 = True And ShaftNum = 4 Then ElevatorDoorL(31).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05, -(ShaftLeft + 0.05), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e1 = True And ShaftNum = 4 Then ElevatorDoorR(31).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05, -(ShaftLeft + 0.05), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e1 = True And ShaftNum = 1 Then ElevatorDoorL(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05, -(ShaftLeft + WallOffset), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e1 = True And ShaftNum = 1 Then ElevatorDoorR(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05, -(ShaftLeft + WallOffset), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e1 = True And ShaftNum = 2 Then ElevatorDoorL(11).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05, -(ShaftLeft + WallOffset), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e1 = True And ShaftNum = 2 Then ElevatorDoorR(11).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05, -(ShaftLeft + WallOffset), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e1 = True And ShaftNum = 3 Then ElevatorDoorL(21).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05, -(ShaftLeft + WallOffset), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e1 = True And ShaftNum = 3 Then ElevatorDoorR(21).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05, -(ShaftLeft + WallOffset), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e1 = True And ShaftNum = 4 Then ElevatorDoorL(31).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05, -(ShaftLeft + WallOffset), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e1 = True And ShaftNum = 4 Then ElevatorDoorR(31).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05, -(ShaftLeft + WallOffset), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
         
         If FloorID = 1 Then
-        If ShaftNum = 1 Then ElevatorDoorL(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05, -(ShaftLeft + 0.05), -22.95, 19.6, FloorHeight, 1, 1
-        If ShaftNum = 1 Then ElevatorDoorR(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05, -(ShaftLeft + 0.05), -27.05, 19.6, FloorHeight, 1, 1
-        If ShaftNum = 2 Then ElevatorDoorL(11).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05, -(ShaftLeft + 0.05), -22.95, 19.6, FloorHeight, 1, 1
-        If ShaftNum = 2 Then ElevatorDoorR(11).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05, -(ShaftLeft + 0.05), -27.05, 19.6, FloorHeight, 1, 1
+        If ShaftNum = 1 Then ElevatorDoorL(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05, -(ShaftLeft + WallOffset), -22.95, 19.6, FloorHeight, 1, 1
+        If ShaftNum = 1 Then ElevatorDoorR(1).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05, -(ShaftLeft + WallOffset), -27.05, 19.6, FloorHeight, 1, 1
+        If ShaftNum = 2 Then ElevatorDoorL(11).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05, -(ShaftLeft + WallOffset), -22.95, 19.6, FloorHeight, 1, 1
+        If ShaftNum = 2 Then ElevatorDoorR(11).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05, -(ShaftLeft + WallOffset), -27.05, 19.6, FloorHeight, 1, 1
         End If
         
-        If e2 = True And ShaftNum = 1 Then ElevatorDoorL(2).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05, (ShaftLeft + 0.05), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e2 = True And ShaftNum = 1 Then ElevatorDoorR(2).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05, (ShaftLeft + 0.05), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e2 = True And ShaftNum = 2 Then ElevatorDoorL(12).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05, (ShaftLeft + 0.05), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e2 = True And ShaftNum = 2 Then ElevatorDoorR(12).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05, (ShaftLeft + 0.05), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e2 = True And ShaftNum = 3 Then ElevatorDoorL(22).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05, (ShaftLeft + 0.05), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e2 = True And ShaftNum = 3 Then ElevatorDoorR(22).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05, (ShaftLeft + 0.05), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e2 = True And ShaftNum = 4 Then ElevatorDoorL(32).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05, (ShaftLeft + 0.05), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e2 = True And ShaftNum = 4 Then ElevatorDoorR(32).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05, (ShaftLeft + 0.05), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e2 = True And ShaftNum = 1 Then ElevatorDoorL(2).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05, (ShaftLeft + WallOffset), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e2 = True And ShaftNum = 1 Then ElevatorDoorR(2).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05, (ShaftLeft + WallOffset), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e2 = True And ShaftNum = 2 Then ElevatorDoorL(12).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05, (ShaftLeft + WallOffset), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e2 = True And ShaftNum = 2 Then ElevatorDoorR(12).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05, (ShaftLeft + WallOffset), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e2 = True And ShaftNum = 3 Then ElevatorDoorL(22).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05, (ShaftLeft + WallOffset), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e2 = True And ShaftNum = 3 Then ElevatorDoorR(22).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05, (ShaftLeft + WallOffset), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e2 = True And ShaftNum = 4 Then ElevatorDoorL(32).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05, (ShaftLeft + WallOffset), -22.95, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e2 = True And ShaftNum = 4 Then ElevatorDoorR(32).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05, (ShaftLeft + WallOffset), -27.05, 19.6, (q * FloorHeight) + FloorHeight, 1, 1
         If FloorID = 1 Then
         If ShaftNum = 1 Then
-        ElevatorDoorL(2).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05, (ShaftLeft + 0.05), -22.95, 19.6, FloorHeight, 1, 1
-        ElevatorDoorR(2).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05, (ShaftLeft + 0.05), -27.05, 19.6, FloorHeight, 1, 1
+        ElevatorDoorL(2).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05, (ShaftLeft + WallOffset), -22.95, 19.6, FloorHeight, 1, 1
+        ElevatorDoorR(2).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05, (ShaftLeft + WallOffset), -27.05, 19.6, FloorHeight, 1, 1
         End If
         If ShaftNum = 2 Then
-        ElevatorDoorL(12).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05, (ShaftLeft + 0.05), -22.95, 19.6, FloorHeight, 1, 1
-        ElevatorDoorR(12).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05, (ShaftLeft + 0.05), -27.05, 19.6, FloorHeight, 1, 1
+        ElevatorDoorL(12).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05, (ShaftLeft + WallOffset), -22.95, 19.6, FloorHeight, 1, 1
+        ElevatorDoorR(12).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05, (ShaftLeft + WallOffset), -27.05, 19.6, FloorHeight, 1, 1
         End If
         End If
         
-        If e3 = True And ShaftNum = 1 Then ElevatorDoorL(3).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 1), -(ShaftLeft + 0.05), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e3 = True And ShaftNum = 1 Then ElevatorDoorR(3).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 1), -(ShaftLeft + 0.05), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e3 = True And ShaftNum = 2 Then ElevatorDoorL(13).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 1), -(ShaftLeft + 0.05), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e3 = True And ShaftNum = 2 Then ElevatorDoorR(13).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 1), -(ShaftLeft + 0.05), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e3 = True And ShaftNum = 3 Then ElevatorDoorL(23).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 1), -(ShaftLeft + 0.05), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e3 = True And ShaftNum = 3 Then ElevatorDoorR(23).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 1), -(ShaftLeft + 0.05), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e3 = True And ShaftNum = 4 Then ElevatorDoorL(33).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 1), -(ShaftLeft + 0.05), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e3 = True And ShaftNum = 4 Then ElevatorDoorR(33).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 1), -(ShaftLeft + 0.05), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e3 = True And ShaftNum = 1 Then ElevatorDoorL(3).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 1), -(ShaftLeft + WallOffset), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e3 = True And ShaftNum = 1 Then ElevatorDoorR(3).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 1), -(ShaftLeft + WallOffset), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e3 = True And ShaftNum = 2 Then ElevatorDoorL(13).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 1), -(ShaftLeft + WallOffset), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e3 = True And ShaftNum = 2 Then ElevatorDoorR(13).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 1), -(ShaftLeft + WallOffset), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e3 = True And ShaftNum = 3 Then ElevatorDoorL(23).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 1), -(ShaftLeft + WallOffset), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e3 = True And ShaftNum = 3 Then ElevatorDoorR(23).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 1), -(ShaftLeft + WallOffset), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e3 = True And ShaftNum = 4 Then ElevatorDoorL(33).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 1), -(ShaftLeft + WallOffset), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e3 = True And ShaftNum = 4 Then ElevatorDoorR(33).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 1), -(ShaftLeft + WallOffset), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
        
-        If e4 = True And ShaftNum = 1 Then ElevatorDoorL(4).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 1), (ShaftLeft + 0.05), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e4 = True And ShaftNum = 1 Then ElevatorDoorR(4).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 1), (ShaftLeft + 0.05), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e4 = True And ShaftNum = 2 Then ElevatorDoorL(14).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 1), (ShaftLeft + 0.05), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e4 = True And ShaftNum = 2 Then ElevatorDoorR(14).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 1), (ShaftLeft + 0.05), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e4 = True And ShaftNum = 3 Then ElevatorDoorL(24).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 1), (ShaftLeft + 0.05), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e4 = True And ShaftNum = 3 Then ElevatorDoorR(24).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 1), (ShaftLeft + 0.05), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e4 = True And ShaftNum = 4 Then ElevatorDoorL(34).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 1), (ShaftLeft + 0.05), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e4 = True And ShaftNum = 4 Then ElevatorDoorR(34).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 1), (ShaftLeft + 0.05), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e4 = True And ShaftNum = 1 Then ElevatorDoorL(4).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 1), (ShaftLeft + WallOffset), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e4 = True And ShaftNum = 1 Then ElevatorDoorR(4).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 1), (ShaftLeft + WallOffset), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e4 = True And ShaftNum = 2 Then ElevatorDoorL(14).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 1), (ShaftLeft + WallOffset), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e4 = True And ShaftNum = 2 Then ElevatorDoorR(14).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 1), (ShaftLeft + WallOffset), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e4 = True And ShaftNum = 3 Then ElevatorDoorL(24).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 1), (ShaftLeft + WallOffset), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e4 = True And ShaftNum = 3 Then ElevatorDoorR(24).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 1), (ShaftLeft + WallOffset), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e4 = True And ShaftNum = 4 Then ElevatorDoorL(34).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 1), (ShaftLeft + WallOffset), -22.95 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e4 = True And ShaftNum = 4 Then ElevatorDoorR(34).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 1), (ShaftLeft + WallOffset), -27.05 + (15 * 1), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
         
-        If e5 = True And ShaftNum = 1 Then ElevatorDoorL(5).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 2), -(ShaftLeft + 0.05), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e5 = True And ShaftNum = 1 Then ElevatorDoorR(5).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 2), -(ShaftLeft + 0.05), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e5 = True And ShaftNum = 2 Then ElevatorDoorL(15).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 2), -(ShaftLeft + 0.05), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e5 = True And ShaftNum = 2 Then ElevatorDoorR(15).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 2), -(ShaftLeft + 0.05), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e5 = True And ShaftNum = 3 Then ElevatorDoorL(25).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 2), -(ShaftLeft + 0.05), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e5 = True And ShaftNum = 3 Then ElevatorDoorR(25).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 2), -(ShaftLeft + 0.05), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e5 = True And ShaftNum = 4 Then ElevatorDoorL(35).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 2), -(ShaftLeft + 0.05), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e5 = True And ShaftNum = 4 Then ElevatorDoorR(35).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 2), -(ShaftLeft + 0.05), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e5 = True And ShaftNum = 1 Then ElevatorDoorL(5).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 2), -(ShaftLeft + WallOffset), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e5 = True And ShaftNum = 1 Then ElevatorDoorR(5).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 2), -(ShaftLeft + WallOffset), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e5 = True And ShaftNum = 2 Then ElevatorDoorL(15).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 2), -(ShaftLeft + WallOffset), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e5 = True And ShaftNum = 2 Then ElevatorDoorR(15).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 2), -(ShaftLeft + WallOffset), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e5 = True And ShaftNum = 3 Then ElevatorDoorL(25).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 2), -(ShaftLeft + WallOffset), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e5 = True And ShaftNum = 3 Then ElevatorDoorR(25).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 2), -(ShaftLeft + WallOffset), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e5 = True And ShaftNum = 4 Then ElevatorDoorL(35).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 2), -(ShaftLeft + WallOffset), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e5 = True And ShaftNum = 4 Then ElevatorDoorR(35).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 2), -(ShaftLeft + WallOffset), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
         
-        If e6 = True And ShaftNum = 1 Then ElevatorDoorL(6).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 2), (ShaftLeft + 0.05), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e6 = True And ShaftNum = 1 Then ElevatorDoorR(6).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 2), (ShaftLeft + 0.05), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e6 = True And ShaftNum = 2 Then ElevatorDoorL(16).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 2), (ShaftLeft + 0.05), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e6 = True And ShaftNum = 2 Then ElevatorDoorR(16).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 2), (ShaftLeft + 0.05), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e6 = True And ShaftNum = 3 Then ElevatorDoorL(26).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 2), (ShaftLeft + 0.05), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e6 = True And ShaftNum = 3 Then ElevatorDoorR(26).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 2), (ShaftLeft + 0.05), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e6 = True And ShaftNum = 4 Then ElevatorDoorL(36).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 2), (ShaftLeft + 0.05), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e6 = True And ShaftNum = 4 Then ElevatorDoorR(36).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 2), (ShaftLeft + 0.05), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e6 = True And ShaftNum = 1 Then ElevatorDoorL(6).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 2), (ShaftLeft + WallOffset), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e6 = True And ShaftNum = 1 Then ElevatorDoorR(6).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 2), (ShaftLeft + WallOffset), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e6 = True And ShaftNum = 2 Then ElevatorDoorL(16).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 2), (ShaftLeft + WallOffset), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e6 = True And ShaftNum = 2 Then ElevatorDoorR(16).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 2), (ShaftLeft + WallOffset), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e6 = True And ShaftNum = 3 Then ElevatorDoorL(26).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 2), (ShaftLeft + WallOffset), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e6 = True And ShaftNum = 3 Then ElevatorDoorR(26).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 2), (ShaftLeft + WallOffset), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e6 = True And ShaftNum = 4 Then ElevatorDoorL(36).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 2), (ShaftLeft + WallOffset), -22.95 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e6 = True And ShaftNum = 4 Then ElevatorDoorR(36).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 2), (ShaftLeft + WallOffset), -27.05 + (15 * 2), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
         
-        If e7 = True And ShaftNum = 1 Then ElevatorDoorL(7).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 3), -(ShaftLeft + 0.05), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e7 = True And ShaftNum = 1 Then ElevatorDoorR(7).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 3), -(ShaftLeft + 0.05), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e7 = True And ShaftNum = 2 Then ElevatorDoorL(17).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 3), -(ShaftLeft + 0.05), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e7 = True And ShaftNum = 2 Then ElevatorDoorR(17).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 3), -(ShaftLeft + 0.05), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e7 = True And ShaftNum = 3 Then ElevatorDoorL(27).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 3), -(ShaftLeft + 0.05), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e7 = True And ShaftNum = 3 Then ElevatorDoorR(27).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 3), -(ShaftLeft + 0.05), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e7 = True And ShaftNum = 4 Then ElevatorDoorL(37).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 3), -(ShaftLeft + 0.05), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e7 = True And ShaftNum = 4 Then ElevatorDoorR(37).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 3), -(ShaftLeft + 0.05), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e7 = True And ShaftNum = 1 Then ElevatorDoorL(7).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 3), -(ShaftLeft + WallOffset), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e7 = True And ShaftNum = 1 Then ElevatorDoorR(7).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 3), -(ShaftLeft + WallOffset), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e7 = True And ShaftNum = 2 Then ElevatorDoorL(17).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 3), -(ShaftLeft + WallOffset), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e7 = True And ShaftNum = 2 Then ElevatorDoorR(17).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 3), -(ShaftLeft + WallOffset), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e7 = True And ShaftNum = 3 Then ElevatorDoorL(27).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 3), -(ShaftLeft + WallOffset), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e7 = True And ShaftNum = 3 Then ElevatorDoorR(27).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 3), -(ShaftLeft + WallOffset), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e7 = True And ShaftNum = 4 Then ElevatorDoorL(37).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 3), -(ShaftLeft + WallOffset), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e7 = True And ShaftNum = 4 Then ElevatorDoorR(37).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 3), -(ShaftLeft + WallOffset), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
         
-        If e8 = True And ShaftNum = 1 Then ElevatorDoorL(8).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 3), (ShaftLeft + 0.05), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e8 = True And ShaftNum = 1 Then ElevatorDoorR(8).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 3), (ShaftLeft + 0.05), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e8 = True And ShaftNum = 2 Then ElevatorDoorL(18).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 3), (ShaftLeft + 0.05), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e8 = True And ShaftNum = 2 Then ElevatorDoorR(18).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 3), (ShaftLeft + 0.05), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e8 = True And ShaftNum = 3 Then ElevatorDoorL(28).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 3), (ShaftLeft + 0.05), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e8 = True And ShaftNum = 3 Then ElevatorDoorR(28).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 3), (ShaftLeft + 0.05), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e8 = True And ShaftNum = 4 Then ElevatorDoorL(38).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 3), (ShaftLeft + 0.05), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e8 = True And ShaftNum = 4 Then ElevatorDoorR(38).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 3), (ShaftLeft + 0.05), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e8 = True And ShaftNum = 1 Then ElevatorDoorL(8).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 3), (ShaftLeft + WallOffset), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e8 = True And ShaftNum = 1 Then ElevatorDoorR(8).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 3), (ShaftLeft + WallOffset), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e8 = True And ShaftNum = 2 Then ElevatorDoorL(18).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 3), (ShaftLeft + WallOffset), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e8 = True And ShaftNum = 2 Then ElevatorDoorR(18).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 3), (ShaftLeft + WallOffset), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e8 = True And ShaftNum = 3 Then ElevatorDoorL(28).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 3), (ShaftLeft + WallOffset), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e8 = True And ShaftNum = 3 Then ElevatorDoorR(28).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 3), (ShaftLeft + WallOffset), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e8 = True And ShaftNum = 4 Then ElevatorDoorL(38).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 3), (ShaftLeft + WallOffset), -22.95 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e8 = True And ShaftNum = 4 Then ElevatorDoorR(38).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 3), (ShaftLeft + WallOffset), -27.05 + (15 * 3), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
         
-        If e9 = True And ShaftNum = 1 Then ElevatorDoorL(9).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 4), -(ShaftLeft + 0.05), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e9 = True And ShaftNum = 1 Then ElevatorDoorR(9).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 4), -(ShaftLeft + 0.05), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e9 = True And ShaftNum = 2 Then ElevatorDoorL(19).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 4), -(ShaftLeft + 0.05), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e9 = True And ShaftNum = 2 Then ElevatorDoorR(19).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 4), -(ShaftLeft + 0.05), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e9 = True And ShaftNum = 3 Then ElevatorDoorL(29).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 4), -(ShaftLeft + 0.05), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e9 = True And ShaftNum = 3 Then ElevatorDoorR(29).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 4), -(ShaftLeft + 0.05), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e9 = True And ShaftNum = 4 Then ElevatorDoorL(39).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -19.05 + (15 * 4), -(ShaftLeft + 0.05), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e9 = True And ShaftNum = 4 Then ElevatorDoorR(39).AddWall GetTex("ElevDoors"), -(ShaftLeft + 0.05), -23.05 + (15 * 4), -(ShaftLeft + 0.05), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e9 = True And ShaftNum = 1 Then ElevatorDoorL(9).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 4), -(ShaftLeft + WallOffset), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e9 = True And ShaftNum = 1 Then ElevatorDoorR(9).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 4), -(ShaftLeft + WallOffset), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e9 = True And ShaftNum = 2 Then ElevatorDoorL(19).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 4), -(ShaftLeft + WallOffset), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e9 = True And ShaftNum = 2 Then ElevatorDoorR(19).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 4), -(ShaftLeft + WallOffset), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e9 = True And ShaftNum = 3 Then ElevatorDoorL(29).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 4), -(ShaftLeft + WallOffset), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e9 = True And ShaftNum = 3 Then ElevatorDoorR(29).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 4), -(ShaftLeft + WallOffset), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e9 = True And ShaftNum = 4 Then ElevatorDoorL(39).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -19.05 + (15 * 4), -(ShaftLeft + WallOffset), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e9 = True And ShaftNum = 4 Then ElevatorDoorR(39).AddWall GetTex("ElevDoors"), -(ShaftLeft + WallOffset), -23.05 + (15 * 4), -(ShaftLeft + WallOffset), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
         
-        If e10 = True And ShaftNum = 1 Then ElevatorDoorL(10).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 4), (ShaftLeft + 0.05), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e10 = True And ShaftNum = 1 Then ElevatorDoorR(10).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 4), (ShaftLeft + 0.05), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e10 = True And ShaftNum = 2 Then ElevatorDoorL(20).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 4), (ShaftLeft + 0.05), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e10 = True And ShaftNum = 2 Then ElevatorDoorR(20).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 4), (ShaftLeft + 0.05), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e10 = True And ShaftNum = 3 Then ElevatorDoorL(30).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 4), (ShaftLeft + 0.05), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e10 = True And ShaftNum = 3 Then ElevatorDoorR(30).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 4), (ShaftLeft + 0.05), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e10 = True And ShaftNum = 4 Then ElevatorDoorL(40).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -19.05 + (15 * 4), (ShaftLeft + 0.05), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
-        If e10 = True And ShaftNum = 4 Then ElevatorDoorR(40).AddWall GetTex("ElevDoors"), (ShaftLeft + 0.05), -23.05 + (15 * 4), (ShaftLeft + 0.05), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e10 = True And ShaftNum = 1 Then ElevatorDoorL(10).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 4), (ShaftLeft + WallOffset), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e10 = True And ShaftNum = 1 Then ElevatorDoorR(10).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 4), (ShaftLeft + WallOffset), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e10 = True And ShaftNum = 2 Then ElevatorDoorL(20).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 4), (ShaftLeft + WallOffset), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e10 = True And ShaftNum = 2 Then ElevatorDoorR(20).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 4), (ShaftLeft + WallOffset), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e10 = True And ShaftNum = 3 Then ElevatorDoorL(30).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 4), (ShaftLeft + WallOffset), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e10 = True And ShaftNum = 3 Then ElevatorDoorR(30).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 4), (ShaftLeft + WallOffset), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e10 = True And ShaftNum = 4 Then ElevatorDoorL(40).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 4), (ShaftLeft + WallOffset), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
+        If e10 = True And ShaftNum = 4 Then ElevatorDoorR(40).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 4), (ShaftLeft + WallOffset), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
                 
 End Sub
 
