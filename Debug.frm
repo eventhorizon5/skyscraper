@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form DebugPanel 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "SkyScraper 0.95 Beta - Simulator Control Panel"
@@ -1080,15 +1080,15 @@ End Sub
 
 Private Sub Check8_Click()
 If Check8.Value = 1 Then
-Stairs(CameraFloor).Enable True
-If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
-If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable True
+If StairDataTable(CameraFloor) = False Then CreateStairs (CameraFloor)
+If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = False Then CreateStairs (CameraFloor + 1)
+If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = False Then CreateStairs (CameraFloor - 1)
 End If
 
 If Check8.Value = 0 Then
-Stairs(CameraFloor).Enable False
-If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
-If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable False
+If StairDataTable(CameraFloor) = True Then DeleteStairs (CameraFloor)
+If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
+If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
 End If
 End Sub
 
