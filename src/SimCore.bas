@@ -27,23 +27,23 @@ Attribute VB_Name = "SimCore"
 Option Explicit
 
 'Truevision Engine
-Public TV As TVEngine
-Public Scene As TVScene
-Public Effect As TVGraphicEffect
-Public Light As TVLightEngine
+Public TV As TVEngine 'truevision engine
+Public Scene As TVScene '3d environment
+Public Effect As TVGraphicEffect 'effects
+Public Light As TVLightEngine 'single light
 Public MatFactory As New TVMaterialFactory
 Public SoundEngine As TVSoundEngine
 Public Listener As TVListener
 Public ListenerDirection As D3DVECTOR
-Public Atmos As New TVAtmosphere
-Public Inp As TVInputEngine
-Public TextureFactory As TVTextureFactory
-Public Camera As TVCamera
+Public Atmos As New TVAtmosphere 'sky
+Public Inp As TVInputEngine 'input
+Public TextureFactory As TVTextureFactory 'texture system
+Public Camera As TVCamera 'main first-person view camera
 Public MainMusic As TVSoundMP3
 
 'Global Simulation Data
 Public CameraDefAltitude As Single 'default vertical offset of camera
-Public Gravity As Single
+Public Gravity As Single 'gravity variable for physics algorithms
 Public Dest As Object 'Output object for visual simulation, usually a form
 Public isRunning As Boolean 'is sim engine running?
 Public EnableCollisions As Boolean 'turns collisions on/off
@@ -149,10 +149,8 @@ Dest.Print Spc(2); "Processing Meshes..."
 
 DoEvents
 
-'These Triton calls will be replaced with routines
-'to load and parse the building data file.
-'This one loads the global parameters
-Call Triton_Globals
+'Load globals from data file
+Call LoadGlobals(FileName)
 
 Set IntroMesh = Scene.CreateMeshBuilder("IntroMesh")
 
@@ -203,12 +201,15 @@ DoEvents
 
 'expand 3D view distance
 Scene.SetViewFrustum 90, 200000
-  
-'load texture files
-Call Triton_LoadTextures
 
-Call Triton_ProcessBasement
-Call Triton_ProcessFloors
+'Load textures from data file
+Call LoadTextures(FileName)
+
+'Load building
+Call LoadBuilding(FileName)
+
+'Load Elevators
+Call LoadElevators(FileName)
 
 'Start main processing timer
 Sim.MainTimer.Enabled = True
@@ -274,18 +275,18 @@ Private Sub GetInput()
       
       'If Inp.IsKeyPressed(TV_KEY_UP) = True And Focused = True Then
       If Inp.IsKeyPressed(TV_KEY_UP) = True Then
-      KeepAltitude = Camera.GetPosition.Y
+      KeepAltitude = Camera.GetPosition.y
       If Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.MoveRelative 0.7, 0, 0
       If Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.MoveRelative 1.4, 0, 0
-      If Camera.GetPosition.Y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.X, KeepAltitude, Camera.GetPosition.z
+      If Camera.GetPosition.y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.x, KeepAltitude, Camera.GetPosition.z
       End If
       
       'If Inp.IsKeyPressed(TV_KEY_DOWN) = True And Focused = True Then
       If Inp.IsKeyPressed(TV_KEY_DOWN) = True Then
-      KeepAltitude = Camera.GetPosition.Y
+      KeepAltitude = Camera.GetPosition.y
       If Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.MoveRelative -0.7, 0, 0
       If Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.MoveRelative -1.4, 0, 0
-      If Camera.GetPosition.Y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.X, KeepAltitude, Camera.GetPosition.z
+      If Camera.GetPosition.y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.x, KeepAltitude, Camera.GetPosition.z
       End If
       
       'If Inp.IsKeyPressed(TV_KEY_RIGHT) = True And Focused = True Then Camera.RotateY 0.07
@@ -321,7 +322,7 @@ Private Sub GetInput()
       If Inp.IsKeyPressed(TV_KEY_F1) = True Then TV.ScreenShot (App.Path + "\shot.bmp")
 End Sub
 
-Sub SlowToFPS(ByVal FrameRate As Long)
+Private Sub SlowToFPS(ByVal FrameRate As Long)
 Dim lngTicksPerFrame As Long
 Static lngOldTickCount As Long
 lngTicksPerFrame = 1000 / FrameRate
@@ -331,3 +332,36 @@ Wend
 lngOldTickCount = GetTickCount() + lngTicksPerFrame
 End Sub
 
+Public Function IsEven(Number As Integer) As Boolean
+'Determine if the passed number is even.
+'If number divides evenly, return true
+If Number / 2 = Int(Number / 2) Then
+    IsEven = True
+Else
+    IsEven = False
+End If
+End Function
+
+Public Function AutoSize(n1 As Single, n2 As Single, iswidth As Boolean) As Single
+'Texture autosizing formulas
+
+If (n1 < 0 And n2 < 0) Or (n1 >= 0 And n2 >= 0) Then
+'if numbers have the same sign
+    If Abs(n1) >= Abs(n2) Then
+        If iswidth = True Then AutoSize = (Abs(n1) - Abs(n2)) * 0.086
+        If iswidth = False Then AutoSize = (Abs(n1) - Abs(n2)) * 0.08
+    Else
+        If iswidth = True Then AutoSize = (Abs(n2) - Abs(n1)) * 0.086
+        If iswidth = False Then AutoSize = (Abs(n2) - Abs(n1)) * 0.08
+    End If
+Else
+'if numbers have different signs
+    If n1 > n2 Then
+        If iswidth = True Then AutoSize = (Abs(n1) + Abs(n2)) * 0.086
+        If iswidth = False Then AutoSize = (Abs(n1) + Abs(n2)) * 0.08
+    Else
+        If iswidth = True Then AutoSize = (Abs(n2) + Abs(n1)) * 0.086
+        If iswidth = False Then AutoSize = (Abs(n2) + Abs(n1)) * 0.08
+    End If
+End If
+End Function
