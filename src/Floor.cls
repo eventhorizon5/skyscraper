@@ -34,9 +34,9 @@ Attribute VB_Exposed = False
 Public Level As TVMesh
 Public CrawlSpace As TVMesh
 Public ShaftsFloor As TVMesh
-Public CrawlSpaceShaft() As TVMesh
-Public Shafts() As TVMesh
-Public Stairs() As TVMesh
+Private CrawlSpaceShaft() As TVMesh
+Private Shafts() As TVMesh
+Private Stairs() As TVMesh
 Private FakeStairDoor() As TVMesh
 Private Objects() As TVMesh
 Public Enabled As Boolean
@@ -49,17 +49,35 @@ Public CrawlSpaceHeight As Single
 
 Public Sub SetCameraFloor()
 'Moves camera to specified floor (sets altitude to the floor's altitude plus CameraAltitude)
-Camera.SetPosition Camera.GetPosition.X, FloorAltitude + CameraAltitude, Camera.GetPosition.X
+Camera.SetPosition Camera.GetPosition.X, FloorAltitude + CameraDefAltitude, Camera.GetPosition.X
 End Sub
 
 Public Sub AddFloor(Texture As String, x1 As Single, z1 As Single, x2 As Single, z2 As Single, voffset As Single, tw As Single, th As Single)
 'Adds a floor with the specified dimensions and vertical offset
-Level.AddFloor GetTex(Texture), x1, z1, x2, z2, FloorAltitude + voffset, tw, th
+Dim tw2 As Single
+Dim th2 As Single
+tw2 = tw
+th2 = th
+
+'Sizing formulas from version 1.0
+If tw = 0 Then tw2 = (Abs(x1) + Abs(x2)) * 0.086
+If th = 0 Then tw2 = (Abs(z1) + Abs(z2)) * 0.08
+
+Level.AddFloor GetTex(Texture), x1, z1, x2, z2, FloorAltitude + voffset, tw2, th2
 End Sub
 
 Public Sub AddWall(Texture As String, x1 As Single, z1 As Single, x2 As Single, z2 As Single, height As Single, voffset As Single, tw As Single, th As Single)
 'Adds a wall with the specified dimensions
-Level.AddWall GetTex(Texture), x1, z1, x2, z2, height, FloorAltitude + voffset, tw, th
+Dim tw2 As Single
+Dim th2 As Single
+tw2 = tw
+th2 = th
+
+'Sizing formulas from version 1.0
+If tw = 0 Then tw2 = (Abs(x1) + Abs(x2)) * 0.086
+If th = 0 Then tw2 = (Abs(z1) + Abs(z2)) * 0.08
+
+Level.AddWall GetTex(Texture), x1, z1, x2, z2, height, FloorAltitude + voffset, tw2, th2
 End Sub
 
 Sub CreateWallBox(TextureName As String, WidthX As Single, LengthZ As Single, CenterX As Single, CenterZ As Single, CSpace As Boolean, ResX As Single, ResY As Single)
@@ -87,25 +105,35 @@ Level.AddWall GetTex(TextureName), x1, z2, x1, z1, WallHeight, height, (WidthX *
 
 End Sub
 
-Private Sub Class_Initialize(Num As Integer)
+Public Sub Initialize(Num As Integer)
 'Set floor's object number
 Number = Num
 'size shaft arrays accordingly
-ReDim CrawlSpaceShaft(elevatorshafts)
-ReDim Shafts(elevatorshafts)
+ReDim CrawlSpaceShaft(ElevatorShafts)
+ReDim Shafts(ElevatorShafts)
 
 'Create and name new meshes
 Set Level = Scene.CreateMeshBuilder("Level " + Str$(Number))
 Set CrawlSpace = Scene.CreateMeshBuilder("CrawlSpace " + Str$(Number))
 Set ShaftsFloor = Scene.CreateMeshBuilder("ShaftsFloor " + Str$(Number))
 Dim i As Integer
-For i = 1 To elevatorshafts
-Set CrawlSpaceShaft(i) = Scene.CreateMeshBuilder("CrawlSpaceShaft" + LTrim(Str$(i)) + " " + Str$(Number))
-Set Shafts(i) = Scene.CreateMeshBuilder("Shafts" + LTrim(Str$(i)) + " " + Str$(Number))
+For i = 1 To ElevatorShafts
+    DoEvents
+    Set CrawlSpaceShaft(i) = Scene.CreateMeshBuilder("CrawlSpaceShaft" + LTrim(Str$(i)) + " " + Str$(Number))
+    Set Shafts(i) = Scene.CreateMeshBuilder("Shafts" + LTrim(Str$(i)) + " " + Str$(Number))
 Next i
 
 End Sub
 
 Private Sub Class_Terminate()
+'Set Level = Nothing
+'Set CrawlSpace = Nothing
+'Set ShaftsFloor = Nothing
+'Dim i As Integer
+'For i = 1 To ElevatorShafts
+'    DoEvents
+'    Set CrawlSpaceShaft(i) = Nothing
+'    Set Shafts(i) = Nothing
+'Next i
 
 End Sub
