@@ -41,34 +41,26 @@ Global Shafts3(-10 To 138) As TVMesh
 Global Shafts4(-10 To 138) As TVMesh
 Global ShaftsFloor(-10 To 138) As TVMesh
 Global Buttons(-11 To 144) As TVMesh
-'Global Elevator1 As TVMesh
-Global Elevator(40) As TVMesh '-update from Elevator1
-'Global FloorIndicator1 As TVMesh
-Global FloorIndicator(40) As TVMesh '-update from FloorIndicator1
-'Global Elevator1DoorL As TVMesh
-'Global Elevator1DoorR As TVMesh
-Global ElevatorInsDoorL(40) As TVMesh '-update from Elevator1DoorL
-Global ElevatorInsDoorR(40) As TVMesh '-update
-'Global ElevatorDoorL(-1 To 138) As TVMesh
-'Global ElevatorDoorR(-1 To 138) As TVMesh
+Global Elevator(40) As TVMesh
+Global FloorIndicator(40) As TVMesh
+Global ElevatorInsDoorL(40) As TVMesh
+Global ElevatorInsDoorR(40) As TVMesh
 Global ElevatorDoorL(40) As TVMesh
 Global ElevatorDoorR(40) As TVMesh
 Global Stairs(-10 To 138) As TVMesh
 Global CallButtonsUp(40) As TVMesh
 Global CallButtonsDown(40) As TVMesh
 Global StairDoor(1 To 4) As TVMesh
+Global FakeStairDoor(-10 To 138, 1 To 4) As TVMesh
 Global Light As TVLightEngine
 Global MatFactory As New TVMaterialFactory
 Global LightID As Integer
 Global LightD As D3DLIGHT8
-'Global Plaque As TVMesh
-Global Plaque(40) As TVMesh '-update
+Global Plaque(40) As TVMesh
 
 Global SoundEngine As TVSoundEngine
-'Global ElevatorMusic As TVSoundWave3D
-Global ElevatorMusic(40) As TVSoundWave3D '-update
-'Global Elevator1Sounds As TVSoundWave3D
-Global ElevatorSounds(40) As TVSoundWave3D '-update from Elevator1Sounds
+Global ElevatorMusic(40) As TVSoundWave3D
+Global ElevatorSounds(40) As TVSoundWave3D
 Global Listener As TVListener
 Global ListenerDirection As D3DVECTOR
 'Global MousePositionX As Long
@@ -77,8 +69,7 @@ Global Focused As Boolean
 Global LineTest As D3DVECTOR
 Global LineTest2 As D3DVECTOR
 Global KeepAltitude As Integer
-'Global ElevatorSync As Boolean
-Global ElevatorSync(40) As Boolean '-update
+Global ElevatorSync(40) As Boolean
 
 Global Atmos As New TVAtmosphere
 Global sngPositionX As Single
@@ -96,8 +87,7 @@ Global Inp As TVInputEngine
 Global TextureFactory As TVTextureFactory
 Global linestart As D3DVECTOR
 Global lineend As D3DVECTOR
-'Global elevator1start As D3DVECTOR
-Global elevatorstart(40) As D3DVECTOR '-update from elevator1start
+Global elevatorstart(40) As D3DVECTOR
 Global isRunning As Boolean
 Global Camera As TVCamera
 Global ColRes As TV_COLLISIONRESULT
@@ -109,10 +99,8 @@ Global i53 As Single
 Global i54 As Single
 Global j As Single
 Global j50 As Single
-'Global ElevatorEnable As Single
-Global ElevatorEnable(40) As Single '-update
-'Global ElevatorDirection As Integer '1=up -1=down
-Global ElevatorDirection(40) As Integer '1=up -1=down UPDATE
+Global ElevatorEnable(40) As Single
+Global ElevatorDirection(40) As Integer '1=up -1=down
 Global OpenElevatorLoc(40) As Single
 Global ElevatorCheck(40) As Integer
 Global ElevatorCheck2(40) As Integer
@@ -121,8 +109,7 @@ Global ElevatorCheck4(40) As Integer
 Global X As Integer
 Global CollisionResult As TVCollisionResult
 
-'Global GotoFloor As Single
-Global GotoFloor(40) As Single '-update
+Global GotoFloor(40) As Single
 Global CurrentFloor(40) As Integer
 Global CurrentFloorExact(40) As Single
 Global DistanceToTravel(40) As Single
@@ -130,16 +117,13 @@ Global Destination(40) As Single
 Global OriginalLocation(40) As Single
 Global StoppingDistance(40) As Single
 Global FineTune(40) As Boolean
-'Global OpenElevator As Integer '1=open -1=close
-Global OpenElevator(40) As Integer '1=open -1=close UPDATE
-'Global ElevatorFloor As Integer
-Global ElevatorFloor(40) As Integer 'update
+Global OpenElevator(40) As Integer '1=open -1=close
+Global ElevatorFloor(40) As Integer
 Global CameraFloor As Integer
-Global CameraFloorExact As Single
+'Global CameraFloorExact As Single
 Global PartialFloor As Single
 Global InStairwell As Boolean
-'Global FloorIndicator As String
-Global FloorIndicatorText(40) As String 'update
+Global FloorIndicatorText(40) As String
 Global ElevatorFloor2(40) As Integer
 Global CameraFloor2 As Integer
 Global FloorIndicatorPic(40) As String
@@ -184,6 +168,69 @@ Global QueuePositionFloor(40) As Integer
 Global PauseQueueSearch(40) As Boolean
 Global QueueMonitor(40) As Integer
 'Global CallButtonTemp(40) As Integer
+Global StairDataTable(-10 To 138) As Boolean
+Sub CreateStairDoors(FloorID As Integer)
+Call DeleteStairDoors
+
+'Stairway Doors
+Dim jxx As Integer
+For jxx = 1 To 4
+Set StairDoor(jxx) = Scene.CreateMeshBuilder
+Next jxx
+
+For jxx = 1 To 4
+Dim Endfloor As Integer
+If jxx = 1 Then Endfloor = 138
+If jxx = 2 Then Endfloor = 117
+If jxx = 3 Then Endfloor = 79
+If jxx = 4 Then Endfloor = 39
+    
+    Dim ShaftLeft As Single
+    Dim ShaftRight As Single
+    
+    If jxx = 1 Then ShaftLeft = 12.5: ShaftRight = 32.5
+    If jxx = 2 Then ShaftLeft = -52.5: ShaftRight = -32.5
+    If jxx = 3 Then ShaftLeft = 90.5: ShaftRight = 110.5
+    If jxx = 4 Then ShaftLeft = -130.5: ShaftRight = -110.5
+    
+    If FloorID < 2 Then StairDoor(jxx).AddWall GetTex("StairsDoor2"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
+    If FloorID >= 2 And FloorID <= Endfloor Then StairDoor(jxx).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
+    
+    If FloorID <= Endfloor Then
+    StairDoor(jxx).SetMeshName ("DoorSB " + Str$(jxx))
+    StairDoor(jxx).SetRotation 0, 1.56, 0
+    If FloorID > -1 Then StairDoor(jxx).SetPosition -(ShaftLeft + 0.3), (FloorID * FloorHeight) + FloorHeight, -36.4
+    If FloorID = -1 Then StairDoor(jxx).SetPosition -(ShaftLeft + 0.3), 0, -36.4
+    End If
+    
+Next jxx
+
+End Sub
+
+Sub DeleteStairDoors()
+Dim jxx As Integer
+For jxx = 1 To 4
+Scene.DestroyMesh StairDoor(jxx)
+Set StairDoor(jxx) = Nothing
+Next jxx
+End Sub
+
+
+Sub DeleteStairs(FloorID As Integer)
+
+Scene.DestroyMesh Stairs(FloorID)
+Scene.DestroyMesh FakeStairDoor(FloorID, 1)
+Scene.DestroyMesh FakeStairDoor(FloorID, 2)
+Scene.DestroyMesh FakeStairDoor(FloorID, 3)
+Scene.DestroyMesh FakeStairDoor(FloorID, 4)
+Set Stairs(FloorID) = Nothing
+Set FakeStairDoor(FloorID, 1) = Nothing
+Set FakeStairDoor(FloorID, 2) = Nothing
+Set FakeStairDoor(FloorID, 3) = Nothing
+Set FakeStairDoor(FloorID, 4) = Nothing
+StairDataTable(FloorID) = False
+    
+End Sub
 
 Sub Start()
 ElevatorNumber = 1
@@ -194,6 +241,9 @@ ElevatorSpeed = 8
 ElevatorFineTuneSpeed = 0.15
 'ElevatorFineTuneSpeed = 0.2 'Original Value
 'FileName = App.Path + "\data\triton.dat"
+CameraFloor = 1
+CameraFloor2 = -1
+
 Call Init_Simulator
 Call ProcessFloors
     
@@ -225,7 +275,6 @@ Call ProcessFloors
   External.Enable False
   For i = -10 To 138
   Room(i).Enable False
-  Stairs(i).Enable False
   ShaftsFloor(i).Enable False
   Shafts1(i).Enable False
   Shafts2(i).Enable False
@@ -253,8 +302,9 @@ Call ProcessFloors
   Room(1).Enable True
   'ElevatorDoorL(1).Enable True
   'ElevatorDoorR(1).Enable True
-  Stairs(-1).Enable True
-  Stairs(1).Enable True
+  'Stairs(-1).Enable True
+  'Stairs(1).Enable True
+  CreateStairs (1)
   ShaftsFloor(1).Enable True
   
 'Lights
@@ -362,29 +412,15 @@ Set ElevatorDoorR(i54) = Nothing
 'Sleep 10
 Next i54
 
-For i = 1 To 4
-Scene.DestroyMesh StairDoor(i)
-Set StairDoor(i) = Nothing
-Next i
-
-'Sleep 100
+Call DeleteStairDoors
 
 'Create blank meshes
 For i54 = 1 To 40
-Set ElevatorDoorL(i54) = New TVMesh
-Set ElevatorDoorR(i54) = New TVMesh
-Set CallButtonsUp(i54) = New TVMesh
-Set CallButtonsDown(i54) = New TVMesh
 Set ElevatorDoorL(i54) = Scene.CreateMeshBuilder("ElevatorDoorL" + Str$(i54))
 Set ElevatorDoorR(i54) = Scene.CreateMeshBuilder("ElevatorDoorR" + Str$(i54))
 Set CallButtonsUp(i54) = Scene.CreateMeshBuilder("CallButtonsUp" + Str$(i54))
 Set CallButtonsDown(i54) = Scene.CreateMeshBuilder("CallButtonsDown" + Str$(i54))
 Next i54
-
-For i = 1 To 4
-Set StairDoor(i) = New TVMesh
-Set StairDoor(i) = Scene.CreateMeshBuilder("StairDoor " + Str$(i))
-Next i
 
 'Generate objects for floors
 
@@ -497,31 +533,10 @@ DebugPanel.Show
 Sim.Show
 'Set TV = New TVEngine
 'Set Scene = New TVScene
-'Set Mesh = New TVMesh
-Set Buildings = New TVMesh
-Set External = New TVMesh
-Set Landscape = New TVMesh
-For i = -10 To 138
-DoEvents
-Set Room(i) = New TVMesh
-Set Stairs(i) = New TVMesh
-Set ShaftsFloor(i) = New TVMesh
-Set Shafts1(i) = New TVMesh
-Set Shafts2(i) = New TVMesh
-Set Shafts3(i) = New TVMesh
-Set Shafts4(i) = New TVMesh
-Next i
 
 For i = 1 To 40
-Set Elevator(i) = New TVMesh
-Set FloorIndicator(i) = New TVMesh
-Set ElevatorInsDoorL(i) = New TVMesh
-Set ElevatorInsDoorR(i) = New TVMesh
 'Set ElevatorMusic(i) = New TV3DMedia.TVSoundWave3D
 Set ElevatorSounds(i) = New TV3DMedia.TVSoundWave3D
-Set Plaque(i) = New TVMesh
-Set CallButtonsUp(i) = New TVMesh
-Set CallButtonsDown(i) = New TVMesh
 Next i
 
 Set Camera = New TVCamera
@@ -532,7 +547,7 @@ Set Light = New TVLightEngine
 
 'If TV.ShowDriverDialog = False Then End
   
-Sim.Label1.Caption = "Skyscraper 0.95 Beta - Build" + Str$(App.Revision) + vbCrLf
+Sim.Label1.Caption = "Skyscraper " + Str$(App.Major) + "." + Right(Str$(App.Minor), 2) + " Beta - Build" + Str$(App.Revision) + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "©2003 Ryan Thoryk" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on November 20, 2003" + vbCrLf + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf
@@ -568,7 +583,6 @@ Sim.Label2.Caption = "Initializing TrueVision3D..."
   For i = -10 To 138
   DoEvents
   Set Room(i) = Scene.CreateMeshBuilder("Room " + Str$(i))
-  Set Stairs(i) = Scene.CreateMeshBuilder("Stairs " + Str$(i))
   Set ShaftsFloor(i) = Scene.CreateMeshBuilder("ShaftsFloor " + Str$(i))
   Set Shafts1(i) = Scene.CreateMeshBuilder("Shafts1 " + Str$(i))
   Set Shafts2(i) = Scene.CreateMeshBuilder("Shafts2 " + Str$(i))
@@ -592,7 +606,6 @@ Sim.Label2.Caption = "Initializing TrueVision3D..."
     
   'Elevator Button Meshes
   For i54 = -11 To 144
-  Set Buttons(i54) = New TVMesh
   Set Buttons(i54) = Scene.CreateMeshBuilder("Buttons " + Str$(i54))
   'Buttons(i54).SetPosition 0, Elevator(Number).GetPosition.Y, 0
   'Buttons(i54).SetMeshCenter 0, 0, 0
@@ -922,7 +935,6 @@ Sub OptimizeMeshes()
   DoEvents
   Sim.Label2.Caption = "Optimizing Meshes Part 1 (of 2)... " + Str$(Int((i / 138) * 100)) + "%"
   Room(i).Optimize
-  Stairs(i).Optimize
   ShaftsFloor(i).Optimize
   Shafts1(i).Optimize
   Shafts2(i).Optimize
@@ -996,15 +1008,6 @@ For i = -1 To -10 Step -1
     Room(i).AddWall GetTex("BrickTexture"), 160, 150, -160, 150, FloorHeight, (i * FloorHeight), ((160 + 160) * 0.086), 1
     Room(i).AddWall GetTex("BrickTexture"), -160, 150, -160, -150, FloorHeight, (i * FloorHeight), ((160 + 160) * 0.086), 1
     
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight), ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight), (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight), (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight), (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight), (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight), (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight), (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-    
     Call DrawElevatorWalls(Int(i), 5, 1, True, False, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 5, 2, True, False, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 2, 3, True, False, False, False, False, False, False, False, False, False, False)
@@ -1032,7 +1035,6 @@ Sim.Label2.Caption = "Processing Outside... "
 Call ProcessOutside
 Sim.Label2.Caption = "Processing Elevators... "
 Call ProcessMisc
-Call ProcessStairs
 Call OptimizeMeshes
 
 Sim.IntroMusic.Enabled = False
@@ -1148,15 +1150,6 @@ Sub Process2to39()
     Room(i).AddWall GetTex("BrickTexture"), 160, 150, -160, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((160 + 160) * 0.086), 1
     Room(i).AddWall GetTex("BrickTexture"), -160, 150, -160, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((160 + 160) * 0.086), 1
 
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-    
     If i = 2 Or i = 39 Then
     Call DrawElevatorWalls(Int(i), 5, 1, True, True, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 5, 2, True, True, False, False, False, False, False, False, False, False, False)
@@ -1323,15 +1316,6 @@ Sub Process40to79()
     Room(i).AddWall GetTex("BrickTexture"), 135, 150, -135, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((135 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -135, 150, -135, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-    
     If i = 40 Then Call DrawElevatorWalls(Int(i), 2, 4, False, False, False, False, False, False, False, False, False, False, False)
     
     If i = 40 Or i = 79 Then
@@ -1492,19 +1476,6 @@ Sub Process81to114()
     Room(i).AddWall GetTex("BrickTexture"), 110, 150, -110, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -110, 150, -110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-       
-    'If i = 80 Then
-    'Call DrawElevatorWalls(Int(i), 2, 1, True, True, True, True, True, True, True, True, True, True, True)
-    'Call DrawElevatorWalls(Int(i), 2, 2, True, True, True, True, True, True, True, True, True, True, True)
-    'End If
     If i >= 82 And i <= 98 Then
     Call DrawElevatorWalls(Int(i), 2, 1, True, False, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, False, False, True, True, True, True, True, True)
@@ -1662,15 +1633,6 @@ Sub Process118to129()
     Room(i).AddWall GetTex("BrickTexture"), 85, 150, -85, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((85 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -85, 150, -85, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-        
     'If i = 118 Or i = 129 Then
     Call DrawElevatorWalls(Int(i), 2, 1, False, True, False, False, False, True, True, True, True, True, True)
     'End If
@@ -1769,7 +1731,6 @@ End Sub
 Sub Init_Objects(Floor As Integer, ObjectIndex As Integer)
 'currently, 150 objects per floor (150*138)
 i53 = ObjectIndex + (150 * (Floor - 1))
-Set Objects(i53) = New TVMesh
 Set Objects(i53) = Scene.CreateMeshBuilder("Objects " + Str$(i53))
 'MsgBox (Str$(i53))
 'objectindex + (150 * (currentfloor - 1 ))
@@ -1817,15 +1778,6 @@ Sub ProcessOtherFloors()
     Room(i).AddWall GetTex("BrickTexture"), 110, 150, -110, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -110, 150, -110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-       
     Call DrawElevatorWalls(Int(i), 2, 3, False, False, False, False, False, False, False, False, False, False, False)
     
     Call DrawElevatorWalls(Int(i), 2, 1, True, True, True, True, True, True, True, True, True, True, True)
@@ -1871,15 +1823,6 @@ Sub ProcessOtherFloors()
     Room(i).AddWall GetTex("BrickTexture"), 110, 150, -110, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -110, 150, -110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-       
     Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 2, 2, True, True, True, False, False, False, False, False, False, False, False)
     
@@ -1923,15 +1866,6 @@ Sub ProcessOtherFloors()
     Room(i).AddWall GetTex("BrickTexture"), 110, 150, -110, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -110, 150, -110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-       
     Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 2, 2, True, True, True, False, False, False, False, False, False, False, False)
   
@@ -1974,15 +1908,6 @@ Sub ProcessOtherFloors()
     Room(i).AddWall GetTex("BrickTexture"), 110, 150, -110, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -110, 150, -110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-       
     Call DrawElevatorWalls(Int(i), 2, 1, True, True, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, False, False, False, False, False, False, False, False)
     
@@ -2026,15 +1951,6 @@ Sub ProcessOtherFloors()
     Room(i).AddWall GetTex("BrickTexture"), 85, 150, -85, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((85 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -85, 150, -85, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-        
     Call DrawElevatorWalls(Int(i), 2, 1, False, True, False, False, False, False, False, False, False, False, False)
     
     
@@ -2114,7 +2030,7 @@ Room(CameraFloor).Enable True
       CallButtonsUp(i51).Enable True
       CallButtonsDown(i51).Enable True
       Next i51
-      Stairs(CameraFloor).Enable True
+      If StairDataTable(CameraFloor) = False Then CreateStairs (CameraFloor)
       Atmos.SkyBox_Enable True
       Call InitRealtime(CameraFloor)
       InitObjectsForFloor (CameraFloor)
@@ -2202,15 +2118,6 @@ Sub ProcessOtherFloors2()
     Room(i).AddWall GetTex("BrickTexture"), 85, 150, -85, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((85 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -85, 150, -85, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-        
     Call DrawElevatorWalls(Int(i), 5, 1, False, True, False, False, False, False, False, False, False, False, False)
     
     
@@ -2253,15 +2160,6 @@ Sub ProcessOtherFloors2()
     Room(i).AddWall GetTex("BrickTexture"), 85, 150, -85, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((85 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -85, 150, -85, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
  
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-        
     Call DrawElevatorWalls(Int(i), 5, 1, False, True, True, True, True, False, False, False, False, False, False)
     
     
@@ -2304,15 +2202,6 @@ Sub ProcessOtherFloors2()
     Room(i).AddWall GetTex("BrickTexture"), 85, 150, -85, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((85 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -85, 150, -85, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
  
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-    
     Call DrawElevatorWalls(Int(i), 5, 1, False, True, False, False, False, False, False, False, False, False, False)
     
     'Room(I) Walls
@@ -2340,15 +2229,6 @@ Sub ProcessOtherFloors2()
     Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 85, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, 3, 3
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, 1, 3
      
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-    
     Call DrawElevatorWalls(Int(i), 5, 1, False, True, True, True, True, False, False, False, False, False, False)
        
 
@@ -2371,15 +2251,6 @@ Sub ProcessOtherFloors2()
     Room(i).AddFloor GetTex("Marble3"), -60, -46.25, -32.5, 0, (i * FloorHeight) + (FloorHeight * 2) - 0.5, ((60 - 32.5) * 0.086), (46.25 * 0.08)
     Room(i).AddFloor GetTex("Marble3"), 60, -46.25, 32.5, 0, (i * FloorHeight) + (FloorHeight * 2) - 0.5, ((60 - 32.5) * 0.086), (46.25 * 0.08)
     
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-        
     Call DrawElevatorWalls(Int(i), 5, 1, False, True, True, True, True, False, False, False, False, False, False)
          
 
@@ -2422,15 +2293,6 @@ Sub ProcessOtherFloors2()
     Room(i).AddWall GetTex("BrickTexture"), 60, 150, -60, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((60 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -60, 150, -60, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
  
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-        
     Call DrawElevatorWalls(Int(i), 5, 1, False, True, True, True, True, False, False, False, False, False, False)
    
     
@@ -2480,15 +2342,6 @@ Sub ProcessOtherFloors2()
     Room(i).AddWall GetTex("BrickTexture"), 60 - 0.1, 150 - 0.1, -60 + 0.1, 150 - 0.1, 25, (i * FloorHeight) + FloorHeight, 3, 1
     Room(i).AddWall GetTex("BrickTexture"), -60 + 0.1, 150 - 0.1, -60 + 0.1, -150 + 0.1, 25, (i * FloorHeight) + FloorHeight, 7, 1
     
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
-        
     Call DrawElevatorWalls(Int(i), 7, 1, False, True, False, False, False, False, False, False, False, False, False)
         
 
@@ -2504,15 +2357,6 @@ i = 138
     Room(i).AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, -15.42, (i * FloorHeight) + FloorHeight, ((12.5 * 2) * 0.086), ((46.25 - 15.42) * 0.08)
     
     Room(i).AddFloor GetTex("BrickTexture"), -32.5, -46.25, -12.5, -15.42, (i * FloorHeight) + (FloorHeight + 25) + 0.1, 2, 2.4
-    
-    ''Stairwell Walls
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), (FloorHeight * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), (FloorHeight * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), (FloorHeight * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), (FloorHeight * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), (FloorHeight * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), (FloorHeight * 0.086)
-    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
     Call DrawElevatorWalls(Int(i), 7, 1, False, True, False, False, False, False, False, False, False, False, False)
 
@@ -3008,14 +2852,29 @@ If Elevator(i50).GetPosition.Y > FloorHeight And ElevatorFloor(i50) < 2 Then Flo
 Next i50
 
 'Stair doors used to speed up stairway
-'i50 = CameraFloor
-'If CameraFloor = 1 Then i50 = -1
-'If CameraFloor > -10 Then StairDoor(i50 - 1).Enable True
-'If CameraFloor < 138 Then StairDoor(i50 + 1).Enable True
+i50 = CameraFloor
+If CameraFloor = 1 Then i50 = -1
+If CameraFloor > -10 Then FakeStairDoor(i50 - 1, 1).Enable True: FakeStairDoor(i50, 1).Enable False
+If CameraFloor > -10 Then FakeStairDoor(i50 - 1, 2).Enable True: FakeStairDoor(i50, 2).Enable False
+If CameraFloor > -10 Then FakeStairDoor(i50 - 1, 3).Enable True: FakeStairDoor(i50, 3).Enable False
+If CameraFloor > -10 Then FakeStairDoor(i50 - 1, 4).Enable True: FakeStairDoor(i50, 4).Enable False
+If CameraFloor < 138 Then FakeStairDoor(i50 + 1, 1).Enable True: FakeStairDoor(i50, 1).Enable False
+If CameraFloor < 138 Then FakeStairDoor(i50 + 1, 2).Enable True: FakeStairDoor(i50, 2).Enable False
+If CameraFloor < 138 Then FakeStairDoor(i50 + 1, 3).Enable True: FakeStairDoor(i50, 3).Enable False
+If CameraFloor < 138 Then FakeStairDoor(i50 + 1, 4).Enable True: FakeStairDoor(i50, 4).Enable False
 'StairDoor(i50).Enable True
-'If CameraFloor = 1 Then StairDoor(0).Enable True: StairDoor(2).Enable True
-'If CameraFloor > 2 Then StairDoor(i50 - 2).Enable False
-'If CameraFloor < 137 Then StairDoor(i50 + 2).Enable False
+If CameraFloor = 1 Then FakeStairDoor(0, 1).Enable True: FakeStairDoor(2, 1).Enable True
+If CameraFloor = 1 Then FakeStairDoor(0, 2).Enable True: FakeStairDoor(2, 2).Enable True
+If CameraFloor = 1 Then FakeStairDoor(0, 3).Enable True: FakeStairDoor(2, 3).Enable True
+If CameraFloor = 1 Then FakeStairDoor(0, 4).Enable True: FakeStairDoor(2, 4).Enable True
+If CameraFloor > 2 Then FakeStairDoor(i50 - 2, 1).Enable False
+If CameraFloor > 2 Then FakeStairDoor(i50 - 2, 2).Enable False
+If CameraFloor > 2 Then FakeStairDoor(i50 - 2, 3).Enable False
+If CameraFloor > 2 Then FakeStairDoor(i50 - 2, 4).Enable False
+If CameraFloor < 137 Then FakeStairDoor(i50 + 2, 1).Enable False
+If CameraFloor < 137 Then FakeStairDoor(i50 + 2, 2).Enable False
+If CameraFloor < 137 Then FakeStairDoor(i50 + 2, 3).Enable False
+If CameraFloor < 137 Then FakeStairDoor(i50 + 2, 4).Enable False
 
 DebugPanel.Label1.Caption = FloorIndicatorText(1)
 DebugPanel.Label2.Caption = FloorIndicatorText(2)
@@ -3761,32 +3620,35 @@ For ShaftNum = 1 To 4
       DestroyObjects (CameraFloor)
       
       'Stairs(CameraFloor).Enable False
-      If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
-      If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable False
-    If CameraFloor >= 2 Then CameraFloor = CameraFloor + 1
-    If CameraFloor >= -10 And CameraFloor < 1 Then CameraFloor = CameraFloor + 1
-    If CameraFloor = 0 Then CameraFloor = 1
+      If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
+      If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
+    If CameraFloor >= 2 Then
+        Call DeleteStairDoors
+        CameraFloor = CameraFloor + 1
+        Call CreateStairDoors(CameraFloor)
+    End If
+    If CameraFloor >= -10 And CameraFloor < 1 Then
+        Call DeleteStairDoors
+        CameraFloor = CameraFloor + 1
+        Call CreateStairDoors(CameraFloor)
+    End If
+    If CameraFloor = 0 Then
+        Call DeleteStairDoors
+        CameraFloor = 1
+        Call CreateStairDoors(CameraFloor)
+    End If
     If CameraFloor = 1 Then PartialFloor = PartialFloor + FloorHeight
-    If CameraFloor = 1 And PartialFloor >= FloorHeight Then PartialFloor = 0: CameraFloor = 2
-      'Room(CameraFloor).Enable True
-      'For i51 = 1 To 40
-      'ElevatorDoorL(i51).Enable True
-      'ElevatorDoorL(i51).Enable True
-      'Next i51
-      'ShaftsFloor(CameraFloor).Enable True
-      'For i51 = 1 To 40
-      'CallButtons(i51).Enable True
-      'Next i51
-      Stairs(CameraFloor).Enable True
-      'Atmos.SkyBox_Enable True
-      'Call InitRealtime(CameraFloor)
-      'InitObjectsForFloor (CameraFloor)
-      ''If CameraFloor = 137 Then
-      ''For i51 = 1 To 138
-      ''Shafts(i51).Enable True
-      ''Next i51
-      If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
-      If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable True
+    If CameraFloor = 1 And PartialFloor >= FloorHeight Then
+        Call DeleteStairDoors
+        PartialFloor = 0
+        CameraFloor = 2
+        Call CreateStairDoors(CameraFloor)
+    End If
+        
+      If StairDataTable(CameraFloor) = False Then CreateStairs (CameraFloor)
+      
+      If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = False Then CreateStairs (CameraFloor + 1)
+      If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = False Then CreateStairs (CameraFloor - 1)
     Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + PartialFloor, Camera.GetPosition.z
     End If
     If Camera.GetPosition.X <= -ShaftLeft And Camera.GetPosition.X > -ShaftLeft - 6 And Camera.GetPosition.z > -46.25 And Camera.GetPosition.z < -30.85 And Camera.GetPosition.Y = (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 1) + PartialFloor Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + PartialFloor, Camera.GetPosition.z
@@ -3806,33 +3668,30 @@ For ShaftNum = 1 To 4
       DestroyObjects (CameraFloor)
       
       'Stairs(CameraFloor).Enable False
-      If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
-      If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable False
+      If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
+      If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
     If CameraFloor = 1 Then PartialFloor = PartialFloor - FloorHeight
     If CameraFloor = 2 Then PartialFloor = 0: CameraFloor = 1
     If CameraFloor = 1 And PartialFloor <= -(FloorHeight * 2) Then PartialFloor = -(FloorHeight * 2)
-    If CameraFloor > 2 Then CameraFloor = CameraFloor - 1
-    If CameraFloor > -10 And CameraFloor <= 1 Then CameraFloor = CameraFloor - 1
-    If CameraFloor = 0 Then CameraFloor = -1
-     'Room(CameraFloor).Enable True
-      'For i51 = 1 To 40
-      'ElevatorDoorL(i51).Enable True
-      'ElevatorDoorL(i51).Enable True
-      'Next i51
-      'For i51 = 1 To 40
-      'CallButtons(i51).Enable True
-      'Next i51
-      'ShaftsFloor(CameraFloor).Enable True
-      Stairs(CameraFloor).Enable True
-      'Atmos.SkyBox_Enable True
-      'Call InitRealtime(CameraFloor)
-      'InitObjectsForFloor (CameraFloor)
-      ''If CameraFloor = 137 Then
-      ''For i51 = 1 To 138
-      ''Shafts(i51).Enable True
-      ''Next i51
-      If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
-      If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable True
+    If CameraFloor > 2 Then
+        Call DeleteStairDoors
+        CameraFloor = CameraFloor - 1
+        Call CreateStairDoors(CameraFloor)
+    End If
+    If CameraFloor > -10 And CameraFloor <= 1 Then
+        Call DeleteStairDoors
+        CameraFloor = CameraFloor - 1
+        Call CreateStairDoors(CameraFloor)
+    End If
+    If CameraFloor = 0 Then
+        Call DeleteStairDoors
+        CameraFloor = -1
+        Call CreateStairDoors(CameraFloor)
+    End If
+        
+      If StairDataTable(CameraFloor) = False Then CreateStairs (CameraFloor)
+      If CameraFloor < 138 Then If StairDataTable(CameraFloor + 1) = False Then CreateStairs (CameraFloor + 1)
+      If CameraFloor > -10 Then If StairDataTable(CameraFloor - 1) = False Then CreateStairs (CameraFloor - 1)
     Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10 + (RiserHeight * 15) + PartialFloor, Camera.GetPosition.z
     End If
     If Camera.GetPosition.Y <> 10 Then
@@ -3863,17 +3722,6 @@ Sub ProcessMisc()
 DoEvents
  
     'Shafts.AddWall GetTex("Ceiling1"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight * 138) + FloorHeight, 0, 2, 139 * 2
-        
-    For i = 1 To 4
-        If i = 1 Or i = 3 Then
-        Stairs(-10).AddWall GetTex("Concrete"), -12.5 - 6, -46.25, -12.5 - 6, -46.25 + 7.71, (FloorHeight - 6), (FloorHeight * -10), (7.71 * 0.086), (FloorHeight * 0.086)
-        Stairs(138).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 6, -30.5, (FloorHeight), (138 * FloorHeight) + FloorHeight, (7.71 * 0.086), (FloorHeight * 0.086)
-        End If
-        If i = 2 Or i = 4 Then
-        Stairs(-10).AddWall GetTex("Concrete"), 12.5 + 6, -46.25, 12.5 + 6, -46.25 + 7.71, (FloorHeight - 6), (FloorHeight * -10), (7.71 * 0.086), (FloorHeight * 0.086)
-        Stairs(138).AddWall GetTex("Concrete"), 12.5 + 6, -46.25 + 7.71, 12.5 + 6, -30.5, (FloorHeight), (138 * FloorHeight) + FloorHeight, (7.71 * 0.086), (FloorHeight * 0.086)
-        End If
-    Next i
     
     'Shafts.AddFloor GetTex("BrickTexture"), -60, -150, 60, 150, (138 * FloorHeight) + FloorHeight, 10, 10
 
@@ -4241,7 +4089,15 @@ DoEvents
     
 End Sub
 
-Sub ProcessStairs()
+Sub CreateStairs(FloorID As Integer)
+    Set Stairs(FloorID) = Scene.CreateMeshBuilder("Stairs " + Str$(FloorID))
+    Set FakeStairDoor(FloorID, 1) = Scene.CreateMeshBuilder("FakeStairDoor " + Str$(i) + " 1")
+    Set FakeStairDoor(FloorID, 2) = Scene.CreateMeshBuilder("FakeStairDoor " + Str$(i) + " 2")
+    Set FakeStairDoor(FloorID, 3) = Scene.CreateMeshBuilder("FakeStairDoor " + Str$(i) + " 1")
+    Set FakeStairDoor(FloorID, 4) = Scene.CreateMeshBuilder("FakeStairDoor " + Str$(i) + " 2")
+  
+    StairDataTable(FloorID) = True
+    
     Dim RiserHeight As Single
     RiserHeight = FloorHeight / 16
     Dim ShaftNum As Integer
@@ -4254,7 +4110,12 @@ Sub ProcessStairs()
     If ShaftNum = 3 Then ShaftLeft = 90.5: ShaftRight = 110.5
     If ShaftNum = 4 Then ShaftLeft = -130.5: ShaftRight = -110.5
     
-    For i = -10 To -2
+    'Stairway End Block Walls
+    If FloorID = -10 Then Stairs(-10).AddWall GetTex("Concrete"), -(ShaftLeft + 6), -46.25, -(ShaftLeft + 6), -46.25 + 7.71, (FloorHeight - 6), (FloorHeight * -10), (7.71 * 0.086), (FloorHeight * 0.086)
+    If ShaftNum = 1 And FloorID = 138 Then Stairs(138).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 6, -30.5, (FloorHeight), (138 * FloorHeight) + FloorHeight, (7.71 * 0.086), (FloorHeight * 0.086)
+    
+    If FloorID <= -2 Then
+    i = FloorID
     'Stairwell Walls
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -46.25 + 0.1, -ShaftLeft - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -32.5, -ShaftLeft - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
@@ -4306,9 +4167,10 @@ Sub ProcessStairs()
     'Stairs(i).AddWall GetTex("FloorSign"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 11 - 0.4, 1, 1
     'Stairs(i).AddWall GetTex("Button" + Mid$(Str$(i), 2)), -ShaftLeft - 0.51, -42.5, -ShaftLeft - 0.51, -44.5, 1.5, ((i * FloorHeight) + FloorHeight) + 9.5, 1, 1
     'If i >= 2 And i <= 79 Then Stairs(i).AddWall GetTex("FloorSignOffices"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    Next i
+    End If
 
-i = 1
+    If FloorID = 1 Then
+    i = 1
 'Stairs on the first floor, section 1
  
     'Stairwell Walls
@@ -4442,6 +4304,7 @@ i = 1
     Stairs(i).AddWall GetTex("FloorSign"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, 11 + FloorHeight - 0.4, 1, 1
     Stairs(i).AddWall GetTex("ButtonM"), -ShaftLeft - 0.51, -42.5, -ShaftLeft - 0.51, -44.5, 1.5, 9.5 + FloorHeight, 1, 1
     Stairs(i).AddWall GetTex("FloorSignMez"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, 9 + FloorHeight + 0.3, 1, 1
+    End If
     
 Dim Endfloor As Integer
 If ShaftNum = 1 Then Endfloor = 138
@@ -4449,10 +4312,18 @@ If ShaftNum = 2 Then Endfloor = 117
 If ShaftNum = 3 Then Endfloor = 79
 If ShaftNum = 4 Then Endfloor = 39
 
-    For i = 2 To Endfloor
+    'Fake Stair Doors
+    If FloorID <= Endfloor Then
+        FakeStairDoor(FloorID, ShaftNum).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
+        FakeStairDoor(FloorID, ShaftNum).SetRotation 0, 1.56, 0
+        If FloorID > -1 Then FakeStairDoor(FloorID, ShaftNum).SetPosition -(ShaftLeft + 0.3), (FloorID * FloorHeight) + FloorHeight, -36.4
+        If FloorID = -1 Then FakeStairDoor(FloorID, ShaftNum).SetPosition -(ShaftLeft + 0.3), 0, -36.4
+    End If
+    
+    If FloorID >= 2 And FloorID <= Endfloor Then
     'Stairs
     DoEvents
-    Sim.Label2.Caption = "Processing Stairs... " + Str$(Int((i / 137) * 100)) + "%"
+    i = FloorID
     
     'Stairwell Walls
     Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -46.25 + 0.1, -ShaftLeft - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
@@ -4517,11 +4388,14 @@ If ShaftNum = 4 Then Endfloor = 39
     If i = 136 Then Stairs(i).AddWall GetTex("FloorSignBalcony"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
     If i = 137 Then Stairs(i).AddWall GetTex("FloorSignMechanical"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
     
-    Next i
+    End If
+    
+    If FloorID = 138 Then
     i = 138
     Stairs(i).AddWall GetTex("FloorSign"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 11 - 0.4, 1, 1
     Stairs(i).AddWall GetTex("Button" + Mid$(Str$(i), 2)), -ShaftLeft - 0.51, -42.5, -ShaftLeft - 0.51, -44.5, 1.5, ((i * FloorHeight) + FloorHeight) + 9.5, 1, 1
     Stairs(i).AddWall GetTex("FloorSignRoof"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    End If
     
     Next ShaftNum
     
