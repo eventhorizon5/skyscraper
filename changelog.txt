@@ -1,11 +1,21 @@
+Changelog starts after 0.94 release
+
 Version 0.96
 -------------
 -cleaned up elevator button code, and made it into a nice little algorithm
 -fixed falling issue
 -added error detection during startup, for the absence of the TrueVision engine
--fixed a bug in the Object Manager in the scale slider
+-fixed bugs in the Object Manager
 -fixed up 134th floor, and reworked the pool
--rewritten elevator queuing system
+-rewrote elevator queuing system
+-collision detection failure bug fixed
+-reworked pipe shafts and crawl spaces
+-new cinematic intro added (will be enhanced later)
+-new functionality added to the simulator control panel
+-automation added to the simulator control panel
+-new buildings added
+-building texture resolutions fixed
+-ModelViewer application added
 
 Version 0.95b (build 144)
 -------------
@@ -15,10 +25,7 @@ Version 0.95b (build 144)
 Version 0.95 (build 140)
 ------------
 Changelog begins during 0.95 development.
-Build 140
 -Date change
-
-Build 139
 -Shaft wall put over stairwell wall
 -Shaft ceilings raised to next floor
 -Fixed mezzanine walls and shafts somewhat
@@ -27,19 +34,13 @@ Build 139
 -Fixed mezzanine call buttons
 -Stopped elevator doors from opening if on a different floor
 -Large chunk of useless code deleted from DrawElevatorWalls2
-
-Builds 136-138
 -Support for 4 stairwells added
 -Pipeshafts fixed, 4 total
 -Elevator call issue fixed (elevators didn't initally set currentfloorexact value to corresponding floor)
 -Massive bugs introduced with new features fixed
 -Elevator call queues added
 -Stairs creation moved into realtime
-
-Build 135
 -integrated with TrueVision3D 6.1b	
-
-Builds 126-134
 -Tons of bugfixes and features
 -Elevator grouping support
 
