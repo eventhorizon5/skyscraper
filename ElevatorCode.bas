@@ -1,5 +1,5 @@
 Attribute VB_Name = "ElevatorCode"
-'Skycraper 0.9 Beta
+'Skycraper 0.91 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'Contact - ryan@tliquest.net

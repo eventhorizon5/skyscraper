@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form Form1 
+   BorderStyle     =   1  'Fixed Single
    Caption         =   "SkyScraper"
    ClientHeight    =   7920
    ClientLeft      =   1080
@@ -7,6 +8,8 @@ Begin VB.Form Form1
    ClientWidth     =   10440
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
    ScaleHeight     =   7920
    ScaleWidth      =   10440
    Begin VB.Timer Timer10 
@@ -147,7 +150,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.9 Beta
+'Skycraper 0.91 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'Contact - ryan@tliquest.net
@@ -261,8 +264,9 @@ Call ProcessFloors
     sngStrafe = 0
   
   'Room.Enable False
-  External.Enable False
   Buildings.Enable True
+  Landscape.Enable True
+  External.Enable False
   For i = 1 To 138
   Room(i).Enable False
   Stairs(i).Enable False
