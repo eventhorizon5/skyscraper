@@ -22,46 +22,46 @@ Attribute VB_Name = "API"
 
 Option Explicit
 
-Function IsEven(Number As Integer) As Boolean
-'Determine if the passed number is even.
-'If number divides evenly, return true
-If Number / 2 = Int(Number / 2) Then
-    IsEven = True
-Else
-    IsEven = False
-End If
+'Function IsEven(Number As Integer) As Boolean
+''Determine if the passed number is even.
+''If number divides evenly, return true
+'If Number / 2 = Int(Number / 2) Then
+'    IsEven = True
+'Else
+'    IsEven = False
+'End If
 
-End Function
+'End Function
 
-Function GetCameraFloor() As Integer
-'Determine what floor the camera is on
-Dim curfloor As Integer
-Dim total As Single
+'Function GetCameraFloor() As Integer
+''Determine what floor the camera is on
+'Dim curfloor As Integer
+'Dim total As Single
 
-'Find the upper and lower bounds of each floor, then see if the
-'camera altitude is within the bounds
-'if camera is above TopFloor, then returns TopFloor
-For curfloor = BottomFloor To TopFloor
-DoEvents
-total = GetFloorAltitude(curfloor)
-If Camera.GetPosition.Y >= total And Camera.GetPosition.Y < total + GetFloorHeight(curfloor) Then Exit For
-Next curfloor
+''Find the upper and lower bounds of each floor, then see if the
+''camera altitude is within the bounds
+''if camera is above TopFloor, then returns TopFloor
+'For curfloor = BottomFloor To TopFloor
+'DoEvents
+'total = GetFloorAltitude(curfloor)
+'If Camera.GetPosition.Y >= total And Camera.GetPosition.Y < total + GetFloorHeight(curfloor) Then Exit For
+'Next curfloor
 
-GetCameraFloor = curfloor
+'GetCameraFloor = curfloor
 
-End Function
+'End Function
 
-Function GetFloorExact(Number As Single) As Single
-'Determine what floor the specified altitude is part of
-Dim curfloor As Integer
+'Function GetFloorExact(Number As Single) As Single
+''Determine what floor the specified altitude is part of
+'Dim curfloor As Integer
 
-'Find the upper and lower bounds of each floor, then see if the
-'altitude is within the bounds
-For curfloor = BottomFloor To TopFloor
-DoEvents
-If Number >= GetFloorAltitude(curfloor) And Number < GetFloorAltitude(curfloor) + GetFloorHeight(curfloor) Then Exit For
-Next curfloor
+''Find the upper and lower bounds of each floor, then see if the
+''altitude is within the bounds
+'For curfloor = BottomFloor To TopFloor
+'DoEvents
+'If Number >= GetFloorAltitude(curfloor) And Number < GetFloorAltitude(curfloor) + GetFloorHeight(curfloor) Then Exit For
+'Next curfloor
 
-GetFloorExact = curfloor + ((Number - GetFloorAltitude(curfloor)) / GetFloorHeight(curfloor))
-End Function
+'GetFloorExact = curfloor + ((Number - GetFloorAltitude(curfloor)) / GetFloorHeight(curfloor))
+'End Function
 
