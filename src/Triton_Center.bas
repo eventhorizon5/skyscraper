@@ -869,6 +869,7 @@ Dim i As Integer
 For i = 1 To 40
 Elevator(i).ElevatorSpeed = 1
 Elevator(i).Acceleration = 0.1
+Elevator(i).OpenSpeed = 1
 Next i
 
 Elevator(1).CreateElevator 12.5, 30, 0, 0
