@@ -65,29 +65,3 @@ Next curfloor
 GetFloorExact = curfloor + ((Number - GetFloorAltitude(curfloor)) / GetFloorHeight(curfloor))
 End Function
 
-
-Sub CreateWallBox(DestMesh As TVMesh, TextureName As String, WidthX As Single, LengthZ As Single, CenterX As Single, CenterZ As Single, Floor As Integer, CSpace As Boolean, ResX As Single, ResY As Single)
-Dim Height As Single
-Dim WallHeight As Single
-Dim x1 As Single
-Dim x2 As Single
-Dim z1 As Single
-Dim z2 As Single
-Height = GetFloorAltitude(Floor)
-WallHeight = GetFloorHeight(Floor) - CrawlSpaceHeight
-If CSpace = True Then
-    Height = WallHeight
-    WallHeight = CrawlSpaceHeight
-End If
-x1 = CenterX - (WidthX / 2)
-x2 = CenterX + (WidthX / 2)
-z1 = CenterZ - (LengthZ / 2)
-z1 = CenterZ + (LengthZ / 2)
-
-DestMesh.AddWall GetTex(TextureName), x1, z1, x2, z1, WallHeight, Height, (WidthX * (0.086 * ResX)), ResY
-DestMesh.AddWall GetTex(TextureName), x2, z1, x2, z2, WallHeight, Height, (WidthX * (0.086 * ResX)), ResY
-DestMesh.AddWall GetTex(TextureName), x2, z2, x1, z2, WallHeight, Height, (WidthX * (0.086 * ResX)), ResY
-DestMesh.AddWall GetTex(TextureName), x1, z2, x1, z1, WallHeight, Height, (WidthX * (0.086 * ResX)), ResY
-
-End Sub
-
