@@ -1,5 +1,5 @@
 Skyscraper version 0.95b - Beta
-©2003 Ryan Thoryk
+©2004 Ryan Thoryk
 http://www.tliquest.net/skyscraper
 http://sourceforge.net/projects/skyscraper
 email: ryan@tliquest.net
