@@ -2,6 +2,9 @@ Version 0.96
 -------------
 -cleaned up elevator button code, and made it into a nice little algorithm
 -fixed falling issue
+-added error detection during startup, for the absence of the TrueVision engine
+-fixed a bug in the Object Manager in the scale slider
+-fixed up 134th floor, and reworked the pool
 
 Version 0.95b (build 144)
 -------------

@@ -551,7 +551,7 @@ Set Light = New TVLightEngine
   
 Sim.Label1.Caption = "Skyscraper " + Str$(App.Major) + "." + LTrim(Str$(App.Minor)) + " Beta - Build" + Str$(App.Revision) + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "©2004 Ryan Thoryk" + vbCrLf
-Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on April 16, 2004" + vbCrLf + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on April 21, 2004" + vbCrLf + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "software, and you are welcome to redistribute it under certain" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "conditions. For details, see the file gpl.txt" + vbCrLf
@@ -2225,7 +2225,7 @@ Sub ProcessOtherFloors2()
     Call DrawElevatorWalls(Int(i), 5, 1, False, True, False, False, False, False, False, False, False, False, False)
     
     'Room(I) Walls
-    Room(i).AddWall GetTex("Wall3"), -85, 60, 85, 60, 25, (i * FloorHeight) + FloorHeight, 9, 1
+    Room(i).AddWall GetTex("Wall3"), -85, 35, 85, 35, 25, (i * FloorHeight) + FloorHeight, 9, 1
         
 
 'Floor 134
@@ -2233,21 +2233,21 @@ Sub ProcessOtherFloors2()
     DoEvents
     Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
-    Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, 10, 3
-    Room(i).AddFloor GetTex("Granite"), -85, -46.25, -32.5, 0, (i * FloorHeight) + FloorHeight, 3, 3
-    Room(i).AddFloor GetTex("Granite"), 32.5, -46.25, 85, 0, (i * FloorHeight) + FloorHeight, 3, 3
-    Room(i).AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 0, (i * FloorHeight) + FloorHeight, 1, 3
+    Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
+    Room(i).AddFloor GetTex("Granite"), -85, -46.25, -32.5, 0, (i * FloorHeight) + FloorHeight, ((85 - 32.5) * 0.086), (46.25 * 0.08)
+    Room(i).AddFloor GetTex("Granite"), 32.5, -46.25, 85, 0, (i * FloorHeight) + FloorHeight, ((85 - 32.5) * 0.086), (46.25 * 0.08)
+    Room(i).AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 0, (i * FloorHeight) + FloorHeight, ((12.5 * 2) * 0.086), (46.25 * 0.08)
     
     'modified floor for pool
-    Room(i).AddFloor GetTex("Granite"), -50, 0, 50, 60, (i * FloorHeight) + FloorHeight, 10, 3
-    Room(i).AddFloor GetTex("Granite"), -85, 0, -50, 150, (i * FloorHeight) + FloorHeight, 10, 3
-    Room(i).AddFloor GetTex("Granite"), 50, 0, 85, 150, (i * FloorHeight) + FloorHeight, 10, 3
+    Room(i).AddFloor GetTex("Granite"), -50, 0, 63, 41, (i * FloorHeight) + FloorHeight, ((63 + 50) * 0.086), (41 * 0.08)
+    Room(i).AddFloor GetTex("Granite"), -85, 0, -50, 150, (i * FloorHeight) + FloorHeight, ((85 - 50) * 0.086), (150 * 0.08)
+    Room(i).AddFloor GetTex("Granite"), 63, 0, 85, 150, (i * FloorHeight) + FloorHeight, ((85 - 63) * 0.086), (150 * 0.08)
     
-    Room(i).AddFloor GetTex("Marble3"), -85, -150, 85, -46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, 10, 3
-    Room(i).AddFloor GetTex("Marble3"), -85, 0, 85, 150, (i * FloorHeight) + (FloorHeight + 25) - 0.5, 10, 3
-    Room(i).AddFloor GetTex("Marble3"), -85, -46.25, -32.5, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, 3, 3
-    Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 85, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, 3, 3
-    Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, 1, 3
+    Room(i).AddFloor GetTex("Marble3"), -85, -150, 85, -46.25, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), -85, 0, 85, 150, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((85 * 2) * 0.086), (150 * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), -85, -46.25, -32.5, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((85 - 32.5) * 0.086), (46.25 * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 85, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((85 - 32.5) * 0.086), (46.25 * 0.08)
+    Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, ((12.5 * 2) * 0.086), (46.25 * 0.08)
      
     Call DrawElevatorWalls(Int(i), 5, 1, False, True, True, True, True, False, False, False, False, False, False)
        
