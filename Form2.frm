@@ -2,10 +2,10 @@ VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form Form2 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "SkyScraper 0.8 Alpha - Simulator Control Panel"
+   Caption         =   "SkyScraper 0.9 Beta - Simulator Control Panel"
    ClientHeight    =   4410
-   ClientLeft      =   45
-   ClientTop       =   330
+   ClientLeft      =   1500
+   ClientTop       =   1770
    ClientWidth     =   6720
    Icon            =   "Form2.frx":0000
    LinkTopic       =   "Form2"
@@ -13,39 +13,83 @@ Begin VB.Form Form2
    MinButton       =   0   'False
    ScaleHeight     =   4410
    ScaleWidth      =   6720
-   StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton Command15 
+      Caption         =   "Bldgs Off"
+      Height          =   255
+      Left            =   5640
+      TabIndex        =   33
+      Top             =   1080
+      Width           =   855
+   End
+   Begin VB.CommandButton Command14 
+      Caption         =   "Bldgs On"
+      Height          =   255
+      Left            =   4680
+      TabIndex        =   32
+      Top             =   1080
+      Width           =   855
+   End
+   Begin MSComctlLib.Slider Slider2 
+      Height          =   495
+      Left            =   0
+      TabIndex        =   22
+      Top             =   2520
+      Width           =   1695
+      _ExtentX        =   2990
+      _ExtentY        =   873
+      _Version        =   393216
+      Min             =   1
+      SelStart        =   1
+      Value           =   1
+   End
+   Begin VB.CommandButton Command11 
+      Caption         =   "Shaftf Off"
+      Height          =   255
+      Left            =   5640
+      TabIndex        =   21
+      Top             =   840
+      Width           =   855
+   End
+   Begin VB.CommandButton Command10 
+      Caption         =   "Shaftf On"
+      Height          =   255
+      Left            =   4680
+      TabIndex        =   20
+      Top             =   840
+      Width           =   855
+   End
    Begin VB.CommandButton Command9 
       Caption         =   "Close Elevator"
-      Enabled         =   0   'False
       Height          =   495
-      Left            =   3240
+      Left            =   3960
       TabIndex        =   19
-      Top             =   1920
+      Top             =   2760
       Width           =   855
    End
    Begin VB.CommandButton Command8 
       Caption         =   "Open Elevator"
-      Enabled         =   0   'False
       Height          =   495
-      Left            =   2280
+      Left            =   3120
       TabIndex        =   18
-      Top             =   1920
+      Top             =   2760
       Width           =   855
    End
    Begin VB.CommandButton Command7 
       Caption         =   "Shafts Off"
-      Height          =   375
+      Enabled         =   0   'False
+      Height          =   255
       Left            =   5640
       TabIndex        =   17
-      Top             =   960
+      Top             =   600
       Width           =   855
    End
    Begin VB.CommandButton Command6 
       Caption         =   "Shafts On"
-      Height          =   375
+      Enabled         =   0   'False
+      Height          =   255
       Left            =   4680
       TabIndex        =   16
-      Top             =   960
+      Top             =   600
       Width           =   855
    End
    Begin VB.CommandButton Command5 
@@ -53,7 +97,7 @@ Begin VB.Form Form2
       Height          =   495
       Left            =   4800
       TabIndex        =   15
-      Top             =   3240
+      Top             =   3600
       Width           =   855
    End
    Begin VB.CommandButton Command4 
@@ -61,7 +105,7 @@ Begin VB.Form Form2
       Height          =   495
       Left            =   5760
       TabIndex        =   14
-      Top             =   3240
+      Top             =   3600
       Width           =   855
    End
    Begin VB.CheckBox Check9 
@@ -69,7 +113,7 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   13
-      Top             =   3840
+      Top             =   4080
       Value           =   1  'Checked
       Width           =   975
    End
@@ -86,17 +130,16 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   10
-      Top             =   2760
+      Top             =   3120
       Value           =   1  'Checked
       Width           =   1575
    End
    Begin VB.CommandButton Command2 
       Caption         =   "Call Elevator"
-      Enabled         =   0   'False
       Height          =   375
-      Left            =   1680
+      Left            =   1800
       TabIndex        =   9
-      Top             =   2760
+      Top             =   2880
       Width           =   1215
    End
    Begin VB.CheckBox Check8 
@@ -104,7 +147,7 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   8
-      Top             =   2400
+      Top             =   2760
       Value           =   1  'Checked
       Width           =   1575
    End
@@ -113,7 +156,7 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   7
-      Top             =   2040
+      Top             =   2400
       Value           =   1  'Checked
       Width           =   1575
    End
@@ -122,16 +165,17 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   6
-      Top             =   1680
+      Top             =   2040
       Value           =   1  'Checked
       Width           =   1575
    End
    Begin VB.CheckBox Check5 
-      Caption         =   "Elevator1"
+      Caption         =   "Elevators"
+      Enabled         =   0   'False
       Height          =   375
       Left            =   5040
       TabIndex        =   5
-      Top             =   1320
+      Top             =   1680
       Value           =   1  'Checked
       Width           =   1575
    End
@@ -140,7 +184,7 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   4
-      Top             =   600
+      Top             =   240
       Value           =   1  'Checked
       Width           =   1575
    End
@@ -149,7 +193,7 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   3
-      Top             =   240
+      Top             =   0
       Value           =   1  'Checked
       Width           =   1575
    End
@@ -186,12 +230,12 @@ Begin VB.Form Form2
       Top             =   120
       Width           =   4335
    End
-   Begin VB.Label Label1 
+   Begin VB.Label Label10 
       Alignment       =   2  'Center
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
          Name            =   "MS Sans Serif"
-         Size            =   12
+         Size            =   9.75
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -199,10 +243,172 @@ Begin VB.Form Form2
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
-      Left            =   240
+      Left            =   4320
+      TabIndex        =   31
+      Top             =   1920
+      Width           =   495
+   End
+   Begin VB.Label Label9 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   3840
+      TabIndex        =   30
+      Top             =   1920
+      Width           =   495
+   End
+   Begin VB.Label Label8 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   3360
+      TabIndex        =   29
+      Top             =   1920
+      Width           =   495
+   End
+   Begin VB.Label Label7 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   2880
+      TabIndex        =   28
+      Top             =   1920
+      Width           =   495
+   End
+   Begin VB.Label Label6 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   2400
+      TabIndex        =   27
+      Top             =   1920
+      Width           =   495
+   End
+   Begin VB.Label Label5 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   1920
+      TabIndex        =   26
+      Top             =   1920
+      Width           =   495
+   End
+   Begin VB.Label Label4 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   1440
+      TabIndex        =   25
+      Top             =   1920
+      Width           =   495
+   End
+   Begin VB.Label Label3 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   960
+      TabIndex        =   24
+      Top             =   1920
+      Width           =   495
+   End
+   Begin VB.Label Label2 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   480
+      TabIndex        =   23
+      Top             =   1920
+      Width           =   495
+   End
+   Begin VB.Label Label1 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   0
       TabIndex        =   12
       Top             =   1920
-      Width           =   975
+      Width           =   495
    End
 End
 Attribute VB_Name = "Form2"
@@ -210,7 +416,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.7 Alpha
+'Skycraper 0.9 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 
@@ -252,21 +458,46 @@ End Sub
 
 
 Private Sub Check5_Click()
-If Check5.Value = 1 Then Elevator1.Enable True
-If Check5.Value = 0 Then Elevator1.Enable False
+For i = 1 To 10
+If Check5.Value = 1 Then Elevator(i).Enable True
+If Check5.Value = 0 Then Elevator(i).Enable False
+Next i
 End Sub
 
 Private Sub Check6_Click()
-If Check6.Value = 1 Then Elevator1DoorL.Enable True: Elevator1DoorR.Enable True
-If Check6.Value = 0 Then Elevator1DoorL.Enable False: Elevator1DoorR.Enable False
+For i = 1 To 10
+If Check6.Value = 1 Then ElevatorInsDoorL(i).Enable True: ElevatorInsDoorR(i).Enable True
+If Check6.Value = 0 Then ElevatorInsDoorL(i).Enable False: ElevatorInsDoorR(i).Enable False
+Next i
 End Sub
 
 Private Sub Check7_Click()
+i = CameraFloor
+If i = 1 Then i = -1
 If Check7.Value = 1 Then
-ElevatorDoorL(CameraFloor).Enable True: ElevatorDoorR(CameraFloor).Enable True
+ElevatorDoor1L(i).Enable True: ElevatorDoor1R(i).Enable True
+ElevatorDoor2L(i).Enable True: ElevatorDoor2R(i).Enable True
+ElevatorDoor3L(i).Enable True: ElevatorDoor3R(i).Enable True
+ElevatorDoor4L(i).Enable True: ElevatorDoor4R(i).Enable True
+ElevatorDoor5L(i).Enable True: ElevatorDoor5R(i).Enable True
+ElevatorDoor6L(i).Enable True: ElevatorDoor6R(i).Enable True
+ElevatorDoor7L(i).Enable True: ElevatorDoor7R(i).Enable True
+ElevatorDoor8L(i).Enable True: ElevatorDoor8R(i).Enable True
+ElevatorDoor9L(i).Enable True: ElevatorDoor9R(i).Enable True
+ElevatorDoor10L(i).Enable True: ElevatorDoor10R(i).Enable True
 End If
 
-If Check7.Value = 0 Then ElevatorDoorL(CameraFloor).Enable False: ElevatorDoorR(CameraFloor).Enable False
+If Check7.Value = 0 Then ElevatorDoor1L(i).Enable False: ElevatorDoor1R(i).Enable False
+If Check7.Value = 0 Then ElevatorDoor2L(i).Enable False: ElevatorDoor2R(i).Enable False
+If Check7.Value = 0 Then ElevatorDoor3L(i).Enable False: ElevatorDoor3R(i).Enable False
+If Check7.Value = 0 Then ElevatorDoor4L(i).Enable False: ElevatorDoor4R(i).Enable False
+If Check7.Value = 0 Then ElevatorDoor5L(i).Enable False: ElevatorDoor5R(i).Enable False
+If Check7.Value = 0 Then ElevatorDoor6L(i).Enable False: ElevatorDoor6R(i).Enable False
+If Check7.Value = 0 Then ElevatorDoor7L(i).Enable False: ElevatorDoor7R(i).Enable False
+If Check7.Value = 0 Then ElevatorDoor8L(i).Enable False: ElevatorDoor8R(i).Enable False
+If Check7.Value = 0 Then ElevatorDoor9L(i).Enable False: ElevatorDoor9R(i).Enable False
+If Check7.Value = 0 Then ElevatorDoor10L(i).Enable False: ElevatorDoor10R(i).Enable False
+
 End Sub
 
 Private Sub Check8_Click()
@@ -284,24 +515,44 @@ End If
 End Sub
 
 Private Sub Command1_Click()
-If Check9.Value = 1 Then ElevatorSync = True Else ElevatorSync = False
-OpenElevator = -1
-GotoFloor = Slider1.Value
-If GotoFloor = 1 Then GotoFloor = -1
+ElevatorNumber = Slider2.Value
+If Check9.Value = 1 Then ElevatorSync(ElevatorNumber) = True Else ElevatorSync(ElevatorNumber) = False
+OpenElevator(ElevatorNumber) = -1
+GotoFloor(ElevatorNumber) = Slider1.Value
+If GotoFloor(ElevatorNumber) = 1 Then GotoFloor(ElevatorNumber) = -1
+End Sub
+
+Private Sub Command10_Click()
+ShaftsFloor(CameraFloor).Enable True
+End Sub
+
+Private Sub Command11_Click()
+ShaftsFloor(CameraFloor).Enable False
+End Sub
+
+
+Private Sub Command14_Click()
+Buildings.Enable True
+End Sub
+
+Private Sub Command15_Click()
+Buildings.Enable False
 End Sub
 
 Private Sub Command2_Click()
-ElevatorSync = False
-OpenElevator = -1
-GotoFloor = CameraFloor
-If FloorIndicator = "M" Then GotoFloor = 0.1
-If GotoFloor = 1 Then GotoFloor = -1
+ElevatorNumber = Slider2.Value
+ElevatorSync(ElevatorNumber) = False
+OpenElevator(ElevatorNumber) = -1
+GotoFloor(ElevatorNumber) = CameraFloor
+If CameraFloor = 1 And Camera.GetPosition.Y > 27 Then GotoFloor(ElevatorNumber) = 0.1
+If GotoFloor(ElevatorNumber) = 1 Then GotoFloor(ElevatorNumber) = -1
 End Sub
 
 Private Sub Command3_Click()
-If Check9.Value = 1 Then ElevatorSync = True Else ElevatorSync = False
-OpenElevator = -1
-GotoFloor = 0.1
+ElevatorNumber = Slider2.Value
+If Check9.Value = 1 Then ElevatorSync(ElevatorNumber) = True Else ElevatorSync(ElevatorNumber) = False
+OpenElevator(ElevatorNumber) = -1
+GotoFloor(ElevatorNumber) = 0.1
 End Sub
 
 Private Sub Command4_Click()
@@ -310,24 +561,32 @@ DestroyObjects (CameraFloor)
 End Sub
 
 Private Sub Command5_Click()
+Test1 = True
 InitObjectsForFloor (CameraFloor)
 
 End Sub
 
 Private Sub Command6_Click()
-Shafts.Enable True
-
+For i = 1 To 138
+Shafts1(i).Enable True
+Shafts2(i).Enable True
+Next i
 End Sub
 
 Private Sub Command7_Click()
-Shafts.Enable False
-
+For i = 1 To 138
+Shafts1(i).Enable False
+Shafts2(i).Enable False
+Next i
 End Sub
 
 Private Sub Command8_Click()
-OpenElevator = 1
+ElevatorNumber = Slider2.Value
+OpenElevator(ElevatorNumber) = 1
 End Sub
 
 Private Sub Command9_Click()
-OpenElevator = -1
+ElevatorNumber = Slider2.Value
+OpenElevator(ElevatorNumber) = -1
 End Sub
+
