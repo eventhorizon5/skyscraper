@@ -82,11 +82,13 @@ If FloorID = -10 Then q = -11
         End If
         'wall between stairs and 1st elevator
         If e1 = True Then
-            ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -32.5, -ShaftLeft, -30, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 3 Then ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -32.5, -ShaftLeft, -30, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 2 Or ShaftNum = 4 Then ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -32.5, ShaftLeft, -30, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
             If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -32.5, -ShaftLeft - WallOffset, -30.5, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
             If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -32.5, -ShaftLeft - WallOffset, -30.5, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
         Else
-            ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -32.5, -ShaftLeft, -16, 19.5, (q * FloorHeight) + FloorHeight, (16.5 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 1 Or ShaftNum = 3 Then ShaftsFloor(FloorID).AddWall GetTex(TextureName), -ShaftLeft, -32.5, -ShaftLeft, -16, 19.5, (q * FloorHeight) + FloorHeight, (16.5 * 0.086), (19.5 * 0.08)
+            If ShaftNum = 2 Or ShaftNum = 4 Then ShaftsFloor(FloorID).AddWall GetTex(TextureName), ShaftLeft, -32.5, ShaftLeft, -16, 19.5, (q * FloorHeight) + FloorHeight, (16.5 * 0.086), (19.5 * 0.08)
             If ShaftNum = 1 Or ShaftNum = 2 Then Shafts1(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -32.5, -ShaftLeft - WallOffset, -16, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
             If ShaftNum = 3 Or ShaftNum = 4 Then Shafts3(FloorID).AddWall GetTex("BrickTexture"), -ShaftLeft - WallOffset, -32.5, -ShaftLeft - WallOffset, -16, 19.5, (q * FloorHeight) + FloorHeight, (2.5 * 0.086), (19.5 * 0.08)
         End If
@@ -976,29 +978,8 @@ If ShaftNum = 2 Or ShaftNum = 4 Then WallOffset = -0.05: WallOffset2 = 0.01
         If e10 = True And ShaftNum = 4 Then ElevatorDoorL(40).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -19.05 + (15 * 4), (ShaftLeft + WallOffset), -22.95 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
         If e10 = True And ShaftNum = 4 Then ElevatorDoorR(40).AddWall GetTex("ElevDoors"), (ShaftLeft + WallOffset), -23.05 + (15 * 4), (ShaftLeft + WallOffset), -27.05 + (15 * 4), 19.6, (q * FloorHeight) + FloorHeight, 1, 1
             
-'Stairway Doors
-    
-Dim Endfloor As Integer
-If ShaftNum = 1 Then Endfloor = 138
-If ShaftNum = 2 Then Endfloor = 117
-If ShaftNum = 3 Then Endfloor = 79
-If ShaftNum = 4 Then Endfloor = 39
-    
-    If FloorID < 2 Then StairDoor(ShaftNum).AddWall GetTex("StairsDoor2"), -3.9, 0, 3.9, 0, 19.5, (i * FloorHeight) + FloorHeight, 1, 1
-    If FloorID >= 2 And FloorID <= Endfloor Then StairDoor(ShaftNum).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, (i * FloorHeight) + FloorHeight, 1, 1
-    
-    If (ShaftNum = 1 Or ShaftNum = 3) And FloorID <= Endfloor Then
-    StairDoor(ShaftNum).SetMeshName ("DoorSB " + Str$(ShaftNum))
-    StairDoor(ShaftNum).SetRotation 0, 1.56, 0
-    StairDoor(ShaftNum).SetPosition -12.8, 0, -36.4
-    End If
-    
-    If (ShaftNum = 2 Or ShaftNum = 4) And FloorID <= Endfloor Then
-    StairDoor(ShaftNum).SetMeshName ("DoorSB " + Str$(ShaftNum))
-    StairDoor(ShaftNum).SetRotation 0, 1.56, 0
-    StairDoor(ShaftNum).SetPosition 12.8, 0, -36.4
-    End If
-    
+Call CreateStairDoors(q)
+            
 End Sub
 
 Sub InitObjectsForFloor(Floor As Integer)
@@ -1210,17 +1191,6 @@ Objects(i).SetRotation 0, -1.58, 0
 Objects(i).SetPosition -159.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 80) * 12) + ((j - 80) * 0.1)
 'Objects(i).Optimize
 Next j
-
-''Stairway Door
-'i = 105 + (150 * (Floor - 1))
-'Call Init_Objects(Floor, 105)
-'Objects(i).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
-''Objects(i).SetColor (RGBA(10, 10, 10, 1))
-''Objects(i).ScaleMesh 0.45, 0.535, 0.535
-''Objects(i).SetTexture GetTex("Wood2")
-'Objects(i).SetMeshName ("DoorB " + Str$(i))
-'Objects(i).SetRotation 0, 1.56, 0
-'Objects(i).SetPosition -12.8, (Floor * FloorHeight) + FloorHeight, -36.4
 
 'Door 01
 i = 106 + (150 * (Floor - 1))
@@ -1544,17 +1514,6 @@ Objects(i).SetPosition 129 - ((j - 73) * 12) + ((j - 73) * 0.1), ((Floor * Floor
 'Objects(i).Optimize
 Next j
 
-''Stairway Door
-'i = 95 + (150 * (Floor - 1))
-'Call Init_Objects(Floor, 95)
-'Objects(i).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
-''Objects(i).SetColor (RGBA(10, 10, 10, 1))
-''Objects(i).ScaleMesh 0.45, 0.535, 0.535
-''Objects(i).SetTexture GetTex("Wood2")
-'Objects(i).SetMeshName ("DoorB " + Str$(i))
-'Objects(i).SetRotation 0, 1.56, 0
-'Objects(i).SetPosition -12.8, (Floor * FloorHeight) + FloorHeight, -36.4
-
 'Door 01
 i = 96 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 96)
@@ -1876,17 +1835,6 @@ Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetPosition 103 - ((j - 69) * 12) + ((j - 69) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 Next j
-
-''Stairway Door
-'i = 87 + (150 * (Floor - 1))
-'Call Init_Objects(Floor, 87)
-'Objects(i).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
-''Objects(i).SetColor (RGBA(10, 10, 10, 1))
-''Objects(i).ScaleMesh 0.45, 0.535, 0.535
-''Objects(i).SetTexture GetTex("Wood2")
-'Objects(i).SetMeshName ("DoorB " + Str$(i))
-'Objects(i).SetRotation 0, 1.56, 0
-'Objects(i).SetPosition -12.8, (Floor * FloorHeight) + FloorHeight, -36.4
 
 End If
 
@@ -2235,17 +2183,6 @@ Objects(i).SetPosition 78 - ((j - 65) * 12) + ((j - 65) * 0.15), ((Floor * Floor
 'Objects(i).Optimize
 Next j
 
-''Stairway Door
-'i = 79 + (150 * (Floor - 1))
-'Call Init_Objects(Floor, 79)
-'Objects(i).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
-''Objects(i).SetColor (RGBA(10, 10, 10, 1))
-''Objects(i).ScaleMesh 0.45, 0.535, 0.535
-''Objects(i).SetTexture GetTex("Wood2")
-'Objects(i).SetMeshName ("DoorB " + Str$(i))
-'Objects(i).SetRotation 0, 1.56, 0
-'Objects(i).SetPosition -12.8, (Floor * FloorHeight) + FloorHeight, -36.4
-
 End If
 
 If Floor >= 118 And Floor <= 129 Then
@@ -2510,17 +2447,6 @@ Objects(i).SetPosition 18 - ((j - 65) * 12) + ((j - 65) * 0.15), ((Floor * Floor
 'Objects(i).Optimize
 Next j
 
-''Stairway Door
-'i = 75 + (150 * (Floor - 1))
-'Call Init_Objects(Floor, 75)
-'Objects(i).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
-''Objects(i).SetColor (RGBA(10, 10, 10, 1))
-''Objects(i).ScaleMesh 0.45, 0.535, 0.535
-''Objects(i).SetTexture GetTex("Wood2")
-'Objects(i).SetMeshName ("DoorB " + Str$(i))
-'Objects(i).SetRotation 0, 1.56, 0
-'Objects(i).SetPosition -12.8, (Floor * FloorHeight) + FloorHeight, -36.4
-
 '-----------------------------
 Floor = 136
 'Window 1
@@ -2621,17 +2547,6 @@ Objects(i).SetPosition 18 - ((j - 65) * 12) + ((j - 65) * 0.15), ((Floor * Floor
 'Objects(i).Optimize
 Next j
 
-''Stairway Door
-'i = 75 + (150 * (Floor - 1))
-'Call Init_Objects(Floor, 75)
-'Objects(i).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
-''Objects(i).SetColor (RGBA(10, 10, 10, 1))
-''Objects(i).ScaleMesh 0.45, 0.535, 0.535
-''Objects(i).SetTexture GetTex("Wood2")
-'Objects(i).SetMeshName ("DoorB " + Str$(i))
-'Objects(i).SetRotation 0, 1.56, 0
-'Objects(i).SetPosition -12.8, (Floor * FloorHeight) + FloorHeight, -36.4
-
 End If
 
 If Floor = 137 Then
@@ -2644,31 +2559,9 @@ Objects(i).ScaleMesh 0.04, 0.04, 0.04
 Objects(i).SetPosition 0, 10 + ((Floor * FloorHeight) + FloorHeight), 60
 Objects(i).Optimize
 
-''Stairway Door
-'i = 2 + (150 * (Floor - 1))
-'Call Init_Objects(Floor, 2)
-'Objects(i).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
-''Objects(i).SetColor (RGBA(10, 10, 10, 1))
-''Objects(i).ScaleMesh 0.45, 0.535, 0.535
-''Objects(i).SetTexture GetTex("Wood2")
-'Objects(i).SetMeshName ("DoorB " + Str$(i))
-'Objects(i).SetRotation 0, 1.56, 0
-'Objects(i).SetPosition -12.8, (Floor * FloorHeight) + FloorHeight, -36.4
-
 End If
 
 If Floor = 138 Then
-
-''Stairway Door
-'i = 1 + (150 * (Floor - 1))
-'Call Init_Objects(Floor, 1)
-'Objects(i).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
-''Objects(i).SetColor (RGBA(10, 10, 10, 1))
-''Objects(i).ScaleMesh 0.45, 0.535, 0.535
-''Objects(i).SetTexture GetTex("Wood2")
-'Objects(i).SetMeshName ("DoorB " + Str$(i))
-'Objects(i).SetRotation 0, 1.56, 0
-'Objects(i).SetPosition -12.8, (Floor * FloorHeight) + FloorHeight, -36.4
 
 End If
 
