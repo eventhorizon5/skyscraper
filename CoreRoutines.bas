@@ -1,5 +1,5 @@
 Attribute VB_Name = "CoreRoutines"
-'Skycraper 0.95b Beta
+'Skycraper 0.96 Beta
 'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -549,7 +549,7 @@ Set Light = New TVLightEngine
 
 'If TV.ShowDriverDialog = False Then End
   
-Sim.Label1.Caption = "Skyscraper " + Str$(App.Major) + "." + LTrim(Str$(App.Minor)) + "b Beta - Build" + Str$(App.Revision) + vbCrLf
+Sim.Label1.Caption = "Skyscraper " + Str$(App.Major) + "." + LTrim(Str$(App.Minor)) + " Beta - Build" + Str$(App.Revision) + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "©2004 Ryan Thoryk" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on January 2, 2004" + vbCrLf + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf
@@ -852,7 +852,11 @@ If IsFalling = False Then Exit Sub
 
 'The gravity originally acted weird
 Dim TimeRate As Single
+Dim OldPos As Single
+Dim NewPos As Single
+Dim HeightChange As Single
 Gravity = 5
+
 If FallRate = 0 Then
 lngOldTick = GetTickCount()
 CameraOriginalPos = Camera.GetPosition.Y
@@ -867,7 +871,11 @@ If FallRate = 0 Then FallRate = 0.1
 If TimeRate = 0 Then TimeRate = 0.1
 'MsgBox ("Gravity:" + Str$(Gravity) + " Time Passed:" + Str$((GetTickCount() / 1000) - (lngOldTick / 1000)))
 
+OldPos = Camera.GetPosition.Y
 Camera.SetPosition Camera.GetPosition.X, CameraOriginalPos - FallRate, Camera.GetPosition.z
+NewPos = Camera.GetPosition.Y
+HeightChange = OldPos - NewPos
+'If HeightChange > 546 Then MsgBox (FallRate) 'terminal velocity
 
 Room(CameraFloor).SetCollisionEnable True
 Shafts1(CameraFloor).SetCollisionEnable True
@@ -877,43 +885,44 @@ Shafts4(CameraFloor).SetCollisionEnable True
 Buildings.SetCollisionEnable True
 Landscape.SetCollisionEnable True
 
-If Room(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+'If Room(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+If Room(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - HeightChange - 10, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
 FallRate = 0
 IsFalling = False
 If CameraFloor > -10 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z
 If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
 End If
-If Shafts1(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+If Shafts1(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - HeightChange - 10, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
 FallRate = 0
 IsFalling = False
 If CameraFloor > -10 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z
 If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
 End If
-If Shafts2(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+If Shafts2(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - HeightChange - 10, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
 FallRate = 0
 IsFalling = False
 If CameraFloor > -10 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z
 If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
 End If
-If Shafts3(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+If Shafts3(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - HeightChange - 10, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
 FallRate = 0
 IsFalling = False
 If CameraFloor > -10 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z
 If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
 End If
-If Shafts4(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+If Shafts4(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - HeightChange - 10, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
 FallRate = 0
 IsFalling = False
 If CameraFloor > -10 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z
 If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
 End If
-If Buildings.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+If Buildings.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - HeightChange - 10, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
 FallRate = 0
 IsFalling = False
 If CameraFloor > -10 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z
 If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
 End If
-If Landscape.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+If Landscape.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - HeightChange - 10, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
 FallRate = 0
 IsFalling = False
 If CameraFloor > -10 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z

@@ -1,3 +1,8 @@
+Version 0.96
+-------------
+-cleaned up elevator button code, and made it into a nice little algorithm
+-fixed falling issue
+
 Version 0.95b (build 144)
 -------------
 -minor code changes
