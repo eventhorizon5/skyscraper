@@ -1,5 +1,5 @@
 Attribute VB_Name = "CoreRoutines"
-'Skycraper 0.93 Beta
+'Skycraper 0.94 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -22,6 +22,7 @@ Attribute VB_Name = "CoreRoutines"
 '2/15/03 - Code amount - 79 pages
 '3/1/03 - Code amount - 129 pages
 '4/26/03 - Code amount - 280 pages
+'10/6/03 - Code amount - 297 pages
 
 'Building title - "The Triton Center"
 '
@@ -30,7 +31,7 @@ Option Explicit
 
 Global TV As TVEngine
 Global Scene As TVScene
-Global Mesh As TVMesh
+Global Effect As TVGraphicEffect
 Global External As TVMesh
 Global Landscape As TVMesh
 Global Room(-10 To 138) As TVMesh
@@ -173,6 +174,169 @@ Global FloorHeight As Integer
 Global ElevatorSpeed As Single
 Global ElevatorFineTuneSpeed As Single
 Global CallingStairDoors As Boolean
+Global SelectedObject As String
+Global MainMusic As TVSoundMP3
+Global RouteDirection(40) As Integer
+Global FloorRoutes(40, 300) As Integer
+Global DirectionRoutes(40, 300) As Integer
+
+Sub Start()
+ElevatorNumber = 1
+FloorHeight = 32
+'With the next 2 variables, lower=faster
+ElevatorSpeed = 8
+'ElevatorSpeed = 5 'Original Value
+ElevatorFineTuneSpeed = 0.15
+'ElevatorFineTuneSpeed = 0.2 'Original Value
+'FileName = App.Path + "\data\triton.dat"
+Call Init_Simulator
+Call ProcessFloors
+    
+    '4 : Old movement system startposition stuff
+    'Camera.SetCameraPosition 0, 10, 0
+    Camera.SetPosition 0, 10, 130
+    'Camera.SetPosition 0, 1000, 2000
+    'Camera.SetCameraLookAt 0, 10, 1
+    Camera.SetLookAt 0, 10, -90
+    Camera.RotateY 3.15
+    
+'*** also part of third movement system
+'    sngPositionX = 0
+'    sngPositionY = 10
+'    sngPositionZ = 90
+'    snglookatX = 0
+'    snglookatY = 0
+'    snglookatZ = 0
+'    sngAngleX = 0
+'    sngAngleY = -1.6
+    
+    ' We set the initial values of movement
+    sngWalk = 0
+    sngStrafe = 0
+  
+  'Room.Enable False
+  Buildings.Enable True
+  Landscape.Enable True
+  External.Enable False
+  For i = -10 To 138
+  Room(i).Enable False
+  Stairs(i).Enable False
+  ShaftsFloor(i).Enable False
+  Shafts1(i).Enable False
+  Shafts2(i).Enable False
+  Shafts3(i).Enable False
+  Shafts4(i).Enable False
+  Next i
+  
+  For i = -11 To 138
+  StairDoor(i).Enable False
+  Next i
+  
+  For i = 1 To 40
+    Plaque(i).Enable False
+    FloorIndicator(i).Enable False
+    'Elevator(i).Enable False
+  Next i
+  
+  'For j = 1 To 40
+  'ElevatorDoorL(j).Enable False
+  'ElevatorDoorR(j).Enable False
+  'Next j
+  'For i = -1 To 144
+  '  Buttons(i).Enable False
+  'Next i
+  Room(1).Enable True
+  'ElevatorDoorL(1).Enable True
+  'ElevatorDoorR(1).Enable True
+  Stairs(-1).Enable True
+  Stairs(1).Enable True
+  ShaftsFloor(1).Enable True
+  
+'Lights
+'MatFactory.CreateMaterialQuick 0.2, 0.2, 0.2, 1, "Mat"
+'MatFactory.SetDiffuse GetMat("Mat"), 1, 1, 1, 1
+'External.SetMaterial GetMat("Mat")
+'Mesh.ComputeNormals
+'LightD.Type = D3DLIGHT_POINT
+'LightD.Position = Vector(0, 10, -130)
+'LightD.Range = 20
+'LightD.Ambient = DXColor(0, 0, 300, 1)
+'LightD.diffuse = DXColor(0, 0, 300, 1)
+'LightD.Attenuation0 = 1
+'LightD.Attenuation1 = 1
+'LightD.Attenuation2 = 1
+'Light.CreateLight LightD
+
+  'External.Enable False
+  'Shafts.Enable False
+  'Elevator1.Enable False
+  
+
+  'ElevatorMusic.Loop_ = True
+  'Call ElevatorMusic.Play
+  
+  Atmos.SkyBox_SetTexture GetTex("SkyFront"), GetTex("SkyBack"), GetTex("SkyLeft"), GetTex("SkyRight"), GetTex("SkyTop"), GetTex("SkyBottom")
+  Atmos.SkyBox_Enable True
+    
+Sim.MainTimer.Enabled = True
+Sim.Elevator1Timer.Enabled = True
+Sim.Elevator2Timer.Enabled = True
+Sim.Elevator3Timer.Enabled = True
+Sim.Elevator4Timer.Enabled = True
+Sim.Elevator5Timer.Enabled = True
+Sim.Elevator6Timer.Enabled = True
+Sim.Elevator7Timer.Enabled = True
+Sim.Elevator8Timer.Enabled = True
+Sim.Elevator9Timer.Enabled = True
+Sim.Elevator10Timer.Enabled = True
+Sim.Elevator11Timer.Enabled = True
+Sim.Elevator12Timer.Enabled = True
+Sim.Elevator13Timer.Enabled = True
+Sim.Elevator14Timer.Enabled = True
+Sim.Elevator15Timer.Enabled = True
+Sim.Elevator16Timer.Enabled = True
+Sim.Elevator17Timer.Enabled = True
+Sim.Elevator18Timer.Enabled = True
+Sim.Elevator19Timer.Enabled = True
+Sim.Elevator20Timer.Enabled = True
+Sim.Elevator21Timer.Enabled = True
+Sim.Elevator22Timer.Enabled = True
+Sim.Elevator23Timer.Enabled = True
+Sim.Elevator24Timer.Enabled = True
+Sim.Elevator25Timer.Enabled = True
+Sim.Elevator26Timer.Enabled = True
+Sim.Elevator27Timer.Enabled = True
+Sim.Elevator28Timer.Enabled = True
+Sim.Elevator29Timer.Enabled = True
+Sim.Elevator30Timer.Enabled = True
+Sim.Elevator31Timer.Enabled = True
+Sim.Elevator32Timer.Enabled = True
+Sim.Elevator33Timer.Enabled = True
+Sim.Elevator34Timer.Enabled = True
+Sim.Elevator35Timer.Enabled = True
+Sim.Elevator36Timer.Enabled = True
+Sim.Elevator37Timer.Enabled = True
+Sim.Elevator38Timer.Enabled = True
+Sim.Elevator39Timer.Enabled = True
+Sim.Elevator40Timer.Enabled = True
+Sim.StairsTimer.Enabled = True
+  'Do Until isRunning = False Or Inp.IsKeyPressed(TV_KEY_ESCAPE) = True
+'Loop
+  
+  'Set TV = Nothing
+  'End
+  
+ErrorHandler:
+  Dim Msg
+If Err.Number <> 0 Then
+   Msg = "Error # " & Str(Err.Number) & " was generated by " _
+         & Err.Source & Chr(13) & Err.Description
+   MsgBox Msg, , "Error", Err.HelpFile, Err.HelpContext
+   End
+End If
+
+
+End Sub
 
 Sub InitRealtime(FloorID As Integer)
 
@@ -302,14 +466,18 @@ If FloorID = 138 Then Call ProcessRealtime(FloorID, 7, 1, False, False, True, Fa
 End Sub
 
 Sub Init_Simulator()
+Sim.ScaleWidth = 10440
+Sim.ScaleMode = 1
+Sim.ScaleHeight = 7920
+
 'On Error GoTo ErrorHandler
 isRunning = True
 EnableCollisions = True
-Form2.Show
-Form1.Show
-Set TV = New TVEngine
-Set Scene = New TVScene
-Set Mesh = New TVMesh
+DebugPanel.Show
+Sim.Show
+'Set TV = New TVEngine
+'Set Scene = New TVScene
+'Set Mesh = New TVMesh
 Set Buildings = New TVMesh
 Set External = New TVMesh
 Set Landscape = New TVMesh
@@ -341,32 +509,32 @@ Next i
 
 Set Camera = New TVCamera
 
-Set TextureFactory = New TVTextureFactory
-Set SoundEngine = New TV3DMedia.TVSoundEngine
+'Set TextureFactory = New TVTextureFactory
+'Set SoundEngine = New TV3DMedia.TVSoundEngine
 Set Light = New TVLightEngine
 
-If TV.ShowDriverDialog = False Then End
+'If TV.ShowDriverDialog = False Then End
   
-Form1.Label1.Caption = "Skyscraper 0.93 Beta - Build" + Str$(App.Revision) + vbCrLf
-Form1.Label1.Caption = Form1.Label1.Caption + "©2003 Ryan Thoryk" + vbCrLf
-Form1.Label1.Caption = Form1.Label1.Caption + "Compiled on July 25, 2003" + vbCrLf + vbCrLf
-Form1.Label1.Caption = Form1.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf
-Form1.Label1.Caption = Form1.Label1.Caption + "software, and you are welcome to redistribute it under certain" + vbCrLf
-Form1.Label1.Caption = Form1.Label1.Caption + "conditions. For details, see the file gpl.txt" + vbCrLf
-Form1.Label1.Caption = Form1.Label1.Caption + "Build number counting has been done since version 0.7" + vbCrLf
+Sim.Label1.Caption = "Skyscraper 0.94 Beta - Build" + Str$(App.Revision) + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "©2003 Ryan Thoryk" + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on October 13, 2003" + vbCrLf + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "software, and you are welcome to redistribute it under certain" + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "conditions. For details, see the file gpl.txt" + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "Build number counting has been done since version 0.7" + vbCrLf
 
 DoEvents
    
 Sleep 2000
    '2. Initialize the engine with the selected mode
     TV.SetSearchDirectory App.Path
-Form1.Label2.Caption = "Initializing TrueVision3D..."
-   'TV.Initialize Form1.hWnd
-    TV.Init3DWindowedMode Form1.hWnd
+Sim.Label2.Caption = "Initializing TrueVision3D..."
+   'TV.Initialize Sim.hWnd
+    TV.Init3DWindowedMode Sim.hWnd
     'TV.Init3DFullscreen 640, 480, 16
 
-  Set Inp = New TVInputEngine
-  TV.SetSearchDirectory App.Path
+  'Set Inp = New TVInputEngine
+  'TV.SetSearchDirectory App.Path
   TV.DisplayFPS = True
   
   'TV.MultiSampleTp = TV3D_MULTISAMPLE_16_SAMPLES
@@ -376,10 +544,10 @@ Form1.Label2.Caption = "Initializing TrueVision3D..."
   'Scene.SetDithering True
   TV.EnableAntialising True
   
-  Scene.LoadCursor "pointer.bmp", TV_COLORKEY_BLACK, 14, 16
+  Scene.LoadCursor App.Path + "\data\pointer.bmp", TV_COLORKEY_BLACK, 14, 16
   
-  Set Mesh = Scene.CreateMeshBuilder("Mesh")
-  Form1.Label2.Caption = "Processing Meshes..."
+  'Set Mesh = Scene.CreateMeshBuilder("Mesh")
+  Sim.Label2.Caption = "Processing Meshes..."
   For i = -10 To 138
   DoEvents
   Set Room(i) = Scene.CreateMeshBuilder("Room " + Str$(i))
@@ -408,33 +576,42 @@ Form1.Label2.Caption = "Initializing TrueVision3D..."
   Set External = Scene.CreateMeshBuilder("External")
   Set Landscape = Scene.CreateMeshBuilder("Landscape")
     
-  DoEvents
-  Form1.Label2.Caption = "Loading Textures..."
-  Scene.SetViewFrustum 90, 200000
-  'TextureFactory.LoadTexture "..\..\..\media\stone_wall.jpg", "Floor"
+  'Elevator Button Meshes
+  For i54 = -11 To 144
+  Set Buttons(i54) = New TVMesh
+  Set Buttons(i54) = Scene.CreateMeshBuilder("Buttons " + Str$(i54))
+  'Buttons(i54).SetPosition 0, Elevator(Number).GetPosition.Y, 0
+  'Buttons(i54).SetMeshCenter 0, 0, 0
+  'Buttons(i54).SetPosition 0, 0, 0
+  'Buttons(i54).SetRotation 0, 0, 0
+  Next i54
   
-  TextureFactory.LoadTexture "brick1.jpg", "BrickTexture"
-  TextureFactory.LoadTexture "LobbyFront.jpg", "LobbyFront"
-  TextureFactory.LoadTexture "windows11c.jpg", "MainWindows"
-  TextureFactory.LoadTexture "granite.jpg", "Granite"
-  'TextureFactory.LoadTexture "marbl3.jpg", "Marble3"
-  'TextureFactory.LoadTexture "text12.jpg", "Marble3"
-  TextureFactory.LoadTexture "symb5.jpg", "Marble3"
-  TextureFactory.LoadTexture "marb047.jpg", "Marble4"
-  TextureFactory.LoadTexture "elev1.jpg", "Elev1"
-  TextureFactory.LoadTexture "textur15.jpg", "Wood1"
-  TextureFactory.LoadTexture "text16.jpg", "Wood2"
-  'TextureFactory.LoadTexture "text12.jpg", "Wall1"
-  TextureFactory.LoadTexture "marbl3.jpg", "Wall1"
-  TextureFactory.LoadTexture "marb123.jpg", "Wall2"
-  'TextureFactory.LoadTexture "marbl3.jpg", "Wall2"
-  'TextureFactory.LoadTexture "marb056.jpg", "Wall3"
-  TextureFactory.LoadTexture "cutston.jpg", "Ceiling1"
-  TextureFactory.LoadTexture "text12.jpg", "Wall3"
-  TextureFactory.LoadTexture "text16.jpg", "ElevDoors"
-  TextureFactory.LoadTexture "marb148.jpg", "ElevExtPanels"
-  TextureFactory.LoadTexture "mason01.jpg", "Concrete"
-  TextureFactory.LoadTexture "text13.jpg", "Stairs"
+  DoEvents
+  Sim.Label2.Caption = "Loading Textures..."
+  Scene.SetViewFrustum 90, 200000
+  
+  TextureFactory.LoadTexture App.Path + "\data\brick1.jpg", "BrickTexture"
+  TextureFactory.LoadTexture App.Path + "\data\LobbyFront.jpg", "LobbyFront"
+  TextureFactory.LoadTexture App.Path + "\data\windows11c.jpg", "MainWindows"
+  TextureFactory.LoadTexture App.Path + "\data\granite.jpg", "Granite"
+  'TextureFactory.LoadTexture App.Path+"\data\marbl3.jpg", "Marble3"
+  'TextureFactory.LoadTexture App.Path+"\data\text12.jpg", "Marble3"
+  TextureFactory.LoadTexture App.Path + "\data\symb5.jpg", "Marble3"
+  TextureFactory.LoadTexture App.Path + "\data\marb047.jpg", "Marble4"
+  TextureFactory.LoadTexture App.Path + "\data\elev1.jpg", "Elev1"
+  TextureFactory.LoadTexture App.Path + "\data\textur15.jpg", "Wood1"
+  TextureFactory.LoadTexture App.Path + "\data\text16.jpg", "Wood2"
+  'TextureFactory.LoadTexture App.Path+"\data\text12.jpg", "Wall1"
+  TextureFactory.LoadTexture App.Path + "\data\marbl3.jpg", "Wall1"
+  TextureFactory.LoadTexture App.Path + "\data\marb123.jpg", "Wall2"
+  'TextureFactory.LoadTexture App.Path+"\data\marbl3.jpg", "Wall2"
+  'TextureFactory.LoadTexture App.Path+"\data\marb056.jpg", "Wall3"
+  TextureFactory.LoadTexture App.Path + "\data\cutston.jpg", "Ceiling1"
+  TextureFactory.LoadTexture App.Path + "\data\text12.jpg", "Wall3"
+  TextureFactory.LoadTexture App.Path + "\data\text16.jpg", "ElevDoors"
+  TextureFactory.LoadTexture App.Path + "\data\marb148.jpg", "ElevExtPanels"
+  TextureFactory.LoadTexture App.Path + "\data\mason01.jpg", "Concrete"
+  TextureFactory.LoadTexture App.Path + "\data\text13.jpg", "Stairs"
   TextureFactory.LoadTexture App.Path + "\data\wooddoor3.jpg", "Door1"
   TextureFactory.LoadTexture App.Path + "\data\wooddoor1.jpg", "Door2"
   TextureFactory.LoadTexture App.Path + "\data\servicedoor2.jpg", "StairsDoor"
@@ -446,17 +623,17 @@ Form1.Label2.Caption = "Initializing TrueVision3D..."
   TextureFactory.LoadTexture App.Path + "\data\sidewalkcorner2.jpg", "Road3"
   TextureFactory.LoadTexture App.Path + "\data\sidewalkcorner3.jpg", "Road4"
   TextureFactory.LoadTexture App.Path + "\data\roadfull.jpg", "Road5"
-  TextureFactory.LoadTexture "windows08.jpg", "Windows8"
-  TextureFactory.LoadTexture "windows11.jpg", "Windows11"
+  TextureFactory.LoadTexture App.Path + "\data\windows08.jpg", "Windows8"
+  TextureFactory.LoadTexture App.Path + "\data\windows11.jpg", "Windows11"
   TextureFactory.LoadTexture App.Path + "\data\downtown.jpg", "Downtown"
   TextureFactory.LoadTexture App.Path + "\data\suburbs.jpg", "Suburbs"
       
-  TextureFactory.LoadTexture "top.jpg", "SkyTop"
-  TextureFactory.LoadTexture "bottom.jpg", "SkyBottom"
-  TextureFactory.LoadTexture "left.jpg", "SkyLeft"
-  TextureFactory.LoadTexture "right.jpg", "SkyRight"
-  TextureFactory.LoadTexture "front.jpg", "SkyFront"
-  TextureFactory.LoadTexture "back.jpg", "SkyBack"
+  TextureFactory.LoadTexture App.Path + "\data\top.jpg", "SkyTop"
+  TextureFactory.LoadTexture App.Path + "\data\bottom.jpg", "SkyBottom"
+  TextureFactory.LoadTexture App.Path + "\data\left.jpg", "SkyLeft"
+  TextureFactory.LoadTexture App.Path + "\data\right.jpg", "SkyRight"
+  TextureFactory.LoadTexture App.Path + "\data\front.jpg", "SkyFront"
+  TextureFactory.LoadTexture App.Path + "\data\back.jpg", "SkyBack"
   TextureFactory.LoadTexture App.Path + "\objects\benedeti.jpg", "ColumnTex", , , TV_COLORKEY_NO
   TextureFactory.LoadTexture App.Path + "\data\plaque.jpg", "Plaque"
   TextureFactory.LoadTexture App.Path + "\data\floorsign.jpg", "FloorSign"
@@ -491,11 +668,11 @@ Form1.Label2.Caption = "Initializing TrueVision3D..."
    
   'Sound System
     
-    Call SoundEngine.Init(Form1.hWnd)
+    'Call SoundEngine.Init(Sim.hWnd)
     
     'Load the file into the classes.
-    'ElevatorMusic.Load App.Path + "\elevmusic3.wav"
-    'ElevatorMusic.Load App.Path + "\elevmusic2.wav"
+    'ElevatorMusic.Load App.Path + "\data\elevmusic3.wav"
+    'ElevatorMusic.Load App.Path + "\data\elevmusic2.wav"
     'Set sound properties.
     'ElevatorMusic.Volume = -300
     'ElevatorMusic.maxDistance = 1000
@@ -546,7 +723,6 @@ LineTest = lineend
         Stairs(CameraFloor).SetCollisionEnable True
         
         
-        
  'Elevator Collision
  For i50 = 1 To 40
  
@@ -572,17 +748,19 @@ LineTest = lineend
     If Shafts3(CameraFloor).IsMeshEnabled = True Then If Shafts3(CameraFloor).IsMeshEnabled = True Then If Shafts3(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If Shafts4(CameraFloor).IsMeshEnabled = True Then If Shafts4(CameraFloor).IsMeshEnabled = True Then If Shafts4(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If ShaftsFloor(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-    
-'On Error Resume Next
-'For i50 = 1 To 150
-'j50 = i50 + (150 * (CameraFloor - 1))
-'If Objects(j50).IsMeshEnabled = True Then
-'    Objects(j50).SetCollisionEnable True
-'    MsgBox (j50)
-'    If Objects(j50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-'    Objects(j50).SetCollisionEnable False
-'End If
-'Next i50
+    If StairDoor(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+
+'Object Collision
+On Error GoTo MethodFix
+For i50 = 1 To 150
+j50 = i50 + (150 * (CameraFloor - 1))
+If Objects(j50).IsMeshEnabled = True Then
+    'Objects(j50).SetCollisionEnable True
+    If Objects(j50).Collision(linestart, LineTest, TV_TESTTYPE_BOUNDINGBOX) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    'Objects(j50).SetCollisionEnable False
+End If
+MethodFix:
+Next i50
 
 CollisionEnd:
 
@@ -604,7 +782,7 @@ CollisionEnd:
         ElevatorDoorR(i50).SetCollisionEnable False
         Next i50
         Stairs(CameraFloor).SetCollisionEnable False
-
+        
 End Sub
 
 
@@ -619,7 +797,7 @@ Shafts3(CameraFloor).SetCollisionEnable True
 Shafts4(CameraFloor).SetCollisionEnable True
 Buildings.SetCollisionEnable True
 Landscape.SetCollisionEnable True
-
+        
 If Room(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
     Shafts1(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
     Shafts2(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
@@ -725,7 +903,7 @@ Sub OptimizeMeshes()
   Buildings.Optimize
   For i = -10 To 138
   DoEvents
-  Form1.Label2.Caption = "Optimizing Meshes Part 1 (of 2)... " + Str$(Int((i / 138) * 100)) + "%"
+  Sim.Label2.Caption = "Optimizing Meshes Part 1 (of 2)... " + Str$(Int((i / 138) * 100)) + "%"
   Room(i).Optimize
   Stairs(i).Optimize
   ShaftsFloor(i).Optimize
@@ -736,7 +914,7 @@ Sub OptimizeMeshes()
   Next i
   For i = 1 To 40
   DoEvents
-  Form1.Label2.Caption = "Optimizing Meshes Part 2 (of 2)... " + Str$(Int((i / 40) * 100)) + "%"
+  Sim.Label2.Caption = "Optimizing Meshes Part 2 (of 2)... " + Str$(Int((i / 40) * 100)) + "%"
   Elevator(i).Optimize
   ElevatorInsDoorL(i).Optimize
   ElevatorInsDoorR(i).Optimize
@@ -829,23 +1007,28 @@ Call Process81to114
 Call Process118to129
 Call ProcessOtherFloors
 Call ProcessOtherFloors2
-Form1.Label2.Caption = "Initializing Lobby... "
+Sim.Label2.Caption = "Initializing Lobby... "
 Call InitRealtime(1)
 Call InitObjectsForFloor(1)
  
-Form1.Label2.Caption = "Processing Outside... "
+Sim.Label2.Caption = "Processing Outside... "
 Call ProcessOutside
-Form1.Label2.Caption = "Processing Elevators... "
+Sim.Label2.Caption = "Processing Elevators... "
 Call ProcessMisc
 Call ProcessStairs
 Call OptimizeMeshes
+
+Sim.IntroMusic.Enabled = False
+MainMusic.Stop_
+Effect.FadeIn 1500
+
 End Sub
 
 Sub ProcessLobby()
 
 
 DoEvents
-Form1.Label2.Caption = "Processing Lobby..."
+Sim.Label2.Caption = "Processing Lobby..."
       i = 1
     'Floor
     'Room(i).AddFloor GetTex("Marble4"), -160, -150, 160, 150, 0, (FloorHeight * 2), 31
@@ -919,7 +1102,7 @@ Sub Process2to39()
     'Floors 2 to 39
     For i = 2 To 39
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 2 to 39... " + Str$(Int((i / 39) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 2 to 39... " + Str$(Int((i / 39) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -160, -150, 160, -46.25, (i * FloorHeight) + FloorHeight, ((160 + 160) * 0.086), ((150 - 46.25) * 0.08)
@@ -1094,7 +1277,7 @@ Sub Process40to79()
     'Floors 40 to 79 (minus 14 feet on both sides where 20=8 feet)
     For i = 40 To 79
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 40 to 79... " + Str$(Int(((i - 40) / (79 - 40)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 40 to 79... " + Str$(Int(((i - 40) / (79 - 40)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -135, -150, 135, -46.25, (i * FloorHeight) + FloorHeight, ((135 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1275,7 +1458,7 @@ Sub Process81to114()
     'Floors 81 to 114
     For i = 81 To 114
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 81 to 114... " + Str$(Int(((i - 81) / (114 - 81)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 81 to 114... " + Str$(Int(((i - 81) / (114 - 81)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -110, -150, 110, -46.25, (i * FloorHeight) + FloorHeight, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1445,7 +1628,7 @@ Sub Process118to129()
     'Floors 118 to 129 (minus 10 feet)
     For i = 118 To 129
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 118 to 129... " + Str$(Int(((i - 118) / (129 - 118)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 118 to 129... " + Str$(Int(((i - 118) / (129 - 118)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1577,7 +1760,6 @@ For i = (1 + (150 * (Floor - 1))) To (150 + (150 * (Floor - 1)))
 'The destroymesh function is broken
 On Error Resume Next
 Objects(i).Enable False
-Sleep 10
 Scene.DestroyMesh Objects(i)
 Set Objects(i) = Nothing
 Next i
@@ -1601,7 +1783,7 @@ Sub ProcessOtherFloors()
 'Floor 80
     i = 80
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -110, -150, 110, -46.25, (i * FloorHeight) + FloorHeight, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1655,7 +1837,7 @@ Sub ProcessOtherFloors()
 'Floor 115
     i = 115
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -110, -150, 110, -46.25, (i * FloorHeight) + FloorHeight, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1707,7 +1889,7 @@ Sub ProcessOtherFloors()
 'Floor 116
     i = 116
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -110, -150, 110, -46.25, (i * FloorHeight) + FloorHeight, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1758,7 +1940,7 @@ Sub ProcessOtherFloors()
 'Floor 117
     i = 117
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -110, -150, 110, -46.25, (i * FloorHeight) + FloorHeight, ((110 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1810,7 +1992,7 @@ Sub ProcessOtherFloors()
 'Floor 130
     i = 130
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1985,7 +2167,7 @@ Sub ProcessOtherFloors2()
 'Floor 131
     i = 131
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2036,7 +2218,7 @@ Sub ProcessOtherFloors2()
 'Floor 132
     i = 132
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2087,7 +2269,7 @@ Sub ProcessOtherFloors2()
 'Floor 133
     i = 133
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, ((85 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2141,7 +2323,7 @@ Sub ProcessOtherFloors2()
 'Floor 134
     i = 134
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     Room(i).AddFloor GetTex("Granite"), -85, -150, 85, -46.25, (i * FloorHeight) + FloorHeight, 10, 3
     Room(i).AddFloor GetTex("Granite"), -85, -46.25, -32.5, 0, (i * FloorHeight) + FloorHeight, 3, 3
@@ -2174,7 +2356,7 @@ Sub ProcessOtherFloors2()
 'Floor 135
     i = 135
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -60, -150, 60, -46.25, (i * FloorHeight) + FloorHeight, ((60 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2205,7 +2387,7 @@ Sub ProcessOtherFloors2()
 'Floor 136
     i = 136
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("Granite"), -60, -150, 60, -46.25, (i * FloorHeight) + FloorHeight, ((60 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2256,7 +2438,7 @@ Sub ProcessOtherFloors2()
 'Floor 137
     i = 137
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     'Floor
     Room(i).AddFloor GetTex("BrickTexture"), -60, -150, 60, -46.25, (i * FloorHeight) + FloorHeight, ((60 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -2314,7 +2496,7 @@ Sub ProcessOtherFloors2()
 'Roof Layout
 i = 138
     DoEvents
-    Form1.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Floors 80, 115 to 117 and 130 to 138... " + Str$(Int(((i - 24) / (138 - 24)) * 100)) + "%"
     
     Room(i).AddFloor GetTex("BrickTexture"), -60, -150, 60, -46.25, (i * FloorHeight) + FloorHeight, ((60 * 2) * 0.086), ((150 - 46.25) * 0.08)
     Room(i).AddFloor GetTex("BrickTexture"), -60, -15.42, 60, 150, (i * FloorHeight) + FloorHeight, ((60 * 2) * 0.086), ((150 - 15.42) * 0.08)
@@ -2714,8 +2896,7 @@ InElevator = False
 ElevatorSync(ElevatorNumber) = False
 ButtonsEnabled = False
 For j50 = -11 To 144
-Scene.DestroyMesh Buttons(j50)
-Set Buttons(j50) = Nothing
+Buttons(i54).ResetMesh
 Next j50
 End If
 Elevator(ElevatorNumber).SetCollisionEnable False
@@ -2792,8 +2973,7 @@ For i50 = 1 To 40
         If Plaque(i50).IsMeshEnabled = True And ElevatorSync(ElevatorNumber) = False Then
             InElevator = False
             For j50 = -11 To 144
-            Scene.DestroyMesh Buttons(j50)
-            Set Buttons(j50) = Nothing
+            Buttons(i54).ResetMesh
             Next j50
             ButtonsEnabled = False
             Plaque(i50).Enable False
@@ -2838,46 +3018,46 @@ If CameraFloor = 1 Then StairDoor(0).Enable True: StairDoor(2).Enable True
 If CameraFloor > 2 Then StairDoor(i50 - 2).Enable False
 If CameraFloor < 137 Then StairDoor(i50 + 2).Enable False
 
-Form2.Label1.Caption = FloorIndicatorText(1)
-Form2.Label2.Caption = FloorIndicatorText(2)
-Form2.Label3.Caption = FloorIndicatorText(3)
-Form2.Label4.Caption = FloorIndicatorText(4)
-Form2.Label5.Caption = FloorIndicatorText(5)
-Form2.Label6.Caption = FloorIndicatorText(6)
-Form2.Label7.Caption = FloorIndicatorText(7)
-Form2.Label8.Caption = FloorIndicatorText(8)
-Form2.Label9.Caption = FloorIndicatorText(9)
-Form2.Label10.Caption = FloorIndicatorText(10)
-Form2.Label11.Caption = FloorIndicatorText(11)
-Form2.Label12.Caption = FloorIndicatorText(12)
-Form2.Label13.Caption = FloorIndicatorText(13)
-Form2.Label14.Caption = FloorIndicatorText(14)
-Form2.Label15.Caption = FloorIndicatorText(15)
-Form2.Label16.Caption = FloorIndicatorText(16)
-Form2.Label17.Caption = FloorIndicatorText(17)
-Form2.Label18.Caption = FloorIndicatorText(18)
-Form2.Label19.Caption = FloorIndicatorText(19)
-Form2.Label20.Caption = FloorIndicatorText(20)
-Form2.Label21.Caption = FloorIndicatorText(21)
-Form2.Label22.Caption = FloorIndicatorText(22)
-Form2.Label23.Caption = FloorIndicatorText(23)
-Form2.Label24.Caption = FloorIndicatorText(24)
-Form2.Label25.Caption = FloorIndicatorText(25)
-Form2.Label26.Caption = FloorIndicatorText(26)
-Form2.Label27.Caption = FloorIndicatorText(27)
-Form2.Label28.Caption = FloorIndicatorText(28)
-Form2.Label29.Caption = FloorIndicatorText(29)
-Form2.Label30.Caption = FloorIndicatorText(30)
-Form2.Label31.Caption = FloorIndicatorText(31)
-Form2.Label32.Caption = FloorIndicatorText(32)
-Form2.Label33.Caption = FloorIndicatorText(33)
-Form2.Label34.Caption = FloorIndicatorText(34)
-Form2.Label35.Caption = FloorIndicatorText(35)
-Form2.Label36.Caption = FloorIndicatorText(36)
-Form2.Label37.Caption = FloorIndicatorText(37)
-Form2.Label38.Caption = FloorIndicatorText(38)
-Form2.Label39.Caption = FloorIndicatorText(39)
-Form2.Label40.Caption = FloorIndicatorText(40)
+DebugPanel.Label1.Caption = FloorIndicatorText(1)
+DebugPanel.Label2.Caption = FloorIndicatorText(2)
+DebugPanel.Label3.Caption = FloorIndicatorText(3)
+DebugPanel.Label4.Caption = FloorIndicatorText(4)
+DebugPanel.Label5.Caption = FloorIndicatorText(5)
+DebugPanel.Label6.Caption = FloorIndicatorText(6)
+DebugPanel.Label7.Caption = FloorIndicatorText(7)
+DebugPanel.Label8.Caption = FloorIndicatorText(8)
+DebugPanel.Label9.Caption = FloorIndicatorText(9)
+DebugPanel.Label10.Caption = FloorIndicatorText(10)
+DebugPanel.Label11.Caption = FloorIndicatorText(11)
+DebugPanel.Label12.Caption = FloorIndicatorText(12)
+DebugPanel.Label13.Caption = FloorIndicatorText(13)
+DebugPanel.Label14.Caption = FloorIndicatorText(14)
+DebugPanel.Label15.Caption = FloorIndicatorText(15)
+DebugPanel.Label16.Caption = FloorIndicatorText(16)
+DebugPanel.Label17.Caption = FloorIndicatorText(17)
+DebugPanel.Label18.Caption = FloorIndicatorText(18)
+DebugPanel.Label19.Caption = FloorIndicatorText(19)
+DebugPanel.Label20.Caption = FloorIndicatorText(20)
+DebugPanel.Label21.Caption = FloorIndicatorText(21)
+DebugPanel.Label22.Caption = FloorIndicatorText(22)
+DebugPanel.Label23.Caption = FloorIndicatorText(23)
+DebugPanel.Label24.Caption = FloorIndicatorText(24)
+DebugPanel.Label25.Caption = FloorIndicatorText(25)
+DebugPanel.Label26.Caption = FloorIndicatorText(26)
+DebugPanel.Label27.Caption = FloorIndicatorText(27)
+DebugPanel.Label28.Caption = FloorIndicatorText(28)
+DebugPanel.Label29.Caption = FloorIndicatorText(29)
+DebugPanel.Label30.Caption = FloorIndicatorText(30)
+DebugPanel.Label31.Caption = FloorIndicatorText(31)
+DebugPanel.Label32.Caption = FloorIndicatorText(32)
+DebugPanel.Label33.Caption = FloorIndicatorText(33)
+DebugPanel.Label34.Caption = FloorIndicatorText(34)
+DebugPanel.Label35.Caption = FloorIndicatorText(35)
+DebugPanel.Label36.Caption = FloorIndicatorText(36)
+DebugPanel.Label37.Caption = FloorIndicatorText(37)
+DebugPanel.Label38.Caption = FloorIndicatorText(38)
+DebugPanel.Label39.Caption = FloorIndicatorText(39)
+DebugPanel.Label40.Caption = FloorIndicatorText(40)
    
 
 Dim A As Single
@@ -3308,16 +3488,16 @@ EndShafts:
             For i50 = 1 To 40
             If CollisionResult.GetCollisionMesh.GetMeshName = CallButtons(i50).GetMeshName Then
                 
-                'use other elevator if it's closer
+                'use other elevators if they're closer
                 j50 = i50
-                If i50 = 3 And Abs(ElevatorFloor(3) - CameraFloor) > Abs(ElevatorFloor(4) - CameraFloor) Then j50 = 4
-                If i50 = 4 And Abs(ElevatorFloor(4) - CameraFloor) > Abs(ElevatorFloor(3) - CameraFloor) Then j50 = 3
-                If i50 = 5 And Abs(ElevatorFloor(5) - CameraFloor) > Abs(ElevatorFloor(6) - CameraFloor) Then j50 = 6
-                If i50 = 6 And Abs(ElevatorFloor(6) - CameraFloor) > Abs(ElevatorFloor(5) - CameraFloor) Then j50 = 5
-                If i50 = 7 And Abs(ElevatorFloor(7) - CameraFloor) > Abs(ElevatorFloor(8) - CameraFloor) Then j50 = 8
-                If i50 = 8 And Abs(ElevatorFloor(8) - CameraFloor) > Abs(ElevatorFloor(7) - CameraFloor) Then j50 = 7
-                If i50 = 9 And Abs(ElevatorFloor(9) - CameraFloor) > Abs(ElevatorFloor(10) - CameraFloor) Then j50 = 10
-                If i50 = 10 And Abs(ElevatorFloor(10) - CameraFloor) > Abs(ElevatorFloor(9) - CameraFloor) Then j50 = 9
+                'If i50 = 3 And Abs(ElevatorFloor(3) - CameraFloor) > Abs(ElevatorFloor(4) - CameraFloor) Then j50 = 4
+                'If i50 = 4 And Abs(ElevatorFloor(4) - CameraFloor) > Abs(ElevatorFloor(3) - CameraFloor) Then j50 = 3
+                'If i50 = 5 And Abs(ElevatorFloor(5) - CameraFloor) > Abs(ElevatorFloor(6) - CameraFloor) Then j50 = 6
+                'If i50 = 6 And Abs(ElevatorFloor(6) - CameraFloor) > Abs(ElevatorFloor(5) - CameraFloor) Then j50 = 5
+                'If i50 = 7 And Abs(ElevatorFloor(7) - CameraFloor) > Abs(ElevatorFloor(8) - CameraFloor) Then j50 = 8
+                'If i50 = 8 And Abs(ElevatorFloor(8) - CameraFloor) > Abs(ElevatorFloor(7) - CameraFloor) Then j50 = 7
+                'If i50 = 9 And Abs(ElevatorFloor(9) - CameraFloor) > Abs(ElevatorFloor(10) - CameraFloor) Then j50 = 10
+                'If i50 = 10 And Abs(ElevatorFloor(10) - CameraFloor) > Abs(ElevatorFloor(9) - CameraFloor) Then j50 = 9
                 
                 If ElevatorFloor(j50) <> CameraFloor Then
                 ElevatorSync(j50) = False
@@ -3343,6 +3523,9 @@ EndShafts:
 EndCall:
             Next i50
             'CollisionResult.GetCollisionMesh.Enable False
+        
+        SelectedObject = CollisionResult.GetCollisionMesh.GetMeshName
+        
         If OpeningDoor = 0 And ClosingDoor = 0 Then
             
             If Left(CollisionResult.GetCollisionMesh.GetMeshName, 7) = "DoorSB " Then
@@ -3473,10 +3656,10 @@ EndCall:
       'If Inp.IsKeyPressed(TV_KEY_6) = True Then MsgBox (Str$(Camera.GetLookAt.X) + Str$(Camera.GetLookAt.Y) + Str$(Camera.GetLookAt.z))
       If Inp.IsKeyPressed(TV_KEY_7) = True Then IsFalling = True
       
-      If Inp.IsKeyPressed(TV_KEY_F1) = True And Focused = True Then TV.ScreenShot ("c:\shot.bmp")
+      If Inp.IsKeyPressed(TV_KEY_F1) = True And Focused = True Then TV.ScreenShot (App.Path + "\shot.bmp")
 
       
-Form2.Text1.Text = "Elevator Number= " + Str$(ElevatorNumber) + vbCrLf + "Elevator Floor=" + Str$(ElevatorFloor(ElevatorNumber)) + vbCrLf + "Camera Floor=" + Str$(CameraFloor) + vbCrLf + "Current Location= " + Str$(Int(Camera.GetPosition.X)) + "," + Str$(Int(Camera.GetPosition.Y)) + "," + Str$(Int(Camera.GetPosition.z)) + vbCrLf + "GotoFloor=" + Str$(GotoFloor(ElevatorNumber)) + vbCrLf + "DistancetoDest=" + Str$(Abs(GotoFloor(ElevatorNumber) - CurrentFloor(ElevatorNumber))) + vbCrLf + "Rate=" + Str$(ElevatorEnable(ElevatorNumber) / 5)
+DebugPanel.Text1.Text = "Elevator Number= " + Str$(ElevatorNumber) + vbCrLf + "Elevator Floor=" + Str$(ElevatorFloor(ElevatorNumber)) + vbCrLf + "Camera Floor=" + Str$(CameraFloor) + vbCrLf + "Current Location= " + Str$(Int(Camera.GetPosition.X)) + "," + Str$(Int(Camera.GetPosition.Y)) + "," + Str$(Int(Camera.GetPosition.z)) + vbCrLf + "GotoFloor=" + Str$(GotoFloor(ElevatorNumber)) + vbCrLf + "DistancetoDest=" + Str$(Abs(GotoFloor(ElevatorNumber) - CurrentFloor(ElevatorNumber))) + vbCrLf + "Rate=" + Str$(ElevatorEnable(ElevatorNumber) / 5) + vbCrLf + "Selected Object=" + SelectedObject
              
       'ElevatorFloor(ElevatorNumber) = (Elevator(ElevatorNumber).GetPosition.Y - FloorHeight) / FloorHeight
       'If ElevatorFloor(ElevatorNumber) < 1 Then ElevatorFloor(ElevatorNumber) = 1
@@ -4162,7 +4345,7 @@ i = 1
     For i = 2 To 137
     'Stairs
     DoEvents
-    Form1.Label2.Caption = "Processing Stairs... " + Str$(Int((i / 137) * 100)) + "%"
+    Sim.Label2.Caption = "Processing Stairs... " + Str$(Int((i / 137) * 100)) + "%"
     Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0) + FloorHeight
     Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1) + FloorHeight
     Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2) + FloorHeight

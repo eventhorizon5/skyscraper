@@ -1,5 +1,5 @@
 Attribute VB_Name = "CoreRoutines2"
-'Skycraper 0.93 Beta
+'Skycraper 0.94 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -984,17 +984,18 @@ If Floor = 1 Then
 ''Column 1
 'i = 1 + (150 * (Floor - 1))
 'Call Init_Objects(Floor, 1)
-'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).LoadXFile App.Path + "\objects\column.x", True
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.105, 0.105, 0.105
 'Objects(i).SetTexture GetTex("ColumnTex")
 'Objects(i).SetPosition -75, 13.5, 45
-''Objects(i).Optimize
+'Objects(i).SetPosition -75, 5, 45
+'Objects(i).Optimize
 
 ''Column 2
 'i = 2 + (150 * (Floor - 1))
 'Call Init_Objects(Floor, 2)
-'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).LoadXFile App.Path + "\objects\column.x", True
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.105, 0.105, 0.105
 'Objects(i).SetTexture GetTex("ColumnTex")
@@ -1004,7 +1005,7 @@ If Floor = 1 Then
 ''Column 3
 'i = 3 + (150 * (Floor - 1))
 'Call Init_Objects(Floor, 3)
-'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).LoadXFile App.Path + "\objects\column.x", True
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.105, 0.105, 0.105
 'Objects(i).SetTexture GetTex("ColumnTex")
@@ -1014,7 +1015,7 @@ If Floor = 1 Then
 ''Column 4
 'i = 4 + (150 * (Floor - 1))
 'Call Init_Objects(Floor, 4)
-'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).LoadXFile App.Path + "\objects\column.x", True
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.105, 0.105, 0.105
 'Objects(i).SetTexture GetTex("ColumnTex")
@@ -1024,7 +1025,7 @@ If Floor = 1 Then
 ''Column 5
 'i = 5 + (150 * (Floor - 1))
 'Call Init_Objects(Floor, 5)
-'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).LoadXFile App.Path + "\objects\column.x", True
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.105, 0.105, 0.105
 'Objects(i).SetTexture GetTex("ColumnTex")
@@ -1034,7 +1035,7 @@ If Floor = 1 Then
 ''Column 6
 'i = 6 + (150 * (Floor - 1))
 'Call Init_Objects(Floor, 6)
-'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).LoadXFile App.Path + "\objects\column.x", True
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.105, 0.105, 0.105
 'Objects(i).SetTexture GetTex("ColumnTex")
@@ -1044,7 +1045,7 @@ If Floor = 1 Then
 ''Column 7
 'i = 7 + (150 * (Floor - 1))
 'Call Init_Objects(Floor, 7)
-'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).LoadXFile App.Path + "\objects\column.x", True
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.105, 0.105, 0.105
 'Objects(i).SetTexture GetTex("ColumnTex")
@@ -1054,7 +1055,7 @@ If Floor = 1 Then
 ''Column 8
 'i = 8 + (150 * (Floor - 1))
 'Call Init_Objects(Floor, 8)
-'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).LoadXFile App.Path + "\objects\column.x", True
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.105, 0.105, 0.105
 'Objects(i).SetTexture GetTex("ColumnTex")
@@ -1090,98 +1091,96 @@ If Floor >= 2 And Floor <= 39 Then
 'Window 1
 i = 1 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 1)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
-Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
+Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 
 For j = 2 To 27
 'Windows 2 to 27
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 154 - ((j - 1) * 12) + ((j - 1) * 0.15), 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
+Objects(i).SetPosition 154 - ((j - 1) * 12) + ((j - 1) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 Next j
 
 'Window 28
 i = 28 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 28)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
+Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 
 For j = 29 To 54
 'Windows 29 to 54
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 154 - ((j - 28) * 12) + ((j - 28) * 0.15), 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
+Objects(i).SetPosition 154 - ((j - 28) * 12) + ((j - 28) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 Next j
 
 'Window 55
 i = 55 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 55)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 159.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 159.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 56 to 79
 For j = 56 To 79
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 159.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 55) * 12) + ((j - 55) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 159.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 55) * 12) + ((j - 55) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 80
 i = 80 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 80)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -159.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -159.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 81 to 104
 For j = 81 To 104
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -159.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 80) * 12) + ((j - 80) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -159.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 80) * 12) + ((j - 80) * 0.1)
 'Objects(i).Optimize
 Next j
 
@@ -1423,98 +1422,98 @@ If Floor >= 40 And Floor <= 79 Then
 'Window 1
 i = 1 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 1)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 134.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 134.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 2 to 25
 For j = 2 To 25
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 134.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 1) * 12) + ((j - 1) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 134.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 1) * 12) + ((j - 1) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 26
 i = 26 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 26)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -134.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -134.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 27 to 50
 For j = 27 To 50
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -134.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 26) * 12) + ((j - 26) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -134.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 26) * 12) + ((j - 26) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 51
 i = 51 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 51)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
-Objects(i).SetPosition 129, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
+Objects(i).SetPosition 129, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 
 For j = 52 To 72
 'Windows 52 to 72
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 129 - ((j - 51) * 12) + ((j - 51) * 0.1), 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
+Objects(i).SetPosition 129 - ((j - 51) * 12) + ((j - 51) * 0.1), ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 Next j
 
 'Window 73
 i = 73 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 73)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
-Objects(i).SetPosition 129, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
+Objects(i).SetPosition 129, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 
 For j = 74 To 94
 'Windows 74 to 94
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 129 - ((j - 73) * 12) + ((j - 73) * 0.1), 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
+Objects(i).SetPosition 129 - ((j - 73) * 12) + ((j - 73) * 0.1), ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 Next j
 
@@ -1756,98 +1755,98 @@ If Floor >= 80 And Floor <= 117 Then
 'Window 1
 i = 1 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 1)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 109.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 109.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 2 to 25
 For j = 2 To 25
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 109.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 1) * 12) + ((j - 1) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 109.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 1) * 12) + ((j - 1) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 26
 i = 26 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 26)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -109.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -109.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 27 to 50
 For j = 27 To 50
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -109.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 26) * 12) + ((j - 26) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -109.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 26) * 12) + ((j - 26) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 51
 i = 51 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 51)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
-Objects(i).SetPosition 103, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
+Objects(i).SetPosition 103, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 
 For j = 52 To 68
 'Windows 52 to 68
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 103 - ((j - 51) * 12) + ((j - 51) * 0.15), 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
+Objects(i).SetPosition 103 - ((j - 51) * 12) + ((j - 51) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 Next j
 
 'Window 69
 i = 69 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 69)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
-Objects(i).SetPosition 103, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
+Objects(i).SetPosition 103, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 
 For j = 70 To 86
 'Windows 70 to 86
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 103 - ((j - 69) * 12) + ((j - 69) * 0.15), 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
+Objects(i).SetPosition 103 - ((j - 69) * 12) + ((j - 69) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 Next j
 
@@ -2114,98 +2113,98 @@ If Floor >= 118 And Floor <= 134 Then
 'Window 1
 i = 1 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 1)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 84.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 84.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 2 to 25
 For j = 2 To 25
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 84.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 1) * 12) + ((j - 1) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 84.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 1) * 12) + ((j - 1) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 26
 i = 26 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 26)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -84.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -84.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 27 to 50
 For j = 27 To 50
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -84.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 26) * 12) + ((j - 26) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -84.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 26) * 12) + ((j - 26) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 51
 i = 51 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 51)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
-Objects(i).SetPosition 78, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
+Objects(i).SetPosition 78, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 
 For j = 52 To 64
 'Windows 52 to 64
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 78 - ((j - 51) * 12) + ((j - 51) * 0.15), 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
+Objects(i).SetPosition 78 - ((j - 51) * 12) + ((j - 51) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 Next j
 
 'Window 65
 i = 65 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 65)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
-Objects(i).SetPosition 78, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
+Objects(i).SetPosition 78, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 
 For j = 66 To 78
 'Windows 66 to 78
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 78 - ((j - 65) * 12) + ((j - 65) * 0.15), 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
+Objects(i).SetPosition 78 - ((j - 65) * 12) + ((j - 65) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 Next j
 
@@ -2372,7 +2371,7 @@ End If
 If Floor = 133 Or Floor = 134 Then
 i = 79 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 79)
-Objects(i).Load3DsMesh App.Path + "\objects\swimpool.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\swimpool.x", True
 'Objects(i).SetMaterial 0
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).SetRotation 0, -1.58, 0
@@ -2387,100 +2386,100 @@ Floor = 135
 'Window 1
 i = 1 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 1)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).ScaleMesh 0.136, 0.178, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 59.5, 15.51 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 59.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 2 to 25
 For j = 2 To 25
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.178, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 59.5, 15.51 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 1) * 12) + ((j - 1) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 59.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 1) * 12) + ((j - 1) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 26
 i = 26 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 26)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.178, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -59.5, 15.51 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -59.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 27 to 50
 For j = 27 To 50
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.178, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -59.5, 15.51 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 26) * 12) + ((j - 26) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -59.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 26) * 12) + ((j - 26) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 51
 i = 51 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 51)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.178, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
-Objects(i).SetPosition 53, 15.51 + ((Floor * FloorHeight) + FloorHeight), 149.5
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
+Objects(i).SetPosition 53, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 
 For j = 52 To 60
 'Windows 52 to 60
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.178, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 53 - ((j - 51) * 12) + ((j - 51) * 0.15), 15.51 + ((Floor * FloorHeight) + FloorHeight), 149.5
+Objects(i).SetPosition 53 - ((j - 51) * 12) + ((j - 51) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 Next j
 
 'Window 61
 i = 61 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 61)
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.178, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 53, 15.51 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 18, 15.51 + ((Floor * FloorHeight) + FloorHeight), -149.5
+'Objects(i).SetPosition 53, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 18, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 
 For j = 62 To 71
 'Windows 62 to 71
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window4.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window4.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.178, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 53 - ((j - 65) * 12) + ((j - 65) * 0.15), 15.51 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 18 - ((j - 65) * 12) + ((j - 65) * 0.15), 15.51 + ((Floor * FloorHeight) + FloorHeight), -149.5
+'Objects(i).SetPosition 53 - ((j - 65) * 12) + ((j - 65) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 18 - ((j - 65) * 12) + ((j - 65) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 Next j
 
@@ -2500,98 +2499,98 @@ Floor = 136
 'Window 1
 i = 1 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 1)
-Objects(i).Load3DsMesh App.Path + "\objects\window5.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window5.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 59.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 59.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 2 to 25
 For j = 2 To 25
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window5.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window5.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition 59.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 1) * 12) + ((j - 1) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition 59.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 1) * 12) + ((j - 1) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 26
 i = 26 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 26)
-Objects(i).Load3DsMesh App.Path + "\objects\window5.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window5.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -59.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -59.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143
 'Objects(i).Optimize
 
 'Windows 27 to 50
 For j = 27 To 50
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window5.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window5.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
 Objects(i).SetRotation 0, -1.58, 0
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
-Objects(i).SetPosition -59.5, 12.01 + ((Floor * FloorHeight) + FloorHeight), 143 - ((j - 26) * 12) + ((j - 26) * 0.1)
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
+Objects(i).SetPosition -59.5, ((Floor * FloorHeight) + FloorHeight) - 0.5, 143 - ((j - 26) * 12) + ((j - 26) * 0.1)
 'Objects(i).Optimize
 Next j
 
 'Window 51
 i = 51 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 51)
-Objects(i).Load3DsMesh App.Path + "\objects\window5.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window5.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
-Objects(i).SetPosition 53, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
+Objects(i).SetPosition 53, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 
 For j = 52 To 60
 'Windows 52 to 60
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window5.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window5.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 53 - ((j - 51) * 12) + ((j - 51) * 0.15), 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
+Objects(i).SetPosition 53 - ((j - 51) * 12) + ((j - 51) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
 'Objects(i).Optimize
 Next j
 
 'Window 61
 i = 61 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 61)
-Objects(i).Load3DsMesh App.Path + "\objects\window5.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window5.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-'Objects(i).SetPosition 154, 12.01 + ((Floor * FloorHeight) + FloorHeight), 149.5
-Objects(i).SetPosition 18, 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
+'Objects(i).SetPosition 154, ((Floor * FloorHeight) + FloorHeight) - 0.5, 149.5
+Objects(i).SetPosition 18, ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 
 For j = 62 To 71
 'Windows 62 to 71
 i = j + (150 * (Floor - 1))
 Call Init_Objects(Floor, Int(j))
-Objects(i).Load3DsMesh App.Path + "\objects\window5.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\window5.x", True
 Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.136, 0.136, 0.136
 Objects(i).SetTexture GetTex("Ceiling1")
-Objects(i).SetPosition 18 - ((j - 65) * 12) + ((j - 65) * 0.15), 12.01 + ((Floor * FloorHeight) + FloorHeight), -149.5
+Objects(i).SetPosition 18 - ((j - 65) * 12) + ((j - 65) * 0.15), ((Floor * FloorHeight) + FloorHeight) - 0.5, -149.5
 'Objects(i).Optimize
 Next j
 
@@ -2611,7 +2610,7 @@ End If
 If Floor = 137 Then
 i = 1 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 1)
-Objects(i).Load3DsMesh App.Path + "\objects\piping.3ds", True
+Objects(i).LoadXFile App.Path + "\objects\piping.x", True
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).ScaleMesh 0.04, 0.04, 0.04
 'Objects(i).SetTexture GetTex("ColumnTex")
