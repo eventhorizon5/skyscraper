@@ -1,9 +1,9 @@
 Sim = 209, 120, 847, 666, C, 0, 0, 0, 0, C
 DebugPanel = 257, 115, 902, 691, C, 0, 0, 0, 0, C
-Triton_Center = 172, 146, 784, 722, C
-SimCore = 122, 83, 811, 699, C
-ElevatorObject = 120, 97, 752, 672, C
-FloorObject = 118, 140, 710, 716, C
+Triton_Center = 177, 150, 789, 726, C
+SimCore = 127, 86, 816, 702, C
+ElevatorObject = 137, 96, 769, 671, C
+FloorObject = 154, 119, 746, 695, 
 FileIO = 165, 113, 763, 689, C
 Designer = 129, 103, 576, 679, C, 0, 0, 0, 0, C
 Preview = 129, 103, 576, 679, C, 0, 0, 0, 0, C
