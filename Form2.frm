@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form Form2 
-   Caption         =   "SkyScraper 0.4 Alpha"
+   Caption         =   "SkyScraper 0.5 Alpha"
    ClientHeight    =   3195
    ClientLeft      =   60
    ClientTop       =   345
@@ -58,7 +58,9 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Private Sub Command1_Click()
+OpenElevator = -1
 GotoFloor = Slider1.Value
 If GotoFloor = 1 Then GotoFloor = -1
 End Sub
