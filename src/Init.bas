@@ -26,111 +26,111 @@ Attribute VB_Name = "Init"
 
 Option Explicit
 
+'Global TV As TVEngine
+'Global Scene As TVScene
+'Global Effect As TVGraphicEffect
+'Global External As TVMesh
+'Global Landscape As TVMesh
+'Global PipeShaft(4) As TVMesh
+'Global Buttons(-11 To 144) As TVMesh
+'Global CallButtonsUp(40) As TVMesh
+'Global CallButtonsDown(40) As TVMesh
+'Global StairDoor(1 To 4) As TVMesh
+'Global Light As TVLightEngine
+'Global MatFactory As New TVMaterialFactory
+'Global LightID As Integer
+'Global LightD As D3DLIGHT8
+'Global IntroMesh As TVMesh
 
-Global TV As TVEngine
-Global Scene As TVScene
-Global Effect As TVGraphicEffect
-Global External As TVMesh
-Global Landscape As TVMesh
-Global PipeShaft(4) As TVMesh
-Global Buttons(-11 To 144) As TVMesh
-Global CallButtonsUp(40) As TVMesh
-Global CallButtonsDown(40) As TVMesh
-Global StairDoor(1 To 4) As TVMesh
-Global Light As TVLightEngine
-Global MatFactory As New TVMaterialFactory
-Global LightID As Integer
-Global LightD As D3DLIGHT8
-Global IntroMesh As TVMesh
+''New stuff
+'Global Floor(-10 To 138) As FloorC
+'Global Elevator(40) As ElevatorC
 
-'New stuff
-Global Floor(-10 To 138) As FloorC
-Global Elevator(40) As ElevatorC
+'Global SoundEngine As TVSoundEngine
+'Global Listener As TVListener
+'Global ListenerDirection As D3DVECTOR
+''Global MousePositionX As Long
+''Global MousePositionY As Long
+'Global Focused As Boolean
+'Global LineTest As D3DVECTOR
+'Global LineTest2 As D3DVECTOR
+'Global KeepAltitude As Integer
 
-Global SoundEngine As TVSoundEngine
-Global Listener As TVListener
-Global ListenerDirection As D3DVECTOR
-'Global MousePositionX As Long
-'Global MousePositionY As Long
-Global Focused As Boolean
-Global LineTest As D3DVECTOR
-Global LineTest2 As D3DVECTOR
-Global KeepAltitude As Integer
+'Global Atmos As New TVAtmosphere
+'Global sngPositionX As Single
+'Global sngPositionY As Single
+'Global sngPositionZ As Single
+'Global snglookatX As Single
+'Global snglookatY As Single
+'Global snglookatZ As Single
+'Global sngAngleX As Single
+'Global sngAngleY As Single
+'Global sngWalk As Single
+'Global sngStrafe As Single
 
-Global Atmos As New TVAtmosphere
-Global sngPositionX As Single
-Global sngPositionY As Single
-Global sngPositionZ As Single
-Global snglookatX As Single
-Global snglookatY As Single
-Global snglookatZ As Single
-Global sngAngleX As Single
-Global sngAngleY As Single
-Global sngWalk As Single
-Global sngStrafe As Single
+'Global Inp As TVInputEngine
+'Global TextureFactory As TVTextureFactory
+'Global linestart As D3DVECTOR
+'Global lineend As D3DVECTOR
+'Global isRunning As Boolean
+'Global Camera As TVCamera
+'Global ColRes As TV_COLLISIONRESULT
+'Global i As Single
+'Global i50 As Single
+'Global i51 As Single
+'Global i52 As Single
+'Global i53 As Single
+'Global i54 As Single
+'Global j As Single
+'Global j50 As Single
+'Global X As Integer
+'Global CollisionResult As TVCollisionResult
 
-Global Inp As TVInputEngine
-Global TextureFactory As TVTextureFactory
-Global linestart As D3DVECTOR
-Global lineend As D3DVECTOR
-Global isRunning As Boolean
-Global Camera As TVCamera
-Global ColRes As TV_COLLISIONRESULT
-Global i As Single
-Global i50 As Single
-Global i51 As Single
-Global i52 As Single
-Global i53 As Single
-Global i54 As Single
-Global j As Single
-Global j50 As Single
-Global X As Integer
-Global CollisionResult As TVCollisionResult
+'Global CameraFloor As Integer
+''Global CameraFloorExact As Single
+'Global InStairwell As Boolean
+''3D Objects
+'Global Buildings As TVMesh
+'Global FileName As String
+'Global OpeningDoor As Integer
+'Global ClosingDoor As Integer
+'Global DoorNumber As Integer
+'Global DoorRotated As Integer
+'Global ElevatorNumber As Integer
+'Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
+'Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
+'Declare Function GetTickCount Lib "kernel32.dll" () As Long
 
-Global CameraFloor As Integer
-'Global CameraFloorExact As Single
-Global InStairwell As Boolean
-'3D Objects
-Global Buildings As TVMesh
-Global FileName As String
-Global OpeningDoor As Integer
-Global ClosingDoor As Integer
-Global DoorNumber As Integer
-Global DoorRotated As Integer
-Global ElevatorNumber As Integer
-Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
-Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
-Declare Function GetTickCount Lib "kernel32.dll" () As Long
+'Global Test1 As Boolean
+'Global InElevator As Boolean
 
-Global Test1 As Boolean
-Global InElevator As Boolean
+'Global tmpMouseX As Long, tmpMouseY As Long, tmpMouseB1 As Integer
+'Global EnableCollisions As Boolean
+'Global Gravity As Single
+'Global IsFalling As Boolean
+'Global lngOldTick As Long
+'Global FallRate As Single
+'Global CameraOriginalPos As Single
 
-Global tmpMouseX As Long, tmpMouseY As Long, tmpMouseB1 As Integer
-Global EnableCollisions As Boolean
-Global Gravity As Single
-Global IsFalling As Boolean
-Global lngOldTick As Long
-Global FallRate As Single
-Global CameraOriginalPos As Single
+'Global ButtonsEnabled As Boolean
+'Global CrawlSpaceHeight As Single
+'Global ElevatorSpeed As Single
+'Global ElevatorFineTuneSpeed As Single
+'Global CallingStairDoors As Boolean
+'Global SelectedObject As String
+'Global MainMusic As TVSoundMP3
 
-Global ButtonsEnabled As Boolean
-Global CrawlSpaceHeight As Single
-Global ElevatorSpeed As Single
-Global ElevatorFineTuneSpeed As Single
-Global CallingStairDoors As Boolean
-Global SelectedObject As String
-Global MainMusic As TVSoundMP3
+''Global CallButtonTemp(40) As Integer
+'Global RenderOnly As Boolean
+'Global IntroOn As Boolean
+'Global SkipIntro As Boolean
+'Global SoundDivisor As Integer
+'Global SoundMaxDistance As Integer
+'Global LookUp As Integer
+'Global BottomFloor As Integer
+'Global TopFloor As Integer
 
-'Global CallButtonTemp(40) As Integer
-Global RenderOnly As Boolean
-Global IntroOn As Boolean
-Global SkipIntro As Boolean
-Global SoundDivisor As Integer
-Global SoundMaxDistance As Integer
-Global LookUp As Integer
-Global BottomFloor As Integer
-Global TopFloor As Integer
-
+Global CameraAltitude As Single 'default vertical offset of camera
 
 Sub CalculateFloorAltitudes()
 'This stores the altitude of all floors
