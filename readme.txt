@@ -1,4 +1,4 @@
-Skyscraper version 0.8 - Alpha
+Skyscraper version 0.9 - Beta
 ©2003 Ryan Thoryk
 http://www.tliquest.net/skyscraper
 
@@ -34,8 +34,6 @@ or even realistic, for example, the single stairwell for the whole building.  Th
 be changed in newer models of the Triton Center, but we'll see.
 
 Important keys used in the game:
-3 - open elevator door
-4 - close elevator door
 5 - play elevator music (disabled in this release)
 6 - stop elevator music (disabled in this release)
 F1 - to take a screenshot (saves as c:\shot.bmp)
@@ -43,7 +41,7 @@ PgUp - Look upwards (warning - there's alignment problems with this)
 PgDown - Look downwards (same problem with above)
 Home - Float upwards
 End - Float downwards
-
+Space - Straight out viewpoint
 
 Current building floor layout:
 
