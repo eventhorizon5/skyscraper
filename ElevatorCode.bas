@@ -64,6 +64,18 @@ CallQueue(Direction, Number, Floor) = False
 
 End Sub
 Sub StopElevator(Number As Integer)
+'If GotoFloor(ElevatorNumber) < ElevatorFloor(ElevatorNumber) And GotoFloor(ElevatorNumber) <> 0 Then
+    'Buttons(i52).SetColor RGBA(1, 1, 0, 1)
+    'GotoFloor(ElevatorNumber) = CurrentFloorExact(ElevatorNumber) - 1
+    'FineTune(ElevatorNumber) = True
+'End If
+'If GotoFloor(ElevatorNumber) > ElevatorFloor(ElevatorNumber) And GotoFloor(ElevatorNumber) <> 0 Then
+    'Buttons(i52).SetColor RGBA(1, 1, 0, 1)
+    'GotoFloor(ElevatorNumber) = CurrentFloorExact(ElevatorNumber) + 1
+    'FineTune(ElevatorNumber) = True
+'End If
+
+ElevatorDirection(Number) = -ElevatorDirection(Number)
 
 End Sub
 Sub Alarm(Number As Integer)
@@ -602,19 +614,9 @@ If CollisionResult.GetCollisionMesh.GetMeshName = Buttons(i52).GetMeshName Then
     If i52 > 138 Then
         If i52 = 139 Then OpenElevator(ElevatorNumber) = 1 'Open button
         If i52 = 140 Then OpenElevator(ElevatorNumber) = -1 'Close button
-        'If i52=141 then Call DeleteRoute(QueuePositionDirection(ElevatorNumber) 'Cancel button
+        'If i52 = 141 Then Call DeleteRoute(QueuePositionDirection(ElevatorNumber)) 'Cancel button
         If i52 = 142 Then Call StopElevator(ElevatorNumber) 'Stop button
         If i52 = 143 Then Call Alarm(ElevatorNumber) 'Alarm button
-        'If i52 = 142 And GotoFloor(ElevatorNumber) < ElevatorFloor(ElevatorNumber) And GotoFloor(ElevatorNumber) <> 0 Then
-        '    Buttons(i52).SetColor RGBA(1, 1, 0, 1)
-        '    GotoFloor(ElevatorNumber) = CurrentFloorExact(ElevatorNumber) - 1
-        '    FineTune(ElevatorNumber) = True
-        'End If
-        'If i52 = 142 And GotoFloor(ElevatorNumber) > ElevatorFloor(ElevatorNumber) And GotoFloor(ElevatorNumber) <> 0 Then
-        '    Buttons(i52).SetColor RGBA(1, 1, 0, 1)
-        '    GotoFloor(ElevatorNumber) = CurrentFloorExact(ElevatorNumber) + 1
-        '    FineTune(ElevatorNumber) = True
-        'End If
         Exit Sub
     End If
     Buttons(i52).SetColor RGBA(1, 1, 0, 1)
