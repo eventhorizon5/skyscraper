@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form Form2 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "SkyScraper 0.7 Alpha - Simulator Control Panel"
+   Caption         =   "SkyScraper 0.8 Alpha - Simulator Control Panel"
    ClientHeight    =   4410
    ClientLeft      =   45
    ClientTop       =   330
@@ -16,6 +16,7 @@ Begin VB.Form Form2
    StartUpPosition =   3  'Windows Default
    Begin VB.CommandButton Command9 
       Caption         =   "Close Elevator"
+      Enabled         =   0   'False
       Height          =   495
       Left            =   3240
       TabIndex        =   19
@@ -24,6 +25,7 @@ Begin VB.Form Form2
    End
    Begin VB.CommandButton Command8 
       Caption         =   "Open Elevator"
+      Enabled         =   0   'False
       Height          =   495
       Left            =   2280
       TabIndex        =   18
@@ -90,6 +92,7 @@ Begin VB.Form Form2
    End
    Begin VB.CommandButton Command2 
       Caption         =   "Call Elevator"
+      Enabled         =   0   'False
       Height          =   375
       Left            =   1680
       TabIndex        =   9
@@ -274,7 +277,7 @@ If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable True
 End If
 
 If Check8.Value = 0 Then
-Stairs(i).Enable False
+Stairs(CameraFloor).Enable False
 If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
 If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
 End If
