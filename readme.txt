@@ -1,4 +1,4 @@
-Skyscraper version 0.94 - Beta
+Skyscraper version 0.95 - Beta
 ©2003 Ryan Thoryk
 http://www.tliquest.net/skyscraper
 http://sourceforge.net/projects/skyscraper
@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 Release Notes
 ------------------------------
 
-Note - starting with the previous version (0.93), the TrueVision 3D 6.0 engine needs to be installed (releases prior to 0.93 used version 6.0 RC3)
+Note - starting with this version (0.95), the TrueVision 3D 6.1 engine needs to be installed. Version 0.94 required TrueVision3D 6.0 and releases prior to 0.93 used version 6.0-RC3.
 
 Skyscraper is a 3D virtual building simulator written in Visual Basic 6.0 using the
 TrueVision3D graphics library which can be found at http://www.truevision3d.com.
@@ -36,7 +36,7 @@ Original models (2D and 3D) of the Triton Center were made in MyHouse for Window
 The building's features and locations of equipment currently don't aim to be 100% accurate
 or even realistic, but they might be changed in newer models of the Triton Center.
 
-This release, version 0.94, is a major bugfix release (fixes 2 major bugs that slowed development to a crawl), and includes a new startup screen.
+See the changelog for new features and fixes for this release.
 
 --------------------
 

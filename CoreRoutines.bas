@@ -169,6 +169,7 @@ Global PauseQueueSearch(40) As Boolean
 Global QueueMonitor(40) As Integer
 'Global CallButtonTemp(40) As Integer
 Global StairDataTable(-10 To 138) As Boolean
+
 Sub CreateStairDoors(FloorID As Integer)
 Call DeleteStairDoors
 
@@ -550,7 +551,7 @@ Set Light = New TVLightEngine
   
 Sim.Label1.Caption = "Skyscraper " + Str$(App.Major) + "." + Right(Str$(App.Minor), 2) + " Beta - Build" + Str$(App.Revision) + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "©2004 Ryan Thoryk" + vbCrLf
-Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on January 1, 2004" + vbCrLf + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on January 2, 2004" + vbCrLf + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "software, and you are welcome to redistribute it under certain" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "conditions. For details, see the file gpl.txt" + vbCrLf
@@ -3422,8 +3423,11 @@ EndShafts:
                 If j50 = 31 Or j50 = 33 Or j50 = 35 Or j50 = 37 Or j50 = 39 Then Section = 12
                 If j50 = 32 Or j50 = 34 Or j50 = 36 Or j50 = 38 Or j50 = 40 Then Section = 13
                 
+                If Camera.GetPosition.Y > FloorHeight And Camera.GetPosition.Y < FloorHeight * 3 Then
+                Call CallElevator(0, Section, Direction) 'Mezzanine
+                Else
                 Call CallElevator(CameraFloor, Section, Direction)
-               
+                End If
             End If
 EndCall:
             Next i50
@@ -3729,12 +3733,7 @@ End Sub
 Sub ProcessMisc()
 DoEvents
  
-    'Shafts.AddWall GetTex("Ceiling1"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight * 138) + FloorHeight, 0, 2, 139 * 2
-    
-    'Shafts.AddFloor GetTex("BrickTexture"), -60, -150, 60, 150, (138 * FloorHeight) + FloorHeight, 10, 10
-
-    'Elevator1
-    'Old one Elevator1.AddFloor GetTex("BrickTexture"), -32, -30, -12, -16, 1
+    'Elevators
     Dim vv As Single
     Dim xx As Single
     For i = 1 To 4
@@ -3809,7 +3808,7 @@ DoEvents
     Elevator(j + 9).AddWall GetTex("Wood1"), vv, 44, xx, 44, 19.5, 0.1, 2, 2
     Elevator(j + 9).AddWall GetTex("Wood1"), vv, 44, vv, 30, 19.5, 0.1, 2, 2
    
-   'Floor Indicator
+   'Floor Indicators
     If i = 1 Or i = 3 Then
     FloorIndicator(j).AddWall GetTex("ButtonL"), -(xx + 0.16), -29.5, -(xx + 0.16), -27.5, 1.5, 16, -1, 1
     FloorIndicator(j + 1).AddWall GetTex("ButtonL"), (xx + 0.16), -18.5, (xx + 0.16), -16.5, 1.5, 16, 1, 1
@@ -3835,7 +3834,7 @@ DoEvents
     FloorIndicator(j + 8).AddWall GetTex("ButtonL"), -(xx - 0.16), -18.5 + (15 * 4), -(xx - 0.16), -16.5 + (15 * 4), 1.5, 16, 1, 1
     End If
     
-   'Button Panel
+   'Button Panels
     If i = 1 Or i = 3 Then
     Elevator(j).AddWall GetTex("ElevExtPanels"), -(xx + 0.16), -29.7, -(xx + 0.16), -27.3, 7, 6, 1, 1
     Elevator(j + 1).AddWall GetTex("ElevExtPanels"), (xx + 0.16), -18.7, (xx + 0.16), -16.3, 7, 6, 1, 1
@@ -3860,6 +3859,7 @@ DoEvents
     Elevator(j + 9).AddWall GetTex("ElevExtPanels"), (xx - 0.16), -29.7 + (15 * 4), (xx - 0.16), -27.3 + (15 * 4), 7, 6, 1, 1
     Elevator(j + 8).AddWall GetTex("ElevExtPanels"), -(xx - 0.16), -18.7 + (15 * 4), -(xx - 0.16), -16.3 + (15 * 4), 7, 6, 1, 1
     End If
+   
    'Plaques
     If i = 1 Or i = 3 Then
     Plaque(j).AddWall GetTex("Plaque"), -(xx + 0.16), -29.7, -(xx + 0.16), -27.3, 1, 13, -1, 1
@@ -3925,6 +3925,7 @@ DoEvents
     Plaque(j + 8).SetBlendingMode (TV_BLEND_ALPHA)
     Plaque(j + 8).SetColor RGBA(1, 1, 1, 0.1)
     End If
+    
     'Interior Panels
     If i = 1 Or i = 3 Then
     Elevator(j).AddWall GetTex("Marble3"), -(xx + 0.15), -16, -(xx + 0.15), -19, 19.5, 0.1, 1, 1
@@ -3970,6 +3971,7 @@ DoEvents
     Elevator(j + 8).AddWall GetTex("Marble3"), -(xx - 0.15), -16 + (15 * 4), -(xx - 0.15), -19 + (15 * 4), 19.5, 0.1, 1, 1
     Elevator(j + 8).AddWall GetTex("Marble3"), -(xx - 0.15), -30 + (15 * 4), -(xx - 0.15), -27 + (15 * 4), 19.5, 0.1, 1, 1
     End If
+    
     'Interior Doors
     If i = 1 Or i = 3 Then
     ElevatorInsDoorL(j).AddWall GetTex("ElevDoors"), -(xx + 0.1), -19.05, -(xx + 0.1), -22.95, 19.5, 0.1, 1, 1
@@ -4194,8 +4196,13 @@ Dim jxx As Integer
     Stairs(jxx).AddWall GetTex("Concrete"), -(ShaftLeft + 6), -46.25 + 7.71, -(ShaftLeft + 16), -46.25 + 7.71, (FloorHeight * 3), 0, (10 * 0.086), ((FloorHeight * 3) * 0.086)
     
     Stairs(jxx).AddWall GetTex("Concrete"), -(ShaftLeft + 0.5), -40.3, -(ShaftLeft + 0.5), -30, (FloorHeight - 19.5), 19.5, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
-    Stairs(jxx).AddWall GetTex("Concrete"), -(ShaftLeft + 0.5), -40.3, -(ShaftLeft + 0.5), -30, (FloorHeight - 19.5), 19.5 + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
-    Stairs(jxx).AddWall GetTex("Concrete"), -(ShaftLeft + 0.5), -40.3, -(ShaftLeft + 0.5), -30, FloorHeight, (FloorHeight * 2), (10.3 * 0.086), (FloorHeight * 0.086)
+    If ShaftNum <> 4 Then
+        Stairs(jxx).AddWall GetTex("Concrete"), -(ShaftLeft + 0.5), -40.3, -(ShaftLeft + 0.5), -30, (FloorHeight - 19.5), 19.5 + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
+        Stairs(jxx).AddWall GetTex("Concrete"), -(ShaftLeft + 0.5), -40.3, -(ShaftLeft + 0.5), -30, FloorHeight, (FloorHeight * 2), (10.3 * 0.086), (FloorHeight * 0.086)
+    Else
+        Stairs(jxx).AddWall GetTex("Concrete"), -(ShaftLeft + 0.5), -40.3, -(ShaftLeft + 0.5), -30, FloorHeight, FloorHeight, (10.3 * 0.086), (FloorHeight * 0.086)
+        Stairs(jxx).AddWall GetTex("Concrete"), -(ShaftLeft + 0.5), -40.3, -(ShaftLeft + 0.5), -30, (FloorHeight * 2) - 19.5, FloorHeight + 19.5, (10.3 * 0.086), (FloorHeight * 0.086)
+    End If
     
     'Stairs
     Stairs(jxx).AddWall GetTex("stairs"), -(ShaftLeft + 6), -46.25 + 7.71, -(ShaftLeft + 6), -30.85, RiserHeight, (jxx * FloorHeight) + (RiserHeight * 0) - FloorHeight
@@ -4313,9 +4320,11 @@ Dim jxx As Integer
     Stairs(jxx).AddWall GetTex("ButtonL"), -(ShaftLeft + 0.51), -42.5, -(ShaftLeft + 0.51), -44.5, 1.5, 9.5, 1, 1
     Stairs(jxx).AddWall GetTex("FloorSignLobby"), -(ShaftLeft + 0.52), -42.5, -(ShaftLeft + 0.52), -44.5, 0.5, 9 + 0.3, 1, 1
     
-    Stairs(jxx).AddWall GetTex("FloorSign"), -(ShaftLeft + 0.52), -42.5, -(ShaftLeft + 0.52), -44.5, 0.5, 11 + FloorHeight - 0.4, 1, 1
-    Stairs(jxx).AddWall GetTex("ButtonM"), -(ShaftLeft + 0.51), -42.5, -(ShaftLeft + 0.51), -44.5, 1.5, 9.5 + FloorHeight, 1, 1
-    Stairs(jxx).AddWall GetTex("FloorSignMez"), -(ShaftLeft + 0.52), -42.5, -(ShaftLeft + 0.52), -44.5, 0.5, 9 + FloorHeight + 0.3, 1, 1
+        If ShaftNum <> 4 Then
+            Stairs(jxx).AddWall GetTex("FloorSign"), -(ShaftLeft + 0.52), -42.5, -(ShaftLeft + 0.52), -44.5, 0.5, 11 + FloorHeight - 0.4, 1, 1
+            Stairs(jxx).AddWall GetTex("ButtonM"), -(ShaftLeft + 0.51), -42.5, -(ShaftLeft + 0.51), -44.5, 1.5, 9.5 + FloorHeight, 1, 1
+            Stairs(jxx).AddWall GetTex("FloorSignMez"), -(ShaftLeft + 0.52), -42.5, -(ShaftLeft + 0.52), -44.5, 0.5, 9 + FloorHeight + 0.3, 1, 1
+        End If
     End If
     
 Dim Endfloor As Integer
