@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
 Begin VB.Form DebugPanel 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "SkyScraper 0.94 Beta - Simulator Control Panel"
+   Caption         =   "SkyScraper 0.95 Beta - Simulator Control Panel"
    ClientHeight    =   5280
    ClientLeft      =   1830
    ClientTop       =   1710
@@ -1006,7 +1006,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.94 Beta
+'Skycraper 0.95 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -1055,8 +1055,8 @@ End Sub
 
 Private Sub Check5_Click()
 For i = 1 To 40
-If Check5.Value = 1 Then CallButtons(i).Enable True
-If Check5.Value = 0 Then CallButtons(i).Enable False
+If Check5.Value = 1 Then CallButtonsDown(i).Enable True: CallButtonsUp(i).Enable True
+If Check5.Value = 0 Then CallButtonsDown(i).Enable False: CallButtonsUp(i).Enable False
 Next i
 End Sub
 
