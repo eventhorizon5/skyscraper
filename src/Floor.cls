@@ -59,10 +59,10 @@ Dim th2 As Single
 tw2 = tw
 th2 = th
 
-'Sizing formulas from version 1.0
-If tw = 0 Then tw2 = (Abs(x1) + Abs(x2)) * 0.086
-If th = 0 Then tw2 = (Abs(z1) + Abs(z2)) * 0.08
-MsgBox (tw2)
+'Texture autosizing formulas
+If tw = 0 Then tw2 = AutoSize(x1, x2, True)
+If th = 0 Then th2 = AutoSize(z1, z2, False)
+
 Level.AddFloor GetTex(Texture), x1, z1, x2, z2, FloorAltitude + voffset, tw2, th2
 End Sub
 
@@ -73,9 +73,9 @@ Dim th2 As Single
 tw2 = tw
 th2 = th
 
-'Sizing formulas from version 1.0
-If tw = 0 Then tw2 = (Abs(x1) + Abs(x2)) * 0.086
-If th = 0 Then tw2 = (Abs(z1) + Abs(z2)) * 0.08
+'Texture autosizing formulas
+If tw = 0 Then tw2 = AutoSize(x1, x2, True)
+If th = 0 Then th2 = AutoSize(z1, z2, False)
 
 Level.AddFloor GetTex(Texture), x1, z1, x2, z2, FloorAltitude + FloorHeight + voffset, tw2, th2
 End Sub
@@ -87,9 +87,10 @@ Dim th2 As Single
 tw2 = tw
 th2 = th
 
-'Sizing formulas from version 1.0
-If tw = 0 Then tw2 = (Abs(x1) + Abs(x2)) * 0.086
-If th = 0 Then tw2 = (Abs(z1) + Abs(z2)) * 0.08
+'Texture autosizing formulas
+If tw = 0 And z1 = z2 Then tw2 = AutoSize(x1, x2, True)
+If tw = 0 And x1 = x2 Then tw2 = AutoSize(z1, z2, True)
+If th = 0 Then th2 = AutoSize(0, height, False)
 
 Level.AddWall GetTex(Texture), x1, z1, x2, z2, height, FloorAltitude + voffset, tw2, th2
 End Sub
@@ -101,9 +102,10 @@ Dim th2 As Single
 tw2 = tw
 th2 = th
 
-'Sizing formulas from version 1.0
-If tw = 0 Then tw2 = (Abs(x1) + Abs(x2)) * 0.086
-If th = 0 Then tw2 = (Abs(z1) + Abs(z2)) * 0.08
+'Texture autosizing formulas
+If tw = 0 And z1 = z2 Then tw2 = AutoSize(x1, x2, True)
+If tw = 0 And x1 = x2 Then tw2 = AutoSize(z1, z2, True)
+If th = 0 Then th2 = AutoSize(0, height, False)
 
 Level.AddWall GetTex(Texture), x1, z1, x2, z2, height, FloorAltitude + FloorHeight + voffset, tw2, th2
 End Sub
@@ -165,3 +167,4 @@ Private Sub Class_Terminate()
 'Next i
 
 End Sub
+
