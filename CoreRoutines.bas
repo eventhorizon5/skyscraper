@@ -183,6 +183,8 @@ Global QueuePositionDirection(40) As Integer
 Global QueuePositionFloor(40) As Integer
 Global PauseQueueSearch(40) As Boolean
 Global QueueMonitor(40) As Integer
+'Global CallButtonTemp(40) As Integer
+
 Sub Start()
 ElevatorNumber = 1
 FloorHeight = 32
@@ -526,7 +528,7 @@ Set Light = New TVLightEngine
   
 Sim.Label1.Caption = "Skyscraper 0.95 Beta - Build" + Str$(App.Revision) + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "©2003 Ryan Thoryk" + vbCrLf
-Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on November 1, 2003" + vbCrLf + vbCrLf
+Sim.Label1.Caption = Sim.Label1.Caption + "Compiled on November 3, 2003" + vbCrLf + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "software, and you are welcome to redistribute it under certain" + vbCrLf
 Sim.Label1.Caption = Sim.Label1.Caption + "conditions. For details, see the file gpl.txt" + vbCrLf
@@ -1082,17 +1084,17 @@ Sim.Label2.Caption = "Processing Lobby..."
     Call DrawElevatorWalls(Int(i), 1, 3, True, False, True, True, True, True, True, True, True, True, True, True)
     Call DrawElevatorWalls(Int(i), 1, 4, True, False, True, True, True, True, True, True, True, True, True, True)
     
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight * 3), 0, ((46.25 - 40.3) * 0.086), ((FloorHeight * 3) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight * 3), 0, (2.5 * 0.086), ((FloorHeight * 3) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight * 3), 0, (16.25 * 0.086), ((FloorHeight * 3) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight * 3), 0, (20 * 0.086), ((FloorHeight * 3) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight * 3), 0, (20 * 0.086), ((FloorHeight * 3) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight * 3), 0, (10 * 0.086), ((FloorHeight * 3) * 0.086)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight * 3), 0, ((46.25 - 40.3) * 0.086), ((FloorHeight * 3) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight * 3), 0, (2.5 * 0.086), ((FloorHeight * 3) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight * 3), 0, (16.25 * 0.086), ((FloorHeight * 3) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight * 3), 0, (20 * 0.086), ((FloorHeight * 3) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight * 3), 0, (20 * 0.086), ((FloorHeight * 3) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight * 3), 0, (10 * 0.086), ((FloorHeight * 3) * 0.086)
     
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, FloorHeight, (FloorHeight * 2), (10.3 * 0.086), (FloorHeight * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, FloorHeight, (FloorHeight * 2), (10.3 * 0.086), (FloorHeight * 0.086)
     
     'Ceiling
     Room(i).AddFloor GetTex("Ceiling1"), -160, -150, 160, -46.25, (FloorHeight * 3) - 0.5, ((160 * 2) * 0.086), ((150 - 46.25) * 0.08)
@@ -1160,14 +1162,14 @@ Sub Process2to39()
     Room(i).AddWall GetTex("BrickTexture"), 160, 150, -160, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((160 + 160) * 0.086), 1
     Room(i).AddWall GetTex("BrickTexture"), -160, 150, -160, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((160 + 160) * 0.086), 1
 
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
     If i = 2 Or i = 39 Then
     Call DrawElevatorWalls(Int(i), 5, 1, True, False, True, False, False, False, False, False, False, False, False, False)
@@ -1335,14 +1337,14 @@ Sub Process40to79()
     Room(i).AddWall GetTex("BrickTexture"), 135, 150, -135, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((135 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -135, 150, -135, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
     If i = 40 Then Call DrawElevatorWalls(Int(i), 2, 4, False, False, False, False, False, False, False, False, False, False, False, False)
     
@@ -1504,14 +1506,14 @@ Sub Process81to114()
     Room(i).AddWall GetTex("BrickTexture"), 110, 150, -110, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -110, 150, -110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
        
     'If i = 80 Then
     'Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, True, True, True, True, True, True, True, True, True)
@@ -1674,14 +1676,14 @@ Sub Process118to129()
     Room(i).AddWall GetTex("BrickTexture"), 85, 150, -85, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((85 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -85, 150, -85, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
     'If i = 118 Or i = 129 Then
     Call DrawElevatorWalls(Int(i), 2, 1, False, True, True, False, False, False, True, True, True, True, True, True)
@@ -1829,14 +1831,14 @@ Sub ProcessOtherFloors()
     Room(i).AddWall GetTex("BrickTexture"), 110, 150, -110, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -110, 150, -110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
        
     Call DrawElevatorWalls(Int(i), 2, 3, False, False, False, False, False, False, False, False, False, False, False, False)
     
@@ -1883,14 +1885,14 @@ Sub ProcessOtherFloors()
     Room(i).AddWall GetTex("BrickTexture"), 110, 150, -110, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -110, 150, -110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
        
     Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, True, False, False, False, False, False, False, False, False)
@@ -1935,14 +1937,14 @@ Sub ProcessOtherFloors()
     Room(i).AddWall GetTex("BrickTexture"), 110, 150, -110, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -110, 150, -110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
        
     Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 2, 2, True, False, True, True, False, False, False, False, False, False, False, False)
@@ -1986,14 +1988,14 @@ Sub ProcessOtherFloors()
     Room(i).AddWall GetTex("BrickTexture"), 110, 150, -110, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((110 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -110, 150, -110, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
        
     Call DrawElevatorWalls(Int(i), 2, 1, True, False, True, False, False, False, False, False, False, False, False, False)
     Call DrawElevatorWalls(Int(i), 2, 2, True, False, False, False, False, False, False, False, False, False, False, False)
@@ -2038,14 +2040,14 @@ Sub ProcessOtherFloors()
     Room(i).AddWall GetTex("BrickTexture"), 85, 150, -85, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((85 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -85, 150, -85, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
     Call DrawElevatorWalls(Int(i), 2, 1, False, False, True, False, False, False, False, False, False, False, False, False)
     
@@ -2214,14 +2216,14 @@ Sub ProcessOtherFloors2()
     Room(i).AddWall GetTex("BrickTexture"), 85, 150, -85, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((85 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -85, 150, -85, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
 
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
     Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, False, False, False, False, False, False, False, False, False)
     
@@ -2265,14 +2267,14 @@ Sub ProcessOtherFloors2()
     Room(i).AddWall GetTex("BrickTexture"), 85, 150, -85, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((85 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -85, 150, -85, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
  
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
     Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
     
@@ -2316,14 +2318,14 @@ Sub ProcessOtherFloors2()
     Room(i).AddWall GetTex("BrickTexture"), 85, 150, -85, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((85 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -85, 150, -85, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
  
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
     Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, False, False, False, False, False, False, False, False, False)
     
@@ -2352,14 +2354,14 @@ Sub ProcessOtherFloors2()
     Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 85, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, 3, 3
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 0, (i * FloorHeight) + (FloorHeight + 25) - 0.5, 1, 3
      
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
     Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
        
@@ -2383,14 +2385,14 @@ Sub ProcessOtherFloors2()
     Room(i).AddFloor GetTex("Marble3"), -60, -46.25, -32.5, 0, (i * FloorHeight) + (FloorHeight * 2) - 0.5, ((60 - 32.5) * 0.086), (46.25 * 0.08)
     Room(i).AddFloor GetTex("Marble3"), 60, -46.25, 32.5, 0, (i * FloorHeight) + (FloorHeight * 2) - 0.5, ((60 - 32.5) * 0.086), (46.25 * 0.08)
     
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
     Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
          
@@ -2434,14 +2436,14 @@ Sub ProcessOtherFloors2()
     Room(i).AddWall GetTex("BrickTexture"), 60, 150, -60, 150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((60 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
     Room(i).AddWall GetTex("BrickTexture"), -60, 150, -60, -150, (FloorHeight - 25), (i * FloorHeight) + FloorHeight + 25, ((150 * 2) * 0.086), ((FloorHeight - 25) * 0.08)
  
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
     Call DrawElevatorWalls(Int(i), 5, 1, False, False, True, True, True, True, False, False, False, False, False, False)
    
@@ -2492,14 +2494,14 @@ Sub ProcessOtherFloors2()
     Room(i).AddWall GetTex("BrickTexture"), 60 - 0.1, 150 - 0.1, -60 + 0.1, 150 - 0.1, 25, (i * FloorHeight) + FloorHeight, 3, 1
     Room(i).AddWall GetTex("BrickTexture"), -60 + 0.1, 150 - 0.1, -60 + 0.1, -150 + 0.1, 25, (i * FloorHeight) + FloorHeight, 7, 1
     
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
         
     Call DrawElevatorWalls(Int(i), 7, 1, False, False, True, False, False, False, False, False, False, False, False, False)
         
@@ -2517,14 +2519,14 @@ i = 138
     
     Room(i).AddFloor GetTex("BrickTexture"), -32.5, -46.25, -12.5, -15.42, (i * FloorHeight) + (FloorHeight + 25) + 0.1, 2, 2.4
     
-    'Stairwell Walls
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), (FloorHeight * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), (FloorHeight * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), (FloorHeight * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), (FloorHeight * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), (FloorHeight * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), (FloorHeight * 0.086)
-    Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    ''Stairwell Walls
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -46.25 + 0.1, -12.5 - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), (FloorHeight * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -32.5, -12.5 - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), (FloorHeight * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -32.5 + 0.1, -46.25 + 0.1, -32.5 + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), (FloorHeight * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -46.25 + 0.1, -32.5, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), (FloorHeight * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5, -30 - 1, -32.5, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), (FloorHeight * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 6, -46.25 + 7.71, -12.5 - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), (FloorHeight * 0.086)
+    'Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
     
     Call DrawElevatorWalls(Int(i), 7, 1, False, False, True, False, False, False, False, False, False, False, False, False)
 
@@ -3500,10 +3502,11 @@ EndShafts:
             Dim CallElevatorTemp As Boolean
             Dim Direction As Integer
                 
-            If CollisionResult.GetCollisionMesh.GetMeshName = CallButtonsUp(i50).GetMeshName Then CallElevatorTemp = True: Direction = 1
-            If CollisionResult.GetCollisionMesh.GetMeshName = CallButtonsDown(i50).GetMeshName Then CallElevatorTemp = True: Direction = 0
+            If CollisionResult.GetCollisionMesh.GetMeshName = CallButtonsUp(i50).GetMeshName Then CallButtonsUp(i50).SetColor RGBA(1, 1, 0, 1): CallElevatorTemp = True: Direction = 1
+            If CollisionResult.GetCollisionMesh.GetMeshName = CallButtonsDown(i50).GetMeshName Then CallButtonsDown(i50).SetColor RGBA(1, 1, 0, 1): CallElevatorTemp = True: Direction = 0
             
             If CallElevatorTemp = True Then
+                
                 CallElevatorTemp = False
                 
                 'Elevator Sections:
@@ -4165,6 +4168,10 @@ DoEvents
     ElevatorFloor(8) = 80
     ElevatorFloor(9) = 80
     ElevatorFloor(10) = 80
+    ElevatorFloor(11) = 1
+    ElevatorFloor(12) = 1
+    ElevatorFloor(13) = 1
+    ElevatorFloor(14) = 1
     ElevatorFloor(15) = 80
     ElevatorFloor(16) = 80
     ElevatorFloor(17) = 80
@@ -4221,237 +4228,286 @@ End Sub
 Sub ProcessStairs()
     Dim RiserHeight As Single
     RiserHeight = FloorHeight / 16
+    Dim ShaftNum As Integer
+    Dim ShaftLeft As Single
+    Dim ShaftRight As Single
     
+    For ShaftNum = 1 To 4
+    If ShaftNum = 1 Then ShaftLeft = 12.5: ShaftRight = 32.5
+    If ShaftNum = 2 Then ShaftLeft = -52.5: ShaftRight = -32.5
+    If ShaftNum = 3 Then ShaftLeft = 90.5: ShaftRight = 110.5
+    If ShaftNum = 4 Then ShaftLeft = -130.5: ShaftRight = -110.5
+
     For i = -10 To -1
+    'Stairwell Walls
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -46.25 + 0.1, -ShaftLeft - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -ShaftRight, -ShaftLeft - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftRight + 0.1, -46.25 + 0.1, -ShaftRight + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -46.25 + 0.1, -ShaftRight, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -30 - 1, -ShaftRight, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -40.3, -ShaftLeft - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+    
     'Stairs
     DoEvents
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 10.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 3)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 12, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 4)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 13.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 5)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 15, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 6)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 16, -46.25 + 7.71, -12.5 - 16, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 7)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 10.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 3)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 12, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 4)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 13.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 5)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 15, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 6)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 16, -46.25 + 7.71, -ShaftLeft - 16, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 7)
     
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 7.5, -30.85, (i * FloorHeight) + (RiserHeight * 1)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 9, -30.85, (i * FloorHeight) + (RiserHeight * 2)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 10.5, -30.85, (i * FloorHeight) + (RiserHeight * 3)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 12, -30.85, (i * FloorHeight) + (RiserHeight * 4)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 13.5, -30.85, (i * FloorHeight) + (RiserHeight * 5)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 15, -30.85, (i * FloorHeight) + (RiserHeight * 6)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 16, -30.85, (i * FloorHeight) + (RiserHeight * 7)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 16, -46.25, -12.5 - 20, -30.85, (i * FloorHeight) + (RiserHeight * 8)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 7.5, -30.85, (i * FloorHeight) + (RiserHeight * 1)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 9, -30.85, (i * FloorHeight) + (RiserHeight * 2)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 10.5, -30.85, (i * FloorHeight) + (RiserHeight * 3)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 12, -30.85, (i * FloorHeight) + (RiserHeight * 4)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 13.5, -30.85, (i * FloorHeight) + (RiserHeight * 5)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 15, -30.85, (i * FloorHeight) + (RiserHeight * 6)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 16, -30.85, (i * FloorHeight) + (RiserHeight * 7)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 16, -46.25, -ShaftLeft - 20, -30.85, (i * FloorHeight) + (RiserHeight * 8)
     
-    Stairs(i).AddFloor GetTex("stairs"), -12.5, -46.25, -12.5 - 6, -30.85, (i * FloorHeight) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 7.5, -46.25, (i * FloorHeight) + (RiserHeight * 15)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 9, -46.25, (i * FloorHeight) + (RiserHeight * 14)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 10.5, -46.25, (i * FloorHeight) + (RiserHeight * 13)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 12, -46.25, (i * FloorHeight) + (RiserHeight * 12)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 13.5, -46.25, (i * FloorHeight) + (RiserHeight * 11)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 15, -46.25, (i * FloorHeight) + (RiserHeight * 10)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 16, -46.25, (i * FloorHeight) + (RiserHeight * 9)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft, -46.25, -ShaftLeft - 6, -30.85, (i * FloorHeight) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 7.5, -46.25, (i * FloorHeight) + (RiserHeight * 15)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 9, -46.25, (i * FloorHeight) + (RiserHeight * 14)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 10.5, -46.25, (i * FloorHeight) + (RiserHeight * 13)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 12, -46.25, (i * FloorHeight) + (RiserHeight * 12)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 13.5, -46.25, (i * FloorHeight) + (RiserHeight * 11)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 15, -46.25, (i * FloorHeight) + (RiserHeight * 10)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 16, -46.25, (i * FloorHeight) + (RiserHeight * 9)
     
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25, -12.5 - 6, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 15)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25, -12.5 - 7.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 14)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25, -12.5 - 9, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 13)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 10.5, -46.25, -12.5 - 10.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 12)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 12, -46.25, -12.5 - 12, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 11)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 13.5, -46.25, -12.5 - 13.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 10)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 15, -46.25, -12.5 - 15, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 9)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 16, -46.25, -12.5 - 16, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 8)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 6, -46.25, -ShaftLeft - 6, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 15)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 7.5, -46.25, -ShaftLeft - 7.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 14)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 9, -46.25, -ShaftLeft - 9, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 13)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 10.5, -46.25, -ShaftLeft - 10.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 12)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 12, -46.25, -ShaftLeft - 12, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 11)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 13.5, -46.25, -ShaftLeft - 13.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 10)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 15, -46.25, -ShaftLeft - 15, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 9)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 16, -46.25, -ShaftLeft - 16, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 8)
     
     'Floor Signs
-    'Stairs(i).AddWall GetTex("FloorSign"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 11 - 0.4, 1, 1
-    'Stairs(i).AddWall GetTex("Button" + Mid$(Str$(i), 2)), -12.5 - 0.51, -42.5, -12.5 - 0.51, -44.5, 1.5, ((i * FloorHeight) + FloorHeight) + 9.5, 1, 1
-    'If i >= 2 And i <= 79 Then Stairs(i).AddWall GetTex("FloorSignOffices"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    'Stairs(i).AddWall GetTex("FloorSign"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 11 - 0.4, 1, 1
+    'Stairs(i).AddWall GetTex("Button" + Mid$(Str$(i), 2)), -ShaftLeft - 0.51, -42.5, -ShaftLeft - 0.51, -44.5, 1.5, ((i * FloorHeight) + FloorHeight) + 9.5, 1, 1
+    'If i >= 2 And i <= 79 Then Stairs(i).AddWall GetTex("FloorSignOffices"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
     Next i
         
 i = 1
 'Stairs on the first floor, section 1
  
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 10.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 3) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 12, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 4) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 13.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 5) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 15, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 6) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 16, -46.25 + 7.71, -12.5 - 16, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 7) - FloorHeight
+    'Stairwell Walls
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -46.25 + 0.1, -ShaftLeft - 0.5, -40.3, (FloorHeight * 3), 0, ((46.25 - 40.3) * 0.086), ((FloorHeight * 3) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -ShaftRight, -ShaftLeft - 0.5, -30, (FloorHeight * 3), 0, (2.5 * 0.086), ((FloorHeight * 3) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftRight + 0.1, -46.25 + 0.1, -ShaftRight + 0.1, -30 - 1, (FloorHeight * 3), 0, (16.25 * 0.086), ((FloorHeight * 3) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -46.25 + 0.1, -ShaftRight, -46.25 + 0.1, (FloorHeight * 3), 0, (20 * 0.086), ((FloorHeight * 3) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -30 - 1, -ShaftRight, -30 - 1, (FloorHeight * 3), 0, (20 * 0.086), ((FloorHeight * 3) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 16, -46.25 + 7.71, (FloorHeight * 3), 0, (10 * 0.086), ((FloorHeight * 3) * 0.086)
     
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 7.5, -30.85, (i * FloorHeight) + (RiserHeight * 1) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 9, -30.85, (i * FloorHeight) + (RiserHeight * 2) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 10.5, -30.85, (i * FloorHeight) + (RiserHeight * 3) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 12, -30.85, (i * FloorHeight) + (RiserHeight * 4) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 13.5, -30.85, (i * FloorHeight) + (RiserHeight * 5) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 15, -30.85, (i * FloorHeight) + (RiserHeight * 6) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 16, -30.85, (i * FloorHeight) + (RiserHeight * 7) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 16, -46.25, -12.5 - 20, -30.85, (i * FloorHeight) + (RiserHeight * 8) - FloorHeight
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -40.3, -ShaftLeft - 0.5, -30, (FloorHeight - 19.5), 19.5, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -40.3, -ShaftLeft - 0.5, -30, (FloorHeight - 19.5), 19.5 + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -40.3, -ShaftLeft - 0.5, -30, FloorHeight, (FloorHeight * 2), (10.3 * 0.086), (FloorHeight * 0.086)
     
-    Stairs(i).AddFloor GetTex("stairs"), -12.5, -46.25, -12.5 - 6, -30.85, (i * FloorHeight) + FloorHeight - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 7.5, -46.25, (i * FloorHeight) + (RiserHeight * 15) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 9, -46.25, (i * FloorHeight) + (RiserHeight * 14) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 10.5, -46.25, (i * FloorHeight) + (RiserHeight * 13) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 12, -46.25, (i * FloorHeight) + (RiserHeight * 12) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 13.5, -46.25, (i * FloorHeight) + (RiserHeight * 11) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 15, -46.25, (i * FloorHeight) + (RiserHeight * 10) - FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 16, -46.25, (i * FloorHeight) + (RiserHeight * 9) - FloorHeight
+    'Stairs
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 10.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 3) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 12, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 4) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 13.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 5) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 15, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 6) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 16, -46.25 + 7.71, -ShaftLeft - 16, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 7) - FloorHeight
     
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25, -12.5 - 6, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 15) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25, -12.5 - 7.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 14) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25, -12.5 - 9, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 13) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 10.5, -46.25, -12.5 - 10.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 12) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 12, -46.25, -12.5 - 12, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 11) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 13.5, -46.25, -12.5 - 13.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 10) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 15, -46.25, -12.5 - 15, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 9) - FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 16, -46.25, -12.5 - 16, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 8) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 7.5, -30.85, (i * FloorHeight) + (RiserHeight * 1) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 9, -30.85, (i * FloorHeight) + (RiserHeight * 2) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 10.5, -30.85, (i * FloorHeight) + (RiserHeight * 3) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 12, -30.85, (i * FloorHeight) + (RiserHeight * 4) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 13.5, -30.85, (i * FloorHeight) + (RiserHeight * 5) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 15, -30.85, (i * FloorHeight) + (RiserHeight * 6) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 16, -30.85, (i * FloorHeight) + (RiserHeight * 7) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 16, -46.25, -ShaftLeft - 20, -30.85, (i * FloorHeight) + (RiserHeight * 8) - FloorHeight
+    
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft, -46.25, -ShaftLeft - 6, -30.85, (i * FloorHeight) + FloorHeight - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 7.5, -46.25, (i * FloorHeight) + (RiserHeight * 15) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 9, -46.25, (i * FloorHeight) + (RiserHeight * 14) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 10.5, -46.25, (i * FloorHeight) + (RiserHeight * 13) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 12, -46.25, (i * FloorHeight) + (RiserHeight * 12) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 13.5, -46.25, (i * FloorHeight) + (RiserHeight * 11) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 15, -46.25, (i * FloorHeight) + (RiserHeight * 10) - FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 16, -46.25, (i * FloorHeight) + (RiserHeight * 9) - FloorHeight
+    
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 6, -46.25, -ShaftLeft - 6, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 15) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 7.5, -46.25, -ShaftLeft - 7.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 14) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 9, -46.25, -ShaftLeft - 9, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 13) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 10.5, -46.25, -ShaftLeft - 10.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 12) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 12, -46.25, -ShaftLeft - 12, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 11) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 13.5, -46.25, -ShaftLeft - 13.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 10) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 15, -46.25, -ShaftLeft - 15, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 9) - FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 16, -46.25, -ShaftLeft - 16, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 8) - FloorHeight
 
 'Stairs on the first floor, section 2
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 10.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 3)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 12, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 4)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 13.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 5)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 15, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 6)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 16, -46.25 + 7.71, -12.5 - 16, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 7)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 10.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 3)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 12, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 4)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 13.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 5)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 15, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 6)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 16, -46.25 + 7.71, -ShaftLeft - 16, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 7)
     
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 7.5, -30.85, (i * FloorHeight) + (RiserHeight * 1)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 9, -30.85, (i * FloorHeight) + (RiserHeight * 2)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 10.5, -30.85, (i * FloorHeight) + (RiserHeight * 3)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 12, -30.85, (i * FloorHeight) + (RiserHeight * 4)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 13.5, -30.85, (i * FloorHeight) + (RiserHeight * 5)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 15, -30.85, (i * FloorHeight) + (RiserHeight * 6)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 16, -30.85, (i * FloorHeight) + (RiserHeight * 7)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 16, -46.25, -12.5 - 20, -30.85, (i * FloorHeight) + (RiserHeight * 8)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 7.5, -30.85, (i * FloorHeight) + (RiserHeight * 1)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 9, -30.85, (i * FloorHeight) + (RiserHeight * 2)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 10.5, -30.85, (i * FloorHeight) + (RiserHeight * 3)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 12, -30.85, (i * FloorHeight) + (RiserHeight * 4)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 13.5, -30.85, (i * FloorHeight) + (RiserHeight * 5)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 15, -30.85, (i * FloorHeight) + (RiserHeight * 6)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 16, -30.85, (i * FloorHeight) + (RiserHeight * 7)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 16, -46.25, -ShaftLeft - 20, -30.85, (i * FloorHeight) + (RiserHeight * 8)
     
-    Stairs(i).AddFloor GetTex("stairs"), -12.5, -46.25, -12.5 - 6, -30.85, (i * FloorHeight) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 7.5, -46.25, (i * FloorHeight) + (RiserHeight * 15)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 9, -46.25, (i * FloorHeight) + (RiserHeight * 14)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 10.5, -46.25, (i * FloorHeight) + (RiserHeight * 13)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 12, -46.25, (i * FloorHeight) + (RiserHeight * 12)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 13.5, -46.25, (i * FloorHeight) + (RiserHeight * 11)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 15, -46.25, (i * FloorHeight) + (RiserHeight * 10)
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 16, -46.25, (i * FloorHeight) + (RiserHeight * 9)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft, -46.25, -ShaftLeft - 6, -30.85, (i * FloorHeight) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 7.5, -46.25, (i * FloorHeight) + (RiserHeight * 15)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 9, -46.25, (i * FloorHeight) + (RiserHeight * 14)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 10.5, -46.25, (i * FloorHeight) + (RiserHeight * 13)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 12, -46.25, (i * FloorHeight) + (RiserHeight * 12)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 13.5, -46.25, (i * FloorHeight) + (RiserHeight * 11)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 15, -46.25, (i * FloorHeight) + (RiserHeight * 10)
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 16, -46.25, (i * FloorHeight) + (RiserHeight * 9)
     
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25, -12.5 - 6, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 15)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25, -12.5 - 7.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 14)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25, -12.5 - 9, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 13)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 10.5, -46.25, -12.5 - 10.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 12)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 12, -46.25, -12.5 - 12, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 11)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 13.5, -46.25, -12.5 - 13.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 10)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 15, -46.25, -12.5 - 15, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 9)
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 16, -46.25, -12.5 - 16, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 8)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 6, -46.25, -ShaftLeft - 6, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 15)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 7.5, -46.25, -ShaftLeft - 7.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 14)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 9, -46.25, -ShaftLeft - 9, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 13)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 10.5, -46.25, -ShaftLeft - 10.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 12)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 12, -46.25, -ShaftLeft - 12, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 11)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 13.5, -46.25, -ShaftLeft - 13.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 10)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 15, -46.25, -ShaftLeft - 15, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 9)
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 16, -46.25, -ShaftLeft - 16, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 8)
 
 'Stairs on the first floor, section 3
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 10.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 3) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 12, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 4) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 13.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 5) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 15, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 6) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 16, -46.25 + 7.71, -12.5 - 16, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 7) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 10.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 3) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 12, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 4) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 13.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 5) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 15, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 6) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 16, -46.25 + 7.71, -ShaftLeft - 16, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 7) + FloorHeight
     
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 7.5, -30.85, (i * FloorHeight) + (RiserHeight * 1) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 9, -30.85, (i * FloorHeight) + (RiserHeight * 2) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 10.5, -30.85, (i * FloorHeight) + (RiserHeight * 3) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 12, -30.85, (i * FloorHeight) + (RiserHeight * 4) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 13.5, -30.85, (i * FloorHeight) + (RiserHeight * 5) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 15, -30.85, (i * FloorHeight) + (RiserHeight * 6) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 16, -30.85, (i * FloorHeight) + (RiserHeight * 7) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 16, -46.25, -12.5 - 20, -30.85, (i * FloorHeight) + (RiserHeight * 8) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 7.5, -30.85, (i * FloorHeight) + (RiserHeight * 1) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 9, -30.85, (i * FloorHeight) + (RiserHeight * 2) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 10.5, -30.85, (i * FloorHeight) + (RiserHeight * 3) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 12, -30.85, (i * FloorHeight) + (RiserHeight * 4) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 13.5, -30.85, (i * FloorHeight) + (RiserHeight * 5) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 15, -30.85, (i * FloorHeight) + (RiserHeight * 6) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 16, -30.85, (i * FloorHeight) + (RiserHeight * 7) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 16, -46.25, -ShaftLeft - 20, -30.85, (i * FloorHeight) + (RiserHeight * 8) + FloorHeight
     
-    Stairs(i).AddFloor GetTex("stairs"), -12.5, -46.25, -12.5 - 6, -30.85, (i * FloorHeight) + FloorHeight + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 7.5, -46.25, (i * FloorHeight) + (RiserHeight * 15) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 9, -46.25, (i * FloorHeight) + (RiserHeight * 14) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 10.5, -46.25, (i * FloorHeight) + (RiserHeight * 13) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 12, -46.25, (i * FloorHeight) + (RiserHeight * 12) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 13.5, -46.25, (i * FloorHeight) + (RiserHeight * 11) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 15, -46.25, (i * FloorHeight) + (RiserHeight * 10) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 16, -46.25, (i * FloorHeight) + (RiserHeight * 9) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft, -46.25, -ShaftLeft - 6, -30.85, (i * FloorHeight) + FloorHeight + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 7.5, -46.25, (i * FloorHeight) + (RiserHeight * 15) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 9, -46.25, (i * FloorHeight) + (RiserHeight * 14) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 10.5, -46.25, (i * FloorHeight) + (RiserHeight * 13) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 12, -46.25, (i * FloorHeight) + (RiserHeight * 12) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 13.5, -46.25, (i * FloorHeight) + (RiserHeight * 11) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 15, -46.25, (i * FloorHeight) + (RiserHeight * 10) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 16, -46.25, (i * FloorHeight) + (RiserHeight * 9) + FloorHeight
     
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25, -12.5 - 6, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 15) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25, -12.5 - 7.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 14) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25, -12.5 - 9, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 13) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 10.5, -46.25, -12.5 - 10.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 12) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 12, -46.25, -12.5 - 12, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 11) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 13.5, -46.25, -12.5 - 13.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 10) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 15, -46.25, -12.5 - 15, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 9) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 16, -46.25, -12.5 - 16, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 8) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 6, -46.25, -ShaftLeft - 6, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 15) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 7.5, -46.25, -ShaftLeft - 7.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 14) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 9, -46.25, -ShaftLeft - 9, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 13) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 10.5, -46.25, -ShaftLeft - 10.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 12) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 12, -46.25, -ShaftLeft - 12, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 11) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 13.5, -46.25, -ShaftLeft - 13.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 10) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 15, -46.25, -ShaftLeft - 15, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 9) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 16, -46.25, -ShaftLeft - 16, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 8) + FloorHeight
 
     'Floor signs
-    Stairs(i).AddWall GetTex("FloorSign"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, 11 - 0.4, 1, 1
-    Stairs(i).AddWall GetTex("ButtonL"), -12.5 - 0.51, -42.5, -12.5 - 0.51, -44.5, 1.5, 9.5, 1, 1
-    Stairs(i).AddWall GetTex("FloorSignLobby"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, 9 + 0.3, 1, 1
+    Stairs(i).AddWall GetTex("FloorSign"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, 11 - 0.4, 1, 1
+    Stairs(i).AddWall GetTex("ButtonL"), -ShaftLeft - 0.51, -42.5, -ShaftLeft - 0.51, -44.5, 1.5, 9.5, 1, 1
+    Stairs(i).AddWall GetTex("FloorSignLobby"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, 9 + 0.3, 1, 1
     
-    Stairs(i).AddWall GetTex("FloorSign"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, 11 + FloorHeight - 0.4, 1, 1
-    Stairs(i).AddWall GetTex("ButtonM"), -12.5 - 0.51, -42.5, -12.5 - 0.51, -44.5, 1.5, 9.5 + FloorHeight, 1, 1
-    Stairs(i).AddWall GetTex("FloorSignMez"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, 9 + FloorHeight + 0.3, 1, 1
+    Stairs(i).AddWall GetTex("FloorSign"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, 11 + FloorHeight - 0.4, 1, 1
+    Stairs(i).AddWall GetTex("ButtonM"), -ShaftLeft - 0.51, -42.5, -ShaftLeft - 0.51, -44.5, 1.5, 9.5 + FloorHeight, 1, 1
+    Stairs(i).AddWall GetTex("FloorSignMez"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, 9 + FloorHeight + 0.3, 1, 1
     
+Dim Endfloor As Integer
+If ShaftNum = 1 Then Endfloor = 138
+If ShaftNum = 2 Then Endfloor = 117
+If ShaftNum = 3 Then Endfloor = 79
+If ShaftNum = 4 Then Endfloor = 39
 
-    For i = 2 To 137
+    For i = 2 To Endfloor
     'Stairs
     DoEvents
     Sim.Label2.Caption = "Processing Stairs... " + Str$(Int((i / 137) * 100)) + "%"
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 10.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 3) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 12, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 4) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 13.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 5) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 15, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 6) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 16, -46.25 + 7.71, -12.5 - 16, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 7) + FloorHeight
     
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 7.5, -30.85, (i * FloorHeight) + (RiserHeight * 1) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 9, -30.85, (i * FloorHeight) + (RiserHeight * 2) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 10.5, -30.85, (i * FloorHeight) + (RiserHeight * 3) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 12, -30.85, (i * FloorHeight) + (RiserHeight * 4) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 13.5, -30.85, (i * FloorHeight) + (RiserHeight * 5) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 15, -30.85, (i * FloorHeight) + (RiserHeight * 6) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 16, -30.85, (i * FloorHeight) + (RiserHeight * 7) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 16, -46.25, -12.5 - 20, -30.85, (i * FloorHeight) + (RiserHeight * 8) + FloorHeight
+    'Stairwell Walls
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -46.25 + 0.1, -ShaftLeft - 0.5, -40.3, (FloorHeight), (i * FloorHeight) + FloorHeight, ((46.25 - 40.3) * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -ShaftRight, -ShaftLeft - 0.5, -30, (FloorHeight), (i * FloorHeight) + FloorHeight, (2.5 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftRight + 0.1, -46.25 + 0.1, -ShaftRight + 0.1, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (16.25 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -46.25 + 0.1, -ShaftRight, -46.25 + 0.1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft, -30 - 1, -ShaftRight, -30 - 1, (FloorHeight), (i * FloorHeight) + FloorHeight, (20 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 16, -46.25 + 7.71, (FloorHeight), (i * FloorHeight) + FloorHeight, (10 * 0.086), ((FloorHeight) * 0.086)
+    Stairs(i).AddWall GetTex("Concrete"), -ShaftLeft - 0.5, -40.3, -ShaftLeft - 0.5, -30, (FloorHeight - 19.5), 19.5 + (i * FloorHeight) + FloorHeight, (10.3 * 0.086), ((FloorHeight - 19.5) * 0.08)
+        
+    'Stairs
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 6, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 0) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 7.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 1) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 9, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 2) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 10.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 3) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 12, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 4) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 13.5, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 5) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 15, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 6) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 16, -46.25 + 7.71, -ShaftLeft - 16, -30.85, RiserHeight, (i * FloorHeight) + (RiserHeight * 7) + FloorHeight
     
-    Stairs(i).AddFloor GetTex("stairs"), -12.5, -46.25, -12.5 - 6, -30.85, (i * FloorHeight) + FloorHeight + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 6, -46.25 + 7.71, -12.5 - 7.5, -46.25, (i * FloorHeight) + (RiserHeight * 15) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 7.5, -46.25 + 7.71, -12.5 - 9, -46.25, (i * FloorHeight) + (RiserHeight * 14) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 9, -46.25 + 7.71, -12.5 - 10.5, -46.25, (i * FloorHeight) + (RiserHeight * 13) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 10.5, -46.25 + 7.71, -12.5 - 12, -46.25, (i * FloorHeight) + (RiserHeight * 12) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 12, -46.25 + 7.71, -12.5 - 13.5, -46.25, (i * FloorHeight) + (RiserHeight * 11) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 13.5, -46.25 + 7.71, -12.5 - 15, -46.25, (i * FloorHeight) + (RiserHeight * 10) + FloorHeight
-    Stairs(i).AddFloor GetTex("stairs"), -12.5 - 15, -46.25 + 7.71, -12.5 - 16, -46.25, (i * FloorHeight) + (RiserHeight * 9) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 7.5, -30.85, (i * FloorHeight) + (RiserHeight * 1) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 9, -30.85, (i * FloorHeight) + (RiserHeight * 2) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 10.5, -30.85, (i * FloorHeight) + (RiserHeight * 3) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 12, -30.85, (i * FloorHeight) + (RiserHeight * 4) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 13.5, -30.85, (i * FloorHeight) + (RiserHeight * 5) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 15, -30.85, (i * FloorHeight) + (RiserHeight * 6) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 16, -30.85, (i * FloorHeight) + (RiserHeight * 7) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 16, -46.25, -ShaftLeft - 20, -30.85, (i * FloorHeight) + (RiserHeight * 8) + FloorHeight
     
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 6, -46.25, -12.5 - 6, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 15) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 7.5, -46.25, -12.5 - 7.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 14) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 9, -46.25, -12.5 - 9, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 13) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 10.5, -46.25, -12.5 - 10.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 12) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 12, -46.25, -12.5 - 12, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 11) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 13.5, -46.25, -12.5 - 13.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 10) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 15, -46.25, -12.5 - 15, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 9) + FloorHeight
-    Stairs(i).AddWall GetTex("stairs"), -12.5 - 16, -46.25, -12.5 - 16, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 8) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft, -46.25, -ShaftLeft - 6, -30.85, (i * FloorHeight) + FloorHeight + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 6, -46.25 + 7.71, -ShaftLeft - 7.5, -46.25, (i * FloorHeight) + (RiserHeight * 15) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 7.5, -46.25 + 7.71, -ShaftLeft - 9, -46.25, (i * FloorHeight) + (RiserHeight * 14) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 9, -46.25 + 7.71, -ShaftLeft - 10.5, -46.25, (i * FloorHeight) + (RiserHeight * 13) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 10.5, -46.25 + 7.71, -ShaftLeft - 12, -46.25, (i * FloorHeight) + (RiserHeight * 12) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 12, -46.25 + 7.71, -ShaftLeft - 13.5, -46.25, (i * FloorHeight) + (RiserHeight * 11) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 13.5, -46.25 + 7.71, -ShaftLeft - 15, -46.25, (i * FloorHeight) + (RiserHeight * 10) + FloorHeight
+    Stairs(i).AddFloor GetTex("stairs"), -ShaftLeft - 15, -46.25 + 7.71, -ShaftLeft - 16, -46.25, (i * FloorHeight) + (RiserHeight * 9) + FloorHeight
+    
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 6, -46.25, -ShaftLeft - 6, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 15) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 7.5, -46.25, -ShaftLeft - 7.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 14) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 9, -46.25, -ShaftLeft - 9, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 13) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 10.5, -46.25, -ShaftLeft - 10.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 12) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 12, -46.25, -ShaftLeft - 12, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 11) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 13.5, -46.25, -ShaftLeft - 13.5, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 10) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 15, -46.25, -ShaftLeft - 15, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 9) + FloorHeight
+    Stairs(i).AddWall GetTex("stairs"), -ShaftLeft - 16, -46.25, -ShaftLeft - 16, -46.25 + 7.71, RiserHeight, (i * FloorHeight) + (RiserHeight * 8) + FloorHeight
     
     'Floor Signs
-    Stairs(i).AddWall GetTex("FloorSign"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 11 - 0.4, 1, 1
-    Stairs(i).AddWall GetTex("Button" + Mid$(Str$(i), 2)), -12.5 - 0.51, -42.5, -12.5 - 0.51, -44.5, 1.5, ((i * FloorHeight) + FloorHeight) + 9.5, 1, 1
-    If i >= 2 And i <= 79 Then Stairs(i).AddWall GetTex("FloorSignOffices"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i = 80 Then Stairs(i).AddWall GetTex("FloorSignSkylobby"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i >= 81 And i <= 99 Then Stairs(i).AddWall GetTex("FloorSignHotel"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i >= 100 And i <= 114 Then Stairs(i).AddWall GetTex("FloorSignResidential"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i >= 115 And i <= 117 Then Stairs(i).AddWall GetTex("FloorSignMaint"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i >= 118 And i <= 129 Then Stairs(i).AddWall GetTex("FloorSignResidential"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i = 130 Or i = 131 Then Stairs(i).AddWall GetTex("FloorSignMaint"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i = 132 Then Stairs(i).AddWall GetTex("FloorSignObservatory"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i = 133 Then Stairs(i).AddWall GetTex("FloorSignMaint"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i = 134 Then Stairs(i).AddWall GetTex("FloorSignPool"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i = 135 Then Stairs(i).AddWall GetTex("FloorSignBallroom"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i = 136 Then Stairs(i).AddWall GetTex("FloorSignBalcony"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
-    If i = 137 Then Stairs(i).AddWall GetTex("FloorSignMechanical"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    Stairs(i).AddWall GetTex("FloorSign"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 11 - 0.4, 1, 1
+    Stairs(i).AddWall GetTex("Button" + Mid$(Str$(i), 2)), -ShaftLeft - 0.51, -42.5, -ShaftLeft - 0.51, -44.5, 1.5, ((i * FloorHeight) + FloorHeight) + 9.5, 1, 1
+    If i >= 2 And i <= 79 Then Stairs(i).AddWall GetTex("FloorSignOffices"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i = 80 Then Stairs(i).AddWall GetTex("FloorSignSkylobby"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i >= 81 And i <= 99 Then Stairs(i).AddWall GetTex("FloorSignHotel"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i >= 100 And i <= 114 Then Stairs(i).AddWall GetTex("FloorSignResidential"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i >= 115 And i <= 117 Then Stairs(i).AddWall GetTex("FloorSignMaint"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i >= 118 And i <= 129 Then Stairs(i).AddWall GetTex("FloorSignResidential"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i = 130 Or i = 131 Then Stairs(i).AddWall GetTex("FloorSignMaint"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i = 132 Then Stairs(i).AddWall GetTex("FloorSignObservatory"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i = 133 Then Stairs(i).AddWall GetTex("FloorSignMaint"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i = 134 Then Stairs(i).AddWall GetTex("FloorSignPool"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i = 135 Then Stairs(i).AddWall GetTex("FloorSignBallroom"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i = 136 Then Stairs(i).AddWall GetTex("FloorSignBalcony"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    If i = 137 Then Stairs(i).AddWall GetTex("FloorSignMechanical"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
     
     Next i
     i = 138
-    Stairs(i).AddWall GetTex("FloorSign"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 11 - 0.4, 1, 1
-    Stairs(i).AddWall GetTex("Button" + Mid$(Str$(i), 2)), -12.5 - 0.51, -42.5, -12.5 - 0.51, -44.5, 1.5, ((i * FloorHeight) + FloorHeight) + 9.5, 1, 1
-    Stairs(i).AddWall GetTex("FloorSignRoof"), -12.5 - 0.52, -42.5, -12.5 - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    Stairs(i).AddWall GetTex("FloorSign"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 11 - 0.4, 1, 1
+    Stairs(i).AddWall GetTex("Button" + Mid$(Str$(i), 2)), -ShaftLeft - 0.51, -42.5, -ShaftLeft - 0.51, -44.5, 1.5, ((i * FloorHeight) + FloorHeight) + 9.5, 1, 1
+    Stairs(i).AddWall GetTex("FloorSignRoof"), -ShaftLeft - 0.52, -42.5, -ShaftLeft - 0.52, -44.5, 0.5, ((i * FloorHeight) + FloorHeight) + 9 + 0.3, 1, 1
+    
+    Next ShaftNum
     
 End Sub
 
