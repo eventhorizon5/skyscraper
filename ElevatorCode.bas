@@ -1,5 +1,5 @@
 Attribute VB_Name = "ElevatorCode"
-'Skycraper 0.95b Beta
+'Skycraper 0.96 Beta
 'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -183,2672 +183,413 @@ Buttons(i54).SetPosition 0, 0, 0
 Buttons(i54).SetRotation 0, 0, 0
 Next i54
 
-If Number <= 10 Then Call DrawElevatorButtons1(Number)
-If Number > 10 And Number <= 20 Then Call DrawElevatorButtons2(Number)
-If Number > 20 And Number <= 30 Then Call DrawElevatorButtons3(Number)
-If Number > 30 And Number <= 40 Then Call DrawElevatorButtons4(Number)
-
-End Sub
-
-Sub DrawElevatorButtons1(Number As Integer)
-
-Dim ShaftLeft As Single
-
-ShaftLeft = 12.5
-
-    'each panel can cover 60 floors
+'General Buttons
+Call ElevatorButton(139, "Open", Number, 56)
+Call ElevatorButton(140, "Close", Number, 57)
+Call ElevatorButton(141, "Cancel", Number, 58)
+Call ElevatorButton(142, "Stop", Number, 59)
+Call ElevatorButton(143, "Alarm", Number, 60)
+    
 'Elevator 1
 If Number = 1 Then
 
-    'Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
+    Call ElevatorButton(134, "134", Number, 6)
+    Call ElevatorButton(135, "135", Number, 7)
+    Call ElevatorButton(136, "136", Number, 8)
+    Call ElevatorButton(137, "137", Number, 9)
+    Call ElevatorButton(138, "R", Number, 10)
     
-    Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
+    Call ElevatorButton(129, "129", Number, 11)
+    Call ElevatorButton(130, "130", Number, 12)
+    Call ElevatorButton(131, "131", Number, 13)
+    Call ElevatorButton(132, "132", Number, 14)
+    Call ElevatorButton(133, "133", Number, 15)
     
-    Buttons(129).AddWall GetTex("Button129"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(130).AddWall GetTex("Button130"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(131).AddWall GetTex("Button131"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(132).AddWall GetTex("Button132"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(133).AddWall GetTex("Button133"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
+    Call ElevatorButton(124, "124", Number, 16)
+    Call ElevatorButton(125, "125", Number, 17)
+    Call ElevatorButton(126, "126", Number, 18)
+    Call ElevatorButton(127, "127", Number, 19)
+    Call ElevatorButton(128, "128", Number, 20)
     
-    Buttons(124).AddWall GetTex("Button124"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(125).AddWall GetTex("Button125"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(126).AddWall GetTex("Button126"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(127).AddWall GetTex("Button127"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(128).AddWall GetTex("Button128"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
+    Call ElevatorButton(119, "119", Number, 21)
+    Call ElevatorButton(120, "120", Number, 22)
+    Call ElevatorButton(121, "121", Number, 23)
+    Call ElevatorButton(122, "122", Number, 24)
+    Call ElevatorButton(123, "123", Number, 25)
     
-    Buttons(119).AddWall GetTex("Button119"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(120).AddWall GetTex("Button120"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(121).AddWall GetTex("Button121"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(122).AddWall GetTex("Button122"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(123).AddWall GetTex("Button123"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
+    Call ElevatorButton(114, "114", Number, 26)
+    Call ElevatorButton(115, "115", Number, 27)
+    Call ElevatorButton(116, "116", Number, 28)
+    Call ElevatorButton(117, "117", Number, 29)
+    Call ElevatorButton(118, "118", Number, 30)
     
-    Buttons(114).AddWall GetTex("Button114"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(115).AddWall GetTex("Button115"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(116).AddWall GetTex("Button116"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(117).AddWall GetTex("Button117"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(118).AddWall GetTex("Button118"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
+    Call ElevatorButton(109, "109", Number, 31)
+    Call ElevatorButton(110, "110", Number, 32)
+    Call ElevatorButton(111, "111", Number, 33)
+    Call ElevatorButton(112, "112", Number, 34)
+    Call ElevatorButton(113, "113", Number, 35)
     
-    Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(110).AddWall GetTex("Button110"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(111).AddWall GetTex("Button111"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(112).AddWall GetTex("Button112"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(113).AddWall GetTex("Button113"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
+    Call ElevatorButton(104, "104", Number, 36)
+    Call ElevatorButton(105, "105", Number, 37)
+    Call ElevatorButton(106, "106", Number, 38)
+    Call ElevatorButton(107, "107", Number, 39)
+    Call ElevatorButton(108, "108", Number, 40)
     
-    Buttons(104).AddWall GetTex("Button104"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(106).AddWall GetTex("Button106"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(107).AddWall GetTex("Button107"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(108).AddWall GetTex("Button108"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
+    Call ElevatorButton(79, "79", Number, 41)
+    Call ElevatorButton(80, "80", Number, 42)
+    Call ElevatorButton(101, "101", Number, 43)
+    Call ElevatorButton(102, "102", Number, 44)
+    Call ElevatorButton(103, "103", Number, 45)
     
-    Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(101).AddWall GetTex("Button101"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(102).AddWall GetTex("Button102"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(103).AddWall GetTex("Button103"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
+    Call ElevatorButton(-1, "L", Number, 46)
+    Call ElevatorButton(0, "M", Number, 47)
+    Call ElevatorButton(2, "2", Number, 48)
+    Call ElevatorButton(39, "39", Number, 49)
+    Call ElevatorButton(40, "40", Number, 50)
     
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(0).AddWall GetTex("ButtonM"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(40).AddWall GetTex("Button40"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(0).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(2).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(40).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
 End If
 
 'Elevator 2
-If Number = 2 Then
+If Number >= 2 And Number <= 4 Then
 
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft+0.17), -18.45  + 0.8, (ShaftLeft+0.17), -18.15  + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    'Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(131).AddWall GetTex("Button131"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft+0.17), -18.45  + 0.8, (ShaftLeft+0.17), -18.15  + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    'Buttons(133).AddWall GetTex("Button133"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    
-    'Buttons(115).AddWall GetTex("Button115"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    'Buttons(116).AddWall GetTex("Button116"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(136).AddWall GetTex("Button136"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(118).AddWall GetTex("Button118"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    'Buttons(129).AddWall GetTex("Button129"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    
-    'Buttons(110).AddWall GetTex("Button110"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    'Buttons(111).AddWall GetTex("Button111"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(135).AddWall GetTex("Button135"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(113).AddWall GetTex("Button113"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    'Buttons(114).AddWall GetTex("Button114"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    'Buttons(106).AddWall GetTex("Button106"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(134).AddWall GetTex("Button134"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(108).AddWall GetTex("Button108"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    'Buttons(109).AddWall GetTex("Button109"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    
-    'Buttons(100).AddWall GetTex("Button100"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    'Buttons(101).AddWall GetTex("Button101"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(132).AddWall GetTex("Button132"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(103).AddWall GetTex("Button103"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    'Buttons(104).AddWall GetTex("Button104"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    
-    'Buttons(95).AddWall GetTex("Button95"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(80).AddWall GetTex("Button80"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(98).AddWall GetTex("Button98"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    'Buttons(91).AddWall GetTex("Button91"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(0).AddWall GetTex("ButtonM"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(93).AddWall GetTex("Button93"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    'Buttons(94).AddWall GetTex("Button94"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    
-    'Buttons(85).AddWall GetTex("Button85"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    'Buttons(86).AddWall GetTex("Button86"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(88).AddWall GetTex("Button88"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    'Buttons(89).AddWall GetTex("Button89"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    
-    'Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    
-    'Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(40).AddWall GetTex("Button40"), (ShaftLeft+0.17), -18.45  + 0.8, (ShaftLeft+0.17), -18.15  + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
+    Call ElevatorButton(136, "136", Number, 13)
+    Call ElevatorButton(135, "135", Number, 18)
+    Call ElevatorButton(134, "134", Number, 23)
+    Call ElevatorButton(132, "132", Number, 28)
+    Call ElevatorButton(80, "80", Number, 33)
+    Call ElevatorButton(0, "M", Number, 38)
+    Call ElevatorButton(-1, "L", Number, 43)
 
 End If
 
-'Elevator 3
-If Number = 3 Then
+If Number >= 5 And Number <= 10 Then
 
-    'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
+    Call ElevatorButton(127, "127", Number, 7)
+    Call ElevatorButton(128, "128", Number, 8)
+    Call ElevatorButton(129, "129", Number, 9)
     
-    'Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(131).AddWall GetTex("Button131"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    'Buttons(133).AddWall GetTex("Button133"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
+    Call ElevatorButton(124, "124", Number, 12)
+    Call ElevatorButton(125, "125", Number, 13)
+    Call ElevatorButton(126, "126", Number, 14)
     
-    'Buttons(115).AddWall GetTex("Button115"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    'Buttons(116).AddWall GetTex("Button116"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    'Buttons(118).AddWall GetTex("Button118"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    'Buttons(129).AddWall GetTex("Button129"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
+    Call ElevatorButton(121, "121", Number, 17)
+    Call ElevatorButton(122, "122", Number, 18)
+    Call ElevatorButton(123, "123", Number, 19)
     
-    'Buttons(110).AddWall GetTex("Button110"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    'Buttons(111).AddWall GetTex("Button111"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    'Buttons(113).AddWall GetTex("Button113"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    'Buttons(114).AddWall GetTex("Button114"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
+    Call ElevatorButton(118, "118", Number, 22)
+    Call ElevatorButton(119, "119", Number, 23)
+    Call ElevatorButton(120, "120", Number, 24)
     
-    'Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    'Buttons(106).AddWall GetTex("Button106"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    'Buttons(108).AddWall GetTex("Button108"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    'Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
+    Call ElevatorButton(112, "112", Number, 27)
+    Call ElevatorButton(113, "113", Number, 28)
+    Call ElevatorButton(114, "114", Number, 29)
     
-    'Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    'Buttons(101).AddWall GetTex("Button101"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(132).AddWall GetTex("Button132"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(103).AddWall GetTex("Button103"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    'Buttons(104).AddWall GetTex("Button104"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
+    Call ElevatorButton(109, "109", Number, 32)
+    Call ElevatorButton(110, "110", Number, 33)
+    Call ElevatorButton(111, "111", Number, 34)
     
-    'Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(98).AddWall GetTex("Button98"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
+    Call ElevatorButton(106, "106", Number, 37)
+    Call ElevatorButton(107, "107", Number, 38)
+    Call ElevatorButton(108, "108", Number, 39)
     
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    'Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    Buttons(0).AddWall GetTex("ButtonM"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    'Buttons(93).AddWall GetTex("Button93"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    'Buttons(94).AddWall GetTex("Button94"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
+    Call ElevatorButton(103, "103", Number, 42)
+    Call ElevatorButton(104, "104", Number, 43)
+    Call ElevatorButton(105, "105", Number, 44)
     
-    'Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    'Buttons(86).AddWall GetTex("Button86"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    'Buttons(88).AddWall GetTex("Button88"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    'Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
+    Call ElevatorButton(100, "100", Number, 47)
+    Call ElevatorButton(101, "101", Number, 48)
+    Call ElevatorButton(102, "102", Number, 49)
     
-    'Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
+    Call ElevatorButton(80, "80", Number, 53)
     
-    'Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(40).AddWall GetTex("Button40"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
 End If
 
-'Elevator 4
-If Number = 4 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    'Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(131).AddWall GetTex("Button131"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    'Buttons(133).AddWall GetTex("Button133"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    
-    'Buttons(115).AddWall GetTex("Button115"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    'Buttons(116).AddWall GetTex("Button116"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(136).AddWall GetTex("Button136"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(118).AddWall GetTex("Button118"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    'Buttons(129).AddWall GetTex("Button129"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    
-    'Buttons(110).AddWall GetTex("Button110"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    'Buttons(111).AddWall GetTex("Button111"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(135).AddWall GetTex("Button135"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(113).AddWall GetTex("Button113"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    'Buttons(114).AddWall GetTex("Button114"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    'Buttons(106).AddWall GetTex("Button106"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(134).AddWall GetTex("Button134"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(108).AddWall GetTex("Button108"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    'Buttons(109).AddWall GetTex("Button109"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    
-    'Buttons(100).AddWall GetTex("Button100"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    'Buttons(101).AddWall GetTex("Button101"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(132).AddWall GetTex("Button132"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(103).AddWall GetTex("Button103"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    'Buttons(104).AddWall GetTex("Button104"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    
-    'Buttons(95).AddWall GetTex("Button95"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(80).AddWall GetTex("Button80"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(98).AddWall GetTex("Button98"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    'Buttons(91).AddWall GetTex("Button91"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(0).AddWall GetTex("ButtonM"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(93).AddWall GetTex("Button93"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    'Buttons(94).AddWall GetTex("Button94"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    
-    'Buttons(85).AddWall GetTex("Button85"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    'Buttons(86).AddWall GetTex("Button86"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(88).AddWall GetTex("Button88"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    'Buttons(89).AddWall GetTex("Button89"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    
-    'Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    
-    'Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(40).AddWall GetTex("Button40"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 5
-If Number = 5 Then
-
-    'Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    
-    'Buttons(128).AddWall GetTex("Button128"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(127).AddWall GetTex("Button127"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(128).AddWall GetTex("Button128"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(129).AddWall GetTex("Button129"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    'Buttons(123).AddWall GetTex("Button123"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    Buttons(124).AddWall GetTex("Button124"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(125).AddWall GetTex("Button125"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(126).AddWall GetTex("Button126"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    'Buttons(127).AddWall GetTex("Button127"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    
-    'Buttons(118).AddWall GetTex("Button118"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    Buttons(121).AddWall GetTex("Button121"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(122).AddWall GetTex("Button122"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(123).AddWall GetTex("Button123"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    'Buttons(122).AddWall GetTex("Button122"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    Buttons(118).AddWall GetTex("Button118"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(119).AddWall GetTex("Button119"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(120).AddWall GetTex("Button120"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    'Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    
-    'Buttons(110).AddWall GetTex("Button110"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(112).AddWall GetTex("Button112"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(113).AddWall GetTex("Button113"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(114).AddWall GetTex("Button114"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(114).AddWall GetTex("Button114"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(110).AddWall GetTex("Button110"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(111).AddWall GetTex("Button111"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    
-    'Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    Buttons(106).AddWall GetTex("Button106"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(107).AddWall GetTex("Button107"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(108).AddWall GetTex("Button108"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    'Buttons(104).AddWall GetTex("Button104"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    
-    'Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    Buttons(103).AddWall GetTex("Button103"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(104).AddWall GetTex("Button104"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    'Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(101).AddWall GetTex("Button101"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(102).AddWall GetTex("Button102"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 6
-If Number = 6 Then
-
-    'Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    
-    'Buttons(128).AddWall GetTex("Button128"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(127).AddWall GetTex("Button127"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(128).AddWall GetTex("Button128"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(129).AddWall GetTex("Button129"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    'Buttons(123).AddWall GetTex("Button123"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(124).AddWall GetTex("Button124"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(125).AddWall GetTex("Button125"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(126).AddWall GetTex("Button126"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(127).AddWall GetTex("Button127"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    
-    'Buttons(118).AddWall GetTex("Button118"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(121).AddWall GetTex("Button121"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(122).AddWall GetTex("Button122"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(123).AddWall GetTex("Button123"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(122).AddWall GetTex("Button122"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(118).AddWall GetTex("Button118"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(119).AddWall GetTex("Button119"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(120).AddWall GetTex("Button120"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(109).AddWall GetTex("Button109"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    
-    'Buttons(110).AddWall GetTex("Button110"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(112).AddWall GetTex("Button112"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(113).AddWall GetTex("Button113"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(114).AddWall GetTex("Button114"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(114).AddWall GetTex("Button114"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(109).AddWall GetTex("Button109"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(110).AddWall GetTex("Button110"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(111).AddWall GetTex("Button111"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(109).AddWall GetTex("Button109"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    
-    'Buttons(100).AddWall GetTex("Button100"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(106).AddWall GetTex("Button106"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(107).AddWall GetTex("Button107"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(108).AddWall GetTex("Button108"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(104).AddWall GetTex("Button104"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    
-    'Buttons(85).AddWall GetTex("Button85"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(103).AddWall GetTex("Button103"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(104).AddWall GetTex("Button104"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(105).AddWall GetTex("Button105"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(89).AddWall GetTex("Button89"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(100).AddWall GetTex("Button100"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    Buttons(101).AddWall GetTex("Button101"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    Buttons(102).AddWall GetTex("Button102"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(80).AddWall GetTex("Button80"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    Buttons(80).AddWall GetTex("Button80"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    'Buttons(100).AddWall GetTex("Button100"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 7
-If Number = 7 Then
-
-    'Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    
-    'Buttons(128).AddWall GetTex("Button128"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(127).AddWall GetTex("Button127"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(128).AddWall GetTex("Button128"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(129).AddWall GetTex("Button129"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    'Buttons(123).AddWall GetTex("Button123"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    Buttons(124).AddWall GetTex("Button124"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(125).AddWall GetTex("Button125"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(126).AddWall GetTex("Button126"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    'Buttons(127).AddWall GetTex("Button127"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    
-    'Buttons(118).AddWall GetTex("Button118"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    Buttons(121).AddWall GetTex("Button121"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(122).AddWall GetTex("Button122"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(123).AddWall GetTex("Button123"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    'Buttons(122).AddWall GetTex("Button122"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    Buttons(118).AddWall GetTex("Button118"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(119).AddWall GetTex("Button119"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(120).AddWall GetTex("Button120"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    'Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    
-    'Buttons(110).AddWall GetTex("Button110"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(112).AddWall GetTex("Button112"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(113).AddWall GetTex("Button113"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(114).AddWall GetTex("Button114"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(114).AddWall GetTex("Button114"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(110).AddWall GetTex("Button110"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(111).AddWall GetTex("Button111"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    
-    'Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    Buttons(106).AddWall GetTex("Button106"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(107).AddWall GetTex("Button107"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(108).AddWall GetTex("Button108"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    'Buttons(104).AddWall GetTex("Button104"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    
-    'Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    Buttons(103).AddWall GetTex("Button103"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(104).AddWall GetTex("Button104"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    'Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(101).AddWall GetTex("Button101"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(102).AddWall GetTex("Button102"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 8
-If Number = 8 Then
-
-    'Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    
-    'Buttons(128).AddWall GetTex("Button128"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(127).AddWall GetTex("Button127"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(128).AddWall GetTex("Button128"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(129).AddWall GetTex("Button129"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    'Buttons(123).AddWall GetTex("Button123"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(124).AddWall GetTex("Button124"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(125).AddWall GetTex("Button125"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(126).AddWall GetTex("Button126"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(127).AddWall GetTex("Button127"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    
-    'Buttons(118).AddWall GetTex("Button118"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(121).AddWall GetTex("Button121"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(122).AddWall GetTex("Button122"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(123).AddWall GetTex("Button123"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(122).AddWall GetTex("Button122"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(118).AddWall GetTex("Button118"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(119).AddWall GetTex("Button119"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(120).AddWall GetTex("Button120"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(109).AddWall GetTex("Button109"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    
-    'Buttons(110).AddWall GetTex("Button110"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(112).AddWall GetTex("Button112"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(113).AddWall GetTex("Button113"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(114).AddWall GetTex("Button114"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(114).AddWall GetTex("Button114"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(109).AddWall GetTex("Button109"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(110).AddWall GetTex("Button110"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(111).AddWall GetTex("Button111"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(109).AddWall GetTex("Button109"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    
-    'Buttons(100).AddWall GetTex("Button100"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(106).AddWall GetTex("Button106"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(107).AddWall GetTex("Button107"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(108).AddWall GetTex("Button108"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(104).AddWall GetTex("Button104"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    
-    'Buttons(85).AddWall GetTex("Button85"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(103).AddWall GetTex("Button103"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(104).AddWall GetTex("Button104"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(105).AddWall GetTex("Button105"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(89).AddWall GetTex("Button89"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(100).AddWall GetTex("Button100"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    Buttons(101).AddWall GetTex("Button101"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    Buttons(102).AddWall GetTex("Button102"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(80).AddWall GetTex("Button80"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    Buttons(80).AddWall GetTex("Button80"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    'Buttons(100).AddWall GetTex("Button100"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 9
-If Number = 9 Then
-
-    'Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    
-    'Buttons(128).AddWall GetTex("Button128"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(127).AddWall GetTex("Button127"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(128).AddWall GetTex("Button128"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(129).AddWall GetTex("Button129"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    'Buttons(123).AddWall GetTex("Button123"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    Buttons(124).AddWall GetTex("Button124"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(125).AddWall GetTex("Button125"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(126).AddWall GetTex("Button126"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    'Buttons(127).AddWall GetTex("Button127"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    
-    'Buttons(118).AddWall GetTex("Button118"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    Buttons(121).AddWall GetTex("Button121"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(122).AddWall GetTex("Button122"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(123).AddWall GetTex("Button123"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    'Buttons(122).AddWall GetTex("Button122"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    Buttons(118).AddWall GetTex("Button118"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(119).AddWall GetTex("Button119"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(120).AddWall GetTex("Button120"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    'Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    
-    'Buttons(110).AddWall GetTex("Button110"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(112).AddWall GetTex("Button112"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(113).AddWall GetTex("Button113"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(114).AddWall GetTex("Button114"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(114).AddWall GetTex("Button114"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(110).AddWall GetTex("Button110"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(111).AddWall GetTex("Button111"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    
-    'Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    Buttons(106).AddWall GetTex("Button106"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(107).AddWall GetTex("Button107"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(108).AddWall GetTex("Button108"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    'Buttons(104).AddWall GetTex("Button104"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    
-    'Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    Buttons(103).AddWall GetTex("Button103"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(104).AddWall GetTex("Button104"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    'Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(101).AddWall GetTex("Button101"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(102).AddWall GetTex("Button102"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 10
-If Number = 10 Then
-
-    'Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    
-    'Buttons(128).AddWall GetTex("Button128"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(127).AddWall GetTex("Button127"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(128).AddWall GetTex("Button128"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(129).AddWall GetTex("Button129"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    'Buttons(123).AddWall GetTex("Button123"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(124).AddWall GetTex("Button124"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(125).AddWall GetTex("Button125"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(126).AddWall GetTex("Button126"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(127).AddWall GetTex("Button127"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    
-    'Buttons(118).AddWall GetTex("Button118"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(121).AddWall GetTex("Button121"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(122).AddWall GetTex("Button122"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(123).AddWall GetTex("Button123"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(122).AddWall GetTex("Button122"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(118).AddWall GetTex("Button118"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(119).AddWall GetTex("Button119"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(120).AddWall GetTex("Button120"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(109).AddWall GetTex("Button109"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    
-    'Buttons(110).AddWall GetTex("Button110"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(112).AddWall GetTex("Button112"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(113).AddWall GetTex("Button113"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(114).AddWall GetTex("Button114"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(114).AddWall GetTex("Button114"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(109).AddWall GetTex("Button109"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(110).AddWall GetTex("Button110"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(111).AddWall GetTex("Button111"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(109).AddWall GetTex("Button109"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    
-    'Buttons(100).AddWall GetTex("Button100"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(106).AddWall GetTex("Button106"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(107).AddWall GetTex("Button107"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(108).AddWall GetTex("Button108"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(104).AddWall GetTex("Button104"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    
-    'Buttons(85).AddWall GetTex("Button85"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(103).AddWall GetTex("Button103"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(104).AddWall GetTex("Button104"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(105).AddWall GetTex("Button105"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(89).AddWall GetTex("Button89"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(100).AddWall GetTex("Button100"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    Buttons(101).AddWall GetTex("Button101"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    Buttons(102).AddWall GetTex("Button102"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(80).AddWall GetTex("Button80"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    Buttons(80).AddWall GetTex("Button80"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    'Buttons(100).AddWall GetTex("Button100"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-End Sub
-
-
-Sub DrawElevatorButtons2(Number As Integer)
-'Elevator Buttons
-Dim ShaftLeft As Single
-ShaftLeft = 52.5
     
 If Number = 11 Then
 
-    Buttons(51).AddWall GetTex("Button51"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    Buttons(115).AddWall GetTex("Button115"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    Buttons(116).AddWall GetTex("Button116"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    'Buttons(117).AddWall GetTex("Button117"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
+    Call ElevatorButton(51, "51", Number, 1)
+    Call ElevatorButton(80, "80", Number, 2)
+    Call ElevatorButton(115, "115", Number, 3)
+    Call ElevatorButton(116, "116", Number, 4)
     
-    Buttons(46).AddWall GetTex("Button46"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(47).AddWall GetTex("Button47"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(48).AddWall GetTex("Button48"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(49).AddWall GetTex("Button49"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(50).AddWall GetTex("Button50"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
+    Call ElevatorButton(46, "46", Number, 6)
+    Call ElevatorButton(47, "47", Number, 7)
+    Call ElevatorButton(48, "48", Number, 8)
+    Call ElevatorButton(49, "49", Number, 9)
+    Call ElevatorButton(50, "50", Number, 10)
     
-    Buttons(41).AddWall GetTex("Button41"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(42).AddWall GetTex("Button42"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(43).AddWall GetTex("Button43"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(44).AddWall GetTex("Button44"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(45).AddWall GetTex("Button45"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
+    Call ElevatorButton(41, "41", Number, 11)
+    Call ElevatorButton(42, "42", Number, 12)
+    Call ElevatorButton(43, "43", Number, 13)
+    Call ElevatorButton(44, "44", Number, 14)
+    Call ElevatorButton(45, "45", Number, 15)
     
-    Buttons(36).AddWall GetTex("Button36"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(38).AddWall GetTex("Button38"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(40).AddWall GetTex("Button40"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
+    Call ElevatorButton(36, "36", Number, 16)
+    Call ElevatorButton(37, "37", Number, 17)
+    Call ElevatorButton(38, "38", Number, 18)
+    Call ElevatorButton(39, "39", Number, 19)
+    Call ElevatorButton(40, "40", Number, 20)
     
-    Buttons(31).AddWall GetTex("Button31"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(32).AddWall GetTex("Button32"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(33).AddWall GetTex("Button33"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(34).AddWall GetTex("Button34"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(35).AddWall GetTex("Button35"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
+    Call ElevatorButton(31, "31", Number, 21)
+    Call ElevatorButton(32, "32", Number, 22)
+    Call ElevatorButton(33, "33", Number, 23)
+    Call ElevatorButton(34, "34", Number, 24)
+    Call ElevatorButton(35, "35", Number, 25)
     
-    Buttons(26).AddWall GetTex("Button26"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(27).AddWall GetTex("Button27"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(28).AddWall GetTex("Button28"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(29).AddWall GetTex("Button29"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(30).AddWall GetTex("Button30"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
+    Call ElevatorButton(26, "26", Number, 26)
+    Call ElevatorButton(27, "27", Number, 27)
+    Call ElevatorButton(28, "28", Number, 28)
+    Call ElevatorButton(29, "29", Number, 29)
+    Call ElevatorButton(30, "30", Number, 30)
     
-    Buttons(21).AddWall GetTex("Button21"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(22).AddWall GetTex("Button22"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(23).AddWall GetTex("Button23"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(24).AddWall GetTex("Button24"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(25).AddWall GetTex("Button25"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
+    Call ElevatorButton(21, "21", Number, 31)
+    Call ElevatorButton(22, "22", Number, 32)
+    Call ElevatorButton(23, "23", Number, 33)
+    Call ElevatorButton(24, "24", Number, 34)
+    Call ElevatorButton(25, "25", Number, 35)
     
-    Buttons(16).AddWall GetTex("Button16"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(17).AddWall GetTex("Button17"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(18).AddWall GetTex("Button18"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(19).AddWall GetTex("Button19"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(20).AddWall GetTex("Button20"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
+    Call ElevatorButton(16, "16", Number, 36)
+    Call ElevatorButton(17, "17", Number, 37)
+    Call ElevatorButton(18, "18", Number, 38)
+    Call ElevatorButton(19, "19", Number, 39)
+    Call ElevatorButton(20, "20", Number, 40)
     
-    Buttons(11).AddWall GetTex("Button11"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(12).AddWall GetTex("Button12"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(13).AddWall GetTex("Button13"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(14).AddWall GetTex("Button14"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(15).AddWall GetTex("Button15"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
+    Call ElevatorButton(11, "11", Number, 41)
+    Call ElevatorButton(12, "12", Number, 42)
+    Call ElevatorButton(13, "13", Number, 43)
+    Call ElevatorButton(14, "14", Number, 44)
+    Call ElevatorButton(15, "15", Number, 45)
     
-    Buttons(6).AddWall GetTex("Button6"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    Buttons(7).AddWall GetTex("Button7"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    Buttons(8).AddWall GetTex("Button8"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    Buttons(9).AddWall GetTex("Button9"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    Buttons(10).AddWall GetTex("Button10"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
+    Call ElevatorButton(6, "6", Number, 46)
+    Call ElevatorButton(7, "7", Number, 47)
+    Call ElevatorButton(8, "8", Number, 48)
+    Call ElevatorButton(9, "9", Number, 49)
+    Call ElevatorButton(10, "10", Number, 50)
     
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    Buttons(3).AddWall GetTex("Button3"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    Buttons(4).AddWall GetTex("Button4"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    Buttons(5).AddWall GetTex("Button5"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
+    Call ElevatorButton(-1, "L", Number, 51)
+    Call ElevatorButton(2, "2", Number, 52)
+    Call ElevatorButton(3, "3", Number, 53)
+    Call ElevatorButton(4, "4", Number, 54)
+    Call ElevatorButton(5, "5", Number, 55)
     
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
 End If
 
-'Elevator 2
 If Number = 12 Then
 
-    Buttons(100).AddWall GetTex("Button100"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    Buttons(101).AddWall GetTex("Button101"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    Buttons(115).AddWall GetTex("Button115"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    Buttons(116).AddWall GetTex("Button116"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    'Buttons(117).AddWall GetTex("Button117"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
+    Call ElevatorButton(100, "100", Number, 1)
+    Call ElevatorButton(101, "101", Number, 2)
+    Call ElevatorButton(115, "115", Number, 3)
+    Call ElevatorButton(116, "116", Number, 4)
     
-    Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(97).AddWall GetTex("Button97"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(98).AddWall GetTex("Button98"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
+    Call ElevatorButton(95, "95", Number, 6)
+    Call ElevatorButton(96, "96", Number, 7)
+    Call ElevatorButton(97, "97", Number, 8)
+    Call ElevatorButton(98, "98", Number, 9)
+    Call ElevatorButton(99, "99", Number, 10)
     
-    Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(92).AddWall GetTex("Button92"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(93).AddWall GetTex("Button93"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(94).AddWall GetTex("Button94"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
+    Call ElevatorButton(90, "90", Number, 11)
+    Call ElevatorButton(91, "91", Number, 12)
+    Call ElevatorButton(92, "92", Number, 13)
+    Call ElevatorButton(93, "93", Number, 14)
+    Call ElevatorButton(94, "94", Number, 15)
     
-    Buttons(85).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(86).AddWall GetTex("Button86"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(87).AddWall GetTex("Button87"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(88).AddWall GetTex("Button88"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(89).AddWall GetTex("Button89"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
+    Call ElevatorButton(85, "85", Number, 16)
+    Call ElevatorButton(86, "86", Number, 17)
+    Call ElevatorButton(87, "87", Number, 18)
+    Call ElevatorButton(88, "88", Number, 19)
+    Call ElevatorButton(89, "89", Number, 20)
     
-    Buttons(80).AddWall GetTex("Button80"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(82).AddWall GetTex("Button82"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(83).AddWall GetTex("Button83"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
+    Call ElevatorButton(80, "80", Number, 21)
+    Call ElevatorButton(81, "81", Number, 22)
+    Call ElevatorButton(82, "82", Number, 23)
+    Call ElevatorButton(83, "83", Number, 24)
+    Call ElevatorButton(84, "84", Number, 25)
     
-    Buttons(75).AddWall GetTex("Button75"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(76).AddWall GetTex("Button76"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(77).AddWall GetTex("Button77"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(78).AddWall GetTex("Button78"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(79).AddWall GetTex("Button79"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
+    Call ElevatorButton(75, "75", Number, 26)
+    Call ElevatorButton(76, "76", Number, 27)
+    Call ElevatorButton(77, "77", Number, 28)
+    Call ElevatorButton(78, "78", Number, 29)
+    Call ElevatorButton(79, "79", Number, 30)
     
-    Buttons(70).AddWall GetTex("Button70"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(71).AddWall GetTex("Button71"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(72).AddWall GetTex("Button72"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(73).AddWall GetTex("Button73"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(74).AddWall GetTex("Button74"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
+    Call ElevatorButton(70, "70", Number, 31)
+    Call ElevatorButton(71, "71", Number, 32)
+    Call ElevatorButton(72, "72", Number, 33)
+    Call ElevatorButton(73, "73", Number, 34)
+    Call ElevatorButton(74, "74", Number, 35)
     
-    Buttons(65).AddWall GetTex("Button65"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(66).AddWall GetTex("Button66"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(67).AddWall GetTex("Button67"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(68).AddWall GetTex("Button68"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(69).AddWall GetTex("Button69"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
+    Call ElevatorButton(65, "65", Number, 36)
+    Call ElevatorButton(66, "66", Number, 37)
+    Call ElevatorButton(67, "67", Number, 38)
+    Call ElevatorButton(68, "68", Number, 39)
+    Call ElevatorButton(69, "69", Number, 40)
     
-    Buttons(60).AddWall GetTex("Button60"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(61).AddWall GetTex("Button61"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(62).AddWall GetTex("Button62"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(63).AddWall GetTex("Button63"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(64).AddWall GetTex("Button64"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
+    Call ElevatorButton(60, "60", Number, 41)
+    Call ElevatorButton(61, "61", Number, 42)
+    Call ElevatorButton(62, "62", Number, 43)
+    Call ElevatorButton(63, "63", Number, 44)
+    Call ElevatorButton(64, "64", Number, 45)
     
-    Buttons(55).AddWall GetTex("Button55"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(56).AddWall GetTex("Button56"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(57).AddWall GetTex("Button57"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(58).AddWall GetTex("Button58"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    Buttons(59).AddWall GetTex("Button59"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
+    Call ElevatorButton(55, "55", Number, 46)
+    Call ElevatorButton(56, "56", Number, 47)
+    Call ElevatorButton(57, "57", Number, 48)
+    Call ElevatorButton(58, "58", Number, 49)
+    Call ElevatorButton(59, "59", Number, 50)
     
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    Buttons(51).AddWall GetTex("Button51"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    Buttons(52).AddWall GetTex("Button52"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    Buttons(53).AddWall GetTex("Button53"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    Buttons(54).AddWall GetTex("Button54"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
+    Call ElevatorButton(-1, "L", Number, 51)
+    Call ElevatorButton(51, "51", Number, 52)
+    Call ElevatorButton(52, "52", Number, 53)
+    Call ElevatorButton(53, "53", Number, 54)
+    Call ElevatorButton(54, "54", Number, 55)
     
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
 End If
 
-'Elevator 3
-If Number = 13 Then
+If Number = 13 Or Number = 14 Then
 
-'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
+    Call ElevatorButton(80, "80", Number, 28)
+    Call ElevatorButton(-1, "L", Number, 33)
     
-    'Buttons(130).AddWall GetTex("Button130"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    'Buttons(131).AddWall GetTex("Button131"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    'Buttons(132).AddWall GetTex("Button132"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    'Buttons(133).AddWall GetTex("Button133"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    'Buttons(115).AddWall GetTex("Button115"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    'Buttons(116).AddWall GetTex("Button116"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    'Buttons(117).AddWall GetTex("Button117"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    'Buttons(118).AddWall GetTex("Button118"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    'Buttons(129).AddWall GetTex("Button129"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    
-    'Buttons(110).AddWall GetTex("Button110"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    'Buttons(111).AddWall GetTex("Button111"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    'Buttons(112).AddWall GetTex("Button112"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    'Buttons(113).AddWall GetTex("Button113"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    'Buttons(114).AddWall GetTex("Button114"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    
-    'Buttons(105).AddWall GetTex("Button105"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    'Buttons(106).AddWall GetTex("Button106"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    'Buttons(107).AddWall GetTex("Button107"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    'Buttons(108).AddWall GetTex("Button108"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    'Buttons(109).AddWall GetTex("Button109"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    
-    'Buttons(100).AddWall GetTex("Button100"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    'Buttons(101).AddWall GetTex("Button101"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(103).AddWall GetTex("Button103"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    'Buttons(104).AddWall GetTex("Button104"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    
-    'Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(98).AddWall GetTex("Button98"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    'Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    'Buttons(92).AddWall GetTex("Button92"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    'Buttons(93).AddWall GetTex("Button93"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    'Buttons(94).AddWall GetTex("Button94"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    
-    'Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    'Buttons(86).AddWall GetTex("Button86"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    'Buttons(87).AddWall GetTex("Button87"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    'Buttons(88).AddWall GetTex("Button88"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    'Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(82).AddWall GetTex("Button82"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(40).AddWall GetTex("Button40"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
 End If
 
-'Elevator 4
-If Number = 14 Then
+If Number >= 15 And Number <= 20 Then
 
-'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
+    Call ElevatorButton(98, "98", Number, 7)
+    Call ElevatorButton(99, "99", Number, 9)
     
-    'Buttons(130).AddWall GetTex("Button130"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    'Buttons(131).AddWall GetTex("Button131"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    'Buttons(132).AddWall GetTex("Button132"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    'Buttons(133).AddWall GetTex("Button133"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
+    Call ElevatorButton(96, "96", Number, 12)
+    Call ElevatorButton(97, "97", Number, 14)
     
-    'Buttons(115).AddWall GetTex("Button115"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    'Buttons(116).AddWall GetTex("Button116"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    'Buttons(117).AddWall GetTex("Button117"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    'Buttons(118).AddWall GetTex("Button118"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    'Buttons(129).AddWall GetTex("Button129"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
+    Call ElevatorButton(94, "94", Number, 17)
+    Call ElevatorButton(95, "95", Number, 19)
     
-    'Buttons(110).AddWall GetTex("Button110"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    'Buttons(111).AddWall GetTex("Button111"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    'Buttons(112).AddWall GetTex("Button112"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    'Buttons(113).AddWall GetTex("Button113"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    'Buttons(114).AddWall GetTex("Button114"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
+    Call ElevatorButton(92, "92", Number, 22)
+    Call ElevatorButton(93, "93", Number, 24)
     
-    'Buttons(105).AddWall GetTex("Button105"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    'Buttons(106).AddWall GetTex("Button106"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    'Buttons(107).AddWall GetTex("Button107"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    'Buttons(108).AddWall GetTex("Button108"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    'Buttons(109).AddWall GetTex("Button109"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
+    Call ElevatorButton(90, "90", Number, 27)
+    Call ElevatorButton(91, "91", Number, 29)
     
-    'Buttons(100).AddWall GetTex("Button100"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    'Buttons(101).AddWall GetTex("Button101"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(80).AddWall GetTex("Button80"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(103).AddWall GetTex("Button103"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    'Buttons(104).AddWall GetTex("Button104"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
+    Call ElevatorButton(88, "88", Number, 32)
+    Call ElevatorButton(89, "89", Number, 34)
     
-    'Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(98).AddWall GetTex("Button98"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
+    Call ElevatorButton(86, "86", Number, 37)
+    Call ElevatorButton(87, "87", Number, 39)
     
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    'Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    'Buttons(92).AddWall GetTex("Button92"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    'Buttons(93).AddWall GetTex("Button93"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    'Buttons(94).AddWall GetTex("Button94"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
+    Call ElevatorButton(84, "84", Number, 42)
+    Call ElevatorButton(85, "85", Number, 44)
     
-    'Buttons(85).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    'Buttons(86).AddWall GetTex("Button86"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    'Buttons(87).AddWall GetTex("Button87"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    'Buttons(88).AddWall GetTex("Button88"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    'Buttons(89).AddWall GetTex("Button89"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
+    Call ElevatorButton(82, "82", Number, 47)
+    Call ElevatorButton(83, "83", Number, 49)
     
-    'Buttons(80).AddWall GetTex("Button80"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(82).AddWall GetTex("Button82"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
+    Call ElevatorButton(80, "80", Number, 52)
+    Call ElevatorButton(81, "81", Number, 54)
     
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(40).AddWall GetTex("Button40"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
+End If
     
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
+If Number >= 21 And Number <= 30 Then
 
+    Call ElevatorButton(75, "75", Number, 6)
+    Call ElevatorButton(76, "76", Number, 7)
+    Call ElevatorButton(77, "77", Number, 8)
+    Call ElevatorButton(78, "78", Number, 9)
+    Call ElevatorButton(79, "79", Number, 10)
+    
+    Call ElevatorButton(70, "70", Number, 11)
+    Call ElevatorButton(71, "71", Number, 12)
+    Call ElevatorButton(72, "72", Number, 13)
+    Call ElevatorButton(73, "73", Number, 14)
+    Call ElevatorButton(74, "74", Number, 15)
+    
+    Call ElevatorButton(65, "65", Number, 16)
+    Call ElevatorButton(66, "66", Number, 17)
+    Call ElevatorButton(67, "67", Number, 18)
+    Call ElevatorButton(68, "68", Number, 19)
+    Call ElevatorButton(69, "69", Number, 20)
+    
+    Call ElevatorButton(60, "60", Number, 21)
+    Call ElevatorButton(61, "61", Number, 22)
+    Call ElevatorButton(62, "62", Number, 23)
+    Call ElevatorButton(63, "63", Number, 24)
+    Call ElevatorButton(64, "64", Number, 25)
+    
+    Call ElevatorButton(55, "55", Number, 26)
+    Call ElevatorButton(56, "56", Number, 27)
+    Call ElevatorButton(57, "57", Number, 28)
+    Call ElevatorButton(58, "58", Number, 29)
+    Call ElevatorButton(59, "59", Number, 30)
+    
+    Call ElevatorButton(50, "50", Number, 31)
+    Call ElevatorButton(51, "51", Number, 32)
+    Call ElevatorButton(52, "52", Number, 33)
+    Call ElevatorButton(53, "53", Number, 34)
+    Call ElevatorButton(54, "54", Number, 35)
+    
+    Call ElevatorButton(45, "45", Number, 36)
+    Call ElevatorButton(46, "46", Number, 37)
+    Call ElevatorButton(47, "47", Number, 38)
+    Call ElevatorButton(48, "48", Number, 39)
+    Call ElevatorButton(49, "49", Number, 40)
+    
+    Call ElevatorButton(40, "40", Number, 41)
+    Call ElevatorButton(41, "41", Number, 42)
+    Call ElevatorButton(42, "42", Number, 43)
+    Call ElevatorButton(43, "43", Number, 44)
+    Call ElevatorButton(44, "44", Number, 45)
+    
+    Call ElevatorButton(-1, "L", Number, 48)
+    
 End If
 
-'Elevator 5
-If Number = 15 Then
+If Number >= 31 And Number <= 40 Then
 
-    'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(97).AddWall GetTex("Button97"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(98).AddWall GetTex("Button98"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
+    Call ElevatorButton(37, "37", Number, 7)
+    Call ElevatorButton(38, "38", Number, 8)
+    Call ElevatorButton(39, "39", Number, 9)
     
-    'Buttons(130).AddWall GetTex("Button130"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(98).AddWall GetTex("Button98"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
+    Call ElevatorButton(32, "32", Number, 11)
+    Call ElevatorButton(33, "33", Number, 12)
+    Call ElevatorButton(34, "34", Number, 13)
+    Call ElevatorButton(35, "35", Number, 14)
+    Call ElevatorButton(36, "36", Number, 15)
     
-    'Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(97).AddWall GetTex("Button97"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
+    Call ElevatorButton(27, "27", Number, 16)
+    Call ElevatorButton(28, "28", Number, 17)
+    Call ElevatorButton(29, "29", Number, 18)
+    Call ElevatorButton(30, "30", Number, 19)
+    Call ElevatorButton(31, "31", Number, 20)
     
-    'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(94).AddWall GetTex("Button94"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
+    Call ElevatorButton(22, "22", Number, 21)
+    Call ElevatorButton(23, "23", Number, 22)
+    Call ElevatorButton(24, "24", Number, 23)
+    Call ElevatorButton(25, "25", Number, 24)
+    Call ElevatorButton(26, "26", Number, 25)
     
-    'Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(92).AddWall GetTex("Button92"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(93).AddWall GetTex("Button93"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(93).AddWall GetTex("Button93"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
+    Call ElevatorButton(17, "17", Number, 26)
+    Call ElevatorButton(18, "18", Number, 27)
+    Call ElevatorButton(19, "19", Number, 28)
+    Call ElevatorButton(20, "20", Number, 29)
+    Call ElevatorButton(21, "21", Number, 30)
     
-    'Buttons(86).AddWall GetTex("Button86"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
+    Call ElevatorButton(12, "12", Number, 31)
+    Call ElevatorButton(13, "13", Number, 32)
+    Call ElevatorButton(14, "14", Number, 33)
+    Call ElevatorButton(15, "15", Number, 34)
+    Call ElevatorButton(16, "16", Number, 35)
     
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(88).AddWall GetTex("Button88"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(87).AddWall GetTex("Button87"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
+    Call ElevatorButton(7, "7", Number, 36)
+    Call ElevatorButton(8, "8", Number, 37)
+    Call ElevatorButton(9, "9", Number, 38)
+    Call ElevatorButton(10, "10", Number, 39)
+    Call ElevatorButton(11, "11", Number, 40)
     
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(86).AddWall GetTex("Button86"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(87).AddWall GetTex("Button87"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(94).AddWall GetTex("Button94"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
+    Call ElevatorButton(2, "2", Number, 41)
+    Call ElevatorButton(3, "3", Number, 42)
+    Call ElevatorButton(4, "4", Number, 43)
+    Call ElevatorButton(5, "5", Number, 44)
+    Call ElevatorButton(6, "6", Number, 45)
     
-    'Buttons(81).AddWall GetTex("Button85"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
+    Call ElevatorButton(-1, "L", Number, 48)
     
-    'Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(82).AddWall GetTex("Button82"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
 End If
-
-'Elevator 6
-If Number = 16 Then
-
-    'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(97).AddWall GetTex("Button97"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(98).AddWall GetTex("Button98"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    'Buttons(130).AddWall GetTex("Button130"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(98).AddWall GetTex("Button98"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    'Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    Buttons(97).AddWall GetTex("Button97"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    'Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    
-    'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    Buttons(94).AddWall GetTex("Button94"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    
-    'Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    Buttons(92).AddWall GetTex("Button92"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    'Buttons(93).AddWall GetTex("Button93"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    Buttons(93).AddWall GetTex("Button93"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    'Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    
-    'Buttons(86).AddWall GetTex("Button86"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(88).AddWall GetTex("Button88"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(87).AddWall GetTex("Button87"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(89).AddWall GetTex("Button89"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(85).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    Buttons(86).AddWall GetTex("Button86"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    Buttons(87).AddWall GetTex("Button87"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    'Buttons(94).AddWall GetTex("Button94"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    
-    'Buttons(81).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    Buttons(85).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    'Buttons(89).AddWall GetTex("Button89"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(82).AddWall GetTex("Button82"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(83).AddWall GetTex("Button83"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    Buttons(80).AddWall GetTex("Button80"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 7
-If Number = 17 Then
-
-'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(97).AddWall GetTex("Button97"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(98).AddWall GetTex("Button98"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    'Buttons(130).AddWall GetTex("Button130"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(98).AddWall GetTex("Button98"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    'Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(97).AddWall GetTex("Button97"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    
-    'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(94).AddWall GetTex("Button94"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    
-    'Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(92).AddWall GetTex("Button92"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(93).AddWall GetTex("Button93"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(93).AddWall GetTex("Button93"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    
-    'Buttons(86).AddWall GetTex("Button86"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(88).AddWall GetTex("Button88"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(87).AddWall GetTex("Button87"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(86).AddWall GetTex("Button86"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(87).AddWall GetTex("Button87"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(94).AddWall GetTex("Button94"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    
-    'Buttons(81).AddWall GetTex("Button85"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(82).AddWall GetTex("Button82"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 8
-If Number = 18 Then
-
-'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(97).AddWall GetTex("Button97"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(98).AddWall GetTex("Button98"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    'Buttons(130).AddWall GetTex("Button130"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(98).AddWall GetTex("Button98"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    'Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    Buttons(97).AddWall GetTex("Button97"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    'Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    
-    'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    Buttons(94).AddWall GetTex("Button94"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    
-    'Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    Buttons(92).AddWall GetTex("Button92"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    'Buttons(93).AddWall GetTex("Button93"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    Buttons(93).AddWall GetTex("Button93"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    'Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    
-    'Buttons(86).AddWall GetTex("Button86"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(88).AddWall GetTex("Button88"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(87).AddWall GetTex("Button87"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(89).AddWall GetTex("Button89"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(85).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    Buttons(86).AddWall GetTex("Button86"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    Buttons(87).AddWall GetTex("Button87"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    'Buttons(94).AddWall GetTex("Button94"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    
-    'Buttons(81).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    Buttons(85).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    'Buttons(89).AddWall GetTex("Button89"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(82).AddWall GetTex("Button82"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(83).AddWall GetTex("Button83"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    Buttons(80).AddWall GetTex("Button80"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 9
-If Number = 19 Then
-
-'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(97).AddWall GetTex("Button97"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(98).AddWall GetTex("Button98"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    'Buttons(130).AddWall GetTex("Button130"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(98).AddWall GetTex("Button98"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    'Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(99).AddWall GetTex("Button99"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    Buttons(97).AddWall GetTex("Button97"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    'Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, 1, 1
-    
-    'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(94).AddWall GetTex("Button94"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(96).AddWall GetTex("Button96"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    'Buttons(134).AddWall GetTex("Button134"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, 1, 1
-    
-    'Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(92).AddWall GetTex("Button92"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(93).AddWall GetTex("Button93"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    Buttons(93).AddWall GetTex("Button93"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    'Buttons(95).AddWall GetTex("Button95"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, 1, 1
-    
-    'Buttons(86).AddWall GetTex("Button86"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    Buttons(91).AddWall GetTex("Button91"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, 1, 1
-    
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(88).AddWall GetTex("Button88"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(87).AddWall GetTex("Button87"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    'Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, 1, 1
-    
-    'Buttons(90).AddWall GetTex("Button90"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(86).AddWall GetTex("Button86"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    Buttons(87).AddWall GetTex("Button87"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    'Buttons(94).AddWall GetTex("Button94"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, 1, 1
-    
-    'Buttons(81).AddWall GetTex("Button85"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    Buttons(85).AddWall GetTex("Button85"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    'Buttons(89).AddWall GetTex("Button89"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, 1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(82).AddWall GetTex("Button82"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 10
-If Number = 20 Then
-
-'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(97).AddWall GetTex("Button97"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(98).AddWall GetTex("Button98"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    'Buttons(130).AddWall GetTex("Button130"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(98).AddWall GetTex("Button98"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    'Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    'Buttons(99).AddWall GetTex("Button99"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    Buttons(97).AddWall GetTex("Button97"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    'Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1, -1, 1
-    
-    'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    Buttons(94).AddWall GetTex("Button94"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    'Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    'Buttons(134).AddWall GetTex("Button134"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 1.5, -1, 1
-    
-    'Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    Buttons(92).AddWall GetTex("Button92"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    'Buttons(93).AddWall GetTex("Button93"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    Buttons(93).AddWall GetTex("Button93"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    'Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2, -1, 1
-    
-    'Buttons(86).AddWall GetTex("Button86"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    Buttons(91).AddWall GetTex("Button91"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 2.5, -1, 1
-    
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(88).AddWall GetTex("Button88"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(87).AddWall GetTex("Button87"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    Buttons(89).AddWall GetTex("Button89"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    'Buttons(85).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3, -1, 1
-    
-    'Buttons(90).AddWall GetTex("Button90"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    Buttons(86).AddWall GetTex("Button86"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    Buttons(87).AddWall GetTex("Button87"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    'Buttons(94).AddWall GetTex("Button94"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 3.5, -1, 1
-    
-    'Buttons(81).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    Buttons(85).AddWall GetTex("Button85"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    'Buttons(89).AddWall GetTex("Button89"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4, -1, 1
-    
-    'Buttons(80).AddWall GetTex("Button80"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(82).AddWall GetTex("Button82"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(83).AddWall GetTex("Button83"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    Buttons(80).AddWall GetTex("Button80"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-   
 End Sub
-
-Sub DrawElevatorButtons3(Number As Integer)
-'Elevator Buttons
-Dim ShaftLeft As Single
-ShaftLeft = 90.5
-    
-'Elevator 1
-If Number = 21 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft+0.17), -27.85 , -(ShaftLeft+0.17), -27.55, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft+0.17), -27.85 - 0.4, -(ShaftLeft+0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft+0.17), -27.85 - 0.8, -(ShaftLeft+0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft+0.17), -27.85 - 1.2, -(ShaftLeft+0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft+0.17), -27.85 - 1.6, -(ShaftLeft+0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    Buttons(75).AddWall GetTex("Button75"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.5, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(76).AddWall GetTex("Button76"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(77).AddWall GetTex("Button77"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(78).AddWall GetTex("Button78"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    
-    Buttons(70).AddWall GetTex("Button70"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.5, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(71).AddWall GetTex("Button71"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(72).AddWall GetTex("Button72"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(73).AddWall GetTex("Button73"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(74).AddWall GetTex("Button74"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    
-    Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.5, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(66).AddWall GetTex("Button66"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(67).AddWall GetTex("Button67"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(68).AddWall GetTex("Button68"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(69).AddWall GetTex("Button69"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    
-    Buttons(60).AddWall GetTex("Button60"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.5, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(61).AddWall GetTex("Button61"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(62).AddWall GetTex("Button62"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(63).AddWall GetTex("Button63"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(64).AddWall GetTex("Button64"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    
-    Buttons(55).AddWall GetTex("Button55"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.5, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(56).AddWall GetTex("Button56"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(57).AddWall GetTex("Button57"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(58).AddWall GetTex("Button58"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(59).AddWall GetTex("Button59"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    
-    Buttons(50).AddWall GetTex("Button50"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.5, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(51).AddWall GetTex("Button51"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(52).AddWall GetTex("Button52"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(53).AddWall GetTex("Button53"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(54).AddWall GetTex("Button54"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    
-    Buttons(45).AddWall GetTex("Button45"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.5, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(46).AddWall GetTex("Button46"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(47).AddWall GetTex("Button47"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(48).AddWall GetTex("Button48"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(49).AddWall GetTex("Button49"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    
-    Buttons(40).AddWall GetTex("Button40"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.5, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(41).AddWall GetTex("Button41"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(42).AddWall GetTex("Button42"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(43).AddWall GetTex("Button43"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(44).AddWall GetTex("Button44"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft+0.17), -27.85 , -(ShaftLeft+0.17), -27.55, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft+0.17), -27.85 - 0.4, -(ShaftLeft+0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft+0.17), -27.85 - 1.2, -(ShaftLeft+0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft+0.17), -27.85 - 1.6, -(ShaftLeft+0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft+0.17), -27.85 , -(ShaftLeft+0.17), -27.55, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft+0.17), -27.85 - 0.4, -(ShaftLeft+0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft+0.17), -27.85 - 0.8, -(ShaftLeft+0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft+0.17), -27.85 - 1.2, -(ShaftLeft+0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft+0.17), -27.85 - 1.6, -(ShaftLeft+0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85, -(ShaftLeft + 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 - 0.4, -(ShaftLeft + 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 - 0.8, -(ShaftLeft + 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 - 1.2, -(ShaftLeft + 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 - 1.6, -(ShaftLeft + 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 2
-If Number = 22 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft+0.17), -18.45  + 0.8, (ShaftLeft+0.17), -18.15  + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    Buttons(75).AddWall GetTex("Button75"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(76).AddWall GetTex("Button76"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(77).AddWall GetTex("Button77"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(78).AddWall GetTex("Button78"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(79).AddWall GetTex("Button79"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    
-    Buttons(70).AddWall GetTex("Button70"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(71).AddWall GetTex("Button71"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(72).AddWall GetTex("Button72"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(73).AddWall GetTex("Button73"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(74).AddWall GetTex("Button74"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    
-    Buttons(65).AddWall GetTex("Button65"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(66).AddWall GetTex("Button66"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(67).AddWall GetTex("Button67"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(68).AddWall GetTex("Button68"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(69).AddWall GetTex("Button69"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    
-    Buttons(60).AddWall GetTex("Button60"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(61).AddWall GetTex("Button61"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(62).AddWall GetTex("Button62"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(63).AddWall GetTex("Button63"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(64).AddWall GetTex("Button64"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    
-    Buttons(55).AddWall GetTex("Button55"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(56).AddWall GetTex("Button56"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(57).AddWall GetTex("Button57"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(58).AddWall GetTex("Button58"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(59).AddWall GetTex("Button59"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    
-    Buttons(50).AddWall GetTex("Button50"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(51).AddWall GetTex("Button51"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(52).AddWall GetTex("Button52"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(53).AddWall GetTex("Button53"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(54).AddWall GetTex("Button54"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    
-    Buttons(45).AddWall GetTex("Button45"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(46).AddWall GetTex("Button46"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(47).AddWall GetTex("Button47"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(48).AddWall GetTex("Button48"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(49).AddWall GetTex("Button49"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    
-    Buttons(40).AddWall GetTex("Button40"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(41).AddWall GetTex("Button41"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(42).AddWall GetTex("Button42"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(43).AddWall GetTex("Button43"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(44).AddWall GetTex("Button44"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft+0.17), -18.45 , (ShaftLeft+0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft+0.17), -18.45  + 0.4, (ShaftLeft+0.17), -18.15  + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft+0.17), -18.45  + 0.8, (ShaftLeft+0.17), -18.15  + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft+0.17), -18.45  + 1.2, (ShaftLeft+0.17), -18.15  + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft+0.17), -18.45  + 1.6, (ShaftLeft+0.17), -18.15  + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45, (ShaftLeft + 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + 0.4, (ShaftLeft + 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + 0.8, (ShaftLeft + 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + 1.2, (ShaftLeft + 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + 1.6, (ShaftLeft + 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 3
-If Number = 23 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    Buttons(75).AddWall GetTex("Button75"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(76).AddWall GetTex("Button76"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(77).AddWall GetTex("Button77"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(78).AddWall GetTex("Button78"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    
-    Buttons(70).AddWall GetTex("Button70"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(71).AddWall GetTex("Button71"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(72).AddWall GetTex("Button72"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(73).AddWall GetTex("Button73"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(74).AddWall GetTex("Button74"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    
-    Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(66).AddWall GetTex("Button66"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(67).AddWall GetTex("Button67"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(68).AddWall GetTex("Button68"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(69).AddWall GetTex("Button69"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    
-    Buttons(60).AddWall GetTex("Button60"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(61).AddWall GetTex("Button61"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(62).AddWall GetTex("Button62"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(63).AddWall GetTex("Button63"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(64).AddWall GetTex("Button64"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    
-    Buttons(55).AddWall GetTex("Button55"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(56).AddWall GetTex("Button56"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(57).AddWall GetTex("Button57"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(58).AddWall GetTex("Button58"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(59).AddWall GetTex("Button59"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    
-    Buttons(50).AddWall GetTex("Button50"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(51).AddWall GetTex("Button51"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(52).AddWall GetTex("Button52"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(53).AddWall GetTex("Button53"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(54).AddWall GetTex("Button54"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    
-    Buttons(45).AddWall GetTex("Button45"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(46).AddWall GetTex("Button46"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(47).AddWall GetTex("Button47"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(48).AddWall GetTex("Button48"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(49).AddWall GetTex("Button49"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    
-    Buttons(40).AddWall GetTex("Button40"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(41).AddWall GetTex("Button41"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(42).AddWall GetTex("Button42"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(43).AddWall GetTex("Button43"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(44).AddWall GetTex("Button44"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft+0.17), -27.85 + (15 * 1), -(ShaftLeft+0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft+0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85 + (15 * 1), -(ShaftLeft + 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 1) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 4
-If Number = 24 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    Buttons(75).AddWall GetTex("Button75"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(76).AddWall GetTex("Button76"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(77).AddWall GetTex("Button77"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(78).AddWall GetTex("Button78"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(79).AddWall GetTex("Button79"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    
-    Buttons(70).AddWall GetTex("Button70"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(71).AddWall GetTex("Button71"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(72).AddWall GetTex("Button72"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(73).AddWall GetTex("Button73"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(74).AddWall GetTex("Button74"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    
-    Buttons(65).AddWall GetTex("Button65"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(66).AddWall GetTex("Button66"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(67).AddWall GetTex("Button67"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(68).AddWall GetTex("Button68"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(69).AddWall GetTex("Button69"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    
-    Buttons(60).AddWall GetTex("Button60"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(61).AddWall GetTex("Button61"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(62).AddWall GetTex("Button62"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(63).AddWall GetTex("Button63"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(64).AddWall GetTex("Button64"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    
-    Buttons(55).AddWall GetTex("Button55"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(56).AddWall GetTex("Button56"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(57).AddWall GetTex("Button57"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(58).AddWall GetTex("Button58"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(59).AddWall GetTex("Button59"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    
-    Buttons(50).AddWall GetTex("Button50"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(51).AddWall GetTex("Button51"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(52).AddWall GetTex("Button52"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(53).AddWall GetTex("Button53"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(54).AddWall GetTex("Button54"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    
-    Buttons(45).AddWall GetTex("Button45"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(46).AddWall GetTex("Button46"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(47).AddWall GetTex("Button47"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(48).AddWall GetTex("Button48"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(49).AddWall GetTex("Button49"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    
-    Buttons(40).AddWall GetTex("Button40"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(41).AddWall GetTex("Button41"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(42).AddWall GetTex("Button42"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(43).AddWall GetTex("Button43"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(44).AddWall GetTex("Button44"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft+0.17), -18.45 + (15 * 1), (ShaftLeft+0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft+0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45 + (15 * 1), (ShaftLeft + 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 1) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-Call DrawElevatorButtons31(Number)
-
-End Sub
-
-Sub DrawElevatorButtons31(Number As Integer)
-'Elevator Buttons
-Dim ShaftLeft As Single
-ShaftLeft = 90.5
-    
-'Elevator 5
-If Number = 25 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    Buttons(75).AddWall GetTex("Button75"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(76).AddWall GetTex("Button76"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(77).AddWall GetTex("Button77"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(78).AddWall GetTex("Button78"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    
-    Buttons(70).AddWall GetTex("Button70"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(71).AddWall GetTex("Button71"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(72).AddWall GetTex("Button72"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(73).AddWall GetTex("Button73"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(74).AddWall GetTex("Button74"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    
-    Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(66).AddWall GetTex("Button66"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(67).AddWall GetTex("Button67"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(68).AddWall GetTex("Button68"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(69).AddWall GetTex("Button69"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    
-    Buttons(60).AddWall GetTex("Button60"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(61).AddWall GetTex("Button61"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(62).AddWall GetTex("Button62"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(63).AddWall GetTex("Button63"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(64).AddWall GetTex("Button64"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    
-    Buttons(55).AddWall GetTex("Button55"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(56).AddWall GetTex("Button56"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(57).AddWall GetTex("Button57"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(58).AddWall GetTex("Button58"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(59).AddWall GetTex("Button59"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    
-    Buttons(50).AddWall GetTex("Button50"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(51).AddWall GetTex("Button51"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(52).AddWall GetTex("Button52"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(53).AddWall GetTex("Button53"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(54).AddWall GetTex("Button54"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    
-    Buttons(45).AddWall GetTex("Button45"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(46).AddWall GetTex("Button46"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(47).AddWall GetTex("Button47"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(48).AddWall GetTex("Button48"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(49).AddWall GetTex("Button49"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    
-    Buttons(40).AddWall GetTex("Button40"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(41).AddWall GetTex("Button41"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(42).AddWall GetTex("Button42"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(43).AddWall GetTex("Button43"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(44).AddWall GetTex("Button44"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft+0.17), -27.85 + (15 * 2), -(ShaftLeft+0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft+0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85 + (15 * 2), -(ShaftLeft + 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 2) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 6
-If Number = 26 Then
-
-'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    Buttons(75).AddWall GetTex("Button75"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(76).AddWall GetTex("Button76"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(77).AddWall GetTex("Button77"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(78).AddWall GetTex("Button78"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(79).AddWall GetTex("Button79"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    
-    Buttons(70).AddWall GetTex("Button70"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(71).AddWall GetTex("Button71"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(72).AddWall GetTex("Button72"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(73).AddWall GetTex("Button73"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(74).AddWall GetTex("Button74"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    
-    Buttons(65).AddWall GetTex("Button65"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(66).AddWall GetTex("Button66"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(67).AddWall GetTex("Button67"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(68).AddWall GetTex("Button68"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(69).AddWall GetTex("Button69"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    
-    Buttons(60).AddWall GetTex("Button60"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(61).AddWall GetTex("Button61"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(62).AddWall GetTex("Button62"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(63).AddWall GetTex("Button63"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(64).AddWall GetTex("Button64"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    
-    Buttons(55).AddWall GetTex("Button55"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(56).AddWall GetTex("Button56"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(57).AddWall GetTex("Button57"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(58).AddWall GetTex("Button58"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(59).AddWall GetTex("Button59"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    
-    Buttons(50).AddWall GetTex("Button50"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(51).AddWall GetTex("Button51"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(52).AddWall GetTex("Button52"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(53).AddWall GetTex("Button53"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(54).AddWall GetTex("Button54"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    
-    Buttons(45).AddWall GetTex("Button45"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(46).AddWall GetTex("Button46"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(47).AddWall GetTex("Button47"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(48).AddWall GetTex("Button48"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(49).AddWall GetTex("Button49"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    
-    Buttons(40).AddWall GetTex("Button40"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(41).AddWall GetTex("Button41"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(42).AddWall GetTex("Button42"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(43).AddWall GetTex("Button43"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(44).AddWall GetTex("Button44"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft+0.17), -18.45 + (15 * 2), (ShaftLeft+0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft+0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45 + (15 * 2), (ShaftLeft + 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 2) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 7
-If Number = 27 Then
-
-'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    Buttons(75).AddWall GetTex("Button75"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(76).AddWall GetTex("Button76"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(77).AddWall GetTex("Button77"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(78).AddWall GetTex("Button78"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    
-    Buttons(70).AddWall GetTex("Button70"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(71).AddWall GetTex("Button71"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(72).AddWall GetTex("Button72"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(73).AddWall GetTex("Button73"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(74).AddWall GetTex("Button74"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    
-    Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(66).AddWall GetTex("Button66"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(67).AddWall GetTex("Button67"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(68).AddWall GetTex("Button68"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(69).AddWall GetTex("Button69"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    
-    Buttons(60).AddWall GetTex("Button60"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(61).AddWall GetTex("Button61"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(62).AddWall GetTex("Button62"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(63).AddWall GetTex("Button63"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(64).AddWall GetTex("Button64"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    
-    Buttons(55).AddWall GetTex("Button55"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(56).AddWall GetTex("Button56"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(57).AddWall GetTex("Button57"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(58).AddWall GetTex("Button58"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(59).AddWall GetTex("Button59"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    
-    Buttons(50).AddWall GetTex("Button50"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(51).AddWall GetTex("Button51"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(52).AddWall GetTex("Button52"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(53).AddWall GetTex("Button53"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(54).AddWall GetTex("Button54"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    
-    Buttons(45).AddWall GetTex("Button45"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(46).AddWall GetTex("Button46"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(47).AddWall GetTex("Button47"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(48).AddWall GetTex("Button48"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(49).AddWall GetTex("Button49"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    
-    Buttons(40).AddWall GetTex("Button40"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(41).AddWall GetTex("Button41"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(42).AddWall GetTex("Button42"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(43).AddWall GetTex("Button43"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(44).AddWall GetTex("Button44"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft+0.17), -27.85 + (15 * 3), -(ShaftLeft+0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft+0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85 + (15 * 3), -(ShaftLeft + 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 3) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 8
-If Number = 28 Then
-
-'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    Buttons(75).AddWall GetTex("Button75"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(76).AddWall GetTex("Button76"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(77).AddWall GetTex("Button77"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(78).AddWall GetTex("Button78"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(79).AddWall GetTex("Button79"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    
-    Buttons(70).AddWall GetTex("Button70"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(71).AddWall GetTex("Button71"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(72).AddWall GetTex("Button72"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(73).AddWall GetTex("Button73"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(74).AddWall GetTex("Button74"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    
-    Buttons(65).AddWall GetTex("Button65"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(66).AddWall GetTex("Button66"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(67).AddWall GetTex("Button67"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(68).AddWall GetTex("Button68"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(69).AddWall GetTex("Button69"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    
-    Buttons(60).AddWall GetTex("Button60"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(61).AddWall GetTex("Button61"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(62).AddWall GetTex("Button62"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(63).AddWall GetTex("Button63"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(64).AddWall GetTex("Button64"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    
-    Buttons(55).AddWall GetTex("Button55"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(56).AddWall GetTex("Button56"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(57).AddWall GetTex("Button57"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(58).AddWall GetTex("Button58"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(59).AddWall GetTex("Button59"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    
-    Buttons(50).AddWall GetTex("Button50"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(51).AddWall GetTex("Button51"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(52).AddWall GetTex("Button52"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(53).AddWall GetTex("Button53"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(54).AddWall GetTex("Button54"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    
-    Buttons(45).AddWall GetTex("Button45"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(46).AddWall GetTex("Button46"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(47).AddWall GetTex("Button47"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(48).AddWall GetTex("Button48"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(49).AddWall GetTex("Button49"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    
-    Buttons(40).AddWall GetTex("Button40"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(41).AddWall GetTex("Button41"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(42).AddWall GetTex("Button42"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(43).AddWall GetTex("Button43"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(44).AddWall GetTex("Button44"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft+0.17), -18.45 + (15 * 3), (ShaftLeft+0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft+0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45 + (15 * 3), (ShaftLeft + 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 3) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 9
-If Number = 29 Then
-
-'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    Buttons(75).AddWall GetTex("Button75"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(76).AddWall GetTex("Button76"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(77).AddWall GetTex("Button77"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(78).AddWall GetTex("Button78"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    
-    Buttons(70).AddWall GetTex("Button70"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(71).AddWall GetTex("Button71"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(72).AddWall GetTex("Button72"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(73).AddWall GetTex("Button73"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(74).AddWall GetTex("Button74"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    
-    Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(66).AddWall GetTex("Button66"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(67).AddWall GetTex("Button67"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(68).AddWall GetTex("Button68"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(69).AddWall GetTex("Button69"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    
-    Buttons(60).AddWall GetTex("Button60"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(61).AddWall GetTex("Button61"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(62).AddWall GetTex("Button62"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(63).AddWall GetTex("Button63"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(64).AddWall GetTex("Button64"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    
-    Buttons(55).AddWall GetTex("Button55"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(56).AddWall GetTex("Button56"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(57).AddWall GetTex("Button57"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(58).AddWall GetTex("Button58"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(59).AddWall GetTex("Button59"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    
-    Buttons(50).AddWall GetTex("Button50"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(51).AddWall GetTex("Button51"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(52).AddWall GetTex("Button52"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(53).AddWall GetTex("Button53"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(54).AddWall GetTex("Button54"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    
-    Buttons(45).AddWall GetTex("Button45"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(46).AddWall GetTex("Button46"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(47).AddWall GetTex("Button47"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(48).AddWall GetTex("Button48"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(49).AddWall GetTex("Button49"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    
-    Buttons(40).AddWall GetTex("Button40"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(41).AddWall GetTex("Button41"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(42).AddWall GetTex("Button42"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(43).AddWall GetTex("Button43"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(44).AddWall GetTex("Button44"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft+0.17), -27.85 + (15 * 4), -(ShaftLeft+0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft+0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft+0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft + 0.17), -27.85 + (15 * 4), -(ShaftLeft + 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.4, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 0.8, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.2, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft + 0.17), -27.85 + (15 * 4) - 1.6, -(ShaftLeft + 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 10
-If Number = 30 Then
-
-'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    Buttons(75).AddWall GetTex("Button75"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(76).AddWall GetTex("Button76"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(77).AddWall GetTex("Button77"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(78).AddWall GetTex("Button78"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(79).AddWall GetTex("Button79"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    
-    Buttons(70).AddWall GetTex("Button70"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(71).AddWall GetTex("Button71"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(72).AddWall GetTex("Button72"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(73).AddWall GetTex("Button73"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(74).AddWall GetTex("Button74"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    
-    Buttons(65).AddWall GetTex("Button65"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(66).AddWall GetTex("Button66"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(67).AddWall GetTex("Button67"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(68).AddWall GetTex("Button68"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(69).AddWall GetTex("Button69"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    
-    Buttons(60).AddWall GetTex("Button60"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(61).AddWall GetTex("Button61"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(62).AddWall GetTex("Button62"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(63).AddWall GetTex("Button63"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(64).AddWall GetTex("Button64"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    
-    Buttons(55).AddWall GetTex("Button55"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(56).AddWall GetTex("Button56"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(57).AddWall GetTex("Button57"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(58).AddWall GetTex("Button58"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(59).AddWall GetTex("Button59"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    
-    Buttons(50).AddWall GetTex("Button50"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(51).AddWall GetTex("Button51"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(52).AddWall GetTex("Button52"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(53).AddWall GetTex("Button53"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(54).AddWall GetTex("Button54"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    
-    Buttons(45).AddWall GetTex("Button45"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(46).AddWall GetTex("Button46"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(47).AddWall GetTex("Button47"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(48).AddWall GetTex("Button48"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(49).AddWall GetTex("Button49"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    
-    Buttons(40).AddWall GetTex("Button40"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(41).AddWall GetTex("Button41"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(42).AddWall GetTex("Button42"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(43).AddWall GetTex("Button43"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(44).AddWall GetTex("Button44"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft+0.17), -18.45 + (15 * 4), (ShaftLeft+0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft+0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft+0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft+0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft+0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft + 0.17), -18.45 + (15 * 4), (ShaftLeft + 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.4, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 0.8, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.2, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft + 0.17), -18.45 + (15 * 4) + 1.6, (ShaftLeft + 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-End Sub
-
-
-Sub DrawElevatorButtons4(Number As Integer)
-'Elevator Buttons
-Dim ShaftLeft As Single
-ShaftLeft = 130.5
-
-'Elevator 1
-If Number = 31 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft - 0.17), -18.45 , -(ShaftLeft - 0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    'Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 , -(ShaftLeft - 0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(38).AddWall GetTex("Button38"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    Buttons(32).AddWall GetTex("Button32"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(33).AddWall GetTex("Button33"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(34).AddWall GetTex("Button34"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(35).AddWall GetTex("Button35"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(36).AddWall GetTex("Button36"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    
-    Buttons(27).AddWall GetTex("Button27"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(28).AddWall GetTex("Button28"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(29).AddWall GetTex("Button29"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(30).AddWall GetTex("Button30"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(31).AddWall GetTex("Button31"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    
-    Buttons(22).AddWall GetTex("Button22"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(23).AddWall GetTex("Button23"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(24).AddWall GetTex("Button24"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(25).AddWall GetTex("Button25"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(26).AddWall GetTex("Button26"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    
-    Buttons(17).AddWall GetTex("Button17"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(18).AddWall GetTex("Button18"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(19).AddWall GetTex("Button19"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(20).AddWall GetTex("Button20"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(21).AddWall GetTex("Button21"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    
-    Buttons(12).AddWall GetTex("Button12"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(13).AddWall GetTex("Button13"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(14).AddWall GetTex("Button14"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(15).AddWall GetTex("Button15"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(16).AddWall GetTex("Button16"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    
-    Buttons(7).AddWall GetTex("Button7"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(8).AddWall GetTex("Button8"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(9).AddWall GetTex("Button9"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(10).AddWall GetTex("Button10"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(11).AddWall GetTex("Button11"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    
-    Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(3).AddWall GetTex("Button3"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(4).AddWall GetTex("Button4"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(5).AddWall GetTex("Button5"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(6).AddWall GetTex("Button6"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 , -(ShaftLeft - 0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 , -(ShaftLeft - 0.17), -18.15 , 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 2
-If Number = 32 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft - 0.17), -27.85 , (ShaftLeft - 0.17), -27.55 , 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    'Buttons(37).AddWall GetTex("Button37"), (ShaftLeft - 0.17), -27.85 , (ShaftLeft - 0.17), -27.55 , 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(37).AddWall GetTex("Button37"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(38).AddWall GetTex("Button38"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    Buttons(32).AddWall GetTex("Button32"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(33).AddWall GetTex("Button33"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(34).AddWall GetTex("Button34"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(35).AddWall GetTex("Button35"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(36).AddWall GetTex("Button36"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    
-    Buttons(27).AddWall GetTex("Button27"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(28).AddWall GetTex("Button28"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(29).AddWall GetTex("Button29"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(30).AddWall GetTex("Button30"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(31).AddWall GetTex("Button31"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    
-    Buttons(22).AddWall GetTex("Button22"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(23).AddWall GetTex("Button23"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(24).AddWall GetTex("Button24"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(25).AddWall GetTex("Button25"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(26).AddWall GetTex("Button26"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    
-    Buttons(17).AddWall GetTex("Button17"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(18).AddWall GetTex("Button18"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(19).AddWall GetTex("Button19"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(20).AddWall GetTex("Button20"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(21).AddWall GetTex("Button21"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    
-    Buttons(12).AddWall GetTex("Button12"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(13).AddWall GetTex("Button13"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(14).AddWall GetTex("Button14"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(15).AddWall GetTex("Button15"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(16).AddWall GetTex("Button16"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    
-    Buttons(7).AddWall GetTex("Button7"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(8).AddWall GetTex("Button8"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(9).AddWall GetTex("Button9"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(10).AddWall GetTex("Button10"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(11).AddWall GetTex("Button11"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    
-    Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(3).AddWall GetTex("Button3"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(4).AddWall GetTex("Button4"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(5).AddWall GetTex("Button5"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(6).AddWall GetTex("Button6"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 , (ShaftLeft - 0.17), -27.55 , 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 , (ShaftLeft - 0.17), -27.55 , 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 3
-If Number = 33 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    'Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(38).AddWall GetTex("Button38"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    Buttons(32).AddWall GetTex("Button32"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(33).AddWall GetTex("Button33"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(34).AddWall GetTex("Button34"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(35).AddWall GetTex("Button35"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(36).AddWall GetTex("Button36"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    
-    Buttons(27).AddWall GetTex("Button27"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(28).AddWall GetTex("Button28"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(29).AddWall GetTex("Button29"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(30).AddWall GetTex("Button30"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(31).AddWall GetTex("Button31"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    
-    Buttons(22).AddWall GetTex("Button22"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(23).AddWall GetTex("Button23"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(24).AddWall GetTex("Button24"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(25).AddWall GetTex("Button25"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(26).AddWall GetTex("Button26"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    
-    Buttons(17).AddWall GetTex("Button17"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(18).AddWall GetTex("Button18"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(19).AddWall GetTex("Button19"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(20).AddWall GetTex("Button20"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(21).AddWall GetTex("Button21"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    
-    Buttons(12).AddWall GetTex("Button12"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(13).AddWall GetTex("Button13"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(14).AddWall GetTex("Button14"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(15).AddWall GetTex("Button15"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(16).AddWall GetTex("Button16"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    
-    Buttons(7).AddWall GetTex("Button7"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(8).AddWall GetTex("Button8"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(9).AddWall GetTex("Button9"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(10).AddWall GetTex("Button10"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(11).AddWall GetTex("Button11"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    
-    Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(3).AddWall GetTex("Button3"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(4).AddWall GetTex("Button4"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(5).AddWall GetTex("Button5"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(6).AddWall GetTex("Button6"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft - 0.17), -18.45 + (15 * 1), -(ShaftLeft - 0.17), -18.15 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft - 0.17), -18.45 + (15 * 1) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 1) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 4
-If Number = 34 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    'Buttons(37).AddWall GetTex("Button37"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(37).AddWall GetTex("Button37"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(38).AddWall GetTex("Button38"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    Buttons(32).AddWall GetTex("Button32"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(33).AddWall GetTex("Button33"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(34).AddWall GetTex("Button34"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(35).AddWall GetTex("Button35"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(36).AddWall GetTex("Button36"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    
-    Buttons(27).AddWall GetTex("Button27"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(28).AddWall GetTex("Button28"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(29).AddWall GetTex("Button29"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(30).AddWall GetTex("Button30"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(31).AddWall GetTex("Button31"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    
-    Buttons(22).AddWall GetTex("Button22"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(23).AddWall GetTex("Button23"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(24).AddWall GetTex("Button24"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(25).AddWall GetTex("Button25"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(26).AddWall GetTex("Button26"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    
-    Buttons(17).AddWall GetTex("Button17"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(18).AddWall GetTex("Button18"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(19).AddWall GetTex("Button19"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(20).AddWall GetTex("Button20"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(21).AddWall GetTex("Button21"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    
-    Buttons(12).AddWall GetTex("Button12"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(13).AddWall GetTex("Button13"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(14).AddWall GetTex("Button14"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(15).AddWall GetTex("Button15"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(16).AddWall GetTex("Button16"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    
-    Buttons(7).AddWall GetTex("Button7"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(8).AddWall GetTex("Button8"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(9).AddWall GetTex("Button9"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(10).AddWall GetTex("Button10"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(11).AddWall GetTex("Button11"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    
-    Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(3).AddWall GetTex("Button3"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(4).AddWall GetTex("Button4"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(5).AddWall GetTex("Button5"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(6).AddWall GetTex("Button6"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft - 0.17), -27.85 + (15 * 1), (ShaftLeft - 0.17), -27.55 + (15 * 1), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft - 0.17), -27.85 + (15 * 1) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 1) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-Call DrawElevatorButtons41(Number)
-
-End Sub
-
 Sub CheckElevatorButtons()
 If InElevator = False Then Exit Sub
 
@@ -2887,476 +628,6 @@ If CollisionResult.GetCollisionMesh.GetMeshName = Buttons(i52).GetMeshName Then
 End If
 
 Next i52
-End Sub
-
-
-Sub DrawElevatorButtons41(Number As Integer)
-'Elevator Buttons
-Dim ShaftLeft As Single
-ShaftLeft = 130.5
-
-'Elevator 5
-If Number = 35 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    'Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(38).AddWall GetTex("Button38"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    Buttons(32).AddWall GetTex("Button32"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(33).AddWall GetTex("Button33"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(34).AddWall GetTex("Button34"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(35).AddWall GetTex("Button35"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(36).AddWall GetTex("Button36"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    
-    Buttons(27).AddWall GetTex("Button27"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(28).AddWall GetTex("Button28"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(29).AddWall GetTex("Button29"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(30).AddWall GetTex("Button30"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(31).AddWall GetTex("Button31"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    
-    Buttons(22).AddWall GetTex("Button22"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(23).AddWall GetTex("Button23"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(24).AddWall GetTex("Button24"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(25).AddWall GetTex("Button25"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(26).AddWall GetTex("Button26"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    
-    Buttons(17).AddWall GetTex("Button17"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(18).AddWall GetTex("Button18"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(19).AddWall GetTex("Button19"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(20).AddWall GetTex("Button20"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(21).AddWall GetTex("Button21"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    
-    Buttons(12).AddWall GetTex("Button12"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(13).AddWall GetTex("Button13"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(14).AddWall GetTex("Button14"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(15).AddWall GetTex("Button15"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(16).AddWall GetTex("Button16"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    
-    Buttons(7).AddWall GetTex("Button7"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(8).AddWall GetTex("Button8"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(9).AddWall GetTex("Button9"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(10).AddWall GetTex("Button10"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(11).AddWall GetTex("Button11"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    
-    Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(3).AddWall GetTex("Button3"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(4).AddWall GetTex("Button4"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(5).AddWall GetTex("Button5"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(6).AddWall GetTex("Button6"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft - 0.17), -18.45 + (15 * 2), -(ShaftLeft - 0.17), -18.15 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft - 0.17), -18.45 + (15 * 2) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 2) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 6
-If Number = 36 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    'Buttons(37).AddWall GetTex("Button37"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(37).AddWall GetTex("Button37"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(38).AddWall GetTex("Button38"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    Buttons(32).AddWall GetTex("Button32"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(33).AddWall GetTex("Button33"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(34).AddWall GetTex("Button34"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(35).AddWall GetTex("Button35"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(36).AddWall GetTex("Button36"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    
-    Buttons(27).AddWall GetTex("Button27"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(28).AddWall GetTex("Button28"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(29).AddWall GetTex("Button29"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(30).AddWall GetTex("Button30"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(31).AddWall GetTex("Button31"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    
-    Buttons(22).AddWall GetTex("Button22"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(23).AddWall GetTex("Button23"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(24).AddWall GetTex("Button24"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(25).AddWall GetTex("Button25"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(26).AddWall GetTex("Button26"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    
-    Buttons(17).AddWall GetTex("Button17"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(18).AddWall GetTex("Button18"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(19).AddWall GetTex("Button19"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(20).AddWall GetTex("Button20"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(21).AddWall GetTex("Button21"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    
-    Buttons(12).AddWall GetTex("Button12"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(13).AddWall GetTex("Button13"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(14).AddWall GetTex("Button14"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(15).AddWall GetTex("Button15"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(16).AddWall GetTex("Button16"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    
-    Buttons(7).AddWall GetTex("Button7"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(8).AddWall GetTex("Button8"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(9).AddWall GetTex("Button9"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(10).AddWall GetTex("Button10"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(11).AddWall GetTex("Button11"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    
-    Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(3).AddWall GetTex("Button3"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(4).AddWall GetTex("Button4"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(5).AddWall GetTex("Button5"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(6).AddWall GetTex("Button6"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft - 0.17), -27.85 + (15 * 2), (ShaftLeft - 0.17), -27.55 + (15 * 2), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft - 0.17), -27.85 + (15 * 2) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 2) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 7
-If Number = 37 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    'Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(38).AddWall GetTex("Button38"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    Buttons(32).AddWall GetTex("Button32"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(33).AddWall GetTex("Button33"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(34).AddWall GetTex("Button34"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(35).AddWall GetTex("Button35"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(36).AddWall GetTex("Button36"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    
-    Buttons(27).AddWall GetTex("Button27"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(28).AddWall GetTex("Button28"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(29).AddWall GetTex("Button29"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(30).AddWall GetTex("Button30"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(31).AddWall GetTex("Button31"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    
-    Buttons(22).AddWall GetTex("Button22"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(23).AddWall GetTex("Button23"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(24).AddWall GetTex("Button24"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(25).AddWall GetTex("Button25"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(26).AddWall GetTex("Button26"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    
-    Buttons(17).AddWall GetTex("Button17"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(18).AddWall GetTex("Button18"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(19).AddWall GetTex("Button19"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(20).AddWall GetTex("Button20"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(21).AddWall GetTex("Button21"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    
-    Buttons(12).AddWall GetTex("Button12"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(13).AddWall GetTex("Button13"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(14).AddWall GetTex("Button14"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(15).AddWall GetTex("Button15"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(16).AddWall GetTex("Button16"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    
-    Buttons(7).AddWall GetTex("Button7"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(8).AddWall GetTex("Button8"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(9).AddWall GetTex("Button9"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(10).AddWall GetTex("Button10"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(11).AddWall GetTex("Button11"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    
-    Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(3).AddWall GetTex("Button3"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(4).AddWall GetTex("Button4"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(5).AddWall GetTex("Button5"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(6).AddWall GetTex("Button6"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft - 0.17), -18.45 + (15 * 3), -(ShaftLeft - 0.17), -18.15 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft - 0.17), -18.45 + (15 * 3) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 3) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 8
-If Number = 38 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    'Buttons(37).AddWall GetTex("Button37"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(37).AddWall GetTex("Button37"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(38).AddWall GetTex("Button38"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    Buttons(32).AddWall GetTex("Button32"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(33).AddWall GetTex("Button33"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(34).AddWall GetTex("Button34"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(35).AddWall GetTex("Button35"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(36).AddWall GetTex("Button36"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    
-    Buttons(27).AddWall GetTex("Button27"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(28).AddWall GetTex("Button28"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(29).AddWall GetTex("Button29"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(30).AddWall GetTex("Button30"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(31).AddWall GetTex("Button31"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    
-    Buttons(22).AddWall GetTex("Button22"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(23).AddWall GetTex("Button23"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(24).AddWall GetTex("Button24"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(25).AddWall GetTex("Button25"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(26).AddWall GetTex("Button26"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    
-    Buttons(17).AddWall GetTex("Button17"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(18).AddWall GetTex("Button18"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(19).AddWall GetTex("Button19"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(20).AddWall GetTex("Button20"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(21).AddWall GetTex("Button21"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    
-    Buttons(12).AddWall GetTex("Button12"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(13).AddWall GetTex("Button13"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(14).AddWall GetTex("Button14"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(15).AddWall GetTex("Button15"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(16).AddWall GetTex("Button16"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    
-    Buttons(7).AddWall GetTex("Button7"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(8).AddWall GetTex("Button8"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(9).AddWall GetTex("Button9"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(10).AddWall GetTex("Button10"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(11).AddWall GetTex("Button11"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    
-    Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(3).AddWall GetTex("Button3"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(4).AddWall GetTex("Button4"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(5).AddWall GetTex("Button5"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(6).AddWall GetTex("Button6"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft - 0.17), -27.85 + (15 * 3), (ShaftLeft - 0.17), -27.55 + (15 * 3), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft - 0.17), -27.85 + (15 * 3) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 3) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-
-'Elevator 9
-If Number = 39 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(1).AddWall GetTex("Button1"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(136).AddWall GetTex("Button136"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(137).AddWall GetTex("Button137"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), 1, 1
-    
-    'Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    Buttons(37).AddWall GetTex("Button37"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(38).AddWall GetTex("Button38"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, 1, 1
-    
-    Buttons(32).AddWall GetTex("Button32"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(33).AddWall GetTex("Button33"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(34).AddWall GetTex("Button34"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(35).AddWall GetTex("Button35"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    Buttons(36).AddWall GetTex("Button36"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, 1, 1
-    
-    Buttons(27).AddWall GetTex("Button27"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(28).AddWall GetTex("Button28"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(29).AddWall GetTex("Button29"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(30).AddWall GetTex("Button30"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    Buttons(31).AddWall GetTex("Button31"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, 1, 1
-    
-    Buttons(22).AddWall GetTex("Button22"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(23).AddWall GetTex("Button23"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(24).AddWall GetTex("Button24"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(25).AddWall GetTex("Button25"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    Buttons(26).AddWall GetTex("Button26"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, 1, 1
-    
-    Buttons(17).AddWall GetTex("Button17"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(18).AddWall GetTex("Button18"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(19).AddWall GetTex("Button19"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(20).AddWall GetTex("Button20"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    Buttons(21).AddWall GetTex("Button21"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, 1, 1
-    
-    Buttons(12).AddWall GetTex("Button12"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(13).AddWall GetTex("Button13"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(14).AddWall GetTex("Button14"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(15).AddWall GetTex("Button15"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    Buttons(16).AddWall GetTex("Button16"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, 1, 1
-    
-    Buttons(7).AddWall GetTex("Button7"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(8).AddWall GetTex("Button8"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(9).AddWall GetTex("Button9"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(10).AddWall GetTex("Button10"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    Buttons(11).AddWall GetTex("Button11"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, 1, 1
-    
-    Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(3).AddWall GetTex("Button3"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(4).AddWall GetTex("Button4"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(5).AddWall GetTex("Button5"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    Buttons(6).AddWall GetTex("Button6"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, 1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(81).AddWall GetTex("Button81"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, 1, 1
-    'Buttons(83).AddWall GetTex("Button83"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    'Buttons(84).AddWall GetTex("Button84"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, 1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(39).AddWall GetTex("Button39"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(65).AddWall GetTex("Button65"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    'Buttons(79).AddWall GetTex("Button79"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, 1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), -(ShaftLeft - 0.17), -18.45 + (15 * 4), -(ShaftLeft - 0.17), -18.15 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.4, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 0.8, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.2, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), -(ShaftLeft - 0.17), -18.45 + (15 * 4) + 1.6, -(ShaftLeft - 0.17), -18.15 + (15 * 4) + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, 1, 1
-
-End If
-
-'Elevator 10
-If Number = 40 Then
-
-    'Buttons(135).AddWall GetTex("Button135"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(1).AddWall GetTex("Button1"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(136).AddWall GetTex("Button136"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(137).AddWall GetTex("Button137"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    'Buttons(138).AddWall GetTex("ButtonR"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12), -1, 1
-    
-    'Buttons(37).AddWall GetTex("Button37"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    Buttons(37).AddWall GetTex("Button37"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(38).AddWall GetTex("Button38"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 0.5, -1, 1
-    
-    Buttons(32).AddWall GetTex("Button32"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(33).AddWall GetTex("Button33"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(34).AddWall GetTex("Button34"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(35).AddWall GetTex("Button35"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    Buttons(36).AddWall GetTex("Button36"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1, -1, 1
-    
-    Buttons(27).AddWall GetTex("Button27"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(28).AddWall GetTex("Button28"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(29).AddWall GetTex("Button29"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(30).AddWall GetTex("Button30"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    Buttons(31).AddWall GetTex("Button31"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 1.5, -1, 1
-    
-    Buttons(22).AddWall GetTex("Button22"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(23).AddWall GetTex("Button23"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(24).AddWall GetTex("Button24"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(25).AddWall GetTex("Button25"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    Buttons(26).AddWall GetTex("Button26"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2, -1, 1
-    
-    Buttons(17).AddWall GetTex("Button17"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(18).AddWall GetTex("Button18"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(19).AddWall GetTex("Button19"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(20).AddWall GetTex("Button20"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    Buttons(21).AddWall GetTex("Button21"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 2.5, -1, 1
-    
-    Buttons(12).AddWall GetTex("Button12"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(13).AddWall GetTex("Button13"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(14).AddWall GetTex("Button14"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(15).AddWall GetTex("Button15"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    Buttons(16).AddWall GetTex("Button16"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3, -1, 1
-    
-    Buttons(7).AddWall GetTex("Button7"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(8).AddWall GetTex("Button8"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(9).AddWall GetTex("Button9"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(10).AddWall GetTex("Button10"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    Buttons(11).AddWall GetTex("Button11"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 3.5, -1, 1
-    
-    Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(3).AddWall GetTex("Button3"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(4).AddWall GetTex("Button4"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(5).AddWall GetTex("Button5"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    Buttons(6).AddWall GetTex("Button6"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4, -1, 1
-    
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(81).AddWall GetTex("Button81"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 4.5, -1, 1
-    'Buttons(83).AddWall GetTex("Button83"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    'Buttons(84).AddWall GetTex("Button84"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 4.5, -1, 1
-    
-    'Buttons(2).AddWall GetTex("Button2"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(39).AddWall GetTex("Button39"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(-1).AddWall GetTex("ButtonL"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(65).AddWall GetTex("Button65"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    'Buttons(79).AddWall GetTex("Button79"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.y + 12) - 5, -1, 1
-    
-    Buttons(139).AddWall GetTex("ButtonOpen"), (ShaftLeft - 0.17), -27.85 + (15 * 4), (ShaftLeft - 0.17), -27.55 + (15 * 4), 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(140).AddWall GetTex("ButtonClose"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.4, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(141).AddWall GetTex("ButtonCancel"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 0.8, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(142).AddWall GetTex("ButtonStop"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.2, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-    Buttons(143).AddWall GetTex("ButtonAlarm"), (ShaftLeft - 0.17), -27.85 + (15 * 4) - 1.6, (ShaftLeft - 0.17), -27.55 + (15 * 4) - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12) - 5.5, -1, 1
-
-End If
-   
 End Sub
 
 Sub ElevatorLoop(Number As Integer)
@@ -3794,6 +1065,94 @@ OpenElevator2:
       End If
       End If
       
+    
+End Sub
+
+Sub ElevatorButton(FloorID As Integer, ButtonLabel As String, Number As Integer, ButtonIndex As Integer)
+    
+    'This code segment places all of the actual elevator button processing code into a single algorithm
+    'FloorID - Exact floor that button calls
+    'ButtonLabel - Simplified label for button
+    'ButtonLabel2 - Texture name of button derived from ButtonLabel
+    'Number - Elevator number
+    'ButtonIndex - Position of button on table below
+    'ShaftLeft/Right - the left and right x coordinate boundaries of the elevator's shaft
+    'Side - -1 if elevator is on left side (elevator number is even), and 1 if it is on the right
+    'Side2 - -1 if elevator is in an odd-numbered shaft, and 1 if the shaft is even
+    'ElevIndex - Elevator's group number (0-4); 1 or 2=group0, 3 or 4=group1, etc
+    'Offset - Initial Z offset of buttons
+    'IndexH - Horizontal index of button
+    'IndexV - Vertical index of button
+    
+    'ButtonIndex values (based on visual look of panel)
+    '1  2  3  4  5    0
+    '6  7  8  9  10   1
+    '11 12 13 14 15   2
+    '16 17 18 19 20   3
+    '21 22 23 24 25   4
+    '26 27 28 29 30   5
+    '31 32 33 34 35   6
+    '36 37 38 39 40   7
+    '41 42 43 44 45   8
+    '46 47 48 49 50   9
+    '51 52 53 54 55   10
+    '56 57 58 59 60   11
+                      'V
+  'H 0  1  2  3  4
+    'So button 54 would have an IndexH of 3 and an IndexV of 10, while button 6 would have an IndexH of 0 and an IndexV of 1
+    
+    Dim ButtonLabel2 As String
+    Dim ShaftLeft As Single
+    Dim Side As Integer
+    Dim Side2 As Integer
+    Dim ElevIndex As Integer
+    Dim Offset As Single
+    Dim IndexH As Integer
+    Dim IndexV As Integer
+    
+    ButtonLabel = LCase(ButtonLabel)
+    
+    If IsNumeric(ButtonLabel) Then ButtonLabel2 = "Button" + ButtonLabel
+    If ButtonLabel = "l" Then ButtonLabel2 = "ButtonL"
+    If ButtonLabel = "m" Then ButtonLabel2 = "ButtonM"
+    If ButtonLabel = "r" Then ButtonLabel2 = "ButtonR"
+    If ButtonLabel = "open" Then ButtonLabel2 = "ButtonOpen"
+    If ButtonLabel = "close" Then ButtonLabel2 = "ButtonClose"
+    If ButtonLabel = "stop" Then ButtonLabel2 = "ButtonStop"
+    If ButtonLabel = "alarm" Then ButtonLabel2 = "ButtonAlarm"
+    If ButtonLabel = "cancel" Then ButtonLabel2 = "ButtonCancel"
+    
+    ElevIndex = Number
+    If IsEven(ElevIndex) = True Then ElevIndex = ElevIndex - 1
+    If Number <= 10 Then ShaftLeft = 12.5: Side2 = 1: ElevIndex = Int(ElevIndex / 2)
+    If Number > 10 And Number <= 20 Then ShaftLeft = 52.5: Side2 = -1: ElevIndex = Int((ElevIndex - 10) / 2)
+    If Number > 20 And Number <= 30 Then ShaftLeft = 90.5: Side2 = 1: ElevIndex = Int((ElevIndex - 20) / 2)
+    If Number > 30 And Number <= 40 Then ShaftLeft = 130.5: Side2 = -1: ElevIndex = Int((ElevIndex - 30) / 2)
+    
+    If IsEven(Number) = False Then
+        Side = -1
+        If Side2 = 1 Then Offset = -27.85
+        If Side2 = -1 Then Offset = -18.45
+    Else
+        Side = 1
+        If Side2 = -1 Then Offset = -27.85
+        If Side2 = 1 Then Offset = -18.45
+    End If
+            
+    If ButtonIndex <= 5 Then IndexH = ButtonIndex - 1: IndexV = 0
+    If ButtonIndex > 5 And ButtonIndex <= 10 Then IndexH = ButtonIndex - 6: IndexV = 1
+    If ButtonIndex > 10 And ButtonIndex <= 15 Then IndexH = ButtonIndex - 11: IndexV = 2
+    If ButtonIndex > 15 And ButtonIndex <= 20 Then IndexH = ButtonIndex - 16: IndexV = 3
+    If ButtonIndex > 20 And ButtonIndex <= 25 Then IndexH = ButtonIndex - 21: IndexV = 4
+    If ButtonIndex > 25 And ButtonIndex <= 30 Then IndexH = ButtonIndex - 26: IndexV = 5
+    If ButtonIndex > 30 And ButtonIndex <= 35 Then IndexH = ButtonIndex - 31: IndexV = 6
+    If ButtonIndex > 35 And ButtonIndex <= 40 Then IndexH = ButtonIndex - 36: IndexV = 7
+    If ButtonIndex > 40 And ButtonIndex <= 45 Then IndexH = ButtonIndex - 41: IndexV = 8
+    If ButtonIndex > 45 And ButtonIndex <= 50 Then IndexH = ButtonIndex - 46: IndexV = 9
+    If ButtonIndex > 50 And ButtonIndex <= 55 Then IndexH = ButtonIndex - 51: IndexV = 10
+    If ButtonIndex > 55 And ButtonIndex <= 60 Then IndexH = ButtonIndex - 56: IndexV = 11
+    
+    Buttons(FloorID).AddWall GetTex(ButtonLabel2), Side * (ShaftLeft + (0.17 * Side2)), Offset + (15 * ElevIndex) + (0.4 * IndexH * Side * Side2), Side * (ShaftLeft + (0.17 * Side2)), (Offset + 0.3) + (15 * ElevIndex) + (0.4 * IndexH * Side * Side2), 0.3, (Elevator(Number).GetPosition.Y + 12) - (0.5 * IndexV), Side * Side2, 1
     
 End Sub
 
