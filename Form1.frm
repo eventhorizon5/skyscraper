@@ -1,13 +1,13 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "SkyScraper"
-   ClientHeight    =   6870
+   ClientHeight    =   7920
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   10185
+   ClientWidth     =   10440
    LinkTopic       =   "Form1"
-   ScaleHeight     =   6870
-   ScaleWidth      =   10185
+   ScaleHeight     =   7920
+   ScaleWidth      =   10440
    StartUpPosition =   2  'CenterScreen
 End
 Attribute VB_Name = "Form1"
@@ -15,7 +15,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.3 Alpha
+'Skycraper 0.4 Alpha
 'Created by Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 
@@ -69,7 +69,7 @@ Print "Skyscraper 0.3 Alpha"
     'TV.Init3DFullscreen 640, 480, 16
   Set Inp = New TVInputEngine
   TV.SetSearchDirectory App.Path
-  TV.DisplayFPS = True
+  'TV.DisplayFPS = True
   Set Mesh = Scene.CreateMeshBuilder("Mesh")
   Set External = Scene.CreateMeshBuilder("External")
   Set Room = Scene.CreateMeshBuilder("Room")
@@ -82,7 +82,14 @@ Print "Skyscraper 0.3 Alpha"
   TextureFactory.LoadTexture "brick1.bmp", "BrickTexture"
   TextureFactory.LoadTexture "LobbyFront.jpg", "LobbyFront"
   TextureFactory.LoadTexture "windows11c.jpg", "MainWindows"
-    
+  TextureFactory.LoadTexture "granite.bmp", "Granite"
+  TextureFactory.LoadTexture "marbl3.bmp", "Marble3"
+  TextureFactory.LoadTexture "marbl4.bmp", "Marble4"
+  TextureFactory.LoadTexture "elev1.bmp", "Elev1"
+  TextureFactory.LoadTexture "textur15.bmp", "Wood1"
+  TextureFactory.LoadTexture "text16.bmp", "Wood2"
+  TextureFactory.LoadTexture "text12.bmp", "Wall1"
+  
   'Mesh.AddFloor GetTex("Floor"), 0, 0, 1000, 1000, 0, 10, 10
   'Mesh.AddWall GetTex("Floor"), 1000, 0, 1000, 1000, 100, 0, 5
   'Mesh.AddWall GetTex("Floor"), 0, 0, 0, 1000, 100, 0, 5
@@ -93,7 +100,8 @@ Print "Skyscraper 0.3 Alpha"
     'Elevator Mesh are 19 feet in from the north, 51 feet in from the west and are 8 feet wide
     'Lobby
 Print "Processing Main Floor..."
-    Room.AddFloor GetTex("BrickTexture"), -150, -93.75, 150, 93.75, 0, 10, 10
+    I = 1
+    Room.AddFloor GetTex("Marble4"), -150, -93.75, 150, 93.75, 0, 50, 31
     
     External.AddWall GetTex("LobbyFront"), -150, -93.75, 150, -93.75, 75, 0, 3, 1
     External.AddWall GetTex("LobbyFront"), 150, -93.75, 150, 93.75, 75, 0, 3, 1
@@ -103,11 +111,20 @@ Print "Processing Main Floor..."
     'Elevators
     Shafts.AddWall GetTex("BrickTexture"), -32.5, -46.25, -12.5, -46.25, 25, 0, 1, 2
     'Shafts.AddWall GetTex("BrickTexture"), -12.5, -46.25, -12.5, 46.25, 25, 0, 3, 2
+    'cut side wall start
+    Shafts.AddWall GetTex("BrickTexture"), -12.5, -46.25, -12.5, -30, 25, 0, 1, 2
+    Shafts.AddWall GetTex("BrickTexture"), -12.5, -16, -12.5, 46.25, 25, 0, 3, 2
+    Shafts.AddWall GetTex("BrickTexture"), -12.5, -30, -12.5, -16, 5.5, 19.5, 0.8, 0.44
+    'cut side wall end
     Shafts.AddWall GetTex("BrickTexture"), -12.5, 46.25, -32.5, 46.25, 25, 0, 1, 2
     Shafts.AddWall GetTex("BrickTexture"), -32.5, 46.25, -32.5, -46.25, 25, 0, 3, 2
     
     Shafts.AddWall GetTex("BrickTexture"), 32.5, -46.25, 12.5, -46.25, 25, 0, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), 12.5, -46.25, 12.5, 46.25, 25, 0, 3, 2
+    Shafts.AddWall GetTex("BrickTexture"), 12.5, -46.25, 12.5, 46.25, 25, 0, 3, 2
+    'cut side wall start
+    'Shafts.AddWall GetTex("BrickTexture"), 12.5, -46.25, 12.5, -30, 25, 0, 3, 2
+    'Shafts.AddWall GetTex("BrickTexture"), 12.5, -16, 12.5, 46.25, 25, 0, 3, 2
+    'cut side wall end
     Shafts.AddWall GetTex("BrickTexture"), 12.5, 46.25, 32.5, 46.25, 25, 0, 1, 2
     Shafts.AddWall GetTex("BrickTexture"), 32.5, 46.25, 32.5, -46.25, 25, 0, 3, 2
     
@@ -131,17 +148,31 @@ Print "Processing Main Floor..."
     Shafts.AddWall GetTex("BrickTexture"), 12.5, 46.25, 32.5, 46.25, 25, 50, 1, 2
     Shafts.AddWall GetTex("BrickTexture"), 32.5, 46.25, 32.5, -46.25, 25, 50, 3, 2
     
+    'Ceiling
+    Room.AddFloor GetTex("Marble3"), -150, -93.75, 150, -46.25, (I * 25) + 49.5, 30, 5
+    Room.AddFloor GetTex("Marble3"), -150, 46.25, 150, 93.75, (I * 25) + 49.5, 30, 5
+    Room.AddFloor GetTex("Marble3"), -150, -46.25, -32.5, 46.25, (I * 25) + 49.5, 11, 10
+    Room.AddFloor GetTex("Marble3"), 32.5, -46.25, 150, 46.25, (I * 25) + 49.5, 11, 10
+    Room.AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 46.25, (I * 25) + 49.5, 2, 10
+    
+    
 'GoTo 2
 Print "Processing Floors 2 to 39..."
 
     'Floors 2 to 39
     For I = 2 To 39
-    'Mesh.AddFloor GetTex("BrickTexture"), -150, -93.75, 150, 93.75, (I * 25) + 25, 10, 10
-    Room.AddFloor GetTex("BrickTexture"), -150, -93.75, 150, -46.25, (I * 25) + 25, 10, 3
-    Room.AddFloor GetTex("BrickTexture"), -150, 46.25, 150, 93.75, (I * 25) + 25, 10, 3
-    Room.AddFloor GetTex("BrickTexture"), -150, -46.25, -32.5, 46.25, (I * 25) + 25, 3, 3
-    Room.AddFloor GetTex("BrickTexture"), 32.5, -46.25, 150, 46.25, (I * 25) + 25, 3, 3
-    Room.AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, 46.25, (I * 25) + 25, 1, 3
+    'Mesh.AddFloor GetTex("Granite"), -150, -93.75, 150, 93.75, (I * 25) + 25, 10, 10
+    Room.AddFloor GetTex("Granite"), -150, -93.75, 150, -46.25, (I * 25) + 25, 30, 5
+    Room.AddFloor GetTex("Granite"), -150, 46.25, 150, 93.75, (I * 25) + 25, 30, 5
+    Room.AddFloor GetTex("Granite"), -150, -46.25, -32.5, 46.25, (I * 25) + 25, 11, 10
+    Room.AddFloor GetTex("Granite"), 32.5, -46.25, 150, 46.25, (I * 25) + 25, 11, 10
+    Room.AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 46.25, (I * 25) + 25, 2, 10
+    
+    Room.AddFloor GetTex("Marble3"), -150, -93.75, 150, -46.25, (I * 25) + 49.5, 30, 5
+    Room.AddFloor GetTex("Marble3"), -150, 46.25, 150, 93.75, (I * 25) + 49.5, 30, 5
+    Room.AddFloor GetTex("Marble3"), -150, -46.25, -32.5, 46.25, (I * 25) + 49.5, 11, 10
+    Room.AddFloor GetTex("Marble3"), 32.5, -46.25, 150, 46.25, (I * 25) + 49.5, 11, 10
+    Room.AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 46.25, (I * 25) + 49.5, 2, 10
     
     External.AddWall GetTex("MainWindows"), -150, -93.75, 150, -93.75, 25, (I * 25) + 25, 9, 1
     External.AddWall GetTex("MainWindows"), 150, -93.75, 150, 93.75, 25, (I * 25) + 25, 9, 1
@@ -149,15 +180,20 @@ Print "Processing Floors 2 to 39..."
     External.AddWall GetTex("MainWindows"), -150, 93.75, -150, -93.75, 25, (I * 25) + 25, 9, 1
     
     'Elevators
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, -46.25, -12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), -12.5, -46.25, -12.5, 46.25, 25, (I * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), -12.5, 46.25, -32.5, 46.25, 25, (I * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, 46.25, -32.5, -46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), -32.5, -46.25, -12.5, -46.25, 25, (I * 25) + 25, 1, 2
+    'Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, 46.25, 25, (I * 25) + 25, 3, 2
+    'cut side wall start
+    Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -30, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), -12.5, -16, -12.5, 46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), -12.5, -30, -12.5, -16, 5.5, (I * 25) + 25 + 19.5, 0.8, 0.44
+    'cut side wall end
+    Shafts.AddWall GetTex("Wall1"), -12.5, 46.25, -32.5, 46.25, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), -32.5, 46.25, -32.5, -46.25, 25, (I * 25) + 25, 3, 2
     
-    Shafts.AddWall GetTex("BrickTexture"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), 12.5, -46.25, 12.5, 46.25, 25, (I * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), 12.5, 46.25, 32.5, 46.25, 25, (I * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), 32.5, 46.25, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), 12.5, -46.25, 12.5, 46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), 12.5, 46.25, 32.5, 46.25, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), 32.5, 46.25, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
     
     Next I
     
@@ -168,29 +204,39 @@ Print "Processing Floors 2 to 39..."
 Print "Processing Floors 40 to 79"
     'Floors 40 to 79 (minus 14 feet on both sides where 20=8 feet)
     For I = 40 To 79
-    'Mesh.AddFloor GetTex("BrickTexture"), -115, -93.75, 115, 93.75, (I * 25) + 25, 10, 10
+    'Mesh.AddFloor GetTex("Granite"), -115, -93.75, 115, 93.75, (I * 25) + 25, 10, 10
+    Room.AddFloor GetTex("Granite"), -115, -93.75, 115, -46.25, (I * 25) + 25, 10, 3
+    Room.AddFloor GetTex("Granite"), -115, 30.83, 115, 93.75, (I * 25) + 25, 10, 3
+    Room.AddFloor GetTex("Granite"), -115, -46.25, -32.5, 30.83, (I * 25) + 25, 3, 3
+    Room.AddFloor GetTex("Granite"), 32.5, -46.25, 115, 30.83, (I * 25) + 25, 3, 3
+    Room.AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 30.83, (I * 25) + 25, 1, 3
     
-    Room.AddFloor GetTex("BrickTexture"), -115, -93.75, 115, -46.25, (I * 25) + 25, 10, 3
-    Room.AddFloor GetTex("BrickTexture"), -115, 30.83, 115, 93.75, (I * 25) + 25, 10, 3
-    Room.AddFloor GetTex("BrickTexture"), -115, -46.25, -32.5, 30.83, (I * 25) + 25, 3, 3
-    Room.AddFloor GetTex("BrickTexture"), 32.5, -46.25, 115, 30.83, (I * 25) + 25, 3, 3
-    Room.AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, 30.83, (I * 25) + 25, 1, 3
-    
+    Room.AddFloor GetTex("Marble3"), -115, -93.75, 115, -46.25, (I * 25) + 49.5, 10, 3
+    Room.AddFloor GetTex("Marble3"), -115, 30.83, 115, 93.75, (I * 25) + 49.5, 10, 3
+    Room.AddFloor GetTex("Marble3"), -115, -46.25, -32.5, 30.83, (I * 25) + 49.5, 3, 3
+    Room.AddFloor GetTex("Marble3"), 32.5, -46.25, 115, 30.83, (I * 25) + 49.5, 3, 3
+    Room.AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 30.83, (I * 25) + 49.5, 1, 3
+   
     External.AddWall GetTex("MainWindows"), -115, -93.75, 115, -93.75, 25, (I * 25) + 25, 7, 1
     External.AddWall GetTex("MainWindows"), 115, -93.75, 115, 93.75, 25, (I * 25) + 25, 7, 1
     External.AddWall GetTex("MainWindows"), 115, 93.75, -115, 93.75, 25, (I * 25) + 25, 7, 1
     External.AddWall GetTex("MainWindows"), -115, 93.75, -115, -93.75, 25, (I * 25) + 25, 7, 1
     
     'Elevators
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, -46.25, -12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), -12.5, -46.25, -12.5, 30.83, 25, (I * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), -12.5, 30.83, -32.5, 30.83, 25, (I * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, 30.83, -32.5, -46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), -32.5, -46.25, -12.5, -46.25, 25, (I * 25) + 25, 1, 2
+    'Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, 30.83, 25, (I * 25) + 25, 3, 2
+    'cut side wall start
+    Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -30, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), -12.5, -16, -12.5, 30.83, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), -12.5, -30, -12.5, -16, 5.5, (I * 25) + 25 + 19.5, 0.8, 0.44
+    'cut side wall end
+    Shafts.AddWall GetTex("Wall1"), -12.5, 30.83, -32.5, 30.83, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), -32.5, 30.83, -32.5, -46.25, 25, (I * 25) + 25, 3, 2
     
-    Shafts.AddWall GetTex("BrickTexture"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), 12.5, -46.25, 12.5, 30.83, 25, (I * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), 12.5, 30.83, 32.5, 30.83, 25, (I * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), 32.5, 30.83, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), 12.5, -46.25, 12.5, 30.83, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), 12.5, 30.83, 32.5, 30.83, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), 32.5, 30.83, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
     
     Next I
     
@@ -200,13 +246,18 @@ Print "Processing Floors 40 to 79"
 Print "Processing Floors 80 to 117"
     'Floors 80 to 117
     For I = 80 To 117
-    'Mesh.AddFloor GetTex("BrickTexture"), -90, -93.75, 90, 93.75, (I * 25) + 25, 10, 10
+    'Mesh.AddFloor GetTex("Granite"), -90, -93.75, 90, 93.75, (I * 25) + 25, 10, 10
+    Room.AddFloor GetTex("Granite"), -90, -93.75, 90, -46.25, (I * 25) + 25, 10, 3
+    Room.AddFloor GetTex("Granite"), -90, 9, 90, 93.75, (I * 25) + 25, 10, 3
+    Room.AddFloor GetTex("Granite"), -90, -46.25, -32.5, 9, (I * 25) + 25, 3, 3
+    Room.AddFloor GetTex("Granite"), 32.5, -46.25, 90, 9, (I * 25) + 25, 3, 3
+    Room.AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 9, (I * 25) + 25, 1, 3
     
-    Room.AddFloor GetTex("BrickTexture"), -90, -93.75, 90, -46.25, (I * 25) + 25, 10, 3
-    Room.AddFloor GetTex("BrickTexture"), -90, 9, 90, 93.75, (I * 25) + 25, 10, 3
-    Room.AddFloor GetTex("BrickTexture"), -90, -46.25, -32.5, 9, (I * 25) + 25, 3, 3
-    Room.AddFloor GetTex("BrickTexture"), 32.5, -46.25, 90, 9, (I * 25) + 25, 3, 3
-    Room.AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, 9, (I * 25) + 25, 1, 3
+    Room.AddFloor GetTex("Marble3"), -90, -93.75, 90, -46.25, (I * 25) + 49.5, 10, 3
+    Room.AddFloor GetTex("Marble3"), -90, 9, 90, 93.75, (I * 25) + 49.5, 10, 3
+    Room.AddFloor GetTex("Marble3"), -90, -46.25, -32.5, 9, (I * 25) + 49.5, 3, 3
+    Room.AddFloor GetTex("Marble3"), 32.5, -46.25, 90, 9, (I * 25) + 49.5, 3, 3
+    Room.AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 9, (I * 25) + 49.5, 1, 3
     
     External.AddWall GetTex("MainWindows"), -90, -93.75, 90, -93.75, 25, (I * 25) + 25, 5, 1
     External.AddWall GetTex("MainWindows"), 90, -93.75, 90, 93.75, 25, (I * 25) + 25, 5, 1
@@ -215,15 +266,20 @@ Print "Processing Floors 80 to 117"
     
     'Elevators
     
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, -46.25, -12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), -12.5, -46.25, -12.5, 15.41, 25, (I * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), -12.5, 15.41, -32.5, 15.41, 25, (I * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, 15.41, -32.5, -46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), -32.5, -46.25, -12.5, -46.25, 25, (I * 25) + 25, 1, 2
+    'Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, 15.41, 25, (I * 25) + 25, 3, 2
+    'cut side wall start
+    Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -30, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), -12.5, -16, -12.5, 15.41, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), -12.5, -30, -12.5, -16, 5.5, (I * 25) + 25 + 19.5, 0.8, 0.44
+    'cut side wall end
+    Shafts.AddWall GetTex("Wall1"), -12.5, 15.41, -32.5, 15.41, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), -32.5, 15.41, -32.5, -46.25, 25, (I * 25) + 25, 3, 2
     
-    Shafts.AddWall GetTex("BrickTexture"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), 12.5, -46.25, 12.5, 15.41, 25, (I * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), 12.5, 15.41, 32.5, 15.41, 25, (I * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), 32.5, 15.41, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), 12.5, -46.25, 12.5, 15.41, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), 12.5, 15.41, 32.5, 15.41, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), 32.5, 15.41, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
     
     Next I
     
@@ -233,29 +289,39 @@ Print "Processing Floors 80 to 117"
 Print "Processing Floors 118 to 134"
     'Floors 118 to 134 (minus 10 feet)
     For I = 118 To 134
-    'Mesh.AddFloor GetTex("BrickTexture"), -65, -93.75, 65, 93.75, (I * 25) + 25, 10, 10
+    'Mesh.AddFloor GetTex("Granite"), -65, -93.75, 65, 93.75, (I * 25) + 25, 10, 10
+    Room.AddFloor GetTex("Granite"), -65, -93.75, 65, -46.25, (I * 25) + 25, 10, 3
+    Room.AddFloor GetTex("Granite"), -65, 0, 65, 93.75, (I * 25) + 25, 10, 3
+    Room.AddFloor GetTex("Granite"), -65, -46.25, -32.5, 0, (I * 25) + 25, 3, 3
+    Room.AddFloor GetTex("Granite"), 32.5, -46.25, 65, 0, (I * 25) + 25, 3, 3
+    Room.AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, 0, (I * 25) + 25, 1, 3
     
-    Room.AddFloor GetTex("BrickTexture"), -65, -93.75, 65, -46.25, (I * 25) + 25, 10, 3
-    Room.AddFloor GetTex("BrickTexture"), -65, 0, 65, 93.75, (I * 25) + 25, 10, 3
-    Room.AddFloor GetTex("BrickTexture"), -65, -46.25, -32.5, 0, (I * 25) + 25, 3, 3
-    Room.AddFloor GetTex("BrickTexture"), 32.5, -46.25, 65, 0, (I * 25) + 25, 3, 3
-    Room.AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, 0, (I * 25) + 25, 1, 3
-    
+    Room.AddFloor GetTex("Marble3"), -65, -93.75, 65, -46.25, (I * 25) + 49.5, 10, 3
+    Room.AddFloor GetTex("Marble3"), -65, 0, 65, 93.75, (I * 25) + 49.5, 10, 3
+    Room.AddFloor GetTex("Marble3"), -65, -46.25, -32.5, 0, (I * 25) + 49.5, 3, 3
+    Room.AddFloor GetTex("Marble3"), 32.5, -46.25, 65, 0, (I * 25) + 49.5, 3, 3
+    Room.AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 0, (I * 25) + 49.5, 1, 3
+     
     External.AddWall GetTex("MainWindows"), -65, -93.75, 65, -93.75, 25, (I * 25) + 25, 4, 1
     External.AddWall GetTex("MainWindows"), 65, -93.75, 65, 93.75, 25, (I * 25) + 25, 4, 1
     External.AddWall GetTex("MainWindows"), 65, 93.75, -65, 93.75, 25, (I * 25) + 25, 4, 1
     External.AddWall GetTex("MainWindows"), -65, 93.75, -65, -93.75, 25, (I * 25) + 25, 4, 1
     
     'Elevators
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, -46.25, -12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), -12.5, -46.25, -12.5, 0, 25, (I * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), -12.5, 0, -32.5, 0, 25, (I * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, 0, -32.5, -46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), -32.5, -46.25, -12.5, -46.25, 25, (I * 25) + 25, 1, 2
+    'Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, 0, 25, (I * 25) + 25, 3, 2
+    'cut side wall start
+    Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -30, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), -12.5, -16, -12.5, 0, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), -12.5, -30, -12.5, -16, 5.5, (I * 25) + 25 + 19.5, 0.8, 0.44
+    'cut side wall end
+    Shafts.AddWall GetTex("Wall1"), -12.5, 0, -32.5, 0, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), -32.5, 0, -32.5, -46.25, 25, (I * 25) + 25, 3, 2
     
-    Shafts.AddWall GetTex("BrickTexture"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), 12.5, -46.25, 12.5, 0, 25, (I * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), 12.5, 0, 32.5, 0, 25, (I * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), 32.5, 0, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), 12.5, -46.25, 12.5, 0, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), 12.5, 0, 32.5, 0, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), 32.5, 0, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
     
     Next I
 
@@ -265,12 +331,18 @@ Print "Processing Floors 118 to 134"
 Print "Processing Floors 135 to 137"
     'Floors 135 to 137 (minus 6 feet)
     For I = 135 To 137
-    'Mesh.AddFloor GetTex("BrickTexture"), -50, -93.75, 50, 93.75, (I * 25) + 25, 10, 10
-    Room.AddFloor GetTex("BrickTexture"), -50, -93.75, 50, -46.25, (I * 25) + 25, 10, 3
-    Room.AddFloor GetTex("BrickTexture"), -50, -15.42, 50, 93.75, (I * 25) + 25, 10, 3
-    Room.AddFloor GetTex("BrickTexture"), -50, -46.25, -32.5, -15.42, (I * 25) + 25, 3, 3
-    Room.AddFloor GetTex("BrickTexture"), 32.5, -46.25, 50, -15.42, (I * 25) + 25, 3, 3
-    Room.AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, -15.42, (I * 25) + 25, 1, 3
+    'Mesh.AddFloor GetTex("Granite"), -50, -93.75, 50, 93.75, (I * 25) + 25, 10, 10
+    Room.AddFloor GetTex("Granite"), -50, -93.75, 50, -46.25, (I * 25) + 25, 8, 3.8
+    Room.AddFloor GetTex("Granite"), -50, -15.42, 50, 93.75, (I * 25) + 25, 8, 8.6
+    Room.AddFloor GetTex("Granite"), -50, -46.25, -32.5, -15.42, (I * 25) + 25, 1.4, 2.4
+    Room.AddFloor GetTex("Granite"), 32.5, -46.25, 50, -15.42, (I * 25) + 25, 1.4, 2.4
+    Room.AddFloor GetTex("Granite"), -12.5, -46.25, 12.5, -15.42, (I * 25) + 25, 2, 2.4
+    
+    Room.AddFloor GetTex("Marble3"), -50, -93.75, 50, -46.25, (I * 25) + 49.5, 8, 3.8
+    Room.AddFloor GetTex("Marble3"), -50, -15.42, 50, 93.75, (I * 25) + 49.5, 8, 8.6
+    Room.AddFloor GetTex("Marble3"), -50, -46.25, -32.5, -15.42, (I * 25) + 49.5, 1.4, 2.4
+    Room.AddFloor GetTex("Marble3"), 32.5, -46.25, 50, -15.42, (I * 25) + 49.5, 1.4, 2.4
+    Room.AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, -15.42, (I * 25) + 49.5, 2, 2.4
     
     External.AddWall GetTex("MainWindows"), -50, -93.75, 50, -93.75, 25, (I * 25) + 25, 3, 1
     External.AddWall GetTex("MainWindows"), 50, -93.75, 50, 93.75, 25, (I * 25) + 25, 3, 1
@@ -278,15 +350,20 @@ Print "Processing Floors 135 to 137"
     External.AddWall GetTex("MainWindows"), -50, 93.75, -50, -93.75, 25, (I * 25) + 25, 3, 1
     
     'Elevators
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, -46.25, -12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), -12.5, -46.25, -12.5, -15.42, 25, (I * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), -12.5, -15.42, -32.5, -15.42, 25, (I * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), -32.5, -15.42, -32.5, -46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), -32.5, -46.25, -12.5, -46.25, 25, (I * 25) + 25, 1, 2
+    'Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -15.42, 25, (I * 25) + 25, 3, 2
+    'cut side wall start
+    Shafts.AddWall GetTex("Wall1"), -12.5, -46.25, -12.5, -30, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), -12.5, -16, -12.5, -15.42, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), -12.5, -30, -12.5, -16, 5.5, (I * 25) + 25 + 19.5, 0.8, 0.44
+    'cut side wall end
+    Shafts.AddWall GetTex("Wall1"), -12.5, -15.42, -32.5, -15.42, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), -32.5, -15.42, -32.5, -46.25, 25, (I * 25) + 25, 3, 2
     
-    Shafts.AddWall GetTex("BrickTexture"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
-    'Shafts.AddWall GetTex("BrickTexture"), 12.5, -46.25, 12.5, -15.42, 25, (I * 25) + 25, 3, 2
-    Shafts.AddWall GetTex("BrickTexture"), 12.5, -15.42, 32.5, -15.42, 25, (I * 25) + 25, 1, 2
-    Shafts.AddWall GetTex("BrickTexture"), 32.5, -15.42, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), 32.5, -46.25, 12.5, -46.25, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), 12.5, -46.25, 12.5, -15.42, 25, (I * 25) + 25, 3, 2
+    Shafts.AddWall GetTex("Wall1"), 12.5, -15.42, 32.5, -15.42, 25, (I * 25) + 25, 1, 2
+    Shafts.AddWall GetTex("Wall1"), 32.5, -15.42, 32.5, -46.25, 25, (I * 25) + 25, 3, 2
     
     Next I
 
@@ -296,12 +373,13 @@ Print "Processing Floors 135 to 137"
     Shafts.AddFloor GetTex("BrickTexture"), -50, -93.75, 50, 93.75, (138 * 25) + 25, 10, 10
       
     'Elevator1
-    Elevator1.AddFloor GetTex("BrickTexture"), -32, -30, -12, -16, 1
-    Elevator1.AddFloor GetTex("BrickTexture"), -32, -30, -12, -16, 19.5
-    Elevator1.AddWall GetTex("BrickTexture"), -32, -30, -12, -30, 19.5
+    'Old one Elevator1.AddFloor GetTex("BrickTexture"), -32, -30, -12, -16, 1
+    Elevator1.AddFloor GetTex("Wood2"), -28, -30, -12.5, -16, 0.1, 1, 1
+    Elevator1.AddFloor GetTex("Elev1"), -28, -30, -12.5, -16, 19.5, 2, 2
+    Elevator1.AddWall GetTex("Wood1"), -28, -30, -12.5, -30, 19.5, 0.1, 2, 2
     'Elevator1.AddWall GetTex("BrickTexture"), -12, -30, -12, -16, 19.5
-    Elevator1.AddWall GetTex("BrickTexture"), -32, -16, -12, -16, 19.5
-    Elevator1.AddWall GetTex("BrickTexture"), -32, -16, -32, -30, 19.5
+    Elevator1.AddWall GetTex("Wood1"), -28, -16, -12.5, -16, 19.5, 0.1, 2, 2
+    Elevator1.AddWall GetTex("Wood1"), -28, -16, -28, -30, 19.5, 0.1, 2, 2
 2
     '4 : Set the camera startpos
     'Camera.SetCameraPosition 0, 10, 0
@@ -335,6 +413,8 @@ Print "Processing Floors 135 to 137"
       If Inp.IsKeyPressed(TV_KEY_END) = True Then Camera.MoveRelative 0, -1, 0
       If Inp.IsKeyPressed(TV_KEY_1) = True Then ElevatorDirection = 1
       If Inp.IsKeyPressed(TV_KEY_2) = True Then ElevatorDirection = -1
+      
+      If Inp.IsKeyPressed(TV_KEY_F1) = True Then TV.ScreenShot ("c:\shot.bmp")
       
       If GotoFloor <> 0 And GotoFloor > CurrentFloor And ElevatorDirection = 0 Then
       ElevatorDirection = 1
