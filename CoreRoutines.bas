@@ -180,6 +180,207 @@ Global FloorEnabled(138) As Boolean
 Global InElevator As Boolean
 
 Global tmpMouseX As Long, tmpMouseY As Long, tmpMouseB1 As Integer
+Global EnableCollisions As Boolean
+Global Gravity As Single
+Global IsFalling As Boolean
+Global lngOldTick As Long
+Global FallRate As Single
+Global CameraOriginalPos As Single
+Sub CheckCollisions()
+ 'Main collision code
+LineTest = lineend
+ 
+ If lineend.X > linestart.X Then LineTest.X = lineend.X + 2
+ If lineend.X < linestart.X Then LineTest.X = lineend.X - 2
+ If lineend.z > linestart.z Then LineTest.z = lineend.z + 2
+ If lineend.z < linestart.z Then LineTest.z = lineend.z - 2
+    
+'Turn on collisions
+        Room(CameraFloor).SetCollisionEnable True
+        External.SetCollisionEnable True
+        Buildings.SetCollisionEnable True
+        Shafts1(CameraFloor).SetCollisionEnable True
+        Shafts2(CameraFloor).SetCollisionEnable True
+        ShaftsFloor(CameraFloor).SetCollisionEnable True
+        For i50 = 1 To 10
+        Elevator(i50).SetCollisionEnable True
+        ElevatorInsDoorL(i50).SetCollisionEnable True
+        ElevatorInsDoorR(i50).SetCollisionEnable True
+        Next i50
+        If CameraFloor = 1 Then
+        ElevatorDoor1L(-1).SetCollisionEnable True
+        ElevatorDoor1R(-1).SetCollisionEnable True
+        ElevatorDoor2L(-1).SetCollisionEnable True
+        ElevatorDoor2R(-1).SetCollisionEnable True
+        ElevatorDoor3L(-1).SetCollisionEnable True
+        ElevatorDoor3R(-1).SetCollisionEnable True
+        ElevatorDoor4L(-1).SetCollisionEnable True
+        ElevatorDoor4R(-1).SetCollisionEnable True
+        ElevatorDoor5L(-1).SetCollisionEnable True
+        ElevatorDoor5R(-1).SetCollisionEnable True
+        ElevatorDoor6L(-1).SetCollisionEnable True
+        ElevatorDoor6R(-1).SetCollisionEnable True
+        ElevatorDoor7L(-1).SetCollisionEnable True
+        ElevatorDoor7R(-1).SetCollisionEnable True
+        ElevatorDoor8L(-1).SetCollisionEnable True
+        ElevatorDoor8R(-1).SetCollisionEnable True
+        ElevatorDoor9L(-1).SetCollisionEnable True
+        ElevatorDoor9R(-1).SetCollisionEnable True
+        ElevatorDoor10L(-1).SetCollisionEnable True
+        ElevatorDoor10R(-1).SetCollisionEnable True
+        ElevatorDoor1L(0).SetCollisionEnable True
+        ElevatorDoor1R(0).SetCollisionEnable True
+        ElevatorDoor2L(0).SetCollisionEnable True
+        ElevatorDoor2R(0).SetCollisionEnable True
+        Else
+        ElevatorDoor1L(CameraFloor).SetCollisionEnable True
+        ElevatorDoor1R(CameraFloor).SetCollisionEnable True
+        ElevatorDoor2L(CameraFloor).SetCollisionEnable True
+        ElevatorDoor2R(CameraFloor).SetCollisionEnable True
+        ElevatorDoor3L(CameraFloor).SetCollisionEnable True
+        ElevatorDoor3R(CameraFloor).SetCollisionEnable True
+        ElevatorDoor4L(CameraFloor).SetCollisionEnable True
+        ElevatorDoor4R(CameraFloor).SetCollisionEnable True
+        ElevatorDoor5L(CameraFloor).SetCollisionEnable True
+        ElevatorDoor5R(CameraFloor).SetCollisionEnable True
+        ElevatorDoor6L(CameraFloor).SetCollisionEnable True
+        ElevatorDoor6R(CameraFloor).SetCollisionEnable True
+        ElevatorDoor7L(CameraFloor).SetCollisionEnable True
+        ElevatorDoor7R(CameraFloor).SetCollisionEnable True
+        ElevatorDoor8L(CameraFloor).SetCollisionEnable True
+        ElevatorDoor8R(CameraFloor).SetCollisionEnable True
+        ElevatorDoor9L(CameraFloor).SetCollisionEnable True
+        ElevatorDoor9R(CameraFloor).SetCollisionEnable True
+        ElevatorDoor10L(CameraFloor).SetCollisionEnable True
+        ElevatorDoor10R(CameraFloor).SetCollisionEnable True
+        End If
+        Stairs(CameraFloor).SetCollisionEnable True
+        
+        
+        
+ 'Elevator Collision
+ For i50 = 1 To 10
+ 
+    If Elevator(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorInsDoorL(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorInsDoorR(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+        
+ Next i50
+    
+ 'Collision code for all other objects
+    i50 = CameraFloor
+    If CameraFloor = 1 Then i50 = -1
+    If ElevatorDoor1L(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor1R(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor2L(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor2R(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor3L(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor3R(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor4L(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor4R(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor5L(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor5R(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor6L(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor6R(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor7L(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor7R(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor8L(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor8R(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor9L(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor9R(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor10L(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor10R(i50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If CameraFloor = 1 Then
+    If ElevatorDoor1L(0).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor1R(0).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor2L(0).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ElevatorDoor2R(0).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    End If
+    
+    
+    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If Stairs(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If Buildings.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If Shafts1(CameraFloor).IsMeshEnabled = True Then If Shafts1(CameraFloor).IsMeshEnabled = True Then If Shafts1(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If Shafts2(CameraFloor).IsMeshEnabled = True Then If Shafts2(CameraFloor).IsMeshEnabled = True Then If Shafts2(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If ShaftsFloor(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    
+'On Error Resume Next
+'For i50 = 1 To 150
+'j50 = i50 + (150 * (CameraFloor - 1))
+'If Objects(j50).IsMeshEnabled = True Then
+'    Objects(j50).SetCollisionEnable True
+'    MsgBox (j50)
+'    If Objects(j50).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+'    Objects(j50).SetCollisionEnable False
+'End If
+'Next i50
+
+CollisionEnd:
+
+'Turn off collisions
+        Room(CameraFloor).SetCollisionEnable False
+        External.SetCollisionEnable False
+        Buildings.SetCollisionEnable False
+        Shafts1(CameraFloor).SetCollisionEnable False
+        Shafts2(CameraFloor).SetCollisionEnable False
+        ShaftsFloor(CameraFloor).SetCollisionEnable False
+        For i50 = 1 To 10
+        Elevator(i50).SetCollisionEnable False
+        ElevatorInsDoorL(i50).SetCollisionEnable False
+        ElevatorInsDoorR(i50).SetCollisionEnable False
+        Next i50
+        If CameraFloor = 1 Then
+        ElevatorDoor1L(-1).SetCollisionEnable False
+        ElevatorDoor1R(-1).SetCollisionEnable False
+        ElevatorDoor2L(-1).SetCollisionEnable False
+        ElevatorDoor2R(-1).SetCollisionEnable False
+        ElevatorDoor3L(-1).SetCollisionEnable False
+        ElevatorDoor3R(-1).SetCollisionEnable False
+        ElevatorDoor4L(-1).SetCollisionEnable False
+        ElevatorDoor4R(-1).SetCollisionEnable False
+        ElevatorDoor5L(-1).SetCollisionEnable False
+        ElevatorDoor5R(-1).SetCollisionEnable False
+        ElevatorDoor6L(-1).SetCollisionEnable False
+        ElevatorDoor6R(-1).SetCollisionEnable False
+        ElevatorDoor7L(-1).SetCollisionEnable False
+        ElevatorDoor7R(-1).SetCollisionEnable False
+        ElevatorDoor8L(-1).SetCollisionEnable False
+        ElevatorDoor8R(-1).SetCollisionEnable False
+        ElevatorDoor9L(-1).SetCollisionEnable False
+        ElevatorDoor9R(-1).SetCollisionEnable False
+        ElevatorDoor10L(-1).SetCollisionEnable False
+        ElevatorDoor10R(-1).SetCollisionEnable False
+        ElevatorDoor1L(0).SetCollisionEnable False
+        ElevatorDoor1R(0).SetCollisionEnable False
+        ElevatorDoor2L(0).SetCollisionEnable False
+        ElevatorDoor2R(0).SetCollisionEnable False
+        Else
+        ElevatorDoor1L(CameraFloor).SetCollisionEnable False
+        ElevatorDoor1R(CameraFloor).SetCollisionEnable False
+        ElevatorDoor2L(CameraFloor).SetCollisionEnable False
+        ElevatorDoor2R(CameraFloor).SetCollisionEnable False
+        ElevatorDoor3L(CameraFloor).SetCollisionEnable False
+        ElevatorDoor3R(CameraFloor).SetCollisionEnable False
+        ElevatorDoor4L(CameraFloor).SetCollisionEnable False
+        ElevatorDoor4R(CameraFloor).SetCollisionEnable False
+        ElevatorDoor5L(CameraFloor).SetCollisionEnable False
+        ElevatorDoor5R(CameraFloor).SetCollisionEnable False
+        ElevatorDoor6L(CameraFloor).SetCollisionEnable False
+        ElevatorDoor6R(CameraFloor).SetCollisionEnable False
+        ElevatorDoor7L(CameraFloor).SetCollisionEnable False
+        ElevatorDoor7R(CameraFloor).SetCollisionEnable False
+        ElevatorDoor8L(CameraFloor).SetCollisionEnable False
+        ElevatorDoor8R(CameraFloor).SetCollisionEnable False
+        ElevatorDoor9L(CameraFloor).SetCollisionEnable False
+        ElevatorDoor9R(CameraFloor).SetCollisionEnable False
+        ElevatorDoor10L(CameraFloor).SetCollisionEnable False
+        ElevatorDoor10R(CameraFloor).SetCollisionEnable False
+        End If
+        Stairs(CameraFloor).SetCollisionEnable False
+
+End Sub
 
 Sub DrawElevatorWalls(FloorID As Integer, SectionNum As Integer, OpenShaft As Boolean, e1 As Boolean, e2 As Boolean, e3 As Boolean, e4 As Boolean, e5 As Boolean, e6 As Boolean, e7 As Boolean, e8 As Boolean, e9 As Boolean, e10 As Boolean)
 
@@ -341,6 +542,32 @@ If FloorID = 1 Then q = -1
         If SectionNum = 4 Then ShaftEnd = 15.41
         If SectionNum = 5 Then ShaftEnd = 0
         If SectionNum >= 6 Then ShaftEnd = -15.42
+        
+        'this section places any shaft floors/ceilings that need to be made
+        If FloorID = 1 Then
+        Shafts1(FloorID).AddFloor GetTex("BrickTexture"), -12.5, -30, -32.5, 46.25, 0.05, (20 * 0.086), (46 * 0.08)
+        Shafts2(FloorID).AddFloor GetTex("BrickTexture"), 12.5, -30, 32.5, 46.25, 0.05, (20 * 0.086), (46 * 0.08)
+        End If
+        If FloorID = 39 Then
+        Shafts1(FloorID).AddFloor GetTex("BrickTexture"), -12.5, 30.83, -32.5, 46.25, (FloorID * 25) + 25 + 24.95, (20 * 0.086), (16 * 0.08)
+        Shafts2(FloorID).AddFloor GetTex("BrickTexture"), 12.5, 30.83, 32.5, 46.25, (FloorID * 25) + 25 + 24.95, (20 * 0.086), (16 * 0.08)
+        End If
+        If FloorID = 79 Then
+        Shafts1(FloorID).AddFloor GetTex("BrickTexture"), -12.5, 15.41, -32.5, 30.83, (FloorID * 25) + 25 + 24.95, (20 * 0.086), (16 * 0.08)
+        Shafts2(FloorID).AddFloor GetTex("BrickTexture"), 12.5, 15.41, 32.5, 30.83, (FloorID * 25) + 25 + 24.95, (20 * 0.086), (16 * 0.08)
+        End If
+        If FloorID = 117 Then
+        Shafts1(FloorID).AddFloor GetTex("BrickTexture"), -12.5, 0, -32.5, 15.41, (FloorID * 25) + 25 + 24.95, (20 * 0.086), (16 * 0.08)
+        Shafts2(FloorID).AddFloor GetTex("BrickTexture"), 12.5, 0, 32.5, 15.41, (FloorID * 25) + 25 + 24.95, (20 * 0.086), (16 * 0.08)
+        End If
+        If FloorID = 134 Then
+        Shafts1(FloorID).AddFloor GetTex("BrickTexture"), -12.5, -15.42, -32.5, 0, (FloorID * 25) + 25 + 24.95, (20 * 0.086), (16 * 0.08)
+        Shafts2(FloorID).AddFloor GetTex("BrickTexture"), 12.5, -15.42, 32.5, 0, (FloorID * 25) + 25 + 24.95, (20 * 0.086), (16 * 0.08)
+        End If
+        If FloorID = 138 Then
+        Shafts1(FloorID).AddFloor GetTex("BrickTexture"), -12.5, -30, -32.5, -15.42, (FloorID * 25) + 25 + 24.95, (20 * 0.086), (16 * 0.08)
+        'Shafts2(FloorID).AddFloor GetTex("BrickTexture"), 12.5, -30, 32.5, -15.42, (FloorID*25)+25+24.95, (20 * 0.086), (16 * 0.08)
+        End If
         
         'this section places the wall that extends to the end of the shaft, according to where the last elevator is
         If SectionNum = 7 Then
@@ -600,9 +827,89 @@ End If
     
     
 End Sub
+Sub Fall()
+'This detects if the user is above a hole or something (ready to fall)
+Room(CameraFloor).SetCollisionEnable True
+Shafts1(CameraFloor).SetCollisionEnable True
+Shafts2(CameraFloor).SetCollisionEnable True
+Buildings.SetCollisionEnable True
+External.SetCollisionEnable True
+
+If Room(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
+    Shafts1(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
+    Shafts2(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
+    External.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
+    Buildings.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And InElevator = False And InStairwell = False Then IsFalling = True
+
+Room(CameraFloor).SetCollisionEnable False
+Shafts1(CameraFloor).SetCollisionEnable False
+Shafts2(CameraFloor).SetCollisionEnable False
+Buildings.SetCollisionEnable False
+External.SetCollisionEnable False
+
+'*********************************
+If IsFalling = False Then Exit Sub
+
+'The gravity originally acted weird
+Dim TimeRate As Single
+Gravity = 5
+If FallRate = 0 Then
+lngOldTick = GetTickCount()
+CameraOriginalPos = Camera.GetPosition.Y
+End If
+
+'MsgBox ((GetTickCount() / 1000) - (lngOldTick / 1000))
+
+'Basically this is Fallrate=Gravity*SecondsPassed
+TimeRate = ((GetTickCount() / 1000) - (lngOldTick / 1000))
+FallRate = (Gravity * TimeRate) ^ 1.8
+If FallRate = 0 Then FallRate = 0.1
+If TimeRate = 0 Then TimeRate = 0.1
+'MsgBox ("Gravity:" + Str$(Gravity) + " Time Passed:" + Str$((GetTickCount() / 1000) - (lngOldTick / 1000)))
+
+Camera.SetPosition Camera.GetPosition.X, CameraOriginalPos - FallRate, Camera.GetPosition.z
+
+Room(CameraFloor).SetCollisionEnable True
+Shafts1(CameraFloor).SetCollisionEnable True
+Shafts2(CameraFloor).SetCollisionEnable True
+Buildings.SetCollisionEnable True
+
+If Room(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+FallRate = 0
+IsFalling = False
+If CameraFloor > 1 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10, Camera.GetPosition.z
+If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
+End If
+If Shafts1(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+FallRate = 0
+IsFalling = False
+If CameraFloor > 1 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10, Camera.GetPosition.z
+If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
+End If
+If Shafts2(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+FallRate = 0
+IsFalling = False
+If CameraFloor > 1 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10, Camera.GetPosition.z
+If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
+End If
+If Buildings.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+FallRate = 0
+IsFalling = False
+If CameraFloor > 1 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10, Camera.GetPosition.z
+If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
+End If
+
+Room(CameraFloor).SetCollisionEnable False
+Shafts1(CameraFloor).SetCollisionEnable False
+Shafts2(CameraFloor).SetCollisionEnable False
+Buildings.SetCollisionEnable False
+
+End Sub
+
 Sub Init_Simulator()
 'On Error GoTo ErrorHandler
 isRunning = True
+EnableCollisions = True
 Form2.Show
 Form1.Show
 Set TV = New TVEngine
@@ -850,6 +1157,70 @@ Form1.Print "Loading 3D Objects..."
 End Sub
 
 
+Sub OptimizeMeshes()
+  Form1.Print "Optimizing Meshes.";
+  For i = 1 To 138
+  Form1.Print ".";
+  Room(i).Optimize
+  Stairs(i).Optimize
+  ShaftsFloor(i).Optimize
+  Shafts1(i).Optimize
+  Shafts2(i).Optimize
+  Next i
+  Form1.Print "."
+  For i = -1 To 138
+  Form1.Print ".";
+  ElevatorDoor1L(i).Optimize
+  ElevatorDoor1R(i).Optimize
+  ElevatorDoor2L(i).Optimize
+  ElevatorDoor2R(i).Optimize
+  ElevatorDoor3L(i).Optimize
+  ElevatorDoor3R(i).Optimize
+  ElevatorDoor4L(i).Optimize
+  ElevatorDoor4R(i).Optimize
+  ElevatorDoor5L(i).Optimize
+  ElevatorDoor5R(i).Optimize
+  ElevatorDoor6L(i).Optimize
+  ElevatorDoor6R(i).Optimize
+  ElevatorDoor7L(i).Optimize
+  ElevatorDoor7R(i).Optimize
+  ElevatorDoor8L(i).Optimize
+  ElevatorDoor8R(i).Optimize
+  ElevatorDoor9L(i).Optimize
+  ElevatorDoor9R(i).Optimize
+  ElevatorDoor10L(i).Optimize
+  ElevatorDoor10R(i).Optimize
+  Buttons1(i).Optimize
+  Buttons2(i).Optimize
+  Buttons3(i).Optimize
+  Buttons4(i).Optimize
+  Buttons5(i).Optimize
+  Buttons6(i).Optimize
+  Buttons7(i).Optimize
+  Buttons8(i).Optimize
+  Buttons9(i).Optimize
+  Buttons10(i).Optimize
+  Next i
+  Form1.Print ".";
+  External.Optimize
+  Form1.Print ".";
+  For i = 1 To 10
+  Elevator(i).Optimize
+  ElevatorInsDoorL(i).Optimize
+  ElevatorInsDoorR(i).Optimize
+  Plaque(i).Optimize
+  Form1.Print ".";
+  ElevatorInsDoorL(i).Optimize
+  Form1.Print ".";
+  ElevatorInsDoorR(i).Optimize
+  Next i
+  Form1.Print ".";
+  Buildings.Optimize
+  
+  Form1.Print "Done"
+  
+End Sub
+
 Sub ProcessFloors()
 'Lobby
 Call ProcessLobby
@@ -870,6 +1241,7 @@ Form1.Print "Processing Outside..."
 Call ProcessOutside
 Call ProcessMisc
 Call ProcessStairs
+Call OptimizeMeshes
 End Sub
 
 Sub ProcessLobby()
@@ -927,40 +1299,40 @@ Form1.Print "Processing Lobby..."
     'ShaftsFloor(i).AddWall GetTex("Concrete"), -32.5, -130, -32.5, -110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, -110, -32.5, -110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, -130, -32.5, -130, 75, 0, 1, 3
-    Buildings.AddWall GetTex("Concrete"), -12.5, -130, -12.5, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), -32.5, -130, -32.5, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), -12.5, -110, -32.5, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), -12.5, -130, -32.5, -130, (136 * 25) + 50, 0, 1, 138
+    Buildings.AddWall GetTex("Concrete"), -30, -130, -30, -110, (136 * 25) + 50, 0, 1, 138
+    Buildings.AddWall GetTex("Concrete"), -50, -130, -50, -110, (136 * 25) + 50, 0, 1, 138
+    Buildings.AddWall GetTex("Concrete"), -30, -110, -50, -110, (136 * 25) + 50, 0, 1, 138
+    Buildings.AddWall GetTex("Concrete"), -30, -130, -50, -130, (136 * 25) + 50, 0, 1, 138
     
     'Service elevator shaft (South)
     'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, 130, -12.5, 110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), -32.5, 130, -32.5, 110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, 110, -32.5, 110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, 130, -32.5, 130, 75, 0, 1, 3
-    Buildings.AddWall GetTex("Concrete"), -12.5, 130, -12.5, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), -32.5, 130, -32.5, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), -12.5, 110, -32.5, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), -12.5, 130, -32.5, 130, (131 * 25) + 50, 0, 1, 133
+    Buildings.AddWall GetTex("Concrete"), -30, 130, -30, 110, (131 * 25) + 50, 0, 1, 133
+    Buildings.AddWall GetTex("Concrete"), -50, 130, -50, 110, (131 * 25) + 50, 0, 1, 133
+    Buildings.AddWall GetTex("Concrete"), -30, 110, -50, 110, (131 * 25) + 50, 0, 1, 133
+    Buildings.AddWall GetTex("Concrete"), -30, 130, -50, 130, (131 * 25) + 50, 0, 1, 133
     
     'Stairwell shaft (North)
     'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, -130, 12.5, -110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), 32.5, -130, 32.5, -110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, -110, 32.5, -110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, -130, 32.5, -130, 75, 0, 1, 3
-    Buildings.AddWall GetTex("Concrete"), 12.5, -130, 12.5, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), 32.5, -130, 32.5, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), 12.5, -110, 32.5, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), 12.5, -130, 32.5, -130, (136 * 25) + 50, 0, 1, 138
+    Buildings.AddWall GetTex("Concrete"), 30, -130, 30, -110, (136 * 25) + 50, 0, 1, 138
+    Buildings.AddWall GetTex("Concrete"), 50, -130, 50, -110, (136 * 25) + 50, 0, 1, 138
+    Buildings.AddWall GetTex("Concrete"), 30, -110, 50, -110, (136 * 25) + 50, 0, 1, 138
+    Buildings.AddWall GetTex("Concrete"), 30, -130, 50, -130, (136 * 25) + 50, 0, 1, 138
     
     'Stairwell shaft (South)
     'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, 130, 12.5, 110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), 32.5, 130, 32.5, 110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, 110, 32.5, 110, 75, 0, 1, 3
     'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, 130, 32.5, 130, 75, 0, 1, 3
-    Buildings.AddWall GetTex("Concrete"), 12.5, 130, 12.5, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), 32.5, 130, 32.5, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), 12.5, 110, 32.5, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), 12.5, 130, 32.5, 130, (131 * 25) + 50, 0, 1, 133
+    Buildings.AddWall GetTex("Concrete"), 30, 130, 30, 110, (131 * 25) + 50, 0, 1, 133
+    Buildings.AddWall GetTex("Concrete"), 50, 130, 50, 110, (131 * 25) + 50, 0, 1, 133
+    Buildings.AddWall GetTex("Concrete"), 30, 110, 50, 110, (131 * 25) + 50, 0, 1, 133
+    Buildings.AddWall GetTex("Concrete"), 30, 130, 50, 130, (131 * 25) + 50, 0, 1, 133
     
     'Ceiling
     Room(i).AddFloor GetTex("Ceiling1"), -160, -150, 160, -46.25, (i * 25) + 49.5, 10, 5
@@ -1509,85 +1881,85 @@ Sub InitObjectsForFloor(Floor As Integer)
 'Exit Sub
 If Floor = 1 Then
 
-'Column 1
-i = 1 + (150 * (Floor - 1))
-Call Init_Objects(Floor, 1)
-Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
-Objects(i).SetColor (RGBA(10, 10, 10, 1))
-Objects(i).ScaleMesh 0.105, 0.105, 0.105
-Objects(i).SetTexture GetTex("ColumnTex")
-Objects(i).SetPosition -75, 13.5, 45
-'Objects(i).Optimize
+''Column 1
+'i = 1 + (150 * (Floor - 1))
+'Call Init_Objects(Floor, 1)
+'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).SetColor (RGBA(10, 10, 10, 1))
+'Objects(i).ScaleMesh 0.105, 0.105, 0.105
+'Objects(i).SetTexture GetTex("ColumnTex")
+'Objects(i).SetPosition -75, 13.5, 45
+''Objects(i).Optimize
 
-'Column 2
-i = 2 + (150 * (Floor - 1))
-Call Init_Objects(Floor, 2)
-Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
-Objects(i).SetColor (RGBA(10, 10, 10, 1))
-Objects(i).ScaleMesh 0.105, 0.105, 0.105
-Objects(i).SetTexture GetTex("ColumnTex")
-Objects(i).SetPosition -75, 13.5, 15
-'Objects(i).Optimize
+''Column 2
+'i = 2 + (150 * (Floor - 1))
+'Call Init_Objects(Floor, 2)
+'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).SetColor (RGBA(10, 10, 10, 1))
+'Objects(i).ScaleMesh 0.105, 0.105, 0.105
+'Objects(i).SetTexture GetTex("ColumnTex")
+'Objects(i).SetPosition -75, 13.5, 15
+''Objects(i).Optimize
 
-'Column 3
-i = 3 + (150 * (Floor - 1))
-Call Init_Objects(Floor, 3)
-Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
-Objects(i).SetColor (RGBA(10, 10, 10, 1))
-Objects(i).ScaleMesh 0.105, 0.105, 0.105
-Objects(i).SetTexture GetTex("ColumnTex")
-Objects(i).SetPosition -75, 13.5, -15
-'Objects(i).Optimize
+''Column 3
+'i = 3 + (150 * (Floor - 1))
+'Call Init_Objects(Floor, 3)
+'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).SetColor (RGBA(10, 10, 10, 1))
+'Objects(i).ScaleMesh 0.105, 0.105, 0.105
+'Objects(i).SetTexture GetTex("ColumnTex")
+'Objects(i).SetPosition -75, 13.5, -15
+''Objects(i).Optimize
 
-'Column 4
-i = 4 + (150 * (Floor - 1))
-Call Init_Objects(Floor, 4)
-Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
-Objects(i).SetColor (RGBA(10, 10, 10, 1))
-Objects(i).ScaleMesh 0.105, 0.105, 0.105
-Objects(i).SetTexture GetTex("ColumnTex")
-Objects(i).SetPosition -75, 13.5, -45
-'Objects(i).Optimize
+''Column 4
+'i = 4 + (150 * (Floor - 1))
+'Call Init_Objects(Floor, 4)
+'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).SetColor (RGBA(10, 10, 10, 1))
+'Objects(i).ScaleMesh 0.105, 0.105, 0.105
+'Objects(i).SetTexture GetTex("ColumnTex")
+'Objects(i).SetPosition -75, 13.5, -45
+''Objects(i).Optimize
 
-'Column 5
-i = 5 + (150 * (Floor - 1))
-Call Init_Objects(Floor, 5)
-Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
-Objects(i).SetColor (RGBA(10, 10, 10, 1))
-Objects(i).ScaleMesh 0.105, 0.105, 0.105
-Objects(i).SetTexture GetTex("ColumnTex")
-Objects(i).SetPosition 75, 13.5, 45
-'Objects(i).Optimize
+''Column 5
+'i = 5 + (150 * (Floor - 1))
+'Call Init_Objects(Floor, 5)
+'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).SetColor (RGBA(10, 10, 10, 1))
+'Objects(i).ScaleMesh 0.105, 0.105, 0.105
+'Objects(i).SetTexture GetTex("ColumnTex")
+'Objects(i).SetPosition 75, 13.5, 45
+''Objects(i).Optimize
 
-'Column 6
-i = 6 + (150 * (Floor - 1))
-Call Init_Objects(Floor, 6)
-Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
-Objects(i).SetColor (RGBA(10, 10, 10, 1))
-Objects(i).ScaleMesh 0.105, 0.105, 0.105
-Objects(i).SetTexture GetTex("ColumnTex")
-Objects(i).SetPosition 75, 13.5, 15
-'Objects(i).Optimize
+''Column 6
+'i = 6 + (150 * (Floor - 1))
+'Call Init_Objects(Floor, 6)
+'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).SetColor (RGBA(10, 10, 10, 1))
+'Objects(i).ScaleMesh 0.105, 0.105, 0.105
+'Objects(i).SetTexture GetTex("ColumnTex")
+'Objects(i).SetPosition 75, 13.5, 15
+''Objects(i).Optimize
 
-'Column 7
-i = 7 + (150 * (Floor - 1))
-Call Init_Objects(Floor, 7)
-Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
-Objects(i).SetColor (RGBA(10, 10, 10, 1))
-Objects(i).ScaleMesh 0.105, 0.105, 0.105
-Objects(i).SetTexture GetTex("ColumnTex")
-Objects(i).SetPosition 75, 13.5, -15
-'Objects(i).Optimize
+''Column 7
+'i = 7 + (150 * (Floor - 1))
+'Call Init_Objects(Floor, 7)
+'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).SetColor (RGBA(10, 10, 10, 1))
+'Objects(i).ScaleMesh 0.105, 0.105, 0.105
+'Objects(i).SetTexture GetTex("ColumnTex")
+'Objects(i).SetPosition 75, 13.5, -15
+''Objects(i).Optimize
 
-'Column 8
-i = 8 + (150 * (Floor - 1))
-Call Init_Objects(Floor, 8)
-Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
-Objects(i).SetColor (RGBA(10, 10, 10, 1))
-Objects(i).ScaleMesh 0.105, 0.105, 0.105
-Objects(i).SetTexture GetTex("ColumnTex")
-Objects(i).SetPosition 75, 13.5, -45
-'Objects(i).Optimize
+''Column 8
+'i = 8 + (150 * (Floor - 1))
+'Call Init_Objects(Floor, 8)
+'Objects(i).Load3DsMesh App.Path + "\objects\column.3ds", True
+'Objects(i).SetColor (RGBA(10, 10, 10, 1))
+'Objects(i).ScaleMesh 0.105, 0.105, 0.105
+'Objects(i).SetTexture GetTex("ColumnTex")
+'Objects(i).SetPosition 75, 13.5, -45
+''Objects(i).Optimize
 
 'Door 1
 i = 9 + (150 * (Floor - 1))
@@ -2939,7 +3311,7 @@ Objects(i).AddWall GetTex("StairsDoor"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
 'Objects(i).SetRotation 0, 1.56, 0
-Objects(i).SetMeshName ("DoorB " + Str$(i))
+Objects(i).SetMeshName ("DoorA " + Str$(i))
 Objects(i).SetPosition 39, (Floor * 25) + 25, -46.25
 
 'Door 07
@@ -2949,7 +3321,7 @@ Objects(i).AddWall GetTex("Door1"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
-Objects(i).SetMeshName ("DoorD " + Str$(i))
+Objects(i).SetMeshName ("DoorB " + Str$(i))
 Objects(i).SetRotation 0, 1.56, 0
 Objects(i).SetPosition 50, (Floor * 25) + 25, 13
 
@@ -2960,7 +3332,7 @@ Objects(i).AddWall GetTex("Door1"), -3.9, 0, 3.9, 0, 19.5, 0, -1, 1
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
-Objects(i).SetMeshName ("DoorB " + Str$(i))
+Objects(i).SetMeshName ("DoorD " + Str$(i))
 Objects(i).SetRotation 0, 1.56, 0
 Objects(i).SetPosition -50, (Floor * 25) + 25, 13
 
@@ -2971,7 +3343,7 @@ Objects(i).AddWall GetTex("Door1"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
-Objects(i).SetMeshName ("DoorD " + Str$(i))
+Objects(i).SetMeshName ("DoorB " + Str$(i))
 Objects(i).SetRotation 0, 1.56, 0
 Objects(i).SetPosition 12.5, (Floor * 25) + 25, 54
 
@@ -2982,7 +3354,7 @@ Objects(i).AddWall GetTex("Door1"), -3.9, 0, 3.9, 0, 19.5, 0, -1, 1
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
-Objects(i).SetMeshName ("DoorB " + Str$(i))
+Objects(i).SetMeshName ("DoorD " + Str$(i))
 Objects(i).SetRotation 0, 1.56, 0
 Objects(i).SetPosition -12.5, (Floor * 25) + 25, 54
 
@@ -2993,7 +3365,7 @@ Objects(i).AddWall GetTex("Door1"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
-Objects(i).SetMeshName ("DoorD " + Str$(i))
+Objects(i).SetMeshName ("DoorB " + Str$(i))
 Objects(i).SetRotation 0, 1.56, 0
 Objects(i).SetPosition 12.5, (Floor * 25) + 25, 67
 
@@ -3004,7 +3376,7 @@ Objects(i).AddWall GetTex("Door1"), -3.9, 0, 3.9, 0, 19.5, 0, -1, 1
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
-Objects(i).SetMeshName ("DoorB " + Str$(i))
+Objects(i).SetMeshName ("DoorD " + Str$(i))
 Objects(i).SetRotation 0, 1.56, 0
 Objects(i).SetPosition -12.5, (Floor * 25) + 25, 67
 
@@ -3015,7 +3387,7 @@ Objects(i).AddWall GetTex("Door1"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
-Objects(i).SetMeshName ("DoorD " + Str$(i))
+Objects(i).SetMeshName ("DoorB " + Str$(i))
 Objects(i).SetRotation 0, 1.56, 0
 Objects(i).SetPosition 12.5, (Floor * 25) + 25, 115
 
@@ -3026,7 +3398,7 @@ Objects(i).AddWall GetTex("Door1"), -3.9, 0, 3.9, 0, 19.5, 0, -1, 1
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
-Objects(i).SetMeshName ("DoorB " + Str$(i))
+Objects(i).SetMeshName ("DoorD " + Str$(i))
 Objects(i).SetRotation 0, 1.56, 0
 Objects(i).SetPosition -12.5, (Floor * 25) + 25, 115
 
@@ -3037,7 +3409,7 @@ Objects(i).AddWall GetTex("Door1"), -3.9, 0, 3.9, 0, 19.5, 0, 1, 1
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
-Objects(i).SetMeshName ("DoorD " + Str$(i))
+Objects(i).SetMeshName ("DoorB " + Str$(i))
 Objects(i).SetRotation 0, 1.56, 0
 Objects(i).SetPosition 12.5, (Floor * 25) + 25, 126
 
@@ -3048,7 +3420,7 @@ Objects(i).AddWall GetTex("Door1"), -3.9, 0, 3.9, 0, 19.5, 0, -1, 1
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 'Objects(i).ScaleMesh 0.45, 0.535, 0.535
 'Objects(i).SetTexture GetTex("Wood2")
-Objects(i).SetMeshName ("DoorB " + Str$(i))
+Objects(i).SetMeshName ("DoorD " + Str$(i))
 Objects(i).SetRotation 0, 1.56, 0
 Objects(i).SetPosition -12.5, (Floor * 25) + 25, 126
 
@@ -4389,6 +4761,7 @@ Sub DrawElevatorButtons()
 End Sub
 
 Sub CheckElevatorButtons()
+'collision routine for checking if an elevator button is pressed
 
 If CollisionResult.GetCollisionMesh.GetMeshName = Buttons1(-1).GetMeshName Then
     Buttons1(-1).SetColor RGBA(1, 1, 0, 1)
@@ -5114,6 +5487,9 @@ If CameraFloor >= 135 And CameraFloor <= 138 Then
     End If
 End If
 
+'Calls the Fall sub, and if IsFalling is true then the user falls until they hit something
+If EnableCollisions = True Then Call Fall
+
 ''This section turns on and off the Shafts mesh (inside the elevator and pipe shafts) when the camera is located inside them.
 'If CameraFloor = ElevatorFloor(ElevatorNumber) And Camera.GetPosition.X > -32.5 And Camera.GetPosition.X < -12.5 And Camera.GetPosition.z > -30 And Camera.GetPosition.z < -16 And CameraFloor <> 137 Then
 'For i50 = 1 To 138
@@ -5434,21 +5810,25 @@ EndCall:
       'If Inp.IsKeyPressed(TV_KEY_UP) = True And Focused = True Then
       If Inp.IsKeyPressed(TV_KEY_UP) = True Then
       KeepAltitude = Camera.GetPosition.Y
-      Camera.MoveRelative 0.7, 0, 0
+      If Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.MoveRelative 0.7, 0, 0
+      If Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.MoveRelative 1.4, 0, 0
       If Camera.GetPosition.Y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.X, KeepAltitude, Camera.GetPosition.z
       End If
       
       'If Inp.IsKeyPressed(TV_KEY_DOWN) = True And Focused = True Then
       If Inp.IsKeyPressed(TV_KEY_DOWN) = True Then
       KeepAltitude = Camera.GetPosition.Y
-      Camera.MoveRelative -0.7, 0, 0
+      If Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.MoveRelative -0.7, 0, 0
+      If Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.MoveRelative -1.4, 0, 0
       If Camera.GetPosition.Y <> KeepAltitude Then Camera.SetPosition Camera.GetPosition.X, KeepAltitude, Camera.GetPosition.z
       End If
       
       'If Inp.IsKeyPressed(TV_KEY_RIGHT) = True And Focused = True Then Camera.RotateY 0.07
       'If Inp.IsKeyPressed(TV_KEY_LEFT) = True And Focused = True Then Camera.RotateY -0.07
-      If Inp.IsKeyPressed(TV_KEY_RIGHT) = True Then Camera.RotateY 0.07
-      If Inp.IsKeyPressed(TV_KEY_LEFT) = True Then Camera.RotateY -0.07
+      If Inp.IsKeyPressed(TV_KEY_RIGHT) = True And Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.RotateY 0.07
+      If Inp.IsKeyPressed(TV_KEY_LEFT) = True And Inp.IsKeyPressed(TV_KEY_Z) = False Then Camera.RotateY -0.07
+      If Inp.IsKeyPressed(TV_KEY_RIGHT) = True And Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.RotateY 0.14
+      If Inp.IsKeyPressed(TV_KEY_LEFT) = True And Inp.IsKeyPressed(TV_KEY_Z) = True Then Camera.RotateY -0.14
       
 '*** Second movement system (has horrible problems)
       'If Inp.IsKeyPressed(TV_KEY_UP) = True Then Camera.SetCamera Camera.GetPosition.x, Camera.GetPosition.y, Camera.GetPosition.z - (Camera.GetLookAt.z / 100), Camera.GetLookAt.x, Camera.GetLookAt.y, Camera.GetLookAt.z - 0.7
@@ -5553,6 +5933,8 @@ EndCall:
       'If Inp.IsKeyPressed(TV_KEY_5) = True And Focused = True Then Call ElevatorMusic.Play
       'If Inp.IsKeyPressed(TV_KEY_6) = True And Focused = True Then Call ElevatorMusic.Stop_
       If Inp.IsKeyPressed(TV_KEY_SPACE) = True Then Camera.SetRotation 0, 0, 0
+      'If Inp.IsKeyPressed(TV_KEY_6) = True Then MsgBox (Str$(Camera.GetLookAt.X) + Str$(Camera.GetLookAt.Y) + Str$(Camera.GetLookAt.z))
+      If Inp.IsKeyPressed(TV_KEY_7) = True Then IsFalling = True
       
         'Inp.GetMouseState MousePositionX, MousePositionY
       'MsgBox (Str$(MousePositionX) + "," + Str$(MousePositionY))
@@ -5576,188 +5958,8 @@ Form2.Text1.Text = "Sound Location=7.75,20,7 " + vbCrLf + "Elevator Floor=" + St
    
       lineend = Camera.GetPosition
           
-GoTo CollisionEnd
+If EnableCollisions = True Then Call CheckCollisions
 
-    'Elevator1 Collision
-    
-    LineTest.X = lineend.X + 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If Elevator(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X - 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If Elevator(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z + 2
-    If Elevator(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z - 2
-    If Elevator(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-        
- 'ElevatorDoorL Collision
-    
-    LineTest.X = lineend.X + 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If ElevatorDoor1L(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X - 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If ElevatorDoor1L(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z + 2
-    If ElevatorDoor1L(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z - 2
-    If ElevatorDoor1L(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-       
-'ElevatorDoorR Collision
-    
-    LineTest.X = lineend.X + 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If ElevatorDoor1R(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X - 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If ElevatorDoor1R(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z + 2
-    If ElevatorDoor1R(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z - 2
-    If ElevatorDoor1R(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-        
-'Room Collision
-    
-    LineTest.X = lineend.X + 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X - 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z + 2
-    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z - 2
-    If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-            
-''Shafts Collision
-
-'    LineTest.X = Camera.GetPosition.X + 2
-'    LineTest.Y = Camera.GetPosition.Y
-'    LineTest.z = Camera.GetPosition.z + 2
-'    LineTest2.X = Camera.GetPosition.X - 2
-'    LineTest2.Y = Camera.GetPosition.Y
-'    LineTest2.z = Camera.GetPosition.z + 2
-'    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-'    LineTest.X = Camera.GetPosition.X + 2
-'    LineTest.Y = Camera.GetPosition.Y
-'    LineTest.z = Camera.GetPosition.z - 2
-'    LineTest2.X = Camera.GetPosition.X - 2
-'    LineTest2.Y = Camera.GetPosition.Y
-'    LineTest2.z = Camera.GetPosition.z - 2
-'    'If Inp.IsKeyPressed(TV_KEY_7) = True Then Shafts.AddWall GetTex("Wood2"), LineTest.x, LineTest.z, LineTest2.x, LineTest2.z, 25
-'    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-'    LineTest.X = Camera.GetPosition.X + 2
-'    LineTest.Y = Camera.GetPosition.Y
-'    LineTest.z = Camera.GetPosition.z + 2
-'    LineTest2.X = Camera.GetPosition.X + 2
-'    LineTest2.Y = Camera.GetPosition.Y
-'    LineTest2.z = Camera.GetPosition.z - 2
-'    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-'    LineTest.X = Camera.GetPosition.X - 2
-'    LineTest.Y = Camera.GetPosition.Y
-'    LineTest.z = Camera.GetPosition.z + 2
-'    LineTest2.X = Camera.GetPosition.X - 2
-'    LineTest2.Y = Camera.GetPosition.Y
-'    LineTest2.z = Camera.GetPosition.z - 2
-'    If Shafts.Collision(LineTest, LineTest2, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-
-
-'Elevator1DoorL Collision
-    
-    LineTest.X = lineend.X + 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If ElevatorInsDoorL(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X - 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If ElevatorInsDoorL(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z + 2
-    If ElevatorInsDoorL(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z - 2
-    If ElevatorInsDoorL(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-        
-'Elevator1DoorR Collision
-    
-    LineTest.X = lineend.X + 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If ElevatorInsDoorR(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X - 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If ElevatorInsDoorR(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z + 2
-    If ElevatorInsDoorR(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z - 2
-    If ElevatorInsDoorR(ElevatorNumber).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-        
-'External Collision
-    
-    LineTest.X = lineend.X + 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X - 2
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z
-    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, Camera.GetPosition.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z + 2
-    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-    LineTest.X = lineend.X
-    LineTest.Y = lineend.Y
-    LineTest.z = lineend.z - 2
-    If External.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition Camera.GetPosition.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
-            
-    'If External.Collision(linestart, lineend, TV_TESTTYPE_ACCURATETESTING) = True Then
-    '    Camera.SetPosition linestart.x, linestart.y, linestart.z
-    '    GoTo CollisionEnd
-    'Else
-    '    Camera.SetPosition lineend.x, lineend.y, lineend.z
-    'End If
-    
-    'If Mesh.Collision(linestart, lineend, TV_TESTTYPE_ACCURATETESTING) = True Then
-    '    Camera.SetPosition linestart.x, linestart.y, linestart.z
-    '    GoTo CollisionEnd
-    'Else
-    '    Camera.SetPosition lineend.x, lineend.y, lineend.z
-    'End If
-CollisionEnd:
         
     On Error Resume Next
     Atmos.Atmosphere_Render
