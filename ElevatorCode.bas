@@ -3392,9 +3392,9 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       DestroyObjects (CameraFloor)
       ShaftsFloor(CameraFloor).Enable False
       Atmos.SkyBox_Enable False
-      Stairs(CameraFloor).Enable False
-      If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
-      If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable False
+      If StairDataTable(CameraFloor) = True Then DeleteStairs (CameraFloor)
+      If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
+      If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
       End If
       End If
       'If GotoFloor(Number) <> 0 And GotoFloor(Number) < CurrentFloor(Number) And ElevatorDirection(Number) = 0 And ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z <= 0 Then
@@ -3416,9 +3416,9 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       DestroyObjects (CameraFloor)
       ShaftsFloor(CameraFloor).Enable False
       Atmos.SkyBox_Enable False
-      Stairs(CameraFloor).Enable False
-      If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
-      If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable False
+      If StairDataTable(CameraFloor) = True Then DeleteStairs (CameraFloor)
+      If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
+      If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
       End If
       End If
       
@@ -3573,13 +3573,13 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       CallButtonsDown(ElevTemp(Number)).Enable True
       Next ElevTemp(Number)
       ShaftsFloor(CameraFloor).Enable True
-      Stairs(CameraFloor).Enable True
+      If StairDataTable(CameraFloor) = False Then CreateStairs (CameraFloor)
       Atmos.SkyBox_Enable True
       'If CameraFloor = 137 Then Shafts.Enable True
       Call InitRealtime(CameraFloor)
       InitObjectsForFloor (CameraFloor)
-      If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
-      If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable True
+      If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = False Then CreateStairs (CameraFloor + 1)
+      If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = False Then CreateStairs (CameraFloor - 1)
       End If
       GotoFloor(Number) = 0
       OpenElevator(Number) = 1
