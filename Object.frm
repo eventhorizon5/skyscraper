@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form Object 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Object Manager"
-   ClientHeight    =   7410
+   ClientHeight    =   7245
    ClientLeft      =   1650
    ClientTop       =   1545
    ClientWidth     =   4530
@@ -11,7 +11,7 @@ Begin VB.Form Object
    LinkTopic       =   "Form4"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7410
+   ScaleHeight     =   7245
    ScaleWidth      =   4530
    Begin VB.CommandButton Command13 
       Caption         =   "Help"
@@ -23,9 +23,9 @@ Begin VB.Form Object
    End
    Begin MSComctlLib.Slider Slider1 
       Height          =   375
-      Left            =   120
+      Left            =   0
       TabIndex        =   20
-      Top             =   5400
+      Top             =   5280
       Width           =   1095
       _ExtentX        =   1931
       _ExtentY        =   661
@@ -85,7 +85,7 @@ Begin VB.Form Object
    End
    Begin VB.TextBox Text1 
       Height          =   1815
-      Left            =   1320
+      Left            =   1200
       Locked          =   -1  'True
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Both
@@ -160,7 +160,7 @@ Begin VB.Form Object
       Begin VB.FileListBox File1 
          Height          =   2235
          Left            =   2160
-         Pattern         =   "*.x"
+         Pattern         =   "*.3ds"
          TabIndex        =   5
          Top             =   360
          Width           =   1935
@@ -198,9 +198,9 @@ Begin VB.Form Object
    End
    Begin MSComctlLib.Slider Slider2 
       Height          =   375
-      Left            =   120
+      Left            =   0
       TabIndex        =   21
-      Top             =   6120
+      Top             =   6000
       Width           =   1095
       _ExtentX        =   1931
       _ExtentY        =   661
@@ -212,9 +212,9 @@ Begin VB.Form Object
    End
    Begin MSComctlLib.Slider Slider3 
       Height          =   375
-      Left            =   120
+      Left            =   0
       TabIndex        =   22
-      Top             =   6840
+      Top             =   6720
       Width           =   1095
       _ExtentX        =   1931
       _ExtentY        =   661
@@ -228,27 +228,27 @@ Begin VB.Form Object
       Alignment       =   2  'Center
       Caption         =   "ScaleChange"
       Height          =   255
-      Left            =   120
+      Left            =   0
       TabIndex        =   25
-      Top             =   6600
+      Top             =   6480
       Width           =   1095
    End
    Begin VB.Label Label2 
       Alignment       =   2  'Center
       Caption         =   "RotateChange"
       Height          =   255
-      Left            =   120
+      Left            =   0
       TabIndex        =   24
-      Top             =   5880
+      Top             =   5760
       Width           =   1095
    End
    Begin VB.Label Label1 
       Alignment       =   2  'Center
       Caption         =   "MoveChange"
       Height          =   255
-      Left            =   120
+      Left            =   0
       TabIndex        =   23
-      Top             =   5160
+      Top             =   5040
       Width           =   1095
    End
 End
@@ -283,17 +283,17 @@ Dim RotateChange As Single
 Dim MoveChange As Single
 
 Private Sub Command1_Click()
-   If Dir1.Path <> Dir1.List _
-   (Dir1.ListIndex) Then
+   If Dir1.Path <> Dir1.List(Dir1.ListIndex) Then
       Dir1.Path = Dir1.List(Dir1.ListIndex)
       Exit Sub
    End If
+If File1.FileName = "" Then Exit Sub
 
 i = 500
 Set Objects(i) = Scene.CreateMeshBuilder("Objects " + Str$(i))
 
 'Call Init_Objects(Floor, 79)
-Objects(i).LoadXFile (File1.Path + "\" + File1.FileName), True
+Objects(i).Load3DSMesh (File1.Path + "\" + File1.FileName), , True, , True, True
 'Objects(i).SetMaterial 0
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).SetRotation 0, 0, 0
@@ -378,7 +378,7 @@ If Option3.Value = True Then Objects(500).ScaleMesh Objects(500).GetMeshScale.X,
 End Sub
 
 Private Sub Command9_Click()
-Text1.Text = "i = 0 + (150 * (Floor - 1))" + vbCrLf + "Call Init_Objects(Floor, 0)" + vbCrLf + "Objects(i).LoadXFile App.Path + """ + File1.Path + "\" + File1.FileName + """, True" + vbCrLf + "Objects(i).SetRotation " + Str$(Objects(500).GetRotation.X) + "," + Str$(Objects(500).GetRotation.Y) + "," + Str$(Objects(500).GetRotation.z) + vbCrLf + "Objects(i).ScaleMesh " + Str$(Objects(500).GetMeshScale.X) + "," + Str$(Objects(500).GetMeshScale.Y) + "," + Str$(Objects(500).GetMeshScale.z) + vbCrLf + "Objects(i).SetPosition " + Str$(Objects(500).GetPosition.X) + ", Floor + " + Str$(Objects(500).GetPosition.Y - ((CameraFloor2 - FloorHeight) / FloorHeight)) + "," + Str$(Objects(500).GetPosition.z) + vbCrLf
+Text1.Text = "i = 0 + (150 * (Floor - 1))" + vbCrLf + "Call Init_Objects(Floor, 0)" + vbCrLf + "Objects(i).Load3DSMesh App.Path + """ + File1.Path + "\" + File1.FileName + """, , True, , True, True" + vbCrLf + "Objects(i).SetRotation " + Str$(Objects(500).GetRotation.X) + "," + Str$(Objects(500).GetRotation.Y) + "," + Str$(Objects(500).GetRotation.z) + vbCrLf + "Objects(i).ScaleMesh " + Str$(Objects(500).GetMeshScale.X) + "," + Str$(Objects(500).GetMeshScale.Y) + "," + Str$(Objects(500).GetMeshScale.z) + vbCrLf + "Objects(i).SetPosition " + Str$(Objects(500).GetPosition.X) + ", Floor + " + Str$(Objects(500).GetPosition.Y - ((CameraFloor - FloorHeight) / FloorHeight)) + "," + Str$(Objects(500).GetPosition.z) + vbCrLf
 End Sub
 
 Private Sub Dir1_Change()
@@ -415,6 +415,6 @@ Private Sub Slider2_Change()
 RotateChange = Slider2.Value * 0.001
 End Sub
 
-Private Sub Slider3_Click()
+Private Sub Slider3_Change()
 ScaleChange = Slider3.Value * 0.0005
 End Sub
