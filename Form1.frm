@@ -524,7 +524,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.92 Beta
+'Skycraper 0.93 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -763,8 +763,9 @@ ElevatorNumber = 1
 FloorHeight = 32
 'With the next 2 variables, lower=faster
 ElevatorSpeed = 8
+'ElevatorSpeed = 5 'Original Value
 ElevatorFineTuneSpeed = 0.15
-
+'ElevatorFineTuneSpeed = 0.2 'Original Value
 'FileName = App.Path + "\triton.dat"
 Call Init_Simulator
 Call ProcessFloors
@@ -795,7 +796,7 @@ Call ProcessFloors
   Buildings.Enable True
   Landscape.Enable True
   External.Enable False
-  For i = 1 To 138
+  For i = -10 To 138
   Room(i).Enable False
   Stairs(i).Enable False
   ShaftsFloor(i).Enable False
@@ -805,7 +806,7 @@ Call ProcessFloors
   Shafts4(i).Enable False
   Next i
   
-  For i = -1 To 138
+  For i = -11 To 138
   StairDoor(i).Enable False
   Next i
   
@@ -825,6 +826,7 @@ Call ProcessFloors
   Room(1).Enable True
   'ElevatorDoorL(1).Enable True
   'ElevatorDoorR(1).Enable True
+  Stairs(-1).Enable True
   Stairs(1).Enable True
   ShaftsFloor(1).Enable True
   
