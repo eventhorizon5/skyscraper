@@ -558,13 +558,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private isRunning As Boolean
-'Public TV As TVEngine
-'Public Scene As TVScene
-'Public Inp As TVInputEngine
 Public scr As TVScreen2DText
-'Public texturefactory As TVTextureFactory
 Public Screen As TVScreen2DImmediate
-'Public Effect As TVGraphicEffect
 Public RollOnTexture As Integer
 Public Explosion As TVMesh
 Public Fin As Integer
@@ -703,13 +698,8 @@ bSing = True
 Fin = 1
       'Effect.FadeIn 1000
       isRunning = False
-        'Set TV = Nothing
-        'Set Scene = Nothing
         Set scr = Nothing
-        'Set TextureFactory = Nothing
-        'Set Effect = Nothing
         Set Screen = Nothing
-        'Set Inp = Nothing
         Sim.Refresh
         Start
         Exit Sub
@@ -1056,16 +1046,8 @@ Sim.ScaleHeight = 504
       Fin = 1
       
       isRunning = False
-      'Set TV = Nothing
-        'Set TV = Nothing
-        'Set Scene = Nothing
         Set scr = Nothing
-        'Set TextureFactory = Nothing
-        'Set Effect = Nothing
         Set Screen = Nothing
-        'Set Inp = Nothing
-        'Sim.Refresh
-        'Start
            Set Effect = Nothing
         MainMusic.Stop_
         End
@@ -1075,14 +1057,8 @@ Sim.ScaleHeight = 504
       Fin = 1
       
       isRunning = False
-      'Set TV = Nothing
-        'Set TV = Nothing
-        'Set Scene = Nothing
         Set scr = Nothing
-        'Set TextureFactory = Nothing
-        'Set Effect = Nothing
         Set Screen = Nothing
-        'Set Inp = Nothing
         Sim.Refresh
         Start
         Exit Sub
