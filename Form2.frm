@@ -13,6 +13,14 @@ Begin VB.Form Form2
    MinButton       =   0   'False
    ScaleHeight     =   5115
    ScaleWidth      =   6720
+   Begin VB.CommandButton Command17 
+      Caption         =   "Add Object"
+      Height          =   375
+      Left            =   120
+      TabIndex        =   68
+      Top             =   4680
+      Width           =   1455
+   End
    Begin VB.CommandButton Command16 
       Caption         =   "InitRealtime"
       Height          =   255
@@ -249,7 +257,7 @@ Begin VB.Form Form2
       _ExtentX        =   7646
       _ExtentY        =   900
       _Version        =   393216
-      Min             =   1
+      Min             =   -10
       Max             =   138
       SelStart        =   1
       TickFrequency   =   5
@@ -991,7 +999,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.92 Beta
+'Skycraper 0.93 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -1074,13 +1082,13 @@ Private Sub Check8_Click()
 If Check8.Value = 1 Then
 Stairs(CameraFloor).Enable True
 If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
-If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable True
+If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable True
 End If
 
 If Check8.Value = 0 Then
 Stairs(CameraFloor).Enable False
 If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
-If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
+If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable False
 End If
 End Sub
 
@@ -1121,6 +1129,10 @@ Private Sub Command16_Click()
 Call InitRealtime(CameraFloor)
 End Sub
 
+Private Sub Command17_Click()
+Form4.Visible = True
+End Sub
+
 Private Sub Command2_Click()
 ElevatorNumber = Slider2.Value
 ElevatorSync(ElevatorNumber) = False
@@ -1150,16 +1162,20 @@ InitObjectsForFloor (CameraFloor)
 End Sub
 
 Private Sub Command6_Click()
-For i = 1 To 138
+For i = -10 To 138
 Shafts1(i).Enable True
 Shafts2(i).Enable True
+Shafts3(i).Enable True
+Shafts4(i).Enable True
 Next i
 End Sub
 
 Private Sub Command7_Click()
-For i = 1 To 138
+For i = -10 To 138
 Shafts1(i).Enable False
 Shafts2(i).Enable False
+Shafts3(i).Enable False
+Shafts4(i).Enable False
 Next i
 End Sub
 
