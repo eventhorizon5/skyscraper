@@ -162,11 +162,10 @@ Global CallingStairDoors As Boolean
 Global SelectedObject As String
 Global MainMusic As TVSoundMP3
 
-Global CallQueue(1, 40, -10 To 138) As Boolean 'values are - direction, elevator number, floor
 Global QueuePositionDirection(40) As Integer
-Global QueuePositionFloor(40) As Integer
 Global PauseQueueSearch(40) As Boolean
-Global QueueMonitor(40) As Integer
+Global UpQueue(40) As String
+Global DownQueue(40) As String
 'Global CallButtonTemp(40) As Integer
 Global StairDataTable(-10 To 138) As Boolean
 
@@ -3398,7 +3397,7 @@ EndShafts:
             Dim Direction As Integer
                 
             If CollisionResult.GetCollisionMesh.GetMeshName = CallButtonsUp(i50).GetMeshName Then CallButtonsUp(i50).SetColor RGBA(1, 1, 0, 1): CallElevatorTemp = True: Direction = 1
-            If CollisionResult.GetCollisionMesh.GetMeshName = CallButtonsDown(i50).GetMeshName Then CallButtonsDown(i50).SetColor RGBA(1, 1, 0, 1): CallElevatorTemp = True: Direction = 0
+            If CollisionResult.GetCollisionMesh.GetMeshName = CallButtonsDown(i50).GetMeshName Then CallButtonsDown(i50).SetColor RGBA(1, 1, 0, 1): CallElevatorTemp = True: Direction = -1
             
             If CallElevatorTemp = True Then
                 

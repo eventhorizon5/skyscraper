@@ -21,46 +21,143 @@ Attribute VB_Name = "ElevatorCode"
 
 Option Explicit
 Sub ProcessCallQueue(Number As Integer)
+'new calling queue - old one was slow and inefficient
 
-If PauseQueueSearch(Number) = True Or QueueMonitor(Number) <= 0 Then Exit Sub
+Dim Position As Long
+Dim Position2 As Long
+Dim Floor As Integer
 
-'This code handles a 3-dimensional array that stores a calling queue in the form of boolean values.
-'The code continuously scans the queues up and down for call requests, and if it finds one, calls elevator
-If QueuePositionDirection(Number) = 1 Then QueuePositionFloor(Number) = QueuePositionFloor(Number) + 1
-If QueuePositionDirection(Number) = 0 Then QueuePositionFloor(Number) = QueuePositionFloor(Number) - 1
-If QueuePositionFloor(Number) = 138 Then QueuePositionDirection(Number) = 0: QueueMonitor(Number) = QueueMonitor(Number) - 1
-If QueuePositionFloor(Number) = -10 Then QueuePositionDirection(Number) = 1: QueueMonitor(Number) = QueueMonitor(Number) - 1
+If PauseQueueSearch(Number) = True Then Exit Sub
 
-'If Number = 39 And QueuePositionFloor(39) = 7 Then MsgBox (CallQueue(QueuePositionDirection(Number), Number, QueuePositionFloor(Number)))
+If QueuePositionDirection(Number) = 0 Then
+    If UpQueue(Number) <> "" Then QueuePositionDirection(Number) = 1
+    If DownQueue(Number) <> "" Then QueuePositionDirection(Number) = -1
+End If
+If UpQueue(Number) = "" And DownQueue(Number) = "" Then
+    QueuePositionDirection(Number) = 0
+    PauseQueueSearch(Number) = True
+    Exit Sub
+End If
+If QueuePositionDirection(Number) = 1 And UpQueue(Number) = "" Then QueuePositionDirection(Number) = 0
+If QueuePositionDirection(Number) = -1 And DownQueue(Number) = "" Then QueuePositionDirection(Number) = 0
 
-If CallQueue(QueuePositionDirection(Number), Number, QueuePositionFloor(Number)) = True Then
-PauseQueueSearch(Number) = True
-QueueMonitor(Number) = 5
-Call DeleteRoute(QueuePositionFloor(Number), Number, QueuePositionDirection(Number))
-OpenElevator(Number) = -1
-If InElevator = True Then ElevatorSync(Number) = True
-If QueuePositionFloor(Number) <> 0 Then GotoFloor(Number) = QueuePositionFloor(Number)
-If QueuePositionFloor(Number) = 0 Then GotoFloor(Number) = 0.01
+If QueuePositionDirection(Number) = 1 Then
+    Position = 1
+    Do
+    Position2 = InStr(Position, UpQueue(Number), ",")
+    'Search through queue list and find next valid floor call (direction-wise)
+    If Val(Mid$(UpQueue(Number), Position, Position2 - 1)) < Floor Then
+        Position = Position2 + 1
+        Exit Sub
+    Else
+        PauseQueueSearch(Number) = True
+        Floor = Val(Mid$(UpQueue(Number), Position, Position2 - 1))
+        Call DeleteRoute(Floor, Number, 1)
+        OpenElevator(Number) = -1
+        If InElevator = True Then ElevatorSync(Number) = True
+        If Floor <> 0 Then GotoFloor(Number) = Floor
+        If Floor = 0 Then GotoFloor(Number) = 0.01
+        Exit Sub
+    End If
+    Loop
+End If
 
+If QueuePositionDirection(Number) = -1 Then
+    Position = 1
+    Do
+    Position2 = InStr(Position, DownQueue(Number), ",")
+    'Search through queue list and find next valid floor call (direction-wise)
+    If Val(Mid$(DownQueue(Number), Position, Position2 - 1)) < Floor Then
+        Position = Position2 + 1
+        Exit Sub
+    Else
+        PauseQueueSearch(Number) = True
+        Floor = Val(Mid$(DownQueue(Number), Position, Position2 - 1))
+        Call DeleteRoute(Floor, Number, -1)
+        OpenElevator(Number) = -1
+        If InElevator = True Then ElevatorSync(Number) = True
+        If Floor <> 0 Then GotoFloor(Number) = Floor
+        If Floor = 0 Then GotoFloor(Number) = 0.01
+        Exit Sub
+    End If
+    Loop
 End If
 
 End Sub
 Sub AddRoute(Floor As Integer, Number As Integer, Direction As Integer)
-'Add call route to elevator routing table
+'Add call route to elevator routing table, in sorted order
 
-CallQueue(Direction, Number, Floor) = True
-If QueueMonitor(Number) = 0 Then
-QueuePositionDirection(Number) = Direction
-If Direction = 1 Then QueuePositionFloor(Number) = Floor - 1
-If Direction = 0 Then QueuePositionFloor(Number) = Floor + 1
+Dim Position As Long
+Dim Position2 As Long
+Dim TempString As String
+Dim TempString2 As String
+
+If Direction = 1 Then
+    Position = 1
+    If UpQueue(Number) = "" Then UpQueue(Number) = LTrim(Str$(Floor)) + ",": If QueuePositionDirection(Number) = 0 Then PauseQueueSearch(Number) = False: Exit Sub
+    Do
+    Position2 = InStr(Position, UpQueue(Number), ",")
+    If Position2 = 0 Then Position2 = Len(UpQueue(Number)) + 1
+    'Find the 2 numbers that the new number should go between
+    If Val(Mid$(UpQueue(Number), Position, Position2 - 1)) = Floor Then Exit Sub
+    If Val(Mid$(UpQueue(Number), Position, Position2 - 1)) < Floor And Mid$(UpQueue(Number), Position, Position2 - 1) <> "" Then Position = Position2 + 1: GoTo SkipIt
+    If Val(Mid$(UpQueue(Number), Position, Position2 - 1)) > Floor Or Mid$(UpQueue(Number), Position, Position2 - 1) = "" Then
+        'break queue into 2 strings
+        TempString = Left$(UpQueue(Number), Position - 1)
+        TempString2 = Mid$(UpQueue(Number), Position)
+        'Insert new number between 2 strings
+        UpQueue(Number) = TempString + LTrim(Str$(Floor)) + "," + TempString2
+        PauseQueueSearch(Number) = False
+        Exit Sub
+    End If
+SkipIt:
+    Loop
 End If
 
-QueueMonitor(Number) = 5
+If Direction = -1 Then
+    Position = 1
+    If DownQueue(Number) = "" Then DownQueue(Number) = LTrim(Str$(Floor)) + ",": If QueuePositionDirection(Number) = 0 Then PauseQueueSearch(Number) = False: Exit Sub
+    Do
+    Position2 = InStr(Position, DownQueue(Number), ",")
+    If Position2 = 0 Then Position2 = Len(DownQueue(Number)) + 1
+    'Find the 2 numbers that the new number should go between
+    If Val(Mid$(DownQueue(Number), Position, Position2 - 1)) = Floor Then Exit Sub
+    If Val(Mid$(DownQueue(Number), Position, Position2 - 1)) < Floor And Mid$(DownQueue(Number), Position, Position2 - 1) <> "" Then Position = Position2 + 1: GoTo SkipIt2
+    If Val(Mid$(DownQueue(Number), Position, Position2 - 1)) > Floor Or Mid$(DownQueue(Number), Position, Position2 - 1) = "" Then
+        'break queue into 2 strings
+        TempString = Left$(DownQueue(Number), Position - 1)
+        TempString2 = Mid$(DownQueue(Number), Position)
+        'Insert new number between 2 strings
+        DownQueue(Number) = TempString + LTrim(Str$(Floor)) + "," + TempString2
+        PauseQueueSearch(Number) = False
+        Exit Sub
+    End If
+SkipIt2:
+    Loop
+End If
+
 End Sub
 Sub DeleteRoute(Floor As Integer, Number As Integer, Direction As Integer)
 'Delete call route from elevator routing table
 
-CallQueue(Direction, Number, Floor) = False
+Dim Position As Long
+Dim Position2 As Long
+
+If Direction = 1 Then
+    'break string in 2; 1 before and 1 after number searched for
+    Position = InStr(1, UpQueue(Number), LTrim(Str$(Floor)) + ",")
+    Position2 = InStr(Position, UpQueue(Number), ",")
+    'join 2 strings, eliminating old number
+    UpQueue(Number) = Left$(UpQueue(Number), Position - 1) + Mid$(UpQueue(Number), Position2 + 1)
+End If
+
+If Direction = -1 Then
+    'break string in 2; 1 before and 1 after number searched for
+    Position = InStr(1, DownQueue(Number), LTrim(Str$(Floor)) + ",")
+    Position2 = InStr(Position, DownQueue(Number), ",")
+    'join 2 strings, eliminating old number
+    DownQueue(Number) = Left$(DownQueue(Number), Position - 1) + Mid$(DownQueue(Number), Position2 + 1)
+End If
 
 End Sub
 Sub StopElevator(Number As Integer)
@@ -106,59 +203,199 @@ Dim Number As Integer
 'Autoselect closest elevator in section (if applicable)
 If Section = 1 Then Number = 1
 If Section = 2 Then
-If Abs(ElevatorFloor(2) - Floor) <= Abs(ElevatorFloor(3) - Floor) And Abs(ElevatorFloor(2) - Floor) <= Abs(ElevatorFloor(4) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 2
-If Abs(ElevatorFloor(3) - Floor) <= Abs(ElevatorFloor(4) - Floor) And Abs(ElevatorFloor(3) - Floor) <= Abs(ElevatorFloor(2) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 3
-If Abs(ElevatorFloor(4) - Floor) <= Abs(ElevatorFloor(2) - Floor) And Abs(ElevatorFloor(4) - Floor) <= Abs(ElevatorFloor(3) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 4
+If Abs(ElevatorFloor(2) - Floor) <= Abs(ElevatorFloor(3) - Floor) And Abs(ElevatorFloor(2) - Floor) <= Abs(ElevatorFloor(4) - Floor) Then
+    If UpQueue(2) = "" And DownQueue(2) = "" Then Number = 2
+    If ElevatorFloor(2) > Floor And QueuePositionDirection(2) = -1 And Direction = -1 Then Number = 2
+    If ElevatorFloor(2) < Floor And QueuePositionDirection(2) = 1 And Direction = 1 Then Number = 2
+End If
+If Abs(ElevatorFloor(3) - Floor) <= Abs(ElevatorFloor(4) - Floor) And Abs(ElevatorFloor(3) - Floor) <= Abs(ElevatorFloor(2) - Floor) Then
+    If UpQueue(3) = "" And DownQueue(3) = "" Then Number = 3
+    If ElevatorFloor(3) > Floor And QueuePositionDirection(3) = -1 And Direction = -1 Then Number = 3
+    If ElevatorFloor(3) < Floor And QueuePositionDirection(3) = 1 And Direction = 1 Then Number = 3
+End If
+If Abs(ElevatorFloor(4) - Floor) <= Abs(ElevatorFloor(2) - Floor) And Abs(ElevatorFloor(4) - Floor) <= Abs(ElevatorFloor(3) - Floor) Then
+    If UpQueue(4) = "" And DownQueue(4) = "" Then Number = 4
+    If ElevatorFloor(4) > Floor And QueuePositionDirection(4) = -1 And Direction = -1 Then Number = 4
+    If ElevatorFloor(4) < Floor And QueuePositionDirection(4) = 1 And Direction = 1 Then Number = 4
+End If
 End If
 If Section = 3 Then
-If Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(10) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 5
-If Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(5) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 6
-If Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(6) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 7
-If Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(7) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 8
-If Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(8) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 9
-If Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(9) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 10
+If Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(5) - Floor) <= Abs(ElevatorFloor(10) - Floor) Then
+    If UpQueue(5) = "" And DownQueue(5) = "" Then Number = 5
+    If ElevatorFloor(5) > Floor And QueuePositionDirection(5) = -1 And Direction = -1 Then Number = 5
+    If ElevatorFloor(5) < Floor And QueuePositionDirection(5) = 1 And Direction = 1 Then Number = 5
+End If
+If Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(6) - Floor) <= Abs(ElevatorFloor(5) - Floor) Then
+    If UpQueue(6) = "" And DownQueue(6) = "" Then Number = 6
+    If ElevatorFloor(6) > Floor And QueuePositionDirection(6) = -1 And Direction = -1 Then Number = 6
+    If ElevatorFloor(6) < Floor And QueuePositionDirection(6) = 1 And Direction = 1 Then Number = 6
+End If
+If Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(7) - Floor) <= Abs(ElevatorFloor(6) - Floor) Then
+    If UpQueue(7) = "" And DownQueue(7) = "" Then Number = 7
+    If ElevatorFloor(7) > Floor And QueuePositionDirection(7) = -1 And Direction = -1 Then Number = 7
+    If ElevatorFloor(7) < Floor And QueuePositionDirection(7) = 1 And Direction = 1 Then Number = 7
+End If
+If Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(9) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(8) - Floor) <= Abs(ElevatorFloor(7) - Floor) Then
+    If UpQueue(8) = "" And DownQueue(8) = "" Then Number = 8
+    If ElevatorFloor(8) > Floor And QueuePositionDirection(8) = -1 And Direction = -1 Then Number = 8
+    If ElevatorFloor(8) < Floor And QueuePositionDirection(8) = 1 And Direction = 1 Then Number = 8
+End If
+If Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(10) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(9) - Floor) <= Abs(ElevatorFloor(8) - Floor) Then
+    If UpQueue(9) = "" And DownQueue(9) = "" Then Number = 9
+    If ElevatorFloor(9) > Floor And QueuePositionDirection(9) = -1 And Direction = -1 Then Number = 9
+    If ElevatorFloor(9) < Floor And QueuePositionDirection(9) = 1 And Direction = 1 Then Number = 9
+End If
+If Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(5) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(6) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(7) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(8) - Floor) And Abs(ElevatorFloor(10) - Floor) <= Abs(ElevatorFloor(9) - Floor) Then
+    If UpQueue(10) = "" And DownQueue(10) = "" Then Number = 10
+    If ElevatorFloor(10) > Floor And QueuePositionDirection(10) = -1 And Direction = -1 Then Number = 10
+    If ElevatorFloor(10) < Floor And QueuePositionDirection(10) = 1 And Direction = 1 Then Number = 10
+End If
 End If
 If Section = 4 Then Number = 11
 If Section = 5 Then Number = 12
 If Section = 6 Then Number = 13
 If Section = 7 Then Number = 14
 If Section = 8 Then
-If Abs(ElevatorFloor(15) - Floor) <= Abs(ElevatorFloor(17) - Floor) And Abs(ElevatorFloor(15) - Floor) <= Abs(ElevatorFloor(19) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 15
-If Abs(ElevatorFloor(17) - Floor) <= Abs(ElevatorFloor(19) - Floor) And Abs(ElevatorFloor(17) - Floor) <= Abs(ElevatorFloor(15) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 17
-If Abs(ElevatorFloor(19) - Floor) <= Abs(ElevatorFloor(15) - Floor) And Abs(ElevatorFloor(19) - Floor) <= Abs(ElevatorFloor(17) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 19
+If Abs(ElevatorFloor(15) - Floor) <= Abs(ElevatorFloor(17) - Floor) And Abs(ElevatorFloor(15) - Floor) <= Abs(ElevatorFloor(19) - Floor) Then
+    If UpQueue(15) = "" And DownQueue(15) = "" Then Number = 15
+    If ElevatorFloor(15) > Floor And QueuePositionDirection(15) = -1 And Direction = -1 Then Number = 15
+    If ElevatorFloor(15) < Floor And QueuePositionDirection(15) = 1 And Direction = 1 Then Number = 15
+End If
+If Abs(ElevatorFloor(17) - Floor) <= Abs(ElevatorFloor(19) - Floor) And Abs(ElevatorFloor(17) - Floor) <= Abs(ElevatorFloor(15) - Floor) Then
+    If UpQueue(17) = "" And DownQueue(17) = "" Then Number = 17
+    If ElevatorFloor(17) > Floor And QueuePositionDirection(17) = -1 And Direction = -1 Then Number = 17
+    If ElevatorFloor(17) < Floor And QueuePositionDirection(17) = 1 And Direction = 1 Then Number = 17
+End If
+If Abs(ElevatorFloor(19) - Floor) <= Abs(ElevatorFloor(15) - Floor) And Abs(ElevatorFloor(19) - Floor) <= Abs(ElevatorFloor(17) - Floor) Then
+    If UpQueue(19) = "" And DownQueue(19) = "" Then Number = 19
+    If ElevatorFloor(19) > Floor And QueuePositionDirection(19) = -1 And Direction = -1 Then Number = 19
+    If ElevatorFloor(19) < Floor And QueuePositionDirection(19) = 1 And Direction = 1 Then Number = 19
+End If
 End If
 If Section = 9 Then
-If Abs(ElevatorFloor(16) - Floor) <= Abs(ElevatorFloor(18) - Floor) And Abs(ElevatorFloor(16) - Floor) <= Abs(ElevatorFloor(20) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 16
-If Abs(ElevatorFloor(18) - Floor) <= Abs(ElevatorFloor(20) - Floor) And Abs(ElevatorFloor(18) - Floor) <= Abs(ElevatorFloor(16) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 18
-If Abs(ElevatorFloor(20) - Floor) <= Abs(ElevatorFloor(16) - Floor) And Abs(ElevatorFloor(20) - Floor) <= Abs(ElevatorFloor(18) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 20
+If Abs(ElevatorFloor(16) - Floor) <= Abs(ElevatorFloor(18) - Floor) And Abs(ElevatorFloor(16) - Floor) <= Abs(ElevatorFloor(20) - Floor) Then
+    If UpQueue(16) = "" And DownQueue(16) = "" Then Number = 16
+    If ElevatorFloor(16) > Floor And QueuePositionDirection(16) = -1 And Direction = -1 Then Number = 16
+    If ElevatorFloor(16) < Floor And QueuePositionDirection(16) = 1 And Direction = 1 Then Number = 16
+End If
+If Abs(ElevatorFloor(18) - Floor) <= Abs(ElevatorFloor(20) - Floor) And Abs(ElevatorFloor(18) - Floor) <= Abs(ElevatorFloor(16) - Floor) Then
+    If UpQueue(18) = "" And DownQueue(18) = "" Then Number = 18
+    If ElevatorFloor(18) > Floor And QueuePositionDirection(18) = -1 And Direction = -1 Then Number = 18
+    If ElevatorFloor(18) < Floor And QueuePositionDirection(18) = 1 And Direction = 1 Then Number = 18
+End If
+If Abs(ElevatorFloor(20) - Floor) <= Abs(ElevatorFloor(16) - Floor) And Abs(ElevatorFloor(20) - Floor) <= Abs(ElevatorFloor(18) - Floor) Then
+    If UpQueue(20) = "" And DownQueue(20) = "" Then Number = 20
+    If ElevatorFloor(20) > Floor And QueuePositionDirection(20) = -1 And Direction = -1 Then Number = 20
+    If ElevatorFloor(20) < Floor And QueuePositionDirection(20) = 1 And Direction = 1 Then Number = 20
+End If
 End If
 If Section = 10 Then
-If Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(23) - Floor) And Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(25) - Floor) And Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(27) - Floor) And Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(29) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 21
-If Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(25) - Floor) And Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(27) - Floor) And Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(29) - Floor) And Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(21) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 23
-If Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(27) - Floor) And Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(29) - Floor) And Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(21) - Floor) And Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(23) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 25
-If Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(29) - Floor) And Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(21) - Floor) And Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(23) - Floor) And Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(25) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 27
-If Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(21) - Floor) And Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(23) - Floor) And Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(25) - Floor) And Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(27) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 29
+If Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(23) - Floor) And Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(25) - Floor) And Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(27) - Floor) And Abs(ElevatorFloor(21) - Floor) <= Abs(ElevatorFloor(29) - Floor) Then
+    If UpQueue(21) = "" And DownQueue(21) = "" Then Number = 21
+    If ElevatorFloor(21) > Floor And QueuePositionDirection(21) = -1 And Direction = -1 Then Number = 21
+    If ElevatorFloor(21) < Floor And QueuePositionDirection(21) = 1 And Direction = 1 Then Number = 21
+End If
+If Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(25) - Floor) And Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(27) - Floor) And Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(29) - Floor) And Abs(ElevatorFloor(23) - Floor) <= Abs(ElevatorFloor(21) - Floor) Then
+    If UpQueue(23) = "" And DownQueue(23) = "" Then Number = 23
+    If ElevatorFloor(23) > Floor And QueuePositionDirection(23) = -1 And Direction = -1 Then Number = 23
+    If ElevatorFloor(23) < Floor And QueuePositionDirection(23) = 1 And Direction = 1 Then Number = 23
+End If
+If Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(27) - Floor) And Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(29) - Floor) And Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(21) - Floor) And Abs(ElevatorFloor(25) - Floor) <= Abs(ElevatorFloor(23) - Floor) Then
+    If UpQueue(25) = "" And DownQueue(25) = "" Then Number = 25
+    If ElevatorFloor(25) > Floor And QueuePositionDirection(25) = -1 And Direction = -1 Then Number = 25
+    If ElevatorFloor(25) < Floor And QueuePositionDirection(25) = 1 And Direction = 1 Then Number = 25
+End If
+If Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(29) - Floor) And Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(21) - Floor) And Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(23) - Floor) And Abs(ElevatorFloor(27) - Floor) <= Abs(ElevatorFloor(25) - Floor) Then
+    If UpQueue(27) = "" And DownQueue(27) = "" Then Number = 27
+    If ElevatorFloor(27) > Floor And QueuePositionDirection(27) = -1 And Direction = -1 Then Number = 27
+    If ElevatorFloor(27) < Floor And QueuePositionDirection(27) = 1 And Direction = 1 Then Number = 27
+End If
+If Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(21) - Floor) And Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(23) - Floor) And Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(25) - Floor) And Abs(ElevatorFloor(29) - Floor) <= Abs(ElevatorFloor(27) - Floor) Then
+    If UpQueue(29) = "" And DownQueue(29) = "" Then Number = 29
+    If ElevatorFloor(29) > Floor And QueuePositionDirection(29) = -1 And Direction = -1 Then Number = 29
+    If ElevatorFloor(29) < Floor And QueuePositionDirection(29) = 1 And Direction = 1 Then Number = 29
+End If
 End If
 If Section = 11 Then
-If Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(24) - Floor) And Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(26) - Floor) And Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(28) - Floor) And Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(30) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 22
-If Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(26) - Floor) And Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(28) - Floor) And Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(30) - Floor) And Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(22) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 24
-If Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(28) - Floor) And Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(30) - Floor) And Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(22) - Floor) And Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(24) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 26
-If Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(30) - Floor) And Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(22) - Floor) And Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(24) - Floor) And Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(26) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 28
-If Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(22) - Floor) And Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(24) - Floor) And Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(26) - Floor) And Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(28) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 30
+If Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(24) - Floor) And Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(26) - Floor) And Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(28) - Floor) And Abs(ElevatorFloor(22) - Floor) <= Abs(ElevatorFloor(30) - Floor) Then
+    If UpQueue(22) = "" And DownQueue(22) = "" Then Number = 22
+    If ElevatorFloor(22) > Floor And QueuePositionDirection(22) = -1 And Direction = -1 Then Number = 22
+    If ElevatorFloor(22) < Floor And QueuePositionDirection(22) = 1 And Direction = 1 Then Number = 22
+End If
+If Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(26) - Floor) And Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(28) - Floor) And Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(30) - Floor) And Abs(ElevatorFloor(24) - Floor) <= Abs(ElevatorFloor(22) - Floor) Then
+    If UpQueue(24) = "" And DownQueue(24) = "" Then Number = 24
+    If ElevatorFloor(24) > Floor And QueuePositionDirection(24) = -1 And Direction = -1 Then Number = 24
+    If ElevatorFloor(24) < Floor And QueuePositionDirection(24) = 1 And Direction = 1 Then Number = 24
+End If
+If Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(28) - Floor) And Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(30) - Floor) And Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(22) - Floor) And Abs(ElevatorFloor(26) - Floor) <= Abs(ElevatorFloor(24) - Floor) Then
+    If UpQueue(26) = "" And DownQueue(26) = "" Then Number = 26
+    If ElevatorFloor(26) > Floor And QueuePositionDirection(26) = -1 And Direction = -1 Then Number = 26
+    If ElevatorFloor(26) < Floor And QueuePositionDirection(26) = 1 And Direction = 1 Then Number = 26
+End If
+If Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(30) - Floor) And Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(22) - Floor) And Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(24) - Floor) And Abs(ElevatorFloor(28) - Floor) <= Abs(ElevatorFloor(26) - Floor) Then
+    If UpQueue(28) = "" And DownQueue(28) = "" Then Number = 28
+    If ElevatorFloor(28) > Floor And QueuePositionDirection(28) = -1 And Direction = -1 Then Number = 28
+    If ElevatorFloor(28) < Floor And QueuePositionDirection(28) = 1 And Direction = 1 Then Number = 28
+End If
+If Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(22) - Floor) And Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(24) - Floor) And Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(26) - Floor) And Abs(ElevatorFloor(30) - Floor) <= Abs(ElevatorFloor(28) - Floor) Then
+    If UpQueue(30) = "" And DownQueue(30) = "" Then Number = 30
+    If ElevatorFloor(30) > Floor And QueuePositionDirection(30) = -1 And Direction = -1 Then Number = 30
+    If ElevatorFloor(30) < Floor And QueuePositionDirection(30) = 1 And Direction = 1 Then Number = 30
+End If
 End If
 If Section = 12 Then
-If Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(33) - Floor) And Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(35) - Floor) And Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(37) - Floor) And Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(39) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 31
-If Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(35) - Floor) And Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(37) - Floor) And Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(39) - Floor) And Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(31) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 33
-If Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(37) - Floor) And Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(39) - Floor) And Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(31) - Floor) And Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(33) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 35
-If Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(39) - Floor) And Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(31) - Floor) And Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(33) - Floor) And Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(35) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 37
-If Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(31) - Floor) And Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(33) - Floor) And Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(35) - Floor) And Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(37) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 39
+If Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(33) - Floor) And Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(35) - Floor) And Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(37) - Floor) And Abs(ElevatorFloor(31) - Floor) <= Abs(ElevatorFloor(39) - Floor) Then
+    If UpQueue(31) = "" And DownQueue(31) = "" Then Number = 31
+    If ElevatorFloor(31) > Floor And QueuePositionDirection(31) = -1 And Direction = -1 Then Number = 31
+    If ElevatorFloor(31) < Floor And QueuePositionDirection(31) = 1 And Direction = 1 Then Number = 31
+End If
+If Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(35) - Floor) And Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(37) - Floor) And Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(39) - Floor) And Abs(ElevatorFloor(33) - Floor) <= Abs(ElevatorFloor(31) - Floor) Then
+    If UpQueue(33) = "" And DownQueue(33) = "" Then Number = 33
+    If ElevatorFloor(33) > Floor And QueuePositionDirection(33) = -1 And Direction = -1 Then Number = 33
+    If ElevatorFloor(33) < Floor And QueuePositionDirection(33) = 1 And Direction = 1 Then Number = 33
+End If
+If Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(37) - Floor) And Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(39) - Floor) And Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(31) - Floor) And Abs(ElevatorFloor(35) - Floor) <= Abs(ElevatorFloor(33) - Floor) Then
+    If UpQueue(35) = "" And DownQueue(35) = "" Then Number = 35
+    If ElevatorFloor(35) > Floor And QueuePositionDirection(35) = -1 And Direction = -1 Then Number = 35
+    If ElevatorFloor(35) < Floor And QueuePositionDirection(35) = 1 And Direction = 1 Then Number = 35
+End If
+If Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(39) - Floor) And Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(31) - Floor) And Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(33) - Floor) And Abs(ElevatorFloor(37) - Floor) <= Abs(ElevatorFloor(35) - Floor) Then
+    If UpQueue(37) = "" And DownQueue(37) = "" Then Number = 37
+    If ElevatorFloor(37) > Floor And QueuePositionDirection(37) = -1 And Direction = -1 Then Number = 37
+    If ElevatorFloor(37) < Floor And QueuePositionDirection(37) = 1 And Direction = 1 Then Number = 37
+End If
+If Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(31) - Floor) And Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(33) - Floor) And Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(35) - Floor) And Abs(ElevatorFloor(39) - Floor) <= Abs(ElevatorFloor(37) - Floor) Then
+    If UpQueue(39) = "" And DownQueue(39) = "" Then Number = 39
+    If ElevatorFloor(39) > Floor And QueuePositionDirection(39) = -1 And Direction = -1 Then Number = 39
+    If ElevatorFloor(39) < Floor And QueuePositionDirection(39) = 1 And Direction = 1 Then Number = 39
+End If
 End If
 If Section = 13 Then
-If Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(34) - Floor) And Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(36) - Floor) And Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(38) - Floor) And Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(40) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 32
-If Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(36) - Floor) And Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(38) - Floor) And Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(40) - Floor) And Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(32) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 34
-If Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(38) - Floor) And Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(40) - Floor) And Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(32) - Floor) And Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(34) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 36
-If Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(40) - Floor) And Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(32) - Floor) And Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(34) - Floor) And Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(36) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 38
-If Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(32) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(34) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(36) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(38) - Floor) Then If QueuePositionDirection(Number) = 0 Or QueuePositionDirection(Number) = Direction Then Number = 40
+If Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(34) - Floor) And Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(36) - Floor) And Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(38) - Floor) And Abs(ElevatorFloor(32) - Floor) <= Abs(ElevatorFloor(40) - Floor) Then
+    If UpQueue(32) = "" And DownQueue(32) = "" Then Number = 32
+    If ElevatorFloor(32) > Floor And QueuePositionDirection(32) = -1 And Direction = -1 Then Number = 32
+    If ElevatorFloor(32) < Floor And QueuePositionDirection(32) = 1 And Direction = 1 Then Number = 32
+End If
+If Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(36) - Floor) And Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(38) - Floor) And Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(40) - Floor) And Abs(ElevatorFloor(34) - Floor) <= Abs(ElevatorFloor(32) - Floor) Then
+    If UpQueue(34) = "" And DownQueue(34) = "" Then Number = 34
+    If ElevatorFloor(34) > Floor And QueuePositionDirection(34) = -1 And Direction = -1 Then Number = 34
+    If ElevatorFloor(34) < Floor And QueuePositionDirection(34) = 1 And Direction = 1 Then Number = 34
+End If
+If Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(38) - Floor) And Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(40) - Floor) And Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(32) - Floor) And Abs(ElevatorFloor(36) - Floor) <= Abs(ElevatorFloor(34) - Floor) Then
+    If UpQueue(36) = "" And DownQueue(36) = "" Then Number = 36
+    If ElevatorFloor(36) > Floor And QueuePositionDirection(36) = -1 And Direction = -1 Then Number = 36
+    If ElevatorFloor(36) < Floor And QueuePositionDirection(36) = 1 And Direction = 1 Then Number = 36
+End If
+If Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(40) - Floor) And Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(32) - Floor) And Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(34) - Floor) And Abs(ElevatorFloor(38) - Floor) <= Abs(ElevatorFloor(36) - Floor) Then
+    If UpQueue(38) = "" And DownQueue(38) = "" Then Number = 38
+    If ElevatorFloor(38) > Floor And QueuePositionDirection(38) = -1 And Direction = -1 Then Number = 38
+    If ElevatorFloor(38) < Floor And QueuePositionDirection(38) = 1 And Direction = 1 Then Number = 38
+End If
+If Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(32) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(34) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(36) - Floor) And Abs(ElevatorFloor(40) - Floor) <= Abs(ElevatorFloor(38) - Floor) Then
+    If UpQueue(40) = "" And DownQueue(40) = "" Then Number = 40
+    If ElevatorFloor(40) > Floor And QueuePositionDirection(40) = -1 And Direction = -1 Then Number = 40
+    If ElevatorFloor(40) < Floor And QueuePositionDirection(40) = 1 And Direction = 1 Then Number = 40
+End If
 End If
  
  If ElevatorFloor(Number) <> Floor Then
@@ -168,21 +405,6 @@ End If
  Exit Sub
  End If
  
- 'Fix these:
- 
- 'If Floor = 1 And Camera.GetPosition.Y > FloorHeight And FloorIndicatorText(Number) <> "M" Then
- 'ElevatorSync(j50) = False
- 'OpenElevator(j50) = -1
- 'GotoFloor(j50) = 0.1
- 'Exit Sub
- 'End If
- 
- 'If Floor = 1 And Camera.GetPosition.Y < FloorHeight And FloorIndicatorText(j50) = "M" Then
- 'ElevatorSync(j50) = False
- 'OpenElevator(j50) = -1
- 'GotoFloor(j50) = 0.1
- 'Exit Sub
- 'End If
  OpenElevator(Number) = 1
 End Sub
 Sub DrawElevatorButtons(Number As Integer)
@@ -624,7 +846,7 @@ If CollisionResult.GetCollisionMesh.GetMeshName = Buttons(i52).GetMeshName Then
     'OpenElevator(ElevatorNumber) = -1
     'GotoFloor(ElevatorNumber) = i52
     Dim Direction As Integer
-    If i52 < ElevatorFloor(ElevatorNumber) Then Direction = 0
+    If i52 < ElevatorFloor(ElevatorNumber) Then Direction = -1
     If i52 > ElevatorFloor(ElevatorNumber) Then Direction = 1
     Call AddRoute(Int(i52), ElevatorNumber, Direction)
 End If
