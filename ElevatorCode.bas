@@ -1,6 +1,6 @@
 Attribute VB_Name = "ElevatorCode"
 'Skycraper 0.95 Beta
-'Copyright (C) 2003 Ryan Thoryk
+'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
 'Contact - ryan@tliquest.net
@@ -3380,6 +3380,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       OriginalLocation(Number) = CurrentFloorExact(Number)
       DistanceToTravel(Number) = ((GotoFloor(Number) * FloorHeight) + FloorHeight) - ((CurrentFloorExact(Number) * FloorHeight) + FloorHeight)
       If ElevatorSync(Number) = True Then
+      Call DeleteStairDoors
       Room(CameraFloor).Enable False
       For ElevTemp(Number) = 1 To 40
       CallButtonsUp(ElevTemp(Number)).Enable False
@@ -3392,6 +3393,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       DestroyObjects (CameraFloor)
       ShaftsFloor(CameraFloor).Enable False
       Atmos.SkyBox_Enable False
+      Buildings.Enable False
+      Landscape.Enable False
       If StairDataTable(CameraFloor) = True Then DeleteStairs (CameraFloor)
       If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
       If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
@@ -3404,6 +3407,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       OriginalLocation(Number) = CurrentFloorExact(Number)
       DistanceToTravel(Number) = ((CurrentFloorExact(Number) * FloorHeight) + FloorHeight) - ((GotoFloor(Number) * FloorHeight) + FloorHeight)
       If ElevatorSync(Number) = True Then
+      Call DeleteStairDoors
       Room(CameraFloor).Enable False
       For ElevTemp(Number) = 1 To 40
       CallButtonsUp(ElevTemp(Number)).Enable False
@@ -3416,6 +3420,8 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       DestroyObjects (CameraFloor)
       ShaftsFloor(CameraFloor).Enable False
       Atmos.SkyBox_Enable False
+      Buildings.Enable False
+      Landscape.Enable False
       If StairDataTable(CameraFloor) = True Then DeleteStairs (CameraFloor)
       If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = True Then DeleteStairs (CameraFloor + 1)
       If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = True Then DeleteStairs (CameraFloor - 1)
@@ -3573,13 +3579,15 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       CallButtonsDown(ElevTemp(Number)).Enable True
       Next ElevTemp(Number)
       ShaftsFloor(CameraFloor).Enable True
-      If StairDataTable(CameraFloor) = False Then CreateStairs (CameraFloor)
+      'If StairDataTable(CameraFloor) = False Then CreateStairs (CameraFloor)
       Atmos.SkyBox_Enable True
+      Buildings.Enable True
+      Landscape.Enable True
       'If CameraFloor = 137 Then Shafts.Enable True
       Call InitRealtime(CameraFloor)
       InitObjectsForFloor (CameraFloor)
-      If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = False Then CreateStairs (CameraFloor + 1)
-      If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = False Then CreateStairs (CameraFloor - 1)
+      'If CameraFloor < 138 And StairDataTable(CameraFloor + 1) = False Then CreateStairs (CameraFloor + 1)
+      'If CameraFloor > -10 And StairDataTable(CameraFloor - 1) = False Then CreateStairs (CameraFloor - 1)
       End If
       GotoFloor(Number) = 0
       OpenElevator(Number) = 1
