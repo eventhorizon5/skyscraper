@@ -13,6 +13,15 @@ Begin VB.Form Form2
    MinButton       =   0   'False
    ScaleHeight     =   4410
    ScaleWidth      =   6720
+   Begin VB.CheckBox Check4 
+      Caption         =   "Collision Detection"
+      Height          =   255
+      Left            =   5040
+      TabIndex        =   34
+      Top             =   1440
+      Value           =   1  'Checked
+      Width           =   1695
+   End
    Begin VB.CommandButton Command15 
       Caption         =   "Bldgs Off"
       Height          =   255
@@ -456,6 +465,11 @@ If Check3.Value = 1 Then Room(CameraFloor).Enable True
 If Check3.Value = 0 Then Room(CameraFloor).Enable False
 End Sub
 
+
+Private Sub Check4_Click()
+If Check4.Value = 1 Then EnableCollisions = True
+If Check4.Value = 0 Then EnableCollisions = False: FallRate = 0
+End Sub
 
 Private Sub Check5_Click()
 For i = 1 To 10
