@@ -1,5 +1,5 @@
 Attribute VB_Name = "CoreRoutines"
-'Skycraper 0.9 Beta
+'Skycraper 0.91 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'Contact - ryan@tliquest.net
@@ -29,6 +29,7 @@ Global TV As TVEngine
 Global Scene As TVScene
 Global Mesh As TVMesh
 Global External As TVMesh
+Global Landscape As TVMesh
 Global Room(138) As TVMesh
 Global Shafts1(138) As TVMesh
 Global Shafts2(138) As TVMesh
@@ -197,8 +198,9 @@ LineTest = lineend
     
 'Turn on collisions
         Room(CameraFloor).SetCollisionEnable True
-        External.SetCollisionEnable True
         Buildings.SetCollisionEnable True
+        Landscape.SetCollisionEnable True
+        External.SetCollisionEnable True
         Shafts1(CameraFloor).SetCollisionEnable True
         Shafts2(CameraFloor).SetCollisionEnable True
         ShaftsFloor(CameraFloor).SetCollisionEnable True
@@ -302,6 +304,7 @@ LineTest = lineend
     If Room(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If Stairs(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If Buildings.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
+    If Landscape.Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If Shafts1(CameraFloor).IsMeshEnabled = True Then If Shafts1(CameraFloor).IsMeshEnabled = True Then If Shafts1(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If Shafts2(CameraFloor).IsMeshEnabled = True Then If Shafts2(CameraFloor).IsMeshEnabled = True Then If Shafts2(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
     If ShaftsFloor(CameraFloor).Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING) = True Then Camera.SetPosition linestart.X, Camera.GetPosition.Y, linestart.z: GoTo CollisionEnd
@@ -323,6 +326,7 @@ CollisionEnd:
         Room(CameraFloor).SetCollisionEnable False
         External.SetCollisionEnable False
         Buildings.SetCollisionEnable False
+        Landscape.SetCollisionEnable False
         Shafts1(CameraFloor).SetCollisionEnable False
         Shafts2(CameraFloor).SetCollisionEnable False
         ShaftsFloor(CameraFloor).SetCollisionEnable False
@@ -833,19 +837,19 @@ Room(CameraFloor).SetCollisionEnable True
 Shafts1(CameraFloor).SetCollisionEnable True
 Shafts2(CameraFloor).SetCollisionEnable True
 Buildings.SetCollisionEnable True
-External.SetCollisionEnable True
+Landscape.SetCollisionEnable True
 
 If Room(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
     Shafts1(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
     Shafts2(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
-    External.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
+    Landscape.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And _
     Buildings.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - 12, Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = False And InElevator = False And InStairwell = False Then IsFalling = True
 
 Room(CameraFloor).SetCollisionEnable False
 Shafts1(CameraFloor).SetCollisionEnable False
 Shafts2(CameraFloor).SetCollisionEnable False
 Buildings.SetCollisionEnable False
-External.SetCollisionEnable False
+Landscape.SetCollisionEnable False
 
 '*********************************
 If IsFalling = False Then Exit Sub
@@ -873,6 +877,7 @@ Room(CameraFloor).SetCollisionEnable True
 Shafts1(CameraFloor).SetCollisionEnable True
 Shafts2(CameraFloor).SetCollisionEnable True
 Buildings.SetCollisionEnable True
+Landscape.SetCollisionEnable True
 
 If Room(CameraFloor).Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
 FallRate = 0
@@ -898,11 +903,18 @@ IsFalling = False
 If CameraFloor > 1 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10, Camera.GetPosition.z
 If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
 End If
+If Landscape.Collision(Camera.GetPosition, Vector(Camera.GetPosition.X, Camera.GetPosition.Y - (FallRate / TimeRate), Camera.GetPosition.z), TV_TESTTYPE_ACCURATETESTING) = True Then
+FallRate = 0
+IsFalling = False
+If CameraFloor > 1 Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * 25) + 25 + 10, Camera.GetPosition.z
+If CameraFloor = 1 Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
+End If
 
 Room(CameraFloor).SetCollisionEnable False
 Shafts1(CameraFloor).SetCollisionEnable False
 Shafts2(CameraFloor).SetCollisionEnable False
 Buildings.SetCollisionEnable False
+Landscape.SetCollisionEnable False
 
 End Sub
 
@@ -915,8 +927,9 @@ Form1.Show
 Set TV = New TVEngine
 Set Scene = New TVScene
 Set Mesh = New TVMesh
-Set External = New TVMesh
 Set Buildings = New TVMesh
+Set External = New TVMesh
+Set Landscape = New TVMesh
 For i = 1 To 138
 Set Room(i) = New TVMesh
 Set Stairs(i) = New TVMesh
@@ -974,21 +987,23 @@ Set TextureFactory = New TVTextureFactory
 Set SoundEngine = New TV3DMedia.TVSoundEngine
 Set Light = New TVLightEngine
 
-
-   
+If TV.ShowDriverDialog = False Then End
+  
 Form1.Print " "
-Form1.Print "Skyscraper 0.9 Beta"
+Form1.Print "Skyscraper 0.91 Beta - Build" + Str$(App.Revision)
 Form1.Print "©2003 Ryan Thoryk"
+Form1.Print "Compiled on March 30, 2003"
 Form1.Print " "
 Form1.Print "Skyscraper comes with ABSOLUTELY NO WARRANTY. This is free"
 Form1.Print "software, and you are welcome to redistribute it under certain"
 Form1.Print "conditions. For details, see the file gpl.txt"
+Form1.Print "Build number counting has been done since version 0.7"
 Form1.Print " "
-
-  If TV.ShowDriverDialog = False Then End
    DoEvents
+   
+Sleep 2000
    '2. Initialize the engine with the selected mode
-   TV.SetSearchDirectory App.Path
+    TV.SetSearchDirectory App.Path
 Form1.Print "Initializing TrueVision3D..."
    'TV.Initialize Form1.hWnd
     TV.Init3DWindowedMode Form1.hWnd
@@ -1009,7 +1024,6 @@ Form1.Print "Creating Meshes..."
   Scene.LoadCursor "pointer.bmp", TV_COLORKEY_BLACK, 14, 16
   
   Set Mesh = Scene.CreateMeshBuilder("Mesh")
-  Set External = Scene.CreateMeshBuilder("External")
   For i = 1 To 138
   Set Room(i) = Scene.CreateMeshBuilder("Room " + Str$(i))
   Set Stairs(i) = Scene.CreateMeshBuilder("Stairs " + Str$(i))
@@ -1058,6 +1072,8 @@ Form1.Print "Creating Meshes..."
   Set CallButtons(i) = Scene.CreateMeshBuilder("CallButtons" + Str$(i))
   Next i
   Set Buildings = Scene.CreateMeshBuilder("Buildings")
+  Set External = Scene.CreateMeshBuilder("External")
+  Set Landscape = Scene.CreateMeshBuilder("Landscape")
     
 Form1.Print "Mesh Areas Created"
   Scene.SetViewFrustum 90, 10000
@@ -1098,24 +1114,15 @@ Form1.Print "Mesh Areas Created"
   TextureFactory.LoadTexture App.Path + "\data\roadfull.jpg", "Road5"
   TextureFactory.LoadTexture "windows08.jpg", "Windows8"
   TextureFactory.LoadTexture "windows11.jpg", "Windows11"
-  
-    
+  TextureFactory.LoadTexture App.Path + "\data\downtown.jpg", "Downtown"
+  TextureFactory.LoadTexture App.Path + "\data\suburbs.jpg", "Suburbs"
+      
   TextureFactory.LoadTexture "top.jpg", "SkyTop"
   TextureFactory.LoadTexture "bottom.jpg", "SkyBottom"
   TextureFactory.LoadTexture "left.jpg", "SkyLeft"
   TextureFactory.LoadTexture "right.jpg", "SkyRight"
   TextureFactory.LoadTexture "front.jpg", "SkyFront"
   TextureFactory.LoadTexture "back.jpg", "SkyBack"
-  'TextureFactory.LoadTexture App.Path + "\data\floorindicators\L.jpg", "FloorIndicator1"
-  'TextureFactory.LoadTexture App.Path + "\data\floorindicators\L.jpg", "FloorIndicator2"
-  'TextureFactory.LoadTexture App.Path + "\data\floorindicators\L.jpg", "FloorIndicator3"
-  'TextureFactory.LoadTexture App.Path + "\data\floorindicators\L.jpg", "FloorIndicator4"
-  'TextureFactory.LoadTexture App.Path + "\data\floorindicators\L.jpg", "FloorIndicator5"
-  'TextureFactory.LoadTexture App.Path + "\data\floorindicators\L.jpg", "FloorIndicator6"
-  'TextureFactory.LoadTexture App.Path + "\data\floorindicators\L.jpg", "FloorIndicator7"
-  'TextureFactory.LoadTexture App.Path + "\data\floorindicators\L.jpg", "FloorIndicator8"
-  'TextureFactory.LoadTexture App.Path + "\data\floorindicators\L.jpg", "FloorIndicator9"
-  'TextureFactory.LoadTexture App.Path + "\data\floorindicators\L.jpg", "FloorIndicator10"
   TextureFactory.LoadTexture App.Path + "\objects\benedeti.jpg", "ColumnTex", , , TV_COLORKEY_NO
   TextureFactory.LoadTexture App.Path + "\data\plaque.jpg", "Plaque"
   
@@ -1159,6 +1166,8 @@ End Sub
 
 Sub OptimizeMeshes()
   Form1.Print "Optimizing Meshes.";
+  External.Optimize
+  Landscape.Optimize
   For i = 1 To 138
   Form1.Print ".";
   Room(i).Optimize
@@ -1202,7 +1211,6 @@ Sub OptimizeMeshes()
   Buttons10(i).Optimize
   Next i
   Form1.Print ".";
-  External.Optimize
   Form1.Print ".";
   For i = 1 To 10
   Elevator(i).Optimize
@@ -1294,45 +1302,30 @@ Form1.Print "Processing Lobby..."
     Stairs(i).AddWall GetTex("Concrete"), -12.5 - 0.5, -40.3, -12.5 - 0.5, -30, 25, 50, (10.3 * 0.086) * 4, (25 * 0.086) * 2
     
 
+    'More elevator shafts are being planned for the near future
     'Service elevator shaft (North)
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, -130, -12.5, -110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), -32.5, -130, -32.5, -110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, -110, -32.5, -110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, -130, -32.5, -130, 75, 0, 1, 3
-    Buildings.AddWall GetTex("Concrete"), -30, -130, -30, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), -50, -130, -50, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), -30, -110, -50, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), -30, -130, -50, -130, (136 * 25) + 50, 0, 1, 138
+    'Buildings.AddWall GetTex("Concrete"), -30, -130, -30, -110, (136 * 25) + 50, 0, 1, 138
+    'Buildings.AddWall GetTex("Concrete"), -50, -130, -50, -110, (136 * 25) + 50, 0, 1, 138
+    'Buildings.AddWall GetTex("Concrete"), -30, -110, -50, -110, (136 * 25) + 50, 0, 1, 138
+    'Buildings.AddWall GetTex("Concrete"), -30, -130, -50, -130, (136 * 25) + 50, 0, 1, 138
     
     'Service elevator shaft (South)
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, 130, -12.5, 110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), -32.5, 130, -32.5, 110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, 110, -32.5, 110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), -12.5, 130, -32.5, 130, 75, 0, 1, 3
-    Buildings.AddWall GetTex("Concrete"), -30, 130, -30, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), -50, 130, -50, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), -30, 110, -50, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), -30, 130, -50, 130, (131 * 25) + 50, 0, 1, 133
+    'Buildings.AddWall GetTex("Concrete"), -30, 130, -30, 110, (131 * 25) + 50, 0, 1, 133
+    'Buildings.AddWall GetTex("Concrete"), -50, 130, -50, 110, (131 * 25) + 50, 0, 1, 133
+    'Buildings.AddWall GetTex("Concrete"), -30, 110, -50, 110, (131 * 25) + 50, 0, 1, 133
+    'Buildings.AddWall GetTex("Concrete"), -30, 130, -50, 130, (131 * 25) + 50, 0, 1, 133
     
     'Stairwell shaft (North)
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, -130, 12.5, -110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), 32.5, -130, 32.5, -110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, -110, 32.5, -110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, -130, 32.5, -130, 75, 0, 1, 3
-    Buildings.AddWall GetTex("Concrete"), 30, -130, 30, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), 50, -130, 50, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), 30, -110, 50, -110, (136 * 25) + 50, 0, 1, 138
-    Buildings.AddWall GetTex("Concrete"), 30, -130, 50, -130, (136 * 25) + 50, 0, 1, 138
+    'Buildings.AddWall GetTex("Concrete"), 30, -130, 30, -110, (136 * 25) + 50, 0, 1, 138
+    'Buildings.AddWall GetTex("Concrete"), 50, -130, 50, -110, (136 * 25) + 50, 0, 1, 138
+    'Buildings.AddWall GetTex("Concrete"), 30, -110, 50, -110, (136 * 25) + 50, 0, 1, 138
+    'Buildings.AddWall GetTex("Concrete"), 30, -130, 50, -130, (136 * 25) + 50, 0, 1, 138
     
     'Stairwell shaft (South)
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, 130, 12.5, 110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), 32.5, 130, 32.5, 110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, 110, 32.5, 110, 75, 0, 1, 3
-    'ShaftsFloor(i).AddWall GetTex("Concrete"), 12.5, 130, 32.5, 130, 75, 0, 1, 3
-    Buildings.AddWall GetTex("Concrete"), 30, 130, 30, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), 50, 130, 50, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), 30, 110, 50, 110, (131 * 25) + 50, 0, 1, 133
-    Buildings.AddWall GetTex("Concrete"), 30, 130, 50, 130, (131 * 25) + 50, 0, 1, 133
+    'Buildings.AddWall GetTex("Concrete"), 30, 130, 30, 110, (131 * 25) + 50, 0, 1, 133
+    'Buildings.AddWall GetTex("Concrete"), 50, 130, 50, 110, (131 * 25) + 50, 0, 1, 133
+    'Buildings.AddWall GetTex("Concrete"), 30, 110, 50, 110, (131 * 25) + 50, 0, 1, 133
+    'Buildings.AddWall GetTex("Concrete"), 30, 130, 50, 130, (131 * 25) + 50, 0, 1, 133
     
     'Ceiling
     Room(i).AddFloor GetTex("Ceiling1"), -160, -150, 160, -46.25, (i * 25) + 49.5, 10, 5
@@ -1361,11 +1354,6 @@ Sub Process2to39()
     Room(i).AddFloor GetTex("Marble3"), -160, -46.25, -32.5, 46.25, (i * 25) + 49.5, 11, 10
     Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 160, 46.25, (i * 25) + 49.5, 11, 10
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 46.25, (i * 25) + 49.5, 2, 10
-    
-    'External.AddWall GetTex("MainWindows"), -160, -150, 160, -150, 25, (i * 25) + 25, 7.6, 1
-    'External.AddWall GetTex("MainWindows"), 160, -150, 160, 150, 25, (i * 25) + 25, 7, 1
-    'External.AddWall GetTex("MainWindows"), 160, 150, -160, 150, 25, (i * 25) + 25, 7.6, 1
-    'External.AddWall GetTex("MainWindows"), -160, 150, -160, -150, 25, (i * 25) + 25, 7, 1
     
     'Fake Stairway Doors for other floors
     Room(i).AddWall GetTex("StairsDoor"), -12.8, -36.4 - 3.9, -12.8, -36.4 + 4.3, 19.5, (i * 25) + 25 + 25, -1, 1
@@ -1475,11 +1463,6 @@ Sub Process40to79()
     Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 135, 30.83, (i * 25) + 49.5, 3, 3
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 30.83, (i * 25) + 49.5, 1, 3
    
-    'External.AddWall GetTex("MainWindows"), -135, -150, 135, -150, 25, (i * 25) + 25, 6.5, 1
-    'External.AddWall GetTex("MainWindows"), 135, -150, 135, 150, 25, (i * 25) + 25, 7, 1
-    'External.AddWall GetTex("MainWindows"), 135, 150, -135, 150, 25, (i * 25) + 25, 6.5, 1
-    'External.AddWall GetTex("MainWindows"), -135, 150, -135, -150, 25, (i * 25) + 25, 7, 1
-    
     'Fake Stairway Doors for other floors
     Room(i).AddWall GetTex("StairsDoor"), -12.8, -36.4 - 3.9, -12.8, -36.4 + 4.3, 19.5, (i * 25) + 25 + 25, -1, 1
     
@@ -1593,11 +1576,6 @@ Sub Process80to117()
     Room(i).AddFloor GetTex("Marble3"), -110, -46.25, -32.5, 15.41, (i * 25) + 49.5, 3, 3
     Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 110, 15.41, (i * 25) + 49.5, 3, 3
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 15.41, (i * 25) + 49.5, 1, 3
-    
-    'External.AddWall GetTex("MainWindows"), -110, -150, 110, -150, 25, (i * 25) + 25, 5, 1
-    'External.AddWall GetTex("MainWindows"), 110, -150, 110, 150, 25, (i * 25) + 25, 7, 1
-    'External.AddWall GetTex("MainWindows"), 110, 150, -110, 150, 25, (i * 25) + 25, 5, 1
-    'External.AddWall GetTex("MainWindows"), -110, 150, -110, -150, 25, (i * 25) + 25, 7, 1
     
     'Fake Stairway Doors for other floors
     Room(i).AddWall GetTex("StairsDoor"), -12.8, -36.4 - 3.9, -12.8, -36.4 + 4.3, 19.5, (i * 25) + 25 + 25, -1, 1
@@ -1756,11 +1734,6 @@ Sub Process118to132()
     Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 85, 0, (i * 25) + 49.5, 3, 3
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 0, (i * 25) + 49.5, 1, 3
      
-    'External.AddWall GetTex("MainWindows"), -85, -150, 85, -150, 25, (i * 25) + 25, 4, 1
-    'External.AddWall GetTex("MainWindows"), 85, -150, 85, 150, 25, (i * 25) + 25, 7, 1
-    'External.AddWall GetTex("MainWindows"), 85, 150, -85, 150, 25, (i * 25) + 25, 4, 1
-    'External.AddWall GetTex("MainWindows"), -85, 150, -85, -150, 25, (i * 25) + 25, 7, 1
-    
     'Fake Stairway Doors for other floors
     Room(i).AddWall GetTex("StairsDoor"), -12.8, -36.4 - 3.9, -12.8, -36.4 + 4.3, 19.5, (i * 25) + 25 + 25, -1, 1
     
@@ -3431,6 +3404,7 @@ If Floor = 133 Or Floor = 134 Then
 i = 79 + (150 * (Floor - 1))
 Call Init_Objects(Floor, 79)
 Objects(i).Load3DsMesh App.Path + "\objects\swimpool.3ds", True
+'Objects(i).SetMaterial 0
 'Objects(i).SetColor (RGBA(10, 10, 10, 1))
 Objects(i).SetRotation 0, -1.58, 0
 Objects(i).ScaleMesh 0.2, 0.2, 0.2
@@ -3728,11 +3702,6 @@ i = 133
     Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 85, 0, (i * 25) + 49.5, 3, 3
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 0, (i * 25) + 49.5, 1, 3
      
-    'External.AddWall GetTex("MainWindows"), -85, -150, 85, -150, 25, (i * 25) + 25, 4, 1
-    'External.AddWall GetTex("MainWindows"), 85, -150, 85, 150, 25, (i * 25) + 25, 7, 1
-    'External.AddWall GetTex("MainWindows"), 85, 150, -85, 150, 25, (i * 25) + 25, 4, 1
-    'External.AddWall GetTex("MainWindows"), -85, 150, -85, -150, 25, (i * 25) + 25, 7, 1
-    
     'Fake Stairway Doors for other floors
     Room(i).AddWall GetTex("StairsDoor"), -12.8, -36.4 - 3.9, -12.8, -36.4 + 4.3, 19.5, (i * 25) + 25 + 25, -1, 1
     
@@ -3810,11 +3779,6 @@ i = 133
     Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 85, 0, (i * 25) + 49.5, 3, 3
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, 0, (i * 25) + 49.5, 1, 3
      
-    'External.AddWall GetTex("MainWindows"), -85, -150, 85, -150, 25, (i * 25) + 25, 4, 1
-    'External.AddWall GetTex("MainWindows"), 85, -150, 85, 150, 25, (i * 25) + 25, 7, 1
-    'External.AddWall GetTex("MainWindows"), 85, 150, -85, 150, 25, (i * 25) + 25, 4, 1
-    'External.AddWall GetTex("MainWindows"), -85, 150, -85, -150, 25, (i * 25) + 25, 7, 1
-    
     'Fake Stairway Doors for other floors
     Room(i).AddWall GetTex("StairsDoor"), -12.8, -36.4 - 3.9, -12.8, -36.4 + 4.3, 19.5, (i * 25) + 25 + 25, -1, 1
     
@@ -3855,11 +3819,6 @@ i = 133
     Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 60, -15.42, (i * 25) + 49.5, 1.4, 2.4
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, -15.42, (i * 25) + 49.5, 2, 2.4
     
-    'External.AddWall GetTex("MainWindows"), -60, -150, 60, -150, 25, (i * 25) + 25, 3, 1
-    'External.AddWall GetTex("MainWindows"), 60, -150, 60, 150, 25, (i * 25) + 25, 7, 1
-    'External.AddWall GetTex("MainWindows"), 60, 150, -60, 150, 25, (i * 25) + 25, 3, 1
-    'External.AddWall GetTex("MainWindows"), -60, 150, -60, -150, 25, (i * 25) + 25, 7, 1
-    
     'Fake Stairway Doors for other floors
     Room(i).AddWall GetTex("StairsDoor"), -12.8, -36.4 - 3.9, -12.8, -36.4 + 4.3, 19.5, (i * 25) + 25 + 25, -1, 1
     
@@ -3889,11 +3848,6 @@ i = 133
     Room(i).AddFloor GetTex("Marble3"), -60, -46.25, -32.5, -15.42, (i * 25) + 49.5, 1.4, 2.4
     Room(i).AddFloor GetTex("Marble3"), 32.5, -46.25, 60, -15.42, (i * 25) + 49.5, 1.4, 2.4
     Room(i).AddFloor GetTex("Marble3"), -12.5, -46.25, 12.5, -15.42, (i * 25) + 49.5, 2, 2.4
-    
-    'External.AddWall GetTex("MainWindows"), -60, -150, 60, -150, 25, (i * 25) + 25, 3, 1
-    'External.AddWall GetTex("MainWindows"), 60, -150, 60, 150, 25, (i * 25) + 25, 7, 1
-    'External.AddWall GetTex("MainWindows"), 60, 150, -60, 150, 25, (i * 25) + 25, 3, 1
-    'External.AddWall GetTex("MainWindows"), -60, 150, -60, -150, 25, (i * 25) + 25, 7, 1
     
     'Fake Stairway Doors for other floors
     Room(i).AddWall GetTex("StairsDoor"), -12.8, -36.4 - 3.9, -12.8, -36.4 + 4.3, 19.5, (i * 25) + 25 + 25, -1, 1
@@ -3925,16 +3879,6 @@ i = 133
     Room(i).AddFloor GetTex("BrickTexture"), -60, -46.25, -32.5, -15.42, (i * 25) + 49.5, 1.4, 2.4
     Room(i).AddFloor GetTex("BrickTexture"), 12.5, -46.25, 60, -15.42, (i * 25) + 49.5, 1.4, 2.4
     Room(i).AddFloor GetTex("BrickTexture"), -12.5, -46.25, 12.5, -15.42, (i * 25) + 49.5, 2, 2.4
-    
-    'External.AddWall GetTex("MainWindows"), -60, -150, 60, -150, 25, (i * 25) + 25, 3, 1
-    'External.AddWall GetTex("MainWindows"), 60, -150, 60, 150, 25, (i * 25) + 25, 7, 1
-    'External.AddWall GetTex("MainWindows"), 60, 150, -60, 150, 25, (i * 25) + 25, 3, 1
-    'External.AddWall GetTex("MainWindows"), -60, 150, -60, -150, 25, (i * 25) + 25, 7, 1
-    
-    'External.AddWall GetTex("Concrete"), -60, -150, 60, -150, 25, (i * 25) + 25, 3 * 4, 1 * 4
-    'External.AddWall GetTex("Concrete"), 60, -150, 60, 150, 25, (i * 25) + 25, 7 * 4, 1 * 4
-    'External.AddWall GetTex("Concrete"), 60, 150, -60, 150, 25, (i * 25) + 25, 3 * 4, 1 * 4
-    'External.AddWall GetTex("Concrete"), -60, 150, -60, -150, 25, (i * 25) + 25, 7 * 4, 1 * 4
     
     Room(i).AddWall GetTex("BrickTexture"), -60 + 0.1, -150 + 0.1, 60 - 0.1, -150 + 0.1, 25, (i * 25) + 25, 3, 1
     Room(i).AddWall GetTex("BrickTexture"), 60 - 0.1, -150 + 0.1, 60 - 0.1, 150 - 0.1, 25, (i * 25) + 25, 7, 1
@@ -4329,8 +4273,8 @@ Sub DrawElevatorButtons()
     
     'Buttons5(91).AddWall GetTex("Button91"), -12.67, -27.85 + (15 * 2), -12.67, -27.55 + (15 * 2), 0.3, 12 - 1, -1, 1
     Buttons5(98).AddWall GetTex("Button98"), -12.67, -27.85 + (15 * 2) - 0.4, -12.67, -27.55 + (15 * 2) - 0.4, 0.3, 12 - 1, -1, 1
-    Buttons5(99).AddWall GetTex("Button99"), -12.67, -27.85 + (15 * 2) - 0.8, -12.67, -27.55 + (15 * 2) - 0.8, 0.3, 12 - 1, -1, 1
-    Buttons5(134).AddWall GetTex("Button134"), -12.67, -27.85 + (15 * 2) - 1.2, -12.67, -27.55 + (15 * 2) - 1.2, 0.3, 12 - 1, -1, 1
+    'Buttons5(99).AddWall GetTex("Button99"), -12.67, -27.85 + (15 * 2) - 0.8, -12.67, -27.55 + (15 * 2) - 0.8, 0.3, 12 - 1, -1, 1
+    Buttons5(99).AddWall GetTex("Button99"), -12.67, -27.85 + (15 * 2) - 1.2, -12.67, -27.55 + (15 * 2) - 1.2, 0.3, 12 - 1, -1, 1
     'Buttons5(95).AddWall GetTex("Button95"), -12.67, -27.85 + (15 * 2) - 1.6, -12.67, -27.55 + (15 * 2) - 1.6, 0.3, 12 - 1, -1, 1
     
     'Buttons5(96).AddWall GetTex("Button96"), -12.67, -27.85 + (15 * 2), -12.67, -27.55 + (15 * 2), 0.3, 12 - 1.5, -1, 1
@@ -4403,8 +4347,8 @@ Sub DrawElevatorButtons()
     
     'Buttons6(91).AddWall GetTex("Button91"), 12.67, -18.45 + (15 * 2), 12.67, -18.15 + (15 * 2), 0.3, 12 - 1, 1, 1
     Buttons6(98).AddWall GetTex("Button98"), 12.67, -18.45 + (15 * 2) + 0.4, 12.67, -18.15 + (15 * 2) + 0.4, 0.3, 12 - 1, 1, 1
-    Buttons6(99).AddWall GetTex("Button99"), 12.67, -18.45 + (15 * 2) + 0.8, 12.67, -18.15 + (15 * 2) + 0.8, 0.3, 12 - 1, 1, 1
-    Buttons6(134).AddWall GetTex("Button134"), 12.67, -18.45 + (15 * 2) + 1.2, 12.67, -18.15 + (15 * 2) + 1.2, 0.3, 12 - 1, 1, 1
+    'Buttons6(99).AddWall GetTex("Button99"), 12.67, -18.45 + (15 * 2) + 0.8, 12.67, -18.15 + (15 * 2) + 0.8, 0.3, 12 - 1, 1, 1
+    Buttons6(99).AddWall GetTex("Button99"), 12.67, -18.45 + (15 * 2) + 1.2, 12.67, -18.15 + (15 * 2) + 1.2, 0.3, 12 - 1, 1, 1
     'Buttons6(95).AddWall GetTex("Button95"), 12.67, -18.45 + (15 * 2) + 1.6, 12.67, -18.15 + (15 * 2) + 1.6, 0.3, 12 - 1, 1, 1
     
     'Buttons6(96).AddWall GetTex("Button96"), 12.67, -18.45 + (15 * 2), 12.67, -18.15 + (15 * 2), 0.3, 12 - 1.5, 1, 1
@@ -4976,75 +4920,252 @@ lngOldTickCount = GetTickCount() + lngTicksPerFrame
 End Sub
 
 Sub ProcessOutside()
+'640 and 70
+'350 and 120
 
 'Outside of Building
-    External.AddFloor GetTex("Walkway"), -160, 150, 160, 200, 0, 4, 1
     
-    External.AddFloor GetTex("Road1"), -160, 200, 160, 260, 0, 4, 1
-    External.AddFloor GetTex("Road1"), -160, 260, 160, 320, 0, 4, -1
-    External.AddFloor GetTex("Road1"), 230, 200, 550, 260, 0, 4, 1
-    External.AddFloor GetTex("Road1"), 230, 260, 550, 320, 0, 4, -1
-    External.AddFloor GetTex("Road1"), 620, 200, 940, 260, 0, 4, 1
-    External.AddFloor GetTex("Road1"), 620, 260, 940, 320, 0, 4, -1
+    Landscape.AddFloor GetTex("Downtown"), 2290, -1140, 7000, 1140, 0, 0.5, 0.25
+    Landscape.AddFloor GetTex("Downtown"), -1900, -1140, -7000, 1140, 0, 0.5, 0.25
+    Landscape.AddFloor GetTex("Downtown"), -7000, -1140, 7000, -7000, 0, 1.5, 0.75
+    Landscape.AddFloor GetTex("Downtown"), -7000, 1140, 7000, 7000, 0, 1.5, 0.75
     
-    External.AddFloor GetTex("Road4"), 230, 200, 160, 260, 0, 1, -1
-    External.AddFloor GetTex("Road4"), 230, 260, 160, 320, 0, 1, 1
-    External.AddFloor GetTex("Road4"), -230, 200, -160, 260, 0, 1, -1
-    External.AddFloor GetTex("Road4"), -230, 260, -160, 320, 0, 1, 1
+    Landscape.AddFloor GetTex("Suburbs"), 7000, -7000, 100000, 7000, 0, 10, 1
+    Landscape.AddFloor GetTex("Suburbs"), -7000, -7000, -100000, 7000, 0, 10, 1
+    Landscape.AddFloor GetTex("Suburbs"), -100000, -7000, 100000, -100000, 0, 10, 10
+    Landscape.AddFloor GetTex("Suburbs"), -100000, 7000, 100000, 100000, 0, 10, 10
     
-    External.AddFloor GetTex("Road5"), -230, -150, -160, 200, 0, 1, 5
-    External.AddFloor GetTex("Road5"), -230, 320, -160, 670, 0, 1, 5
-    External.AddFloor GetTex("Road5"), 230, -150, 160, 200, 0, 1, 5
-    External.AddFloor GetTex("Road5"), 230, 320, 160, 670, 0, 1, 5
+    'concrete below buildings
+    Landscape.AddFloor GetTex("Walkway"), 1650, -790, 2290, -1140, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 1650, -320, 2290, -670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 1650, -200, 2290, 200, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 1650, 320, 2290, 670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 1650, 790, 2290, 1140, -0.1, 4, 4
     
-    External.AddFloor GetTex("Road5"), -620, -150, -550, 200, 0, 1, 5
-    External.AddFloor GetTex("Road5"), -620, 320, -550, 670, 0, 1, 5
-    External.AddFloor GetTex("Road5"), 620, -150, 550, 200, 0, 1, 5
-    External.AddFloor GetTex("Road5"), 620, 320, 550, 670, 0, 1, 5
+    Landscape.AddFloor GetTex("Walkway"), 940, -790, 1580, -1140, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 940, -320, 1580, -670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 940, -200, 1580, 200, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 940, 320, 1580, 670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 940, 790, 1580, 1140, -0.1, 4, 4
+        
+    Landscape.AddFloor GetTex("Walkway"), 230, -790, 870, -1140, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 230, -320, 870, -670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 230, -200, 870, 200, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 230, 320, 870, 670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 230, 790, 870, 1140, -0.1, 4, 4
+    
+    Landscape.AddFloor GetTex("Walkway"), 160, -790, -480, -1140, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 160, -320, -480, -670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 160, -200, -480, 200, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 160, 320, -480, 670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), 160, 790, -480, 1140, -0.1, 4, 4
+    
+    Landscape.AddFloor GetTex("Walkway"), -550, -790, -1190, -1140, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), -550, -320, -1190, -670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), -550, -200, -1190, 200, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), -550, 320, -1190, 670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), -550, 790, -1190, 1140, -0.1, 4, 4
+    
+    Landscape.AddFloor GetTex("Walkway"), -1260, -790, -1900, -1140, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), -1260, -320, -1900, -670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), -1260, -200, -1900, 200, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), -1260, 320, -1900, 670, -0.1, 4, 4
+    Landscape.AddFloor GetTex("Walkway"), -1260, 790, -1900, 1140, -0.1, 4, 4
+    
+    'Main East/West Road
+    Landscape.AddFloor GetTex("Road1"), 1650, -1140, 2290, -1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 1650, -1200, 2290, -1260, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 940, -1140, 1580, -1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 940, -1200, 1580, -1260, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 230, -1140, 870, -1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 230, -1200, 870, -1260, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 160, -1140, -480, -1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 160, -1200, -480, -1260, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -550, -1140, -1190, -1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -550, -1200, -1190, -1260, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -1260, -1140, -1900, -1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -1260, -1200, -1900, -1260, 0, 4, -1
+    
+    Landscape.AddFloor GetTex("Road1"), 1650, -670, 2290, -730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 1650, -730, 2290, -790, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 940, -670, 1580, -730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 940, -730, 1580, -790, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 230, -670, 870, -730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 230, -730, 870, -790, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 160, -670, -480, -730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 160, -730, -480, -790, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -550, -670, -1190, -730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -550, -730, -1190, -790, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -1260, -670, -1900, -730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -1260, -730, -1900, -790, 0, 4, -1
+    
+    Landscape.AddFloor GetTex("Road1"), 1650, -200, 2290, -260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 1650, -260, 2290, -320, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 940, -200, 1580, -260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 940, -260, 1580, -320, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 230, -200, 870, -260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 230, -260, 870, -320, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 160, -200, -480, -260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 160, -260, -480, -320, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -550, -200, -1190, -260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -550, -260, -1190, -320, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -1260, -200, -1900, -260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -1260, -260, -1900, -320, 0, 4, -1
+    
+    Landscape.AddFloor GetTex("Road1"), 1650, 200, 2290, 260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 1650, 260, 2290, 320, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 940, 200, 1580, 260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 940, 260, 1580, 320, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 230, 200, 870, 260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 230, 260, 870, 320, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 160, 200, -480, 260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 160, 260, -480, 320, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -550, 200, -1190, 260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -550, 260, -1190, 320, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -1260, 200, -1900, 260, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -1260, 260, -1900, 320, 0, 4, -1
+    
+    Landscape.AddFloor GetTex("Road1"), 1650, 670, 2290, 730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 1650, 730, 2290, 790, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 940, 670, 1580, 730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 940, 730, 1580, 790, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 230, 670, 870, 730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 230, 730, 870, 790, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 160, 670, -480, 730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 160, 730, -480, 790, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -550, 670, -1190, 730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -550, 730, -1190, 790, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -1260, 670, -1900, 730, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -1260, 730, -1900, 790, 0, 4, -1
+    
+    Landscape.AddFloor GetTex("Road1"), 1650, 1140, 2290, 1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 1650, 1200, 2290, 1260, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 940, 1140, 1580, 1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 940, 1200, 1580, 1260, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 230, 1140, 870, 1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 230, 1200, 870, 1260, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), 160, 1140, -480, 1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), 160, 1200, -480, 1260, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -550, 1140, -1190, 1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -550, 1200, -1190, 1260, 0, 4, -1
+    Landscape.AddFloor GetTex("Road1"), -1260, 1140, -1900, 1200, 0, 4, 1
+    Landscape.AddFloor GetTex("Road1"), -1260, 1200, -1900, 1260, 0, 4, -1
+    
+    'North/South roads
+    Landscape.AddFloor GetTex("Road5"), 2290, -790, 2360, -1140, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 2290, -320, 2360, -670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 2290, -200, 2360, 200, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 2290, 320, 2360, 670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 2290, 790, 2360, 1140, 0, 1, 5
+    
+    Landscape.AddFloor GetTex("Road5"), 1580, -790, 1650, -1140, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 1580, -320, 1650, -670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 1580, -200, 1650, 200, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 1580, 320, 1650, 670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 1580, 790, 1650, 1140, 0, 1, 5
+    
+    Landscape.AddFloor GetTex("Road5"), 870, -790, 940, -1140, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 870, -320, 940, -670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 870, -200, 940, 200, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 870, 320, 940, 670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 870, 790, 940, 1140, 0, 1, 5
+    
+    Landscape.AddFloor GetTex("Road5"), 160, -790, 230, -1140, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 160, -320, 230, -670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 160, -200, 230, 200, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 160, 320, 230, 670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), 160, 790, 230, 1140, 0, 1, 5
+    
+    Landscape.AddFloor GetTex("Road5"), -480, -790, -550, -1140, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -480, -320, -550, -670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -480, -200, -550, 200, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -480, 320, -550, 670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -480, 790, -550, 1140, 0, 1, 5
+    
+    Landscape.AddFloor GetTex("Road5"), -1190, -790, -1260, -1140, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -1190, -320, -1260, -670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -1190, -200, -1260, 200, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -1190, 320, -1260, 670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -1190, 790, -1260, 1140, 0, 1, 5
+    
+    Landscape.AddFloor GetTex("Road5"), -1900, -790, -1970, -1140, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -1900, -320, -1970, -670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -1900, -200, -1970, 200, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -1900, 320, -1970, 670, 0, 1, 5
+    Landscape.AddFloor GetTex("Road5"), -1900, 790, -1970, 1140, 0, 1, 5
+    
+    'Intersections
+    Landscape.AddFloor GetTex("Road4"), 1580, -790, 1650, -670, 0, 1, -1
+    Landscape.AddFloor GetTex("Road4"), 1580, -320, 1650, -200, 0, 1, 1
+    Landscape.AddFloor GetTex("Road4"), 1580, 200, 1650, 320, 0, 1, -1
+    Landscape.AddFloor GetTex("Road4"), 1580, 670, 1650, 790, 0, 1, 1
+    
+    Landscape.AddFloor GetTex("Road4"), 870, -790, 940, -670, 0, 1, -1
+    Landscape.AddFloor GetTex("Road4"), 870, -320, 940, -200, 0, 1, 1
+    Landscape.AddFloor GetTex("Road4"), 870, 200, 940, 320, 0, 1, -1
+    Landscape.AddFloor GetTex("Road4"), 870, 670, 940, 790, 0, 1, 1
+    
+    Landscape.AddFloor GetTex("Road4"), 230, -790, 160, -670, 0, 1, -1
+    Landscape.AddFloor GetTex("Road4"), 230, -320, 160, -200, 0, 1, 1
+    Landscape.AddFloor GetTex("Road4"), 230, 200, 160, 320, 0, 1, -1
+    Landscape.AddFloor GetTex("Road4"), 230, 670, 160, 790, 0, 1, 1
+    
+    Landscape.AddFloor GetTex("Road4"), -550, -790, -480, -670, 0, 1, -1
+    Landscape.AddFloor GetTex("Road4"), -550, -320, -480, -200, 0, 1, 1
+    Landscape.AddFloor GetTex("Road4"), -550, 200, -480, 320, 0, 1, -1
+    Landscape.AddFloor GetTex("Road4"), -550, 670, -480, 790, 0, 1, 1
+    
+    Landscape.AddFloor GetTex("Road4"), -1260, -790, -1190, -670, 0, 1, -1
+    Landscape.AddFloor GetTex("Road4"), -1260, -320, -1190, -200, 0, 1, 1
+    Landscape.AddFloor GetTex("Road4"), -1260, 200, -1190, 320, 0, 1, -1
+    Landscape.AddFloor GetTex("Road4"), -1260, 670, -1190, 790, 0, 1, 1
+       
     
     'Other Towers
     
     '*** Building directly south of the Triton Center
-    External.AddFloor GetTex("Walkway"), -160, 320, 160, 670, -0.1, 4, 10
-    Buildings.AddWall GetTex("Windows11"), -160, 320, 160, 320, 25 * 15, 0, 10, 15
-    Buildings.AddWall GetTex("Windows11"), -160, 670, 160, 670, 25 * 15, 0, 10, 15
-    Buildings.AddWall GetTex("Windows11"), -160, 320, -160, 670, 25 * 15, 0, 10, 15
-    Buildings.AddWall GetTex("Windows11"), 160, 320, 160, 670, 25 * 15, 0, 10, 15
-    Buildings.AddFloor GetTex("Concrete"), -160, 320, 160, 670, 25 * 15, 30, 30
+    Buildings.AddWall GetTex("Windows11"), -160, 400, 160, 400, 25 * 15, 0, 10, 15
+    Buildings.AddWall GetTex("Windows11"), -160, 600, 160, 600, 25 * 15, 0, 10, 15
+    Buildings.AddWall GetTex("Windows11"), -160, 400, -160, 600, 25 * 15, 0, 10, 15
+    Buildings.AddWall GetTex("Windows11"), 160, 400, 160, 600, 25 * 15, 0, 10, 15
+    Buildings.AddFloor GetTex("Concrete"), -160, 400, 160, 600, 25 * 15, 30, 30
     
     '*** Building directly west of the Triton Center
-    External.AddFloor GetTex("Walkway"), 230, -200, 550, 200, -0.1, 4, 10
-    Buildings.AddWall GetTex("Windows11"), 500, -150, 280, -150, 25 * 86, 0, 4, 86
-    Buildings.AddWall GetTex("Windows11"), 500, 200, 280, 200, 25 * 86, 0, 4, 86
-    Buildings.AddWall GetTex("Windows11"), 500, -150, 500, 200, 25 * 86, 0, 4, 86
-    Buildings.AddWall GetTex("Windows11"), 280, -150, 280, 200, 25 * 86, 0, 4, 86
-    Buildings.AddFloor GetTex("Concrete"), 500, -150, 280, 200, 25 * 86, 30, 30
+    Buildings.AddWall GetTex("Windows11"), 470, -150, 320, -150, 25 * 36, 0, 4, 36
+    Buildings.AddWall GetTex("Windows11"), 470, 150, 320, 150, 25 * 36, 0, 4, 36
+    Buildings.AddWall GetTex("Windows11"), 470, -150, 470, 150, 25 * 36, 0, 4, 36
+    Buildings.AddWall GetTex("Windows11"), 320, -150, 320, 150, 25 * 36, 0, 4, 36
+    Buildings.AddFloor GetTex("Concrete"), 470, -150, 320, 150, 25 * 36, 30, 30
+    
+    '*** 2 Buildings directly west of the Triton Center
+    Buildings.AddWall GetTex("Windows11"), 820, -125, 600, -125, 25 * 95, 0, 4, 95
+    Buildings.AddWall GetTex("Windows11"), 820, 125, 600, 125, 25 * 95, 0, 4, 95
+    Buildings.AddWall GetTex("Windows11"), 820, -125, 820, 125, 25 * 95, 0, 4, 95
+    Buildings.AddWall GetTex("Windows11"), 600, -125, 600, 125, 25 * 95, 0, 4, 95
+    Buildings.AddFloor GetTex("Concrete"), 820, -125, 600, 125, 25 * 95, 30, 30
     
     '*** Building directly east of the Triton Center
-    External.AddFloor GetTex("Walkway"), -230, -200, -550, 200, -0.1, 4, 10
-    Buildings.AddWall GetTex("Windows11"), -450, -100, -300, -100, 25 * 45, 0, 4, 45
-    Buildings.AddWall GetTex("Windows11"), -450, 100, -300, 100, 25 * 45, 0, 4, 45
-    Buildings.AddWall GetTex("Windows11"), -450, -100, -450, 100, 25 * 45, 0, 4, 45
-    Buildings.AddWall GetTex("Windows11"), -300, -100, -300, 100, 25 * 45, 0, 4, 45
-    Buildings.AddFloor GetTex("Concrete"), -450, -100, -300, 100, 25 * 45, 30, 30
+    Buildings.AddWall GetTex("Windows11"), -400, -100, -250, -100, 25 * 45, 0, 4, 45
+    Buildings.AddWall GetTex("Windows11"), -400, 100, -250, 100, 25 * 45, 0, 4, 45
+    Buildings.AddWall GetTex("Windows11"), -400, -100, -400, 100, 25 * 45, 0, 4, 45
+    Buildings.AddWall GetTex("Windows11"), -250, -100, -250, 100, 25 * 45, 0, 4, 45
+    Buildings.AddFloor GetTex("Concrete"), -400, -100, -250, 100, 25 * 45, 30, 30
     
-    '*** 2 buildings west of the Triton Center
+    '*** 3 buildings west of the Triton Center
     
-    External.AddFloor GetTex("Walkway"), 620, -200, 940, 200, -0.1, 4, 10
-    Buildings.AddWall GetTex("Windows11"), 900, -100, 750, -100, 25 * 25, 0, 2, 25
-    Buildings.AddWall GetTex("Windows11"), 900, 100, 750, 100, 25 * 25, 0, 2, 25
-    Buildings.AddWall GetTex("Windows11"), 900, -100, 900, 100, 25 * 25, 0, 4, 25
-    Buildings.AddWall GetTex("Windows11"), 750, -100, 750, 100, 25 * 25, 0, 4, 25
-    Buildings.AddFloor GetTex("Concrete"), 900, -100, 750, 100, 25 * 25, 30, 30
+    Buildings.AddWall GetTex("Windows11"), 1300, -100, 970, -100, 25 * 25, 0, 2, 25
+    Buildings.AddWall GetTex("Windows11"), 1300, 100, 970, 100, 25 * 25, 0, 2, 25
+    Buildings.AddWall GetTex("Windows11"), 1300, -100, 1300, 100, 25 * 25, 0, 4, 25
+    Buildings.AddWall GetTex("Windows11"), 970, -100, 970, 100, 25 * 25, 0, 4, 25
+    Buildings.AddFloor GetTex("Concrete"), 1300, -100, 970, 100, 25 * 25, 30, 30
     
     '*** 2 buildings east of the Triton Center
     
-    External.AddFloor GetTex("Walkway"), -620, -200, -940, 200, -0.1, 4, 10
-    Buildings.AddWall GetTex("Windows11"), -920, -100, -650, -100, 25 * 5, 0, 2, 5
-    Buildings.AddWall GetTex("Windows11"), -920, 100, -650, 100, 25 * 5, 0, 2, 5
-    Buildings.AddWall GetTex("Windows11"), -920, -100, -920, 100, 25 * 5, 0, 4, 5
-    Buildings.AddWall GetTex("Windows11"), -650, -100, -650, 100, 25 * 5, 0, 4, 5
-    Buildings.AddFloor GetTex("Concrete"), -920, -100, -650, 100, 25 * 5, 30, 30
+    Buildings.AddWall GetTex("Windows11"), -820, -100, -650, -100, 25 * 65, 0, 2, 65
+    Buildings.AddWall GetTex("Windows11"), -820, 100, -650, 100, 25 * 65, 0, 2, 65
+    Buildings.AddWall GetTex("Windows11"), -820, -100, -820, 100, 25 * 65, 0, 4, 65
+    Buildings.AddWall GetTex("Windows11"), -650, -100, -650, 100, 25 * 65, 0, 4, 65
+    Buildings.AddFloor GetTex("Concrete"), -820, -100, -650, 100, 25 * 65, 30, 30
     
     
     External.AddWall GetTex("LobbyFront"), -160, -150, 160, -150, 75, 0, 3, 1
@@ -5427,7 +5548,7 @@ If CameraFloor >= 40 And CameraFloor <= 79 Then
         ShaftsFloor(CameraFloor).Enable True
         InitObjectsForFloor (CameraFloor)
     End If
-    End If
+   End If
 End If
 If CameraFloor >= 80 And CameraFloor <= 117 Then
     If Camera.GetPosition.X < -110 Or Camera.GetPosition.X > 110 Or Camera.GetPosition.z < -150 Or Camera.GetPosition.z > 150 Then
@@ -5629,6 +5750,7 @@ EndShafts:
         Room(CameraFloor).SetCollisionEnable False
         External.SetCollisionEnable False
         Buildings.SetCollisionEnable False
+        Landscape.SetCollisionEnable False
         For i50 = 1 To 138
         Shafts1(i50).SetCollisionEnable False
         Shafts2(i50).SetCollisionEnable False
@@ -5925,7 +6047,7 @@ EndCall:
       'If Inp.IsKeyPressed(TV_KEY_HOME) = True And Focused = True Then Camera.MoveRelative 0, 1, 0
       'If Inp.IsKeyPressed(TV_KEY_END) = True And Focused = True Then Camera.MoveRelative 0, -1, 0
       If Inp.IsKeyPressed(TV_KEY_HOME) = True Then Camera.MoveRelative 0, 1, 0
-      If Inp.IsKeyPressed(TV_KEY_END) = True Then Camera.MoveRelative 0, -1, 0
+      If Inp.IsKeyPressed(TV_KEY_END) = True And EnableCollisions = True Then Camera.MoveRelative 0, -1, 0
       'If Inp.IsKeyPressed(TV_KEY_1) = True And Focused = True Then ElevatorDirection = 1
       'If Inp.IsKeyPressed(TV_KEY_2) = True And Focused = True Then ElevatorDirection = -1
       'If Inp.IsKeyPressed(TV_KEY_3) = True And Focused = True Then OpenElevator(ElevatorNumber) = 1
