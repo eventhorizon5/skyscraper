@@ -1,6 +1,12 @@
 Changelog starts after 0.94 release
 
-Version 0.96
+Version 0.97
+-------------
+-massive code rewrites
+-new modules created, old ones deleted
+-API created
+
+Version 0.96 (build 161)
 -------------
 -cleaned up elevator button code, and made it into a nice little algorithm
 -fixed falling issue
