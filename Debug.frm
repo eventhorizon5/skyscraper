@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form DebugPanel 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "SkyScraper 0.95b Beta - Simulator Control Panel"
+   Caption         =   "SkyScraper 0.96 Beta - Simulator Control Panel"
    ClientHeight    =   5280
    ClientLeft      =   1830
    ClientTop       =   1710
@@ -1000,7 +1000,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.95b Beta
+'Skycraper 0.96 Beta
 'Copyright (C) 2004 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
