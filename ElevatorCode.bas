@@ -1,5 +1,5 @@
 Attribute VB_Name = "ElevatorCode"
-'Skycraper 0.92 Beta
+'Skycraper 0.93 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 'http://sourceforge.net/projects/skyscraper
@@ -26,7 +26,7 @@ Option Explicit
 Sub DrawElevatorButtons(Number As Integer)
 ButtonsEnabled = True
 
-For i54 = -1 To 144
+For i54 = -11 To 144
 'Buttons(i54).Enable False
 Scene.DestroyMesh Buttons(i54)
 Set Buttons(i54) = Nothing
@@ -35,9 +35,10 @@ Next i54
 
 'Sleep 100
 
-For i54 = -1 To 144
+For i54 = -11 To 144
 Set Buttons(i54) = New TVMesh
 Set Buttons(i54) = Scene.CreateMeshBuilder("Buttons " + Str$(i54))
+'Buttons(i54).SetPosition 0, Elevator(Number).GetPosition.Y, 0
 Buttons(i54).SetPosition 0, 0, 0
 Buttons(i54).SetRotation 0, 0, 0
 Next i54
@@ -839,7 +840,7 @@ If Number = 11 Then
     Buttons(80).AddWall GetTex("Button80"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
     Buttons(115).AddWall GetTex("Button115"), -(ShaftLeft - 0.17), -18.45 + 0.8, -(ShaftLeft - 0.17), -18.15 + 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
     Buttons(116).AddWall GetTex("Button116"), -(ShaftLeft - 0.17), -18.45 + 1.2, -(ShaftLeft - 0.17), -18.15 + 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
-    Buttons(117).AddWall GetTex("Button117"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
+    'Buttons(117).AddWall GetTex("Button117"), -(ShaftLeft - 0.17), -18.45 + 1.6, -(ShaftLeft - 0.17), -18.15 + 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), 1, 1
     
     Buttons(46).AddWall GetTex("Button46"), -(ShaftLeft - 0.17), -18.45, -(ShaftLeft - 0.17), -18.15, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
     Buttons(47).AddWall GetTex("Button47"), -(ShaftLeft - 0.17), -18.45 + 0.4, -(ShaftLeft - 0.17), -18.15 + 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, 1, 1
@@ -916,7 +917,7 @@ If Number = 12 Then
     Buttons(101).AddWall GetTex("Button101"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
     Buttons(115).AddWall GetTex("Button115"), (ShaftLeft - 0.17), -27.85 - 0.8, (ShaftLeft - 0.17), -27.55 - 0.8, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
     Buttons(116).AddWall GetTex("Button116"), (ShaftLeft - 0.17), -27.85 - 1.2, (ShaftLeft - 0.17), -27.55 - 1.2, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
-    Buttons(117).AddWall GetTex("Button117"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
+    'Buttons(117).AddWall GetTex("Button117"), (ShaftLeft - 0.17), -27.85 - 1.6, (ShaftLeft - 0.17), -27.55 - 1.6, 0.3, (Elevator(Number).GetPosition.Y + 12), -1, 1
     
     Buttons(95).AddWall GetTex("Button95"), (ShaftLeft - 0.17), -27.85, (ShaftLeft - 0.17), -27.55, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
     Buttons(96).AddWall GetTex("Button96"), (ShaftLeft - 0.17), -27.85 - 0.4, (ShaftLeft - 0.17), -27.55 - 0.4, 0.3, (Elevator(Number).GetPosition.Y + 12) - 0.5, -1, 1
@@ -2713,7 +2714,7 @@ If InElevator = False Then Exit Sub
 
 'collision routine for checking if an elevator button is pressed
 
-For i52 = -1 To 144
+For i52 = -11 To 144
 If i52 = 1 Then i52 = 2
 
 If CollisionResult.GetCollisionMesh.GetMeshName = Buttons(i52).GetMeshName Then
@@ -3245,7 +3246,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       Atmos.SkyBox_Enable False
       Stairs(CameraFloor).Enable False
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
-      If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
+      If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable False
       End If
       End If
       'If GotoFloor(Number) <> 0 And GotoFloor(Number) < CurrentFloor(Number) And ElevatorDirection(Number) = 0 And ElevatorInsDoorL(ElevatorFloor2(Number)).GetPosition.z <= 0 Then
@@ -3268,7 +3269,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       Atmos.SkyBox_Enable False
       Stairs(CameraFloor).Enable False
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable False
-      If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable False
+      If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable False
       End If
       End If
       
@@ -3303,7 +3304,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorInsDoorR(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         FloorIndicator(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Plaque(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
-        For ElevTemp(Number) = -1 To 144
+        For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Next ElevTemp(Number)
         If ElevatorSync(Number) = True Then Camera.MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
@@ -3334,7 +3335,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorInsDoorR(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         FloorIndicator(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Plaque(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
-        For ElevTemp(Number) = -1 To 144
+        For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Next ElevTemp(Number)
         If ElevatorSync(Number) = True Then Camera.MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
@@ -3369,7 +3370,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorInsDoorR(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         FloorIndicator(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Plaque(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
-        For ElevTemp(Number) = -1 To 144
+        For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Next ElevTemp(Number)
         If ElevatorSync(Number) = True Then Camera.MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
@@ -3398,7 +3399,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
         ElevatorInsDoorR(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         FloorIndicator(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Plaque(Number).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
-        For ElevTemp(Number) = -1 To 144
+        For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
         Next ElevTemp(Number)
         If ElevatorSync(Number) = True Then Camera.MoveRelative 0, (ElevatorEnable(Number) / ElevatorSpeed), 0
@@ -3428,7 +3429,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       Call InitRealtime(CameraFloor)
       InitObjectsForFloor (CameraFloor)
       If CameraFloor < 138 Then Stairs(CameraFloor + 1).Enable True
-      If CameraFloor > 1 Then Stairs(CameraFloor - 1).Enable True
+      If CameraFloor > -10 Then Stairs(CameraFloor - 1).Enable True
       End If
       GotoFloor(Number) = 0
       OpenElevator(Number) = 1
@@ -3436,7 +3437,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorCheck2(Number) = 0
       ElevatorCheck3(Number) = 0
       ElevatorCheck4(Number) = 0
-      If CameraFloor > 1 And ElevatorSync(Number) = True Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z
+      If CameraFloor > -10 And ElevatorSync(Number) = True Then Camera.SetPosition Camera.GetPosition.X, (CameraFloor * FloorHeight) + FloorHeight + 10, Camera.GetPosition.z
       If CameraFloor = 1 And ElevatorSync(Number) = True And FloorIndicatorText(Number) <> "M" Then Camera.SetPosition Camera.GetPosition.X, 10, Camera.GetPosition.z
       End If
       
@@ -3445,7 +3446,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorSounds(Number).Load App.Path + "\ding1.wav"
       ElevatorSounds(Number).Play
       ElevatorCheck3(Number) = 1
-        For ElevTemp(Number) = -1 To 144
+        For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).SetColor RGBA(1, 1, 1, 1)
         Next ElevTemp(Number)
       End If
@@ -3454,7 +3455,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorInsDoorL(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
       ElevatorInsDoorR(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
       Plaque(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
-        For ElevTemp(Number) = -1 To 144
+        For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, ElevatorFineTuneSpeed, 0
         Next ElevTemp(Number)
         FloorIndicator(Number).MoveRelative 0, ElevatorFineTuneSpeed, 0
@@ -3465,7 +3466,7 @@ ElevatorFloor(Number) = (Elevator(Number).GetPosition.Y - FloorHeight) / FloorHe
       ElevatorInsDoorL(Number).MoveRelative 0, -ElevatorFineTuneSpeed, 0
       ElevatorInsDoorR(Number).MoveRelative 0, -ElevatorFineTuneSpeed, 0
       Plaque(Number).MoveRelative 0, -ElevatorFineTuneSpeed, 0
-        For ElevTemp(Number) = -1 To 144
+        For ElevTemp(Number) = -11 To 144
         If ButtonsEnabled = True And ElevatorSync(Number) = True Then Buttons(ElevTemp(Number)).MoveRelative 0, -ElevatorFineTuneSpeed, 0
         Next ElevTemp(Number)
         FloorIndicator(Number).MoveRelative 0, -ElevatorFineTuneSpeed, 0
