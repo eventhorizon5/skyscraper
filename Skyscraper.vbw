@@ -1,6 +1,6 @@
 Sim = 121, 152, 804, 728, C, 0, 0, 0, 0, C
 DebugPanel = 203, 131, 650, 707, C, 0, 0, 0, 0, C
-CoreRoutines = 134, 109, 812, 685, C
-ElevatorCode = 114, 108, 915, 698, C
-CoreRoutines2 = 120, 105, 958, 715, C
+CoreRoutines = 245, 90, 923, 666, C
+ElevatorCode = 96, 85, 897, 675, C
+CoreRoutines2 = 149, 109, 987, 719, C
 Object = 129, 103, 576, 679, C, 0, 0, 0, 0, C
