@@ -13,12 +13,28 @@ Begin VB.Form Form2
    MinButton       =   0   'False
    ScaleHeight     =   4410
    ScaleWidth      =   6720
+   Begin VB.CommandButton Command13 
+      Caption         =   "Land Off"
+      Height          =   255
+      Left            =   5640
+      TabIndex        =   36
+      Top             =   1320
+      Width           =   855
+   End
+   Begin VB.CommandButton Command12 
+      Caption         =   "Land On"
+      Height          =   255
+      Left            =   4680
+      TabIndex        =   35
+      Top             =   1320
+      Width           =   855
+   End
    Begin VB.CheckBox Check4 
       Caption         =   "Collision Detection"
       Height          =   255
       Left            =   5040
       TabIndex        =   34
-      Top             =   1440
+      Top             =   1560
       Value           =   1  'Checked
       Width           =   1695
    End
@@ -139,7 +155,7 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   10
-      Top             =   3120
+      Top             =   3240
       Value           =   1  'Checked
       Width           =   1575
    End
@@ -156,7 +172,7 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   8
-      Top             =   2760
+      Top             =   2880
       Value           =   1  'Checked
       Width           =   1575
    End
@@ -165,7 +181,7 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   7
-      Top             =   2400
+      Top             =   2520
       Value           =   1  'Checked
       Width           =   1575
    End
@@ -174,7 +190,7 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   6
-      Top             =   2040
+      Top             =   2160
       Value           =   1  'Checked
       Width           =   1575
    End
@@ -184,7 +200,7 @@ Begin VB.Form Form2
       Height          =   375
       Left            =   5040
       TabIndex        =   5
-      Top             =   1680
+      Top             =   1800
       Value           =   1  'Checked
       Width           =   1575
    End
@@ -425,7 +441,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Skycraper 0.9 Beta
+'Skycraper 0.91 Beta
 'Copyright (C) 2003 Ryan Thoryk
 'http://www.tliquest.net/skyscraper
 
@@ -544,6 +560,14 @@ Private Sub Command11_Click()
 ShaftsFloor(CameraFloor).Enable False
 End Sub
 
+
+Private Sub Command12_Click()
+Landscape.Enable True
+End Sub
+
+Private Sub Command13_Click()
+Landscape.Enable False
+End Sub
 
 Private Sub Command14_Click()
 Buildings.Enable True
