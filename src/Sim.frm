@@ -793,6 +793,7 @@ Sub Main()
       If b1 = 128 Then
         Effect.FadeIn 1000
         'Options
+        Design
       End If
     End If
             
@@ -888,6 +889,22 @@ bSing = False
     'scr.DrawText "X = " & blahmx, 10, 10, RGBA(1, 0, 0, 1), "menu"
     'scr.DrawText "Y = " & blahmy, 10, 25, RGBA(1, 0, 0, 1), "menu"
 End Sub
+Sub Design()
+bOptions = False
+bMain = False
+bMulti = False
+bSing = True
+    
+'Start with no other menus
+Fin = 1
+      'Effect.FadeIn 1000
+      isRunning = False
+        Set scr = Nothing
+        Set Screen = Nothing
+        Designer.Show
+        Exit Sub
+End Sub
+
 Sub Sing()
 bOptions = False
 bMain = False
