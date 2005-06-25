@@ -8,6 +8,7 @@ Pre-version 1.1
 -building designer created
 -added multiple elevator speed support
 -added manual elevator open/close support
+-C++ porting started
 
 Version 1.0
 1.0 is being released now due to the massive overhauls and redesigns that have
