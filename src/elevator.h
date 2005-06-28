@@ -34,8 +34,8 @@ public:
 //	ITVMesh CallButtonsUp; //up call button
 //	ITVMesh CallButtonsDown; //down call button
 //  ITVMesh Buttons[]; //elevator buttons
-	wxString UpQueue; //up call queue
-	wxString DownQueue; //down call queue
+	csString UpQueue; //up call queue
+	csString DownQueue; //down call queue
 	int QueuePositionDirection; //queue processing direction
 	bool PauseQueueSearch; //pause queue processor
 	float ElevatorSpeed; //maximum elevator speed

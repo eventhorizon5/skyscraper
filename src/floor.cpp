@@ -19,6 +19,44 @@
 //along with this program; if not, write to the Free Software
 //Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <iostream>
+#include <string>
+
+//CrystalSpace Includes
+#include "cssysdef.h"
+#include "csutil/sysfunc.h"
+#include "iutil/vfs.h"
+#include "csutil/cscolor.h"
+#include "cstool/csview.h"
+#include "cstool/initapp.h"
+#include "iutil/eventq.h"
+#include "iutil/event.h"
+#include "iutil/objreg.h"
+#include "iutil/csinput.h"
+#include "iutil/virtclk.h"
+#include "iengine/sector.h"
+#include "iengine/engine.h"
+#include "iengine/camera.h"
+#include "iengine/light.h"
+#include "iengine/texture.h"
+#include "iengine/mesh.h"
+#include "iengine/movable.h"
+#include "iengine/material.h"
+#include "imesh/thing.h"
+#include "imesh/object.h"
+#include "ivideo/graph3d.h"
+#include "ivideo/graph2d.h"
+#include "ivideo/texture.h"
+#include "ivideo/material.h"
+#include "ivideo/fontserv.h"
+#include "ivideo/natwin.h"
+#include "igraphic/imageio.h"
+#include "imap/parser.h"
+#include "ivaria/reporter.h"
+#include "ivaria/stdrep.h"
+#include "csutil/cmdhelp.h"
+#include "csutil/event.h"
+
 #include "floor.h"
 
 Floor::Floor(int number)
@@ -55,27 +93,27 @@ void Floor::SetCameraFloor()
 
 }
 
-void Floor::AddFloor(wxString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
+void Floor::AddFloor(csString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
 {
 
 }
 
-void Floor::AddCrawlSpaceFloor(wxString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
+void Floor::AddCrawlSpaceFloor(csString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
 {
 
 }
 
-void Floor::AddWall(wxString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Floor::AddWall(csString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
 
 }
 
-void Floor::AddCrawlSpaceWall(wxString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Floor::AddCrawlSpaceWall(csString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
 
 }
 
-void Floor::CreateWallBox(wxString texture, float WidthX, float LengthZ, float CenterX, float CenterZ, bool CSpace, float ResX, float ResY)
+void Floor::CreateWallBox(csString texture, float WidthX, float LengthZ, float CenterX, float CenterZ, bool CSpace, float ResX, float ResY)
 {
 
 }

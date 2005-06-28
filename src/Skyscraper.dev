@@ -11,8 +11,8 @@ PrivateResource=Skyscraper_private.rc
 ResourceIncludes=C:\Dev-Cpp\include
 MakeIncludes=
 Compiler=-fno-rtti_@@_-fno-exceptions_@@_-fno-pcc-struct-return_@@_-fstrict-aliasing_@@_-Wall_@@_-fvtable-thunks_@@_-D__WXMSW___@@_-D__GNUWIN32___@@_-D__WIN95___@@_
-CppCompiler=-fno-rtti_@@_-fno-exceptions_@@_-fno-pcc-struct-return_@@_-fstrict-aliasing_@@_-Wall_@@_-D__WXMSW___@@_-D__GNUWIN32___@@_-D__WIN95___@@_
-Linker=-lwxmsw25_@@_-lwxmsw25_gl_@@_-lwxtiff_@@_-lwxjpeg_@@_-lwxpng_@@_-lwxzlib_@@_-lwxregex_@@_-lwxexpat_@@_-lkernel32_@@_-luser32_@@_-lgdi32_@@_-lcomdlg32_@@_-lwinspool_@@_-lwinmm_@@_-lshell32_@@_-lcomctl32_@@_-lole32_@@_-loleaut32_@@_-luuid_@@_-lrpcrt4_@@_-ladvapi32_@@_-lwsock32_@@_-lodbc32_@@_-lopengl32_@@_
+CppCompiler=-fno-rtti_@@_-fno-exceptions_@@_-fno-pcc-struct-return_@@_-fstrict-aliasing_@@_-Wall_@@_-D__WXMSW___@@_-D__GNUWIN32___@@_-D__WIN95___@@_-DWIN32_VOLATILE_@@_-D__CRYSTAL_SPACE___@@_-DCS_RELEASE_@@_
+Linker=-lcstool_@@_-lcsws_@@_-lcsutil_@@_-lcsgfx_@@_-lcsgeom_@@_-lwxmsw25_@@_-lwxmsw25_gl_@@_-lwxtiff_@@_-lwxjpeg_@@_-lwxpng_@@_-lwxzlib_@@_-lwxregex_@@_-lwxexpat_@@_-lkernel32_@@_-luser32_@@_-lgdi32_@@_-lcomdlg32_@@_-lwinspool_@@_-lwinmm_@@_-lshell32_@@_-lcomctl32_@@_-lole32_@@_-loleaut32_@@_-luuid_@@_-lrpcrt4_@@_-ladvapi32_@@_-lwsock32_@@_-lodbc32_@@_-lopengl32_@@_
 IsCpp=1
 Icon=Skyscraper.ico
 ExeOutput=../
@@ -72,11 +72,11 @@ BuildCmd=
 FileName=mainfrm.cpp
 CompileCpp=1
 Folder=Skyscraper
-Compile=1
-Link=1
+Compile=0
+Link=0
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=
+BuildCmd=$(CPP) -c mainfrm.cpp -o mainfrm.o $(CXXFLAGS)
 
 [Unit6]
 FileName=mainfrm.wxform
@@ -91,7 +91,7 @@ BuildCmd=
 Major=1
 Minor=1
 Release=0
-Build=211
+Build=265
 LanguageID=1033
 CharsetID=1252
 CompanyName=TLI Networks
@@ -119,11 +119,11 @@ BuildCmd=
 FileName=debugpanel.cpp
 CompileCpp=1
 Folder=Skyscraper
-Compile=1
-Link=1
+Compile=0
+Link=0
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=
+BuildCmd=$(CPP) -c debugpanel.cpp -o debugpanel.o $(CXXFLAGS)
 
 [Unit9]
 FileName=debugpanel.wxform
@@ -142,7 +142,7 @@ Compile=1
 Link=1
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=
+BuildCmd=$(CPP) -c elevator.cpp -o elevator.o $(CXXFLAGS)
 
 [Unit11]
 FileName=elevator.h
@@ -228,24 +228,15 @@ BuildCmd=
 FileName=console.cpp
 CompileCpp=1
 Folder=Skyscraper
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit21]
-FileName=console.wxform
-CompileCpp=1
-Folder=Skyscraper
 Compile=0
 Link=0
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=
+BuildCmd=$(CPP) -c console.cpp -o console.o $(CXXFLAGS)
 
-[Unit22]
+[Unit21]
 FileName=console.wxform
+CompileCpp=1
 Folder=Skyscraper
 Compile=0
 Link=0
@@ -258,6 +249,33 @@ FileName=globals.h
 CompileCpp=1
 Folder=
 Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit24]
+FileName=C:\CS\libs\libcstool.lib
+Folder=Skyscraper
+Compile=0
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit25]
+FileName=C:\CS\libs\libcsws.lib
+Folder=Skyscraper
+Compile=0
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit26]
+FileName=C:\CS\libs\libcsutil.lib
+Folder=Skyscraper
+Compile=0
 Link=1
 Priority=1000
 OverrideBuildCmd=0

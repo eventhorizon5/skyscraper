@@ -5,11 +5,11 @@
 #define SKYSCRAPER_PRIVATE_H
 
 /* VERSION DEFINITIONS */
-#define VER_STRING	"1.1.0.211"
+#define VER_STRING	"1.1.0.265"
 #define VER_MAJOR	1
 #define VER_MINOR	1
 #define VER_RELEASE	0
-#define VER_BUILD	211
+#define VER_BUILD	265
 #define COMPANY_NAME	"TLI Networks"
 #define FILE_VERSION	""
 #define FILE_DESCRIPTION	"Virtual Skyscraper Simulator"

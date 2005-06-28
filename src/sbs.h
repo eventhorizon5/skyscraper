@@ -20,30 +20,39 @@
 //Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "globals.h"
-#include "console.h"
+//#include "console.h"
+
+#include "csutil/ref.h"
 
 bool IsEven(int Number);
+
+struct iEngine;
+struct iLoader;
+struct iGraphics3D;
+struct iKeyboardDriver;
+struct iVirtualClock;
+struct iObjectRegistry;
+struct iEvent;
+struct iSector;
+struct iView;
 
 class SBS
 {
 public:
-    //Truevision globals
-/*	ITVEngine pEngine; //truevision engine
-    ITVInputEngine pInput; //input
-    ITVGlobals pGlobals;
-    ITVScene pScene; //3d environment
-    ITVAtmosphere pAtmos; //sky
-    ITVCamera pCamera; //main first-person view camera
-    ITVMaterialFactory pMatFactory;
-    ITVLightEngine pLightEngine; //lights
-    ITVGraphicEffect pGraphicEffect; //effects
-    ITVTextureFactory pTextureFactory; //textures
-    ITVCollisionResult ColRes;
-    ITVMesh Buildings; //external buildings
-    ITVMesh External; //external walls for building
-    ITVMesh Landscape; //outside landscape
-    ITVMesh IntroMesh; //introduction mesh
-*/
+
+    //Engine data
+    iObjectRegistry* object_reg;
+	csRef<iEngine> engine;
+	csRef<iLoader> loader;
+	csRef<iGraphics3D> g3d;
+	csRef<iKeyboardDriver> kbd;
+	csRef<iVirtualClock> vc;
+	csRef<iView> view;
+	iSector* room;
+
+	float rotY;
+    float rotX;
+
 	//Internal data
     float Gravity; //gravity variable for physics algorithms
     bool IsRunning; //is sim engine running?
@@ -74,21 +83,28 @@ public:
 //	D3DVECTOR CameraStartRotation;
 
 	//Console
-	Console *mainconsole;
+	//Console *mainconsole;
 	
 	//public functions
-	SBS();
+	SBS(iObjectRegistry* object_reg);
 	~SBS();
-	void StartEngine();
 	void Wait(long Milliseconds);
 	float AutoSize(float n1, float n2, bool iswidth);
 	void render();
 	void input();
 	void SlowToFPS(long FrameRate);
 
+	bool Initialize ();
+ 	void Start ();
+
 private:
 
 	//private functions
 	void PrintBanner();
+
+	static bool SBSEventHandler (iEvent& ev);
+	bool HandleEvent (iEvent& ev);
+	void SetupFrame ();
+	void FinishFrame ();
 
 };

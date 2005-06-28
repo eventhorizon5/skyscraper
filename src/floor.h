@@ -32,7 +32,7 @@ public:
 	bool Enabled; //is floor enabled?
 	//bool StairDataTable;
 	int FloorNumber; //floor number
-	wxString FloorName; //floor name
+	csString FloorName; //floor name
 	float FloorAltitude; //floor altitude
 	float FloorHeight; //floor height (not including crawl space height)
 	float CrawlSpaceHeight; //height of crawl space
@@ -41,11 +41,11 @@ public:
 	Floor(int num);
 	~Floor();
 	void SetCameraFloor();
-	void AddFloor(wxString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
-	void AddCrawlSpaceFloor(wxString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
-	void AddWall(wxString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void AddCrawlSpaceWall(wxString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void CreateWallBox(wxString texture, float WidthX, float LengthZ, float CenterX, float CenterZ, bool CSpace, float ResX, float ResY);
+	void AddFloor(csString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
+	void AddCrawlSpaceFloor(csString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
+	void AddWall(csString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void AddCrawlSpaceWall(csString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void CreateWallBox(csString texture, float WidthX, float LengthZ, float CenterX, float CenterZ, bool CSpace, float ResX, float ResY);
 	void EnableFloor();
 	void DisableFloor();
 

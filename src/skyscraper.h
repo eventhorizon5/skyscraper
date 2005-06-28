@@ -19,7 +19,7 @@
 //Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // For compilers that support precompilation, includes "wx.h".
-#include <wx/wxprec.h>
+/*#include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -29,15 +29,15 @@
 // Include your minimal set of headers here, or wx.h
 #include <wx/wx.h>
 #endif
-
+*/
 #include "globals.h"
 
 void startsim();
 void MainLoop();
 
-class MainFrmApp:public wxApp
-{
-public:
-	bool OnInit();
-	int OnExit();
-};
+//class MainFrmApp:public wxApp
+//{
+//public:
+//	bool OnInit();
+//	int OnExit();
+//};

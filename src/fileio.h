@@ -20,7 +20,7 @@
 
 #include "globals.h"
 
-void LoadGlobals(wxString filename);
-void LoadTextures(wxString filename);
-void LoadBuilding(wxString filename);
-void LoadElevators(wxString filename);
+void LoadGlobals(csString filename);
+void LoadTextures(csString filename);
+void LoadBuilding(csString filename);
+void LoadElevators(csString filename);
