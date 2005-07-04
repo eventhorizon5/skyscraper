@@ -55,22 +55,22 @@
 
 #include "fileio.h"
 
-void LoadGlobals(csString filename)
+void LoadGlobals(const char * filename)
 {
 
 }
 
-void LoadTextures(csString filename)
+void LoadTextures(const char * filename)
 {
 
 }
 
-void LoadBuilding(csString filename)
+void LoadBuilding(const char * filename)
 {
 
 }
 
-void LoadElevators(csString filename)
+void LoadElevators(const char * filename)
 {
 
 }

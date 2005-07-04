@@ -25,10 +25,12 @@ class Floor
 {
 public:
 
-//	ITVMesh Level; //level mesh
-//	ITVMesh CrawlSpace; //crawl space mesh
-//	ITVMesh ShaftsFloor; //walls around shafts
-//	ITVMesh PipeShaft[]; //pipe shaft object
+	csRef<iMeshWrapper> Level; //level mesh
+	csRef<iMeshWrapper> CrawlSpace; //crawl space mesh
+	csRef<iMeshWrapper> ShaftsFloor; //walls around shafts
+	csRefArray<iMeshWrapper> PipeShaft; //pipe shaft object array
+	csRef<iThingState> ls;
+	csRef<iThingFactoryState> level_state;
 	bool Enabled; //is floor enabled?
 	//bool StairDataTable;
 	int FloorNumber; //floor number
@@ -41,18 +43,18 @@ public:
 	Floor(int num);
 	~Floor();
 	void SetCameraFloor();
-	void AddFloor(csString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
-	void AddCrawlSpaceFloor(csString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
-	void AddWall(csString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void AddCrawlSpaceWall(csString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void CreateWallBox(csString texture, float WidthX, float LengthZ, float CenterX, float CenterZ, bool CSpace, float ResX, float ResY);
+	void AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
+	void AddCrawlSpaceFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
+	void AddWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void AddCrawlSpaceWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void CreateWallBox(const char *texture, float WidthX, float LengthZ, float CenterX, float CenterZ, bool CSpace, float ResX, float ResY);
 	void EnableFloor();
 	void DisableFloor();
 
 private:
-//	ITVMesh CrawlSpaceShaft[];
-//	ITVMesh Shafts[];
-//	ITVMesh Stairs[];
-//	ITVMesh FakeStairDoor[];
-//	ITVMesh Objects[];
+	csRefArray<iMeshWrapper> CrawlSpaceShaft;
+	csRefArray<iMeshWrapper> Shafts;
+	csRefArray<iMeshWrapper> Stairs;
+	csRefArray<iMeshWrapper> FakeStairDoor;
+	csRefArray<iMeshWrapper> Objects;
 };

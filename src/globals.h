@@ -19,9 +19,8 @@
 //along with this program; if not, write to the Free Software
 //Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//#include <wx/textctrl.h>
-
 extern bool IsEven(int Number);
+extern float AutoSize(float n1, float n2, bool iswidth);
 
 #ifndef _SBS_GLOBALS_H
 #define _SBS_GLOBALS_H

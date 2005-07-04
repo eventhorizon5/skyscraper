@@ -20,7 +20,6 @@
 //Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
-#include <string>
 
 //CrystalSpace Includes
 #include "cssysdef.h"
@@ -61,12 +60,11 @@ CS_IMPLEMENT_APPLICATION
 
 #include "sbs.h"
 
-SBS *sbs;
+SBS *sbs; //self reference
 
 SBS::SBS(iObjectRegistry* object_reg)
 {
     SBS::object_reg = object_reg;
-	//csReport (object_reg, CS_REPORTER_SEVERITY_ERROR, "crystalspace.application.sbs", "Starting");
     sbs = this;
 }
 
@@ -99,10 +97,11 @@ SBS::~SBS()
 
 void SBS::Start()
 {
-    //mainconsole = new Console(NULL);
-    //mainconsole->Show(TRUE);		
 	//PrintBanner();
-    csDefaultRunLoop (object_reg);
+	
+	//Post-init startup code goes here, before the runloop
+    
+	csDefaultRunLoop (object_reg);
 /*	
 	pEngine = CreateTVEngine();
 
@@ -148,22 +147,65 @@ void SBS::Wait(long milliseconds)
 
 }
 
-float SBS::AutoSize(float n1, float n2, bool iswidth)
+float AutoSize(float n1, float n2, bool iswidth)
 {
 //Texture autosizing formulas
 //If any of the texture parameters are 0, then automatically size the
 //texture using the Skyscraper 1.0 sizing algorithms
-    return 0;
+	if (((n1 < 0) && (n2 < 0)) || ((n1 >= 0) && (n2 >= 0)))
+	{
+		//if numbers have the same sign
+	    if (abs(n1) >= abs(n2))
+		{
+			if (iswidth == true)
+				return (abs(n1) - abs(n2)) * 0.086;
+			if (iswidth == false)
+				return (abs(n1) - abs(n2)) * 0.08;
+		}
+		else
+		{
+			if (iswidth == true)
+				return (abs(n2) - abs(n1)) * 0.086;
+			if (iswidth == false)
+				return (abs(n2) - abs(n1)) * 0.08;
+		}
+	}
+	else
+	{
+		//if numbers have different signs
+	    if (n1 > n2)
+		{
+			if (iswidth == true)
+				return (abs(n1) + abs(n2)) * 0.086;
+			if (iswidth == false)
+				return (abs(n1) + abs(n2)) * 0.08;
+		}
+		else
+		{
+			if (iswidth == true)
+				return (abs(n2) + abs(n1)) * 0.086;
+			if (iswidth == false)
+				return (abs(n2) + abs(n1)) * 0.08;
+		}
+	}
+	return 0;
 }
 
 void SBS::PrintBanner()
 {
-	//mainconsole->WxMemo1->AppendText("Scalable Building Simulator Starting\n");
+
 }
 
 void SBS::render()
 {
-/*	pEngine->Clear(tvfalse);						//Clear the screen
+	// Tell 3D driver we're going to display 3D things.
+	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS))
+	    return;
+
+	// Tell the camera to render into the frame buffer.
+	view->Draw ();
+
+	/*	pEngine->Clear(tvfalse);						//Clear the screen
 	pAtmos->Atmosphere_Render();
 	pScene->RenderAllMeshes (tvfalse);
 	pEngine->RenderToScreen ();					//Render the screen	
@@ -172,6 +214,55 @@ void SBS::render()
 
 void SBS::input()
 {
+	// Now rotate the camera according to keyboard state
+	float speed = (elapsed_time / 1000.0) * (0.06 * 20);
+
+	if (kbd->GetKeyState (CSKEY_SHIFT))
+	{
+		// If the user is holding down shift, the arrow keys will cause
+	    // the camera to strafe up, down, left or right from it's
+	    // current position.
+	    if (kbd->GetKeyState (CSKEY_RIGHT))
+			c->Move (CS_VEC_RIGHT * 4 * speed);
+		if (kbd->GetKeyState (CSKEY_LEFT))
+			c->Move (CS_VEC_LEFT * 4 * speed);
+		if (kbd->GetKeyState (CSKEY_UP))
+			c->Move (CS_VEC_UP * 4 * speed);
+		if (kbd->GetKeyState (CSKEY_DOWN))
+			c->Move (CS_VEC_DOWN * 4 * speed);
+	}
+	else
+	{
+		// left and right cause the camera to rotate on the global Y
+		// axis; page up and page down cause the camera to rotate on the
+		// _camera's_ X axis (more on this in a second) and up and down
+		// arrows cause the camera to go forwards and backwards.
+		if (kbd->GetKeyState (CSKEY_RIGHT))
+			rotY += speed;
+		if (kbd->GetKeyState (CSKEY_LEFT))
+			rotY -= speed;
+		if (kbd->GetKeyState (CSKEY_PGUP))
+			rotX += speed;
+		if (kbd->GetKeyState (CSKEY_PGDN))
+		    rotX -= speed;
+		if (kbd->GetKeyState (CSKEY_UP))
+			c->Move (CS_VEC_FORWARD * 4 * speed);
+		if (kbd->GetKeyState (CSKEY_DOWN))
+			c->Move (CS_VEC_BACKWARD * 4 * speed);
+  }
+
+	// We now assign a new rotation transformation to the camera.  You
+	// can think of the rotation this way: starting from the zero
+	// position, you first rotate "rotY" radians on your Y axis to get
+	// the first rotation.  From there you rotate "rotX" radians on the
+	// your X axis to get the final rotation.  We multiply the
+	// individual rotations on each axis together to get a single
+	// rotation matrix.  The rotations are applied in right to left
+	// order .
+	csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
+	csOrthoTransform ot (rot, c->GetTransform().GetOrigin ());
+	c->SetTransform (ot);
+
 /*	if(pInput->IsKeyPressed(TV_KEY_UP))
         pCamera->MoveRelative ((0.015 * pEngine->TimeElapsed()), 0, 0, tvfalse);
 
@@ -233,249 +324,205 @@ void SBS::SlowToFPS(long FrameRate)
 
 }
 
-void SBS::SetupFrame ()
+void SBS::FinishFrame()
 {
-  // First get elapsed time from the virtual clock.
-  csTicks elapsed_time = vc->GetElapsedTicks ();
-  // Now rotate the camera according to keyboard state
-  float speed = (elapsed_time / 1000.0) * (0.06 * 20);
-
-  iCamera* c = view->GetCamera();
-
-  if (kbd->GetKeyState (CSKEY_SHIFT))
-  {
-    // If the user is holding down shift, the arrow keys will cause
-    // the camera to strafe up, down, left or right from it's
-    // current position.
-    if (kbd->GetKeyState (CSKEY_RIGHT))
-      c->Move (CS_VEC_RIGHT * 4 * speed);
-    if (kbd->GetKeyState (CSKEY_LEFT))
-      c->Move (CS_VEC_LEFT * 4 * speed);
-    if (kbd->GetKeyState (CSKEY_UP))
-      c->Move (CS_VEC_UP * 4 * speed);
-    if (kbd->GetKeyState (CSKEY_DOWN))
-      c->Move (CS_VEC_DOWN * 4 * speed);
-  }
-  else
-  {
-    // left and right cause the camera to rotate on the global Y
-    // axis; page up and page down cause the camera to rotate on the
-    // _camera's_ X axis (more on this in a second) and up and down
-    // arrows cause the camera to go forwards and backwards.
-    if (kbd->GetKeyState (CSKEY_RIGHT))
-      rotY += speed;
-    if (kbd->GetKeyState (CSKEY_LEFT))
-      rotY -= speed;
-    if (kbd->GetKeyState (CSKEY_PGUP))
-      rotX += speed;
-    if (kbd->GetKeyState (CSKEY_PGDN))
-        rotX -= speed;
-    if (kbd->GetKeyState (CSKEY_UP))
-        c->Move (CS_VEC_FORWARD * 4 * speed);
-    if (kbd->GetKeyState (CSKEY_DOWN))
-        c->Move (CS_VEC_BACKWARD * 4 * speed);
-  }
-
-  // We now assign a new rotation transformation to the camera.  You
-  // can think of the rotation this way: starting from the zero
-  // position, you first rotate "rotY" radians on your Y axis to get
-  // the first rotation.  From there you rotate "rotX" radians on the
-  // your X axis to get the final rotation.  We multiply the
-  // individual rotations on each axis together to get a single
-  // rotation matrix.  The rotations are applied in right to left
-  // order .
-  csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
-  csOrthoTransform ot (rot, c->GetTransform().GetOrigin ());
-  c->SetTransform (ot);
-
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS))
-    return;
-
-  // Tell the camera to render into the frame buffer.
-  view->Draw ();
+	g3d->FinishDraw ();
+	g3d->Print (0);
 }
 
-void SBS::FinishFrame ()
+bool SBS::HandleEvent(iEvent& ev)
 {
-  g3d->FinishDraw ();
-  g3d->Print (0);
+//Event handler
+
+	// First get elapsed time from the virtual clock.
+	elapsed_time = vc->GetElapsedTicks ();
+  
+	//get camera object
+	c = view->GetCamera();
+
+	if (ev.Type == csevBroadcast && ev.Command.Code == cscmdProcess)
+	{
+		if (RenderOnly == false)
+			input();
+		if (InputOnly == false)
+			render();
+	    return true;
+	}
+	else if (ev.Type == csevBroadcast && ev.Command.Code == cscmdFinalProcess)
+	{
+	    FinishFrame ();
+	    return true;
+	}
+	else if ((ev.Type == csevKeyboard) &&
+	    (csKeyEventHelper::GetEventType (&ev) == csKeyEventTypeDown) &&
+	    (csKeyEventHelper::GetCookedCode (&ev) == CSKEY_ESC))
+	{
+	    csRef<iEventQueue> q (CS_QUERY_REGISTRY (object_reg, iEventQueue));
+	    if (q) q->GetEventOutlet()->Broadcast (cscmdQuit);
+	    return true;
+	}
+
+	return false;
 }
 
-bool SBS::HandleEvent (iEvent& ev)
+bool SBS::SBSEventHandler(iEvent& ev)
 {
-  if (ev.Type == csevBroadcast && ev.Command.Code == cscmdProcess)
-  {
-    SetupFrame ();
-    return true;
-  }
-  else if (ev.Type == csevBroadcast && ev.Command.Code == cscmdFinalProcess)
-  {
-    FinishFrame ();
-    return true;
-  }
-  else if ((ev.Type == csevKeyboard) &&
-    (csKeyEventHelper::GetEventType (&ev) == csKeyEventTypeDown) &&
-    (csKeyEventHelper::GetCookedCode (&ev) == CSKEY_ESC))
-  {
-    csRef<iEventQueue> q (CS_QUERY_REGISTRY (object_reg, iEventQueue));
-    if (q) q->GetEventOutlet()->Broadcast (cscmdQuit);
-    return true;
-  }
-
-  return false;
+	//called by csDefaultRunLoop above in Start()
+	return sbs ? sbs->HandleEvent (ev) : false;
 }
 
-bool SBS::SBSEventHandler (iEvent& ev)
+bool SBS::Initialize()
 {
-  return sbs ? sbs->HandleEvent (ev) : false;
+  
+	if (!csInitializer::RequestPlugins (object_reg,
+		CS_REQUEST_VFS,
+		CS_REQUEST_OPENGL3D,
+		CS_REQUEST_ENGINE,
+		CS_REQUEST_FONTSERVER,
+		CS_REQUEST_IMAGELOADER,
+		CS_REQUEST_LEVELLOADER,
+		CS_REQUEST_REPORTER,
+		CS_REQUEST_REPORTERLISTENER,
+		CS_REQUEST_END))
+	{
+	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+			"crystalspace.application.sbs",
+			"Can't initialize plugins!");
+		return false;
+	}
+
+	  if (!csInitializer::SetupEventHandler (object_reg, SBSEventHandler))
+	{
+		csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+	        "crystalspace.application.sbs",
+			"Can't initialize event handler!");
+	    return false;
+	}
+
+	  // Check for commandline help.
+	if (csCommandLineHelper::CheckHelp (object_reg))
+	{
+	    csCommandLineHelper::Help (object_reg);
+	    return false;
+	}
+
+	// The virtual clock.
+	vc = CS_QUERY_REGISTRY (object_reg, iVirtualClock);
+	if (vc == 0)
+	{
+	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+			"crystalspace.application.sbs",
+			"Can't find the virtual clock!");
+		return false;
+	}
+
+	// Find the pointer to engine plugin
+	engine = CS_QUERY_REGISTRY (object_reg, iEngine);
+	if (engine == 0)
+	{
+	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+			"crystalspace.application.sbs",
+			"No iEngine plugin!");
+		return false;
+	}
+
+	loader = CS_QUERY_REGISTRY (object_reg, iLoader);
+	if (loader == 0)
+	{
+	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+			"crystalspace.application.sbs",
+			"No iLoader plugin!");
+		return false;
+	}
+
+	g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
+	if (g3d == 0)
+	{
+	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+			"crystalspace.application.sbs",
+			"No iGraphics3D plugin!");
+		return false;
+	}
+
+	kbd = CS_QUERY_REGISTRY (object_reg, iKeyboardDriver);
+	if (kbd == 0)
+	{
+	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+			"crystalspace.application.sbs",
+			"No iKeyboardDriver plugin!");
+		return false;
+	}
+
+	// Open the main system. This will open all the previously loaded plug-ins.
+	if (!csInitializer::OpenApplication (object_reg))
+	{
+	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+			"crystalspace.application.sbs",
+			"Error opening system!");
+		return false;
+	}
+
+	// First disable the lighting cache. Our app is simple enough
+	// not to need this.
+	engine->SetLightingCacheMode (0);
+
+	//Load textures
+
+	// these are used store the current orientation of the camera
+	rotY = rotX = 0;
+
+	//create 3D environment
+	area = engine->CreateSector("area");
+	
+	//add lights
+
+	engine->Prepare();
+
+	//set up initial camera position
+	view = csPtr<iView>(new csView (engine, g3d));
+	view->GetCamera()->SetSector(area);
+	view->GetCamera()->GetTransform().SetOrigin(csVector3(startposition.x, startposition.y, startposition.z));
+	g2d = g3d->GetDriver2D();
+	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
+
+	return true;
 }
 
-bool SBS::Initialize ()
+bool SBS::LoadTexture(const char *name, const char *filename)
 {
-  if (!csInitializer::RequestPlugins (object_reg,
-    CS_REQUEST_VFS,
-    CS_REQUEST_OPENGL3D,
-    CS_REQUEST_ENGINE,
-    CS_REQUEST_FONTSERVER,
-    CS_REQUEST_IMAGELOADER,
-    CS_REQUEST_LEVELLOADER,
-    CS_REQUEST_REPORTER,
-    CS_REQUEST_REPORTERLISTENER,
-    CS_REQUEST_END))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.sbs",
-    "Can't initialize plugins!");
-    return false;
-  }
+	// Load the texture from the standard library.  This is located in
+	// CS/data/standard.zip and mounted as /lib/std using the Virtual
+	// File System (VFS) plugin.
+	if (!loader->LoadTexture (name, filename))
+	{
+	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+			"crystalspace.application.sbs",
+			"Error loading texture");
+		return false;
+	}
+	return true;
+}
 
-  if (!csInitializer::SetupEventHandler (object_reg, SBSEventHandler))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.sbs",
-    "Can't initialize event handler!");
-    return false;
-  }
+void SBS::AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b)
+{
+	ll = area->GetLights();
+	light = engine->CreateLight(name, csVector3(x, y, z), radius, csColor(r, g, b));
+	ll->Add(light);
+}
 
-  // Check for commandline help.
-  if (csCommandLineHelper::CheckHelp (object_reg))
-  {
-    csCommandLineHelper::Help (object_reg);
-    return false;
-  }
-
-  // The virtual clock.
-  vc = CS_QUERY_REGISTRY (object_reg, iVirtualClock);
-  if (vc == 0)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.sbs",
-    "Can't find the virtual clock!");
-    return false;
-  }
-
-  // Find the pointer to engine plugin
-  engine = CS_QUERY_REGISTRY (object_reg, iEngine);
-  if (engine == 0)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.sbs",
-    "No iEngine plugin!");
-    return false;
-  }
-
-  loader = CS_QUERY_REGISTRY (object_reg, iLoader);
-  if (loader == 0)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.sbs",
-        "No iLoader plugin!");
-    return false;
-  }
-
-  g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
-  if (g3d == 0)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.sbs",
-        "No iGraphics3D plugin!");
-    return false;
-  }
-
-  kbd = CS_QUERY_REGISTRY (object_reg, iKeyboardDriver);
-  if (kbd == 0)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.sbs",
-        "No iKeyboardDriver plugin!");
-    return false;
-  }
-
-  // Open the main system. This will open all the previously loaded plug-ins.
-  if (!csInitializer::OpenApplication (object_reg))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.sbs",
-        "Error opening system!");
-    return false;
-  }
-
-  // First disable the lighting cache. Our app is simple enough
-  // not to need this.
-  engine->SetLightingCacheMode (0);
-
-  // Load the texture from the standard library.  This is located in
-  // CS/data/standard.zip and mounted as /lib/std using the Virtual
-  // File System (VFS) plugin.
-  if (!loader->LoadTexture ("stone", "/lib/std/stone4.gif"))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.sbs",
-        "Error loading 'stone4' texture!");
-    return false;
-  }
-  iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName ("stone");
-
-  // these are used store the current orientation of the camera
-  rotY = rotX = 0;
-
-  room = engine->CreateSector ("room");
-  csRef<iMeshWrapper> walls (engine->CreateSectorWallsMesh (room, "walls"));
-  csRef<iThingState> ws =
-    SCF_QUERY_INTERFACE (walls->GetMeshObject (), iThingState);
-  csRef<iThingFactoryState> walls_state = ws->GetFactory ();
-  walls_state->AddInsideBox (csVector3 (-5, 0, -5), csVector3 (5, 20, 5));
-  walls_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-  walls_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
-
-  csRef<iLight> light;
-  iLightList* ll = room->GetLights ();
-
-  light = engine->CreateLight (0, csVector3 (-3, 5, 0), 10,
-    csColor (1, 0, 0));
-  ll->Add (light);
-
-  light = engine->CreateLight (0, csVector3 (3, 5,  0), 10,
-    csColor (0, 0, 1));
-  ll->Add (light);
-
-  light = engine->CreateLight (0, csVector3 (0, 5, -3), 10,
-    csColor (0, 1, 0));
-  ll->Add (light);
-
-  engine->Prepare ();
-
-  view = csPtr<iView> (new csView (engine, g3d));
-  view->GetCamera ()->SetSector (room);
-  view->GetCamera ()->GetTransform ().SetOrigin (csVector3 (0, 5, -3));
-  iGraphics2D* g2d = g3d->GetDriver2D ();
-  view->SetRectangle (0, 0, g2d->GetWidth (), g2d->GetHeight ());
-
-  return true;
+void SBS::SetStartPosition(float x, float y, float z)
+{
+	startposition.x = x;
+	startposition.y = y;
+	startposition.z = z;
 }
 
 bool IsEven(int Number)
 {
-    return false;
+    //Determine if the passed number is even.
+	//If number divides evenly, return true
+	if ((Number / 2) == int(Number / 2))
+		return true;
+	else
+		return false;
 }

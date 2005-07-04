@@ -20,7 +20,6 @@
 //Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
-#include <string>
 
 //CrystalSpace Includes
 #include "cssysdef.h"
@@ -58,28 +57,36 @@
 #include "csutil/event.h"
 
 #include "floor.h"
+#include "sbs.h"
+
+extern SBS *sbs; //external pointer to the SBS engine
 
 Floor::Floor(int number)
 {
-//Set floor's object number
-FloorNumber = number;
+	//Set floor's object number
+	FloorNumber = number;
 
-//size shaft arrays accordingly
-//ReDim CrawlSpaceShaft(ElevatorShafts)
-//ReDim Shafts(ElevatorShafts)
+	//size shaft arrays accordingly
+	//ReDim CrawlSpaceShaft(ElevatorShafts)
+	//ReDim Shafts(ElevatorShafts)
 
-//Create and name new meshes
+	//Create and name new meshes
+	Level (sbs->engine->CreateSectorWallsMesh (area, "Level"));
+	ls = SCF_QUERY_INTERFACE (Level->GetMeshObject (), iThingState);
+	level_state = ls->GetFactory ();
 
-//Set Level = Scene.CreateMeshBuilder("Level " + Str$(Number))
-//Set CrawlSpace = Scene.CreateMeshBuilder("CrawlSpace " + Str$(Number))
-//Set ShaftsFloor = Scene.CreateMeshBuilder("ShaftsFloor " + Str$(Number))
-//Dim i As Integer
-//For i = 1 To ElevatorShafts
-//    DoEvents
-//    Set CrawlSpaceShaft(i) = Scene.CreateMeshBuilder("CrawlSpaceShaft" + LTrim(Str$(i)) + " " + Str$(Number))
-//    Set Shafts(i) = Scene.CreateMeshBuilder("Shafts" + LTrim(Str$(i)) + " " + Str$(Number))
-//Next i
+	CrawlSpace (sbs->engine->CreateSectorWallsMesh (area, "CrawlSpace"));
+	ShaftsFloor (sbs->engine->CreateSectorWallsMesh (area, "ShaftsFloor"));
 
+	//Set Level = Scene.CreateMeshBuilder("Level " + Str$(Number))
+	//Set CrawlSpace = Scene.CreateMeshBuilder("CrawlSpace " + Str$(Number))
+	//Set ShaftsFloor = Scene.CreateMeshBuilder("ShaftsFloor " + Str$(Number))
+	//Dim i As Integer
+	//For i = 1 To ElevatorShafts
+	//    DoEvents
+	//    Set CrawlSpaceShaft(i) = Scene.CreateMeshBuilder("CrawlSpaceShaft" + LTrim(Str$(i)) + " " + Str$(Number))
+	//    Set Shafts(i) = Scene.CreateMeshBuilder("Shafts" + LTrim(Str$(i)) + " " + Str$(Number))
+	//Next i
 
 }
 
@@ -90,31 +97,134 @@ Floor::~Floor()
 
 void Floor::SetCameraFloor()
 {
+	//Moves camera to specified floor (sets altitude to the floor's altitude plus CameraAltitude)
+	
+	csVector3 camlocation = sbs->view->GetCamera()->GetTransform().GetOrigin();
+	sbs->view->GetCamera()->GetTransform().SetOrigin(csVector3(camlocation.x, FloorAltitude + sbs->CameraDefAltitude, camlocation.z));
+}
+
+void Floor::AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
+{
+	//Adds a floor with the specified dimensions and vertical offset
+	
+	//Call texture autosizing formulas
+	if (tw == 0)
+		tw = AutoSize(x1, x2, true);
+	if (th == 0)
+		th = AutoSize(z1, z2, false);
+
+	float altitude = FloorAltitude + voffset;
+
+	level_state->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
+	level_state->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
+	iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName (texture);
+	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
 
 }
 
-void Floor::AddFloor(csString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
+void Floor::AddCrawlSpaceFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
 {
+	//Adds a crawlspace with the specified dimensions and vertical offset
+
+	//Texture autosizing formulas
+	if (tw == 0)
+		tw = AutoSize(x1, x2, true);
+	if (th == 0)
+		th = AutoSize(z1, z2, false);
+
+	float altitude = FloorAltitude + FloorHeight + voffset;
+
+	level_state->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
+	level_state->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
+	iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName (texture);
+	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
 
 }
 
-void Floor::AddCrawlSpaceFloor(csString texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
+void Floor::AddWall(const char *texture, float x1, float z1, float x2, float z2, float heightchange, float voffset, float tw, float th)
 {
+	//Adds a wall with the specified dimensions
+	
+	float wallheight = heightchange + FloorHeight;
+	float altitude = FloorAltitude + voffset;
+
+	//Call texture autosizing formulas
+	if ((tw == 0) && (z1 == z2)
+		tw = AutoSize(x1, x2, true);
+	if ((tw == 0) && (x1 == x2))
+		tw = AutoSize(z1, z2, true);
+	if (th == 0)
+		th = AutoSize(0, wallheight, false);
+	
+	level_state->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
+	level_state->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
+	iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName (texture);
+	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
 
 }
 
-void Floor::AddWall(csString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Floor::AddCrawlSpaceWall(const char *texture, float x1, float z1, float x2, float z2, float heightchange, float voffset, float tw, float th)
 {
+	//Adds a crawlspace wall with the specified dimensions
+	
+	float wallheight = heightchange + FloorHeight;
+	float altitude = FloorAltitude + voffset;
+
+	//Texture autosizing formulas
+	if ((tw == 0) && (z1 == z2))
+		tw = AutoSize(x1, x2, true);
+	if ((tw == 0) && (x1 == x2)
+		tw = AutoSize(z1, z2, true);
+	if (th == 0)
+		th = AutoSize(0, wallheight, false);
+	
+	float altitude = FloorAltitude + FloorHeight + voffset;
+
+	level_state->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
+	level_state->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
+	iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName (texture);
+	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
 
 }
 
-void Floor::AddCrawlSpaceWall(csString texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Floor::CreateWallBox(const char *texture, float WidthX, float LengthZ, float CenterX, float CenterZ, float heightchange, bool CSpace, float ResX, float ResY)
 {
+	float height = heightchange + FloorAltitude;
+	float WallHeight = FloorHeight - CrawlSpaceHeight;
+	float x1;
+	float x2;
+	float z1;
+	float z2;
+	if (CSpace == true)
+	{
+	    height = WallHeight;
+	    WallHeight = CrawlSpaceHeight;
+	}
 
-}
+	x1 = CenterX - (WidthX / 2);
+	x2 = CenterX + (WidthX / 2);
+	z1 = CenterZ - (LengthZ / 2);
+	z1 = CenterZ + (LengthZ / 2);
 
-void Floor::CreateWallBox(csString texture, float WidthX, float LengthZ, float CenterX, float CenterZ, bool CSpace, float ResX, float ResY)
-{
+	level_state->AddOutsideBox(csVector3(x1, height, z1), csVector3(x2, WallHeight + height, z2));
+	level_state->AddInsideBox(csVector3(x1, height, z1), csVector3(x2, WallHeight + height, z2));
+	iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName (texture);
+	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+//for the texture sizing, the original VB rewrite didn't call the autosize functions
 
 }
 

@@ -55,8 +55,11 @@
 #include "csutil/event.h"
 
 #include "elevator.h"
+#include "sbs.h"
 
-Elevator::Elevator(int num)
+extern SBS *sbs; //external pointer to the SBS engine
+
+Elevator::Elevator(int number)
 {
 
 }
@@ -68,80 +71,109 @@ Elevator::~Elevator()
 
 void Elevator::CreateElevator(float x, float y, int floor, int direction)
 {
+	//Creates elevator at specified location and floor
+	//x is the horiz position where the door is
+	//y is the northmost position
+	//Direction: 0=x is left side, 1=x is right side
 
 }
 
 void Elevator::AddRoute(int floor, int direction)
 {
+	//Add call route to elevator routing table, in sorted order
+	//Direction values - 1=up, -1=down
 
 }
 
 void Elevator::DeleteRoute(int floor, int direction)
 {
+	//Delete call route from elevator routing table
 
 }
 
 void Elevator::Alarm()
 {
+	//elevator's alarm code
 
 }
 
 void Elevator::CallElevator(int floor, int direction)
 {
+	//Calls elevator from specified floor, and gives desired direction to travel
 
 }
 
 void Elevator::StopElevator()
 {
+	//Tells elevator to stop moving, no matter where it is
 
 }
 
 void Elevator::OpenHatch()
 {
+	//Opens the elevator's upper escape hatch, allowing access to the shaft
 
 }
 
 void Elevator::OpenDoorsEmergency()
 {
+	//Simulates manually prying doors open.
+	//Slowly opens the elevator doors no matter where elevator is.
+	//If lined up with shaft doors, then opens the shaft doors also
 
 }
 
 void Elevator::OpenShaftDoors(int floor)
 {
+	//Simulates manually opening shaft doors
+	//Slowly opens the shaft's elevator doors no matter where elevator is.
+	//Cannot be used with OpenDoorsEmergency.
+	//This is if the elevator is not lined up with the shaft doors,
+	//and the user needs to open the shaft doors, usually while on top of elevator.
 
 }
 
 void Elevator::ProcessCallQueue()
 {
+	//Processes the elevator's call queue, and sends elevators to called floors
 
 }
 
 int Elevator::GetElevatorFloor()
 {
-
+	//Determine floor that the elevator is on
+	
+	return 0;
 }
 
 void Elevator::MonitorLoop()
 {
+	//Monitors elevator and starts actions if needed
 
 }
 
 void Elevator::CloseDoorsEmergency()
 {
+	//Simulates manually closing doors.
+	//Slowly closes the elevator doors no matter where elevator is.
+	//If lined up with shaft doors, then closes the shaft doors also
 
 }
 
 void Elevator::OpenDoors()
 {
+	//Opens elevator doors
 
 }
 
 void Elevator::CloseDoors()
 {
+	//Closes elevator doors
 
 }
 
 void Elevator::MoveElevatorToFloor()
 {
+	//Main processing routine; sends elevator to floor specified in GotoFloor
 
 }

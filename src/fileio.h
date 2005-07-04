@@ -20,7 +20,7 @@
 
 #include "globals.h"
 
-void LoadGlobals(csString filename);
-void LoadTextures(csString filename);
-void LoadBuilding(csString filename);
-void LoadElevators(csString filename);
+void LoadGlobals(const char * filename);
+void LoadTextures(const char * filename);
+void LoadBuilding(const char * filename);
+void LoadElevators(const char * filename);

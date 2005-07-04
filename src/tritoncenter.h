@@ -1,4 +1,4 @@
-//Skyscraper 1.1 Alpha - Simulation Frontend
+//Skyscraper 1.1 Alpha - Temporary Triton Center building definitions
 //Copyright ©2005 Ryan Thoryk
 //http://www.tliquest.net/skyscraper
 //http://sourceforge.net/projects/skyscraper
@@ -20,6 +20,4 @@
 
 #include "globals.h"
 
-int main (int argc, char* argv[]);
-void startsim();
-void MainLoop();
+void LoadTritonCenter();

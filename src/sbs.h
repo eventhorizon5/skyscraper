@@ -20,11 +20,12 @@
 //Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "globals.h"
-//#include "console.h"
 
 #include "csutil/ref.h"
 
+//global functions
 bool IsEven(int Number);
+float AutoSize(float n1, float n2, bool iswidth);
 
 struct iEngine;
 struct iLoader;
@@ -35,6 +36,13 @@ struct iObjectRegistry;
 struct iEvent;
 struct iSector;
 struct iView;
+
+struct sbsVector3
+{
+	float x;
+	float y;
+	float z;
+};
 
 class SBS
 {
@@ -48,10 +56,16 @@ public:
 	csRef<iKeyboardDriver> kbd;
 	csRef<iVirtualClock> vc;
 	csRef<iView> view;
-	iSector* room;
+	csRef<iLight> light;
+
+	iLightList* ll;
+	iSector* area;
+	iCamera* c;
+	iGraphics2D* g2d;
 
 	float rotY;
     float rotX;
+	csTicks elapsed_time;
 
 	//Internal data
     float Gravity; //gravity variable for physics algorithms
@@ -82,29 +96,27 @@ public:
 //	D3DVECTOR CameraStartDirection;
 //	D3DVECTOR CameraStartRotation;
 
-	//Console
-	//Console *mainconsole;
-	
 	//public functions
 	SBS(iObjectRegistry* object_reg);
 	~SBS();
 	void Wait(long Milliseconds);
-	float AutoSize(float n1, float n2, bool iswidth);
 	void render();
 	void input();
 	void SlowToFPS(long FrameRate);
-
-	bool Initialize ();
- 	void Start ();
+	bool LoadTexture(const char *name, const char *filename);
+	bool Initialize();
+ 	void Start();
+	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b)
+	void SetStartPosition(float x, float y, float z);
 
 private:
+
+	sbsVector3 startposition;
 
 	//private functions
 	void PrintBanner();
 
-	static bool SBSEventHandler (iEvent& ev);
-	bool HandleEvent (iEvent& ev);
-	void SetupFrame ();
-	void FinishFrame ();
-
+	static bool SBSEventHandler(iEvent& ev);
+	bool HandleEvent(iEvent& ev);
+	void FinishFrame();
 };

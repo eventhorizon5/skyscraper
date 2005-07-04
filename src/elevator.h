@@ -26,14 +26,14 @@ class Elevator
 public:
 
 	int Number; //elevator number
-//	ITVMesh ElevatorMesh; //elevator mesh object
-//	ITVMesh FloorIndicator; //floor indicator object
-//	ITVMesh ElevatorInsDoorL; //left inside door
-//	ITVMesh ElevatorInsDoorR; //right inside door
-//	ITVMesh Plaque; //plaque object
-//	ITVMesh CallButtonsUp; //up call button
-//	ITVMesh CallButtonsDown; //down call button
-//  ITVMesh Buttons[]; //elevator buttons
+	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
+	csRef<iMeshWrapper> FloorIndicator; //floor indicator object
+	csRef<iMeshWrapper> ElevatorInsDoorL; //left inside door
+	csRef<iMeshWrapper> ElevatorInsDoorR; //right inside door
+	csRef<iMeshWrapper> Plaque; //plaque object
+	csRef<iMeshWrapper> CallButtonsUp; //up call button
+	csRef<iMeshWrapper> CallButtonsDown; //down call button
+	csRefArray<iMeshWrapper> Buttons; //elevator button array
 	csString UpQueue; //up call queue
 	csString DownQueue; //down call queue
 	int QueuePositionDirection; //queue processing direction
@@ -44,14 +44,14 @@ public:
 	//Public ElevatorMusic As TVSoundWave3D
 	//Public ElevatorSounds As TVSoundWave3D
 	bool MoveElevator; //Tells elevator to start going to specified floor
-    int MoveElevatorFloor[]; //floor to move elevator to
+    int MoveElevatorFloor; //floor to move elevator to
 	int GotoFloor; //floor to go to
 	int OpenDoor; //1=open doors, -1=close doors
 	float Acceleration; //percentage of speed increase
 	float OpenSpeed; //elevator opening/closing speed
 
 	//functions
-	Elevator(int num);
+	Elevator(int number);
 	~Elevator();
 	void CreateElevator(float x, float y, int floor, int direction);
 	void AddRoute(int floor, int direction);

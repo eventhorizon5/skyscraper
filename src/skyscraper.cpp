@@ -56,27 +56,11 @@
 #include "csutil/cmdhelp.h"
 #include "csutil/event.h"
 
-//#include "mainfrm.h"
 #include "sbs.h"
-
-//IMPLEMENT_APP(MainFrmApp)
+#include "tritoncenter.h"
 
 SBS *Simcore;
 iObjectRegistry* object_reg;
-
-/*bool MainFrmApp::OnInit()
-{
-    MainFrm *myFrame = new  MainFrm(NULL);
-    SetTopWindow(myFrame);
-    myFrame->Show(TRUE);
-    startsim();
-    return TRUE;
-}
- 
-int MainFrmApp::OnExit()
-{
-	return 0;
-}*/
 
 void startsim()
 {
@@ -100,7 +84,10 @@ void startsim()
 
 	//Start simulator
 	if (Simcore->Initialize ())
-	   Simcore->Start ();
+	{
+		LoadTritonCenter(); //temporary building loader
+		Simcore->Start ();
+	}
 	//DoEvents
 
 	//wait 2 seconds
