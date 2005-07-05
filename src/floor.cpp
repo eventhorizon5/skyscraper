@@ -115,14 +115,7 @@ void Floor::AddFloor(const char *texture, float x1, float z1, float x2, float z2
 
 	float altitude = FloorAltitude + voffset;
 
-	level_state->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
-	level_state->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
-	iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName (texture);
-	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-
-//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
-
+	sbs->AddFloor(level_state, texture, x1, z1, x2, z2, altitude, tw, th);
 }
 
 void Floor::AddCrawlSpaceFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
@@ -137,14 +130,7 @@ void Floor::AddCrawlSpaceFloor(const char *texture, float x1, float z1, float x2
 
 	float altitude = FloorAltitude + FloorHeight + voffset;
 
-	level_state->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
-	level_state->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
-	iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName (texture);
-	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-
-//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
-
+	sbs->AddFloor(level_state, texture, x1, z1, x2, z2, altitude, tw, th);
 }
 
 void Floor::AddWall(const char *texture, float x1, float z1, float x2, float z2, float heightchange, float voffset, float tw, float th)
@@ -162,14 +148,7 @@ void Floor::AddWall(const char *texture, float x1, float z1, float x2, float z2,
 	if (th == 0)
 		th = AutoSize(0, wallheight, false);
 	
-	level_state->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
-	level_state->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
-	iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName (texture);
-	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-
-//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
-
+	sbs->AddWall(level_state, texture, x1, z1, x2, z2, wallheight, altitude, tw, th);
 }
 
 void Floor::AddCrawlSpaceWall(const char *texture, float x1, float z1, float x2, float z2, float heightchange, float voffset, float tw, float th)
@@ -189,14 +168,7 @@ void Floor::AddCrawlSpaceWall(const char *texture, float x1, float z1, float x2,
 	
 	float altitude = FloorAltitude + FloorHeight + voffset;
 
-	level_state->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
-	level_state->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
-	iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName (texture);
-	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-
-//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
-
+	sbs->AddWall(level_state, texture, x1, z1, x2, z2, wallheight, altitude, tw, th);
 }
 
 void Floor::CreateWallBox(const char *texture, float WidthX, float LengthZ, float CenterX, float CenterZ, float heightchange, bool CSpace, float ResX, float ResY)
@@ -218,14 +190,7 @@ void Floor::CreateWallBox(const char *texture, float WidthX, float LengthZ, floa
 	z1 = CenterZ - (LengthZ / 2);
 	z1 = CenterZ + (LengthZ / 2);
 
-	level_state->AddOutsideBox(csVector3(x1, height, z1), csVector3(x2, WallHeight + height, z2));
-	level_state->AddInsideBox(csVector3(x1, height, z1), csVector3(x2, WallHeight + height, z2));
-	iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName (texture);
-	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-
-//for the texture sizing, the original VB rewrite didn't call the autosize functions
-
+	sbs->AddWall(level_state, texture, x1, z1, x2, z2, WallHeight, height, tw, th);
 }
 
 void Floor::EnableFloor()

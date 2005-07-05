@@ -26,20 +26,9 @@ class Elevator
 public:
 
 	int Number; //elevator number
-	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
-	csRef<iMeshWrapper> FloorIndicator; //floor indicator object
-	csRef<iMeshWrapper> ElevatorInsDoorL; //left inside door
-	csRef<iMeshWrapper> ElevatorInsDoorR; //right inside door
-	csRef<iMeshWrapper> Plaque; //plaque object
-	csRef<iMeshWrapper> CallButtonsUp; //up call button
-	csRef<iMeshWrapper> CallButtonsDown; //down call button
-	csRefArray<iMeshWrapper> Buttons; //elevator button array
-	csString UpQueue; //up call queue
-	csString DownQueue; //down call queue
 	int QueuePositionDirection; //queue processing direction
 	bool PauseQueueSearch; //pause queue processor
 	float ElevatorSpeed; //maximum elevator speed
-	int ElevatorFloor; //current elevator floor
 	bool ElevatorSync; //true if user should move with elevator
 	//Public ElevatorMusic As TVSoundWave3D
 	//Public ElevatorSounds As TVSoundWave3D
@@ -66,10 +55,45 @@ public:
 	int GetElevatorFloor();
 	void MonitorLoop();
 	void CloseDoorsEmergency();
+	csVector3 GetPosition();
+	void AddWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
+	void AddFloorIndicator(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset);
+	void AddButtonPanel(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void AddPanels(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void AddDoors(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void AddCallButtons(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
 
 private:
+	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
+		csRef<iThingState> ElevatorTS;
+		csRef<iThingFactoryState> ElevatorState;
+	csRef<iMeshWrapper> FloorIndicator; //floor indicator object
+		csRef<iThingState> FloorIndicatorTS;
+		csRef<iThingFactoryState> FloorIndicatorState;
+	csRef<iMeshWrapper> ElevatorDoorL; //left inside door
+		csRef<iThingState> ElevatorDoorL_TS;
+		csRef<iThingFactoryState> ElevatorDoorL_State;
+	csRef<iMeshWrapper> ElevatorDoorR; //right inside door
+		csRef<iThingState> ElevatorDoorR_TS;
+		csRef<iThingFactoryState> ElevatorDoorR_State;
+	csRef<iMeshWrapper> Plaque; //plaque object
+		csRef<iThingState> PlaqueTS;
+		csRef<iThingFactoryState> PlaqueState;
+	csRef<iMeshWrapper> CallButtonsUp; //up call button
+		csRef<iThingState> CallButtonsUp_TS;
+		csRef<iThingFactoryState> CallButtonsUp_State;
+	csRef<iMeshWrapper> CallButtonsDown; //down call button
+		csRef<iThingState> CallButtonsDown_TS;
+		csRef<iThingFactoryState> CallButtonsDown_State;
+	csRefArray<iMeshWrapper> Buttons; //elevator button array
+
 	//Internal elevator simulation data
+	csString UpQueue; //up call queue ***Change these to sorted arrays
+	csString DownQueue; //down call queue
 	float ElevatorStart; //elevator vertical starting location
+	int ElevatorFloor; //current elevator floor
 	bool DoorsOpen; //elevator door state
 	int ElevatorDirection; //-1=down, 1=up, 0=stopped
 	float DistanceToTravel; //distance in Y to travel

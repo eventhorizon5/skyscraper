@@ -526,3 +526,31 @@ bool IsEven(int Number)
 	else
 		return false;
 }
+
+void SBS::AddWall(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float wallheight, float altitude, float tw, float th)
+{
+	//Adds a wall with the specified dimensions
+	
+	dest->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
+	dest->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
+	iMaterialWrapper* tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
+
+}
+
+void SBS::AddFloor(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th)
+{
+	//Adds a floor with the specified dimensions and vertical offset
+	
+	dest->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
+	dest->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
+	iMaterialWrapper* tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
+
+}
