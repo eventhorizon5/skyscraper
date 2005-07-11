@@ -40,14 +40,14 @@ public:
 	float CrawlSpaceHeight; //height of crawl space
 
 	//functions
-	Floor(int num);
+	Floor(int number);
 	~Floor();
 	void SetCameraFloor();
 	void AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
 	void AddCrawlSpaceFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
 	void AddWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
 	void AddCrawlSpaceWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void CreateWallBox(const char *texture, float WidthX, float LengthZ, float CenterX, float CenterZ, bool CSpace, float ResX, float ResY);
+	void CreateWallBox(const char *texture, float WidthX, float LengthZ, float CenterX, float CenterZ, float heightchange, bool CSpace, float tw, float th);
 	void EnableFloor();
 	void DisableFloor();
 

@@ -58,7 +58,7 @@ public:
 	csVector3 GetPosition();
 	void AddWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
 	void AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
-	void AddFloorIndicator(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset);
+	void AddFloorIndicator(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
 	void AddButtonPanel(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
 	void AddPanels(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
 	void AddDoors(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);

@@ -64,31 +64,31 @@ Elevator::Elevator(int number)
 	Number = number;
 
 	//create object meshes
-	ElevatorMesh (sbs->engine->CreateSectorWallsMesh (area, "Elevator"));
+	ElevatorMesh = (sbs->engine->CreateSectorWallsMesh (sbs->area, "Elevator"));
 	ElevatorTS = SCF_QUERY_INTERFACE (ElevatorMesh->GetMeshObject (), iThingState);
 	ElevatorState = ElevatorTS->GetFactory ();
 
-	FloorIndicator (sbs->engine->CreateSectorWallsMesh (area, "FloorIndicator"));
+	FloorIndicator = (sbs->engine->CreateSectorWallsMesh (sbs->area, "FloorIndicator"));
 	FloorIndicatorTS = SCF_QUERY_INTERFACE (FloorIndicator->GetMeshObject (), iThingState);
 	FloorIndicatorState = FloorIndicatorTS->GetFactory ();
 
-	ElevatorDoorL (sbs->engine->CreateSectorWallsMesh (area, "ElevatorDoorL"));
+	ElevatorDoorL = (sbs->engine->CreateSectorWallsMesh (sbs->area, "ElevatorDoorL"));
 	ElevatorDoorL_TS = SCF_QUERY_INTERFACE (ElevatorDoorL->GetMeshObject (), iThingState);
 	ElevatorDoorL_State = ElevatorDoorL_TS->GetFactory ();
 
-	ElevatorDoorR (sbs->engine->CreateSectorWallsMesh (area, "ElevatorDoorR"));
+	ElevatorDoorR = (sbs->engine->CreateSectorWallsMesh (sbs->area, "ElevatorDoorR"));
 	ElevatorDoorR_TS = SCF_QUERY_INTERFACE (ElevatorDoorR->GetMeshObject (), iThingState);
 	ElevatorDoorR_State = ElevatorDoorR_TS->GetFactory ();
 
-	Plaque (sbs->engine->CreateSectorWallsMesh (area, "Plaque"));
+	Plaque = (sbs->engine->CreateSectorWallsMesh (sbs->area, "Plaque"));
 	PlaqueTS = SCF_QUERY_INTERFACE (Plaque->GetMeshObject (), iThingState);
 	PlaqueState = PlaqueTS->GetFactory ();
 
-	CallButtonsUp (sbs->engine->CreateSectorWallsMesh (area, "CallButtonsUp"));
+	CallButtonsUp = (sbs->engine->CreateSectorWallsMesh (sbs->area, "CallButtonsUp"));
 	CallButtonsUp_TS = SCF_QUERY_INTERFACE (CallButtonsUp->GetMeshObject (), iThingState);
 	CallButtonsUp_State = CallButtonsUp_TS->GetFactory ();
 
-	CallButtonsDown (sbs->engine->CreateSectorWallsMesh (area, "CallButtonsDown"));
+	CallButtonsDown = (sbs->engine->CreateSectorWallsMesh (sbs->area, "CallButtonsDown"));
 	CallButtonsDown_TS = SCF_QUERY_INTERFACE (CallButtonsDown->GetMeshObject (), iThingState);
 	CallButtonsDown_State = CallButtonsDown_TS->GetFactory ();
 
@@ -118,7 +118,6 @@ void Elevator::CreateElevator(float x, float y, int floor, int direction)
 	//Direction: 0=x is left side, 1=x is right side
 
 	int v;
-	iMaterialWrapper* tm;
 	
 	//ElevatorMesh.SetPosition X, Floor(FloorID).FloorAltitude, Y
 	//FloorIndicator.SetPosition X, Floor(FloorID).FloorAltitude, Y
@@ -277,7 +276,7 @@ void Elevator::AddFloor(const char *texture, float x1, float z1, float x2, float
    	sbs->AddFloor(ElevatorState, texture, x1, z1, x2, z2, voffset + GetPosition().y, tw, th);
 }
 
-void Elevator::AddFloorIndicator(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset)
+void Elevator::AddFloorIndicator(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
 	sbs->AddWall(FloorIndicatorState, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, 0, 0);
 }
@@ -312,4 +311,5 @@ void Elevator::AddCallButtons(const char *texture, float x1, float z1, float x2,
 csVector3 Elevator::GetPosition()
 {
 	//don't know how to get the mesh's vector position
+	return (0, 0, 0);
 }

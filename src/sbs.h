@@ -106,7 +106,7 @@ public:
 	bool LoadTexture(const char *name, const char *filename);
 	bool Initialize();
  	void Start();
-	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b)
+	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
 	void SetStartPosition(float x, float y, float z);
 	void AddWall(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float wallheight, float altitude, float tw, float th);
 	void AddFloor(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th);

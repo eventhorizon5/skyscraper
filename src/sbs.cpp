@@ -19,8 +19,6 @@
 //along with this program; if not, write to the Free Software
 //Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include <iostream>
-
 //CrystalSpace Includes
 #include "cssysdef.h"
 #include "csutil/sysfunc.h"
@@ -100,7 +98,22 @@ void SBS::Start()
 	//PrintBanner();
 	
 	//Post-init startup code goes here, before the runloop
-    
+
+	//set up initial camera position
+	view = csPtr<iView>(new csView (engine, g3d));
+	view->GetCamera()->SetSector(area);
+	view->GetCamera()->GetTransform().SetOrigin(csVector3(startposition.x, startposition.y, startposition.z));
+	g2d = g3d->GetDriver2D();
+	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
+
+	//get camera object
+	c = view->GetCamera();
+
+	//set main simulation values
+	InputOnly = false;
+	RenderOnly = false;
+
+	//start simulation
 	csDefaultRunLoop (object_reg);
 /*	
 	pEngine = CreateTVEngine();
@@ -151,7 +164,7 @@ float AutoSize(float n1, float n2, bool iswidth)
 {
 //Texture autosizing formulas
 //If any of the texture parameters are 0, then automatically size the
-//texture using the Skyscraper 1.0 sizing algorithms
+//texture using sizing algorithms
 	if (((n1 < 0) && (n2 < 0)) || ((n1 >= 0) && (n2 >= 0)))
 	{
 		//if numbers have the same sign
@@ -204,7 +217,7 @@ void SBS::render()
 
 	// Tell the camera to render into the frame buffer.
 	view->Draw ();
-
+	
 	/*	pEngine->Clear(tvfalse);						//Clear the screen
 	pAtmos->Atmosphere_Render();
 	pScene->RenderAllMeshes (tvfalse);
@@ -334,19 +347,16 @@ bool SBS::HandleEvent(iEvent& ev)
 {
 //Event handler
 
-	// First get elapsed time from the virtual clock.
-	elapsed_time = vc->GetElapsedTicks ();
-  
-	//get camera object
-	c = view->GetCamera();
-
 	if (ev.Type == csevBroadcast && ev.Command.Code == cscmdProcess)
 	{
-		if (RenderOnly == false)
+		// First get elapsed time from the virtual clock.
+		elapsed_time = vc->GetElapsedTicks ();
+
+		//if (RenderOnly == false)
 			input();
-		if (InputOnly == false)
+		//if (InputOnly == false)
 			render();
-	    return true;
+		return true;
 	}
 	else if (ev.Type == csevBroadcast && ev.Command.Code == cscmdFinalProcess)
 	{
@@ -474,16 +484,7 @@ bool SBS::Initialize()
 	//create 3D environment
 	area = engine->CreateSector("area");
 	
-	//add lights
-
 	engine->Prepare();
-
-	//set up initial camera position
-	view = csPtr<iView>(new csView (engine, g3d));
-	view->GetCamera()->SetSector(area);
-	view->GetCamera()->GetTransform().SetOrigin(csVector3(startposition.x, startposition.y, startposition.z));
-	g2d = g3d->GetDriver2D();
-	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
 
 	return true;
 }
@@ -531,26 +532,10 @@ void SBS::AddWall(csRef<iThingFactoryState> dest, const char *texture, float x1,
 {
 	//Adds a wall with the specified dimensions
 	
-	dest->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
-	dest->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude + wallheight, z2));
-	iMaterialWrapper* tm = sbs->engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-
-//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
-
 }
 
 void SBS::AddFloor(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	
-	dest->AddOutsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
-	dest->AddInsideBox(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2));
-	iMaterialWrapper* tm = sbs->engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-
-//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
-
 }

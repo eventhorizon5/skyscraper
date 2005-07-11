@@ -4,7 +4,6 @@
 	Version="8.00"
 	Name="Skyscraper"
 	ProjectGUID="{899501B5-1571-4301-B4D0-5FAADAE2A607}"
-	SignManifests="true"
 	>
 	<Platforms>
 		<Platform
@@ -80,7 +79,7 @@
 				OutputFile="../Skyscraper.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="C:\CS_vc\libs"
+				AdditionalLibraryDirectories="C:\CS\libs"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -173,11 +172,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcsutil_d.lib libcsgeom_d.lib libcsgfx_d.lib libcstool_d.lib libcsws_d.lib libpartgen_d.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib"
+				AdditionalDependencies="libcsutil_d.lib libcsgeom_d.lib libcsgfx_d.lib libcstool_d.lib libcsws_d.lib libpartgen_d.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
 				OutputFile="../Skyscraper.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="C:\CS_vc\libs"
+				AdditionalLibraryDirectories="C:\CS\libs"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/Skyscraper.pdb"
 				SubSystem="1"
@@ -219,7 +218,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="elevator.cpp"
+				RelativePath=".\elevator.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -243,7 +242,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="fileio.cpp"
+				RelativePath=".\fileio.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -267,7 +266,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="floor.cpp"
+				RelativePath=".\floor.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -291,7 +290,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="sbs.cpp"
+				RelativePath=".\sbs.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -315,7 +314,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="skyscraper.cpp"
+				RelativePath=".\skyscraper.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -348,27 +347,27 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="elevator.h"
+				RelativePath=".\elevator.h"
 				>
 			</File>
 			<File
-				RelativePath="fileio.h"
+				RelativePath=".\fileio.h"
 				>
 			</File>
 			<File
-				RelativePath="floor.h"
+				RelativePath=".\floor.h"
 				>
 			</File>
 			<File
-				RelativePath="globals.h"
+				RelativePath=".\globals.h"
 				>
 			</File>
 			<File
-				RelativePath="sbs.h"
+				RelativePath=".\sbs.h"
 				>
 			</File>
 			<File
-				RelativePath="skyscraper.h"
+				RelativePath=".\skyscraper.h"
 				>
 			</File>
 			<File
@@ -380,6 +379,10 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
+			<File
+				RelativePath=".\skyscraper.ico"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

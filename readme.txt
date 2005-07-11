@@ -58,10 +58,13 @@ Z - Run (hold down Z while moving)
 
 Current building floor layout:
 
+B10-B1 - Parking lot, shops, etc
 1 - 3 story lobby
 M - Mezzanine inside the 3 story lobby
-2-39 - Offices, section 1
-40-79 - Office, section 2
+2-9 - ?
+10-39 - Offices, section 1
+40 - Office Skylobby
+41-79 - Offices, section 2
 80 - Residential Skylobby
 81-99 - Hotel
 100-114 - Apartments
@@ -76,5 +79,5 @@ M - Mezzanine inside the 3 story lobby
 137 - Mechanical
 138 - Roof w/Heliport and radio/tv towers
 
-
- 
+-need office maintenance floor, possibly 2
+-make either 99 or 100 housekeeping
