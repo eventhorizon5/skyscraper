@@ -81,3 +81,4 @@ M - Mezzanine inside the 3 story lobby
 
 -need office maintenance floor, possibly 2
 -make either 99 or 100 housekeeping
+-possibly add a restaurant on either 116/117 or somewhere above 120

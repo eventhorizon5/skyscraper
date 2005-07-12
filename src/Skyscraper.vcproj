@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="Skyscraper"
 	ProjectGUID="{899501B5-1571-4301-B4D0-5FAADAE2A607}"
+	SignManifests="true"
 	>
 	<Platforms>
 		<Platform
@@ -337,10 +338,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\tritoncenter.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -368,10 +365,6 @@
 			</File>
 			<File
 				RelativePath=".\skyscraper.h"
-				>
-			</File>
-			<File
-				RelativePath=".\tritoncenter.h"
 				>
 			</File>
 		</Filter>

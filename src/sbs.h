@@ -26,6 +26,7 @@
 //global functions
 bool IsEven(int Number);
 float AutoSize(float n1, float n2, bool iswidth);
+void Cleanup();
 
 struct iEngine;
 struct iLoader;
@@ -49,7 +50,6 @@ class SBS
 public:
 
     //Engine data
-    iObjectRegistry* object_reg;
 	csRef<iEngine> engine;
 	csRef<iLoader> loader;
 	csRef<iGraphics3D> g3d;
@@ -97,14 +97,12 @@ public:
 //	D3DVECTOR CameraStartRotation;
 
 	//public functions
-	SBS(iObjectRegistry* object_reg);
+	SBS(int _argc, char** _argv);
 	~SBS();
 	void Wait(long Milliseconds);
-	void render();
-	void input();
 	void SlowToFPS(long FrameRate);
 	bool LoadTexture(const char *name, const char *filename);
-	bool Initialize();
+	bool Initialize(const char *windowtitle);
  	void Start();
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
 	void SetStartPosition(float x, float y, float z);
@@ -117,8 +115,12 @@ private:
 
 	//private functions
 	void PrintBanner();
+	void render();
+	void input();
 
 	static bool SBSEventHandler(iEvent& ev);
 	bool HandleEvent(iEvent& ev);
 	void FinishFrame();
+    int argc;
+    char **argv;
 };

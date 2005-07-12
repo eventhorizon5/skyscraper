@@ -73,8 +73,8 @@ Floor::Floor(int number)
 	ls = SCF_QUERY_INTERFACE (Level->GetMeshObject (), iThingState);
 	level_state = ls->GetFactory ();
 
-	CrawlSpace = (sbs->engine->CreateSectorWallsMesh (sbs->area, "CrawlSpace"));
-	ShaftsFloor = (sbs->engine->CreateSectorWallsMesh (sbs->area, "ShaftsFloor"));
+	//CrawlSpace = (sbs->engine->CreateSectorWallsMesh (sbs->area, "CrawlSpace"));
+	//ShaftsFloor = (sbs->engine->CreateSectorWallsMesh (sbs->area, "ShaftsFloor"));
 
 	//Set Level = Scene.CreateMeshBuilder("Level " + Str$(Number))
 	//Set CrawlSpace = Scene.CreateMeshBuilder("CrawlSpace " + Str$(Number))
@@ -169,6 +169,7 @@ void Floor::AddCrawlSpaceWall(const char *texture, float x1, float z1, float x2,
 
 void Floor::CreateWallBox(const char *texture, float WidthX, float LengthZ, float CenterX, float CenterZ, float heightchange, bool CSpace, float tw, float th)
 {
+	iMaterialWrapper* tm;
 	float height = heightchange + FloorAltitude;
 	float wallheight = FloorHeight - CrawlSpaceHeight;
 	float x1;
@@ -194,12 +195,16 @@ void Floor::CreateWallBox(const char *texture, float WidthX, float LengthZ, floa
 	if (th == 0)
 		th = AutoSize(0, wallheight, false);
 
-	//level_state->AddOutsideBox(csVector3(x1, height, z1), csVector3(x2, height + wallheight, z2));
 	level_state->AddInsideBox(csVector3(x1, height, z1), csVector3(x2, height + wallheight, z2));
-	iMaterialWrapper* tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
+	level_state->AddOutsideBox(csVector3(x1 + 0.1, height + 0.1, z1 + 0.1), csVector3(x2 - 0.1, height + wallheight + 0.1, z2 + 0.1));
+	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	level_state->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	level_state->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+	
 //*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
 
 }

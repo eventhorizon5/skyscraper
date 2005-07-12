@@ -56,15 +56,17 @@
 #include "csutil/event.h"
 
 #include "sbs.h"
-#include "tritoncenter.h"
+#include "floor.h"
+#include "elevator.h"
+#include "globals.h"
 
 SBS *Simcore;
-iObjectRegistry* object_reg;
+Floor *testfloor;
 
-void startsim()
+int main (int argc, char* argv[])
 {
 	//Create new simulator object
-	Simcore = new SBS (object_reg);
+	Simcore = new SBS(argc, argv);
 	
 	//set default starting elevator
 	Simcore->ElevatorNumber = 1;
@@ -73,41 +75,39 @@ void startsim()
 	Simcore->FrameRate = 30;
 	Simcore->FrameLimiter = true;
 
-	//temporary static values
-	//SoundDivisor = 10
-	//SoundMaxDistance = 1000
-
-	//Print banner
-	//Dest.ForeColor = RGB(255, 255, 255)
-	//Dest.BackColor = RGB(0, 0, 0)
-
 	//Start simulator
-	if (Simcore->Initialize ())
+	if (Simcore->Initialize("Skyscraper 1.1 Alpha"))
 	{
 		LoadTritonCenter(); //temporary building loader
 		Simcore->Start();
 	}
-	//DoEvents
 
-	//wait 2 seconds
-	//Sleep(2000);
-
-	//Dest.Print Spc(2); "Initializing TrueVision3D..."
-	//DoEvents
-
-	//Simcore->IsRunning = true;
-	//EnableCollisions = true;
-
+	delete testfloor;
 	delete Simcore;
+	testfloor = 0;
 	Simcore = 0;
-	
-}
+	Cleanup();
 
-int main (int argc, char* argv[])
-{
-    object_reg = csInitializer::CreateEnvironment (argc, argv);
-	startsim();
-	csInitializer::DestroyApplication (object_reg);
 	return 0;
 }
 
+void LoadTritonCenter()
+{
+	//This is a temporary function to load the Triton Center, since file loading
+	//support is not implemented yet
+	Simcore->LoadTexture("stone", "/lib/std/stone4.gif");
+	
+	Simcore->SetStartPosition(0, 5, -3);
+	
+	testfloor = new Floor(1);
+	testfloor->FloorAltitude = 0;
+	testfloor->FloorHeight = 20;
+	testfloor->CrawlSpaceHeight = 0;
+	testfloor->CreateWallBox("stone", 10, 10, 0, 0, 0, false, 0, 0);
+
+	//Add lights
+	Simcore->AddLight(0, -3, 5, 0, 10, 1, 0, 0);
+	Simcore->AddLight(0, 3, 5, 0, 10, 0, 0, 1);
+	Simcore->AddLight(0, 0, 5, -3, 10, 0, 1, 0);
+	
+}

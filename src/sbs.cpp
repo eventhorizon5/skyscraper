@@ -57,40 +57,22 @@
 CS_IMPLEMENT_APPLICATION
 
 #include "sbs.h"
+#include "floor.h"
 
 SBS *sbs; //self reference
+iObjectRegistry* object_reg;
 
-SBS::SBS(iObjectRegistry* object_reg)
+SBS::SBS(int _argc, char** _argv)
 {
-    SBS::object_reg = object_reg;
+    argc = _argc;
+	argv = _argv;
+	object_reg = csInitializer::CreateEnvironment (argc, argv);
     sbs = this;
 }
 
 SBS::~SBS()
 {
-	//Uninitialize the variables
-/*	pScene->DestroyAllMeshes ();
 
-	pScene->Release ();
-	pInput->Release ();
-	pEngine->Release ();
-	pAtmos->Release ();
-	pCamera->Release ();
-	pMatFactory->Release ();
-	pLightEngine->Release ();
-	pGraphicEffect->Release ();
-	pTextureFactory->Release ();
-
-	pScene = NULL;
-	pInput = NULL;
-	pEngine = NULL;
-	pAtmos = NULL;
-	pCamera = NULL;
-	pMatFactory = NULL;
-	pLightEngine = NULL;
-	pGraphicEffect = NULL;
-	pTextureFactory = NULL;
-*/
 }
 
 void SBS::Start()
@@ -98,6 +80,7 @@ void SBS::Start()
 	//PrintBanner();
 	
 	//Post-init startup code goes here, before the runloop
+	engine->Prepare();
 
 	//set up initial camera position
 	view = csPtr<iView>(new csView (engine, g3d));
@@ -106,53 +89,13 @@ void SBS::Start()
 	g2d = g3d->GetDriver2D();
 	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
 
-	//get camera object
-	c = view->GetCamera();
-
 	//set main simulation values
 	InputOnly = false;
 	RenderOnly = false;
 
 	//start simulation
 	csDefaultRunLoop (object_reg);
-/*	
-	pEngine = CreateTVEngine();
 
-	//Set the debug file before doing anything else
-	pEngine->SetDebugFile ("c:\\debug.txt");
-
-	//Initialize Windowed
-	pEngine->Init3DWindowedMode ((long)WindowHandle, true);
-
-	//Tell it to display the FPS
-	pEngine->put_DisplayFPS(tvtrue);
-
-	//AppPath is a small Macro function in tv3dcpp lib to return the path
-	//of a file you pass to it, in this case we get the application path
-	char path[256];
-	char srchpath[256];
-	
-	HMODULE Module = (HMODULE)hInstance;
-	GetModuleFileName(Module,path,255); 
-	
-	AppPath(path,srchpath);	
-	
-	//Set the search directory of the objects, textures, ...
-	pEngine->SetSearchDirectory(srchpath);
-	
-	//We set the AngleSystem to Degrees
-	pEngine->SetAngleSystem (TV_ANGLE_DEGREE);
-
-	//Init input after main init, and check if it errors anywhere.
-	pInput = CreateTVInputEngine();
-	pScene = CreateTVScene();	
-	pGlobals = CreateTVGlobals();
-	pAtmos = CreateTVAtmosphere();
-	pCamera = CreateTVCamera();
-	pMatFactory = CreateTVMaterialFactory();
-	pLightEngine = CreateTVLightEngine();
-	pGraphicEffect = CreateTVGraphicEffect();
-*/
 }
 
 void SBS::Wait(long milliseconds)
@@ -205,6 +148,11 @@ float AutoSize(float n1, float n2, bool iswidth)
 }
 
 void SBS::PrintBanner()
+{
+
+}
+
+void SBS::SlowToFPS(long FrameRate)
 {
 
 }
@@ -276,65 +224,6 @@ void SBS::input()
 	csOrthoTransform ot (rot, c->GetTransform().GetOrigin ());
 	c->SetTransform (ot);
 
-/*	if(pInput->IsKeyPressed(TV_KEY_UP))
-        pCamera->MoveRelative ((0.015 * pEngine->TimeElapsed()), 0, 0, tvfalse);
-
-    if(pInput->IsKeyPressed(TV_KEY_DOWN))
-        pCamera->MoveRelative ((-0.015 * pEngine->TimeElapsed()), 0, 0, tvfalse);
-
-    if(pInput->IsKeyPressed(TV_KEY_LEFT))
-        pCamera->RotateY (pEngine->TimeElapsed() * -6 / 100);
-
-    if(pInput->IsKeyPressed(TV_KEY_RIGHT))
-        pCamera->RotateY (pEngine->TimeElapsed() * 6 / 100);
-
-	if(pInput->IsKeyPressed(TV_KEY_PAGEUP))
-        pCamera->RotateX (-0.68);
-    
-	if(pInput->IsKeyPressed(TV_KEY_PAGEDOWN))
-        pCamera->RotateX (0.68);
-
-	if(pInput->IsKeyPressed(TV_KEY_HOME))
-		pCamera->MoveRelative (0, 1, 0, tvfalse);
-
-	if(pInput->IsKeyPressed(TV_KEY_END))
-		pCamera->MoveRelative (0, -1, 0, tvfalse);
-
-	if(pInput->IsKeyPressed(TV_KEY_F1))
-		pEngine->ScreenShot ("../shot.bmp");
-
-	if(pInput->IsKeyPressed(TV_KEY_A) && RideCar->GetPosition().z > 0)
-		GoCar = true;
-
-	if(pInput->IsKeyPressed(TV_KEY_SPACE))
-		pCamera->SetRotation (0, 180, 0);
-	
-	lineend = pCamera->GetPosition();
-	LineTest = lineend;
-
-    if(lineend.x > linestart.x)
-		LineTest.x = lineend.x + 2;
-    if(lineend.x < linestart.x)
-		LineTest.x = lineend.x - 2;
-    if(lineend.z > linestart.z)
-		LineTest.z = lineend.z + 2;
-    if(lineend.z < linestart.z)
-		LineTest.z = lineend.z - 2;
-
-	//if (Room->Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING, 0) == tvtrue || HypnoRoom->Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING, 0) == tvtrue || HypnoDoor->Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING, 0) == tvtrue || HypnoRide->Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING, 0) == tvtrue || RideDoor->Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING, 0) == tvrue Or RideCar->Collision(linestart, LineTest, TV_TESTTYPE_ACCURATETESTING, 0) == tvtrue)
-	//	pCamera->SetPosition (linestart.x, linestart.y, linestart.z);
-	//else
-	//	pCamera->SetPosition (lineend.x, lineend.y, lineend.z);
-	//
-	if(pInput->IsKeyPressed(TV_KEY_ESCAPE))		//Check if ESCAPE has been pressed.
-	{		
-		PostQuitMessage(0);
-	}*/
-}
-
-void SBS::SlowToFPS(long FrameRate)
-{
-
 }
 
 void SBS::FinishFrame()
@@ -351,6 +240,9 @@ bool SBS::HandleEvent(iEvent& ev)
 	{
 		// First get elapsed time from the virtual clock.
 		elapsed_time = vc->GetElapsedTicks ();
+
+		//get camera object
+		c = view->GetCamera();
 
 		//if (RenderOnly == false)
 			input();
@@ -381,7 +273,7 @@ bool SBS::SBSEventHandler(iEvent& ev)
 	return sbs ? sbs->HandleEvent (ev) : false;
 }
 
-bool SBS::Initialize()
+bool SBS::Initialize(const char *windowtitle)
 {
   
 	if (!csInitializer::RequestPlugins (object_reg,
@@ -464,6 +356,8 @@ bool SBS::Initialize()
 	}
 
 	// Open the main system. This will open all the previously loaded plug-ins.
+    iNativeWindow* nw = g2d->GetNativeWindow ();
+	if (nw) nw->SetTitle (windowtitle);
 	if (!csInitializer::OpenApplication (object_reg))
 	{
 	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
@@ -476,15 +370,11 @@ bool SBS::Initialize()
 	// not to need this.
 	engine->SetLightingCacheMode (0);
 
-	//Load textures
-
 	// these are used store the current orientation of the camera
 	rotY = rotX = 0;
 
 	//create 3D environment
 	area = engine->CreateSector("area");
-	
-	engine->Prepare();
 
 	return true;
 }
@@ -526,6 +416,12 @@ bool IsEven(int Number)
 		return true;
 	else
 		return false;
+}
+
+void Cleanup()
+{
+	//cleanup
+	csInitializer::DestroyApplication (object_reg);
 }
 
 void SBS::AddWall(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float wallheight, float altitude, float tw, float th)
