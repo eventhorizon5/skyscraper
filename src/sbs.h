@@ -1,27 +1,29 @@
-//Scalable Building Simulator - Simulator Core
-//The Skyscraper Project - Version 1.1 Alpha
-//Copyright ©2005 Ryan Thoryk
-//http://www.tliquest.net/skyscraper
-//http://sourceforge.net/projects/skyscraper
-//Contact - ryan@tliquest.net
+/*
+	Scalable Building Simulator - Simulator Core
+	The Skyscraper Project - Version 1.1 Alpha
+	Copyright ©2005 Ryan Thoryk
+	http://www.tliquest.net/skyscraper
+	http://sourceforge.net/projects/skyscraper
+	Contact - ryan@tliquest.net
 
-//This program is free software; you can redistribute it and/or
-//modify it under the terms of the GNU General Public License
-//as published by the Free Software Foundation; either version 2
-//of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-//This program is distributed in the hope that it will be useful,
-//but WITHOUT ANY WARRANTY; without even the implied warranty of
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-//You should have received a copy of the GNU General Public License
-//along with this program; if not, write to the Free Software
-//Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
 
 #include "globals.h"
 
-#include "csutil/ref.h"
+//#include "csutil/ref.h"
 
 //global functions
 bool IsEven(int Number);
@@ -29,14 +31,24 @@ float AutoSize(float n1, float n2, bool iswidth);
 void Cleanup();
 
 struct iEngine;
-struct iLoader;
-struct iGraphics3D;
-struct iKeyboardDriver;
-struct iVirtualClock;
-struct iObjectRegistry;
-struct iEvent;
 struct iSector;
 struct iView;
+struct iFont;
+struct iFile;
+struct iKeyboardDriver;
+struct iImageLoader;
+struct iLoaderPlugin;
+struct iMeshWrapper;
+struct iConsoleOutput;
+struct iVirtualClock;
+struct iObjectRegistry;
+struct iGraphics3D;
+struct iGraphics2D;
+struct iLoader;
+struct iVFS;
+struct iEvent;
+class DemoSequenceManager;
+class csTransform;
 
 struct sbsVector3
 {
@@ -53,15 +65,23 @@ public:
 	csRef<iEngine> engine;
 	csRef<iLoader> loader;
 	csRef<iGraphics3D> g3d;
+	csRef<iGraphics2D> g2d;
 	csRef<iKeyboardDriver> kbd;
 	csRef<iVirtualClock> vc;
 	csRef<iView> view;
 	csRef<iLight> light;
-
+	csRef<iConsoleOutput> console;
+	csRef<iFont> font;
+	csRef<iVFS> vfs;
+	csRef<iImageIO> imageio;
+	csRef<iCommandLineParser> cmdline;
+	csRef<iGeneralMeshState> gmSingle;
+	csRef<iStringSet> strings;
+	
+	iMaterialWrapper* material;
 	iLightList* ll;
 	iSector* area;
 	iCamera* c;
-	iGraphics2D* g2d;
 
 	float rotY;
     float rotX;
@@ -97,12 +117,14 @@ public:
 //	D3DVECTOR CameraStartRotation;
 
 	//public functions
-	SBS(int _argc, char** _argv);
+	SBS();
 	~SBS();
+	void Report (const char* msg, ...);
+	bool ReportError (const char* msg, ...);
 	void Wait(long Milliseconds);
 	void SlowToFPS(long FrameRate);
 	bool LoadTexture(const char *name, const char *filename);
-	bool Initialize(const char *windowtitle);
+	bool Initialize(int argc, const char* const argv[], const char *windowtitle);
  	void Start();
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
 	void SetStartPosition(float x, float y, float z);
@@ -115,12 +137,8 @@ private:
 
 	//private functions
 	void PrintBanner();
-	void render();
-	void input();
-
-	static bool SBSEventHandler(iEvent& ev);
-	bool HandleEvent(iEvent& ev);
+	bool SBSEventHandler(iEvent& Event);
+	bool HandleEvent(iEvent& Event);
+	void SetupFrame();
 	void FinishFrame();
-    int argc;
-    char **argv;
 };

@@ -19,7 +19,6 @@
 			OutputDirectory=".\Release"
 			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
-			InheritedPropertySheets="UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -50,7 +49,7 @@
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="c:\CS\include"
 				AdditionalUsingDirectories="c:\CS\include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;WIN32_VOLATILE;__CRYSTAL_SPACE__;CS_RELEASE;__WXMSW__;WXUSINGDLL"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -76,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcsutil.lib libcsgeom.lib libcsgfx.lib libcstool.lib libcsws.lib libpartgen.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
+				AdditionalDependencies="libcrystalspace.lib libcrystalspaceirectx.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
 				OutputFile="../Skyscraper.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -116,7 +115,6 @@
 			OutputDirectory=".\Debug"
 			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
-			InheritedPropertySheets="UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -146,7 +144,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="c:\CS\include"
 				AdditionalUsingDirectories="c:\CS\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;WIN32_VOLATILE;__CRYSTAL_SPACE__;CS_DEBUG;__WXMSW__;WXUSINGDLL"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -173,7 +171,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcsutil_d.lib libcsgeom_d.lib libcsgfx_d.lib libcstool_d.lib libcsws_d.lib libpartgen_d.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
+				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_directx_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
 				OutputFile="../Skyscraper.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"

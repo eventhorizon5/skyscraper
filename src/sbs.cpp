@@ -1,84 +1,45 @@
-//Scalable Building Simulator - Simulator Core
-//The Skyscraper Project - Version 1.1 Alpha
-//Copyright ©2005 Ryan Thoryk
-//http://www.tliquest.net/skyscraper
-//http://sourceforge.net/projects/skyscraper
-//Contact - ryan@tliquest.net
+/*
+	Scalable Building Simulator - Simulator Core
+	The Skyscraper Project - Version 1.1 Alpha
+	Copyright ©2005 Ryan Thoryk
+	http://www.tliquest.net/skyscraper
+	http://sourceforge.net/projects/skyscraper
+	Contact - ryan@tliquest.net
 
-//This program is free software; you can redistribute it and/or
-//modify it under the terms of the GNU General Public License
-//as published by the Free Software Foundation; either version 2
-//of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-//This program is distributed in the hope that it will be useful,
-//but WITHOUT ANY WARRANTY; without even the implied warranty of
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-//You should have received a copy of the GNU General Public License
-//along with this program; if not, write to the Free Software
-//Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
 
-//CrystalSpace Includes
-#include "cssysdef.h"
-#include "csutil/sysfunc.h"
-#include "iutil/vfs.h"
-#include "csutil/cscolor.h"
-#include "cstool/csview.h"
-#include "cstool/initapp.h"
-#include "iutil/eventq.h"
-#include "iutil/event.h"
-#include "iutil/objreg.h"
-#include "iutil/csinput.h"
-#include "iutil/virtclk.h"
-#include "iengine/sector.h"
-#include "iengine/engine.h"
-#include "iengine/camera.h"
-#include "iengine/light.h"
-#include "iengine/texture.h"
-#include "iengine/mesh.h"
-#include "iengine/movable.h"
-#include "iengine/material.h"
-#include "imesh/thing.h"
-#include "imesh/object.h"
-#include "ivideo/graph3d.h"
-#include "ivideo/graph2d.h"
-#include "ivideo/texture.h"
-#include "ivideo/material.h"
-#include "ivideo/fontserv.h"
-#include "ivideo/natwin.h"
-#include "igraphic/imageio.h"
-#include "imap/parser.h"
-#include "ivaria/reporter.h"
-#include "ivaria/stdrep.h"
-#include "csutil/cmdhelp.h"
-#include "csutil/event.h"
+#include <crystalspace.h>
+#include "sbs.h"
 
 CS_IMPLEMENT_APPLICATION
-
-#include "sbs.h"
-#include "floor.h"
 
 SBS *sbs; //self reference
 iObjectRegistry* object_reg;
 
-SBS::SBS(int _argc, char** _argv)
+SBS::SBS()
 {
-    argc = _argc;
-	argv = _argv;
-	object_reg = csInitializer::CreateEnvironment (argc, argv);
     sbs = this;
 }
 
 SBS::~SBS()
 {
-
 }
 
 void SBS::Start()
 {
-	//PrintBanner();
-	
 	//Post-init startup code goes here, before the runloop
 	engine->Prepare();
 
@@ -86,7 +47,6 @@ void SBS::Start()
 	view = csPtr<iView>(new csView (engine, g3d));
 	view->GetCamera()->SetSector(area);
 	view->GetCamera()->GetTransform().SetOrigin(csVector3(startposition.x, startposition.y, startposition.z));
-	g2d = g3d->GetDriver2D();
 	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
 
 	//set main simulation values
@@ -149,7 +109,11 @@ float AutoSize(float n1, float n2, bool iswidth)
 
 void SBS::PrintBanner()
 {
-
+	Report("Scalable Building Simulator 0.1");
+	Report("Copyright 2004-2005 Ryan Thoryk");
+	Report("This software comes with ABSOLUTELY NO WARRANTY. This is free");
+	Report("software, and you are welcome to redistribute it under certain");
+	Report("conditions. For details, see the file gpl.txt");
 }
 
 void SBS::SlowToFPS(long FrameRate)
@@ -157,61 +121,8 @@ void SBS::SlowToFPS(long FrameRate)
 
 }
 
-void SBS::render()
+void SBS::SetupFrame()
 {
-	// Tell 3D driver we're going to display 3D things.
-	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS))
-	    return;
-
-	// Tell the camera to render into the frame buffer.
-	view->Draw ();
-	
-	/*	pEngine->Clear(tvfalse);						//Clear the screen
-	pAtmos->Atmosphere_Render();
-	pScene->RenderAllMeshes (tvfalse);
-	pEngine->RenderToScreen ();					//Render the screen	
-*/
-}
-
-void SBS::input()
-{
-	// Now rotate the camera according to keyboard state
-	float speed = (elapsed_time / 1000.0) * (0.06 * 20);
-
-	if (kbd->GetKeyState (CSKEY_SHIFT))
-	{
-		// If the user is holding down shift, the arrow keys will cause
-	    // the camera to strafe up, down, left or right from it's
-	    // current position.
-	    if (kbd->GetKeyState (CSKEY_RIGHT))
-			c->Move (CS_VEC_RIGHT * 4 * speed);
-		if (kbd->GetKeyState (CSKEY_LEFT))
-			c->Move (CS_VEC_LEFT * 4 * speed);
-		if (kbd->GetKeyState (CSKEY_UP))
-			c->Move (CS_VEC_UP * 4 * speed);
-		if (kbd->GetKeyState (CSKEY_DOWN))
-			c->Move (CS_VEC_DOWN * 4 * speed);
-	}
-	else
-	{
-		// left and right cause the camera to rotate on the global Y
-		// axis; page up and page down cause the camera to rotate on the
-		// _camera's_ X axis (more on this in a second) and up and down
-		// arrows cause the camera to go forwards and backwards.
-		if (kbd->GetKeyState (CSKEY_RIGHT))
-			rotY += speed;
-		if (kbd->GetKeyState (CSKEY_LEFT))
-			rotY -= speed;
-		if (kbd->GetKeyState (CSKEY_PGUP))
-			rotX += speed;
-		if (kbd->GetKeyState (CSKEY_PGDN))
-		    rotX -= speed;
-		if (kbd->GetKeyState (CSKEY_UP))
-			c->Move (CS_VEC_FORWARD * 4 * speed);
-		if (kbd->GetKeyState (CSKEY_DOWN))
-			c->Move (CS_VEC_BACKWARD * 4 * speed);
-  }
-
 	// We now assign a new rotation transformation to the camera.  You
 	// can think of the rotation this way: starting from the zero
 	// position, you first rotate "rotY" radians on your Y axis to get
@@ -224,19 +135,77 @@ void SBS::input()
 	csOrthoTransform ot (rot, c->GetTransform().GetOrigin ());
 	c->SetTransform (ot);
 
+	// Tell 3D driver we're going to display 3D things.
+	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS))
+		return;
+
+	// Tell the camera to render into the frame buffer.
+	view->Draw ();
 }
 
 void SBS::FinishFrame()
 {
-	g3d->FinishDraw ();
-	g3d->Print (0);
+	g3d->FinishDraw();
+	g3d->Print(0);
 }
 
-bool SBS::HandleEvent(iEvent& ev)
-{
-//Event handler
 
-	if (ev.Type == csevBroadcast && ev.Command.Code == cscmdProcess)
+bool SBS::HandleEvent(iEvent& Event)
+{
+	// First get elapsed time from the virtual clock.
+	csTicks elapsed_time = vc->GetElapsedTicks ();
+	// Now rotate the camera according to keyboard state
+	float speed = (elapsed_time / 1000.0) * (0.06 * 20);
+	
+	if ((Event.Type == csevKeyboard) && (csKeyEventHelper::GetEventType (&Event) == csKeyEventTypeDown))
+	{
+		if (kbd->GetKeyState (CSKEY_SHIFT))
+		{
+			// If the user is holding down shift, the arrow keys will cause
+			// the camera to strafe up, down, left or right from it's
+			// current position.
+			if (kbd->GetKeyState (CSKEY_RIGHT))
+				c->Move (CS_VEC_RIGHT * 4 * speed);
+			if (kbd->GetKeyState (CSKEY_LEFT))
+				c->Move (CS_VEC_LEFT * 4 * speed);
+			if (kbd->GetKeyState (CSKEY_UP))
+				c->Move (CS_VEC_UP * 4 * speed);
+			if (kbd->GetKeyState (CSKEY_DOWN))
+				c->Move (CS_VEC_DOWN * 4 * speed);
+		}
+		else
+		{
+			// left and right cause the camera to rotate on the global Y
+			// axis; page up and page down cause the camera to rotate on the
+			// _camera's_ X axis (more on this in a second) and up and down
+			// arrows cause the camera to go forwards and backwards.
+			if (kbd->GetKeyState (CSKEY_RIGHT))
+				rotY += speed;
+			if (kbd->GetKeyState (CSKEY_LEFT))
+				rotY -= speed;
+			if (kbd->GetKeyState (CSKEY_PGUP))
+				rotX += speed;
+			if (kbd->GetKeyState (CSKEY_PGDN))
+				rotX -= speed;
+			if (kbd->GetKeyState (CSKEY_UP))
+				c->Move (CS_VEC_FORWARD * 4 * speed);
+			if (kbd->GetKeyState (CSKEY_DOWN))
+				c->Move (CS_VEC_BACKWARD * 4 * speed);
+		}
+	}
+	else if (Event.Type == csevMouseDown)
+	{
+	}
+	else if (Event.Type == csevMouseMove)
+	{
+	}
+	return false;
+}
+
+bool SBS::SBSEventHandler(iEvent& Event)
+{
+	//Event handler
+	if (Event.Type == csevBroadcast && csCommandEventHelper::GetCode(&Event) == cscmdProcess)
 	{
 		// First get elapsed time from the virtual clock.
 		elapsed_time = vc->GetElapsedTicks ();
@@ -244,131 +213,70 @@ bool SBS::HandleEvent(iEvent& ev)
 		//get camera object
 		c = view->GetCamera();
 
-		//if (RenderOnly == false)
-			input();
-		//if (InputOnly == false)
-			render();
+		SetupFrame ();
 		return true;
 	}
-	else if (ev.Type == csevBroadcast && ev.Command.Code == cscmdFinalProcess)
+	else if (Event.Type == csevBroadcast && csCommandEventHelper::GetCode(&Event) == cscmdFinalProcess)
 	{
-	    FinishFrame ();
-	    return true;
+		FinishFrame ();
+		return true;
 	}
-	else if ((ev.Type == csevKeyboard) &&
-	    (csKeyEventHelper::GetEventType (&ev) == csKeyEventTypeDown) &&
-	    (csKeyEventHelper::GetCookedCode (&ev) == CSKEY_ESC))
+	else
 	{
-	    csRef<iEventQueue> q (CS_QUERY_REGISTRY (object_reg, iEventQueue));
-	    if (q) q->GetEventOutlet()->Broadcast (cscmdQuit);
-	    return true;
+		return sbs ? sbs->HandleEvent(Event) : false;
 	}
-
-	return false;
 }
 
-bool SBS::SBSEventHandler(iEvent& ev)
+bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle)
 {
-	//called by csDefaultRunLoop above in Start()
-	return sbs ? sbs->HandleEvent (ev) : false;
-}
+	object_reg = csInitializer::CreateEnvironment (argc, argv);
+	if (!object_reg) return false;
 
-bool SBS::Initialize(const char *windowtitle)
-{
-  
 	if (!csInitializer::RequestPlugins (object_reg,
-		CS_REQUEST_VFS,
+  		CS_REQUEST_VFS,
 		CS_REQUEST_OPENGL3D,
-		CS_REQUEST_ENGINE,
+        CS_REQUEST_ENGINE,
 		CS_REQUEST_FONTSERVER,
 		CS_REQUEST_IMAGELOADER,
-		CS_REQUEST_LEVELLOADER,
+        CS_REQUEST_LEVELLOADER,
+		CS_REQUEST_CONSOLEOUT,
 		CS_REQUEST_REPORTER,
 		CS_REQUEST_REPORTERLISTENER,
 		CS_REQUEST_END))
-	{
-	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-			"crystalspace.application.sbs",
-			"Can't initialize plugins!");
-		return false;
-	}
+		return ReportError ("Couldn't init app!");
 
-	  if (!csInitializer::SetupEventHandler (object_reg, SBSEventHandler))
-	{
-		csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-	        "crystalspace.application.sbs",
-			"Can't initialize event handler!");
-	    return false;
-	}
-
-	  // Check for commandline help.
-	if (csCommandLineHelper::CheckHelp (object_reg))
-	{
-	    csCommandLineHelper::Help (object_reg);
-	    return false;
-	}
-
-	// The virtual clock.
 	vc = CS_QUERY_REGISTRY (object_reg, iVirtualClock);
-	if (vc == 0)
-	{
-	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-			"crystalspace.application.sbs",
-			"Can't find the virtual clock!");
-		return false;
-	}
-
-	// Find the pointer to engine plugin
-	engine = CS_QUERY_REGISTRY (object_reg, iEngine);
-	if (engine == 0)
-	{
-	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-			"crystalspace.application.sbs",
-			"No iEngine plugin!");
-		return false;
-	}
-
-	loader = CS_QUERY_REGISTRY (object_reg, iLoader);
-	if (loader == 0)
-	{
-	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-			"crystalspace.application.sbs",
-			"No iLoader plugin!");
-		return false;
-	}
-
-	g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
-	if (g3d == 0)
-	{
-	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-			"crystalspace.application.sbs",
-			"No iGraphics3D plugin!");
-		return false;
-	}
-
 	kbd = CS_QUERY_REGISTRY (object_reg, iKeyboardDriver);
-	if (kbd == 0)
-	{
-	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-			"crystalspace.application.sbs",
-			"No iKeyboardDriver plugin!");
-		return false;
-	}
+	if (!kbd) return ReportError ("No keyboard driver!");
+	engine = CS_QUERY_REGISTRY (object_reg, iEngine);
+	if (!engine) return ReportError ("No engine!");
+	loader = CS_QUERY_REGISTRY (object_reg, iLoader);
+	if (!loader) return ReportError ("No loader!");
+	g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
+	if (!g3d) return ReportError ("No 3D driver!");
+	g2d = CS_QUERY_REGISTRY (object_reg, iGraphics2D);
+	if (!g2d) return ReportError ("No 2D driver!");
+	imageio = CS_QUERY_REGISTRY (object_reg, iImageIO);
+	if (!imageio) return ReportError ("No image loader!");
+	vfs = CS_QUERY_REGISTRY (object_reg, iVFS);
+	if (!vfs) return ReportError ("No VFS!");
+
+	iNativeWindow* nw = g2d->GetNativeWindow();
+	if (nw) nw->SetTitle(windowtitle);
+
+	font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
+
+	PrintBanner();
+
+	csSleep(3000);
 
 	// Open the main system. This will open all the previously loaded plug-ins.
-    iNativeWindow* nw = g2d->GetNativeWindow ();
-	if (nw) nw->SetTitle (windowtitle);
 	if (!csInitializer::OpenApplication (object_reg))
-	{
-	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-			"crystalspace.application.sbs",
-			"Error opening system!");
-		return false;
-	}
+		return ReportError ("Error opening system!");
 
 	// First disable the lighting cache. Our app is simple enough
 	// not to need this.
-	engine->SetLightingCacheMode (0);
+		engine->SetLightingCacheMode (0);
 
 	// these are used store the current orientation of the camera
 	rotY = rotX = 0;
@@ -386,9 +294,7 @@ bool SBS::LoadTexture(const char *name, const char *filename)
 	// File System (VFS) plugin.
 	if (!loader->LoadTexture (name, filename))
 	{
-	    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-			"crystalspace.application.sbs",
-			"Error loading texture");
+	    ReportError("Error loading texture");
 		return false;
 	}
 	return true;
@@ -421,6 +327,7 @@ bool IsEven(int Number)
 void Cleanup()
 {
 	//cleanup
+	csPrintf ("Cleaning up...\n");
 	csInitializer::DestroyApplication (object_reg);
 }
 
@@ -434,4 +341,37 @@ void SBS::AddFloor(csRef<iThingFactoryState> dest, const char *texture, float x1
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	
+}
+
+void SBS::Report (const char* msg, ...)
+{
+	va_list arg;
+	va_start (arg, msg);
+	csRef<iReporter> rep (CS_QUERY_REGISTRY (object_reg, iReporter));
+	if (rep)
+		rep->ReportV (CS_REPORTER_SEVERITY_NOTIFY, "sbs", msg, arg);
+	else
+	{
+		csPrintfV (msg, arg);
+		csPrintf ("\n");
+		fflush (stdout);
+	}
+	va_end (arg);
+}
+
+bool SBS::ReportError (const char* msg, ...)
+{
+	va_list arg;
+	va_start (arg, msg);
+	csRef<iReporter> rep (CS_QUERY_REGISTRY (object_reg, iReporter));
+	if (rep)
+		rep->ReportV (CS_REPORTER_SEVERITY_ERROR, "sbs", msg, arg);
+	else
+	{
+		csPrintfV (msg, arg);
+		csPrintf ("\n");
+		fflush (stdout);
+	}
+	va_end (arg);
+	return false;
 }
