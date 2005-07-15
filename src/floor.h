@@ -42,7 +42,7 @@ public:
 	float CrawlSpaceHeight; //height of crawl space
 
 	//functions
-	Floor(int number);
+	Floor(int number, const char *name);
 	~Floor();
 	void SetCameraFloor();
 	void AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);

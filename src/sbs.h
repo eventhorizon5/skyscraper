@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Simulator Core
+	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 1.1 Alpha
 	Copyright ©2005 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
@@ -28,6 +28,7 @@
 //global functions
 bool IsEven(int Number);
 float AutoSize(float n1, float n2, bool iswidth);
+static bool SBSEventHandler(iEvent& Event);
 void Cleanup();
 
 struct iEngine;
@@ -130,6 +131,9 @@ public:
 	void SetStartPosition(float x, float y, float z);
 	void AddWall(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float wallheight, float altitude, float tw, float th);
 	void AddFloor(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th);
+	bool HandleEvent(iEvent& Event);
+	void SetupFrame();
+	void FinishFrame();
 
 private:
 
@@ -137,8 +141,4 @@ private:
 
 	//private functions
 	void PrintBanner();
-	bool SBSEventHandler(iEvent& Event);
-	bool HandleEvent(iEvent& Event);
-	void SetupFrame();
-	void FinishFrame();
 };

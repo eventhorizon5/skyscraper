@@ -27,7 +27,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Floor::Floor(int number)
+Floor::Floor(int number, const char *name)
 {
 	//Set floor's object number
 	FloorNumber = number;
@@ -179,10 +179,14 @@ void Floor::CreateWallBox(const char *texture, float WidthX, float LengthZ, floa
 
 void Floor::EnableFloor()
 {
-
+	Level->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+	Level->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+	Level->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
 }
 
 void Floor::DisableFloor()
 {
-
+	Level->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+	Level->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+	Level->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 }

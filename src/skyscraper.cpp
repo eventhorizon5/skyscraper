@@ -71,7 +71,7 @@ void LoadTritonCenter()
 	
 	Simcore->SetStartPosition(0, 5, -3);
 	
-	testfloor = new Floor(1);
+	testfloor = new Floor(1, "L");
 	testfloor->FloorAltitude = 0;
 	testfloor->FloorHeight = 20;
 	testfloor->CrawlSpaceHeight = 0;

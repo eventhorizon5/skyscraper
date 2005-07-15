@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Simulator Core
+	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 1.1 Alpha
 	Copyright ©2005 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
@@ -123,6 +123,45 @@ void SBS::SlowToFPS(long FrameRate)
 
 void SBS::SetupFrame()
 {
+	// First get elapsed time from the virtual clock.
+	csTicks elapsed_time = vc->GetElapsedTicks ();
+	// Now rotate the camera according to keyboard state
+	float speed = (elapsed_time / 1000.0) * (0.06 * 20);
+
+	if (kbd->GetKeyState (CSKEY_SHIFT))
+	{
+		// If the user is holding down shift, the arrow keys will cause
+		// the camera to strafe up, down, left or right from it's
+		// current position.
+		if (kbd->GetKeyState (CSKEY_RIGHT))
+			c->Move (CS_VEC_RIGHT * 4 * speed);
+		if (kbd->GetKeyState (CSKEY_LEFT))
+			c->Move (CS_VEC_LEFT * 4 * speed);
+		if (kbd->GetKeyState (CSKEY_UP))
+			c->Move (CS_VEC_UP * 4 * speed);
+		if (kbd->GetKeyState (CSKEY_DOWN))
+			c->Move (CS_VEC_DOWN * 4 * speed);
+	}
+	else
+	{
+		// left and right cause the camera to rotate on the global Y
+		// axis; page up and page down cause the camera to rotate on the
+		// _camera's_ X axis (more on this in a second) and up and down
+		// arrows cause the camera to go forwards and backwards.
+		if (kbd->GetKeyState (CSKEY_RIGHT))
+			rotY += speed;
+		if (kbd->GetKeyState (CSKEY_LEFT))
+			rotY -= speed;
+		if (kbd->GetKeyState (CSKEY_PGUP))
+			rotX += speed;
+		if (kbd->GetKeyState (CSKEY_PGDN))
+			rotX -= speed;
+		if (kbd->GetKeyState (CSKEY_UP))
+			c->Move (CS_VEC_FORWARD * 4 * speed);
+		if (kbd->GetKeyState (CSKEY_DOWN))
+			c->Move (CS_VEC_BACKWARD * 4 * speed);
+	}
+
 	// We now assign a new rotation transformation to the camera.  You
 	// can think of the rotation this way: starting from the zero
 	// position, you first rotate "rotY" radians on your Y axis to get
@@ -152,73 +191,26 @@ void SBS::FinishFrame()
 
 bool SBS::HandleEvent(iEvent& Event)
 {
-	// First get elapsed time from the virtual clock.
-	csTicks elapsed_time = vc->GetElapsedTicks ();
-	// Now rotate the camera according to keyboard state
-	float speed = (elapsed_time / 1000.0) * (0.06 * 20);
-	
-	if ((Event.Type == csevKeyboard) && (csKeyEventHelper::GetEventType (&Event) == csKeyEventTypeDown))
-	{
-		if (kbd->GetKeyState (CSKEY_SHIFT))
-		{
-			// If the user is holding down shift, the arrow keys will cause
-			// the camera to strafe up, down, left or right from it's
-			// current position.
-			if (kbd->GetKeyState (CSKEY_RIGHT))
-				c->Move (CS_VEC_RIGHT * 4 * speed);
-			if (kbd->GetKeyState (CSKEY_LEFT))
-				c->Move (CS_VEC_LEFT * 4 * speed);
-			if (kbd->GetKeyState (CSKEY_UP))
-				c->Move (CS_VEC_UP * 4 * speed);
-			if (kbd->GetKeyState (CSKEY_DOWN))
-				c->Move (CS_VEC_DOWN * 4 * speed);
-		}
-		else
-		{
-			// left and right cause the camera to rotate on the global Y
-			// axis; page up and page down cause the camera to rotate on the
-			// _camera's_ X axis (more on this in a second) and up and down
-			// arrows cause the camera to go forwards and backwards.
-			if (kbd->GetKeyState (CSKEY_RIGHT))
-				rotY += speed;
-			if (kbd->GetKeyState (CSKEY_LEFT))
-				rotY -= speed;
-			if (kbd->GetKeyState (CSKEY_PGUP))
-				rotX += speed;
-			if (kbd->GetKeyState (CSKEY_PGDN))
-				rotX -= speed;
-			if (kbd->GetKeyState (CSKEY_UP))
-				c->Move (CS_VEC_FORWARD * 4 * speed);
-			if (kbd->GetKeyState (CSKEY_DOWN))
-				c->Move (CS_VEC_BACKWARD * 4 * speed);
-		}
-	}
-	else if (Event.Type == csevMouseDown)
-	{
-	}
-	else if (Event.Type == csevMouseMove)
-	{
-	}
 	return false;
 }
 
-bool SBS::SBSEventHandler(iEvent& Event)
+static bool SBSEventHandler(iEvent& Event)
 {
 	//Event handler
 	if (Event.Type == csevBroadcast && csCommandEventHelper::GetCode(&Event) == cscmdProcess)
 	{
 		// First get elapsed time from the virtual clock.
-		elapsed_time = vc->GetElapsedTicks ();
+		sbs->elapsed_time = sbs->vc->GetElapsedTicks ();
 
 		//get camera object
-		c = view->GetCamera();
+		sbs->c = sbs->view->GetCamera();
 
-		SetupFrame ();
+		sbs->SetupFrame ();
 		return true;
 	}
 	else if (Event.Type == csevBroadcast && csCommandEventHelper::GetCode(&Event) == cscmdFinalProcess)
 	{
-		FinishFrame ();
+		sbs->FinishFrame ();
 		return true;
 	}
 	else
@@ -244,6 +236,16 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 		CS_REQUEST_REPORTERLISTENER,
 		CS_REQUEST_END))
 		return ReportError ("Couldn't init app!");
+	
+	if (!csInitializer::SetupEventHandler (object_reg, SBSEventHandler))
+		return ReportError ("Couldn't initialize event handler!");
+
+	  // Check for commandline help.
+	if (csCommandLineHelper::CheckHelp (object_reg))
+	{
+	    csCommandLineHelper::Help (object_reg);
+	    return false;
+	}
 
 	vc = CS_QUERY_REGISTRY (object_reg, iVirtualClock);
 	kbd = CS_QUERY_REGISTRY (object_reg, iKeyboardDriver);
@@ -334,13 +336,19 @@ void Cleanup()
 void SBS::AddWall(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float wallheight, float altitude, float tw, float th)
 {
 	//Adds a wall with the specified dimensions
-	
+	dest->AddQuad(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2), csVector3(x1, altitude + wallheight, z1), csVector3(x2, altitude + wallheight, z2));
+	material = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, material);
+	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
 }
 
 void SBS::AddFloor(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
-	
+	dest->AddQuad(csVector3(x1, altitude, z1), csVector3(x2, altitude, z1), csVector3(x1, altitude, z2), csVector3(x2, altitude, z2));
+	material = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, material);
+	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
 }
 
 void SBS::Report (const char* msg, ...)
