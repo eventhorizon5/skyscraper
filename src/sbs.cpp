@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 1.1 Alpha
-	Copyright ©2005 Ryan Thoryk
+	Copyright ©2005-2006 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -110,7 +110,7 @@ float AutoSize(float n1, float n2, bool iswidth)
 void SBS::PrintBanner()
 {
 	Report("Scalable Building Simulator 0.1");
-	Report("Copyright 2004-2005 Ryan Thoryk");
+	Report("Copyright 2004-2006 Ryan Thoryk");
 	Report("This software comes with ABSOLUTELY NO WARRANTY. This is free");
 	Report("software, and you are welcome to redistribute it under certain");
 	Report("conditions. For details, see the file gpl.txt");
@@ -175,7 +175,8 @@ void SBS::SetupFrame()
 	c->SetTransform (ot);
 
 	// Tell 3D driver we're going to display 3D things.
-	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS))
+	//if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER ))
+	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN )) //clear screen also
 		return;
 
 	// Tell the camera to render into the frame buffer.
@@ -191,13 +192,8 @@ void SBS::FinishFrame()
 
 bool SBS::HandleEvent(iEvent& Event)
 {
-	return false;
-}
-
-static bool SBSEventHandler(iEvent& Event)
-{
 	//Event handler
-	if (Event.Type == csevBroadcast && csCommandEventHelper::GetCode(&Event) == cscmdProcess)
+	if (Event.Name == Process)
 	{
 		// First get elapsed time from the virtual clock.
 		sbs->elapsed_time = sbs->vc->GetElapsedTicks ();
@@ -208,15 +204,20 @@ static bool SBSEventHandler(iEvent& Event)
 		sbs->SetupFrame ();
 		return true;
 	}
-	else if (Event.Type == csevBroadcast && csCommandEventHelper::GetCode(&Event) == cscmdFinalProcess)
+	else if (Event.Name == FinalProcess)
 	{
 		sbs->FinishFrame ();
 		return true;
 	}
-	else
-	{
-		return sbs ? sbs->HandleEvent(Event) : false;
-	}
+	return false;
+}
+
+static bool SBSEventHandler(iEvent& Event)
+{
+  if (sbs)
+    return sbs->HandleEvent (Event);
+  else
+    return false;
 }
 
 bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle)
@@ -236,7 +237,13 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 		CS_REQUEST_REPORTERLISTENER,
 		CS_REQUEST_END))
 		return ReportError ("Couldn't init app!");
-	
+
+	FocusGained = csevFocusGained (object_reg);
+	FocusLost = csevFocusLost (object_reg);
+	Process = csevProcess (object_reg);
+	FinalProcess = csevFinalProcess (object_reg);
+	KeyboardDown = csevKeyboardDown (object_reg);
+
 	if (!csInitializer::SetupEventHandler (object_reg, SBSEventHandler))
 		return ReportError ("Couldn't initialize event handler!");
 

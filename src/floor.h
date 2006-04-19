@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Floor Class
 	The Skyscraper Project - Version 1.1 Alpha
-	Copyright ©2005 Ryan Thoryk
+	Copyright ©2005-2006 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -28,11 +28,12 @@ class Floor
 public:
 
 	csRef<iMeshWrapper> Level; //level mesh
-	csRef<iMeshWrapper> CrawlSpace; //crawl space mesh
+		csRef<iMeshObject> Level_object;
+		csRef<iMeshObjectFactory> Level_factory;
+		csRef<iThingFactoryState> Level_state;
+		csRef<iMeshWrapper> CrawlSpace; //crawl space mesh
 	csRef<iMeshWrapper> ShaftsFloor; //walls around shafts
 	csRefArray<iMeshWrapper> PipeShaft; //pipe shaft object array
-	csRef<iThingState> ls;
-	csRef<iThingFactoryState> level_state;
 	bool Enabled; //is floor enabled?
 	//bool StairDataTable;
 	int FloorNumber; //floor number

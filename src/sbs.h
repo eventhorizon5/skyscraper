@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 1.1 Alpha
-	Copyright ©2005 Ryan Thoryk
+	Copyright ©2005-2006 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -138,6 +138,12 @@ public:
 private:
 
 	sbsVector3 startposition;
+	
+	csEventID FocusGained;
+	csEventID FocusLost;
+	csEventID Process;
+	csEventID FinalProcess;
+	csEventID KeyboardDown;
 
 	//private functions
 	void PrintBanner();

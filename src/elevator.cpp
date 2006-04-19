@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Elevator Subsystem Class
 	The Skyscraper Project - Version 1.1 Alpha
-	Copyright ©2005 Ryan Thoryk
+	Copyright ©2005-2006 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -33,32 +33,46 @@ Elevator::Elevator(int number)
 
 	//create object meshes
 	ElevatorMesh = (sbs->engine->CreateSectorWallsMesh (sbs->area, "Elevator"));
-	ElevatorTS = SCF_QUERY_INTERFACE (ElevatorMesh->GetMeshObject (), iThingState);
-	ElevatorState = ElevatorTS->GetFactory ();
+	Elevator_object = ElevatorMesh->GetMeshObject ();
+	Elevator_factory = Elevator_object->GetFactory();
+	Elevator_state = scfQueryInterface<iThingFactoryState> (Elevator_factory);
+	ElevatorMesh->SetZBufMode(CS_ZBUF_USE);
 
 	FloorIndicator = (sbs->engine->CreateSectorWallsMesh (sbs->area, "FloorIndicator"));
-	FloorIndicatorTS = SCF_QUERY_INTERFACE (FloorIndicator->GetMeshObject (), iThingState);
-	FloorIndicatorState = FloorIndicatorTS->GetFactory ();
+	FloorIndicator_object = FloorIndicator->GetMeshObject ();
+	FloorIndicator_factory = FloorIndicator_object->GetFactory();
+	FloorIndicator_state = scfQueryInterface<iThingFactoryState> (FloorIndicator_factory);
+	FloorIndicator->SetZBufMode(CS_ZBUF_USE);
 
 	ElevatorDoorL = (sbs->engine->CreateSectorWallsMesh (sbs->area, "ElevatorDoorL"));
-	ElevatorDoorL_TS = SCF_QUERY_INTERFACE (ElevatorDoorL->GetMeshObject (), iThingState);
-	ElevatorDoorL_State = ElevatorDoorL_TS->GetFactory ();
+	ElevatorDoorL_object = ElevatorDoorL->GetMeshObject ();
+	ElevatorDoorL_factory = ElevatorDoorL_object->GetFactory();
+	ElevatorDoorL_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorL_factory);
+	ElevatorDoorL->SetZBufMode(CS_ZBUF_USE);
 
 	ElevatorDoorR = (sbs->engine->CreateSectorWallsMesh (sbs->area, "ElevatorDoorR"));
-	ElevatorDoorR_TS = SCF_QUERY_INTERFACE (ElevatorDoorR->GetMeshObject (), iThingState);
-	ElevatorDoorR_State = ElevatorDoorR_TS->GetFactory ();
+	ElevatorDoorR_object = ElevatorDoorR->GetMeshObject ();
+	ElevatorDoorR_factory = ElevatorDoorR_object->GetFactory();
+	ElevatorDoorR_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorR_factory);
+	ElevatorDoorR->SetZBufMode(CS_ZBUF_USE);
 
 	Plaque = (sbs->engine->CreateSectorWallsMesh (sbs->area, "Plaque"));
-	PlaqueTS = SCF_QUERY_INTERFACE (Plaque->GetMeshObject (), iThingState);
-	PlaqueState = PlaqueTS->GetFactory ();
+	Plaque_object = Plaque->GetMeshObject ();
+	Plaque_factory = Plaque_object->GetFactory();
+	Plaque_state = scfQueryInterface<iThingFactoryState> (Plaque_factory);
+	Plaque->SetZBufMode(CS_ZBUF_USE);
 
 	CallButtonsUp = (sbs->engine->CreateSectorWallsMesh (sbs->area, "CallButtonsUp"));
-	CallButtonsUp_TS = SCF_QUERY_INTERFACE (CallButtonsUp->GetMeshObject (), iThingState);
-	CallButtonsUp_State = CallButtonsUp_TS->GetFactory ();
+	CallButtonsUp_object = CallButtonsUp->GetMeshObject ();
+	CallButtonsUp_factory = CallButtonsUp_object->GetFactory();
+	CallButtonsUp_state = scfQueryInterface<iThingFactoryState> (CallButtonsUp_factory);
+	CallButtonsUp->SetZBufMode(CS_ZBUF_USE);
 
 	CallButtonsDown = (sbs->engine->CreateSectorWallsMesh (sbs->area, "CallButtonsDown"));
-	CallButtonsDown_TS = SCF_QUERY_INTERFACE (CallButtonsDown->GetMeshObject (), iThingState);
-	CallButtonsDown_State = CallButtonsDown_TS->GetFactory ();
+	CallButtonsDown_object = CallButtonsDown->GetMeshObject ();
+	CallButtonsDown_factory = CallButtonsDown_object->GetFactory();
+	CallButtonsDown_state = scfQueryInterface<iThingFactoryState> (CallButtonsDown_factory);
+	CallButtonsDown->SetZBufMode(CS_ZBUF_USE);
 
 	/*Set ElevatorMesh = Scene.CreateMeshBuilder("Elevator" + Str$(Number))
 	Set FloorIndicator = Scene.CreateMeshBuilder("FloorIndicator" + Str$(Number))
@@ -236,44 +250,44 @@ void Elevator::MoveElevatorToFloor()
 
 void Elevator::AddWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(ElevatorState, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWall(Elevator_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
 {
-   	sbs->AddFloor(ElevatorState, texture, x1, z1, x2, z2, voffset + GetPosition().y, tw, th);
+   	sbs->AddFloor(Elevator_state, texture, x1, z1, x2, z2, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddFloorIndicator(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(FloorIndicatorState, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, 0, 0);
+	sbs->AddWall(FloorIndicator_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, 0, 0);
 }
 
 void Elevator::AddButtonPanel(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(ElevatorState, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWall(Elevator_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddPanels(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(ElevatorState, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWall(Elevator_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddDoors(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(ElevatorDoorL_State, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
-	//sbs->AddWall(ElevatorDoorR_State, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWall(ElevatorDoorL_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	//sbs->AddWall(ElevatorDoorR_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(PlaqueState, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWall(Plaque_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddCallButtons(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(CallButtonsUp_State, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
-	//sbs->AddWall(CallButtonsDown_State, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWall(CallButtonsUp_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	//sbs->AddWall(CallButtonsDown_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
 }
 
 csVector3 Elevator::GetPosition()

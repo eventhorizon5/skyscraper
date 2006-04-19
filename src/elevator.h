@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Elevator Subsystem Class
 	The Skyscraper Project - Version 1.1 Alpha
-	Copyright ©2005 Ryan Thoryk
+	Copyright ©2005-2006 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -69,26 +69,33 @@ public:
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
-		csRef<iThingState> ElevatorTS;
-		csRef<iThingFactoryState> ElevatorState;
+		csRef<iMeshObject> Elevator_object;
+		csRef<iMeshObjectFactory> Elevator_factory;
+		csRef<iThingFactoryState> Elevator_state;
 	csRef<iMeshWrapper> FloorIndicator; //floor indicator object
-		csRef<iThingState> FloorIndicatorTS;
-		csRef<iThingFactoryState> FloorIndicatorState;
+		csRef<iMeshObject> FloorIndicator_object;
+		csRef<iMeshObjectFactory> FloorIndicator_factory;
+		csRef<iThingFactoryState> FloorIndicator_state;
 	csRef<iMeshWrapper> ElevatorDoorL; //left inside door
-		csRef<iThingState> ElevatorDoorL_TS;
-		csRef<iThingFactoryState> ElevatorDoorL_State;
+		csRef<iMeshObject> ElevatorDoorL_object;
+		csRef<iMeshObjectFactory> ElevatorDoorL_factory;
+		csRef<iThingFactoryState> ElevatorDoorL_state;
 	csRef<iMeshWrapper> ElevatorDoorR; //right inside door
-		csRef<iThingState> ElevatorDoorR_TS;
-		csRef<iThingFactoryState> ElevatorDoorR_State;
+		csRef<iMeshObject> ElevatorDoorR_object;
+		csRef<iMeshObjectFactory> ElevatorDoorR_factory;
+		csRef<iThingFactoryState> ElevatorDoorR_state;
 	csRef<iMeshWrapper> Plaque; //plaque object
-		csRef<iThingState> PlaqueTS;
-		csRef<iThingFactoryState> PlaqueState;
+		csRef<iMeshObject> Plaque_object;
+		csRef<iMeshObjectFactory> Plaque_factory;
+		csRef<iThingFactoryState> Plaque_state;
 	csRef<iMeshWrapper> CallButtonsUp; //up call button
-		csRef<iThingState> CallButtonsUp_TS;
-		csRef<iThingFactoryState> CallButtonsUp_State;
+		csRef<iMeshObject> CallButtonsUp_object;
+		csRef<iMeshObjectFactory> CallButtonsUp_factory;
+		csRef<iThingFactoryState> CallButtonsUp_state;
 	csRef<iMeshWrapper> CallButtonsDown; //down call button
-		csRef<iThingState> CallButtonsDown_TS;
-		csRef<iThingFactoryState> CallButtonsDown_State;
+		csRef<iMeshObject> CallButtonsDown_object;
+		csRef<iMeshObjectFactory> CallButtonsDown_factory;
+		csRef<iThingFactoryState> CallButtonsDown_state;
 	csRefArray<iMeshWrapper> Buttons; //elevator button array
 
 	//Internal elevator simulation data
