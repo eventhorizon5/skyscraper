@@ -72,10 +72,10 @@ void LoadTritonCenter()
 	Simcore->SetStartPosition(0, 5, -3);
 	
 	testfloor = new Floor(1, "L");
-	testfloor->FloorAltitude = 0;
-	testfloor->FloorHeight = 20;
-	testfloor->CrawlSpaceHeight = 0;
-	testfloor->CreateWallBox("stone", 10, 10, 0, 0, 0, false, 0, 0);
+	testfloor->Altitude = 0;
+	testfloor->Height = 20;
+	testfloor->InterfloorHeight = 0;
+	testfloor->AddWall("stone", 0, 0, 10, 0, 10, 0, 0, 0);
 
 	//Add lights
 	Simcore->AddLight(0, -3, 5, 0, 10, 1, 0, 0);

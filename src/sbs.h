@@ -88,6 +88,13 @@ public:
     float rotX;
 	csTicks elapsed_time;
 
+	//Building information
+	csString BuildingName;
+	csString BuildingDesigner;
+	csString BuildingLocation;
+	csString BuildingDescription;
+	csString BuildingVersion;
+
 	//Internal data
     float Gravity; //gravity variable for physics algorithms
     bool IsRunning; //is sim engine running?
@@ -109,6 +116,7 @@ public:
     int FrameRate; //max frame rate
 	bool EnableCollisions; //turns collisions on/off
     float CameraDefAltitude; //default vertical offset of camera from each floor
+	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
 
     //Camera initialization
     int CameraStartFloor; //starting floor
@@ -134,6 +142,7 @@ public:
 	bool HandleEvent(iEvent& Event);
 	void SetupFrame();
 	void FinishFrame();
+	void CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th);
 
 private:
 

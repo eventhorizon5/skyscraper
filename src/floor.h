@@ -31,33 +31,34 @@ public:
 		csRef<iMeshObject> Level_object;
 		csRef<iMeshObjectFactory> Level_factory;
 		csRef<iThingFactoryState> Level_state;
-		csRef<iMeshWrapper> CrawlSpace; //crawl space mesh
-	csRef<iMeshWrapper> ShaftsFloor; //walls around shafts
-	csRefArray<iMeshWrapper> PipeShaft; //pipe shaft object array
-	bool Enabled; //is floor enabled?
-	//bool StairDataTable;
-	int FloorNumber; //floor number
-	csString FloorName; //floor name
-	float FloorAltitude; //floor altitude
-	float FloorHeight; //floor height (not including crawl space height)
-	float CrawlSpaceHeight; //height of crawl space
+
+	csRef<iMeshWrapper> Interfloor; //interfloor mesh
+		csRef<iMeshObject> Interfloor_object;
+		csRef<iMeshObjectFactory> Interfloor_factory;
+		csRef<iThingFactoryState> Interfloor_state;
+
+	int Number; //floor number
+	csString Name; //floor name
+	csString ID;
+	csString FloorType;
+	csString Description;
+	float Altitude; //floor altitude
+	float Height; //floor height (not including interfloor height)
+	float InterfloorHeight; //height of interfloor area
+	bool IsEnabled; //is floor enabled?
 
 	//functions
 	Floor(int number, const char *name);
 	~Floor();
 	void SetCameraFloor();
 	void AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
-	void AddCrawlSpaceFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
+	void AddInterfloorFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
 	void AddWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void AddCrawlSpaceWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void CreateWallBox(const char *texture, float WidthX, float LengthZ, float CenterX, float CenterZ, float heightchange, bool CSpace, float tw, float th);
-	void EnableFloor();
-	void DisableFloor();
+	void AddInterfloorWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void Enabled(bool value);
+	void AddAutoFloor(const char *texture);
+	float FullHeight();
 
 private:
-	csRefArray<iMeshWrapper> CrawlSpaceShaft;
-	csRefArray<iMeshWrapper> Shafts;
-	csRefArray<iMeshWrapper> Stairs;
-	csRefArray<iMeshWrapper> FakeStairDoor;
 	csRefArray<iMeshWrapper> Objects;
 };

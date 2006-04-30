@@ -390,3 +390,30 @@ bool SBS::ReportError (const char* msg, ...)
 	va_end (arg);
 	return false;
 }
+
+void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th)
+{
+	iMaterialWrapper* tm;
+	float x1;
+	float x2;
+	float z1;
+	float z2;
+
+	x1 = CenterX - (WidthX / 2);
+	x2 = CenterX + (WidthX / 2);
+	z1 = CenterZ - (LengthZ / 2);
+	z2 = CenterZ + (LengthZ / 2);
+
+	dest->AddInsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+	dest->AddOutsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+	
+//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
+
+}
