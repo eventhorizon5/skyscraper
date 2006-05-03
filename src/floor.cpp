@@ -24,8 +24,10 @@
 #include <crystalspace.h>
 #include "floor.h"
 #include "sbs.h"
+#include "camera.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
+extern Camera *c; //external pointer to the camera
 
 Floor::Floor(int number, const char *name)
 {
@@ -60,8 +62,8 @@ void Floor::SetCameraFloor()
 {
 	//Moves camera to specified floor (sets altitude to the floor's altitude plus CameraAltitude)
 	
-	csVector3 camlocation = sbs->view->GetCamera()->GetTransform().GetOrigin();
-	sbs->view->GetCamera()->GetTransform().SetOrigin(csVector3(camlocation.x, Altitude + sbs->CameraDefAltitude, camlocation.z));
+	csVector3 camlocation = c->GetPosition();
+	c->SetPosition(csVector3(camlocation.x, Altitude + c->DefaultAltitude, camlocation.z));
 }
 
 void Floor::AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
@@ -80,9 +82,7 @@ void Floor::AddFloor(const char *texture, float x1, float z1, float x2, float z2
 	if (th == 0)
 		th = AutoSize(z1, z2, false);
 
-	float altitude = Altitude + voffset;
-
-	sbs->AddFloor(Level_state, texture, x1, z1, x2, z2, altitude, tw, th);
+	sbs->AddFloorMain(Level_state, texture, x1, z1, x2, z2, Altitude + voffset, tw, th);
 }
 
 void Floor::AddInterfloorFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
@@ -101,18 +101,13 @@ void Floor::AddInterfloorFloor(const char *texture, float x1, float z1, float x2
 	if (th == 0)
 		th = AutoSize(z1, z2, false);
 
-	float altitude = Altitude + Height + voffset;
-
-	sbs->AddFloor(Interfloor_state, texture, x1, z1, x2, z2, altitude, tw, th);
+	sbs->AddFloorMain(Interfloor_state, texture, x1, z1, x2, z2, Altitude + Height + voffset, tw, th);
 }
 
-void Floor::AddWall(const char *texture, float x1, float z1, float x2, float z2, float heightchange, float voffset, float tw, float th)
+void Floor::AddWall(const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds a wall with the specified dimensions
 	
-	float wallheight = heightchange + Height;
-	float altitude = Altitude + voffset;
-
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
 	x2 = x2 * sbs->HorizScale;
@@ -125,18 +120,15 @@ void Floor::AddWall(const char *texture, float x1, float z1, float x2, float z2,
 	if ((tw == 0) && (x1 == x2))
 		tw = AutoSize(z1, z2, true);
 	if (th == 0)
-		th = AutoSize(0, wallheight, false);
+		th = AutoSize(0, height_in1, false);
 	
-	sbs->AddWall(Level_state, texture, x1, z1, x2, z2, wallheight, altitude, tw, th);
+	sbs->AddWallMain(Level_state, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th);
 }
 
-void Floor::AddInterfloorWall(const char *texture, float x1, float z1, float x2, float z2, float heightchange, float voffset, float tw, float th)
+void Floor::AddInterfloorWall(const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds an interfloor wall with the specified dimensions
 	
-	float wallheight = heightchange + InterfloorHeight;
-	float altitude = Altitude + Height + voffset;
-
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
 	x2 = x2 * sbs->HorizScale;
@@ -149,9 +141,9 @@ void Floor::AddInterfloorWall(const char *texture, float x1, float z1, float x2,
 	if ((tw == 0) && (x1 == x2))
 		tw = AutoSize(z1, z2, true);
 	if (th == 0)
-		th = AutoSize(0, wallheight, false);
+		th = AutoSize(0, height_in1, false);
 	
-	sbs->AddWall(Interfloor_state, texture, x1, z1, x2, z2, wallheight, altitude, tw, th);
+	sbs->AddWallMain(Interfloor_state, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th);
 }
 
 void Floor::Enabled(bool value)

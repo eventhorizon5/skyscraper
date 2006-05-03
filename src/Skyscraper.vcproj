@@ -4,7 +4,6 @@
 	Version="8.00"
 	Name="Skyscraper"
 	ProjectGUID="{899501B5-1571-4301-B4D0-5FAADAE2A607}"
-	SignManifests="true"
 	>
 	<Platforms>
 		<Platform
@@ -217,6 +216,10 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath=".\camera.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\elevator.cpp"
 				>
 				<FileConfiguration
@@ -342,11 +345,11 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath=".\elevator.h"
+				RelativePath=".\camera.h"
 				>
 			</File>
 			<File
-				RelativePath=".\fileio.h"
+				RelativePath=".\elevator.h"
 				>
 			</File>
 			<File

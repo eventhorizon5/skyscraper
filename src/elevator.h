@@ -32,8 +32,6 @@ public:
 	bool PauseQueueSearch; //pause queue processor
 	float ElevatorSpeed; //maximum elevator speed
 	bool ElevatorSync; //true if user should move with elevator
-	//Public ElevatorMusic As TVSoundWave3D
-	//Public ElevatorSounds As TVSoundWave3D
 	bool MoveElevator; //Tells elevator to start going to specified floor
     int MoveElevatorFloor; //floor to move elevator to
 	int GotoFloor; //floor to go to

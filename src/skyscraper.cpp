@@ -25,10 +25,12 @@
 #include "sbs.h"
 #include "floor.h"
 #include "elevator.h"
+#include "camera.h"
 #include "globals.h"
 
 SBS *Simcore;
 Floor *testfloor;
+extern Camera *c; //external pointer to the camera
 
 int main (int argc, char* argv[])
 {
@@ -37,13 +39,6 @@ int main (int argc, char* argv[])
 	//Create new simulator object
 	Simcore = new SBS();
 	
-	//set default starting elevator
-	Simcore->ElevatorNumber = 1;
-
-	//set frame rate
-	Simcore->FrameRate = 30;
-	Simcore->FrameLimiter = true;
-
 	if (!Simcore->Initialize(argc, argv, "Skyscraper 1.1 Alpha"))
 	{
 		Simcore->ReportError("Error initializing system!");
@@ -69,13 +64,11 @@ void LoadTritonCenter()
 	//support is not implemented yet
 	Simcore->LoadTexture("stone", "/lib/std/stone4.gif");
 	
-	Simcore->SetStartPosition(0, 5, -3);
-	
 	testfloor = new Floor(1, "L");
 	testfloor->Altitude = 0;
 	testfloor->Height = 20;
 	testfloor->InterfloorHeight = 0;
-	testfloor->AddWall("stone", 0, 0, 10, 0, 10, 0, 0, 0);
+	testfloor->AddWall("stone", 0, 0, 10, 0, 10, 10, 0, 0, 0, 0);
 
 	//Add lights
 	Simcore->AddLight(0, -3, 5, 0, 10, 1, 0, 0);

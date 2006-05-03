@@ -20,24 +20,33 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "fileio.h"
+#include <crystalspace.h>
+#include "sbs.h"
+#include "camera.h"
+#include "floor.h"
+#include "elevator.h"
 
-void LoadGlobals(const char * filename)
+extern SBS *sbs; //external pointer to the SBS engine
+extern Camera *c; //external pointer to the camera
+
+float AltitudeCheck;
+
+int SBS::LoadBuilding(const char * filename)
 {
-
+	return 0;
 }
 
-void LoadTextures(const char * filename)
+int SBS::LoadDataFile(const char * filename)
 {
-
+	return 0;
 }
 
-void LoadBuilding(const char * filename)
+long SBS::GetLines(const char * filename)
 {
-
+	return 0;
 }
 
-void LoadElevators(const char * filename)
+bool SBS::FileExists(const char * filename)
 {
-
+	return true;
 }

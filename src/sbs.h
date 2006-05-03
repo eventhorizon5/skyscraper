@@ -82,10 +82,7 @@ public:
 	iMaterialWrapper* material;
 	iLightList* ll;
 	iSector* area;
-	iCamera* c;
 
-	float rotY;
-    float rotX;
 	csTicks elapsed_time;
 
 	//Building information
@@ -104,26 +101,28 @@ public:
 	int Elevators; //number of elevators
 	int PipeShafts; //number of pipe shafts
 	int StairsNum; //number of stairwells
+	csArray<Floor*> FloorArray; //pointer array to floor objects
+	csArray<Elevator*> ElevatorArray; //pointer array to elevator objects
 	bool RenderOnly; //skip sim processing and only render graphics
     bool InputOnly; //skip sim processing and only run input and rendering code
     bool IsFalling; //make user fall
-    bool CameraFloor; //floor camera's on
+	float FallRate; //falling rate
     bool InStairwell; //true if user is in a stairwell
+	bool InElevator; //true is user is in an elevator
     int ElevatorNumber; //number of currently selected elevator
-	//int SoundDivisor;
-	//int SoundMaxDistance;
 	bool FrameLimiter; //frame limiter toggle
     int FrameRate; //max frame rate
+	float FPSModifier; //modification value for FPS changes
+	bool FrameSync; //synchronize movement to frame rate
 	bool EnableCollisions; //turns collisions on/off
-    float CameraDefAltitude; //default vertical offset of camera from each floor
 	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
+	float Feet; //feet scale value
+	csStringArray UserVariable;
 
-    //Camera initialization
-    int CameraStartFloor; //starting floor
-	float CameraStartPositionX;
-	float CameraStartPositionZ;
-//	D3DVECTOR CameraStartDirection;
-//	D3DVECTOR CameraStartRotation;
+	//File I/O
+	csString BuildingFile;
+	csArray<csString> BuildingData;
+	long FileLines;
 
 	//public functions
 	SBS();
@@ -136,18 +135,43 @@ public:
 	bool Initialize(int argc, const char* const argv[], const char *windowtitle);
  	void Start();
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
-	void SetStartPosition(float x, float y, float z);
-	void AddWall(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float wallheight, float altitude, float tw, float th);
-	void AddFloor(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th);
+	void AddWallMain(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
+	void AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th);
 	bool HandleEvent(iEvent& Event);
 	void SetupFrame();
 	void FinishFrame();
 	void CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th);
+	void InitMeshes();
+
+	//file loader functions
+	int LoadBuilding(const char * filename);
+	int LoadDataFile(const char * filename);
+	long GetLines(const char * filename);
+	bool FileExists(const char * filename);
+
+	//Meshes
+	csRef<iMeshWrapper> Buildings; //building mesh
+		csRef<iMeshObject> Buildings_object;
+		csRef<iMeshObjectFactory> Buildings_factory;
+		csRef<iThingFactoryState> Buildings_state;
+
+	csRef<iMeshWrapper> External; //external mesh
+		csRef<iMeshObject> External_object;
+		csRef<iMeshObjectFactory> External_factory;
+		csRef<iThingFactoryState> External_state;
+
+	csRef<iMeshWrapper> Landscape; //landscape mesh
+		csRef<iMeshObject> Landscape_object;
+		csRef<iMeshObjectFactory> Landscape_factory;
+		csRef<iThingFactoryState> Landscape_state;
+
+	csRef<iMeshWrapper> ColumnFrame; //column frame mesh
+		csRef<iMeshObject> ColumnFrame_object;
+		csRef<iMeshObjectFactory> ColumnFrame_factory;
+		csRef<iThingFactoryState> ColumnFrame_state;
 
 private:
 
-	sbsVector3 startposition;
-	
 	csEventID FocusGained;
 	csEventID FocusLost;
 	csEventID Process;

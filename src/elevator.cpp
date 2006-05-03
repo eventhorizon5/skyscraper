@@ -24,8 +24,10 @@
 #include <crystalspace.h>
 #include "elevator.h"
 #include "sbs.h"
+#include "camera.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
+extern Camera *c; //external pointer to the camera
 
 Elevator::Elevator(int number)
 {
@@ -250,48 +252,48 @@ void Elevator::MoveElevatorToFloor()
 
 void Elevator::AddWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(Elevator_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
 {
-   	sbs->AddFloor(Elevator_state, texture, x1, z1, x2, z2, voffset + GetPosition().y, tw, th);
+   	sbs->AddFloorMain(Elevator_state, texture, x1, z1, x2, z2, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddFloorIndicator(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(FloorIndicator_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, 0, 0);
+	sbs->AddWallMain(FloorIndicator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, 0, 0);
 }
 
 void Elevator::AddButtonPanel(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(Elevator_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddPanels(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(Elevator_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddDoors(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(ElevatorDoorL_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
-	//sbs->AddWall(ElevatorDoorR_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWallMain(ElevatorDoorL_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
+	//sbs->AddWallMain(ElevatorDoorR_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(Plaque_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWallMain(Plaque_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddCallButtons(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
-	sbs->AddWall(CallButtonsUp_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
-	//sbs->AddWall(CallButtonsDown_state, texture, x1, z1, x2, z2, height, voffset + GetPosition().y, tw, th);
+	sbs->AddWallMain(CallButtonsUp_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
+	//sbs->AddWallMain(CallButtonsDown_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
 csVector3 Elevator::GetPosition()
 {
-	//don't know how to get the mesh's vector position
+	//don't know how to get the mesh's position
 	return (0, 0, 0);
 }

@@ -53,8 +53,8 @@ public:
 	void SetCameraFloor();
 	void AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
 	void AddInterfloorFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
-	void AddWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void AddInterfloorWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void AddWall(const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th);
+	void AddInterfloorWall(const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th);
 	void Enabled(bool value);
 	void AddAutoFloor(const char *texture);
 	float FullHeight();

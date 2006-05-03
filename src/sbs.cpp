@@ -23,19 +23,40 @@
 
 #include <crystalspace.h>
 #include "sbs.h"
+#include "camera.h"
 
 CS_IMPLEMENT_APPLICATION
 
 SBS *sbs; //self reference
+Camera *c; //camera object
+
 iObjectRegistry* object_reg;
 
 SBS::SBS()
 {
     sbs = this;
+
+	//Set default horizontal scaling value
+	HorizScale = 1;
+
+	//Set feet scale value
+	Feet = 0.5;
+
+	//Set default starting elevator
+	ElevatorNumber = 1;
+
+	//Set default frame rate
+	FrameRate = 30;
+	FrameLimiter = true;
+
 }
 
 SBS::~SBS()
 {
+	//engine deconstructor
+	delete c;
+	c = 0;
+	sbs = 0;
 }
 
 void SBS::Start()
@@ -43,15 +64,44 @@ void SBS::Start()
 	//Post-init startup code goes here, before the runloop
 	engine->Prepare();
 
-	//set up initial camera position
+	//set up viewport
 	view = csPtr<iView>(new csView (engine, g3d));
-	view->GetCamera()->SetSector(area);
-	view->GetCamera()->GetTransform().SetOrigin(csVector3(startposition.x, startposition.y, startposition.z));
 	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
+
+	//load camera object
+	c = new Camera();
 
 	//set main simulation values
 	InputOnly = false;
 	RenderOnly = false;
+	IsRunning = true;
+	EnableCollisions = true;
+
+	//clear user variables
+	UserVariable.DeleteAll;
+	UserVariable.SetSize(256);
+
+	//load building data file
+
+	//move camera to start location
+	c->SetToStartPosition;
+	c->SetToStartDirection;
+	c->SetToStartRotation;
+
+	//turn on main objects
+	//EnableBuildings true;
+	//EnableLandscape true;
+	//EnableExternal true;
+	//EnableColumnFrame true;
+
+	//turn off floors
+	for (int i=-Basements; i<=TotalFloors; i++)
+		FloorArray.Get(i)->Enabled(false);
+	
+	//turn on first/lobby floor
+	FloorArray.Get(1)->Enabled(true);
+
+	//create skybox
 
 	//start simulation
 	csDefaultRunLoop (object_reg);
@@ -149,30 +199,18 @@ void SBS::SetupFrame()
 		// _camera's_ X axis (more on this in a second) and up and down
 		// arrows cause the camera to go forwards and backwards.
 		if (kbd->GetKeyState (CSKEY_RIGHT))
-			rotY += speed;
+			c->Rotate(CS_VEC_UP * speed);
 		if (kbd->GetKeyState (CSKEY_LEFT))
-			rotY -= speed;
+			c->Rotate(CS_VEC_DOWN * speed);
 		if (kbd->GetKeyState (CSKEY_PGUP))
-			rotX += speed;
+			c->Rotate(CS_VEC_RIGHT * speed);
 		if (kbd->GetKeyState (CSKEY_PGDN))
-			rotX -= speed;
+			c->Rotate(CS_VEC_LEFT * speed);
 		if (kbd->GetKeyState (CSKEY_UP))
 			c->Move (CS_VEC_FORWARD * 4 * speed);
 		if (kbd->GetKeyState (CSKEY_DOWN))
 			c->Move (CS_VEC_BACKWARD * 4 * speed);
 	}
-
-	// We now assign a new rotation transformation to the camera.  You
-	// can think of the rotation this way: starting from the zero
-	// position, you first rotate "rotY" radians on your Y axis to get
-	// the first rotation.  From there you rotate "rotX" radians on the
-	// your X axis to get the final rotation.  We multiply the
-	// individual rotations on each axis together to get a single
-	// rotation matrix.  The rotations are applied in right to left
-	// order .
-	csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
-	csOrthoTransform ot (rot, c->GetTransform().GetOrigin ());
-	c->SetTransform (ot);
 
 	// Tell 3D driver we're going to display 3D things.
 	//if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER ))
@@ -196,17 +234,14 @@ bool SBS::HandleEvent(iEvent& Event)
 	if (Event.Name == Process)
 	{
 		// First get elapsed time from the virtual clock.
-		sbs->elapsed_time = sbs->vc->GetElapsedTicks ();
+		elapsed_time = vc->GetElapsedTicks ();
 
-		//get camera object
-		sbs->c = sbs->view->GetCamera();
-
-		sbs->SetupFrame ();
+		SetupFrame ();
 		return true;
 	}
 	else if (Event.Name == FinalProcess)
 	{
-		sbs->FinishFrame ();
+		FinishFrame ();
 		return true;
 	}
 	return false;
@@ -287,9 +322,6 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	// not to need this.
 		engine->SetLightingCacheMode (0);
 
-	// these are used store the current orientation of the camera
-	rotY = rotX = 0;
-
 	//create 3D environment
 	area = engine->CreateSector("area");
 
@@ -316,13 +348,6 @@ void SBS::AddLight(const char *name, float x, float y, float z, float radius, fl
 	ll->Add(light);
 }
 
-void SBS::SetStartPosition(float x, float y, float z)
-{
-	startposition.x = x;
-	startposition.y = y;
-	startposition.z = z;
-}
-
 bool IsEven(int Number)
 {
     //Determine if the passed number is even.
@@ -340,19 +365,19 @@ void Cleanup()
 	csInitializer::DestroyApplication (object_reg);
 }
 
-void SBS::AddWall(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float wallheight, float altitude, float tw, float th)
+void SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
 {
 	//Adds a wall with the specified dimensions
-	dest->AddQuad(csVector3(x1, altitude, z1), csVector3(x2, altitude, z2), csVector3(x1, altitude + wallheight, z1), csVector3(x2, altitude + wallheight, z2));
+	dest->AddQuad(csVector3(Feet * x1, Feet * altitude1, Feet * z1), csVector3(Feet * x1, Feet * (altitude1 + height_in1), Feet * z1), csVector3(Feet * x2, Feet * (altitude2 + height_in2), Feet * z2), csVector3(Feet * x2, Feet * altitude2, Feet * z2));
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, material);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
 }
 
-void SBS::AddFloor(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th)
+void SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
-	dest->AddQuad(csVector3(x1, altitude, z1), csVector3(x2, altitude, z1), csVector3(x1, altitude, z2), csVector3(x2, altitude, z2));
+	dest->AddQuad(csVector3(Feet * x1, Feet * altitude, Feet * z1), csVector3(Feet * x1, Feet * altitude, Feet * z2), csVector3(Feet * x2, Feet * altitude, Feet * z2), csVector3(Feet * x2, Feet * altitude, Feet * z1));
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, material);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
@@ -416,4 +441,14 @@ void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, fl
 	
 //*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
 
+}
+
+void SBS::InitMeshes()
+{
+	//initialize floor and elevator object container arrays
+	FloorArray.DeleteAll;
+	FloorArray.SetSize(Basements + TotalFloors);
+	ElevatorArray.DeleteAll;
+	ElevatorArray.SetSize(Elevators);
+	
 }
