@@ -26,14 +26,14 @@
 class Camera
 {
 public:
-	float DefaultAltitude; //default vertical offset of camera from each floor
+	double DefaultAltitude; //default vertical offset of camera from each floor
 	int CurrentFloor; //floor camera's on
-	float OriginalPosition;
+	double OriginalPosition;
 	int StartFloor; //Starting floor
-	float StartPositionX; //starting position on X axis
-	float StartPositionZ; //starting position on Z axis
-	float rotY;
-    float rotX;
+	double StartPositionX; //starting position on X axis
+	double StartPositionZ; //starting position on Z axis
+	double rotY;
+    double rotX;
 
 	//functions
 	Camera();

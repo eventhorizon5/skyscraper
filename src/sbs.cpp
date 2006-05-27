@@ -78,15 +78,15 @@ void SBS::Start()
 	EnableCollisions = true;
 
 	//clear user variables
-	UserVariable.DeleteAll;
+	UserVariable.DeleteAll();
 	UserVariable.SetSize(256);
 
 	//load building data file
 
 	//move camera to start location
-	c->SetToStartPosition;
-	c->SetToStartDirection;
-	c->SetToStartRotation;
+	c->SetToStartPosition();
+	c->SetToStartDirection();
+	c->SetToStartRotation();
 
 	//turn on main objects
 	//EnableBuildings true;
@@ -113,7 +113,7 @@ void SBS::Wait(long milliseconds)
 
 }
 
-float AutoSize(float n1, float n2, bool iswidth)
+double AutoSize(double n1, double n2, bool iswidth)
 {
 //Texture autosizing formulas
 //If any of the texture parameters are 0, then automatically size the
@@ -176,7 +176,7 @@ void SBS::SetupFrame()
 	// First get elapsed time from the virtual clock.
 	csTicks elapsed_time = vc->GetElapsedTicks ();
 	// Now rotate the camera according to keyboard state
-	float speed = (elapsed_time / 1000.0) * (0.06 * 20);
+	double speed = (elapsed_time / 1000.0) * (0.06 * 20);
 
 	if (kbd->GetKeyState (CSKEY_SHIFT))
 	{
@@ -341,7 +341,7 @@ bool SBS::LoadTexture(const char *name, const char *filename)
 	return true;
 }
 
-void SBS::AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b)
+void SBS::AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b)
 {
 	ll = area->GetLights();
 	light = engine->CreateLight(name, csVector3(x, y, z), radius, csColor(r, g, b));
@@ -365,7 +365,7 @@ void Cleanup()
 	csInitializer::DestroyApplication (object_reg);
 }
 
-void SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
+void SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th)
 {
 	//Adds a wall with the specified dimensions
 	dest->AddQuad(csVector3(Feet * x1, Feet * altitude1, Feet * z1), csVector3(Feet * x1, Feet * (altitude1 + height_in1), Feet * z1), csVector3(Feet * x2, Feet * (altitude2 + height_in2), Feet * z2), csVector3(Feet * x2, Feet * altitude2, Feet * z2));
@@ -374,7 +374,7 @@ void SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, float
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
 }
 
-void SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th)
+void SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude, double tw, double th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	dest->AddQuad(csVector3(Feet * x1, Feet * altitude, Feet * z1), csVector3(Feet * x1, Feet * altitude, Feet * z2), csVector3(Feet * x2, Feet * altitude, Feet * z2), csVector3(Feet * x2, Feet * altitude, Feet * z1));
@@ -416,13 +416,35 @@ bool SBS::ReportError (const char* msg, ...)
 	return false;
 }
 
-void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th)
+void SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th)
 {
+	//create 4 walls
+	
 	iMaterialWrapper* tm;
-	float x1;
-	float x2;
-	float z1;
-	float z2;
+	
+	dest->AddInsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+	dest->AddOutsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+	
+//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
+
+}
+
+void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th)
+{
+	//create 4 walls from a central point
+	
+	iMaterialWrapper* tm;
+	double x1;
+	double x2;
+	double z1;
+	double z2;
 
 	x1 = CenterX - (WidthX / 2);
 	x2 = CenterX + (WidthX / 2);
@@ -446,9 +468,112 @@ void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, fl
 void SBS::InitMeshes()
 {
 	//initialize floor and elevator object container arrays
-	FloorArray.DeleteAll;
+	FloorArray.DeleteAll();
 	FloorArray.SetSize(Basements + TotalFloors);
-	ElevatorArray.DeleteAll;
+	ElevatorArray.DeleteAll();
 	ElevatorArray.SetSize(Elevators);
 	
+}
+
+/*void SBS::AddPolygonWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4, double FloorHeight, double tw, double th, bool IsExternal)
+{
+	//Adds a wall from specified vertices
+
+	dest->AddQuad(csVector3(Feet * x1, Feet * altitude1, Feet * z1), csVector3(Feet * x1, Feet * (altitude1 + height_in1), Feet * z1), csVector3(Feet * x2, Feet * (altitude2 + height_in2), Feet * z2), csVector3(Feet * x2, Feet * altitude2, Feet * z2));
+	material = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, material);
+	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+}
+*/
+
+void SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double FloorHeight, double tw, double th, bool IsExternal)
+{
+	//Adds a triangular wall with the specified dimensions
+	//***note - possibly replace this with the AddPolygonWall function
+
+	//Set horizontal scaling
+	x1 = x1 * HorizScale;
+	x2 = x2 * HorizScale;
+	x3 = x3 * HorizScale;
+	z1 = z1 * HorizScale;
+	z2 = z2 * HorizScale;
+	z3 = z3 * HorizScale;
+
+	dest->AddTriangle(csVector3(Feet * x1, Feet * y1, Feet * z1), csVector3(Feet * x2, Feet * y2, Feet * z2), csVector3(Feet * x3, Feet * y3, Feet * z3));
+	material = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, material);
+	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+}
+
+const char * SBS::Calc(const char *expression)
+{
+	//performs a calculation operation on a string
+	//for example, the string "1 + 1" would output to "2"
+
+	int temp1;
+	int decimal, sign;
+	csString tmpcalc = expression;
+	tmpcalc.Trim();
+
+	//general math
+	temp1 = tmpcalc.Find("+", 0);
+	if (temp1 > 1)
+	{
+		tmpcalc = _fcvt(atof(tmpcalc.Slice(0, temp1 - 1).GetData()) + atof(tmpcalc.Slice(temp1 + 1).GetData()), 7, &decimal, &sign);
+		return tmpcalc;
+	}
+	temp1 = tmpcalc.Find("-", 0);
+	if (temp1 > 1)
+	{
+		tmpcalc = _fcvt(atof(tmpcalc.Slice(0, temp1 - 1).GetData()) - atof(tmpcalc.Slice(temp1 + 1).GetData()), 7, &decimal, &sign);
+		return tmpcalc;
+	}
+	temp1 = tmpcalc.Find("/", 0);
+	if (temp1 > 1)
+	{
+		tmpcalc = _fcvt(atof(tmpcalc.Slice(0, temp1 - 1).GetData()) / atof(tmpcalc.Slice(temp1 + 1).GetData()), 7, &decimal, &sign);
+		return tmpcalc;
+	}
+	temp1 = tmpcalc.Find("*", 0);
+	if (temp1 > 1)
+	{
+		tmpcalc = _fcvt(atof(tmpcalc.Slice(0, temp1 - 1).GetData()) * atof(tmpcalc.Slice(temp1 + 1).GetData()), 7, &decimal, &sign);
+		return tmpcalc;
+	}
+	
+	//boolean operators
+	temp1 = tmpcalc.Find("=", 0);
+	if (temp1 > 1)
+	{
+		if (atof(tmpcalc.Slice(0, temp1 - 1)) == atof(tmpcalc.Slice(temp1 + 1)))
+			return "true";
+		else
+			return "false";
+	}
+	temp1 = tmpcalc.Find("!", 0);
+	if (temp1 > 1)
+	{
+		if (atof(tmpcalc.Slice(0, temp1 - 1)) != atof(tmpcalc.Slice(temp1 + 1)))
+			return "true";
+		else
+			return "false";
+	}
+	temp1 = tmpcalc.Find("<", 0);
+	if (temp1 > 1)
+	{
+		if (atof(tmpcalc.Slice(0, temp1 - 1)) < atof(tmpcalc.Slice(temp1 + 1)))
+			return "true";
+		else
+			return "false";
+	}
+	temp1 = tmpcalc.Find(">", 0);
+	if (temp1 > 1)
+	{
+		if (atof(tmpcalc.Slice(0, temp1 - 1)) > atof(tmpcalc.Slice(temp1 + 1)))
+			return "true";
+		else
+			return "false";
+	}
+	
+	return "";
 }

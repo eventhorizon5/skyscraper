@@ -94,7 +94,7 @@ Elevator::~Elevator()
 
 }
 
-void Elevator::CreateElevator(float x, float y, int floor, int direction)
+void Elevator::CreateElevator(double x, double y, int floor, int direction)
 {
 	//Creates elevator at specified location and floor
 	//x is the horiz position where the door is
@@ -250,43 +250,43 @@ void Elevator::MoveElevatorToFloor()
 
 }
 
-void Elevator::AddWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Elevator::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
 	sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
-void Elevator::AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
+void Elevator::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset, double tw, double th)
 {
    	sbs->AddFloorMain(Elevator_state, texture, x1, z1, x2, z2, voffset + GetPosition().y, tw, th);
 }
 
-void Elevator::AddFloorIndicator(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Elevator::AddFloorIndicator(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
 	sbs->AddWallMain(FloorIndicator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, 0, 0);
 }
 
-void Elevator::AddButtonPanel(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Elevator::AddButtonPanel(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
 	sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
-void Elevator::AddPanels(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Elevator::AddPanels(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
 	sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
-void Elevator::AddDoors(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Elevator::AddDoors(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
 	sbs->AddWallMain(ElevatorDoorL_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 	//sbs->AddWallMain(ElevatorDoorR_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
-void Elevator::AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Elevator::AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
 	sbs->AddWallMain(Plaque_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
-void Elevator::AddCallButtons(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
+void Elevator::AddCallButtons(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
 	sbs->AddWallMain(CallButtonsUp_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 	//sbs->AddWallMain(CallButtonsDown_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);

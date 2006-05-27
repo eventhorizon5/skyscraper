@@ -21,6 +21,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef _SBS_FLOOR_H
+#define _SBS_FLOOR_H
+
 #include "globals.h"
 
 class Floor
@@ -42,23 +45,25 @@ public:
 	csString ID;
 	csString FloorType;
 	csString Description;
-	float Altitude; //floor altitude
-	float Height; //floor height (not including interfloor height)
-	float InterfloorHeight; //height of interfloor area
+	double Altitude; //floor altitude
+	double Height; //floor height (not including interfloor height)
+	double InterfloorHeight; //height of interfloor area
 	bool IsEnabled; //is floor enabled?
 
 	//functions
 	Floor(int number, const char *name);
 	~Floor();
 	void SetCameraFloor();
-	void AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
-	void AddInterfloorFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
-	void AddWall(const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th);
-	void AddInterfloorWall(const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th);
+	void AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset, double tw, double th);
+	void AddInterfloorFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset, double tw, double th);
+	void AddWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th);
+	void AddInterfloorWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th);
 	void Enabled(bool value);
 	void AddAutoFloor(const char *texture);
-	float FullHeight();
+	double FullHeight();
 
 private:
 	csRefArray<iMeshWrapper> Objects;
 };
+
+#endif

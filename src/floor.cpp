@@ -66,7 +66,7 @@ void Floor::SetCameraFloor()
 	c->SetPosition(csVector3(camlocation.x, Altitude + c->DefaultAltitude, camlocation.z));
 }
 
-void Floor::AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
+void Floor::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset, double tw, double th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	
@@ -85,7 +85,7 @@ void Floor::AddFloor(const char *texture, float x1, float z1, float x2, float z2
 	sbs->AddFloorMain(Level_state, texture, x1, z1, x2, z2, Altitude + voffset, tw, th);
 }
 
-void Floor::AddInterfloorFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th)
+void Floor::AddInterfloorFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset, double tw, double th)
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
@@ -104,7 +104,7 @@ void Floor::AddInterfloorFloor(const char *texture, float x1, float z1, float x2
 	sbs->AddFloorMain(Interfloor_state, texture, x1, z1, x2, z2, Altitude + Height + voffset, tw, th);
 }
 
-void Floor::AddWall(const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
+void Floor::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th)
 {
 	//Adds a wall with the specified dimensions
 	
@@ -125,7 +125,7 @@ void Floor::AddWall(const char *texture, float x1, float z1, float x2, float z2,
 	sbs->AddWallMain(Level_state, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th);
 }
 
-void Floor::AddInterfloorWall(const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
+void Floor::AddInterfloorWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th)
 {
 	//Adds an interfloor wall with the specified dimensions
 	
@@ -182,7 +182,7 @@ void Floor::AddAutoFloor(const char *texture)
 
 }
 
-float Floor::FullHeight()
+double Floor::FullHeight()
 {
 	//calculate full height of a floor
 	return Height + InterfloorHeight;

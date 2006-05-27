@@ -22,12 +22,14 @@
 */
 
 #include "globals.h"
+#include "floor.h"
+#include "elevator.h"
 
 //#include "csutil/ref.h"
 
 //global functions
 bool IsEven(int Number);
-float AutoSize(float n1, float n2, bool iswidth);
+double AutoSize(double n1, double n2, bool iswidth);
 static bool SBSEventHandler(iEvent& Event);
 void Cleanup();
 
@@ -53,9 +55,9 @@ class csTransform;
 
 struct sbsVector3
 {
-	float x;
-	float y;
-	float z;
+	double x;
+	double y;
+	double z;
 };
 
 class SBS
@@ -93,7 +95,7 @@ public:
 	csString BuildingVersion;
 
 	//Internal data
-    float Gravity; //gravity variable for physics algorithms
+    double Gravity; //gravity variable for physics algorithms
     bool IsRunning; //is sim engine running?
     int ElevatorShafts; //number of elevator shafts
 	int TotalFloors; //number of above-ground floors including 0
@@ -106,22 +108,22 @@ public:
 	bool RenderOnly; //skip sim processing and only render graphics
     bool InputOnly; //skip sim processing and only run input and rendering code
     bool IsFalling; //make user fall
-	float FallRate; //falling rate
+	double FallRate; //falling rate
     bool InStairwell; //true if user is in a stairwell
 	bool InElevator; //true is user is in an elevator
     int ElevatorNumber; //number of currently selected elevator
 	bool FrameLimiter; //frame limiter toggle
     int FrameRate; //max frame rate
-	float FPSModifier; //modification value for FPS changes
+	double FPSModifier; //modification value for FPS changes
 	bool FrameSync; //synchronize movement to frame rate
 	bool EnableCollisions; //turns collisions on/off
-	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
-	float Feet; //feet scale value
+	double HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
+	double Feet; //feet scale value
 	csStringArray UserVariable;
 
 	//File I/O
 	csString BuildingFile;
-	csArray<csString> BuildingData;
+	csStringArray BuildingData;
 	long FileLines;
 
 	//public functions
@@ -134,13 +136,16 @@ public:
 	bool LoadTexture(const char *name, const char *filename);
 	bool Initialize(int argc, const char* const argv[], const char *windowtitle);
  	void Start();
-	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
-	void AddWallMain(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
-	void AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, float x1, float z1, float x2, float z2, float altitude, float tw, float th);
+	void AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b);
+	void AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th);
+	void AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude, double tw, double th);
 	bool HandleEvent(iEvent& Event);
 	void SetupFrame();
 	void FinishFrame();
-	void CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th);
+	void CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th);
+	void CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
+	void AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double FloorHeight, double tw, double th, bool IsExternal);
+	const char * Calc(const char *expression);
 	void InitMeshes();
 
 	//file loader functions

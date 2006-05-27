@@ -21,6 +21,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef _SBS_ELEVATOR_H
+#define _SBS_ELEVATOR_H
+
 #include "globals.h"
 
 class Elevator
@@ -30,19 +33,19 @@ public:
 	int Number; //elevator number
 	int QueuePositionDirection; //queue processing direction
 	bool PauseQueueSearch; //pause queue processor
-	float ElevatorSpeed; //maximum elevator speed
+	double ElevatorSpeed; //maximum elevator speed
 	bool ElevatorSync; //true if user should move with elevator
 	bool MoveElevator; //Tells elevator to start going to specified floor
     int MoveElevatorFloor; //floor to move elevator to
 	int GotoFloor; //floor to go to
 	int OpenDoor; //1=open doors, -1=close doors
-	float Acceleration; //percentage of speed increase
-	float OpenSpeed; //elevator opening/closing speed
+	double Acceleration; //percentage of speed increase
+	double OpenSpeed; //elevator opening/closing speed
 
 	//functions
 	Elevator(int number);
 	~Elevator();
-	void CreateElevator(float x, float y, int floor, int direction);
+	void CreateElevator(double x, double y, int floor, int direction);
 	void AddRoute(int floor, int direction);
 	void DeleteRoute(int floor, int direction);
 	void Alarm();
@@ -56,14 +59,14 @@ public:
 	void MonitorLoop();
 	void CloseDoorsEmergency();
 	csVector3 GetPosition();
-	void AddWall(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void AddFloor(const char *texture, float x1, float z1, float x2, float z2, float voffset, float tw, float th);
-	void AddFloorIndicator(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void AddButtonPanel(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void AddPanels(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void AddDoors(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void AddCallButtons(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void AddWall(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
+	void AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset, double tw, double th);
+	void AddFloorIndicator(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
+	void AddButtonPanel(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
+	void AddPanels(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
+	void AddDoors(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
+	void AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
+	void AddCallButtons(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -99,18 +102,18 @@ private:
 	//Internal elevator simulation data
 	csString UpQueue; //up call queue ***Change these to sorted arrays
 	csString DownQueue; //down call queue
-	float ElevatorStart; //elevator vertical starting location
+	double ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
 	bool DoorsOpen; //elevator door state
 	int ElevatorDirection; //-1=down, 1=up, 0=stopped
-	float DistanceToTravel; //distance in Y to travel
-	float Destination; //elevator destination Y value
-	float ElevatorRate;
-	float StoppingDistance;
+	double DistanceToTravel; //distance in Y to travel
+	double Destination; //elevator destination Y value
+	double ElevatorRate;
+	double StoppingDistance;
 	bool CalculateStoppingDistance;
 	bool Brakes;
-	float ElevatorDoorSpeed;
-	float ElevatorDoorPos; //original elevator door position
+	double ElevatorDoorSpeed;
+	double ElevatorDoorPos; //original elevator door position
 	bool ElevWait;
 
 	//functions
@@ -119,3 +122,5 @@ private:
 	void MoveElevatorToFloor();
 
 };
+
+#endif

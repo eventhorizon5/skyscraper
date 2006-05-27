@@ -22,7 +22,7 @@
 */
 
 extern bool IsEven(int Number);
-extern float AutoSize(float n1, float n2, bool iswidth);
+extern double AutoSize(double n1, double n2, bool iswidth);
 
 #ifndef _SBS_GLOBALS_H
 #define _SBS_GLOBALS_H
