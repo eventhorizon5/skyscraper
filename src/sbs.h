@@ -30,6 +30,7 @@
 //global functions
 bool IsEven(int Number);
 double AutoSize(double n1, double n2, bool iswidth);
+bool IsNumeric(const char *expression);
 static bool SBSEventHandler(iEvent& Event);
 void Cleanup();
 
@@ -151,9 +152,7 @@ public:
 	//file loader functions
 	int LoadBuilding(const char * filename);
 	int LoadDataFile(const char * filename);
-	long GetLines(const char * filename);
-	bool FileExists(const char * filename);
-
+	
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
 		csRef<iMeshObject> Buildings_object;

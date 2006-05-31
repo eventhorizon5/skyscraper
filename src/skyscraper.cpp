@@ -23,14 +23,9 @@
 #include <crystalspace.h>
 #include "skyscraper.h"
 #include "sbs.h"
-#include "floor.h"
-#include "elevator.h"
-#include "camera.h"
 #include "globals.h"
 
 SBS *Simcore;
-Floor *testfloor;
-extern Camera *c; //external pointer to the camera
 
 int main (int argc, char* argv[])
 {
@@ -45,34 +40,17 @@ int main (int argc, char* argv[])
 		Cleanup();
 		exit(1);
 	}
+	
+	//set building file
+	Simcore->BuildingFile = "/buildings/Simple.bld";
 
-	LoadTritonCenter(); //temporary building loader
+	//start simulation
 	Simcore->Start();
 
-	delete testfloor;
+	//clean up
 	delete Simcore;
-	testfloor = 0;
 	Simcore = 0;
 	Cleanup();
 
 	return 0;
-}
-
-void LoadTritonCenter()
-{
-	//This is a temporary function to load the Triton Center, since file loading
-	//support is not implemented yet
-	Simcore->LoadTexture("stone", "/lib/std/stone4.gif");
-	
-	testfloor = new Floor(1, "L");
-	testfloor->Altitude = 0;
-	testfloor->Height = 20;
-	testfloor->InterfloorHeight = 0;
-	testfloor->AddWall("stone", 0, 0, 10, 0, 10, 10, 0, 0, 0, 0);
-
-	//Add lights
-	Simcore->AddLight(0, -3, 5, 0, 10, 1, 0, 0);
-	Simcore->AddLight(0, 3, 5, 0, 10, 0, 0, 1);
-	Simcore->AddLight(0, 0, 5, -3, 10, 0, 1, 0);
-	
 }

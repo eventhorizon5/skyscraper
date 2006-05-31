@@ -40,6 +40,7 @@ public:
 	int GotoFloor; //floor to go to
 	int OpenDoor; //1=open doors, -1=close doors
 	double Acceleration; //percentage of speed increase
+	double Deceleration; //deceleration value; may be removed
 	double OpenSpeed; //elevator opening/closing speed
 
 	//functions

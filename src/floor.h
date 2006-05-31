@@ -48,6 +48,8 @@ public:
 	double Altitude; //floor altitude
 	double Height; //floor height (not including interfloor height)
 	double InterfloorHeight; //height of interfloor area
+	double DoorHeight; //height of doors; may be removed
+	double DoorWidth; //width of doors; may be removed
 	bool IsEnabled; //is floor enabled?
 
 	//functions

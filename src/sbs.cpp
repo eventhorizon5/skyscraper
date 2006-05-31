@@ -22,6 +22,7 @@
 */
 
 #include <crystalspace.h>
+#include <sstream>
 #include "sbs.h"
 #include "camera.h"
 
@@ -82,6 +83,8 @@ void SBS::Start()
 	UserVariable.SetSize(256);
 
 	//load building data file
+	LoadBuilding(BuildingFile.GetData());
+	//if (LoadBuilding(BuildingFile.GetData()) != 0)
 
 	//move camera to start location
 	c->SetToStartPosition();
@@ -96,10 +99,10 @@ void SBS::Start()
 
 	//turn off floors
 	for (int i=-Basements; i<=TotalFloors; i++)
-		FloorArray.Get(i)->Enabled(false);
+		FloorArray[i]->Enabled(false);
 	
 	//turn on first/lobby floor
-	FloorArray.Get(1)->Enabled(true);
+	FloorArray[1]->Enabled(true);
 
 	//create skybox
 
@@ -304,6 +307,8 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	if (!imageio) return ReportError ("No image loader!");
 	vfs = CS_QUERY_REGISTRY (object_reg, iVFS);
 	if (!vfs) return ReportError ("No VFS!");
+	
+	vfs->ChDirAuto("H:/Skyscraper");
 
 	iNativeWindow* nw = g2d->GetNativeWindow();
 	if (nw) nw->SetTitle(windowtitle);
@@ -576,4 +581,12 @@ const char * SBS::Calc(const char *expression)
 	}
 	
 	return "";
+}
+
+bool IsNumeric(const char *expression)
+{
+	std::stringstream ss(expression);
+	double d;
+	ss >> d;
+	return ss.good();
 }
