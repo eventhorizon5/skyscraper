@@ -46,7 +46,7 @@ int SBS::LoadBuilding(const char * filename)
     csString temp2;
     int temp3;
     int temp4;
-    //int temp5;
+    int temp5;
     csString temp6;
     csString temp7;
     csStringArray tempdata;
@@ -54,7 +54,7 @@ int SBS::LoadBuilding(const char * filename)
     int FloorCheck;
     int RangeL;
     int RangeH;
-    long RangeStart;
+    long RangeStart = 0;
     int Section;
     csRef<iThingFactoryState> tmpMesh;
     csString Context;
@@ -66,16 +66,20 @@ int SBS::LoadBuilding(const char * filename)
     Section = 0;
     Context = "None";
 
-	while (i < FileLines)
+	while (i < BuildingData.GetSize() - 1)
 	{
-Nextline:
-		i++;
 		LineData = BuildingData[i];
 		LineData.Trim();
 
-		//process comment markers
-		temp1 = atoi(LineData.Slice(0, LineData.Find("#", 0) - 1).GetData());
+		//skip blank lines
+        if (LineData == "")
+			goto Nextline;
 
+		//process comment markers
+		temp1 = LineData.Find("#", 0);
+		if (temp1 > -1)
+			LineData.Truncate(temp1);
+		
 		//skip blank lines
         if (LineData == "")
 			goto Nextline;
@@ -85,8 +89,7 @@ Nextline:
 		{
 			Section = 1;
             Context = "Globals";
-            //Dest.Print Spc(2); "Processing globals..."
-            //DebugWindow.AddText "Processing globals"
+            Report("Processing globals...");
             goto Nextline;
 		}
         if (LineData.CompareNoCase("<endglobals>") == true)
@@ -94,22 +97,21 @@ Nextline:
             InitMeshes();
             Section = 0;
             Context = "None";
-            //DebugWindow.AddText "Finished globals"
+            Report("Finished globals");
             goto Nextline;
 		}
         if (LineData.CompareNoCase("<external>") == true)
 		{
             Section = 3;
             Context = "External";
-            //Dest.Print Spc(2); "Processing external objects..."
-            //DebugWindow.AddText "Processing external"
+            Report("Processing external objects...");
             goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endexternal>") == true)
 		{
             Section = 0;
             Context = "None";
-            //DebugWindow.AddText "Finished external"
+            Report("Finished external");
             goto Nextline;
 		}
         if (LineData.Slice(0, 7).CompareNoCase("<floors") == true)
@@ -118,13 +120,12 @@ Nextline:
             temp3 = LineData.Find("to", 0);
             RangeL = atoi(LineData.Slice(8, temp3 - 9).GetData());
             RangeH = atoi(LineData.Slice(temp3 + 2).GetData());
-            Context = "Floor range " + csString(_itoa(RangeL, intbuffer, 10)).Trim() + " to " + csString(_itoa(RangeH, intbuffer, 10)).Trim();
+            Context = "Floor range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
             //if (RangeL < -Basements !! RangeH > TotalFloors)
 				//Err.Raise 1004;
             Current = RangeL;
             RangeStart = i;
-            //Dest.Print Spc(2); "Processing floors " & RangeL & " to " & RangeH & "..."
-            //DebugWindow.AddText "Processing floors " & RangeL & " to " & RangeH
+            Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
             goto Nextline;
 		}
         if (LineData.Slice(0, 7).CompareNoCase("<floor ") == true)
@@ -136,15 +137,14 @@ Nextline:
             Current = atoi(LineData.Slice(8, LineData.Length() - 8).GetData());
             //if (Current < -Basements !! Current > TotalFloors)
 				//Err.Raise 1005
-            //Dest.Print Spc(2); "Processing floor " & Current & "..."
-            //DebugWindow.AddText "Processing floor " & Current
+            Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
             goto Nextline;
 		}
         if (LineData.CompareNoCase("<endfloor>") == true)
 		{
             Section = 0;
             Context = "None";
-            //DebugWindow.AddText "Finished floor"
+            Report("Finished floor");
             goto Nextline;
 		}
         if (LineData.Slice(0, 10).CompareNoCase("<elevators") == true)
@@ -153,13 +153,12 @@ Nextline:
             temp3 = LineData.Find("to", 10);
 			RangeL = atoi(LineData.Slice(11, temp3 - 12).GetData());
             RangeH = atoi(LineData.Slice(temp3 + 2).GetData());
-            Context = "Elevator range " + csString(_itoa(RangeL, intbuffer, 10)).Trim() + " to " + csString(_itoa(RangeH, intbuffer, 10)).Trim();
+            Context = "Elevator range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
             //if (RangeL < 1 !! RangeH > Elevators)
 				//Err.Raise 1006;
             Current = RangeL;
             RangeStart = i;
-            //Dest.Print Spc(2); "Processing elevators " & RangeL & " to " & RangeH & "..."
-            //DebugWindow.AddText "Processing elevators " & RangeL & " to " & RangeH
+            Report("Processing elevators " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
             goto Nextline;
 		}
         if (LineData.Slice(0, 10).CompareNoCase("<elevator ") == true)
@@ -171,30 +170,28 @@ Nextline:
             Current = atoi(LineData.Slice(11, LineData.Length() - 11).GetData());
             //if (Current < 1 !! Current > Elevators)
 				//Err.Raise 1007;
-            //Dest.Print Spc(2); "Processing elevator " & Current & "..."
-            //DebugWindow.AddText "Processing elevator " & Current
+            Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
             goto Nextline;
 		}
         if (LineData.CompareNoCase("<endelevator>") == true)
 		{
             Section = 0;
             Context = "None";
-            //DebugWindow.AddText "Finished elevator"
+            Report("Finished elevator");
             goto Nextline;
 		}
         if (LineData.Slice(0, 10).CompareNoCase("<textures>") == true)
 		{        
 			Section = 5;
             Context = "Textures";
-            //Dest.Print Spc(2); "Processing textures..."
-            //DebugWindow.AddText "Processing textures"
+            Report("Processing textures...");
             goto Nextline;
 		}
         if (LineData.Slice(0, 13).CompareNoCase("<endtextures>") == true)
 		{        
 			Section = 0;
             Context = "None";
-            //DebugWindow.AddText "Finished textures"
+            Report("Finished textures");
             goto Nextline;
 		}
         
@@ -206,26 +203,29 @@ Nextline:
             temp3 = 0;
 
 		if (temp1 + temp3 > 0)
-			temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
-        if (IsNumeric(temp2.GetData()) == true)
 		{
-            //if (temp2 < 0 !! temp2 > UBound(UserVariable))
-				//Err.Raise 1001
-            while (temp1 + temp3 > 0)
+			temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
+			if (IsNumeric(temp2.GetData()) == true)
 			{
-                LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
-				temp1 = LineData.Find("%", 0);
-                if (temp1 > 0)
-                    temp3 = LineData.Find("%", temp1 + 1);
-				else
-                    temp3 = 0;
-                if (temp1 + temp3 > 0)
-					temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
+				//if (temp2 < 0 !! temp2 > UBound(UserVariable))
+					//Err.Raise 1001
+				while (temp1 + temp3 > 0)
+				{
+	                LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
+					temp1 = LineData.Find("%", 0);
+					if (temp1 > 0)
+	                    temp3 = LineData.Find("%", temp1 + 1);
+					else
+	                    temp3 = 0;
+					if (temp1 + temp3 > 0)
+						temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
+				}
 			}
 		}
 
         //Floor object conversion
-        while (LineData.Find("floor(", 0) > 0)
+		temp5 = LineData.Find("floor(", 0);
+        while (temp5 > -1)
 		{
             temp1 = LineData.Find("(", 0);
             temp3 = LineData.Find(")", 0);
@@ -251,7 +251,8 @@ Nextline:
             if (temp1 > 0)
 				buffer = FloorArray[temp4]->Altitude;
                 LineData = LineData.Slice(1, temp1 - 1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
-		}
+			temp5 = LineData.Find("floor(", 0);
+        }
         
         //Set command
         if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
@@ -262,7 +263,7 @@ Nextline:
             //if (temp3 < 0 !! temp3 > UBound(UserVariable))
 				//Err.Raise 1001
             UserVariable[temp3] = Calc(temp2);
-            //DebugWindow.AddText "Variable " & temp3 & " set to " & UserVariable(temp3)
+            Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 		}
         
         //CreateWallBox2 command
@@ -329,15 +330,15 @@ Nextline:
 
             //store variable values
             if (LineData.Slice(0, 4).CompareNoCase("name") == true)
-				BuildingName = temp2;
+				BuildingName = temp2.Trim();
             if (LineData.Slice(0, 8).CompareNoCase("designer") == true)
-				BuildingDesigner = temp2;
+				BuildingDesigner = temp2.Trim();
             if (LineData.Slice(0, 8).CompareNoCase("location") == true)
-				BuildingLocation = temp2;
+				BuildingLocation = temp2.Trim();
             if (LineData.Slice(0, 11).CompareNoCase("description") == true)
-				BuildingDescription = temp2;
+				BuildingDescription = temp2.Trim();
             if (LineData.Slice(0, 7).CompareNoCase("version") == true)
-				BuildingVersion = temp2;
+				BuildingVersion = temp2.Trim();
             if (LineData.Slice(0, 14).CompareNoCase("cameraaltitude") == true)
 			{
                 //if (IsNumeric(temp2) == false)
@@ -785,6 +786,8 @@ recalc:
 				}
 			}
 		}
+Nextline:
+		i++;
 	}
 
 	return 0;
@@ -793,12 +796,21 @@ recalc:
 int SBS::LoadDataFile(const char * filename)
 {
 	//loads a building data file into the runtime buffer
-	bool streamfinished = false;
+	bool streamnotfinished = true;
 	char buffer[1000];
+
+	//if (vfs->ChDir("/root/") == false)
+	//	return 1;
+	
+	//make sure file exists
+	if (vfs->Exists(filename) == false)
+		return 1;
+	
+	//load file
 	csRef<iFile> file (vfs->Open(filename, VFS_FILE_READ));
 
 	//exit if an error occurred while loading
-	if (file->GetStatus() != 0)
+	if (!file)
 		return 1;
 	
 	csFileReadHelper file_r(file);
@@ -806,13 +818,19 @@ int SBS::LoadDataFile(const char * filename)
 	//clear array
 	BuildingData.DeleteAll();
 
-	while (streamfinished == false)
+	while (streamnotfinished == true)
 	{
+		//clear buffer
+		for (int i = 0; i < 1000; i++)
+			buffer[i] = ' ';
+
 		//read each line into the buffer
-		streamfinished = file_r.GetString(buffer, 1000, true);
+		streamnotfinished = file_r.GetString(buffer, 1000, true);
 	
 		//push buffer onto the tail end of the BuildingData array
 		BuildingData.Push(buffer);
+
 	}
+
 	return 0;
 }

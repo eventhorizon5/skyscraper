@@ -307,9 +307,19 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	if (!imageio) return ReportError ("No image loader!");
 	vfs = CS_QUERY_REGISTRY (object_reg, iVFS);
 	if (!vfs) return ReportError ("No VFS!");
-	
-	vfs->ChDirAuto("H:/Skyscraper");
 
+	stdrep = CS_QUERY_REGISTRY (object_reg, iStandardReporterListener);
+	if (!stdrep) return ReportError ("No stdrep plugin!");
+	stdrep->SetDebugFile ("/tmp/sbs_report.txt");
+	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_BUG, true, false, false, false, true, false);
+	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_ERROR, true, false, false, false, true, false);
+	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_WARNING, true, false, false, false, true, false);
+	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_NOTIFY, true, false, false, false, true, false);
+	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_DEBUG, true, false, false, false, true, false);
+
+	//mount app's directory in VFS
+	vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "\\");
+	
 	iNativeWindow* nw = g2d->GetNativeWindow();
 	if (nw) nw->SetTitle(windowtitle);
 

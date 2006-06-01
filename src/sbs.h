@@ -81,7 +81,8 @@ public:
 	csRef<iCommandLineParser> cmdline;
 	csRef<iGeneralMeshState> gmSingle;
 	csRef<iStringSet> strings;
-	
+	csRef<iStandardReporterListener> stdrep;
+
 	iMaterialWrapper* material;
 	iLightList* ll;
 	iSector* area;
@@ -125,7 +126,6 @@ public:
 	//File I/O
 	csString BuildingFile;
 	csStringArray BuildingData;
-	long FileLines;
 
 	//public functions
 	SBS();
