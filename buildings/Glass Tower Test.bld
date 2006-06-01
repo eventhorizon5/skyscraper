@@ -1,0 +1,552 @@
+# The Glass Tower
+# Featured in the movie The Towering Inferno
+# Model ©2005-2006 Ryan Thoryk and Michael Jehn
+
+#This program is free software; you can redistribute it and/or
+#modify it under the terms of the GNU General Public License
+#as published by the Free Software Foundation; either version 2
+#of the License, or (at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+<Globals>
+    Name = Glass Tower
+    Designer = n/a
+    Location = 655 Market Street, San Francisco, CA
+    Description = The fictitious 138-story building from the movie The Towering Inferno.
+    Version = 1
+    CameraAltitude = 3.2
+    ElevatorShafts = 1
+    Floors = 137 #138 total floors: 0-137
+    Basements = 0
+    Elevators = 1
+    PipeShafts = 1
+    Stairs = 1
+    CameraFloor = 0
+    CameraPosition = 0, -300
+    CameraDirection = 0, 10, 90
+    CameraRotation = 0, 0, 0
+<EndGlobals>
+
+<Textures>
+  Load data\brick1.jpg, Brick
+  Load data\LobbyFront.jpg, LobbyFront
+  Load data\windows11e.jpg, MainWindows
+  Load data\windows11e-r1.jpg, MainWindowsR1
+  Load data\windows11f.jpg, MainWindowsInv
+  Load data\granite.jpg, Granite
+  Load data\symb5.jpg, Marble3
+  Load data\marb047.jpg, Marble4
+  Load data\elev1.jpg, Elev1
+  Load data\textur15.jpg, Wood1
+  Load data\text16.jpg, Wood2
+  Load data\marbl3.jpg, Wall1
+  Load data\marb123.jpg, Wall2
+  Load data\cutston.jpg, Ceiling1
+  Load data\text12.jpg, Wall3
+  Load data\text16.jpg, ElevDoors
+  Load data\marb148.jpg, ElevExtPanels
+  Load data\mason01.jpg, Concrete
+  Load data\text13.jpg, Stairs
+  Load data\wooddoor3.jpg, Door1
+  Load data\wooddoor1.jpg, Door2
+  Load data\servicedoor2.jpg, StairsDoor
+  Load data\miscdoor8.jpg, StairsDoor2
+  Load data\button1.jpg, CallButtonsTex
+  Load data\sidewalk1r.jpg, Road1
+  Load data\walkway.jpg, Walkway
+  Load data\sidewalkcorner1.jpg, Road2
+  Load data\sidewalkcorner2.jpg, Road3
+  Load data\sidewalkcorner3.jpg, Road4
+  Load data\roadfull.jpg, Road5
+  Load data\windows08.jpg, Windows8
+  Load data\windows11.jpg, Windows11
+  Load data\downtown.jpg, Downtown
+  Load data\suburbs.jpg, Suburbs
+  Load data\top.jpg, SkyTop
+  Load data\bottom.jpg, SkyBottom
+  Load data\left.jpg, SkyLeft
+  Load data\right.jpg, SkyRight
+  Load data\front.jpg, SkyFront
+  Load data\back.jpg, SkyBack
+  Load objects\benedeti.jpg, ColumnTex, , , TV_COLORKEY_NO
+  Load data\plaque.jpg, Plaque
+  Load data\floorsign.jpg, FloorSign
+  Load data\floorsignballroom.jpg, FloorSignBallroom
+  Load data\floorsignbalcony.jpg, FloorSignBalcony
+  Load data\floorsignhotel.jpg, FloorSignHotel
+  Load data\floorsignlobby.jpg, FloorSignLobby
+  Load data\floorsignmaint.jpg, FloorSignMaint
+  Load data\floorsignmez.jpg, FloorSignMez
+  Load data\floorsignmechanical.jpg, FloorSignMechanical
+  Load data\floorsignobservatory.jpg, FloorSignObservatory
+  Load data\floorsignoffices.jpg, FloorSignOffices
+  Load data\floorsignpool.jpg, FloorSignPool
+  Load data\floorsignresidential.jpg, FloorSignResidential
+  Load data\floorsignroof.jpg, FloorSignRoof
+  Load data\floorsignskylobby.jpg, FloorSignSkylobby
+
+  #floor indicator/button pictures
+  Load data\floorindicators\L.jpg, ButtonL
+  Load data\floorindicators\M.jpg, ButtonM
+  Load data\floorindicators\R.jpg, ButtonR
+  Load data\floorindicators\open.jpg, ButtonOpen
+  Load data\floorindicators\close.jpg, ButtonClose
+  Load data\floorindicators\stop.jpg, ButtonStop
+  Load data\floorindicators\alarm.jpg, ButtonAlarm
+  Load data\floorindicators\cancel.jpg, ButtonCancel
+  LoadRange 2, 138, data\floorindicators\%number%.jpg, Button%number%
+<EndTextures>
+
+# Lobby
+<Floor 0>
+    ID = L
+    Name = Lobby
+    Type = Lobby
+    Height = 30
+    InterfloorHeight = 3
+    DoorHeight = 7
+
+    # Floor
+    #AddFloor Marble4, -87.04, -81.6, 87.04, 81.6, 0, 0, 0, False
+    AddFloor Marble4, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, False
+
+    # Ceiling
+    #AddFloor Ceiling1, -107.1, -100.4, 107.1, 100.4, %height% - 0.05, 0, 0, False
+
+    #Lobby Front
+    # back left wall
+    AddWall LobbyFront, -61.7, 52.8, -21.5, 93, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # back left corner wall
+    AddWall LobbyFront, -55.4, 52.8, -61.7, 52.8, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # back right wall
+    AddWall LobbyFront, -21.5, 93, 58.7, 62.1, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # back right corner wall
+    AddWall LobbyFront, 58.7, 62.1, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # left upper wall
+    AddWall LobbyFront, -99.8, 11.8, -55.4, 52.8, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # left lower wall
+    AddWall LobbyFront, -120.8, -58.8, -99.8, 11.8, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # front left wall
+    AddWall LobbyFront, -120.8, -58.8, -16.9, -57.8, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # front right corner wall
+    AddWall LobbyFront, -16.9, -57.8, -19.9, -51, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # front right corner wall 2
+    AddWall LobbyFront, -19.9, -51, -14.4, -53.6, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # glass elevator wall
+    AddWall LobbyFront, -14.4, -53.6, 21.5, -53.6, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # right bottom wall
+    AddWall LobbyFront, 21.5, -53.6, 98.1, -26.2, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    # right top wall
+    AddWall LobbyFront, 98.1, -26.2, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+<EndFloor>
+
+# floors 2 to 39
+<Floors 1 to 38>
+    ID = %floor% + 1
+    Name = Offices
+    Type = Office
+    Height = 9.5
+    InterfloorHeight = 2.5
+    DoorHeight = 7
+
+    # Floor
+    AddFloor Granite, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, False
+
+    # Ceiling
+    AddFloor Marble3, -418.2, -418.2, 418.2, 418.2, %height%, 0, 0, False
+
+    # Interfloor bottom
+
+    # Interfloor top
+
+    # Interfloor walls
+
+    #External windows/walls
+    # back left wall
+    AddWall MainWindows, -61.7, 52.8, -21.5, 93, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # back left corner wall
+    AddWall MainWindows, -55.4, 52.8, -61.7, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # back right wall
+    AddWall MainWindows, -21.5, 93, 58.7, 62.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # back right corner wall
+    AddWall MainWindows, 58.7, 62.1, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left upper wall
+    AddWall MainWindows, -99.8, 11.8, -55.4, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left lower wall
+    AddWall MainWindows, -120.8, -58.8, -99.8, 11.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front left wall
+    AddWall MainWindows, -120.8, -58.8, -16.9, -57.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front right corner wall
+    AddWall MainWindows, -16.9, -57.8, -19.9, -51, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front right corner wall 2
+    AddWall MainWindows, -19.9, -51, -14.4, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # glass elevator wall
+    AddWall Ceiling1, -14.4, -53.6, 21.5, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right bottom wall
+    AddWall MainWindows, 21.5, -53.6, 98.1, -26.2, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right top wall
+    AddWall MainWindows, 98.1, -26.2, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+# floors 40 to 60
+<Floors 39 To 59>
+    ID = %floor% + 1
+    Name = Offices
+    Type = Office
+    Height = 9.5
+    InterfloorHeight = 2.5
+    DoorHeight = 7
+
+    # Floor
+    AddFloor Granite, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, False
+
+    # Ceiling
+    AddFloor Marble3, -418.2, -418.2, 418.2, 418.2, %height%, 0, 0, False
+
+    # Interfloor bottom
+
+    # Interfloor top
+
+    # Interfloor walls
+
+    #External windows/walls
+    # back left wall
+    If(%floor% < 50) AddWall MainWindows, -61.7, 52.8, -21.5, 93, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # back left corner wall
+    AddWall MainWindows, -55.4, 52.8, -61.7, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left upper wall
+    AddWall MainWindows, -99.8, 11.8, -55.4, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left lower wall
+    AddWall MainWindows, -120.8, -58.8, -99.8, 11.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front left wall
+    AddWall MainWindows, -120.8, -58.8, -16.9, -57.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front right corner wall
+    AddWall MainWindows, -16.9, -57.8, -19.9, -51, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front right corner wall 2
+    AddWall MainWindows, -19.9, -51, -14.4, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # glass elevator wall
+    AddWall Ceiling1, -14.4, -53.6, 21.5, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right bottom wall
+    AddWall MainWindows, 21.5, -53.6, 98.1, -26.2, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right top wall
+    AddWall MainWindows, 98.1, -26.2, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+# floors 61 to 67
+<Floors 60 to 66>
+    ID = %floor% + 1
+    Name = Offices
+    Type = Office
+    Height = 9.5
+    InterfloorHeight = 2.5
+    DoorHeight = 7
+
+    # Floor
+    If(%floor% ! 65) AddFloor Granite, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, False
+
+    # Ceiling
+    If(%floor% ! 64) AddFloor Marble3, -418.2, -418.2, 418.2, 418.2, %height%, 0, 0, False
+
+    # Interfloor bottom
+
+    # Interfloor top
+
+    # Interfloor walls
+
+    #External windows/walls
+    # back left corner wall
+    AddWall MainWindows, -55.4, 52.8, -61.7, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left upper wall
+    AddWall MainWindows, -99.8, 11.8, -55.4, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left lower wall
+    If(%floor% < 66) AddWall MainWindows, -120.8, -58.8, -99.8, 11.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # glass elevator wall
+    AddWall Ceiling1, -14.4, -53.6, 21.5, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right bottom wall
+    AddWall MainWindows, 21.5, -53.6, 98.1, -26.2, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right top wall
+    AddWall MainWindows, 98.1, -26.2, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+# floors 68 to 80
+<Floors 67 To 79>
+    ID = %floor% + 1
+    Name = Offices
+    Type = Office
+    Height = 9.5
+    InterfloorHeight = 2.5
+    DoorHeight = 7
+
+    # Floor
+    AddFloor Granite, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, False
+
+    # Ceiling
+    AddFloor Marble3, -418.2, -418.2, 418.2, 418.2, %height%, 0, 0, False
+
+    # Interfloor bottom
+
+    # Interfloor top
+
+    # Interfloor walls
+
+    #External windows/walls
+    # front wall
+    If(%floor% = 79) AddWall MainWindows, -88.3, -19.9, -14.4, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # back wall
+    AddWall MainWindows, -55.4, 52.8, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left upper wall
+    AddWall MainWindows, -99.8, 11.8, -55.4, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left lower wall
+    If(%floor% = 79) AddWall MainWindows, -88.3, -19.9, -99.8, 11.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front right corner wall 2
+    AddWall MainWindows, -19.9, -51, -14.4, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # glass elevator wall
+    AddWall Ceiling1, -14.4, -53.6, 21.5, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right bottom wall
+    AddWall MainWindows, 21.5, -53.6, 98.1, -26.2, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right top wall
+    AddWall MainWindows, 98.1, -26.2, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+# floors 81 to 89
+<Floors 80 To 88>
+    ID = %floor% + 1
+    Name = Residential
+    Type = Residential
+    Height = 8.5
+    InterfloorHeight = 3.5
+    DoorHeight = 7
+
+    # Floor
+    AddFloor Granite, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, False
+
+    # Ceiling
+    AddFloor Marble3, -418.2, -418.2, 418.2, 418.2, %height%, 0, 0, False
+
+    # Interfloor bottom
+
+    # Interfloor top
+
+    # Interfloor walls
+
+    #External windows/walls
+    # back wall
+    AddWall MainWindows, -55.4, 52.8, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left upper wall
+    AddWall MainWindows, -99.8, 11.8, -55.4, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left lower wall
+    AddWall MainWindows, -88.3, -19.9, -99.8, 11.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front wall
+    AddWall MainWindows, -88.3, -19.9, -14.4, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # glass elevator wall
+    AddWall Ceiling1, -14.4, -53.6, 21.5, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right bottom wall
+    AddWall MainWindows, 21.5, -53.6, 98.1, -26.2, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right top wall
+    AddWall MainWindows, 98.1, -26.2, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+# floors 90 to 113
+<Floors 89 To 112>
+    ID = %floor% + 1
+    Name = Residential
+    Type = Residential
+    Height = 8.5
+    InterfloorHeight = 3.5
+    DoorHeight = 7
+
+    # Floor
+    AddFloor Granite, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, False
+
+    # Ceiling
+    AddFloor Marble3, -418.2, -418.2, 418.2, 418.2, %height%, 0, 0, False
+
+    # Interfloor bottom
+
+    # Interfloor top
+
+    # Interfloor walls
+
+    #External windows/walls
+    # back wall
+    AddWall MainWindows, -55.4, 52.8, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left upper wall
+    AddWall MainWindows, -99.8, 11.8, -55.4, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # left lower wall
+    AddWall MainWindows, -88.3, -19.9, -99.8, 11.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front wall
+    AddWall MainWindows, -88.3, -19.9, -14.4, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # glass elevator wall
+    AddWall Ceiling1, -14.4, -53.6, 21.5, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right top wall
+    AddWall MainWindows, 55.4, 54.1, 63.3, 38.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+# floors 114 to 120
+<Floors 113 To 119>
+    ID = %floor% + 1
+    Name = Residential
+    Type = Residential
+    Height = 8.5
+    InterfloorHeight = 3.5
+    DoorHeight = 7
+
+    # Floor
+    AddFloor Granite, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, False
+
+    # Ceiling
+    AddFloor Marble3, -418.2, -418.2, 418.2, 418.2, %height%, 0, 0, False
+
+    # Interfloor bottom
+
+    # Interfloor top
+
+    # Interfloor walls
+
+    #External windows/walls
+    # back wall
+    AddWall MainWindows, -55.4, 52.8, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front wall
+    AddWall MainWindows, -88.3, -19.9, -14.4, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # glass elevator wall
+    AddWall Ceiling1, -14.4, -53.6, 21.5, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right top wall
+    AddWall MainWindows, 55.4, 54.1, 63.3, 38.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+# floors 121 to 136
+<Floors 120 To 135>
+    Height = 9.5
+    InterfloorHeight = 2.5
+    DoorHeight = 7
+
+    # Floor
+    If(%floor% <= 133) AddFloor Granite, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, False
+
+    # Ceiling
+    If(%floor% < 133 Or i = 134) AddFloor Marble3, -418.2, -418.2, 418.2, 418.2, %height%, 0, 0, False
+
+    # Interfloor bottom
+
+    # Interfloor top
+
+    # Interfloor walls
+
+    #External windows/walls
+    # back wall
+    AddWall MainWindows, -55.4, 52.8, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front wall
+    AddWall MainWindows, -88.3, -19.9, -14.4, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # glass elevator wall
+    AddWall Ceiling1, -14.4, -53.6, 21.5, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right top wall
+    AddWall MainWindows, 55.4, 54.1, 63.3, 38.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+<Floor 134>
+    ID = %floor% + 1
+    Name = Promenade Room
+    Type = Ballroom
+<EndFloor>
+
+<Floor 135>
+    ID = %floor% + 1
+    Name = Utility Room
+    Type = Service
+<EndFloor>
+
+<Floor 136>
+    ID = %floor% + 1
+    Name = Mechanical
+    Type = Service
+<EndFloor>
+
+<Floor 137>
+    ID = %floor% + 1
+    Name = Rooftop Heliport
+    Type = Roof
+<EndFloor>
+
+# floors 137 and 138
+<Floors 136 To 137>
+    Height = 12
+    InterfloorHeight = 0
+    DoorHeight = 7
+
+    # Floor
+    AddFloor Marble4, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, False
+
+    # Ceiling
+    AddFloor Marble4, -418.2, -418.2, 418.2, 418.2, %height%, 0, 0, False
+
+    # Interfloor bottom
+
+    # Interfloor top
+
+    # Interfloor walls
+
+    #External windows/walls
+    # back wall
+    AddWall Concrete, -55.4, 52.8, 55.4, 54.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # front wall
+    AddWall Concrete, -88.3, -19.9, -14.4, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # glass elevator wall
+    AddWall Ceiling1, -14.4, -53.6, 21.5, -53.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    # right top wall
+    AddWall Concrete, 55.4, 54.1, 63.3, 38.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+<External>
+    Set 1 = Floor(66).FullHeight / 2
+
+    # front setback
+    AddTriangleWall MainWindows, -120.8, Floor(66).Altitude + %1%, -58.8, -91.6, Floor(80).Altitude, -18.6, -19.9, Floor(62).Altitude, -51, Floor(60).Altitude, 0, -18, FrontTop #top
+    AddTriangleWall Concrete, -19.9, Floor(62).Altitude, -51, -16.9, Floor(60).Altitude, -57.8, -120.8, Floor(66).Altitude + %1%, -58.8, Floor(60).Altitude, 12.5, 2, FrontMiddle #middle
+    AddTriangleWall MainWindows, -91.6, Floor(79).Altitude, -18.6, -91.6, Floor(80).Altitude, -18.6, -88.3, Floor(79).Altitude, -19.9, Floor(60).Altitude, 0, -1, FrontLeftTop #left top filler
+    AddTriangleWall MainWindows, -19.9, Floor(60).Altitude, -51, -19.9, Floor(62).Altitude, -51, -16.9, Floor(60).Altitude, -57.8, Floor(60).Altitude, 0, -2, FrontRight #right
+    AddTriangleWall MainWindows, -19.9, Floor(60).Altitude, -51, -19.9, Floor(62).Altitude, -51, -14.4, Floor(60).Altitude, -53.6, Floor(60).Altitude, 0, -2, FrontRight2 #right2
+    AddTriangleWall MainWindows, -14.4, Floor(79).Altitude, -53.6, -14.4, Floor(60).Altitude, -53.6, -88.3, Floor(79).Altitude, -19.9, Floor(60).Altitude, 0, 19, FrontBack #back
+    AddTriangleWall MainWindows, -120.8, Floor(60).Altitude, -58.8, -120.8, Floor(66).Altitude + %1%, -58.8, -16.9, Floor(60).Altitude, -57.8, Floor(60).Altitude, 0, -6.5, FrontBottom #bottom
+
+    # back setback
+    AddTriangleWall MainWindows, 55.3, Floor(67).Altitude, 54.1, 55.3, Floor(41).Altitude, 54.1, -61.7, Floor(67).Altitude, 52.8, Floor(60).Altitude, 0, 26, BackBack #back
+    AddTriangleWall MainWindows, 14.8, Floor(50).Altitude, 53.5, 58.7, Floor(39).Altitude, 62.1, -21.5, Floor(50).Altitude, 93, Floor(60).Altitude, 0.6, 11, BackLower #lower section
+    AddTriangleWall MainWindows, 14.8, Floor(50).Altitude, 53.5, -61.7, Floor(67).Altitude, 52.8, -21.5, Floor(50).Altitude, 93, Floor(60).Altitude, 0, -17, BackUpper #upper section
+    AddTriangleWall MainWindows, 55.3, Floor(39).Altitude, 54.1, 55.3, Floor(41).Altitude, 54.1, 58.7, Floor(39).Altitude, 62.1, Floor(60).Altitude, 0, -2, BackNotchBase #right notch base
+    AddTriangleWall MainWindows, 49.8, Floor(41).Altitude, 60.9, 58.7, Floor(39).Altitude, 62.1, 55.3, Floor(41).Altitude, 54.1, Floor(60).Altitude, 0, 2, BackNotchFill #right notch fill
+    AddTriangleWall MainWindows, 49.8, Floor(41).Altitude, 60.9, 14.8, Floor(50).Altitude, 53.5, 55.3, Floor(41).Altitude, 54.1, Floor(60).Altitude, 0, -9, BackNotchLength #right notch length
+    AddTriangleWall MainWindows, -61.7, Floor(50).Altitude, 52.8, -61.7, Floor(67).Altitude, 52.8, -21.5, Floor(50).Altitude, 93, Floor(60).Altitude, 0, -17, BackLeft #left
+    AddTriangleWall MainWindows, -21.5, Floor(39).Altitude, 93, -21.5, Floor(50).Altitude, 93, 58.7, Floor(39).Altitude, 62.1, Floor(60).Altitude, 0, -11, BackRight #right
+
+    # right setback
+    AddTriangleWall MainWindows, 21.5, Floor(137).Altitude, -53.6, 98.1, Floor(89).Altitude, -26.2, 63.3, Floor(137).Altitude, 38.9, Floor(60).Altitude, 0, 48, RightMain #main section
+    AddTriangleWall MainWindows, 21.5, Floor(89).Altitude, -53.6, 21.5, Floor(137).Altitude, -53.6, 98.1, Floor(89).Altitude, -26.2, Floor(60).Altitude, 0, -48, RightFront #front
+    AddTriangleWall MainWindows, 63.3, Floor(89).Altitude, 38.9, 63.3, Floor(137).Altitude, 38.9, 98.1, Floor(89).Altitude, -26.2, Floor(60).Altitude, 0, -48, RightBack #back
+
+    # left upper setback
+    AddTriangleWall MainWindows, -88.3, Floor(137).Altitude, -19.9, -99.8, Floor(113).Altitude, 11.8, -55.3, Floor(137).Altitude, 52.8, Floor(60).Altitude, -1, 24, LeftMain #main section
+    AddTriangleWall MainWindows, -88.3, Floor(113).Altitude, -19.9, -88.3, Floor(137).Altitude, -19.9, -99.8, Floor(113).Altitude, 11.8, Floor(60).Altitude, 0, -24, LeftFront #front
+    AddTriangleWall MainWindows, -55.3, Floor(113).Altitude, 52.8, -55.3, Floor(137).Altitude, 52.8, -99.8, Floor(113).Altitude, 11.8, Floor(60).Altitude, 0, -24, LeftBack #back
+
+    # left lower setback
+    AddTriangleWall MainWindows, -99.8, Floor(66).Altitude, 11.8, -91.6, Floor(80).Altitude, -18.6, -120.8, Floor(66).Altitude + %1%, -58.8, Floor(60).Altitude, -1, 14, LeftMain #main section
+    AddTriangleWall MainWindows, -99.8, Floor(79).Altitude, 11.8, -99.8, Floor(66).Altitude, 11.8, -88.3, Floor(79).Altitude, -19.9, Floor(60).Altitude, 0, 13, LeftFront #back
+    AddTriangleWall MainWindows, -99.8, Floor(66).Altitude, 11.8, -120.8, Floor(66).Altitude + %1%, -58.8, -120.8, Floor(66).Altitude, -58.8, Floor(60).Altitude, 0, 0.5, LeftFront #lower half floor
+    
+<EndExternal>
+
+<Elevator 1>
+    Speed = 2
+    Acceleration = 0.003
+    Deceleration = 0.4
+    OpenSpeed = 1.5
+    CreateElevator 4, 9.6, 0, 0
+<EndElevator>

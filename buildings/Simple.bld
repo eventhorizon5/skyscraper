@@ -1,0 +1,84 @@
+#MyBuilding
+
+<Globals>
+    Name = My Building
+    Designer = Me
+    CameraAltitude = 3.2
+    ElevatorShafts = 1
+    Floors = 9 #10 total floors/levels, 0 to 9
+    Basements = 0
+    Elevators = 2
+    PipeShafts = 0
+    Stairs = 2
+    HorizScale = 1
+    CameraFloor = 0
+    CameraPosition = 0, -41.6
+    CameraDirection = 0, 10, 28.8
+    CameraRotation = 0, 0, 0
+<EndGlobals>
+
+<Textures>
+    Load data\brick1.jpg, Brick
+    Load data\windows08.jpg, MainWindows
+    Load data\granite.jpg, Granite
+    Load data\symb5.jpg, Marble3
+    Load data\elev1.jpg, Elev1
+    Load data\textur15.jpg, Wood1
+    Load data\text16.jpg, Wood2
+    Load data\text16.jpg, ElevDoors
+    Load data\marb148.jpg, ElevExtPanels
+    Load data\top.jpg, SkyTop
+    Load data\bottom.jpg, SkyBottom
+    Load data\left.jpg, SkyLeft
+    Load data\right.jpg, SkyRight
+    Load data\front.jpg, SkyFront
+    Load data\back.jpg, SkyBack
+ <EndTextures>
+
+<Floors 0 to 9>
+    ID = %floor%
+    Name = Floor %floor%
+    Type = Office
+    Height = 10
+    InterfloorHeight = 2.24
+    DoorHeight = 6.24
+    DoorWidth = 3
+
+    #Floor
+    AddFloor Granite, -20, 20, 20, -20, 0, 0, 0, False
+
+    #Ceiling
+    AddFloor Marble3, -20, 20, 20, -20, %height% - 0.05, 0, 0, False
+
+    #External walls
+    AddWall MainWindows, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall MainWindows, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall MainWindows, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall MainWindows, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+
+    #Interfloor bottom
+    AddInterfloorFloor Brick, -20, 20, 20, 20, 0, 0, 0
+
+    #Interfloor top
+    AddInterfloorFloor Brick, -20, 20, 20, 20, %interfloorheight% - 0.05, 0, 0
+
+    #Interfloor walls
+    #AddInterfloorWall Brick, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+<EndFloors>
+
+<Floor 0>
+    AddFloor Brick, -150, -150, 150, 150, -0.1, 0, 0, False
+<EndFloor>
+
+<Elevators 1 to 2>
+    Speed = 0.5
+    Acceleration = 0.01
+    Deceleration = 0.7
+    OpenSpeed = 1.5
+
+    if(%elevator% = 1) CreateElevator 6, 14, 0, 0
+    if(%elevator% = 2) CreateElevator -6, 14, 0, 1
+<EndElevators>
