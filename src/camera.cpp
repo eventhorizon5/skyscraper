@@ -35,15 +35,21 @@ Camera::Camera()
 	// these are used store the current orientation of the camera
 	rotY = rotX = 0;
 
-	//Set default start position
+	//init variables
+	DefaultAltitude = 0;
+	CurrentFloor = 0;
+	OriginalPosition = 0;
+	StartFloor = 0;
 	StartPositionX = 0;
 	StartPositionZ = 0;
-	DefaultAltitude = 5;
+	StartDirection = csVector3(0, 0, 0);
+	StartRotation = csVector3(0, 0, 0);
 }
 
 Camera::~Camera()
 {
 	//Deconstructor
+	delete MainCamera;
 	MainCamera = 0;
 }
 

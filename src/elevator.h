@@ -31,6 +31,7 @@ class Elevator
 public:
 
 	int Number; //elevator number
+	csString Name; //elevator name
 	int QueuePositionDirection; //queue processing direction
 	bool PauseQueueSearch; //pause queue processor
 	double ElevatorSpeed; //maximum elevator speed

@@ -40,31 +40,27 @@ int SBS::LoadBuilding(const char * filename)
 	if (LoadDataFile(filename) > 0)
 		return 1;
 
-	long i; //line number
-	csString LineData;  //line contents
-	int temp1;
-    csString temp2;
-    int temp3;
-    int temp4;
-    int temp5;
-    csString temp6;
-    csString temp7;
+	long i = 0; //line number
+	csString LineData = "";  //line contents
+	int temp1 = 0;
+    csString temp2 = "";
+    int temp3 = 0;
+    int temp4 = 0;
+    int temp5 = 0;
+    csString temp6 = "";
+    csString temp7 = "";
     csStringArray tempdata;
-    int Current;
-    int FloorCheck;
-    int RangeL;
-    int RangeH;
+    int Current = 0;
+    int FloorCheck = 0;
+    int RangeL = 0;
+    int RangeH = 0;
     long RangeStart = 0;
-    int Section;
+    int Section = 0;
     csRef<iThingFactoryState> tmpMesh;
-    csString Context;
+    csString Context = "None";
 	char intbuffer[65];
 	csString buffer;
 	//char dbuffer[CVTBUFSIZE];
-
-    i = 0;
-    Section = 0;
-    Context = "None";
 
 	while (i < BuildingData.GetSize() - 1)
 	{
@@ -270,8 +266,11 @@ int SBS::LoadBuilding(const char * filename)
         if (LineData.Slice(0, 14).CompareNoCase("createwallbox2") == true)
 		{
             tempdata.SplitString(LineData.Slice(15).GetData(), ",");
-			for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
-                tempdata.Put(temp3, Calc(tempdata[temp3]));
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
             //if (tempdata.GetSize < 9)
 				//Err.Raise 1003;
             if (csString(tempdata[0]).CompareNoCase("floor") == true)
@@ -292,14 +291,18 @@ int SBS::LoadBuilding(const char * filename)
 				tmpMesh = sbs->ColumnFrame_state;
             //if IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
             CreateWallBox2(tmpMesh, tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
+			tempdata.DeleteAll();
 		}
             
         //CreateWallBox command
         if (LineData.Slice(0, 14).CompareNoCase("createwallbox ") == true)
 		{
             tempdata.SplitString(LineData.Slice(15).GetData(), ",");
-			for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
-                tempdata.Put(temp3, Calc(tempdata[temp3]));
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
             //if (tempdata.GetSize < 9)
 				//Err.Raise 1003
             if (csString(tempdata[0]).CompareNoCase("floor") == true)
@@ -320,6 +323,7 @@ int SBS::LoadBuilding(const char * filename)
 				tmpMesh = sbs->ColumnFrame_state;
             //If IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
             CreateWallBox(tmpMesh, tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
+			tempdata.DeleteAll();
 		}
         
         //Process globals
@@ -327,18 +331,19 @@ int SBS::LoadBuilding(const char * filename)
 		{
             //get text after equal sign
             temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			temp2.Trim();
 
             //store variable values
             if (LineData.Slice(0, 4).CompareNoCase("name") == true)
-				BuildingName = temp2.Trim();
+				BuildingName = temp2;
             if (LineData.Slice(0, 8).CompareNoCase("designer") == true)
-				BuildingDesigner = temp2.Trim();
+				BuildingDesigner = temp2;
             if (LineData.Slice(0, 8).CompareNoCase("location") == true)
-				BuildingLocation = temp2.Trim();
+				BuildingLocation = temp2;
             if (LineData.Slice(0, 11).CompareNoCase("description") == true)
-				BuildingDescription = temp2.Trim();
+				BuildingDescription = temp2;
             if (LineData.Slice(0, 7).CompareNoCase("version") == true)
-				BuildingVersion = temp2.Trim();
+				BuildingVersion = temp2;
             if (LineData.Slice(0, 14).CompareNoCase("cameraaltitude") == true)
 			{
                 //if (IsNumeric(temp2) == false)
@@ -381,7 +386,7 @@ int SBS::LoadBuilding(const char * filename)
 					//Err.Raise 1000;
                 StairsNum = atoi(temp2.GetData());
 			}
-            if (LineData.Slice(0, 11).CompareNoCase("Camera.CurrentFloor") == true)
+            if (LineData.Slice(0, 11).CompareNoCase("camerafloor") == true)
 			{
                 //if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
@@ -395,20 +400,20 @@ int SBS::LoadBuilding(const char * filename)
 			}
             if (LineData.Slice(0, 14).CompareNoCase("cameraposition") == true)
 			{
-                c->StartPositionX  = atof(temp2.Slice(0, temp2.Find(",", 0) - 1).GetData());
+                c->StartPositionX  = atof(temp2.Slice(0, temp2.Find(",", 0)).GetData());
                 c->StartPositionZ  = atof(temp2.Slice(temp2.Find(",", 0) + 1).GetData());
 			}
             if (LineData.Slice(0, 15).CompareNoCase("cameradirection") == true)
 			{
                 temp3 = temp2.Find(",", 0);
                 temp4 = temp2.Find(",", temp3 + 1);
-				c->SetStartDirection(csVector3(atof(temp2.Slice(0, temp3 - 1).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(atoi(temp2), temp4 + 1).GetData())));
+				c->SetStartDirection(csVector3(atof(temp2.Slice(0, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
 			}
             if (LineData.Slice(0, 14).CompareNoCase("camerarotation") == true)
 			{
                 temp3 = temp2.Find(",", 0);
 				temp4 = temp2.Find(",", temp3 + 1);
-                c->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3 - 1).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
+                c->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
 			}
 		}
 
@@ -433,7 +438,8 @@ recalc:
             
             //get text after equal sign
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
-            
+            temp2.Trim();
+
             //parameters
             if (LineData.Slice(0, 6).CompareNoCase("height") == true)
 			{
@@ -495,6 +501,7 @@ recalc:
 					temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
 				else
 					temp2 = "";
+				temp2.Trim();
                 if (Calc(temp2) == "true")
 				{
                     LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
@@ -520,14 +527,23 @@ recalc:
                 tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 				
                 //calculate inline math
-                for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
-                    tempdata[temp3] = Calc(tempdata[temp3]);
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+                    buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
                 //if (tempdata.GetSize() < 8)
 					//Err.Raise 1003;
                 //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
                 
                 //create floor
-				FloorArray[Current]->AddFloor(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+				buffer = tempdata[9];
+				if (buffer.CompareNoCase("true") == true)
+					FloorArray[Current]->AddFloor(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), true);
+				else
+					FloorArray[Current]->AddFloor(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), false);
+
+				tempdata.DeleteAll();
 			}
             
             //AddInterFloorFloor command
@@ -537,14 +553,18 @@ recalc:
                 tempdata.SplitString(LineData.Slice(19).GetData(), ",");
 				
                 //calculate inline math
-                for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
-                    tempdata[temp3] = Calc(tempdata[temp3]);
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
                 //if (tempdata.GetSize() < 7)
 				//	Err.Raise 1003;
                 //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
                 
                 //create floor
-				FloorArray[Current]->AddInterfloorFloor(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+				FloorArray[Current]->AddInterfloorFloor(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+				tempdata.DeleteAll();
 			}
             
             //AddWall command
@@ -554,14 +574,23 @@ recalc:
                 tempdata.SplitString(LineData.Slice(8).GetData(), ",");
 				
                 //calculate inline math
-                for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
-                    tempdata[temp3] = Calc(tempdata[temp3]);
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
                 //if (tempdata.GetSize() < 11)
 					//Err.Raise 1003;
                 //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
                 
                 //create wall
-                FloorArray[Current]->AddWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				buffer = tempdata[11];
+				if (buffer.CompareNoCase("true") == true)
+					FloorArray[Current]->AddWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), true);
+				else
+					FloorArray[Current]->AddWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), false);
+
+				tempdata.DeleteAll();
 			}
             
             //AddInterFloorWall command
@@ -571,14 +600,18 @@ recalc:
                 tempdata.SplitString(LineData.Slice(18).GetData(), ",");
 				
                 //calculate inline math
-                for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
-                    tempdata[temp3] = Calc(tempdata[temp3]);
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
                 //if (tempdata.GetSize() < 10)
 					//Err.Raise 1003;
                 //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
                 
                 //create wall
                 FloorArray[Current]->AddInterfloorWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				tempdata.DeleteAll();
 			}
             
             //handle floor range
@@ -627,14 +660,18 @@ recalc:
                 tempdata.SplitString(LineData.Slice(16).GetData(), ",");
 				
                 //calculate inline math
-                for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
-                    tempdata[temp3] = Calc(tempdata[temp3]);
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
                 //if (tempdata.GetSize() < 13)
 					//Err.Raise 1003;
                 //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
                 
                 //create triangle wall
                 AddTriangleWall(External_state, tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), true);
+				tempdata.DeleteAll();
 			}
             
             //AddWall command
@@ -644,14 +681,18 @@ recalc:
                 tempdata.SplitString(LineData.Slice(8).GetData(), ",");
 				
                 //calculate inline math
-                for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
-                    tempdata[temp3] = Calc(tempdata[temp3]);
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
                 //if (tempdata.GetSize() < 11)
 					//Err.Raise 1003;
                 //if IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
                 
                 //create wall
                 AddWallMain(External_state, tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				tempdata.DeleteAll();
 			}
             
             //AddFloor
@@ -661,14 +702,18 @@ recalc:
                 tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 				
                 //calculate inline math
-                for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
-                    tempdata[temp3] = Calc(tempdata[temp3]);
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
                 //if (tempdata.GetSize() < 7)
 					//Err.Raise 1003;
                 //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
                 
                 //create floor
-                AddFloorMain(External_state, tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+                AddFloorMain(External_state, tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+				tempdata.DeleteAll();
 			}
 		}
         
@@ -714,6 +759,7 @@ recalc:
 					temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
 				else
 					temp2 = "";
+				temp2.Trim();
                 if (Calc(temp2) == "true")
                     LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
                 else
@@ -724,12 +770,16 @@ recalc:
             if (LineData.Slice(0, 14).CompareNoCase("createelevator") == true)
 			{
                 tempdata.SplitString(LineData.Slice(15).GetData(), ",");
-				for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
-                    tempdata[temp3] = Calc(tempdata[temp3]);
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
                 //if (tempdata.GetSize() < 3)
 					//Err.Raise 1003;
                 //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Then Err.Raise 1000
                 ElevatorArray[Current]->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]));
+				tempdata.DeleteAll();
 			}
             
             //handle elevator range
@@ -753,22 +803,29 @@ recalc:
         //Process textures
         if (Section == 5)
 		{
-            if (LineData.Slice(0, 5).CompareNoCase("load") == true)
+            if (LineData.Slice(0, 5).CompareNoCase("load ") == true)
 			{
-                tempdata.SplitString(LineData.Slice(6).GetData(), ",");
-				for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
+                tempdata.SplitString(LineData.Slice(5).GetData(), ",");
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
                     buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
+				}
                 //if (tempdata.GetSize() < 1)
 					//Err.Raise 1003;
-                LoadTexture(tempdata[0], tempdata[1]);
+				buffer = tempdata[0];
+				buffer.Insert(0, "/root/");
+				LoadTexture(buffer.GetData(), tempdata[1]);
+				tempdata.DeleteAll();
 			}
             if (LineData.Slice(0, 9).CompareNoCase("loadrange") == true)
 			{
-                tempdata.SplitString(LineData.Slice(10).GetData(), ",");
-				for (temp3 = 0; temp3 <= tempdata.GetSize(); temp3++)
+                tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
                     buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
+				}
                 //if (tempdata.GetSize() < 1)
 					//Err.Raise 1003;
                 //If IsNumeric(tempdata(0)) = False Or IsNumeric(tempdata(1)) = False Then Err.Raise 1000
@@ -782,8 +839,9 @@ recalc:
 					temp2.ReplaceAll("%number%", buffer.Trim());
 					temp6 = tempdata[3];
 					temp6.ReplaceAll("%number%", buffer.Trim());
-                    LoadTexture(temp2, temp6);
+                    LoadTexture("/root/" + temp2, temp6);
 				}
+				tempdata.DeleteAll();
 			}
 		}
 Nextline:
@@ -799,9 +857,6 @@ int SBS::LoadDataFile(const char * filename)
 	bool streamnotfinished = true;
 	char buffer[1000];
 
-	//if (vfs->ChDir("/root/") == false)
-	//	return 1;
-	
 	//make sure file exists
 	if (vfs->Exists(filename) == false)
 		return 1;
@@ -829,7 +884,6 @@ int SBS::LoadDataFile(const char * filename)
 	
 		//push buffer onto the tail end of the BuildingData array
 		BuildingData.Push(buffer);
-
 	}
 
 	return 0;

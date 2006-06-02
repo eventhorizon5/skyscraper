@@ -50,21 +50,66 @@ SBS::SBS()
 	FrameRate = 30;
 	FrameLimiter = true;
 
+	//initialize other variables
+	BuildingName = "";
+	BuildingDesigner = "";
+	BuildingLocation = "";
+	BuildingDescription = "";
+	BuildingVersion = "";
+	Gravity = 0;
+	IsRunning = false;
+	ElevatorShafts = 0;
+	TotalFloors = 0;
+	Basements = 0;
+	Elevators = 0;
+	PipeShafts = 0;
+	StairsNum = 0;
+	RenderOnly = false;
+	InputOnly = false;
+	IsFalling = false;
+	FallRate = 0;
+	InStairwell = false;
+	InElevator = false;
+	FPSModifier = 0;
+	FrameSync = false;
+	EnableCollisions = false;
+	BuildingFile = "";
 }
 
 SBS::~SBS()
 {
 	//engine deconstructor
+	int i;
 	delete c;
 	c = 0;
+	UserVariable.DeleteAll();
+
+//	for (i = -Basements; i <= TotalFloors; i++)
+//		delete &FloorArray[i];
+
+//	for (i = 1; i <= Elevators; i++)
+//		delete &ElevatorArray[i];
+
+	FloorArray.DeleteAll();
+	ElevatorArray.DeleteAll();
 	sbs = 0;
+
+	//delete objects
+	if (Buildings)
+		delete Buildings;
+
+	if (External)
+		delete External;
+
+	if (Landscape)
+		delete Landscape;
+
+	if (ColumnFrame)
+		delete ColumnFrame;
 }
 
 void SBS::Start()
 {
-	//Post-init startup code goes here, before the runloop
-	engine->Prepare();
-
 	//set up viewport
 	view = csPtr<iView>(new csView (engine, g3d));
 	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
@@ -83,8 +128,12 @@ void SBS::Start()
 	UserVariable.SetSize(256);
 
 	//load building data file
+	BuildingFile.Insert(0, "/root/");
 	LoadBuilding(BuildingFile.GetData());
 	//if (LoadBuilding(BuildingFile.GetData()) != 0)
+
+	//Post-init startup code goes here, before the runloop
+	engine->Prepare();
 
 	//move camera to start location
 	c->SetToStartPosition();
@@ -92,17 +141,17 @@ void SBS::Start()
 	c->SetToStartRotation();
 
 	//turn on main objects
-	//EnableBuildings true;
-	//EnableLandscape true;
-	//EnableExternal true;
-	//EnableColumnFrame true;
+	EnableBuildings(true);
+	EnableLandscape(true);
+	EnableExternal(true);
+	EnableColumnFrame(true);
 
 	//turn off floors
 	for (int i=-Basements; i<=TotalFloors; i++)
 		FloorArray[i]->Enabled(false);
 	
 	//turn on first/lobby floor
-	FloorArray[1]->Enabled(true);
+	FloorArray[0]->Enabled(true);
 
 	//create skybox
 
@@ -116,11 +165,40 @@ void SBS::Wait(long milliseconds)
 
 }
 
-double AutoSize(double n1, double n2, bool iswidth)
+double AutoSize(double n1, double n2, bool iswidth, bool external, double offset)
 {
 //Texture autosizing formulas
 //If any of the texture parameters are 0, then automatically size the
 //texture using sizing algorithms
+
+	double size1;
+	double size2;
+
+	if (offset == 0)
+		offset = 1;
+
+	if (external == false)
+	{
+		size1 = 0.086 * offset;
+		size2 = 0.08 * offset;
+	}
+	else
+	{
+		size1 = 0.023 * offset;
+		size2 = 1 * offset;
+	}
+
+	if (iswidth == true)
+		return abs(n1 - n2) * size1;
+	else
+	{
+		if (external == false)
+			return abs(n1 - n2) * size2;
+		else
+			return size2;
+	}
+
+	/*
 	if (((n1 < 0) && (n2 < 0)) || ((n1 >= 0) && (n2 >= 0)))
 	{
 		//if numbers have the same sign
@@ -156,7 +234,7 @@ double AutoSize(double n1, double n2, bool iswidth)
 			if (iswidth == false)
 				return (abs(n2) + abs(n1)) * 0.08;
 		}
-	}
+	}*/
 	return 0;
 }
 
@@ -336,6 +414,7 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	// First disable the lighting cache. Our app is simple enough
 	// not to need this.
 		engine->SetLightingCacheMode (0);
+		engine->SetAmbientLight(csColor(0.75, 0.75, 0.75));
 
 	//create 3D environment
 	area = engine->CreateSector("area");
@@ -343,7 +422,7 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	return true;
 }
 
-bool SBS::LoadTexture(const char *name, const char *filename)
+bool SBS::LoadTexture(const char *filename, const char *name)
 {
 	// Load the texture from the standard library.  This is located in
 	// CS/data/standard.zip and mounted as /lib/std using the Virtual
@@ -383,19 +462,33 @@ void Cleanup()
 void SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th)
 {
 	//Adds a wall with the specified dimensions
-	dest->AddQuad(csVector3(Feet * x1, Feet * altitude1, Feet * z1), csVector3(Feet * x1, Feet * (altitude1 + height_in1), Feet * z1), csVector3(Feet * x2, Feet * (altitude2 + height_in2), Feet * z2), csVector3(Feet * x2, Feet * altitude2, Feet * z2));
+	csVector3 v1 (Feet * x1, Feet * (altitude1 + height_in1), Feet * z1);
+	csVector3 v2 (Feet * x2, Feet * (altitude2 + height_in2), Feet * z2);
+	csVector3 v3 (Feet * x2, Feet * altitude2, Feet * z2);
+	csVector3 v4 (Feet * x1, Feet * altitude1, Feet * z1);
+
+	int firstidx = dest->AddQuad(v1, v2, v3, v4);
+	dest->AddQuad(v4, v3, v2, v1);
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, material);
-	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx), v1, v2, tw, v4, th);
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1), v4, v3, tw, v1, th);
 }
 
-void SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude, double tw, double th)
+void SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
-	dest->AddQuad(csVector3(Feet * x1, Feet * altitude, Feet * z1), csVector3(Feet * x1, Feet * altitude, Feet * z2), csVector3(Feet * x2, Feet * altitude, Feet * z2), csVector3(Feet * x2, Feet * altitude, Feet * z1));
+	csVector3 v1 (Feet * x1, Feet * altitude1, Feet * z1);
+	csVector3 v4 (Feet * x2, Feet * altitude2, Feet * z1);
+	csVector3 v3 (Feet * x2, Feet * altitude2, Feet * z2);
+	csVector3 v2 (Feet * x1, Feet * altitude1, Feet * z2);
+
+	int firstidx = dest->AddQuad(v1, v2, v3, v4);
+	dest->AddQuad(v4, v3, v2, v1);
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, material);
-	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx), v1, v2, tw, v4, th);
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1), v4, v3, tw, v1, th);
 }
 
 void SBS::Report (const char* msg, ...)
@@ -483,11 +576,44 @@ void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, do
 void SBS::InitMeshes()
 {
 	//initialize floor and elevator object container arrays
+	int i;
 	FloorArray.DeleteAll();
-	FloorArray.SetSize(Basements + TotalFloors);
+	FloorArray.SetSize(Basements + TotalFloors + 1);
+
+	for (i = -Basements; i <= TotalFloors; i++)
+		FloorArray[i] = new Floor(i);
+
 	ElevatorArray.DeleteAll();
-	ElevatorArray.SetSize(Elevators);
-	
+	ElevatorArray.SetSize(Elevators + 1);
+
+	for (i = 1; i <= Elevators; i++)
+		ElevatorArray[i] = new Elevator(i);
+
+	//create object meshes
+	Buildings = (sbs->engine->CreateSectorWallsMesh (sbs->area, "Buildings"));
+	Buildings_object = Buildings->GetMeshObject ();
+	Buildings_factory = Buildings_object->GetFactory();
+	Buildings_state = scfQueryInterface<iThingFactoryState> (Buildings_factory);
+	Buildings->SetZBufMode(CS_ZBUF_USE);
+
+	External = (sbs->engine->CreateSectorWallsMesh (sbs->area, "External"));
+	External_object = External->GetMeshObject ();
+	External_factory = External_object->GetFactory();
+	External_state = scfQueryInterface<iThingFactoryState> (External_factory);
+	External->SetZBufMode(CS_ZBUF_USE);
+
+	Landscape = (sbs->engine->CreateSectorWallsMesh (sbs->area, "Landscape"));
+	Landscape_object = Landscape->GetMeshObject ();
+	Landscape_factory = Landscape_object->GetFactory();
+	Landscape_state = scfQueryInterface<iThingFactoryState> (Landscape_factory);
+	Landscape->SetZBufMode(CS_ZBUF_USE);
+
+	ColumnFrame = (sbs->engine->CreateSectorWallsMesh (sbs->area, "ColumnFrame"));
+	ColumnFrame_object = ColumnFrame->GetMeshObject ();
+	ColumnFrame_factory = ColumnFrame_object->GetFactory();
+	ColumnFrame_state = scfQueryInterface<iThingFactoryState> (ColumnFrame_factory);
+	ColumnFrame->SetZBufMode(CS_ZBUF_USE);
+
 }
 
 /*void SBS::AddPolygonWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4, double FloorHeight, double tw, double th, bool IsExternal)
@@ -520,77 +646,77 @@ void SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, d
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
 }
 
-const char * SBS::Calc(const char *expression)
+csString SBS::Calc(const char *expression)
 {
 	//performs a calculation operation on a string
 	//for example, the string "1 + 1" would output to "2"
 
 	int temp1;
-	int decimal, sign;
 	csString tmpcalc = expression;
+	char buffer[20];
 	tmpcalc.Trim();
 
 	//general math
 	temp1 = tmpcalc.Find("+", 0);
-	if (temp1 > 1)
+	if (temp1 > 0)
 	{
-		tmpcalc = _fcvt(atof(tmpcalc.Slice(0, temp1 - 1).GetData()) + atof(tmpcalc.Slice(temp1 + 1).GetData()), 7, &decimal, &sign);
+		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) + atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
 		return tmpcalc;
 	}
 	temp1 = tmpcalc.Find("-", 0);
-	if (temp1 > 1)
+	if (temp1 > 0)
 	{
-		tmpcalc = _fcvt(atof(tmpcalc.Slice(0, temp1 - 1).GetData()) - atof(tmpcalc.Slice(temp1 + 1).GetData()), 7, &decimal, &sign);
+		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) - atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
 		return tmpcalc;
 	}
 	temp1 = tmpcalc.Find("/", 0);
-	if (temp1 > 1)
+	if (temp1 > 0)
 	{
-		tmpcalc = _fcvt(atof(tmpcalc.Slice(0, temp1 - 1).GetData()) / atof(tmpcalc.Slice(temp1 + 1).GetData()), 7, &decimal, &sign);
+		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) / atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
 		return tmpcalc;
 	}
 	temp1 = tmpcalc.Find("*", 0);
-	if (temp1 > 1)
+	if (temp1 > 0)
 	{
-		tmpcalc = _fcvt(atof(tmpcalc.Slice(0, temp1 - 1).GetData()) * atof(tmpcalc.Slice(temp1 + 1).GetData()), 7, &decimal, &sign);
+		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) * atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
 		return tmpcalc;
 	}
 	
 	//boolean operators
 	temp1 = tmpcalc.Find("=", 0);
-	if (temp1 > 1)
+	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1 - 1)) == atof(tmpcalc.Slice(temp1 + 1)))
+		if (atof(tmpcalc.Slice(0, temp1)) == atof(tmpcalc.Slice(temp1 + 1)))
 			return "true";
 		else
 			return "false";
 	}
 	temp1 = tmpcalc.Find("!", 0);
-	if (temp1 > 1)
+	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1 - 1)) != atof(tmpcalc.Slice(temp1 + 1)))
+		if (atof(tmpcalc.Slice(0, temp1)) != atof(tmpcalc.Slice(temp1 + 1)))
 			return "true";
 		else
 			return "false";
 	}
 	temp1 = tmpcalc.Find("<", 0);
-	if (temp1 > 1)
+	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1 - 1)) < atof(tmpcalc.Slice(temp1 + 1)))
+		if (atof(tmpcalc.Slice(0, temp1)) < atof(tmpcalc.Slice(temp1 + 1)))
 			return "true";
 		else
 			return "false";
 	}
 	temp1 = tmpcalc.Find(">", 0);
-	if (temp1 > 1)
+	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1 - 1)) > atof(tmpcalc.Slice(temp1 + 1)))
+		if (atof(tmpcalc.Slice(0, temp1)) > atof(tmpcalc.Slice(temp1 + 1)))
 			return "true";
 		else
 			return "false";
 	}
 	
-	return "";
+	return tmpcalc.GetData();
 }
 
 bool IsNumeric(const char *expression)
@@ -599,4 +725,72 @@ bool IsNumeric(const char *expression)
 	double d;
 	ss >> d;
 	return ss.good();
+}
+
+void SBS::EnableBuildings(bool value)
+{
+	//turns buildings on/off
+	if (value == true)
+	{
+		Buildings->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		Buildings->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		Buildings->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		Buildings->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		Buildings->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		Buildings->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+	}
+}
+
+void SBS::EnableLandscape(bool value)
+{
+	//turns landscape on/off
+	if (value == true)
+	{
+		Landscape->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		Landscape->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		Landscape->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		Landscape->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		Landscape->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		Landscape->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+	}
+}
+
+void SBS::EnableExternal(bool value)
+{
+	//turns external on/off
+	if (value == true)
+	{
+		External->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		External->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		External->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		External->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		External->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		External->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+	}
+}
+
+void SBS::EnableColumnFrame(bool value)
+{
+	//turns column frame on/off
+	if (value == true)
+	{
+		ColumnFrame->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ColumnFrame->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ColumnFrame->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		ColumnFrame->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		ColumnFrame->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ColumnFrame->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+	}
 }

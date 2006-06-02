@@ -31,67 +31,128 @@ extern Camera *c; //external pointer to the camera
 
 Elevator::Elevator(int number)
 {
+	csString buffer;
+	
+	//set elevator number
 	Number = number;
 
+	//init variables
+	Name = "";
+	QueuePositionDirection = 0;
+	PauseQueueSearch = false;
+	ElevatorSpeed = 0;
+	ElevatorSync = false;
+	MoveElevator = false;
+	MoveElevatorFloor = 0;
+	GotoFloor = 0;
+	OpenDoor = 0;
+	Acceleration = 0;
+	Deceleration = 0;
+	OpenSpeed = 0;
+	UpQueue = "";
+	DownQueue = "";
+	ElevatorStart = 0;
+	ElevatorFloor = 0;
+	DoorsOpen = false;
+	ElevatorDirection = 0;
+	DistanceToTravel = 0;
+	Destination = 0;
+	ElevatorRate = 0;
+	StoppingDistance = 0;
+	CalculateStoppingDistance = false;
+	Brakes = false;
+	ElevatorDoorSpeed = 0;
+	ElevatorDoorPos = 0;
+	ElevWait = false;
+
 	//create object meshes
-	ElevatorMesh = (sbs->engine->CreateSectorWallsMesh (sbs->area, "Elevator"));
+	buffer = Number;
+	buffer.Insert(0, "Elevator ");
+	buffer.Trim();
+	ElevatorMesh = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
 	Elevator_object = ElevatorMesh->GetMeshObject ();
 	Elevator_factory = Elevator_object->GetFactory();
 	Elevator_state = scfQueryInterface<iThingFactoryState> (Elevator_factory);
 	ElevatorMesh->SetZBufMode(CS_ZBUF_USE);
 
-	FloorIndicator = (sbs->engine->CreateSectorWallsMesh (sbs->area, "FloorIndicator"));
+	buffer = Number;
+	buffer.Insert(0, "FloorIndicator ");
+	buffer.Trim();
+	FloorIndicator = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
 	FloorIndicator_object = FloorIndicator->GetMeshObject ();
 	FloorIndicator_factory = FloorIndicator_object->GetFactory();
 	FloorIndicator_state = scfQueryInterface<iThingFactoryState> (FloorIndicator_factory);
 	FloorIndicator->SetZBufMode(CS_ZBUF_USE);
 
-	ElevatorDoorL = (sbs->engine->CreateSectorWallsMesh (sbs->area, "ElevatorDoorL"));
+	buffer = Number;
+	buffer.Insert(0, "ElevatorDoorL ");
+	buffer.Trim();
+	ElevatorDoorL = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
 	ElevatorDoorL_object = ElevatorDoorL->GetMeshObject ();
 	ElevatorDoorL_factory = ElevatorDoorL_object->GetFactory();
 	ElevatorDoorL_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorL_factory);
 	ElevatorDoorL->SetZBufMode(CS_ZBUF_USE);
 
-	ElevatorDoorR = (sbs->engine->CreateSectorWallsMesh (sbs->area, "ElevatorDoorR"));
+	buffer = Number;
+	buffer.Insert(0, "ElevatorDoorR ");
+	buffer.Trim();
+	ElevatorDoorR = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
 	ElevatorDoorR_object = ElevatorDoorR->GetMeshObject ();
 	ElevatorDoorR_factory = ElevatorDoorR_object->GetFactory();
 	ElevatorDoorR_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorR_factory);
 	ElevatorDoorR->SetZBufMode(CS_ZBUF_USE);
 
-	Plaque = (sbs->engine->CreateSectorWallsMesh (sbs->area, "Plaque"));
+	buffer = Number;
+	buffer.Insert(0, "Plaque ");
+	buffer.Trim();
+	Plaque = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
 	Plaque_object = Plaque->GetMeshObject ();
 	Plaque_factory = Plaque_object->GetFactory();
 	Plaque_state = scfQueryInterface<iThingFactoryState> (Plaque_factory);
 	Plaque->SetZBufMode(CS_ZBUF_USE);
 
-	CallButtonsUp = (sbs->engine->CreateSectorWallsMesh (sbs->area, "CallButtonsUp"));
+	buffer = Number;
+	buffer.Insert(0, "CallButtonsUp ");
+	buffer.Trim();
+	CallButtonsUp = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
 	CallButtonsUp_object = CallButtonsUp->GetMeshObject ();
 	CallButtonsUp_factory = CallButtonsUp_object->GetFactory();
 	CallButtonsUp_state = scfQueryInterface<iThingFactoryState> (CallButtonsUp_factory);
 	CallButtonsUp->SetZBufMode(CS_ZBUF_USE);
 
-	CallButtonsDown = (sbs->engine->CreateSectorWallsMesh (sbs->area, "CallButtonsDown"));
+	buffer = Number;
+	buffer.Insert(0, "CallButtonsDown ");
+	buffer.Trim();
+	CallButtonsDown = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
 	CallButtonsDown_object = CallButtonsDown->GetMeshObject ();
 	CallButtonsDown_factory = CallButtonsDown_object->GetFactory();
 	CallButtonsDown_state = scfQueryInterface<iThingFactoryState> (CallButtonsDown_factory);
 	CallButtonsDown->SetZBufMode(CS_ZBUF_USE);
-
-	/*Set ElevatorMesh = Scene.CreateMeshBuilder("Elevator" + Str$(Number))
-	Set FloorIndicator = Scene.CreateMeshBuilder("FloorIndicator" + Str$(Number))
-	Set ElevatorInsDoorL = Scene.CreateMeshBuilder("ElevatorInsDoorL" + Str$(Number))
-	Set ElevatorInsDoorR = Scene.CreateMeshBuilder("ElevatorInsDoorR" + Str$(Number))
-	Set Plaque = Scene.CreateMeshBuilder("Plaque" + Str$(Number))
-	Set CallButtonsUp = Scene.CreateMeshBuilder("CallButtonsUp" + Str$(Number))
-	Set CallButtonsDown = Scene.CreateMeshBuilder("CallButtonsDown" + Str$(Number))
-	//Set ElevatorMusic = New TV3DMedia.TVSoundWave3D
-	//Set ElevatorSounds = New TV3DMedia.TVSoundWave3D
-	*/
-
 }
 
 Elevator::~Elevator()
 {
+	//Deconstructor
+	if (CallButtonsDown)
+		delete CallButtonsDown;
 
+	if (CallButtonsUp)
+		delete CallButtonsUp;
+
+	if (Plaque)
+		delete Plaque;
+
+	if (ElevatorDoorR)
+		delete ElevatorDoorR;
+
+	if (ElevatorDoorL)
+		delete ElevatorDoorL;
+
+	if (FloorIndicator)
+		delete FloorIndicator;
+
+	if (ElevatorMesh)
+		delete ElevatorMesh;
 }
 
 void Elevator::CreateElevator(double x, double y, int floor, int direction)
@@ -257,7 +318,7 @@ void Elevator::AddWall(const char *texture, double x1, double z1, double x2, dou
 
 void Elevator::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset, double tw, double th)
 {
-   	sbs->AddFloorMain(Elevator_state, texture, x1, z1, x2, z2, voffset + GetPosition().y, tw, th);
+   	sbs->AddFloorMain(Elevator_state, texture, x1, z1, x2, z2, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
 void Elevator::AddFloorIndicator(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)

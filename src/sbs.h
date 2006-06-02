@@ -29,7 +29,7 @@
 
 //global functions
 bool IsEven(int Number);
-double AutoSize(double n1, double n2, bool iswidth);
+double AutoSize(double n1, double n2, bool iswidth, bool external, double offset);
 bool IsNumeric(const char *expression);
 static bool SBSEventHandler(iEvent& Event);
 void Cleanup();
@@ -134,20 +134,24 @@ public:
 	bool ReportError (const char* msg, ...);
 	void Wait(long Milliseconds);
 	void SlowToFPS(long FrameRate);
-	bool LoadTexture(const char *name, const char *filename);
+	bool LoadTexture(const char *filename, const char *name);
 	bool Initialize(int argc, const char* const argv[], const char *windowtitle);
  	void Start();
 	void AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b);
 	void AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th);
-	void AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude, double tw, double th);
+	void AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th);
 	bool HandleEvent(iEvent& Event);
 	void SetupFrame();
 	void FinishFrame();
 	void CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th);
 	void CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
 	void AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double FloorHeight, double tw, double th, bool IsExternal);
-	const char * Calc(const char *expression);
+	csString Calc(const char *expression);
 	void InitMeshes();
+	void EnableBuildings(bool value);
+	void EnableLandscape(bool value);
+	void EnableExternal(bool value);
+	void EnableColumnFrame(bool value);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);

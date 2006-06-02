@@ -42,7 +42,7 @@ int main (int argc, char* argv[])
 	}
 	
 	//set building file
-	Simcore->BuildingFile = "/root/buildings/Simple.bld";
+	Simcore->BuildingFile = "buildings/Simple2.bld";
 
 	//start simulation
 	Simcore->Start();
