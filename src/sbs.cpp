@@ -462,33 +462,45 @@ void Cleanup()
 void SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th)
 {
 	//Adds a wall with the specified dimensions
-	csVector3 v1 (Feet * x1, Feet * (altitude1 + height_in1), Feet * z1);
-	csVector3 v2 (Feet * x2, Feet * (altitude2 + height_in2), Feet * z2);
-	csVector3 v3 (Feet * x2, Feet * altitude2, Feet * z2);
-	csVector3 v4 (Feet * x1, Feet * altitude1, Feet * z1);
+	csVector3 v1 (Feet * x1, Feet * (altitude1 + height_in1), Feet * z1); //left top
+	csVector3 v2 (Feet * x2, Feet * (altitude2 + height_in2), Feet * z2); //right top
+	csVector3 v3 (Feet * x2, Feet * altitude2, Feet * z2); //right base
+	csVector3 v4 (Feet * x1, Feet * altitude1, Feet * z1); //left base
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	dest->AddQuad(v4, v3, v2, v1);
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx), v1, v2, tw, v4, th);
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1), v4, v3, tw, v1, th);
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
+		csVector2 (0, 0),
+		csVector2 (tw, 0),
+		csVector2 (tw, th));
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
+		csVector2 (0, th),
+		csVector2 (tw, th),
+		csVector2 (tw, 0));
 }
 
 void SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
-	csVector3 v1 (Feet * x1, Feet * altitude1, Feet * z1);
-	csVector3 v4 (Feet * x2, Feet * altitude2, Feet * z1);
-	csVector3 v3 (Feet * x2, Feet * altitude2, Feet * z2);
-	csVector3 v2 (Feet * x1, Feet * altitude1, Feet * z2);
+	csVector3 v1 (Feet * x1, Feet * altitude1, Feet * z1); //bottom left
+	csVector3 v4 (Feet * x2, Feet * altitude2, Feet * z1); //bottom right
+	csVector3 v3 (Feet * x2, Feet * altitude2, Feet * z2); //top right
+	csVector3 v2 (Feet * x1, Feet * altitude1, Feet * z2); //top left
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	dest->AddQuad(v4, v3, v2, v1);
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx), v1, v2, tw, v4, th);
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1), v4, v3, tw, v1, th);
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx + 1), 
+		csVector2 (0, 0),
+		csVector2 (tw, 0),
+		csVector2 (tw, th));
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
+		csVector2 (0, th),
+		csVector2 (tw, th),
+		csVector2 (tw, 0));
 }
 
 void SBS::Report (const char* msg, ...)
