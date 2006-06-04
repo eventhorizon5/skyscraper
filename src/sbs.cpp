@@ -41,7 +41,7 @@ SBS::SBS()
 	HorizScale = 1;
 
 	//Set feet scale value
-	Feet = 0.5;
+	Feet = 3.125;
 
 	//Set default starting elevator
 	ElevatorNumber = 1;
@@ -84,11 +84,11 @@ SBS::~SBS()
 	c = 0;
 	UserVariable.DeleteAll();
 
-//	for (i = -Basements; i <= TotalFloors; i++)
-//		delete &FloorArray[i];
+	for (i = -Basements; i <= TotalFloors; i++)
+		delete &FloorArray[i];
 
-//	for (i = 1; i <= Elevators; i++)
-//		delete &ElevatorArray[i];
+	for (i = 1; i <= Elevators; i++)
+		delete &ElevatorArray[i];
 
 	FloorArray.DeleteAll();
 	ElevatorArray.DeleteAll();
@@ -197,44 +197,6 @@ double AutoSize(double n1, double n2, bool iswidth, bool external, double offset
 		else
 			return size2;
 	}
-
-	/*
-	if (((n1 < 0) && (n2 < 0)) || ((n1 >= 0) && (n2 >= 0)))
-	{
-		//if numbers have the same sign
-	    if (abs(n1) >= abs(n2))
-		{
-			if (iswidth == true)
-				return (abs(n1) - abs(n2)) * 0.086;
-			if (iswidth == false)
-				return (abs(n1) - abs(n2)) * 0.08;
-		}
-		else
-		{
-			if (iswidth == true)
-				return (abs(n2) - abs(n1)) * 0.086;
-			if (iswidth == false)
-				return (abs(n2) - abs(n1)) * 0.08;
-		}
-	}
-	else
-	{
-		//if numbers have different signs
-	    if (n1 > n2)
-		{
-			if (iswidth == true)
-				return (abs(n1) + abs(n2)) * 0.086;
-			if (iswidth == false)
-				return (abs(n1) + abs(n2)) * 0.08;
-		}
-		else
-		{
-			if (iswidth == true)
-				return (abs(n2) + abs(n1)) * 0.086;
-			if (iswidth == false)
-				return (abs(n2) + abs(n1)) * 0.08;
-		}
-	}*/
 	return 0;
 }
 
@@ -258,6 +220,9 @@ void SBS::SetupFrame()
 	csTicks elapsed_time = vc->GetElapsedTicks ();
 	// Now rotate the camera according to keyboard state
 	double speed = (elapsed_time / 1000.0) * (0.06 * 20);
+
+	if (kbd->GetKeyState (CSKEY_CTRL))
+		speed *= 2;
 
 	if (kbd->GetKeyState (CSKEY_SHIFT))
 	{
@@ -291,6 +256,12 @@ void SBS::SetupFrame()
 			c->Move (CS_VEC_FORWARD * 4 * speed);
 		if (kbd->GetKeyState (CSKEY_DOWN))
 			c->Move (CS_VEC_BACKWARD * 4 * speed);
+
+		if (kbd->GetKeyState (CSKEY_SPACE))
+		{
+			c->SetToStartDirection();
+			c->SetToStartRotation();
+		}
 	}
 
 	// Tell 3D driver we're going to display 3D things.
@@ -414,7 +385,7 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	// First disable the lighting cache. Our app is simple enough
 	// not to need this.
 		engine->SetLightingCacheMode (0);
-		engine->SetAmbientLight(csColor(0.75, 0.75, 0.75));
+		engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
 
 	//create 3D environment
 	area = engine->CreateSector("area");
@@ -542,18 +513,15 @@ void SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, dou
 	
 	iMaterialWrapper* tm;
 	
-	dest->AddInsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	dest->AddInsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
-	dest->AddOutsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	dest->AddOutsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-	
-//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
-
 }
 
 void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th)
@@ -571,18 +539,15 @@ void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, do
 	z1 = CenterZ - (LengthZ / 2);
 	z2 = CenterZ + (LengthZ / 2);
 
-	dest->AddInsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	dest->AddInsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
-	dest->AddOutsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	dest->AddOutsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-	
-//*** todo: implement full texture sizing - the "3" above is a single-dimension value; there needs to be 2
-
 }
 
 void SBS::InitMeshes()
@@ -673,24 +638,32 @@ csString SBS::Calc(const char *expression)
 	if (temp1 > 0)
 	{
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) + atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
+		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
 		return tmpcalc;
 	}
 	temp1 = tmpcalc.Find("-", 0);
 	if (temp1 > 0)
 	{
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) - atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
+		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
 		return tmpcalc;
 	}
 	temp1 = tmpcalc.Find("/", 0);
 	if (temp1 > 0)
 	{
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) / atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
+		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
 		return tmpcalc;
 	}
 	temp1 = tmpcalc.Find("*", 0);
 	if (temp1 > 0)
 	{
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) * atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
+		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
 		return tmpcalc;
 	}
 	
@@ -733,10 +706,17 @@ csString SBS::Calc(const char *expression)
 
 bool IsNumeric(const char *expression)
 {
-	std::stringstream ss(expression);
-	double d;
-	ss >> d;
-	return ss.good();
+	//returns true if the string is numeric; otherwise returns false	
+	csString s;
+	s = expression;
+	char test;
+	for (int i = 0; i < s.Length(); i++)
+	{
+		test = s.GetAt(i);
+		if((test <= '0' || test >= '9') && test != '.')
+			return false;
+	}
+	return true;
 }
 
 void SBS::EnableBuildings(bool value)

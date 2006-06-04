@@ -225,7 +225,6 @@ void Floor::Enabled(bool value)
 
 void Floor::AddAutoFloor(const char *texture)
 {
-	//this is going to be *hard* lol
 	//autogenerate a floor based on either wall bounds, or by specified boundaries
 
 }

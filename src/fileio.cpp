@@ -113,7 +113,7 @@ int SBS::LoadBuilding(const char * filename)
         if (LineData.Slice(0, 7).CompareNoCase("<floors") == true)
 		{
             Section = 2;
-            temp3 = LineData.Find("to", 0);
+            temp3 = csString(LineData).Downcase().Find("to", 0);
             RangeL = atoi(LineData.Slice(8, temp3 - 9).GetData());
             RangeH = atoi(LineData.Slice(temp3 + 2).GetData());
             Context = "Floor range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
@@ -146,7 +146,7 @@ int SBS::LoadBuilding(const char * filename)
         if (LineData.Slice(0, 10).CompareNoCase("<elevators") == true)
 		{
             Section = 4;
-            temp3 = LineData.Find("to", 10);
+            temp3 = csString(LineData).Downcase().Find("to", 10);
 			RangeL = atoi(LineData.Slice(11, temp3 - 12).GetData());
             RangeH = atoi(LineData.Slice(temp3 + 2).GetData());
             Context = "Elevator range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
@@ -220,7 +220,7 @@ int SBS::LoadBuilding(const char * filename)
 		}
 
         //Floor object conversion
-		temp5 = LineData.Find("floor(", 0);
+		temp5 = csString(LineData).Downcase().Find("floor(", 0);
         while (temp5 > -1)
 		{
             temp1 = LineData.Find("(", 0);
@@ -236,8 +236,10 @@ int SBS::LoadBuilding(const char * filename)
 			buffer.Downcase();
 			temp1 = buffer.Find(temp6.GetData(), 0);
             if (temp1 > 0)
+			{
 				buffer = FloorArray[temp4]->FullHeight();
-                LineData = LineData.Slice(1, temp1 - 1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
+                LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
+			}
             //altitude parameter
 			buffer = temp4;
             temp6 = "floor(" + buffer.Trim() + ").altitude";
@@ -245,9 +247,11 @@ int SBS::LoadBuilding(const char * filename)
 			buffer.Downcase();
 			temp1 = buffer.Find(temp6.GetData(), 0);
             if (temp1 > 0)
+			{
 				buffer = FloorArray[temp4]->Altitude;
-                LineData = LineData.Slice(1, temp1 - 1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
-			temp5 = LineData.Find("floor(", 0);
+                LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
+			}
+			temp5 = csString(LineData).Downcase().Find("floor(", 0);
         }
         
         //Set command
