@@ -64,13 +64,26 @@ void Camera::SetPosition(csVector3 vector)
 void Camera::SetDirection(csVector3 vector)
 {
 	//sets the camera's direction to an absolute position
-
+	MainCamera->GetTransform().LookAt(vector, csVector3 (0, 1, 0));
 }
 
 void Camera::SetRotation(csVector3 vector)
 {
 	//sets the camera's rotation to an absolute position
 
+	// We now assign a new rotation transformation to the camera.  You
+	// can think of the rotation this way: starting from the zero
+	// position, you first rotate "rotY" radians on your Y axis to get
+	// the first rotation.  From there you rotate "rotX" radians on the
+	// your X axis to get the final rotation.  We multiply the
+	// individual rotations on each axis together to get a single
+	// rotation matrix.  The rotations are applied in right to left
+	// order .
+	csMatrix3 rot = csXRotMatrix3 (vector.x) * csYRotMatrix3 (vector.y);
+	csOrthoTransform ot (rot, MainCamera->GetTransform().GetOrigin ());
+	MainCamera->SetTransform (ot);
+	rotX = vector.x;
+	rotY = vector.y;
 }
 
 csVector3 Camera::GetPosition()
@@ -113,19 +126,7 @@ void Camera::Rotate(csVector3 vector)
 	
 	rotX += vector.x;
 	rotY += vector.y;
-
-	// We now assign a new rotation transformation to the camera.  You
-	// can think of the rotation this way: starting from the zero
-	// position, you first rotate "rotY" radians on your Y axis to get
-	// the first rotation.  From there you rotate "rotX" radians on the
-	// your X axis to get the final rotation.  We multiply the
-	// individual rotations on each axis together to get a single
-	// rotation matrix.  The rotations are applied in right to left
-	// order .
-	csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
-	csOrthoTransform ot (rot, MainCamera->GetTransform().GetOrigin ());
-	MainCamera->SetTransform (ot);
-
+	SetRotation(csVector3(rotX, rotY, vector.z));
 }
 
 void Camera::SetStartDirection(csVector3 vector)
@@ -141,6 +142,8 @@ csVector3 Camera::GetStartDirection()
 void Camera::SetStartRotation(csVector3 vector)
 {
 	StartRotation = vector;
+	rotX = vector.x;
+	rotY = vector.y;
 }
 
 csVector3 Camera::GetStartRotation()

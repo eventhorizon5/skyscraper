@@ -230,13 +230,13 @@ void SBS::SetupFrame()
 		// the camera to strafe up, down, left or right from it's
 		// current position.
 		if (kbd->GetKeyState (CSKEY_RIGHT))
-			c->Move (CS_VEC_RIGHT * 4 * speed);
+			c->Move (CS_VEC_RIGHT * 8 * speed);
 		if (kbd->GetKeyState (CSKEY_LEFT))
-			c->Move (CS_VEC_LEFT * 4 * speed);
+			c->Move (CS_VEC_LEFT * 8 * speed);
 		if (kbd->GetKeyState (CSKEY_UP))
-			c->Move (CS_VEC_UP * 4 * speed);
+			c->Move (CS_VEC_UP * 8 * speed);
 		if (kbd->GetKeyState (CSKEY_DOWN))
-			c->Move (CS_VEC_DOWN * 4 * speed);
+			c->Move (CS_VEC_DOWN * 8 * speed);
 	}
 	else
 	{
@@ -253,15 +253,26 @@ void SBS::SetupFrame()
 		if (kbd->GetKeyState (CSKEY_PGDN))
 			c->Rotate(CS_VEC_LEFT * speed);
 		if (kbd->GetKeyState (CSKEY_UP))
-			c->Move (CS_VEC_FORWARD * 4 * speed);
+		{
+			double KeepAltitude;
+			KeepAltitude = c->GetPosition().y;
+			c->Move (CS_VEC_FORWARD * 8 * speed);
+			if (c->GetPosition().y != KeepAltitude)
+				c->SetPosition(csVector3(c->GetPosition().x, KeepAltitude, c->GetPosition().z));
+		}
 		if (kbd->GetKeyState (CSKEY_DOWN))
-			c->Move (CS_VEC_BACKWARD * 4 * speed);
+			c->Move (CS_VEC_BACKWARD * 8 * speed);
 
 		if (kbd->GetKeyState (CSKEY_SPACE))
 		{
 			c->SetToStartDirection();
 			c->SetToStartRotation();
 		}
+		//values from old version
+		if (kbd->GetKeyState (CSKEY_HOME))
+			c->Move (CS_VEC_UP * 8 * speed);
+		if (kbd->GetKeyState (CSKEY_END))
+			c->Move (CS_VEC_DOWN * 8 * speed);
 	}
 
 	// Tell 3D driver we're going to display 3D things.
@@ -442,6 +453,7 @@ void SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, doubl
 	dest->AddQuad(v4, v3, v2, v1);
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+	//texture mapping is set from first 3 coordinates
 	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
 		csVector2 (0, 0),
 		csVector2 (tw, 0),
@@ -464,6 +476,7 @@ void SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, doub
 	dest->AddQuad(v4, v3, v2, v1);
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+	//texture mapping is set from first 3 coordinates
 	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx + 1), 
 		csVector2 (0, 0),
 		csVector2 (tw, 0),
@@ -604,23 +617,72 @@ void SBS::InitMeshes()
 }
 */
 
-void SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double FloorHeight, double tw, double th, bool IsExternal)
+void SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal)
 {
 	//Adds a triangular wall with the specified dimensions
 	//***note - possibly replace this with the AddPolygonWall function
+	double tw2 = tw;
+	double th2;
+	double tempw1;
+	double tempw2;
 
 	//Set horizontal scaling
-	x1 = x1 * HorizScale;
-	x2 = x2 * HorizScale;
-	x3 = x3 * HorizScale;
-	z1 = z1 * HorizScale;
-	z2 = z2 * HorizScale;
-	z3 = z3 * HorizScale;
+	x1 *= HorizScale;
+	x2 *= HorizScale;
+	x3 *= HorizScale;
+	z1 *= HorizScale;
+	z2 *= HorizScale;
+	z3 *= HorizScale;
+	
+	csVector2 x, y, z;
 
-	dest->AddTriangle(csVector3(Feet * x1, Feet * y1, Feet * z1), csVector3(Feet * x2, Feet * y2, Feet * z2), csVector3(Feet * x3, Feet * y3, Feet * z3));
+	//get extents
+	x = FindExtents(x1, x2, x3);
+	y = FindExtents(y1, y2, y3);
+	z = FindExtents(z1, x2, z3);
+
+	//Call texture autosizing formulas
+	if (z1 == z2 == z3)
+		tw2 = AutoSize(sbs->Feet * x.x, sbs->Feet * x.y, true, IsExternal, tw);
+	if (x1 == x2 == x3)
+		tw2 = AutoSize(sbs->Feet * z.x, sbs->Feet * z.y, true, IsExternal, tw);
+	if ((z1 != z2 != z3) && (x1 != x2 != x3))
+	{
+		//calculate diagonals
+		tempw1 = (sbs->Feet * x.y) - (sbs->Feet * x.x);
+		tempw2 = (sbs->Feet * z.y) - (sbs->Feet * z.x);
+	    tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
+	}
+	th2 = AutoSize(0, sbs->Feet * (y.y - y.x), false, IsExternal, th);
+
+	csVector3 v1 (Feet * x1, Feet * y1, Feet * z1);
+	csVector3 v2 (Feet * x2, Feet * y2, Feet * z2);
+	csVector3 v3 (Feet * x3, Feet * y3, Feet * z3);
+
+	int firstidx = dest->AddTriangle(v1, v2, v3);
+	dest->AddTriangle(v3, v2, v1);
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, material);
-	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+
+	//texture mapping is set from 3 manual vectors in a square layout
+	v1 = csVector3(Feet * x.x, Feet * y.y, Feet * z.x); //top left
+	v2 = csVector3(Feet * x.y, Feet * y.y, Feet * z.y); //top right
+	v3 = csVector3(Feet * x.y, Feet * y.x, Feet * z.y); //bottom right
+
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
+		v1,
+		csVector2 (0, 0),
+		v2,
+		csVector2 (tw2, 0),
+		v3,
+		csVector2 (tw2, th2));
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
+		v1,
+		csVector2 (0, th2),
+		v2,
+		csVector2 (tw2, th2),
+		v3,
+		csVector2 (tw2, 0));
 }
 
 csString SBS::Calc(const char *expression)
@@ -785,4 +847,27 @@ void SBS::EnableColumnFrame(bool value)
 		ColumnFrame->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		ColumnFrame->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
+}
+
+csVector2 SBS::FindExtents(double v1, double v2, double v3)
+{
+	//returns the smallest and largest values out of 3 inputs
+	double esmall;
+	double ebig;
+
+	if ((v1 <= v2) && (v1 <= v3))
+		esmall = v1;
+	if ((v2 <= v1) && (v2 <= v3))
+		esmall = v2;
+	if ((v3 <= v1) && (v3 <= v2))
+		esmall = v3;
+	
+	if ((v1 >= v2) && (v1 >= v3))
+		ebig = v1;
+	if ((v2 >= v1) && (v2 >= v3))
+		ebig = v2;
+	if ((v3 >= v1) && (v3 >= v2))
+		ebig = v3;
+	
+	return csVector2(esmall, ebig);
 }

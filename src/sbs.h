@@ -145,8 +145,9 @@ public:
 	void FinishFrame();
 	void CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th);
 	void CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
-	void AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double FloorHeight, double tw, double th, bool IsExternal);
+	void AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal);
 	csString Calc(const char *expression);
+	csVector2 FindExtents(double v1, double v2, double v3);
 	void InitMeshes();
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
