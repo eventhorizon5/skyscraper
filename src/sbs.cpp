@@ -25,6 +25,7 @@
 #include <sstream>
 #include "sbs.h"
 #include "camera.h"
+#include "unix.h"
 
 CS_IMPLEMENT_APPLICATION
 
@@ -378,7 +379,11 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_DEBUG, true, false, false, false, true, false);
 
 	//mount app's directory in VFS
-	vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "\\");
+	#if defined(__linux__)
+		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "/");
+	#else
+		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "\\");
+	#endif
 	
 	iNativeWindow* nw = g2d->GetNativeWindow();
 	if (nw) nw->SetTitle(windowtitle);

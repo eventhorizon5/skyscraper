@@ -339,6 +339,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\unix.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -366,6 +370,10 @@
 			</File>
 			<File
 				RelativePath=".\skyscraper.h"
+				>
+			</File>
+			<File
+				RelativePath=".\unix.h"
 				>
 			</File>
 		</Filter>

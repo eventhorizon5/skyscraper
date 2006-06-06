@@ -26,6 +26,7 @@
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
+#include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
 extern Camera *c; //external pointer to the camera
