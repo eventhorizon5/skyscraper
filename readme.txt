@@ -27,11 +27,9 @@ This 1.1 release is a milestone release, and is a continuation/rewrite of the 0.
 Newer features, a completely rewritten simulation engine, loadable buildings, better graphics, etc are all
 being developed for a 2.0 release.  This version is a C++ port of the VB6 version.
 
-This software uses the CrystalSpace3D 1/27/2006 pseudo-stable graphics engine library.
+This software uses the CrystalSpace3D CVS 5/19/2006 (or later) graphics engine library.
 
 Skyscraper is a 3D virtual building simulator written in C++ using the
 CrystalSpace graphics engine which can be found at http://www.crystalspace3d.com.
-
-Support for loading buildings is not in this version yet (coming soon).
 
 See the changelog for new features and fixes for this release.
