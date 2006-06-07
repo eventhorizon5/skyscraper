@@ -14,7 +14,8 @@
   <p align="left">This document describes how to create your own buildings for 
     Skyscraper's Scalable Building Simulator engine, and also describes all of 
     the available commands. Please note that the commands and syntax will change 
-    during the simulator's development. </p>
+    during the simulator's development, and formatting will be cleaned up to make 
+    the code more readable. </p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong>1. Starting a new building</strong></p>
   <p align="left">Buildings are stored in text files in Skyscraper's <em>buildings</em> 
@@ -74,7 +75,7 @@
   <p align="left">Example:<font size="2" face="Courier New, Courier, mono"><br>
     Set 1 = Floor(5).Altitude</font></p>
   <p align="left"><br>
-    Commands:</p>
+    These commands can be used anywhere in the script:</p>
   <p align="left">1. CreateWallBox - creates 4 walls (box) at the specified coordinate 
     locations<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateWallBox <em>destobject</em>, 
@@ -84,7 +85,7 @@
     brick, -10, 10, -10, 10, 15, 0, 0, 0</font></p>
   <p align="left">The parameters in this command are very similar to the ones 
     in the AddWall command shown below in the Floor section, except for the destobject 
-    parameter; so loook in that section for info on most of these parameters.</p>
+    parameter.</p>
   <p align="left">Destobject can be either external, landscape, buildings, or 
     columnframe (more will come soon). The voffset parameter would then be the 
     altitude offset in feet of the specified destination object's base.</p>
@@ -96,8 +97,16 @@
     Example: <font size="2" face="Courier New, Courier, mono">CreateWallBox2 external, 
     brick, 0, 0, 10, 10, 15, 0, 0, 0</font></p>
   <p align="left">The parameters are the same as the above command, except centerx 
-    and centerz define the center of the box, and widthx and depthz specify the 
-    width and depth off of the center.</p>
+    and centerz define the center of the box, and widthx and lengthz specify the 
+    width and length off of the center.</p>
+  <p align="left"><br>
+    3. AddCustomWall - creates a custom polygon (wall, floor, etc) with any number 
+    of vertex points. For example, a triangular wall has 3 vertex points, and 
+    a standard wall has 4. This function allows 3 or more vertices.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddCustomWall <em>destobject, 
+    texturename, x1, y1, z1, x2, y2, z2, x3, y3, z3, ..., tw, th</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddCustomWall external, brick, 
+    0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0, 0</font></p>
   <p align="left"><br>
     <strong>3. The <em>Globals</em> Section</strong></p>
   <p align="left">The <em>Globals</em> section contains the general information 

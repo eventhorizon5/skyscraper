@@ -446,7 +446,7 @@ void Cleanup()
 	csInitializer::DestroyApplication (object_reg);
 }
 
-void SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th)
+int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th)
 {
 	//Adds a wall with the specified dimensions
 	csVector3 v1 (Feet * x1, Feet * (altitude1 + height_in1), Feet * z1); //left top
@@ -467,9 +467,10 @@ void SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, doubl
 		csVector2 (0, th),
 		csVector2 (tw, th),
 		csVector2 (tw, 0));
+	return firstidx;
 }
 
-void SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th)
+int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	csVector3 v1 (Feet * x1, Feet * altitude1, Feet * z1); //bottom left
@@ -490,6 +491,7 @@ void SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, doub
 		csVector2 (0, th),
 		csVector2 (tw, th),
 		csVector2 (tw, 0));
+	return firstidx;
 }
 
 void SBS::Report (const char* msg, ...)
@@ -525,13 +527,13 @@ bool SBS::ReportError (const char* msg, ...)
 	return false;
 }
 
-void SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th)
+int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th)
 {
 	//create 4 walls
 	
 	iMaterialWrapper* tm;
 	
-	dest->AddInsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
+	int firstidx = dest->AddInsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
@@ -540,9 +542,11 @@ void SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, dou
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+	return firstidx;
 }
 
-void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th)
+int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th)
 {
 	//create 4 walls from a central point
 	
@@ -557,7 +561,7 @@ void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, do
 	z1 = CenterZ - (LengthZ / 2);
 	z2 = CenterZ + (LengthZ / 2);
 
-	dest->AddInsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
+	int firstidx = dest->AddInsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
@@ -566,6 +570,7 @@ void SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, do
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+	return firstidx;
 }
 
 void SBS::InitMeshes()
@@ -611,21 +616,40 @@ void SBS::InitMeshes()
 
 }
 
-/*void SBS::AddPolygonWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4, double FloorHeight, double tw, double th, bool IsExternal)
+int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th)
 {
-	//Adds a wall from specified vertices
+	//Adds a wall from a specified array of 3D vectors
+	int num;
+	csPoly3D varray2;
 
-	dest->AddQuad(csVector3(Feet * x1, Feet * altitude1, Feet * z1), csVector3(Feet * x1, Feet * (altitude1 + height_in1), Feet * z1), csVector3(Feet * x2, Feet * (altitude2 + height_in2), Feet * z2), csVector3(Feet * x2, Feet * altitude2, Feet * z2));
+	//get number of stored vertices
+	num = varray.GetVertexCount();
+
+	//create a second array with reversed vertices
+	for (int i = num - 1; i >= 0; i--)
+		varray2.AddVertex(varray[i]);
+
+	//create 2 polygons (front and back) from the vertex array
+	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
+	dest->AddPolygon(varray2.GetVertices(), num);
+
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, material);
-	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
+		csVector2 (0, 0),
+		csVector2 (tw, 0),
+		csVector2 (tw, th));
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
+		csVector2 (0, th),
+		csVector2 (tw, th),
+		csVector2 (tw, 0));
+	return firstidx;
 }
-*/
 
-void SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal)
+int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal)
 {
 	//Adds a triangular wall with the specified dimensions
-	//***note - possibly replace this with the AddPolygonWall function
+	//***note - possibly replace this with the AddCustomWall function
 	double tw2 = tw;
 	double th2;
 	double tempw1;
@@ -688,6 +712,7 @@ void SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, d
 		csVector2 (tw2, th2),
 		v3,
 		csVector2 (tw2, 0));
+	return firstidx;
 }
 
 csString SBS::Calc(const char *expression)

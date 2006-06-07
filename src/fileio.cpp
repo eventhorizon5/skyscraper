@@ -281,9 +281,13 @@ int SBS::LoadBuilding(const char * filename)
             if (csString(tempdata[0]).CompareNoCase("floor") == true)
 				tmpMesh = sbs->FloorArray[Current]->Level_state;
 			else
+			{
                 if (Section == 2)
+				{
 					buffer = FloorArray[Current]->Altitude + atof(tempdata[7]);
 					tempdata.Put(7, buffer);
+				}
+			}
             buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
@@ -313,9 +317,13 @@ int SBS::LoadBuilding(const char * filename)
             if (csString(tempdata[0]).CompareNoCase("floor") == true)
                 tmpMesh = sbs->FloorArray[Current]->Level_state;
 			else
+			{
                 if (Section == 2)
+				{
 					buffer = FloorArray[Current]->Altitude + atof(tempdata[7]);
 					tempdata.Put(7, buffer);
+				}
+			}
             buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
@@ -328,6 +336,45 @@ int SBS::LoadBuilding(const char * filename)
 				tmpMesh = sbs->ColumnFrame_state;
             //If IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
             CreateWallBox(tmpMesh, tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
+			tempdata.DeleteAll();
+		}
+
+		//AddCustomWall command
+        if (LineData.Slice(0, 14).CompareNoCase("addcustomwall ") == true)
+		{
+            tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+            if (csString(tempdata[0]).CompareNoCase("floor") == true)
+                tmpMesh = sbs->FloorArray[Current]->Level_state;
+			else
+			{
+                if (Section == 2)
+				{
+					buffer = FloorArray[Current]->Altitude + atof(tempdata[7]);
+					tempdata.Put(7, buffer);
+				}
+			}
+            buffer = tempdata[0];
+			buffer.Downcase();
+			if (buffer == "external")
+				tmpMesh = sbs->External_state;
+            if (buffer == "landscape")
+				tmpMesh = sbs->Landscape_state;
+            if (buffer == "buildings")
+				tmpMesh = sbs->Buildings_state;
+            if (buffer == "columnframe")
+				tmpMesh = sbs->ColumnFrame_state;
+			
+			csPoly3D varray;
+			int alength;
+			alength = tempdata.Length();
+			for (temp3 = 2; temp3 < alength - 2; temp3 += 3)
+				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
+			AddCustomWall(tmpMesh, tempdata[1], varray, atof(tempdata[alength - 3]), atof(tempdata[alength - 2]));
 			tempdata.DeleteAll();
 		}
         

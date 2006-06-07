@@ -25,8 +25,6 @@
 #include "floor.h"
 #include "elevator.h"
 
-//#include "csutil/ref.h"
-
 //global functions
 bool IsEven(int Number);
 double AutoSize(double n1, double n2, bool iswidth, bool external, double offset);
@@ -53,13 +51,6 @@ struct iVFS;
 struct iEvent;
 class DemoSequenceManager;
 class csTransform;
-
-struct sbsVector3
-{
-	double x;
-	double y;
-	double z;
-};
 
 class SBS
 {
@@ -138,14 +129,15 @@ public:
 	bool Initialize(int argc, const char* const argv[], const char *windowtitle);
  	void Start();
 	void AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b);
-	void AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th);
-	void AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th);
+	int AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th);
+	int AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th);
 	bool HandleEvent(iEvent& Event);
 	void SetupFrame();
 	void FinishFrame();
-	void CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th);
-	void CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
-	void AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal);
+	int CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th);
+	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
+	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal);
+	int AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th);
 	csString Calc(const char *expression);
 	csVector2 FindExtents(double v1, double v2, double v3);
 	void InitMeshes();
