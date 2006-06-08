@@ -36,7 +36,13 @@ iObjectRegistry* object_reg;
 
 SBS::SBS()
 {
-    sbs = this;
+	sbs = this;
+
+	//Print SBS banner
+	PrintBanner();
+
+	//Pause for 3 seconds
+	csSleep(3000);
 
 	//Set default horizontal scaling value
 	HorizScale = 1;
@@ -203,11 +209,11 @@ double AutoSize(double n1, double n2, bool iswidth, bool external, double offset
 
 void SBS::PrintBanner()
 {
-	Report("Scalable Building Simulator 0.1");
-	Report("Copyright 2004-2006 Ryan Thoryk");
-	Report("This software comes with ABSOLUTELY NO WARRANTY. This is free");
-	Report("software, and you are welcome to redistribute it under certain");
-	Report("conditions. For details, see the file gpl.txt");
+	csPrintf("\n Scalable Building Simulator 0.1\n");
+	csPrintf(" Copyright (C)2004-2006 Ryan Thoryk\n");
+	csPrintf(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
+	csPrintf(" software, and you are welcome to redistribute it under certain\n");
+	csPrintf(" conditions. For details, see the file gpl.txt\n");
 }
 
 void SBS::SlowToFPS(long FrameRate)
@@ -379,7 +385,7 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_DEBUG, true, false, false, false, true, false);
 
 	//mount app's directory in VFS
-	#if defined(__linux__)
+	#ifndef CS_PLATFORM_WIN32
 		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "/");
 	#else
 		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "\\");
@@ -389,10 +395,6 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	if (nw) nw->SetTitle(windowtitle);
 
 	font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
-
-	PrintBanner();
-
-	csSleep(3000);
 
 	// Open the main system. This will open all the previously loaded plug-ins.
 	if (!csInitializer::OpenApplication (object_reg))

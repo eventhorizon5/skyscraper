@@ -21,7 +21,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#if defined(__linux__)
+#include <crystalspace.h>
+
+#if !defined(CS_PLATFORM_WIN32)
 
 #define _itoa itoa
 #define __strrev strrev

@@ -21,10 +21,10 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#if defined(__linux__)
-
 #include <string>
 #include "unix.h"
+
+#ifndef CS_PLATFORM_WIN32
 
 using namespace std;
 
