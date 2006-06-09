@@ -77,7 +77,6 @@
   Load data/right.jpg, SkyRight
   Load data/front.jpg, SkyFront
   Load data/back.jpg, SkyBack
-  Load objects/benedeti.jpg, ColumnTex, , , TV_COLORKEY_NO
   Load data/plaque.jpg, Plaque
   Load data/floorsign.jpg, FloorSign
   Load data/floorsignballroom.jpg, FloorSignBallroom

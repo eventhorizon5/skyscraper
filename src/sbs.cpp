@@ -175,8 +175,6 @@ void SBS::Wait(long milliseconds)
 double AutoSize(double n1, double n2, bool iswidth, bool external, double offset)
 {
 //Texture autosizing formulas
-//If any of the texture parameters are 0, then automatically size the
-//texture using sizing algorithms
 
 	double size1;
 	double size2;
@@ -667,7 +665,7 @@ int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, do
 	
 	csVector2 x, y, z;
 
-	//get extents
+	//get extents for texture autosizing
 	x = FindExtents(x1, x2, x3);
 	y = FindExtents(y1, y2, y3);
 	z = FindExtents(z1, x2, z3);
@@ -686,16 +684,19 @@ int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, do
 	}
 	th2 = AutoSize(0, sbs->Feet * (y.y - y.x), false, IsExternal, th);
 
+	//set up 3D vectors
 	csVector3 v1 (Feet * x1, Feet * y1, Feet * z1);
 	csVector3 v2 (Feet * x2, Feet * y2, Feet * z2);
 	csVector3 v3 (Feet * x3, Feet * y3, Feet * z3);
 
+	//create 2 polygons (front and back) from 3D vectors
 	int firstidx = dest->AddTriangle(v1, v2, v3);
 	dest->AddTriangle(v3, v2, v1);
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
 
-	//texture mapping is set from 3 manual vectors in a square layout
+	//texture mapping is set from 3 manual vectors (origin, width extent,
+	//height extent) in a square layout
 	v1 = csVector3(Feet * x.x, Feet * y.y, Feet * z.x); //top left
 	v2 = csVector3(Feet * x.y, Feet * y.y, Feet * z.y); //top right
 	v3 = csVector3(Feet * x.y, Feet * y.x, Feet * z.y); //bottom right

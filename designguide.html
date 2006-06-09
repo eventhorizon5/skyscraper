@@ -6,10 +6,11 @@
 </head>
 
 <body>
-<div align="center"> 
-  <p><strong><font size="+2">Scalable Building Simulator<br>
+<div align="center">
+  <p><strong><font size="+2">Skyscraper 1.1<br>
+    Scalable Building Simulator<br>
     Building Design Guide</font></strong><br>
-    (1.1 C++ version)</p>
+    (C++ version)</p>
   <hr>
   <p align="left">This document describes how to create your own buildings for 
     Skyscraper's Scalable Building Simulator engine, and also describes all of 
@@ -17,12 +18,13 @@
     during the simulator's development, and formatting will be cleaned up to make 
     the code more readable. </p>
   <p align="left">&nbsp;</p>
-  <p align="left"><strong>1. Starting a new building</strong></p>
+  <p align="left"><strong><font size="+1">1. Starting a new building</font></strong></p>
   <p align="left">Buildings are stored in text files in Skyscraper's <em>buildings</em> 
-    folder, usually at c:\program files\skyscraper\buildings. The filenames end 
-    in BLD, and so you need to make sure your text file ends with &quot;.bld&quot; 
-    and not &quot;.txt&quot;. To create a new building, first open up a text editor, 
-    and read the instructions below. When you're finished, save it into the <em>buildings</em> 
+    folder, usually at c:\program files\skyscraper\buildings on Windows, or in 
+    the &quot;buildings&quot; directory on Unix. The filenames end in BLD, and 
+    so you need to make sure your text file ends with &quot;.bld&quot; and not 
+    &quot;.txt&quot;. To create a new building, first open up a text editor, and 
+    read the instructions below. When you're finished, save it into the <em>buildings</em> 
     folder shown above, as something like &quot;mybuilding.bld&quot;. The building 
     will appear in Skyscraper's buildings list the next time you run it. You might 
     also want to open one of the buildings that come with Skyscraper (&quot;Triton 
@@ -30,8 +32,8 @@
     format of a building data file. Eventually there will be a graphical designer 
     app, but it'll be a while since I'm the only developer so far :)</p>
   <p align="left">&nbsp;</p>
-  <p align="left"><strong>2. General Stuff</strong></p>
-  <p align="left">1. Comments</p>
+  <p align="left"><strong><font size="+1">2. General Stuff</font></strong></p>
+  <p align="left"><strong>1. Comments</strong></p>
   <p align="left">To add a comment to your file, simply put the # symbol right 
     before your comment. For example:<br>
     <font size="2" face="Courier New, Courier, mono"># This is a comment</font></p>
@@ -40,7 +42,7 @@
     <font size="2" face="Courier New, Courier, mono">#The Triton Center<br>
     #Copyright &copy;2003-2006 Ryan Thoryk</font></p>
   <p align="left"><br>
-    2. Variables</p>
+    <strong>2. Variables</strong></p>
   <p align="left">Variables are marked with percent signs (%), and most system 
     variables will be described later. There are 256 user variables (0-255) which 
     can be set using the Set command:<font size="2" face="Courier New, Courier, mono"><br>
@@ -48,7 +50,7 @@
     </font>and then can be used later:<font size="2" face="Courier New, Courier, mono"><br>
     Height = %2%<br>
     </font></p>
-  <p align="left">3. IF statements</p>
+  <p align="left"><strong>3. IF statements</strong></p>
   <p align="left">Basic IF statements can be made, with the following syntax:<br>
     <font size="2" face="Courier New, Courier, mono">if(<em>value1 sign value2</em>) 
     <em>command</em></font></p>
@@ -59,7 +61,7 @@
   <p align="left">Available signs are = (equals), &gt; (greater than), &lt; (less 
     than), and ! (is not)<br>
   </p>
-  <p align="left">4. Inline calculations</p>
+  <p align="left"><strong>4. Inline calculations</strong></p>
   <p align="left">Values can be calculated inline by using the following math 
     operators: <br>
     + (plus), - (minus), / (divide), and * (multiply).</p>
@@ -67,7 +69,7 @@
     of one being used with the Set command:<br>
     <font size="2" face="Courier New, Courier, mono">Set 1 = %floorheight% + 10</font></p>
   <p align="left"><font size="2" face="Courier New, Courier, mono"><br>
-    </font>5. Object parameters from the outside</p>
+    </font><strong>5. Object parameters from the outside</strong></p>
   <p align="left">Information about floors can be obtained outside the floor sections, 
     by referencing the floor in this manner:</p>
   <p align="left"><font size="2" face="Courier New, Courier, mono">Floor(<em>number</em>).<em>parameter</em></font></p>
@@ -75,9 +77,10 @@
   <p align="left">Example:<font size="2" face="Courier New, Courier, mono"><br>
     Set 1 = Floor(5).Altitude</font></p>
   <p align="left"><br>
-    These commands can be used anywhere in the script:</p>
-  <p align="left">1. CreateWallBox - creates 4 walls (box) at the specified coordinate 
-    locations<br>
+    <strong>6. Global commands; can be used anywhere in the script</strong><br>
+    <br>
+    <strong>a. CreateWallBox</strong> - creates 4 walls (box) at the specified 
+    coordinate locations<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateWallBox <em>destobject</em>, 
     <em>texturename</em>, <em>x1</em>, <em>x2</em>, <em>z1</em>, <em>z2</em>, 
     <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font><br>
@@ -89,8 +92,8 @@
   <p align="left">Destobject can be either external, landscape, buildings, or 
     columnframe (more will come soon). The voffset parameter would then be the 
     altitude offset in feet of the specified destination object's base.</p>
-  <p align="left">2. CreateWallBox2 - creates 4 walls (box) at a specified central 
-    location<br>
+  <p align="left"><strong>b. CreateWallBox2</strong> - creates 4 walls (box) at 
+    a specified central location<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateWallBox2 <em>destobject</em>, 
     <em>texturename</em>, <em>centerx</em>, <em>centerz</em>, <em>widthx</em>, 
     <em>lengthz</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font><br>
@@ -98,17 +101,22 @@
     brick, 0, 0, 10, 10, 15, 0, 0, 0</font></p>
   <p align="left">The parameters are the same as the above command, except centerx 
     and centerz define the center of the box, and widthx and lengthz specify the 
-    width and length off of the center.</p>
-  <p align="left"><br>
-    3. AddCustomWall - creates a custom polygon (wall, floor, etc) with any number 
-    of vertex points. For example, a triangular wall has 3 vertex points, and 
-    a standard wall has 4. This function allows 3 or more vertices.<br>
+    width and length off of the center.<br>
+    <br>
+    <strong>c. AddCustomWall</strong> - creates a custom polygon (wall, floor, 
+    etc) with any number of vertex points. For example, a triangular wall has 
+    3 vertex points, and a standard wall has 4. This function allows 3 or more 
+    vertices.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddCustomWall <em>destobject, 
     texturename, x1, y1, z1, x2, y2, z2, x3, y3, z3, ..., tw, th</em></font><br>
-    Example: <font size="2" face="Courier New, Courier, mono">AddCustomWall external, brick, 
-    0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0, 0</font></p>
+    Example: <font size="2" face="Courier New, Courier, mono">AddCustomWall external, 
+    brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0, 0</font></p>
   <p align="left"><br>
-    <strong>3. The <em>Globals</em> Section</strong></p>
+    <strong>7. END command</strong></p>
+  <p align="left">The End command tells the software to stop processing the current 
+    script and start the simulation. This is optional.</p>
+  <p align="left">&nbsp;</p>
+  <p align="left"> <strong><font size="+1">3. The <em>Globals</em> Section</font></strong></p>
   <p align="left">The <em>Globals</em> section contains the general information 
     about your building. The section starts with this header:<br>
     <font size="2" face="Courier New, Courier, mono">&lt;Globals&gt;</font></p>
@@ -120,72 +128,79 @@
   <p align="left">Example:<br>
     <font size="2" face="Courier New, Courier, mono">Name = Triton Center</font></p>
   <p align="left">Here are the available commands:</p>
-  <p align="left">1. Name - building name, required<br>
+  <p align="left"><strong>1. Name</strong> - building name, required<br>
     Example: <font size="2" face="Courier New, Courier, mono">Name = My Building</font></p>
-  <p align="left"> 2. Designer - name of building's designer, optional<br>
+  <p align="left"> <strong>2. Designer</strong> - name of building's designer, 
+    optional<br>
     <font size="2" face="Courier New, Courier, mono">Designer = Me</font><br>
     <br>
-    3. Location - location of the building, optional<br>
+    <strong>3. Location</strong> - location of the building, optional<br>
     <font size="2" face="Courier New, Courier, mono">Location = 100 Main Street</font></p>
-  <p align="left"> 4. Description - Brief description of the building, optional<br>
+  <p align="left"> <strong>4. Description</strong> - Brief description of the 
+    building, optional<br>
     <font size="2" face="Courier New, Courier, mono">Description = A really average 
     building</font><br>
     <br>
-    5. Version - Version of the building (can be text), optional<br>
+    <strong>5. Version</strong> - Version of the building (can be text), optional<br>
     <font size="2" face="Courier New, Courier, mono">Version = 1</font><br>
     <br>
-    6. Floors - total number of above-ground floors the building has, starting 
-    with 0 (for a 15-story building, you would enter 14), required<br>
+    <strong>6. Floors</strong> - total number of above-ground floors the building 
+    has, starting with 0 (for a 15-story building, you would enter 14), required<br>
     <font size="2" face="Courier New, Courier, mono">Floors = 20</font><br>
     <br>
-    7. Basements - total number of below-ground floors the building has, required<br>
+    <strong>7. Basements</strong> - total number of below-ground floors the building 
+    has, required<br>
     <font size="2" face="Courier New, Courier, mono">Basements = 2</font><br>
     <br>
-    8. Elevators - total number of elevators, required<br>
+    <strong>8. Elevators</strong> - total number of elevators, required<br>
     <font size="2" face="Courier New, Courier, mono">Elevators = 6</font><br>
     <br>
-    9. ElevatorShafts - total number of elevator shafts, required<br>
+    <strong>9. ElevatorShafts</strong> - total number of elevator shafts, required<br>
     <font size="2" face="Courier New, Courier, mono">ElevatorShafts = 1</font></p>
-  <p align="left"> 10. Pipeshafts - total number of pipe/utility shafts, required<br>
+  <p align="left"> <strong>10. Pipeshafts</strong> - total number of pipe/utility 
+    shafts, required<br>
     <font size="2" face="Courier New, Courier, mono">Pipeshafts = 2</font><br>
     <br>
-    11. Stairs - total number of stairwells, required<br>
+    <strong>11. Stairs</strong> - total number of stairwells, required<br>
     <font size="2" face="Courier New, Courier, mono">Stairs = 3</font><br>
     <br>
-    12. HorizScale - horizontal scaling modifier; default is 1, optional<br>
+    <strong>12. HorizScale</strong> - horizontal scaling modifier; default is 
+    1, optional<br>
     <font size="2" face="Courier New, Courier, mono">HorizScale = 2</font> (makes 
     each horizontal foot become 2 feet, keeping vertical feet at the default)<br>
     <br>
-    13. CameraAltitude - camera's normal altitude in feet above the floor, required<br>
+    <strong>13. CameraAltitude</strong> - camera's normal altitude in feet above 
+    the floor, required<br>
     <font size="2" face="Courier New, Courier, mono">CameraAltitude = 3.2</font><br>
     <br>
-    14. CameraFloor - camera's starting floor, starting with 0 (like Floors command), 
-    required<br>
+    <strong>14. CameraFloor</strong> - camera's starting floor, starting with 
+    0 (like Floors command), required<br>
     <font size="2" face="Courier New, Courier, mono">CameraFloor = 0</font><br>
     <br>
-    15. CameraPosition - camera's starting position in X (left/right) and Z (in/out) 
-    feet coordinates, required<br>
+    <strong>15. CameraPosition</strong> - camera's starting position in X (left/right) 
+    and Z (in/out) feet coordinates, required<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CameraPosition = 
     <em>X</em>, <em>Z</em></font><br>
     <font size="2" face="Courier New, Courier, mono">CameraPosition = 0, -10</font><br>
     <br>
-    16. CameraDirection - direction the camera's facing on startup, in X (left/right), 
-    Y (up down), and Z (in/out) feet coordinates, required<br>
+    <strong>16. CameraDirection</strong> - direction the camera's facing on startup, 
+    in X (left/right), Y (up down), and Z (in/out) feet coordinates, required<br>
     <font size="2" face="Courier New, Courier, mono">CameraDirection = 0, 10, 
     28.8</font></p>
-  <p align="left">17. CameraRotation - rotation of the camera on startup, required<br>
+  <p align="left"><strong>17. CameraRotation</strong> - rotation of the camera 
+    on startup, required<br>
     <font size="2" face="Courier New, Courier, mono">CameraRotation = 0, 0, 0</font></p>
-  <p align="left"><strong><br>
-    4. The <em>Textures</em> Section</strong></p>
+  <p align="left">&nbsp;</p>
+  <p align="left"><strong> <font size="+1">4. The <em>Textures</em> Section</font></strong></p>
   <p align="left">The Textures section loads textures into the simulation and 
     assigns names to them, for use in the rest of the sections.</p>
-  <p align="left">1. Load - loads a texture<br>
+  <p align="left"><strong>1. Load</strong> - loads a texture<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Load <em>filename</em>, 
     <em>name</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">Load data\brick1.jpg, 
     Brick</font></p>
-  <p align="left">2. LoadRange - loads a numeric range of textures, and the current 
-    number is available in the <em>number</em> variable (<font size="2" face="Courier New, Courier, mono">%number%</font>)<br>
+  <p align="left"><strong>2. LoadRange</strong> - loads a numeric range of textures, 
+    and the current number is available in the <em>number</em> variable (<font size="2" face="Courier New, Courier, mono">%number%</font>)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">LoadRange <em>startnumber</em>, 
     <em>endnumber</em>, <em>filename</em>, <em>name</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">LoadRange 2, 138, 
@@ -193,7 +208,7 @@
   <p align="left">This example will load the file 2.jpg and name it Button2, 3.jpg 
     as Button3, and so on.</p>
   <p align="left">&nbsp;</p>
-  <p align="left"><strong>5. The <em>Floor</em> Sections</strong></p>
+  <p align="left"><strong><font size="+1">5. The <em>Floor</em> Sections</font></strong></p>
   <p align="left">There are 2 <em>Floor</em> sections available - <em>Floor</em> 
     and <em>Floors</em>. <em>Floor</em> specifies a single floor, while <em>Floors</em> 
     specifies a range of floors.<br>
@@ -210,50 +225,52 @@
     <font size="2" face="Courier New, Courier, mono">&lt;EndFloors&gt;<br>
     </font>For example, to work with floors 5-10, you would type:<font size="2" face="Courier New, Courier, mono"><br>
     &lt;Floors 5 to 10&gt;</font></p>
-  <p align="left">Available variables:</p>
-  <p align="left"><font size="2" face="Courier New, Courier, mono">%floor%</font> 
+  <p align="left"><strong>Variables:</strong></p>
+  <p align="left"><font size="2" face="Courier New, Courier, mono"><strong>%floor%</strong></font> 
     - contains the current floor number<br>
-    <font size="2" face="Courier New, Courier, mono">%height%</font> - contains 
-    the current floor's ceiling height<br>
-    <font size="2" face="Courier New, Courier, mono">%interfloorheight%</font> 
+    <font size="2" face="Courier New, Courier, mono"><strong>%height%</strong></font> 
+    - contains the current floor's ceiling height<br>
+    <font size="2" face="Courier New, Courier, mono"><strong>%interfloorheight%</strong></font> 
     - contains the current floor's interfloor height (spacing between floors)<br>
-    <font size="2" face="Courier New, Courier, mono">%fullheight%</font> - contains 
-    the current floor's total height, including the interfloor height<br>
-    <font size="2" face="Courier New, Courier, mono">%doorheight%</font> - contains 
-    the current floor's default door height<br>
-    <font size="2" face="Courier New, Courier, mono">%doorwidth%</font> - contains 
-    the current floor's default door width</p>
-  <p align="left">Parameters:</p>
-  <p align="left">1. Name - the name of the current floor, required<br>
+    <font size="2" face="Courier New, Courier, mono"><strong>%fullheight%</strong></font> 
+    - contains the current floor's total height, including the interfloor height<br>
+    <font size="2" face="Courier New, Courier, mono"><strong>%doorheight%</strong></font> 
+    - contains the current floor's default door height<br>
+    <font size="2" face="Courier New, Courier, mono"><strong>%doorwidth%</strong></font> 
+    - contains the current floor's default door width</p>
+  <p align="left"><strong>Parameters:</strong></p>
+  <p align="left"><strong>1. Name</strong> - the name of the current floor, required<br>
     Example: <font size="2" face="Courier New, Courier, mono">Name = Floor %floor%</font></p>
-  <p align="left">2. ID - the floor indicator name for the current floor, such 
-    as L (for Lobby), LL (lower level), M (Mezzanine), etc<br>
+  <p align="left"><strong>2. ID</strong> - the floor indicator name for the current 
+    floor, such as L (for Lobby), LL (lower level), M (Mezzanine), etc<br>
     <font size="2" face="Courier New, Courier, mono">ID = %floor%</font></p>
-  <p align="left">3. Type - the type of floor the current floor is. The types 
-    are still being defined, but the currently used ones are Basement, Lobby, 
-    Mezzanine, Conference, Office, Service, Skylobby, Hotel, Apartment, Condominium, 
-    Restaurant, Observatory, Recreation, Ballroom, Communications, and Roof. (Required)<br>
+  <p align="left"><strong>3. Type</strong> - the type of floor the current floor 
+    is. The types are still being defined, but the currently used ones are Basement, 
+    Lobby, Mezzanine, Conference, Office, Service, Skylobby, Hotel, Apartment, 
+    Condominium, Restaurant, Observatory, Recreation, Ballroom, Communications, 
+    and Roof. (Required)<br>
     <font size="2" face="Courier New, Courier, mono">Type = Office</font></p>
-  <p align="left">4. Description - description of the current floor, optional<br>
+  <p align="left"><strong>4. Description</strong> - description of the current 
+    floor, optional<br>
     <font size="2" face="Courier New, Courier, mono">Description = Offices</font></p>
-  <p align="left">5. Height - the floor-to-ceiling height of the current floor, 
-    required<br>
+  <p align="left"><strong>5. Height</strong> - the floor-to-ceiling height of 
+    the current floor, required<br>
     <font size="2" face="Courier New, Courier, mono">Height = 9.5</font></p>
-  <p align="left">6. InterfloorHeight - the height in feet of the space between 
-    floors, starting right above the current floor's ceiling and ending right 
-    below the next floor's floor, required.<br>
+  <p align="left"><strong>6. InterfloorHeight</strong> - the height in feet of 
+    the space between floors, starting right above the current floor's ceiling 
+    and ending right below the next floor's floor, required.<br>
     <font size="2" face="Courier New, Courier, mono">InterfloorHeight = 2.24</font></p>
-  <p align="left">7. DoorHeight - the default height in feet of the doors on the 
-    current floor, optional.<br>
+  <p align="left"><strong>7. DoorHeight</strong> - the default height in feet 
+    of the doors on the current floor, optional.<br>
     <font size="2" face="Courier New, Courier, mono">DoorHeight = 7</font></p>
-  <p align="left">8. DoorWidth - the default width in feet of the doors on the 
-    current floor, optional.<br>
+  <p align="left"><strong>8. DoorWidth</strong> - the default width in feet of 
+    the doors on the current floor, optional.<br>
     <font size="2" face="Courier New, Courier, mono">DoorWidth = 3</font></p>
   <p align="left"><br>
-    Commands:</p>
-  <p align="left">1. Exit - exits the current floor section</p>
-  <p align="left">2. AddFloor - adds a textured floor with the specified dimensions 
-    to the current floor/level<br>
+    <strong>Commands:</strong></p>
+  <p align="left"><strong>1. Exit</strong> - exits the current floor section</p>
+  <p align="left"><strong>2. AddFloor</strong> - adds a textured floor with the 
+    specified dimensions to the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor <em>texturename</em>, 
     <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>voffset</em>, <em>tw</em>, 
     <em>th</em>, <em>isexternal</em></font><br>
@@ -264,8 +281,8 @@
     the app autosize them), and <em>isexternal</em> determines if the floor is 
     part of the building's external framework, or is part of the current floor 
     (is either True or False).</p>
-  <p align="left">3. AddWall - adds a textured wall with the specified dimensions 
-    to the current floor/level<br>
+  <p align="left"><strong>3. AddWall</strong> - adds a textured wall with the 
+    specified dimensions to the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddWall <em>texturename</em>, 
     <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>height1</em>, <em>height2</em>, 
     <em>voffset1</em>, <em>voffset2</em>, <em>tw</em>, <em>th</em>, <em>isexternal</em></font><br>
@@ -278,8 +295,8 @@
     <em>Tw</em> and <em>th</em> are the texture sizing/tiling multipliers, and 
     <em>isexternal</em> determines if the wall is part of the building's external 
     framework (true) or if it's part of the current floor (false)</p>
-  <p align="left">4. AddInterfloorFloor - adds a textured floor above the ceiling 
-    of the current floor/level<br>
+  <p align="left"><strong>4. AddInterfloorFloor</strong> - adds a textured floor 
+    above the ceiling of the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddInterfloorFloor 
     <em>texturename</em>, <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, 
     <em>voffset</em>, <em>tw</em>, <em>th</em></font><br>
@@ -288,8 +305,8 @@
   <p align="left">The parameters are the same as the AddFloor command, except 
     the <em>voffset</em> value is the height offset in feet above the current 
     floor's ceiling.</p>
-  <p align="left">5. AddInterfloorWall - adds a textured wall above the ceiling 
-    of the current floor/level<br>
+  <p align="left"><strong>5. AddInterfloorWall</strong> - adds a textured wall 
+    above the ceiling of the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddInterfloorWall 
     <em>texturename</em>, <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, 
     <em>height1</em>, <em>height2</em>, <em>voffset1</em>, <em>voffset2</em>, 
@@ -297,32 +314,28 @@
   <p align="left">The parameters are the same as the AddWall command, and the 
     <em>voffset</em> values are the same as the AddInterfloorFloor command.</p>
   <p align="left">&nbsp;</p>
-  <p align="left"><strong>6. The <em>External</em> Section</strong></p>
+  <p align="left"><strong><font size="+1">6. The <em>External</em> Section</font></strong></p>
   <p align="left">The <em>External</em> section defines parts of the building's 
     exterior. The exterior can also be somewhat created in the Floor sections, 
     but this section provides more options.</p>
-  <p align="left">Commands:</p>
-  <p align="left">1. AddTriangleWall - adds a textured triangular wall<br>
+  <p align="left"><strong>Commands:</strong></p>
+  <p align="left"><strong>1. AddTriangleWall</strong> - adds a textured triangular 
+    wall<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddTriangleWall <em>texturename</em>, 
     <em>x1</em>, <em>y1</em>, <em>z1</em>, <em>x2</em>, <em>y2</em>, <em>z2</em>, 
-    <em>x3</em>, <em>y3</em>, <em>z3</em>, <em>referenceheight</em>, <em>tw</em>, 
-    <em>th</em>, <em>SetbackID</em></font><br>
+    <em>x3</em>, <em>y3</em>, <em>z3</em>, <em>tw</em>, <em>th</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddTrianglewall 
-    brick, 0, 0, 0, 0, 10, 0, 0, 0, 10, 10, 0, 0, mywall</font></p>
-  <p align="left"><em>SetbackID</em> is optional (it assigns a name to the wall, 
-    so position information can be retrieved later on angular positions).<br>
-    <em>Referenceheight</em> is going to be removed soon - for now set it to a 
-    height of a floor.</p>
-  <p align="left">2. AddWall - adds a textured wall<br>
+    brick, 0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0</font></p>
+  <p align="left"><strong>2. AddWall</strong> - adds a textured wall<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddWall <em>texturename</em>, 
     <em>x1</em>, <em>z1</em>, <em>x2</em>, z2, <em>height1</em>, <em>height2</em>, 
-    <em>altitude1</em>, <em>altitude2</em>, <em>tw</em>, <em>th</em>, <em>SetbackID</em></font><br>
+    <em>altitude1</em>, <em>altitude2</em>, <em>tw</em>, <em>th</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddWall brick, -10, 
     -10, 10, 10, 15, 15, Floor(2).Altitude, Floor(2).Altitude, 0, 0</font></p>
   <p align="left">The command's parameters are the same as the Floor section's 
     AddWall command, except for the altitudes. Since there is no floor to reference, 
     the actual altitude of the wall in feet must be specified.</p>
-  <p align="left">3. AddFloor - adds a textured floor<br>
+  <p align="left"><strong>3. AddFloor</strong> - adds a textured floor<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor <em>texturename</em>, 
     <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>altitude</em>, <em>tw</em>, 
     <em>th</em></font></p>
@@ -330,7 +343,7 @@
     AddFloor command, except the <em>altitude</em> parameter. Since there is no 
     floor to reference, the actual altitude of the wall in feet must be specified.</p>
   <p align="left">&nbsp;</p>
-  <p align="left"><strong>7. The <em>Elevator</em> Section</strong></p>
+  <p align="left"><strong><font size="+1">7. The <em>Elevator</em> Section</font></strong></p>
   <p align="left">The <em>Elevator</em> section allows you to create elevators 
     for your building.</p>
   <p align="left">The section headers and footers are similar to the ones in the 
@@ -344,22 +357,26 @@
     <font size="2" face="Courier New, Courier, mono">&lt;Elevators 2 to 10&gt;</font><br>
     and end with:<br>
     <font size="2" face="Courier New, Courier, mono">&lt;EndElevators&gt;</font></p>
-  <p align="left">Variables:</p>
-  <p align="left"><font size="2" face="Courier New, Courier, mono">%elevator%</font> 
+  <p align="left"><strong>Variables:</strong></p>
+  <p align="left"><font size="2" face="Courier New, Courier, mono"><strong>%elevator%</strong></font> 
     - number of the current elevator</p>
   <p align="left">Parameters (the values of most of these are still being figured 
     out as to what they exactly correspond to in real-world terms):</p>
-  <p align="left">1. Speed - maximum speed of the elevator<br>
+  <p align="left"><strong>1. Speed</strong> - maximum speed of the elevator<br>
     Example: <font size="2" face="Courier New, Courier, mono">Speed = 1</font></p>
-  <p align="left">2. Acceleration - acceleration speed of the elevator<br>
+  <p align="left"><strong>2. Acceleration</strong> - acceleration speed of the 
+    elevator<br>
     Example: <font size="2" face="Courier New, Courier, mono">Acceleration = 0.003</font></p>
-  <p align="left">3. Deceleration - deceleration speed of the elevator<br>
+  <p align="left"><strong>3. Deceleration</strong> - deceleration speed of the 
+    elevator<br>
     Example: <font size="2" face="Courier New, Courier, mono">Deceleration = 0.4</font></p>
-  <p align="left">4. OpenSpeed - open/close speed of the elevator doors<br>
+  <p align="left"><strong>4. OpenSpeed</strong> - open/close speed of the elevator 
+    doors<br>
     Example: <font size="2" face="Courier New, Courier, mono">OpenSpeed = 1.5</font></p>
   <p align="left"><br>
-    Commands:</p>
-  <p align="left">1. CreateElevator - creates an elevator at the specified location<br>
+    <strong>Commands:</strong></p>
+  <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
+    the specified location<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateElevator <em>x</em>, 
     <em>y</em>, <em>floor</em>, <em>direction<br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
@@ -370,10 +387,11 @@
     there are only 2: 0 is the doors on the left side, and 1 is the doors on the 
     right side)</p>
   <p align="left">&nbsp;</p>
-  <p align="left"><strong>8. Small Example Building</strong></p>
+  <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 
     at the Simple.bld file in Skyscraper's buildings directory. It's also available 
     online <a href="http://www.tliquest.net/cgi-bin/viewcvs.cgi/*checkout*/skyscraper/buildings/Simple.bld">here</a>.</p>
+  <p align="left">&nbsp;</p>
 </div>
 </body>
 </html>

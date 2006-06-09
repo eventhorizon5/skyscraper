@@ -191,7 +191,7 @@ void Floor::AddInterfloorWall(const char *texture, double x1, double z1, double 
 		tw2 = AutoSize(sbs->Feet * z1, sbs->Feet * z2, true, false, tw);
 	th2 = AutoSize(0, sbs->Feet * height_in1, false, false, th);
 	
-	sbs->AddWallMain(Interfloor_state, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+	sbs->AddWallMain(Interfloor_state, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2);
 }
 
 void Floor::Enabled(bool value)

@@ -131,7 +131,7 @@ int SBS::LoadBuilding(const char * filename)
             Context = "Floor";
             RangeL = 0;
             RangeH = 0;
-            Current = atoi(LineData.Slice(8, LineData.Length() - 8).GetData());
+            Current = atoi(LineData.Slice(7, LineData.Length() - 7).GetData());
             //if (Current < -Basements !! Current > TotalFloors)
 				//Err.Raise 1005
             Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
@@ -164,7 +164,7 @@ int SBS::LoadBuilding(const char * filename)
             Context = "Elevator";
             RangeL = 0;
             RangeH = 0;
-            Current = atoi(LineData.Slice(11, LineData.Length() - 11).GetData());
+            Current = atoi(LineData.Slice(10, LineData.Length() - 10).GetData());
             //if (Current < 1 !! Current > Elevators)
 				//Err.Raise 1007;
             Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
@@ -191,6 +191,14 @@ int SBS::LoadBuilding(const char * filename)
             Report("Finished textures");
             goto Nextline;
 		}
+        if (LineData.Slice(0, 5).CompareNoCase("<end>") == true)
+		{
+			Section = 0;
+			Context = "None";
+            Report("Exiting building script");
+			break; //exit data file parser
+		}
+		
         
         //User variable conversion
         temp1 = LineData.Find("%", 0);
