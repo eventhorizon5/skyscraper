@@ -47,9 +47,6 @@ SBS::SBS()
 	//Set default horizontal scaling value
 	HorizScale = 1;
 
-	//Set feet scale value
-	Feet = 3.125;
-
 	//Set default starting elevator
 	ElevatorNumber = 1;
 
@@ -81,6 +78,7 @@ SBS::SBS()
 	FrameSync = false;
 	EnableCollisions = false;
 	BuildingFile = "";
+
 }
 
 SBS::~SBS()
@@ -139,6 +137,9 @@ void SBS::Start()
 	LoadBuilding(BuildingFile.GetData());
 	//if (LoadBuilding(BuildingFile.GetData()) != 0)
 
+	//create skybox
+	CreateSky();
+
 	//Post-init startup code goes here, before the runloop
 	engine->Prepare();
 
@@ -160,7 +161,7 @@ void SBS::Start()
 	//turn on first/lobby floor
 	FloorArray[0]->Enabled(true);
 
-	//create skybox
+	Report("Running simulation...");
 
 	//start simulation
 	csDefaultRunLoop (object_reg);
@@ -184,12 +185,12 @@ double AutoSize(double n1, double n2, bool iswidth, bool external, double offset
 
 	if (external == false)
 	{
-		size1 = 0.086 * offset;
-		size2 = 0.08 * offset;
+		size1 = 0.269 * offset;
+		size2 = 0.25 * offset;
 	}
 	else
 	{
-		size1 = 0.023 * offset;
+		size1 = 0.072 * offset;
 		size2 = 1 * offset;
 	}
 
@@ -403,8 +404,9 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 		engine->SetLightingCacheMode (0);
 		engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
 
-	//create 3D environment
+	//create 3D environments
 	area = engine->CreateSector("area");
+	sky = engine->CreateSector("sky");
 
 	return true;
 }
@@ -449,10 +451,10 @@ void Cleanup()
 int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th)
 {
 	//Adds a wall with the specified dimensions
-	csVector3 v1 (Feet * x1, Feet * (altitude1 + height_in1), Feet * z1); //left top
-	csVector3 v2 (Feet * x2, Feet * (altitude2 + height_in2), Feet * z2); //right top
-	csVector3 v3 (Feet * x2, Feet * altitude2, Feet * z2); //right base
-	csVector3 v4 (Feet * x1, Feet * altitude1, Feet * z1); //left base
+	csVector3 v1 (x1, altitude1 + height_in1, z1); //left top
+	csVector3 v2 (x2, altitude2 + height_in2, z2); //right top
+	csVector3 v3 (x2, altitude2, z2); //right base
+	csVector3 v4 (x1, altitude1, z1); //left base
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	dest->AddQuad(v4, v3, v2, v1);
@@ -473,10 +475,10 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double
 int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
-	csVector3 v1 (Feet * x1, Feet * altitude1, Feet * z1); //bottom left
-	csVector3 v4 (Feet * x2, Feet * altitude2, Feet * z1); //bottom right
-	csVector3 v3 (Feet * x2, Feet * altitude2, Feet * z2); //top right
-	csVector3 v2 (Feet * x1, Feet * altitude1, Feet * z2); //top left
+	csVector3 v1 (x1, altitude1, z1); //bottom left
+	csVector3 v4 (x2, altitude2, z1); //bottom right
+	csVector3 v3 (x2, altitude2, z2); //top right
+	csVector3 v2 (x1, altitude1, z2); //top left
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	dest->AddQuad(v4, v3, v2, v1);
@@ -533,12 +535,12 @@ int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, doub
 	
 	iMaterialWrapper* tm;
 	
-	int firstidx = dest->AddInsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
+	int firstidx = dest->AddInsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
-	dest->AddOutsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
+	dest->AddOutsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
@@ -561,12 +563,12 @@ int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, dou
 	z1 = CenterZ - (LengthZ / 2);
 	z2 = CenterZ + (LengthZ / 2);
 
-	int firstidx = dest->AddInsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
+	int firstidx = dest->AddInsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
-	dest->AddOutsideBox(csVector3(Feet * x1, Feet * voffset, Feet * z1), csVector3(Feet * x2, Feet * (voffset + height_in), Feet * z2));
+	dest->AddOutsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
@@ -613,21 +615,51 @@ void SBS::InitMeshes()
 	ColumnFrame_factory = ColumnFrame_object->GetFactory();
 	ColumnFrame_state = scfQueryInterface<iThingFactoryState> (ColumnFrame_factory);
 	ColumnFrame->SetZBufMode(CS_ZBUF_USE);
-
 }
 
-int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th)
+int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th, bool IsExternal)
 {
 	//Adds a wall from a specified array of 3D vectors
+	double tw2 = tw;
+	double th2;
+	double tempw1;
+	double tempw2;
 	int num;
+	int i;
+	csPoly3D varray1;
 	csPoly3D varray2;
 
 	//get number of stored vertices
 	num = varray.GetVertexCount();
 
+	//Set horizontal scaling
+	for (i = 0; i < num; i++)
+		varray1.AddVertex(varray[i].x * HorizScale, varray[i].y, varray[i].z * HorizScale);
+
 	//create a second array with reversed vertices
-	for (int i = num - 1; i >= 0; i--)
+	for (i = num - 1; i >= 0; i--)
 		varray2.AddVertex(varray[i]);
+
+	csVector2 x, y, z;
+
+	//get extents for texture autosizing
+	x = GetExtents(varray1, 1);
+	y = GetExtents(varray1, 2);
+	z = GetExtents(varray1, 3);
+
+	//Call texture autosizing formulas
+	if (z.x == z.y)
+		tw2 = AutoSize(x.x, x.y, true, IsExternal, tw);
+	if (x.x == x.y)
+		tw2 = AutoSize(z.x, z.y, true, IsExternal, tw);
+	if ((z.x != z.y) && (x.x != x.y))
+	{
+		//calculate diagonals
+		tempw1 = abs(x.y - x.x);
+		tempw2 = abs(z.y - z.x);
+	    tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
+	}
+	th2 = AutoSize(0, abs(y.y - y.x), false, IsExternal, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
@@ -635,71 +667,12 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPo
 
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
-		csVector2 (0, 0),
-		csVector2 (tw, 0),
-		csVector2 (tw, th));
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
-		csVector2 (0, th),
-		csVector2 (tw, th),
-		csVector2 (tw, 0));
-	return firstidx;
-}
-
-int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal)
-{
-	//Adds a triangular wall with the specified dimensions
-	//***note - possibly replace this with the AddCustomWall function
-	double tw2 = tw;
-	double th2;
-	double tempw1;
-	double tempw2;
-
-	//Set horizontal scaling
-	x1 *= HorizScale;
-	x2 *= HorizScale;
-	x3 *= HorizScale;
-	z1 *= HorizScale;
-	z2 *= HorizScale;
-	z3 *= HorizScale;
 	
-	csVector2 x, y, z;
-
-	//get extents for texture autosizing
-	x = FindExtents(x1, x2, x3);
-	y = FindExtents(y1, y2, y3);
-	z = FindExtents(z1, x2, z3);
-
-	//Call texture autosizing formulas
-	if (z1 == z2 == z3)
-		tw2 = AutoSize(sbs->Feet * x.x, sbs->Feet * x.y, true, IsExternal, tw);
-	if (x1 == x2 == x3)
-		tw2 = AutoSize(sbs->Feet * z.x, sbs->Feet * z.y, true, IsExternal, tw);
-	if ((z1 != z2 != z3) && (x1 != x2 != x3))
-	{
-		//calculate diagonals
-		tempw1 = (sbs->Feet * x.y) - (sbs->Feet * x.x);
-		tempw2 = (sbs->Feet * z.y) - (sbs->Feet * z.x);
-	    tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
-	}
-	th2 = AutoSize(0, sbs->Feet * (y.y - y.x), false, IsExternal, th);
-
-	//set up 3D vectors
-	csVector3 v1 (Feet * x1, Feet * y1, Feet * z1);
-	csVector3 v2 (Feet * x2, Feet * y2, Feet * z2);
-	csVector3 v3 (Feet * x3, Feet * y3, Feet * z3);
-
-	//create 2 polygons (front and back) from 3D vectors
-	int firstidx = dest->AddTriangle(v1, v2, v3);
-	dest->AddTriangle(v3, v2, v1);
-	material = sbs->engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
-
 	//texture mapping is set from 3 manual vectors (origin, width extent,
 	//height extent) in a square layout
-	v1 = csVector3(Feet * x.x, Feet * y.y, Feet * z.x); //top left
-	v2 = csVector3(Feet * x.y, Feet * y.y, Feet * z.y); //top right
-	v3 = csVector3(Feet * x.y, Feet * y.x, Feet * z.y); //bottom right
+	csVector3 v1 (x.x, y.y, z.x); //top left
+	csVector3 v2 (x.y, y.y, z.y); //top right
+	csVector3 v3 (x.y, y.x, z.y); //bottom right
 
 	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
 		v1,
@@ -715,6 +688,23 @@ int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, do
 		csVector2 (tw2, th2),
 		v3,
 		csVector2 (tw2, 0));
+
+	return firstidx;
+}
+
+int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal)
+{
+	//Adds a triangular wall with the specified dimensions
+	csPoly3D varray;
+
+	//set up temporary vertex array
+	varray.AddVertex(x1, y1, z1);
+	varray.AddVertex(x2, y2, z2);
+	varray.AddVertex(x3, y3, z3);
+
+	//pass data on to AddCustomWall function
+	int firstidx = AddCustomWall(dest, texture, varray, tw, th, IsExternal);
+
 	return firstidx;
 }
 
@@ -882,25 +872,75 @@ void SBS::EnableColumnFrame(bool value)
 	}
 }
 
-csVector2 SBS::FindExtents(double v1, double v2, double v3)
+csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 {
-	//returns the smallest and largest values out of 3 inputs
+	//returns the smallest and largest values from a specified coordinate type
+	//(x, y, or z) from a vector array.
+	//first parameter must be a vector array object
+	//second must be either 1 (for x), 2 (for y) or 3 (for z)
+
 	double esmall;
 	double ebig;
+	double tempnum;
+	int i;
+	int num = varray.GetVertexCount();
 
-	if ((v1 <= v2) && (v1 <= v3))
-		esmall = v1;
-	if ((v2 <= v1) && (v2 <= v3))
-		esmall = v2;
-	if ((v3 <= v1) && (v3 <= v2))
-		esmall = v3;
-	
-	if ((v1 >= v2) && (v1 >= v3))
-		ebig = v1;
-	if ((v2 >= v1) && (v2 >= v3))
-		ebig = v2;
-	if ((v3 >= v1) && (v3 >= v2))
-		ebig = v3;
+	//return 0,0 if coord value is out of range
+	if (coord < 1 || coord > 3)
+		return csVector2(0, 0);
+
+	for (i = 0; i < num; i++)
+	{
+		if (coord == 1)
+			tempnum = varray[i].x;
+		if (coord == 2)
+			tempnum = varray[i].y;
+		if (coord == 3)
+			tempnum = varray[i].z;
+		
+		if (i == 0)
+		{
+			esmall = tempnum;
+			ebig = tempnum;
+		}
+		else
+		{
+			if (tempnum < esmall)
+				esmall = tempnum;
+			if (tempnum > ebig)
+				ebig = tempnum;
+		}
+	}
 	
 	return csVector2(esmall, ebig);
+}
+
+int SBS::CreateSky()
+{
+	SkyBox = (engine->CreateSectorWallsMesh (area, "SkyBox"));
+	SkyBox_object = SkyBox->GetMeshObject ();
+	SkyBox_factory = SkyBox_object->GetFactory();
+	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox_factory);
+	SkyBox->SetZBufMode(CS_ZBUF_USE);
+
+	int firstidx = SkyBox_state->AddInsideBox(csVector3(-100000, -100000, -100000), csVector3(100000, 100000, 100000));
+	material = sbs->engine->GetMaterialList ()->FindByName ("SkyBack");
+	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
+	material = sbs->engine->GetMaterialList ()->FindByName ("SkyRight");
+	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
+	material = sbs->engine->GetMaterialList ()->FindByName ("SkyFront");
+	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 2, firstidx + 2), material);
+	material = sbs->engine->GetMaterialList ()->FindByName ("SkyLeft");
+	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 3, firstidx + 3), material);
+	material = sbs->engine->GetMaterialList ()->FindByName ("SkyBottom");
+	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 4, firstidx + 4), material);
+	material = sbs->engine->GetMaterialList ()->FindByName ("SkyTop");
+	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 5, firstidx + 5), material);
+
+	SkyBox_state->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx + 5),
+		csVector2 (0, 1),
+		csVector2 (1, 1),
+		csVector2 (1, 0));
+
+	return firstidx;
 }

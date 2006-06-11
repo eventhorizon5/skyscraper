@@ -56,9 +56,9 @@ Camera::~Camera()
 void Camera::SetPosition(csVector3 vector)
 {
 	//sets the camera to an absolute position in 3D space
-	MainCamera->GetTransform().SetOrigin(csVector3(vector.x * sbs->Feet,
-												   vector.y * sbs->Feet,
-												   vector.z * sbs->Feet));
+	MainCamera->GetTransform().SetOrigin(csVector3(vector.x,
+												   vector.y,
+												   vector.z));
 }
 
 void Camera::SetDirection(csVector3 vector)
@@ -89,9 +89,9 @@ void Camera::SetRotation(csVector3 vector)
 csVector3 Camera::GetPosition()
 {
 	//returns the camera's current position
-	return csVector3(MainCamera->GetTransform().GetOrigin().x / sbs->Feet,
-					 MainCamera->GetTransform().GetOrigin().y / sbs->Feet,
-					 MainCamera->GetTransform().GetOrigin().z / sbs->Feet);
+	return csVector3(MainCamera->GetTransform().GetOrigin().x,
+					 MainCamera->GetTransform().GetOrigin().y,
+					 MainCamera->GetTransform().GetOrigin().z);
 }
 
 csVector3 Camera::GetDirection()
@@ -114,9 +114,6 @@ void Camera::UpdateCameraFloor()
 void Camera::Move(csVector3 vector)
 {
 	//moves the camera in a relative amount specified by a vector
-	vector.x *= sbs->Feet;
-	vector.y *= sbs->Feet;
-	vector.z *= sbs->Feet;
 	MainCamera->Move(vector);
 }
 

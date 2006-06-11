@@ -350,7 +350,8 @@ int SBS::LoadBuilding(const char * filename)
 		//AddCustomWall command
         if (LineData.Slice(0, 14).CompareNoCase("addcustomwall ") == true)
 		{
-            tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+            bool extcheck = false;
+			tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
 				buffer = Calc(tempdata[temp3]);
@@ -369,7 +370,10 @@ int SBS::LoadBuilding(const char * filename)
             buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
+			{
 				tmpMesh = sbs->External_state;
+				extcheck = true;
+			}
             if (buffer == "landscape")
 				tmpMesh = sbs->Landscape_state;
             if (buffer == "buildings")
@@ -382,7 +386,7 @@ int SBS::LoadBuilding(const char * filename)
 			alength = tempdata.Length();
 			for (temp3 = 2; temp3 < alength - 2; temp3 += 3)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
-			AddCustomWall(tmpMesh, tempdata[1], varray, atof(tempdata[alength - 3]), atof(tempdata[alength - 2]));
+			AddCustomWall(tmpMesh, tempdata[1], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]), extcheck);
 			tempdata.DeleteAll();
 		}
         

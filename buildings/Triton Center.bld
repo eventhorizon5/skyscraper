@@ -154,7 +154,8 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Marble4, -75, -70, 75, 70, 0, 0, 0, 0, False
+    #AddFloor Marble4, -75, -70, 75, 70, 0, 0, 0, 0, False
+    AddFloor Marble4, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, 0, False
 
     #Ceiling
     AddFloor Marble4, -75, -70, 75, 70, %height% * 3, %height% * 3, 0, 0, False

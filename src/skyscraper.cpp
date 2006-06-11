@@ -43,8 +43,8 @@ int main (int argc, char* argv[])
 	
 	//set building file
 	//Simcore->BuildingFile = "buildings/Simple2.bld";
-	Simcore->BuildingFile = "buildings/Glass Tower.bld";
-	//Simcore->BuildingFile = "buildings/Triton Center.bld";
+	//Simcore->BuildingFile = "buildings/Glass Tower.bld";
+	Simcore->BuildingFile = "buildings/Triton Center.bld";
 
 	//start simulation
 	Simcore->Start();

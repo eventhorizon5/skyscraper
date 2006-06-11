@@ -77,6 +77,7 @@ public:
 	iMaterialWrapper* material;
 	iLightList* ll;
 	iSector* area;
+	iSector* sky;
 
 	csTicks elapsed_time;
 
@@ -111,7 +112,6 @@ public:
 	bool FrameSync; //synchronize movement to frame rate
 	bool EnableCollisions; //turns collisions on/off
 	double HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
-	double Feet; //feet scale value
 	csStringArray UserVariable;
 
 	//File I/O
@@ -128,6 +128,7 @@ public:
 	bool LoadTexture(const char *filename, const char *name);
 	bool Initialize(int argc, const char* const argv[], const char *windowtitle);
  	void Start();
+	int CreateSky();
 	void AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b);
 	int AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th);
 	int AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th);
@@ -137,9 +138,9 @@ public:
 	int CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th);
 	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
 	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal);
-	int AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th);
+	int AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th, bool IsExternal);
 	csString Calc(const char *expression);
-	csVector2 FindExtents(double v1, double v2, double v3);
+	csVector2 GetExtents(csPoly3D &varray, int coord);
 	void InitMeshes();
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
@@ -170,6 +171,11 @@ public:
 		csRef<iMeshObject> ColumnFrame_object;
 		csRef<iMeshObjectFactory> ColumnFrame_factory;
 		csRef<iThingFactoryState> ColumnFrame_state;
+
+	csRef<iMeshWrapper> SkyBox; //skybox mesh
+		csRef<iMeshObject> SkyBox_object;
+		csRef<iMeshObjectFactory> SkyBox_factory;
+		csRef<iThingFactoryState> SkyBox_state;
 
 private:
 
