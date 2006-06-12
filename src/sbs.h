@@ -77,7 +77,6 @@ public:
 	iMaterialWrapper* material;
 	iLightList* ll;
 	iSector* area;
-	iSector* sky;
 
 	csTicks elapsed_time;
 

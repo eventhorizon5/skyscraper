@@ -406,7 +406,6 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 
 	//create 3D environments
 	area = engine->CreateSector("area");
-	sky = engine->CreateSector("sky");
 
 	return true;
 }
