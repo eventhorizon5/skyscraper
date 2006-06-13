@@ -25,9 +25,13 @@
 #include "elevator.h"
 #include "sbs.h"
 #include "camera.h"
+#include "shaft.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
 extern Camera *c; //external pointer to the camera
+
+char intbuffer[65];
+char buffer[20];
 
 Elevator::Elevator(int number)
 {
@@ -110,35 +114,11 @@ Elevator::Elevator(int number)
 	Plaque_factory = Plaque_object->GetFactory();
 	Plaque_state = scfQueryInterface<iThingFactoryState> (Plaque_factory);
 	Plaque->SetZBufMode(CS_ZBUF_USE);
-
-	buffer = Number;
-	buffer.Insert(0, "CallButtonsUp ");
-	buffer.Trim();
-	CallButtonsUp = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
-	CallButtonsUp_object = CallButtonsUp->GetMeshObject ();
-	CallButtonsUp_factory = CallButtonsUp_object->GetFactory();
-	CallButtonsUp_state = scfQueryInterface<iThingFactoryState> (CallButtonsUp_factory);
-	CallButtonsUp->SetZBufMode(CS_ZBUF_USE);
-
-	buffer = Number;
-	buffer.Insert(0, "CallButtonsDown ");
-	buffer.Trim();
-	CallButtonsDown = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
-	CallButtonsDown_object = CallButtonsDown->GetMeshObject ();
-	CallButtonsDown_factory = CallButtonsDown_object->GetFactory();
-	CallButtonsDown_state = scfQueryInterface<iThingFactoryState> (CallButtonsDown_factory);
-	CallButtonsDown->SetZBufMode(CS_ZBUF_USE);
 }
 
 Elevator::~Elevator()
 {
 	//Deconstructor
-	if (CallButtonsDown)
-		delete CallButtonsDown;
-
-	if (CallButtonsUp)
-		delete CallButtonsUp;
-
 	if (Plaque)
 		delete Plaque;
 
@@ -162,53 +142,21 @@ void Elevator::CreateElevator(double x, double y, int floor, int direction)
 	//y is the northmost position
 	//Direction: 0=x is left side, 1=x is right side
 
-	int v;
+	csVector3 vpos (x, sbs->FloorArray[floor]->Altitude, y);
+
+	//move objects to positions
+	ElevatorMesh->GetMovable()->SetPosition(vpos);
+	ElevatorMesh->GetMovable()->UpdateMove();
+	FloorIndicator->GetMovable()->SetPosition(vpos);
+	FloorIndicator->GetMovable()->UpdateMove();
+	Plaque->GetMovable()->SetPosition(vpos);
+	Plaque->GetMovable()->UpdateMove();
+	ElevatorDoorL->GetMovable()->SetPosition(vpos);
+	ElevatorDoorL->GetMovable()->UpdateMove();
+	ElevatorDoorR->GetMovable()->SetPosition(vpos);
+	ElevatorDoorR->GetMovable()->UpdateMove();
 	
-	//ElevatorMesh.SetPosition X, Floor(FloorID).FloorAltitude, Y
-	//FloorIndicator.SetPosition X, Floor(FloorID).FloorAltitude, Y
-	//Plaque.SetPosition X, Floor(FloorID).FloorAltitude, Y
-	//ElevatorInsDoorL.SetPosition X, Floor(FloorID).FloorAltitude, Y
-	//ElevatorInsDoorR.SetPosition X, Floor(FloorID).FloorAltitude, Y
-
-	if (direction == 0)
-		v = 1;
-	if (direction == 1)
-		v = -1;
-
-    //Elevator
-	AddFloor("Wood2", v * 15.5, 0, 0, -13.9, 0.1, 1, 1);
-    AddFloor("Elev1", v * 15.5, 0, 0, -13.9, 19.5, 2, 2);
-    AddWall("Wood1", v * 15.5, 0, 0, 0, 19.5, 0.1, 2, 2);
-    AddWall("Wood1", v * 15.5, -13.9, 0, -13.9, 19.5, 0.1, 2, 2);
-    AddWall("Wood1", v * 15.5, -13.9, v * 15.5, 0, 19.5, 0.1, 2, 2);
-
-    //Floor Indicator
-    if (direction == 0)
-		AddFloorIndicator("ButtonL", v * 0.16, -0.5, v * 0.16, -2.5, 1.5, 16, -1, 1);
-    if (direction == 1)
-		AddFloorIndicator("ButtonL", v * 0.16, -13.9 + 0.5, v * 0.16, -13.9 + 2.5, 1.5, 16, -1, 1);
-
-    //Button Panel
-    if (direction == 0)
-		AddButtonPanel("ElevExtPanels", v * 0.16, -0.3, v * 0.16, -2.7, 7, 6, 1, 1);
-    if (direction == 1)
-		AddButtonPanel("ElevExtPanels", v * 0.16, -13.9 + 0.3, v * 0.16, -13.9 + 2.7, 7, 6, 1, 1);
-
-	//Plaque
-    if (direction == 0)
-		AddPlaque("Plaque", v * 0.16, -0.3, v * 0.16, -2.7, 1, 13, -1, 1);
-    if (direction == 1)
-		AddPlaque("Plaque", v * 0.16, -13.9 + 0.3, v * 0.16, -13.9 + 2.7, 1, 13, -1, 1);
-    //Plaque.SetBlendingMode (TV_BLEND_ALPHA)
-    //Plaque.SetColor RGBA(1, 1, 1, 0.1)
-
-	//Interior Panels
-    AddPanels("Marble3", v * 0.15, -14, v * 0.15, -11, 19.5, 0.1, 1, 1);
-    AddPanels("Marble3", v * 0.15, 0, v * 0.15, -3, 19.5, 0.1, 1, 1);
-    
-	//Interior Doors
-    AddDoors("ElevDoors", v * 0.1, -10.95, v * 0.1, -7.05, 19.5, 0.1, 1, 1);
-    AddDoors("ElevDoors", v * 0.1, -6.95, v * 0.1, -2.95, 19.5, 0.1, 1, 1);
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(y, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)) + ", " + csString(_itoa(direction, buffer, 12)));
 }
 
 void Elevator::AddRoute(int floor, int direction)
@@ -226,26 +174,36 @@ void Elevator::DeleteRoute(int floor, int direction)
 
 void Elevator::Alarm()
 {
-	//elevator's alarm code
+	//elevator alarm code
 
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": alarm on");
 }
 
 void Elevator::CallElevator(int floor, int direction)
 {
 	//Calls elevator from specified floor, and gives desired direction to travel
 
+	csString direction2;
+	if (direction == -1)
+		direction2 = "down";
+	else
+		direction2 = "up";
+
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": calling to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction " + direction2);
 }
 
 void Elevator::StopElevator()
 {
 	//Tells elevator to stop moving, no matter where it is
 
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": emergency stop");
 }
 
 void Elevator::OpenHatch()
 {
 	//Opens the elevator's upper escape hatch, allowing access to the shaft
 
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening hatch");
 }
 
 void Elevator::OpenDoorsEmergency()
@@ -254,6 +212,8 @@ void Elevator::OpenDoorsEmergency()
 	//Slowly opens the elevator doors no matter where elevator is.
 	//If lined up with shaft doors, then opens the shaft doors also
 
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening doors");
+	MoveDoors(true, true);
 }
 
 void Elevator::OpenShaftDoors(int floor)
@@ -275,7 +235,17 @@ void Elevator::ProcessCallQueue()
 int Elevator::GetElevatorFloor()
 {
 	//Determine floor that the elevator is on
-	
+
+	int i;
+	for (i = -sbs->Basements; i <= sbs->TotalFloors; i++)
+	{
+		if (i < sbs->TotalFloors)
+			if ((GetPosition().y >= sbs->FloorArray[i]->Altitude) && (GetPosition().y < sbs->FloorArray[i + 1]->Altitude))
+				return i;
+			if ((i == sbs->TotalFloors) && (GetPosition().y >= sbs->FloorArray[i]->Altitude))
+				return i;
+	}
+
 	return 0;
 }
 
@@ -291,17 +261,28 @@ void Elevator::CloseDoorsEmergency()
 	//Slowly closes the elevator doors no matter where elevator is.
 	//If lined up with shaft doors, then closes the shaft doors also
 
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing doors");
+	MoveDoors(false, true);
 }
 
 void Elevator::OpenDoors()
 {
 	//Opens elevator doors
 
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening doors");
+	MoveDoors(true, false);
 }
 
 void Elevator::CloseDoors()
 {
 	//Closes elevator doors
+
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing doors");
+	MoveDoors(false, false);
+}
+
+void Elevator::MoveDoors(bool open, bool emergency)
+{
 
 }
 
@@ -311,50 +292,68 @@ void Elevator::MoveElevatorToFloor()
 
 }
 
-void Elevator::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
+int Elevator::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool DrawBothSides)
 {
-	sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
+	return sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height1, height2, voffset1 + GetPosition().y, voffset2 + GetPosition().y, tw, th, DrawBothSides);
 }
 
-void Elevator::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset, double tw, double th)
+int Elevator::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
-   	sbs->AddFloorMain(Elevator_state, texture, x1, z1, x2, z2, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
+   	return sbs->AddFloorMain(Elevator_state, texture, x1, z1, x2, z2, voffset1 + GetPosition().y, voffset2 + GetPosition().y, tw, th);
 }
 
-void Elevator::AddFloorIndicator(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
+int Elevator::AddFloorIndicator(const char *basename, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
-	sbs->AddWallMain(FloorIndicator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, 0, 0);
+	//Creates a floor indicator at the specified location
+	csString texture;
+	BaseName = basename;
+	texture = BaseName + sbs->FloorArray[OriginFloor]->ID;
+	return sbs->AddWallMain(FloorIndicator_state, texture.GetData(), x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, 0, 0, false);
 }
 
-void Elevator::AddButtonPanel(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
+int Elevator::AddDoors(const char *texture, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th)
 {
-	sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
+	//adds elevator doors
+	double x1, x2, x3, x4;
+	double z1, z2, z3, z4;
+
+	DoorDirection = direction;
+
+	if (direction == false)
+	{
+		x1 = CenterX;
+		x2 = CenterX;
+		x3 = CenterX;
+		x4 = CenterX;
+		z1 = CenterZ - (width / 2);
+		z2 = CenterZ;
+		z3 = CenterZ;
+		z4 = CenterZ + (width / 2);
+	}
+	else
+	{
+		x1 = CenterX - (width / 2);
+		x2 = CenterX;
+		x3 = CenterX;
+		x4 = CenterX + (width / 2);
+		z1 = CenterZ;
+		z2 = CenterZ;
+		z3 = CenterZ;
+		z4 = CenterZ;
+	}
+
+	int firstidx = sbs->AddWallMain(ElevatorDoorL_state, texture, x1, z1, x2, z2, height, height, GetPosition().y, GetPosition().y, tw, th);
+	sbs->AddWallMain(ElevatorDoorR_state, texture, x3, z3, x4, z4, height, height, GetPosition().y, GetPosition().y, tw, th);
+	return firstidx;
 }
 
-void Elevator::AddPanels(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
+int Elevator::AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
-	sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
+	return sbs->AddWallMain(Plaque_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 }
 
-void Elevator::AddDoors(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
+const csVector3 Elevator::GetPosition()
 {
-	sbs->AddWallMain(ElevatorDoorL_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
-	//sbs->AddWallMain(ElevatorDoorR_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
-}
-
-void Elevator::AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
-{
-	sbs->AddWallMain(Plaque_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
-}
-
-void Elevator::AddCallButtons(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
-{
-	sbs->AddWallMain(CallButtonsUp_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
-	//sbs->AddWallMain(CallButtonsDown_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
-}
-
-csVector3 Elevator::GetPosition()
-{
-	//don't know how to get the mesh's position
-	return (0, 0, 0);
+	//returns the elevator's position
+	return ElevatorMesh->GetMovable()->GetPosition();
 }

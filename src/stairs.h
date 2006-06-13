@@ -28,7 +28,10 @@
 
 class Stairs
 {
+public:
 
+	Stairs();
+	~Stairs();
 };
 
 #endif

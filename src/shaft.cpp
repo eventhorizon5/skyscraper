@@ -28,3 +28,23 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 extern Camera *c; //external pointer to the camera
+
+Shaft::Shaft()
+{
+
+}
+
+Shaft::~Shaft()
+{
+
+}
+
+void Shaft::OpenShaftDoors(int floor)
+{
+	//Simulates manually opening shaft doors
+	//Slowly opens the shaft's elevator doors no matter where elevator is.
+	//Cannot be used with OpenDoorsEmergency.
+	//This is if the elevator is not lined up with the shaft doors,
+	//and the user needs to open the shaft doors, usually while on top of elevator.
+
+}

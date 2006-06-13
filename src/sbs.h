@@ -129,7 +129,7 @@ public:
  	void Start();
 	int CreateSky();
 	void AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b);
-	int AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th);
+	int AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, bool DrawBothSides = true);
 	int AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th);
 	bool HandleEvent(iEvent& Event);
 	void SetupFrame();

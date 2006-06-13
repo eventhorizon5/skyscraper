@@ -43,6 +43,11 @@ public:
 	double Acceleration; //percentage of speed increase
 	double Deceleration; //deceleration value; may be removed
 	double OpenSpeed; //elevator opening/closing speed
+	int OriginFloor; //elevator starting floor
+	csString BaseName; //indicator texture base name
+	bool DoorDirection; //if direction is false, doors are on the left/right side
+	double DoorSpeed; //max door speed
+	double DoorAcceleration; //door acceleration
 
 	//functions
 	Elevator(int number);
@@ -60,15 +65,14 @@ public:
 	int GetElevatorFloor();
 	void MonitorLoop();
 	void CloseDoorsEmergency();
-	csVector3 GetPosition();
-	void AddWall(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
-	void AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset, double tw, double th);
-	void AddFloorIndicator(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
-	void AddButtonPanel(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
-	void AddPanels(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
-	void AddDoors(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
-	void AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
-	void AddCallButtons(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
+	const csVector3 GetPosition();
+	void OpenDoors();
+	void CloseDoors();
+	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool DrawBothSides = true);
+	int AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
+	int AddFloorIndicator(const char *basename, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
+	int AddDoors(const char *texture, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th);
+	int AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -91,14 +95,6 @@ private:
 		csRef<iMeshObject> Plaque_object;
 		csRef<iMeshObjectFactory> Plaque_factory;
 		csRef<iThingFactoryState> Plaque_state;
-	csRef<iMeshWrapper> CallButtonsUp; //up call button
-		csRef<iMeshObject> CallButtonsUp_object;
-		csRef<iMeshObjectFactory> CallButtonsUp_factory;
-		csRef<iThingFactoryState> CallButtonsUp_state;
-	csRef<iMeshWrapper> CallButtonsDown; //down call button
-		csRef<iMeshObject> CallButtonsDown_object;
-		csRef<iMeshObjectFactory> CallButtonsDown_factory;
-		csRef<iThingFactoryState> CallButtonsDown_state;
 	csRefArray<iMeshWrapper> Buttons; //elevator button array
 
 	//Internal elevator simulation data
@@ -119,9 +115,8 @@ private:
 	bool ElevWait;
 
 	//functions
-	void OpenDoors();
-	void CloseDoors();
 	void MoveElevatorToFloor();
+	void MoveDoors(bool open, bool emergency);
 
 };
 

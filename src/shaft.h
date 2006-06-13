@@ -28,7 +28,11 @@
 
 class Shaft
 {
+public:
 
+	Shaft();
+	~Shaft();
+	void OpenShaftDoors(int floor);
 };
 
 #endif
