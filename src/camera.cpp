@@ -150,8 +150,7 @@ csVector3 Camera::GetStartRotation()
 
 void Camera::SetToStartPosition()
 {
-	SetPosition(csVector3(StartPositionX, DefaultAltitude, StartPositionZ));
-	//Camera.SetPosition StartPositionX, Floor(StartFloor).altitude + DefaultAltitude, StartPositionZ
+	SetPosition(csVector3(StartPositionX, sbs->FloorArray[StartFloor]->Altitude + DefaultAltitude, StartPositionZ));
 }
 
 void Camera::SetToStartDirection()

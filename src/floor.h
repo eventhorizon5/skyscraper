@@ -58,7 +58,7 @@ public:
 	void SetCameraFloor();
 	int AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, bool isexternal);
 	int AddInterfloorFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
-	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, bool isexternal);
+	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool isexternal);
 	int AddInterfloorWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th);
 	void Enabled(bool value);
 	void AddAutoFloor(const char *texture);

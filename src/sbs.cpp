@@ -228,7 +228,7 @@ void SBS::SetupFrame()
 	double speed = (elapsed_time / 1000.0) * (0.06 * 20);
 
 	if (kbd->GetKeyState (CSKEY_CTRL))
-		speed *= 2;
+		speed *= 4;
 
 	if (kbd->GetKeyState (CSKEY_SHIFT))
 	{
@@ -447,7 +447,7 @@ void Cleanup()
 	csInitializer::DestroyApplication (object_reg);
 }
 
-int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, bool DrawBothSides)
+int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
 {
 	//Adds a wall with the specified dimensions
 	csVector3 v1 (x1, altitude1 + height_in1, z1); //left top
@@ -465,16 +465,45 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double
 	if (DrawBothSides == true)
 		dest->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
 	
+	//reverse vector portions if specified
+	if (revX == true)
+	{
+		v1.x = x2;
+		v2.x = x1;
+		v3.x = x1;
+		v4.x = x2;
+	}
+	if (revY == true)
+	{
+		v1.y = altitude1;
+		v2.y = altitude2;
+		v3.y = altitude2 + height_in2;
+		v4.y = altitude1 + height_in1;
+	}
+	if (revZ == true)
+	{
+		v1.z = z2;
+		v2.z = z1;
+		v3.z = z1;
+		v4.z = z2;
+	}
+	
 	//texture mapping is set from first 3 coordinates
 	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
+		v1,
 		csVector2 (0, 0),
+		v2,
 		csVector2 (tw, 0),
+		v3,
 		csVector2 (tw, th));
 	if (DrawBothSides == true)
 	{
 		dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
+			v1,
 			csVector2 (0, th),
+			v2,
 			csVector2 (tw, th),
+			v3,
 			csVector2 (tw, 0));
 	}
 	return firstidx;
@@ -625,7 +654,7 @@ void SBS::InitMeshes()
 	ColumnFrame->SetZBufMode(CS_ZBUF_USE);
 }
 
-int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th, bool IsExternal)
+int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal)
 {
 	//Adds a wall from a specified array of 3D vectors
 	double tw2 = tw;
@@ -676,6 +705,27 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPo
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
 	
+	//reverse extents if specified
+	float tmpv;
+	if (revX == true)
+	{
+		tmpv = x.x;
+		x.x = x.y;
+		x.y = tmpv;
+	}
+	if (revY == true)
+	{
+		tmpv = y.x;
+		y.x = y.y;
+		y.y = tmpv;
+	}
+	if (revZ == true)
+	{
+		tmpv = z.x;
+		z.x = z.y;
+		z.y = tmpv;
+	}
+	
 	//texture mapping is set from 3 manual vectors (origin, width extent,
 	//height extent) in a square layout
 	csVector3 v1 (x.x, y.y, z.x); //top left
@@ -700,7 +750,7 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPo
 	return firstidx;
 }
 
-int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal)
+int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal)
 {
 	//Adds a triangular wall with the specified dimensions
 	csPoly3D varray;
@@ -711,7 +761,7 @@ int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, do
 	varray.AddVertex(x3, y3, z3);
 
 	//pass data on to AddCustomWall function
-	int firstidx = AddCustomWall(dest, texture, varray, tw, th, IsExternal);
+	int firstidx = AddCustomWall(dest, texture, varray, tw, th, revX, revY, revZ, IsExternal);
 
 	return firstidx;
 }

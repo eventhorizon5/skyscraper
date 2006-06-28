@@ -18,21 +18,21 @@
 <EndGlobals>
 
 <Textures>
-    Load data\brick1.jpg, Brick
-    Load data\windows08.jpg, MainWindows
-    Load data\granite.jpg, Granite
-    Load data\symb5.jpg, Marble3
-    Load data\elev1.jpg, Elev1
-    Load data\textur15.jpg, Wood1
-    Load data\text16.jpg, Wood2
-    Load data\text16.jpg, ElevDoors
-    Load data\marb148.jpg, ElevExtPanels
-    Load data\top.jpg, SkyTop
-    Load data\bottom.jpg, SkyBottom
-    Load data\left.jpg, SkyLeft
-    Load data\right.jpg, SkyRight
-    Load data\front.jpg, SkyFront
-    Load data\back.jpg, SkyBack
+    Load data/brick1.jpg, Brick
+    Load data/windows08.jpg, MainWindows
+    Load data/granite.jpg, Granite
+    Load data/symb5.jpg, Marble3
+    Load data/elev1.jpg, Elev1
+    Load data/textur15.jpg, Wood1
+    Load data/text16.jpg, Wood2
+    Load data/text16.jpg, ElevDoors
+    Load data/marb148.jpg, ElevExtPanels
+    Load data/top.jpg, SkyTop
+    Load data/bottom.jpg, SkyBottom
+    Load data/left.jpg, SkyLeft
+    Load data/right.jpg, SkyRight
+    Load data/front.jpg, SkyFront
+    Load data/back.jpg, SkyBack
  <EndTextures>
 
 <Floors 0 to 9>
@@ -51,10 +51,10 @@
     AddFloor Marble3, -20, 20, 20, -20, %height% - 0.05, 0, 0, False
 
     #External walls
-    AddWall MainWindows, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall MainWindows, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall MainWindows, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall MainWindows, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall MainWindows, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 
     #Interfloor bottom
     AddInterfloorFloor Brick, -20, 20, 20, 20, 0, 0, 0
