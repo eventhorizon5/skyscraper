@@ -108,9 +108,14 @@
     3 vertex points, and a standard wall has 4. This function allows 3 or more 
     vertices.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddCustomWall <em>destobject, 
-    texturename, x1, y1, z1, x2, y2, z2, x3, y3, z3, ..., tw, th</em></font><br>
+    texturename, x1, y1, z1, x2, y2, z2, x3, y3, z3, ..., tw, th</em>, revx, revy, 
+    revz</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddCustomWall external, 
-    brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0, 0</font></p>
+    brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0, 0, false, false, false</font></p>
+  <p align="left">Revx, revy, and revz are either true or false, and determine 
+    if the texture mapping data should be reversed, per axis. If the texture looks 
+    strange in the simulator, mess around with the revx and revz values (revy 
+    flips the texture upside down).</p>
   <p align="left"><br>
     <strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
@@ -261,10 +266,12 @@
     and ending right below the next floor's floor, required.<br>
     <font size="2" face="Courier New, Courier, mono">InterfloorHeight = 2.24</font></p>
   <p align="left"><strong>7. DoorHeight</strong> - the default height in feet 
-    of the doors on the current floor, optional.<br>
+    of the doors on the current floor, optional. (this command may be removed 
+    in a future version)<br>
     <font size="2" face="Courier New, Courier, mono">DoorHeight = 7</font></p>
   <p align="left"><strong>8. DoorWidth</strong> - the default width in feet of 
-    the doors on the current floor, optional.<br>
+    the doors on the current floor, optional. (this command may be removed in 
+    a future version)<br>
     <font size="2" face="Courier New, Courier, mono">DoorWidth = 3</font></p>
   <p align="left"><br>
     <strong>Commands:</strong></p>
@@ -285,16 +292,21 @@
     specified dimensions to the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddWall <em>texturename</em>, 
     <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>height1</em>, <em>height2</em>, 
-    <em>voffset1</em>, <em>voffset2</em>, <em>tw</em>, <em>th</em>, <em>isexternal</em></font><br>
+    <em>voffset1</em>, <em>voffset2</em>, <em>tw</em>, <em>th</em>, <em>revx, 
+    revy, revz, isexternal</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddWall brick, -10, 
-    -10, 10, 10, 10, 10, 0, 0, 0, 0, False</font></p>
+    -10, 10, 10, 10, 10, 0, 0, 0, 0, False, False, False, False</font></p>
   <p align="left"><em>Height1</em> is the wall height in feet at the first coordinate 
     set (x1 and z1), and <em>height2</em> is for the second set (x2, and z2). 
     <em>Voffset1</em> is the vertical offset in feet (from the floor's altitude) 
     for the first coordinate set, and <em>voffset2</em> is for the second set. 
     <em>Tw</em> and <em>th</em> are the texture sizing/tiling multipliers, and 
     <em>isexternal</em> determines if the wall is part of the building's external 
-    framework (true) or if it's part of the current floor (false)</p>
+    framework (true) or if it's part of the current floor (false).</p>
+  <p align="left">Revx, revy, and revz are either true or false, and determine 
+    if the texture mapping data should be reversed, per axis. If the texture looks 
+    strange in the simulator, mess around with the revx and revz values (revy 
+    flips the texture upside down).</p>
   <p align="left"><strong>4. AddInterfloorFloor</strong> - adds a textured floor 
     above the ceiling of the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddInterfloorFloor 
@@ -329,7 +341,8 @@
   <p align="left"><strong>2. AddWall</strong> - adds a textured wall<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddWall <em>texturename</em>, 
     <em>x1</em>, <em>z1</em>, <em>x2</em>, z2, <em>height1</em>, <em>height2</em>, 
-    <em>altitude1</em>, <em>altitude2</em>, <em>tw</em>, <em>th</em></font><br>
+    <em>altitude1</em>, <em>altitude2</em>, <em>tw</em>, <em>th</em></font>, <font size="2" face="Courier New, Courier, mono">revx, 
+    revy, revz</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddWall brick, -10, 
     -10, 10, 10, 15, 15, Floor(2).Altitude, Floor(2).Altitude, 0, 0</font></p>
   <p align="left">The command's parameters are the same as the Floor section's 

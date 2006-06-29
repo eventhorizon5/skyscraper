@@ -500,11 +500,11 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double
 	{
 		dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
 			v1,
-			csVector2 (0, th),
+			csVector2 (tw, 0),
 			v2,
-			csVector2 (tw, th),
+			csVector2 (0, 0),
 			v3,
-			csVector2 (tw, 0));
+			csVector2 (0, th));
 	}
 	return firstidx;
 }
@@ -741,11 +741,11 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPo
 		csVector2 (tw2, th2));
 	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
 		v1,
-		csVector2 (0, th2),
+		csVector2 (tw2, 0),
 		v2,
-		csVector2 (tw2, th2),
+		csVector2 (0, 0),
 		v3,
-		csVector2 (tw2, 0));
+		csVector2 (0, th2));
 
 	return firstidx;
 }
