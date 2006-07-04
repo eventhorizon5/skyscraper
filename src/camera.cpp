@@ -33,7 +33,7 @@ Camera::Camera()
 	MainCamera->SetSector(sbs->area);
 	
 	// these are used store the current orientation of the camera
-	rotY = rotX = 0;
+	rotY = rotX = rotZ = 0;
 
 	//init variables
 	DefaultAltitude = 0;
@@ -48,7 +48,7 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-	//Deconstructor
+	//Destructor
 	delete MainCamera;
 	MainCamera = 0;
 }
@@ -79,11 +79,12 @@ void Camera::SetRotation(csVector3 vector)
 	// individual rotations on each axis together to get a single
 	// rotation matrix.  The rotations are applied in right to left
 	// order .
-	csMatrix3 rot = csXRotMatrix3 (vector.x) * csYRotMatrix3 (vector.y);
+	csMatrix3 rot = csXRotMatrix3 (vector.x) * csYRotMatrix3 (vector.y) * csZRotMatrix3 (vector.z);
 	csOrthoTransform ot (rot, MainCamera->GetTransform().GetOrigin ());
 	MainCamera->SetTransform (ot);
 	rotX = vector.x;
 	rotY = vector.y;
+	rotZ = vector.z;
 }
 
 csVector3 Camera::GetPosition()
@@ -108,7 +109,7 @@ csVector3 Camera::GetRotation()
 
 void Camera::UpdateCameraFloor()
 {
-	//CurrentFloor = sbs->GetFloorNumber(MainCamera->GetTransform().GetOrigin().y);
+	CurrentFloor = sbs->GetFloorNumber(MainCamera->GetTransform().GetOrigin().y);
 }
 
 void Camera::Move(csVector3 vector)
@@ -123,7 +124,8 @@ void Camera::Rotate(csVector3 vector)
 	
 	rotX += vector.x;
 	rotY += vector.y;
-	SetRotation(csVector3(rotX, rotY, vector.z));
+	rotZ += vector.z;
+	SetRotation(csVector3(rotX, rotY, rotZ));
 }
 
 void Camera::SetStartDirection(csVector3 vector)
@@ -141,6 +143,7 @@ void Camera::SetStartRotation(csVector3 vector)
 	StartRotation = vector;
 	rotX = vector.x;
 	rotY = vector.y;
+	rotZ = vector.z;
 }
 
 csVector3 Camera::GetStartRotation()

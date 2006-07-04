@@ -83,7 +83,7 @@ SBS::SBS()
 
 SBS::~SBS()
 {
-	//engine deconstructor
+	//engine destructor
 	int i;
 	delete c;
 	c = 0;
@@ -244,6 +244,14 @@ void SBS::SetupFrame()
 		if (kbd->GetKeyState (CSKEY_DOWN))
 			c->Move (CS_VEC_DOWN * 8 * speed);
 	}
+	else if (kbd->GetKeyState (CSKEY_ALT))
+	{
+		//rotate on the Z axis if the Alt key is pressed with the left/right arrows
+		if (kbd->GetKeyState (CSKEY_RIGHT))
+			c->Rotate(CS_VEC_FORWARD * speed);
+		if (kbd->GetKeyState (CSKEY_LEFT))
+			c->Rotate(CS_VEC_BACKWARD * speed);
+	}
 	else
 	{
 		// left and right cause the camera to rotate on the global Y
@@ -267,13 +275,21 @@ void SBS::SetupFrame()
 				c->SetPosition(csVector3(c->GetPosition().x, KeepAltitude, c->GetPosition().z));
 		}
 		if (kbd->GetKeyState (CSKEY_DOWN))
+		{
+			double KeepAltitude;
+			KeepAltitude = c->GetPosition().y;
 			c->Move (CS_VEC_BACKWARD * 8 * speed);
+			if (c->GetPosition().y != KeepAltitude)
+				c->SetPosition(csVector3(c->GetPosition().x, KeepAltitude, c->GetPosition().z));
+		}
 
 		if (kbd->GetKeyState (CSKEY_SPACE))
 		{
+			//reset view
 			c->SetToStartDirection();
 			c->SetToStartRotation();
 		}
+
 		//values from old version
 		if (kbd->GetKeyState (CSKEY_HOME))
 			c->Move (CS_VEC_UP * 8 * speed);
@@ -1001,4 +1017,29 @@ int SBS::CreateSky()
 		csVector2 (1, 0));
 
 	return firstidx;
+}
+
+int SBS::GetFloorNumber(double altitude)
+{
+	//Returns floor number located at a specified altitude
+	
+	for (int i = -Basements + 1; i <= TotalFloors; i++)
+	{
+		if ((FloorArray[i]->Altitude > altitude) && (FloorArray[i - 1]->Altitude <= altitude))
+			return i - 1;
+		if ((i == TotalFloors) && (altitude > FloorArray[i]->Altitude))
+			return i;
+	}
+}
+
+double SBS::GetDistance(double x1, double x2, double z1, double z2)
+{
+	//returns the distance between 2 2D vectors
+
+	if (z1 == z2)
+		return abs(x1 - x2);
+	if (x1 == x2)
+		return abs(z1 - z2);
+	if ((x1 != x2) && (z2 != x2))
+		return sqrt(pow(abs(x1 - x2), 2) + pow(abs(z1 - z2), 2)); //calculate diagonals
 }

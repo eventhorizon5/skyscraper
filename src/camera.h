@@ -32,6 +32,7 @@ public:
 	int StartFloor; //Starting floor
 	double StartPositionX; //starting position on X axis
 	double StartPositionZ; //starting position on Z axis
+	double rotZ;
 	double rotY;
     double rotX;
 

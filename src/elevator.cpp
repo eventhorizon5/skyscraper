@@ -26,6 +26,7 @@
 #include "sbs.h"
 #include "camera.h"
 #include "shaft.h"
+#include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
 extern Camera *c; //external pointer to the camera
@@ -118,7 +119,7 @@ Elevator::Elevator(int number)
 
 Elevator::~Elevator()
 {
-	//Deconstructor
+	//Destructor
 	if (Plaque)
 		delete Plaque;
 

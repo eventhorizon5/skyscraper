@@ -145,6 +145,8 @@ public:
 	void EnableLandscape(bool value);
 	void EnableExternal(bool value);
 	void EnableColumnFrame(bool value);
+	int GetFloorNumber(double altitude);
+	double GetDistance(double x1, double x2, double z1, double z2);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);

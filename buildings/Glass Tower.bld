@@ -135,7 +135,7 @@
     # left lower wall
     AddWall LobbyFront, -88.3, -19.9, -99.8, 11.8, %fullheight%, %fullheight%, 0, 0, 0.3, 0, False, False, False, True
     # front left wall
-    AddWall LobbyFront, -115.8, -61.3, -88.3, -19.9, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True, True, True, True
+    AddWall LobbyFront, -115.8, -61.3, -88.3, -19.9, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True, False, True, True
     # front center wall
     AddWall LobbyFront, -115.8, -61.3, -14.4, -60.9, %fullheight%, %fullheight%, 0, 0, 0.3, 0, False, False, False, True
     # front right corner wall
@@ -147,9 +147,9 @@
     # right bottom wall
     AddWall LobbyFront, 21.5, -53.6, 98.1, -26.2, %fullheight%, %fullheight%, 0, 0, 0.3, 0, False, False, False, True
     # right top wall
-    AddWall LobbyFront, 98.1, -26.2, 63.3, 38.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
+    AddWall LobbyFront, 98.1, -26.2, 63.3, 38.9, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True, False, True, True
     # right top corner wall
-    AddWall LobbyFront, 55.4, 54.1, 63.3, 38.9, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall LobbyFront, 55.4, 54.1, 63.3, 38.9, %fullheight%, %fullheight%, 0, 0, 0.3, 0, False, False, False, True
 <EndFloor>
 
 # floors 2 to 39
@@ -187,7 +187,7 @@
     # left lower wall
     AddWall MainWindows, -88.3, -19.9, -99.8, 11.8, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # front left wall
-    AddWall MainWindows, -115.8, -61.3, -88.3, -19.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True, True, True, True
+    AddWall MainWindows, -115.8, -61.3, -88.3, -19.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
     # front center wall
     AddWall MainWindows, -115.8, -61.3, -14.4, -60.9, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # front right corner wall
@@ -235,7 +235,7 @@
     # left lower wall
     AddWall MainWindows, -88.3,-19.9, -99.8, 11.8, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # front left wall
-    AddWall MainWindows, -115.8, -61.3, -88.3, -19.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True, True, True, True
+    AddWall MainWindows, -115.8, -61.3, -88.3, -19.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
     # front center wall
     AddWall MainWindows, -115.8, -61.3, -14.4, -60.9, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # front right corner wall

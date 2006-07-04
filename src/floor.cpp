@@ -76,7 +76,7 @@ Floor::Floor(int number)
 
 Floor::~Floor()
 {
-	//Deconstructor
+	//Destructor
 
 	if (Level)
 		delete Level;
