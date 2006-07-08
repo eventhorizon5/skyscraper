@@ -74,11 +74,15 @@ SBS::SBS()
 	FallRate = 0;
 	InStairwell = false;
 	InElevator = false;
-	FPSModifier = 0;
+	FPSModifier = 1;
 	FrameSync = false;
 	EnableCollisions = false;
 	BuildingFile = "";
-
+	IsBuildingsEnabled = false;
+	IsColumnFrameEnabled = false;
+	IsExternalEnabled = false;
+	IsLandscapeEnabled = false;
+	IsSkyboxEnabled = false;
 }
 
 SBS::~SBS()
@@ -153,6 +157,7 @@ void SBS::Start()
 	EnableLandscape(true);
 	EnableExternal(true);
 	EnableColumnFrame(true);
+	EnableSkybox(true);
 
 	//turn off floors
 	for (int i=-Basements; i<=TotalFloors; i++)
@@ -220,12 +225,20 @@ void SBS::SlowToFPS(long FrameRate)
 
 }
 
-void SBS::SetupFrame()
+void SBS::GetInput()
 {
 	// First get elapsed time from the virtual clock.
 	csTicks elapsed_time = vc->GetElapsedTicks ();
 	// Now rotate the camera according to keyboard state
 	double speed = (elapsed_time / 1000.0) * (0.06 * 20);
+
+	if (kbd->GetKeyState('a'))
+	{
+		ElevatorArray[1]->GotoFloor = 30;
+		ElevatorArray[1]->ElevatorSync = true;
+		ElevatorArray[1]->MoveElevator = true;
+		return;
+	}
 
 	if (kbd->GetKeyState (CSKEY_CTRL))
 		speed *= 4;
@@ -296,7 +309,10 @@ void SBS::SetupFrame()
 		if (kbd->GetKeyState (CSKEY_END))
 			c->Move (CS_VEC_DOWN * 8 * speed);
 	}
+}
 
+void SBS::Render()
+{
 	// Tell 3D driver we're going to display 3D things.
 	//if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER ))
 	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN )) //clear screen also
@@ -304,6 +320,42 @@ void SBS::SetupFrame()
 
 	// Tell the camera to render into the frame buffer.
 	view->Draw ();
+}
+
+void SBS::SetupFrame()
+{
+	//Main simulator loop
+	
+	//Calls frame limiter function, which sets the max frame rate
+	//note - the frame rate determines elevator speed, walking speed, etc
+	//In order to raise it, elevator timers and walking speed must both be changed
+	if (FrameLimiter == true)
+		SlowToFPS(FrameRate);
+
+	//used to adjust speeds according to frame rate
+	//if (FrameSync == true)
+		//FPSModifier = FrameRate / TV.GetFPS;
+	//else
+		//FPSModifier = 1;
+
+	if (RenderOnly == false && InputOnly == false)
+	{
+		//Calls the Fall function, and if IsFalling is true then the user falls until they hit something
+		if (EnableCollisions == true)
+			Fall();
+
+		//Determine floor that the camera is on
+		c->UpdateCameraFloor();
+
+		//run elevator handlers
+		for (int i = 1; i <= Elevators; i++)
+			ElevatorArray[i]->MonitorLoop();
+	}
+
+	if (RenderOnly == false)
+		GetInput();
+
+    Render();
 }
 
 void SBS::FinishFrame()
@@ -893,6 +945,7 @@ void SBS::EnableBuildings(bool value)
 		Buildings->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		Buildings->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
+	IsBuildingsEnabled = value;
 }
 
 void SBS::EnableLandscape(bool value)
@@ -910,6 +963,7 @@ void SBS::EnableLandscape(bool value)
 		Landscape->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		Landscape->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
+	IsLandscapeEnabled = value;
 }
 
 void SBS::EnableExternal(bool value)
@@ -927,6 +981,7 @@ void SBS::EnableExternal(bool value)
 		External->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		External->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
+	IsExternalEnabled = value;
 }
 
 void SBS::EnableColumnFrame(bool value)
@@ -944,6 +999,25 @@ void SBS::EnableColumnFrame(bool value)
 		ColumnFrame->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		ColumnFrame->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
+	IsColumnFrameEnabled = value;
+}
+
+void SBS::EnableSkybox(bool value)
+{
+	//turns skybox on/off
+	if (value == true)
+	{
+		SkyBox->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		SkyBox->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		SkyBox->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		SkyBox->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		SkyBox->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		SkyBox->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+	}
+	IsSkyboxEnabled = value;
 }
 
 csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
@@ -1042,4 +1116,9 @@ double SBS::GetDistance(double x1, double x2, double z1, double z2)
 		return abs(z1 - z2);
 	if ((x1 != x2) && (z2 != x2))
 		return sqrt(pow(abs(x1 - x2), 2) + pow(abs(z1 - z2), 2)); //calculate diagonals
+}
+
+void SBS::Fall()
+{
+
 }

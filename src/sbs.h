@@ -112,6 +112,11 @@ public:
 	bool EnableCollisions; //turns collisions on/off
 	double HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
 	csStringArray UserVariable;
+	bool IsBuildingsEnabled; //contains status of buildings object
+	bool IsColumnFrameEnabled; //contains status of column frame object
+	bool IsExternalEnabled; //contains status of external object
+	bool IsLandscapeEnabled; //contains status of landscape object
+	bool IsSkyboxEnabled; //contains status of skybox object
 
 	//File I/O
 	csString BuildingFile;
@@ -134,6 +139,8 @@ public:
 	bool HandleEvent(iEvent& Event);
 	void SetupFrame();
 	void FinishFrame();
+	void GetInput();
+	void Render();
 	int CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th);
 	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
 	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal);
@@ -145,8 +152,10 @@ public:
 	void EnableLandscape(bool value);
 	void EnableExternal(bool value);
 	void EnableColumnFrame(bool value);
+	void EnableSkybox(bool value);
 	int GetFloorNumber(double altitude);
 	double GetDistance(double x1, double x2, double z1, double z2);
+	void Fall();
 
 	//file loader functions
 	int LoadBuilding(const char * filename);

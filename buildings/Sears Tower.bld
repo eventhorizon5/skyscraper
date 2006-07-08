@@ -31,8 +31,8 @@
     Stairs = 0
     HorizScale = 1
     CameraFloor = 0
-    CameraPosition = 0, -41.6
-    CameraDirection = 0, 10, 28.8
+    CameraPosition = -50, 0
+    CameraDirection = 28.8, 10, 0
     CameraRotation = 0, 0, 0
 <EndGlobals>
 
@@ -159,11 +159,23 @@
     AddFloor Marble3, -112.5, 112.5, 112.5, -112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
-    AddWall MainWindows, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, 112.5, 112.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -112.5, 112.5, -112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-
+    #front
+    AddWall MainWindows, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #back
+    AddWall MainWindows, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #left
+    AddWall MainWindows, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #right
+    AddWall MainWindows, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    
     #Interfloor bottom
     AddInterfloorFloor Brick, -112.5, 112.5, 112.5, 112.5, 0, 0, 0, 0
 
@@ -182,8 +194,6 @@
     Name = Offices
     Type = Office
     Description = Zone 1 office level %floor%
-
-    Set 1 = %doorwidth% / 2
 
 <EndFloors>
 
@@ -205,12 +215,6 @@
     #Ceiling
     AddFloor Brick, -112.5, 112.5, 112.5, -112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
-    #External vents
-    AddWall VentsExt, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, 112.5, 112.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, -112.5, 112.5, -112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-
     #Internal vents
     AddWall VentsInt, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
     AddWall VentsInt, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
@@ -230,6 +234,15 @@
     AddInterfloorWall Brick, -112.5, 112.5, -112.5, -112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
+#Zone 1 mechanical vents
+<Floor 30>
+    #External vents
+    AddWall VentsExt, -112.5, -112.5, 112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, 112.5, -112.5, 112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, 112.5, 112.5, -112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, -112.5, 112.5, -112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, False, False, False, True
+<EndFloor>
+
 #zone 2 lower skeleton
 <Floors 33 to 49>
     Height = 10
@@ -238,28 +251,40 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Granite, 63, 70, -63, -70, 0, 0, 0, 0, False
+    AddFloor Granite, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Marble3, 63, 70, -63, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Marble3, -112.5, -112.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
-    AddWall MainWindows, 63, 70, -63, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -63, 70, -63, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -63, -70, 63, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, 63, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, 0, 0.7, False, False, False, True
+    #front
+    AddWall MainWindows, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #back
+    AddWall MainWindows, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #left
+    AddWall MainWindows, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #right
+    AddWall MainWindows, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
 
     #Interfloor bottom
-    AddInterfloorFloor Brick, 63, 70, -63, -70, 0, 0, 0, 0
+    AddInterfloorFloor Brick, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor Brick, 63, 70, -63, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor Brick, -112.5, -112.5, 112.5, 112.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    AddInterfloorWall Brick, 63, 70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -63, 70, -63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, 112.5, 112.5, -112.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, 112.5, -112.5, -112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, -112.5, 112.5, -112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, 112.5, -112.5, 112.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
 #Office skylobbies
@@ -278,16 +303,12 @@
     Type = Office
     Description = Zone 2 office level %floor%
 
-    Set 1 = %doorwidth% / 2
-
-    #Room Walls
-
 <EndFloors>
 
 #lower level setbacks
 <Floor 49>
-    AddFloor Brick, -63, 70, -51, -70, %fullheight%, %fullheight%, 0, 0, True
-    AddFloor Brick, 63, 70, 51, -70, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Brick, -112.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Brick, 37.5, -37.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, True
 <EndFloor>
 
 #zone 2 upper skeleton
@@ -298,28 +319,49 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Granite, 63, 70, -63, -70, 0, 0, 0, 0, False
+    #AddFloor Granite, 112.5, 112.5, -112.5, -112.5, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Marble3, 63, 70, -63, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    #AddFloor Marble3, 112.5, 112.5, -112.5, -112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
-    AddWall MainWindows, 63, 70, -63, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -63, 70, -63, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -63, -70, 63, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, 63, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, 0, 0.7, False, False, False, True
+    #front
+    AddWall MainWindows, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #back
+    AddWall MainWindows, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #left
+    AddWall MainWindows, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #right
+    AddWall MainWindows, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
 
     #Interfloor bottom
-    AddInterfloorFloor Brick, 63, 70, -63, -70, 0, 0, 0, 0
+    AddInterfloorFloor Brick, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor Brick, 63, 70, -63, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor Brick, -112.5, -112.5, 112.5, 112.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    AddInterfloorWall Brick, 63, 70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -63, 70, -63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, 112.5, 112.5, -112.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, 112.5, -112.5, -112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, -112.5, 112.5, -112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, 112.5, -112.5, 112.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+<EndFloors>
+
+#rooms
+<Floors 50 to 63>
+    ID = %floor%
+    Name = Offices
+    Type = Office
+    Description = Zone 2 office level %floor%
+
 <EndFloors>
 
 #zone 2 mechanical
@@ -334,40 +376,58 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Brick, 63, 70, -63, -70, 0, 0, 0, 0, False
+    #AddFloor Brick, 112.5, 112.5, -112.5, -112.5, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Brick, 63, 70, -63, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
-
-    #External vents
-    AddWall VentsExt, 63, 70, -63, 70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, -63, 70, -63, -70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, -63, -70, 63, -70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, 63, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
+    #AddFloor Brick, 112.5, 112.5, -112.5, -112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
-    AddWall VentsInt, 63, 70, -63, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
-    AddWall VentsInt, -63, 70, -63, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
-    AddWall VentsInt, -63, -70, 63, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
-    AddWall VentsInt, 63, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
+    #front
+    AddWall VentsInt, -112.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
+    AddWall VentsInt, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
+    #back
+    AddWall VentsInt, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
+    AddWall VentsInt, -37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
+    #left
+    AddWall VentsInt, -112.5, -112.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
+    AddWall VentsInt, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
+    #right
+    AddWall VentsInt, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
+    AddWall VentsInt, 112.5, -37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
 
     #Interfloor bottom
-    AddInterfloorFloor Brick, 63, 70, -63, -70, 0, 0, 0, 0
+    #AddInterfloorFloor Brick, 63, 70, -63, -70, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor Brick, 63, 70, -63, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    #AddInterfloorFloor Brick, 63, 70, -63, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    AddInterfloorWall Brick, 63, 70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -63, 70, -63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, 63, 70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, -63, 70, -63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
+
+<Floor 64>
+    #External vents
+    #front
+    AddWall VentsExt, -112.5, -112.5, 37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, 37.5, -112.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    #back
+    AddWall VentsExt, -37.5, 37.5, -37.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, -37.5, 112.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    #left
+    AddWall VentsExt, -112.5, -112.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, -112.5, 37.5, -37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    #right
+    AddWall VentsExt, 37.5, -37.5, 112.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, 112.5, -37.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+<EndFloor>
 
 #middle level setbacks
 <Floor 65>
-    AddFloor Brick, -63, 70, -51, -70, %fullheight%, %fullheight%, 0, 0, True
-    AddFloor Brick, 63, 70, 51, -70, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Brick, 37.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Brick, -112.5, -37.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, True
 <EndFloor>
 
 #zone 3 lower skeleton
@@ -378,28 +438,40 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Granite, 51, 70, -51, -70, 0, 0, 0, 0, False
+    #AddFloor Granite, 51, 70, -51, -70, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Marble3, 51, 70, -51, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    #AddFloor Marble3, 51, 70, -51, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
-    AddWall MainWindows, 51, 70, -51, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -51, 70, -51, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -51, -70, 51, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, 51, -70, 51, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #front
+    AddWall MainWindows, -37.5, -37.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #back
+    AddWall MainWindows, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 37.5, 112.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #left
+    AddWall MainWindows, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #right
+    AddWall MainWindows, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, 112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
 
     #Interfloor bottom
-    AddInterfloorFloor Granite, 51, 70, -51, -70, 0, 0, 0, 0
+    #AddInterfloorFloor Granite, 51, 70, -51, -70, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor Brick, 51, 70, -51, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    #AddInterfloorFloor Brick, 51, 70, -51, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    AddInterfloorWall Brick, 51, 70, -51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -51, 70, -51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -51, -70, 51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, 51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, 51, 70, -51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, -51, 70, -51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, -51, -70, 51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, 51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
 # Zone 3 skylobbies
@@ -432,40 +504,67 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Brick, 51, 70, -51, -70, 0, 0, 0, 0, False
+    #AddFloor Brick, 51, 70, -51, -70, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Brick, 51, 70, -51, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
-
-    #External vents
-    AddWall VentsExt, 51, 70, -51, 70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, -51, 70, -51, -70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, -51, -70, 51, -70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, 51, -70, 51, 70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
+    #AddFloor Brick, 51, 70, -51, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
-    AddWall VentsInt, 51, 70, -51, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
-    AddWall VentsInt, -51, 70, -51, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
-    AddWall VentsInt, -51, -70, 51, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
-    AddWall VentsInt, 51, -70, 51, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    #front
+    AddWall VentsInt, -37.5, -37.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    AddWall VentsInt, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    AddWall VentsInt, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    #back
+    AddWall VentsInt, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    AddWall VentsInt, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    AddWall VentsInt, 37.5, 112.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    #left
+    AddWall VentsInt, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    AddWall VentsInt, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    AddWall VentsInt, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    #right
+    AddWall VentsInt, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    AddWall VentsInt, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    AddWall VentsInt, 112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
 
     #Interfloor bottom
-    AddInterfloorFloor Granite, 51, 70, -51, -70, 0, 0, 0, 0
+    #AddInterfloorFloor Granite, 51, 70, -51, -70, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor Brick, 51, 70, -51, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    #AddInterfloorFloor Brick, 51, 70, -51, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    AddInterfloorWall Brick, 51, 70, -51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -51, 70, -51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -51, -70, 51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, 51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, 51, 70, -51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, -51, 70, -51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, -51, -70, 51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall Brick, 51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
+
+<Floor 88>
+    #External vents
+    #front
+    AddWall VentsExt, -37.5, -37.5, -37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, -37.5, -112.5, 37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, 37.5, -112.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    #back
+    AddWall VentsExt, -37.5, 37.5, -37.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, -37.5, 112.5, 37.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, 37.5, 112.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    #left
+    AddWall VentsExt, -112.5, -37.5, -37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, -112.5, -37.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, -112.5, 37.5, -37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    #right
+    AddWall VentsExt, 37.5, -37.5, 112.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, 112.5, -37.5, 112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, 112.5, 37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+<EndFloor>
 
 #upper level setbacks
 <Floor 89>
-    AddFloor Brick, -51, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, True
-    AddFloor Brick, 51, 70, 39, -70, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Brick, -37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Brick, -37.5, 112.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Brick, 37.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, True
 <EndFloor>
 
 #zone 3 upper skeleton
@@ -477,28 +576,43 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Granite, 39, 70, -39, -70, 0, 0, 0, 0, False
+    AddFloor Granite, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Marble3, 39, 70, -39, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Marble3, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
-    AddWall MainWindows, 39, 70, -39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -39, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -39, -70, 39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, 39, -70, 39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #front
+    AddWall MainWindows, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #back
+    AddWall MainWindows, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #left
+    AddWall MainWindows, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #right
+    AddWall MainWindows, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
 
     #Interfloor bottom
-    AddInterfloorFloor Brick, 39, 70, -39, -70, 0, 0, 0, 0
+    AddInterfloorFloor Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor Brick, 39, 70, -39, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor Brick, -112.5, -37.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    AddInterfloorWall Brick, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, -37.5, 37.5, -37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, 37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, -37.5, -112.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, 37.5, -37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+<EndFloors>
+
+# Zone 3 upper offices
+<Floors 90 to 103>
+    ID = %floor%
+    Name = Offices
+    Type = Office
+    Description = Office level %floor%
+
 <EndFloors>
 
 #communications floors
@@ -513,28 +627,34 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Brick, 27, 70, -27, -70, 0, 0, 0, 0, False
+    AddFloor Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Ceiling1, 27, 70, -27, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling1, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
-    AddWall MainWindows, 27, 70, -27, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -27, 70, -27, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, -27, -70, 27, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, 27, -70, 27, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #front
+    AddWall MainWindows, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #back
+    AddWall MainWindows, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #left
+    AddWall MainWindows, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #right
+    AddWall MainWindows, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
 
     #Interfloor bottom
-    AddInterfloorFloor Brick, 27, 70, -27, -70, 0, 0, 0, 0
+    AddInterfloorFloor Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor Brick, 27, 70, -27, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor Brick, -112.5, -37.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    AddInterfloorWall Brick, 27, 70, -27, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -27, 70, -27, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -27, -70, 27, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, 27, -70, 27, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, -37.5, 37.5, -37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, 37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, -37.5, -112.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, 37.5, -37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
 #zone 3 upper mechanical
@@ -549,35 +669,45 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Brick, 27, 70, -27, -70, 0, 0, 0, 0, False
+    AddFloor Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Brick, 27, 70, -27, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
-
-    #External vents
-    AddWall VentsExt, 27, 70, -27, 70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, -27, 70, -27, -70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, -27, -70, 27, -70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, 27, -70, 27, 70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
+    AddFloor Brick, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
-    AddWall VentsInt, 27, 70, -27, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
-    AddWall VentsInt, -27, 70, -27, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
-    AddWall VentsInt, -27, -70, 27, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
-    AddWall VentsInt, 27, -70, 27, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    #front
+    AddWall VentsInt, -112.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    #back
+    AddWall VentsInt, -112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    #left
+    AddWall VentsInt, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    #right
+    AddWall VentsInt, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
 
     #Interfloor bottom
-    AddInterfloorFloor Brick, 27, 70, -27, -70, 0, 0, 0, 0
+    AddInterfloorFloor Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor Brick, 27, 70, -27, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor Brick, -112.5, -37.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    AddInterfloorWall Brick, 27, 70, -27, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -27, 70, -27, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -27, -70, 27, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, 27, -70, 27, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, -37.5, 37.5, -37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, 37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, -37.5, -112.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, 37.5, -37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
+
+<Floor 106>
+    #External vents
+    #front
+    AddWall VentsExt, -112.5, -37.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    #back
+    AddWall VentsExt, -112.5, 37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    #left
+    AddWall VentsExt, -112.5, -37.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    #right
+    AddWall VentsExt, 37.5, -37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+<EndFloor>
 
 #top floor mechanical/communications
 <Floor 108>
@@ -591,49 +721,49 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Brick, 27, 70, -27, -70, 0, 0, 0, 0, False
+    AddFloor Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Brick, 27, 70, -27, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Brick, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
-    #External vents
-    AddWall VentsExt, 27, 70, -27, 70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, -27, 70, -27, -70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, -27, -70, 27, -70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, 27, -70, 27, 70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-
-    #Internal vents
-    AddWall VentsInt, 27, 70, -27, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
-    AddWall VentsInt, -27, 70, -27, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
-    AddWall VentsInt, -27, -70, 27, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
-    AddWall VentsInt, 27, -70, 27, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False, False, False, False
+    #External walls
+    #front
+    AddWall MainWindows, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #back
+    AddWall MainWindows, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall MainWindows, -37.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #left
+    AddWall MainWindows, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    #right
+    AddWall MainWindows, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
 
     #Interfloor bottom
-    AddInterfloorFloor Brick, 27, 70, -27, -70, 0, 0, 0, 0
+    AddInterfloorFloor Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor Brick, 27, 70, -27, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor Brick, -112.5, -37.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    AddInterfloorWall Brick, 27, 70, -27, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -27, 70, -27, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, -27, -70, 27, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall Brick, 27, -70, 27, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, -37.5, 37.5, -37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, 37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, -112.5, -37.5, -112.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall Brick, 37.5, -37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloor>
 
 # Roof and Penthouse
 <Floor 109>
-    ID = R
-    Name = Roof
-    Type = Roof
-    Description = Roof and communications antennas
+    ID = P
+    Name = Penthouse
+    Type = Service
+    Description = Main roof, penthouse and communications antennas
     Height = 12
     InterfloorHeight = 0
     DoorHeight = 6.24
     DoorWidth = 3
 
     #Floor
-    AddFloor Brick, 27, 70, -27, -70, 0, 0, 0, 0, True
+    AddFloor Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, True
 
     #Antennas
     CreateWallBox2 External, Concrete, 0, -40, 4, 4, 300, 0, 0, 25
@@ -643,15 +773,15 @@
 # Penthouse roof (comm equipment)
 <Floor 110>
     ID = R
-    Name = Penthouse Roof
+    Name = Roof
     Type = Roof
-    Description = Penthouse Roof 
+    Description = Roof 
     Height = 12
     InterfloorHeight = 0
     DoorHeight = 6.24
     DoorWidth = 3
 
     #Floor
-    AddFloor Brick, 27, 70, -27, -70, 0, 0, 0, 0, True
+    #AddFloor Brick, 27, 70, -27, -70, 0, 0, 0, 0, True
 
 <EndFloor>

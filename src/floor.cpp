@@ -56,9 +56,6 @@ Floor::Floor(int number)
 	Interfloor_state = scfQueryInterface<iThingFactoryState> (Level_factory);
 	Interfloor->SetZBufMode(CS_ZBUF_USE);
 
-	// turn on ZUSE Z-buffer mode
-	Level->SetZBufMode(CS_ZBUF_USE);
-
 	//set enabled flag
 	IsEnabled = true;
 

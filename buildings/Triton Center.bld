@@ -21,12 +21,12 @@
     Location = 111 N. Dearborn, Chicago, IL
     Description = A fictitious Chicago-based 142-story skyscraper located on the northeast corner of Dearborn & Washington.
     Version = 3
-    CameraAltitude = 3.2
+    CameraAltitude = 5
     ElevatorShafts = 0
     Floors = 142 #143 total floors/levels, 0 =lobby, 1=mezzanine, then 2-142
     #Basements = 10
     Basements = 0
-    Elevators = 0
+    Elevators = 1
     PipeShafts = 0
     Stairs = 0
     HorizScale = 1
@@ -829,6 +829,20 @@
     CreateWallBox2 External, Concrete, 0, -40, 4, 4, 300, 0, 0, 25
     CreateWallBox2 External, Concrete, 0, 40, 4, 4, 300, 0, 0, 25
 <EndFloor>
+
+<Elevator 1>
+    Speed = 0.7
+    Acceleration = 0.004
+    Deceleration = 0.002
+    OpenSpeed = 0.2
+    CreateElevator 6, 14, 0, 0
+
+    AddFloor Wood2, 6, 0, 0, -4.5, 0, 0, 0, 0
+    AddFloor Elev1, 6, 0, 0, -4.5, 8, 8, 0, 0
+    AddWall Wood1, 6, 0, 0, 0, 8, 8, 0, 0, 2, 2, false, false, false, true
+    AddWall Wood1, 6, -4.5, 0, -4.5, 8, 8, 0, 0, 2, 2, false, false, false, true
+    AddWall Wood1, 6, -4.5, 6, 0, 8, 8, 0, 0, 2, 2, false, false, false, true
+<EndElevator>
 
 # Main load-bearing columns
 #Top set

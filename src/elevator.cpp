@@ -78,6 +78,7 @@ Elevator::Elevator(int number)
 	Elevator_object = ElevatorMesh->GetMeshObject ();
 	Elevator_factory = Elevator_object->GetFactory();
 	Elevator_state = scfQueryInterface<iThingFactoryState> (Elevator_factory);
+	Elevator_movable = ElevatorMesh->GetMovable();
 	ElevatorMesh->SetZBufMode(CS_ZBUF_USE);
 
 	buffer = Number;
@@ -87,6 +88,7 @@ Elevator::Elevator(int number)
 	FloorIndicator_object = FloorIndicator->GetMeshObject ();
 	FloorIndicator_factory = FloorIndicator_object->GetFactory();
 	FloorIndicator_state = scfQueryInterface<iThingFactoryState> (FloorIndicator_factory);
+	FloorIndicator_movable = FloorIndicator->GetMovable();
 	FloorIndicator->SetZBufMode(CS_ZBUF_USE);
 
 	buffer = Number;
@@ -96,6 +98,7 @@ Elevator::Elevator(int number)
 	ElevatorDoorL_object = ElevatorDoorL->GetMeshObject ();
 	ElevatorDoorL_factory = ElevatorDoorL_object->GetFactory();
 	ElevatorDoorL_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorL_factory);
+	ElevatorDoorL_movable = ElevatorDoorL->GetMovable();
 	ElevatorDoorL->SetZBufMode(CS_ZBUF_USE);
 
 	buffer = Number;
@@ -105,6 +108,7 @@ Elevator::Elevator(int number)
 	ElevatorDoorR_object = ElevatorDoorR->GetMeshObject ();
 	ElevatorDoorR_factory = ElevatorDoorR_object->GetFactory();
 	ElevatorDoorR_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorR_factory);
+	ElevatorDoorR_movable = ElevatorDoorR->GetMovable();
 	ElevatorDoorR->SetZBufMode(CS_ZBUF_USE);
 
 	buffer = Number;
@@ -114,6 +118,7 @@ Elevator::Elevator(int number)
 	Plaque_object = Plaque->GetMeshObject ();
 	Plaque_factory = Plaque_object->GetFactory();
 	Plaque_state = scfQueryInterface<iThingFactoryState> (Plaque_factory);
+	Plaque_movable = Plaque->GetMovable();
 	Plaque->SetZBufMode(CS_ZBUF_USE);
 }
 
@@ -146,16 +151,16 @@ void Elevator::CreateElevator(double x, double y, int floor, int direction)
 	csVector3 vpos (x, sbs->FloorArray[floor]->Altitude, y);
 
 	//move objects to positions
-	ElevatorMesh->GetMovable()->SetPosition(vpos);
-	ElevatorMesh->GetMovable()->UpdateMove();
-	FloorIndicator->GetMovable()->SetPosition(vpos);
-	FloorIndicator->GetMovable()->UpdateMove();
-	Plaque->GetMovable()->SetPosition(vpos);
-	Plaque->GetMovable()->UpdateMove();
-	ElevatorDoorL->GetMovable()->SetPosition(vpos);
-	ElevatorDoorL->GetMovable()->UpdateMove();
-	ElevatorDoorR->GetMovable()->SetPosition(vpos);
-	ElevatorDoorR->GetMovable()->UpdateMove();
+	Elevator_movable->SetPosition(vpos);
+	Elevator_movable->UpdateMove();
+	FloorIndicator_movable->SetPosition(vpos);
+	FloorIndicator_movable->UpdateMove();
+	Plaque_movable->SetPosition(vpos);
+	Plaque_movable->UpdateMove();
+	ElevatorDoorL_movable->SetPosition(vpos);
+	ElevatorDoorL_movable->UpdateMove();
+	ElevatorDoorR_movable->SetPosition(vpos);
+	ElevatorDoorR_movable->UpdateMove();
 	
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(y, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)) + ", " + csString(_itoa(direction, buffer, 12)));
 }
@@ -254,6 +259,22 @@ void Elevator::MonitorLoop()
 {
 	//Monitors elevator and starts actions if needed
 
+	//check to see if person is in elevator
+	CheckElevator();
+
+/*
+	if (OpenDoor == 1)
+		OpenDoors();
+	if (OpenDoor == -1)
+		CloseDoors();
+	if (OpenDoor == 2)
+		OpenDoorsEmergency();
+	if (OpenDoor == -2)
+		CloseDoorsEmergency();
+*/
+	if (MoveElevator == true)
+		MoveElevatorToFloor();
+
 }
 
 void Elevator::CloseDoorsEmergency()
@@ -290,12 +311,246 @@ void Elevator::MoveDoors(bool open, bool emergency)
 void Elevator::MoveElevatorToFloor()
 {
 	//Main processing routine; sends elevator to floor specified in GotoFloor
+	static bool IsRunning;
+
+	if (IsRunning == false)
+	{
+		IsRunning = true;
+		
+		//get elevator's current altitude
+		ElevatorStart = GetPosition().y;
+
+		//get elevator's current floor
+		ElevatorFloor = GetElevatorFloor();
+
+		//If elevator is already on specified floor, open doors and exit
+		if (ElevatorFloor == GotoFloor)
+		{
+			OpenDoor = 1;
+			return;
+		}
+
+		//close doors if open
+		if (DoorsOpen == true)
+			OpenDoor = -1;
+
+		//Determine direction
+		if (GotoFloor < ElevatorFloor)
+			ElevatorDirection = -1;
+		if (GotoFloor > ElevatorFloor)
+			ElevatorDirection = 1;
+
+		//Determine distance to destination floor
+		DistanceToTravel = abs(abs(sbs->FloorArray[GotoFloor]->Altitude) - abs(ElevatorStart));
+		Destination = sbs->FloorArray[GotoFloor]->Altitude;
+		CalculateStoppingDistance = true;
+
+		//If user is riding this elevator, then turn off floor
+		if (ElevatorSync == true)
+			sbs->FloorArray[c->CurrentFloor]->Enabled(false);
+
+		//Turn off sky, buildings, and landscape
+		sbs->EnableSkybox(false);
+		sbs->EnableBuildings(false);
+		sbs->EnableLandscape(false);
+
+		//Play starting sound
+		//"\data\elevstart.wav"
+
+		//Get first rate increment value
+		ElevatorRate = ElevatorDirection * (ElevatorSpeed * Acceleration);
+
+		//get starting frame rate and hold value
+		FPSModifierStatic = sbs->FPSModifier;
+	}
+
+	//Movement sound
+    //"\data\elevmove.wav"
+
+	//move elevator objects and camera
+	Elevator_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+	Elevator_movable->UpdateMove();
+	if (ElevatorSync == true)
+		c->SetPosition(csVector3(c->GetPosition().x, GetPosition().y + c->DefaultAltitude, c->GetPosition().z));
+	ElevatorDoorL_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+	ElevatorDoorL_movable->UpdateMove();
+	ElevatorDoorR_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+	ElevatorDoorR_movable->UpdateMove();
+	FloorIndicator_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+	FloorIndicator_movable->UpdateMove();
+	Plaque_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+	Plaque_movable->UpdateMove();
+
+	//move sounds
+
+	//motion calculation
+	if (Brakes == false)
+	{
+		//regular motion
+		if (ElevatorDirection == 1)
+			ElevatorRate = ElevatorRate + (ElevatorSpeed * Acceleration);
+		if (ElevatorDirection == -1)
+			ElevatorRate = ElevatorRate - (ElevatorSpeed * Acceleration);
+	}
+	else
+	{
+		//slow down
+		if (ElevatorDirection == 1)
+			ElevatorRate = ElevatorRate + (ElevatorSpeed * TempDeceleration);
+		if (ElevatorDirection == -1)
+			ElevatorRate = ElevatorRate - (ElevatorSpeed * TempDeceleration);
+	}
+
+	//change speeds
+	if ((ElevatorDirection == 1) && (ElevatorRate > ElevatorSpeed))
+		ElevatorRate = ElevatorSpeed;
+	if ((ElevatorDirection == -1) && (ElevatorRate < -ElevatorSpeed))
+		ElevatorRate = -ElevatorSpeed;
+	if ((ElevatorDirection == 1) && (Brakes == true) && (ElevatorRate > 0))
+		ElevatorRate = 0;
+	if ((ElevatorDirection == -1) && (Brakes == true) && (ElevatorRate < 0))
+		ElevatorRate = 0;
+
+	//get distance needed to stop elevator
+	if (CalculateStoppingDistance == true)
+	{
+		if (ElevatorDirection == 1)
+			StoppingDistance = (GetPosition().y - ElevatorStart) * (Acceleration / Deceleration);
+		else if (ElevatorDirection == -1)
+			StoppingDistance = (ElevatorStart - GetPosition().y) * (Acceleration / Deceleration);
+	}
+
+	if (abs(ElevatorRate) == ElevatorSpeed)
+		CalculateStoppingDistance = false;
+
+	//Deceleration routines with floor overrun correction (there's still problems, but it works pretty good)
+	//since this function cycles at a slower/less granular rate (cycles according to frames per sec), an error factor is present where the elevator overruns the dest floor,
+	//even though the algorithms are all correct. Since the elevator moves by "jumping" to a new altitude every frame - and usually jumps right over the altitude value where it is supposed to
+	//start the deceleration process, causing the elevator to decelerate too late, and end up passing/overrunning the dest floor's altitude.  This code corrects this problem
+	//by determining if the next "jump" will overrun the deceleration marker (which is Dest's Altitude minus Stopping Distance), and temporarily altering the deceleration rate according to how far off the mark it is
+	//and then starting the deceleration process immediately.
+
+	//up movement
+	if ((Brakes == false) && (ElevatorDirection == 1))
+	{
+		//determine if next jump altitude is over deceleration marker
+		if (((GetPosition().y + (ElevatorRate * FPSModifierStatic)) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
+		{
+			CalculateStoppingDistance = false;
+			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
+			TempDeceleration = Deceleration * (StoppingDistance / (Destination - GetPosition().y));
+			//start deceleration
+			ElevatorDirection = -1;
+			Brakes = true;
+			//stop sounds
+			//play elevator stopping sound
+			//"\data\elevstop.wav"
+		}
+    
+		//normal routine - this will rarely happen (only if the elevator happens to reach the exact deceleration marker)
+		if (GetPosition().y == (Destination - StoppingDistance))
+		{
+			TempDeceleration = Deceleration;
+			CalculateStoppingDistance = false;
+			//slow down elevator
+			ElevatorDirection = -1;
+			Brakes = true;
+			//stop sounds
+			//play stopping sound
+			//"\data\elevstop.wav"
+		}
+	}
+
+	//down movement
+	if (Brakes == false && ElevatorDirection == -1)
+	{
+        //determine if next jump altitude is below deceleration marker
+		if (((GetPosition().y - (ElevatorRate * FPSModifierStatic)) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
+		{
+			CalculateStoppingDistance = false;
+			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
+			TempDeceleration = Deceleration * (StoppingDistance / (GetPosition().y - Destination));
+			//start deceleration
+			ElevatorDirection = 1;
+			Brakes = true;
+			//stop sounds
+			//play stopping sound
+            //"\data\elevstop.wav"
+		}
+    
+		//normal routine - this will rarely happen (only if the elevator happens to reach the exact deceleration marker)
+		if (GetPosition().y == (Destination + StoppingDistance))
+		{
+			TempDeceleration = Deceleration;
+			CalculateStoppingDistance = false;
+			//slow down elevator
+			ElevatorDirection = 1;
+			Brakes = true;
+			//stop sounds
+			//play stopping sound
+			//"\data\elevstop.wav"
+		}
+	}
+
+	//exit if elevator's running
+	if (abs(ElevatorRate) != 0)
+		return;
+
+	//store error offset value
+	if (ElevatorDirection == -1)
+		ErrorOffset = GetPosition().y - Destination;
+	else if (ElevatorDirection == 1)
+		ErrorOffset = Destination - GetPosition().y;
+	else
+		ErrorOffset = 0;
+
+	//set elevator and objects to floor altitude (corrects offset errors)
+	//move elevator objects and camera
+	Elevator_movable->SetPosition(csVector3(GetPosition().x, Destination, GetPosition().z));
+	Elevator_movable->UpdateMove();
+	if (ElevatorSync == true)
+		c->SetPosition(csVector3(c->GetPosition().x, GetPosition().y + c->DefaultAltitude, c->GetPosition().z));
+	ElevatorDoorL_movable->MovePosition(csVector3(ElevatorDoorL_movable->GetPosition().x, Destination, ElevatorDoorL_movable->GetPosition().z));
+	ElevatorDoorL_movable->UpdateMove();
+	ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorR_movable->GetPosition().x, Destination, ElevatorDoorR_movable->GetPosition().z));
+	ElevatorDoorR_movable->UpdateMove();
+	FloorIndicator_movable->MovePosition(csVector3(FloorIndicator_movable->GetPosition().x, Destination, FloorIndicator_movable->GetPosition().z));
+	FloorIndicator_movable->UpdateMove();
+	Plaque_movable->MovePosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
+	Plaque_movable->UpdateMove();
+
+	//move sounds
+
+	//reset values if at destination floor
+	ElevatorRate = 0;
+	ElevatorDirection = 0;
+	Brakes = false;
+	Destination = 0;
+	DistanceToTravel = 0;
+	ElevatorStart = 0;
+	IsRunning = false;
+	MoveElevator = false;
+
+	//update elevator's floor number
+	GetElevatorFloor();
+
+	//Turn on floor
+	if (ElevatorSync == true)
+		sbs->FloorArray[GotoFloor]->Enabled(true);
+
+	//open doors
+	OpenDoor = 1;
+
+	//Turn on sky, buildings, and landscape
+	sbs->EnableSkybox(true);
+	sbs->EnableBuildings(true);
+	sbs->EnableLandscape(true);
 
 }
 
-int Elevator::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool DrawBothSides)
+int Elevator::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
 {
-	return sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height1, height2, voffset1 + GetPosition().y, voffset2 + GetPosition().y, tw, th, false, false, false, DrawBothSides);
+	return sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height1, height2, voffset1 + GetPosition().y, voffset2 + GetPosition().y, tw, th, revX, revY, revZ, DrawBothSides);
 }
 
 int Elevator::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
@@ -356,5 +611,11 @@ int Elevator::AddPlaque(const char *texture, double x1, double z1, double x2, do
 const csVector3 Elevator::GetPosition()
 {
 	//returns the elevator's position
-	return ElevatorMesh->GetMovable()->GetPosition();
+	return Elevator_movable->GetPosition();
+}
+
+void Elevator::CheckElevator()
+{
+	//check to see if user (camera) is in the elevator
+
 }

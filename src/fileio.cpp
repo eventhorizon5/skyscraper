@@ -904,7 +904,67 @@ recalc:
                 ElevatorArray[Current]->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]));
 				tempdata.DeleteAll();
 			}
+
+            //AddFloor command
+            if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
+			{
+                //get data
+                tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+				
+                //calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+                    buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+                //if (tempdata.GetSize() < 8)
+					//Err.Raise 1003;
+                //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
+                
+                //create floor
+				ElevatorArray[Current]->AddFloor(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+
+				tempdata.DeleteAll();
+			}
             
+			//AddWall command
+            if (LineData.Slice(0, 7).CompareNoCase("addwall") == true)
+			{
+                //get data
+                tempdata.SplitString(LineData.Slice(8).GetData(), ",");
+				
+                //calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+                //if (tempdata.GetSize() < 11)
+					//Err.Raise 1003;
+                //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+                
+				if (csString(tempdata[11]).CompareNoCase("true") == true)
+					revX = true;
+				else
+					revX = false;
+				if (csString(tempdata[12]).CompareNoCase("true") == true)
+					revY = true;
+				else
+					revY = false;
+				if (csString(tempdata[13]).CompareNoCase("true") == true)
+					revZ = true;
+				else
+					revZ = false;
+
+                //create wall
+				if (csString(tempdata[14]).CompareNoCase("true") == true)
+					ElevatorArray[Current]->AddWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), revX, revY, revZ, true);
+				else
+					ElevatorArray[Current]->AddWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), revX, revY, revZ, false);
+
+				tempdata.DeleteAll();
+			}
+
             //handle elevator range
             if (RangeL != RangeH && LineData.Slice(0, 14).CompareNoCase("<endelevators>") == true)
 			{

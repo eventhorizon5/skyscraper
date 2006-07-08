@@ -48,6 +48,8 @@ public:
 	bool DoorDirection; //if direction is false, doors are on the left/right side
 	double DoorSpeed; //max door speed
 	double DoorAcceleration; //door acceleration
+	double TempDeceleration; //temporary deceleration value, used in overrun correction
+	double ErrorOffset;
 
 	//functions
 	Elevator(int number);
@@ -68,7 +70,8 @@ public:
 	const csVector3 GetPosition();
 	void OpenDoors();
 	void CloseDoors();
-	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool DrawBothSides = true);
+	void CheckElevator();
+	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides);
 	int AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
 	int AddFloorIndicator(const char *basename, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
 	int AddDoors(const char *texture, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th);
@@ -79,22 +82,27 @@ private:
 		csRef<iMeshObject> Elevator_object;
 		csRef<iMeshObjectFactory> Elevator_factory;
 		csRef<iThingFactoryState> Elevator_state;
+		csRef<iMovable> Elevator_movable;
 	csRef<iMeshWrapper> FloorIndicator; //floor indicator object
 		csRef<iMeshObject> FloorIndicator_object;
 		csRef<iMeshObjectFactory> FloorIndicator_factory;
 		csRef<iThingFactoryState> FloorIndicator_state;
+		csRef<iMovable> FloorIndicator_movable;
 	csRef<iMeshWrapper> ElevatorDoorL; //left inside door
 		csRef<iMeshObject> ElevatorDoorL_object;
 		csRef<iMeshObjectFactory> ElevatorDoorL_factory;
 		csRef<iThingFactoryState> ElevatorDoorL_state;
+		csRef<iMovable> ElevatorDoorL_movable;
 	csRef<iMeshWrapper> ElevatorDoorR; //right inside door
 		csRef<iMeshObject> ElevatorDoorR_object;
 		csRef<iMeshObjectFactory> ElevatorDoorR_factory;
 		csRef<iThingFactoryState> ElevatorDoorR_state;
+		csRef<iMovable> ElevatorDoorR_movable;
 	csRef<iMeshWrapper> Plaque; //plaque object
 		csRef<iMeshObject> Plaque_object;
 		csRef<iMeshObjectFactory> Plaque_factory;
 		csRef<iThingFactoryState> Plaque_state;
+		csRef<iMovable> Plaque_movable;
 	csRefArray<iMeshWrapper> Buttons; //elevator button array
 
 	//Internal elevator simulation data
@@ -113,6 +121,7 @@ private:
 	double ElevatorDoorSpeed;
 	double ElevatorDoorPos; //original elevator door position
 	bool ElevWait;
+	double FPSModifierStatic;
 
 	//functions
 	void MoveElevatorToFloor();
