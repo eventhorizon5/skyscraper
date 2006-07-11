@@ -69,6 +69,7 @@ Elevator::Elevator(int number)
 	ElevatorDoorSpeed = 0;
 	ElevatorDoorPos = 0;
 	ElevWait = false;
+	EmergencyStop = false;
 
 	//create object meshes
 	buffer = Number;
@@ -202,6 +203,7 @@ void Elevator::StopElevator()
 {
 	//Tells elevator to stop moving, no matter where it is
 
+	EmergencyStop = true;
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": emergency stop");
 }
 
@@ -212,23 +214,9 @@ void Elevator::OpenHatch()
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening hatch");
 }
 
-void Elevator::OpenDoorsEmergency()
-{
-	//Simulates manually prying doors open.
-	//Slowly opens the elevator doors no matter where elevator is.
-	//If lined up with shaft doors, then opens the shaft doors also
-
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening doors");
-	MoveDoors(true, true);
-}
-
 void Elevator::OpenShaftDoors(int floor)
 {
-	//Simulates manually opening shaft doors
-	//Slowly opens the shaft's elevator doors no matter where elevator is.
-	//Cannot be used with OpenDoorsEmergency.
-	//This is if the elevator is not lined up with the shaft doors,
-	//and the user needs to open the shaft doors, usually while on top of elevator.
+	//passes open shaft door request to elevator's assigned shaft class object
 
 }
 
@@ -262,19 +250,36 @@ void Elevator::MonitorLoop()
 	//check to see if person is in elevator
 	CheckElevator();
 
-/*
+
 	if (OpenDoor == 1)
-		OpenDoors();
+		MoveDoors(true, false);
 	if (OpenDoor == -1)
-		CloseDoors();
+		MoveDoors(false, false);
 	if (OpenDoor == 2)
-		OpenDoorsEmergency();
+		MoveDoors(true, true);
 	if (OpenDoor == -2)
-		CloseDoorsEmergency();
-*/
+		MoveDoors(false, true);
+
 	if (MoveElevator == true)
 		MoveElevatorToFloor();
 
+}
+
+void Elevator::OpenDoorsEmergency()
+{
+	//Simulates manually prying doors open.
+	//Slowly opens the elevator doors no matter where elevator is.
+	//If lined up with shaft doors, then opens the shaft doors also
+
+	if (OpenDoor != 0)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
+		return;
+	}
+
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening doors");
+	OpenDoor = 2;
+	MoveDoors(true, true);
 }
 
 void Elevator::CloseDoorsEmergency()
@@ -283,7 +288,14 @@ void Elevator::CloseDoorsEmergency()
 	//Slowly closes the elevator doors no matter where elevator is.
 	//If lined up with shaft doors, then closes the shaft doors also
 
+	if (OpenDoor != 0)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
+		return;
+	}
+
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing doors");
+	OpenDoor = -2;
 	MoveDoors(false, true);
 }
 
@@ -291,7 +303,14 @@ void Elevator::OpenDoors()
 {
 	//Opens elevator doors
 
+	if (OpenDoor != 0)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
+		return;
+	}
+
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening doors");
+	OpenDoor = 1;
 	MoveDoors(true, false);
 }
 
@@ -299,12 +318,122 @@ void Elevator::CloseDoors()
 {
 	//Closes elevator doors
 
+	if (OpenDoor != 0)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
+		return;
+	}
+
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing doors");
+	OpenDoor = -1;
 	MoveDoors(false, false);
 }
 
 void Elevator::MoveDoors(bool open, bool emergency)
 {
+	//opens or closes elevator doors
+
+	static bool IsRunning;
+	static double OpenChange;
+	static float marker1;
+	static float marker2;
+
+	//todo: turn off autoclose timer
+
+	if (IsRunning == false)
+	{
+		//initialization code
+
+		IsRunning = true;
+		if (open == true)
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening doors");
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing doors");
+
+		//get starting FPS and hold value
+		FPSModifierStatic = sbs->FPSModifier;
+
+		if (emergency == false)
+		{
+			OpenChange = OpenSpeed / 50;
+			marker1 = 0.32;
+			marker2 = 0.96;
+		}
+		else
+		{
+			OpenChange = 0.001;
+			marker1 = 0.064;
+			marker2 = 1.44;
+		}
+
+		//get elevator starting position
+		ElevatorDoorPos = GetPosition().z;
+
+		if (emergency == false)
+		{
+			//play elevator opening sound
+			//"data/elevatoropen.wav"
+			//"data/elevatorclose.wav"
+		}
+
+		ElevatorDoorSpeed = 0;
+	}
+
+	//Speed up doors
+	if ((ElevatorDoorPos - ElevatorDoorL_movable->GetPosition().z <= marker1 && open == true) || (ElevatorDoorPos - ElevatorDoorL_movable->GetPosition().z > marker2 && open == false))
+	{
+		if (open == true)
+			ElevatorDoorSpeed += OpenChange;
+		else
+			ElevatorDoorSpeed -= OpenChange;
+
+		//todo: move shaft doors here
+		ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+		ElevatorDoorL_movable->UpdateMove();
+		ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+		ElevatorDoorR_movable->UpdateMove();
+		return;
+	}
+
+	//Normal door movement
+	if ((ElevatorDoorPos - ElevatorDoorL_movable->GetPosition().z <= marker2 && open == true) || (ElevatorDoorPos - ElevatorDoorL_movable->GetPosition().z > marker2 && open == false))
+	{
+		//todo: move shaft doors here
+		ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+		ElevatorDoorL_movable->UpdateMove();
+		ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+		ElevatorDoorR_movable->UpdateMove();
+		return;
+	}
+
+	//slow down doors
+	if ((ElevatorDoorSpeed > 0 && open == true) || (ElevatorDoorSpeed < 0 && open == false))
+	{
+		if (open == true)
+			ElevatorDoorSpeed -= OpenChange;
+		else
+			ElevatorDoorSpeed += OpenChange;
+		//todo: move shaft doors here
+		ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+		ElevatorDoorL_movable->UpdateMove();
+		ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+		ElevatorDoorR_movable->UpdateMove();
+		return;
+	}
+
+	//reset values
+	ElevatorDoorSpeed = 0;
+	OpenDoor = 0;
+
+	//turn on autoclose timer
+
+	//the doors are open or closed now
+	if (open == true)
+		DoorsOpen = true;
+	else
+		DoorsOpen = false;
+
+	IsRunning = false;
 
 }
 
@@ -326,13 +455,13 @@ void Elevator::MoveElevatorToFloor()
 		//If elevator is already on specified floor, open doors and exit
 		if (ElevatorFloor == GotoFloor)
 		{
-			OpenDoor = 1;
+			OpenDoors();
 			return;
 		}
 
 		//close doors if open
 		if (DoorsOpen == true)
-			OpenDoor = -1;
+			CloseDoors();
 
 		//Determine direction
 		if (GotoFloor < ElevatorFloor)
@@ -362,6 +491,12 @@ void Elevator::MoveElevatorToFloor()
 
 		//get starting frame rate and hold value
 		FPSModifierStatic = sbs->FPSModifier;
+	}
+
+	if (EmergencyStop == true)
+	{
+		ElevatorDirection = -1;
+		Brakes = true;
 	}
 
 	//Movement sound
@@ -496,30 +631,33 @@ void Elevator::MoveElevatorToFloor()
 	if (abs(ElevatorRate) != 0)
 		return;
 
-	//store error offset value
-	if (ElevatorDirection == -1)
-		ErrorOffset = GetPosition().y - Destination;
-	else if (ElevatorDirection == 1)
-		ErrorOffset = Destination - GetPosition().y;
-	else
-		ErrorOffset = 0;
+	if (EmergencyStop == false)
+	{
+		//store error offset value
+		if (ElevatorDirection == -1)
+			ErrorOffset = GetPosition().y - Destination;
+		else if (ElevatorDirection == 1)
+			ErrorOffset = Destination - GetPosition().y;
+		else
+			ErrorOffset = 0;
 
-	//set elevator and objects to floor altitude (corrects offset errors)
-	//move elevator objects and camera
-	Elevator_movable->SetPosition(csVector3(GetPosition().x, Destination, GetPosition().z));
-	Elevator_movable->UpdateMove();
-	if (ElevatorSync == true)
-		c->SetPosition(csVector3(c->GetPosition().x, GetPosition().y + c->DefaultAltitude, c->GetPosition().z));
-	ElevatorDoorL_movable->MovePosition(csVector3(ElevatorDoorL_movable->GetPosition().x, Destination, ElevatorDoorL_movable->GetPosition().z));
-	ElevatorDoorL_movable->UpdateMove();
-	ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorR_movable->GetPosition().x, Destination, ElevatorDoorR_movable->GetPosition().z));
-	ElevatorDoorR_movable->UpdateMove();
-	FloorIndicator_movable->MovePosition(csVector3(FloorIndicator_movable->GetPosition().x, Destination, FloorIndicator_movable->GetPosition().z));
-	FloorIndicator_movable->UpdateMove();
-	Plaque_movable->MovePosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
-	Plaque_movable->UpdateMove();
-
-	//move sounds
+		//set elevator and objects to floor altitude (corrects offset errors)
+		//move elevator objects and camera
+		Elevator_movable->SetPosition(csVector3(GetPosition().x, Destination, GetPosition().z));
+		Elevator_movable->UpdateMove();
+		if (ElevatorSync == true)
+			c->SetPosition(csVector3(c->GetPosition().x, GetPosition().y + c->DefaultAltitude, c->GetPosition().z));
+		ElevatorDoorL_movable->MovePosition(csVector3(ElevatorDoorL_movable->GetPosition().x, Destination, ElevatorDoorL_movable->GetPosition().z));
+		ElevatorDoorL_movable->UpdateMove();
+		ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorR_movable->GetPosition().x, Destination, ElevatorDoorR_movable->GetPosition().z));
+		ElevatorDoorR_movable->UpdateMove();
+		FloorIndicator_movable->MovePosition(csVector3(FloorIndicator_movable->GetPosition().x, Destination, FloorIndicator_movable->GetPosition().z));
+		FloorIndicator_movable->UpdateMove();
+		Plaque_movable->MovePosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
+		Plaque_movable->UpdateMove();
+	
+		//move sounds
+	}
 
 	//reset values if at destination floor
 	ElevatorRate = 0;
@@ -530,22 +668,25 @@ void Elevator::MoveElevatorToFloor()
 	ElevatorStart = 0;
 	IsRunning = false;
 	MoveElevator = false;
+	EmergencyStop = false;
 
-	//update elevator's floor number
-	GetElevatorFloor();
+	if (EmergencyStop == false)
+	{
+		//update elevator's floor number
+		GetElevatorFloor();
 
-	//Turn on floor
-	if (ElevatorSync == true)
-		sbs->FloorArray[GotoFloor]->Enabled(true);
+		//Turn on floor
+		if (ElevatorSync == true)
+			sbs->FloorArray[GotoFloor]->Enabled(true);
 
-	//open doors
-	OpenDoor = 1;
+		//open doors
+		OpenDoors();
 
-	//Turn on sky, buildings, and landscape
-	sbs->EnableSkybox(true);
-	sbs->EnableBuildings(true);
-	sbs->EnableLandscape(true);
-
+		//Turn on sky, buildings, and landscape
+		sbs->EnableSkybox(true);
+		sbs->EnableBuildings(true);
+		sbs->EnableLandscape(true);
+	}
 }
 
 int Elevator::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)

@@ -73,6 +73,9 @@ public:
 	csRef<iGeneralMeshState> gmSingle;
 	csRef<iStringSet> strings;
 	csRef<iStandardReporterListener> stdrep;
+	csRef<iAws2> aws;
+	int col_red, col_blue, col_white, col_black;
+	int col_yellow, col_cyan, col_green, col_gray;
 
 	iMaterialWrapper* material;
 	iLightList* ll;

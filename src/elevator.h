@@ -39,7 +39,6 @@ public:
 	bool MoveElevator; //Tells elevator to start going to specified floor
     int MoveElevatorFloor; //floor to move elevator to
 	int GotoFloor; //floor to go to
-	int OpenDoor; //1=open doors, -1=close doors
 	double Acceleration; //percentage of speed increase
 	double Deceleration; //deceleration value; may be removed
 	double OpenSpeed; //elevator opening/closing speed
@@ -111,6 +110,7 @@ private:
 	double ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
 	bool DoorsOpen; //elevator door state
+	int OpenDoor; //1=open doors, -1=close doors
 	int ElevatorDirection; //-1=down, 1=up, 0=stopped
 	double DistanceToTravel; //distance in Y to travel
 	double Destination; //elevator destination Y value
@@ -122,6 +122,7 @@ private:
 	double ElevatorDoorPos; //original elevator door position
 	bool ElevWait;
 	double FPSModifierStatic;
+	bool EmergencyStop;
 
 	//functions
 	void MoveElevatorToFloor();
