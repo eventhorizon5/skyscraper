@@ -48,7 +48,7 @@
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories=""
 				AdditionalUsingDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace.lib libcrystalspaceirectx.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
+				AdditionalDependencies="libcrystalspace.lib libcrystalspace_directx.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase26.lib wxmsw26_core.lib wxmsw26_gl.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
 				OutputFile="../Skyscraper.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -144,10 +144,11 @@
 				Optimization="0"
 				AdditionalIncludeDirectories=""
 				AdditionalUsingDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/Skyscraper.pch"
 				AssemblerListingLocation=".\Debug/"
@@ -171,7 +172,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_directx_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
+				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_directx_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase26d.lib wxmsw26d_core.lib wxmsw26d_gl.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
 				OutputFile="../Skyscraper.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -221,6 +222,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\cameracontrol.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\debugpanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\editelevator.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\elevator.cpp"
 				>
 			</File>
@@ -230,6 +243,14 @@
 			</File>
 			<File
 				RelativePath="..\src\floor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\loader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\meshcontrol.cpp"
 				>
 			</File>
 			<File
@@ -262,6 +283,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\cameracontrol.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\debugpanel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\editelevator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\elevator.h"
 				>
 			</File>
@@ -275,6 +308,14 @@
 			</File>
 			<File
 				RelativePath="..\src\globals.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\loader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\meshcontrol.h"
 				>
 			</File>
 			<File

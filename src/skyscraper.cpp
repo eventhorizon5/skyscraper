@@ -20,14 +20,26 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#define CS_IMPLEMENT_PLATFORM_APPLICATION
+
+#include <wx/wx.h>
 #include <crystalspace.h>
 #include "skyscraper.h"
 #include "sbs.h"
-#include "globals.h"
+#include "debugpanel.h"
+#include "loader.h"
+
+CS_IMPLEMENT_APPLICATION
+IMPLEMENT_APP(Skyscraper)
 
 SBS *Simcore;
 
 int main (int argc, char* argv[])
+{
+	return WinMain (GetModuleHandle (0), 0, GetCommandLineA (), SW_SHOWNORMAL);
+}
+
+bool Skyscraper::OnInit(void)
 {
 	srand (time (0));
 	
@@ -40,8 +52,11 @@ int main (int argc, char* argv[])
 		Cleanup();
 		exit(1);
 	}
-	
+
 	//set building file
+	//Loader *loader = new Loader(NULL,-1,"");
+    //loader->Show(true);
+
 	//Simcore->BuildingFile = "buildings/Simple2.bld";
 	//Simcore->BuildingFile = "buildings/Glass Tower.bld";
 	Simcore->BuildingFile = "buildings/Triton Center.bld";
@@ -50,6 +65,18 @@ int main (int argc, char* argv[])
 	//start simulation
 	Simcore->Start();
 
+	//load dialogs
+	DebugPanel *dpanel = new DebugPanel(NULL,-1,"");
+    dpanel->Show(true);
+
+	//run simulation
+	Simcore->Run();
+
+	return true;
+}
+
+int Skyscraper::OnExit()
+{
 	//clean up
 	delete Simcore;
 	Simcore = 0;

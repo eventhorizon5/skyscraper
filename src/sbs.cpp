@@ -21,13 +21,12 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+//#include <wx/wx.h>
 #include <crystalspace.h>
 #include <sstream>
 #include "sbs.h"
 #include "camera.h"
 #include "unix.h"
-
-CS_IMPLEMENT_APPLICATION
 
 SBS *sbs; //self reference
 Camera *c; //camera object
@@ -166,6 +165,12 @@ void SBS::Start()
 	//turn on first/lobby floor
 	FloorArray[0]->Enabled(true);
 
+}
+
+void SBS::Run()
+{
+	//start runloop
+	
 	Report("Running simulation...");
 
 	//start simulation
@@ -323,12 +328,6 @@ void SBS::Render()
 
 	// Tell the camera to render into the frame buffer.
 	view->Draw ();
-	
-	// Start drawing 2D graphics.
-	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return;
-
-	//aws2 draw
-	aws->Redraw();
 }
 
 void SBS::SetupFrame()
@@ -390,9 +389,6 @@ bool SBS::HandleEvent(iEvent& Event)
 		FinishFrame ();
 		return true;
 	}
-	
-	if (aws) return aws->HandleEvent(Event);
-	
 	return false;
 }
 
@@ -457,8 +453,6 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	if (!vfs) return ReportError ("No VFS!");
 	console = CS_QUERY_REGISTRY (object_reg, iConsoleOutput);
 	if (!console) return ReportError ("No ConsoleOutput!");
-	aws = CS_LOAD_PLUGIN(plugin_mgr, "crystalspace.window.alternatemanager2", iAws2);
-	if (!aws) return ReportError ("No Aws2 plugin!");
 
 	stdrep = CS_QUERY_REGISTRY (object_reg, iStandardReporterListener);
 	if (!stdrep) return ReportError ("No stdrep plugin!");
@@ -492,23 +486,6 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 
 	//create 3D environments
 	area = engine->CreateSector("area");
-
-	//colors
-	col_red = g2d->FindRGB (255, 0, 0);
-	col_blue = g2d->FindRGB (0, 0, 255);
-	col_white = g2d->FindRGB (255, 255, 255);
-	col_gray = g2d->FindRGB (50, 50, 50);
-	col_black = g2d->FindRGB (0, 0, 0);
-	col_yellow = g2d->FindRGB (255, 255, 0);
-	col_cyan = g2d->FindRGB (0, 255, 255);
-	col_green = g2d->FindRGB (0, 255, 0);
-
-	// Setup AWS specific stuff here.
-	aws->SetDrawTarget(g2d, g3d);
-
-	// Load a definition file
-	if (aws->Load("/aws/awstest.js.def")==false)
-	ReportError("Unable to load the definition file '/aws/awstest.js.def'");
 
 	return true;
 }

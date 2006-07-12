@@ -1,5 +1,5 @@
 #The Sears Tower
-#Model Copyright ©2006 Ryan Thoryk
+#Model Copyright (C)2006 Ryan Thoryk
 
 #This program is free software; you can redistribute it and/or
 #modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
     CameraAltitude = 3.2
     ElevatorShafts = 0
     Floors = 110 #111 total floors/levels, 0 =lobby, 1=mezzanine, then 2-108, roof, and penthouse roof
-    Basements = 0
+    Basements = 4
     #Elevators = 104
     Elevators = 0
     PipeShafts = 0
@@ -105,12 +105,37 @@
     #LoadRange 2, 138, data/floorindicators/%number%.jpg, Button%number%
 <EndTextures>
 
-#Lobby
+#Lower Levels
+<Floors -4 to -2>
+    ID = LL(%floor% + 1)
+    Name = Lower Level (%floor% + 1)
+    Type = Basement
+    Description = Lower Level (%floor% + 1)
+    Height = 12.24
+    InterfloorHeight = 0
+    DoorHeight = 6.24
+    DoorWidth = 3
+
+<EndFloors>
+
+#Franklin Concourse
+<Floor -1>
+    ID = C
+    Name = Franklin Concourse
+    Type = Lobby
+    Description = Rear Entrance Lobby Level
+    Height = 12.24
+    InterfloorHeight = 0
+    DoorHeight = 6.24
+    DoorWidth = 3
+<EndFloor>
+
+#Plaza
 <Floor 0>
     ID = L
     Name = Lobby
     Type = Lobby
-    Description = Lobby
+    Description = Lobby/Plaza
     Height = 12.24
     InterfloorHeight = 0
     DoorHeight = 6.24
@@ -145,8 +170,13 @@
     AddFloor Ceiling1, -42.5, 25.8, 42.5, -25.8, -0.05, -0.05, 0, 0, False
 <EndFloor>
 
+#bottom mechanical
+<Floor 2>
+
+<EndFloor>
+
 #zone 1 skeleton
-<Floors 2 to 29>
+<Floors 3 to 28>
     Height = 10
     InterfloorHeight = 2.24
     DoorHeight = 6.24
@@ -189,7 +219,7 @@
     AddInterfloorWall Brick, -112.5, 112.5, -112.5, -112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
-<Floors 2 to 29>
+<Floors 3 to 28>
     ID = %floor%
     Name = Offices
     Type = Office
@@ -198,7 +228,7 @@
 <EndFloors>
 
 #zone 1 mechanical
-<Floors 30 to 32>
+<Floors 29 to 32>
     ID = %floor%
     Name = Mechanical
     Type = Service
@@ -615,12 +645,12 @@
 
 <EndFloors>
 
-#communications floors
+#communications & mechanical floors
 <Floors 104 to 105>
     ID = %floor%
     Name = Communications
     Type = Communications
-    Description = Communications level %floor%
+    Description = Communications & mechanical level %floor%
     Height = 12
     InterfloorHeight = 3
     DoorHeight = 6.24
@@ -662,7 +692,7 @@
     ID = %floor%
     Name = Mechanical
     Type = Service
-    Description = Zone 3 upper mechanical
+    Description = Zone 3 upper mechanical (cooling towers)
     Height = 20
     InterfloorHeight = 4
     DoorHeight = 6.24
@@ -714,7 +744,7 @@
     ID = %floor%
     Name = Communications
     Type = Communications
-    Description = Top floor
+    Description = Mechanical and communications
     Height = 20
     InterfloorHeight = 4
     DoorHeight = 6.24

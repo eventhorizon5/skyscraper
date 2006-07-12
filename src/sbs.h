@@ -73,9 +73,6 @@ public:
 	csRef<iGeneralMeshState> gmSingle;
 	csRef<iStringSet> strings;
 	csRef<iStandardReporterListener> stdrep;
-	csRef<iAws2> aws;
-	int col_red, col_blue, col_white, col_black;
-	int col_yellow, col_cyan, col_green, col_gray;
 
 	iMaterialWrapper* material;
 	iLightList* ll;
@@ -135,6 +132,7 @@ public:
 	bool LoadTexture(const char *filename, const char *name);
 	bool Initialize(int argc, const char* const argv[], const char *windowtitle);
  	void Start();
+	void Run();
 	int CreateSky();
 	void AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b);
 	int AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides = true);

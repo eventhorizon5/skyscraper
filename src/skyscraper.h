@@ -23,3 +23,12 @@
 #include "globals.h"
 
 int main (int argc, char* argv[]);
+
+class Skyscraper : public wxApp
+{
+public:
+	virtual bool OnInit(void);
+	virtual int OnExit(void);
+};
+
+DECLARE_APP(Skyscraper)
