@@ -1,0 +1,239 @@
+<resource>
+    <object class="wxFrame" name="DebugPanel">
+        <title>Simulator Control Panel</title>
+        <style>wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX</style>
+        <object class="wxButton" name="ID_bListAltitudes" variable="bListAltitudes" member="yes">
+            <label>List Altitudes</label>
+            <handler entry="EVT_BUTTON" function="On_bListAltitudes_Click" />
+            <pos>350,185</pos>
+            <size>85,25</size>
+        </object>
+        <object class="wxStaticText" name="st4c" variable="StaticText1" member="yes">
+            <label>Camera Floor:</label>
+            <pos>15,10</pos>
+            <size>74,13</size>
+            <style>wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="st5c" variable="StaticText2" member="yes">
+            <label>Camera Position:</label>
+            <pos>15,30</pos>
+            <size>89,13</size>
+            <style>wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="st6c" variable="StaticText3" member="yes">
+            <label>Elevator Number:</label>
+            <pos>15,50</pos>
+            <size>89,13</size>
+            <style>wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="st7c" variable="StaticText4" member="yes">
+            <label>Elevator Floor:</label>
+            <pos>15,70</pos>
+            <size>79,13</size>
+            <style>wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="st8c" variable="StaticText5" member="yes">
+            <label>Goto Floor:</label>
+            <pos>15,90</pos>
+            <size>64,13</size>
+            <style>wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="st9c" variable="StaticText6" member="yes">
+            <label>Distance To Dest:</label>
+            <pos>15,110</pos>
+            <size>89,13</size>
+            <style>wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="st10c" variable="StaticText7" member="yes">
+            <label>Rate:</label>
+            <pos>15,130</pos>
+            <size>34,13</size>
+            <style>wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="st11c" variable="StaticText8" member="yes">
+            <label>Selected Object:</label>
+            <pos>15,150</pos>
+            <size>89,13</size>
+            <style>wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="ID_t_camerafloor" variable="t_camerafloor" member="yes">
+            <label></label>
+            <pos>105,10</pos>
+            <size>109,18</size>
+            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+        </object>
+        <object class="wxStaticText" name="ID_t_camerap" variable="t_camerap" member="yes">
+            <label></label>
+            <pos>105,30</pos>
+            <size>109,18</size>
+            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+        </object>
+        <object class="wxStaticText" name="ID_t_elevnumber" variable="t_elevnumber" member="yes">
+            <label></label>
+            <pos>105,50</pos>
+            <size>109,18</size>
+            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+        </object>
+        <object class="wxStaticText" name="ID_t_elevfloor" variable="t_elevfloor" member="yes">
+            <label></label>
+            <pos>105,70</pos>
+            <size>109,18</size>
+            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+        </object>
+        <object class="wxStaticText" name="ID_t_gotofloor" variable="t_gotofloor" member="yes">
+            <label></label>
+            <pos>105,90</pos>
+            <size>109,18</size>
+            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+        </object>
+        <object class="wxStaticText" name="ID_t_disttodest" variable="t_disttodest" member="yes">
+            <label></label>
+            <pos>105,110</pos>
+            <size>109,18</size>
+            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+        </object>
+        <object class="wxStaticText" name="ID_t_rate" variable="t_rate" member="yes">
+            <label></label>
+            <pos>105,130</pos>
+            <size>109,18</size>
+            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+        </object>
+        <object class="wxStaticText" name="ID_t_object" variable="t_object" member="yes">
+            <label></label>
+            <pos>105,150</pos>
+            <size>109,18</size>
+            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+        </object>
+        <object class="wxStaticText" name="st22c" variable="StaticText17" member="yes">
+            <label>Simulator Options</label>
+            <pos>295,10</pos>
+            <size>119,13</size>
+            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxCheckBox" name="ID_chkCollisionDetection" variable="chkCollisionDetection" member="yes">
+            <label>Collision Detection</label>
+            <pos>302,35</pos>
+        </object>
+        <object class="wxButton" name="ID_bMeshControl" variable="bMeshControl" member="yes">
+            <label>Realtime Mesh Control</label>
+            <handler entry="EVT_BUTTON" function="On_bMeshControl_Click" />
+            <pos>325,215</pos>
+            <size>135,25</size>
+        </object>
+        <object class="wxButton" name="ID_bInitRealtime" variable="bInitRealtime" member="yes">
+            <label>Init Realtime</label>
+            <handler entry="EVT_BUTTON" function="On_bInitRealtime_Click" />
+            <pos>350,245</pos>
+            <size>85,25</size>
+        </object>
+        <object class="wxStaticText" name="ID_t_number" variable="t_number" member="yes">
+            <label>Number</label>
+            <pos>130,190</pos>
+            <size>49,13</size>
+            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="ID_t_floor" variable="t_floor" member="yes">
+            <label>Floor</label>
+            <pos>130,235</pos>
+            <size>49,13</size>
+            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="st44c" variable="StaticText25" member="yes">
+            <label>On Floor</label>
+            <pos>35,290</pos>
+            <size>54,13</size>
+            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
+        </object>
+        <object class="wxStaticText" name="ID_elevFloor" variable="elevFloor" member="yes">
+            <label></label>
+            <pos>35,305</pos>
+            <size>54,18</size>
+            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+        </object>
+        <object class="wxButton" name="ID_bEditElevator" variable="bEditElevator" member="yes">
+            <label>Edit Elevator</label>
+            <pos>25,340</pos>
+            <size>75,25</size>
+        </object>
+        <object class="wxButton" name="ID_bCallElevator" variable="bCallElevator" member="yes">
+            <label>Call Elevator</label>
+            <handler entry="EVT_BUTTON" function="On_bCallElevator_Click" />
+            <pos>115,290</pos>
+            <size>85,20</size>
+        </object>
+        <object class="wxButton" name="ID_bGo" variable="bGo" member="yes">
+            <label>Go</label>
+            <handler entry="EVT_BUTTON" function="On_bGo_Click" />
+            <pos>115,310</pos>
+            <size>85,20</size>
+        </object>
+        <object class="wxButton" name="ID_bOpen" variable="bOpen" member="yes">
+            <label>Open</label>
+            <handler entry="EVT_BUTTON" function="On_bOpen_Click" />
+            <pos>115,335</pos>
+            <size>85,20</size>
+        </object>
+        <object class="wxButton" name="ID_bOpenManual" variable="bOpenManual" member="yes">
+            <label>Open Manual</label>
+            <handler entry="EVT_BUTTON" function="On_bOpenManual_Click" />
+            <pos>115,355</pos>
+            <size>85,20</size>
+        </object>
+        <object class="wxButton" name="ID_bEnqueueUp" variable="bEnqueueUp" member="yes">
+            <label>Enqueue Up</label>
+            <handler entry="EVT_BUTTON" function="On_bEnqueueUp_Click" />
+            <pos>210,290</pos>
+            <size>80,20</size>
+        </object>
+        <object class="wxButton" name="ID_bEnqueueDown" variable="bEnqueueDown" member="yes">
+            <label>Enqueue Down</label>
+            <handler entry="EVT_BUTTON" function="On_bEnqueueDown_Click" />
+            <pos>210,310</pos>
+            <size>80,20</size>
+        </object>
+        <object class="wxButton" name="ID_bClose" variable="bClose" member="yes">
+            <label>Close</label>
+            <handler entry="EVT_BUTTON" function="On_bClose_Click" />
+            <pos>210,335</pos>
+            <size>80,20</size>
+        </object>
+        <object class="wxButton" name="ID_bCloseManual" variable="bCloseManual" member="yes">
+            <label>Close Manual</label>
+            <handler entry="EVT_BUTTON" function="On_bCloseManual_Click" />
+            <pos>210,355</pos>
+            <size>80,20</size>
+        </object>
+        <object class="wxStaticText" name="st55c" variable="StaticText27" member="yes">
+            <label>Measurements are in feet</label>
+            <pos>230,138</pos>
+            <size>94,33</size>
+            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+        </object>
+        <object class="wxScrollBar" name="ID_s_ElevFloor" variable="s_ElevFloor" member="yes">
+            <pos>27,255</pos>
+            <size>265,13</size>
+            <style>wxSB_HORIZONTAL</style>
+        </object>
+        <object class="wxScrollBar" name="ID_s_ElevNum" variable="s_ElevNum" member="yes">
+            <pos>27,210</pos>
+            <size>265,13</size>
+            <style>wxSB_HORIZONTAL</style>
+        </object>
+        <object class="wxCheckBox" name="ID_chkFrameSync" variable="chkFrameSync" member="yes">
+            <label>Framerate Sync</label>
+            <pos>302,93</pos>
+        </object>
+        <object class="wxCheckBox" name="ID_chkAutoShafts" variable="chkAutoShafts" member="yes">
+            <label>Automatic Shafts</label>
+            <pos>302,79</pos>
+        </object>
+        <object class="wxCheckBox" name="ID_chkMainProcessing" variable="chkMainProcessing" member="yes">
+            <label>Main Sim Processing</label>
+            <pos>302,65</pos>
+        </object>
+        <object class="wxCheckBox" name="ID_chkFrameLimiter" variable="chkFrameLimiter" member="yes">
+            <label>Frame Limiter</label>
+            <pos>302,50</pos>
+        </object>
+    </object>
+</resource>

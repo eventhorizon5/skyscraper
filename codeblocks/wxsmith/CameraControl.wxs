@@ -1,0 +1,6 @@
+<resource>
+    <object class="wxFrame" name="CameraControl">
+        <title>Camera Control</title>
+        <handler entry="EVT_INIT_DIALOG" function="OnInit" />
+    </object>
+</resource>

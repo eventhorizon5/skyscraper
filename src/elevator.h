@@ -49,6 +49,8 @@ public:
 	double DoorAcceleration; //door acceleration
 	double TempDeceleration; //temporary deceleration value, used in overrun correction
 	double ErrorOffset;
+	double DistanceToTravel; //distance in Y to travel
+	double ElevatorRate;
 
 	//functions
 	Elevator(int number);
@@ -112,9 +114,7 @@ private:
 	bool DoorsOpen; //elevator door state
 	int OpenDoor; //1=open doors, -1=close doors
 	int ElevatorDirection; //-1=down, 1=up, 0=stopped
-	double DistanceToTravel; //distance in Y to travel
 	double Destination; //elevator destination Y value
-	double ElevatorRate;
 	double StoppingDistance;
 	bool CalculateStoppingDistance;
 	bool Brakes;
@@ -127,6 +127,9 @@ private:
 	//functions
 	void MoveElevatorToFloor();
 	void MoveDoors(bool open, bool emergency);
+
+	char intbuffer[65];
+	char buffer[20];
 
 };
 

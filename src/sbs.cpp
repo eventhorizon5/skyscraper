@@ -22,6 +22,7 @@
 */
 
 //#include <wx/wx.h>
+#include <wx/timer.h>
 #include <crystalspace.h>
 #include <sstream>
 #include "sbs.h"
@@ -30,8 +31,17 @@
 
 SBS *sbs; //self reference
 Camera *c; //camera object
+wxTimer *stimer; //timer object
 
 iObjectRegistry* object_reg;
+
+//Runloop Timer
+class STimer : public wxTimer
+{
+public:
+	STimer() { };
+	virtual void Notify();
+};
 
 SBS::SBS()
 {
@@ -175,6 +185,8 @@ void SBS::Run()
 
 	//start simulation
 	csDefaultRunLoop (object_reg);
+    //stimer = new STimer();
+    //stimer->Start(1000 / FrameRate);
 
 }
 
@@ -225,11 +237,6 @@ void SBS::PrintBanner()
 	csPrintf(" conditions. For details, see the file gpl.txt\n");
 }
 
-void SBS::SlowToFPS(long FrameRate)
-{
-
-}
-
 void SBS::GetInput()
 {
 	// First get elapsed time from the virtual clock.
@@ -240,13 +247,7 @@ void SBS::GetInput()
 	// Now rotate the camera according to keyboard state
 	double speed = (elapsed_time / 1000.0) * (0.06 * 20);
 
-	if (kbd->GetKeyState('a'))
-	{
-		ElevatorArray[1]->GotoFloor = 30;
-		ElevatorArray[1]->ElevatorSync = true;
-		ElevatorArray[1]->MoveElevator = true;
-		return;
-	}
+	//if (kbd->GetKeyState('a'))
 
 	if (kbd->GetKeyState (CSKEY_CTRL))
 		speed *= 4;
@@ -334,12 +335,6 @@ void SBS::SetupFrame()
 {
 	//Main simulator loop
 	
-	//Calls frame limiter function, which sets the max frame rate
-	//note - the frame rate determines elevator speed, walking speed, etc
-	//In order to raise it, elevator timers and walking speed must both be changed
-	if (FrameLimiter == true)
-		SlowToFPS(FrameRate);
-
 	//used to adjust speeds according to frame rate
 	//if (FrameSync == true)
 		//FPSModifier = FrameRate / TV.GetFPS;
@@ -398,6 +393,22 @@ static bool SBSEventHandler(iEvent& Event)
     return sbs->HandleEvent (Event);
   else
     return false;
+}
+
+void STimer::Notify()
+{
+	//timer loop code
+	sbs->PushFrame();
+}
+
+void SBS::PushFrame()
+{
+	//timer loop event queue processor
+	if (!equeue)
+		return;
+	if (vc)
+		vc->Advance();
+	equeue->Process();
 }
 
 bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle)
@@ -478,6 +489,8 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	// Open the main system. This will open all the previously loaded plug-ins.
 	if (!csInitializer::OpenApplication (object_reg))
 		return ReportError ("Error opening system!");
+
+	equeue = CS_QUERY_REGISTRY(object_reg, iEventQueue);
 
 	// First disable the lighting cache. Our app is simple enough
 	// not to need this.
@@ -1134,3 +1147,4 @@ void SBS::Fall()
 {
 
 }
+

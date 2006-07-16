@@ -302,7 +302,7 @@
     AddWall MainWindows, 63, 70, -63, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
     AddWall MainWindows, -63, 70, -63, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
     AddWall MainWindows, -63, -70, 63, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    AddWall MainWindows, 63, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, 0, 0.7, False, False, False, True
+    AddWall MainWindows, 63, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
 
     #Interfloor bottom
     AddInterfloorFloor Brick, 63, 70, -63, -70, 0, 0, 0, 0

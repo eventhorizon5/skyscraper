@@ -66,7 +66,7 @@ bool Skyscraper::OnInit(void)
 	Simcore->Start();
 
 	//load dialogs
-	DebugPanel *dpanel = new DebugPanel(NULL,-1,"");
+	DebugPanel *dpanel = new DebugPanel(NULL, -1);
     dpanel->Show(true);
 
 	//run simulation

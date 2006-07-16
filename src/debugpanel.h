@@ -1,112 +1,149 @@
+#ifndef DEBUGPANEL_H
+#define DEBUGPANEL_H
 
-// Don't modify comment 
-#ifndef __VwX_debugpanel_H__
-#define __VwX_debugpanel_H__
+//(*Headers(DebugPanel)
+#include <wx/button.h>
+#include <wx/checkbox.h>
+#include <wx/frame.h>
+#include <wx/intl.h>
+#include <wx/scrolbar.h>
+#include <wx/stattext.h>
+//*)
+#include <wx/timer.h>
 
- #include <wx/wxprec.h>
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-    #include <wx/wx.h>
-#endif
- 
-//[inc]add your include files here
-
-
-
-//[inc]end your include
- 
-class DebugPanel;
-class DebugPanelEvt:public wxEvtHandler
+class Timer : public wxTimer
 {
 public:
- DebugPanelEvt(DebugPanel *parent){ptr_winPan=parent;}
-protected:  
- DebugPanel *ptr_winPan;
- DECLARE_EVENT_TABLE()     
-//[evt]add your code here
+	Timer() { };
+	virtual void Notify();
 
+private:
+	char intbuffer[65];
+	char buffer[20];
 
-
-//[evt]end your code
 };
 
-class DebugPanel:public wxFrame
+class DebugPanel: public wxFrame
 {
- friend class DebugPanelEvt;
-protected:
-  wxPoint m_tmppoint;
-  wxSize  m_tmpsize;
-  wxPoint& VwXSetwxPoint(long x,long y);
-  wxSize& VwXSetwxSize(long w,long h);
-public:
- DebugPanel(wxWindow* parent, wxWindowID id, const wxString& title = wxT(""), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT("frame"));
-// Pointer control
- wxButton *bListAltitudes;
- wxStaticText *st4c;
- wxStaticText *st5c;
- wxStaticText *st6c;
- wxStaticText *st7c;
- wxStaticText *st8c;
- wxStaticText *st9c;
- wxStaticText *st10c;
- wxStaticText *st11c;
- wxStaticText *t_camerafloor;
- wxStaticText *t_cameraposition;
- wxStaticText *t_elevnumber;
- wxStaticText *t_elevfloor;
- wxStaticText *t_gotofloor;
- wxStaticText *t_disttodest;
- wxStaticText *t_rate;
- wxStaticText *t_object;
- wxStaticText *st22c;
- wxStaticBox *sb24c;
- wxStaticText *st25c;
- wxStaticText *st26c;
- wxStaticText *st27c;
- wxStaticText *st28c;
- wxStaticText *st29c;
- wxCheckBox *chkCollisionDetection;
- wxCheckBox *chkFrameLimiter;
- wxCheckBox *chkMainProcessing;
- wxCheckBox *chkAutoShafts;
- wxCheckBox *chkFrameSync;
- wxButton *bMeshControl;
- wxButton *bInitRealtime;
- wxSlider *s_ElevNum;
- wxStaticText *st39c;
- wxStaticText *st40c;
- wxSlider *s_Floor;
- wxStaticText *st44c;
- wxStaticText *elevFloor;
- wxButton *bEditElevator;
- wxButton *bCallElevator;
- wxButton *bGo;
- wxButton *bOpen;
- wxButton *bOpenManual;
- wxButton *bEnqueueUp;
- wxButton *bEnqueueDown;
- wxButton *bClose;
- wxButton *bCloseManual;
- wxStaticText *st55c;
- virtual ~DebugPanel();
- void DDebugPanel();
- void initBefore();
- void OnPreCreate();
- void VwXinit();
- void initAfter();
-protected:
-// DECLARE_EVENT_TABLE()  
-//[win]add your code here
+	friend Timer;
+	public:
 
+		DebugPanel(wxWindow* parent,wxWindowID id = -1);
+		virtual ~DebugPanel();
 
+		//(*Identifiers(DebugPanel)
+        enum Identifiers
+        {
+            ID_bCallElevator = 0x1000,
+            ID_bClose,
+            ID_bCloseManual,
+            ID_bEditElevator,
+            ID_bEnqueueDown,
+            ID_bEnqueueUp,
+            ID_bGo,
+            ID_bInitRealtime,
+            ID_bListAltitudes,
+            ID_bMeshControl,
+            ID_bOpen,
+            ID_bOpenManual,
+            ID_chkAutoShafts,
+            ID_chkCollisionDetection,
+            ID_chkFrameLimiter,
+            ID_chkFrameSync,
+            ID_chkMainProcessing,
+            ID_elevFloor,
+            ID_s_ElevFloor,
+            ID_s_ElevNum,
+            ID_t_camerafloor,
+            ID_t_camerap,
+            ID_t_disttodest,
+            ID_t_elevfloor,
+            ID_t_elevnumber,
+            ID_t_floor,
+            ID_t_gotofloor,
+            ID_t_number,
+            ID_t_object,
+            ID_t_rate,
+            st10c,
+            st11c,
+            st22c,
+            st44c,
+            st4c,
+            st55c,
+            st5c,
+            st6c,
+            st7c,
+            st8c,
+            st9c
+        };
+        //*)
 
- #define VwX_INIT_OBJECTS_DebugPanel
-//[win]end your code 
+	protected:
+
+		//(*Handlers(DebugPanel)
+		void On_bGo_Click(wxCommandEvent& event);
+        void On_bCallElevator_Click(wxCommandEvent& event);
+        void On_bOpen_Click(wxCommandEvent& event);
+        void On_bOpenManual_Click(wxCommandEvent& event);
+        void On_bEnqueueUp_Click(wxCommandEvent& event);
+        void On_bEnqueueDown_Click(wxCommandEvent& event);
+        void On_bClose_Click(wxCommandEvent& event);
+        void On_bCloseManual_Click(wxCommandEvent& event);
+        void On_bListAltitudes_Click(wxCommandEvent& event);
+        void On_bMeshControl_Click(wxCommandEvent& event);
+        void On_bInitRealtime_Click(wxCommandEvent& event);
+        void On_chkCollisionDetection_Change(wxCommandEvent& event);
+        void On_chkFrameLimiter_Change(wxCommandEvent& event);
+        //*)
+        void OnInit();
+
+		//(*Declarations(DebugPanel)
+        wxButton* bListAltitudes;
+        wxStaticText* StaticText1;
+        wxStaticText* StaticText2;
+        wxStaticText* StaticText3;
+        wxStaticText* StaticText4;
+        wxStaticText* StaticText5;
+        wxStaticText* StaticText6;
+        wxStaticText* StaticText7;
+        wxStaticText* StaticText8;
+        wxStaticText* t_camerafloor;
+        wxStaticText* t_camerap;
+        wxStaticText* t_elevnumber;
+        wxStaticText* t_elevfloor;
+        wxStaticText* t_gotofloor;
+        wxStaticText* t_disttodest;
+        wxStaticText* t_rate;
+        wxStaticText* t_object;
+        wxStaticText* StaticText17;
+        wxCheckBox* chkCollisionDetection;
+        wxButton* bMeshControl;
+        wxButton* bInitRealtime;
+        wxStaticText* t_number;
+        wxStaticText* t_floor;
+        wxStaticText* StaticText25;
+        wxStaticText* elevFloor;
+        wxButton* bEditElevator;
+        wxButton* bCallElevator;
+        wxButton* bGo;
+        wxButton* bOpen;
+        wxButton* bOpenManual;
+        wxButton* bEnqueueUp;
+        wxButton* bEnqueueDown;
+        wxButton* bClose;
+        wxButton* bCloseManual;
+        wxStaticText* StaticText27;
+        wxScrollBar* s_ElevFloor;
+        wxScrollBar* s_ElevNum;
+        wxCheckBox* chkFrameSync;
+        wxCheckBox* chkAutoShafts;
+        wxCheckBox* chkMainProcessing;
+        wxCheckBox* chkFrameLimiter;
+        //*)
+
+	private:
+
+		DECLARE_EVENT_TABLE()
 };
-// end DebugPanel
 
 #endif

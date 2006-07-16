@@ -32,9 +32,6 @@
 extern SBS *sbs; //external pointer to the SBS engine
 extern Camera *c; //external pointer to the camera
 
-char intbuffer[65];
-char buffer[20];
-
 Elevator::Elevator(int number)
 {
 	csString buffer;
