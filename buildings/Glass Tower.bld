@@ -202,6 +202,9 @@
     AddWall MainWindows, 98.1, -26.2, 63.3, 38.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
     # right top corner wall
     AddWall MainWindows, 55.4, 54.1, 63.3, 38.9, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    
+    #AddAutoFloor Granite, 0, 0, 0
+    
 <EndFloors>
 
 # floors 40 to 60

@@ -235,5 +235,10 @@
             <label>Frame Limiter</label>
             <pos>302,50</pos>
         </object>
+        <object class="wxButton" name="ID_bStop" variable="bStop" member="yes">
+            <label>Emergency Stop</label>
+            <handler entry="EVT_BUTTON" function="On_bStop_Click" />
+            <pos>306,323</pos>
+        </object>
     </object>
 </resource>

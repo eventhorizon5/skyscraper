@@ -711,6 +711,24 @@ recalc:
                 FloorArray[Current]->AddInterfloorWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 				tempdata.DeleteAll();
 			}
+
+			//AddAutoFloor command
+			if (LineData.Slice(0, 12).CompareNoCase("addautofloor") == true)
+			{
+                //get data
+                tempdata.SplitString(LineData.Slice(13).GetData(), ",");
+				
+                //calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+                //create wall
+                FloorArray[Current]->AddAutoFloor(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]));
+				tempdata.DeleteAll();
+			}
             
             //handle floor range
             if (RangeL != RangeH && LineData.Slice(0, 11).CompareNoCase("<endfloors>") == true)

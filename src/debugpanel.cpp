@@ -1,4 +1,27 @@
+/*
+	Skyscraper 1.1 Alpha - Debug Panel Form
+	Copyright ©2005-2006 Ryan Thoryk
+	http://www.tliquest.net/skyscraper
+	http://sourceforge.net/projects/skyscraper
+	Contact - ryan@tliquest.net
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
 #include "debugpanel.h"
+#include "meshcontrol.h"
 #include <crystalspace.h>
 #include "sbs.h"
 #include "camera.h"
@@ -8,6 +31,7 @@
 extern SBS *sbs; //external pointer to the SBS engine
 extern Camera *c; //external pointer to the camera
 DebugPanel *p; //self pointer
+MeshControl *mc;
 
 BEGIN_EVENT_TABLE(DebugPanel,wxFrame)
 //(*EventTable(DebugPanel)
@@ -28,7 +52,7 @@ END_EVENT_TABLE()
 DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(DebugPanel)
-    Create(parent,id,_("Simulator Control Panel"),wxDefaultPosition,wxSize(460,420),wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX);
+    Create(parent,id,_("Simulator Control Panel"),wxDefaultPosition,wxDefaultSize,wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX);
     bListAltitudes = new wxButton(this,ID_bListAltitudes,_("List Altitudes"),wxPoint(350,185),wxSize(85,25),0);
     if (false) bListAltitudes->SetDefault();
     StaticText1 = new wxStaticText(this,st4c,_("Camera Floor:"),wxPoint(15,10),wxSize(74,13),wxST_NO_AUTORESIZE);
@@ -89,6 +113,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
     chkMainProcessing->SetValue(false);
     chkFrameLimiter = new wxCheckBox(this,ID_chkFrameLimiter,_("Frame Limiter"),wxPoint(302,50),wxDefaultSize,0);
     chkFrameLimiter->SetValue(false);
+    bStop = new wxButton(this,ID_bStop,_("Emergency Stop"),wxPoint(306,323),wxDefaultSize,0);
+    if (false) bStop->SetDefault();
     //*)
 	p = this;
 	OnInit();
@@ -113,12 +139,12 @@ void DebugPanel::On_bCallElevator_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bOpen_Click(wxCommandEvent& event)
 {
-
+	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->OpenDoors();
 }
 
 void DebugPanel::On_bOpenManual_Click(wxCommandEvent& event)
 {
-
+	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->OpenDoorsEmergency();
 }
 
 void DebugPanel::On_bEnqueueUp_Click(wxCommandEvent& event)
@@ -133,21 +159,22 @@ void DebugPanel::On_bEnqueueDown_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bClose_Click(wxCommandEvent& event)
 {
-
+	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->CloseDoors();
 }
 
 void DebugPanel::On_bCloseManual_Click(wxCommandEvent& event)
 {
-
+	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->CloseDoorsEmergency();
 }
 
 void DebugPanel::On_bListAltitudes_Click(wxCommandEvent& event)
 {
+
 }
 
 void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
 {
-
+	mc->Show(true);
 }
 
 void DebugPanel::On_bInitRealtime_Click(wxCommandEvent& event)
@@ -155,17 +182,27 @@ void DebugPanel::On_bInitRealtime_Click(wxCommandEvent& event)
 
 }
 
+void DebugPanel::On_bStop_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->StopElevator();
+}
+
 void DebugPanel::OnInit()
 {
-    //set elevator range slider
-    //s_ElevNum->SetRange(1, sbs->Elevators);
-    s_ElevNum->SetRange(sbs->Elevators);
-    s_ElevNum->SetThumbPosition(0);
+	if (sbs->Elevators > 0)
+	{
+		//set elevator range slider
+		//s_ElevNum->SetRange(1, sbs->Elevators);
+		s_ElevNum->SetRange(sbs->Elevators);
+		s_ElevNum->SetThumbPosition(0);
 
-    //set floor range slider
-    //s_ElevFloor->SetRange(-sbs->Basements, sbs->TotalFloors);
-    s_ElevFloor->SetRange(sbs->TotalFloors);
-    s_ElevFloor->SetThumbPosition(0);
+		//set floor range slider
+		//s_ElevFloor->SetRange(-sbs->Basements, sbs->TotalFloors);
+		s_ElevFloor->SetRange(sbs->TotalFloors);
+		s_ElevFloor->SetThumbPosition(0);
+	}
+	else
+		s_ElevNum->Enable(false);
 
     //set check boxes
     chkCollisionDetection->SetValue(sbs->EnableCollisions);
@@ -173,6 +210,8 @@ void DebugPanel::OnInit()
     //chkMainProcessing->SetValue();
     //chkAutoShafts->SetValue();
     chkFrameSync->SetValue(sbs->FrameSync);
+
+	mc = new MeshControl(p, -1);
 
 	wxTimer *timer;
     timer = new Timer();
@@ -183,12 +222,26 @@ void Timer::Notify()
 {
 	p->t_camerap->SetLabel(wxT(wxString(_gcvt(c->GetPosition().x, 2, buffer)) + ", " + wxString(_gcvt(c->GetPosition().y, 2, buffer)) + ", " + wxString(_gcvt(c->GetPosition().z, 2, buffer))));
 	p->t_camerafloor->SetLabel(wxString(_itoa(c->CurrentFloor, intbuffer, 10)));
-	p->t_elevnumber->SetLabel(wxString(_itoa(sbs->ElevatorNumber, intbuffer, 10)));
-	p->t_elevfloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GetElevatorFloor(), intbuffer, 10)));
-	p->t_gotofloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GotoFloor, intbuffer, 10)));
-	p->t_disttodest->SetLabel(wxString(_gcvt(sbs->ElevatorArray[sbs->ElevatorNumber]->DistanceToTravel, 2, buffer)));
-	p->t_rate->SetLabel(wxString(_gcvt(sbs->ElevatorArray[sbs->ElevatorNumber]->ElevatorRate, 2, buffer)));
+	
+	if (sbs->Elevators > 0)
+	{
+		p->t_elevnumber->SetLabel(wxString(_itoa(sbs->ElevatorNumber, intbuffer, 10)));
+		p->t_elevfloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GetElevatorFloor(), intbuffer, 10)));
+		p->t_gotofloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GotoFloor, intbuffer, 10)));
+		p->t_disttodest->SetLabel(wxString(_gcvt(sbs->ElevatorArray[sbs->ElevatorNumber]->DistanceToTravel, 2, buffer)));
+		p->t_rate->SetLabel(wxString(_gcvt(sbs->ElevatorArray[sbs->ElevatorNumber]->ElevatorRate, 2, buffer)));
 
-	p->t_number->SetLabel(wxT("Number " + wxString(_itoa(p->s_ElevNum->GetThumbPosition() + 1, intbuffer, 10))));
-	p->t_floor->SetLabel(wxT("Floor " + wxString(_itoa(p->s_ElevFloor->GetThumbPosition(), intbuffer, 10))));
+		p->t_number->SetLabel(wxT("Number " + wxString(_itoa(p->s_ElevNum->GetThumbPosition() + 1, intbuffer, 10))));
+		p->t_floor->SetLabel(wxT("Floor " + wxString(_itoa(p->s_ElevFloor->GetThumbPosition(), intbuffer, 10))));
+	}
+
+	if (mc)
+	{
+		mc->chkFloor->SetValue(sbs->FloorArray[c->CurrentFloor]->IsEnabled);
+		mc->chkColumnFrame->SetValue(sbs->IsColumnFrameEnabled);
+		mc->chkSky->SetValue(sbs->IsSkyboxEnabled);
+		mc->chkLandscape->SetValue(sbs->IsLandscapeEnabled);
+		mc->chkBuildings->SetValue(sbs->IsBuildingsEnabled);
+		mc->chkExternal->SetValue(sbs->IsExternalEnabled);
+	}
 }

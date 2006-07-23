@@ -792,8 +792,99 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPo
 	th2 = AutoSize(0, abs(y.y - y.x), false, IsExternal, th);
 
 	//create 2 polygons (front and back) from the vertex array
-	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
+	int firstidx = dest->AddPolygon(varray1.GetVertices(), num);
 	dest->AddPolygon(varray2.GetVertices(), num);
+
+	material = sbs->engine->GetMaterialList ()->FindByName (texture);
+	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+	
+	//reverse extents if specified
+	float tmpv;
+	if (revX == true)
+	{
+		tmpv = x.x;
+		x.x = x.y;
+		x.y = tmpv;
+	}
+	if (revY == true)
+	{
+		tmpv = y.x;
+		y.x = y.y;
+		y.y = tmpv;
+	}
+	if (revZ == true)
+	{
+		tmpv = z.x;
+		z.x = z.y;
+		z.y = tmpv;
+	}
+	
+	//texture mapping is set from 3 manual vectors (origin, width extent,
+	//height extent) in a square layout
+	csVector3 v1 (x.x, y.y, z.x); //top left
+	csVector3 v2 (x.y, y.y, z.y); //top right
+	csVector3 v3 (x.y, y.x, z.y); //bottom right
+
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
+		v1,
+		csVector2 (0, 0),
+		v2,
+		csVector2 (tw2, 0),
+		v3,
+		csVector2 (tw2, th2));
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
+		v1,
+		csVector2 (tw2, 0),
+		v2,
+		csVector2 (0, 0),
+		v3,
+		csVector2 (0, th2));
+
+	return firstidx;
+}
+
+int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal)
+{
+	//Adds a wall from a specified array of 3D vectors
+	double tw2 = tw;
+	double th2;
+	double tempw1;
+	double tempw2;
+	int num;
+	int i;
+	csPoly3D varray1;
+
+	//get number of stored vertices
+	num = varray.GetVertexCount();
+
+	//create a second array with reversed vertices
+	for (i = num - 1; i >= 0; i--)
+		varray1.AddVertex(varray[i]);
+
+	csVector2 x, y, z;
+
+	//get extents for texture autosizing
+	x = GetExtents(varray, 1);
+	y = GetExtents(varray, 2);
+	z = GetExtents(varray, 3);
+
+	//Call texture autosizing formulas
+	if (z.x == z.y)
+		tw2 = AutoSize(x.x, x.y, true, IsExternal, tw);
+	if (x.x == x.y)
+		tw2 = AutoSize(z.x, z.y, true, IsExternal, tw);
+	if ((z.x != z.y) && (x.x != x.y))
+	{
+		//calculate diagonals
+		tempw1 = abs(x.y - x.x);
+		tempw2 = abs(z.y - z.x);
+	    tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
+	}
+	th2 = AutoSize(0, abs(y.y - y.x), false, IsExternal, th);
+
+	//create 2 polygons (front and back) from the vertex array
+	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
+	dest->AddPolygon(varray1.GetVertices(), num);
 
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);

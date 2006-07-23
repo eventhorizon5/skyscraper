@@ -1,3 +1,25 @@
+/*
+	Skyscraper 1.1 Alpha - Debug Panel Form
+	Copyright ©2005-2006 Ryan Thoryk
+	http://www.tliquest.net/skyscraper
+	http://sourceforge.net/projects/skyscraper
+	Contact - ryan@tliquest.net
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
 #ifndef DEBUGPANEL_H
 #define DEBUGPANEL_H
 
@@ -46,6 +68,7 @@ class DebugPanel: public wxFrame
             ID_bMeshControl,
             ID_bOpen,
             ID_bOpenManual,
+            ID_bStop,
             ID_chkAutoShafts,
             ID_chkCollisionDetection,
             ID_chkFrameLimiter,
@@ -94,6 +117,7 @@ class DebugPanel: public wxFrame
         void On_bInitRealtime_Click(wxCommandEvent& event);
         void On_chkCollisionDetection_Change(wxCommandEvent& event);
         void On_chkFrameLimiter_Change(wxCommandEvent& event);
+        void On_bStop_Click(wxCommandEvent& event);
         //*)
         void OnInit();
 
@@ -139,6 +163,7 @@ class DebugPanel: public wxFrame
         wxCheckBox* chkAutoShafts;
         wxCheckBox* chkMainProcessing;
         wxCheckBox* chkFrameLimiter;
+        wxButton* bStop;
         //*)
 
 	private:

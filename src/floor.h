@@ -61,7 +61,7 @@ public:
 	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool isexternal);
 	int AddInterfloorWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th);
 	void Enabled(bool value);
-	void AddAutoFloor(const char *texture);
+	void AddAutoFloor(const char *texture, double voffset, double tw, double th);
 	double FullHeight();
 	int AddCallButtons(bool up, bool down, int elevatornumber, bool direction, const char *backtexture, const char *buttontexture, double CenterX, double CenterZ, double width, double height, double tw, double th);
 

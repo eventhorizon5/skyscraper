@@ -58,8 +58,9 @@ Newer features, a completely redesigned simulation engine, external loadable
 buildings, better graphics, and more are being developed.  This version was
 originally coded in Visual Basic 6 using the TrueVision3D graphics engine.
 
-This software requires the CrystalSpace3D CVS 5/19/2006 (or later) graphics engine
-library which can be found at http://www.crystalspace3d.com.
+This software requires both the CrystalSpace3D CVS 5/19/2006 (or later) graphics
+engine library which can be found at http://www.crystalspace3d.com, and the wxWidgets
+library (version 2.6.3 or later) which can be found at http://www.wxwidgets.org.
 
 See the changelog for new features, fixes, and other changes in this release.
 

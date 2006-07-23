@@ -147,6 +147,7 @@ public:
 	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
 	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal);
 	int AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal);
+	int AddCustomFloor(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal);
 	csString Calc(const char *expression);
 	csVector2 GetExtents(csPoly3D &varray, int coord);
 	void InitMeshes();
