@@ -1,72 +1,295 @@
-<?xml version="1.0"?>
-<!DOCTYPE CodeBlocks_project_file>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="1"/>
+	<FileVersion major="1" minor="4" />
 	<Project>
-		<Option title="Skyscraper"/>
-		<Option makefile="Makefile"/>
-		<Option makefile_is_custom="0"/>
-		<Option compiler="0"/>
+		<Option title="Skyscraper" />
+		<Option pch_mode="2" />
+		<Option compiler="msvc8" />
 		<Build>
-			<Target title="default">
-				<Option output="H:\Skyscraper\dev\codeblocks\skyscraper.exe"/>
-				<Option working_dir="."/>
-				<Option object_output=".objs"/>
-				<Option deps_output=".deps"/>
-				<Option type="1"/>
-				<Option compiler="0"/>
-				<Option projectResourceIncludeDirsRelation="1"/>
+			<Target title="Release|Win32">
+				<Option output="..\Skyscraper.exe" />
+				<Option working_dir="..\" />
+				<Option object_output="Release" />
+				<Option type="1" />
+				<Option compiler="msvc8" />
+				<Compiler>
+					<Add option="/MD" />
+					<Add option="/O2" />
+					<Add option="/W3" />
+					<Add option="/Ob1" />
+					<Add option="/DWIN32" />
+					<Add option="/DNDEBUG" />
+					<Add option="/D_CONSOLE" />
+					<Add option="/DCS_WIN32_CSCONFIG" />
+					<Add option="/D__CRYSTAL_SPACE__" />
+					<Add option="/DCS_RELEASE" />
+					<Add option="/DwxUSE_GUI=1" />
+					<Add option="/DWXUSINGDLL=1" />
+				</Compiler>
+				<Linker>
+					<Add option="/INCREMENTAL:NO" />
+					<Add option="/SUBSYSTEM:CONSOLE" />
+					<Add library="libcrystalspace" />
+					<Add library="libcrystalspace_directx" />
+					<Add library="libcrystalspace_opengl" />
+					<Add library="libcrystalspace_windows" />
+					<Add library="wxbase26" />
+					<Add library="wxmsw26_core" />
+					<Add library="wxmsw26_gl" />
+					<Add library="comctl32" />
+					<Add library="rpcrt4" />
+					<Add library="winmm" />
+					<Add library="wsock32" />
+					<Add library="opengl32" />
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="uuid" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+				</Linker>
+			</Target>
+			<Target title="Debug|Win32">
+				<Option output="..\Skyscraper.exe" />
+				<Option working_dir="..\" />
+				<Option object_output="Debug" />
+				<Option type="1" />
+				<Option compiler="msvc8" />
+				<Compiler>
+					<Add option="/MDd" />
+					<Add option="/Od" />
+					<Add option="/W3" />
+					<Add option="/DWIN32" />
+					<Add option="/D_DEBUG" />
+					<Add option="/D_CONSOLE" />
+					<Add option="/DCS_WIN32_CSCONFIG" />
+					<Add option="/D__CRYSTAL_SPACE__" />
+					<Add option="/DCS_DEBUG" />
+					<Add option="/DwxUSE_GUI=1" />
+					<Add option="/DWXUSINGDLL=1" />
+					<Add option="/DWXDEBUG=1" />
+				</Compiler>
+				<Linker>
+					<Add option="/INCREMENTAL" />
+					<Add option="/SUBSYSTEM:CONSOLE" />
+					<Add library="libcrystalspace_d" />
+					<Add library="libcrystalspace_directx_d" />
+					<Add library="libcrystalspace_opengl_d" />
+					<Add library="libcrystalspace_windows_d" />
+					<Add library="wxbase26d" />
+					<Add library="wxmsw26d_core" />
+					<Add library="wxmsw26d_gl" />
+					<Add library="comctl32" />
+					<Add library="rpcrt4" />
+					<Add library="winmm" />
+					<Add library="wsock32" />
+					<Add library="opengl32" />
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="uuid" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+				</Linker>
 			</Target>
 		</Build>
+		<Unit filename="..\skyscraper.ico">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\camera.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\camera.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
 		<Unit filename="..\src\cameracontrol.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
 		</Unit>
 		<Unit filename="..\src\cameracontrol.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
 		</Unit>
 		<Unit filename="..\src\debugpanel.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
 		</Unit>
 		<Unit filename="..\src\debugpanel.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
 		</Unit>
 		<Unit filename="..\src\editelevator.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
 		</Unit>
 		<Unit filename="..\src\editelevator.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\elevator.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\elevator.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\fileio.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\fileio.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\floor.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\floor.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\globals.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
 		</Unit>
 		<Unit filename="..\src\loader.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
 		</Unit>
 		<Unit filename="..\src\loader.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
 		</Unit>
 		<Unit filename="..\src\meshcontrol.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
 		</Unit>
 		<Unit filename="..\src\meshcontrol.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
 		</Unit>
+		<Unit filename="..\src\sbs.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\sbs.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\shaft.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\shaft.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\skyscraper.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\skyscraper.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\stairs.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\stairs.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\unix.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\unix.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Extensions>
+<wxsmith>
+	<dialog wxs_file="Loader.wxs" class="Loader" src_file="..\src\loader.cpp" header_file="..\src\loader.h" xrc_file="" edit_mode="Source" />
+	<frame wxs_file="CameraControl.wxs" class="CameraControl" src_file="..\src\cameracontrol.cpp" header_file="..\src\cameracontrol.h" xrc_file="" edit_mode="Source" />
+	<frame wxs_file="DebugPanel.wxs" class="DebugPanel" src_file="..\src\debugpanel.cpp" header_file="..\src\debugpanel.h" xrc_file="" edit_mode="Source" />
+	<frame wxs_file="editelevator.wxs" class="editelevator" src_file="..\src\editelevator.cpp" header_file="..\src\editelevator.h" xrc_file="" edit_mode="Source" />
+	<frame wxs_file="MeshControl.wxs" class="MeshControl" src_file="..\src\meshcontrol.cpp" header_file="..\src\meshcontrol.h" xrc_file="" edit_mode="Source" />
+	<configuration app_src_file="" main_resource="" init_all_handlers="necessary" />
+</wxsmith>
+		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

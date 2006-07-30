@@ -1,5 +1,5 @@
 <resource>
-    <object class="wxFrame" name="DebugPanel">
+    <object class="wxDialog" name="DebugPanel">
         <title>Simulator Control Panel</title>
         <style>wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX</style>
         <object class="wxButton" name="ID_bListAltitudes" variable="bListAltitudes" member="yes">
@@ -60,49 +60,49 @@
             <label></label>
             <pos>105,10</pos>
             <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+            <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_camerap" variable="t_camerap" member="yes">
             <label></label>
             <pos>105,30</pos>
             <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+            <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_elevnumber" variable="t_elevnumber" member="yes">
             <label></label>
             <pos>105,50</pos>
             <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+            <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_elevfloor" variable="t_elevfloor" member="yes">
             <label></label>
             <pos>105,70</pos>
             <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+            <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_gotofloor" variable="t_gotofloor" member="yes">
             <label></label>
             <pos>105,90</pos>
             <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+            <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_disttodest" variable="t_disttodest" member="yes">
             <label></label>
             <pos>105,110</pos>
             <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+            <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_rate" variable="t_rate" member="yes">
             <label></label>
             <pos>105,130</pos>
             <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+            <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_object" variable="t_object" member="yes">
             <label></label>
             <pos>105,150</pos>
             <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+            <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="st22c" variable="StaticText17" member="yes">
             <label>Simulator Options</label>
@@ -148,7 +148,7 @@
             <label></label>
             <pos>35,305</pos>
             <size>54,18</size>
-            <style>wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+            <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxButton" name="ID_bEditElevator" variable="bEditElevator" member="yes">
             <label>Edit Elevator</label>
@@ -207,7 +207,7 @@
             <label>Measurements are in feet</label>
             <pos>230,138</pos>
             <size>94,33</size>
-            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE|wxSUNKEN_BORDER</style>
+            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxScrollBar" name="ID_s_ElevFloor" variable="s_ElevFloor" member="yes">
             <pos>27,255</pos>

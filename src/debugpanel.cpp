@@ -1,5 +1,5 @@
 /*
-	Skyscraper 1.1 Alpha - Debug Panel Form
+	Skyscraper 1.1 Alpha - Debug Panel
 	Copyright ©2005-2006 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
 	http://sourceforge.net/projects/skyscraper
@@ -33,7 +33,7 @@ extern Camera *c; //external pointer to the camera
 DebugPanel *p; //self pointer
 MeshControl *mc;
 
-BEGIN_EVENT_TABLE(DebugPanel,wxFrame)
+BEGIN_EVENT_TABLE(DebugPanel,wxDialog)
 //(*EventTable(DebugPanel)
     EVT_BUTTON(ID_bListAltitudes,DebugPanel::On_bListAltitudes_Click)
     EVT_BUTTON(ID_bMeshControl,DebugPanel::On_bMeshControl_Click)

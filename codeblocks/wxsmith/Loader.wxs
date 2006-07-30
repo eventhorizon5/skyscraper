@@ -1,6 +1,6 @@
 <resource>
     <object class="wxDialog" name="Loader">
         <title>Building Loader</title>
-        <handler entry="EVT_INIT_DIALOG" function="OnInit" />
+        <style>wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX|wxNO_3D</style>
     </object>
 </resource>
