@@ -51,7 +51,7 @@ SBS::SBS()
 	PrintBanner();
 
 	//Pause for 3 seconds
-	csSleep(3000);
+	csSleep(30);
 
 	//Set default horizontal scaling value
 	HorizScale = 1;
@@ -60,7 +60,7 @@ SBS::SBS()
 	ElevatorNumber = 1;
 
 	//Set default frame rate
-	FrameRate = 30;
+	FrameRate = 40;
 	FrameLimiter = true;
 
 	//initialize other variables
@@ -84,7 +84,7 @@ SBS::SBS()
 	InStairwell = false;
 	InElevator = false;
 	FPSModifier = 1;
-	FrameSync = false;
+	FrameSync = true;
 	EnableCollisions = false;
 	BuildingFile = "";
 	IsBuildingsEnabled = false;
@@ -92,6 +92,9 @@ SBS::SBS()
 	IsExternalEnabled = false;
 	IsLandscapeEnabled = false;
 	IsSkyboxEnabled = false;
+	fps_frame_count = 0;
+	fps_tottime = 0;
+	FPS = 0;
 }
 
 SBS::~SBS()
@@ -240,10 +243,9 @@ void SBS::PrintBanner()
 void SBS::GetInput()
 {
 	// First get elapsed time from the virtual clock.
-	csTicks elapsed_time, current_time;
 	elapsed_time = vc->GetElapsedTicks ();
 	current_time = vc->GetCurrentTicks ();
-
+	
 	// Now rotate the camera according to keyboard state
 	double speed = (elapsed_time / 1000.0) * (0.06 * 20);
 
@@ -336,10 +338,10 @@ void SBS::SetupFrame()
 	//Main simulator loop
 	
 	//used to adjust speeds according to frame rate
-	//if (FrameSync == true)
-		//FPSModifier = FrameRate / TV.GetFPS;
-	//else
-		//FPSModifier = 1;
+	if (FrameSync == true)
+		FPSModifier = FrameRate / FPS;
+	else
+		FPSModifier = 1;
 
 	if (RenderOnly == false && InputOnly == false)
 	{
@@ -376,11 +378,24 @@ bool SBS::HandleEvent(iEvent& Event)
 		// First get elapsed time from the virtual clock.
 		elapsed_time = vc->GetElapsedTicks ();
 
+		//calculate frame rate
+		fps_tottime += elapsed_time;
+		fps_frame_count++;
+		if (fps_tottime > 500)
+		{
+			FPS = (float (fps_frame_count) * 1000.0) / float (fps_tottime);
+			fps_frame_count = 0;
+			fps_tottime = 0;
+		}
+
 		SetupFrame ();
 		return true;
 	}
 	else if (Event.Name == FinalProcess)
 	{
+		if (FrameLimiter == true)
+			wxMilliSleep(1000 / FrameRate);
+
 		FinishFrame ();
 		return true;
 	}
@@ -464,6 +479,9 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	if (!vfs) return ReportError ("No VFS!");
 	console = CS_QUERY_REGISTRY (object_reg, iConsoleOutput);
 	if (!console) return ReportError ("No ConsoleOutput!");
+	plug = CS_LOAD_PLUGIN_ALWAYS (plugin_mgr, "crystalspace.utilities.bugplug");
+	if (!plug) return ReportError ("No BugPlug!");
+	if (plug) plug->IncRef ();
 
 	stdrep = CS_QUERY_REGISTRY (object_reg, iStandardReporterListener);
 	if (!stdrep) return ReportError ("No stdrep plugin!");

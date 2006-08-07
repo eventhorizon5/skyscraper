@@ -43,6 +43,7 @@ public:
 	double Deceleration; //deceleration value; may be removed
 	double OpenSpeed; //elevator opening/closing speed
 	int OriginFloor; //elevator starting floor
+	csVector3 Origin; //3D elevator origin
 	csString BaseName; //indicator texture base name
 	bool DoorDirection; //if direction is false, doors are on the left/right side
 	double DoorSpeed; //max door speed
@@ -51,11 +52,13 @@ public:
 	double ErrorOffset;
 	double DistanceToTravel; //distance in Y to travel
 	double ElevatorRate;
+	double DoorWidth; //elevator door width
+	csVector3 DoorOrigin; //elevator door origin
 
 	//functions
 	Elevator(int number);
 	~Elevator();
-	void CreateElevator(double x, double y, int floor, int direction);
+	void CreateElevator(double x, double z, int floor);
 	void AddRoute(int floor, int direction);
 	void DeleteRoute(int floor, int direction);
 	void Alarm();
@@ -119,7 +122,6 @@ private:
 	bool CalculateStoppingDistance;
 	bool Brakes;
 	double ElevatorDoorSpeed;
-	double ElevatorDoorPos; //original elevator door position
 	bool ElevWait;
 	double FPSModifierStatic;
 	bool EmergencyStop;

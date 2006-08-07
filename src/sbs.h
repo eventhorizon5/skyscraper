@@ -74,12 +74,13 @@ public:
 	csRef<iStringSet> strings;
 	csRef<iStandardReporterListener> stdrep;
 	csRef<iEventQueue> equeue;
+	csRef<iBase> plug;
 
 	iMaterialWrapper* material;
 	iLightList* ll;
 	iSector* area;
 
-	csTicks elapsed_time;
+	csTicks elapsed_time, current_time;
 
 	//Building information
 	csString BuildingName;
@@ -118,6 +119,7 @@ public:
 	bool IsExternalEnabled; //contains status of external object
 	bool IsLandscapeEnabled; //contains status of landscape object
 	bool IsSkyboxEnabled; //contains status of skybox object
+	double FPS; //current frame rate
 
 	//File I/O
 	csString BuildingFile;
@@ -163,7 +165,7 @@ public:
 	//file loader functions
 	int LoadBuilding(const char * filename);
 	int LoadDataFile(const char * filename);
-	
+
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
 		csRef<iMeshObject> Buildings_object;
@@ -197,6 +199,10 @@ private:
 	csEventID Process;
 	csEventID FinalProcess;
 	csEventID KeyboardDown;
+
+	//fps
+	int fps_frame_count;
+	int fps_tottime;
 
 	//private functions
 	void PrintBanner();

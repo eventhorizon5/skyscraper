@@ -58,8 +58,8 @@ bool Skyscraper::OnInit(void)
     //loader->Show(true);
 
 	//Simcore->BuildingFile = "buildings/Simple2.bld";
-	Simcore->BuildingFile = "buildings/Glass Tower.bld";
-	//Simcore->BuildingFile = "buildings/Triton Center.bld";
+	//Simcore->BuildingFile = "buildings/Glass Tower.bld";
+	Simcore->BuildingFile = "buildings/Triton Center.bld";
 	//Simcore->BuildingFile = "buildings/Sears Tower.bld";
 
 	//start simulation

@@ -920,7 +920,7 @@ recalc:
                 //if (tempdata.GetSize() < 3)
 					//Err.Raise 1003;
                 //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Then Err.Raise 1000
-                ElevatorArray[Current]->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]));
+                ElevatorArray[Current]->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atoi(tempdata[2]));
 				tempdata.DeleteAll();
 			}
 
@@ -981,6 +981,30 @@ recalc:
 				else
 					ElevatorArray[Current]->AddWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), revX, revY, revZ, false);
 
+				tempdata.DeleteAll();
+			}
+
+			//AddDoors command
+            if (LineData.Slice(0, 8).CompareNoCase("adddoors") == true)
+			{
+                //get data
+                tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+				
+                //calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+                //if (tempdata.GetSize() < 11)
+					//Err.Raise 1003;
+                //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+                
+				if (csString(tempdata[5]).CompareNoCase("true") == true)
+					ElevatorArray[Current]->AddDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), true, atof(tempdata[6]), atof(tempdata[7]));
+				else
+					ElevatorArray[Current]->AddDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), false, atof(tempdata[6]), atof(tempdata[7]));
+				
 				tempdata.DeleteAll();
 			}
 

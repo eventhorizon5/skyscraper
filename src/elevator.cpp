@@ -65,7 +65,6 @@ Elevator::Elevator(int number)
 	CalculateStoppingDistance = false;
 	Brakes = false;
 	ElevatorDoorSpeed = 0;
-	ElevatorDoorPos = 0;
 	ElevWait = false;
 	EmergencyStop = false;
 
@@ -140,28 +139,28 @@ Elevator::~Elevator()
 		delete ElevatorMesh;
 }
 
-void Elevator::CreateElevator(double x, double y, int floor, int direction)
+void Elevator::CreateElevator(double x, double z, int floor)
 {
 	//Creates elevator at specified location and floor
-	//x is the horiz position where the door is
-	//y is the northmost position
-	//Direction: 0=x is left side, 1=x is right side
+	//x and z are the center coordinates
 
-	csVector3 vpos (x, sbs->FloorArray[floor]->Altitude, y);
+	//set data
+	Origin = csVector3(x, sbs->FloorArray[floor]->Altitude, z);
+	OriginFloor = floor;
 
 	//move objects to positions
-	Elevator_movable->SetPosition(vpos);
+	Elevator_movable->SetPosition(Origin);
 	Elevator_movable->UpdateMove();
-	FloorIndicator_movable->SetPosition(vpos);
+	FloorIndicator_movable->SetPosition(Origin);
 	FloorIndicator_movable->UpdateMove();
-	Plaque_movable->SetPosition(vpos);
+	Plaque_movable->SetPosition(Origin);
 	Plaque_movable->UpdateMove();
-	ElevatorDoorL_movable->SetPosition(vpos);
+	ElevatorDoorL_movable->SetPosition(Origin);
 	ElevatorDoorL_movable->UpdateMove();
-	ElevatorDoorR_movable->SetPosition(vpos);
+	ElevatorDoorR_movable->SetPosition(Origin);
 	ElevatorDoorR_movable->UpdateMove();
 	
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(y, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)) + ", " + csString(_itoa(direction, buffer, 12)));
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }
 
 void Elevator::AddRoute(int floor, int direction)
@@ -330,6 +329,8 @@ void Elevator::CloseDoors()
 void Elevator::MoveDoors(bool open, bool emergency)
 {
 	//opens or closes elevator doors
+	//currently only supports doors on either the left/right or front/back
+	//diagonal doors will be done later, by possibly using relative plane movement
 
 	static bool IsRunning;
 	static double OpenChange;
@@ -343,10 +344,6 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		//initialization code
 
 		IsRunning = true;
-		if (open == true)
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening doors");
-		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing doors");
 
 		//get starting FPS and hold value
 		FPSModifierStatic = sbs->FPSModifier;
@@ -354,18 +351,15 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		if (emergency == false)
 		{
 			OpenChange = OpenSpeed / 50;
-			marker1 = 0.32;
-			marker2 = 0.96;
+			marker1 = DoorWidth / 8;
+			marker2 = (DoorWidth / 2) - (DoorWidth / 8);
 		}
 		else
 		{
-			OpenChange = 0.001;
-			marker1 = 0.064;
-			marker2 = 1.44;
+			OpenChange = 0.0001;
+			marker1 = DoorWidth / 16;
+			marker2 = (DoorWidth / 2) - (DoorWidth / 16);
 		}
-
-		//get elevator starting position
-		ElevatorDoorPos = GetPosition().z;
 
 		if (emergency == false)
 		{
@@ -378,30 +372,65 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	}
 
 	//Speed up doors
-	if ((ElevatorDoorPos - ElevatorDoorL_movable->GetPosition().z <= marker1 && open == true) || (ElevatorDoorPos - ElevatorDoorL_movable->GetPosition().z > marker2 && open == false))
+	if (DoorDirection == false)
 	{
-		if (open == true)
-			ElevatorDoorSpeed += OpenChange;
-		else
-			ElevatorDoorSpeed -= OpenChange;
+		if ((DoorOrigin.z - ElevatorDoorL_movable->GetPosition().z <= marker1 && open == true) || (DoorOrigin.z - ElevatorDoorL_movable->GetPosition().z > marker2 && open == false))
+		{
+			if (open == true)
+				ElevatorDoorSpeed += OpenChange;
+			else
+				ElevatorDoorSpeed -= OpenChange;
 
-		//todo: move shaft doors here
-		ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-		ElevatorDoorL_movable->UpdateMove();
-		ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-		ElevatorDoorR_movable->UpdateMove();
-		return;
+			//todo: move shaft doors here
+			ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+			ElevatorDoorL_movable->UpdateMove();
+			ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+			ElevatorDoorR_movable->UpdateMove();
+			return;
+		}
+	}
+	else
+	{
+		if ((DoorOrigin.x - ElevatorDoorL_movable->GetPosition().x <= marker1 && open == true) || (DoorOrigin.x - ElevatorDoorL_movable->GetPosition().x > marker2 && open == false))
+		{
+			if (open == true)
+				ElevatorDoorSpeed += OpenChange;
+			else
+				ElevatorDoorSpeed -= OpenChange;
+
+			//todo: move shaft doors here
+			ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ElevatorDoorL_movable->UpdateMove();
+			ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ElevatorDoorR_movable->UpdateMove();
+			return;
+		}
 	}
 
 	//Normal door movement
-	if ((ElevatorDoorPos - ElevatorDoorL_movable->GetPosition().z <= marker2 && open == true) || (ElevatorDoorPos - ElevatorDoorL_movable->GetPosition().z > marker2 && open == false))
+	if (DoorDirection == false)
 	{
-		//todo: move shaft doors here
-		ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-		ElevatorDoorL_movable->UpdateMove();
-		ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-		ElevatorDoorR_movable->UpdateMove();
-		return;
+		if ((DoorOrigin.z - ElevatorDoorL_movable->GetPosition().z <= marker2 && open == true) || (DoorOrigin.z - ElevatorDoorL_movable->GetPosition().z > marker1 && open == false))
+		{
+			//todo: move shaft doors here
+			ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+			ElevatorDoorL_movable->UpdateMove();
+			ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+			ElevatorDoorR_movable->UpdateMove();
+			return;
+		}
+	}
+	else
+	{
+		if ((DoorOrigin.x - ElevatorDoorL_movable->GetPosition().x <= marker2 && open == true) || (DoorOrigin.x - ElevatorDoorL_movable->GetPosition().x > marker1 && open == false))
+		{
+			//todo: move shaft doors here
+			ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ElevatorDoorL_movable->UpdateMove();
+			ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ElevatorDoorR_movable->UpdateMove();
+			return;
+		}
 	}
 
 	//slow down doors
@@ -411,11 +440,22 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			ElevatorDoorSpeed -= OpenChange;
 		else
 			ElevatorDoorSpeed += OpenChange;
-		//todo: move shaft doors here
-		ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-		ElevatorDoorL_movable->UpdateMove();
-		ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-		ElevatorDoorR_movable->UpdateMove();
+		if (DoorDirection == false)
+		{
+			//todo: move shaft doors here
+			ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+			ElevatorDoorL_movable->UpdateMove();
+			ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+			ElevatorDoorR_movable->UpdateMove();
+		}
+		else
+		{
+			//todo: move shaft doors here
+			ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ElevatorDoorL_movable->UpdateMove();
+			ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ElevatorDoorR_movable->UpdateMove();
+		}
 		return;
 	}
 
@@ -491,9 +531,14 @@ void Elevator::MoveElevatorToFloor()
 		FPSModifierStatic = sbs->FPSModifier;
 	}
 
-	if (EmergencyStop == true)
+	if (EmergencyStop == true && Brakes == false)
 	{
-		ElevatorDirection = -1;
+		CalculateStoppingDistance = false;
+		TempDeceleration = Deceleration;
+		if (ElevatorDirection == 1)
+			ElevatorDirection = -1;
+		else
+			ElevatorDirection = 1;
 		Brakes = true;
 	}
 
@@ -645,13 +690,13 @@ void Elevator::MoveElevatorToFloor()
 		Elevator_movable->UpdateMove();
 		if (ElevatorSync == true)
 			c->SetPosition(csVector3(c->GetPosition().x, GetPosition().y + c->DefaultAltitude, c->GetPosition().z));
-		ElevatorDoorL_movable->MovePosition(csVector3(ElevatorDoorL_movable->GetPosition().x, Destination, ElevatorDoorL_movable->GetPosition().z));
+		ElevatorDoorL_movable->SetPosition(csVector3(ElevatorDoorL_movable->GetPosition().x, Destination, ElevatorDoorL_movable->GetPosition().z));
 		ElevatorDoorL_movable->UpdateMove();
-		ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorR_movable->GetPosition().x, Destination, ElevatorDoorR_movable->GetPosition().z));
+		ElevatorDoorR_movable->SetPosition(csVector3(ElevatorDoorR_movable->GetPosition().x, Destination, ElevatorDoorR_movable->GetPosition().z));
 		ElevatorDoorR_movable->UpdateMove();
-		FloorIndicator_movable->MovePosition(csVector3(FloorIndicator_movable->GetPosition().x, Destination, FloorIndicator_movable->GetPosition().z));
+		FloorIndicator_movable->SetPosition(csVector3(FloorIndicator_movable->GetPosition().x, Destination, FloorIndicator_movable->GetPosition().z));
 		FloorIndicator_movable->UpdateMove();
-		Plaque_movable->MovePosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
+		Plaque_movable->SetPosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
 		Plaque_movable->UpdateMove();
 	
 		//move sounds
@@ -666,7 +711,6 @@ void Elevator::MoveElevatorToFloor()
 	ElevatorStart = 0;
 	IsRunning = false;
 	MoveElevator = false;
-	EmergencyStop = false;
 
 	if (EmergencyStop == false)
 	{
@@ -685,16 +729,17 @@ void Elevator::MoveElevatorToFloor()
 		sbs->EnableBuildings(true);
 		sbs->EnableLandscape(true);
 	}
+	EmergencyStop = false;
 }
 
 int Elevator::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
 {
-	return sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height1, height2, voffset1 + GetPosition().y, voffset2 + GetPosition().y, tw, th, revX, revY, revZ, DrawBothSides);
+	return sbs->AddWallMain(Elevator_state, texture, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, voffset1 + Origin.y, voffset2 + Origin.y, tw, th, revX, revY, revZ, DrawBothSides);
 }
 
 int Elevator::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
-   	return sbs->AddFloorMain(Elevator_state, texture, x1, z1, x2, z2, voffset1 + GetPosition().y, voffset2 + GetPosition().y, tw, th);
+   	return sbs->AddFloorMain(Elevator_state, texture, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, voffset1 + Origin.y, voffset2 + Origin.y, tw, th);
 }
 
 int Elevator::AddFloorIndicator(const char *basename, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
@@ -703,48 +748,54 @@ int Elevator::AddFloorIndicator(const char *basename, double x1, double z1, doub
 	csString texture;
 	BaseName = basename;
 	texture = BaseName + sbs->FloorArray[OriginFloor]->ID;
-	return sbs->AddWallMain(FloorIndicator_state, texture.GetData(), x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, 0, 0, false, false, false, false);
+	return sbs->AddWallMain(FloorIndicator_state, texture.GetData(), Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height, height, voffset + Origin.y, voffset + Origin.y, 0, 0, false, false, false, false);
 }
 
 int Elevator::AddDoors(const char *texture, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th)
 {
-	//adds elevator doors
+	//adds elevator doors specified at a relative central position (off of elevator origin)
+	//if direction is false, doors are on the left/right side; otherwise front/back
 	double x1, x2, x3, x4;
 	double z1, z2, z3, z4;
 
+	//set door parameters
 	DoorDirection = direction;
+	DoorWidth = width;
+	DoorOrigin = csVector3(Origin.x + CenterX, Origin.y, Origin.z + CenterZ);
 
+	//set up coordinates
 	if (direction == false)
 	{
-		x1 = CenterX;
-		x2 = CenterX;
-		x3 = CenterX;
-		x4 = CenterX;
-		z1 = CenterZ - (width / 2);
-		z2 = CenterZ;
-		z3 = CenterZ;
-		z4 = CenterZ + (width / 2);
+		x1 = DoorOrigin.x;
+		x2 = DoorOrigin.x;
+		x3 = DoorOrigin.x;
+		x4 = DoorOrigin.x;
+		z1 = DoorOrigin.z - (width / 2);
+		z2 = DoorOrigin.z;
+		z3 = DoorOrigin.z;
+		z4 = DoorOrigin.z + (width / 2);
 	}
 	else
 	{
-		x1 = CenterX - (width / 2);
-		x2 = CenterX;
-		x3 = CenterX;
-		x4 = CenterX + (width / 2);
-		z1 = CenterZ;
-		z2 = CenterZ;
-		z3 = CenterZ;
-		z4 = CenterZ;
+		x1 = DoorOrigin.x - (width / 2);
+		x2 = DoorOrigin.x;
+		x3 = DoorOrigin.x;
+		x4 = DoorOrigin.x + (width / 2);
+		z1 = DoorOrigin.z;
+		z2 = DoorOrigin.z;
+		z3 = DoorOrigin.z;
+		z4 = DoorOrigin.z;
 	}
 
-	int firstidx = sbs->AddWallMain(ElevatorDoorL_state, texture, x1, z1, x2, z2, height, height, GetPosition().y, GetPosition().y, tw, th, false, false, false);
-	sbs->AddWallMain(ElevatorDoorR_state, texture, x3, z3, x4, z4, height, height, GetPosition().y, GetPosition().y, tw, th, false, false, false);
+	//create doors
+	int firstidx = sbs->AddWallMain(ElevatorDoorL_state, texture, x1, z1, x2, z2, height, height, Origin.y, Origin.y, tw, th, false, false, false);
+	sbs->AddWallMain(ElevatorDoorR_state, texture, x3, z3, x4, z4, height, height, Origin.y, Origin.y, tw, th, false, false, false);
 	return firstidx;
 }
 
 int Elevator::AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
-	return sbs->AddWallMain(Plaque_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th, false, false, false);
+	return sbs->AddWallMain(Plaque_state, texture, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height, height, voffset + Origin.y, voffset + Origin.y, tw, th, false, false, false);
 }
 
 const csVector3 Elevator::GetPosition()

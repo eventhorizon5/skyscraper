@@ -118,6 +118,7 @@ class DebugPanel: public wxDialog
         void On_chkCollisionDetection_Change(wxCommandEvent& event);
         void On_chkFrameLimiter_Change(wxCommandEvent& event);
         void On_bStop_Click(wxCommandEvent& event);
+		void On_chkFrameSync_Change(wxCommandEvent& event);
         //*)
         void OnInit();
 

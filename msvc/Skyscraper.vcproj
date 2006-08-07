@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace.lib libcrystalspace_directx.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase26.lib wxmsw26_core.lib wxmsw26_gl.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
+				AdditionalDependencies="libcrystalspace.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase26.lib wxmsw26_core.lib wxmsw26_gl.lib"
 				OutputFile="../Skyscraper.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -172,7 +172,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_directx_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase26d.lib wxmsw26d_core.lib wxmsw26d_gl.lib comctl32.lib rpcrt4.lib winmm.lib wsock32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib uuid.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib"
+				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase26d.lib wxmsw26d_core.lib wxmsw26d_gl.lib"
 				OutputFile="../Skyscraper.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"

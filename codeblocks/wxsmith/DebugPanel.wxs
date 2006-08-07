@@ -221,6 +221,7 @@
         </object>
         <object class="wxCheckBox" name="ID_chkFrameSync" variable="chkFrameSync" member="yes">
             <label>Framerate Sync</label>
+            <handler entry="EVT_CHECKBOX" function="On_chkFrameSync_Change" />
             <pos>302,93</pos>
         </object>
         <object class="wxCheckBox" name="ID_chkAutoShafts" variable="chkAutoShafts" member="yes">
@@ -233,6 +234,7 @@
         </object>
         <object class="wxCheckBox" name="ID_chkFrameLimiter" variable="chkFrameLimiter" member="yes">
             <label>Frame Limiter</label>
+            <handler entry="EVT_CHECKBOX" function="On_chkFrameLimiter_Change" />
             <pos>302,50</pos>
         </object>
         <object class="wxButton" name="ID_bStop" variable="bStop" member="yes">

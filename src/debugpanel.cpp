@@ -46,6 +46,9 @@ BEGIN_EVENT_TABLE(DebugPanel,wxDialog)
     EVT_BUTTON(ID_bEnqueueDown,DebugPanel::On_bEnqueueDown_Click)
     EVT_BUTTON(ID_bClose,DebugPanel::On_bClose_Click)
     EVT_BUTTON(ID_bCloseManual,DebugPanel::On_bCloseManual_Click)
+	EVT_BUTTON(ID_bStop,DebugPanel::On_bStop_Click)
+    EVT_CHECKBOX(ID_chkFrameLimiter,DebugPanel::On_chkFrameLimiter_Change)
+	EVT_CHECKBOX(ID_chkFrameSync,DebugPanel::On_chkFrameSync_Change)
 //*)
 END_EVENT_TABLE()
 
@@ -185,6 +188,16 @@ void DebugPanel::On_bInitRealtime_Click(wxCommandEvent& event)
 void DebugPanel::On_bStop_Click(wxCommandEvent& event)
 {
 	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->StopElevator();
+}
+
+void DebugPanel::On_chkFrameLimiter_Change(wxCommandEvent& event)
+{
+	sbs->FrameLimiter = chkFrameLimiter->GetValue();
+}
+
+void DebugPanel::On_chkFrameSync_Change(wxCommandEvent& event)
+{
+	sbs->FrameSync = chkFrameSync->GetValue();
 }
 
 void DebugPanel::OnInit()
