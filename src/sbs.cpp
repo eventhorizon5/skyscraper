@@ -51,7 +51,7 @@ SBS::SBS()
 	PrintBanner();
 
 	//Pause for 3 seconds
-	csSleep(30);
+	csSleep(3000);
 
 	//Set default horizontal scaling value
 	HorizScale = 1;
