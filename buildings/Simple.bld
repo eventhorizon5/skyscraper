@@ -1,5 +1,7 @@
 #MyBuilding
 
+# $Id$
+	
 <Globals>
     Name = My Building
     Designer = Me
