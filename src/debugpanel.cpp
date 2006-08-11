@@ -1,6 +1,6 @@
 /*
 	Skyscraper 1.1 Alpha - Debug Panel
-	Copyright ©2005-2006 Ryan Thoryk
+	Copyright (C)2005-2006 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net

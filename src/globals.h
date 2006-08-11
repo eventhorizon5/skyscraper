@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - SBS Engine Globals
 	The Skyscraper Project - Version 1.1 Alpha
-	Copyright ©2005-2006 Ryan Thoryk
+	Copyright (C)2005-2006 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
