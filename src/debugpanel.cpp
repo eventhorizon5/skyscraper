@@ -1,3 +1,5 @@
+/* 	$Id$ */
+
 /*
 	Skyscraper 1.1 Alpha - Debug Panel
 	Copyright (C)2005-2006 Ryan Thoryk
@@ -5,8 +7,6 @@
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
 
-	$Id$
-	
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
