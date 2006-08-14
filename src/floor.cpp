@@ -229,7 +229,7 @@ void Floor::AddAutoFloor(const char *texture, double voffset, double tw, double 
 {
 	/* autogenerate a floor based on either wall bounds, or by specified boundaries
 	 
-	   this function splits the "external" polygon at a certain altitude (y plane)
+	   this function splits the "external" mesh at a certain altitude (y plane)
 	   into 2 new polygons, discards one, creates a list of vertices in the new
 	   polygon located at the altitude, and then creates a new floor polygon from
 	   that vertex list.
@@ -239,7 +239,7 @@ void Floor::AddAutoFloor(const char *texture, double voffset, double tw, double 
 
 	double i;
 
-	varray1.SetVertices(Level_state->GetVertices(), Level_state->GetVertexCount());
+	varray1.SetVertices(sbs->External_state->GetVertices(), sbs->External_state->GetVertexCount());
 	varray1.SplitWithPlaneY(varray2, varray3, Altitude + voffset);
 	varray3.MakeEmpty();
 
