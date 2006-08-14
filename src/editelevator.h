@@ -1,4 +1,4 @@
-/* 	$Id$ */
+/* $Id$ */
 
 /*
 	Skyscraper 1.1 Alpha - Edit Elevator Form

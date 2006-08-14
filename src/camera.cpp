@@ -1,4 +1,4 @@
-/* 	$Id$ */
+/* $Id$ */
 
 /*
 	Scalable Building Simulator - Camera Object Class
