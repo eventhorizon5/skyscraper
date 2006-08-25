@@ -227,30 +227,16 @@ void Floor::Enabled(bool value)
 
 void Floor::AddAutoFloor(const char *texture, double voffset, double tw, double th)
 {
-	/* autogenerate a floor based on either wall bounds, or by specified boundaries
+	/* Autogenerate a floor
 	 
-	   this function splits the "external" mesh at a certain altitude (y plane)
-	   into 2 new polygons, discards one, creates a list of vertices in the new
-	   polygon located at the altitude, and then creates a new floor polygon from
-	   that vertex list.
-   */
+	   this function splits the "external" mesh's polygons at a certain altitude
+	   (y plane), discards the lower ones, makes a list the vertices at the Y value,
+	   does a clockwise sort using the Graham scan method, and creates a new floor
+	   polygon from the sorted vertices.
 
-	csPoly3D varray1, varray2, varray3;
+	*/
 
-	double i;
-
-	varray1.SetVertices(sbs->External_state->GetVertices(), sbs->External_state->GetVertexCount());
-	varray1.SplitWithPlaneY(varray2, varray3, Altitude + voffset);
-	varray3.MakeEmpty();
-
-	for (i = 0; i < varray2.GetVertexCount(); i++)
-	{
-		if (varray2[i].y = Altitude + voffset)
-			varray3.AddVertex(varray2[i]);
-	}
-
-	sbs->AddCustomFloor(Level_state, texture, varray3, tw, th, false, false, false, false);
-
+	//sbs->AddCustomFloor(Level_state, texture, varray3, tw, th, false, false, false, false);
 }
 
 double Floor::FullHeight()
