@@ -370,11 +370,13 @@ int SBS::LoadBuilding(const char * filename)
                 tmpMesh = sbs->FloorArray[Current]->Level_state;
 			else
 			{
-                if (Section == 2)
+                /*
+				if (Section == 2)
 				{
 					buffer = FloorArray[Current]->Altitude + atof(tempdata[7]);
 					tempdata.Put(7, buffer);
 				}
+				*/
 			}
             buffer = tempdata[0];
 			buffer.Downcase();
@@ -412,7 +414,69 @@ int SBS::LoadBuilding(const char * filename)
 			AddCustomWall(tmpMesh, tempdata[1], varray, atof(tempdata[alength - 5]), atof(tempdata[alength - 4]), revX, revY, revZ, extcheck);
 			tempdata.DeleteAll();
 		}
-        
+
+		//AddCustomFloor command
+        if (LineData.Slice(0, 15).CompareNoCase("addcustomfloor ") == true)
+		{
+            bool extcheck = false;
+			bool revX;
+			bool revY;
+			bool revZ;
+			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+            if (csString(tempdata[0]).CompareNoCase("floor") == true)
+                tmpMesh = sbs->FloorArray[Current]->Level_state;
+			else
+			{
+                /*
+				if (Section == 2)
+				{
+					buffer = FloorArray[Current]->Altitude + atof(tempdata[7]);
+					tempdata.Put(7, buffer);
+				}
+				*/
+			}
+            buffer = tempdata[0];
+			buffer.Downcase();
+			if (buffer == "external")
+			{
+				tmpMesh = sbs->External_state;
+				extcheck = true;
+			}
+            if (buffer == "landscape")
+				tmpMesh = sbs->Landscape_state;
+            if (buffer == "buildings")
+				tmpMesh = sbs->Buildings_state;
+            if (buffer == "columnframe")
+				tmpMesh = sbs->ColumnFrame_state;
+			
+			csPoly3D varray;
+			int alength;
+			alength = tempdata.Length();
+			for (temp3 = 2; temp3 < alength - 5; temp3 += 3)
+				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
+			
+			if (csString(tempdata[alength - 3]).CompareNoCase("true") == true)
+				revX = true;
+			else
+				revX = false;
+			if (csString(tempdata[alength - 2]).CompareNoCase("true") == true)
+				revY = true;
+			else
+				revY = false;
+			if (csString(tempdata[alength - 1]).CompareNoCase("true") == true)
+				revZ = true;
+			else
+				revZ = false;
+			
+			AddCustomFloor(tmpMesh, tempdata[1], varray, atof(tempdata[alength - 5]), atof(tempdata[alength - 4]), revX, revY, revZ, extcheck);
+			tempdata.DeleteAll();
+		}
+
         //Process globals
         if (Section == 1)
 		{
