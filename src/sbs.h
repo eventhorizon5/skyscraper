@@ -163,6 +163,8 @@ public:
 	int GetFloorNumber(double altitude);
 	double GetDistance(double x1, double x2, double z1, double z2);
 	void Fall();
+	void DumpVertices(csRef<iThingFactoryState> mesh);
+	void ListAltitudes();
 
 	//file loader functions
 	int LoadBuilding(const char * filename);
@@ -205,6 +207,10 @@ private:
 	//fps
 	int fps_frame_count;
 	int fps_tottime;
+
+	//conversion buffers
+	char intbuffer[65];
+	char buffer[20];
 
 	//private functions
 	void PrintBanner();

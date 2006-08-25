@@ -1259,3 +1259,20 @@ void SBS::Fall()
 
 }
 
+void SBS::DumpVertices(csRef<iThingFactoryState> mesh)
+{
+	//dumps a list of vertices from a mesh object to the console/logfile
+
+	Report("--- Vertex Dump ---\n");
+	for (int i = 0; i < mesh->GetVertexCount(); i++)
+		Report(csString(csString(_itoa(i, intbuffer, 10)) + ": " + csString(_gcvt(mesh->GetVertices()[i].x, 6, buffer)) + ", " + csString(_gcvt(mesh->GetVertices()[i].y, 6, buffer)) + ", " + csString(_gcvt(mesh->GetVertices()[i].z, 6, buffer))));
+}
+
+void SBS::ListAltitudes()
+{
+	//dumps the floor altitude list
+
+	Report("--- Floor Altitudes ---\n");
+	for (int i = -Basements; i <= TotalFloors; i++)
+		Report(csString(csString(_itoa(i, intbuffer, 10)) + "(" + FloorArray[i]->ID + ")\t----\t" + csString(_gcvt(FloorArray[i]->FullHeight(), 6, buffer)) + "\t----\t" + csString(_gcvt(FloorArray[i]->Altitude, 6, buffer))));
+}
