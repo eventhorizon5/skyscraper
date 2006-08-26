@@ -366,20 +366,11 @@ int SBS::LoadBuilding(const char * filename)
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-            if (csString(tempdata[0]).CompareNoCase("floor") == true)
-                tmpMesh = sbs->FloorArray[Current]->Level_state;
-			else
-			{
-                /*
-				if (Section == 2)
-				{
-					buffer = FloorArray[Current]->Altitude + atof(tempdata[7]);
-					tempdata.Put(7, buffer);
-				}
-				*/
-			}
-            buffer = tempdata[0];
+
+			buffer = tempdata[0];
 			buffer.Downcase();
+			if (buffer == "floor")
+                tmpMesh = sbs->FloorArray[Current]->Level_state;
 			if (buffer == "external")
 			{
 				tmpMesh = sbs->External_state;
@@ -428,20 +419,11 @@ int SBS::LoadBuilding(const char * filename)
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-            if (csString(tempdata[0]).CompareNoCase("floor") == true)
-                tmpMesh = sbs->FloorArray[Current]->Level_state;
-			else
-			{
-                /*
-				if (Section == 2)
-				{
-					buffer = FloorArray[Current]->Altitude + atof(tempdata[7]);
-					tempdata.Put(7, buffer);
-				}
-				*/
-			}
-            buffer = tempdata[0];
+
+			buffer = tempdata[0];
 			buffer.Downcase();
+			if (buffer == "floor")
+                tmpMesh = sbs->FloorArray[Current]->Level_state;
 			if (buffer == "external")
 			{
 				tmpMesh = sbs->External_state;
@@ -473,7 +455,11 @@ int SBS::LoadBuilding(const char * filename)
 			else
 				revZ = false;
 			
-			AddCustomFloor(tmpMesh, tempdata[1], varray, atof(tempdata[alength - 5]), atof(tempdata[alength - 4]), revX, revY, revZ, extcheck);
+			int index;
+			index = AddCustomFloor(tmpMesh, tempdata[1], varray, atof(tempdata[alength - 5]), atof(tempdata[alength - 4]), revX, revY, revZ, extcheck);
+			if (buffer == "floor")
+				FloorArray[Current]->FloorList.Push(index);
+
 			tempdata.DeleteAll();
 		}
 
