@@ -110,7 +110,12 @@ int Floor::AddFloor(const char *texture, double x1, double z1, double x2, double
 	th2 = AutoSize(z1, z2, false, isexternal, th);
 	
 	if (isexternal == false)
-		return sbs->AddFloorMain(Level_state, texture, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+	{
+		int index;
+		index = sbs->AddFloorMain(Level_state, texture, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+		FloorList.Push(index);
+		return index;
+	}
 	else
 		return sbs->AddFloorMain(sbs->External_state, texture, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
@@ -131,7 +136,10 @@ int Floor::AddInterfloorFloor(const char *texture, double x1, double z1, double 
 	tw2 = AutoSize(x1, x2, true, false, tw);
 	th2 = AutoSize(z1, z2, false, false, th);
 
-	return sbs->AddFloorMain(Interfloor_state, texture, x1, z1, x2, z2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2);
+	int index;
+	index = sbs->AddFloorMain(Interfloor_state, texture, x1, z1, x2, z2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2);
+	//FloorList.Push(index);
+	return index;
 }
 
 int Floor::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool isexternal)
@@ -236,7 +244,10 @@ void Floor::AddAutoFloor(const char *texture, double voffset, double tw, double 
 
 	*/
 
-	//sbs->AddCustomFloor(Level_state, texture, varray3, tw, th, false, false, false, false);
+	//int index;
+	//index = sbs->AddCustomFloor(Level_state, texture, varray3, tw, th, false, false, false, false);
+	//FloorList.Push(index);
+	//return index;
 }
 
 double Floor::FullHeight()
@@ -271,4 +282,42 @@ int Floor::AddCallButtons(bool up, bool down, int elevatornumber, bool direction
 	//firstidx = sbs->AddWallMain(CallButtonsUp_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 	//sbs->AddWallMain(CallButtonsDown_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 	return firstidx;
+}
+
+void Floor::CutFloor(double x1, double x2, double z1, double z2)
+{
+	//cuts a rectangular hole in the listed floor polygons (floor, ceiling, etc)
+	
+	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5;
+
+	//step through each floor polygon
+	for (int i = 0; i <= FloorList.Length() - 1; i++)
+	{
+		temppoly.MakeEmpty();
+		temppoly2.MakeEmpty();
+		temppoly3.MakeEmpty();
+		temppoly4.MakeEmpty();
+		temppoly5.MakeEmpty();
+
+		//copy polygon vertices
+		for (int j = 0; j <= Level_state->GetPolygonVertexCount(FloorList[i]); j++)
+			temppoly.AddVertex(Level_state->GetPolygonVertex(FloorList[i], j));
+		
+		//get left side
+		temppoly.SplitWithPlaneX(temppoly2, temppoly, x1);
+
+		//get right side
+		temppoly2.SplitWithPlaneX(temppoly2, temppoly3, x2);
+
+		//get lower
+		temppoly3.SplitWithPlaneZ(temppoly4, temppoly3, z1);
+
+		//get upper
+		temppoly4.SplitWithPlaneZ(temppoly4, temppoly5, z2);
+
+		//reconstruct 4 resulting polygons into single polygon
+
+		//delete original floor polygon and create a new one
+		
+	}
 }

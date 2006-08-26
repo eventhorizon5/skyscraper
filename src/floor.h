@@ -53,6 +53,7 @@ public:
 	double DoorHeight; //height of doors; may be removed
 	double DoorWidth; //width of doors; may be removed
 	bool IsEnabled; //is floor enabled?
+	csArray<int> FloorList; //list of floor/ceiling polygon indices
 
 	//functions
 	Floor(int number);
@@ -66,6 +67,7 @@ public:
 	void AddAutoFloor(const char *texture, double voffset, double tw, double th);
 	double FullHeight();
 	int AddCallButtons(bool up, bool down, int elevatornumber, bool direction, const char *backtexture, const char *buttontexture, double CenterX, double CenterZ, double width, double height, double tw, double th);
+	void CutFloor(double x1, double x2, double z1, double z2);
 
 private:
 	csRefArray<iMeshWrapper> Objects;
