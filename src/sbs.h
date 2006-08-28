@@ -26,6 +26,7 @@
 #include "globals.h"
 #include "floor.h"
 #include "elevator.h"
+#include "shaft.h"
 
 //global functions
 bool IsEven(int Number);
@@ -102,6 +103,7 @@ public:
 	int StairsNum; //number of stairwells
 	csArray<Floor*> FloorArray; //pointer array to floor objects
 	csArray<Elevator*> ElevatorArray; //pointer array to elevator objects
+	csArray<Shaft*> ShaftArray; //pointer array to shaft objects
 	bool RenderOnly; //skip sim processing and only render graphics
     bool InputOnly; //skip sim processing and only run input and rendering code
     bool IsFalling; //make user fall
