@@ -44,7 +44,9 @@ Elevator::Elevator(int number)
 	//init variables
 	Name = "";
 	QueuePositionDirection = 0;
-	PauseQueueSearch = false;
+	LastQueueFloor[0] = 0;
+	LastQueueFloor[1] = 0;
+	PauseQueueSearch = true;
 	ElevatorSpeed = 0;
 	ElevatorSync = false;
 	MoveElevator = false;
@@ -54,8 +56,6 @@ Elevator::Elevator(int number)
 	Acceleration = 0;
 	Deceleration = 0;
 	OpenSpeed = 0;
-	UpQueue = "";
-	DownQueue = "";
 	ElevatorStart = 0;
 	ElevatorFloor = 0;
 	DoorsOpen = false;
@@ -165,17 +165,65 @@ void Elevator::CreateElevator(double x, double z, int floor)
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }
 
-void Elevator::AddRoute(int floor, int direction)
+void Elevator::AddRoute(int floor, bool directionup)
 {
 	//Add call route to elevator routing table, in sorted order
-	//Direction values - 1=up, -1=down
+
+	if (directionup == true)
+	{
+		if (UpQueue.Length() == 0 && QueuePositionDirection == 0)
+			PauseQueueSearch = false;
+		UpQueue.InsertSorted(floor);
+		LastQueueFloor[0] = floor;
+		LastQueueFloor[1] = 1;
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction up");
+	}
+	else
+	{
+		if (DownQueue.Length() == 0 && QueuePositionDirection == 0)
+			PauseQueueSearch = false;
+		DownQueue.InsertSorted(floor);
+		LastQueueFloor[0] = floor;
+		LastQueueFloor[1] = -1;
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction down");
+	}
 
 }
 
-void Elevator::DeleteRoute(int floor, int direction)
+void Elevator::DeleteRoute(int floor, bool directionup)
 {
 	//Delete call route from elevator routing table
 
+	if (directionup == true)
+	{
+		UpQueue.Delete(floor);
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction up");
+	}
+	else
+	{
+		DownQueue.Delete(floor);
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction down");
+	}
+}
+
+void Elevator::CancelLastRoute()
+{
+	//cancels the last added route
+	
+	if (LastQueueFloor[1] == 1)
+	{
+		DeleteRoute(LastQueueFloor[0], true);
+		LastQueueFloor[0] = 0;
+		LastQueueFloor[1] = 0;
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cancelling last route");
+	}
+	else if (LastQueueFloor[1] == -1)
+	{
+		DeleteRoute(LastQueueFloor[0], false);
+		LastQueueFloor[0] = 0;
+		LastQueueFloor[1] = 0;
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cancelling last route");
+	}
 }
 
 void Elevator::Alarm()
@@ -183,19 +231,6 @@ void Elevator::Alarm()
 	//elevator alarm code
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": alarm on");
-}
-
-void Elevator::CallElevator(int floor, int direction)
-{
-	//Calls elevator from specified floor, and gives desired direction to travel
-
-	csString direction2;
-	if (direction == -1)
-		direction2 = "down";
-	else
-		direction2 = "up";
-
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": calling to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction " + direction2);
 }
 
 void Elevator::StopElevator()
@@ -223,6 +258,62 @@ void Elevator::ProcessCallQueue()
 {
 	//Processes the elevator's call queue, and sends elevators to called floors
 
+	if (QueuePositionDirection == 0)
+	{
+		if (UpQueue.Length() != 0)
+			QueuePositionDirection = 1;
+		if (DownQueue.Length() != 0)
+			QueuePositionDirection = -1;
+	}
+	if (UpQueue.Length() == 0 && DownQueue.Length() == 0)
+	{
+		QueuePositionDirection = 0;
+		PauseQueueSearch = true;
+		return;
+	}
+	if (QueuePositionDirection == 1 && UpQueue.Length() == 0)
+		QueuePositionDirection = 0;
+	if (QueuePositionDirection == -1 && DownQueue.Length() == 0)
+		QueuePositionDirection = 0;
+	
+	if (PauseQueueSearch == true)
+		return;
+
+	//Search through queue lists and find next valid floor call (direction-wise)
+	if (QueuePositionDirection == 1)
+	{
+		//search through up queue
+		for (int i = 0; i < UpQueue.Length(); i++)
+		{
+			if (UpQueue[i] > ElevatorFloor)
+			{
+				PauseQueueSearch = true;
+				CloseDoors();
+				GotoFloor = UpQueue[i];
+				//ElevatorSync = true;
+				MoveElevator = true;
+				DeleteRoute(UpQueue[i], true);
+				return;
+			}
+		}
+	}
+	else if (QueuePositionDirection == -1)
+	{
+		//search through down queue
+		for (int i = 0; i < DownQueue.Length(); i++)
+		{
+			if (DownQueue[i] > ElevatorFloor)
+			{
+				PauseQueueSearch = true;
+				CloseDoors();
+				GotoFloor = DownQueue[i];
+				//ElevatorSync = true;
+				MoveElevator = true;
+				DeleteRoute(DownQueue[i], true);
+				return;
+			}
+		}
+	}
 }
 
 int Elevator::GetElevatorFloor()
@@ -249,6 +340,8 @@ void Elevator::MonitorLoop()
 	//check to see if person is in elevator
 	CheckElevator();
 
+	//call queue processor
+	ProcessCallQueue();
 
 	if (OpenDoor == 1)
 		MoveDoors(true, false);
@@ -810,4 +903,17 @@ void Elevator::CheckElevator()
 {
 	//check to see if user (camera) is in the elevator
 
+}
+
+void Elevator::DumpQueues()
+{
+	//dump both (up and down) elevator queues
+
+	sbs->Report("--- Elevator " + csString(_itoa(Number, intbuffer, 10)) + " Queues ---\n");
+	sbs->Report("Up:");
+	for (int i = 0; i < UpQueue.Length(); i++)
+		sbs->Report(csString(_itoa(i, intbuffer, 10)) + " - " + csString(_itoa(UpQueue[i], intbuffer, 10)));
+	sbs->Report("Down:");
+	for (int i = 0; i < DownQueue.Length(); i++)
+		sbs->Report(csString(_itoa(i, intbuffer, 10)) + " - " + csString(_itoa(DownQueue[i], intbuffer, 10)));
 }

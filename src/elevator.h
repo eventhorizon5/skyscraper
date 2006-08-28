@@ -36,6 +36,7 @@ public:
 	csString Name; //elevator name
 	int QueuePositionDirection; //queue processing direction
 	bool PauseQueueSearch; //pause queue processor
+	int LastQueueFloor[1]; //last route added to either queue
 	double ElevatorSpeed; //maximum elevator speed
 	bool ElevatorSync; //true if user should move with elevator
 	bool MoveElevator; //Tells elevator to start going to specified floor
@@ -61,10 +62,10 @@ public:
 	Elevator(int number);
 	~Elevator();
 	void CreateElevator(double x, double z, int floor);
-	void AddRoute(int floor, int direction);
-	void DeleteRoute(int floor, int direction);
+	void AddRoute(int floor, bool directionup);
+	void DeleteRoute(int floor, bool directionup);
+	void CancelLastRoute();
 	void Alarm();
-	void CallElevator(int floor, int direction);
 	void StopElevator();
 	void OpenHatch();
 	void OpenDoorsEmergency();
@@ -82,6 +83,7 @@ public:
 	int AddFloorIndicator(const char *basename, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
 	int AddDoors(const char *texture, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th);
 	int AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
+	void DumpQueues();
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -112,8 +114,8 @@ private:
 	csRefArray<iMeshWrapper> Buttons; //elevator button array
 
 	//Internal elevator simulation data
-	csString UpQueue; //up call queue ***Change these to sorted arrays
-	csString DownQueue; //down call queue
+	csArray<int> UpQueue; //up call queue
+	csArray<int> DownQueue; //down call queue
 	double ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
 	bool DoorsOpen; //elevator door state
