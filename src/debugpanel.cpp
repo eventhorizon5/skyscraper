@@ -139,7 +139,11 @@ void DebugPanel::On_bGo_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bCallElevator_Click(wxCommandEvent& event)
 {
-
+	//calls elevator to the current camera floor
+	if (sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GetElevatorFloor() > c->CurrentFloor)
+		sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(c->CurrentFloor, false);
+	if (sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GetElevatorFloor() < c->CurrentFloor)
+		sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(c->CurrentFloor, true);
 }
 
 void DebugPanel::On_bOpen_Click(wxCommandEvent& event)
@@ -154,12 +158,12 @@ void DebugPanel::On_bOpenManual_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bEnqueueUp_Click(wxCommandEvent& event)
 {
-
+	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(s_ElevFloor->GetThumbPosition(), true);
 }
 
 void DebugPanel::On_bEnqueueDown_Click(wxCommandEvent& event)
 {
-
+	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(s_ElevFloor->GetThumbPosition(), false);
 }
 
 void DebugPanel::On_bClose_Click(wxCommandEvent& event)
@@ -174,7 +178,7 @@ void DebugPanel::On_bCloseManual_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bListAltitudes_Click(wxCommandEvent& event)
 {
-
+	sbs->ListAltitudes();
 }
 
 void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
