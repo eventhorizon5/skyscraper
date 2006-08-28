@@ -1265,7 +1265,7 @@ void SBS::DumpVertices(csRef<iThingFactoryState> mesh)
 
 	Report("--- Vertex Dump ---\n");
 	for (int i = 0; i < mesh->GetVertexCount(); i++)
-		Report(csString(csString(_itoa(i, intbuffer, 10)) + ": " + csString(_gcvt(mesh->GetVertices()[i].x, 6, buffer)) + ", " + csString(_gcvt(mesh->GetVertices()[i].y, 6, buffer)) + ", " + csString(_gcvt(mesh->GetVertices()[i].z, 6, buffer))));
+		Report(csString(_itoa(i, intbuffer, 10)) + ": " + csString(_gcvt(mesh->GetVertices()[i].x, 6, buffer)) + ", " + csString(_gcvt(mesh->GetVertices()[i].y, 6, buffer)) + ", " + csString(_gcvt(mesh->GetVertices()[i].z, 6, buffer)));
 }
 
 void SBS::ListAltitudes()
@@ -1274,5 +1274,5 @@ void SBS::ListAltitudes()
 
 	Report("--- Floor Altitudes ---\n");
 	for (int i = -Basements; i <= TotalFloors; i++)
-		Report(csString(csString(_itoa(i, intbuffer, 10)) + "(" + FloorArray[i]->ID + ")\t----\t" + csString(_gcvt(FloorArray[i]->FullHeight(), 6, buffer)) + "\t----\t" + csString(_gcvt(FloorArray[i]->Altitude, 6, buffer))));
+		Report(csString(_itoa(i, intbuffer, 10)) + "(" + FloorArray[i]->ID + ")\t----\t" + csString(_gcvt(FloorArray[i]->FullHeight(), 6, buffer)) + "\t----\t" + csString(_gcvt(FloorArray[i]->Altitude, 6, buffer)));
 }
