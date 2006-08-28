@@ -32,7 +32,13 @@ class Shaft
 {
 public:
 
-	Shaft();
+	int ShaftType; //type of shaft; 1=elevator shaft, 2=pipe/utility shaft
+	csVector2 location1; //location vertex 1; is x1 and z1
+	csVector2 location2; //location vertex 2; is x2 and z2
+	int startfloor; //starting floor
+	int endfloor; //ending floor
+
+	Shaft(int type, double x1, double x2, double z1, double z2, int _startfloor, int _endfloor);
 	~Shaft();
 	void OpenShaftDoors(int floor);
 };

@@ -32,13 +32,26 @@
 extern SBS *sbs; //external pointer to the SBS engine
 extern Camera *c; //external pointer to the camera
 
-Shaft::Shaft()
+Shaft::Shaft(int type, double x1, double x2, double z1, double z2, int _startfloor, int _endfloor)
 {
+	//constructor
+	//creates a shaft in the location specified by x1, x2, z1, and z2
+	//and that spans the floor range specified by startfloor and endfloor
+	//types are currently:
+	//1 = elevator shaft
+	//2 = pipe/utility shaft
+
+	ShaftType = type;
+	startfloor = _startfloor;
+	endfloor = _endfloor;
+	location1 = csVector2(x1, z1);
+	location2 = csVector2(x2, z2);
 
 }
 
 Shaft::~Shaft()
 {
+	//destructor
 
 }
 
