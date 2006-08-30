@@ -170,6 +170,9 @@ AS_IF([test $cs_cv_wxwidgets = yes],
 	[$cs_cv_wxwidgets_lflags],
 	[$cs_cv_wxwidgets_libs])],
     [cs_cv_wxwidgets_ok=no])
+
+AS_IF([test $cs_cv_wxwidgets_ok = yes],
+	[CS_EMIT_BUILD_RESULT([cs_cv_wxwidgets_ok], [WX])])
 ])
 
 #----------------------------------------------------------------------------
