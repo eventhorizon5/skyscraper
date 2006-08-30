@@ -212,13 +212,11 @@ void DebugPanel::OnInit()
 	{
 		//set elevator range slider
 		//s_ElevNum->SetRange(1, sbs->Elevators);
-		s_ElevNum->SetRange(sbs->Elevators);
-		s_ElevNum->SetThumbPosition(0);
+		s_ElevNum->SetScrollbar(0, 1, sbs->Elevators, 1);
 
 		//set floor range slider
 		//s_ElevFloor->SetRange(-sbs->Basements, sbs->TotalFloors);
-		s_ElevFloor->SetRange(sbs->TotalFloors);
-		s_ElevFloor->SetThumbPosition(0);
+		s_ElevFloor->SetScrollbar(0, 1, sbs->TotalFloors, 1);
 	}
 	else
 		s_ElevNum->Enable(false);
@@ -239,19 +237,20 @@ void DebugPanel::OnInit()
 
 void Timer::Notify()
 {
-	p->t_camerap->SetLabel(wxT(wxString(_gcvt(c->GetPosition().x, 6, buffer)) + ", " + wxString(_gcvt(c->GetPosition().y, 6, buffer)) + ", " + wxString(_gcvt(c->GetPosition().z, 6, buffer))));
-	p->t_camerafloor->SetLabel(wxString(_itoa(c->CurrentFloor, intbuffer, 10)));
+	//this line doesn't work on unicode WX build
+	//p->t_camerap->SetLabel(wxT(wxString(_gcvt(c->GetPosition().x, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(c->GetPosition().y, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(c->GetPosition().z, 6, buffer), wxConvUTF8)));
+	p->t_camerafloor->SetLabel(wxString(_itoa(c->CurrentFloor, intbuffer, 10), wxConvUTF8));
 	
 	if (sbs->Elevators > 0)
 	{
-		p->t_elevnumber->SetLabel(wxString(_itoa(sbs->ElevatorNumber, intbuffer, 10)));
-		p->t_elevfloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GetElevatorFloor(), intbuffer, 10)));
-		p->t_gotofloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GotoFloor, intbuffer, 10)));
-		p->t_disttodest->SetLabel(wxString(_gcvt(sbs->ElevatorArray[sbs->ElevatorNumber]->DistanceToTravel, 6, buffer)));
-		p->t_rate->SetLabel(wxString(_gcvt(sbs->ElevatorArray[sbs->ElevatorNumber]->ElevatorRate, 6, buffer)));
+		p->t_elevnumber->SetLabel(wxString(_itoa(sbs->ElevatorNumber, intbuffer, 10), wxConvUTF8));
+		p->t_elevfloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GetElevatorFloor(), intbuffer, 10), wxConvUTF8));
+		p->t_gotofloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GotoFloor, intbuffer, 10), wxConvUTF8));
+		p->t_disttodest->SetLabel(wxString(_gcvt(sbs->ElevatorArray[sbs->ElevatorNumber]->DistanceToTravel, 6, buffer), wxConvUTF8));
+		p->t_rate->SetLabel(wxString(_gcvt(sbs->ElevatorArray[sbs->ElevatorNumber]->ElevatorRate, 6, buffer), wxConvUTF8));
 
-		p->t_number->SetLabel(wxT("Number " + wxString(_itoa(p->s_ElevNum->GetThumbPosition() + 1, intbuffer, 10))));
-		p->t_floor->SetLabel(wxT("Floor " + wxString(_itoa(p->s_ElevFloor->GetThumbPosition(), intbuffer, 10))));
+		p->t_number->SetLabel(wxT("Number " + wxString(_itoa(p->s_ElevNum->GetThumbPosition() + 1, intbuffer, 10), wxConvUTF8)));
+		p->t_floor->SetLabel(wxT("Floor " + wxString(_itoa(p->s_ElevFloor->GetThumbPosition(), intbuffer, 10), wxConvUTF8)));
 	}
 
 	if (mc)
