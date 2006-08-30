@@ -92,6 +92,14 @@ if $(CEL.DESIRED) = yes
     [ ConcatDirs "$(hash)(CEL)" libs ] ;
 }
 
+MsvcGenConfig WX.AVAILABLE : yes ;
+MsvcGenConfig WX.CFLAGS : "/D \"wxUSE_GUI=1\" /D \"WXUSINGDLL=1\"" ;
+MsvcGenConfig WX.LFLAGS ;
+MsvcGenConfig WX.LIBS : "wxbase26.lib wxmsw26_core.lib" ;
+MsvcGenConfig WX.CFLAGS.DEBUG : "/D \"wxUSE_GUI=1\" /D \"WXDEBUG=1\" /D \"WXUSINGDLL=1\"" ;
+MsvcGenConfig WX.LFLAGS.DEBUG ;
+MsvcGenConfig WX.LIBS.DEBUG : "wxbase26d.lib wxmsw26d_core.lib" ;
+
 # Set project-specific compiler and linker options for msvcgen.
 #MsvcDefine MY_DEFINE : "my value" ;
 #MsvcDefine MY_RELEASE_DEFINE : "my release value" : release ;
