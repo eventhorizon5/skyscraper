@@ -35,7 +35,7 @@
 
 class MeshControl: public wxFrame
 {
-	friend Timer;
+	friend class Timer;
 	public:
 
 		MeshControl(wxWindow* parent,wxWindowID id = -1);

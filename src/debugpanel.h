@@ -49,7 +49,7 @@ private:
 
 class DebugPanel: public wxDialog
 {
-	friend Timer;
+	friend class Timer;
 	public:
 
 		DebugPanel(wxWindow* parent,wxWindowID id = -1);
