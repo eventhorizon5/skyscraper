@@ -116,6 +116,63 @@ AS_IF([test $with_cs != no],
 ])], [crystalspace])])
 
 #----------------------------------------------------------------------------
+# Check for wxWidgets
+#----------------------------------------------------------------------------
+AC_ARG_WITH([wx], [AC_HELP_STRING([--without-wx],
+  [do not look for an installed wxWidgets; this option is useful only
+  if you need to perform routine maintenance tasks, such as generating
+  project files or converting documentation, without having wxWidgets 
+  installed])])
+AS_IF([test -z "$with_wx"], [with_wx=yes])
+
+AS_IF([test $with_wx != no],
+[
+AM_OPTIONS_WXCONFIG
+reqwx=2.6.3
+AM_PATH_WXCONFIG($reqwx, wxWin=1)
+if test "$wxWin" != 1; then
+	AC_MSG_ERROR([
+			wxWidgets must be installed on your system.
+
+	 		Please check that wx-config is in path, the directory
+			where wxWidgets libraries are installed (returned by
+			'wx-config --libs' or 'wx-config --static --libs' command)
+			is in LD_LIBRARY_PATH or equivalent variable and
+			wxWidgets version is $reqwx or above.
+			])
+else
+CS_CHECK_TOOLS([WXCONFIG], [wx-config])
+    AS_IF([test -n "$WXCONFIG"],
+        [cs_cv_wxwidgets=yes
+	cs_cv_wxwidgets_cflags=CS_RUN_PATH_NORMALIZE([$WXCONFIG --cxxflags])
+	cs_cv_wxwidgets_lflags=CS_RUN_PATH_NORMALIZE([$WXCONFIG --ldflags])
+	cs_cv_wxwidgets_libs=CS_RUN_PATH_NORMALIZE([$WXCONFIG --libs])
+	cs_cv_wxwidgets_gllibs=CS_RUN_PATH_NORMALIZE([$WXCONFIG --gl-libs])],
+	[cs_cv_wxwidgets=no])
+fi
+
+AS_IF([test $cs_cv_wxwidgets = yes],
+    [CS_CHECK_BUILD([if wxWidgets SDK is usable], [cs_cv_wxwidgets_ok],
+    	[AC_LANG_PROGRAM(
+	    [[#include "wx/wxprec.h"
+    	    #ifdef __BORLANDC__
+    	    #pragma hdrstop
+   	    #endif
+    	    #ifndef WX_PRECOMP
+    	    #include "wx/wx.h"
+   	    #endif
+   	    ]],
+  	    [[wxWindow* p = 0; int w,h; p->GetClientSize(&w,&h);]])],
+  	[CS_CREATE_TUPLE([],[],[]) \
+	CS_CREATE_TUPLE([-I/usr/local/include],[],[]) \
+	CS_CREATE_TUPLE([-I/usr/include],[],[])], [C++], [], [], [],
+	[$cs_cv_wxwidgets_cflags],
+	[$cs_cv_wxwidgets_lflags],
+	[$cs_cv_wxwidgets_libs])],
+    [cs_cv_wxwidgets_ok=no])
+])
+
+#----------------------------------------------------------------------------
 # Check for Crystal Entity Layer (CEL)
 #----------------------------------------------------------------------------
 m4_define([cel_desired], [no])
