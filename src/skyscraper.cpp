@@ -36,10 +36,14 @@ IMPLEMENT_APP(Skyscraper)
 
 SBS *Simcore;
 
+#ifdef CS_PLATFORM_WIN32
+
 int main (int argc, char* argv[])
 {
 	return WinMain (GetModuleHandle (0), 0, GetCommandLineA (), SW_SHOWNORMAL);
 }
+
+#endif
 
 bool Skyscraper::OnInit(void)
 {
