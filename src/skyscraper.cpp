@@ -52,7 +52,15 @@ bool Skyscraper::OnInit(void)
 	//Create new simulator object
 	Simcore = new SBS();
 	
+	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+	char** csargv;
+	csargv = (char**)cs_malloc(sizeof(char*) * argc);
+	for (int i = 0; i < argc; i++)
+		csargv[i] = strdup(wxString(argv[i]).mb_str().data());
+	if (!Simcore->Initialize(argc, csargv, "Skyscraper 1.1 Alpha"))
+	#else
 	if (!Simcore->Initialize(argc, argv, "Skyscraper 1.1 Alpha"))
+	#endif
 	{
 		Simcore->ReportError("Error initializing system!");
 		Cleanup();
