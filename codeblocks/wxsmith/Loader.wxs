@@ -2,5 +2,16 @@
     <object class="wxDialog" name="Loader">
         <title>Building Loader</title>
         <style>wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX|wxNO_3D</style>
+        <object class="wxGenericDirCtrl" name="ID_SELECTOR" variable="Selector" member="yes">
+            <defaultfolder></defaultfolder>
+            <filter></filter>
+            <pos>16,17</pos>
+            <size>196,167</size>
+        </object>
+        <object class="wxButton" name="ID_bOK" variable="bOK" member="yes">
+            <label>OK</label>
+            <handler entry="EVT_BUTTON" function="On_bOK_Click" />
+            <pos>71,199</pos>
+        </object>
     </object>
 </resource>
