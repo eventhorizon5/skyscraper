@@ -102,6 +102,7 @@ SBS::SBS()
 SBS::~SBS()
 {
 	//engine destructor
+/*
 	int i;
 	delete c;
 	c = 0;
@@ -115,7 +116,7 @@ SBS::~SBS()
 
 	FloorArray.DeleteAll();
 	ElevatorArray.DeleteAll();
-	sbs = 0;
+
 
 	//delete objects
 	if (Buildings)
@@ -129,6 +130,8 @@ SBS::~SBS()
 
 	if (ColumnFrame)
 		delete ColumnFrame;
+*/
+
 }
 
 void SBS::Start()
@@ -151,7 +154,7 @@ void SBS::Start()
 	UserVariable.SetSize(256);
 
 	//load building data file
-	BuildingFile.Insert(0, "/root/");
+	BuildingFile.Insert(0, "/root/buildings/");
 	LoadBuilding(BuildingFile.GetData());
 	//if (LoadBuilding(BuildingFile.GetData()) != 0)
 
@@ -252,6 +255,9 @@ void SBS::GetInput()
 	double speed = (elapsed_time / 1000.0) * (0.06 * 20);
 
 	//if (kbd->GetKeyState('a'))
+	
+	if (kbd->GetKeyState (CSKEY_ESC))
+		if (equeue) equeue->GetEventOutlet()->Broadcast (csevQuit(object_reg));
 
 	if (kbd->GetKeyState (CSKEY_CTRL))
 		speed *= 4;
