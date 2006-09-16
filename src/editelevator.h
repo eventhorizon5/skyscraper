@@ -26,11 +26,11 @@
 #define EDITELEVATOR_H
 
 //(*Headers(editelevator)
-#include <wx/frame.h>
+#include <wx/dialog.h>
 #include <wx/intl.h>
 //*)
 
-class editelevator: public wxFrame
+class editelevator: public wxDialog
 {
 	public:
 

@@ -24,7 +24,7 @@
 
 #include "cameracontrol.h"
 
-BEGIN_EVENT_TABLE(CameraControl,wxFrame)
+BEGIN_EVENT_TABLE(CameraControl,wxDialog)
 //(*EventTable(CameraControl)
 //*)
 END_EVENT_TABLE()

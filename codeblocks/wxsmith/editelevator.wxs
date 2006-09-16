@@ -1,6 +1,5 @@
 <resource>
-    <object class="wxFrame" name="editelevator">
+    <object class="wxDialog" name="editelevator">
         <title>Elevator Parameters</title>
-        <handler entry="EVT_INIT_DIALOG" function="OnInit" />
     </object>
 </resource>

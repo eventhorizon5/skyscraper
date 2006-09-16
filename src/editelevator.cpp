@@ -24,9 +24,8 @@
 
 #include "editelevator.h"
 
-BEGIN_EVENT_TABLE(editelevator,wxFrame)
+BEGIN_EVENT_TABLE(editelevator,wxDialog)
 //(*EventTable(editelevator)
-    EVT_INIT_DIALOG(editelevator::OnInit)
 //*)
 END_EVENT_TABLE()
 

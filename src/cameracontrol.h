@@ -26,11 +26,11 @@
 #define CAMERACONTROL_H
 
 //(*Headers(CameraControl)
-#include <wx/frame.h>
+#include <wx/dialog.h>
 #include <wx/intl.h>
 //*)
 
-class CameraControl: public wxFrame
+class CameraControl: public wxDialog
 {
 	public:
 
