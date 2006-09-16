@@ -49,6 +49,14 @@ bool Skyscraper::OnInit(void)
 {
 	srand (time (0));
 	
+	//set building file
+	wxFileDialog *Selector = new wxFileDialog(0, "Select a Building", "buildings", "", "Building files (*.bld)|*.bld", wxOPEN);
+	int result = Selector->ShowModal();
+	if (result == wxID_CANCEL)
+		return false;
+	
+	wxSleep(1);
+
 	//Create new simulator object
 	Simcore = new SBS();
 	
@@ -67,14 +75,11 @@ bool Skyscraper::OnInit(void)
 		exit(1);
 	}
 
-	//set building file
-	//Loader *loader = new Loader(NULL,-1,"");
-    //loader->Show(true);
+	Simcore->BuildingFile = Selector->GetFilename();
 
-	//Simcore->BuildingFile = "buildings/Simple2.bld";
-	//Simcore->BuildingFile = "buildings/Glass Tower.bld";
-	Simcore->BuildingFile = "buildings/Triton Center.bld";
-	//Simcore->BuildingFile = "buildings/Sears Tower.bld";
+	//delete dialog
+	delete Selector;
+	Selector = 0;
 
 	//start simulation
 	Simcore->Start();
@@ -86,15 +91,16 @@ bool Skyscraper::OnInit(void)
 	//run simulation
 	Simcore->Run();
 
+	//clean up
+	delete dpanel;
+	dpanel = 0;
+	Cleanup();
+
 	return true;
 }
 
 int Skyscraper::OnExit()
 {
-	//clean up
-	delete Simcore;
 	Simcore = 0;
-	Cleanup();
-
 	return 0;
 }
