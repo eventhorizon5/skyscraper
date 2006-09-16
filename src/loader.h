@@ -26,8 +26,11 @@
 #define LOADER_H
 
 //(*Headers(Loader)
+#include <wx/button.h>
 #include <wx/dialog.h>
+#include <wx/dirctrl.h>
 #include <wx/intl.h>
+#include <wx/settings.h>
 //*)
 
 class Loader: public wxDialog
@@ -38,19 +41,24 @@ class Loader: public wxDialog
 		virtual ~Loader();
 
 		//(*Identifiers(Loader)
-        enum Identifiers
-        {
-        };
-        //*)
+		enum Identifiers
+		{
+		    ID_SELECTOR = 0x1000,
+		    ID_bOK
+		};
+		//*)
 
 	protected:
 
 		//(*Handlers(Loader)
 		void OnInit(wxInitDialogEvent& event);
-        //*)
+		void On_bOK_Click(wxCommandEvent& event);
+		//*)
 
 		//(*Declarations(Loader)
-        //*)
+		wxGenericDirCtrl* Selector;
+		wxButton* bOK;
+		//*)
 
 	private:
 

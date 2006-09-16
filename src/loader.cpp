@@ -26,14 +26,20 @@
 
 BEGIN_EVENT_TABLE(Loader,wxDialog)
 //(*EventTable(Loader)
+EVT_BUTTON(ID_bOK,Loader::On_bOK_Click)
 //*)
 END_EVENT_TABLE()
 
 Loader::Loader(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(Loader)
-    Create(parent,id,_("Building Loader"),wxDefaultPosition,wxDefaultSize,0);
-    //*)
+	Create(parent,id,_("Building Loader"),wxDefaultPosition,wxDefaultSize,wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX|wxNO_3D,_T(""));
+	Selector = new wxGenericDirCtrl( this, ID_SELECTOR, _T(""), wxPoint(16,17),wxSize(196,167), 0, _T(""), 0, _("ID_SELECTOR"));
+	bOK = new wxButton(this,ID_bOK,_("OK"),wxPoint(71,199),wxDefaultSize,0,wxDefaultValidator,_("ID_bOK"));
+	if (false) bOK->SetDefault();
+	//*)
+	Selector->SetFilter("Building files (*.bld)|*.bld");
+	//Selector->SetDefaultPath(
 }
 
 Loader::~Loader()
@@ -42,6 +48,11 @@ Loader::~Loader()
 
 
 void Loader::OnInit(wxInitDialogEvent& event)
+{
+
+}
+
+void Loader::On_bOK_Click(wxCommandEvent& event)
 {
 
 }
