@@ -228,7 +228,7 @@ double AutoSize(double n1, double n2, bool iswidth, bool external, double offset
 
 void SBS::PrintBanner()
 {
-	csPrintf("\n Scalable Building Simulator 0.1\n");
+	csPrintf("\n Scalable Building Simulator 0.1 Alpha\n");
 	csPrintf(" Copyright (C)2004-2006 Ryan Thoryk\n");
 	csPrintf(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
 	csPrintf(" software, and you are welcome to redistribute it under certain\n");
