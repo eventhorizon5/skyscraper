@@ -808,7 +808,7 @@
 
 <EndFloor>
 
-# Roof
+# Roof with Mechanical Penthouse
 <Floor 142>
     ID = R
     Name = Rooftop Heliport
@@ -819,14 +819,35 @@
     DoorHeight = 6.24
     DoorWidth = 3
 
-    #Floor
+    #Roof Base
     AddFloor Brick, 39, 70, -39, -70, 0, 0, 0, 0, True
 
     #Antennae
     CreateWallBox2 External, Concrete, 0, -40, 4, 4, 300, 0, 0, 25
     CreateWallBox2 External, Concrete, 0, 40, 4, 4, 300, 0, 0, 25
 
-    AddAutoFloor Granite, 0, 0, 0
+    #Penthouse Floor
+    AddFloor Brick, -20, -40, 20, 40, 0, 0, 0, 0, False
+
+    #Ceiling
+    AddFloor Ceiling1, -20, -40, 20, 40, %height% - 0.05, %height% - 0.05, 0, 0, False
+
+    #Internal walls
+    AddWall Brick, 20, 40, -20, 40, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, False
+    AddWall Brick, -20, 40, -20, -40, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, False
+    AddWall Brick, -20, -40, 20, -40, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, False
+    AddWall Brick, 20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, False
+
+    #External walls
+    AddWall Brick, 20, 40, -20, 40, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall Brick, -20, 40, -20, -40, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall Brick, -20, -40, 20, -40, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    AddWall Brick, 20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
+    
+    #Penthouse roof
+    AddFloor Brick, -20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, True
+
+    #AddAutoFloor Granite, 0, 0, 0
 <EndFloor>
 
 <Elevator 1>
