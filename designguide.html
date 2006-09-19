@@ -87,11 +87,12 @@
     Example: <font size="2" face="Courier New, Courier, mono">CreateWallBox external, 
     brick, -10, 10, -10, 10, 15, 0, 0, 0</font></p>
   <p align="left">The parameters in this command are very similar to the ones 
-    in the AddWall command shown below in the Floor section, except for the destobject 
+    in the AddWall command shown below in the Floor section, except for the <em>destobject</em> 
     parameter.</p>
-  <p align="left">Destobject can be either external, landscape, buildings, or 
-    columnframe (more will come soon). The voffset parameter would then be the 
-    altitude offset in feet of the specified destination object's base.</p>
+  <p align="left"><em>Destobject</em> can be either <em>external</em>, <em>landscape</em>, 
+    <em>buildings</em>, or <em>columnframe</em> (more will come soon). The <em>voffset</em> 
+    parameter would then be the altitude offset in feet of the specified destination 
+    object's base.</p>
   <p align="left"><strong>b. CreateWallBox2</strong> - creates 4 walls (box) at 
     a specified central location<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateWallBox2 <em>destobject</em>, 
@@ -99,9 +100,9 @@
     <em>lengthz</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">CreateWallBox2 external, 
     brick, 0, 0, 10, 10, 15, 0, 0, 0</font></p>
-  <p align="left">The parameters are the same as the above command, except centerx 
-    and centerz define the center of the box, and widthx and lengthz specify the 
-    width and length off of the center.<br>
+  <p align="left">The parameters are the same as the above command, except that<em> 
+    centerx</em> and <em>centerz</em> define the center of the box, and <em>widthx</em> 
+    and <em>lengthz</em> specify the width and length off of the center.<br>
     <br>
     <strong>c. AddCustomWall</strong> - creates a custom polygon (wall, floor, 
     etc) with any number of vertex points. For example, a triangular wall has 
@@ -112,10 +113,11 @@
     revz</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddCustomWall external, 
     brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0, 0, false, false, false</font></p>
-  <p align="left">Revx, revy, and revz are either true or false, and determine 
-    if the texture mapping data should be reversed, per axis. If the texture looks 
-    strange in the simulator, mess around with the revx and revz values (revy 
-    flips the texture upside down).</p>
+  <p align="left"><em>Revx</em>, <em>revy</em>, and <em>revz</em> are either <em>true</em> 
+    or <em>false</em>, and determine if the texture mapping data should be reversed, 
+    per axis. If the texture looks strange in the simulator, mess around with 
+    the <em>revx</em> and <em>revz</em> values (<em>revy</em> flips the texture 
+    upside down).</p>
   <p align="left"><br>
     <strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
@@ -279,15 +281,15 @@
   <p align="left"><strong>2. AddFloor</strong> - adds a textured floor with the 
     specified dimensions to the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor <em>texturename</em>, 
-    <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>voffset</em>, <em>tw</em>, 
-    <em>th</em>, <em>isexternal</em></font><br>
+    <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, 
+    tw</em>, <em>th</em>, <em>isexternal</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddFloor brick, 
-    -10, -10, 10, 10, 0, 0, 0, False</font></p>
-  <p align="left"><em>Voffset</em> is the height in feet above the current floor's 
-    altitude; <em>tw</em> and <em>th</em> are to size/tile the texture (0 lets 
-    the app autosize them), and <em>isexternal</em> determines if the floor is 
-    part of the building's external framework, or is part of the current floor 
-    (is either True or False).</p>
+    -10, -10, 10, 10, 0, 0, 0, 0, False</font></p>
+  <p align="left"><em>Voffset1</em> and <em>voffset2</em> are the height in feet 
+    above the current floor's altitude; <em>tw</em> and <em>th</em> are to size/tile 
+    the texture (0 lets the app autosize them), and <em>isexternal</em> determines 
+    if the floor is part of the building's external framework, or is part of the 
+    current floor (is either True or False).</p>
   <p align="left"><strong>3. AddWall</strong> - adds a textured wall with the 
     specified dimensions to the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddWall <em>texturename</em>, 
@@ -303,19 +305,20 @@
     <em>Tw</em> and <em>th</em> are the texture sizing/tiling multipliers, and 
     <em>isexternal</em> determines if the wall is part of the building's external 
     framework (true) or if it's part of the current floor (false).</p>
-  <p align="left">Revx, revy, and revz are either true or false, and determine 
-    if the texture mapping data should be reversed, per axis. If the texture looks 
-    strange in the simulator, mess around with the revx and revz values (revy 
-    flips the texture upside down).</p>
+  <p align="left"><em>Revx</em>, <em>revy</em>, and <em>revz</em> are either <em>true</em> 
+    or <em>false</em>, and determine if the texture mapping data should be reversed, 
+    per axis. If the texture looks strange in the simulator, mess around with 
+    the <em>revx</em> and <em>revz</em> values (<em>revy</em> flips the texture 
+    upside down).</p>
   <p align="left"><strong>4. AddInterfloorFloor</strong> - adds a textured floor 
     above the ceiling of the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddInterfloorFloor 
     <em>texturename</em>, <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, 
-    <em>voffset</em>, <em>tw</em>, <em>th</em></font><br>
+    <em>voffset1</em>, <em>voffset2, tw</em>, <em>th</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddInterfloorFloor 
     brick, -10, -10, 10, 10, 0, 0, 0</font></p>
   <p align="left">The parameters are the same as the AddFloor command, except 
-    the <em>voffset</em> value is the height offset in feet above the current 
+    the <em>voffset</em> values are the height offset in feet above the current 
     floor's ceiling.</p>
   <p align="left"><strong>5. AddInterfloorWall</strong> - adds a textured wall 
     above the ceiling of the current floor/level<br>
@@ -335,26 +338,28 @@
     wall<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddTriangleWall <em>texturename</em>, 
     <em>x1</em>, <em>y1</em>, <em>z1</em>, <em>x2</em>, <em>y2</em>, <em>z2</em>, 
-    <em>x3</em>, <em>y3</em>, <em>z3</em>, <em>tw</em>, <em>th</em></font><br>
+    <em>x3</em>, <em>y3</em>, <em>z3</em>, <em>tw</em>, <em>th</em></font><font size="2" face="Courier New, Courier, mono"><em>, 
+    revx, revy, revz</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddTrianglewall 
-    brick, 0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0</font></p>
+    brick, 0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, false, false, false</font></p>
   <p align="left"><strong>2. AddWall</strong> - adds a textured wall<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddWall <em>texturename</em>, 
     <em>x1</em>, <em>z1</em>, <em>x2</em>, z2, <em>height1</em>, <em>height2</em>, 
-    <em>altitude1</em>, <em>altitude2</em>, <em>tw</em>, <em>th</em></font>, <font size="2" face="Courier New, Courier, mono">revx, 
-    revy, revz</font><br>
+    <em>altitude1</em>, <em>altitude2</em>, <em>tw</em>, <em>th</em></font>, <font size="2" face="Courier New, Courier, mono"><em>revx, 
+    revy, revz</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddWall brick, -10, 
-    -10, 10, 10, 15, 15, Floor(2).Altitude, Floor(2).Altitude, 0, 0</font></p>
+    -10, 10, 10, 15, 15, Floor(2).Altitude, Floor(2).Altitude, 0, 0, false, false, 
+    false </font></p>
   <p align="left">The command's parameters are the same as the Floor section's 
     AddWall command, except for the altitudes. Since there is no floor to reference, 
     the actual altitude of the wall in feet must be specified.</p>
   <p align="left"><strong>3. AddFloor</strong> - adds a textured floor<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor <em>texturename</em>, 
-    <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>altitude</em>, <em>tw</em>, 
-    <em>th</em></font></p>
+    <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>altitude1</em>, <em>altitude2</em>, 
+    <em>tw</em>, <em>th</em></font></p>
   <p align="left">The command's parameters are the same as the Floor section's 
-    AddFloor command, except the <em>altitude</em> parameter. Since there is no 
-    floor to reference, the actual altitude of the wall in feet must be specified.</p>
+    AddFloor command, except the <em>altitude</em> parameters. Since there is 
+    no floor to reference, the actual altitude of the wall in feet must be specified.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">7. The <em>Elevator</em> Section</font></strong></p>
   <p align="left">The <em>Elevator</em> section allows you to create elevators 
@@ -376,29 +381,54 @@
   <p align="left">Parameters (the values of most of these are still being figured 
     out as to what they exactly correspond to in real-world terms):</p>
   <p align="left"><strong>1. Speed</strong> - maximum speed of the elevator<br>
-    Example: <font size="2" face="Courier New, Courier, mono">Speed = 1</font></p>
+    Example: <font size="2" face="Courier New, Courier, mono">Speed = 0.7</font></p>
   <p align="left"><strong>2. Acceleration</strong> - acceleration speed of the 
     elevator<br>
-    Example: <font size="2" face="Courier New, Courier, mono">Acceleration = 0.003</font></p>
+    Example: <font size="2" face="Courier New, Courier, mono">Acceleration = 0.004</font></p>
   <p align="left"><strong>3. Deceleration</strong> - deceleration speed of the 
     elevator<br>
-    Example: <font size="2" face="Courier New, Courier, mono">Deceleration = 0.4</font></p>
+    Example: <font size="2" face="Courier New, Courier, mono">Deceleration = 0.002</font></p>
   <p align="left"><strong>4. OpenSpeed</strong> - open/close speed of the elevator 
     doors<br>
-    Example: <font size="2" face="Courier New, Courier, mono">OpenSpeed = 1.5</font></p>
+    Example: <font size="2" face="Courier New, Courier, mono">OpenSpeed = 0.2</font></p>
   <p align="left"><br>
     <strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
     the specified location<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateElevator <em>x</em>, 
-    <em>y</em>, <em>floor</em>, <em>direction<br>
+    <em>y</em>, <em>floor</em><em><br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
-    </em>CreateElevator 0, 10, 0, 0</font></p>
+    </em>CreateElevator 0, 10, 0</font></p>
   <p align="left"><em>X</em> and <em>Y</em> are the coordinates to place the center 
-    of the elevator at. <em>Floor</em> is the floor to place the elevator on, 
-    and <em>Direction</em> is the direction that the elevator faces (currently 
-    there are only 2: 0 is the doors on the left side, and 1 is the doors on the 
-    right side)</p>
+    of the elevator at, and <em>Floor</em> is the floor to place the elevator 
+    on.</p>
+  <p align="left"><strong>2. AddFloor</strong> - adds a textured floor with the 
+    specified dimensions for the elevator<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor <em>texturename</em>, 
+    <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, 
+    tw</em>, <em>th</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddFloor Wood2, -3.5, -3, 
+    3.5, 3, 0, 0, 0, 0</font></p>
+  <p align="left"><strong>3. AddWall</strong> - adds a textured wall for the elevator<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddWall <em>texturename</em>, 
+    <em>x1</em>, <em>z1</em>, <em>x2</em>, z2, <em>height1</em>, <em>height2</em>, 
+    <em>voffset1</em>, <em>voffset2, </em></font><font size="2" face="Courier New, Courier, mono"><em>tw</em>, 
+    <em>th</em>, <em>revx, revy, revz</em></font><em><font size="2" face="Courier New, Courier, mono">, 
+    DrawBothSides</font></em><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddWall Wood1, -3.5, 3, 3.5, 
+    3, 8, 8, 0, 0, 2, 2, false, false, false, true</font></p>
+  <p align="left">The elevator's AddWall command is similar to the other AddWall 
+    commands, with the <em>DrawBothSides</em> parameter specifying if both sides 
+    of the wall (front and back) should be created.</p>
+  <p align="left"><strong>4. AddDoors</strong> - creates elevator doors<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddDoors <em>texturename</em>, 
+    <em>CenterX, CenterZ, width, height, direction, tw, th</em></font> </p>
+  <p align="left">The AddDoors command creates working elevator doors at the central 
+    location specified by <em>CenterX</em> and <em>CenterZ</em>, with <em>width</em> 
+    and <em>height</em> specifiying the width and height of each door, and <em>Direction</em> 
+    specifying the direction that the doors face (currently there are only 2: 
+    <em>false</em> if the doors are on the left or right sides, and <em>true</em> 
+    if the doors are on the front or back sides)</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 
