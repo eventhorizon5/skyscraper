@@ -185,7 +185,7 @@
 <EndFloor>
 
 #zone 1 skeleton
-<Floors 2 to 38>
+<Floors 2 to 37>
     Height = 10
     InterfloorHeight = 2.24
     DoorHeight = 6.24
@@ -226,7 +226,7 @@
 <EndFloors>
 
 # rooms
-<Floors 6 to 38>
+<Floors 6 to 37>
     ID = %floor%
     Name = Offices
     Type = Office
@@ -239,7 +239,7 @@
 <EndFloors>
 
 #zone 1 mechanical
-<Floor 39>
+<Floors 38 to 39>
     ID = %floor%
     Name = Mechanical
     Type = Service
@@ -255,12 +255,6 @@
 
     #Ceiling
     AddFloor Brick, -75, 70, 75, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
-
-    #External vents
-    AddWall VentsExt, -75, -70, 75, -70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, 75, -70, 75, 70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, 75, 70, -75, 70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
-    AddWall VentsExt, -75, 70, -75, -70, %fullheight%, %fullheight%, 0, 0, 0.5, 0, False, False, False, True
 
     #Internal vents
     AddWall VentsInt, -75, -70, 75, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False, False, False, False
@@ -279,6 +273,14 @@
     AddInterfloorWall Brick, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall Brick, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall Brick, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+<EndFloors>
+
+#external vents
+<Floor 38>
+    AddWall VentsExt, -75, -70, 75, -70, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, 75, -70, 75, 70, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, 75, 70, -75, 70, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
+    AddWall VentsExt, -75, 70, -75, -70, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, False, False, False, True
 <EndFloor>
 
 #zone 1 setbacks
