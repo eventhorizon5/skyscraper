@@ -818,7 +818,7 @@
     DoorWidth = 3
 
     #Floor
-    AddFloor Ceiling1, 39, 70, -39, -70, 0, 0, 0, 0, True
+    AddFloor Brick, 39, 70, -39, -70, 0, 0, 0, 0, True
 
     #Antennae
     CreateWallBox2 External, Concrete, 0, -40, 4, 4, 300, 0, 0, 25
