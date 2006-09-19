@@ -216,7 +216,7 @@ void DebugPanel::OnInit()
 
 		//set floor range slider
 		//s_ElevFloor->SetRange(-sbs->Basements, sbs->TotalFloors);
-		s_ElevFloor->SetScrollbar(0, 1, sbs->TotalFloors, 1);
+		s_ElevFloor->SetScrollbar(0, 1, sbs->TotalFloors + 1, 1);
 	}
 	else
 		s_ElevNum->Enable(false);
