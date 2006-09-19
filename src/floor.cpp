@@ -78,11 +78,7 @@ Floor::~Floor()
 {
 	//Destructor
 
-	if (Level)
-		delete Level;
-
-	if (Interfloor)
-		delete Interfloor;
+	FloorList.DeleteAll();
 }
 
 void Floor::SetCameraFloor()

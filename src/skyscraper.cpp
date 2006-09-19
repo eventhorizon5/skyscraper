@@ -94,6 +94,8 @@ bool Skyscraper::OnInit(void)
 	//clean up
 	delete dpanel;
 	dpanel = 0;
+	delete Simcore;
+	Simcore = 0;
 	Cleanup();
 
 	return true;
@@ -101,6 +103,5 @@ bool Skyscraper::OnInit(void)
 
 int Skyscraper::OnExit()
 {
-	Simcore = 0;
 	return 0;
 }

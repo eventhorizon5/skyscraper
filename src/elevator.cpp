@@ -125,20 +125,8 @@ Elevator::Elevator(int number)
 Elevator::~Elevator()
 {
 	//Destructor
-	if (Plaque)
-		delete Plaque;
-
-	if (ElevatorDoorR)
-		delete ElevatorDoorR;
-
-	if (ElevatorDoorL)
-		delete ElevatorDoorL;
-
-	if (FloorIndicator)
-		delete FloorIndicator;
-
-	if (ElevatorMesh)
-		delete ElevatorMesh;
+	UpQueue.DeleteAll();
+	DownQueue.DeleteAll();
 }
 
 void Elevator::CreateElevator(double x, double z, int floor)

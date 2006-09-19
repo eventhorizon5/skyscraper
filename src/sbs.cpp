@@ -102,36 +102,26 @@ SBS::SBS()
 SBS::~SBS()
 {
 	//engine destructor
-/*
-	int i;
+
 	delete c;
 	c = 0;
+	sbs = 0;
 	UserVariable.DeleteAll();
 
-	for (i = -Basements; i <= TotalFloors; i++)
-		delete &FloorArray[i];
+	for (int i = -Basements; i <= TotalFloors; i++)
+	{
+		delete FloorArray[i];
+		FloorArray[i] = 0;
+	}
 
-	for (i = 1; i <= Elevators; i++)
-		delete &ElevatorArray[i];
+	for (int i = 1; i <= Elevators; i++)
+	{
+		delete ElevatorArray[i];
+		ElevatorArray[i] = 0;
+	}
 
 	FloorArray.DeleteAll();
 	ElevatorArray.DeleteAll();
-
-
-	//delete objects
-	if (Buildings)
-		delete Buildings;
-
-	if (External)
-		delete External;
-
-	if (Landscape)
-		delete Landscape;
-
-	if (ColumnFrame)
-		delete ColumnFrame;
-*/
-
 }
 
 void SBS::Start()

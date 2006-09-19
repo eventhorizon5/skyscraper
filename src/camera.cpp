@@ -52,8 +52,6 @@ Camera::Camera()
 Camera::~Camera()
 {
 	//Destructor
-	delete MainCamera;
-	MainCamera = 0;
 }
 
 void Camera::SetPosition(csVector3 vector)

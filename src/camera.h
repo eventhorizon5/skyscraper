@@ -59,7 +59,7 @@ public:
 	void SetToStartRotation();
 
 private:
-	iCamera* MainCamera; //main first-person view camera
+	csRef<iCamera> MainCamera; //main first-person view camera
 	csVector3 StartDirection; //direction camera faces on start
 	csVector3 StartRotation; //camera's startup rotation
 
