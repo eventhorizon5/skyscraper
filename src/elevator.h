@@ -129,6 +129,7 @@ private:
 	bool ElevWait;
 	double FPSModifierStatic;
 	bool EmergencyStop;
+	csRefArray<iMeshWrapper> ShaftDoorArray; //shaft door array
 
 	//functions
 	void MoveElevatorToFloor();

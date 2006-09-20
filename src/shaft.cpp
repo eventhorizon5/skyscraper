@@ -32,18 +32,18 @@
 extern SBS *sbs; //external pointer to the SBS engine
 extern Camera *c; //external pointer to the camera
 
-Shaft::Shaft(int type, double x1, double x2, double z1, double z2, int _startfloor, int _endfloor)
+Shaft::Shaft(int type, double x1, double x2, double z1, double z2, double startalt, double endalt)
 {
 	//constructor
 	//creates a shaft in the location specified by x1, x2, z1, and z2
-	//and that spans the floor range specified by startfloor and endfloor
+	//and that spans the altitude range specified by startalt and endalt
 	//types are currently:
 	//1 = elevator shaft
 	//2 = pipe/utility shaft
 
 	ShaftType = type;
-	startfloor = _startfloor;
-	endfloor = _endfloor;
+	startaltitude = startalt;
+	endaltitude = endalt;
 	location1 = csVector2(x1, z1);
 	location2 = csVector2(x2, z2);
 
@@ -55,12 +55,12 @@ Shaft::~Shaft()
 
 }
 
-void Shaft::OpenShaftDoors(int floor)
+int Shaft::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
 {
-	//Simulates manually opening shaft doors
-	//Slowly opens the shaft's elevator doors no matter where elevator is.
-	//Cannot be used with OpenDoorsEmergency.
-	//This is if the elevator is not lined up with the shaft doors,
-	//and the user needs to open the shaft doors, usually while on top of elevator.
+	return sbs->AddWallMain(Shaft_state, texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, height1, height2, altitude1, altitude2, tw, th, revX, revY, revZ, DrawBothSides);
+}
 
+int Shaft::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th)
+{
+   	return sbs->AddFloorMain(Shaft_state, texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, altitude1, altitude2, tw, th);
 }

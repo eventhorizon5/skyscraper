@@ -35,12 +35,19 @@ public:
 	int ShaftType; //type of shaft; 1=elevator shaft, 2=pipe/utility shaft
 	csVector2 location1; //location vertex 1; is x1 and z1
 	csVector2 location2; //location vertex 2; is x2 and z2
-	int startfloor; //starting floor
-	int endfloor; //ending floor
+	double startaltitude; //starting altitude
+	double endaltitude; //ending altitude
 
-	Shaft(int type, double x1, double x2, double z1, double z2, int _startfloor, int _endfloor);
+	Shaft(int type, double x1, double x2, double z1, double z2, double startalt, double endalt);
 	~Shaft();
-	void OpenShaftDoors(int floor);
+	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides);
+	int AddFloor(const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th);
+
+private:
+	csRef<iMeshWrapper> ShaftMesh; //shaft mesh object
+	csRef<iMeshObject> Shaft_object;
+	csRef<iMeshObjectFactory> Shaft_factory;
+	csRef<iThingFactoryState> Shaft_state;
 };
 
 #endif

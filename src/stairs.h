@@ -32,8 +32,11 @@ class Stairs
 {
 public:
 
-	Stairs();
+	Stairs(int type, double CenterX, double CenterZ, double width, double length, double risersize, double treadsize);
 	~Stairs();
+
+private:
+	csRefArray<iMeshWrapper> StairDoorArray; //stair door array
 };
 
 #endif

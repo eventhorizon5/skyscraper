@@ -238,7 +238,11 @@ void Elevator::OpenHatch()
 
 void Elevator::OpenShaftDoors(int floor)
 {
-	//passes open shaft door request to elevator's assigned shaft class object
+	//Simulates manually opening shaft doors
+	//Slowly opens the shaft's elevator doors no matter where elevator is.
+	//Cannot be used with OpenDoorsEmergency.
+	//This is if the elevator is not lined up with the shaft doors,
+	//and the user needs to open the shaft doors, usually while on top of elevator.
 
 }
 
