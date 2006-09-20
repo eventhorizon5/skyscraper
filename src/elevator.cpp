@@ -74,7 +74,7 @@ Elevator::Elevator(int number)
 	buffer = Number;
 	buffer.Insert(0, "Elevator ");
 	buffer.Trim();
-	ElevatorMesh = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
+	ElevatorMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	Elevator_object = ElevatorMesh->GetMeshObject ();
 	Elevator_factory = Elevator_object->GetFactory();
 	Elevator_state = scfQueryInterface<iThingFactoryState> (Elevator_factory);
@@ -84,7 +84,7 @@ Elevator::Elevator(int number)
 	buffer = Number;
 	buffer.Insert(0, "FloorIndicator ");
 	buffer.Trim();
-	FloorIndicator = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
+	FloorIndicator = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	FloorIndicator_object = FloorIndicator->GetMeshObject ();
 	FloorIndicator_factory = FloorIndicator_object->GetFactory();
 	FloorIndicator_state = scfQueryInterface<iThingFactoryState> (FloorIndicator_factory);
@@ -94,7 +94,7 @@ Elevator::Elevator(int number)
 	buffer = Number;
 	buffer.Insert(0, "ElevatorDoorL ");
 	buffer.Trim();
-	ElevatorDoorL = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
+	ElevatorDoorL = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	ElevatorDoorL_object = ElevatorDoorL->GetMeshObject ();
 	ElevatorDoorL_factory = ElevatorDoorL_object->GetFactory();
 	ElevatorDoorL_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorL_factory);
@@ -104,7 +104,7 @@ Elevator::Elevator(int number)
 	buffer = Number;
 	buffer.Insert(0, "ElevatorDoorR ");
 	buffer.Trim();
-	ElevatorDoorR = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
+	ElevatorDoorR = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	ElevatorDoorR_object = ElevatorDoorR->GetMeshObject ();
 	ElevatorDoorR_factory = ElevatorDoorR_object->GetFactory();
 	ElevatorDoorR_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorR_factory);
@@ -114,7 +114,7 @@ Elevator::Elevator(int number)
 	buffer = Number;
 	buffer.Insert(0, "Plaque ");
 	buffer.Trim();
-	Plaque = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
+	Plaque = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	Plaque_object = Plaque->GetMeshObject ();
 	Plaque_factory = Plaque_object->GetFactory();
 	Plaque_state = scfQueryInterface<iThingFactoryState> (Plaque_factory);

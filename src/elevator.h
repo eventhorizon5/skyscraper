@@ -46,7 +46,7 @@ public:
 	double Deceleration; //deceleration value; may be removed
 	double OpenSpeed; //elevator opening/closing speed
 	int OriginFloor; //elevator starting floor
-	csVector3 Origin; //3D elevator origin
+	csVector3 Origin; //3D elevator origin vector
 	csString BaseName; //indicator texture base name
 	bool DoorDirection; //if direction is false, doors are on the left/right side
 	double DoorSpeed; //max door speed
@@ -57,6 +57,7 @@ public:
 	double ElevatorRate;
 	double DoorWidth; //elevator door width
 	csVector3 DoorOrigin; //elevator door origin
+	csArray<int> ServicedFloors; //list of floors this elevator services
 
 	//functions
 	Elevator(int number);
@@ -130,6 +131,7 @@ private:
 	double FPSModifierStatic;
 	bool EmergencyStop;
 	csRefArray<iMeshWrapper> ShaftDoorArray; //shaft door array
+	csRefArray<iThingFactoryState> ShaftDoorArray_state; //shaft door array state
 
 	//functions
 	void MoveElevatorToFloor();

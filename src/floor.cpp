@@ -43,7 +43,7 @@ Floor::Floor(int number)
 	buffer = Number;
 	buffer.Insert(0, "Level ");
 	buffer.Trim();
-	Level = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
+	Level = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	Level_object = Level->GetMeshObject ();
 	Level_factory = Level_object->GetFactory();
 	Level_state = scfQueryInterface<iThingFactoryState> (Level_factory);
@@ -53,7 +53,7 @@ Floor::Floor(int number)
 	buffer = Number;
 	buffer.Insert(0, "Interfloor ");
 	buffer.Trim();
-	Interfloor = (sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
+	Interfloor = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	Interfloor_object = Level->GetMeshObject ();
 	Interfloor_factory = Level_object->GetFactory();
 	Interfloor_state = scfQueryInterface<iThingFactoryState> (Level_factory);

@@ -32,21 +32,35 @@
 extern SBS *sbs; //external pointer to the SBS engine
 extern Camera *c; //external pointer to the camera
 
-Shaft::Shaft(int type, double x1, double x2, double z1, double z2, double startalt, double endalt)
+Shaft::Shaft(int type, double x1, double x2, double z1, double z2, int _startfloor, int _endfloor, bool cutfloor)
 {
 	//constructor
 	//creates a shaft in the location specified by x1, x2, z1, and z2
 	//and that spans the altitude range specified by startalt and endalt
 	//types are currently:
-	//1 = elevator shaft
-	//2 = pipe/utility shaft
+	//1 = pipe/utility shaft
+	//2 = elevator shaft
+	//3 = stairwell shaft
 
 	ShaftType = type;
-	startaltitude = startalt;
-	endaltitude = endalt;
+	startfloor = _startfloor;
+	endfloor = _endfloor;
 	location1 = csVector2(x1, z1);
 	location2 = csVector2(x2, z2);
 
+	csString buffer, buffer2, buffer3;
+
+	for (int i = startfloor; i <= endfloor; i++)
+	{
+		//Create shaft meshes
+		buffer2 = number;
+		buffer3 = i;
+		buffer = "Shaft " + buffer2 + ":" + buffer3;
+		buffer.Trim();
+		//ShaftArray.Push(sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData()));
+		//ShaftArray_state.Push(scfQueryInterface<iThingFactoryState> (ShaftArray[i]->GetMeshObject()->GetFactory()));
+		ShaftArray[i]->SetZBufMode(CS_ZBUF_USE);
+	}
 }
 
 Shaft::~Shaft()
@@ -55,12 +69,12 @@ Shaft::~Shaft()
 
 }
 
-int Shaft::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
+int Shaft::AddWall(const char *texture, int floor, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
 {
-	return sbs->AddWallMain(Shaft_state, texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, height1, height2, altitude1, altitude2, tw, th, revX, revY, revZ, DrawBothSides);
+	return sbs->AddWallMain(ShaftArray_state[floor], texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, height1, height2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th, revX, revY, revZ, DrawBothSides);
 }
 
-int Shaft::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th)
+int Shaft::AddFloor(const char *texture, int floor, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
-   	return sbs->AddFloorMain(Shaft_state, texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, altitude1, altitude2, tw, th);
+   	return sbs->AddFloorMain(ShaftArray_state[floor], texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th);
 }

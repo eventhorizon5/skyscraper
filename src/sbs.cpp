@@ -750,25 +750,25 @@ void SBS::InitMeshes()
 		ElevatorArray[i] = new Elevator(i);
 
 	//create object meshes
-	Buildings = (sbs->engine->CreateSectorWallsMesh (sbs->area, "Buildings"));
+	Buildings = sbs->engine->CreateSectorWallsMesh (sbs->area, "Buildings");
 	Buildings_object = Buildings->GetMeshObject ();
 	Buildings_factory = Buildings_object->GetFactory();
 	Buildings_state = scfQueryInterface<iThingFactoryState> (Buildings_factory);
 	Buildings->SetZBufMode(CS_ZBUF_USE);
 
-	External = (sbs->engine->CreateSectorWallsMesh (sbs->area, "External"));
+	External = sbs->engine->CreateSectorWallsMesh (sbs->area, "External");
 	External_object = External->GetMeshObject ();
 	External_factory = External_object->GetFactory();
 	External_state = scfQueryInterface<iThingFactoryState> (External_factory);
 	External->SetZBufMode(CS_ZBUF_USE);
 
-	Landscape = (sbs->engine->CreateSectorWallsMesh (sbs->area, "Landscape"));
+	Landscape = sbs->engine->CreateSectorWallsMesh (sbs->area, "Landscape");
 	Landscape_object = Landscape->GetMeshObject ();
 	Landscape_factory = Landscape_object->GetFactory();
 	Landscape_state = scfQueryInterface<iThingFactoryState> (Landscape_factory);
 	Landscape->SetZBufMode(CS_ZBUF_USE);
 
-	ColumnFrame = (sbs->engine->CreateSectorWallsMesh (sbs->area, "ColumnFrame"));
+	ColumnFrame = sbs->engine->CreateSectorWallsMesh (sbs->area, "ColumnFrame");
 	ColumnFrame_object = ColumnFrame->GetMeshObject ();
 	ColumnFrame_factory = ColumnFrame_object->GetFactory();
 	ColumnFrame_state = scfQueryInterface<iThingFactoryState> (ColumnFrame_factory);
