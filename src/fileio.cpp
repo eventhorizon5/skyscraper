@@ -269,18 +269,6 @@ int SBS::LoadBuilding(const char * filename)
 			temp5 = csString(LineData).Downcase().Find("floor(", 0);
         }
         
-        //Set command
-        if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
-		{
-            temp1 = LineData.Find("=", 0);
-            temp3 = atoi(LineData.Slice(4, temp1 - 5));
-            temp2 = LineData.Slice(temp1 + 1);
-            //if (temp3 < 0 !! temp3 > UBound(UserVariable))
-				//Err.Raise 1001
-            UserVariable[temp3] = Calc(temp2);
-            Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
-		}
-        
         //CreateWallBox2 command
         if (LineData.Slice(0, 14).CompareNoCase("createwallbox2") == true)
 		{
@@ -552,6 +540,18 @@ int SBS::LoadBuilding(const char * filename)
 				temp4 = temp2.Find(",", temp3 + 1);
                 c->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
 			}
+
+			//Set command
+			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
+			{
+				temp1 = LineData.Find("=", 0);
+				temp3 = atoi(LineData.Slice(4, temp1 - 5));
+				temp2 = LineData.Slice(temp1 + 1);
+				//if (temp3 < 0 !! temp3 > UBound(UserVariable))
+					//Err.Raise 1001
+				UserVariable[temp3] = Calc(temp2);
+				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+			}
 		}
 
         //Process floors
@@ -782,7 +782,19 @@ recalc:
 				tempdata.DeleteAll();
 			}
             
-            //handle floor range
+			//Set command
+			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
+			{
+				temp1 = LineData.Find("=", 0);
+				temp3 = atoi(LineData.Slice(4, temp1 - 5));
+				temp2 = LineData.Slice(temp1 + 1);
+				//if (temp3 < 0 !! temp3 > UBound(UserVariable))
+					//Err.Raise 1001
+				UserVariable[temp3] = Calc(temp2);
+				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+			}
+
+			//handle floor range
             if (RangeL != RangeH && LineData.Slice(0, 11).CompareNoCase("<endfloors>") == true)
 			{
                 if (RangeL < RangeH)
@@ -908,6 +920,18 @@ recalc:
                 //create floor
                 AddFloorMain(External_state, tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
 				tempdata.DeleteAll();
+			}
+			
+			//Set command
+			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
+			{
+				temp1 = LineData.Find("=", 0);
+				temp3 = atoi(LineData.Slice(4, temp1 - 5));
+				temp2 = LineData.Slice(temp1 + 1);
+				//if (temp3 < 0 !! temp3 > UBound(UserVariable))
+					//Err.Raise 1001
+				UserVariable[temp3] = Calc(temp2);
+				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 			}
 		}
         
@@ -1060,7 +1084,19 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
-            //handle elevator range
+			//Set command
+			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
+			{
+				temp1 = LineData.Find("=", 0);
+				temp3 = atoi(LineData.Slice(4, temp1 - 5));
+				temp2 = LineData.Slice(temp1 + 1);
+				//if (temp3 < 0 !! temp3 > UBound(UserVariable))
+					//Err.Raise 1001
+				UserVariable[temp3] = Calc(temp2);
+				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+			}
+
+			//handle elevator range
             if (RangeL != RangeH && LineData.Slice(0, 14).CompareNoCase("<endelevators>") == true)
 			{
 			    if (Current < RangeH)

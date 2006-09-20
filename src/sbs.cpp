@@ -52,8 +52,8 @@ SBS::SBS()
 	//Print SBS banner
 	PrintBanner();
 
-	//Pause for 3 seconds
-	csSleep(3000);
+	//Pause for 2 seconds
+	csSleep(2000);
 
 	//Set default horizontal scaling value
 	HorizScale = 1;
@@ -103,25 +103,31 @@ SBS::~SBS()
 {
 	//engine destructor
 
+	//delete camera object
 	delete c;
 	c = 0;
-	sbs = 0;
-	UserVariable.DeleteAll();
 
+	//delete floors
 	for (int i = -Basements; i <= TotalFloors; i++)
 	{
 		delete FloorArray[i];
 		FloorArray[i] = 0;
 	}
 
+	//delete elevators
 	for (int i = 1; i <= Elevators; i++)
 	{
 		delete ElevatorArray[i];
 		ElevatorArray[i] = 0;
 	}
 
+	//delete floor and elevator arrays
 	FloorArray.DeleteAll();
 	ElevatorArray.DeleteAll();
+
+	//delete string arrays
+	UserVariable.DeleteAll();
+	BuildingData.DeleteAll();
 }
 
 void SBS::Start()
@@ -144,6 +150,11 @@ void SBS::Start()
 	UserVariable.SetSize(256);
 
 	//load building data file
+    Report("\nLoading building data from " + BuildingFile + "...\n");
+
+	//Pause for 1 second
+	csSleep(1000);
+
 	BuildingFile.Insert(0, "/root/buildings/");
 	LoadBuilding(BuildingFile.GetData());
 	//if (LoadBuilding(BuildingFile.GetData()) != 0)
@@ -553,6 +564,7 @@ void Cleanup()
 {
 	//cleanup
 	csPrintf ("Cleaning up...\n");
+	sbs = 0;
 	csInitializer::DestroyApplication (object_reg);
 }
 
@@ -983,7 +995,7 @@ csString SBS::Calc(const char *expression)
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) + atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
 		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
 			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-		return tmpcalc;
+		return tmpcalc.GetData();
 	}
 	temp1 = tmpcalc.Find("-", 0);
 	if (temp1 > 0)
@@ -991,7 +1003,7 @@ csString SBS::Calc(const char *expression)
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) - atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
 		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
 			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-		return tmpcalc;
+		return tmpcalc.GetData();
 	}
 	temp1 = tmpcalc.Find("/", 0);
 	if (temp1 > 0)
@@ -999,7 +1011,7 @@ csString SBS::Calc(const char *expression)
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) / atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
 		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
 			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-		return tmpcalc;
+		return tmpcalc.GetData();
 	}
 	temp1 = tmpcalc.Find("*", 0);
 	if (temp1 > 0)
@@ -1007,7 +1019,7 @@ csString SBS::Calc(const char *expression)
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) * atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
 		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
 			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-		return tmpcalc;
+		return tmpcalc.GetData();
 	}
 	
 	//boolean operators

@@ -79,9 +79,9 @@ public:
 	csRef<iEventQueue> equeue;
 	csRef<iBase> plug;
 
-	iMaterialWrapper* material;
-	iLightList* ll;
-	iSector* area;
+	csRef<iMaterialWrapper> material;
+	csRef<iLightList> ll;
+	csRef<iSector> area;
 
 	csTicks elapsed_time, current_time;
 
