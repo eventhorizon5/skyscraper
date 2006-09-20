@@ -232,10 +232,6 @@
     Type = Office
     Description = Zone 1 office level %floor%
 
-    Set 1 = %doorwidth% / 2
-
-    #Room Walls
-
 <EndFloors>
 
 #zone 1 mechanical
@@ -336,10 +332,6 @@
     Name = Offices
     Type = Office
     Description = Zone 2 office level %floor%
-
-    Set 1 = %doorwidth% / 2
-
-    #Room Walls
 
 <EndFloors>
 
@@ -479,10 +471,6 @@
     Type = Condominium
     Description = Condominium level %floor%
 
-    Set 1 = %doorwidth% / 2
-
-    #Room Walls
-
 <EndFloors>
 
 #zone 3A mechanical
@@ -574,10 +562,6 @@
     Name = Residential
     Type = Condominium
     Description = Condominium level %floor%
-
-    Set 1 = %doorwidth% / 2
-
-    #Room Walls
 
 <EndFloors>
 
