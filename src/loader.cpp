@@ -38,7 +38,7 @@ Loader::Loader(wxWindow* parent,wxWindowID id)
 	bOK = new wxButton(this,ID_bOK,_("OK"),wxPoint(71,199),wxDefaultSize,0,wxDefaultValidator,_("ID_bOK"));
 	if (false) bOK->SetDefault();
 	//*)
-	Selector->SetFilter("Building files (*.bld)|*.bld");
+	Selector->SetFilter(_("Building files (*.bld)|*.bld"));
 	//Selector->SetDefaultPath(
 }
 

@@ -50,7 +50,7 @@ bool Skyscraper::OnInit(void)
 	srand (time (0));
 	
 	//set building file
-	wxFileDialog *Selector = new wxFileDialog(0, "Select a Building", "buildings", "", "Building files (*.bld)|*.bld", wxOPEN);
+	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings"), _(""), _("Building files (*.bld)|*.bld"), wxOPEN);
 	int result = Selector->ShowModal();
 	if (result == wxID_CANCEL)
 		return false;
