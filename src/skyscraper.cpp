@@ -75,7 +75,11 @@ bool Skyscraper::OnInit(void)
 		exit(1);
 	}
 
+	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+	Simcore->BuildingFile = Selector->GetFilename().mb_str().data();
+	#else
 	Simcore->BuildingFile = Selector->GetFilename();
+	#endif
 
 	//delete dialog
 	delete Selector;
@@ -86,7 +90,7 @@ bool Skyscraper::OnInit(void)
 
 	//load dialogs
 	DebugPanel *dpanel = new DebugPanel(NULL, -1);
-    dpanel->Show(true);
+	dpanel->Show(true);
 
 	//run simulation
 	Simcore->Run();
