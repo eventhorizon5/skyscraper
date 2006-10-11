@@ -693,12 +693,12 @@ int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, doub
 	
 	iMaterialWrapper* tm;
 	
-	int firstidx = dest->AddInsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	int firstidx = dest->AddInsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
-	dest->AddOutsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	dest->AddOutsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
@@ -721,12 +721,12 @@ int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, dou
 	z1 = CenterZ - (LengthZ / 2);
 	z2 = CenterZ + (LengthZ / 2);
 
-	int firstidx = dest->AddInsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	int firstidx = dest->AddInsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
-	dest->AddOutsideBox(csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+	dest->AddOutsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
@@ -796,7 +796,7 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPo
 
 	//create a second array with reversed vertices
 	for (i = num - 1; i >= 0; i--)
-		varray2.AddVertex(varray[i]);
+		varray2.AddVertex(varray1[i]);
 
 	csVector2 x, y, z;
 
@@ -885,9 +885,13 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *texture, csP
 	//get number of stored vertices
 	num = varray.GetVertexCount();
 
+	//Set horizontal scaling
+	for (i = 0; i < num; i++)
+		varray1.AddVertex(varray[i].x * HorizScale, varray[i].y, varray[i].z * HorizScale);
+
 	//create a second array with reversed vertices
 	for (i = num - 1; i >= 0; i--)
-		varray1.AddVertex(varray[i]);
+		varray1.AddVertex(varray1[i]);
 
 	csVector2 x, y, z;
 
