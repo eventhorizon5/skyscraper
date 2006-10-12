@@ -209,8 +209,8 @@
     
 <EndFloors>
 
-# floors 40 to 60
-<Floors 39 To 59>
+# floors 40 to 58
+<Floors 39 To 57>
     ID = %floor% + 1
     Name = Offices
     Type = Office
@@ -257,8 +257,8 @@
     AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 <EndFloors>
 
-# floors 61 to 67
-<Floors 60 to 66>
+# floors 59 to 64
+<Floors 58 to 63>
     ID = %floor% + 1
     Name = Offices
     Type = Office
@@ -267,10 +267,10 @@
     DoorHeight = 7
 
     # Floor
-    If(%floor% ! 65) AddFloor Granite, -355.5, -355.5, 355.5, 355.5, 0, 0, 0, 0, False
+    #If(%floor% ! 65) AddFloor Granite, -355.5, -355.5, 355.5, 355.5, 0, 0, 0, 0, False
 
     # Ceiling
-    If(%floor% ! 64) AddFloor Marble3, -355.5, -355.5, 355.5, 355.5, %height%, %height%, 0, 0, False
+    #If(%floor% ! 64) AddFloor Marble3, -355.5, -355.5, 355.5, 355.5, %height%, %height%, 0, 0, False
 
     # Interfloor bottom
 
@@ -279,15 +279,10 @@
     # Interfloor walls
 
     #External windows/walls
-    # front left corner wall
-    If(%floor% = 66) AddWall MainWindows, -75.1, -16.9, -76.9, -19.4, %fullheight% / 2, %fullheight% / 2, %fullheight% / 2, %fullheight% / 2, 0, 0.5, False, False, False, True
     # front left wall
-    If(%floor% < 65) AddWall MainWindows, -98.4, -52.1, -75.1, -16.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True, True, True, True
-    If(%floor% = 65) AddWall MainWindows, -98.4, -52.1, -75.1, -16.9, %fullheight% * 1.5, %fullheight% * 1.5, 0, 0, 0, 1.5, True, True, True, True
-    # back wall
-    If(%floor% = 66) AddWall MainWindows, -47.1, 44.9, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, -98.4, -52.1, -75.1, -16.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True, True, True, True
     # back left corner wall
-    If(%floor% < 66) AddWall MainWindows, -47.1, 44.9, -52.4, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, -47.1, 44.9, -52.4, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # left upper wall
     AddWall MainWindows, -84.8, 10, -47.1, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # left lower wall
@@ -302,8 +297,8 @@
     AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 <EndFloors>
 
-# floors 68 to 80
-<Floors 67 To 79>
+# floors 65 to 78
+<Floors 64 To 77>
     ID = %floor% + 1
     Name = Offices
     Type = Office
@@ -325,11 +320,13 @@
 
     #External windows/walls
     # front left corner wall
-    If(%floor% < 78) AddWall MainWindows, -75.1, -16.9, -76.9, -19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    If(%floor% < 77) AddWall MainWindows, -75.1, -16.9, -76.9, -19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # front wall
-    If(%floor% > 77) AddWall MainWindows, -75.1, -16.9, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    If(%floor% > 75) AddWall MainWindows, -75.1, -16.9, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # back wall
-    AddWall MainWindows, -47.1, 44.9, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    If(%floor% > 65) AddWall MainWindows, -47.1, 44.9, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    # back left corner wall
+    If(%floor% < 66) AddWall MainWindows, -47.1, 44.9, -52.4, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # left upper wall
     AddWall MainWindows, -84.8, 10, -47.1, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # left lower wall
@@ -344,8 +341,8 @@
     AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 <EndFloors>
 
-# floors 81 to 89
-<Floors 80 To 88>
+# floors 79 to 86
+<Floors 78 To 85>
     ID = %floor% + 1
     Name = Residential
     Type = Residential
@@ -385,8 +382,8 @@
 
 <EndFloors>
 
-# floors 90 to 113
-<Floors 89 To 112>
+# floors 87 to 113
+<Floors 86 To 112>
     ID = %floor% + 1
     Name = Residential
     Type = Residential
@@ -536,18 +533,17 @@
 <EndFloors>
 
 <External>
-    Set 1 = Floor(66).FullHeight / 2
 
     # front setback
-    AddCustomWall external, MainWindows, -98.4, Floor(66).Altitude + %1%, -52.1, -76.9, Floor(79).Altitude, -19.4, -14.4, Floor(63).Altitude, -46.3, -12.2, Floor(60).Altitude, -51.8, 0, 20, false, false, false #main
-    AddTriangleWall MainWindowsInv, -76.9, Floor(66).Altitude + %1%, -19.4, -76.9, Floor(79).Altitude, -19.4, -98.4, Floor(66).Altitude + %1%, -52.1, 0, -12.5, false, true, false #left
-    AddTriangleWall MainWindows, -12.2, Floor(60).Altitude, -51.8, -14.4, Floor(63).Altitude, -46.3, -14.4, Floor(60).Altitude, -47.8, 0, -2, false, false, false #right front
-    AddCustomWall external, Brick, -14.4, Floor(60).Altitude, -47.8, -14.4, Floor(63).Altitude, -46.3, -16.9, Floor(63).Altitude, -43.4, -12.2, Floor(60).Altitude, -45.6, 0, -2, false, false, false #right back
-    AddTriangleWall MainWindows, -12.2, Floor(78).Altitude, -45.6, -75.1, Floor(78).Altitude, -16.9, -12.2, Floor(60).Altitude, -45.6, 0, 19, true, false, false #back
-    AddTriangleWall MainWindows, -98.4, Floor(60).Altitude, -52.1, -98.4, Floor(66).Altitude + %1%, -52.1, -12.2, Floor(60).Altitude, -51.8, 0, -6.5, false, true, false #bottom
-    AddCustomWall external, Brick, -14.4, Floor(63).Altitude, -46.3, -16.9, Floor(63).Altitude, -43.4, -75.1, Floor(78).Altitude, -16.9, -73, Floor(78).Altitude, -21.2, 0, 1, false, false, false #back filler
-    AddTriangleWall MainWindows, -75.1, Floor(78).Altitude, -16.9, -76.9, Floor(79).Altitude, -19.4, -73, Floor(78).Altitude, -21.2, 0, 1, false, false, false #top triangle filler 1
-    AddTriangleWall MainWindows, -75.1, Floor(78).Altitude, -16.9, -76.9, Floor(79).Altitude, -19.4, -76.9, Floor(78).Altitude, -19.4, 0, 1, false, false, false #top triangle filler 2
+    AddCustomWall external, MainWindows, -98.4, Floor(64).Altitude, -52.1, -76.9, Floor(78).Altitude, -19.4, -14.4, Floor(60).Altitude, -46.3, -12.2, Floor(58).Altitude, -51.8, 0, 20, false, false, false #main
+    AddTriangleWall MainWindows, -76.9, Floor(64).Altitude, -19.4, -76.9, Floor(78).Altitude, -19.4, -98.4, Floor(64).Altitude, -52.1, 0, -14, false, false, false #left
+    AddTriangleWall MainWindows, -12.2, Floor(58).Altitude, -51.8, -14.4, Floor(60).Altitude, -46.3, -14.4, Floor(58).Altitude, -47.8, 0, -2, false, false, false #right front
+    AddCustomWall external, Brick, -14.4, Floor(58).Altitude, -47.8, -14.4, Floor(60).Altitude, -46.3, -16.9, Floor(60).Altitude, -43.4, -12.2, Floor(58).Altitude, -45.6, 0, -2, false, false, false #right back
+    AddTriangleWall MainWindows, -12.2, Floor(77).Altitude, -45.6, -75.1, Floor(77).Altitude, -16.9, -12.2, Floor(58).Altitude, -45.6, 0, 19, true, false, false #back
+    AddTriangleWall MainWindows, -98.4, Floor(58).Altitude, -52.1, -98.4, Floor(64).Altitude, -52.1, -12.2, Floor(58).Altitude, -51.8, 0, -6, false, true, false #bottom
+    AddCustomWall external, Brick, -14.4, Floor(60).Altitude, -46.3, -16.9, Floor(60).Altitude, -43.4, -75.1, Floor(77).Altitude, -16.9, -73, Floor(77).Altitude, -21.2, 0, 1, false, false, false #back filler
+    AddTriangleWall MainWindows, -75.1, Floor(77).Altitude, -16.9, -76.9, Floor(78).Altitude, -19.4, -73, Floor(77).Altitude, -21.2, 0, 1, false, false, false #top triangle filler 1
+    AddTriangleWall MainWindows, -75.1, Floor(77).Altitude, -16.9, -76.9, Floor(78).Altitude, -19.4, -76.9, Floor(77).Altitude, -19.4, 0, 1, false, false, false #top triangle filler 2
     
     # back setback
     AddTriangleWall MainWindows, 47.1, Floor(66).Altitude, 46, 47.1, Floor(41).Altitude, 46, -49.3, Floor(66).Altitude, 44.9, 0, 25, false, false, false #back
@@ -558,9 +554,9 @@
     AddTriangleWall MainWindows, -52.4, Floor(66).Altitude, 44.9, -49.3, Floor(66).Altitude, 44.9, -52.4, Floor(67).Altitude, 44.9, 0, 1, false, false, false #left notch filler
 
     # right setback
-    AddTriangleWall MainWindows, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(89).Altitude, -22.3, 53.8, Floor(137).Altitude, 33.1, 0, 48, false, false, false #main section
-    AddTriangleWall MainWindows, 18.3, Floor(89).Altitude, -45.6, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(89).Altitude, -22.3, 0, -48, false, false, false #front
-    AddTriangleWall MainWindows, 53.8, Floor(89).Altitude, 33.1, 53.8, Floor(137).Altitude, 33.1, 83.4, Floor(89).Altitude, -22.3, 0, -48, true, false, false #back
+    AddTriangleWall MainWindows, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(86).Altitude, -22.3, 53.8, Floor(137).Altitude, 33.1, 0, 51, false, false, false #main section
+    AddTriangleWall MainWindows, 18.3, Floor(86).Altitude, -45.6, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(86).Altitude, -22.3, 0, -51, false, false, false #front
+    AddTriangleWall MainWindows, 53.8, Floor(86).Altitude, 33.1, 53.8, Floor(137).Altitude, 33.1, 83.4, Floor(86).Altitude, -22.3, 0, -51, true, false, false #back
 
     # left setback
     AddTriangleWall MainWindows, -75.1, Floor(137).Altitude, -16.9, -84.8, Floor(113).Altitude, 10, -47, Floor(137).Altitude, 44.9, -1, 24, false, false, false #main section
