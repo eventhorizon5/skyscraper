@@ -149,9 +149,9 @@
     # right bottom wall
     AddWall LobbyFront, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0.3, 0, False, False, False, True
     # right top wall
-    AddWall LobbyFront, 83.4, -22.3, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True, False, True, True
+    AddWall LobbyFront, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True, False, True, True
     # right top corner wall
-    AddWall LobbyFront, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0.3, 0, False, False, False, True
+    AddWall LobbyFront, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0.3, 0, False, False, False, True
 <EndFloor>
 
 # floors 2 to 39
@@ -201,9 +201,9 @@
     # right bottom wall
     AddWall MainWindows, 18.3, -45.6, 83.4,-22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # right top wall
-    AddWall MainWindows, 83.4, -22.3, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
+    AddWall MainWindows, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
     # right top corner wall
-    AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     
     #AddAutoFloor Granite, 0, 0, 0
     
@@ -252,9 +252,9 @@
     # right bottom wall
     AddWall MainWindows, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # right top wall
-    AddWall MainWindows, 83.4, -22.3, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
+    AddWall MainWindows, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
     # right top corner wall
-    AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 <EndFloors>
 
 # floors 59 to 64
@@ -292,9 +292,9 @@
     # right bottom wall
     AddWall MainWindows, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # right top wall
-    AddWall MainWindows, 83.4, -22.3, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
+    AddWall MainWindows, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
     # right top corner wall
-    AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 <EndFloors>
 
 # floors 65 to 78
@@ -336,9 +336,9 @@
     # right bottom wall
     AddWall MainWindows, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # right top wall
-    AddWall MainWindows, 83.4, -22.3, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
+    AddWall MainWindows, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
     # right top corner wall
-    AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 <EndFloors>
 
 # floors 79 to 86
@@ -376,9 +376,9 @@
     # right bottom wall
     AddWall MainWindows, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # right top wall
-    AddWall MainWindows, 83.4, -22.3, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
+    AddWall MainWindows, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True, False, True, True
     # right top corner wall
-    AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 
 <EndFloors>
 
@@ -415,7 +415,7 @@
     # glass elevator wall
     AddWall Ceiling1, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # right top corner wall
-    AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 <EndFloors>
 
 # floors 114 to 120
@@ -447,7 +447,7 @@
     # glass elevator wall
     AddWall Ceiling1, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # right top corner wall
-    AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 <EndFloors>
 
 # floors 121 to 136
@@ -476,7 +476,7 @@
     # glass elevator wall
     AddWall Ceiling1, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # right top corner wall
-    AddWall MainWindows, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall MainWindows, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 <EndFloors>
 
 <Floor 134>
@@ -529,7 +529,7 @@
     # glass elevator wall
     AddWall Ceiling1, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
     # right top corner wall
-    AddWall Concrete, 47.1, 46, 53.8, 33.1, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall Concrete, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 <EndFloors>
 
 <External>
@@ -554,9 +554,9 @@
     AddTriangleWall MainWindows, -52.4, Floor(66).Altitude, 44.9, -49.3, Floor(66).Altitude, 44.9, -52.4, Floor(67).Altitude, 44.9, 0, 1, false, false, false #left notch filler
 
     # right setback
-    AddTriangleWall MainWindows, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(86).Altitude, -22.3, 53.8, Floor(137).Altitude, 33.1, 0, 51, false, false, false #main section
+    AddTriangleWall MainWindows, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(86).Altitude, -22.3, 59.3, Floor(137).Altitude, 19.4, 0, 51, false, false, false #main section
     AddTriangleWall MainWindows, 18.3, Floor(86).Altitude, -45.6, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(86).Altitude, -22.3, 0, -51, false, false, false #front
-    AddTriangleWall MainWindows, 53.8, Floor(86).Altitude, 33.1, 53.8, Floor(137).Altitude, 33.1, 83.4, Floor(86).Altitude, -22.3, 0, -51, true, false, false #back
+    AddTriangleWall MainWindows, 59.3, Floor(86).Altitude, 19.4, 59.3, Floor(137).Altitude, 19.4, 83.4, Floor(86).Altitude, -22.3, 0, -51, true, false, false #back
 
     # left setback
     AddTriangleWall MainWindows, -75.1, Floor(137).Altitude, -16.9, -84.8, Floor(113).Altitude, 10, -47, Floor(137).Altitude, 44.9, -1, 24, false, false, false #main section
