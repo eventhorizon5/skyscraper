@@ -28,6 +28,7 @@
     CameraAltitude = 3.2
     ElevatorShafts = 0
     Floors = 137 #138 total floors: 0-137
+    #Basements = 6
     Basements = 0
     Elevators = 0
     PipeShafts = 0
