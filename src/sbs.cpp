@@ -73,11 +73,10 @@ SBS::SBS()
 	BuildingVersion = "";
 	Gravity = 0;
 	IsRunning = false;
-	ElevatorShafts = 0;
+	Shafts = 0;
 	TotalFloors = 0;
 	Basements = 0;
 	Elevators = 0;
-	PipeShafts = 0;
 	StairsNum = 0;
 	RenderOnly = false;
 	InputOnly = false;
@@ -748,6 +747,8 @@ void SBS::InitMeshes()
 
 	for (i = 1; i <= Elevators; i++)
 		ElevatorArray[i] = new Elevator(i);
+
+	ShaftArray.SetSize(Shafts);
 
 	//create object meshes
 	Buildings = sbs->engine->CreateSectorWallsMesh (sbs->area, "Buildings");

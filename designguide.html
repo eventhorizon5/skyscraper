@@ -118,6 +118,16 @@
     per axis. If the texture looks strange in the simulator, mess around with 
     the <em>revx</em> and <em>revz</em> values (<em>revy</em> flips the texture 
     upside down).</p>
+  <p align="left"><strong>d. AddShaft</strong> - creates a shaft at a specified 
+    location and floor range<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaft number, type, x1, 
+    x2, z1, x2, startfloor, endfloor</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddShaft 1, 2, -10, 10, -10, 
+    10, 0, 9</font></p>
+  <p align="left">The number parameter specifies the shaft number to create; type 
+    is either 1 for a pipe/utility shaft, 2 for an elevator shaft, and 3 for a 
+    stairwell shaft. This command just tells the simulator the area that the shaft 
+    will take up, and does not create the actual shaft walls.</p>
   <p align="left"><br>
     <strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
@@ -162,39 +172,35 @@
     <strong>8. Elevators</strong> - total number of elevators, required<br>
     <font size="2" face="Courier New, Courier, mono">Elevators = 6</font><br>
     <br>
-    <strong>9. ElevatorShafts</strong> - total number of elevator shafts, required<br>
-    <font size="2" face="Courier New, Courier, mono">ElevatorShafts = 1</font></p>
-  <p align="left"> <strong>10. Pipeshafts</strong> - total number of pipe/utility 
-    shafts, required<br>
-    <font size="2" face="Courier New, Courier, mono">Pipeshafts = 2</font><br>
-    <br>
-    <strong>11. Stairs</strong> - total number of stairwells, required<br>
+    <strong>9. Shafts</strong> - total number of shafts, required<br>
+    <font size="2" face="Courier New, Courier, mono">Shafts = 1</font></p>
+  <p align="left"> <strong>10. Stairs</strong> - total number of stairwells, required<br>
     <font size="2" face="Courier New, Courier, mono">Stairs = 3</font><br>
     <br>
-    <strong>12. HorizScale</strong> - horizontal scaling modifier; default is 
+    <strong>11. HorizScale</strong> - horizontal scaling modifier; default is 
     1, optional<br>
     <font size="2" face="Courier New, Courier, mono">HorizScale = 2</font> (makes 
     each horizontal foot become 2 feet, keeping vertical feet at the default)<br>
     <br>
-    <strong>13. CameraAltitude</strong> - camera's normal altitude in feet above 
+    <strong>12. CameraAltitude</strong> - camera's normal altitude in feet above 
     the floor, required<br>
     <font size="2" face="Courier New, Courier, mono">CameraAltitude = 3.2</font><br>
     <br>
-    <strong>14. CameraFloor</strong> - camera's starting floor, starting with 
+    <strong>13. CameraFloor</strong> - camera's starting floor, starting with 
     0 (like Floors command), required<br>
     <font size="2" face="Courier New, Courier, mono">CameraFloor = 0</font><br>
     <br>
-    <strong>15. CameraPosition</strong> - camera's starting position in X (left/right) 
+    <strong>14. CameraPosition</strong> - camera's starting position in X (left/right) 
     and Z (in/out) feet coordinates, required<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CameraPosition = 
     <em>X</em>, <em>Z</em></font><br>
     <font size="2" face="Courier New, Courier, mono">CameraPosition = 0, -10</font><br>
     <br>
-    <strong>16. CameraDirection</strong> - direction the camera's facing on startup, 
+    <strong>15. CameraDirection</strong> - direction the camera's facing on startup, 
     in X (left/right), Y (up down), and Z (in/out) feet coordinates, required<br>
     <font size="2" face="Courier New, Courier, mono">CameraDirection = 0, 10, 
     28.8</font></p>
-  <p align="left"><strong>17. CameraRotation</strong> - rotation of the camera 
+  <p align="left"><strong>16. CameraRotation</strong> - rotation of the camera 
     on startup, required<br>
     <font size="2" face="Courier New, Courier, mono">CameraRotation = 0, 0, 0</font></p>
   <p align="left">&nbsp;</p>
@@ -328,6 +334,23 @@
     <em>tw</em>, <em>th</em></font></p>
   <p align="left">The parameters are the same as the AddWall command, and the 
     <em>voffset</em> values are the same as the AddInterfloorFloor command.</p>
+  <p align="left"><strong>6. AddShaftFloor</strong> - adds a textured floor to 
+    the specified shaft, on the current floor<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftFloor <em>number, 
+    texturename</em>, <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>voffset1</em>, 
+    <em>voffset2, tw</em>, <em>th</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddShaftFloor brick, 
+    -10, -10, 10, 10, 0, 0, 0</font></p>
+  <p align="left">The parameters are the same as the AddFloor command, and the 
+    <em>number</em> value is the shaft number to use</p>
+  <p align="left"><strong>7. AddShaftWall</strong> - adds a textured wall to the 
+    specified shaft, on the current floor<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftWall <em>number, 
+    texturename</em>, <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>height1</em>, 
+    <em>height2</em>, <em>voffset1</em>, <em>voffset2</em>, <em>tw</em>, <em>th</em>, 
+    <em>revx, revy, revz</em></font></p>
+  <p align="left">The parameters are the same as the AddWall command, and the 
+    <em>number</em> value is the shaft number to use</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">6. The <em>External</em> Section</font></strong></p>
   <p align="left">The <em>External</em> section defines parts of the building's 

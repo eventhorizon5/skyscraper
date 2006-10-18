@@ -95,11 +95,10 @@ public:
 	//Internal data
     double Gravity; //gravity variable for physics algorithms
     bool IsRunning; //is sim engine running?
-    int ElevatorShafts; //number of elevator shafts
+    int Shafts; //number of shafts
 	int TotalFloors; //number of above-ground floors including 0
 	int Basements; //number of basement floors
 	int Elevators; //number of elevators
-	int PipeShafts; //number of pipe shafts
 	int StairsNum; //number of stairwells
 	csArray<Floor*> FloorArray; //pointer array to floor objects
 	csArray<Elevator*> ElevatorArray; //pointer array to elevator objects

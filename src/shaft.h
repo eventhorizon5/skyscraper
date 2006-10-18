@@ -33,7 +33,7 @@ class Shaft
 public:
 
 	int ShaftType; //type of shaft
-	int number; //shaft number
+	int ShaftNumber; //shaft number
 	csVector2 location1; //location vertex 1; is x1 and z1
 	csVector2 location2; //location vertex 2; is x2 and z2
 	double startfloor; //starting floor
@@ -41,10 +41,10 @@ public:
 	csArray<int> elevators; //if elevator shaft, this is the list of elevators that use this shaft
 	csArray<int> stairs; //if stairwell, this lists the stairs that use this shaft
 
-	Shaft(int type, double x1, double x2, double z1, double z2, int _startfloor, int _endfloor, bool cutfloor);
+	Shaft(int number, int type, double x1, double x2, double z1, double z2, int _startfloor, int _endfloor);
 	~Shaft();
-	int AddWall(const char *texture, int floor, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides);
-	int AddFloor(const char *texture, int floor, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
+	int AddWall(int floor, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ);
+	int AddFloor(int floor, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array

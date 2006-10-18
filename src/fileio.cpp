@@ -29,6 +29,7 @@
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
+#include "shaft.h"
 #include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
@@ -451,6 +452,19 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.DeleteAll();
 		}
 
+		//AddShaft command
+        if (LineData.Slice(0, 9).CompareNoCase("addshaft ") == true)
+		{
+			tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+
+			sbs->ShaftArray[atoi(tempdata[0])] = new Shaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]));
+		}
+
         //Process globals
         if (Section == 1)
 		{
@@ -475,11 +489,11 @@ int SBS::LoadBuilding(const char * filename)
 					//Err.Raise 1000;
                 c->DefaultAltitude = atof(temp2.GetData());
 			}
-            if (LineData.Slice(0, 14).CompareNoCase("elevatorshafts") == true)
+            if (LineData.Slice(0, 6).CompareNoCase("shafts") == true)
 			{
                 //if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-                ElevatorShafts = atoi(temp2.GetData());
+                Shafts = atoi(temp2.GetData());
 			}
             if (LineData.Slice(0, 6).CompareNoCase("floors") == true)
 			{
@@ -498,12 +512,6 @@ int SBS::LoadBuilding(const char * filename)
                 //if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
                 Elevators = atoi(temp2.GetData());
-			}
-            if (LineData.Slice(0, 10).CompareNoCase("pipeshafts") == true)
-			{
-                //if (IsNumeric(temp2) == false)
-					//Err.Raise 1000;
-                PipeShafts = atoi(temp2.GetData());
 			}
             if (LineData.Slice(0, 6).CompareNoCase("stairs") == true)
 			{
@@ -682,7 +690,29 @@ recalc:
 
 				tempdata.DeleteAll();
 			}
-            
+
+            //AddShaftFloor command
+            if (LineData.Slice(0, 13).CompareNoCase("addshaftfloor") == true)
+			{
+                //get data
+                tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+				
+                //calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+                    buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+                //if (tempdata.GetSize() < 8)
+					//Err.Raise 1003;
+                //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
+                
+                //create floor
+				ShaftArray[atoi(tempdata[0])]->AddFloor(Current, tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
+
+				tempdata.DeleteAll();
+			}
+
             //AddInterFloorFloor command
             if (LineData.Slice(0, 18).CompareNoCase("addinterfloorfloor") == true)
 			{
@@ -742,7 +772,42 @@ recalc:
 
 				tempdata.DeleteAll();
 			}
-            
+
+            //AddShaftWall command
+            if (LineData.Slice(0, 12).CompareNoCase("addshaftwall") == true)
+			{
+                //get data
+                tempdata.SplitString(LineData.Slice(13).GetData(), ",");
+				
+                //calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+                //if (tempdata.GetSize() < 11)
+					//Err.Raise 1003;
+                //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+                
+				if (csString(tempdata[12]).CompareNoCase("true") == true)
+					revX = true;
+				else
+					revX = false;
+				if (csString(tempdata[13]).CompareNoCase("true") == true)
+					revY = true;
+				else
+					revY = false;
+				if (csString(tempdata[14]).CompareNoCase("true") == true)
+					revZ = true;
+				else
+					revZ = false;
+
+                //create wall
+				ShaftArray[atoi(tempdata[0])]->AddWall(Current, tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), revX, revY, revZ);
+
+				tempdata.DeleteAll();
+			}
+
             //AddInterFloorWall command
             if (LineData.Slice(0, 17).CompareNoCase("addinterfloorwall") == true)
 			{
@@ -1158,6 +1223,7 @@ recalc:
 				tempdata.DeleteAll();
 			}
 		}
+
 Nextline:
 		i++;
 	}

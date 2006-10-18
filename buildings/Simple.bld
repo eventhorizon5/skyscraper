@@ -6,11 +6,10 @@
     Name = My Building
     Designer = Me
     CameraAltitude = 3.2
-    ElevatorShafts = 1
+    Shafts = 1
     Floors = 9 #10 total floors/levels, 0 to 9
     Basements = 0
     Elevators = 1
-    PipeShafts = 0
     Stairs = 0
     HorizScale = 1
     CameraFloor = 0

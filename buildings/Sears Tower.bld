@@ -25,13 +25,12 @@
     Description = The famous 108-story Sears Tower, tallest building in the US
     Version = 1
     CameraAltitude = 3.2
-    ElevatorShafts = 0
+    Shafts = 0
     Floors = 110 #111 total floors/levels, 0 =lobby, 1=mezzanine, then 2-108, roof, and penthouse roof
     #Basements = 4
     Basements = 0
     #Elevators = 104
     Elevators = 0
-    PipeShafts = 0
     Stairs = 0
     HorizScale = 1
     CameraFloor = 0

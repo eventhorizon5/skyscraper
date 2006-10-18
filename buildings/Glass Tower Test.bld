@@ -23,11 +23,10 @@
     Description = The fictitious 138-story building from the movie The Towering Inferno.
     Version = 1
     CameraAltitude = 3.2
-    ElevatorShafts = 1
+    Shafts = 1
     Floors = 137 #138 total floors: 0-137
     Basements = 0
     Elevators = 1
-    PipeShafts = 1
     Stairs = 1
     CameraFloor = 0
     CameraPosition = 0, -300
