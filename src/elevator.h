@@ -56,8 +56,11 @@ public:
 	double DistanceToTravel; //distance in Y to travel
 	double ElevatorRate;
 	double DoorWidth; //elevator door width
+	double DoorHeight; //elevator door height
 	csVector3 DoorOrigin; //elevator door origin
+	csVector3 ShaftDoorOrigin; //shaft door origin
 	csArray<int> ServicedFloors; //list of floors this elevator services
+	bool MoveShaftDoors; //true if shaft doors should be operated
 
 	//functions
 	Elevator(int number);
@@ -83,6 +86,7 @@ public:
 	int AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
 	int AddFloorIndicator(const char *basename, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
 	int AddDoors(const char *texture, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th);
+	int AddShaftDoors(const char *texture, double CenterX, double CenterZ, double tw, double th);
 	int AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
 	void DumpQueues();
 
@@ -130,8 +134,10 @@ private:
 	bool ElevWait;
 	double FPSModifierStatic;
 	bool EmergencyStop;
-	csRefArray<iMeshWrapper> ShaftDoorArray; //shaft door array
-	csRefArray<iThingFactoryState> ShaftDoorArray_state; //shaft door array state
+	csRefArray<iMeshWrapper> ShaftDoorL; //shaft door array
+	csRefArray<iThingFactoryState> ShaftDoorL_state; //shaft door array state
+	csRefArray<iMeshWrapper> ShaftDoorR; //shaft door array
+	csRefArray<iThingFactoryState> ShaftDoorR_state; //shaft door array state
 
 	//functions
 	void MoveElevatorToFloor();

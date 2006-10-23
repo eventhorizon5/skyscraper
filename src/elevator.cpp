@@ -69,6 +69,7 @@ Elevator::Elevator(int number)
 	ElevatorDoorSpeed = 0;
 	ElevWait = false;
 	EmergencyStop = false;
+	MoveShaftDoors = true;
 
 	//create object meshes
 	buffer = Number;
@@ -468,11 +469,17 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			else
 				ElevatorDoorSpeed -= OpenChange;
 
-			//todo: move shaft doors here
+			//move elevator doors
 			ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
 			ElevatorDoorL_movable->UpdateMove();
 			ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
 			ElevatorDoorR_movable->UpdateMove();
+
+			//move shaft doors
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
 			return;
 		}
 	}
@@ -485,11 +492,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			else
 				ElevatorDoorSpeed -= OpenChange;
 
-			//todo: move shaft doors here
+			//move elevator doors
 			ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
 			ElevatorDoorL_movable->UpdateMove();
 			ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
 			ElevatorDoorR_movable->UpdateMove();
+
+			//move shaft doors
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
+
 			return;
 		}
 	}
@@ -499,11 +513,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	{
 		if ((DoorOrigin.z - ElevatorDoorL_movable->GetPosition().z <= marker2 && open == true) || (DoorOrigin.z - ElevatorDoorL_movable->GetPosition().z > marker1 && open == false))
 		{
-			//todo: move shaft doors here
+			//move elevator doors
 			ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
 			ElevatorDoorL_movable->UpdateMove();
 			ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
 			ElevatorDoorR_movable->UpdateMove();
+
+			//move shaft doors
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
+
 			return;
 		}
 	}
@@ -511,11 +532,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	{
 		if ((DoorOrigin.x - ElevatorDoorL_movable->GetPosition().x <= marker2 && open == true) || (DoorOrigin.x - ElevatorDoorL_movable->GetPosition().x > marker1 && open == false))
 		{
-			//todo: move shaft doors here
+			//move elevator doors
 			ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
 			ElevatorDoorL_movable->UpdateMove();
 			ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
 			ElevatorDoorR_movable->UpdateMove();
+
+			//move shaft doors
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
+
 			return;
 		}
 	}
@@ -529,19 +557,31 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			ElevatorDoorSpeed += OpenChange;
 		if (DoorDirection == false)
 		{
-			//todo: move shaft doors here
+			//move elevator doors
 			ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
 			ElevatorDoorL_movable->UpdateMove();
 			ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
 			ElevatorDoorR_movable->UpdateMove();
+
+			//move shaft doors
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
 		}
 		else
 		{
-			//todo: move shaft doors here
+			//move elevator doors
 			ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
 			ElevatorDoorL_movable->UpdateMove();
 			ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
 			ElevatorDoorR_movable->UpdateMove();
+
+			//move shaft doors
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
 		}
 		return;
 	}
@@ -848,6 +888,7 @@ int Elevator::AddDoors(const char *texture, double CenterX, double CenterZ, doub
 	//set door parameters
 	DoorDirection = direction;
 	DoorWidth = width;
+	DoorHeight = height;
 	DoorOrigin = csVector3(Origin.x + CenterX, Origin.y, Origin.z + CenterZ);
 
 	//set up coordinates
@@ -878,6 +919,82 @@ int Elevator::AddDoors(const char *texture, double CenterX, double CenterZ, doub
 	int firstidx = sbs->AddWallMain(ElevatorDoorL_state, texture, x1, z1, x2, z2, height, height, Origin.y, Origin.y, tw, th, false, false, false);
 	sbs->AddWallMain(ElevatorDoorR_state, texture, x3, z3, x4, z4, height, height, Origin.y, Origin.y, tw, th, false, false, false);
 	return firstidx;
+}
+
+int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ, double tw, double th)
+{
+	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
+	//uses some parameters (width, height, direction) from AddDoors function
+	double x1, x2, x3, x4;
+	double z1, z2, z3, z4;
+
+	//set door parameters
+	ShaftDoorOrigin = csVector3(Origin.x + CenterX, Origin.y, Origin.z + CenterZ);
+
+	//set up coordinates
+	if (DoorDirection == false)
+	{
+		x1 = ShaftDoorOrigin.x;
+		x2 = ShaftDoorOrigin.x;
+		x3 = ShaftDoorOrigin.x;
+		x4 = ShaftDoorOrigin.x;
+		z1 = ShaftDoorOrigin.z - (DoorWidth / 2);
+		z2 = ShaftDoorOrigin.z;
+		z3 = ShaftDoorOrigin.z;
+		z4 = ShaftDoorOrigin.z + (DoorWidth / 2);
+	}
+	else
+	{
+		x1 = ShaftDoorOrigin.x - (DoorWidth / 2);
+		x2 = ShaftDoorOrigin.x;
+		x3 = ShaftDoorOrigin.x;
+		x4 = ShaftDoorOrigin.x + (DoorWidth / 2);
+		z1 = ShaftDoorOrigin.z;
+		z2 = ShaftDoorOrigin.z;
+		z3 = ShaftDoorOrigin.z;
+		z4 = ShaftDoorOrigin.z;
+	}
+
+	//resize shaft door meshes
+	ShaftDoorL.SetSize(ServicedFloors.GetSize());
+	ShaftDoorR.SetSize(ServicedFloors.GetSize());
+	ShaftDoorL_state.SetSize(ServicedFloors.GetSize());
+	ShaftDoorR_state.SetSize(ServicedFloors.GetSize());
+
+	csString buffer, buffer2, buffer3, buffer4;
+
+	//create doors
+	for (int i = 0; i <= ServicedFloors.GetSize(); i++)
+	{
+		//create meshes
+		buffer3 = Number;
+		buffer4 = i;
+		buffer = "Elevator " + buffer3 + ": Shaft Door " + buffer4 + "L";
+		buffer2 = "Elevator " + buffer3 + ": Shaft Door " + buffer4 + "R";
+		buffer.Trim();
+		buffer2.Trim();
+		csRef<iMeshWrapper> tmpmesh;
+		csRef<iThingFactoryState> tmpstate;
+
+		//door L
+		tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
+		ShaftDoorL[i] = tmpmesh;
+		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorL[i]->GetMeshObject()->GetFactory());
+		ShaftDoorL_state[i] = tmpstate;
+		ShaftDoorL[i]->SetZBufMode(CS_ZBUF_USE);
+
+		//door R
+		tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer2.GetData());
+		ShaftDoorL[i] = tmpmesh;
+		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorR[i]->GetMeshObject()->GetFactory());
+		ShaftDoorL_state[i] = tmpstate;
+		ShaftDoorL[i]->SetZBufMode(CS_ZBUF_USE);
+
+		//create doors
+		sbs->AddWallMain(ShaftDoorL_state[ServicedFloors[i]], texture, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);
+		sbs->AddWallMain(ShaftDoorR_state[ServicedFloors[i]], texture, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);
+	}
+	return 0;
 }
 
 int Elevator::AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)

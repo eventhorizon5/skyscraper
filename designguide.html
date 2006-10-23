@@ -414,6 +414,15 @@
   <p align="left"><strong>4. OpenSpeed</strong> - open/close speed of the elevator 
     doors<br>
     Example: <font size="2" face="Courier New, Courier, mono">OpenSpeed = 0.2</font></p>
+  <p align="left"><strong>5. ServicedFloors</strong> - a comma-separated list 
+    of floors this elevator services<br>
+    Example: <font size="2" face="Courier New, Courier, mono">ServicedFloors = 
+    0, 5, 6</font></p>
+  <p align="left"><strong>6. MoveShaftDoors</strong> - either true or false; if 
+    false (default is true), the shaft doors don't open along with the elevator 
+    doors. This parameter is really only meant for debugging purposes.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">MoveShaftDoors = 
+    false</font></p>
   <p align="left"><br>
     <strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
@@ -452,6 +461,16 @@
     specifying the direction that the doors face (currently there are only 2: 
     <em>false</em> if the doors are on the left or right sides, and <em>true</em> 
     if the doors are on the front or back sides)</p>
+  <p align="left"><strong>5. AddShaftDoors</strong> - creates shaft elevator doors<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoors <em>texturename</em>, 
+    <em>CenterX, CenterZ, tw, th</em></font> </p>
+  <p align="left">The AddShaftDoors command creates working shaft elevator doors 
+    at the central location specified by <em>CenterX</em> and <em>CenterZ</em>. 
+    Other parameters such as width, height, and direction are taken from the AddDoors 
+    command (so the regular elevator doors need to be created first). These doors 
+    should be moved slightly away from the elevator doors (to separate them both). 
+    Also, this command creates doors at all the floors specified in the ServicedFloors 
+    value. </p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 

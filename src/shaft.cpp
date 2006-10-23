@@ -64,8 +64,8 @@ Shaft::Shaft(int number, int type, double x1, double x2, double z1, double z2, i
 		csRef<iMeshWrapper> tmpmesh;
 		csRef<iThingFactoryState> tmpstate;
 		tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftArray[i]->GetMeshObject()->GetFactory());
 		ShaftArray[i] = tmpmesh;
+		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftArray[i]->GetMeshObject()->GetFactory());
 		ShaftArray_state[i] = tmpstate;
 		ShaftArray[i]->SetZBufMode(CS_ZBUF_USE);
 	}

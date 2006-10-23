@@ -1028,6 +1028,25 @@ recalc:
                 //If IsNumeric(temp2) = False Then Err.Raise 1000
                 ElevatorArray[Current]->OpenSpeed = atof(temp2.GetData());
 			}
+            if (LineData.Slice(0, 14).CompareNoCase("moveshaftdoors") == true)
+			{
+                //If IsNumeric(temp2) = False Then Err.Raise 1000
+				temp2.Trim();
+				if (csString(temp2).CompareNoCase("true") == true)
+					ElevatorArray[Current]->MoveShaftDoors = true;
+				else
+					ElevatorArray[Current]->MoveShaftDoors = false;
+			}
+			if (LineData.Slice(0, 14).CompareNoCase("servicedfloors") == true)
+			{
+                //copy string listing of serviced floors into array
+				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+				sbs->ElevatorArray[Current]->ServicedFloors.SetSize(tempdata.GetSize());
+				for (int i = 0; i <= tempdata.GetSize(); i++)
+				{
+					sbs->ElevatorArray[Current]->ServicedFloors[i] = atoi(tempdata[i]);
+				}
+			}
             
             //replace variables with actual values
 			buffer = Current;
@@ -1145,6 +1164,27 @@ recalc:
 					ElevatorArray[Current]->AddDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), true, atof(tempdata[6]), atof(tempdata[7]));
 				else
 					ElevatorArray[Current]->AddDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), false, atof(tempdata[6]), atof(tempdata[7]));
+				
+				tempdata.DeleteAll();
+			}
+
+			//AddShaftDoors command
+            if (LineData.Slice(0, 13).CompareNoCase("addshaftdoors") == true)
+			{
+                //get data
+                tempdata.SplitString(LineData.Slice(14).GetData(), ",");
+				
+                //calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+                //if (tempdata.GetSize() < 11)
+					//Err.Raise 1003;
+                //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+                
+				ElevatorArray[Current]->AddShaftDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]));
 				
 				tempdata.DeleteAll();
 			}
