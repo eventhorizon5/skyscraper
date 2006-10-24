@@ -277,7 +277,8 @@ int Floor::AddCallButtons(bool up, bool down, int elevatornumber, bool direction
 
 	//firstidx = sbs->AddWallMain(CallButtonsUp_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
 	//sbs->AddWallMain(CallButtonsDown_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
-	return firstidx;
+	//return firstidx;
+	return 0;
 }
 
 void Floor::CutFloor(double x1, double x2, double z1, double z2)

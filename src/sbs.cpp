@@ -187,6 +187,10 @@ void SBS::Start()
 			ShaftArray[i]->Enabled(j, false);
 	}
 
+	//turn on shaft elevator doors
+	for (int i = 1; i <= Elevators; i++)
+		ElevatorArray[i]->ShaftDoorsEnabled(i, true);
+
 	//turn on first/lobby floor
 	FloorArray[0]->Enabled(true);
 

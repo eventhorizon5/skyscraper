@@ -1030,8 +1030,17 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 		ShaftDoorL[i]->SetZBufMode(CS_ZBUF_USE);
 
 		//create doors
-		sbs->AddWallMain(ShaftDoorL_state[ServicedFloors[i]], texture, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);
-		sbs->AddWallMain(ShaftDoorR_state[ServicedFloors[i]], texture, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);
+		sbs->AddWallMain(ShaftDoorL_state[i], texture, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);
+		sbs->AddWallMain(ShaftDoorR_state[i], texture, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);
+
+		//make doors invisible on start
+		ShaftDoorL[i]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ShaftDoorL[i]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ShaftDoorL[i]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+
+		ShaftDoorR[i]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ShaftDoorR[i]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ShaftDoorR[i]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
 	}
 	return 0;
 }
