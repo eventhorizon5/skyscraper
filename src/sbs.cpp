@@ -177,9 +177,16 @@ void SBS::Start()
 	EnableSkybox(true);
 
 	//turn off floors
-	for (int i=-Basements; i<=TotalFloors; i++)
+	for (int i = -Basements; i <= TotalFloors; i++)
 		FloorArray[i]->Enabled(false);
 	
+	//turn off shafts
+	for (int i = 0; i <= ShaftArray.GetSize(); i++)
+	{
+		for (int j = ShaftArray[i]->startfloor; j <= (ShaftArray[i]->startfloor - ShaftArray[i]->endfloor); j++)
+			ShaftArray[i]->Enabled(j, false);
+	}
+
 	//turn on first/lobby floor
 	FloorArray[0]->Enabled(true);
 

@@ -61,6 +61,8 @@ public:
 	csVector3 ShaftDoorOrigin; //shaft door origin
 	csArray<int> ServicedFloors; //list of floors this elevator services
 	bool MoveShaftDoors; //true if shaft doors should be operated
+	int AssignedShaft; //shaft number this elevator is assigned to
+	bool IsEnabled; //true if elevator is enabled
 
 	//functions
 	Elevator(int number);
@@ -89,6 +91,8 @@ public:
 	int AddShaftDoors(const char *texture, double CenterX, double CenterZ, double tw, double th);
 	int AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
 	void DumpQueues();
+	void Enabled(bool value);
+	void ShaftDoorsEnabled(int floor, bool value);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

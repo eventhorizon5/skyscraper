@@ -45,6 +45,7 @@ public:
 	~Shaft();
 	int AddWall(int floor, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ);
 	int AddFloor(int floor, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
+	void Enabled(int floor, bool value);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array

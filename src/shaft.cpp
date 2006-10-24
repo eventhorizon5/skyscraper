@@ -64,10 +64,10 @@ Shaft::Shaft(int number, int type, double x1, double x2, double z1, double z2, i
 		csRef<iMeshWrapper> tmpmesh;
 		csRef<iThingFactoryState> tmpstate;
 		tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-		ShaftArray[i] = tmpmesh;
-		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftArray[i]->GetMeshObject()->GetFactory());
-		ShaftArray_state[i] = tmpstate;
-		ShaftArray[i]->SetZBufMode(CS_ZBUF_USE);
+		ShaftArray[i - startfloor] = tmpmesh;
+		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftArray[i - startfloor]->GetMeshObject()->GetFactory());
+		ShaftArray_state[i - startfloor] = tmpstate;
+		ShaftArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
 	}
 }
 
@@ -79,10 +79,27 @@ Shaft::~Shaft()
 
 int Shaft::AddWall(int floor, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ)
 {
-	return sbs->AddWallMain(ShaftArray_state[floor], texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, height1, height2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th, revX, revY, revZ);
+	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, height1, height2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th, revX, revY, revZ);
 }
 
 int Shaft::AddFloor(int floor, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
-   	return sbs->AddFloorMain(ShaftArray_state[floor], texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th);
+   	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th);
+}
+
+void Shaft::Enabled(int floor, bool value)
+{
+	//turns shaft elevator doors on/off
+	if (value == true)
+	{
+		ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+	}
 }

@@ -1047,6 +1047,11 @@ recalc:
 					sbs->ElevatorArray[Current]->ServicedFloors[i] = atoi(tempdata[i]);
 				}
 			}
+            if (LineData.Slice(0, 13).CompareNoCase("assignedshaft") == true)
+			{
+                //If IsNumeric(temp2) = False Then Err.Raise 1000
+                ElevatorArray[Current]->AssignedShaft = atoi(temp2.GetData());
+			}
             
             //replace variables with actual values
 			buffer = Current;

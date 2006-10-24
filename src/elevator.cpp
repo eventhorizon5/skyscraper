@@ -70,6 +70,8 @@ Elevator::Elevator(int number)
 	ElevWait = false;
 	EmergencyStop = false;
 	MoveShaftDoors = true;
+	AssignedShaft = 0;
+	IsEnabled = true;
 
 	//create object meshes
 	buffer = Number;
@@ -150,7 +152,13 @@ void Elevator::CreateElevator(double x, double z, int floor)
 	ElevatorDoorL_movable->UpdateMove();
 	ElevatorDoorR_movable->SetPosition(Origin);
 	ElevatorDoorR_movable->UpdateMove();
-	
+
+	//resize shaft door arrays
+	ShaftDoorL.SetSize(ServicedFloors.GetSize());
+	ShaftDoorR.SetSize(ServicedFloors.GetSize());
+	ShaftDoorL_state.SetSize(ServicedFloors.GetSize());
+	ShaftDoorR_state.SetSize(ServicedFloors.GetSize());
+
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }
 
@@ -424,6 +432,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	static double OpenChange;
 	static float marker1;
 	static float marker2;
+	int index;
 
 	//todo: turn off autoclose timer
 
@@ -457,6 +466,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		}
 
 		ElevatorDoorSpeed = 0;
+		index = ServicedFloors.Find(GetElevatorFloor());
 	}
 
 	//Speed up doors
@@ -476,10 +486,10 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			ElevatorDoorR_movable->UpdateMove();
 
 			//move shaft doors
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorL[index]->GetMovable()->UpdateMove();
+			ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorR[index]->GetMovable()->UpdateMove();
 			return;
 		}
 	}
@@ -499,10 +509,10 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			ElevatorDoorR_movable->UpdateMove();
 
 			//move shaft doors
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorL[index]->GetMovable()->UpdateMove();
+			ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorR[index]->GetMovable()->UpdateMove();
 
 			return;
 		}
@@ -520,10 +530,10 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			ElevatorDoorR_movable->UpdateMove();
 
 			//move shaft doors
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorL[index]->GetMovable()->UpdateMove();
+			ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorR[index]->GetMovable()->UpdateMove();
 
 			return;
 		}
@@ -539,10 +549,10 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			ElevatorDoorR_movable->UpdateMove();
 
 			//move shaft doors
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorL[index]->GetMovable()->UpdateMove();
+			ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorR[index]->GetMovable()->UpdateMove();
 
 			return;
 		}
@@ -564,10 +574,10 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			ElevatorDoorR_movable->UpdateMove();
 
 			//move shaft doors
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorL[index]->GetMovable()->UpdateMove();
+			ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+			ShaftDoorR[index]->GetMovable()->UpdateMove();
 		}
 		else
 		{
@@ -578,10 +588,10 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			ElevatorDoorR_movable->UpdateMove();
 
 			//move shaft doors
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-			ShaftDoorL[GetElevatorFloor()]->GetMovable()->UpdateMove();
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
-			ShaftDoorR[GetElevatorFloor()]->GetMovable()->UpdateMove();
+			ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorL[index]->GetMovable()->UpdateMove();
+			ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+			ShaftDoorR[index]->GetMovable()->UpdateMove();
 		}
 		return;
 	}
@@ -620,7 +630,17 @@ void Elevator::MoveElevatorToFloor()
 		//If elevator is already on specified floor, open doors and exit
 		if (ElevatorFloor == GotoFloor)
 		{
+			sbs->Report("Elevator already on specified floor");
+			MoveElevator = false;
 			OpenDoors();
+			return;
+		}
+
+		//if destination floor is not in the ServicedFloors array, reset and exit
+		if (ServicedFloors.Find(GotoFloor) == csArrayItemNotFound)
+		{
+			sbs->Report("Destination floor not in ServicedFloors list");
+			MoveElevator = false;
 			return;
 		}
 
@@ -685,6 +705,31 @@ void Elevator::MoveElevatorToFloor()
 	FloorIndicator_movable->UpdateMove();
 	Plaque_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
 	Plaque_movable->UpdateMove();
+
+	//show partial shaft areas (3 floors at a time)
+	int i = GetElevatorFloor();
+	sbs->ShaftArray[AssignedShaft]->Enabled(i, true);
+	ShaftDoorsEnabled(i, true);
+	if (i > sbs->ShaftArray[AssignedShaft]->startfloor)
+	{
+		sbs->ShaftArray[AssignedShaft]->Enabled(i - 1, true);
+		ShaftDoorsEnabled(i - 1, true);
+	}
+	if (i < sbs->ShaftArray[AssignedShaft]->endfloor)
+	{
+		sbs->ShaftArray[AssignedShaft]->Enabled(i + 1, true);
+		ShaftDoorsEnabled(i + 1, true);
+	}
+	if (i > sbs->ShaftArray[AssignedShaft]->startfloor + 1)
+	{
+		sbs->ShaftArray[AssignedShaft]->Enabled(i - 2, false);
+		ShaftDoorsEnabled(i - 2, false);
+	}
+	if (i < sbs->ShaftArray[AssignedShaft]->endfloor - 1)
+	{
+		sbs->ShaftArray[AssignedShaft]->Enabled(i + 2, false);
+		ShaftDoorsEnabled(i + 2, false);
+	}
 
 	//move sounds
 
@@ -955,12 +1000,6 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 		z4 = ShaftDoorOrigin.z;
 	}
 
-	//resize shaft door meshes
-	ShaftDoorL.SetSize(ServicedFloors.GetSize());
-	ShaftDoorR.SetSize(ServicedFloors.GetSize());
-	ShaftDoorL_state.SetSize(ServicedFloors.GetSize());
-	ShaftDoorR_state.SetSize(ServicedFloors.GetSize());
-
 	csString buffer, buffer2, buffer3, buffer4;
 
 	//create doors
@@ -1025,4 +1064,87 @@ void Elevator::DumpQueues()
 	sbs->Report("Down:");
 	for (int i = 0; i < DownQueue.Length(); i++)
 		sbs->Report(csString(_itoa(i, intbuffer, 10)) + " - " + csString(_itoa(DownQueue[i], intbuffer, 10)));
+}
+
+void Elevator::Enabled(bool value)
+{
+	//shows/hides elevator
+	if (value == true)
+	{
+		ElevatorMesh->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ElevatorMesh->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ElevatorMesh->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+
+		FloorIndicator->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		FloorIndicator->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		FloorIndicator->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+
+		ElevatorDoorL->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ElevatorDoorL->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ElevatorDoorL->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+
+		ElevatorDoorR->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ElevatorDoorR->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ElevatorDoorR->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+
+		Plaque->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		Plaque->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		Plaque->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+
+		IsEnabled = true;
+	}
+	else
+	{
+		ElevatorMesh->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		ElevatorMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ElevatorMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+
+		FloorIndicator->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		FloorIndicator->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		FloorIndicator->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+
+		ElevatorDoorL->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		ElevatorDoorL->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ElevatorDoorL->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+
+		ElevatorDoorR->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		ElevatorDoorR->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ElevatorDoorR->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+
+		Plaque->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		Plaque->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		Plaque->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+
+		IsEnabled = false;
+	}
+}
+
+void Elevator::ShaftDoorsEnabled(int floor, bool value)
+{
+	//turns shaft elevator doors on/off
+	
+	int index = ServicedFloors.Find(floor);
+	if (index == csArrayItemNotFound)
+		return;
+
+	if (value == true)
+	{
+		ShaftDoorL[index]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ShaftDoorL[index]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ShaftDoorL[index]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+
+		ShaftDoorR[index]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ShaftDoorR[index]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ShaftDoorR[index]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		ShaftDoorL[index]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		ShaftDoorL[index]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ShaftDoorL[index]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+
+		ShaftDoorR[index]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		ShaftDoorR[index]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ShaftDoorR[index]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+	}
 }
