@@ -30,7 +30,19 @@
 
 class CallButton
 {
+public:
+	
+	csArray<int> Elevators; //elevators this call button set is assigned to
 
+	//functions
+	CallButton(const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, bool direction, double BackWidth, double BackHeight, bool ShowBack, bool UpButton, bool DownButton, double tw, double th);
+	~CallButton();
+
+private:
+	csRef<iMeshWrapper> CallButtonMesh; //call button mesh object
+	csRef<iMeshObject> CallButton_object;
+	csRef<iMeshObjectFactory> CallButton_factory;
+	csRef<iThingFactoryState> CallButton_state;
 };
 
 #endif

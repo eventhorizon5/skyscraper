@@ -31,7 +31,6 @@
 #include "elevator.h"
 #include "unix.h"
 extern SBS *sbs; //external pointer to the SBS engine
-extern Camera *c; //external pointer to the camera
 DebugPanel *dp; //self pointer
 MeshControl *mc;
 
@@ -140,10 +139,10 @@ void DebugPanel::On_bGo_Click(wxCommandEvent& event)
 void DebugPanel::On_bCallElevator_Click(wxCommandEvent& event)
 {
 	//calls elevator to the current camera floor
-	if (sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GetElevatorFloor() > c->CurrentFloor)
-		sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(c->CurrentFloor, false);
-	if (sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GetElevatorFloor() < c->CurrentFloor)
-		sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(c->CurrentFloor, true);
+	if (sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GetElevatorFloor() > sbs->camera->CurrentFloor)
+		sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(sbs->camera->CurrentFloor, false);
+	if (sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GetElevatorFloor() < sbs->camera->CurrentFloor)
+		sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(sbs->camera->CurrentFloor, true);
 }
 
 void DebugPanel::On_bOpen_Click(wxCommandEvent& event)
@@ -238,8 +237,8 @@ void DebugPanel::OnInit()
 void Timer::Notify()
 {
 	//this line doesn't work on unicode WX build
-	//p->t_camerap->SetLabel(wxT(wxString(_gcvt(c->GetPosition().x, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(c->GetPosition().y, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(c->GetPosition().z, 6, buffer), wxConvUTF8)));
-	dp->t_camerafloor->SetLabel(wxString(_itoa(c->CurrentFloor, intbuffer, 10), wxConvUTF8));
+	//p->t_camerap->SetLabel(wxT(wxString(_gcvt(sbs->camera->GetPosition().x, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(sbs->camera->GetPosition().y, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(sbs->camera->GetPosition().z, 6, buffer), wxConvUTF8)));
+	dp->t_camerafloor->SetLabel(wxString(_itoa(sbs->camera->CurrentFloor, intbuffer, 10), wxConvUTF8));
 	
 	if (sbs->Elevators > 0)
 	{
@@ -255,7 +254,7 @@ void Timer::Notify()
 
 	if (mc)
 	{
-		mc->chkFloor->SetValue(sbs->FloorArray[c->CurrentFloor]->IsEnabled);
+		mc->chkFloor->SetValue(sbs->FloorArray[sbs->camera->CurrentFloor]->IsEnabled);
 		mc->chkColumnFrame->SetValue(sbs->IsColumnFrameEnabled);
 		mc->chkSky->SetValue(sbs->IsSkyboxEnabled);
 		mc->chkLandscape->SetValue(sbs->IsLandscapeEnabled);

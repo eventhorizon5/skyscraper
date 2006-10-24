@@ -23,6 +23,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef _SBS_CAMERA_H
+#define _SBS_CAMERA_H
+
 #include "globals.h"
 
 class Camera
@@ -64,3 +67,5 @@ private:
 	csVector3 StartRotation; //camera's startup rotation
 
 };
+
+#endif

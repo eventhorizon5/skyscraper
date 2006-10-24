@@ -30,10 +30,8 @@
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"
+#include "callbutton.h"
 #include "unix.h"
-
-extern SBS *sbs; //external pointer to the SBS engine
-extern Camera *c; //external pointer to the camera
 
 double AltitudeCheck;
 
@@ -198,6 +196,18 @@ int SBS::LoadBuilding(const char * filename)
             Report("Finished textures");
             goto Nextline;
 		}
+		if (LineData.Slice(0, 10).CompareNoCase("<callbuttons>") == true)
+		{
+			Section = 6;
+			Context = "Call Buttons";
+			goto Nextline;
+		}
+		if (LineData.Slice(0, 14).CompareNoCase("<endcallbuttons>") == true)
+		{
+			Section = 0;
+			Context = "None";
+			goto Nextline;
+		}
         if (LineData.Slice(0, 5).CompareNoCase("<end>") == true)
 		{
 			Section = 0;
@@ -282,7 +292,7 @@ int SBS::LoadBuilding(const char * filename)
             //if (tempdata.GetSize < 9)
 				//Err.Raise 1003;
             if (csString(tempdata[0]).CompareNoCase("floor") == true)
-				tmpMesh = sbs->FloorArray[Current]->Level_state;
+				tmpMesh = FloorArray[Current]->Level_state;
 			else
 			{
                 if (Section == 2)
@@ -294,13 +304,13 @@ int SBS::LoadBuilding(const char * filename)
             buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
-				tmpMesh = sbs->External_state;
+				tmpMesh = External_state;
             if (buffer == "landscape")
-				tmpMesh = sbs->Landscape_state;
+				tmpMesh = Landscape_state;
             if (buffer == "buildings")
-				tmpMesh = sbs->Buildings_state;
+				tmpMesh = Buildings_state;
             if (buffer == "columnframe")
-				tmpMesh = sbs->ColumnFrame_state;
+				tmpMesh = ColumnFrame_state;
             //if IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
             CreateWallBox2(tmpMesh, tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
 			tempdata.DeleteAll();
@@ -318,7 +328,7 @@ int SBS::LoadBuilding(const char * filename)
             //if (tempdata.GetSize < 9)
 				//Err.Raise 1003
             if (csString(tempdata[0]).CompareNoCase("floor") == true)
-                tmpMesh = sbs->FloorArray[Current]->Level_state;
+                tmpMesh = FloorArray[Current]->Level_state;
 			else
 			{
                 if (Section == 2)
@@ -330,13 +340,13 @@ int SBS::LoadBuilding(const char * filename)
             buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
-				tmpMesh = sbs->External_state;
+				tmpMesh = External_state;
             if (buffer == "landscape")
-				tmpMesh = sbs->Landscape_state;
+				tmpMesh = Landscape_state;
             if (buffer == "buildings")
-				tmpMesh = sbs->Buildings_state;
+				tmpMesh = Buildings_state;
             if (buffer == "columnframe")
-				tmpMesh = sbs->ColumnFrame_state;
+				tmpMesh = ColumnFrame_state;
             //If IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
             CreateWallBox(tmpMesh, tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
 			tempdata.DeleteAll();
@@ -359,18 +369,18 @@ int SBS::LoadBuilding(const char * filename)
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "floor")
-                tmpMesh = sbs->FloorArray[Current]->Level_state;
+                tmpMesh = FloorArray[Current]->Level_state;
 			if (buffer == "external")
 			{
-				tmpMesh = sbs->External_state;
+				tmpMesh = External_state;
 				extcheck = true;
 			}
             if (buffer == "landscape")
-				tmpMesh = sbs->Landscape_state;
+				tmpMesh = Landscape_state;
             if (buffer == "buildings")
-				tmpMesh = sbs->Buildings_state;
+				tmpMesh = Buildings_state;
             if (buffer == "columnframe")
-				tmpMesh = sbs->ColumnFrame_state;
+				tmpMesh = ColumnFrame_state;
 			
 			csPoly3D varray;
 			int alength;
@@ -412,18 +422,18 @@ int SBS::LoadBuilding(const char * filename)
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "floor")
-                tmpMesh = sbs->FloorArray[Current]->Level_state;
+                tmpMesh = FloorArray[Current]->Level_state;
 			if (buffer == "external")
 			{
-				tmpMesh = sbs->External_state;
+				tmpMesh = External_state;
 				extcheck = true;
 			}
             if (buffer == "landscape")
-				tmpMesh = sbs->Landscape_state;
+				tmpMesh = Landscape_state;
             if (buffer == "buildings")
-				tmpMesh = sbs->Buildings_state;
+				tmpMesh = Buildings_state;
             if (buffer == "columnframe")
-				tmpMesh = sbs->ColumnFrame_state;
+				tmpMesh = ColumnFrame_state;
 			
 			csPoly3D varray;
 			int alength;
@@ -462,7 +472,7 @@ int SBS::LoadBuilding(const char * filename)
 				tempdata.Put(temp3, buffer);
 			}
 
-			sbs->ShaftArray[atoi(tempdata[0])] = new Shaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]));
+			ShaftArray[atoi(tempdata[0])] = new Shaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]));
 		}
 
         //Process globals
@@ -487,7 +497,7 @@ int SBS::LoadBuilding(const char * filename)
 			{
                 //if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-                c->DefaultAltitude = atof(temp2.GetData());
+                camera->DefaultAltitude = atof(temp2.GetData());
 			}
             if (LineData.Slice(0, 6).CompareNoCase("shafts") == true)
 			{
@@ -523,7 +533,7 @@ int SBS::LoadBuilding(const char * filename)
 			{
                 //if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-                c->StartFloor = atoi(temp2.GetData());
+                camera->StartFloor = atoi(temp2.GetData());
 			}
             if (LineData.Slice(0, 10).CompareNoCase("horizscale") == true)
 			{
@@ -533,20 +543,20 @@ int SBS::LoadBuilding(const char * filename)
 			}
             if (LineData.Slice(0, 14).CompareNoCase("cameraposition") == true)
 			{
-                c->StartPositionX  = atof(temp2.Slice(0, temp2.Find(",", 0)).GetData());
-                c->StartPositionZ  = atof(temp2.Slice(temp2.Find(",", 0) + 1).GetData());
+                camera->StartPositionX  = atof(temp2.Slice(0, temp2.Find(",", 0)).GetData());
+                camera->StartPositionZ  = atof(temp2.Slice(temp2.Find(",", 0) + 1).GetData());
 			}
             if (LineData.Slice(0, 15).CompareNoCase("cameradirection") == true)
 			{
                 temp3 = temp2.Find(",", 0);
                 temp4 = temp2.Find(",", temp3 + 1);
-				c->SetStartDirection(csVector3(atof(temp2.Slice(0, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
+				camera->SetStartDirection(csVector3(atof(temp2.Slice(0, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
 			}
             if (LineData.Slice(0, 14).CompareNoCase("camerarotation") == true)
 			{
                 temp3 = temp2.Find(",", 0);
 				temp4 = temp2.Find(",", temp3 + 1);
-                c->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
+                camera->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
 			}
 
 			//Set command
@@ -1040,11 +1050,11 @@ recalc:
 			if (LineData.Slice(0, 14).CompareNoCase("servicedfloors") == true)
 			{
                 //copy string listing of serviced floors into array
-				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
-				sbs->ElevatorArray[Current]->ServicedFloors.SetSize(tempdata.GetSize());
-				for (int i = 0; i <= tempdata.GetSize(); i++)
+				tempdata.SplitString(temp2.GetData(), ",");
+				ElevatorArray[Current]->ServicedFloors.SetSize(tempdata.GetSize());
+				for (int i = 0; i < tempdata.GetSize(); i++)
 				{
-					sbs->ElevatorArray[Current]->ServicedFloors[i] = atoi(tempdata[i]);
+					ElevatorArray[Current]->ServicedFloors[i] = atoi(tempdata[i]);
 				}
 			}
             if (LineData.Slice(0, 13).CompareNoCase("assignedshaft") == true)
@@ -1266,6 +1276,62 @@ recalc:
                     LoadTexture("/root/" + temp2, temp6);
 				}
 				tempdata.DeleteAll();
+			}
+		}
+
+		//Process call buttons
+		if (Section == 6)
+		{
+            if (LineData.Slice(0, 6).CompareNoCase("create") == true)
+			{
+				bool direction, ShowBack, UpButton, DownButton;
+                tempdata.SplitString(LineData.Slice(5).GetData(), ",");
+
+				//calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				
+				//increment array size
+				CallButtonArray.SetSize(CallButtonArray.GetSize() + 1);
+				Current = CallButtonArray.GetSize();
+				
+				//get boolean values
+				if (csString(tempdata[6]).CompareNoCase("true") == true)
+					direction = true;
+				else
+					direction = false;
+				if (csString(tempdata[9]).CompareNoCase("true") == true)
+					ShowBack = true;
+				else
+					ShowBack = false;
+				if (csString(tempdata[10]).CompareNoCase("true") == true)
+					UpButton = true;
+				else
+					UpButton = false;
+				if (csString(tempdata[11]).CompareNoCase("true") == true)
+					DownButton = true;
+				else
+					DownButton = false;
+				
+				//create call button object
+				CallButtonArray[Current] = new CallButton(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), direction, atof(tempdata[7]), atof(tempdata[8]), ShowBack, UpButton, DownButton, atof(tempdata[12]), atof(tempdata[13]));
+			}
+            
+            if (LineData.Slice(0, 9).CompareNoCase("elevators") == true)
+			{
+				//get text after equal sign
+				temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+            
+				//copy values into elevators array
+				tempdata.SplitString(temp2.GetData(), ",");
+				CallButtonArray[Current]->Elevators.SetSize(tempdata.GetSize());
+				for (int i = 0; i < tempdata.GetSize(); i++)
+				{
+					CallButtonArray[Current]->Elevators[i] = atoi(tempdata[i]);
+				}
 			}
 		}
 

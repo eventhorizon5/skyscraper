@@ -27,6 +27,8 @@
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"
+#include "callbutton.h"
+#include "camera.h"
 
 //global functions
 bool IsEven(int Number);
@@ -103,6 +105,8 @@ public:
 	csArray<Floor*> FloorArray; //pointer array to floor objects
 	csArray<Elevator*> ElevatorArray; //pointer array to elevator objects
 	csArray<Shaft*> ShaftArray; //pointer array to shaft objects
+	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
+	Camera *camera; //camera object
 	bool RenderOnly; //skip sim processing and only render graphics
     bool InputOnly; //skip sim processing and only run input and rendering code
     bool IsFalling; //make user fall

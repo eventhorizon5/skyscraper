@@ -31,7 +31,6 @@
 #include "elevator.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
-extern Camera *c; //external pointer to the camera
 MeshControl *p; //self pointer
 
 BEGIN_EVENT_TABLE(MeshControl,wxDialog)
@@ -114,5 +113,5 @@ void MeshControl::On_chkExternal_Change(wxCommandEvent& event)
 
 void MeshControl::On_chkFloor_Change(wxCommandEvent& event)
 {
-	sbs->FloorArray[c->CurrentFloor]->Enabled(chkFloor->GetValue());
+	sbs->FloorArray[sbs->camera->CurrentFloor]->Enabled(chkFloor->GetValue());
 }

@@ -32,7 +32,6 @@
 #include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
-extern Camera *c; //external pointer to the camera
 
 Elevator::Elevator(int number)
 {
@@ -661,7 +660,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//If user is riding this elevator, then turn off floor
 		if (ElevatorSync == true)
-			sbs->FloorArray[c->CurrentFloor]->Enabled(false);
+			sbs->FloorArray[sbs->camera->CurrentFloor]->Enabled(false);
 
 		//Turn off sky, buildings, and landscape
 		sbs->EnableSkybox(false);
@@ -696,7 +695,7 @@ void Elevator::MoveElevatorToFloor()
 	Elevator_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
 	Elevator_movable->UpdateMove();
 	if (ElevatorSync == true)
-		c->SetPosition(csVector3(c->GetPosition().x, GetPosition().y + c->DefaultAltitude, c->GetPosition().z));
+		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->DefaultAltitude, sbs->camera->GetPosition().z));
 	ElevatorDoorL_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
 	ElevatorDoorL_movable->UpdateMove();
 	ElevatorDoorR_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
@@ -861,7 +860,7 @@ void Elevator::MoveElevatorToFloor()
 		Elevator_movable->SetPosition(csVector3(GetPosition().x, Destination, GetPosition().z));
 		Elevator_movable->UpdateMove();
 		if (ElevatorSync == true)
-			c->SetPosition(csVector3(c->GetPosition().x, GetPosition().y + c->DefaultAltitude, c->GetPosition().z));
+			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->DefaultAltitude, sbs->camera->GetPosition().z));
 		ElevatorDoorL_movable->SetPosition(csVector3(ElevatorDoorL_movable->GetPosition().x, Destination, ElevatorDoorL_movable->GetPosition().z));
 		ElevatorDoorL_movable->UpdateMove();
 		ElevatorDoorR_movable->SetPosition(csVector3(ElevatorDoorR_movable->GetPosition().x, Destination, ElevatorDoorR_movable->GetPosition().z));

@@ -28,11 +28,9 @@
 #include <crystalspace.h>
 #include <sstream>
 #include "sbs.h"
-#include "camera.h"
 #include "unix.h"
 
 SBS *sbs; //self reference
-Camera *c; //camera object
 wxTimer *stimer; //timer object
 
 iObjectRegistry* object_reg;
@@ -103,8 +101,8 @@ SBS::~SBS()
 	//engine destructor
 
 	//delete camera object
-	delete c;
-	c = 0;
+	delete camera;
+	camera = 0;
 
 	//delete floors
 	for (int i = -Basements; i <= TotalFloors; i++)
@@ -136,7 +134,7 @@ void SBS::Start()
 	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
 
 	//load camera object
-	c = new Camera();
+	camera = new Camera();
 
 	//set main simulation values
 	InputOnly = false;
@@ -165,9 +163,9 @@ void SBS::Start()
 	engine->Prepare();
 
 	//move camera to start location
-	c->SetToStartPosition();
-	c->SetToStartDirection();
-	c->SetToStartRotation();
+	camera->SetToStartPosition();
+	camera->SetToStartDirection();
+	camera->SetToStartRotation();
 
 	//turn on main objects
 	EnableBuildings(true);
@@ -181,7 +179,7 @@ void SBS::Start()
 		FloorArray[i]->Enabled(false);
 	
 	//turn off shafts
-	for (int i = 0; i <= ShaftArray.GetSize(); i++)
+	for (int i = 0; i < ShaftArray.GetSize(); i++)
 	{
 		for (int j = ShaftArray[i]->startfloor; j <= (ShaftArray[i]->startfloor - ShaftArray[i]->endfloor); j++)
 			ShaftArray[i]->Enabled(j, false);
@@ -279,21 +277,21 @@ void SBS::GetInput()
 		// the camera to strafe up, down, left or right from it's
 		// current position.
 		if (kbd->GetKeyState (CSKEY_RIGHT))
-			c->Move (CS_VEC_RIGHT * 8 * speed);
+			camera->Move (CS_VEC_RIGHT * 8 * speed);
 		if (kbd->GetKeyState (CSKEY_LEFT))
-			c->Move (CS_VEC_LEFT * 8 * speed);
+			camera->Move (CS_VEC_LEFT * 8 * speed);
 		if (kbd->GetKeyState (CSKEY_UP))
-			c->Move (CS_VEC_UP * 8 * speed);
+			camera->Move (CS_VEC_UP * 8 * speed);
 		if (kbd->GetKeyState (CSKEY_DOWN))
-			c->Move (CS_VEC_DOWN * 8 * speed);
+			camera->Move (CS_VEC_DOWN * 8 * speed);
 	}
 	else if (kbd->GetKeyState (CSKEY_ALT))
 	{
 		//rotate on the Z axis if the Alt key is pressed with the left/right arrows
 		if (kbd->GetKeyState (CSKEY_RIGHT))
-			c->Rotate(CS_VEC_FORWARD * speed);
+			camera->Rotate(CS_VEC_FORWARD * speed);
 		if (kbd->GetKeyState (CSKEY_LEFT))
-			c->Rotate(CS_VEC_BACKWARD * speed);
+			camera->Rotate(CS_VEC_BACKWARD * speed);
 	}
 	else
 	{
@@ -302,42 +300,42 @@ void SBS::GetInput()
 		// _camera's_ X axis (more on this in a second) and up and down
 		// arrows cause the camera to go forwards and backwards.
 		if (kbd->GetKeyState (CSKEY_RIGHT))
-			c->Rotate(CS_VEC_UP * speed);
+			camera->Rotate(CS_VEC_UP * speed);
 		if (kbd->GetKeyState (CSKEY_LEFT))
-			c->Rotate(CS_VEC_DOWN * speed);
+			camera->Rotate(CS_VEC_DOWN * speed);
 		if (kbd->GetKeyState (CSKEY_PGUP))
-			c->Rotate(CS_VEC_RIGHT * speed);
+			camera->Rotate(CS_VEC_RIGHT * speed);
 		if (kbd->GetKeyState (CSKEY_PGDN))
-			c->Rotate(CS_VEC_LEFT * speed);
+			camera->Rotate(CS_VEC_LEFT * speed);
 		if (kbd->GetKeyState (CSKEY_UP))
 		{
 			double KeepAltitude;
-			KeepAltitude = c->GetPosition().y;
-			c->Move (CS_VEC_FORWARD * 8 * speed);
-			if (c->GetPosition().y != KeepAltitude)
-				c->SetPosition(csVector3(c->GetPosition().x, KeepAltitude, c->GetPosition().z));
+			KeepAltitude = camera->GetPosition().y;
+			camera->Move (CS_VEC_FORWARD * 8 * speed);
+			if (camera->GetPosition().y != KeepAltitude)
+				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
 		}
 		if (kbd->GetKeyState (CSKEY_DOWN))
 		{
 			double KeepAltitude;
-			KeepAltitude = c->GetPosition().y;
-			c->Move (CS_VEC_BACKWARD * 8 * speed);
-			if (c->GetPosition().y != KeepAltitude)
-				c->SetPosition(csVector3(c->GetPosition().x, KeepAltitude, c->GetPosition().z));
+			KeepAltitude = camera->GetPosition().y;
+			camera->Move (CS_VEC_BACKWARD * 8 * speed);
+			if (camera->GetPosition().y != KeepAltitude)
+				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
 		}
 
 		if (kbd->GetKeyState (CSKEY_SPACE))
 		{
 			//reset view
-			c->SetToStartDirection();
-			c->SetToStartRotation();
+			camera->SetToStartDirection();
+			camera->SetToStartRotation();
 		}
 
 		//values from old version
 		if (kbd->GetKeyState (CSKEY_HOME))
-			c->Move (CS_VEC_UP * 8 * speed);
+			camera->Move (CS_VEC_UP * 8 * speed);
 		if (kbd->GetKeyState (CSKEY_END))
-			c->Move (CS_VEC_DOWN * 8 * speed);
+			camera->Move (CS_VEC_DOWN * 8 * speed);
 	}
 }
 
@@ -369,7 +367,7 @@ void SBS::SetupFrame()
 			Fall();
 
 		//Determine floor that the camera is on
-		c->UpdateCameraFloor();
+		camera->UpdateCameraFloor();
 
 		//run elevator handlers
 		for (int i = 1; i <= Elevators; i++)

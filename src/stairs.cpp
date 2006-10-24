@@ -30,7 +30,6 @@
 #include "camera.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
-extern Camera *c; //external pointer to the camera
 
 Stairs::Stairs(int type, double CenterX, double CenterZ, double width, double length, double risersize, double treadsize)
 {

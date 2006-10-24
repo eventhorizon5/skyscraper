@@ -30,7 +30,6 @@
 #include "camera.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
-extern Camera *c; //external pointer to the camera
 
 Floor::Floor(int number)
 {
@@ -85,8 +84,8 @@ void Floor::SetCameraFloor()
 {
 	//Moves camera to specified floor (sets altitude to the floor's altitude plus CameraAltitude)
 	
-	csVector3 camlocation = c->GetPosition();
-	c->SetPosition(csVector3(camlocation.x, Altitude + c->DefaultAltitude, camlocation.z));
+	csVector3 camlocation = sbs->camera->GetPosition();
+	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + sbs->camera->DefaultAltitude, camlocation.z));
 }
 
 int Floor::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, bool isexternal)

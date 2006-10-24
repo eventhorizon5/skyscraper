@@ -30,7 +30,6 @@
 #include "camera.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
-extern Camera *c; //external pointer to the camera
 
 Shaft::Shaft(int number, int type, double x1, double x2, double z1, double z2, int _startfloor, int _endfloor)
 {

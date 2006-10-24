@@ -31,4 +31,14 @@
 #include "elevator.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
-extern Camera *c; //external pointer to the camera
+
+CallButton::CallButton(const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, bool direction, double BackWidth, double BackHeight, bool ShowBack, bool UpButton, bool DownButton, double tw, double th)
+{
+
+}
+
+CallButton::~CallButton()
+{
+
+}
+
