@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="5" />
 	<Project>
@@ -102,6 +102,18 @@
 			</Target>
 		</Build>
 		<Unit filename="..\skyscraper.ico">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\callbutton.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
+		<Unit filename="..\src\callbutton.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
