@@ -27,6 +27,7 @@
 #define _SBS_FLOOR_H
 
 #include "globals.h"
+#include "callbutton.h"
 
 class Floor
 {
@@ -54,6 +55,7 @@ public:
 	double DoorWidth; //width of doors; may be removed
 	bool IsEnabled; //is floor enabled?
 	csArray<int> FloorList; //list of floor/ceiling polygon indices
+	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
 
 	//functions
 	Floor(int number);

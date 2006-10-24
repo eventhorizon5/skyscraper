@@ -54,6 +54,7 @@ int SBS::LoadBuilding(const char * filename)
     csString temp7 = "";
     csStringArray tempdata;
     int Current = 0;
+	int CurrentCallButton = 0;
     int FloorCheck = 0;
     int RangeL = 0;
     int RangeH = 0;
@@ -195,18 +196,6 @@ int SBS::LoadBuilding(const char * filename)
             Context = "None";
             Report("Finished textures");
             goto Nextline;
-		}
-		if (LineData.Slice(0, 10).CompareNoCase("<callbuttons>") == true)
-		{
-			Section = 6;
-			Context = "Call Buttons";
-			goto Nextline;
-		}
-		if (LineData.Slice(0, 14).CompareNoCase("<endcallbuttons>") == true)
-		{
-			Section = 0;
-			Context = "None";
-			goto Nextline;
 		}
         if (LineData.Slice(0, 5).CompareNoCase("<end>") == true)
 		{
@@ -869,6 +858,49 @@ recalc:
 				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 			}
 
+			//CallButtonElevators command
+            if (LineData.Slice(0, 19).CompareNoCase("callbuttonelevators") == true)
+			{
+				//get text after equal sign
+				temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+            
+				//create a new call buttons object
+				FloorArray[Current]->CallButtonArray.SetSize(FloorArray[Current]->CallButtonArray.GetSize() + 1);
+				CurrentCallButton = FloorArray[Current]->CallButtonArray.GetSize();
+				FloorArray[Current]->CallButtonArray[CurrentCallButton] = new CallButton();
+
+				//copy values into elevators array
+				tempdata.SplitString(temp2.GetData(), ",");
+				FloorArray[Current]->CallButtonArray[CurrentCallButton]->Elevators.SetSize(tempdata.GetSize());
+				for (int i = 0; i < tempdata.GetSize(); i++)
+				{
+					FloorArray[Current]->CallButtonArray[CurrentCallButton]->Elevators[i] = atoi(tempdata[i]);
+				}
+			}
+
+			//CreateCallButtons command
+            if (LineData.Slice(0, 17).CompareNoCase("createcallbuttons") == true)
+			{
+				bool ShowBack;
+                tempdata.SplitString(LineData.Slice(5).GetData(), ",");
+
+				//calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				
+				//get boolean values
+				if (csString(tempdata[9]).CompareNoCase("true") == true)
+					ShowBack = true;
+				else
+					ShowBack = false;
+				
+				//create call button
+				FloorArray[Current]->CallButtonArray[CurrentCallButton]->Create(Current, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), ShowBack, atof(tempdata[10]), atof(tempdata[11]));
+			}
+            
 			//handle floor range
             if (RangeL != RangeH && LineData.Slice(0, 11).CompareNoCase("<endfloors>") == true)
 			{
@@ -1276,62 +1308,6 @@ recalc:
                     LoadTexture("/root/" + temp2, temp6);
 				}
 				tempdata.DeleteAll();
-			}
-		}
-
-		//Process call buttons
-		if (Section == 6)
-		{
-            if (LineData.Slice(0, 6).CompareNoCase("create") == true)
-			{
-				bool direction, ShowBack, UpButton, DownButton;
-                tempdata.SplitString(LineData.Slice(5).GetData(), ",");
-
-				//calculate inline math
-                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
-				{
-					buffer = Calc(tempdata[temp3]);
-					tempdata.Put(temp3, buffer);
-				}
-				
-				//increment array size
-				CallButtonArray.SetSize(CallButtonArray.GetSize() + 1);
-				Current = CallButtonArray.GetSize();
-				
-				//get boolean values
-				if (csString(tempdata[6]).CompareNoCase("true") == true)
-					direction = true;
-				else
-					direction = false;
-				if (csString(tempdata[9]).CompareNoCase("true") == true)
-					ShowBack = true;
-				else
-					ShowBack = false;
-				if (csString(tempdata[10]).CompareNoCase("true") == true)
-					UpButton = true;
-				else
-					UpButton = false;
-				if (csString(tempdata[11]).CompareNoCase("true") == true)
-					DownButton = true;
-				else
-					DownButton = false;
-				
-				//create call button object
-				CallButtonArray[Current] = new CallButton(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), direction, atof(tempdata[7]), atof(tempdata[8]), ShowBack, UpButton, DownButton, atof(tempdata[12]), atof(tempdata[13]));
-			}
-            
-            if (LineData.Slice(0, 9).CompareNoCase("elevators") == true)
-			{
-				//get text after equal sign
-				temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
-            
-				//copy values into elevators array
-				tempdata.SplitString(temp2.GetData(), ",");
-				CallButtonArray[Current]->Elevators.SetSize(tempdata.GetSize());
-				for (int i = 0; i < tempdata.GetSize(); i++)
-				{
-					CallButtonArray[Current]->Elevators[i] = atoi(tempdata[i]);
-				}
 			}
 		}
 

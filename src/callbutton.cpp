@@ -32,7 +32,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-CallButton::CallButton(const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, bool direction, double BackWidth, double BackHeight, bool ShowBack, bool UpButton, bool DownButton, double tw, double th)
+CallButton::CallButton()
 {
 
 }
@@ -42,3 +42,15 @@ CallButton::~CallButton()
 
 }
 
+void CallButton::Create(int floornum, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th)
+{
+	//create a set of call buttons
+
+	floor = floornum;
+
+}
+
+void CallButton::Enabled(bool value)
+{
+
+}
