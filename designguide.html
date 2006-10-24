@@ -144,7 +144,7 @@
     <font size="2" face="Courier New, Courier, mono">Parameter = <em>value</em></font></p>
   <p align="left">Example:<br>
     <font size="2" face="Courier New, Courier, mono">Name = Triton Center</font></p>
-  <p align="left">Here are the available commands:</p>
+  <p align="left"><strong>Parameters</strong>:</p>
   <p align="left"><strong>1. Name</strong> - building name, required<br>
     Example: <font size="2" face="Courier New, Courier, mono">Name = My Building</font></p>
   <p align="left"> <strong>2. Designer</strong> - name of building's designer, 
@@ -206,7 +206,11 @@
   <p align="left">&nbsp;</p>
   <p align="left"><strong> <font size="+1">4. The <em>Textures</em> Section</font></strong></p>
   <p align="left">The Textures section loads textures into the simulation and 
-    assigns names to them, for use in the rest of the sections.</p>
+    assigns names to them, for use in the rest of the sections. The section starts 
+    with this header:<br>
+    <font size="2" face="Courier New, Courier, mono">&lt;Textures&gt;</font></p>
+  <p align="left">and ends with this footer:<br>
+    <font size="2" face="Courier New, Courier, mono">&lt;EndTextures&gt;</font></p>
   <p align="left"><strong>1. Load</strong> - loads a texture<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Load <em>filename</em>, 
     <em>name</em></font><br>
@@ -351,6 +355,42 @@
     <em>revx, revy, revz</em></font></p>
   <p align="left">The parameters are the same as the AddWall command, and the 
     <em>number</em> value is the shaft number to use</p>
+  <p align="left"><strong>8. CallButtonElevators</strong> - comma-separated list 
+    of elevators the next created call button set will work with (this must be 
+    specified before CreateCallButtons)<br>
+    Example: <font size="2" face="Courier New, Courier, mono">CallButtonElevators 
+    1, 2, 3, 4</font></p>
+  <p align="left"> <strong>9. CreateCallButtons</strong> - creates a call button 
+    set<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">CreateCallButtons<em> 
+    BackTexture</em>, <em>UpButtonTexture</em>, <em>DownButtonTexture, CenterX, 
+    CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th<br>
+    </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
+    </em>Create Marble, CallButtonsTex, CallButtonsTex, -10, 0, 4, right, 0.5, 
+    1, true, 1, 1</font></p>
+  <p align="left"><em>BackTexture</em> is the texture of the wall plate behind 
+    the buttons</p>
+  <p align="left"><em>UpButtonTexture</em> and <em>DownButtonTexture</em> are 
+    the textures used for the buttons themselves</p>
+  <p align="left"><em>CenterX</em> and <em>CenterZ</em> are the central location 
+    of the call button set object</p>
+  <p align="left"><em>voffset</em> is the altitude offset that the object is above 
+    each floor</p>
+  <p align="left"><em>direction </em>determines the direction the call buttons 
+    face:<br>
+    'front' means they face towards the front of the building<br>
+    'back' means they face towards the back of the building<br>
+    'left' means they face left<br>
+    'right' means they face right</p>
+  <p align="left"><em>BackWidth</em> and <em>BackHeight</em> are the width and 
+    height of the wall plate</p>
+  <p align="left"><em>ShowBack</em> determines if the wall plate should be shown, 
+    and is either true or false</p>
+  <p align="left"><em>tw</em> and <em>th</em> are the texture scaling for the 
+    wall plate.</p>
+  <p align="left">The up and down buttons will be automatically created based 
+    on the range of the first specified elevator in the CallButtonElevators command 
+    (above).</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">6. The <em>External</em> Section</font></strong></p>
   <p align="left">The <em>External</em> section defines parts of the building's 
@@ -401,8 +441,9 @@
   <p align="left"><strong>Variables:</strong></p>
   <p align="left"><font size="2" face="Courier New, Courier, mono"><strong>%elevator%</strong></font> 
     - number of the current elevator</p>
-  <p align="left">Parameters (the values of most of these are still being figured 
-    out as to what they exactly correspond to in real-world terms):</p>
+  <p align="left"><strong>Parameters</strong> (the values of most of these are 
+    still being figured out as to what they exactly correspond to in real-world 
+    terms):</p>
   <p align="left"><strong>1. Speed</strong> - maximum speed of the elevator<br>
     Example: <font size="2" face="Courier New, Courier, mono">Speed = 0.7</font></p>
   <p align="left"><strong>2. Acceleration</strong> - acceleration speed of the 
@@ -423,6 +464,10 @@
     doors. This parameter is really only meant for debugging purposes.<br>
     Example: <font size="2" face="Courier New, Courier, mono">MoveShaftDoors = 
     false</font></p>
+  <p align="left"><strong>7. AssignedShaft</strong> - the shaft number this elevator 
+    is in<br>
+    Example: <font size="2" face="Courier New, Courier, mono">AssignedShaft = 
+    1</font></p>
   <p align="left"><br>
     <strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
