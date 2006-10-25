@@ -40,6 +40,7 @@ public:
 	~CallButton();
 	void Create(int floornum, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th);
 	void Enabled(bool value);
+	void Call(int direction); //-1 is down, 1 is up
 
 private:
 	csRef<iMeshWrapper> CallButtonMesh; //call button mesh object

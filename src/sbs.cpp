@@ -179,9 +179,9 @@ void SBS::Start()
 		FloorArray[i]->Enabled(false);
 	
 	//turn off shafts
-	for (int i = 0; i < ShaftArray.GetSize(); i++)
+	for (int i = 1; i < ShaftArray.GetSize(); i++)
 	{
-		for (int j = ShaftArray[i]->startfloor; j <= (ShaftArray[i]->startfloor - ShaftArray[i]->endfloor); j++)
+		for (int j = ShaftArray[i]->startfloor; j <= ShaftArray[i]->endfloor; j++)
 			ShaftArray[i]->Enabled(j, false);
 	}
 
@@ -757,7 +757,7 @@ void SBS::InitMeshes()
 	for (i = 1; i <= Elevators; i++)
 		ElevatorArray[i] = new Elevator(i);
 
-	ShaftArray.SetSize(Shafts);
+	ShaftArray.SetSize(Shafts + 1);
 
 	//create object meshes
 	Buildings = sbs->engine->CreateSectorWallsMesh (sbs->area, "Buildings");

@@ -462,6 +462,8 @@ int SBS::LoadBuilding(const char * filename)
 			}
 
 			ShaftArray[atoi(tempdata[0])] = new Shaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]));
+
+			tempdata.DeleteAll();
 		}
 
         //Process globals
@@ -876,6 +878,7 @@ recalc:
 				{
 					FloorArray[Current]->CallButtonArray[CurrentCallButton]->Elevators[i] = atoi(tempdata[i]);
 				}
+				tempdata.DeleteAll();
 			}
 
 			//CreateCallButtons command
@@ -899,6 +902,7 @@ recalc:
 				
 				//create call button
 				FloorArray[Current]->CallButtonArray[CurrentCallButton]->Create(Current, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), ShowBack, atof(tempdata[10]), atof(tempdata[11]));
+				tempdata.DeleteAll();
 			}
             
 			//handle floor range

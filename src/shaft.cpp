@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Shaft::Shaft(int number, int type, double x1, double x2, double z1, double z2, int _startfloor, int _endfloor)
+Shaft::Shaft(int number, int type, double x1, double z1, double x2, double z2, int _startfloor, int _endfloor)
 {
 	//constructor
 	//creates a shaft in the location specified by x1, x2, z1, and z2
@@ -50,8 +50,8 @@ Shaft::Shaft(int number, int type, double x1, double x2, double z1, double z2, i
 
 	csString buffer, buffer2, buffer3;
 
-	ShaftArray.SetSize(endfloor - startfloor);
-	ShaftArray_state.SetSize(endfloor - startfloor);
+	ShaftArray.SetSize(endfloor - startfloor + 1);
+	ShaftArray_state.SetSize(endfloor - startfloor + 1);
 	
 	for (int i = startfloor; i <= endfloor; i++)
 	{

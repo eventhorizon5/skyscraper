@@ -63,13 +63,14 @@ public:
 	bool MoveShaftDoors; //true if shaft doors should be operated
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
+	int Direction; //-1=down, 1=up, 0=stopped
 
 	//functions
 	Elevator(int number);
 	~Elevator();
 	void CreateElevator(double x, double z, int floor);
-	void AddRoute(int floor, bool directionup);
-	void DeleteRoute(int floor, bool directionup);
+	void AddRoute(int floor, int direction);
+	void DeleteRoute(int floor, int direction);
 	void CancelLastRoute();
 	void Alarm();
 	void StopElevator();
@@ -77,7 +78,7 @@ public:
 	void OpenDoorsEmergency();
 	void OpenShaftDoors(int floor);
 	void ProcessCallQueue();
-	int GetElevatorFloor();
+	int GetFloor();
 	void MonitorLoop();
 	void CloseDoorsEmergency();
 	const csVector3 GetPosition();
@@ -129,7 +130,6 @@ private:
 	int ElevatorFloor; //current elevator floor
 	bool DoorsOpen; //elevator door state
 	int OpenDoor; //1=open doors, -1=close doors
-	int ElevatorDirection; //-1=down, 1=up, 0=stopped
 	double Destination; //elevator destination Y value
 	double StoppingDistance;
 	bool CalculateStoppingDistance;

@@ -58,7 +58,7 @@ Elevator::Elevator(int number)
 	ElevatorStart = 0;
 	ElevatorFloor = 0;
 	DoorsOpen = false;
-	ElevatorDirection = 0;
+	Direction = 0;
 	DistanceToTravel = 0;
 	Destination = 0;
 	ElevatorRate = 0;
@@ -161,11 +161,11 @@ void Elevator::CreateElevator(double x, double z, int floor)
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }
 
-void Elevator::AddRoute(int floor, bool directionup)
+void Elevator::AddRoute(int floor, int direction)
 {
 	//Add call route to elevator routing table, in sorted order
 
-	if (directionup == true)
+	if (direction == 1)
 	{
 		if (UpQueue.Length() == 0 && QueuePositionDirection == 0)
 			PauseQueueSearch = false;
@@ -186,11 +186,11 @@ void Elevator::AddRoute(int floor, bool directionup)
 
 }
 
-void Elevator::DeleteRoute(int floor, bool directionup)
+void Elevator::DeleteRoute(int floor, int direction)
 {
 	//Delete call route from elevator routing table
 
-	if (directionup == true)
+	if (direction == 1)
 	{
 		UpQueue.Delete(floor);
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction up");
@@ -208,14 +208,14 @@ void Elevator::CancelLastRoute()
 	
 	if (LastQueueFloor[1] == 1)
 	{
-		DeleteRoute(LastQueueFloor[0], true);
+		DeleteRoute(LastQueueFloor[0], 1);
 		LastQueueFloor[0] = 0;
 		LastQueueFloor[1] = 0;
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cancelling last route");
 	}
 	else if (LastQueueFloor[1] == -1)
 	{
-		DeleteRoute(LastQueueFloor[0], false);
+		DeleteRoute(LastQueueFloor[0], -1);
 		LastQueueFloor[0] = 0;
 		LastQueueFloor[1] = 0;
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cancelling last route");
@@ -285,14 +285,14 @@ void Elevator::ProcessCallQueue()
 		//search through up queue
 		for (int i = 0; i < UpQueue.Length(); i++)
 		{
-			if (UpQueue[i] > ElevatorFloor)
+			if (UpQueue[i] > GetFloor())
 			{
 				PauseQueueSearch = true;
 				CloseDoors();
 				GotoFloor = UpQueue[i];
 				//ElevatorSync = true;
 				MoveElevator = true;
-				DeleteRoute(UpQueue[i], true);
+				DeleteRoute(UpQueue[i], 1);
 				return;
 			}
 		}
@@ -302,21 +302,21 @@ void Elevator::ProcessCallQueue()
 		//search through down queue
 		for (int i = 0; i < DownQueue.Length(); i++)
 		{
-			if (DownQueue[i] > ElevatorFloor)
+			if (DownQueue[i] > GetFloor())
 			{
 				PauseQueueSearch = true;
 				CloseDoors();
 				GotoFloor = DownQueue[i];
 				//ElevatorSync = true;
 				MoveElevator = true;
-				DeleteRoute(DownQueue[i], true);
+				DeleteRoute(DownQueue[i], 1);
 				return;
 			}
 		}
 	}
 }
 
-int Elevator::GetElevatorFloor()
+int Elevator::GetFloor()
 {
 	//Determine floor that the elevator is on
 
@@ -465,7 +465,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		}
 
 		ElevatorDoorSpeed = 0;
-		index = ServicedFloors.Find(GetElevatorFloor());
+		index = ServicedFloors.Find(GetFloor());
 	}
 
 	//Speed up doors
@@ -624,13 +624,14 @@ void Elevator::MoveElevatorToFloor()
 		ElevatorStart = GetPosition().y;
 
 		//get elevator's current floor
-		ElevatorFloor = GetElevatorFloor();
+		ElevatorFloor = GetFloor();
 
 		//If elevator is already on specified floor, open doors and exit
 		if (ElevatorFloor == GotoFloor)
 		{
 			sbs->Report("Elevator already on specified floor");
 			MoveElevator = false;
+			IsRunning = false;
 			OpenDoors();
 			return;
 		}
@@ -640,6 +641,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			sbs->Report("Destination floor not in ServicedFloors list");
 			MoveElevator = false;
+			IsRunning = false;
 			return;
 		}
 
@@ -649,9 +651,9 @@ void Elevator::MoveElevatorToFloor()
 
 		//Determine direction
 		if (GotoFloor < ElevatorFloor)
-			ElevatorDirection = -1;
+			Direction = -1;
 		if (GotoFloor > ElevatorFloor)
-			ElevatorDirection = 1;
+			Direction = 1;
 
 		//Determine distance to destination floor
 		DistanceToTravel = abs(abs(sbs->FloorArray[GotoFloor]->Altitude) - abs(ElevatorStart));
@@ -671,7 +673,7 @@ void Elevator::MoveElevatorToFloor()
 		//"\data\elevstart.wav"
 
 		//Get first rate increment value
-		ElevatorRate = ElevatorDirection * (ElevatorSpeed * Acceleration);
+		ElevatorRate = Direction * (ElevatorSpeed * Acceleration);
 
 		//get starting frame rate and hold value
 		FPSModifierStatic = sbs->FPSModifier;
@@ -681,10 +683,10 @@ void Elevator::MoveElevatorToFloor()
 	{
 		CalculateStoppingDistance = false;
 		TempDeceleration = Deceleration;
-		if (ElevatorDirection == 1)
-			ElevatorDirection = -1;
+		if (Direction == 1)
+			Direction = -1;
 		else
-			ElevatorDirection = 1;
+			Direction = 1;
 		Brakes = true;
 	}
 
@@ -706,7 +708,7 @@ void Elevator::MoveElevatorToFloor()
 	Plaque_movable->UpdateMove();
 
 	//show partial shaft areas (3 floors at a time)
-	int i = GetElevatorFloor();
+	int i = GetFloor();
 	sbs->ShaftArray[AssignedShaft]->Enabled(i, true);
 	ShaftDoorsEnabled(i, true);
 	if (i > sbs->ShaftArray[AssignedShaft]->startfloor)
@@ -736,36 +738,36 @@ void Elevator::MoveElevatorToFloor()
 	if (Brakes == false)
 	{
 		//regular motion
-		if (ElevatorDirection == 1)
+		if (Direction == 1)
 			ElevatorRate = ElevatorRate + (ElevatorSpeed * Acceleration);
-		if (ElevatorDirection == -1)
+		if (Direction == -1)
 			ElevatorRate = ElevatorRate - (ElevatorSpeed * Acceleration);
 	}
 	else
 	{
 		//slow down
-		if (ElevatorDirection == 1)
+		if (Direction == 1)
 			ElevatorRate = ElevatorRate + (ElevatorSpeed * TempDeceleration);
-		if (ElevatorDirection == -1)
+		if (Direction == -1)
 			ElevatorRate = ElevatorRate - (ElevatorSpeed * TempDeceleration);
 	}
 
 	//change speeds
-	if ((ElevatorDirection == 1) && (ElevatorRate > ElevatorSpeed))
+	if ((Direction == 1) && (ElevatorRate > ElevatorSpeed))
 		ElevatorRate = ElevatorSpeed;
-	if ((ElevatorDirection == -1) && (ElevatorRate < -ElevatorSpeed))
+	if ((Direction == -1) && (ElevatorRate < -ElevatorSpeed))
 		ElevatorRate = -ElevatorSpeed;
-	if ((ElevatorDirection == 1) && (Brakes == true) && (ElevatorRate > 0))
+	if ((Direction == 1) && (Brakes == true) && (ElevatorRate > 0))
 		ElevatorRate = 0;
-	if ((ElevatorDirection == -1) && (Brakes == true) && (ElevatorRate < 0))
+	if ((Direction == -1) && (Brakes == true) && (ElevatorRate < 0))
 		ElevatorRate = 0;
 
 	//get distance needed to stop elevator
 	if (CalculateStoppingDistance == true)
 	{
-		if (ElevatorDirection == 1)
+		if (Direction == 1)
 			StoppingDistance = (GetPosition().y - ElevatorStart) * (Acceleration / Deceleration);
-		else if (ElevatorDirection == -1)
+		else if (Direction == -1)
 			StoppingDistance = (ElevatorStart - GetPosition().y) * (Acceleration / Deceleration);
 	}
 
@@ -780,7 +782,7 @@ void Elevator::MoveElevatorToFloor()
 	//and then starting the deceleration process immediately.
 
 	//up movement
-	if ((Brakes == false) && (ElevatorDirection == 1))
+	if ((Brakes == false) && (Direction == 1))
 	{
 		//determine if next jump altitude is over deceleration marker
 		if (((GetPosition().y + (ElevatorRate * FPSModifierStatic)) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
@@ -789,7 +791,7 @@ void Elevator::MoveElevatorToFloor()
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
 			TempDeceleration = Deceleration * (StoppingDistance / (Destination - GetPosition().y));
 			//start deceleration
-			ElevatorDirection = -1;
+			Direction = -1;
 			Brakes = true;
 			//stop sounds
 			//play elevator stopping sound
@@ -802,7 +804,7 @@ void Elevator::MoveElevatorToFloor()
 			TempDeceleration = Deceleration;
 			CalculateStoppingDistance = false;
 			//slow down elevator
-			ElevatorDirection = -1;
+			Direction = -1;
 			Brakes = true;
 			//stop sounds
 			//play stopping sound
@@ -811,7 +813,7 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//down movement
-	if (Brakes == false && ElevatorDirection == -1)
+	if (Brakes == false && Direction == -1)
 	{
         //determine if next jump altitude is below deceleration marker
 		if (((GetPosition().y - (ElevatorRate * FPSModifierStatic)) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
@@ -820,7 +822,7 @@ void Elevator::MoveElevatorToFloor()
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
 			TempDeceleration = Deceleration * (StoppingDistance / (GetPosition().y - Destination));
 			//start deceleration
-			ElevatorDirection = 1;
+			Direction = 1;
 			Brakes = true;
 			//stop sounds
 			//play stopping sound
@@ -833,7 +835,7 @@ void Elevator::MoveElevatorToFloor()
 			TempDeceleration = Deceleration;
 			CalculateStoppingDistance = false;
 			//slow down elevator
-			ElevatorDirection = 1;
+			Direction = 1;
 			Brakes = true;
 			//stop sounds
 			//play stopping sound
@@ -848,9 +850,9 @@ void Elevator::MoveElevatorToFloor()
 	if (EmergencyStop == false)
 	{
 		//store error offset value
-		if (ElevatorDirection == -1)
+		if (Direction == -1)
 			ErrorOffset = GetPosition().y - Destination;
-		else if (ElevatorDirection == 1)
+		else if (Direction == 1)
 			ErrorOffset = Destination - GetPosition().y;
 		else
 			ErrorOffset = 0;
@@ -875,7 +877,7 @@ void Elevator::MoveElevatorToFloor()
 
 	//reset values if at destination floor
 	ElevatorRate = 0;
-	ElevatorDirection = 0;
+	Direction = 0;
 	Brakes = false;
 	Destination = 0;
 	DistanceToTravel = 0;
@@ -886,7 +888,7 @@ void Elevator::MoveElevatorToFloor()
 	if (EmergencyStop == false)
 	{
 		//update elevator's floor number
-		GetElevatorFloor();
+		GetFloor();
 
 		//Turn on floor
 		if (ElevatorSync == true)
@@ -1002,7 +1004,7 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 	csString buffer, buffer2, buffer3, buffer4;
 
 	//create doors
-	for (int i = 0; i <= ServicedFloors.GetSize(); i++)
+	for (int i = 0; i < ServicedFloors.GetSize(); i++)
 	{
 		//create meshes
 		buffer3 = Number;
@@ -1023,10 +1025,10 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 
 		//door R
 		tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer2.GetData());
-		ShaftDoorL[i] = tmpmesh;
+		ShaftDoorR[i] = tmpmesh;
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorR[i]->GetMeshObject()->GetFactory());
-		ShaftDoorL_state[i] = tmpstate;
-		ShaftDoorL[i]->SetZBufMode(CS_ZBUF_USE);
+		ShaftDoorR_state[i] = tmpstate;
+		ShaftDoorR[i]->SetZBufMode(CS_ZBUF_USE);
 
 		//create doors
 		sbs->AddWallMain(ShaftDoorL_state[i], texture, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);

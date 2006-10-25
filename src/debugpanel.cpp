@@ -139,10 +139,10 @@ void DebugPanel::On_bGo_Click(wxCommandEvent& event)
 void DebugPanel::On_bCallElevator_Click(wxCommandEvent& event)
 {
 	//calls elevator to the current camera floor
-	if (sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GetElevatorFloor() > sbs->camera->CurrentFloor)
-		sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(sbs->camera->CurrentFloor, false);
-	if (sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GetElevatorFloor() < sbs->camera->CurrentFloor)
-		sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(sbs->camera->CurrentFloor, true);
+	if (sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GetFloor() > sbs->camera->CurrentFloor)
+		sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(sbs->camera->CurrentFloor, -1);
+	if (sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GetFloor() < sbs->camera->CurrentFloor)
+		sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(sbs->camera->CurrentFloor, 1);
 }
 
 void DebugPanel::On_bOpen_Click(wxCommandEvent& event)
@@ -157,12 +157,12 @@ void DebugPanel::On_bOpenManual_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bEnqueueUp_Click(wxCommandEvent& event)
 {
-	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(s_ElevFloor->GetThumbPosition(), true);
+	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(s_ElevFloor->GetThumbPosition(), 1);
 }
 
 void DebugPanel::On_bEnqueueDown_Click(wxCommandEvent& event)
 {
-	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(s_ElevFloor->GetThumbPosition(), false);
+	sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->AddRoute(s_ElevFloor->GetThumbPosition(), -1);
 }
 
 void DebugPanel::On_bClose_Click(wxCommandEvent& event)
@@ -243,7 +243,7 @@ void Timer::Notify()
 	if (sbs->Elevators > 0)
 	{
 		dp->t_elevnumber->SetLabel(wxString(_itoa(sbs->ElevatorNumber, intbuffer, 10), wxConvUTF8));
-		dp->t_elevfloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GetElevatorFloor(), intbuffer, 10), wxConvUTF8));
+		dp->t_elevfloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GetFloor(), intbuffer, 10), wxConvUTF8));
 		dp->t_gotofloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GotoFloor, intbuffer, 10), wxConvUTF8));
 		dp->t_disttodest->SetLabel(wxString(_gcvt(sbs->ElevatorArray[sbs->ElevatorNumber]->DistanceToTravel, 6, buffer), wxConvUTF8));
 		dp->t_rate->SetLabel(wxString(_gcvt(sbs->ElevatorArray[sbs->ElevatorNumber]->ElevatorRate, 6, buffer), wxConvUTF8));
