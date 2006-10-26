@@ -454,6 +454,12 @@ int SBS::LoadBuilding(const char * filename)
 		//AddShaft command
         if (LineData.Slice(0, 9).CompareNoCase("addshaft ") == true)
 		{
+			if (Shafts == 0)
+			{
+				Report("Error: Trying to add shaft when no shafts are allocated");
+				goto Nextline;
+			}
+
 			tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
@@ -1092,6 +1098,7 @@ recalc:
 				{
 					ElevatorArray[Current]->ServicedFloors[i] = atoi(tempdata[i]);
 				}
+				tempdata.DeleteAll();
 			}
             if (LineData.Slice(0, 13).CompareNoCase("assignedshaft") == true)
 			{

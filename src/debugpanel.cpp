@@ -237,7 +237,12 @@ void DebugPanel::OnInit()
 void Timer::Notify()
 {
 	//this line doesn't work on unicode WX build
-	//p->t_camerap->SetLabel(wxT(wxString(_gcvt(sbs->camera->GetPosition().x, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(sbs->camera->GetPosition().y, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(sbs->camera->GetPosition().z, 6, buffer), wxConvUTF8)));
+	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+		//insert working code here
+	#else
+	dp->t_camerap->SetLabel(wxT(wxString(_gcvt(sbs->camera->GetPosition().x, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(sbs->camera->GetPosition().y, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(sbs->camera->GetPosition().z, 6, buffer), wxConvUTF8)));
+	#endif
+
 	dp->t_camerafloor->SetLabel(wxString(_itoa(sbs->camera->CurrentFloor, intbuffer, 10), wxConvUTF8));
 	
 	if (sbs->Elevators > 0)

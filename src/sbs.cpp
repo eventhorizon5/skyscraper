@@ -181,13 +181,16 @@ void SBS::Start()
 	//turn off shafts
 	for (int i = 1; i < ShaftArray.GetSize(); i++)
 	{
-		for (int j = ShaftArray[i]->startfloor; j <= ShaftArray[i]->endfloor; j++)
-			ShaftArray[i]->Enabled(j, false);
+		if (ShaftArray[i])
+		{
+			for (int j = ShaftArray[i]->startfloor; j <= ShaftArray[i]->endfloor; j++)
+				ShaftArray[i]->Enabled(j, false);
+		}
 	}
 
 	//turn on shaft elevator doors
 	for (int i = 1; i <= Elevators; i++)
-		ElevatorArray[i]->ShaftDoorsEnabled(i, true);
+		ElevatorArray[i]->ShaftDoorsEnabled(0, true);
 
 	//turn on first/lobby floor
 	FloorArray[0]->Enabled(true);
@@ -1255,10 +1258,17 @@ int SBS::GetFloorNumber(double altitude)
 {
 	//Returns floor number located at a specified altitude
 	
+	//check to see if altitude is below bottom floor
+	if (altitude < FloorArray[-Basements]->Altitude)
+		return -Basements;
+
 	for (int i = -Basements + 1; i <= TotalFloors; i++)
 	{
+		//check to see if altitude is within a floor (between the current floor's base and
+		//the lower floor's base)
 		if ((FloorArray[i]->Altitude > altitude) && (FloorArray[i - 1]->Altitude <= altitude))
 			return i - 1;
+		//check to see if altitude is above top floor's altitude
 		if ((i == TotalFloors) && (altitude > FloorArray[i]->Altitude))
 			return i;
 	}

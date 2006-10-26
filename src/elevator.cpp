@@ -427,11 +427,11 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	//currently only supports doors on either the left/right or front/back
 	//diagonal doors will be done later, by possibly using relative plane movement
 
-	static bool IsRunning;
+	static bool IsRunning = false;
 	static double OpenChange;
 	static float marker1;
 	static float marker2;
-	int index;
+	static int index;
 
 	//todo: turn off autoclose timer
 
@@ -614,7 +614,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 void Elevator::MoveElevatorToFloor()
 {
 	//Main processing routine; sends elevator to floor specified in GotoFloor
-	static bool IsRunning;
+	static bool IsRunning = false;
 
 	if (IsRunning == false)
 	{
@@ -907,12 +907,12 @@ void Elevator::MoveElevatorToFloor()
 
 int Elevator::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
 {
-	return sbs->AddWallMain(Elevator_state, texture, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, voffset1 + Origin.y, voffset2 + Origin.y, tw, th, revX, revY, revZ, DrawBothSides);
+	return sbs->AddWallMain(Elevator_state, texture, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, revX, revY, revZ, DrawBothSides);
 }
 
 int Elevator::AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
-   	return sbs->AddFloorMain(Elevator_state, texture, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, voffset1 + Origin.y, voffset2 + Origin.y, tw, th);
+   	return sbs->AddFloorMain(Elevator_state, texture, x1, z1, x2, z2, voffset1, voffset2, tw, th);
 }
 
 int Elevator::AddFloorIndicator(const char *basename, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
@@ -921,7 +921,7 @@ int Elevator::AddFloorIndicator(const char *basename, double x1, double z1, doub
 	csString texture;
 	BaseName = basename;
 	texture = BaseName + sbs->FloorArray[OriginFloor]->ID;
-	return sbs->AddWallMain(FloorIndicator_state, texture.GetData(), Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height, height, voffset + Origin.y, voffset + Origin.y, 0, 0, false, false, false, false);
+	return sbs->AddWallMain(FloorIndicator_state, texture.GetData(), x1, z1, x2, z2, height, height, voffset, voffset, 0, 0, false, false, false, false);
 }
 
 int Elevator::AddDoors(const char *texture, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th)
@@ -940,25 +940,25 @@ int Elevator::AddDoors(const char *texture, double CenterX, double CenterZ, doub
 	//set up coordinates
 	if (direction == false)
 	{
-		x1 = DoorOrigin.x;
-		x2 = DoorOrigin.x;
-		x3 = DoorOrigin.x;
-		x4 = DoorOrigin.x;
-		z1 = DoorOrigin.z - (width / 2);
-		z2 = DoorOrigin.z;
-		z3 = DoorOrigin.z;
-		z4 = DoorOrigin.z + (width / 2);
+		x1 = CenterX;
+		x2 = CenterX;
+		x3 = CenterX;
+		x4 = CenterX;
+		z1 = CenterZ - (width / 2);
+		z2 = CenterZ;
+		z3 = CenterZ;
+		z4 = CenterZ + (width / 2);
 	}
 	else
 	{
-		x1 = DoorOrigin.x - (width / 2);
-		x2 = DoorOrigin.x;
-		x3 = DoorOrigin.x;
-		x4 = DoorOrigin.x + (width / 2);
-		z1 = DoorOrigin.z;
-		z2 = DoorOrigin.z;
-		z3 = DoorOrigin.z;
-		z4 = DoorOrigin.z;
+		x1 = CenterX - (width / 2);
+		x2 = CenterX;
+		x3 = CenterX;
+		x4 = CenterX + (width / 2);
+		z1 = CenterZ;
+		z2 = CenterZ;
+		z3 = CenterZ;
+		z4 = CenterZ;
 	}
 
 	//create doors
@@ -980,25 +980,25 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 	//set up coordinates
 	if (DoorDirection == false)
 	{
-		x1 = ShaftDoorOrigin.x;
-		x2 = ShaftDoorOrigin.x;
-		x3 = ShaftDoorOrigin.x;
-		x4 = ShaftDoorOrigin.x;
-		z1 = ShaftDoorOrigin.z - (DoorWidth / 2);
-		z2 = ShaftDoorOrigin.z;
-		z3 = ShaftDoorOrigin.z;
-		z4 = ShaftDoorOrigin.z + (DoorWidth / 2);
+		x1 = CenterX;
+		x2 = CenterX;
+		x3 = CenterX;
+		x4 = CenterX;
+		z1 = CenterZ - (DoorWidth / 2);
+		z2 = CenterZ;
+		z3 = CenterZ;
+		z4 = CenterZ + (DoorWidth / 2);
 	}
 	else
 	{
-		x1 = ShaftDoorOrigin.x - (DoorWidth / 2);
-		x2 = ShaftDoorOrigin.x;
-		x3 = ShaftDoorOrigin.x;
-		x4 = ShaftDoorOrigin.x + (DoorWidth / 2);
-		z1 = ShaftDoorOrigin.z;
-		z2 = ShaftDoorOrigin.z;
-		z3 = ShaftDoorOrigin.z;
-		z4 = ShaftDoorOrigin.z;
+		x1 = CenterX - (DoorWidth / 2);
+		x2 = CenterX;
+		x3 = CenterX;
+		x4 = CenterX + (DoorWidth / 2);
+		z1 = CenterZ;
+		z2 = CenterZ;
+		z3 = CenterZ;
+		z4 = CenterZ;
 	}
 
 	csString buffer, buffer2, buffer3, buffer4;
@@ -1030,25 +1030,31 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 		ShaftDoorR_state[i] = tmpstate;
 		ShaftDoorR[i]->SetZBufMode(CS_ZBUF_USE);
 
+		//reposition meshes
+		ShaftDoorL[i]->GetMovable()->SetPosition(Origin);
+		ShaftDoorL[i]->GetMovable()->UpdateMove();
+		ShaftDoorR[i]->GetMovable()->SetPosition(Origin);
+		ShaftDoorR[i]->GetMovable()->UpdateMove();
+
 		//create doors
 		sbs->AddWallMain(ShaftDoorL_state[i], texture, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);
 		sbs->AddWallMain(ShaftDoorR_state[i], texture, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);
 
 		//make doors invisible on start
-		ShaftDoorL[i]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ShaftDoorL[i]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ShaftDoorL[i]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 
-		ShaftDoorR[i]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ShaftDoorR[i]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ShaftDoorR[i]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+		ShaftDoorR[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		ShaftDoorR[i]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ShaftDoorR[i]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
 	return 0;
 }
 
 int Elevator::AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
 {
-	return sbs->AddWallMain(Plaque_state, texture, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height, height, voffset + Origin.y, voffset + Origin.y, tw, th, false, false, false);
+	return sbs->AddWallMain(Plaque_state, texture, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false, false, false);
 }
 
 const csVector3 Elevator::GetPosition()
@@ -1135,6 +1141,10 @@ void Elevator::ShaftDoorsEnabled(int floor, bool value)
 	
 	int index = ServicedFloors.Find(floor);
 	if (index == csArrayItemNotFound)
+		return;
+
+	//exit if the specified floor has no shaft doors
+	if (ShaftDoorL[index] == 0)
 		return;
 
 	if (value == true)
