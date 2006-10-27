@@ -179,18 +179,21 @@ void SBS::Start()
 		FloorArray[i]->Enabled(false);
 	
 	//turn off shafts
-	for (int i = 1; i < ShaftArray.GetSize(); i++)
+/*	for (int i = 1; i < ShaftArray.GetSize(); i++)
 	{
 		if (ShaftArray[i])
 		{
 			for (int j = ShaftArray[i]->startfloor; j <= ShaftArray[i]->endfloor; j++)
 				ShaftArray[i]->Enabled(j, false);
 		}
-	}
+	}*/
 
 	//turn on shaft elevator doors
 	for (int i = 1; i <= Elevators; i++)
-		ElevatorArray[i]->ShaftDoorsEnabled(0, true);
+	{
+		if (ElevatorArray[i])
+			ElevatorArray[i]->ShaftDoorsEnabled(camera->StartFloor, true);
+	}
 
 	//turn on first/lobby floor
 	FloorArray[0]->Enabled(true);

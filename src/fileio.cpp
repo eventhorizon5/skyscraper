@@ -467,7 +467,7 @@ int SBS::LoadBuilding(const char * filename)
 				tempdata.Put(temp3, buffer);
 			}
 
-			ShaftArray[atoi(tempdata[0])] = new Shaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]));
+			ShaftArray[atoi(tempdata[0])] = new Shaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
 
 			tempdata.DeleteAll();
 		}
@@ -1094,9 +1094,28 @@ recalc:
                 //copy string listing of serviced floors into array
 				tempdata.SplitString(temp2.GetData(), ",");
 				ElevatorArray[Current]->ServicedFloors.SetSize(tempdata.GetSize());
+				int j = 0;
 				for (int i = 0; i < tempdata.GetSize(); i++)
 				{
-					ElevatorArray[Current]->ServicedFloors[i] = atoi(tempdata[i]);
+					csString tmpstring = tempdata[i];
+					tmpstring.Trim();
+					if (tmpstring.Find("-") > 0)
+					{
+						//found a range marker
+						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-")));
+						int end = atoi(tmpstring.Slice(tmpstring.Find("-") + 1));
+						ElevatorArray[Current]->ServicedFloors.SetSize(tempdata.GetSize() + (end - start));
+						for (int k = start; k <= end; k++)
+						{
+							ElevatorArray[Current]->ServicedFloors[j] = k;
+							j++;
+						}
+					}
+					else
+					{
+						ElevatorArray[Current]->ServicedFloors[j] = atoi(tempdata[i]);
+						j++;
+					}
 				}
 				tempdata.DeleteAll();
 			}

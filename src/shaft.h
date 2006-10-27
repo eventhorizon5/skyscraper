@@ -34,14 +34,13 @@ public:
 
 	int ShaftType; //type of shaft
 	int ShaftNumber; //shaft number
-	csVector2 location1; //location vertex 1; is x1 and z1
-	csVector2 location2; //location vertex 2; is x2 and z2
-	double startfloor; //starting floor
-	double endfloor; //ending floor
+	csVector3 origin; //origin vector
+	int startfloor; //starting floor
+	int endfloor; //ending floor
 	csArray<int> elevators; //if elevator shaft, this is the list of elevators that use this shaft
 	csArray<int> stairs; //if stairwell, this lists the stairs that use this shaft
 
-	Shaft(int number, int type, double x1, double z1, double x2, double z2, int _startfloor, int _endfloor);
+	Shaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
 	int AddWall(int floor, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ);
 	int AddFloor(int floor, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);

@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Shaft::Shaft(int number, int type, double x1, double z1, double x2, double z2, int _startfloor, int _endfloor)
+Shaft::Shaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor)
 {
 	//constructor
 	//creates a shaft in the location specified by x1, x2, z1, and z2
@@ -45,8 +45,7 @@ Shaft::Shaft(int number, int type, double x1, double z1, double x2, double z2, i
 	ShaftNumber = number;
 	startfloor = _startfloor;
 	endfloor = _endfloor;
-	location1 = csVector2(x1, z1);
-	location2 = csVector2(x2, z2);
+	origin = csVector3(CenterX, sbs->FloorArray[_startfloor]->Altitude, CenterZ);
 
 	csString buffer, buffer2, buffer3;
 
@@ -67,6 +66,8 @@ Shaft::Shaft(int number, int type, double x1, double z1, double x2, double z2, i
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftArray[i - startfloor]->GetMeshObject()->GetFactory());
 		ShaftArray_state[i - startfloor] = tmpstate;
 		ShaftArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
+		ShaftArray[i - startfloor]->GetMovable()->SetPosition(origin);
+		ShaftArray[i - startfloor]->GetMovable()->UpdateMove();
 	}
 }
 
@@ -78,12 +79,12 @@ Shaft::~Shaft()
 
 int Shaft::AddWall(int floor, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ)
 {
-	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, height1, height2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th, revX, revY, revZ);
+	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], texture, x1, z1, x2, z2, height1, height2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th, revX, revY, revZ);
 }
 
 int Shaft::AddFloor(int floor, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
-   	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], texture, location1.x + x1, location1.y + z1, location2.x + x2, location2.y + z2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th);
+   	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], texture, x1, z1, x2, z2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th);
 }
 
 void Shaft::Enabled(int floor, bool value)
