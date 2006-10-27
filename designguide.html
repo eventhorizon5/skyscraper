@@ -121,9 +121,9 @@
   <p align="left"><strong>d. AddShaft</strong> - creates a shaft at a specified 
     location and floor range<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddShaft number, 
-    type, x1, z1, x2, z2, startfloor, endfloor</font><br>
-    Example: <font size="2" face="Courier New, Courier, mono">AddShaft 1, 2, -10, 
-    -10, 10, 10, 0, 9</font></p>
+    type, centerx, centerz, startfloor, endfloor</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddShaft 1, 2, 10, 
+    10, 0, 9</font></p>
   <p align="left">The number parameter specifies the shaft number to create; type 
     is either 1 for a pipe/utility shaft, 2 for an elevator shaft, and 3 for a 
     stairwell shaft. This command just tells the simulator the area that the shaft 
@@ -354,7 +354,9 @@
     <em>height2</em>, <em>voffset1</em>, <em>voffset2</em>, <em>tw</em>, <em>th</em>, 
     <em>revx, revy, revz</em></font></p>
   <p align="left">The parameters are the same as the AddWall command, and the 
-    <em>number</em> value is the shaft number to use</p>
+    <em>number</em> value is the shaft number to use. Also, the x1, z1, x2, and 
+    z2 parameters are offsets of the shaft's origin (similar to creating elevator 
+    walls and floors) </p>
   <p align="left"><strong>8. CallButtonElevators</strong> - comma-separated list 
     of elevators the next created call button set will work with (this must be 
     specified before CreateCallButtons)<br>
@@ -456,9 +458,10 @@
     doors<br>
     Example: <font size="2" face="Courier New, Courier, mono">OpenSpeed = 0.2</font></p>
   <p align="left"><strong>5. ServicedFloors</strong> - a comma-separated list 
-    of floors this elevator services<br>
+    of floors this elevator services. Ranges can also be specified by putting 
+    a &quot;-&quot; between the numbers<br>
     Example: <font size="2" face="Courier New, Courier, mono">ServicedFloors = 
-    0, 5, 6</font></p>
+    0, 5, 6, 7-30, 31</font></p>
   <p align="left"><strong>6. MoveShaftDoors</strong> - either true or false; if 
     false (default is true), the shaft doors don't open along with the elevator 
     doors. This parameter is really only meant for debugging purposes.<br>
