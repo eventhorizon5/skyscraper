@@ -94,6 +94,7 @@ SBS::SBS()
 	fps_frame_count = 0;
 	fps_tottime = 0;
 	FPS = 0;
+	AutoShafts = true;
 }
 
 SBS::~SBS()
@@ -179,14 +180,14 @@ void SBS::Start()
 		FloorArray[i]->Enabled(false);
 	
 	//turn off shafts
-/*	for (int i = 1; i < ShaftArray.GetSize(); i++)
+	for (int i = 1; i < ShaftArray.GetSize(); i++)
 	{
 		if (ShaftArray[i])
 		{
 			for (int j = ShaftArray[i]->startfloor; j <= ShaftArray[i]->endfloor; j++)
 				ShaftArray[i]->Enabled(j, false);
 		}
-	}*/
+	}
 
 	//turn on shaft elevator doors
 	for (int i = 1; i <= Elevators; i++)
@@ -376,8 +377,23 @@ void SBS::SetupFrame()
 		camera->UpdateCameraFloor();
 
 		//run elevator handlers
+		bool tmpIn = false;
 		for (int i = 1; i <= Elevators; i++)
+		{
 			ElevatorArray[i]->MonitorLoop();
+			if (ElevatorArray[i]->InElevator == true)
+				tmpIn = true;
+		}
+
+		//set InElevator state
+		InElevator = tmpIn;
+
+		//Check if the user is in a shaft
+		if (AutoShafts == true)
+		{
+			for (int i = 1; i < ShaftArray.GetSize(); i++)
+				ShaftArray[i]->CheckShaft();
+		}
 	}
 
 	if (RenderOnly == false)

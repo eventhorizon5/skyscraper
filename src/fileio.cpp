@@ -467,7 +467,7 @@ int SBS::LoadBuilding(const char * filename)
 				tempdata.Put(temp3, buffer);
 			}
 
-			ShaftArray[atoi(tempdata[0])] = new Shaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+			ShaftArray[atoi(tempdata[0])] = new Shaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]));
 
 			tempdata.DeleteAll();
 		}
@@ -1157,7 +1157,7 @@ recalc:
                 //if (tempdata.GetSize() < 3)
 					//Err.Raise 1003;
                 //If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Then Err.Raise 1000
-                ElevatorArray[Current]->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atoi(tempdata[2]));
+                ElevatorArray[Current]->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atoi(tempdata[5]));
 				tempdata.DeleteAll();
 			}
 

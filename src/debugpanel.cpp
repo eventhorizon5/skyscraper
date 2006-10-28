@@ -49,6 +49,7 @@ EVT_BUTTON(ID_bClose,DebugPanel::On_bClose_Click)
 EVT_BUTTON(ID_bCloseManual,DebugPanel::On_bCloseManual_Click)
 EVT_CHECKBOX(ID_chkFrameSync,DebugPanel::On_chkFrameSync_Change)
 EVT_CHECKBOX(ID_chkFrameLimiter,DebugPanel::On_chkFrameLimiter_Change)
+EVT_CHECKBOX(ID_chkAutoShafts,DebugPanel::On_chkAutoShafts_Change)
 EVT_BUTTON(ID_bStop,DebugPanel::On_bStop_Click)
 //*)
 END_EVENT_TABLE()
@@ -132,7 +133,6 @@ DebugPanel::~DebugPanel()
 void DebugPanel::On_bGo_Click(wxCommandEvent& event)
 {
     sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->GotoFloor = s_ElevFloor->GetThumbPosition();
-    sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->ElevatorSync = true;
     sbs->ElevatorArray[s_ElevNum->GetThumbPosition() + 1]->MoveElevator = true;
 }
 
@@ -224,7 +224,7 @@ void DebugPanel::OnInit()
     chkCollisionDetection->SetValue(sbs->EnableCollisions);
     chkFrameLimiter->SetValue(sbs->FrameLimiter);
     //chkMainProcessing->SetValue();
-    //chkAutoShafts->SetValue();
+    chkAutoShafts->SetValue(sbs->AutoShafts);
     chkFrameSync->SetValue(sbs->FrameSync);
 
 	mc = new MeshControl(dp, -1);
@@ -244,7 +244,7 @@ void Timer::Notify()
 	#endif
 
 	dp->t_camerafloor->SetLabel(wxString(_itoa(sbs->camera->CurrentFloor, intbuffer, 10), wxConvUTF8));
-	
+
 	if (sbs->Elevators > 0)
 	{
 		dp->t_elevnumber->SetLabel(wxString(_itoa(sbs->ElevatorNumber, intbuffer, 10), wxConvUTF8));
@@ -266,4 +266,9 @@ void Timer::Notify()
 		mc->chkBuildings->SetValue(sbs->IsBuildingsEnabled);
 		mc->chkExternal->SetValue(sbs->IsExternalEnabled);
 	}
+}
+
+void DebugPanel::On_chkAutoShafts_Change(wxCommandEvent& event)
+{
+	sbs->AutoShafts = chkAutoShafts->GetValue();
 }

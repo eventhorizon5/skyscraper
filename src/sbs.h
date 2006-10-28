@@ -110,7 +110,7 @@ public:
     bool IsFalling; //make user fall
 	double FallRate; //falling rate
     bool InStairwell; //true if user is in a stairwell
-	bool InElevator; //true is user is in an elevator
+	bool InElevator; //true if user is in an elevator
     int ElevatorNumber; //number of currently selected elevator
 	bool FrameLimiter; //frame limiter toggle
     int FrameRate; //max frame rate
@@ -125,6 +125,7 @@ public:
 	bool IsLandscapeEnabled; //contains status of landscape object
 	bool IsSkyboxEnabled; //contains status of skybox object
 	double FPS; //current frame rate
+	bool AutoShafts; //true if shafts should turn on and off automatically
 
 	//File I/O
 	csString BuildingFile;

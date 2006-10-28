@@ -108,21 +108,22 @@ class DebugPanel: public wxDialog
 
 		//(*Handlers(DebugPanel)
 		void On_bGo_Click(wxCommandEvent& event);
-        void On_bCallElevator_Click(wxCommandEvent& event);
-        void On_bOpen_Click(wxCommandEvent& event);
-        void On_bOpenManual_Click(wxCommandEvent& event);
-        void On_bEnqueueUp_Click(wxCommandEvent& event);
-        void On_bEnqueueDown_Click(wxCommandEvent& event);
-        void On_bClose_Click(wxCommandEvent& event);
-        void On_bCloseManual_Click(wxCommandEvent& event);
-        void On_bListAltitudes_Click(wxCommandEvent& event);
-        void On_bMeshControl_Click(wxCommandEvent& event);
-        void On_bInitRealtime_Click(wxCommandEvent& event);
-        void On_chkCollisionDetection_Change(wxCommandEvent& event);
-        void On_chkFrameLimiter_Change(wxCommandEvent& event);
-        void On_bStop_Click(wxCommandEvent& event);
+		void On_bCallElevator_Click(wxCommandEvent& event);
+		void On_bOpen_Click(wxCommandEvent& event);
+		void On_bOpenManual_Click(wxCommandEvent& event);
+		void On_bEnqueueUp_Click(wxCommandEvent& event);
+		void On_bEnqueueDown_Click(wxCommandEvent& event);
+		void On_bClose_Click(wxCommandEvent& event);
+		void On_bCloseManual_Click(wxCommandEvent& event);
+		void On_bListAltitudes_Click(wxCommandEvent& event);
+		void On_bMeshControl_Click(wxCommandEvent& event);
+		void On_bInitRealtime_Click(wxCommandEvent& event);
+		void On_chkCollisionDetection_Change(wxCommandEvent& event);
+		void On_chkFrameLimiter_Change(wxCommandEvent& event);
+		void On_bStop_Click(wxCommandEvent& event);
 		void On_chkFrameSync_Change(wxCommandEvent& event);
-        //*)
+		void On_chkAutoShafts_Change(wxCommandEvent& event);
+		//*)
         void OnInit();
 
 		//(*Declarations(DebugPanel)

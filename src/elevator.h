@@ -64,11 +64,13 @@ public:
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
+	double Width, Length, Height; //elevator width, length, and height
+	bool InElevator; //true if user is in the elevator
 
 	//functions
 	Elevator(int number);
 	~Elevator();
-	void CreateElevator(double x, double z, int floor);
+	void CreateElevator(double x, double z, double width, double length, double height, int floor);
 	void AddRoute(int floor, int direction);
 	void DeleteRoute(int floor, int direction);
 	void CancelLastRoute();
