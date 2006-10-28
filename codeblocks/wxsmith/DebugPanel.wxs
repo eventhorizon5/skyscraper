@@ -226,6 +226,7 @@
         </object>
         <object class="wxCheckBox" name="ID_chkAutoShafts" variable="chkAutoShafts" member="yes">
             <label>Automatic Shafts</label>
+            <handler entry="EVT_CHECKBOX" function="On_chkAutoShafts_Change" />
             <pos>302,79</pos>
         </object>
         <object class="wxCheckBox" name="ID_chkMainProcessing" variable="chkMainProcessing" member="yes">
