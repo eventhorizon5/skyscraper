@@ -121,9 +121,9 @@
   <p align="left"><strong>d. AddShaft</strong> - creates a shaft at a specified 
     location and floor range<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddShaft number, 
-    type, centerx, centerz, startfloor, endfloor</font><br>
+    type, centerx, centerz, width, length, startfloor, endfloor</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddShaft 1, 2, 10, 
-    10, 0, 9</font></p>
+    10, 10, 10, 0, 9</font></p>
   <p align="left">The number parameter specifies the shaft number to create; type 
     is either 1 for a pipe/utility shaft, 2 for an elevator shaft, and 3 for a 
     stairwell shaft. This command just tells the simulator the area that the shaft 
@@ -476,12 +476,13 @@
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
     the specified location<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateElevator <em>x</em>, 
-    <em>y</em>, <em>floor</em><em><br>
+    <em>y</em>, <em>width, length, height, floor</em><em><br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
-    </em>CreateElevator 0, 10, 0</font></p>
+    </em>CreateElevator 0, 10, 6, 6, 8, 0</font></p>
   <p align="left"><em>X</em> and <em>Y</em> are the coordinates to place the center 
-    of the elevator at, and <em>Floor</em> is the floor to place the elevator 
-    on.</p>
+    of the elevator at, <em>width, length</em> and <em>height</em> are the width, 
+    length and height of the elevator, and <em>Floor</em> is the floor to place 
+    the elevator on.</p>
   <p align="left"><strong>2. AddFloor</strong> - adds a textured floor with the 
     specified dimensions for the elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor <em>texturename</em>, 
