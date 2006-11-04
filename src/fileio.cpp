@@ -1080,15 +1080,6 @@ recalc:
                 //If IsNumeric(temp2) = False Then Err.Raise 1000
                 ElevatorArray[Current]->OpenSpeed = atof(temp2.GetData());
 			}
-            if (LineData.Slice(0, 14).CompareNoCase("moveshaftdoors") == true)
-			{
-                //If IsNumeric(temp2) = False Then Err.Raise 1000
-				temp2.Trim();
-				if (csString(temp2).CompareNoCase("true") == true)
-					ElevatorArray[Current]->MoveShaftDoors = true;
-				else
-					ElevatorArray[Current]->MoveShaftDoors = false;
-			}
 			if (LineData.Slice(0, 14).CompareNoCase("servicedfloors") == true)
 			{
                 //copy string listing of serviced floors into array
