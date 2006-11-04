@@ -68,7 +68,8 @@ Elevator::Elevator(int number)
 	ElevatorDoorSpeed = 0;
 	ElevWait = false;
 	EmergencyStop = false;
-	MoveShaftDoors = true;
+	WhichDoors = 0;
+	ShaftDoorFloor = 0;
 	AssignedShaft = 0;
 	IsEnabled = true;
 	Width = 0;
@@ -164,6 +165,7 @@ void Elevator::CreateElevator(double x, double z, double width, double length, d
 	ShaftDoorR.SetSize(ServicedFloors.GetSize());
 	ShaftDoorL_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorR_state.SetSize(ServicedFloors.GetSize());
+	ShaftDoorsOpen.SetSize(ServicedFloors.GetSize());
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }
@@ -249,16 +251,6 @@ void Elevator::OpenHatch()
 	//Opens the elevator's upper escape hatch, allowing access to the shaft
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening hatch");
-}
-
-void Elevator::OpenShaftDoors(int floor)
-{
-	//Simulates manually opening shaft doors
-	//Slowly opens the shaft's elevator doors no matter where elevator is.
-	//Cannot be used with OpenDoorsEmergency.
-	//This is if the elevator is not lined up with the shaft doors,
-	//and the user needs to open the shaft doors, usually while on top of elevator.
-
 }
 
 void Elevator::ProcessCallQueue()
@@ -362,7 +354,7 @@ void Elevator::MonitorLoop()
 
 }
 
-void Elevator::OpenDoorsEmergency()
+void Elevator::OpenDoorsEmergency(int whichdoors, int floor)
 {
 	//Simulates manually prying doors open.
 	//Slowly opens the elevator doors no matter where elevator is.
@@ -374,12 +366,26 @@ void Elevator::OpenDoorsEmergency()
 		return;
 	}
 
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening doors");
+	//check if elevator doors are already open
+	if (DoorsOpen == true && whichdoors != 3)
+		return;
+
+	//check if shaft doors are already open
+	if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == true && whichdoors == 3)
+		return;
+
+	if (whichdoors != 3)
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening doors");
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+
 	OpenDoor = 2;
+	WhichDoors = whichdoors;
+	ShaftDoorFloor = floor;
 	MoveDoors(true, true);
 }
 
-void Elevator::CloseDoorsEmergency()
+void Elevator::CloseDoorsEmergency(int whichdoors, int floor)
 {
 	//Simulates manually closing doors.
 	//Slowly closes the elevator doors no matter where elevator is.
@@ -391,12 +397,26 @@ void Elevator::CloseDoorsEmergency()
 		return;
 	}
 
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing doors");
+	//check if elevator doors are already closed
+	if (DoorsOpen == false && whichdoors != 3)
+		return;
+
+	//check if shaft doors are already closed
+	if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == false && whichdoors == 3)
+		return;
+
+	if (whichdoors != 3)
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing doors");
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+
 	OpenDoor = -2;
+	WhichDoors = whichdoors;
+	ShaftDoorFloor = floor;
 	MoveDoors(false, true);
 }
 
-void Elevator::OpenDoors()
+void Elevator::OpenDoors(int whichdoors, int floor)
 {
 	//Opens elevator doors
 
@@ -406,12 +426,26 @@ void Elevator::OpenDoors()
 		return;
 	}
 
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening doors");
+	//check if elevator doors are already open
+	if (DoorsOpen == true && whichdoors != 3)
+		return;
+
+	//check if shaft doors are already open
+	if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == true && whichdoors == 3)
+		return;
+
+	if (whichdoors != 3)
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening doors");
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+
 	OpenDoor = 1;
+	WhichDoors = whichdoors;
+	ShaftDoorFloor = floor;
 	MoveDoors(true, false);
 }
 
-void Elevator::CloseDoors()
+void Elevator::CloseDoors(int whichdoors, int floor)
 {
 	//Closes elevator doors
 
@@ -421,21 +455,37 @@ void Elevator::CloseDoors()
 		return;
 	}
 
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing doors");
+	//check if elevator doors are already closed
+	if (DoorsOpen == false && whichdoors != 3)
+		return;
+
+	//check if shaft doors are already closed
+	if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == false && whichdoors == 3)
+		return;
+
+	if (whichdoors != 3)
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing doors");
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+
 	OpenDoor = -1;
+	WhichDoors = whichdoors;
+	ShaftDoorFloor = floor;
 	MoveDoors(false, false);
 }
 
-void Elevator::MoveDoors(bool open, bool emergency, int whichdoors)
+void Elevator::MoveDoors(bool open, bool emergency)
 {
 	//opens or closes elevator doors
 	//currently only supports doors on either the left/right or front/back
 	//diagonal doors will be done later, by possibly using relative plane movement
 
-	//whichdoors is the doors to move:
+	//WhichDoors is the doors to move:
 	//1 = both shaft and elevator doors
 	//2 = only elevator doors
 	//3 = only shaft doors
+
+	//ShaftDoorFloor is the floor the shaft doors are on - only has effect if whichdoors is 3
 
 	static bool IsRunning = false;
 	static double OpenChange;
@@ -475,25 +525,28 @@ void Elevator::MoveDoors(bool open, bool emergency, int whichdoors)
 		}
 
 		ElevatorDoorSpeed = 0;
-		index = ServicedFloors.Find(GetFloor());
+		if (WhichDoors == 3)
+			index = ServicedFloors.Find(ShaftDoorFloor);
+		else
+			index = ServicedFloors.Find(GetFloor());
 	}
 
 	//get reference movable object
 	csRef<iMovable> tmpMovable;
-	if (whichdoors < 3)
+	if (WhichDoors < 3)
 		tmpMovable = ElevatorDoorL_movable;
 	else
 		tmpMovable = ShaftDoorL[index]->GetMovable();
 
 	bool elevdoors = false, shaftdoors = false;
-	if (whichdoors == 1)
+	if (WhichDoors == 1)
 	{
 		elevdoors = true;
 		shaftdoors = true;
 	}
-	if (whichdoors == 2)
+	if (WhichDoors == 2)
 		elevdoors = true;
-	if (whichdoors == 3)
+	if (WhichDoors == 3)
 		shaftdoors = true;
 
 	//Speed up doors
@@ -661,14 +714,25 @@ void Elevator::MoveDoors(bool open, bool emergency, int whichdoors)
 	//reset values
 	ElevatorDoorSpeed = 0;
 	OpenDoor = 0;
+	WhichDoors = 0;
 
 	//turn on autoclose timer
 
 	//the doors are open or closed now
-	if (open == true)
-		DoorsOpen = true;
+	if (WhichDoors != 3)
+	{
+		if (open == true)
+			DoorsOpen = true;
+		else
+			DoorsOpen = false;
+	}
 	else
-		DoorsOpen = false;
+	{
+		if (open == true)
+			ShaftDoorsOpen[ServicedFloors.Find(ShaftDoorFloor)] = true;
+		else
+			ShaftDoorsOpen[ServicedFloors.Find(ShaftDoorFloor)] = false;
+	}
 
 	IsRunning = false;
 

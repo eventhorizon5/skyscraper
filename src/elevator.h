@@ -60,7 +60,6 @@ public:
 	csVector3 DoorOrigin; //elevator door origin
 	csVector3 ShaftDoorOrigin; //shaft door origin
 	csArray<int> ServicedFloors; //list of floors this elevator services
-	bool MoveShaftDoors; //true if shaft doors should be operated
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
@@ -77,15 +76,14 @@ public:
 	void Alarm();
 	void StopElevator();
 	void OpenHatch();
-	void OpenDoorsEmergency();
-	void OpenShaftDoors(int floor);
+	void OpenDoorsEmergency(int whichdoors = 1, int floor = 0);
 	void ProcessCallQueue();
 	int GetFloor();
 	void MonitorLoop();
-	void CloseDoorsEmergency();
+	void CloseDoorsEmergency(int whichdoors = 1, int floor = 0);
 	const csVector3 GetPosition();
-	void OpenDoors();
-	void CloseDoors();
+	void OpenDoors(int whichdoors = 1, int floor = 0);
+	void CloseDoors(int whichdoors = 1, int floor = 0);
 	void CheckElevator();
 	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides);
 	int AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
@@ -131,6 +129,7 @@ private:
 	double ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
 	bool DoorsOpen; //elevator door state
+	csArray<bool> ShaftDoorsOpen; //shaft door state
 	int OpenDoor; //1=open doors, -1=close doors
 	double Destination; //elevator destination Y value
 	double StoppingDistance;
@@ -140,6 +139,8 @@ private:
 	bool ElevWait;
 	double FPSModifierStatic;
 	bool EmergencyStop;
+	int WhichDoors;
+	int ShaftDoorFloor;
 	csRefArray<iMeshWrapper> ShaftDoorL; //shaft door array
 	csRefArray<iThingFactoryState> ShaftDoorL_state; //shaft door array state
 	csRefArray<iMeshWrapper> ShaftDoorR; //shaft door array
@@ -147,7 +148,7 @@ private:
 
 	//functions
 	void MoveElevatorToFloor();
-	void MoveDoors(bool open, bool emergency, int whichdoors = 1);
+	void MoveDoors(bool open, bool emergency);
 
 	char intbuffer[65];
 	char buffer[20];
