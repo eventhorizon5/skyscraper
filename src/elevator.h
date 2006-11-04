@@ -147,7 +147,7 @@ private:
 
 	//functions
 	void MoveElevatorToFloor();
-	void MoveDoors(bool open, bool emergency);
+	void MoveDoors(bool open, bool emergency, int whichdoors = 1);
 
 	char intbuffer[65];
 	char buffer[20];
