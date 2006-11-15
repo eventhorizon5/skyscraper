@@ -84,7 +84,7 @@ SBS::SBS()
 	InElevator = false;
 	FPSModifier = 1;
 	FrameSync = true;
-	EnableCollisions = false;
+	//EnableCollisions = false;
 	BuildingFile = "";
 	IsBuildingsEnabled = false;
 	IsColumnFrameEnabled = false;
@@ -141,7 +141,7 @@ void SBS::Start()
 	InputOnly = false;
 	RenderOnly = false;
 	IsRunning = true;
-	EnableCollisions = true;
+	//EnableCollisions = true;
 
 	//clear user variables
 	UserVariable.DeleteAll();
@@ -162,6 +162,12 @@ void SBS::Start()
 
 	//Post-init startup code goes here, before the runloop
 	engine->Prepare();
+
+	//initialize mesh colliders
+	csColliderHelper::InitializeCollisionWrappers (collision_sys, engine);
+
+	//initialize camera collider
+	camera->ColliderInit();
 
 	//move camera to start location
 	camera->SetToStartPosition();
@@ -284,21 +290,21 @@ void SBS::GetInput()
 		// the camera to strafe up, down, left or right from it's
 		// current position.
 		if (kbd->GetKeyState (CSKEY_RIGHT))
-			camera->Move (CS_VEC_RIGHT * 8 * speed);
+			camera->Move (CS_VEC_RIGHT, speed * 8);
 		if (kbd->GetKeyState (CSKEY_LEFT))
-			camera->Move (CS_VEC_LEFT * 8 * speed);
+			camera->Move (CS_VEC_LEFT, speed * 8);
 		if (kbd->GetKeyState (CSKEY_UP))
-			camera->Move (CS_VEC_UP * 8 * speed);
+			camera->Move (CS_VEC_UP, speed * 8);
 		if (kbd->GetKeyState (CSKEY_DOWN))
-			camera->Move (CS_VEC_DOWN * 8 * speed);
+			camera->Move (CS_VEC_DOWN, speed * 8);
 	}
 	else if (kbd->GetKeyState (CSKEY_ALT))
 	{
 		//rotate on the Z axis if the Alt key is pressed with the left/right arrows
 		if (kbd->GetKeyState (CSKEY_RIGHT))
-			camera->Rotate(CS_VEC_FORWARD * speed);
+			camera->Rotate(CS_VEC_FORWARD, speed);
 		if (kbd->GetKeyState (CSKEY_LEFT))
-			camera->Rotate(CS_VEC_BACKWARD * speed);
+			camera->Rotate(CS_VEC_BACKWARD, speed);
 	}
 	else
 	{
@@ -307,28 +313,28 @@ void SBS::GetInput()
 		// _camera's_ X axis (more on this in a second) and up and down
 		// arrows cause the camera to go forwards and backwards.
 		if (kbd->GetKeyState (CSKEY_RIGHT))
-			camera->Rotate(CS_VEC_UP * speed);
+			camera->Rotate(CS_VEC_UP, speed);
 		if (kbd->GetKeyState (CSKEY_LEFT))
-			camera->Rotate(CS_VEC_DOWN * speed);
+			camera->Rotate(CS_VEC_DOWN, speed);
 		if (kbd->GetKeyState (CSKEY_PGUP))
-			camera->Rotate(CS_VEC_RIGHT * speed);
+			camera->Rotate(CS_VEC_RIGHT, speed);
 		if (kbd->GetKeyState (CSKEY_PGDN))
-			camera->Rotate(CS_VEC_LEFT * speed);
+			camera->Rotate(CS_VEC_LEFT, speed);
 		if (kbd->GetKeyState (CSKEY_UP))
 		{
-			double KeepAltitude;
-			KeepAltitude = camera->GetPosition().y;
-			camera->Move (CS_VEC_FORWARD * 8 * speed);
-			if (camera->GetPosition().y != KeepAltitude)
-				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
+			//double KeepAltitude;
+			//KeepAltitude = camera->GetPosition().y;
+			camera->Move (CS_VEC_FORWARD, speed * 8);
+			//if (camera->GetPosition().y != KeepAltitude)
+			//	camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
 		}
 		if (kbd->GetKeyState (CSKEY_DOWN))
 		{
-			double KeepAltitude;
-			KeepAltitude = camera->GetPosition().y;
-			camera->Move (CS_VEC_BACKWARD * 8 * speed);
-			if (camera->GetPosition().y != KeepAltitude)
-				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
+			//double KeepAltitude;
+			//KeepAltitude = camera->GetPosition().y;
+			camera->Move (CS_VEC_BACKWARD, speed * 8);
+			//if (camera->GetPosition().y != KeepAltitude)
+			//	camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
 		}
 
 		if (kbd->GetKeyState (CSKEY_SPACE))
@@ -340,9 +346,9 @@ void SBS::GetInput()
 
 		//values from old version
 		if (kbd->GetKeyState (CSKEY_HOME))
-			camera->Move (CS_VEC_UP * 8 * speed);
+			camera->Move (CS_VEC_UP, speed * 8);
 		if (kbd->GetKeyState (CSKEY_END))
-			camera->Move (CS_VEC_DOWN * 8 * speed);
+			camera->Move (CS_VEC_DOWN, speed * 8);
 	}
 }
 
@@ -370,8 +376,8 @@ void SBS::SetupFrame()
 	if (RenderOnly == false && InputOnly == false)
 	{
 		//Calls the Fall function, and if IsFalling is true then the user falls until they hit something
-		if (EnableCollisions == true)
-			Fall();
+		//if (EnableCollisions == true)
+		//	Fall();
 
 		//Determine floor that the camera is on
 		camera->UpdateCameraFloor();
@@ -480,6 +486,7 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 		CS_REQUEST_CONSOLEOUT,
 		CS_REQUEST_REPORTER,
 		CS_REQUEST_REPORTERLISTENER,
+		CS_REQUEST_PLUGIN("crystalspace.collisiondetection.opcode", iCollideSystem),
 		CS_REQUEST_END))
 		return ReportError ("Couldn't init app!");
 
@@ -518,6 +525,7 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	if (!vfs) return ReportError ("No VFS!");
 	console = CS_QUERY_REGISTRY (object_reg, iConsoleOutput);
 	if (!console) return ReportError ("No ConsoleOutput!");
+	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
 	plug = CS_LOAD_PLUGIN_ALWAYS (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("No BugPlug!");
 	if (plug) plug->IncRef ();

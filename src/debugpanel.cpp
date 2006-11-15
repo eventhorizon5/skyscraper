@@ -50,6 +50,7 @@ EVT_BUTTON(ID_bCloseManual,DebugPanel::On_bCloseManual_Click)
 EVT_CHECKBOX(ID_chkFrameSync,DebugPanel::On_chkFrameSync_Change)
 EVT_CHECKBOX(ID_chkFrameLimiter,DebugPanel::On_chkFrameLimiter_Change)
 EVT_CHECKBOX(ID_chkAutoShafts,DebugPanel::On_chkAutoShafts_Change)
+EVT_CHECKBOX(ID_chkCollisionDetection,DebugPanel::On_chkCollisionDetection_Change)
 EVT_BUTTON(ID_bStop,DebugPanel::On_bStop_Click)
 //*)
 END_EVENT_TABLE()
@@ -205,6 +206,11 @@ void DebugPanel::On_chkFrameSync_Change(wxCommandEvent& event)
 	sbs->FrameSync = chkFrameSync->GetValue();
 }
 
+void DebugPanel::On_chkCollisionDetection_Change(wxCommandEvent& event)
+{
+	sbs->camera->EnableCollisions(chkCollisionDetection->GetValue());
+}
+
 void DebugPanel::OnInit()
 {
 	if (sbs->Elevators > 0)
@@ -221,7 +227,7 @@ void DebugPanel::OnInit()
 		s_ElevNum->Enable(false);
 
     //set check boxes
-    chkCollisionDetection->SetValue(sbs->EnableCollisions);
+    chkCollisionDetection->SetValue(sbs->camera->GetCollisionStatus());
     chkFrameLimiter->SetValue(sbs->FrameLimiter);
     //chkMainProcessing->SetValue();
     chkAutoShafts->SetValue(sbs->AutoShafts);

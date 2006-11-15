@@ -45,6 +45,7 @@ public:
 private:
 	csRef<iMeshWrapper> CallButtonMesh; //call button mesh object
 	csRef<iThingFactoryState> CallButton_state;
+	//csRef<csColliderWrapper> Callbutton_collider;
 };
 
 #endif

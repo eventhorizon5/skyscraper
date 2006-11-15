@@ -166,6 +166,8 @@ void Elevator::CreateElevator(double x, double z, double width, double length, d
 	ShaftDoorL_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorR_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorsOpen.SetSize(ServicedFloors.GetSize());
+	//ShaftDoorL_collider.SetSize(ServicedFloors.GetSize());
+	//ShaftDoorR_collider.SetSize(ServicedFloors.GetSize());
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }
@@ -1152,6 +1154,7 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorL[i]->GetMeshObject()->GetFactory());
 		ShaftDoorL_state[i] = tmpstate;
 		ShaftDoorL[i]->SetZBufMode(CS_ZBUF_USE);
+		//ShaftDoorL_collider[i] = csColliderHelper::InitializeCollisionWrapper (sbs->collision_sys, ShaftDoorL[i]);
 
 		//door R
 		tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer2.GetData());
@@ -1159,6 +1162,7 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorR[i]->GetMeshObject()->GetFactory());
 		ShaftDoorR_state[i] = tmpstate;
 		ShaftDoorR[i]->SetZBufMode(CS_ZBUF_USE);
+		//ShaftDoorR_collider[i] = csColliderHelper::InitializeCollisionWrapper (sbs->collision_sys, ShaftDoorR[i]);
 
 		//reposition meshes
 		ShaftDoorL[i]->GetMovable()->SetPosition(Origin);

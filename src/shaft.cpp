@@ -54,6 +54,7 @@ Shaft::Shaft(int number, int type, double CenterX, double CenterZ, double width,
 
 	ShaftArray.SetSize(endfloor - startfloor + 1);
 	ShaftArray_state.SetSize(endfloor - startfloor + 1);
+	//ShaftArray_collider.SetSize(endfloor - startfloor + 1);
 	
 	for (int i = startfloor; i <= endfloor; i++)
 	{

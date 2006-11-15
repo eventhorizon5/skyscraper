@@ -37,11 +37,13 @@ public:
 		csRef<iMeshObject> Level_object;
 		csRef<iMeshObjectFactory> Level_factory;
 		csRef<iThingFactoryState> Level_state;
+		//csRef<csColliderWrapper> Level_collider;
 
 	csRef<iMeshWrapper> Interfloor; //interfloor mesh
 		csRef<iMeshObject> Interfloor_object;
 		csRef<iMeshObjectFactory> Interfloor_factory;
 		csRef<iThingFactoryState> Interfloor_state;
+		//csRef<csColliderWrapper> Interfloor_collider;
 
 	int Number; //floor number
 	csString Name; //floor name

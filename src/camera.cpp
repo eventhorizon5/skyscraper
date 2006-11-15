@@ -113,20 +113,22 @@ void Camera::UpdateCameraFloor()
 	CurrentFloor = sbs->GetFloorNumber(MainCamera->GetTransform().GetOrigin().y);
 }
 
-void Camera::Move(csVector3 vector)
+void Camera::Move(csVector3 vector, double speed)
 {
 	//moves the camera in a relative amount specified by a vector
-	MainCamera->Move(vector);
+	MainCamera->Move(vector * speed);
+	collider_actor->Move(sbs->elapsed_time, speed / sbs->elapsed_time, vector, csVector3(0, 0, 0));
 }
 
-void Camera::Rotate(csVector3 vector)
+void Camera::Rotate(csVector3 vector, double speed)
 {
 	//rotates the camera in a relative amount
 	
-	rotX += vector.x;
-	rotY += vector.y;
-	rotZ += vector.z;
+	rotX += vector.x * speed;
+	rotY += vector.y * speed;
+	rotZ += vector.z * speed;
 	SetRotation(csVector3(rotX, rotY, rotZ));
+	collider_actor->Move(sbs->elapsed_time, speed / sbs->elapsed_time, csVector3(0, 0, 0), csVector3(vector.x, vector.y, vector.z));
 }
 
 void Camera::SetStartDirection(csVector3 vector)
@@ -167,3 +169,21 @@ void Camera::SetToStartRotation()
 	SetRotation(StartRotation);
 }
 
+void Camera::ColliderInit()
+{
+	//init collider objects
+	collider_actor = new csColliderActor;
+	collider_actor->SetCollideSystem (sbs->collision_sys);
+	collider_actor->SetEngine (sbs->engine);
+	collider_actor->InitializeColliders (MainCamera, csVector3 (0.2, 0.1, 0.2), csVector3 (0.2, 0.3, 0.2), csVector3 (0, -.2, 0));
+}
+
+void Camera::EnableCollisions(bool value)
+{
+	collider_actor->SetCD(value);
+}
+
+bool Camera::GetCollisionStatus()
+{
+	return collider_actor->HasCD();
+}

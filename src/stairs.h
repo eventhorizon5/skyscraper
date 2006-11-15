@@ -37,7 +37,8 @@ public:
 
 private:
 	csRefArray<iMeshWrapper> StairDoorArray; //stair door array
-	csRefArray<iThingFactoryState> StairDoorArray_state; //shaft mesh array state
+	csRefArray<iThingFactoryState> StairDoorArray_state; //stair mesh array state
+	//csRefArray<csColliderWrapper> StairDoorArray_collider;
 };
 
 #endif
