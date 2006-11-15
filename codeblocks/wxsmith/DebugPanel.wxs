@@ -112,6 +112,7 @@
         </object>
         <object class="wxCheckBox" name="ID_chkCollisionDetection" variable="chkCollisionDetection" member="yes">
             <label>Collision Detection</label>
+            <handler entry="EVT_CHECKBOX" function="On_chkCollisionDetection_Change" />
             <pos>302,35</pos>
         </object>
         <object class="wxButton" name="ID_bMeshControl" variable="bMeshControl" member="yes">
