@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="Skyscraper"
 	ProjectGUID="{899501B5-1571-4301-B4D0-5FAADAE2A607}"
+	RootNamespace="Skyscraper"
 	>
 	<Platforms>
 		<Platform
@@ -77,6 +78,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="libcrystalspace.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase26.lib wxmsw26_core.lib wxmsw26_gl.lib"
 				OutputFile="../Skyscraper.exe"
+				Version=""
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=""
@@ -174,6 +176,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase26d.lib wxmsw26d_core.lib wxmsw26d_gl.lib"
 				OutputFile="../Skyscraper.exe"
+				Version=""
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=""
@@ -217,6 +220,10 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
+			<File
+				RelativePath="..\src\buttonpanel.cpp"
+				>
+			</File>
 			<File
 				RelativePath="..\src\callbutton.cpp"
 				>
@@ -282,6 +289,10 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
+			<File
+				RelativePath="..\src\buttonpanel.h"
+				>
+			</File>
 			<File
 				RelativePath="..\src\callbutton.h"
 				>
