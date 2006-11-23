@@ -56,17 +56,24 @@ public:
 	double DoorHeight; //height of doors; may be removed
 	double DoorWidth; //width of doors; may be removed
 	bool IsEnabled; //is floor enabled?
-	csArray<int> FloorList; //list of floor/ceiling polygon indices
 	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
+	csArray<int> floor_polys; //index refs to floor polygons
+	csArray<int> ifloor_polys; //index refs to interfloor floor polygons
+	csArray<int> wall_polys; //index refs to wall polygons
+	csArray<int> iwall_polys; //index refs to interfloor wall polygons
 
 	//functions
 	Floor(int number);
 	~Floor();
 	void SetCameraFloor();
 	int AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, bool isexternal);
+	void DeleteFloor(int index);
 	int AddInterfloorFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
+	void DeleteInterfloorFloor(int index);
 	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool isexternal);
+	void DeleteWall(int index);
 	int AddInterfloorWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th);
+	void DeleteInterfloorWall(int index);
 	void Enabled(bool value);
 	void AddAutoFloor(const char *texture, double voffset, double tw, double th);
 	double FullHeight();

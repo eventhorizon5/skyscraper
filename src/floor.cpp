@@ -71,13 +71,19 @@ Floor::Floor(int number)
 	InterfloorHeight = 0;
 	DoorHeight = 0;
 	DoorWidth = 0;
+
+	//init arrays
+	floor_polys.DeleteAll();
+	ifloor_polys.DeleteAll();
+	wall_polys.DeleteAll();
+	iwall_polys.DeleteAll();
+
 }
 
 Floor::~Floor()
 {
 	//Destructor
 
-	FloorList.DeleteAll();
 }
 
 void Floor::SetCameraFloor()
@@ -108,11 +114,21 @@ int Floor::AddFloor(const char *texture, double x1, double z1, double x2, double
 	{
 		int index;
 		index = sbs->AddFloorMain(Level_state, texture, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
-		FloorList.Push(index);
-		return index;
+		floor_polys.Push(index);
+		return floor_polys.GetSize() - 1;
 	}
 	else
 		return sbs->AddFloorMain(sbs->External_state, texture, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+}
+
+void Floor::DeleteFloor(int index)
+{
+	//delete floor polygon from level mesh
+	if (floor_polys[index] > -1)
+	{
+		sbs->DeleteFloor(Level_state, floor_polys[index]);
+		floor_polys[index] = -1;
+	}
 }
 
 int Floor::AddInterfloorFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
@@ -133,8 +149,18 @@ int Floor::AddInterfloorFloor(const char *texture, double x1, double z1, double 
 
 	int index;
 	index = sbs->AddFloorMain(Interfloor_state, texture, x1, z1, x2, z2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2);
-	//FloorList.Push(index);
-	return index;
+	ifloor_polys.Push(index);
+	return ifloor_polys.GetSize() - 1;
+}
+
+void Floor::DeleteInterfloorFloor(int index)
+{
+	//delete floor polygon from interfloor mesh
+	if (ifloor_polys[index] > -1)
+	{
+		sbs->DeleteFloor(Interfloor_state, ifloor_polys[index]);
+		ifloor_polys[index] = -1;
+	}
 }
 
 int Floor::AddWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool isexternal)
@@ -172,9 +198,24 @@ int Floor::AddWall(const char *texture, double x1, double z1, double x2, double 
 	th2 = AutoSize(0, height_in1, false, isexternal, th);
 	
 	if (isexternal == false)
-		return sbs->AddWallMain(Level_state, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2, revX, revY, revZ);
+	{
+		int index;
+		index = sbs->AddWallMain(Level_state, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2, revX, revY, revZ);
+		wall_polys.Push(index);
+		return wall_polys.GetSize() - 1;
+	}
 	else
 		return sbs->AddWallMain(sbs->External_state, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2, revX, revY, revZ);
+}
+
+void Floor::DeleteWall(int index)
+{
+	//delete wall polygon from level mesh
+	if (wall_polys[index] > -1)
+	{
+		sbs->DeleteFloor(Level_state, wall_polys[index]);
+		wall_polys[index] = -1;
+	}
 }
 
 int Floor::AddInterfloorWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th)
@@ -196,7 +237,20 @@ int Floor::AddInterfloorWall(const char *texture, double x1, double z1, double x
 		tw2 = AutoSize(z1, z2, true, false, tw);
 	th2 = AutoSize(0, height_in1, false, false, th);
 	
-	return sbs->AddWallMain(Interfloor_state, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2, false, false, false);
+	int index;
+	index = sbs->AddWallMain(Interfloor_state, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2, false, false, false);
+	iwall_polys.Push(index);
+	return iwall_polys.GetSize() - 1;
+}
+
+void Floor::DeleteInterfloorWall(int index)
+{
+	//delete wall polygon from interfloor mesh
+	if (iwall_polys[index] > -1)
+	{
+		sbs->DeleteFloor(Interfloor_state, iwall_polys[index]);
+		iwall_polys[index] = -1;
+	}
 }
 
 void Floor::Enabled(bool value)
@@ -286,7 +340,7 @@ void Floor::CutFloor(double x1, double x2, double z1, double z2)
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5;
 
 	//step through each floor polygon
-	for (int i = 0; i <= FloorList.Length() - 1; i++)
+	for (int i = 0; i <= floor_polys.Length() - 1; i++)
 	{
 		temppoly.MakeEmpty();
 		temppoly2.MakeEmpty();
@@ -295,8 +349,8 @@ void Floor::CutFloor(double x1, double x2, double z1, double z2)
 		temppoly5.MakeEmpty();
 
 		//copy polygon vertices
-		for (int j = 0; j <= Level_state->GetPolygonVertexCount(FloorList[i]); j++)
-			temppoly.AddVertex(Level_state->GetPolygonVertex(FloorList[i], j));
+		for (int j = 0; j <= Level_state->GetPolygonVertexCount(floor_polys[i]); j++)
+			temppoly.AddVertex(Level_state->GetPolygonVertex(floor_polys[i], j));
 		
 		//get left side
 		temppoly.SplitWithPlaneX(temppoly2, temppoly, x1);
