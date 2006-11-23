@@ -88,12 +88,12 @@
 
     AddFloor Wood2, -3.5, -3, 3.5, 3, 0, 0, 0, 0 #floor
     AddFloor Elev1, -3.5, -3, 3.5, 3, 8, 8, 0, 0 #ceiling
-    AddWall Wood1, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false, true #back wall
-    AddWall Wood1, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false, true #right wall
-    AddWall Wood1, -3.5, -3, -3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false, true #left wall
+    AddWall Wood1, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false #back wall
+    AddWall Wood1, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false #right wall
+    AddWall Wood1, -3.5, -3, -3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false #left wall
 
-    AddWall Wood1, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 2, 2, false, false, false, true #left panel
-    AddWall Wood1, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 2, 2, false, false, false, true #right panel
+    AddWall Wood1, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 2, 2, false, false, false#left panel
+    AddWall Wood1, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 2, 2, false, false, false #right panel
     
     AddDoors ElevDoors, 0, -3, 3.5, 8, true, 2, 2 #doors
     
