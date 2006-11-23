@@ -446,7 +446,7 @@ int SBS::LoadBuilding(const char * filename)
 			int index;
 			index = AddCustomFloor(tmpMesh, tempdata[1], varray, atof(tempdata[alength - 5]), atof(tempdata[alength - 4]), revX, revY, revZ, extcheck);
 			if (buffer == "floor")
-				FloorArray[Current]->FloorList.Push(index);
+				FloorArray[Current]->floor_polys.Push(index);
 
 			tempdata.DeleteAll();
 		}
@@ -1204,10 +1204,7 @@ recalc:
 					revZ = false;
 
                 //create wall
-				if (csString(tempdata[14]).CompareNoCase("true") == true)
-					ElevatorArray[Current]->AddWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), revX, revY, revZ, true);
-				else
-					ElevatorArray[Current]->AddWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), revX, revY, revZ, false);
+				ElevatorArray[Current]->AddWall(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), revX, revY, revZ);
 
 				tempdata.DeleteAll();
 			}
