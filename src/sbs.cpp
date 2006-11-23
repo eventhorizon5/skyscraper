@@ -606,7 +606,7 @@ void Cleanup()
 	csInitializer::DestroyApplication (object_reg);
 }
 
-int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
+int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ)
 {
 	//Adds a wall with the specified dimensions
 	csVector3 v1 (x1, altitude1 + height_in1, z1); //left top
@@ -615,14 +615,12 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double
 	csVector3 v4 (x1, altitude1, z1); //left base
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
-	if (DrawBothSides == true)
-		dest->AddQuad(v4, v3, v2, v1);
+	dest->AddQuad(v4, v3, v2, v1);
 
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
-	if (DrawBothSides == true)
-		dest->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
+	dest->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
 	
 	//reverse vector portions if specified
 	if (revX == true)
@@ -655,16 +653,13 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double
 		csVector2 (tw, 0),
 		v3,
 		csVector2 (tw, th));
-	if (DrawBothSides == true)
-	{
-		dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
-			v1,
-			csVector2 (tw, 0),
-			v2,
-			csVector2 (0, 0),
-			v3,
-			csVector2 (0, th));
-	}
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
+		v1,
+		csVector2 (tw, 0),
+		v2,
+		csVector2 (0, 0),
+		v3,
+		csVector2 (0, th));
 	return firstidx;
 }
 
@@ -690,6 +685,21 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, doubl
 		csVector2 (tw, th),
 		csVector2 (tw, 0));
 	return firstidx;
+}
+
+void SBS::DeleteWall(csRef<iThingFactoryState> dest, int index)
+{
+	//delete wall polygons (front and back) from specified mesh
+	dest->RemovePolygon(index);
+	dest->RemovePolygon(index + 1); 
+}
+
+
+void SBS::DeleteFloor(csRef<iThingFactoryState> dest, int index)
+{
+	//delete floor polygons (front and back) from specified mesh
+	dest->RemovePolygon(index);
+	dest->RemovePolygon(index + 1); 
 }
 
 void SBS::Report (const char* msg, ...)
