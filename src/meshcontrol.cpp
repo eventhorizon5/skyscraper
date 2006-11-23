@@ -48,7 +48,7 @@ END_EVENT_TABLE()
 MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(MeshControl)
-	Create(parent,id,_("Realtime Mesh Control"),wxDefaultPosition,wxSize(236,210),wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX,_T(""));
+	Create(parent,id,_("Realtime Mesh Control"),wxDefaultPosition,wxSize(317,251),wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX,_T(""));
 	bOk = new wxButton(this,ID_bOk,_("OK"),wxPoint(75,145),wxDefaultSize,0,wxDefaultValidator,_("ID_bOk"));
 	if (false) bOk->SetDefault();
 	chkFloor = new wxCheckBox(this,ID_chkFloor,_("Level"),wxPoint(139,26),wxDefaultSize,0,wxDefaultValidator,_("ID_chkFloor"));

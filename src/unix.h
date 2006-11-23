@@ -36,4 +36,3 @@ char* strrev(char* szT);
 char* StrRev(char* szT);
 
 #endif
-
