@@ -109,7 +109,6 @@ public:
 	bool RenderOnly; //skip sim processing and only render graphics
     bool InputOnly; //skip sim processing and only run input and rendering code
     bool IsFalling; //make user fall
-	double FallRate; //falling rate
     bool InStairwell; //true if user is in a stairwell
 	bool InElevator; //true if user is in an elevator
     int ElevatorNumber; //number of currently selected elevator
@@ -117,7 +116,7 @@ public:
     int FrameRate; //max frame rate
 	double FPSModifier; //modification value for FPS changes
 	bool FrameSync; //synchronize movement to frame rate
-	//bool EnableCollisions; //turns collisions on/off
+	bool EnableCollisions; //turns collisions on/off
 	double HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
 	csStringArray UserVariable;
 	bool IsBuildingsEnabled; //contains status of buildings object

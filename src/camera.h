@@ -37,13 +37,10 @@ public:
 	int StartFloor; //Starting floor
 	double StartPositionX; //starting position on X axis
 	double StartPositionZ; //starting position on Z axis
-	double body_height, body_width, body_depth; //body size
-	double legs_height, legs_width, legs_depth; //legs size
 
 	//functions
 	Camera();
 	~Camera();
-	void ColliderInit();
 	void SetPosition(csVector3 vector);
 	void SetDirection(csVector3 vector);
 	void SetRotation(csVector3 vector);
@@ -51,7 +48,7 @@ public:
 	csVector3 GetDirection();
 	csVector3 GetRotation();
 	void UpdateCameraFloor();
-	void Move(csVector3 vector, double speed);
+	bool Move(csVector3 vector, double speed);
 	void Rotate(csVector3 vector, double speed);
 	void SetStartDirection(csVector3 vector);
 	csVector3 GetStartDirection();
@@ -60,14 +57,12 @@ public:
 	void SetToStartPosition();
 	void SetToStartDirection();
 	void SetToStartRotation();
-	void EnableCollisions(bool value);
-	bool GetCollisionStatus();
+	void Gravity();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera
 	csVector3 StartDirection; //direction camera faces on start
 	csVector3 StartRotation; //camera's startup rotation
-	csColliderActor *collider_actor; //used for collision detection and gravity
 	double rotX, rotY, rotZ;
 };
 

@@ -48,13 +48,6 @@ Camera::Camera()
 	StartDirection = csVector3(0, 0, 0);
 	StartRotation = csVector3(0, 0, 0);
 
-	//set person defaults
-	body_height = 3.3;
-	body_width = 1.6;
-	body_depth = 1.6;
-	legs_width = 1.3;
-	legs_depth = 1.3;
-	legs_height = 2.6;
 }
 
 Camera::~Camera()
@@ -121,11 +114,24 @@ void Camera::UpdateCameraFloor()
 	CurrentFloor = sbs->GetFloorNumber(MainCamera->GetTransform().GetOrigin().y);
 }
 
-void Camera::Move(csVector3 vector, double speed)
+bool Camera::Move(csVector3 vector, double speed)
 {
+	//collision detection
+	if (sbs->EnableCollisions == true)
+	{
+		csTraceBeamResult result;
+		if (vector != CS_VEC_DOWN)
+			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed), false);
+		else
+			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed) - DefaultAltitude, false);
+
+		if (result.closest_mesh)
+			return false;
+	}
+
 	//moves the camera in a relative amount specified by a vector
-	MainCamera->Move(vector * speed, GetCollisionStatus());
-	collider_actor->Move(sbs->elapsed_time, speed / sbs->elapsed_time, vector, csVector3(0, 0, 0));
+	MainCamera->Move(vector * speed, sbs->EnableCollisions);
+	return true;
 }
 
 void Camera::Rotate(csVector3 vector, double speed)
@@ -136,7 +142,6 @@ void Camera::Rotate(csVector3 vector, double speed)
 	rotY += vector.y * speed;
 	rotZ += vector.z * speed;
 	SetRotation(csVector3(rotX, rotY, rotZ));
-	collider_actor->SetRotation(csVector3(rotX, rotY, rotZ));
 }
 
 void Camera::SetStartDirection(csVector3 vector)
@@ -177,21 +182,42 @@ void Camera::SetToStartRotation()
 	SetRotation(StartRotation);
 }
 
-void Camera::ColliderInit()
+void Camera::Gravity()
 {
-	//init collider objects
-	collider_actor = new csColliderActor;
-	collider_actor->SetCollideSystem (sbs->collision_sys);
-	collider_actor->SetEngine (sbs->engine);
-	collider_actor->InitializeColliders (MainCamera, csVector3(legs_width, legs_height, legs_depth), csVector3(body_width, body_height, body_depth), csVector3 (StartPositionX, sbs->FloorArray[StartFloor]->Altitude + DefaultAltitude, StartPositionZ));
-}
+	csTraceBeamResult result;
+	double new_time;
+	static double old_time, original_position, distance;
 
-void Camera::EnableCollisions(bool value)
-{
-	collider_actor->SetCD(value);
-}
+	result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), csVector3(GetPosition().x, GetPosition().y - DefaultAltitude, GetPosition().z), false);
+	if (result.closest_mesh)
+	{
+		distance = 0;
+		sbs->IsFalling = false;
+		original_position = 0;
+		old_time = 0;
+	}
+	else
+	{
+		//fall routine
+		
+		if (sbs->IsFalling == false)
+		{
+			old_time = sbs->vc->GetCurrentTicks();
+			original_position = GetPosition().y;
+		}
+		sbs->IsFalling = true;
+		new_time = sbs->vc->GetCurrentTicks();
+		double time_rate = (new_time - old_time) / 1000;
 
-bool Camera::GetCollisionStatus()
-{
-	return collider_actor->HasCD();
+		//get distance value
+		//d = 0.5 * g * t^2
+		distance = 0.5 * sbs->Gravity * pow(time_rate, 2);
+
+		result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, csVector3(GetPosition().x, original_position, GetPosition().z), csVector3(GetPosition().x, original_position - distance, GetPosition().z), false);
+		if (result.closest_mesh)
+			SetPosition(csVector3(GetPosition().x, (GetPosition().y - sqrt(result.sqdistance)) + DefaultAltitude, GetPosition().z));
+		else
+			SetPosition(csVector3(GetPosition().x, original_position - distance, GetPosition().z));
+
+	}
 }

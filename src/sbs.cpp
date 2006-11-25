@@ -69,7 +69,7 @@ SBS::SBS()
 	BuildingLocation = "";
 	BuildingDescription = "";
 	BuildingVersion = "";
-	Gravity = 0;
+	Gravity = 32.15; // 9.8 m/s/s
 	IsRunning = false;
 	Shafts = 0;
 	TotalFloors = 0;
@@ -79,12 +79,11 @@ SBS::SBS()
 	RenderOnly = false;
 	InputOnly = false;
 	IsFalling = false;
-	FallRate = 0;
 	InStairwell = false;
 	InElevator = false;
 	FPSModifier = 1;
 	FrameSync = true;
-	//EnableCollisions = false;
+	EnableCollisions = true;
 	BuildingFile = "";
 	IsBuildingsEnabled = false;
 	IsColumnFrameEnabled = false;
@@ -134,14 +133,11 @@ void SBS::Start()
 	view = csPtr<iView>(new csView (engine, g3d));
 	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
 
-	//load camera object
+	//create camera object
 	camera = new Camera();
 
-	//set main simulation values
-	InputOnly = false;
-	RenderOnly = false;
+	//set running value
 	IsRunning = true;
-	//EnableCollisions = true;
 
 	//clear user variables
 	UserVariable.DeleteAll();
@@ -165,9 +161,6 @@ void SBS::Start()
 
 	//initialize mesh colliders
 	csColliderHelper::InitializeCollisionWrappers (collision_sys, engine);
-
-	//initialize camera collider
-	camera->ColliderInit();
 
 	//move camera to start location
 	camera->SetToStartPosition();
@@ -322,19 +315,19 @@ void SBS::GetInput()
 			camera->Rotate(CS_VEC_LEFT, speed);
 		if (kbd->GetKeyState (CSKEY_UP))
 		{
-			//double KeepAltitude;
-			//KeepAltitude = camera->GetPosition().y;
+			double KeepAltitude;
+			KeepAltitude = camera->GetPosition().y;
 			camera->Move (CS_VEC_FORWARD, speed * 8);
-			//if (camera->GetPosition().y != KeepAltitude)
-			//	camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
+			if (camera->GetPosition().y != KeepAltitude)
+				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
 		}
 		if (kbd->GetKeyState (CSKEY_DOWN))
 		{
-			//double KeepAltitude;
-			//KeepAltitude = camera->GetPosition().y;
+			double KeepAltitude;
+			KeepAltitude = camera->GetPosition().y;
 			camera->Move (CS_VEC_BACKWARD, speed * 8);
-			//if (camera->GetPosition().y != KeepAltitude)
-			//	camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
+			if (camera->GetPosition().y != KeepAltitude)
+				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
 		}
 
 		if (kbd->GetKeyState (CSKEY_SPACE))
@@ -375,9 +368,9 @@ void SBS::SetupFrame()
 
 	if (RenderOnly == false && InputOnly == false)
 	{
-		//Calls the Fall function, and if IsFalling is true then the user falls until they hit something
-		//if (EnableCollisions == true)
-		//	Fall();
+		//Process gravity
+		if (EnableCollisions == true)
+			camera->Gravity();
 
 		//Determine floor that the camera is on
 		camera->UpdateCameraFloor();
@@ -400,6 +393,9 @@ void SBS::SetupFrame()
 			for (int i = 1; i < ShaftArray.GetSize(); i++)
 				ShaftArray[i]->CheckShaft();
 		}
+
+		//check if the user is outside
+
 	}
 
 	if (RenderOnly == false)

@@ -208,7 +208,7 @@ void DebugPanel::On_chkFrameSync_Change(wxCommandEvent& event)
 
 void DebugPanel::On_chkCollisionDetection_Change(wxCommandEvent& event)
 {
-	sbs->camera->EnableCollisions(chkCollisionDetection->GetValue());
+	sbs->EnableCollisions = chkCollisionDetection->GetValue();
 }
 
 void DebugPanel::OnInit()
@@ -227,7 +227,7 @@ void DebugPanel::OnInit()
 		s_ElevNum->Enable(false);
 
     //set check boxes
-    chkCollisionDetection->SetValue(sbs->camera->GetCollisionStatus());
+    chkCollisionDetection->SetValue(sbs->EnableCollisions);
     chkFrameLimiter->SetValue(sbs->FrameLimiter);
     //chkMainProcessing->SetValue();
     chkAutoShafts->SetValue(sbs->AutoShafts);
