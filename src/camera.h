@@ -37,9 +37,8 @@ public:
 	int StartFloor; //Starting floor
 	double StartPositionX; //starting position on X axis
 	double StartPositionZ; //starting position on Z axis
-	double rotZ;
-	double rotY;
-    double rotX;
+	double body_height, body_width, body_depth; //body size
+	double legs_height, legs_width, legs_depth; //legs size
 
 	//functions
 	Camera();
@@ -69,6 +68,7 @@ private:
 	csVector3 StartDirection; //direction camera faces on start
 	csVector3 StartRotation; //camera's startup rotation
 	csColliderActor *collider_actor; //used for collision detection and gravity
+	double rotX, rotY, rotZ;
 };
 
 #endif

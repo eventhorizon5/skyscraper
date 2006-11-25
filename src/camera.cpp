@@ -47,6 +47,14 @@ Camera::Camera()
 	StartPositionZ = 0;
 	StartDirection = csVector3(0, 0, 0);
 	StartRotation = csVector3(0, 0, 0);
+
+	//set person defaults
+	body_height = 3.3;
+	body_width = 1.6;
+	body_depth = 1.6;
+	legs_width = 1.3;
+	legs_depth = 1.3;
+	legs_height = 2.6;
 }
 
 Camera::~Camera()
@@ -116,7 +124,7 @@ void Camera::UpdateCameraFloor()
 void Camera::Move(csVector3 vector, double speed)
 {
 	//moves the camera in a relative amount specified by a vector
-	MainCamera->Move(vector * speed);
+	MainCamera->Move(vector * speed, GetCollisionStatus());
 	collider_actor->Move(sbs->elapsed_time, speed / sbs->elapsed_time, vector, csVector3(0, 0, 0));
 }
 
@@ -128,7 +136,7 @@ void Camera::Rotate(csVector3 vector, double speed)
 	rotY += vector.y * speed;
 	rotZ += vector.z * speed;
 	SetRotation(csVector3(rotX, rotY, rotZ));
-	collider_actor->Move(sbs->elapsed_time, speed / sbs->elapsed_time, csVector3(0, 0, 0), csVector3(vector.x, vector.y, vector.z));
+	collider_actor->SetRotation(csVector3(rotX, rotY, rotZ));
 }
 
 void Camera::SetStartDirection(csVector3 vector)
@@ -175,7 +183,7 @@ void Camera::ColliderInit()
 	collider_actor = new csColliderActor;
 	collider_actor->SetCollideSystem (sbs->collision_sys);
 	collider_actor->SetEngine (sbs->engine);
-	collider_actor->InitializeColliders (MainCamera, csVector3 (0.2, 0.1, 0.2), csVector3 (0.2, 0.3, 0.2), csVector3 (0, -.2, 0));
+	collider_actor->InitializeColliders (MainCamera, csVector3(legs_width, legs_height, legs_depth), csVector3(body_width, body_height, body_depth), csVector3 (StartPositionX, sbs->FloorArray[StartFloor]->Altitude + DefaultAltitude, StartPositionZ));
 }
 
 void Camera::EnableCollisions(bool value)
