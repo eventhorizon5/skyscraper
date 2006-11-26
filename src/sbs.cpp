@@ -183,10 +183,7 @@ void SBS::Start()
 	for (int i = 1; i < ShaftArray.GetSize(); i++)
 	{
 		if (ShaftArray[i])
-		{
-			for (int j = ShaftArray[i]->startfloor; j <= ShaftArray[i]->endfloor; j++)
-				ShaftArray[i]->Enabled(j, false);
-		}
+			ShaftArray[i]->EnableWholeShaft(false);
 	}
 
 	//turn on shaft elevator doors

@@ -114,9 +114,13 @@ void Shaft::Enabled(int floor, bool value)
 	}
 	else
 	{
-		ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+		//leave bottom and top on
+		if (floor != startfloor && floor != endfloor)
+		{
+			ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+			ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+			ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+		}
 	}
 
 	for (int i = elevators[0]; i < elevators.GetSize(); i++)
@@ -141,4 +145,14 @@ void Shaft::EnableWholeShaft(bool value)
 	//turn on/off entire shaft
 	for (int i = startfloor; i <= endfloor; i++)
 		Enabled(i, value);
+}
+
+bool Shaft::IsInShaft(const csVector3 &position)
+{
+	if (position.y > bottom && position.y < top)
+	{
+		csHitBeamResult result = ShaftArray[startfloor]->HitBeam(position, csVector3(position.x, position.y - (top - bottom), position.z));
+		return result.hit;
+	}
+	return false;
 }

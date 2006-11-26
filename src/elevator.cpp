@@ -1309,3 +1309,18 @@ bool Elevator::IsElevator(csRef<iMeshWrapper> test)
 	return false;
 }
 
+csHitBeamResult Elevator::HitBeam(const csVector3 &start, const csVector3 &end)
+{
+	//passes info onto HitBeam function
+	return ElevatorMesh->HitBeam(start, end);
+}
+
+bool Elevator::IsInElevator(const csVector3 &position)
+{
+	if (position.y > GetPosition().y && position.y < Height)
+	{
+		csHitBeamResult result = ElevatorMesh->HitBeam(position, csVector3(position.x, position.y - Height, position.z));
+		return result.hit;
+	}
+	return false;
+}

@@ -231,16 +231,12 @@ void Camera::CheckElevator()
 
 	for (int i = 1; i <= sbs->Elevators; i++)
 	{
-		if (GetPosition().y > sbs->ElevatorArray[i]->GetPosition().y && GetPosition().y < sbs->ElevatorArray[i]->Height)
+		if (sbs->ElevatorArray[i]->IsInElevator(GetPosition()) == true)
 		{
-			csTraceBeamResult result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), csVector3(GetPosition().x, GetPosition().y - sbs->ElevatorArray[i]->Height, GetPosition().z), false);
-			if (sbs->ElevatorArray[i]->IsElevator(result.closest_mesh) == true)
-			{
-				sbs->InElevator = true;
-				sbs->ElevatorNumber = i;
-				sbs->ElevatorSync = true;
-				return;
-			}
+			sbs->InElevator = true;
+			sbs->ElevatorNumber = i;
+			sbs->ElevatorSync = true;
+			return;
 		}
 	}
 }
@@ -249,28 +245,27 @@ void Camera::CheckShaft()
 {
 	//check to see if user (camera) is in the shaft
 
+	if (sbs->AutoShafts == false)
+		return;
+
 	for (int i = 1; i < sbs->ShaftArray.GetSize(); i++)
 	{
-		if (GetPosition().y > sbs->ShaftArray[i]->bottom && GetPosition().y < sbs->ShaftArray[i]->top)
+		if (sbs->ShaftArray[i]->IsInShaft(GetPosition()) == true)
 		{
-			csTraceBeamResult result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), csVector3(GetPosition().x, GetPosition().y - (sbs->ShaftArray[i]->top - sbs->ShaftArray[i]->bottom), GetPosition().z), false);
-			if (sbs->ShaftArray[i]->IsShaft(result.closest_mesh) == true)
+			if (sbs->ShaftArray[i]->InsideShaft == false && sbs->InElevator == false)
 			{
-				if (sbs->ShaftArray[i]->InsideShaft == false && sbs->InElevator == false)
-				{
-					sbs->ShaftArray[i]->InsideShaft = true;
+				sbs->ShaftArray[i]->InsideShaft = true;
 
-					//turn on entire shaft
-					sbs->ShaftArray[i]->EnableWholeShaft(true);
-				}
-				else if (sbs->ShaftArray[i]->InsideShaft == true && sbs->InElevator == true)
-				{
-					sbs->ShaftArray[i]->InsideShaft = false;
+				//turn on entire shaft
+				sbs->ShaftArray[i]->EnableWholeShaft(true);
+			}
+			else if (sbs->ShaftArray[i]->InsideShaft == true && sbs->InElevator == true)
+			{
+				sbs->ShaftArray[i]->InsideShaft = false;
 					
-					//turn off shaft except for camera floor
-					sbs->ShaftArray[i]->EnableWholeShaft(false);
-					sbs->ShaftArray[i]->Enabled(sbs->camera->CurrentFloor, true);
-				}
+				//turn off shaft except for camera floor
+				sbs->ShaftArray[i]->EnableWholeShaft(false);
+				sbs->ShaftArray[i]->Enabled(sbs->camera->CurrentFloor, true);
 			}
 		}
 		else if (sbs->ShaftArray[i]->InsideShaft == true)
@@ -279,7 +274,6 @@ void Camera::CheckShaft()
 			
 			//turn off entire shaft
 			sbs->ShaftArray[i]->EnableWholeShaft(false);
-
 		}
 	}
 }

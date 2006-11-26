@@ -50,6 +50,7 @@ public:
 	void Enabled(int floor, bool value);
 	bool IsShaft(csRef<iMeshWrapper> test);
 	void EnableWholeShaft(bool value);
+	bool IsInShaft(const csVector3 &position);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array

@@ -92,6 +92,9 @@ public:
 	void Enabled(bool value);
 	void ShaftDoorsEnabled(int floor, bool value);
 	bool IsElevator(csRef<iMeshWrapper> test);
+	bool IsInElevator(const csVector3 &position);
+	csHitBeamResult HitBeam(const csVector3 &start, const csVector3 &end);
+
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
