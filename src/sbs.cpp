@@ -94,6 +94,7 @@ SBS::SBS()
 	fps_tottime = 0;
 	FPS = 0;
 	AutoShafts = true;
+	ElevatorSync = false;
 }
 
 SBS::~SBS()
@@ -376,23 +377,15 @@ void SBS::SetupFrame()
 		camera->UpdateCameraFloor();
 
 		//run elevator handlers
-		bool tmpIn = false;
 		for (int i = 1; i <= Elevators; i++)
-		{
 			ElevatorArray[i]->MonitorLoop();
-			if (ElevatorArray[i]->InElevator == true)
-				tmpIn = true;
-		}
 
-		//set InElevator state
-		InElevator = tmpIn;
+		//check if the user is in an elevator
+		camera->CheckElevator();
 
 		//Check if the user is in a shaft
 		if (AutoShafts == true)
-		{
-			for (int i = 1; i < ShaftArray.GetSize(); i++)
-				ShaftArray[i]->CheckShaft();
-		}
+			camera->CheckShaft();
 
 		//check if the user is outside
 
@@ -1317,11 +1310,6 @@ double SBS::GetDistance(double x1, double x2, double z1, double z2)
 		return abs(z1 - z2);
 	if ((x1 != x2) && (z2 != x2))
 		return sqrt(pow(abs(x1 - x2), 2) + pow(abs(z1 - z2), 2)); //calculate diagonals
-}
-
-void SBS::Fall()
-{
-
 }
 
 void SBS::DumpVertices(csRef<iThingFactoryState> mesh)

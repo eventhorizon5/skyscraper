@@ -58,6 +58,8 @@ public:
 	void SetToStartDirection();
 	void SetToStartRotation();
 	void Gravity();
+	void CheckElevator();
+	void CheckShaft();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera

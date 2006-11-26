@@ -38,7 +38,6 @@ public:
 	bool PauseQueueSearch; //pause queue processor
 	int LastQueueFloor[1]; //last route added to either queue
 	double ElevatorSpeed; //maximum elevator speed
-	bool ElevatorSync; //true if user should move with elevator
 	bool MoveElevator; //Tells elevator to start going to specified floor
     int MoveElevatorFloor; //floor to move elevator to
 	int GotoFloor; //floor to go to
@@ -63,13 +62,12 @@ public:
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
-	double Width, Length, Height; //elevator width, length, and height
-	bool InElevator; //true if user is in the elevator
+	double Height; //elevator height
 
 	//functions
 	Elevator(int number);
 	~Elevator();
-	void CreateElevator(double x, double z, double width, double length, double height, int floor);
+	void CreateElevator(double x, double z, int floor);
 	void AddRoute(int floor, int direction);
 	void DeleteRoute(int floor, int direction);
 	void CancelLastRoute();
@@ -84,7 +82,6 @@ public:
 	const csVector3 GetPosition();
 	void OpenDoors(int whichdoors = 1, int floor = 0);
 	void CloseDoors(int whichdoors = 1, int floor = 0);
-	void CheckElevator();
 	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ);
 	int AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
 	int AddFloorIndicator(const char *basename, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
@@ -94,6 +91,7 @@ public:
 	void DumpQueues();
 	void Enabled(bool value);
 	void ShaftDoorsEnabled(int floor, bool value);
+	bool IsElevator(csRef<iMeshWrapper> test);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

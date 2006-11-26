@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Shaft::Shaft(int number, int type, double CenterX, double CenterZ, double width, double length, int _startfloor, int _endfloor)
+Shaft::Shaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor)
 {
 	//constructor
 	//creates a shaft in the location specified by x1, x2, z1, and z2
@@ -45,10 +45,10 @@ Shaft::Shaft(int number, int type, double CenterX, double CenterZ, double width,
 	ShaftNumber = number;
 	startfloor = _startfloor;
 	endfloor = _endfloor;
-	Width = width;
-	Length = length;
 	origin = csVector3(CenterX, sbs->FloorArray[_startfloor]->Altitude, CenterZ);
 	InsideShaft = false;
+	top = 0;
+	bottom = 0;
 
 	csString buffer, buffer2, buffer3;
 
@@ -88,12 +88,24 @@ int Shaft::AddWall(int floor, const char *texture, double x1, double z1, double 
 
 int Shaft::AddFloor(int floor, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
-   	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], texture, x1, z1, x2, z2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th);
+   	//get shaft extents
+	double altitude = sbs->FloorArray[floor]->Altitude;
+
+	if (altitude + voffset1 < bottom)
+		bottom = altitude + voffset1;
+	if (altitude + voffset2 < bottom)
+		bottom = altitude + voffset2;
+	if (altitude + voffset1 > top)
+		top = altitude + voffset1;
+	if (altitude + voffset2 > top)
+		top = altitude + voffset2;
+
+	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], texture, x1, z1, x2, z2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th);
 }
 
 void Shaft::Enabled(int floor, bool value)
 {
-	//turns shaft elevator doors on/off
+	//turns shaft on/off for a specific floor
 	if (value == true)
 	{
 		ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
@@ -106,63 +118,27 @@ void Shaft::Enabled(int floor, bool value)
 		ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
+
+	for (int i = elevators[0]; i < elevators.GetSize(); i++)
+	{
+		for(int j = sbs->ElevatorArray[i]->ServicedFloors[0]; j < sbs->ElevatorArray[i]->ServicedFloors.GetSize(); j++)
+			sbs->ElevatorArray[i]->ShaftDoorsEnabled(j, value);
+	}
 }
 
-void Shaft::CheckShaft()
+bool Shaft::IsShaft(csRef<iMeshWrapper> test)
 {
-	//check to see if user (camera) is in the shaft
-
-	if (sbs->camera->GetPosition().y >= origin.y && sbs->camera->GetPosition().y < sbs->FloorArray[endfloor]->Altitude &&
-		sbs->camera->GetPosition().x >= (origin.x - (Width / 2)) && sbs->camera->GetPosition().x < (origin.x + (Width / 2)) &&
-		sbs->camera->GetPosition().z >= (origin.z - (Length / 2)) && sbs->camera->GetPosition().z < (origin.z + (Length / 2)))
+	for (int i = 0; i < ShaftArray.GetSize(); i++)
 	{
-		if (InsideShaft == false && sbs->InElevator == false)
-		{
-			InsideShaft = true;
-			//turn on entire shaft
-			for (int i = startfloor; i <= endfloor; i++)
-				Enabled(i, true);
-
-			for (int i = elevators[0]; i < elevators.GetSize(); i++)
-			{
-				for(int j = sbs->ElevatorArray[i]->ServicedFloors[0]; j < sbs->ElevatorArray[i]->ServicedFloors.GetSize(); j++)
-					sbs->ElevatorArray[i]->ShaftDoorsEnabled(j, true);
-			}
-		}
-		else if (InsideShaft == true && sbs->InElevator == true)
-		{
-			InsideShaft = false;
-			//turn off most of the shaft
-			for (int i = startfloor; i <= endfloor; i++)
-			{
-				if (i != sbs->camera->CurrentFloor)
-					Enabled(i, false);
-			}
-
-			for (int i = elevators[0]; i < elevators.GetSize(); i++)
-			{
-				for(int j = sbs->ElevatorArray[i]->ServicedFloors[0]; j < sbs->ElevatorArray[i]->ServicedFloors.GetSize(); j++)
-				{
-					if (j != sbs->camera->CurrentFloor)
-						sbs->ElevatorArray[i]->ShaftDoorsEnabled(j, false);
-				}
-			}
-		}
+		if (test == ShaftArray[i])
+			return true;
 	}
-	else if (InsideShaft == true)
-	{
-		InsideShaft = false;
-		//turn off entire shaft
-		for (int i = startfloor; i <= endfloor; i++)
-			Enabled(i, false);
+	return false;
+}
 
-		for (int i = elevators[0]; i < elevators.GetSize(); i++)
-		{
-			for(int j = sbs->ElevatorArray[i]->ServicedFloors[0]; j < sbs->ElevatorArray[i]->ServicedFloors.GetSize(); j++)
-			{
-				if (j != sbs->camera->CurrentFloor)
-					sbs->ElevatorArray[i]->ShaftDoorsEnabled(j, false);
-			}
-		}
-	}
+void Shaft::EnableWholeShaft(bool value)
+{
+	//turn on/off entire shaft
+	for (int i = startfloor; i <= endfloor; i++)
+		Enabled(i, value);
 }

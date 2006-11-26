@@ -221,3 +221,65 @@ void Camera::Gravity()
 
 	}
 }
+
+void Camera::CheckElevator()
+{
+	//check to see if user (camera) is in an elevator
+
+	//first checks to see if camera is within an elevator's height range, and then
+	//checks for a collision with the elevator's floor below
+
+	for (int i = 1; i <= sbs->Elevators; i++)
+	{
+		if (GetPosition().y > sbs->ElevatorArray[i]->GetPosition().y && GetPosition().y < sbs->ElevatorArray[i]->Height)
+		{
+			csTraceBeamResult result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), csVector3(GetPosition().x, GetPosition().y - sbs->ElevatorArray[i]->Height, GetPosition().z), false);
+			if (sbs->ElevatorArray[i]->IsElevator(result.closest_mesh) == true)
+			{
+				sbs->InElevator = true;
+				sbs->ElevatorNumber = i;
+				sbs->ElevatorSync = true;
+				return;
+			}
+		}
+	}
+}
+
+void Camera::CheckShaft()
+{
+	//check to see if user (camera) is in the shaft
+
+	for (int i = 1; i < sbs->ShaftArray.GetSize(); i++)
+	{
+		if (GetPosition().y > sbs->ShaftArray[i]->bottom && GetPosition().y < sbs->ShaftArray[i]->top)
+		{
+			csTraceBeamResult result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), csVector3(GetPosition().x, GetPosition().y - (sbs->ShaftArray[i]->top - sbs->ShaftArray[i]->bottom), GetPosition().z), false);
+			if (sbs->ShaftArray[i]->IsShaft(result.closest_mesh) == true)
+			{
+				if (sbs->ShaftArray[i]->InsideShaft == false && sbs->InElevator == false)
+				{
+					sbs->ShaftArray[i]->InsideShaft = true;
+
+					//turn on entire shaft
+					sbs->ShaftArray[i]->EnableWholeShaft(true);
+				}
+				else if (sbs->ShaftArray[i]->InsideShaft == true && sbs->InElevator == true)
+				{
+					sbs->ShaftArray[i]->InsideShaft = false;
+					
+					//turn off shaft except for camera floor
+					sbs->ShaftArray[i]->EnableWholeShaft(false);
+					sbs->ShaftArray[i]->Enabled(sbs->camera->CurrentFloor, true);
+				}
+			}
+		}
+		else if (sbs->ShaftArray[i]->InsideShaft == true)
+		{
+			sbs->ShaftArray[i]->InsideShaft = false;
+			
+			//turn off entire shaft
+			sbs->ShaftArray[i]->EnableWholeShaft(false);
+
+		}
+	}
+}

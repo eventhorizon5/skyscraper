@@ -48,7 +48,6 @@ Elevator::Elevator(int number)
 	LastQueueFloor[1] = 0;
 	PauseQueueSearch = true;
 	ElevatorSpeed = 0;
-	ElevatorSync = false;
 	MoveElevator = false;
 	MoveElevatorFloor = 0;
 	GotoFloor = 0;
@@ -73,10 +72,7 @@ Elevator::Elevator(int number)
 	ShaftDoorFloor = 0;
 	AssignedShaft = 0;
 	IsEnabled = true;
-	Width = 0;
-	Length = 0;
 	Height = 0;
-	InElevator = false;
 
 	//create object meshes
 	buffer = Number;
@@ -137,7 +133,7 @@ Elevator::~Elevator()
 	DownQueue.DeleteAll();
 }
 
-void Elevator::CreateElevator(double x, double z, double width, double length, double height, int floor)
+void Elevator::CreateElevator(double x, double z, int floor)
 {
 	//Creates elevator at specified location and floor
 	//x and z are the center coordinates
@@ -337,8 +333,15 @@ void Elevator::MonitorLoop()
 {
 	//Monitors elevator and starts actions if needed
 
-	//check to see if person is in elevator
-	CheckElevator();
+	//make sure height value is set
+	if (Height == 0)
+	{
+		for (int i = 0; i < Elevator_state->GetVertexCount(); i++)
+		{
+			if (Elevator_state->GetVertex(i).y > Height)
+				Height = Elevator_state->GetVertex(i).y;
+		}
+	}
 
 	//call queue processor
 	ProcessCallQueue();
@@ -791,7 +794,7 @@ void Elevator::MoveElevatorToFloor()
 		CalculateStoppingDistance = true;
 
 		//If user is riding this elevator, then turn off floor
-		if (ElevatorSync == true)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->FloorArray[sbs->camera->CurrentFloor]->Enabled(false);
 
 		//Turn off sky, buildings, and landscape
@@ -826,7 +829,7 @@ void Elevator::MoveElevatorToFloor()
 	//move elevator objects and camera
 	Elevator_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
 	Elevator_movable->UpdateMove();
-	if (ElevatorSync == true)
+	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->DefaultAltitude, sbs->camera->GetPosition().z));
 	ElevatorDoorL_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
 	ElevatorDoorL_movable->UpdateMove();
@@ -838,7 +841,7 @@ void Elevator::MoveElevatorToFloor()
 	Plaque_movable->UpdateMove();
 
 	//show partial shaft areas (3 floors at a time)
-	if (sbs->AutoShafts == true && InElevator == true)
+	if (sbs->AutoShafts == true && sbs->InElevator == true && sbs->ElevatorNumber == Number)
 	{
 		int i = GetFloor();
 		sbs->ShaftArray[AssignedShaft]->Enabled(i, true);
@@ -994,7 +997,7 @@ void Elevator::MoveElevatorToFloor()
 		//move elevator objects and camera
 		Elevator_movable->SetPosition(csVector3(GetPosition().x, Destination, GetPosition().z));
 		Elevator_movable->UpdateMove();
-		if (ElevatorSync == true)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->DefaultAltitude, sbs->camera->GetPosition().z));
 		ElevatorDoorL_movable->SetPosition(csVector3(ElevatorDoorL_movable->GetPosition().x, Destination, ElevatorDoorL_movable->GetPosition().z));
 		ElevatorDoorL_movable->UpdateMove();
@@ -1024,7 +1027,7 @@ void Elevator::MoveElevatorToFloor()
 		GetFloor();
 
 		//Turn on floor
-		if (ElevatorSync == true)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->FloorArray[GotoFloor]->Enabled(true);
 
 		//open doors
@@ -1198,24 +1201,6 @@ const csVector3 Elevator::GetPosition()
 	return Elevator_movable->GetPosition();
 }
 
-void Elevator::CheckElevator()
-{
-	//check to see if user (camera) is in the elevator
-
-	if (sbs->camera->GetPosition().y >= GetPosition().y && sbs->camera->GetPosition().y < GetPosition().y + Height &&
-		sbs->camera->GetPosition().x >= (GetPosition().x - (Width / 2)) && sbs->camera->GetPosition().x < (GetPosition().x + (Width / 2)) &&
-		sbs->camera->GetPosition().z >= (GetPosition().z - (Length / 2)) && sbs->camera->GetPosition().z < (GetPosition().z + (Length / 2)))
-	{
-		InElevator = true;
-		ElevatorSync = true;
-	}
-	else if (InElevator == true)
-	{
-		InElevator = false;
-		ElevatorSync = false;
-	}
-}
-
 void Elevator::DumpQueues()
 {
 	//dump both (up and down) elevator queues
@@ -1315,3 +1300,12 @@ void Elevator::ShaftDoorsEnabled(int floor, bool value)
 		ShaftDoorR[index]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
 }
+
+bool Elevator::IsElevator(csRef<iMeshWrapper> test)
+{
+	if (test == ElevatorMesh)
+		return true;
+	
+	return false;
+}
+

@@ -37,17 +37,19 @@ public:
 	csVector3 origin; //origin vector
 	int startfloor; //starting floor
 	int endfloor; //ending floor
-	double Width, Length; //shaft width and height
 	csArray<int> elevators; //if elevator shaft, this is the list of elevators that use this shaft
 	csArray<int> stairs; //if stairwell, this lists the stairs that use this shaft
 	bool InsideShaft; //true if user/camera is in the shaft
+	double bottom; //shaft base
+	double top; //shaft top
 
-	Shaft(int number, int type, double CenterX, double CenterZ, double width, double length, int _startfloor, int _endfloor);
+	Shaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
 	int AddWall(int floor, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ);
 	int AddFloor(int floor, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
 	void Enabled(int floor, bool value);
-	void CheckShaft();
+	bool IsShaft(csRef<iMeshWrapper> test);
+	void EnableWholeShaft(bool value);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array

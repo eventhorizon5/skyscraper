@@ -112,6 +112,7 @@ public:
     bool InStairwell; //true if user is in a stairwell
 	bool InElevator; //true if user is in an elevator
     int ElevatorNumber; //number of currently selected elevator
+	bool ElevatorSync; //true if user should move with elevator
 	bool FrameLimiter; //frame limiter toggle
     int FrameRate; //max frame rate
 	double FPSModifier; //modification value for FPS changes
@@ -168,7 +169,6 @@ public:
 	void EnableSkybox(bool value);
 	int GetFloorNumber(double altitude);
 	double GetDistance(double x1, double x2, double z1, double z2);
-	void Fall();
 	void DumpVertices(csRef<iThingFactoryState> mesh);
 	void ListAltitudes();
 
