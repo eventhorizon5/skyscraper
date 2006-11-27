@@ -80,6 +80,7 @@ public:
 	csRef<iEventQueue> equeue;
 	csRef<iBase> plug;
 	csRef<iCollideSystem> collision_sys;
+	csRef<iMouseDriver> mouse;
 
 	csRef<iMaterialWrapper> material;
 	csRef<iLightList> ll;
@@ -131,6 +132,9 @@ public:
 	//File I/O
 	csString BuildingFile;
 	csStringArray BuildingData;
+
+	//mouse coordinates
+	int mouse_x, mouse_y;
 
 	//public functions
 	SBS();

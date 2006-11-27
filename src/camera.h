@@ -60,6 +60,7 @@ public:
 	void Gravity();
 	void CheckElevator();
 	void CheckShaft();
+	void ClickedObject();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera

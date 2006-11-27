@@ -277,3 +277,35 @@ void Camera::CheckShaft()
 		}
 	}
 }
+
+void Camera::ClickedObject()
+{
+	//code and comments from the CrystalSpace manual
+	//this returns the mesh that the user clicks on
+	
+	// Setup a 2D vector with our mouse position.  We invert the y
+	// (based on vertical screen dimension) because CS assumes y=0
+	// is down for 3D calculations.
+	csVector2 v2d (sbs->mouse_x, MainCamera->GetShiftY() * 2 - sbs->mouse_y);
+
+	// We calculate the inverse perspective of this 2D point at
+	// z=100.  This results in a 3D position in camera space at
+	// z=100 that directly corresponds to the 2D position we
+	// clicked on.  We use z=100 to ensure that we will at least
+	// hit all objects that are before that distance.
+	csVector3 v3d;
+	MainCamera->InvPerspective(v2d, 100, v3d);
+
+	// We are going to cast a beam in the current sector of the
+	// camera from our camera position in the direction of the
+	// 'v3d' point.  First we transform the v3d camera space
+	// location to world space.
+	csVector3 startbeam = MainCamera->GetTransform().GetOrigin();
+	csVector3 endbeam = MainCamera->GetTransform().This2Other(v3d);
+	csVector3 intersect;
+
+	// Now do the actual intersection.
+	int poly = -1;
+	iMeshWrapper* mesh = sbs->area->HitBeamPortals(startbeam, endbeam, intersect, &poly);
+	sbs->Report("Left click on mesh: " + csString(mesh->QueryObject()->GetName()));
+}

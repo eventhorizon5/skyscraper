@@ -95,6 +95,8 @@ SBS::SBS()
 	FPS = 0;
 	AutoShafts = true;
 	ElevatorSync = false;
+	mouse_x = 0;
+	mouse_y = 0;
 }
 
 SBS::~SBS()
@@ -267,6 +269,14 @@ void SBS::GetInput()
 	// Now rotate the camera according to keyboard state
 	double speed = (elapsed_time / 1000.0) * (0.06 * 20);
 
+	//get mouse pointer coordinates
+	mouse_x = mouse->GetLastX();
+	mouse_y = mouse->GetLastY();
+
+	//check if the user clicked on an object, and process it
+	if (mouse->GetLastButton(0) == true)
+		camera->ClickedObject();
+
 	//if (kbd->GetKeyState('a'))
 	
 	if (kbd->GetKeyState (CSKEY_ESC))
@@ -346,8 +356,7 @@ void SBS::GetInput()
 void SBS::Render()
 {
 	// Tell 3D driver we're going to display 3D things.
-	//if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER ))
-	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN )) //clear screen also
+	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN ))
 		return;
 
 	// Tell the camera to render into the frame buffer.
@@ -511,7 +520,10 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	if (!vfs) return ReportError ("No VFS!");
 	console = CS_QUERY_REGISTRY (object_reg, iConsoleOutput);
 	if (!console) return ReportError ("No ConsoleOutput!");
+	mouse = CS_QUERY_REGISTRY(object_reg, iMouseDriver);
+	if (!mouse) return ReportError("No Mouse Driver!");
 	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
+	if (!collision_sys) return ReportError("No collision detection driver!");
 	plug = CS_LOAD_PLUGIN_ALWAYS (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("No BugPlug!");
 	if (plug) plug->IncRef ();
