@@ -97,6 +97,7 @@ SBS::SBS()
 	ElevatorSync = false;
 	mouse_x = 0;
 	mouse_y = 0;
+	MouseDown = false;
 }
 
 SBS::~SBS()
@@ -274,8 +275,15 @@ void SBS::GetInput()
 	mouse_y = mouse->GetLastY();
 
 	//check if the user clicked on an object, and process it
-	if (mouse->GetLastButton(0) == true)
+	if (mouse->GetLastButton(0) == true && MouseDown == false)
+	{
+		MouseDown = true;
 		camera->ClickedObject();
+	}
+	
+	//reset mouse state
+	if (mouse->GetLastButton(0) == false)
+		MouseDown = false;
 
 	//if (kbd->GetKeyState('a'))
 	

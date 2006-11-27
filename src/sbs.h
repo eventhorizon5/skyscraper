@@ -218,6 +218,9 @@ private:
 	csEventID FinalProcess;
 	csEventID KeyboardDown;
 
+	//mouse status
+	bool MouseDown;
+
 	//fps
 	int fps_frame_count;
 	int fps_tottime;
