@@ -25,6 +25,8 @@
 
 //#include <wx/wx.h>
 #include <crystalspace.h>
+#include "callbutton.h"
+#include "buttonpanel.h"
 #include "camera.h"
 #include "sbs.h"
 
@@ -280,7 +282,7 @@ void Camera::CheckShaft()
 
 void Camera::ClickedObject()
 {
-	//code and comments from the CrystalSpace manual
+	//some code and comments from the CrystalSpace manual
 	//this returns the mesh that the user clicks on
 	
 	// Setup a 2D vector with our mouse position.  We invert the y
@@ -293,8 +295,7 @@ void Camera::ClickedObject()
 	// z=100 that directly corresponds to the 2D position we
 	// clicked on.  We use z=100 to ensure that we will at least
 	// hit all objects that are before that distance.
-	csVector3 v3d;
-	MainCamera->InvPerspective(v2d, 100, v3d);
+	csVector3 v3d = MainCamera->InvPerspective(v2d, 100);
 
 	// We are going to cast a beam in the current sector of the
 	// camera from our camera position in the direction of the
@@ -302,10 +303,28 @@ void Camera::ClickedObject()
 	// location to world space.
 	csVector3 startbeam = MainCamera->GetTransform().GetOrigin();
 	csVector3 endbeam = MainCamera->GetTransform().This2Other(v3d);
-	csVector3 intersect;
 
 	// Now do the actual intersection.
-	int poly = -1;
-	iMeshWrapper* mesh = sbs->area->HitBeamPortals(startbeam, endbeam, intersect, &poly);
-	sbs->Report("Left click on mesh: " + csString(mesh->QueryObject()->GetName()));
+	csSectorHitBeamResult result = sbs->area->HitBeam(startbeam, endbeam);
+	if (!result.mesh)
+		return;
+	csString meshname = result.mesh->QueryObject()->GetName();
+	sbs->Report("Clicked on object: " + meshname);
+
+	//check call buttons
+	if (meshname.Find("Call Button") != -1)
+	{
+		//user clicked on a call button
+		int floor = atoi(meshname.Slice(12, meshname.Find(":") - 12));
+		int number = atoi(meshname.Slice(meshname.Find(":") + 1));
+		sbs->FloorArray[floor]->CallButtonArray[number]->Press(result.isect);
+	}
+
+	//check elevator buttons
+	if (meshname.Find("Elevator Panel") != -1)
+	{
+		//user clicked on an elevator button
+		int elevator = atoi(meshname.Slice(14));
+		sbs->ElevatorArray[elevator]->Panel->Press(result.isect);
+	}
 }

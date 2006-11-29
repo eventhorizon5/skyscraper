@@ -122,9 +122,17 @@ SBS::~SBS()
 		ElevatorArray[i] = 0;
 	}
 
-	//delete floor and elevator arrays
+	//delete shafts
+	for (int i = 1; i <= Shafts; i++)
+	{
+		delete ShaftArray[i];
+		ShaftArray[i] = 0;
+	}
+
+	//delete arrays
 	FloorArray.DeleteAll();
 	ElevatorArray.DeleteAll();
+	ShaftArray.DeleteAll();
 
 	//delete string arrays
 	UserVariable.DeleteAll();

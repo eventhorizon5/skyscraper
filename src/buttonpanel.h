@@ -46,9 +46,11 @@ public:
 	void AddFloorButton(const char *texture, int row, int column, int floor);
 	void AddControlButton(const char *texture, int row, int column, int type);
 	void DeleteButton(int row, int column);
+	void Press(csVector3 isect);
 
 private:
-
+	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
+	csRef<iThingFactoryState> ButtonPanel_state;
 };
 
 #endif

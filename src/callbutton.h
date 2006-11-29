@@ -34,18 +34,21 @@ public:
 	
 	csArray<int> Elevators; //elevators this call button set is assigned to
 	int floor; //floor this call button set is on
+	int Number; //call button index number (on the specified floor)
+	csString Direction; //direction the buttons face; either 'front', 'back', 'left', or 'right'
+	bool IsEnabled;
 
 	//functions
 	CallButton();
 	~CallButton();
-	void Create(int floornum, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th);
+	void Create(int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th);
 	void Enabled(bool value);
 	void Call(int direction); //-1 is down, 1 is up
+	void Press(csVector3 isect);
 
 private:
 	csRef<iMeshWrapper> CallButtonMesh; //call button mesh object
 	csRef<iThingFactoryState> CallButton_state;
-	//csRef<csColliderWrapper> Callbutton_collider;
 };
 
 #endif

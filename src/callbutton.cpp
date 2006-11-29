@@ -34,7 +34,8 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 CallButton::CallButton()
 {
-
+	floor = 0;
+	IsEnabled = true;
 }
 
 CallButton::~CallButton()
@@ -42,17 +43,97 @@ CallButton::~CallButton()
 
 }
 
-void CallButton::Create(int floornum, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th)
+void CallButton::Create(int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th)
 {
 	//create a set of call buttons
 
+	//create object mesh
+	csString buffer, buffer2, buffer3;
+	buffer2 = floornum;
+	buffer3 = number;
+	buffer = "Call Button " + buffer2 + ":" + buffer3;
+	buffer.Trim();
+	CallButtonMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
+	CallButton_state = scfQueryInterface<iThingFactoryState> (CallButtonMesh->GetMeshObject()->GetFactory());
+	CallButtonMesh->SetZBufMode(CS_ZBUF_USE);
+
+	//set variables
 	floor = floornum;
+	Number = number;
+	Direction = direction;
+	Direction.Downcase();
+	Direction.Trim();
+
+	//create panel
+	if (ShowBack == true)
+	{
+		if (Direction == "front" || Direction == "back")
+			sbs->AddWallMain(CallButton_state, BackTexture, CenterX - (BackWidth / 2), CenterZ, CenterX + (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->FloorArray[floor]->Altitude + voffset, sbs->FloorArray[floor]->Altitude + voffset, tw, th, false, false, false);
+		else
+			sbs->AddWallMain(CallButton_state, BackTexture, CenterX, CenterZ - (BackWidth / 2), CenterX, CenterZ + (BackWidth / 2), BackHeight, BackHeight, sbs->FloorArray[floor]->Altitude + voffset, sbs->FloorArray[floor]->Altitude + voffset, tw, th, false, false, false);
+	}
+
+	//create buttons
+	if (Direction == "front" || Direction == "back")
+	{
+		bool reverse;
+		int offset;
+		int index;
+		if (Direction == "front")
+		{
+			reverse = true;
+			offset = -0.1;
+		}
+		else
+		{
+			reverse = false;
+			offset = 0.1;
+		}
+		index = sbs->AddWallMain(CallButton_state, UpButtonTexture, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), 1, 1, reverse, false, false);
+		CallButton_state->SetPolygonName(csPolygonRange(index, index), "Up");
+		index = sbs->AddWallMain(CallButton_state, DownButtonTexture, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), 1, 1, reverse, false, false);
+		CallButton_state->SetPolygonName(csPolygonRange(index, index), "Down");
+	}
+	else
+	{
+		bool reverse;
+		int offset;
+		int index;
+		if (Direction == "left")
+		{
+			reverse = true;
+			offset = -0.1;
+		}
+		else
+		{
+			reverse = false;
+			offset = 0.1;
+		}
+		index = sbs->AddWallMain(CallButton_state, UpButtonTexture, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), 1, 1, false, false, reverse);
+		CallButton_state->SetPolygonName(csPolygonRange(index, index), "Up");
+		index = sbs->AddWallMain(CallButton_state, DownButtonTexture, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), 1, 1, false, false, reverse);
+		CallButton_state->SetPolygonName(csPolygonRange(index, index), "Down");
+	}
 
 }
 
 void CallButton::Enabled(bool value)
 {
-
+	//turns panel on/off
+	if (value == true)
+	{
+		CallButtonMesh->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		CallButtonMesh->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		CallButtonMesh->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+		IsEnabled = true;
+	}
+	else
+	{
+		CallButtonMesh->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		CallButtonMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		CallButtonMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+		IsEnabled = false;
+	}
 }
 
 void CallButton::Call(int direction)
@@ -90,4 +171,14 @@ void CallButton::Call(int direction)
 	else
 		//otherwise add a route entry to this floor
 		sbs->ElevatorArray[Elevators[closest_elev]]->AddRoute(floor, direction);
+}
+
+void CallButton::Press(csVector3 isect)
+{
+	//check clicked location against button polygons
+
+	if (CallButton_state->PointOnPolygon(CallButton_state->FindPolygonByName("Up"), isect) == true)
+		Call (1);
+	if (CallButton_state->PointOnPolygon(CallButton_state->FindPolygonByName("Down"), isect) == true)
+		Call (-1);
 }

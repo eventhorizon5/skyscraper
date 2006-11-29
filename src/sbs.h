@@ -185,25 +185,21 @@ public:
 		csRef<iMeshObject> Buildings_object;
 		csRef<iMeshObjectFactory> Buildings_factory;
 		csRef<iThingFactoryState> Buildings_state;
-		//csRef<csColliderWrapper> Buildings_collider;
 
 	csRef<iMeshWrapper> External; //external mesh
 		csRef<iMeshObject> External_object;
 		csRef<iMeshObjectFactory> External_factory;
 		csRef<iThingFactoryState> External_state;
-		//csRef<csColliderWrapper> External_collider;
 
 	csRef<iMeshWrapper> Landscape; //landscape mesh
 		csRef<iMeshObject> Landscape_object;
 		csRef<iMeshObjectFactory> Landscape_factory;
 		csRef<iThingFactoryState> Landscape_state;
-		//csRef<csColliderWrapper> Landscape_collider;
 
 	csRef<iMeshWrapper> ColumnFrame; //column frame mesh
 		csRef<iMeshObject> ColumnFrame_object;
 		csRef<iMeshObjectFactory> ColumnFrame_factory;
 		csRef<iThingFactoryState> ColumnFrame_state;
-		//csRef<csColliderWrapper> ColumnFrame_collider;
 
 	csRef<iMeshWrapper> SkyBox; //skybox mesh
 		csRef<iMeshObject> SkyBox_object;

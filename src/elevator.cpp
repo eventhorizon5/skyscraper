@@ -73,6 +73,7 @@ Elevator::Elevator(int number)
 	AssignedShaft = 0;
 	IsEnabled = true;
 	Height = 0;
+	Panel = 0;
 
 	//create object meshes
 	buffer = Number;
@@ -175,7 +176,7 @@ void Elevator::AddRoute(int floor, int direction)
 
 	if (direction == 1)
 	{
-		if (UpQueue.Length() == 0 && QueuePositionDirection == 0)
+		if (UpQueue.GetSize() == 0 && QueuePositionDirection == 0)
 			PauseQueueSearch = false;
 		UpQueue.InsertSorted(floor);
 		LastQueueFloor[0] = floor;
@@ -184,7 +185,7 @@ void Elevator::AddRoute(int floor, int direction)
 	}
 	else
 	{
-		if (DownQueue.Length() == 0 && QueuePositionDirection == 0)
+		if (DownQueue.GetSize() == 0 && QueuePositionDirection == 0)
 			PauseQueueSearch = false;
 		DownQueue.InsertSorted(floor);
 		LastQueueFloor[0] = floor;
@@ -258,32 +259,35 @@ void Elevator::ProcessCallQueue()
 
 	if (QueuePositionDirection == 0)
 	{
-		if (UpQueue.Length() != 0)
+		if (UpQueue.GetSize() != 0)
 			QueuePositionDirection = 1;
-		if (DownQueue.Length() != 0)
+		if (DownQueue.GetSize() != 0)
 			QueuePositionDirection = -1;
 	}
-	if (UpQueue.Length() == 0 && DownQueue.Length() == 0)
+	if (UpQueue.GetSize() == 0 && DownQueue.GetSize() == 0)
 	{
 		QueuePositionDirection = 0;
 		PauseQueueSearch = true;
 		return;
 	}
-	if (QueuePositionDirection == 1 && UpQueue.Length() == 0)
+	if (QueuePositionDirection == 1 && UpQueue.GetSize() == 0)
 		QueuePositionDirection = 0;
-	if (QueuePositionDirection == -1 && DownQueue.Length() == 0)
+	if (QueuePositionDirection == -1 && DownQueue.GetSize() == 0)
 		QueuePositionDirection = 0;
+
+	if (QueuePositionDirection != 0 && MoveElevator == false)
+		PauseQueueSearch = false;
 	
 	if (PauseQueueSearch == true)
 		return;
 
-	//Search through queue lists and find next valid floor call (direction-wise)
+	//Search through queue lists and find next valid floor call
 	if (QueuePositionDirection == 1)
 	{
 		//search through up queue
-		for (int i = 0; i < UpQueue.Length(); i++)
+		for (int i = 0; i < UpQueue.GetSize(); i++)
 		{
-			if (UpQueue[i] > GetFloor())
+			if (UpQueue[i] > GetFloor() || (UpQueue[i] < GetFloor() && UpQueue.GetSize() == 1))
 			{
 				PauseQueueSearch = true;
 				CloseDoors();
@@ -297,9 +301,9 @@ void Elevator::ProcessCallQueue()
 	else if (QueuePositionDirection == -1)
 	{
 		//search through down queue
-		for (int i = 0; i < DownQueue.Length(); i++)
+		for (int i = 0; i < DownQueue.GetSize(); i++)
 		{
-			if (DownQueue[i] > GetFloor())
+			if (DownQueue[i] < GetFloor() || (DownQueue[i] > GetFloor() && DownQueue.GetSize() == 1))
 			{
 				PauseQueueSearch = true;
 				CloseDoors();
@@ -748,6 +752,10 @@ void Elevator::MoveElevatorToFloor()
 {
 	//Main processing routine; sends elevator to floor specified in GotoFloor
 	static bool IsRunning = false;
+
+	//exit if doors are moving
+	if (OpenDoor != 0)
+		return;
 
 	if (IsRunning == false)
 	{
@@ -1207,10 +1215,10 @@ void Elevator::DumpQueues()
 
 	sbs->Report("--- Elevator " + csString(_itoa(Number, intbuffer, 10)) + " Queues ---\n");
 	sbs->Report("Up:");
-	for (int i = 0; i < UpQueue.Length(); i++)
+	for (int i = 0; i < UpQueue.GetSize(); i++)
 		sbs->Report(csString(_itoa(i, intbuffer, 10)) + " - " + csString(_itoa(UpQueue[i], intbuffer, 10)));
 	sbs->Report("Down:");
-	for (int i = 0; i < DownQueue.Length(); i++)
+	for (int i = 0; i < DownQueue.GetSize(); i++)
 		sbs->Report(csString(_itoa(i, intbuffer, 10)) + " - " + csString(_itoa(DownQueue[i], intbuffer, 10)));
 }
 

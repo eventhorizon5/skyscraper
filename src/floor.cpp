@@ -84,6 +84,13 @@ Floor::~Floor()
 {
 	//Destructor
 
+	for (int i = 0; i < CallButtonArray.GetSize(); i++)
+	{
+		delete CallButtonArray[i];
+		CallButtonArray[i] = 0;
+	}
+	CallButtonArray.DeleteAll();
+
 }
 
 void Floor::SetCameraFloor()
@@ -280,6 +287,10 @@ void Floor::Enabled(bool value)
 
 		IsEnabled = false;
 	}
+
+	//call buttons
+	for (int i = 0; i < CallButtonArray.GetSize(); i++)
+		CallButtonArray[i]->Enabled(value);
 }
 
 void Floor::AddAutoFloor(const char *texture, double voffset, double tw, double th)
@@ -340,7 +351,7 @@ void Floor::CutFloor(double x1, double x2, double z1, double z2)
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5;
 
 	//step through each floor polygon
-	for (int i = 0; i <= floor_polys.Length() - 1; i++)
+	for (int i = 0; i <= floor_polys.GetSize() - 1; i++)
 	{
 		temppoly.MakeEmpty();
 		temppoly2.MakeEmpty();

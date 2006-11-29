@@ -373,7 +373,7 @@ int SBS::LoadBuilding(const char * filename)
 			
 			csPoly3D varray;
 			int alength;
-			alength = tempdata.Length();
+			alength = tempdata.GetSize();
 			for (temp3 = 2; temp3 < alength - 5; temp3 += 3)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 			
@@ -426,7 +426,7 @@ int SBS::LoadBuilding(const char * filename)
 			
 			csPoly3D varray;
 			int alength;
-			alength = tempdata.Length();
+			alength = tempdata.GetSize();
 			for (temp3 = 2; temp3 < alength - 5; temp3 += 3)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 			
@@ -874,7 +874,7 @@ recalc:
             
 				//create a new call buttons object
 				FloorArray[Current]->CallButtonArray.SetSize(FloorArray[Current]->CallButtonArray.GetSize() + 1);
-				CurrentCallButton = FloorArray[Current]->CallButtonArray.GetSize();
+				CurrentCallButton = FloorArray[Current]->CallButtonArray.GetSize() - 1;
 				FloorArray[Current]->CallButtonArray[CurrentCallButton] = new CallButton();
 
 				//copy values into elevators array
@@ -891,7 +891,7 @@ recalc:
             if (LineData.Slice(0, 17).CompareNoCase("createcallbuttons") == true)
 			{
 				bool ShowBack;
-                tempdata.SplitString(LineData.Slice(5).GetData(), ",");
+                tempdata.SplitString(LineData.Slice(18).GetData(), ",");
 
 				//calculate inline math
                 for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
@@ -907,7 +907,7 @@ recalc:
 					ShowBack = false;
 				
 				//create call button
-				FloorArray[Current]->CallButtonArray[CurrentCallButton]->Create(Current, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), ShowBack, atof(tempdata[10]), atof(tempdata[11]));
+				FloorArray[Current]->CallButtonArray[CurrentCallButton]->Create(Current, CurrentCallButton, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), ShowBack, atof(tempdata[10]), atof(tempdata[11]));
 				tempdata.DeleteAll();
 			}
             
