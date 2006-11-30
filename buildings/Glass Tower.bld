@@ -32,7 +32,7 @@
     Basements = 0
     Elevators = 0
     Stairs = 0
-    CameraFloor = 65
+    CameraFloor = 0
     CameraPosition = 0, -300
     CameraDirection = 0, 10, 90
     CameraRotation = 0, 0, 0
