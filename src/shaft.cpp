@@ -81,12 +81,12 @@ Shaft::~Shaft()
 
 }
 
-int Shaft::AddWall(int floor, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ)
+int Shaft::AddWall(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ)
 {
-	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], texture, x1, z1, x2, z2, height1, height2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th, revX, revY, revZ);
+	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], name, texture, x1, z1, x2, z2, height1, height2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th, revX, revY, revZ);
 }
 
-int Shaft::AddFloor(int floor, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
+int Shaft::AddFloor(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
    	//get shaft extents
 	double altitude = sbs->FloorArray[floor]->Altitude;
@@ -100,7 +100,7 @@ int Shaft::AddFloor(int floor, const char *texture, double x1, double z1, double
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], texture, x1, z1, x2, z2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th);
+	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, x1, z1, x2, z2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th);
 }
 
 void Shaft::Enabled(int floor, bool value)

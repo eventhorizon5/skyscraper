@@ -68,9 +68,9 @@ void CallButton::Create(int floornum, int number, const char *BackTexture, const
 	if (ShowBack == true)
 	{
 		if (Direction == "front" || Direction == "back")
-			sbs->AddWallMain(CallButton_state, BackTexture, CenterX - (BackWidth / 2), CenterZ, CenterX + (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->FloorArray[floor]->Altitude + voffset, sbs->FloorArray[floor]->Altitude + voffset, tw, th, false, false, false);
+			sbs->AddWallMain(CallButton_state, "Panel", BackTexture, CenterX - (BackWidth / 2), CenterZ, CenterX + (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->FloorArray[floor]->Altitude + voffset, sbs->FloorArray[floor]->Altitude + voffset, tw, th, false, false, false);
 		else
-			sbs->AddWallMain(CallButton_state, BackTexture, CenterX, CenterZ - (BackWidth / 2), CenterX, CenterZ + (BackWidth / 2), BackHeight, BackHeight, sbs->FloorArray[floor]->Altitude + voffset, sbs->FloorArray[floor]->Altitude + voffset, tw, th, false, false, false);
+			sbs->AddWallMain(CallButton_state, "Panel", BackTexture, CenterX, CenterZ - (BackWidth / 2), CenterX, CenterZ + (BackWidth / 2), BackHeight, BackHeight, sbs->FloorArray[floor]->Altitude + voffset, sbs->FloorArray[floor]->Altitude + voffset, tw, th, false, false, false);
 	}
 
 	//create buttons
@@ -89,10 +89,8 @@ void CallButton::Create(int floornum, int number, const char *BackTexture, const
 			reverse = false;
 			offset = 0.1;
 		}
-		index = sbs->AddWallMain(CallButton_state, UpButtonTexture, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), 1, 1, reverse, false, false);
-		CallButton_state->SetPolygonName(csPolygonRange(index, index), "Up");
-		index = sbs->AddWallMain(CallButton_state, DownButtonTexture, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), 1, 1, reverse, false, false);
-		CallButton_state->SetPolygonName(csPolygonRange(index, index), "Down");
+		index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), 1, 1, reverse, false, false);
+		index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), 1, 1, reverse, false, false);
 	}
 	else
 	{
@@ -109,10 +107,8 @@ void CallButton::Create(int floornum, int number, const char *BackTexture, const
 			reverse = false;
 			offset = 0.1;
 		}
-		index = sbs->AddWallMain(CallButton_state, UpButtonTexture, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), 1, 1, false, false, reverse);
-		CallButton_state->SetPolygonName(csPolygonRange(index, index), "Up");
-		index = sbs->AddWallMain(CallButton_state, DownButtonTexture, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), 1, 1, false, false, reverse);
-		CallButton_state->SetPolygonName(csPolygonRange(index, index), "Down");
+		index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), 1, 1, false, false, reverse);
+		index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), 1, 1, false, false, reverse);
 	}
 
 }

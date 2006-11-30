@@ -51,8 +51,6 @@ public:
 	double Altitude; //floor altitude
 	double Height; //floor height (not including interfloor height)
 	double InterfloorHeight; //height of interfloor area
-	double DoorHeight; //height of doors; may be removed
-	double DoorWidth; //width of doors; may be removed
 	bool IsEnabled; //is floor enabled?
 	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
 	csArray<int> floor_polys; //index refs to floor polygons
@@ -64,16 +62,16 @@ public:
 	Floor(int number);
 	~Floor();
 	void SetCameraFloor();
-	int AddFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, bool isexternal);
+	int AddFloor(const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, bool isexternal);
 	void DeleteFloor(int index);
-	int AddInterfloorFloor(const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
+	int AddInterfloorFloor(const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
 	void DeleteInterfloorFloor(int index);
-	int AddWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool isexternal);
+	int AddWall(const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, bool isexternal);
 	void DeleteWall(int index);
-	int AddInterfloorWall(const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th);
+	int AddInterfloorWall(const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th);
 	void DeleteInterfloorWall(int index);
 	void Enabled(bool value);
-	void AddAutoFloor(const char *texture, double voffset, double tw, double th);
+	void AddAutoFloor(const char *name, const char *texture, double voffset, double tw, double th);
 	double FullHeight();
 	int AddCallButtons(bool up, bool down, int elevatornumber, bool direction, const char *backtexture, const char *buttontexture, double CenterX, double CenterZ, double width, double height, double tw, double th);
 	void CutFloor(double x1, double x2, double z1, double z2);

@@ -45,8 +45,8 @@ public:
 
 	Shaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
-	int AddWall(int floor, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ);
-	int AddFloor(int floor, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
+	int AddWall(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ);
+	int AddFloor(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
 	void Enabled(int floor, bool value);
 	bool IsShaft(csRef<iMeshWrapper> test);
 	void EnableWholeShaft(bool value);

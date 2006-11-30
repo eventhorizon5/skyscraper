@@ -620,7 +620,7 @@ void Cleanup()
 	csInitializer::DestroyApplication (object_reg);
 }
 
-int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ)
+int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ)
 {
 	//Adds a wall with the specified dimensions
 	csVector3 v1 (x1, altitude1 + height_in1, z1); //left top
@@ -674,10 +674,20 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *texture, double
 		csVector2 (0, 0),
 		v3,
 		csVector2 (0, th));
+
+	//set polygon names
+	csString NewName;
+	NewName = name;
+	NewName.Append(":0");
+	dest->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
+	NewName = name;
+	NewName.Append(":1");
+	dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+
 	return firstidx;
 }
 
-int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th)
+int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	csVector3 v1 (x1, altitude1, z1); //bottom left
@@ -698,6 +708,16 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *texture, doubl
 		csVector2 (0, th),
 		csVector2 (tw, th),
 		csVector2 (tw, 0));
+
+	//set polygon names
+	csString NewName;
+	NewName = name;
+	NewName.Append(":0");
+	dest->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
+	NewName = name;
+	NewName.Append(":1");
+	dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+
 	return firstidx;
 }
 
@@ -749,7 +769,7 @@ bool SBS::ReportError (const char* msg, ...)
 	return false;
 }
 
-int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th)
+int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th)
 {
 	//create 4 walls
 	
@@ -765,10 +785,19 @@ int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *texture, doub
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
+	//set polygon names
+	csString NewName;
+	NewName = name;
+	NewName.Append(":0");
+	dest->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
+	NewName = name;
+	NewName.Append(":1");
+	dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+
 	return firstidx;
 }
 
-int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th)
+int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th)
 {
 	//create 4 walls from a central point
 	
@@ -792,6 +821,16 @@ int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *texture, dou
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+
+	//set polygon names
+	csString NewName;
+	NewName = name;
+	NewName.Append(":0");
+	dest->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
+	NewName = name;
+	NewName.Append(":1");
+	dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+
 	return firstidx;
 }
 
@@ -839,7 +878,7 @@ void SBS::InitMeshes()
 	ColumnFrame->SetZBufMode(CS_ZBUF_USE);
 }
 
-int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal)
+int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal)
 {
 	//Adds a wall from a specified array of 3D vectors
 	double tw2 = tw;
@@ -932,10 +971,19 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *texture, csPo
 		v3,
 		csVector2 (0, th2));
 
+	//set polygon names
+	csString NewName;
+	NewName = name;
+	NewName.Append(":0");
+	dest->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
+	NewName = name;
+	NewName.Append(":1");
+	dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+
 	return firstidx;
 }
 
-int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *texture, csPoly3D &varray, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal)
+int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal)
 {
 	//Adds a wall from a specified array of 3D vectors
 	double tw2 = tw;
@@ -1027,10 +1075,19 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *texture, csP
 		v3,
 		csVector2 (0, th2));
 
+	//set polygon names
+	csString NewName;
+	NewName = name;
+	NewName.Append(":0");
+	dest->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
+	NewName = name;
+	NewName.Append(":1");
+	dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+
 	return firstidx;
 }
 
-int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal)
+int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal)
 {
 	//Adds a triangular wall with the specified dimensions
 	csPoly3D varray;
@@ -1041,7 +1098,7 @@ int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *texture, do
 	varray.AddVertex(x3, y3, z3);
 
 	//pass data on to AddCustomWall function
-	int firstidx = AddCustomWall(dest, texture, varray, tw, th, revX, revY, revZ, IsExternal);
+	int firstidx = AddCustomWall(dest, name, texture, varray, tw, th, revX, revY, revZ, IsExternal);
 
 	return firstidx;
 }
