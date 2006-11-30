@@ -198,6 +198,8 @@
 #zone 1 skeleton
 <Floors 2 to 29>
     Height = 10
+    if(%floor% = 28) Height = 15
+    if(%floor% = 29) Height = 12
     InterfloorHeight = 2.24
 
     #Floor
@@ -253,7 +255,6 @@
     Description = Zone 1 mechanical
     Height = 15
     InterfloorHeight = 0
-    InterfloorHeight = 2.24
 
     #Floor
     AddFloor Floor, Brick, -112.5, 112.5, 112.5, -112.5, 0, 0, 0, 0, False
@@ -417,7 +418,7 @@
     Type = Service
     Description = Zone 2 mechanical
     Height = 15
-    InterfloorHeight = 2.24
+    InterfloorHeight = 0
 
     #Floor
     AddFloor Southwest Floor, Brick, -112.5, -112.5, 37.5, 37.5, 0, 0, 0, 0, False
@@ -549,7 +550,7 @@
     Type = Service
     Description = Zone 3 lower mechanical floor
     Height = 15
-    InterfloorHeight = 2.24
+    InterfloorHeight = 0
 
     #Floor
     AddFloor South Floor, Brick, -37.5, -112.5, 37.5, -37.5, 0, 0, 0, 0, False
@@ -622,6 +623,7 @@
 #zone 3 upper skeleton
 <Floors 90 to 103>
     Height = 10
+    if(%floor% = 103) Height = 12
     InterfloorHeight = 2.24
 
     #Floor
@@ -656,7 +658,7 @@
 <EndFloors>
 
 # Zone 3 upper offices
-<Floors 90 to 103>
+<Floors 90 to 102>
     ID = %floor%
     Name = Offices
     Type = Office
@@ -664,14 +666,22 @@
 
 <EndFloors>
 
+<Floor 103>
+    ID = %floor%
+    Name = Skydeck
+    Type = Observatory
+    Description = Skydeck
+
+<EndFloor>
+
 #communications & mechanical floors
 <Floors 104 to 105>
     ID = %floor%
     Name = Communications
     Type = Communications
     Description = Communications & mechanical level %floor%
-    Height = 12
-    InterfloorHeight = 3
+    Height = 10
+    InterfloorHeight = 0
 
     #Floor
     AddFloor Floor, Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
@@ -710,8 +720,8 @@
     Name = Mechanical
     Type = Service
     Description = Zone 3 upper mechanical (cooling towers)
-    Height = 20
-    InterfloorHeight = 4
+    Height = 10
+    InterfloorHeight = 0
 
     #Floor
     AddFloor Floor, Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
@@ -752,8 +762,8 @@
     Name = Communications
     Type = Communications
     Description = Mechanical and communications
-    Height = 20
-    InterfloorHeight = 4
+    Height = 12
+    InterfloorHeight = 3
 
     #Floor
     AddFloor Floor, Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
@@ -799,11 +809,11 @@
     AddFloor Roof, Brick, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, True
 
     #Antennas
-    CreateWallBox2 External, West Antenna, Concrete, -75, 0, 4, 4, 300, 0, 0, 25
-    CreateWallBox2 External, East Antenna, Concrete, 0, 0, 4, 4, 300, 0, 0, 25
+    CreateWallBox2 External, West Antenna, Concrete, -75, 0, 8, 8, 279, 0, 0, 25
+    CreateWallBox2 External, East Antenna, Concrete, 0, 0, 8, 8, 257, 0, 0, 25
 <EndFloor>
 
-# Penthouse roof
+# Penthouse roof (or second level? - need info)
 <Floor 110>
     ID = R
     Name = Roof
