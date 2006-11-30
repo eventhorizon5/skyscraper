@@ -42,40 +42,38 @@
     Type = Office
     Height = 10
     InterfloorHeight = 2.24
-    DoorHeight = 6.24
-    DoorWidth = 3
 
     #Floor
-    AddFloor Granite, -20, 20, 20, -20, 0, 0, 0, 0, False
+    AddFloor Floor, Granite, -20, 20, 20, -20, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Marble3, -20, 20, 20, -20, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Marble3, -20, 20, 20, -20, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
-    AddWall MainWindows, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
-    AddWall MainWindows, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
-    AddWall MainWindows, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
-    AddWall MainWindows, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall Front, MainWindows, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall Right, MainWindows, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall Back, MainWindows, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
+    AddWall Left, MainWindows, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, True
 
     #Interfloor bottom
-    AddInterfloorFloor Brick, -20, 20, 20, 20, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, -20, 20, 20, 20, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor Brick, -20, 20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, -20, 20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    #AddInterfloorWall Brick, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    #AddInterfloorWall Brick, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    #AddInterfloorWall Brick, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    #AddInterfloorWall Brick, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall IFront, Brick, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall IRight, Brick, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall IBack, Brick, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall ILeft, Brick, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
 <Floor 0>
-    AddFloor Brick, -150, -150, 150, 150, -0.1, -0.1, 1, 8, True #outside ground
+    AddFloor Outside Ground, Brick, -150, -150, 150, 150, -0.1, -0.1, 1, 8, True #outside ground
 <EndFloor>
 
 <Floor 9>
-    AddFloor Brick, -20, 20, 20, -20, %fullheight%, %fullheight%, 0, 0, True #roof
+    AddFloor Roof, Brick, -20, 20, 20, -20, %fullheight%, %fullheight%, 0, 0, True #roof
 <EndFloor>
 
 <Elevator 1>
@@ -86,14 +84,14 @@
     OpenSpeed = 0.2
     CreateElevator 0, 6, 0
 
-    AddFloor Wood2, -3.5, -3, 3.5, 3, 0, 0, 0, 0 #floor
-    AddFloor Elev1, -3.5, -3, 3.5, 3, 8, 8, 0, 0 #ceiling
-    AddWall Wood1, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false #back wall
-    AddWall Wood1, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false #right wall
-    AddWall Wood1, -3.5, -3, -3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false #left wall
+    AddFloor Floor, Wood2, -3.5, -3, 3.5, 3, 0, 0, 0, 0 #floor
+    AddFloor Ceiling, Elev1, -3.5, -3, 3.5, 3, 8, 8, 0, 0 #ceiling
+    AddWall Back, Wood1, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false #back wall
+    AddWall Right, Wood1, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false #right wall
+    AddWall Left, Wood1, -3.5, -3, -3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false #left wall
 
-    AddWall Wood1, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 2, 2, false, false, false#left panel
-    AddWall Wood1, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 2, 2, false, false, false #right panel
+    AddWall Left Panel, Wood1, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 2, 2, false, false, false #left panel
+    AddWall Right Panel, Wood1, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 2, 2, false, false, false #right panel
     
     AddDoors ElevDoors, 0, -3, 3.5, 8, true, 2, 2 #doors
     
