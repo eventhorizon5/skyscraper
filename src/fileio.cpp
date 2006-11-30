@@ -286,8 +286,8 @@ int SBS::LoadBuilding(const char * filename)
 			{
                 if (Section == 2)
 				{
-					buffer = FloorArray[Current]->Altitude + atof(tempdata[7]);
-					tempdata.Put(7, buffer);
+					buffer = FloorArray[Current]->Altitude + atof(tempdata[8]);
+					tempdata.Put(8, buffer);
 				}
 			}
             buffer = tempdata[0];
@@ -322,8 +322,8 @@ int SBS::LoadBuilding(const char * filename)
 			{
                 if (Section == 2)
 				{
-					buffer = FloorArray[Current]->Altitude + atof(tempdata[7]);
-					tempdata.Put(7, buffer);
+					buffer = FloorArray[Current]->Altitude + atof(tempdata[8]);
+					tempdata.Put(8, buffer);
 				}
 			}
             buffer = tempdata[0];
