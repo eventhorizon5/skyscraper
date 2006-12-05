@@ -1070,8 +1070,6 @@ recalc:
 			{
                 //copy string listing of serviced floors into array
 				tempdata.SplitString(temp2.GetData(), ",");
-				ElevatorArray[Current]->ServicedFloors.SetSize(tempdata.GetSize());
-				int j = 0;
 				for (int i = 0; i < tempdata.GetSize(); i++)
 				{
 					csString tmpstring = tempdata[i];
@@ -1081,18 +1079,11 @@ recalc:
 						//found a range marker
 						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-")));
 						int end = atoi(tmpstring.Slice(tmpstring.Find("-") + 1));
-						ElevatorArray[Current]->ServicedFloors.SetSize(tempdata.GetSize() + (end - start));
 						for (int k = start; k <= end; k++)
-						{
-							ElevatorArray[Current]->ServicedFloors[j] = k;
-							j++;
-						}
+							ElevatorArray[Current]->AddServicedFloor(k);
 					}
 					else
-					{
-						ElevatorArray[Current]->ServicedFloors[j] = atoi(tempdata[i]);
-						j++;
-					}
+						ElevatorArray[Current]->AddServicedFloor(atoi(tempdata[i]));
 				}
 				tempdata.DeleteAll();
 			}

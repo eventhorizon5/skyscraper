@@ -1332,3 +1332,66 @@ bool Elevator::IsInElevator(const csVector3 &position)
 	}
 	return false;
 }
+
+double Elevator::GetElevatorStart()
+{
+	//returns the internal elevator starting position
+	return ElevatorStart;
+}
+
+bool Elevator::AreDoorsOpen()
+{
+	//returns the internal door state
+	return DoorsOpen;
+}
+
+double Elevator::GetDestination()
+{
+	//returns the internal destination value
+	return Destination;
+}
+
+double Elevator::GetStoppingDistance()
+{
+	//returns the internal stopping distance value
+	return StoppingDistance;
+}
+
+bool Elevator::GetBrakeStatus()
+{
+	//returns the internal brake status value
+	return Brakes;
+}
+
+double Elevator::GetCurrentDoorSpeed()
+{
+	//returns the internal door speed value
+	return ElevatorDoorSpeed;
+}
+
+bool Elevator::GetEmergencyStopStatus()
+{
+	//returns the internal emergency stop status
+	return EmergencyStop;
+}
+
+void Elevator::DumpServicedFloors()
+{
+	//dump serviced floors list
+
+	sbs->Report("--- Elevator " + csString(_itoa(Number, intbuffer, 10)) + "'s Serviced Floors ---\n");
+	for (int i = 0; i < ServicedFloors.GetSize(); i++)
+		sbs->Report(csString(_itoa(i, intbuffer, 10)) + " - " + csString(_itoa(ServicedFloors[i], intbuffer, 10)));
+}
+
+void Elevator::AddServicedFloor(int number)
+{
+	if (ServicedFloors.Find(number) == csArrayItemNotFound)
+		ServicedFloors.InsertSorted(number);
+}
+
+void Elevator::RemoveServicedFloor(int number)
+{
+	if (ServicedFloors.Find(number) != csArrayItemNotFound)
+		ServicedFloors.Delete(number);
+}

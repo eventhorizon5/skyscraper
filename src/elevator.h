@@ -59,7 +59,6 @@ public:
 	double DoorHeight; //elevator door height
 	csVector3 DoorOrigin; //elevator door origin
 	csVector3 ShaftDoorOrigin; //shaft door origin
-	csArray<int> ServicedFloors; //list of floors this elevator services
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
@@ -96,7 +95,16 @@ public:
 	bool IsElevator(csRef<iMeshWrapper> test);
 	bool IsInElevator(const csVector3 &position);
 	csHitBeamResult HitBeam(const csVector3 &start, const csVector3 &end);
-
+	double GetElevatorStart();
+	bool AreDoorsOpen();
+	double GetDestination();
+	double GetStoppingDistance();
+	bool GetBrakeStatus();
+	double GetCurrentDoorSpeed();
+	bool GetEmergencyStopStatus();
+	void DumpServicedFloors();
+	void AddServicedFloor(int number);
+	void RemoveServicedFloor(int number);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -128,13 +136,14 @@ private:
 	//Internal elevator simulation data
 	csArray<int> UpQueue; //up call queue
 	csArray<int> DownQueue; //down call queue
+	csArray<int> ServicedFloors; //list of floors this elevator services
 	double ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
 	bool DoorsOpen; //elevator door state
 	csArray<bool> ShaftDoorsOpen; //shaft door state
 	int OpenDoor; //1=open doors, -1=close doors
 	double Destination; //elevator destination Y value
-	double StoppingDistance;
+	double StoppingDistance; //distance needed to stop the elevator
 	bool CalculateStoppingDistance;
 	bool Brakes;
 	double ElevatorDoorSpeed;
