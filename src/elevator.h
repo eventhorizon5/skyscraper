@@ -59,6 +59,7 @@ public:
 	double DoorHeight; //elevator door height
 	csVector3 DoorOrigin; //elevator door origin
 	csVector3 ShaftDoorOrigin; //shaft door origin
+	csArray<int> ServicedFloors; //list of floors this elevator services
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
@@ -136,7 +137,6 @@ private:
 	//Internal elevator simulation data
 	csArray<int> UpQueue; //up call queue
 	csArray<int> DownQueue; //down call queue
-	csArray<int> ServicedFloors; //list of floors this elevator services
 	double ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
 	bool DoorsOpen; //elevator door state
