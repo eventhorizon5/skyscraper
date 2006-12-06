@@ -75,6 +75,7 @@ Elevator::Elevator(int number)
 	Panel = 0;
 	DoorAcceleration = 0;
 	TempDeceleration = 0;
+	ErrorOffset = 0;
 
 	//create object meshes
 	buffer = Number;
