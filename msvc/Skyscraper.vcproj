@@ -257,6 +257,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\globals.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\loader.cpp"
 				>
 			</File>

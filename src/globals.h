@@ -23,11 +23,14 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-extern bool IsEven(int Number);
 extern double AutoSize(double n1, double n2, bool iswidth);
-extern const char *BoolToString(bool item);
 
 #ifndef _SBS_GLOBALS_H
 #define _SBS_GLOBALS_H
+
+bool IsEven(int Number);
+bool IsNumeric(const char *expression);
+const char *BoolToString(bool item);
+double RoundDouble(double value, int decimalplaces);
 
 #endif

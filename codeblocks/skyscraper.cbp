@@ -216,6 +216,11 @@
 			<Option target="Release|Win32" />
 			<Option target="Debug|Win32" />
 		</Unit>
+		<Unit filename="..\src\globals.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="Release|Win32" />
+			<Option target="Debug|Win32" />
+		</Unit>
 		<Unit filename="..\src\globals.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
@@ -308,6 +313,7 @@
 			<Option target="Debug|Win32" />
 		</Unit>
 		<Extensions>
+			<code_completion />
 			<wxsmith>
 				<dialog wxs_file="Loader.wxs" class="Loader" src_file="..\src\loader.cpp" header_file="..\src\loader.h" xrc_file="" edit_mode="Source" />
 				<dialog wxs_file="DebugPanel.wxs" class="DebugPanel" src_file="..\src\debugpanel.cpp" header_file="..\src\debugpanel.h" xrc_file="" edit_mode="Source" />
