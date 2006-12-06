@@ -23,7 +23,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//#include <wx/wx.h>
 #include <crystalspace.h>
 #include "elevator.h"
 #include "buttonpanel.h"
@@ -74,6 +73,8 @@ Elevator::Elevator(int number)
 	IsEnabled = true;
 	Height = 0;
 	Panel = 0;
+	DoorAcceleration = 0;
+	TempDeceleration = 0;
 
 	//create object meshes
 	buffer = Number;

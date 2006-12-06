@@ -34,17 +34,13 @@
 #include <wx/stattext.h>
 //*)
 #include <wx/timer.h>
+#include <wx/variant.h>
 
 class Timer : public wxTimer
 {
 public:
 	Timer() { };
 	virtual void Notify();
-
-private:
-	char intbuffer[65];
-	char buffer[20];
-
 };
 
 class DebugPanel: public wxDialog

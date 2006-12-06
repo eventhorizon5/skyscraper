@@ -54,7 +54,7 @@ END_EVENT_TABLE()
 DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(DebugPanel)
-	Create(parent,id,_("Simulator Control Panel"),wxDefaultPosition,wxDefaultSize,wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX,_T(""));
+	Create(parent,id,_("Simulator Control Panel"),wxDefaultPosition,wxSize(469,315),wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX,_T(""));
 	bListAltitudes = new wxButton(this,ID_bListAltitudes,_("List Altitudes"),wxPoint(350,185),wxSize(85,25),0,wxDefaultValidator,_("ID_bListAltitudes"));
 	if (false) bListAltitudes->SetDefault();
 	StaticText1 = new wxStaticText(this,st4c,_("Camera Floor:"),wxPoint(15,10),wxSize(74,13),wxST_NO_AUTORESIZE,_("st4c"));
@@ -143,14 +143,14 @@ void DebugPanel::OnInit()
 
 void Timer::Notify()
 {
-	dp->t_camerap->SetLabel(wxT(wxString(_gcvt(sbs->camera->GetPosition().x, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(sbs->camera->GetPosition().y, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(sbs->camera->GetPosition().z, 6, buffer), wxConvUTF8)));
-	dp->t_camerafloor->SetLabel(wxString(_itoa(sbs->camera->CurrentFloor, intbuffer, 10), wxConvUTF8));
+	dp->t_camerap->SetLabel(wxT(wxVariant(RoundDouble(sbs->camera->GetPosition().x, 2)).GetString() + ", " + wxVariant(RoundDouble(sbs->camera->GetPosition().y, 2)).GetString() + ", " + wxVariant(RoundDouble(sbs->camera->GetPosition().z, 2)).GetString()));
+	dp->t_camerafloor->SetLabel(wxVariant((long)sbs->camera->CurrentFloor).GetString());
 
 	if (sbs->Elevators > 0)
 	{
 		dp->bEditElevator->Enable(true);
-		dp->t_elevnumber->SetLabel(wxString(_itoa(sbs->ElevatorNumber, intbuffer, 10), wxConvUTF8));
-		dp->t_elevfloor->SetLabel(wxString(_itoa(sbs->ElevatorArray[sbs->ElevatorNumber]->GetFloor(), intbuffer, 10), wxConvUTF8));
+		dp->t_elevnumber->SetLabel(wxVariant((long)sbs->ElevatorNumber).GetString());
+		dp->t_elevfloor->SetLabel(wxVariant((long)sbs->ElevatorArray[sbs->ElevatorNumber]->GetFloor()).GetString());
 	}
 	else
 		dp->bEditElevator->Enable(false);
@@ -158,46 +158,46 @@ void Timer::Notify()
 	if (ee->IsShown() == true)
 	{
 		Elevator *elevator = sbs->ElevatorArray.Get(ee->sNumber->GetThumbPosition() + 1);
-		ee->tElevator->SetLabel(wxT("Number " + wxString(_itoa(ee->sNumber->GetThumbPosition() + 1, intbuffer, 10), wxConvUTF8)));
-		ee->tFloor->SetLabel(wxT("Floor " + wxString(_itoa(ee->sFloor->GetThumbPosition(), intbuffer, 10), wxConvUTF8)));
-		ee->txtAcceleration->SetValue(wxString(_gcvt(elevator->Acceleration, 6, buffer)));
+		ee->tElevator->SetLabel(wxT("Number " + wxVariant((long)ee->sNumber->GetThumbPosition() + 1).GetString()));
+		ee->tFloor->SetLabel(wxT("Floor " + wxVariant((long)ee->sFloor->GetThumbPosition()).GetString()));
+		ee->txtAcceleration->SetValue(wxVariant(RoundDouble(elevator->Acceleration, 2)).GetString());
 		ee->txtBrakes->SetValue(wxString(BoolToString(elevator->GetBrakeStatus())));
-		ee->txtDeceleration->SetValue(wxString(_gcvt(elevator->Deceleration, 6, buffer)));
-		ee->txtDestFloor->SetValue(wxString(_itoa(elevator->GotoFloor, intbuffer, 10)));
-		ee->txtDestination->SetValue(wxString(_gcvt(elevator->GetDestination(), 6, buffer)));
-		ee->txtDirection->SetValue(wxString(_itoa(elevator->Direction, intbuffer, 10)));
-		ee->txtDistance->SetValue(wxString(_gcvt(elevator->DistanceToTravel, 6, buffer)));
-		ee->txtDoorAcceleration->SetValue(wxString(_gcvt(elevator->DoorAcceleration, 6, buffer)));
+		ee->txtDeceleration->SetValue(wxVariant(RoundDouble(elevator->Deceleration, 2)).GetString());
+		ee->txtDestFloor->SetValue(wxVariant((long)elevator->GotoFloor).GetString());
+		ee->txtDestination->SetValue(wxVariant(RoundDouble(elevator->GetDestination(), 2)).GetString());
+		ee->txtDirection->SetValue(wxVariant((long)elevator->Direction).GetString());
+		ee->txtDistance->SetValue(wxVariant(RoundDouble(elevator->DistanceToTravel, 2)).GetString());
+		ee->txtDoorAcceleration->SetValue(wxVariant(RoundDouble(elevator->DoorAcceleration, 2)).GetString());
 		ee->txtDoorDirection->SetValue(wxString(BoolToString(elevator->DoorDirection)));
-		ee->txtDoorHeight->SetValue(wxString(_gcvt(elevator->DoorHeight, 6, buffer)));
-		ee->txtDoorOrigin->SetValue(wxT(wxString(_gcvt(elevator->DoorOrigin.x, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(elevator->DoorOrigin.y, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(elevator->DoorOrigin.z, 6, buffer), wxConvUTF8)));
+		ee->txtDoorHeight->SetValue(wxVariant(RoundDouble(elevator->DoorHeight, 2)).GetString());
+		ee->txtDoorOrigin->SetValue(wxT(wxVariant(RoundDouble(elevator->DoorOrigin.x, 2)).GetString() + ", " + wxVariant(RoundDouble(elevator->DoorOrigin.y, 2)).GetString() + ", " + wxVariant(RoundDouble(elevator->DoorOrigin.z, 2)).GetString()));
 		ee->txtDoorsOpen->SetValue(wxString(BoolToString(elevator->AreDoorsOpen())));
-		ee->txtDoorSpeed->SetValue(wxString(_gcvt(elevator->GetCurrentDoorSpeed(), 6, buffer)));
-		ee->txtDoorWidth->SetValue(wxString(_gcvt(elevator->DoorWidth, 6, buffer)));
-		ee->txtElevStart->SetValue(wxString(_gcvt(elevator->GetElevatorStart(), 6, buffer)));
+		ee->txtDoorSpeed->SetValue(wxVariant(RoundDouble(elevator->GetCurrentDoorSpeed(), 2)).GetString());
+		ee->txtDoorWidth->SetValue(wxVariant(RoundDouble(elevator->DoorWidth, 2)).GetString());
+		ee->txtElevStart->SetValue(wxVariant(RoundDouble(elevator->GetElevatorStart(), 2)).GetString());
 		ee->txtEnabled->SetValue(wxString(BoolToString(elevator->IsEnabled)));
-		ee->txtErrorOffset->SetValue(wxString(_gcvt(elevator->ErrorOffset, 6, buffer)));
-		ee->txtFloor->SetValue(wxString(_itoa(elevator->GetFloor(), intbuffer, 10)));
-		ee->txtHeight->SetValue(wxString(_gcvt(elevator->Height, 6, buffer)));
+		ee->txtErrorOffset->SetValue(wxVariant(RoundDouble(elevator->ErrorOffset, 2)).GetString());
+		ee->txtFloor->SetValue(wxVariant((long)elevator->GetFloor()).GetString());
+		ee->txtHeight->SetValue(wxVariant(RoundDouble(elevator->Height, 2)).GetString());
 		ee->txtMoveElevator->SetValue(wxString(BoolToString(elevator->MoveElevator)));
-		ee->txtMoveElevatorFloor->SetValue(wxString(_itoa(elevator->MoveElevatorFloor, intbuffer, 10)));
+		ee->txtMoveElevatorFloor->SetValue(wxVariant((long)elevator->MoveElevatorFloor).GetString());
 		ee->txtName->SetValue(wxString(elevator->Name.GetData()));
-		ee->txtNumber->SetValue(wxString(_itoa(elevator->Number, intbuffer, 10)));
-		ee->txtOpenSpeed->SetValue(wxString(_gcvt(elevator->OpenSpeed, 6, buffer)));
-		ee->txtOrigin->SetValue(wxT(wxString(_gcvt(elevator->Origin.x, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(elevator->Origin.y, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(elevator->Origin.z, 6, buffer), wxConvUTF8)));
-		ee->txtOriginFloor->SetValue(wxString(_itoa(elevator->OriginFloor, intbuffer, 10)));
-		ee->txtPosition->SetValue(wxT(wxString(_gcvt(elevator->GetPosition().x, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(elevator->GetPosition().y, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(elevator->GetPosition().z, 6, buffer), wxConvUTF8)));
-		ee->txtQueueDirection->SetValue(wxString(_itoa(elevator->QueuePositionDirection, intbuffer, 10)));
-		ee->txtQueueLastDown->SetValue(wxString(_itoa(elevator->LastQueueFloor[0], intbuffer, 10)));
-		ee->txtQueueLastUp->SetValue(wxString(_itoa(elevator->LastQueueFloor[1], intbuffer, 10)));
+		ee->txtNumber->SetValue(wxVariant((long)elevator->Number).GetString());
+		ee->txtOpenSpeed->SetValue(wxVariant(RoundDouble(elevator->OpenSpeed, 2)).GetString());
+		ee->txtOrigin->SetValue(wxT(wxVariant(RoundDouble(elevator->Origin.x, 2)).GetString() + ", " + wxVariant(RoundDouble(elevator->Origin.y, 2)).GetString() + ", " + wxVariant(RoundDouble(elevator->Origin.z, 2)).GetString()));
+		ee->txtOriginFloor->SetValue(wxVariant((long)elevator->OriginFloor).GetString());
+		ee->txtPosition->SetValue(wxT(wxVariant(RoundDouble(elevator->GetPosition().x, 2)).GetString() + ", " + wxVariant(RoundDouble(elevator->GetPosition().y, 2)).GetString() + ", " + wxVariant(RoundDouble(elevator->GetPosition().z, 2)).GetString()));
+		ee->txtQueueDirection->SetValue(wxVariant((long)elevator->QueuePositionDirection).GetString());
+		ee->txtQueueLastDown->SetValue(wxVariant((long)elevator->LastQueueFloor[0]).GetString());
+		ee->txtQueueLastUp->SetValue(wxVariant((long)elevator->LastQueueFloor[1]).GetString());
 		ee->txtQueuePause->SetValue(wxString(BoolToString(elevator->PauseQueueSearch)));
-		ee->txtRate->SetValue(wxString(_gcvt(elevator->ElevatorRate, 6, buffer)));
-		ee->txtShaft->SetValue(wxString(_itoa(elevator->AssignedShaft, intbuffer, 10)));
-		ee->txtShaftDoorOrigin->SetValue(wxT(wxString(_gcvt(elevator->ShaftDoorOrigin.x, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(elevator->ShaftDoorOrigin.y, 6, buffer), wxConvUTF8) + ", " + wxString(_gcvt(elevator->ShaftDoorOrigin.z, 6, buffer), wxConvUTF8)));
-		ee->txtSpeed->SetValue(wxString(_gcvt(elevator->ElevatorSpeed, 6, buffer)));
+		ee->txtRate->SetValue(wxVariant(RoundDouble(elevator->ElevatorRate, 2)).GetString());
+		ee->txtShaft->SetValue(wxVariant((long)elevator->AssignedShaft).GetString());
+		ee->txtShaftDoorOrigin->SetValue(wxT(wxVariant(RoundDouble(elevator->ShaftDoorOrigin.x, 2)).GetString() + ", " + wxVariant(RoundDouble(elevator->ShaftDoorOrigin.y, 2)).GetString() + ", " + wxVariant(RoundDouble(elevator->ShaftDoorOrigin.z, 2)).GetString()));
+		ee->txtSpeed->SetValue(wxVariant(RoundDouble(elevator->ElevatorSpeed, 2)).GetString());
 		ee->txtStop->SetValue(wxString(BoolToString(elevator->GetEmergencyStopStatus())));
-		ee->txtStopDistance->SetValue(wxString(_gcvt(elevator->GetStoppingDistance(), 6, buffer)));
-		ee->txtTempDecel->SetValue(wxString(_gcvt(elevator->TempDeceleration, 6, buffer)));
+		ee->txtStopDistance->SetValue(wxVariant(RoundDouble(elevator->GetStoppingDistance(), 2)).GetString());
+		ee->txtTempDecel->SetValue(wxVariant(RoundDouble(elevator->TempDeceleration, 2)).GetString());
 	}
 
 	if (mc->IsShown() == true)
