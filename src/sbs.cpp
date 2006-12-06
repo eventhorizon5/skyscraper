@@ -23,10 +23,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//#include <wx/wx.h>
 #include <wx/timer.h>
 #include <crystalspace.h>
-#include <sstream>
 #include "sbs.h"
 #include "unix.h"
 
@@ -259,19 +257,6 @@ double AutoSize(double n1, double n2, bool iswidth, bool external, double offset
 	}
 	return 0;
 }
-
-const char *BoolToString(bool item)
-{
-	if (item == true)
-		return "true";
-	else
-		return "false";
-}
-
-//need to make an alternate _gcvt function for wx unicode
-#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-
-#endif
 
 void SBS::PrintBanner()
 {
@@ -613,16 +598,6 @@ void SBS::AddLight(const char *name, double x, double y, double z, double radius
 	ll = area->GetLights();
 	light = engine->CreateLight(name, csVector3(x, y, z), radius, csColor(r, g, b));
 	ll->Add(light);
-}
-
-bool IsEven(int Number)
-{
-    //Determine if the passed number is even.
-	//If number divides evenly, return true
-	if ((Number / 2) == int(Number / 2))
-		return true;
-	else
-		return false;
 }
 
 void Cleanup()
@@ -1195,21 +1170,6 @@ csString SBS::Calc(const char *expression)
 	}
 	
 	return tmpcalc.GetData();
-}
-
-bool IsNumeric(const char *expression)
-{
-	//returns true if the string is numeric; otherwise returns false	
-	csString s;
-	s = expression;
-	char test;
-	for (int i = 0; i < s.Length(); i++)
-	{
-		test = s.GetAt(i);
-		if((test <= '0' || test >= '9') && test != '.')
-			return false;
-	}
-	return true;
 }
 
 void SBS::EnableBuildings(bool value)

@@ -30,9 +30,7 @@
 #include "camera.h"
 
 //global functions
-bool IsEven(int Number);
 double AutoSize(double n1, double n2, bool iswidth, bool external, double offset);
-bool IsNumeric(const char *expression);
 static bool SBSEventHandler(iEvent& Event);
 void Cleanup();
 
