@@ -29,254 +29,266 @@
 #include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/intl.h>
+#include <wx/scrolbar.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/slider.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 //*)
 
 class editelevator: public wxDialog
 {
+	friend class Timer;
 	public:
-
 		editelevator(wxWindow* parent,wxWindowID id = -1);
 		virtual ~editelevator();
 
 		//(*Identifiers(editelevator)
 		enum Identifiers
 		{
-		    ID_STATICTEXT1 = 0x1000,
-		    ID_SLIDER1,
-		    ID_STATICTEXT2,
-		    ID_SLIDER2,
-		    ID_BUTTON11,
-		    ID_BUTTON12,
-		    ID_BUTTON1,
-		    ID_BUTTON2,
-		    ID_BUTTON3,
-		    ID_BUTTON4,
-		    ID_BUTTON5,
-		    ID_BUTTON6,
-		    ID_BUTTON7,
-		    ID_BUTTON8,
-		    ID_BUTTON9,
-		    ID_BUTTON10,
+		    ID_tElevator = 0x1000,
+		    ID_sNumber,
+		    ID_tFloor,
+		    ID_sFloor,
+		    ID_bDumpFloors,
+		    ID_bDumpQueues,
+		    ID_bCall,
+		    ID_bGo,
+		    ID_bOpen,
+		    ID_bOpenManual,
+		    ID_bStop,
+		    ID_bEnqueueUp,
+		    ID_bEnqueueDown,
+		    ID_bClose,
+		    ID_bCloseManual,
+		    ID_bAlarm,
 		    ID_STATICTEXT3,
-		    ID_TEXTCTRL2,
+		    ID_txtNumber,
 		    ID_STATICTEXT5,
-		    ID_TEXTCTRL1,
-		    ID_BUTTON13,
+		    ID_txtName,
+		    ID_bSetName,
 		    ID_STATICTEXT4,
-		    ID_TEXTCTRL3,
+		    ID_txtEnabled,
 		    ID_STATICTEXT6,
-		    ID_TEXTCTRL4,
+		    ID_txtShaft,
 		    ID_STATICTEXT7,
-		    ID_TEXTCTRL5,
+		    ID_txtHeight,
 		    ID_STATICTEXT8,
-		    ID_TEXTCTRL6,
+		    ID_txtDoorWidth,
 		    ID_STATICTEXT9,
-		    ID_TEXTCTRL7,
+		    ID_txtDoorHeight,
 		    ID_STATICTEXT10,
-		    ID_TEXTCTRL8,
+		    ID_txtDoorDirection,
 		    ID_STATICTEXT11,
-		    ID_TEXTCTRL9,
+		    ID_txtDoorsOpen,
 		    ID_STATICTEXT12,
-		    ID_TEXTCTRL10,
+		    ID_txtBrakes,
 		    ID_STATICTEXT13,
-		    ID_TEXTCTRL11,
+		    ID_txtStop,
 		    ID_STATICTEXT14,
-		    ID_TEXTCTRL12,
+		    ID_txtFloor,
 		    ID_STATICTEXT15,
-		    ID_TEXTCTRL13,
+		    ID_txtPosition,
 		    ID_STATICTEXT16,
-		    ID_TEXTCTRL14,
+		    ID_txtOrigin,
 		    ID_STATICTEXT17,
-		    ID_TEXTCTRL15,
+		    ID_txtOriginFloor,
 		    ID_STATICTEXT18,
-		    ID_TEXTCTRL16,
+		    ID_txtElevStart,
 		    ID_STATICTEXT19,
-		    ID_TEXTCTRL17,
+		    ID_txtDoorOrigin,
 		    ID_STATICTEXT20,
-		    ID_TEXTCTRL18,
+		    ID_txtShaftDoorOrigin,
 		    ID_STATICTEXT38,
-		    ID_TEXTCTRL36,
+		    ID_txtQueueDirection,
 		    ID_STATICTEXT39,
-		    ID_TEXTCTRL37,
+		    ID_txtQueuePause,
 		    ID_STATICTEXT40,
-		    ID_TEXTCTRL38,
+		    ID_txtQueueLastUp,
 		    ID_STATICTEXT41,
-		    ID_TEXTCTRL39,
+		    ID_txtQueueLastDown,
 		    ID_STATICTEXT21,
-		    ID_TEXTCTRL19,
-		    ID_BUTTON14,
+		    ID_txtSpeed,
+		    ID_bSetSpeed,
 		    ID_STATICTEXT22,
-		    ID_TEXTCTRL20,
-		    ID_BUTTON15,
+		    ID_txtAcceleration,
+		    ID_bSetAcceleration,
 		    ID_STATICTEXT23,
-		    ID_TEXTCTRL21,
-		    ID_BUTTON16,
+		    ID_txtDeceleration,
+		    ID_bSetDeceleration,
 		    ID_STATICTEXT24,
-		    ID_TEXTCTRL22,
-		    ID_BUTTON17,
+		    ID_txtOpenSpeed,
+		    ID_bSetOpenSpeed,
 		    ID_STATICTEXT25,
-		    ID_TEXTCTRL23,
-		    ID_BUTTON18,
+		    ID_txtDoorAcceleration,
+		    ID_bSetDoorAccel,
 		    ID_STATICTEXT26,
-		    ID_TEXTCTRL24,
-		    ID_BUTTON19,
+		    ID_txtRate,
 		    ID_STATICTEXT27,
-		    ID_TEXTCTRL25,
+		    ID_txtDirection,
 		    ID_STATICTEXT28,
-		    ID_TEXTCTRL26,
-		    ID_STATICTEXT29,
-		    ID_TEXTCTRL27,
+		    ID_txtDoorSpeed,
 		    ID_STATICTEXT30,
-		    ID_TEXTCTRL28,
+		    ID_txtDestFloor,
 		    ID_STATICTEXT31,
-		    ID_TEXTCTRL29,
+		    ID_txtMoveElevator,
 		    ID_STATICTEXT32,
-		    ID_TEXTCTRL30,
+		    ID_txtMoveElevatorFloor,
 		    ID_STATICTEXT33,
-		    ID_TEXTCTRL31,
+		    ID_txtDistance,
 		    ID_STATICTEXT34,
-		    ID_TEXTCTRL32,
+		    ID_txtDestination,
 		    ID_STATICTEXT35,
-		    ID_TEXTCTRL33,
+		    ID_txtStopDistance,
 		    ID_STATICTEXT36,
-		    ID_TEXTCTRL34,
+		    ID_txtTempDecel,
 		    ID_STATICTEXT37,
-		    ID_TEXTCTRL35
+		    ID_txtErrorOffset
 		};
 		//*)
 
 	protected:
 
 		//(*Handlers(editelevator)
-		void OnInit(wxInitDialogEvent& event);
-        //*)
+		void On_bCall_Click(wxCommandEvent& event);
+		void On_bEnqueueUp_Click(wxCommandEvent& event);
+		void On_bGo_Click(wxCommandEvent& event);
+		void On_bEnqueueDown_Click(wxCommandEvent& event);
+		void On_bOpen_Click(wxCommandEvent& event);
+		void On_bClose_Click(wxCommandEvent& event);
+		void On_bOpenManual_Click(wxCommandEvent& event);
+		void On_bCloseManual_Click(wxCommandEvent& event);
+		void On_bStop_Click(wxCommandEvent& event);
+		void On_bAlarm_Click(wxCommandEvent& event);
+		void On_bSetName_Click(wxCommandEvent& event);
+		void On_bSetSpeed_Click(wxCommandEvent& event);
+		void On_bSetAcceleration_Click(wxCommandEvent& event);
+		void On_bSetDeceleration_Click(wxCommandEvent& event);
+		void On_bSetOpenSpeed_Click(wxCommandEvent& event);
+		void On_bSetDoorAccel_Click(wxCommandEvent& event);
+		void On_bDumpFloors_Click(wxCommandEvent& event);
+		void On_bDumpQueues_Click(wxCommandEvent& event);
+		//*)
+        void OnInit();
 
 		//(*Declarations(editelevator)
 		wxBoxSizer* BoxSizer1;
 		wxBoxSizer* BoxSizer2;
 		wxBoxSizer* BoxSizer6;
-		wxStaticText* StaticText1;
-		wxSlider* Slider1;
-		wxStaticText* StaticText2;
-		wxSlider* Slider2;
+		wxStaticText* tElevator;
+		wxScrollBar* sNumber;
+		wxStaticText* tFloor;
+		wxScrollBar* sFloor;
 		wxBoxSizer* BoxSizer7;
-		wxButton* Button11;
-		wxButton* Button12;
+		wxButton* bDumpFloors;
+		wxButton* bDumpQueues;
 		wxStaticBoxSizer* StaticBoxSizer1;
 		wxBoxSizer* BoxSizer8;
-		wxButton* Button1;
-		wxButton* Button2;
-		wxButton* Button3;
-		wxButton* Button4;
-		wxButton* Button5;
+		wxButton* bCall;
+		wxButton* bGo;
+		wxButton* bOpen;
+		wxButton* bOpenManual;
+		wxButton* bStop;
 		wxBoxSizer* BoxSizer9;
-		wxButton* Button6;
-		wxButton* Button7;
-		wxButton* Button8;
-		wxButton* Button9;
-		wxButton* Button10;
+		wxButton* bEnqueueUp;
+		wxButton* bEnqueueDown;
+		wxButton* bClose;
+		wxButton* bCloseManual;
+		wxButton* bAlarm;
 		wxBoxSizer* BoxSizer3;
 		wxStaticBoxSizer* StaticBoxSizer2;
 		wxFlexGridSizer* FlexGridSizer1;
 		wxStaticText* StaticText3;
-		wxTextCtrl* TextCtrl2;
+		wxTextCtrl* txtNumber;
 		wxStaticText* StaticText5;
-		wxTextCtrl* TextCtrl1;
-		wxButton* Button13;
+		wxTextCtrl* txtName;
+		wxButton* bSetName;
 		wxStaticText* StaticText4;
-		wxTextCtrl* TextCtrl3;
+		wxTextCtrl* txtEnabled;
 		wxStaticText* StaticText6;
-		wxTextCtrl* TextCtrl4;
+		wxTextCtrl* txtShaft;
 		wxStaticText* StaticText7;
-		wxTextCtrl* TextCtrl5;
+		wxTextCtrl* txtHeight;
 		wxStaticText* StaticText8;
-		wxTextCtrl* TextCtrl6;
+		wxTextCtrl* txtDoorWidth;
 		wxStaticText* StaticText9;
-		wxTextCtrl* TextCtrl7;
+		wxTextCtrl* txtDoorHeight;
 		wxStaticText* StaticText10;
-		wxTextCtrl* TextCtrl8;
+		wxTextCtrl* txtDoorDirection;
 		wxStaticText* StaticText11;
-		wxTextCtrl* TextCtrl9;
+		wxTextCtrl* txtDoorsOpen;
 		wxStaticText* StaticText12;
-		wxTextCtrl* TextCtrl10;
+		wxTextCtrl* txtBrakes;
 		wxStaticText* StaticText13;
-		wxTextCtrl* TextCtrl11;
+		wxTextCtrl* txtStop;
 		wxBoxSizer* BoxSizer10;
 		wxStaticBoxSizer* StaticBoxSizer5;
 		wxFlexGridSizer* FlexGridSizer2;
 		wxStaticText* StaticText14;
-		wxTextCtrl* TextCtrl12;
+		wxTextCtrl* txtFloor;
 		wxStaticText* StaticText15;
-		wxTextCtrl* TextCtrl13;
+		wxTextCtrl* txtPosition;
 		wxStaticText* StaticText16;
-		wxTextCtrl* TextCtrl14;
+		wxTextCtrl* txtOrigin;
 		wxStaticText* StaticText17;
-		wxTextCtrl* TextCtrl15;
+		wxTextCtrl* txtOriginFloor;
 		wxStaticText* StaticText18;
-		wxTextCtrl* TextCtrl16;
+		wxTextCtrl* txtElevStart;
 		wxStaticText* StaticText19;
-		wxTextCtrl* TextCtrl17;
+		wxTextCtrl* txtDoorOrigin;
 		wxStaticText* StaticText20;
-		wxTextCtrl* TextCtrl18;
+		wxTextCtrl* txtShaftDoorOrigin;
 		wxStaticBoxSizer* StaticBoxSizer3;
 		wxFlexGridSizer* FlexGridSizer3;
 		wxStaticText* StaticText38;
-		wxTextCtrl* TextCtrl36;
+		wxTextCtrl* txtQueueDirection;
 		wxStaticText* StaticText39;
-		wxTextCtrl* TextCtrl37;
+		wxTextCtrl* txtQueuePause;
 		wxStaticText* StaticText40;
-		wxTextCtrl* TextCtrl38;
+		wxTextCtrl* txtQueueLastUp;
 		wxStaticText* StaticText41;
-		wxTextCtrl* TextCtrl39;
+		wxTextCtrl* txtQueueLastDown;
 		wxStaticBoxSizer* StaticBoxSizer7;
 		wxFlexGridSizer* FlexGridSizer6;
 		wxStaticText* StaticText21;
-		wxTextCtrl* TextCtrl19;
-		wxButton* Button14;
+		wxTextCtrl* txtSpeed;
+		wxButton* bSetSpeed;
 		wxStaticText* StaticText22;
-		wxTextCtrl* TextCtrl20;
-		wxButton* Button15;
+		wxTextCtrl* txtAcceleration;
+		wxButton* bSetAcceleration;
 		wxStaticText* StaticText23;
-		wxTextCtrl* TextCtrl21;
-		wxButton* Button16;
+		wxTextCtrl* txtDeceleration;
+		wxButton* bSetDeceleration;
 		wxStaticText* StaticText24;
-		wxTextCtrl* TextCtrl22;
-		wxButton* Button17;
+		wxTextCtrl* txtOpenSpeed;
+		wxButton* bSetOpenSpeed;
 		wxStaticText* StaticText25;
-		wxTextCtrl* TextCtrl23;
-		wxButton* Button18;
+		wxTextCtrl* txtDoorAcceleration;
+		wxButton* bSetDoorAccel;
 		wxStaticText* StaticText26;
-		wxTextCtrl* TextCtrl24;
-		wxButton* Button19;
+		wxTextCtrl* txtRate;
 		wxStaticText* StaticText27;
-		wxTextCtrl* TextCtrl25;
+		wxTextCtrl* txtDirection;
 		wxStaticText* StaticText28;
-		wxTextCtrl* TextCtrl26;
-		wxStaticText* StaticText29;
-		wxTextCtrl* TextCtrl27;
+		wxTextCtrl* txtDoorSpeed;
 		wxStaticBoxSizer* StaticBoxSizer8;
 		wxFlexGridSizer* FlexGridSizer7;
 		wxStaticText* StaticText30;
-		wxTextCtrl* TextCtrl28;
+		wxTextCtrl* txtDestFloor;
 		wxStaticText* StaticText31;
-		wxTextCtrl* TextCtrl29;
+		wxTextCtrl* txtMoveElevator;
 		wxStaticText* StaticText32;
-		wxTextCtrl* TextCtrl30;
+		wxTextCtrl* txtMoveElevatorFloor;
 		wxStaticText* StaticText33;
-		wxTextCtrl* TextCtrl31;
+		wxTextCtrl* txtDistance;
 		wxStaticText* StaticText34;
-		wxTextCtrl* TextCtrl32;
+		wxTextCtrl* txtDestination;
 		wxStaticText* StaticText35;
-		wxTextCtrl* TextCtrl33;
+		wxTextCtrl* txtStopDistance;
 		wxStaticText* StaticText36;
-		wxTextCtrl* TextCtrl34;
+		wxTextCtrl* txtTempDecel;
 		wxStaticText* StaticText37;
-		wxTextCtrl* TextCtrl35;
+		wxTextCtrl* txtErrorOffset;
 		//*)
 
 	private:

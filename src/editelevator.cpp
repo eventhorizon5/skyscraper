@@ -22,10 +22,37 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include "debugpanel.h"
 #include "editelevator.h"
+#include <crystalspace.h>
+#include "sbs.h"
+#include "camera.h"
+#include "floor.h"
+#include "elevator.h"
+#include "unix.h"
+
+extern SBS *sbs; //external pointer to the SBS engine
 
 BEGIN_EVENT_TABLE(editelevator,wxDialog)
 //(*EventTable(editelevator)
+EVT_BUTTON(ID_bDumpFloors,editelevator::On_bDumpFloors_Click)
+EVT_BUTTON(ID_bDumpQueues,editelevator::On_bDumpQueues_Click)
+EVT_BUTTON(ID_bCall,editelevator::On_bCall_Click)
+EVT_BUTTON(ID_bGo,editelevator::On_bGo_Click)
+EVT_BUTTON(ID_bOpen,editelevator::On_bOpen_Click)
+EVT_BUTTON(ID_bOpenManual,editelevator::On_bOpenManual_Click)
+EVT_BUTTON(ID_bStop,editelevator::On_bStop_Click)
+EVT_BUTTON(ID_bEnqueueUp,editelevator::On_bEnqueueUp_Click)
+EVT_BUTTON(ID_bEnqueueDown,editelevator::On_bEnqueueDown_Click)
+EVT_BUTTON(ID_bClose,editelevator::On_bClose_Click)
+EVT_BUTTON(ID_bCloseManual,editelevator::On_bCloseManual_Click)
+EVT_BUTTON(ID_bAlarm,editelevator::On_bAlarm_Click)
+EVT_BUTTON(ID_bSetName,editelevator::On_bSetName_Click)
+EVT_BUTTON(ID_bSetSpeed,editelevator::On_bSetSpeed_Click)
+EVT_BUTTON(ID_bSetAcceleration,editelevator::On_bSetAcceleration_Click)
+EVT_BUTTON(ID_bSetDeceleration,editelevator::On_bSetDeceleration_Click)
+EVT_BUTTON(ID_bSetOpenSpeed,editelevator::On_bSetOpenSpeed_Click)
+EVT_BUTTON(ID_bSetDoorAccel,editelevator::On_bSetDoorAccel_Click)
 //*)
 END_EVENT_TABLE()
 
@@ -36,322 +63,305 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	BoxSizer6 = new wxBoxSizer(wxVERTICAL);
-	StaticText1 = new wxStaticText(this,ID_STATICTEXT1,_("Elevator"),wxDefaultPosition,wxDefaultSize,wxALIGN_CENTRE,_("ID_STATICTEXT1"));
-	Slider1 = new wxSlider(this,ID_SLIDER1,0,0,100,wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_SLIDER1"));
-	if ( 0 ) Slider1->SetTickFreq(0,0);
-	if ( 0 ) Slider1->SetPageSize(0);
-	if ( 0 ) Slider1->SetLineSize(0);
-	if ( 0 ) Slider1->SetThumbLength(0);
-	if ( 0 ) Slider1->SetTick(0);
-	if ( 0 || 0 ) Slider1->SetSelection(0,0);
-	StaticText2 = new wxStaticText(this,ID_STATICTEXT2,_("Floor"),wxDefaultPosition,wxDefaultSize,wxALIGN_CENTRE,_("ID_STATICTEXT2"));
-	Slider2 = new wxSlider(this,ID_SLIDER2,0,0,100,wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_SLIDER2"));
-	if ( 0 ) Slider2->SetTickFreq(0,0);
-	if ( 0 ) Slider2->SetPageSize(0);
-	if ( 0 ) Slider2->SetLineSize(0);
-	if ( 0 ) Slider2->SetThumbLength(0);
-	if ( 0 ) Slider2->SetTick(0);
-	if ( 0 || 0 ) Slider2->SetSelection(0,0);
+	tElevator = new wxStaticText(this,ID_tElevator,_("Elevator"),wxDefaultPosition,wxDefaultSize,wxALIGN_CENTRE,_("ID_tElevator"));
+	sNumber = new wxScrollBar(this,ID_sNumber,wxDefaultPosition,wxDefaultSize,wxSB_HORIZONTAL,wxDefaultValidator,_("ID_sNumber"));
+	sNumber->SetScrollbar(0,1,10,1);
+	tFloor = new wxStaticText(this,ID_tFloor,_("Floor"),wxDefaultPosition,wxDefaultSize,wxALIGN_CENTRE,_("ID_tFloor"));
+	sFloor = new wxScrollBar(this,ID_sFloor,wxDefaultPosition,wxDefaultSize,wxSB_HORIZONTAL,wxDefaultValidator,_("ID_sFloor"));
+	sFloor->SetScrollbar(0,1,10,1);
 	BoxSizer7 = new wxBoxSizer(wxHORIZONTAL);
-	Button11 = new wxButton(this,ID_BUTTON11,_("Dump Floor List"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON11"));
-	if (false) Button11->SetDefault();
-	Button12 = new wxButton(this,ID_BUTTON12,_("Dump Queues"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON12"));
-	if (false) Button12->SetDefault();
-	BoxSizer7->Add(Button11,1,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,15);
-	BoxSizer7->Add(Button12,1,wxLEFT|wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL,15);
-	BoxSizer6->Add(StaticText1,0,wxALL|wxALIGN_CENTER,0);
-	BoxSizer6->Add(Slider1,0,wxALL|wxALIGN_CENTER|wxEXPAND,0);
-	BoxSizer6->Add(StaticText2,0,wxTOP|wxALIGN_CENTER,10);
-	BoxSizer6->Add(Slider2,0,wxALL|wxALIGN_CENTER|wxEXPAND,0);
+	bDumpFloors = new wxButton(this,ID_bDumpFloors,_("Dump Floor List"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bDumpFloors"));
+	if (false) bDumpFloors->SetDefault();
+	bDumpQueues = new wxButton(this,ID_bDumpQueues,_("Dump Queues"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bDumpQueues"));
+	if (false) bDumpQueues->SetDefault();
+	BoxSizer7->Add(bDumpFloors,1,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,15);
+	BoxSizer7->Add(bDumpQueues,1,wxLEFT|wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL,15);
+	BoxSizer6->Add(tElevator,0,wxALL|wxALIGN_CENTER,0);
+	BoxSizer6->Add(sNumber,0,wxALL|wxALIGN_CENTER|wxEXPAND,0);
+	BoxSizer6->Add(tFloor,0,wxTOP|wxALIGN_CENTER,10);
+	BoxSizer6->Add(sFloor,0,wxALL|wxALIGN_CENTER|wxEXPAND,0);
 	BoxSizer6->Add(BoxSizer7,0,wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_BOTTOM|wxEXPAND,15);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL,this,_("Control"));
 	BoxSizer8 = new wxBoxSizer(wxVERTICAL);
-	Button1 = new wxButton(this,ID_BUTTON1,_("Call"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON1"));
-	if (false) Button1->SetDefault();
-	Button2 = new wxButton(this,ID_BUTTON2,_("Go"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON2"));
-	if (false) Button2->SetDefault();
-	Button3 = new wxButton(this,ID_BUTTON3,_("Open"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON3"));
-	if (false) Button3->SetDefault();
-	Button4 = new wxButton(this,ID_BUTTON4,_("Open Manual"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON4"));
-	if (false) Button4->SetDefault();
-	Button5 = new wxButton(this,ID_BUTTON5,_("Emerg. Stop"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON5"));
-	if (false) Button5->SetDefault();
-	BoxSizer8->Add(Button1,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
-	BoxSizer8->Add(Button2,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
+	bCall = new wxButton(this,ID_bCall,_("Call"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bCall"));
+	if (false) bCall->SetDefault();
+	bCall->SetFocus();
+	bGo = new wxButton(this,ID_bGo,_("Go"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bGo"));
+	if (false) bGo->SetDefault();
+	bOpen = new wxButton(this,ID_bOpen,_("Open"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bOpen"));
+	if (false) bOpen->SetDefault();
+	bOpenManual = new wxButton(this,ID_bOpenManual,_("Open Manual"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bOpenManual"));
+	if (false) bOpenManual->SetDefault();
+	bStop = new wxButton(this,ID_bStop,_("Emerg. Stop"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bStop"));
+	if (false) bStop->SetDefault();
+	BoxSizer8->Add(bCall,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
+	BoxSizer8->Add(bGo,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
 	BoxSizer8->Add(-1,10,0);
-	BoxSizer8->Add(Button3,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
-	BoxSizer8->Add(Button4,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
+	BoxSizer8->Add(bOpen,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
+	BoxSizer8->Add(bOpenManual,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
 	BoxSizer8->Add(-1,10,0);
-	BoxSizer8->Add(Button5,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
+	BoxSizer8->Add(bStop,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
 	BoxSizer9 = new wxBoxSizer(wxVERTICAL);
-	Button6 = new wxButton(this,ID_BUTTON6,_("Enqueue Up"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON6"));
-	if (false) Button6->SetDefault();
-	Button7 = new wxButton(this,ID_BUTTON7,_("Enqueue Down"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON7"));
-	if (false) Button7->SetDefault();
-	Button8 = new wxButton(this,ID_BUTTON8,_("Close"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON8"));
-	if (false) Button8->SetDefault();
-	Button9 = new wxButton(this,ID_BUTTON9,_("Close Manual"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON9"));
-	if (false) Button9->SetDefault();
-	Button10 = new wxButton(this,ID_BUTTON10,_("Alarm"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_BUTTON10"));
-	if (false) Button10->SetDefault();
-	BoxSizer9->Add(Button6,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
-	BoxSizer9->Add(Button7,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
+	bEnqueueUp = new wxButton(this,ID_bEnqueueUp,_("Enqueue Up"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bEnqueueUp"));
+	if (false) bEnqueueUp->SetDefault();
+	bEnqueueDown = new wxButton(this,ID_bEnqueueDown,_("Enqueue Down"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bEnqueueDown"));
+	if (false) bEnqueueDown->SetDefault();
+	bClose = new wxButton(this,ID_bClose,_("Close"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bClose"));
+	if (false) bClose->SetDefault();
+	bCloseManual = new wxButton(this,ID_bCloseManual,_("Close Manual"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bCloseManual"));
+	if (false) bCloseManual->SetDefault();
+	bAlarm = new wxButton(this,ID_bAlarm,_("Alarm"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_("ID_bAlarm"));
+	if (false) bAlarm->SetDefault();
+	BoxSizer9->Add(bEnqueueUp,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
+	BoxSizer9->Add(bEnqueueDown,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
 	BoxSizer9->Add(-1,10,0);
-	BoxSizer9->Add(Button8,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
-	BoxSizer9->Add(Button9,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
+	BoxSizer9->Add(bClose,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
+	BoxSizer9->Add(bCloseManual,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
 	BoxSizer9->Add(-1,10,0);
-	BoxSizer9->Add(Button10,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
+	BoxSizer9->Add(bAlarm,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND,0);
 	StaticBoxSizer1->Add(BoxSizer8,1,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	StaticBoxSizer1->Add(BoxSizer9,1,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	BoxSizer2->Add(BoxSizer6,2,wxTOP|wxALIGN_LEFT|wxALIGN_TOP,10);
+	BoxSizer2->Add(BoxSizer6,2,wxLEFT|wxRIGHT|wxTOP|wxALIGN_LEFT|wxALIGN_TOP,10);
 	BoxSizer2->Add(StaticBoxSizer1,1,wxRIGHT|wxTOP|wxALIGN_RIGHT|wxALIGN_TOP,5);
 	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL,this,_("General"));
 	FlexGridSizer1 = new wxFlexGridSizer(0,3,0,0);
 	StaticText3 = new wxStaticText(this,ID_STATICTEXT3,_("Number:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT3"));
-	TextCtrl2 = new wxTextCtrl(this,ID_TEXTCTRL2,_("Text"),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_TEXTCTRL2"));
-	if ( 0 ) TextCtrl2->SetMaxLength(0);
+	txtNumber = new wxTextCtrl(this,ID_txtNumber,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtNumber"));
+	if ( 0 ) txtNumber->SetMaxLength(0);
 	StaticText5 = new wxStaticText(this,ID_STATICTEXT5,_("Name:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT5"));
-	TextCtrl1 = new wxTextCtrl(this,ID_TEXTCTRL1,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL1"));
-	if ( 0 ) TextCtrl1->SetMaxLength(0);
-	Button13 = new wxButton(this,ID_BUTTON13,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_BUTTON13"));
-	if (false) Button13->SetDefault();
-	StaticText4 = new wxStaticText(this,ID_STATICTEXT4,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT4"));
-	TextCtrl3 = new wxTextCtrl(this,ID_TEXTCTRL3,_("Text"),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_TEXTCTRL3"));
-	if ( 0 ) TextCtrl3->SetMaxLength(0);
-	StaticText6 = new wxStaticText(this,ID_STATICTEXT6,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT6"));
-	TextCtrl4 = new wxTextCtrl(this,ID_TEXTCTRL4,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL4"));
-	if ( 0 ) TextCtrl4->SetMaxLength(0);
-	StaticText7 = new wxStaticText(this,ID_STATICTEXT7,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT7"));
-	TextCtrl5 = new wxTextCtrl(this,ID_TEXTCTRL5,_("Text"),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_TEXTCTRL5"));
-	if ( 0 ) TextCtrl5->SetMaxLength(0);
-	StaticText8 = new wxStaticText(this,ID_STATICTEXT8,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT8"));
-	TextCtrl6 = new wxTextCtrl(this,ID_TEXTCTRL6,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL6"));
-	if ( 0 ) TextCtrl6->SetMaxLength(0);
-	StaticText9 = new wxStaticText(this,ID_STATICTEXT9,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT9"));
-	TextCtrl7 = new wxTextCtrl(this,ID_TEXTCTRL7,_("Text"),wxPoint(-1,75),wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL7"));
-	if ( 0 ) TextCtrl7->SetMaxLength(0);
-	StaticText10 = new wxStaticText(this,ID_STATICTEXT10,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT10"));
-	TextCtrl8 = new wxTextCtrl(this,ID_TEXTCTRL8,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL8"));
-	if ( 0 ) TextCtrl8->SetMaxLength(0);
-	StaticText11 = new wxStaticText(this,ID_STATICTEXT11,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT11"));
-	TextCtrl9 = new wxTextCtrl(this,ID_TEXTCTRL9,_("Text"),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_TEXTCTRL9"));
-	if ( 0 ) TextCtrl9->SetMaxLength(0);
-	StaticText12 = new wxStaticText(this,ID_STATICTEXT12,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT12"));
-	TextCtrl10 = new wxTextCtrl(this,ID_TEXTCTRL10,_("Text"),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_TEXTCTRL10"));
-	if ( 0 ) TextCtrl10->SetMaxLength(0);
-	StaticText13 = new wxStaticText(this,ID_STATICTEXT13,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT13"));
-	TextCtrl11 = new wxTextCtrl(this,ID_TEXTCTRL11,_("Text"),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_TEXTCTRL11"));
-	if ( 0 ) TextCtrl11->SetMaxLength(0);
+	txtName = new wxTextCtrl(this,ID_txtName,_T(""),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_txtName"));
+	if ( 0 ) txtName->SetMaxLength(0);
+	bSetName = new wxButton(this,ID_bSetName,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_bSetName"));
+	if (false) bSetName->SetDefault();
+	StaticText4 = new wxStaticText(this,ID_STATICTEXT4,_("Enabled:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT4"));
+	txtEnabled = new wxTextCtrl(this,ID_txtEnabled,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtEnabled"));
+	if ( 0 ) txtEnabled->SetMaxLength(0);
+	StaticText6 = new wxStaticText(this,ID_STATICTEXT6,_("Shaft:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT6"));
+	txtShaft = new wxTextCtrl(this,ID_txtShaft,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtShaft"));
+	if ( 0 ) txtShaft->SetMaxLength(0);
+	StaticText7 = new wxStaticText(this,ID_STATICTEXT7,_("Height:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT7"));
+	txtHeight = new wxTextCtrl(this,ID_txtHeight,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtHeight"));
+	if ( 0 ) txtHeight->SetMaxLength(0);
+	StaticText8 = new wxStaticText(this,ID_STATICTEXT8,_("DWidth:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT8"));
+	txtDoorWidth = new wxTextCtrl(this,ID_txtDoorWidth,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtDoorWidth"));
+	if ( 0 ) txtDoorWidth->SetMaxLength(0);
+	StaticText9 = new wxStaticText(this,ID_STATICTEXT9,_("DHeight:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT9"));
+	txtDoorHeight = new wxTextCtrl(this,ID_txtDoorHeight,_T(""),wxPoint(-1,75),wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtDoorHeight"));
+	if ( 0 ) txtDoorHeight->SetMaxLength(0);
+	StaticText10 = new wxStaticText(this,ID_STATICTEXT10,_("DDirection:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT10"));
+	txtDoorDirection = new wxTextCtrl(this,ID_txtDoorDirection,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtDoorDirection"));
+	if ( 0 ) txtDoorDirection->SetMaxLength(0);
+	StaticText11 = new wxStaticText(this,ID_STATICTEXT11,_("DoorsOpen:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT11"));
+	txtDoorsOpen = new wxTextCtrl(this,ID_txtDoorsOpen,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtDoorsOpen"));
+	if ( 0 ) txtDoorsOpen->SetMaxLength(0);
+	StaticText12 = new wxStaticText(this,ID_STATICTEXT12,_("Brakes:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT12"));
+	txtBrakes = new wxTextCtrl(this,ID_txtBrakes,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtBrakes"));
+	if ( 0 ) txtBrakes->SetMaxLength(0);
+	StaticText13 = new wxStaticText(this,ID_STATICTEXT13,_("EmergStop:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT13"));
+	txtStop = new wxTextCtrl(this,ID_txtStop,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtStop"));
+	if ( 0 ) txtStop->SetMaxLength(0);
 	FlexGridSizer1->Add(StaticText3,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl2,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(txtNumber,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer1->Add(-1,-1,0);
 	FlexGridSizer1->Add(StaticText5,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl1,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
-	FlexGridSizer1->Add(Button13,0,wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL,0);
+	FlexGridSizer1->Add(txtName,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(bSetName,0,wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL,0);
 	FlexGridSizer1->Add(StaticText4,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl3,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(txtEnabled,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer1->Add(-1,-1,0);
 	FlexGridSizer1->Add(StaticText6,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl4,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(txtShaft,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer1->Add(-1,-1,0);
 	FlexGridSizer1->Add(StaticText7,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl5,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(txtHeight,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer1->Add(-1,-1,0);
 	FlexGridSizer1->Add(StaticText8,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl6,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(txtDoorWidth,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer1->Add(-1,-1,0);
 	FlexGridSizer1->Add(StaticText9,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl7,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(txtDoorHeight,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer1->Add(-1,-1,0);
 	FlexGridSizer1->Add(StaticText10,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl8,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(txtDoorDirection,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer1->Add(-1,-1,0);
 	FlexGridSizer1->Add(StaticText11,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl9,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(txtDoorsOpen,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer1->Add(-1,-1,0);
 	FlexGridSizer1->Add(StaticText12,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl10,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(txtBrakes,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer1->Add(-1,-1,0);
 	FlexGridSizer1->Add(StaticText13,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer1->Add(TextCtrl11,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer1->Add(txtStop,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer1->Add(-1,-1,0);
 	StaticBoxSizer2->Add(FlexGridSizer1,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
 	StaticBoxSizer5 = new wxStaticBoxSizer(wxHORIZONTAL,this,_("Position"));
 	FlexGridSizer2 = new wxFlexGridSizer(0,2,0,0);
-	StaticText14 = new wxStaticText(this,ID_STATICTEXT14,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT14"));
-	TextCtrl12 = new wxTextCtrl(this,ID_TEXTCTRL12,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL12"));
-	if ( 0 ) TextCtrl12->SetMaxLength(0);
-	StaticText15 = new wxStaticText(this,ID_STATICTEXT15,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT15"));
-	TextCtrl13 = new wxTextCtrl(this,ID_TEXTCTRL13,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL13"));
-	if ( 0 ) TextCtrl13->SetMaxLength(0);
-	StaticText16 = new wxStaticText(this,ID_STATICTEXT16,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT16"));
-	TextCtrl14 = new wxTextCtrl(this,ID_TEXTCTRL14,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL14"));
-	if ( 0 ) TextCtrl14->SetMaxLength(0);
-	StaticText17 = new wxStaticText(this,ID_STATICTEXT17,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT17"));
-	TextCtrl15 = new wxTextCtrl(this,ID_TEXTCTRL15,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL15"));
-	if ( 0 ) TextCtrl15->SetMaxLength(0);
-	StaticText18 = new wxStaticText(this,ID_STATICTEXT18,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT18"));
-	TextCtrl16 = new wxTextCtrl(this,ID_TEXTCTRL16,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL16"));
-	if ( 0 ) TextCtrl16->SetMaxLength(0);
-	StaticText19 = new wxStaticText(this,ID_STATICTEXT19,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT19"));
-	TextCtrl17 = new wxTextCtrl(this,ID_TEXTCTRL17,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL17"));
-	if ( 0 ) TextCtrl17->SetMaxLength(0);
-	StaticText20 = new wxStaticText(this,ID_STATICTEXT20,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT20"));
-	TextCtrl18 = new wxTextCtrl(this,ID_TEXTCTRL18,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL18"));
-	if ( 0 ) TextCtrl18->SetMaxLength(0);
+	StaticText14 = new wxStaticText(this,ID_STATICTEXT14,_("Floor:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT14"));
+	txtFloor = new wxTextCtrl(this,ID_txtFloor,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtFloor"));
+	if ( 0 ) txtFloor->SetMaxLength(0);
+	StaticText15 = new wxStaticText(this,ID_STATICTEXT15,_("Pos:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT15"));
+	txtPosition = new wxTextCtrl(this,ID_txtPosition,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtPosition"));
+	if ( 0 ) txtPosition->SetMaxLength(0);
+	StaticText16 = new wxStaticText(this,ID_STATICTEXT16,_("Origin:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT16"));
+	txtOrigin = new wxTextCtrl(this,ID_txtOrigin,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtOrigin"));
+	if ( 0 ) txtOrigin->SetMaxLength(0);
+	StaticText17 = new wxStaticText(this,ID_STATICTEXT17,_("OriginFlr:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT17"));
+	txtOriginFloor = new wxTextCtrl(this,ID_txtOriginFloor,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtOriginFloor"));
+	if ( 0 ) txtOriginFloor->SetMaxLength(0);
+	StaticText18 = new wxStaticText(this,ID_STATICTEXT18,_("EStart:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT18"));
+	txtElevStart = new wxTextCtrl(this,ID_txtElevStart,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtElevStart"));
+	if ( 0 ) txtElevStart->SetMaxLength(0);
+	StaticText19 = new wxStaticText(this,ID_STATICTEXT19,_("DOrigin:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT19"));
+	txtDoorOrigin = new wxTextCtrl(this,ID_txtDoorOrigin,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtDoorOrigin"));
+	if ( 0 ) txtDoorOrigin->SetMaxLength(0);
+	StaticText20 = new wxStaticText(this,ID_STATICTEXT20,_("SDOrigin:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT20"));
+	txtShaftDoorOrigin = new wxTextCtrl(this,ID_txtShaftDoorOrigin,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtShaftDoorOrigin"));
+	if ( 0 ) txtShaftDoorOrigin->SetMaxLength(0);
 	FlexGridSizer2->Add(StaticText14,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer2->Add(TextCtrl12,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer2->Add(txtFloor,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer2->Add(StaticText15,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer2->Add(TextCtrl13,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer2->Add(txtPosition,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer2->Add(StaticText16,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer2->Add(TextCtrl14,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer2->Add(txtOrigin,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer2->Add(StaticText17,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer2->Add(TextCtrl15,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer2->Add(txtOriginFloor,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer2->Add(StaticText18,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer2->Add(TextCtrl16,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer2->Add(txtElevStart,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer2->Add(StaticText19,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer2->Add(TextCtrl17,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer2->Add(txtDoorOrigin,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer2->Add(StaticText20,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer2->Add(TextCtrl18,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer2->Add(txtShaftDoorOrigin,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	StaticBoxSizer5->Add(FlexGridSizer2,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL,this,_("Queues"));
 	FlexGridSizer3 = new wxFlexGridSizer(0,2,0,0);
-	StaticText38 = new wxStaticText(this,ID_STATICTEXT38,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT38"));
-	TextCtrl36 = new wxTextCtrl(this,ID_TEXTCTRL36,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL36"));
-	if ( 0 ) TextCtrl36->SetMaxLength(0);
-	StaticText39 = new wxStaticText(this,ID_STATICTEXT39,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT39"));
-	TextCtrl37 = new wxTextCtrl(this,ID_TEXTCTRL37,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL37"));
-	if ( 0 ) TextCtrl37->SetMaxLength(0);
-	StaticText40 = new wxStaticText(this,ID_STATICTEXT40,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT40"));
-	TextCtrl38 = new wxTextCtrl(this,ID_TEXTCTRL38,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL38"));
-	if ( 0 ) TextCtrl38->SetMaxLength(0);
-	StaticText41 = new wxStaticText(this,ID_STATICTEXT41,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT41"));
-	TextCtrl39 = new wxTextCtrl(this,ID_TEXTCTRL39,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL39"));
-	if ( 0 ) TextCtrl39->SetMaxLength(0);
+	StaticText38 = new wxStaticText(this,ID_STATICTEXT38,_("Direction:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT38"));
+	txtQueueDirection = new wxTextCtrl(this,ID_txtQueueDirection,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtQueueDirection"));
+	if ( 0 ) txtQueueDirection->SetMaxLength(0);
+	StaticText39 = new wxStaticText(this,ID_STATICTEXT39,_("Pause:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT39"));
+	txtQueuePause = new wxTextCtrl(this,ID_txtQueuePause,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtQueuePause"));
+	if ( 0 ) txtQueuePause->SetMaxLength(0);
+	StaticText40 = new wxStaticText(this,ID_STATICTEXT40,_("LastUp:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT40"));
+	txtQueueLastUp = new wxTextCtrl(this,ID_txtQueueLastUp,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtQueueLastUp"));
+	if ( 0 ) txtQueueLastUp->SetMaxLength(0);
+	StaticText41 = new wxStaticText(this,ID_STATICTEXT41,_("LastDwn:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT41"));
+	txtQueueLastDown = new wxTextCtrl(this,ID_txtQueueLastDown,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtQueueLastDown"));
+	if ( 0 ) txtQueueLastDown->SetMaxLength(0);
 	FlexGridSizer3->Add(StaticText38,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer3->Add(TextCtrl36,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer3->Add(txtQueueDirection,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer3->Add(StaticText39,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer3->Add(TextCtrl37,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer3->Add(txtQueuePause,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer3->Add(StaticText40,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer3->Add(TextCtrl38,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer3->Add(txtQueueLastUp,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer3->Add(StaticText41,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer3->Add(TextCtrl39,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer3->Add(txtQueueLastDown,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	StaticBoxSizer3->Add(FlexGridSizer3,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	BoxSizer10->Add(StaticBoxSizer5,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	BoxSizer10->Add(StaticBoxSizer3,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	StaticBoxSizer7 = new wxStaticBoxSizer(wxHORIZONTAL,this,_("Motion"));
 	FlexGridSizer6 = new wxFlexGridSizer(0,3,0,0);
-	StaticText21 = new wxStaticText(this,ID_STATICTEXT21,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT21"));
-	TextCtrl19 = new wxTextCtrl(this,ID_TEXTCTRL19,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL19"));
-	if ( 0 ) TextCtrl19->SetMaxLength(0);
-	Button14 = new wxButton(this,ID_BUTTON14,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_BUTTON14"));
-	if (false) Button14->SetDefault();
-	StaticText22 = new wxStaticText(this,ID_STATICTEXT22,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT22"));
-	TextCtrl20 = new wxTextCtrl(this,ID_TEXTCTRL20,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL20"));
-	if ( 0 ) TextCtrl20->SetMaxLength(0);
-	Button15 = new wxButton(this,ID_BUTTON15,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_BUTTON15"));
-	if (false) Button15->SetDefault();
-	StaticText23 = new wxStaticText(this,ID_STATICTEXT23,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT23"));
-	TextCtrl21 = new wxTextCtrl(this,ID_TEXTCTRL21,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL21"));
-	if ( 0 ) TextCtrl21->SetMaxLength(0);
-	Button16 = new wxButton(this,ID_BUTTON16,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_BUTTON16"));
-	if (false) Button16->SetDefault();
-	StaticText24 = new wxStaticText(this,ID_STATICTEXT24,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT24"));
-	TextCtrl22 = new wxTextCtrl(this,ID_TEXTCTRL22,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL22"));
-	if ( 0 ) TextCtrl22->SetMaxLength(0);
-	Button17 = new wxButton(this,ID_BUTTON17,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_BUTTON17"));
-	if (false) Button17->SetDefault();
-	StaticText25 = new wxStaticText(this,ID_STATICTEXT25,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT25"));
-	TextCtrl23 = new wxTextCtrl(this,ID_TEXTCTRL23,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL23"));
-	if ( 0 ) TextCtrl23->SetMaxLength(0);
-	Button18 = new wxButton(this,ID_BUTTON18,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_BUTTON18"));
-	if (false) Button18->SetDefault();
-	StaticText26 = new wxStaticText(this,ID_STATICTEXT26,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT26"));
-	TextCtrl24 = new wxTextCtrl(this,ID_TEXTCTRL24,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL24"));
-	if ( 0 ) TextCtrl24->SetMaxLength(0);
-	Button19 = new wxButton(this,ID_BUTTON19,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_BUTTON19"));
-	if (false) Button19->SetDefault();
-	StaticText27 = new wxStaticText(this,ID_STATICTEXT27,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT27"));
-	TextCtrl25 = new wxTextCtrl(this,ID_TEXTCTRL25,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL25"));
-	if ( 0 ) TextCtrl25->SetMaxLength(0);
-	StaticText28 = new wxStaticText(this,ID_STATICTEXT28,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT28"));
-	TextCtrl26 = new wxTextCtrl(this,ID_TEXTCTRL26,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL26"));
-	if ( 0 ) TextCtrl26->SetMaxLength(0);
-	StaticText29 = new wxStaticText(this,ID_STATICTEXT29,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT29"));
-	TextCtrl27 = new wxTextCtrl(this,ID_TEXTCTRL27,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL27"));
-	if ( 0 ) TextCtrl27->SetMaxLength(0);
+	StaticText21 = new wxStaticText(this,ID_STATICTEXT21,_("Speed:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT21"));
+	txtSpeed = new wxTextCtrl(this,ID_txtSpeed,_T(""),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_txtSpeed"));
+	if ( 0 ) txtSpeed->SetMaxLength(0);
+	bSetSpeed = new wxButton(this,ID_bSetSpeed,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_bSetSpeed"));
+	if (false) bSetSpeed->SetDefault();
+	StaticText22 = new wxStaticText(this,ID_STATICTEXT22,_("Accel:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT22"));
+	txtAcceleration = new wxTextCtrl(this,ID_txtAcceleration,_T(""),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_txtAcceleration"));
+	if ( 0 ) txtAcceleration->SetMaxLength(0);
+	bSetAcceleration = new wxButton(this,ID_bSetAcceleration,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_bSetAcceleration"));
+	if (false) bSetAcceleration->SetDefault();
+	StaticText23 = new wxStaticText(this,ID_STATICTEXT23,_("Decel:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT23"));
+	txtDeceleration = new wxTextCtrl(this,ID_txtDeceleration,_T(""),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_txtDeceleration"));
+	if ( 0 ) txtDeceleration->SetMaxLength(0);
+	bSetDeceleration = new wxButton(this,ID_bSetDeceleration,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_bSetDeceleration"));
+	if (false) bSetDeceleration->SetDefault();
+	StaticText24 = new wxStaticText(this,ID_STATICTEXT24,_("OpenSpd:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT24"));
+	txtOpenSpeed = new wxTextCtrl(this,ID_txtOpenSpeed,_T(""),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_txtOpenSpeed"));
+	if ( 0 ) txtOpenSpeed->SetMaxLength(0);
+	bSetOpenSpeed = new wxButton(this,ID_bSetOpenSpeed,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_bSetOpenSpeed"));
+	if (false) bSetOpenSpeed->SetDefault();
+	StaticText25 = new wxStaticText(this,ID_STATICTEXT25,_("DAccel:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT25"));
+	txtDoorAcceleration = new wxTextCtrl(this,ID_txtDoorAcceleration,_T(""),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_txtDoorAcceleration"));
+	if ( 0 ) txtDoorAcceleration->SetMaxLength(0);
+	bSetDoorAccel = new wxButton(this,ID_bSetDoorAccel,_("Set"),wxDefaultPosition,wxDefaultSize,wxBU_EXACTFIT,wxDefaultValidator,_("ID_bSetDoorAccel"));
+	if (false) bSetDoorAccel->SetDefault();
+	StaticText26 = new wxStaticText(this,ID_STATICTEXT26,_("Rate:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT26"));
+	txtRate = new wxTextCtrl(this,ID_txtRate,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtRate"));
+	if ( 0 ) txtRate->SetMaxLength(0);
+	StaticText27 = new wxStaticText(this,ID_STATICTEXT27,_("Dir:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT27"));
+	txtDirection = new wxTextCtrl(this,ID_txtDirection,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtDirection"));
+	if ( 0 ) txtDirection->SetMaxLength(0);
+	StaticText28 = new wxStaticText(this,ID_STATICTEXT28,_("DSpeed:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT28"));
+	txtDoorSpeed = new wxTextCtrl(this,ID_txtDoorSpeed,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtDoorSpeed"));
+	if ( 0 ) txtDoorSpeed->SetMaxLength(0);
 	FlexGridSizer6->Add(StaticText21,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer6->Add(TextCtrl19,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
-	FlexGridSizer6->Add(Button14,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
+	FlexGridSizer6->Add(txtSpeed,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer6->Add(bSetSpeed,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	FlexGridSizer6->Add(StaticText22,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer6->Add(TextCtrl20,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
-	FlexGridSizer6->Add(Button15,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
+	FlexGridSizer6->Add(txtAcceleration,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer6->Add(bSetAcceleration,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	FlexGridSizer6->Add(StaticText23,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer6->Add(TextCtrl21,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
-	FlexGridSizer6->Add(Button16,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
+	FlexGridSizer6->Add(txtDeceleration,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer6->Add(bSetDeceleration,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	FlexGridSizer6->Add(StaticText24,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer6->Add(TextCtrl22,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
-	FlexGridSizer6->Add(Button17,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
+	FlexGridSizer6->Add(txtOpenSpeed,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer6->Add(bSetOpenSpeed,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	FlexGridSizer6->Add(StaticText25,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer6->Add(TextCtrl23,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
-	FlexGridSizer6->Add(Button18,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
+	FlexGridSizer6->Add(txtDoorAcceleration,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer6->Add(bSetDoorAccel,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
 	FlexGridSizer6->Add(StaticText26,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer6->Add(TextCtrl24,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
-	FlexGridSizer6->Add(Button19,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
+	FlexGridSizer6->Add(txtRate,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer6->Add(-1,-1,0);
 	FlexGridSizer6->Add(StaticText27,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer6->Add(TextCtrl25,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer6->Add(txtDirection,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer6->Add(-1,-1,0);
 	FlexGridSizer6->Add(StaticText28,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer6->Add(TextCtrl26,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
-	FlexGridSizer6->Add(-1,-1,0);
-	FlexGridSizer6->Add(StaticText29,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer6->Add(TextCtrl27,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer6->Add(txtDoorSpeed,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer6->Add(-1,-1,0);
 	StaticBoxSizer7->Add(FlexGridSizer6,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	StaticBoxSizer8 = new wxStaticBoxSizer(wxHORIZONTAL,this,_("Label"));
+	StaticBoxSizer8 = new wxStaticBoxSizer(wxHORIZONTAL,this,_("Destination"));
 	FlexGridSizer7 = new wxFlexGridSizer(0,2,0,0);
-	StaticText30 = new wxStaticText(this,ID_STATICTEXT30,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT30"));
-	TextCtrl28 = new wxTextCtrl(this,ID_TEXTCTRL28,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL28"));
-	if ( 0 ) TextCtrl28->SetMaxLength(0);
-	StaticText31 = new wxStaticText(this,ID_STATICTEXT31,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT31"));
-	TextCtrl29 = new wxTextCtrl(this,ID_TEXTCTRL29,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL29"));
-	if ( 0 ) TextCtrl29->SetMaxLength(0);
-	StaticText32 = new wxStaticText(this,ID_STATICTEXT32,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT32"));
-	TextCtrl30 = new wxTextCtrl(this,ID_TEXTCTRL30,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL30"));
-	if ( 0 ) TextCtrl30->SetMaxLength(0);
-	StaticText33 = new wxStaticText(this,ID_STATICTEXT33,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT33"));
-	TextCtrl31 = new wxTextCtrl(this,ID_TEXTCTRL31,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL31"));
-	if ( 0 ) TextCtrl31->SetMaxLength(0);
-	StaticText34 = new wxStaticText(this,ID_STATICTEXT34,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT34"));
-	TextCtrl32 = new wxTextCtrl(this,ID_TEXTCTRL32,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL32"));
-	if ( 0 ) TextCtrl32->SetMaxLength(0);
-	StaticText35 = new wxStaticText(this,ID_STATICTEXT35,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT35"));
-	TextCtrl33 = new wxTextCtrl(this,ID_TEXTCTRL33,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL33"));
-	if ( 0 ) TextCtrl33->SetMaxLength(0);
-	StaticText36 = new wxStaticText(this,ID_STATICTEXT36,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT36"));
-	TextCtrl34 = new wxTextCtrl(this,ID_TEXTCTRL34,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL34"));
-	if ( 0 ) TextCtrl34->SetMaxLength(0);
-	StaticText37 = new wxStaticText(this,ID_STATICTEXT37,_("Label"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT37"));
-	TextCtrl35 = new wxTextCtrl(this,ID_TEXTCTRL35,_("Text"),wxDefaultPosition,wxSize(75,-1),0,wxDefaultValidator,_("ID_TEXTCTRL35"));
-	if ( 0 ) TextCtrl35->SetMaxLength(0);
+	StaticText30 = new wxStaticText(this,ID_STATICTEXT30,_("Floor:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT30"));
+	txtDestFloor = new wxTextCtrl(this,ID_txtDestFloor,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtDestFloor"));
+	if ( 0 ) txtDestFloor->SetMaxLength(0);
+	StaticText31 = new wxStaticText(this,ID_STATICTEXT31,_("Move:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT31"));
+	txtMoveElevator = new wxTextCtrl(this,ID_txtMoveElevator,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtMoveElevator"));
+	if ( 0 ) txtMoveElevator->SetMaxLength(0);
+	StaticText32 = new wxStaticText(this,ID_STATICTEXT32,_("MoveFlr:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT32"));
+	txtMoveElevatorFloor = new wxTextCtrl(this,ID_txtMoveElevatorFloor,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtMoveElevatorFloor"));
+	if ( 0 ) txtMoveElevatorFloor->SetMaxLength(0);
+	StaticText33 = new wxStaticText(this,ID_STATICTEXT33,_("Distance:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT33"));
+	txtDistance = new wxTextCtrl(this,ID_txtDistance,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtDistance"));
+	if ( 0 ) txtDistance->SetMaxLength(0);
+	StaticText34 = new wxStaticText(this,ID_STATICTEXT34,_("Dest:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT34"));
+	txtDestination = new wxTextCtrl(this,ID_txtDestination,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtDestination"));
+	if ( 0 ) txtDestination->SetMaxLength(0);
+	StaticText35 = new wxStaticText(this,ID_STATICTEXT35,_("StopDist:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT35"));
+	txtStopDistance = new wxTextCtrl(this,ID_txtStopDistance,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtStopDistance"));
+	if ( 0 ) txtStopDistance->SetMaxLength(0);
+	StaticText36 = new wxStaticText(this,ID_STATICTEXT36,_("TmpDecel:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT36"));
+	txtTempDecel = new wxTextCtrl(this,ID_txtTempDecel,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtTempDecel"));
+	if ( 0 ) txtTempDecel->SetMaxLength(0);
+	StaticText37 = new wxStaticText(this,ID_STATICTEXT37,_("Error:"),wxDefaultPosition,wxDefaultSize,0,_("ID_STATICTEXT37"));
+	txtErrorOffset = new wxTextCtrl(this,ID_txtErrorOffset,_T(""),wxDefaultPosition,wxSize(75,-1),wxTE_READONLY,wxDefaultValidator,_("ID_txtErrorOffset"));
+	if ( 0 ) txtErrorOffset->SetMaxLength(0);
 	FlexGridSizer7->Add(StaticText30,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer7->Add(TextCtrl28,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer7->Add(txtDestFloor,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer7->Add(StaticText31,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer7->Add(TextCtrl29,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer7->Add(txtMoveElevator,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer7->Add(StaticText32,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer7->Add(TextCtrl30,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer7->Add(txtMoveElevatorFloor,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer7->Add(StaticText33,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer7->Add(TextCtrl31,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer7->Add(txtDistance,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer7->Add(StaticText34,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer7->Add(TextCtrl32,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer7->Add(txtDestination,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer7->Add(StaticText35,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer7->Add(TextCtrl33,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer7->Add(txtStopDistance,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer7->Add(StaticText36,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer7->Add(TextCtrl34,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer7->Add(txtTempDecel,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	FlexGridSizer7->Add(StaticText37,0,wxALL|wxALIGN_LEFT|wxALIGN_TOP,0);
-	FlexGridSizer7->Add(TextCtrl35,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	FlexGridSizer7->Add(txtErrorOffset,0,wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
 	StaticBoxSizer8->Add(FlexGridSizer7,0,wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_LEFT|wxALIGN_TOP,5);
 	BoxSizer3->Add(StaticBoxSizer2,0,wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_TOP,5);
 	BoxSizer3->Add(BoxSizer10,0,wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_LEFT|wxALIGN_TOP,5);
@@ -364,6 +374,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	BoxSizer1->SetSizeHints(this);
 	Center();
 	//*)
+	OnInit();
 }
 
 editelevator::~editelevator()
@@ -371,7 +382,107 @@ editelevator::~editelevator()
 }
 
 
-void editelevator::OnInit(wxInitDialogEvent& event)
+void editelevator::On_bCall_Click(wxCommandEvent& event)
 {
+	//calls elevator to the current camera floor
+	if (sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->GetFloor() > sbs->camera->CurrentFloor)
+		sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->AddRoute(sbs->camera->CurrentFloor, -1);
+	if (sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->GetFloor() < sbs->camera->CurrentFloor)
+		sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->AddRoute(sbs->camera->CurrentFloor, 1);
+}
 
+void editelevator::On_bEnqueueUp_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->AddRoute(sFloor->GetThumbPosition(), 1);
+}
+
+void editelevator::On_bGo_Click(wxCommandEvent& event)
+{
+    sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->GotoFloor = sFloor->GetThumbPosition();
+    sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->MoveElevator = true;
+}
+
+void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->AddRoute(sFloor->GetThumbPosition(), -1);
+}
+
+void editelevator::On_bOpen_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->OpenDoors();
+}
+
+void editelevator::On_bClose_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->CloseDoors();
+}
+
+void editelevator::On_bOpenManual_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->OpenDoorsEmergency();
+}
+
+void editelevator::On_bCloseManual_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->CloseDoorsEmergency();
+}
+
+void editelevator::On_bStop_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->StopElevator();
+}
+
+void editelevator::On_bAlarm_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->Alarm();
+}
+
+void editelevator::On_bSetName_Click(wxCommandEvent& event)
+{
+}
+
+void editelevator::On_bSetSpeed_Click(wxCommandEvent& event)
+{
+}
+
+void editelevator::On_bSetAcceleration_Click(wxCommandEvent& event)
+{
+}
+
+void editelevator::On_bSetDeceleration_Click(wxCommandEvent& event)
+{
+}
+
+void editelevator::On_bSetOpenSpeed_Click(wxCommandEvent& event)
+{
+}
+
+void editelevator::On_bSetDoorAccel_Click(wxCommandEvent& event)
+{
+}
+
+void editelevator::On_bDumpFloors_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->DumpServicedFloors();
+}
+
+void editelevator::On_bDumpQueues_Click(wxCommandEvent& event)
+{
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->DumpQueues();
+}
+
+void editelevator::OnInit()
+{
+	if (sbs->Elevators > 0)
+	{
+		//set elevator range slider
+		//s_ElevNum->SetRange(1, sbs->Elevators);
+		sNumber->SetScrollbar(0, 1, sbs->Elevators, 1);
+
+		//set floor range slider
+		//s_ElevFloor->SetRange(-sbs->Basements, sbs->TotalFloors);
+		sFloor->SetScrollbar(0, 1, sbs->TotalFloors + 1, 1);
+	}
+	else
+		sNumber->Enable(false);
 }

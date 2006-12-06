@@ -25,6 +25,7 @@
 
 extern bool IsEven(int Number);
 extern double AutoSize(double n1, double n2, bool iswidth);
+extern const char *BoolToString(bool item);
 
 #ifndef _SBS_GLOBALS_H
 #define _SBS_GLOBALS_H

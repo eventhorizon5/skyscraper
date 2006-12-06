@@ -260,6 +260,19 @@ double AutoSize(double n1, double n2, bool iswidth, bool external, double offset
 	return 0;
 }
 
+const char *BoolToString(bool item)
+{
+	if (item == true)
+		return "true";
+	else
+		return "false";
+}
+
+//need to make an alternate _gcvt function for wx unicode
+#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+
+#endif
+
 void SBS::PrintBanner()
 {
 	csPrintf("\n Scalable Building Simulator 0.1 Alpha\n");

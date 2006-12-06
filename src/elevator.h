@@ -49,7 +49,6 @@ public:
 	csVector3 Origin; //3D elevator origin vector
 	csString BaseName; //indicator texture base name
 	bool DoorDirection; //if direction is false, doors are on the left/right side
-	double DoorSpeed; //max door speed
 	double DoorAcceleration; //door acceleration
 	double TempDeceleration; //temporary deceleration value, used in overrun correction
 	double ErrorOffset;

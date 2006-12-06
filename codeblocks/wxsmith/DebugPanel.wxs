@@ -32,27 +32,9 @@
             <size>79,13</size>
             <style>wxST_NO_AUTORESIZE</style>
         </object>
-        <object class="wxStaticText" name="st8c" variable="StaticText5" member="yes">
-            <label>Goto Floor:</label>
-            <pos>15,90</pos>
-            <size>64,13</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="st9c" variable="StaticText6" member="yes">
-            <label>Distance To Dest:</label>
-            <pos>15,110</pos>
-            <size>89,13</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="st10c" variable="StaticText7" member="yes">
-            <label>Rate:</label>
-            <pos>15,130</pos>
-            <size>34,13</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
         <object class="wxStaticText" name="st11c" variable="StaticText8" member="yes">
             <label>Selected Object:</label>
-            <pos>15,150</pos>
+            <pos>15,90</pos>
             <size>89,13</size>
             <style>wxST_NO_AUTORESIZE</style>
         </object>
@@ -80,27 +62,9 @@
             <size>109,18</size>
             <style>wxST_NO_AUTORESIZE</style>
         </object>
-        <object class="wxStaticText" name="ID_t_gotofloor" variable="t_gotofloor" member="yes">
-            <label></label>
-            <pos>105,90</pos>
-            <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="ID_t_disttodest" variable="t_disttodest" member="yes">
-            <label></label>
-            <pos>105,110</pos>
-            <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="ID_t_rate" variable="t_rate" member="yes">
-            <label></label>
-            <pos>105,130</pos>
-            <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
         <object class="wxStaticText" name="ID_t_object" variable="t_object" member="yes">
             <label></label>
-            <pos>105,150</pos>
+            <pos>105,90</pos>
             <size>109,18</size>
             <style>wxST_NO_AUTORESIZE</style>
         </object>
@@ -127,98 +91,17 @@
             <pos>350,245</pos>
             <size>85,25</size>
         </object>
-        <object class="wxStaticText" name="ID_t_number" variable="t_number" member="yes">
-            <label>Number</label>
-            <pos>130,190</pos>
-            <size>49,13</size>
-            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="ID_t_floor" variable="t_floor" member="yes">
-            <label>Floor</label>
-            <pos>130,235</pos>
-            <size>49,13</size>
-            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="st44c" variable="StaticText25" member="yes">
-            <label>On Floor</label>
-            <pos>35,290</pos>
-            <size>54,13</size>
-            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="ID_elevFloor" variable="elevFloor" member="yes">
-            <label></label>
-            <pos>35,305</pos>
-            <size>54,18</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
         <object class="wxButton" name="ID_bEditElevator" variable="bEditElevator" member="yes">
             <label>Edit Elevator</label>
-            <pos>25,340</pos>
+            <handler entry="EVT_BUTTON" function="On_bEditElevator_Click" />
+            <pos>355,275</pos>
             <size>75,25</size>
-        </object>
-        <object class="wxButton" name="ID_bCallElevator" variable="bCallElevator" member="yes">
-            <label>Call Elevator</label>
-            <handler entry="EVT_BUTTON" function="On_bCallElevator_Click" />
-            <pos>115,290</pos>
-            <size>85,20</size>
-        </object>
-        <object class="wxButton" name="ID_bGo" variable="bGo" member="yes">
-            <label>Go</label>
-            <handler entry="EVT_BUTTON" function="On_bGo_Click" />
-            <pos>115,310</pos>
-            <size>85,20</size>
-        </object>
-        <object class="wxButton" name="ID_bOpen" variable="bOpen" member="yes">
-            <label>Open</label>
-            <handler entry="EVT_BUTTON" function="On_bOpen_Click" />
-            <pos>115,335</pos>
-            <size>85,20</size>
-        </object>
-        <object class="wxButton" name="ID_bOpenManual" variable="bOpenManual" member="yes">
-            <label>Open Manual</label>
-            <handler entry="EVT_BUTTON" function="On_bOpenManual_Click" />
-            <pos>115,355</pos>
-            <size>85,20</size>
-        </object>
-        <object class="wxButton" name="ID_bEnqueueUp" variable="bEnqueueUp" member="yes">
-            <label>Enqueue Up</label>
-            <handler entry="EVT_BUTTON" function="On_bEnqueueUp_Click" />
-            <pos>210,290</pos>
-            <size>80,20</size>
-        </object>
-        <object class="wxButton" name="ID_bEnqueueDown" variable="bEnqueueDown" member="yes">
-            <label>Enqueue Down</label>
-            <handler entry="EVT_BUTTON" function="On_bEnqueueDown_Click" />
-            <pos>210,310</pos>
-            <size>80,20</size>
-        </object>
-        <object class="wxButton" name="ID_bClose" variable="bClose" member="yes">
-            <label>Close</label>
-            <handler entry="EVT_BUTTON" function="On_bClose_Click" />
-            <pos>210,335</pos>
-            <size>80,20</size>
-        </object>
-        <object class="wxButton" name="ID_bCloseManual" variable="bCloseManual" member="yes">
-            <label>Close Manual</label>
-            <handler entry="EVT_BUTTON" function="On_bCloseManual_Click" />
-            <pos>210,355</pos>
-            <size>80,20</size>
         </object>
         <object class="wxStaticText" name="st55c" variable="StaticText27" member="yes">
             <label>Measurements are in feet</label>
             <pos>230,138</pos>
             <size>94,33</size>
             <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxScrollBar" name="ID_s_ElevFloor" variable="s_ElevFloor" member="yes">
-            <pos>27,255</pos>
-            <size>265,13</size>
-            <style>wxSB_HORIZONTAL</style>
-        </object>
-        <object class="wxScrollBar" name="ID_s_ElevNum" variable="s_ElevNum" member="yes">
-            <pos>27,210</pos>
-            <size>265,13</size>
-            <style>wxSB_HORIZONTAL</style>
         </object>
         <object class="wxCheckBox" name="ID_chkFrameSync" variable="chkFrameSync" member="yes">
             <label>Framerate Sync</label>
@@ -238,11 +121,6 @@
             <label>Frame Limiter</label>
             <handler entry="EVT_CHECKBOX" function="On_chkFrameLimiter_Change" />
             <pos>302,50</pos>
-        </object>
-        <object class="wxButton" name="ID_bStop" variable="bStop" member="yes">
-            <label>Emergency Stop</label>
-            <handler entry="EVT_BUTTON" function="On_bStop_Click" />
-            <pos>306,323</pos>
         </object>
     </object>
 </resource>
