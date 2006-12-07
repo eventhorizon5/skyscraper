@@ -54,7 +54,7 @@ END_EVENT_TABLE()
 DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(DebugPanel)
-	Create(parent,id,_("Simulator Control Panel"),wxDefaultPosition,wxSize(469,315),wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX,_T(""));
+	Create(parent,id,_("Simulator Control Panel"),wxDefaultPosition,wxSize(473,327),wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX,_T(""));
 	bListAltitudes = new wxButton(this,ID_bListAltitudes,_("List Altitudes"),wxPoint(350,185),wxSize(85,25),0,wxDefaultValidator,_("ID_bListAltitudes"));
 	if (false) bListAltitudes->SetDefault();
 	StaticText1 = new wxStaticText(this,st4c,_("Camera Floor:"),wxPoint(15,10),wxSize(74,13),wxST_NO_AUTORESIZE,_("st4c"));
