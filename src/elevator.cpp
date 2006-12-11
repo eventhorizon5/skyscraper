@@ -259,6 +259,7 @@ void Elevator::ProcessCallQueue()
 {
 	//Processes the elevator's call queue, and sends elevators to called floors
 
+	//set queue search direction if queues aren't empty
 	if (QueuePositionDirection == 0)
 	{
 		if (UpQueue.GetSize() != 0)
@@ -266,17 +267,26 @@ void Elevator::ProcessCallQueue()
 		if (DownQueue.GetSize() != 0)
 			QueuePositionDirection = -1;
 	}
+
+	//pause queue search if both queues are empty
 	if (UpQueue.GetSize() == 0 && DownQueue.GetSize() == 0)
 	{
 		QueuePositionDirection = 0;
 		PauseQueueSearch = true;
 		return;
 	}
+
+	//set search direction to 0 if any related queue is empty
 	if (QueuePositionDirection == 1 && UpQueue.GetSize() == 0)
 		QueuePositionDirection = 0;
 	if (QueuePositionDirection == -1 && DownQueue.GetSize() == 0)
 		QueuePositionDirection = 0;
 
+	//if elevator is moving, keep queue paused
+	if (MoveElevator == true)
+		PauseQueueSearch = true;
+	
+	//if elevator is stopped, pause queue
 	if (QueuePositionDirection != 0 && MoveElevator == false)
 		PauseQueueSearch = false;
 	
@@ -311,7 +321,7 @@ void Elevator::ProcessCallQueue()
 				CloseDoors();
 				GotoFloor = DownQueue[i];
 				MoveElevator = true;
-				DeleteRoute(DownQueue[i], 1);
+				DeleteRoute(DownQueue[i], -1);
 				return;
 			}
 		}
@@ -762,6 +772,7 @@ void Elevator::MoveElevatorToFloor()
 	if (IsRunning == false)
 	{
 		IsRunning = true;
+		csString dir_string;
 		
 		//get elevator's current altitude
 		ElevatorStart = GetPosition().y;
@@ -794,9 +805,15 @@ void Elevator::MoveElevatorToFloor()
 
 		//Determine direction
 		if (GotoFloor < ElevatorFloor)
+		{
 			Direction = -1;
+			dir_string = "down";
+		}
 		if (GotoFloor > ElevatorFloor)
+		{
 			Direction = 1;
+			dir_string = "up";
+		}
 
 		//Determine distance to destination floor
 		DistanceToTravel = abs(abs(sbs->FloorArray[GotoFloor]->Altitude) - abs(ElevatorStart));
@@ -820,6 +837,9 @@ void Elevator::MoveElevatorToFloor()
 
 		//get starting frame rate and hold value
 		FPSModifierStatic = sbs->FPSModifier;
+
+		//notify about movement
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
 	}
 
 	if (EmergencyStop == true && Brakes == false)
