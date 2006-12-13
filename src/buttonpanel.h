@@ -45,7 +45,7 @@ public:
 	ButtonPanel(int elevator, const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double tw, double th);
 	~ButtonPanel();
 	void AddFloorButton(const char *texture, int row, int column, int floor);
-	void AddControlButton(const char *texture, int row, int column, int type);
+	void AddControlButton(const char *texture, int row, int column, const char *type);
 	void DeleteButton(int row, int column);
 	void Press(csVector3 isect);
 

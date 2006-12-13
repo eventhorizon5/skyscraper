@@ -1293,7 +1293,7 @@ recalc:
 					tempdata.Put(temp3, buffer);
 				}
 
-				ElevatorArray[Current]->Panel->AddControlButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]));
+				ElevatorArray[Current]->Panel->AddControlButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3]);
 
 				tempdata.DeleteAll();
 			}

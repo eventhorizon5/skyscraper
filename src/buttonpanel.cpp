@@ -82,29 +82,19 @@ void ButtonPanel::AddFloorButton(const char *texture, int row, int column, int f
 	AddButton("Floor " + floornum, texture, row, column);
 }
 
-void ButtonPanel::AddControlButton(const char *texture, int row, int column, int type)
+void ButtonPanel::AddControlButton(const char *texture, int row, int column, const char *type)
 {
 	//create a control button at specified row/column position
 
 	//type is one of these:
-	//1 = Open Doors
-	//2 = Close Doors
-	//3 = Call Cancel
-	//4 = Stop
-	//5 = Alarm
+	//open = Open Doors
+	//close = Close Doors
+	//cancel = Call Cancel
+	//stop = Stop
+	//alarm = Alarm
 
-	csString name;
-
-	if (type == 1)
-		name = "open";
-	if (type == 2)
-		name = "close";
-	if (type == 3)
-		name = "cancel";
-	if (type == 4)
-		name = "stop";
-	if (type == 5)
-		name = "alarm";
+	csString name = type;
+	name.Downcase();
 
 	AddButton(name.GetData(), texture, row, column);
 }
