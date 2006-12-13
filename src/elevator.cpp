@@ -134,6 +134,11 @@ Elevator::~Elevator()
 	//Destructor
 	UpQueue.DeleteAll();
 	DownQueue.DeleteAll();
+	ServicedFloors.DeleteAll();
+	ShaftDoorsOpen.DeleteAll();
+	if (Panel)
+		delete Panel;
+	Panel = 0;
 }
 
 void Elevator::CreateElevator(double x, double z, int floor)

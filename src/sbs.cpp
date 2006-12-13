@@ -109,21 +109,24 @@ SBS::~SBS()
 	//delete floors
 	for (int i = -Basements; i <= TotalFloors; i++)
 	{
-		delete FloorArray[i];
+		if (FloorArray[i])
+			delete FloorArray[i];
 		FloorArray[i] = 0;
 	}
 
 	//delete elevators
 	for (int i = 1; i <= Elevators; i++)
 	{
-		delete ElevatorArray[i];
+		if (ElevatorArray[i])
+			delete ElevatorArray[i];
 		ElevatorArray[i] = 0;
 	}
 
 	//delete shafts
 	for (int i = 1; i <= Shafts; i++)
 	{
-		delete ShaftArray[i];
+		if (ShaftArray[i])
+			delete ShaftArray[i];
 		ShaftArray[i] = 0;
 	}
 

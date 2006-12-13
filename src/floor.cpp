@@ -83,11 +83,15 @@ Floor::~Floor()
 
 	for (int i = 0; i < CallButtonArray.GetSize(); i++)
 	{
-		delete CallButtonArray[i];
+		if (CallButtonArray[i])
+			delete CallButtonArray[i];
 		CallButtonArray[i] = 0;
 	}
 	CallButtonArray.DeleteAll();
-
+	floor_polys.DeleteAll();
+	ifloor_polys.DeleteAll();
+	wall_polys.DeleteAll();
+	iwall_polys.DeleteAll();
 }
 
 void Floor::SetCameraFloor()

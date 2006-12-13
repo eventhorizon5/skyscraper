@@ -107,7 +107,7 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 
 CallButton::~CallButton()
 {
-
+	Elevators.DeleteAll();
 }
 
 void CallButton::Enabled(bool value)
