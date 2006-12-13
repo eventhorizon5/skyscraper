@@ -505,6 +505,35 @@
     should be moved slightly away from the elevator doors (to separate them both). 
     Also, this command creates doors at all the floors specified in the ServicedFloors 
     value. </p>
+  <p align="left"><strong>6. CreatePanel</strong> - creates a button panel<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">CreatePanel <em>texturename</em>, 
+    <em>rows, columns, direction, CenterX, CenterZ, width, height, voffset, tw, 
+    th<br>
+    </em></font> Example<font size="2" face="Courier New, Courier, mono"><em>: 
+    </em><font size="2" face="Courier New, Courier, mono">CreatePanel Wall1, 5, 
+    5, right, -3, -3, 0.5, 1, 4, 0, 0</font></font></p>
+  <p align="left">The CreatePanel command creates a button panel at a position 
+    relative to the elevator's center position (origin). <em>Rows</em> and <em>Columns</em> 
+    define the grid size of the panel. <em>Direction</em> is either &quot;front&quot;, 
+    &quot;back&quot;, &quot;left&quot; or &quot;right&quot;, defining which direction 
+    the panel faces.</p>
+  <p align="left"><strong>7. AddFloorButton</strong> - creates a floor button 
+    on the panel<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorButton <em>texturename</em>, 
+    <em>row, column, floor</em></font></p>
+  <p align="left">The AddFloorButton command creates a floor button on the button 
+    panel created with CreatePanel. <em>Row</em> and <em>Column</em> specify the 
+    position on the grid where the button should be (the engine also leaves one 
+    button-sized space on each side open). <em>Floor</em> specifies the floor 
+    number that this button calls.</p>
+  <p align="left"><strong>8. AddControlButton</strong> - creates a control button 
+    on the panel<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddControlButton 
+    <em>texturename</em>, <em>row, column, type</em></font> </p>
+  <p align="left">The AddControlButton command creates a command button on the 
+    panel created with CreatePanel. <em>Row</em> and <em>Column</em> are the same 
+    as the AddFloorButton command, and <em>Type</em> can be either &quot;open&quot;, 
+    &quot;close&quot;, &quot;cancel&quot;, &quot;stop&quot; or &quot;alarm&quot;.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 
