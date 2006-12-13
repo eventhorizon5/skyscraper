@@ -145,6 +145,7 @@ void Timer::Notify()
 {
 	dp->t_camerap->SetLabel(wxVariant(RoundDouble(sbs->camera->GetPosition().x, 2)).GetString() + wxT(", ") + wxVariant(RoundDouble(sbs->camera->GetPosition().y, 2)).GetString() + wxT(", ") + wxVariant(RoundDouble(sbs->camera->GetPosition().z, 2)).GetString());
 	dp->t_camerafloor->SetLabel(wxVariant((long)sbs->camera->CurrentFloor).GetString());
+	dp->t_object->SetLabel(wxString::FromAscii(sbs->camera->GetClickedMeshName()));
 
 	if (sbs->Elevators > 0)
 	{

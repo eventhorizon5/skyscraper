@@ -307,7 +307,7 @@ void Camera::ClickedObject()
 	csSectorHitBeamResult result = sbs->area->HitBeam(startbeam, endbeam);
 	if (!result.mesh)
 		return;
-	csString meshname = result.mesh->QueryObject()->GetName();
+	meshname = result.mesh->QueryObject()->GetName();
 	sbs->Report("Clicked on object: " + meshname);
 
 	//check call buttons
@@ -316,6 +316,7 @@ void Camera::ClickedObject()
 		//user clicked on a call button
 		int floor = atoi(meshname.Slice(12, meshname.Find(":") - 12));
 		int number = atoi(meshname.Slice(meshname.Find(":") + 1));
+		//return the intersection point since the polygon ID doesn't seem to return
 		sbs->FloorArray[floor]->CallButtonArray[number]->Press(result.isect);
 	}
 
@@ -324,6 +325,14 @@ void Camera::ClickedObject()
 	{
 		//user clicked on an elevator button
 		int elevator = atoi(meshname.Slice(14));
+		//return the intersection point since the polygon ID doesn't seem to return
 		sbs->ElevatorArray[elevator]->Panel->Press(result.isect);
 	}
+}
+
+const char * Camera::GetClickedMeshName()
+{
+	//return name of last clicked mesh
+
+	return meshname.GetData();
 }

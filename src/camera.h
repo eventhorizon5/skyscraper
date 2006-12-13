@@ -61,12 +61,14 @@ public:
 	void CheckElevator();
 	void CheckShaft();
 	void ClickedObject();
+	const char * GetClickedMeshName();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera
 	csVector3 StartDirection; //direction camera faces on start
 	csVector3 StartRotation; //camera's startup rotation
 	double rotX, rotY, rotZ;
+	csString meshname; //last clicked mesh name
 };
 
 #endif
