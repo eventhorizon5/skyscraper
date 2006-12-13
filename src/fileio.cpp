@@ -1232,6 +1232,72 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//CreatePanel command
+			if (LineData.Slice(0, 11).CompareNoCase("createpanel") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(12).GetData(), ",");
+
+                //calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+				ElevatorArray[Current]->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+
+				tempdata.DeleteAll();
+			}
+
+			//AddFloorButton command
+			if (LineData.Slice(0, 14).CompareNoCase("addfloorbutton") == true)
+			{
+				if (!ElevatorArray[Current]->Panel)
+				{
+					Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+					goto Nextline;
+				}
+
+				//get data
+				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+
+                //calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+				ElevatorArray[Current]->Panel->AddFloorButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]));
+
+				tempdata.DeleteAll();
+			}
+
+			//AddControlButton command
+			if (LineData.Slice(0, 16).CompareNoCase("addcontrolbutton") == true)
+			{
+				if (!ElevatorArray[Current]->Panel)
+				{
+					Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+					goto Nextline;
+				}
+
+				//get data
+				tempdata.SplitString(LineData.Slice(17).GetData(), ",");
+
+                //calculate inline math
+                for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+				ElevatorArray[Current]->Panel->AddControlButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]));
+
+				tempdata.DeleteAll();
+			}
+
 			//Set command
 			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
 			{
