@@ -173,6 +173,7 @@ public:
 	double GetDistance(double x1, double x2, double z1, double z2);
 	void DumpVertices(csRef<iThingFactoryState> mesh);
 	void ListAltitudes();
+	void CreateShaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);

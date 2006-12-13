@@ -73,7 +73,7 @@ public:
 	void Enabled(bool value);
 	void AddAutoFloor(const char *name, const char *texture, double voffset, double tw, double th);
 	double FullHeight();
-	int AddCallButtons(bool up, bool down, int elevatornumber, bool direction, const char *backtexture, const char *buttontexture, double CenterX, double CenterZ, double width, double height, double tw, double th);
+	void AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th);
 	void CutFloor(double x1, double x2, double z1, double z2);
 
 private:

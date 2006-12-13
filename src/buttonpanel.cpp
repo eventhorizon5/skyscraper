@@ -32,17 +32,40 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-ButtonPanel::ButtonPanel(int elevator, const char *texture, int rows, int columns, int direction, double CenterX, double CenterZ, double height, double voffset, double tw, double th)
+ButtonPanel::ButtonPanel(int elevator, const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double tw, double th)
 {
 	//Create an elevator button panel
 
 	Elevator = elevator;
 	Direction = direction;
 	Origin.x = CenterX;
+	Origin.y = voffset;
 	Origin.z = CenterZ;
+	Width = width;
 	Height = height;
-	Voffset = voffset;
+	Rows = rows;
+	Columns = columns;
+	GridSize.x = Width / (Columns + 2); //leave 1 empty grid space on both sides
+	GridSize.y = Height / (Rows + 2); //leave 1 empty grid space on both sides
 
+	//create mesh
+	csString buffer, buffer2;
+	buffer2 = Elevator;
+	buffer = "Button Panel " + buffer2;
+	buffer.Trim();
+	ButtonPanelMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
+	ButtonPanel_state = scfQueryInterface<iThingFactoryState> (ButtonPanelMesh->GetMeshObject()->GetFactory());
+	ButtonPanelMesh->SetZBufMode(CS_ZBUF_USE);
+
+	//create panel back
+	if (Direction == "front" || Direction == "back")
+		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, Origin.x - (Width / 2), Origin.z, Origin.x + (Width / 2), Origin.z, Height, Height, Origin.y, Origin.y, tw, th, false, false, false);
+	else
+		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, Origin.x, Origin.z - (Width / 2), Origin.x, Origin.z + (Width / 2), Height, Height, Origin.y, Origin.y, tw, th, false, false, false);
+
+	//move mesh to elevator origin
+	ButtonPanelMesh->GetMovable()->SetPosition(sbs->ElevatorArray[Elevator]->Origin);
+	ButtonPanelMesh->GetMovable()->UpdateMove();
 }
 
 ButtonPanel::~ButtonPanel()
@@ -52,12 +75,57 @@ ButtonPanel::~ButtonPanel()
 
 void ButtonPanel::AddFloorButton(const char *texture, int row, int column, int floor)
 {
-
+	//create a standard floor button at specified row/column position
+	
+	csString floornum;
+	floornum = floor;
+	AddButton("Floor " + floornum, texture, row, column);
 }
 
 void ButtonPanel::AddControlButton(const char *texture, int row, int column, int type)
 {
+	//create a control button at specified row/column position
 
+	//type is one of these:
+	//1 = Open Doors
+	//2 = Close Doors
+	//3 = Call Cancel
+	//4 = Stop
+	//5 = Alarm
+
+	csString name;
+
+	if (type == 1)
+		name = "open";
+	if (type == 2)
+		name = "close";
+	if (type == 3)
+		name = "cancel";
+	if (type == 4)
+		name = "stop";
+	if (type == 5)
+		name = "alarm";
+
+	AddButton(name.GetData(), texture, row, column);
+}
+
+void ButtonPanel::AddButton(const char *name, const char *texture, int row, int column)
+{
+	//create the button polygon
+	double xpos, ypos, zpos;
+	ypos = Origin.y - (Height / 2) + (GridSize.y * (row + 1));
+	if (Direction == "front" || Direction == "back")
+	{
+		xpos = Origin.x - (Width / 2) + (GridSize.x * (column + 1));
+		zpos = Origin.z;
+		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos + GridSize.x, zpos, GridSize.y, GridSize.y, ypos, ypos, 1, 1, false, false, false);
+	}
+	else
+	{
+		xpos = Origin.x;
+		zpos = Origin.z - (Width / 2) + (GridSize.x * (column + 1));
+		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos, zpos + GridSize.x, GridSize.y, GridSize.y, ypos, ypos, 1, 1, false, false, false);
+	}
 }
 
 void ButtonPanel::DeleteButton(int row, int column)

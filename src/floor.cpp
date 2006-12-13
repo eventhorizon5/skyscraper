@@ -313,32 +313,13 @@ double Floor::FullHeight()
 	return Height + InterfloorHeight;
 }
 
-int Floor::AddCallButtons(bool up, bool down, int elevatornumber, bool direction, const char *backtexture, const char *buttontexture, double CenterX, double CenterZ, double width, double height, double tw, double th)
+void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th)
 {
 	//adds call buttons
 
-	double x1, x2;
-	double z1, z2;
-	int firstidx;
-
-	if (direction == false)
-	{
-		x1 = CenterX;
-		x2 = CenterX;
-		z1 = CenterZ - (width / 2);
-		z2 = CenterZ + (width / 2);
-	}
-	else
-	{
-		x1 = CenterX - (width / 2);
-		x2 = CenterX + (width / 2);
-		z1 = CenterZ;
-		z2 = CenterZ;
-	}
-
-	//firstidx = sbs->AddWallMain(CallButtonsUp_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
-	//sbs->AddWallMain(CallButtonsDown_state, texture, x1, z1, x2, z2, height, height, voffset + GetPosition().y, voffset + GetPosition().y, tw, th);
-	return firstidx;
+	CallButtonArray.SetSize(CallButtonArray.GetSize() + 1);
+	int Current = CallButtonArray.GetSize() - 1;
+	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, DownButtonTexture, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 }
 
 void Floor::CutFloor(double x1, double x2, double z1, double z2)

@@ -1384,3 +1384,10 @@ void SBS::ListAltitudes()
 	for (int i = -Basements; i <= TotalFloors; i++)
 		Report(csString(_itoa(i, intbuffer, 10)) + "(" + FloorArray[i]->ID + ")\t----\t" + csString(_gcvt(FloorArray[i]->FullHeight(), 6, buffer)) + "\t----\t" + csString(_gcvt(FloorArray[i]->Altitude, 6, buffer)));
 }
+
+void SBS::CreateShaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor)
+{
+	//create a shaft object
+
+	ShaftArray[number] = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
+}

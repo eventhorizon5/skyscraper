@@ -31,20 +31,14 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-CallButton::CallButton()
-{
-	floor = 0;
-	IsEnabled = true;
-}
-
-CallButton::~CallButton()
-{
-
-}
-
-void CallButton::Create(int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th)
+CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th)
 {
 	//create a set of call buttons
+
+	IsEnabled = true;
+	Elevators.SetSize(elevators.GetSize());
+	for (int i = 0; i < elevators.GetSize(); i++)
+		Elevators[i] = elevators[i];
 
 	//create object mesh
 	csString buffer, buffer2, buffer3;
@@ -109,6 +103,10 @@ void CallButton::Create(int floornum, int number, const char *BackTexture, const
 		index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.75), 1, 1, false, false, reverse);
 		index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), sbs->FloorArray[floor]->Altitude + voffset + (BackHeight * 0.25), 1, 1, false, false, reverse);
 	}
+}
+
+CallButton::~CallButton()
+{
 
 }
 

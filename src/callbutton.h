@@ -39,9 +39,8 @@ public:
 	bool IsEnabled;
 
 	//functions
-	CallButton();
+	CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th);
 	~CallButton();
-	void Create(int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th);
 	void Enabled(bool value);
 	void Call(int direction); //-1 is down, 1 is up
 	void Press(csVector3 isect);

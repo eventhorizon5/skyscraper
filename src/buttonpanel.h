@@ -33,15 +33,16 @@ class ButtonPanel
 public:
 
 	int Elevator;
-	int Direction;
+	csString Direction;
 	csVector3 Origin;
+	double Width;
 	double Height;
-	double Voffset;
 	int Rows;
 	int Columns;
+	csVector2 GridSize;
 
 	//functions
-	ButtonPanel(int elevator, const char *texture, int rows, int columns, int direction, double CenterX, double CenterZ, double height, double voffset, double tw, double th);
+	ButtonPanel(int elevator, const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double tw, double th);
 	~ButtonPanel();
 	void AddFloorButton(const char *texture, int row, int column, int floor);
 	void AddControlButton(const char *texture, int row, int column, int type);
@@ -51,6 +52,8 @@ public:
 private:
 	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
 	csRef<iThingFactoryState> ButtonPanel_state;
+	
+	void AddButton(const char *name, const char *texture, int row, int column);
 };
 
 #endif

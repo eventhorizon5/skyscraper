@@ -52,8 +52,8 @@ int SBS::LoadBuilding(const char * filename)
     csString temp6 = "";
     csString temp7 = "";
     csStringArray tempdata;
+	csArray<int> callbutton_elevators;
     int Current = 0;
-	int CurrentCallButton = 0;
     int FloorCheck = 0;
     int RangeL = 0;
     int RangeH = 0;
@@ -466,7 +466,7 @@ int SBS::LoadBuilding(const char * filename)
 				tempdata.Put(temp3, buffer);
 			}
 
-			ShaftArray[atoi(tempdata[0])] = new Shaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+			CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
 
 			tempdata.DeleteAll();
 		}
@@ -857,24 +857,26 @@ recalc:
 				//get text after equal sign
 				temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
             
-				//create a new call buttons object
-				FloorArray[Current]->CallButtonArray.SetSize(FloorArray[Current]->CallButtonArray.GetSize() + 1);
-				CurrentCallButton = FloorArray[Current]->CallButtonArray.GetSize() - 1;
-				FloorArray[Current]->CallButtonArray[CurrentCallButton] = new CallButton();
-
-				//copy values into elevators array
+				//construct array containing floor numbers
 				tempdata.SplitString(temp2.GetData(), ",");
-				FloorArray[Current]->CallButtonArray[CurrentCallButton]->Elevators.SetSize(tempdata.GetSize());
+				callbutton_elevators.DeleteAll();
+				callbutton_elevators.SetSize(tempdata.GetSize());
+
 				for (int i = 0; i < tempdata.GetSize(); i++)
-				{
-					FloorArray[Current]->CallButtonArray[CurrentCallButton]->Elevators[i] = atoi(tempdata[i]);
-				}
+					callbutton_elevators[i] = atoi(tempdata[i]);
+
 				tempdata.DeleteAll();
 			}
 
 			//CreateCallButtons command
             if (LineData.Slice(0, 17).CompareNoCase("createcallbuttons") == true)
 			{
+				if (callbutton_elevators.GetSize() == 0)
+				{
+					Report("Error: Trying to create call buttons, but no elevators specified");
+					goto Nextline;
+				}
+
 				bool ShowBack;
                 tempdata.SplitString(LineData.Slice(18).GetData(), ",");
 
@@ -892,7 +894,7 @@ recalc:
 					ShowBack = false;
 				
 				//create call button
-				FloorArray[Current]->CallButtonArray[CurrentCallButton]->Create(Current, CurrentCallButton, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), ShowBack, atof(tempdata[10]), atof(tempdata[11]));
+				FloorArray[Current]->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), ShowBack, atof(tempdata[10]), atof(tempdata[11]));
 				tempdata.DeleteAll();
 			}
             

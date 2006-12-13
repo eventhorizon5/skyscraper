@@ -89,6 +89,7 @@ public:
 	int AddDoors(const char *texture, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th);
 	int AddShaftDoors(const char *texture, double CenterX, double CenterZ, double tw, double th);
 	int AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
+	void CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double tw, double th);
 	void DumpQueues();
 	void Enabled(bool value);
 	void ShaftDoorsEnabled(int floor, bool value);

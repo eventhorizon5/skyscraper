@@ -166,8 +166,6 @@ void Elevator::CreateElevator(double x, double z, int floor)
 	ShaftDoorL_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorR_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorsOpen.SetSize(ServicedFloors.GetSize());
-	//ShaftDoorL_collider.SetSize(ServicedFloors.GetSize());
-	//ShaftDoorR_collider.SetSize(ServicedFloors.GetSize());
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }
@@ -1416,4 +1414,13 @@ void Elevator::RemoveServicedFloor(int number)
 {
 	if (ServicedFloors.Find(number) != csArrayItemNotFound)
 		ServicedFloors.Delete(number);
+}
+
+void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double tw, double th)
+{
+	//create a new button panel object and store the pointer
+	if (!Panel)
+		Panel = new ButtonPanel(Number, texture, rows, columns, direction, CenterX, CenterZ, width, height, voffset, tw, th);
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panel already exists");
 }
