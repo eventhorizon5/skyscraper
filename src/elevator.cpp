@@ -857,6 +857,8 @@ void Elevator::MoveElevatorToFloor()
 	FloorIndicator_movable->UpdateMove();
 	Plaque_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
 	Plaque_movable->UpdateMove();
+	if (Panel)
+		Panel->Move(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
 
 	//show partial shaft areas (3 floors at a time)
 	if (sbs->AutoShafts == true && sbs->InElevator == true && sbs->ElevatorNumber == Number)
@@ -1025,6 +1027,8 @@ void Elevator::MoveElevatorToFloor()
 		FloorIndicator_movable->UpdateMove();
 		Plaque_movable->SetPosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
 		Plaque_movable->UpdateMove();
+		if (Panel)
+			Panel->SetToElevatorPosition();
 
 		//move sounds
 	}
@@ -1404,11 +1408,11 @@ void Elevator::RemoveServicedFloor(int number)
 		ServicedFloors.Delete(number);
 }
 
-void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double tw, double th)
+void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double spacing, double tw, double th)
 {
 	//create a new button panel object and store the pointer
 	if (!Panel)
-		Panel = new ButtonPanel(Number, texture, rows, columns, direction, CenterX, CenterZ, width, height, voffset, tw, th);
+		Panel = new ButtonPanel(Number, texture, rows, columns, direction, CenterX, CenterZ, width, height, voffset, spacing, tw, th);
 	else
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panel already exists");
 }

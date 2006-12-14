@@ -32,25 +32,26 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-ButtonPanel::ButtonPanel(int elevator, const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double tw, double th)
+ButtonPanel::ButtonPanel(int _elevator, const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double spacing, double tw, double th)
 {
 	//Create an elevator button panel
 
-	Elevator = elevator;
+	elevator = _elevator;
 	Direction = direction;
-	Origin.x = CenterX;
-	Origin.y = voffset;
-	Origin.z = CenterZ;
+	Origin.x = sbs->ElevatorArray[elevator]->Origin.x + CenterX;
+	Origin.y = sbs->ElevatorArray[elevator]->Origin.y + voffset;
+	Origin.z = sbs->ElevatorArray[elevator]->Origin.z + CenterZ;
 	Width = width;
 	Height = height;
 	Rows = rows;
 	Columns = columns;
 	GridSize.x = Width / (Columns + 2); //leave 1 empty grid space on both sides
 	GridSize.y = Height / (Rows + 2); //leave 1 empty grid space on both sides
+	Spacing = GridSize.x * spacing;
 
 	//create mesh
 	csString buffer, buffer2;
-	buffer2 = Elevator;
+	buffer2 = elevator;
 	buffer = "Button Panel " + buffer2;
 	buffer.Trim();
 	ButtonPanelMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
@@ -62,10 +63,6 @@ ButtonPanel::ButtonPanel(int elevator, const char *texture, int rows, int column
 		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, Origin.x - (Width / 2), Origin.z, Origin.x + (Width / 2), Origin.z, Height, Height, Origin.y, Origin.y, tw, th, false, false, false);
 	else
 		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, Origin.x, Origin.z - (Width / 2), Origin.x, Origin.z + (Width / 2), Height, Height, Origin.y, Origin.y, tw, th, false, false, false);
-
-	//move mesh to elevator origin
-	ButtonPanelMesh->GetMovable()->SetPosition(sbs->ElevatorArray[Elevator]->Origin);
-	ButtonPanelMesh->GetMovable()->UpdateMove();
 }
 
 ButtonPanel::~ButtonPanel()
@@ -79,7 +76,7 @@ void ButtonPanel::AddFloorButton(const char *texture, int row, int column, int f
 
 	csString floornum;
 	floornum = floor;
-	AddButton("Floor " + floornum, texture, row, column);
+	AddButton(floornum, texture, row, column);
 }
 
 void ButtonPanel::AddControlButton(const char *texture, int row, int column, const char *type)
@@ -107,14 +104,20 @@ void ButtonPanel::AddButton(const char *name, const char *texture, int row, int 
 	if (Direction == "front" || Direction == "back")
 	{
 		xpos = Origin.x - (Width / 2) + (GridSize.x * (column + 1));
-		zpos = Origin.z;
-		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos + GridSize.x, zpos, GridSize.y, GridSize.y, ypos, ypos, 1, 1, false, false, false);
+		if (Direction == "front")
+			zpos = Origin.z - 0.2;
+		else
+			zpos = Origin.z + 0.2;
+		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos + GridSize.x - Spacing, zpos, GridSize.y - Spacing, GridSize.y - Spacing, ypos, ypos, 1, 1, false, false, false, false);
 	}
 	else
 	{
-		xpos = Origin.x;
+		if (Direction == "left")
+			xpos = Origin.x - 0.2;
+		else
+			xpos = Origin.x + 0.2;
 		zpos = Origin.z - (Width / 2) + (GridSize.x * (column + 1));
-		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos, zpos + GridSize.x, GridSize.y, GridSize.y, ypos, ypos, 1, 1, false, false, false);
+		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos, zpos + GridSize.x - Spacing, GridSize.y - Spacing, GridSize.y - Spacing, ypos, ypos, 1, 1, false, false, false, false);
 	}
 }
 
@@ -123,8 +126,54 @@ void ButtonPanel::DeleteButton(int row, int column)
 
 }
 
-void ButtonPanel::Press(csVector3 isect)
+void ButtonPanel::Press(int index)
 {
-	//check clicked location against button polygons
+	//Press selected button
 
+	if (index == -1)
+		return;
+
+	csString name = ButtonPanel_state->GetPolygonName(index);
+
+	if (IsNumeric(name) == true)
+	{
+		int floor = atoi(name.GetData());
+		int elev_floor = sbs->ElevatorArray[elevator]->GetFloor();
+		int elev_dir = sbs->ElevatorArray[elevator]->Direction;
+		
+		//elevator is above floor
+		if (elev_floor > floor)
+			sbs->ElevatorArray[elevator]->AddRoute(floor, -1);
+
+		//elevator is on or below floor
+		if (elev_floor <= floor)
+			sbs->ElevatorArray[elevator]->AddRoute(floor, 1);
+	}
+	else
+	{
+		name.Downcase();
+		if (name == "open" && sbs->ElevatorArray[elevator]->Direction == 0)
+			sbs->ElevatorArray[elevator]->OpenDoors();
+		if (name == "close" && sbs->ElevatorArray[elevator]->Direction == 0)
+			sbs->ElevatorArray[elevator]->CloseDoors();
+		if (name == "cancel")
+			sbs->ElevatorArray[elevator]->CancelLastRoute();
+		if (name == "stop")
+			sbs->ElevatorArray[elevator]->StopElevator();
+		if (name == "alarm")
+			sbs->ElevatorArray[elevator]->Alarm();
+	}
+}
+
+void ButtonPanel::Move(csVector3 position)
+{
+	//relative movement
+	ButtonPanelMesh->GetMovable()->MovePosition(position);
+	ButtonPanelMesh->GetMovable()->UpdateMove();
+}
+
+void ButtonPanel::SetToElevatorPosition()
+{
+	ButtonPanelMesh->GetMovable()->SetPosition(sbs->ElevatorArray[elevator]->GetPosition());
+	ButtonPanelMesh->GetMovable()->UpdateMove();
 }

@@ -314,17 +314,15 @@ void Camera::ClickedObject()
 		//user clicked on a call button
 		int floor = atoi(meshname.Slice(12, meshname.Find(":") - 12));
 		int number = atoi(meshname.Slice(meshname.Find(":") + 1));
-		//return the intersection point since the polygon ID doesn't seem to return
-		sbs->FloorArray[floor]->CallButtonArray[number]->Press(result.isect);
+		sbs->FloorArray[floor]->CallButtonArray[number]->Press(sbs->GetPolygonIndex(result, 2));
 	}
 
 	//check elevator buttons
-	if (meshname.Find("Elevator Panel") != -1)
+	if (meshname.Find("Button Panel") != -1)
 	{
 		//user clicked on an elevator button
-		int elevator = atoi(meshname.Slice(14));
-		//return the intersection point since the polygon ID doesn't seem to return
-		sbs->ElevatorArray[elevator]->Panel->Press(result.isect);
+		int elevator = atoi(meshname.Slice(13));
+		sbs->ElevatorArray[elevator]->Panel->Press(sbs->GetPolygonIndex(result, 2));
 	}
 }
 

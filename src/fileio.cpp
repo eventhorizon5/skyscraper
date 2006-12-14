@@ -1130,10 +1130,10 @@ recalc:
 			}
 
 			//AddFloor command
-			if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
+			if (LineData.Slice(0, 9).CompareNoCase("addfloor ") == true)
 			{
 				//get data
-				tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+				tempdata.SplitString(LineData.Slice(10).GetData(), ",");
 
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
@@ -1244,7 +1244,7 @@ recalc:
 					tempdata.Put(temp3, buffer);
 				}
 
-				ElevatorArray[Current]->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				ElevatorArray[Current]->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
 
 				tempdata.DeleteAll();
 			}

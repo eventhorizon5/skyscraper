@@ -43,7 +43,7 @@ public:
 	~CallButton();
 	void Enabled(bool value);
 	void Call(int direction); //-1 is down, 1 is up
-	void Press(csVector3 isect);
+	void Press(int index);
 
 private:
 	csRef<iMeshWrapper> CallButtonMesh; //call button mesh object
