@@ -507,16 +507,17 @@
     value. </p>
   <p align="left"><strong>6. CreatePanel</strong> - creates a button panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreatePanel <em>texturename</em>, 
-    <em>rows, columns, direction, CenterX, CenterZ, width, height, voffset, tw, 
-    th<br>
+    <em>rows, columns, direction, CenterX, CenterZ, width, height, voffset, spacing, 
+    tw, th<br>
     </em></font> Example<font size="2" face="Courier New, Courier, mono"><em>: 
     </em><font size="2" face="Courier New, Courier, mono">CreatePanel Wall1, 5, 
-    5, right, -3, -3, 0.5, 1, 4, 0, 0</font></font></p>
+    5, right, -3, -3, 0.5, 1, 4, 0.5, 0, 0</font></font></p>
   <p align="left">The CreatePanel command creates a button panel at a position 
     relative to the elevator's center position (origin). <em>Rows</em> and <em>Columns</em> 
     define the grid size of the panel. <em>Direction</em> is either &quot;front&quot;, 
     &quot;back&quot;, &quot;left&quot; or &quot;right&quot;, defining which direction 
-    the panel faces.</p>
+    the panel faces. <em>Spacing</em> is the space (percent of a button size) 
+    between each button.</p>
   <p align="left"><strong>7. AddFloorButton</strong> - creates a floor button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorButton <em>texturename</em>, 
