@@ -1,5 +1,5 @@
 # $Id$
-	
+
 #The Triton Center
 #Copyright (C)2003-2006 Ryan Thoryk
 
@@ -95,15 +95,15 @@
     Load data/floorsignskylobby.jpg, FloorSignSkylobby
 
     #floor indicator/button pictures
-    #Load data/floorindicators/L.jpg, ButtonL
-    #Load data/floorindicators/M.jpg, ButtonM
-    #Load data/floorindicators/R.jpg, ButtonR
-    #Load data/floorindicators/open.jpg, ButtonOpen
-    #Load data/floorindicators/close.jpg, ButtonClose
-    #Load data/floorindicators/stop.jpg, ButtonStop
-    #Load data/floorindicators/alarm.jpg, ButtonAlarm
-    #Load data/floorindicators/cancel.jpg, ButtonCancel
-    #LoadRange 2, 138, data/floorindicators/%number%.jpg, Button%number%
+    Load data/floorindicators/L.jpg, ButtonL
+    Load data/floorindicators/M.jpg, ButtonM
+    Load data/floorindicators/R.jpg, ButtonR
+    Load data/floorindicators/open.jpg, ButtonOpen
+    Load data/floorindicators/close.jpg, ButtonClose
+    Load data/floorindicators/stop.jpg, ButtonStop
+    Load data/floorindicators/alarm.jpg, ButtonAlarm
+    Load data/floorindicators/cancel.jpg, ButtonCancel
+    LoadRange 2, 138, data/floorindicators/%number%.jpg, Button%number%
 <EndTextures>
 
 # Basements
@@ -153,7 +153,7 @@
     #Floor
     #AddFloor Floor, Marble4, -75, -70, 75, 70, 0, 0, 0, 0, False
     AddFloor Floor, Marble4, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, 0, False
-    
+
     #Ceiling
     AddFloor Ceiling, Marble4, -75, -70, 75, 70, %height% * 3, %height% * 3, 0, 0, False
 
@@ -793,7 +793,7 @@
     AddWall ExtLeft, Brick, -20, 40, -20, -40, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
     AddWall ExtFront, Brick, -20, -40, 20, -40, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
     AddWall ExtRight, Brick, 20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, 0.7, 0, False, False, False, True
-    
+
     #Penthouse roof
     AddFloor PRoof, Brick, -20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, True
 <EndFloor>
@@ -837,10 +837,24 @@ AddShaft 4, 2, 6, -14, 0, 5
 
     AddWall Left Panel, Wood1, -3, -3.5, -3, -1.75, 8, 8, 0, 0, 2, 2, false, false, false, true
     AddWall Right Panel, Wood1, -3, 1.75, -3, 3.5, 8, 8, 0, 0, 2, 2, false, false, false, true
-    
+
     AddDoors ElevDoors, -3.01, 0, 3.5, 8, false, 2, 2 #doors
     AddShaftDoors ElevDoors, -3.1, 0, 2, 2 #shaft doors
-    
+
+    #panel
+    CreatePanel ElevExtPanels, 4, 3, right, -2.9, 2.63, 0.5, 1, 4.5, 0.3, 0, 0
+    AddFloorButton Button5, 4, 3, 5
+    AddFloorButton Button4, 4, 2, 4
+    AddFloorButton Button3, 4, 1, 3
+    AddFloorButton Button2, 3, 3, 2
+    AddFloorButton ButtonM, 3, 2, 1
+    AddFloorButton ButtonL, 3, 1, 0
+    AddControlButton ButtonOpen, 2, 1, open
+    AddControlButton ButtonClose, 2, 2, close
+    AddControlButton ButtonCancel, 1, 1, cancel
+    AddControlButton ButtonStop, 1, 2, stop
+    AddControlButton ButtonAlarm, 1, 3, alarm
+
 <EndElevator>
 
 <Elevator 2>
@@ -861,10 +875,10 @@ AddShaft 4, 2, 6, -14, 0, 5
 
     AddWall Left Panel, Wood1, 3, -3.5, 3, -1.75, 8, 8, 0, 0, 2, 2, false, false, false, true
     AddWall Right Panel, Wood1, 3, 1.75, 3, 3.5, 8, 8, 0, 0, 2, 2, false, false, false, true
-    
+
     AddDoors ElevDoors, 3.01, 0, 3.5, 8, false, 2, 2 #doors
     AddShaftDoors ElevDoors, 3.1, 0, 2, 2 #shaft doors
-    
+
 <EndElevator>
 
 <Elevator 3>
@@ -885,10 +899,10 @@ AddShaft 4, 2, 6, -14, 0, 5
 
     AddWall Left Panel, Wood1, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 2, 2, false, false, false, true
     AddWall Right Panel, Wood1, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 2, 2, false, false, false, true
-    
+
     AddDoors ElevDoors, 0, -3.01, 3.5, 8, true, 2, 2 #doors
     AddShaftDoors ElevDoors, 0, -3.1, 2, 2 #shaft doors
-    
+
 <EndElevator>
 
 <Elevator 4>
@@ -909,10 +923,10 @@ AddShaft 4, 2, 6, -14, 0, 5
 
     AddWall Left Panel, Wood1, -3.5, 3, -1.75, 3, 8, 8, 0, 0, 0.5, 2, false, false, false
     AddWall Right Panel, Wood1, 1.75, 3, 3.5, 3, 8, 8, 0, 0, 0.5, 2, false, false, false
-    
+
     AddDoors ElevDoors, 0, 3.01, 3.5, 8, true, 2, 2 #doors
     AddShaftDoors ElevDoors, 0, 3.1, 2, 2 #shaft doors
-    
+
 <EndElevator>
 
 #call buttons
