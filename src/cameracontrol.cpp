@@ -32,8 +32,8 @@ END_EVENT_TABLE()
 CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(CameraControl)
-    Create(parent,id,_("Camera Control"),wxDefaultPosition,wxDefaultSize,0);
-    //*)
+	Create(parent,id,_("Camera Control"),wxDefaultPosition,wxDefaultSize,0);
+	//*)
 }
 
 CameraControl::~CameraControl()

@@ -40,7 +40,7 @@ public:
 	int LastQueueFloor[1]; //last route added to either queue
 	double ElevatorSpeed; //maximum elevator speed
 	bool MoveElevator; //Tells elevator to start going to specified floor
-    int MoveElevatorFloor; //floor to move elevator to
+	int MoveElevatorFloor; //floor to move elevator to
 	int GotoFloor; //floor to go to
 	double Acceleration; //percentage of speed increase
 	double Deceleration; //deceleration value; may be removed

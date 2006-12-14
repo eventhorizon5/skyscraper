@@ -31,7 +31,7 @@
 class CallButton
 {
 public:
-	
+
 	csArray<int> Elevators; //elevators this call button set is assigned to
 	int floor; //floor this call button set is on
 	int Number; //call button index number (on the specified floor)

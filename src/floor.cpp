@@ -97,7 +97,7 @@ Floor::~Floor()
 void Floor::SetCameraFloor()
 {
 	//Moves camera to specified floor (sets altitude to the floor's altitude plus CameraAltitude)
-	
+
 	csVector3 camlocation = sbs->camera->GetPosition();
 	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + sbs->camera->DefaultAltitude, camlocation.z));
 }
@@ -117,11 +117,10 @@ int Floor::AddFloor(const char *name, const char *texture, double x1, double z1,
 	//Call texture autosizing formulas
 	tw2 = AutoSize(x1, x2, true, isexternal, tw);
 	th2 = AutoSize(z1, z2, false, isexternal, th);
-	
+
 	if (isexternal == false)
 	{
-		int index;
-		index = sbs->AddFloorMain(Level_state, name, texture, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+		int index = sbs->AddFloorMain(Level_state, name, texture, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 		floor_polys.Push(index);
 		return floor_polys.GetSize() - 1;
 	}
@@ -155,8 +154,7 @@ int Floor::AddInterfloorFloor(const char *name, const char *texture, double x1, 
 	tw2 = AutoSize(x1, x2, true, false, tw);
 	th2 = AutoSize(z1, z2, false, false, th);
 
-	int index;
-	index = sbs->AddFloorMain(Interfloor_state, name, texture, x1, z1, x2, z2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2);
+	int index = sbs->AddFloorMain(Interfloor_state, name, texture, x1, z1, x2, z2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2);
 	ifloor_polys.Push(index);
 	return ifloor_polys.GetSize() - 1;
 }
@@ -178,7 +176,7 @@ int Floor::AddWall(const char *name, const char *texture, double x1, double z1, 
 	double th2;
 	double tempw1;
 	double tempw2;
-	
+
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
 	x2 = x2 * sbs->HorizScale;
@@ -193,7 +191,7 @@ int Floor::AddWall(const char *name, const char *texture, double x1, double z1, 
 	if ((z1 != z2) && (x1 != x2))
 	{
 		//calculate diagonals
-	    if (x1 > x2)
+		if (x1 > x2)
 			tempw1 = x1 - x2;
 		else
 			tempw1 = x2 - x1;
@@ -201,14 +199,13 @@ int Floor::AddWall(const char *name, const char *texture, double x1, double z1, 
 			tempw2 = z1 - z2;
 		else
 			tempw2 = z2 - z1;
-	    tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, isexternal, tw);
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, isexternal, tw);
 	}
 	th2 = AutoSize(0, height_in1, false, isexternal, th);
-	
+
 	if (isexternal == false)
 	{
-		int index;
-		index = sbs->AddWallMain(Level_state, name, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2, revX, revY, revZ);
+		int index = sbs->AddWallMain(Level_state, name, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2, revX, revY, revZ);
 		wall_polys.Push(index);
 		return wall_polys.GetSize() - 1;
 	}
@@ -231,7 +228,7 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, double x1, d
 	//Adds an interfloor wall with the specified dimensions
 	double tw2 = tw;
 	double th2;
-	
+
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
 	x2 = x2 * sbs->HorizScale;
@@ -244,9 +241,8 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, double x1, d
 	if (x1 == x2)
 		tw2 = AutoSize(z1, z2, true, false, tw);
 	th2 = AutoSize(0, height_in1, false, false, th);
-	
-	int index;
-	index = sbs->AddWallMain(Interfloor_state, name, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2, false, false, false);
+
+	int index = sbs->AddWallMain(Interfloor_state, name, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2, false, false, false);
 	iwall_polys.Push(index);
 	return iwall_polys.GetSize() - 1;
 }
@@ -297,11 +293,11 @@ void Floor::Enabled(bool value)
 void Floor::AddAutoFloor(const char *name, const char *texture, double voffset, double tw, double th)
 {
 	/* Autogenerate a floor
-	 
-	   this function splits the "external" mesh's polygons at a certain altitude
-	   (y plane), discards the lower ones, makes a list the vertices at the Y value,
-	   does a clockwise sort using the Graham scan method, and creates a new floor
-	   polygon from the sorted vertices.
+
+		this function splits the "external" mesh's polygons at a certain altitude
+		(y plane), discards the lower ones, makes a list the vertices at the Y value,
+		does a clockwise sort using the Graham scan method, and creates a new floor
+		polygon from the sorted vertices.
 
 	*/
 
@@ -329,7 +325,7 @@ void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, con
 void Floor::CutFloor(double x1, double x2, double z1, double z2)
 {
 	//cuts a rectangular hole in the listed floor polygons (floor, ceiling, etc)
-	
+
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5;
 
 	//step through each floor polygon
@@ -344,7 +340,7 @@ void Floor::CutFloor(double x1, double x2, double z1, double z2)
 		//copy polygon vertices
 		for (int j = 0; j <= Level_state->GetPolygonVertexCount(floor_polys[i]); j++)
 			temppoly.AddVertex(Level_state->GetPolygonVertex(floor_polys[i], j));
-		
+
 		//get left side
 		temppoly.SplitWithPlaneX(temppoly2, temppoly, x1);
 
@@ -360,6 +356,6 @@ void Floor::CutFloor(double x1, double x2, double z1, double z2)
 		//reconstruct 4 resulting polygons into single polygon
 
 		//delete original floor polygon and create a new one
-		
+
 	}
 }

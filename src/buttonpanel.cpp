@@ -76,7 +76,7 @@ ButtonPanel::~ButtonPanel()
 void ButtonPanel::AddFloorButton(const char *texture, int row, int column, int floor)
 {
 	//create a standard floor button at specified row/column position
-	
+
 	csString floornum;
 	floornum = floor;
 	AddButton("Floor " + floornum, texture, row, column);

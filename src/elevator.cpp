@@ -36,7 +36,7 @@ extern SBS *sbs; //external pointer to the SBS engine
 Elevator::Elevator(int number)
 {
 	csString buffer;
-	
+
 	//set elevator number
 	Number = number;
 
@@ -219,7 +219,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 void Elevator::CancelLastRoute()
 {
 	//cancels the last added route
-	
+
 	if (LastQueueFloor[1] == 1)
 	{
 		DeleteRoute(LastQueueFloor[0], 1);
@@ -288,11 +288,11 @@ void Elevator::ProcessCallQueue()
 	//if elevator is moving, keep queue paused
 	if (MoveElevator == true)
 		PauseQueueSearch = true;
-	
+
 	//if elevator is stopped, pause queue
 	if (QueuePositionDirection != 0 && MoveElevator == false)
 		PauseQueueSearch = false;
-	
+
 	if (PauseQueueSearch == true)
 		return;
 
@@ -335,8 +335,7 @@ int Elevator::GetFloor()
 {
 	//Determine floor that the elevator is on
 
-	int i;
-	for (i = -sbs->Basements; i <= sbs->TotalFloors; i++)
+	for (int i = -sbs->Basements; i <= sbs->TotalFloors; i++)
 	{
 		if (i < sbs->TotalFloors)
 			if ((GetPosition().y >= sbs->FloorArray[i]->Altitude) && (GetPosition().y < sbs->FloorArray[i + 1]->Altitude))
@@ -776,7 +775,7 @@ void Elevator::MoveElevatorToFloor()
 	{
 		IsRunning = true;
 		csString dir_string;
-		
+
 		//get elevator's current altitude
 		ElevatorStart = GetPosition().y;
 
@@ -857,7 +856,7 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//Movement sound
-    //"\data\elevmove.wav"
+	//"\data\elevmove.wav"
 
 	//move elevator objects and camera
 	Elevator_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
@@ -966,7 +965,7 @@ void Elevator::MoveElevatorToFloor()
 			//play elevator stopping sound
 			//"\data\elevstop.wav"
 		}
-    
+
 		//normal routine - this will rarely happen (only if the elevator happens to reach the exact deceleration marker)
 		if (GetPosition().y == (Destination - StoppingDistance))
 		{
@@ -984,7 +983,7 @@ void Elevator::MoveElevatorToFloor()
 	//down movement
 	if (Brakes == false && Direction == -1)
 	{
-        //determine if next jump altitude is below deceleration marker
+	//determine if next jump altitude is below deceleration marker
 		if (((GetPosition().y - (ElevatorRate * FPSModifierStatic)) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
@@ -995,9 +994,9 @@ void Elevator::MoveElevatorToFloor()
 			Brakes = true;
 			//stop sounds
 			//play stopping sound
-            //"\data\elevstop.wav"
+			//"\data\elevstop.wav"
 		}
-    
+
 		//normal routine - this will rarely happen (only if the elevator happens to reach the exact deceleration marker)
 		if (GetPosition().y == (Destination + StoppingDistance))
 		{
@@ -1040,7 +1039,7 @@ void Elevator::MoveElevatorToFloor()
 		FloorIndicator_movable->UpdateMove();
 		Plaque_movable->SetPosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
 		Plaque_movable->UpdateMove();
-	
+
 		//move sounds
 	}
 
@@ -1081,7 +1080,7 @@ int Elevator::AddWall(const char *name, const char *texture, double x1, double z
 
 int Elevator::AddFloor(const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
-   	return sbs->AddFloorMain(Elevator_state, name, texture, x1, z1, x2, z2, voffset1, voffset2, tw, th);
+	return sbs->AddFloorMain(Elevator_state, name, texture, x1, z1, x2, z2, voffset1, voffset2, tw, th);
 }
 
 int Elevator::AddFloorIndicator(const char *basename, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
@@ -1191,7 +1190,6 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorL[i]->GetMeshObject()->GetFactory());
 		ShaftDoorL_state[i] = tmpstate;
 		ShaftDoorL[i]->SetZBufMode(CS_ZBUF_USE);
-		//ShaftDoorL_collider[i] = csColliderHelper::InitializeCollisionWrapper (sbs->collision_sys, ShaftDoorL[i]);
 
 		//door R
 		tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer2.GetData());
@@ -1199,7 +1197,6 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorR[i]->GetMeshObject()->GetFactory());
 		ShaftDoorR_state[i] = tmpstate;
 		ShaftDoorR[i]->SetZBufMode(CS_ZBUF_USE);
-		//ShaftDoorR_collider[i] = csColliderHelper::InitializeCollisionWrapper (sbs->collision_sys, ShaftDoorR[i]);
 
 		//reposition meshes
 		ShaftDoorL[i]->GetMovable()->SetPosition(Origin);
@@ -1303,7 +1300,7 @@ void Elevator::Enabled(bool value)
 void Elevator::ShaftDoorsEnabled(int floor, bool value)
 {
 	//turns shaft elevator doors on/off
-	
+
 	int index = ServicedFloors.Find(floor);
 	if (index == csArrayItemNotFound)
 		return;
@@ -1338,7 +1335,7 @@ bool Elevator::IsElevator(csRef<iMeshWrapper> test)
 {
 	if (test == ElevatorMesh)
 		return true;
-	
+
 	return false;
 }
 

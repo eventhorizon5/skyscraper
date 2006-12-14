@@ -52,7 +52,7 @@ public:
 private:
 	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
 	csRef<iThingFactoryState> ButtonPanel_state;
-	
+
 	void AddButton(const char *name, const char *texture, int row, int column);
 };
 

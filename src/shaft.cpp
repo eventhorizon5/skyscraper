@@ -53,8 +53,7 @@ Shaft::Shaft(int number, int type, double CenterX, double CenterZ, int _startflo
 
 	ShaftArray.SetSize(endfloor - startfloor + 1);
 	ShaftArray_state.SetSize(endfloor - startfloor + 1);
-	//ShaftArray_collider.SetSize(endfloor - startfloor + 1);
-	
+
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create shaft meshes
@@ -87,7 +86,7 @@ int Shaft::AddWall(int floor, const char *name, const char *texture, double x1, 
 
 int Shaft::AddFloor(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
-   	//get shaft extents
+	//get shaft extents
 	double altitude = sbs->FloorArray[floor]->Altitude;
 
 	if (altitude + voffset1 < bottom)

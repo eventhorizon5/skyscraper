@@ -45,29 +45,29 @@ class MeshControl: public wxDialog
 		//(*Identifiers(MeshControl)
 		enum Identifiers
 		{
-		    ID_bOk = 0x1000,
-		    ID_chkFloor,
-		    ID_STATICTEXT2,
-		    ID_chkColumnFrame,
-		    ID_chkSky,
-		    ID_chkLandscape,
-		    ID_chkBuildings,
-		    ID_chkExternal,
-		    ID_STATICTEXT1
+			ID_bOk = 0x1000,
+			ID_chkFloor,
+			ID_STATICTEXT2,
+			ID_chkColumnFrame,
+			ID_chkSky,
+			ID_chkLandscape,
+			ID_chkBuildings,
+			ID_chkExternal,
+			ID_STATICTEXT1
 		};
 		//*)
 
 	protected:
 
 		//(*Handlers(MeshControl)
-        void On_bOk_Click(wxCommandEvent& event);
-        void On_chkExternal_Change(wxCommandEvent& event);
-        void On_chkBuildings_Change(wxCommandEvent& event);
-        void On_chkLandscape_Change(wxCommandEvent& event);
-        void On_chkSky_Change(wxCommandEvent& event);
-        void On_chkColumnFrame_Change(wxCommandEvent& event);
-        void On_chkFloor_Change(wxCommandEvent& event);
-        //*)
+		void On_bOk_Click(wxCommandEvent& event);
+		void On_chkExternal_Change(wxCommandEvent& event);
+		void On_chkBuildings_Change(wxCommandEvent& event);
+		void On_chkLandscape_Change(wxCommandEvent& event);
+		void On_chkSky_Change(wxCommandEvent& event);
+		void On_chkColumnFrame_Change(wxCommandEvent& event);
+		void On_chkFloor_Change(wxCommandEvent& event);
+		//*)
 		void OnInit();
 
 		//(*Declarations(MeshControl)

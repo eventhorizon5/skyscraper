@@ -398,8 +398,8 @@ void editelevator::On_bEnqueueUp_Click(wxCommandEvent& event)
 
 void editelevator::On_bGo_Click(wxCommandEvent& event)
 {
-    sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->GotoFloor = sFloor->GetThumbPosition();
-    sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->MoveElevator = true;
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->GotoFloor = sFloor->GetThumbPosition();
+	sbs->ElevatorArray[sNumber->GetThumbPosition() + 1]->MoveElevator = true;
 }
 
 void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)

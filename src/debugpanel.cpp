@@ -130,19 +130,19 @@ void DebugPanel::On_chkCollisionDetection_Change(wxCommandEvent& event)
 
 void DebugPanel::OnInit()
 {
-    //set check boxes
-    chkCollisionDetection->SetValue(sbs->EnableCollisions);
-    chkFrameLimiter->SetValue(sbs->FrameLimiter);
-    //chkMainProcessing->SetValue();
-    chkAutoShafts->SetValue(sbs->AutoShafts);
-    chkFrameSync->SetValue(sbs->FrameSync);
+	//set check boxes
+	chkCollisionDetection->SetValue(sbs->EnableCollisions);
+	chkFrameLimiter->SetValue(sbs->FrameLimiter);
+	//chkMainProcessing->SetValue();
+	chkAutoShafts->SetValue(sbs->AutoShafts);
+	chkFrameSync->SetValue(sbs->FrameSync);
 
 	mc = new MeshControl(dp, -1);
 	ee = new editelevator(dp, -1);
 
 	wxTimer *timer;
-    timer = new Timer();
-    timer->Start(40);
+	timer = new Timer();
+	timer->Start(40);
 }
 
 void Timer::Notify()

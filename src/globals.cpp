@@ -29,7 +29,7 @@
 
 bool IsEven(int Number)
 {
-    //Determine if the passed number is even.
+	//Determine if the passed number is even.
 	//If number divides evenly, return true
 	if ((Number / 2) == int(Number / 2))
 		return true;
@@ -39,7 +39,7 @@ bool IsEven(int Number)
 
 bool IsNumeric(const char *expression)
 {
-	//returns true if the string is numeric; otherwise returns false	
+	//returns true if the string is numeric; otherwise returns false
 	csString s;
 	s = expression;
 	char test;
@@ -72,7 +72,7 @@ double RoundDouble(double value, int decimalplaces)
 	}
 	else
 		resultmult = 1.0;
-	
+
 	// decimalpts effectively moves the decimal points over so the floor()
 	// function returns the rounded version [thanks to the 0.5]
 	double base = 10;

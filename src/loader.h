@@ -43,8 +43,8 @@ class Loader: public wxDialog
 		//(*Identifiers(Loader)
 		enum Identifiers
 		{
-		    ID_SELECTOR = 0x1000,
-		    ID_bOK
+			ID_SELECTOR = 0x1000,
+			ID_bOK
 		};
 		//*)
 

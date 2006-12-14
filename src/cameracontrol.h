@@ -38,19 +38,19 @@ class CameraControl: public wxDialog
 		virtual ~CameraControl();
 
 		//(*Identifiers(CameraControl)
-        enum Identifiers
-        {
-        };
-        //*)
+		enum Identifiers
+		{
+		};
+		//*)
 
 	protected:
 
 		//(*Handlers(CameraControl)
 		void OnInit(wxInitDialogEvent& event);
-        //*)
+		//*)
 
 		//(*Declarations(CameraControl)
-        //*)
+		//*)
 
 	private:
 

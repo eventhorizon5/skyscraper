@@ -48,7 +48,7 @@ int main (int argc, char* argv[])
 bool Skyscraper::OnInit(void)
 {
 	srand (time (0));
-	
+
 	//set building file
 	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings"), _(""), _("Building files (*.bld)|*.bld"), wxOPEN);
 	int result = Selector->ShowModal();
@@ -60,12 +60,12 @@ bool Skyscraper::OnInit(void)
 		//quit
 		return false;
 	}
-	
+
 	wxSleep(1);
 
 	//Create new simulator object
 	Simcore = new SBS();
-	
+
 	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
 	char** csargv;
 	csargv = (char**)cs_malloc(sizeof(char*) * argc);

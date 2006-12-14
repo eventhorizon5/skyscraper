@@ -54,27 +54,27 @@ class DebugPanel: public wxDialog
 		//(*Identifiers(DebugPanel)
 		enum Identifiers
 		{
-		    ID_bListAltitudes = 0x1000,
-		    st4c,
-		    st5c,
-		    st6c,
-		    st7c,
-		    st11c,
-		    ID_t_camerafloor,
-		    ID_t_camerap,
-		    ID_t_elevnumber,
-		    ID_t_elevfloor,
-		    ID_t_object,
-		    st22c,
-		    ID_chkCollisionDetection,
-		    ID_bMeshControl,
-		    ID_bInitRealtime,
-		    ID_bEditElevator,
-		    st55c,
-		    ID_chkFrameSync,
-		    ID_chkAutoShafts,
-		    ID_chkMainProcessing,
-		    ID_chkFrameLimiter
+			ID_bListAltitudes = 0x1000,
+			st4c,
+			st5c,
+			st6c,
+			st7c,
+			st11c,
+			ID_t_camerafloor,
+			ID_t_camerap,
+			ID_t_elevnumber,
+			ID_t_elevfloor,
+			ID_t_object,
+			st22c,
+			ID_chkCollisionDetection,
+			ID_bMeshControl,
+			ID_bInitRealtime,
+			ID_bEditElevator,
+			st55c,
+			ID_chkFrameSync,
+			ID_chkAutoShafts,
+			ID_chkMainProcessing,
+			ID_chkFrameLimiter
 		};
 		//*)
 
@@ -90,7 +90,7 @@ class DebugPanel: public wxDialog
 		void On_chkAutoShafts_Change(wxCommandEvent& event);
 		void On_bEditElevator_Click(wxCommandEvent& event);
 		//*)
-        void OnInit();
+		void OnInit();
 
 		//(*Declarations(DebugPanel)
 		wxButton* bListAltitudes;

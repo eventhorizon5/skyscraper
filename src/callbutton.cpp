@@ -140,7 +140,7 @@ void CallButton::Call(int direction)
 	for (int i = Elevators[0]; i < Elevators.GetSize(); i++)
 	{
 		int current = sbs->ElevatorArray[Elevators[i]]->GetFloor();
-		
+
 		//if elevator is closer than the previously checked one
 		if (abs(current) < closest)
 		{

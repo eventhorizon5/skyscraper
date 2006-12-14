@@ -58,7 +58,7 @@ class SBS
 {
 public:
 
-    //Engine data
+	//Engine data
 	csRef<iEngine> engine;
 	csRef<iLoader> loader;
 	csRef<iGraphics3D> g3d;
@@ -94,9 +94,9 @@ public:
 	csString BuildingVersion;
 
 	//Internal data
-    double Gravity; //gravity variable for physics algorithms
-    bool IsRunning; //is sim engine running?
-    int Shafts; //number of shafts
+	double Gravity; //gravity variable for physics algorithms
+	bool IsRunning; //is sim engine running?
+	int Shafts; //number of shafts
 	int TotalFloors; //number of above-ground floors including 0
 	int Basements; //number of basement floors
 	int Elevators; //number of elevators
@@ -106,14 +106,14 @@ public:
 	csArray<Shaft*> ShaftArray; //pointer array to shaft objects
 	Camera *camera; //camera object
 	bool RenderOnly; //skip sim processing and only render graphics
-    bool InputOnly; //skip sim processing and only run input and rendering code
-    bool IsFalling; //make user fall
-    bool InStairwell; //true if user is in a stairwell
+	bool InputOnly; //skip sim processing and only run input and rendering code
+	bool IsFalling; //make user fall
+	bool InStairwell; //true if user is in a stairwell
 	bool InElevator; //true if user is in an elevator
-    int ElevatorNumber; //number of currently selected elevator
+	int ElevatorNumber; //number of currently selected elevator
 	bool ElevatorSync; //true if user should move with elevator
 	bool FrameLimiter; //frame limiter toggle
-    int FrameRate; //max frame rate
+	int FrameRate; //max frame rate
 	double FPSModifier; //modification value for FPS changes
 	bool FrameSync; //synchronize movement to frame rate
 	bool EnableCollisions; //turns collisions on/off
@@ -142,7 +142,7 @@ public:
 	void Wait(long Milliseconds);
 	bool LoadTexture(const char *filename, const char *name);
 	bool Initialize(int argc, const char* const argv[], const char *windowtitle);
- 	void Start();
+	void Start();
 	void Run();
 	int CreateSky();
 	void AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b);

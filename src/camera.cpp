@@ -7,7 +7,7 @@
 	http://www.tliquest.net/skyscraper
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
@@ -35,7 +35,7 @@ Camera::Camera()
 {
 	MainCamera = sbs->view->GetCamera();
 	MainCamera->SetSector(sbs->area);
-	
+
 	// these are used store the current orientation of the camera
 	rotY = rotX = rotZ = 0;
 
@@ -59,9 +59,7 @@ Camera::~Camera()
 void Camera::SetPosition(csVector3 vector)
 {
 	//sets the camera to an absolute position in 3D space
-	MainCamera->GetTransform().SetOrigin(csVector3(vector.x,
-												   vector.y,
-												   vector.z));
+	MainCamera->GetTransform().SetOrigin(vector);
 }
 
 void Camera::SetDirection(csVector3 vector)
@@ -94,8 +92,8 @@ csVector3 Camera::GetPosition()
 {
 	//returns the camera's current position
 	return csVector3(MainCamera->GetTransform().GetOrigin().x,
-					 MainCamera->GetTransform().GetOrigin().y,
-					 MainCamera->GetTransform().GetOrigin().z);
+				MainCamera->GetTransform().GetOrigin().y,
+				MainCamera->GetTransform().GetOrigin().z);
 }
 
 csVector3 Camera::GetDirection()
@@ -138,7 +136,7 @@ bool Camera::Move(csVector3 vector, double speed)
 void Camera::Rotate(csVector3 vector, double speed)
 {
 	//rotates the camera in a relative amount
-	
+
 	rotX += vector.x * speed;
 	rotY += vector.y * speed;
 	rotZ += vector.z * speed;
@@ -200,7 +198,7 @@ void Camera::Gravity()
 	else
 	{
 		//fall routine
-		
+
 		if (sbs->IsFalling == false)
 		{
 			old_time = sbs->vc->GetCurrentTicks();
@@ -263,7 +261,7 @@ void Camera::CheckShaft()
 			else if (sbs->ShaftArray[i]->InsideShaft == true && sbs->InElevator == true)
 			{
 				sbs->ShaftArray[i]->InsideShaft = false;
-					
+
 				//turn off shaft except for camera floor
 				sbs->ShaftArray[i]->EnableWholeShaft(false);
 				sbs->ShaftArray[i]->Enabled(sbs->camera->CurrentFloor, true);
@@ -272,7 +270,7 @@ void Camera::CheckShaft()
 		else if (sbs->ShaftArray[i]->InsideShaft == true)
 		{
 			sbs->ShaftArray[i]->InsideShaft = false;
-			
+
 			//turn off entire shaft
 			sbs->ShaftArray[i]->EnableWholeShaft(false);
 		}
@@ -283,7 +281,7 @@ void Camera::ClickedObject()
 {
 	//some code and comments from the CrystalSpace manual
 	//this returns the mesh that the user clicks on
-	
+
 	// Setup a 2D vector with our mouse position.  We invert the y
 	// (based on vertical screen dimension) because CS assumes y=0
 	// is down for 3D calculations.

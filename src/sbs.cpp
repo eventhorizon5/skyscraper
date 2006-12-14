@@ -157,7 +157,7 @@ void SBS::Start()
 	UserVariable.SetSize(256);
 
 	//load building data file
-    Report("\nLoading building data from " + BuildingFile + "...\n");
+	Report("\nLoading building data from " + BuildingFile + "...\n");
 
 	//Pause for 1 second
 	csSleep(1000);
@@ -190,7 +190,7 @@ void SBS::Start()
 	//turn off floors
 	for (int i = -Basements; i <= TotalFloors; i++)
 		FloorArray[i]->Enabled(false);
-	
+
 	//turn off shafts
 	for (int i = 1; i < ShaftArray.GetSize(); i++)
 	{
@@ -213,13 +213,13 @@ void SBS::Start()
 void SBS::Run()
 {
 	//start runloop
-	
+
 	Report("Running simulation...");
 
 	//start simulation
 	csDefaultRunLoop (object_reg);
-    //stimer = new STimer();
-    //stimer->Start(1000 / FrameRate);
+	//stimer = new STimer();
+	//stimer->Start(1000 / FrameRate);
 
 }
 
@@ -275,7 +275,7 @@ void SBS::GetInput()
 	// First get elapsed time from the virtual clock.
 	elapsed_time = vc->GetElapsedTicks ();
 	current_time = vc->GetCurrentTicks ();
-	
+
 	// Now rotate the camera according to keyboard state
 	double speed = (elapsed_time / 1000.0) * (0.06 * 20);
 
@@ -289,13 +289,13 @@ void SBS::GetInput()
 		MouseDown = true;
 		camera->ClickedObject();
 	}
-	
+
 	//reset mouse state
 	if (mouse->GetLastButton(0) == false)
 		MouseDown = false;
 
 	//if (kbd->GetKeyState('a'))
-	
+
 	if (kbd->GetKeyState (CSKEY_ESC))
 		if (equeue) equeue->GetEventOutlet()->Broadcast (csevQuit(object_reg));
 
@@ -383,7 +383,7 @@ void SBS::Render()
 void SBS::SetupFrame()
 {
 	//Main simulator loop
-	
+
 	//used to adjust speeds according to frame rate
 	if (FrameSync == true)
 		FPSModifier = FrameRate / FPS;
@@ -417,7 +417,7 @@ void SBS::SetupFrame()
 	if (RenderOnly == false)
 		GetInput();
 
-    Render();
+	Render();
 }
 
 void SBS::FinishFrame()
@@ -461,10 +461,10 @@ bool SBS::HandleEvent(iEvent& Event)
 
 static bool SBSEventHandler(iEvent& Event)
 {
-  if (sbs)
-    return sbs->HandleEvent (Event);
-  else
-    return false;
+	if (sbs)
+		return sbs->HandleEvent (Event);
+	else
+		return false;
 }
 
 void STimer::Notify()
@@ -489,12 +489,12 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	if (!object_reg) return false;
 
 	if (!csInitializer::RequestPlugins (object_reg,
-  		CS_REQUEST_VFS,
+		CS_REQUEST_VFS,
 		CS_REQUEST_OPENGL3D,
-        CS_REQUEST_ENGINE,
+		CS_REQUEST_ENGINE,
 		CS_REQUEST_FONTSERVER,
 		CS_REQUEST_IMAGELOADER,
-        CS_REQUEST_LEVELLOADER,
+		CS_REQUEST_LEVELLOADER,
 		CS_REQUEST_CONSOLEOUT,
 		CS_REQUEST_REPORTER,
 		CS_REQUEST_REPORTERLISTENER,
@@ -511,11 +511,11 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	if (!csInitializer::SetupEventHandler (object_reg, SBSEventHandler))
 		return ReportError ("Couldn't initialize event handler!");
 
-	  // Check for commandline help.
+	// Check for commandline help.
 	if (csCommandLineHelper::CheckHelp (object_reg))
 	{
-	    csCommandLineHelper::Help (object_reg);
-	    return false;
+		csCommandLineHelper::Help (object_reg);
+		return false;
 	}
 
 	csRef<iPluginManager> plugin_mgr (CS_QUERY_REGISTRY (object_reg, iPluginManager));
@@ -560,7 +560,7 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	#else
 		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "\\");
 	#endif
-	
+
 	iNativeWindow* nw = g2d->GetNativeWindow();
 	if (nw) nw->SetTitle(windowtitle);
 
@@ -590,7 +590,7 @@ bool SBS::LoadTexture(const char *filename, const char *name)
 	// File System (VFS) plugin.
 	if (!loader->LoadTexture (name, filename))
 	{
-	    ReportError("Error loading texture");
+		ReportError("Error loading texture");
 		return false;
 	}
 	return true;
@@ -626,7 +626,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
-	
+
 	//reverse vector portions if specified
 	if (revX == true)
 	{
@@ -649,7 +649,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 		v3.z = z1;
 		v4.z = z2;
 	}
-	
+
 	//texture mapping is set from first 3 coordinates
 	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
 		v1,
@@ -691,7 +691,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
 	//texture mapping is set from first 3 coordinates
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx + 1), 
+	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx + 1),
 		csVector2 (0, 0),
 		csVector2 (tw, 0),
 		csVector2 (tw, th));
@@ -716,7 +716,7 @@ void SBS::DeleteWall(csRef<iThingFactoryState> dest, int index)
 {
 	//delete wall polygons (front and back) from specified mesh
 	dest->RemovePolygon(index);
-	dest->RemovePolygon(index + 1); 
+	dest->RemovePolygon(index + 1);
 }
 
 
@@ -724,7 +724,7 @@ void SBS::DeleteFloor(csRef<iThingFactoryState> dest, int index)
 {
 	//delete floor polygons (front and back) from specified mesh
 	dest->RemovePolygon(index);
-	dest->RemovePolygon(index + 1); 
+	dest->RemovePolygon(index + 1);
 }
 
 void SBS::Report (const char* msg, ...)
@@ -763,9 +763,9 @@ bool SBS::ReportError (const char* msg, ...)
 int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th)
 {
 	//create 4 walls
-	
+
 	iMaterialWrapper* tm;
-	
+
 	int firstidx = dest->AddInsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
 	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
@@ -791,7 +791,7 @@ int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const c
 int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th)
 {
 	//create 4 walls from a central point
-	
+
 	iMaterialWrapper* tm;
 	double x1;
 	double x2;
@@ -909,7 +909,7 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 		//calculate diagonals
 		tempw1 = abs(x.y - x.x);
 		tempw2 = abs(z.y - z.x);
-	    tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
 	}
 	th2 = AutoSize(0, abs(y.y - y.x), false, IsExternal, th);
 
@@ -919,7 +919,7 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
-	
+
 	//reverse extents if specified
 	float tmpv;
 	if (revX == true)
@@ -940,7 +940,7 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 		z.x = z.y;
 		z.y = tmpv;
 	}
-	
+
 	//texture mapping is set from 3 manual vectors (origin, width extent,
 	//height extent) in a square layout
 	csVector3 v1 (x.x, y.y, z.x); //top left
@@ -1013,7 +1013,7 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 		//calculate diagonals
 		tempw1 = abs(x.y - x.x);
 		tempw2 = abs(z.y - z.x);
-	    tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
 	}
 	th2 = AutoSize(0, abs(y.y - y.x), false, IsExternal, th);
 
@@ -1023,7 +1023,7 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 
 	material = sbs->engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
-	
+
 	//reverse extents if specified
 	float tmpv;
 	if (revX == true)
@@ -1044,7 +1044,7 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 		z.x = z.y;
 		z.y = tmpv;
 	}
-	
+
 	//texture mapping is set from 3 manual vectors (origin, width extent,
 	//height extent) in a square layout
 	csVector3 v1 (x.x, y.y, z.x); //top left
@@ -1137,7 +1137,7 @@ csString SBS::Calc(const char *expression)
 			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
 		return tmpcalc.GetData();
 	}
-	
+
 	//boolean operators
 	temp1 = tmpcalc.Find("=", 0);
 	if (temp1 > 0)
@@ -1171,7 +1171,7 @@ csString SBS::Calc(const char *expression)
 		else
 			return "false";
 	}
-	
+
 	return tmpcalc.GetData();
 }
 
@@ -1290,7 +1290,7 @@ csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 			tempnum = varray[i].y;
 		if (coord == 3)
 			tempnum = varray[i].z;
-		
+
 		if (i == 0)
 		{
 			esmall = tempnum;
@@ -1304,7 +1304,7 @@ csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 				ebig = tempnum;
 		}
 	}
-	
+
 	return csVector2(esmall, ebig);
 }
 
@@ -1341,7 +1341,7 @@ int SBS::CreateSky()
 int SBS::GetFloorNumber(double altitude)
 {
 	//Returns floor number located at a specified altitude
-	
+
 	//check to see if altitude is below bottom floor
 	if (altitude < FloorArray[-Basements]->Altitude)
 		return -Basements;
