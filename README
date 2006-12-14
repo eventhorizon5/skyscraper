@@ -45,7 +45,7 @@ simulator core is called the Scalable Building Simulator, or SBS. Buildings are 
 in scripted text files that are loaded and generated in realtime by the simulator. A
 graphical building designer application is planned to assist in creating building data
 files. The current version of Skyscraper (1.1) is written in C++ and uses the open-source
-CrystalSpace graphics engine, and is multiplatform.
+Crystal Space graphics engine, and aims to be fully multiplatform.
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -55,12 +55,12 @@ CrystalSpace graphics engine, and is multiplatform.
 This 1.1 release is a milestone release, and is a complete rewrite of the original
 1.0 codebase, in C++.  This is an ongoing effort towards a 2.0 stable release.
 Newer features, a completely redesigned simulation engine, external loadable
-buildings, better graphics, and more are being developed.  This version was
-originally coded in Visual Basic 6 using the TrueVision3D graphics engine.
+buildings, better graphics, and more are being developed.
 
-This software requires both the CrystalSpace3D CVS 5/19/2006 (or later) graphics
-engine library which can be found at http://www.crystalspace3d.com, and the wxWidgets
-library (version 2.6.3 or later) which can be found at http://www.wxwidgets.org.
+This software requires both the Crystal Space graphics engine library which can be
+found at http://www.crystalspace3d.org, and the wxWidgets library (version 2.6.3 or
+later) which can be found at http://www.wxwidgets.org.  The current binary build comes
+with Crystal Space 1.0 RC1 and wxWidgets 2.6.3 binaries.
 
 See the changelog for new features, fixes, and other changes in this release.
 
@@ -106,6 +106,20 @@ in the skyscraper/msvc directory.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 5. Usage
+
+Keys currently used in the simulator:
+
+Arrow keys - movement
+PgUp - Look upwards
+PgDown - Look downwards
+Home - Float upwards (or jump if collision detection is on)
+End - Float downwards (or crouch if collision detection is on)
+Space - Reset viewpoint
+Ctrl - Run (hold down with other keys)
+Shift - Strafe (hold down with other keys)
+Alt - Rotate on Z axis (hold down with other keys)
+Esc - quit
+
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
