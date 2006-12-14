@@ -322,10 +322,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\fileio.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\floor.h"
 				>
 			</File>

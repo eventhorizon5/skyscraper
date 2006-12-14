@@ -197,13 +197,6 @@
 			<Option target="Release|Win32" />
 			<Option target="Debug|Win32" />
 		</Unit>
-		<Unit filename="..\src\fileio.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
 		<Unit filename="..\src\floor.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="Release|Win32" />
