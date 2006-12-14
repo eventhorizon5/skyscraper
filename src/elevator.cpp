@@ -82,9 +82,7 @@ Elevator::Elevator(int number)
 	buffer.Insert(0, "Elevator ");
 	buffer.Trim();
 	ElevatorMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	Elevator_object = ElevatorMesh->GetMeshObject ();
-	Elevator_factory = Elevator_object->GetFactory();
-	Elevator_state = scfQueryInterface<iThingFactoryState> (Elevator_factory);
+	Elevator_state = scfQueryInterface<iThingFactoryState> (ElevatorMesh->GetMeshObject()->GetFactory());
 	Elevator_movable = ElevatorMesh->GetMovable();
 	ElevatorMesh->SetZBufMode(CS_ZBUF_USE);
 
@@ -92,9 +90,7 @@ Elevator::Elevator(int number)
 	buffer.Insert(0, "FloorIndicator ");
 	buffer.Trim();
 	FloorIndicator = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	FloorIndicator_object = FloorIndicator->GetMeshObject ();
-	FloorIndicator_factory = FloorIndicator_object->GetFactory();
-	FloorIndicator_state = scfQueryInterface<iThingFactoryState> (FloorIndicator_factory);
+	FloorIndicator_state = scfQueryInterface<iThingFactoryState> (FloorIndicator->GetMeshObject()->GetFactory());
 	FloorIndicator_movable = FloorIndicator->GetMovable();
 	FloorIndicator->SetZBufMode(CS_ZBUF_USE);
 
@@ -102,9 +98,7 @@ Elevator::Elevator(int number)
 	buffer.Insert(0, "ElevatorDoorL ");
 	buffer.Trim();
 	ElevatorDoorL = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	ElevatorDoorL_object = ElevatorDoorL->GetMeshObject ();
-	ElevatorDoorL_factory = ElevatorDoorL_object->GetFactory();
-	ElevatorDoorL_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorL_factory);
+	ElevatorDoorL_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorL->GetMeshObject()->GetFactory());
 	ElevatorDoorL_movable = ElevatorDoorL->GetMovable();
 	ElevatorDoorL->SetZBufMode(CS_ZBUF_USE);
 
@@ -112,9 +106,7 @@ Elevator::Elevator(int number)
 	buffer.Insert(0, "ElevatorDoorR ");
 	buffer.Trim();
 	ElevatorDoorR = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	ElevatorDoorR_object = ElevatorDoorR->GetMeshObject ();
-	ElevatorDoorR_factory = ElevatorDoorR_object->GetFactory();
-	ElevatorDoorR_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorR_factory);
+	ElevatorDoorR_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorR->GetMeshObject()->GetFactory());
 	ElevatorDoorR_movable = ElevatorDoorR->GetMovable();
 	ElevatorDoorR->SetZBufMode(CS_ZBUF_USE);
 
@@ -122,9 +114,7 @@ Elevator::Elevator(int number)
 	buffer.Insert(0, "Plaque ");
 	buffer.Trim();
 	Plaque = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	Plaque_object = Plaque->GetMeshObject ();
-	Plaque_factory = Plaque_object->GetFactory();
-	Plaque_state = scfQueryInterface<iThingFactoryState> (Plaque_factory);
+	Plaque_state = scfQueryInterface<iThingFactoryState> (Plaque->GetMeshObject()->GetFactory());
 	Plaque_movable = Plaque->GetMovable();
 	Plaque->SetZBufMode(CS_ZBUF_USE);
 }
@@ -132,10 +122,6 @@ Elevator::Elevator(int number)
 Elevator::~Elevator()
 {
 	//Destructor
-	UpQueue.DeleteAll();
-	DownQueue.DeleteAll();
-	ServicedFloors.DeleteAll();
-	ShaftDoorsOpen.DeleteAll();
 	if (Panel)
 		delete Panel;
 	Panel = 0;

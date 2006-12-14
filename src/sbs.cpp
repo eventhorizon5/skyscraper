@@ -129,15 +129,6 @@ SBS::~SBS()
 			delete ShaftArray[i];
 		ShaftArray[i] = 0;
 	}
-
-	//delete arrays
-	FloorArray.DeleteAll();
-	ElevatorArray.DeleteAll();
-	ShaftArray.DeleteAll();
-
-	//delete string arrays
-	UserVariable.DeleteAll();
-	BuildingData.DeleteAll();
 }
 
 void SBS::Start()
@@ -622,7 +613,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	dest->AddQuad(v4, v3, v2, v1);
 
-	material = sbs->engine->GetMaterialList ()->FindByName (texture);
+	material = engine->GetMaterialList ()->FindByName (texture);
 
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
@@ -688,7 +679,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	dest->AddQuad(v4, v3, v2, v1);
-	material = sbs->engine->GetMaterialList ()->FindByName (texture);
+	material = engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
 	//texture mapping is set from first 3 coordinates
 	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx + 1),
@@ -767,12 +758,12 @@ int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const c
 	iMaterialWrapper* tm;
 
 	int firstidx = dest->AddInsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
-	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	tm = engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
 	dest->AddOutsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
-	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	tm = engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
@@ -804,12 +795,12 @@ int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const 
 	z2 = CenterZ + (LengthZ / 2);
 
 	int firstidx = dest->AddInsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
-	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	tm = engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
 	dest->AddOutsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
-	tm = sbs->engine->GetMaterialList ()->FindByName (texture);
+	tm = engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
 	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
 
@@ -844,28 +835,20 @@ void SBS::InitMeshes()
 	ShaftArray.SetSize(Shafts + 1);
 
 	//create object meshes
-	Buildings = sbs->engine->CreateSectorWallsMesh (sbs->area, "Buildings");
-	Buildings_object = Buildings->GetMeshObject ();
-	Buildings_factory = Buildings_object->GetFactory();
-	Buildings_state = scfQueryInterface<iThingFactoryState> (Buildings_factory);
+	Buildings = engine->CreateSectorWallsMesh (area, "Buildings");
+	Buildings_state = scfQueryInterface<iThingFactoryState> (Buildings->GetMeshObject()->GetFactory());
 	Buildings->SetZBufMode(CS_ZBUF_USE);
 
-	External = sbs->engine->CreateSectorWallsMesh (sbs->area, "External");
-	External_object = External->GetMeshObject ();
-	External_factory = External_object->GetFactory();
-	External_state = scfQueryInterface<iThingFactoryState> (External_factory);
+	External = engine->CreateSectorWallsMesh (area, "External");
+	External_state = scfQueryInterface<iThingFactoryState> (External->GetMeshObject()->GetFactory());
 	External->SetZBufMode(CS_ZBUF_USE);
 
-	Landscape = sbs->engine->CreateSectorWallsMesh (sbs->area, "Landscape");
-	Landscape_object = Landscape->GetMeshObject ();
-	Landscape_factory = Landscape_object->GetFactory();
-	Landscape_state = scfQueryInterface<iThingFactoryState> (Landscape_factory);
+	Landscape = engine->CreateSectorWallsMesh (area, "Landscape");
+	Landscape_state = scfQueryInterface<iThingFactoryState> (Landscape->GetMeshObject()->GetFactory());
 	Landscape->SetZBufMode(CS_ZBUF_USE);
 
-	ColumnFrame = sbs->engine->CreateSectorWallsMesh (sbs->area, "ColumnFrame");
-	ColumnFrame_object = ColumnFrame->GetMeshObject ();
-	ColumnFrame_factory = ColumnFrame_object->GetFactory();
-	ColumnFrame_state = scfQueryInterface<iThingFactoryState> (ColumnFrame_factory);
+	ColumnFrame = engine->CreateSectorWallsMesh (area, "ColumnFrame");
+	ColumnFrame_state = scfQueryInterface<iThingFactoryState> (ColumnFrame->GetMeshObject()->GetFactory());
 	ColumnFrame->SetZBufMode(CS_ZBUF_USE);
 }
 
@@ -917,7 +900,7 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 	int firstidx = dest->AddPolygon(varray1.GetVertices(), num);
 	dest->AddPolygon(varray2.GetVertices(), num);
 
-	material = sbs->engine->GetMaterialList ()->FindByName (texture);
+	material = engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
 
 	//reverse extents if specified
@@ -1021,7 +1004,7 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
 	dest->AddPolygon(varray1.GetVertices(), num);
 
-	material = sbs->engine->GetMaterialList ()->FindByName (texture);
+	material = engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
 
 	//reverse extents if specified
@@ -1311,23 +1294,21 @@ csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 int SBS::CreateSky()
 {
 	SkyBox = (engine->CreateSectorWallsMesh (area, "SkyBox"));
-	SkyBox_object = SkyBox->GetMeshObject ();
-	SkyBox_factory = SkyBox_object->GetFactory();
-	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox_factory);
+	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox->GetMeshObject()->GetFactory());
 	SkyBox->SetZBufMode(CS_ZBUF_USE);
 
 	int firstidx = SkyBox_state->AddInsideBox(csVector3(-100000, -100000, -100000), csVector3(100000, 100000, 100000));
-	material = sbs->engine->GetMaterialList ()->FindByName ("SkyBack");
+	material = engine->GetMaterialList ()->FindByName ("SkyBack");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
-	material = sbs->engine->GetMaterialList ()->FindByName ("SkyRight");
+	material = engine->GetMaterialList ()->FindByName ("SkyRight");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
-	material = sbs->engine->GetMaterialList ()->FindByName ("SkyFront");
+	material = engine->GetMaterialList ()->FindByName ("SkyFront");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 2, firstidx + 2), material);
-	material = sbs->engine->GetMaterialList ()->FindByName ("SkyLeft");
+	material = engine->GetMaterialList ()->FindByName ("SkyLeft");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 3, firstidx + 3), material);
-	material = sbs->engine->GetMaterialList ()->FindByName ("SkyBottom");
+	material = engine->GetMaterialList ()->FindByName ("SkyBottom");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 4, firstidx + 4), material);
-	material = sbs->engine->GetMaterialList ()->FindByName ("SkyTop");
+	material = engine->GetMaterialList ()->FindByName ("SkyTop");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 5, firstidx + 5), material);
 
 	SkyBox_state->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx + 5),

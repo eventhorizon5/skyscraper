@@ -63,7 +63,6 @@ int SBS::LoadBuilding(const char * filename)
 	csString Context = "None";
 	char intbuffer[65];
 	csString buffer;
-	//char dbuffer[CVTBUFSIZE];
 	bool revX;
 	bool revY;
 	bool revZ;
@@ -74,7 +73,7 @@ int SBS::LoadBuilding(const char * filename)
 		LineData.Trim();
 
 		//skip blank lines
-	if (LineData == "")
+		if (LineData == "")
 			goto Nextline;
 
 		//process comment markers
@@ -83,134 +82,134 @@ int SBS::LoadBuilding(const char * filename)
 			LineData.Truncate(temp1);
 
 		//skip blank lines
-	if (LineData == "")
+		if (LineData == "")
 			goto Nextline;
 
 		//Section information
-	if (LineData.CompareNoCase("<globals>") == true)
+		if (LineData.CompareNoCase("<globals>") == true)
 		{
 			Section = 1;
-		Context = "Globals";
-		Report("Processing globals...");
-		goto Nextline;
+			Context = "Globals";
+			Report("Processing globals...");
+			goto Nextline;
 		}
-	if (LineData.CompareNoCase("<endglobals>") == true)
+		if (LineData.CompareNoCase("<endglobals>") == true)
 		{
-		InitMeshes();
-		Section = 0;
-		Context = "None";
-		Report("Finished globals");
-		goto Nextline;
+			InitMeshes();
+			Section = 0;
+			Context = "None";
+			Report("Finished globals");
+			goto Nextline;
 		}
-	if (LineData.CompareNoCase("<external>") == true)
+		if (LineData.CompareNoCase("<external>") == true)
 		{
-		Section = 3;
-		Context = "External";
-		Report("Processing external objects...");
-		goto Nextline;
+			Section = 3;
+			Context = "External";
+			Report("Processing external objects...");
+			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endexternal>") == true)
 		{
-		Section = 0;
-		Context = "None";
-		Report("Finished external");
-		goto Nextline;
-		}
-	if (LineData.Slice(0, 7).CompareNoCase("<floors") == true)
-		{
-		Section = 2;
-		temp3 = csString(LineData).Downcase().Find("to", 0);
-		RangeL = atoi(LineData.Slice(8, temp3 - 9).GetData());
-		RangeH = atoi(LineData.Slice(temp3 + 2).GetData());
-		Context = "Floor range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
-		//if (RangeL < -Basements !! RangeH > TotalFloors)
-				//Err.Raise 1004;
-		Current = RangeL;
-		RangeStart = i;
-		Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
-		goto Nextline;
-		}
-	if (LineData.Slice(0, 7).CompareNoCase("<floor ") == true)
-		{
-		Section = 2;
-		Context = "Floor";
-		RangeL = 0;
-		RangeH = 0;
-		Current = atoi(LineData.Slice(7, LineData.Length() - 7).GetData());
-		//if (Current < -Basements !! Current > TotalFloors)
-				//Err.Raise 1005
-		Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
-		goto Nextline;
-		}
-	if (LineData.CompareNoCase("<endfloor>") == true)
-		{
-		Section = 0;
-		Context = "None";
-		Report("Finished floor");
-		goto Nextline;
-		}
-	if (LineData.Slice(0, 10).CompareNoCase("<elevators") == true)
-		{
-		Section = 4;
-		temp3 = csString(LineData).Downcase().Find("to", 10);
-			RangeL = atoi(LineData.Slice(11, temp3 - 12).GetData());
-		RangeH = atoi(LineData.Slice(temp3 + 2).GetData());
-		Context = "Elevator range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
-		//if (RangeL < 1 !! RangeH > Elevators)
-				//Err.Raise 1006;
-		Current = RangeL;
-		RangeStart = i;
-		Report("Processing elevators " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
-		goto Nextline;
-		}
-	if (LineData.Slice(0, 10).CompareNoCase("<elevator ") == true)
-		{
-		Section = 4;
-		Context = "Elevator";
-		RangeL = 0;
-		RangeH = 0;
-		Current = atoi(LineData.Slice(10, LineData.Length() - 10).GetData());
-		//if (Current < 1 !! Current > Elevators)
-				//Err.Raise 1007;
-		Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
-		goto Nextline;
-		}
-	if (LineData.CompareNoCase("<endelevator>") == true)
-		{
-		Section = 0;
-		Context = "None";
-		Report("Finished elevator");
-		goto Nextline;
-		}
-	if (LineData.Slice(0, 10).CompareNoCase("<textures>") == true)
-		{
-			Section = 5;
-		Context = "Textures";
-		Report("Processing textures...");
-		goto Nextline;
-		}
-	if (LineData.Slice(0, 13).CompareNoCase("<endtextures>") == true)
-		{
 			Section = 0;
-		Context = "None";
-		Report("Finished textures");
-		goto Nextline;
+			Context = "None";
+			Report("Finished external");
+			goto Nextline;
 		}
-	if (LineData.Slice(0, 5).CompareNoCase("<end>") == true)
+		if (LineData.Slice(0, 7).CompareNoCase("<floors") == true)
+		{
+			Section = 2;
+			temp3 = csString(LineData).Downcase().Find("to", 0);
+			RangeL = atoi(LineData.Slice(8, temp3 - 9).GetData());
+			RangeH = atoi(LineData.Slice(temp3 + 2).GetData());
+			Context = "Floor range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
+			//if (RangeL < -Basements !! RangeH > TotalFloors)
+				//Err.Raise 1004;
+			Current = RangeL;
+			RangeStart = i;
+			Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
+			goto Nextline;
+		}
+		if (LineData.Slice(0, 7).CompareNoCase("<floor ") == true)
+		{
+			Section = 2;
+			Context = "Floor";
+			RangeL = 0;
+			RangeH = 0;
+			Current = atoi(LineData.Slice(7, LineData.Length() - 7).GetData());
+			//if (Current < -Basements !! Current > TotalFloors)
+				//Err.Raise 1005
+			Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
+			goto Nextline;
+		}
+		if (LineData.CompareNoCase("<endfloor>") == true)
 		{
 			Section = 0;
 			Context = "None";
-		Report("Exiting building script");
+			Report("Finished floor");
+			goto Nextline;
+		}
+		if (LineData.Slice(0, 10).CompareNoCase("<elevators") == true)
+		{
+			Section = 4;
+			temp3 = csString(LineData).Downcase().Find("to", 10);
+			RangeL = atoi(LineData.Slice(11, temp3 - 12).GetData());
+			RangeH = atoi(LineData.Slice(temp3 + 2).GetData());
+			Context = "Elevator range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
+			//if (RangeL < 1 !! RangeH > Elevators)
+				//Err.Raise 1006;
+			Current = RangeL;
+			RangeStart = i;
+			Report("Processing elevators " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
+			goto Nextline;
+		}
+		if (LineData.Slice(0, 10).CompareNoCase("<elevator ") == true)
+		{
+			Section = 4;
+			Context = "Elevator";
+			RangeL = 0;
+			RangeH = 0;
+			Current = atoi(LineData.Slice(10, LineData.Length() - 10).GetData());
+			//if (Current < 1 !! Current > Elevators)
+				//Err.Raise 1007;
+			Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
+			goto Nextline;
+		}
+		if (LineData.CompareNoCase("<endelevator>") == true)
+		{
+			Section = 0;
+			Context = "None";
+			Report("Finished elevator");
+			goto Nextline;
+		}
+		if (LineData.Slice(0, 10).CompareNoCase("<textures>") == true)
+		{
+			Section = 5;
+			Context = "Textures";
+			Report("Processing textures...");
+			goto Nextline;
+		}
+		if (LineData.Slice(0, 13).CompareNoCase("<endtextures>") == true)
+		{
+			Section = 0;
+			Context = "None";
+			Report("Finished textures");
+			goto Nextline;
+		}
+		if (LineData.Slice(0, 5).CompareNoCase("<end>") == true)
+		{
+			Section = 0;
+			Context = "None";
+			Report("Exiting building script");
 			break; //exit data file parser
 		}
 
 
-	//User variable conversion
-	temp1 = LineData.Find("%", 0);
+		//User variable conversion
+		temp1 = LineData.Find("%", 0);
 		if (temp1 > 0)
-		temp3 = LineData.Find("%", temp1 + 1);
-	else
-		temp3 = 0;
+			temp3 = LineData.Find("%", temp1 + 1);
+		else
+			temp3 = 0;
 
 		if (temp1 + temp3 > 0)
 		{
@@ -221,129 +220,129 @@ int SBS::LoadBuilding(const char * filename)
 					//Err.Raise 1001
 				while (temp1 + temp3 > 0)
 				{
-			LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
+					LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
 					temp1 = LineData.Find("%", 0);
 					if (temp1 > 0)
-				temp3 = LineData.Find("%", temp1 + 1);
+						temp3 = LineData.Find("%", temp1 + 1);
 					else
-				temp3 = 0;
+						temp3 = 0;
 					if (temp1 + temp3 > 0)
 						temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
 				}
 			}
 		}
 
-	//Floor object conversion
+		//Floor object conversion
 		temp5 = csString(LineData).Downcase().Find("floor(", 0);
-	while (temp5 > -1)
+		while (temp5 > -1)
 		{
-		temp1 = LineData.Find("(", 0);
-		temp3 = LineData.Find(")", 0);
-		temp4 = atoi(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData());
-		//if (temp4 < -Basements !! temp4 > TotalFloors)
+			temp1 = LineData.Find("(", 0);
+			temp3 = LineData.Find(")", 0);
+			temp4 = atoi(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData());
+			//if (temp4 < -Basements !! temp4 > TotalFloors)
 				//Err.Raise 1005;
 
-		//fullheight parameter
+			//fullheight parameter
 			buffer = temp4;
-		temp6 = "floor(" + buffer.Trim() + ").fullheight";
+			temp6 = "floor(" + buffer.Trim() + ").fullheight";
 			buffer = LineData;
 			buffer.Downcase();
 			temp1 = buffer.Find(temp6.GetData(), 0);
-		if (temp1 > 0)
+			if (temp1 > 0)
 			{
 				buffer = FloorArray[temp4]->FullHeight();
-		LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
+				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
 			}
-		//altitude parameter
+			//altitude parameter
 			buffer = temp4;
-		temp6 = "floor(" + buffer.Trim() + ").altitude";
-		buffer = LineData;
+			temp6 = "floor(" + buffer.Trim() + ").altitude";
+			buffer = LineData;
 			buffer.Downcase();
 			temp1 = buffer.Find(temp6.GetData(), 0);
-		if (temp1 > 0)
+			if (temp1 > 0)
 			{
 				buffer = FloorArray[temp4]->Altitude;
-		LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
+				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
 			}
 			temp5 = csString(LineData).Downcase().Find("floor(", 0);
-	}
+		}
 
-	//CreateWallBox2 command
-	if (LineData.Slice(0, 14).CompareNoCase("createwallbox2") == true)
+		//CreateWallBox2 command
+		if (LineData.Slice(0, 14).CompareNoCase("createwallbox2") == true)
 		{
-		tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-		//if (tempdata.GetSize < 9)
+			//if (tempdata.GetSize < 9)
 				//Err.Raise 1003;
-		if (csString(tempdata[0]).CompareNoCase("floor") == true)
+			if (csString(tempdata[0]).CompareNoCase("floor") == true)
 				tmpMesh = FloorArray[Current]->Level_state;
 			else
 			{
-		if (Section == 2)
+			if (Section == 2)
 				{
 					buffer = FloorArray[Current]->Altitude + atof(tempdata[8]);
 					tempdata.Put(8, buffer);
 				}
 			}
-		buffer = tempdata[0];
+			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
 				tmpMesh = External_state;
-		if (buffer == "landscape")
+			if (buffer == "landscape")
 				tmpMesh = Landscape_state;
-		if (buffer == "buildings")
+			if (buffer == "buildings")
 				tmpMesh = Buildings_state;
-		if (buffer == "columnframe")
+			if (buffer == "columnframe")
 				tmpMesh = ColumnFrame_state;
-		//if IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
-		CreateWallBox2(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+			//if IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
+			CreateWallBox2(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 			tempdata.DeleteAll();
 		}
 
-	//CreateWallBox command
-	if (LineData.Slice(0, 14).CompareNoCase("createwallbox ") == true)
+		//CreateWallBox command
+		if (LineData.Slice(0, 14).CompareNoCase("createwallbox ") == true)
 		{
-		tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-		//if (tempdata.GetSize < 9)
+			//if (tempdata.GetSize < 9)
 				//Err.Raise 1003
-		if (csString(tempdata[0]).CompareNoCase("floor") == true)
-		tmpMesh = FloorArray[Current]->Level_state;
+			if (csString(tempdata[0]).CompareNoCase("floor") == true)
+				tmpMesh = FloorArray[Current]->Level_state;
 			else
 			{
-		if (Section == 2)
+				if (Section == 2)
 				{
 					buffer = FloorArray[Current]->Altitude + atof(tempdata[8]);
 					tempdata.Put(8, buffer);
 				}
 			}
-		buffer = tempdata[0];
+			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
 				tmpMesh = External_state;
-		if (buffer == "landscape")
+			if (buffer == "landscape")
 				tmpMesh = Landscape_state;
-		if (buffer == "buildings")
+			if (buffer == "buildings")
 				tmpMesh = Buildings_state;
-		if (buffer == "columnframe")
+			if (buffer == "columnframe")
 				tmpMesh = ColumnFrame_state;
-		//If IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
-		CreateWallBox(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+			//If IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
+			CreateWallBox(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 			tempdata.DeleteAll();
 		}
 
 		//AddCustomWall command
-	if (LineData.Slice(0, 14).CompareNoCase("addcustomwall ") == true)
+		if (LineData.Slice(0, 14).CompareNoCase("addcustomwall ") == true)
 		{
-		bool extcheck = false;
+			bool extcheck = false;
 			bool revX;
 			bool revY;
 			bool revZ;
@@ -357,17 +356,17 @@ int SBS::LoadBuilding(const char * filename)
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "floor")
-		tmpMesh = FloorArray[Current]->Level_state;
+				tmpMesh = FloorArray[Current]->Level_state;
 			if (buffer == "external")
 			{
 				tmpMesh = External_state;
 				extcheck = true;
 			}
-		if (buffer == "landscape")
+			if (buffer == "landscape")
 				tmpMesh = Landscape_state;
-		if (buffer == "buildings")
+			if (buffer == "buildings")
 				tmpMesh = Buildings_state;
-		if (buffer == "columnframe")
+			if (buffer == "columnframe")
 				tmpMesh = ColumnFrame_state;
 
 			csPoly3D varray;
@@ -394,9 +393,9 @@ int SBS::LoadBuilding(const char * filename)
 		}
 
 		//AddCustomFloor command
-	if (LineData.Slice(0, 15).CompareNoCase("addcustomfloor ") == true)
+		if (LineData.Slice(0, 15).CompareNoCase("addcustomfloor ") == true)
 		{
-		bool extcheck = false;
+			bool extcheck = false;
 			bool revX;
 			bool revY;
 			bool revZ;
@@ -410,17 +409,17 @@ int SBS::LoadBuilding(const char * filename)
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "floor")
-		tmpMesh = FloorArray[Current]->Level_state;
+			tmpMesh = FloorArray[Current]->Level_state;
 			if (buffer == "external")
 			{
 				tmpMesh = External_state;
 				extcheck = true;
 			}
-		if (buffer == "landscape")
+			if (buffer == "landscape")
 				tmpMesh = Landscape_state;
-		if (buffer == "buildings")
+			if (buffer == "buildings")
 				tmpMesh = Buildings_state;
-		if (buffer == "columnframe")
+			if (buffer == "columnframe")
 				tmpMesh = ColumnFrame_state;
 
 			csPoly3D varray;
@@ -451,7 +450,7 @@ int SBS::LoadBuilding(const char * filename)
 		}
 
 		//AddShaft command
-	if (LineData.Slice(0, 9).CompareNoCase("addshaft ") == true)
+		if (LineData.Slice(0, 9).CompareNoCase("addshaft ") == true)
 		{
 			if (Shafts == 0)
 			{
@@ -471,88 +470,88 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.DeleteAll();
 		}
 
-	//Process globals
-	if (Section == 1)
+		//Process globals
+		if (Section == 1)
 		{
-		//get text after equal sign
-		temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			//get text after equal sign
+			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
 			temp2.Trim();
 
-		//store variable values
-		if (LineData.Slice(0, 4).CompareNoCase("name") == true)
+			//store variable values
+			if (LineData.Slice(0, 4).CompareNoCase("name") == true)
 				BuildingName = temp2;
-		if (LineData.Slice(0, 8).CompareNoCase("designer") == true)
+			if (LineData.Slice(0, 8).CompareNoCase("designer") == true)
 				BuildingDesigner = temp2;
-		if (LineData.Slice(0, 8).CompareNoCase("location") == true)
+			if (LineData.Slice(0, 8).CompareNoCase("location") == true)
 				BuildingLocation = temp2;
-		if (LineData.Slice(0, 11).CompareNoCase("description") == true)
+			if (LineData.Slice(0, 11).CompareNoCase("description") == true)
 				BuildingDescription = temp2;
-		if (LineData.Slice(0, 7).CompareNoCase("version") == true)
+			if (LineData.Slice(0, 7).CompareNoCase("version") == true)
 				BuildingVersion = temp2;
-		if (LineData.Slice(0, 14).CompareNoCase("cameraaltitude") == true)
+			if (LineData.Slice(0, 14).CompareNoCase("cameraaltitude") == true)
 			{
-		//if (IsNumeric(temp2) == false)
+				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-		camera->DefaultAltitude = atof(temp2.GetData());
+				camera->DefaultAltitude = atof(temp2.GetData());
 			}
-		if (LineData.Slice(0, 6).CompareNoCase("shafts") == true)
+			if (LineData.Slice(0, 6).CompareNoCase("shafts") == true)
 			{
-		//if (IsNumeric(temp2) == false)
+				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-		Shafts = atoi(temp2.GetData());
+				Shafts = atoi(temp2.GetData());
 			}
-		if (LineData.Slice(0, 6).CompareNoCase("floors") == true)
+			if (LineData.Slice(0, 6).CompareNoCase("floors") == true)
 			{
-		//if (IsNumeric(temp2) == false)
+				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-		TotalFloors = atoi(temp2.GetData());
+				TotalFloors = atoi(temp2.GetData());
 			}
-		if (LineData.Slice(0, 9).CompareNoCase("basements") == true)
+			if (LineData.Slice(0, 9).CompareNoCase("basements") == true)
 			{
-		//if (IsNumeric(temp2) == false)
+				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-		Basements = atoi(temp2.GetData());
+				Basements = atoi(temp2.GetData());
 			}
-		if (LineData.Slice(0, 9).CompareNoCase("elevators") == true)
+			if (LineData.Slice(0, 9).CompareNoCase("elevators") == true)
 			{
-		//if (IsNumeric(temp2) == false)
+				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-		Elevators = atoi(temp2.GetData());
+				Elevators = atoi(temp2.GetData());
 			}
-		if (LineData.Slice(0, 6).CompareNoCase("stairs") == true)
+			if (LineData.Slice(0, 6).CompareNoCase("stairs") == true)
 			{
-		//if (IsNumeric(temp2) == false)
+				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-		StairsNum = atoi(temp2.GetData());
+				StairsNum = atoi(temp2.GetData());
 			}
-		if (LineData.Slice(0, 11).CompareNoCase("camerafloor") == true)
+			if (LineData.Slice(0, 11).CompareNoCase("camerafloor") == true)
 			{
-		//if (IsNumeric(temp2) == false)
+				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-		camera->StartFloor = atoi(temp2.GetData());
+				camera->StartFloor = atoi(temp2.GetData());
 			}
-		if (LineData.Slice(0, 10).CompareNoCase("horizscale") == true)
+			if (LineData.Slice(0, 10).CompareNoCase("horizscale") == true)
 			{
-		//if (IsNumeric(temp2) == false)
+				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-		HorizScale = atof(temp2.GetData());
+				HorizScale = atof(temp2.GetData());
 			}
-		if (LineData.Slice(0, 14).CompareNoCase("cameraposition") == true)
+			if (LineData.Slice(0, 14).CompareNoCase("cameraposition") == true)
 			{
-		camera->StartPositionX  = atof(temp2.Slice(0, temp2.Find(",", 0)).GetData());
-		camera->StartPositionZ  = atof(temp2.Slice(temp2.Find(",", 0) + 1).GetData());
+				camera->StartPositionX  = atof(temp2.Slice(0, temp2.Find(",", 0)).GetData());
+				camera->StartPositionZ  = atof(temp2.Slice(temp2.Find(",", 0) + 1).GetData());
 			}
-		if (LineData.Slice(0, 15).CompareNoCase("cameradirection") == true)
+			if (LineData.Slice(0, 15).CompareNoCase("cameradirection") == true)
 			{
-		temp3 = temp2.Find(",", 0);
-		temp4 = temp2.Find(",", temp3 + 1);
+				temp3 = temp2.Find(",", 0);
+				temp4 = temp2.Find(",", temp3 + 1);
 				camera->SetStartDirection(csVector3(atof(temp2.Slice(0, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
 			}
-		if (LineData.Slice(0, 14).CompareNoCase("camerarotation") == true)
+			if (LineData.Slice(0, 14).CompareNoCase("camerarotation") == true)
 			{
-		temp3 = temp2.Find(",", 0);
+				temp3 = temp2.Find(",", 0);
 				temp4 = temp2.Find(",", temp3 + 1);
-		camera->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
+				camera->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
 			}
 
 			//Set command
@@ -568,112 +567,112 @@ int SBS::LoadBuilding(const char * filename)
 			}
 		}
 
-	//Process floors
-	if (Section == 2)
+		//Process floors
+		if (Section == 2)
 		{
 
 recalc:
-		//replace variables with actual values
+			//replace variables with actual values
 			buffer = Current;
-		LineData.ReplaceAll("%floor%", buffer);
+			LineData.ReplaceAll("%floor%", buffer);
 			buffer = FloorArray[Current]->Height;
-		LineData.ReplaceAll("%height%", buffer);
+			LineData.ReplaceAll("%height%", buffer);
 			buffer = FloorArray[Current]->FullHeight();
-		LineData.ReplaceAll("%fullheight%", buffer);
+			LineData.ReplaceAll("%fullheight%", buffer);
 			buffer = FloorArray[Current]->InterfloorHeight;
-		LineData.ReplaceAll("%interfloorheight%", buffer);
+			LineData.ReplaceAll("%interfloorheight%", buffer);
 
-		//get text after equal sign
+			//get text after equal sign
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
-		temp2.Trim();
+			temp2.Trim();
 
-		//parameters
-		if (LineData.Slice(0, 6).CompareNoCase("height") == true)
+			//parameters
+			if (LineData.Slice(0, 6).CompareNoCase("height") == true)
 			{
-		//If IsNumeric(temp2) = False Then Err.Raise 1000
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
 				FloorArray[Current]->Height = atof(temp2.GetData());
-		if (FloorCheck < 2)
+				if (FloorCheck < 2)
 					FloorCheck = 1;
 				else
 					FloorCheck = 3;
 			}
-		if (LineData.Slice(0, 16).CompareNoCase("interfloorheight") == true)
+			if (LineData.Slice(0, 16).CompareNoCase("interfloorheight") == true)
 			{
-		//If IsNumeric(temp2) = False Then Err.Raise 1000
-		FloorArray[Current]->InterfloorHeight = atof(temp2.GetData());
-		if (FloorCheck == 0)
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
+				FloorArray[Current]->InterfloorHeight = atof(temp2.GetData());
+				if (FloorCheck == 0)
 					FloorCheck = 2;
 				else
 					FloorCheck = 3;
 			}
-		if (LineData.Slice(0, 2).CompareNoCase("id") == true)
+			if (LineData.Slice(0, 2).CompareNoCase("id") == true)
 				FloorArray[Current]->ID = Calc(temp2);
-		if (LineData.Slice(0, 4).CompareNoCase("name") == true)
+			if (LineData.Slice(0, 4).CompareNoCase("name") == true)
 				FloorArray[Current]->Name = temp2;
 			if (LineData.Slice(0, 4).CompareNoCase("type") == true)
 				FloorArray[Current]->FloorType = temp2;
 			if (LineData.Slice(0, 11).CompareNoCase("description") == true)
 				FloorArray[Current]->Description = temp2;
 
-		//calculate altitude
-		if (FloorCheck == 3)
+			//calculate altitude
+			if (FloorCheck == 3)
 			{
-		FloorCheck = 0;
-		if (Current == 0)
+				FloorCheck = 0;
+				if (Current == 0)
 					FloorArray[Current]->Altitude = 0;
-		if (Current > 0)
+				if (Current > 0)
 					FloorArray[Current]->Altitude = FloorArray[Current - 1]->Altitude + FloorArray[Current - 1]->FullHeight();
-		if (Current == -1)
+				if (Current == -1)
 					FloorArray[Current]->Altitude = -FloorArray[Current]->FullHeight();
-		if (Current < -1)
+				if (Current < -1)
 					FloorArray[Current]->Altitude = FloorArray[Current + 1]->Altitude - FloorArray[Current]->FullHeight();
 			}
 
-		//IF statement
-		if (LineData.Slice(0, 2).CompareNoCase("if") == true)
+			//IF statement
+			if (LineData.Slice(0, 2).CompareNoCase("if") == true)
 			{
-		temp1 = LineData.Find("(", 0);
+				temp1 = LineData.Find("(", 0);
 				temp3 = LineData.Find(")", 0);
-		if (temp1 + temp3 > 0)
+				if (temp1 + temp3 > 0)
 					temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
 				else
 					temp2 = "";
 				temp2.Trim();
-		if (Calc(temp2) == "true")
+				if (Calc(temp2) == "true")
 				{
-			LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
-			goto recalc;
+					LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
+					goto recalc;
 				}
-		else
-			goto Nextline; //skip line
+				else
+					goto Nextline; //skip line
 			}
 
-		//Exit command
-		if (LineData.Slice(0, 4).CompareNoCase("exit") == true)
+			//Exit command
+			if (LineData.Slice(0, 4).CompareNoCase("exit") == true)
 			{
-		if (RangeL != RangeH)
-			LineData = "<endfloors>";
-		else
-			LineData = "<endfloor>";
+			if (RangeL != RangeH)
+				LineData = "<endfloors>";
+			else
+				LineData = "<endfloor>";
 			}
 
-		//AddFloor command
-		if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
+			//AddFloor command
+			if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-			buffer = Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 8)
+				//if (tempdata.GetSize() < 8)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
-		//create floor
+				//create floor
 				buffer = tempdata[10];
 				if (buffer.CompareNoCase("true") == true)
 					FloorArray[Current]->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), true);
@@ -683,64 +682,64 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
-		//AddShaftFloor command
-		if (LineData.Slice(0, 13).CompareNoCase("addshaftfloor") == true)
+			//AddShaftFloor command
+			if (LineData.Slice(0, 13).CompareNoCase("addshaftfloor") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(14).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-			buffer = Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 8)
+				//if (tempdata.GetSize() < 8)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
-		//create floor
+				//create floor
 				ShaftArray[atoi(tempdata[0])]->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 
 				tempdata.DeleteAll();
 			}
 
-		//AddInterFloorFloor command
-		if (LineData.Slice(0, 18).CompareNoCase("addinterfloorfloor") == true)
+			//AddInterFloorFloor command
+			if (LineData.Slice(0, 18).CompareNoCase("addinterfloorfloor") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(19).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(19).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 7)
+				//if (tempdata.GetSize() < 7)
 				//	Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
-		//create floor
+				//create floor
 				FloorArray[Current]->AddInterfloorFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
 				tempdata.DeleteAll();
 			}
 
-		//AddWall command
-		if (LineData.Slice(0, 7).CompareNoCase("addwall") == true)
+			//AddWall command
+			if (LineData.Slice(0, 7).CompareNoCase("addwall") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(8).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(8).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 11)
+				//if (tempdata.GetSize() < 11)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				if (csString(tempdata[12]).CompareNoCase("true") == true)
 					revX = true;
@@ -755,7 +754,7 @@ recalc:
 				else
 					revZ = false;
 
-		//create wall
+				//create wall
 				buffer = tempdata[15];
 				if (buffer.CompareNoCase("true") == true)
 					FloorArray[Current]->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), revX, revY, revZ, true);
@@ -765,21 +764,21 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
-		//AddShaftWall command
-		if (LineData.Slice(0, 12).CompareNoCase("addshaftwall") == true)
+			//AddShaftWall command
+			if (LineData.Slice(0, 12).CompareNoCase("addshaftwall") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(13).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(13).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 11)
+				//if (tempdata.GetSize() < 11)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				if (csString(tempdata[13]).CompareNoCase("true") == true)
 					revX = true;
@@ -794,48 +793,48 @@ recalc:
 				else
 					revZ = false;
 
-		//create wall
+				//create wall
 				ShaftArray[atoi(tempdata[0])]->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), revX, revY, revZ);
 
 				tempdata.DeleteAll();
 			}
 
-		//AddInterFloorWall command
-		if (LineData.Slice(0, 17).CompareNoCase("addinterfloorwall") == true)
+			//AddInterFloorWall command
+			if (LineData.Slice(0, 17).CompareNoCase("addinterfloorwall") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(18).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(18).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 10)
+				//if (tempdata.GetSize() < 10)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
-		//create wall
-		FloorArray[Current]->AddInterfloorWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
+				//create wall
+				FloorArray[Current]->AddInterfloorWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
 				tempdata.DeleteAll();
 			}
 
 			//AddAutoFloor command
 			if (LineData.Slice(0, 12).CompareNoCase("addautofloor") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(13).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(13).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
-		//create wall
-		FloorArray[Current]->AddAutoFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]));
+				//create wall
+				FloorArray[Current]->AddAutoFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]));
 				tempdata.DeleteAll();
 			}
 
@@ -852,7 +851,7 @@ recalc:
 			}
 
 			//CallButtonElevators command
-		if (LineData.Slice(0, 19).CompareNoCase("callbuttonelevators") == true)
+			if (LineData.Slice(0, 19).CompareNoCase("callbuttonelevators") == true)
 			{
 				//get text after equal sign
 				temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
@@ -869,7 +868,7 @@ recalc:
 			}
 
 			//CreateCallButtons command
-		if (LineData.Slice(0, 17).CompareNoCase("createcallbuttons") == true)
+			if (LineData.Slice(0, 17).CompareNoCase("createcallbuttons") == true)
 			{
 				if (callbutton_elevators.GetSize() == 0)
 				{
@@ -878,10 +877,10 @@ recalc:
 				}
 
 				bool ShowBack;
-		tempdata.SplitString(LineData.Slice(18).GetData(), ",");
+				tempdata.SplitString(LineData.Slice(18).GetData(), ",");
 
 				//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
@@ -899,59 +898,59 @@ recalc:
 			}
 
 			//handle floor range
-		if (RangeL != RangeH && LineData.Slice(0, 11).CompareNoCase("<endfloors>") == true)
+			if (RangeL != RangeH && LineData.Slice(0, 11).CompareNoCase("<endfloors>") == true)
 			{
-		if (RangeL < RangeH)
+				if (RangeL < RangeH)
 				{
-			if (Current < RangeH)
+					if (Current < RangeH)
 					{
-			Current++;
-			i = RangeStart;  //loop back
-			goto Nextline;
+						Current++;
+						i = RangeStart;  //loop back
+						goto Nextline;
 					}
-			else
+					else
 					{
-			Section = 0; //break out of loop
-			goto Nextline;
+						Section = 0; //break out of loop
+						goto Nextline;
 					}
 				}
-		else
+				else
 				{
-			if (Current > RangeH)
+					if (Current > RangeH)
 					{
-			Current--;
-			i = RangeStart; //loop back
-			goto Nextline;
+						Current--;
+						i = RangeStart; //loop back
+						goto Nextline;
 					}
-			else
+					else
 					{
-			Section = 0; //break out of loop
-			Context = "None";
-			goto Nextline;
+						Section = 0; //break out of loop
+						Context = "None";
+						goto Nextline;
 					}
 				}
 			}
 		}
 
-	//Process external
-	if (Section == 3)
+		//Process external
+		if (Section == 3)
 		{
 
-		//AddTriangleWall command
-		if (LineData.Slice(0, 15).CompareNoCase("addtrianglewall") == true)
+			//AddTriangleWall command
+			if (LineData.Slice(0, 15).CompareNoCase("addtrianglewall") == true)
 			{
 				//get data
-		tempdata.SplitString(LineData.Slice(16).GetData(), ",");
+				tempdata.SplitString(LineData.Slice(16).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 13)
+				//if (tempdata.GetSize() < 13)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
 
 				if (csString(tempdata[13]).CompareNoCase("true") == true)
 					revX = true;
@@ -966,26 +965,26 @@ recalc:
 				else
 					revZ = false;
 
-		//create triangle wall
-		AddTriangleWall(External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), revX, revY, revZ, true);
+				//create triangle wall
+				AddTriangleWall(External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), revX, revY, revZ, true);
 				tempdata.DeleteAll();
 			}
 
-		//AddWall command
-		if (LineData.Slice(0, 7).CompareNoCase("addwall") == true)
+			//AddWall command
+			if (LineData.Slice(0, 7).CompareNoCase("addwall") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(8).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(8).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 11)
+				//if (tempdata.GetSize() < 11)
 					//Err.Raise 1003;
-		//if IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+				//if IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				if (csString(tempdata[12]).CompareNoCase("true") == true)
 					revX = true;
@@ -1001,28 +1000,28 @@ recalc:
 					revZ = false;
 
 				//create wall
-		AddWallMain(External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), revX, revY, revZ);
+				AddWallMain(External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), revX, revY, revZ);
 				tempdata.DeleteAll();
 			}
 
-		//AddFloor
-		if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
+			//AddFloor
+			if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 7)
+				//if (tempdata.GetSize() < 7)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
-		//create floor
-		AddFloorMain(External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
+				//create floor
+				AddFloorMain(External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
 				tempdata.DeleteAll();
 			}
 
@@ -1039,37 +1038,37 @@ recalc:
 			}
 		}
 
-	//Process elevators
-	if (Section == 4)
+		//Process elevators
+		if (Section == 4)
 		{
 
-		//get text after equal sign
-		temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			//get text after equal sign
+			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
 
-		//parameters
-		if (LineData.Slice(0, 5).CompareNoCase("speed") == true)
+			//parameters
+			if (LineData.Slice(0, 5).CompareNoCase("speed") == true)
 			{
-		//If IsNumeric(temp2) = False Then Err.Raise 1000
-		ElevatorArray[Current]->ElevatorSpeed = atof(temp2.GetData());
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
+				ElevatorArray[Current]->ElevatorSpeed = atof(temp2.GetData());
 			}
-		if (LineData.Slice(0, 12).CompareNoCase("acceleration") == true)
+			if (LineData.Slice(0, 12).CompareNoCase("acceleration") == true)
 			{
-		//If IsNumeric(temp2) = False Then Err.Raise 1000
-		ElevatorArray[Current]->Acceleration = atof(temp2.GetData());
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
+				ElevatorArray[Current]->Acceleration = atof(temp2.GetData());
 			}
-		if (LineData.Slice(0, 12).CompareNoCase("deceleration") == true)
+			if (LineData.Slice(0, 12).CompareNoCase("deceleration") == true)
 			{
-		//If IsNumeric(temp2) = False Then Err.Raise 1000
-		ElevatorArray[Current]->Deceleration = atof(temp2.GetData());
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
+				ElevatorArray[Current]->Deceleration = atof(temp2.GetData());
 			}
-		if (LineData.Slice(0, 9).CompareNoCase("openspeed") == true)
+			if (LineData.Slice(0, 9).CompareNoCase("openspeed") == true)
 			{
-		//If IsNumeric(temp2) = False Then Err.Raise 1000
-		ElevatorArray[Current]->OpenSpeed = atof(temp2.GetData());
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
+				ElevatorArray[Current]->OpenSpeed = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 14).CompareNoCase("servicedfloors") == true)
 			{
-		//copy string listing of serviced floors into array
+				//copy string listing of serviced floors into array
 				tempdata.SplitString(temp2.GetData(), ",");
 				for (int i = 0; i < tempdata.GetSize(); i++)
 				{
@@ -1088,85 +1087,85 @@ recalc:
 				}
 				tempdata.DeleteAll();
 			}
-		if (LineData.Slice(0, 13).CompareNoCase("assignedshaft") == true)
+			if (LineData.Slice(0, 13).CompareNoCase("assignedshaft") == true)
 			{
-		//If IsNumeric(temp2) = False Then Err.Raise 1000
-		ElevatorArray[Current]->AssignedShaft = atoi(temp2.GetData());
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
+				ElevatorArray[Current]->AssignedShaft = atoi(temp2.GetData());
 			}
 
-		//replace variables with actual values
+			//replace variables with actual values
 			buffer = Current;
-		LineData.ReplaceAll("%elevator%", buffer);
+			LineData.ReplaceAll("%elevator%", buffer);
 
-		//IF statement
-		if (LineData.Slice(0, 2).CompareNoCase("if") == true)
+			//IF statement
+			if (LineData.Slice(0, 2).CompareNoCase("if") == true)
 			{
-		temp1 = LineData.Find("(", 0);
-		temp3 = LineData.Find(")", 0);
-		if (temp1 + temp3 > 0)
+				temp1 = LineData.Find("(", 0);
+				temp3 = LineData.Find(")", 0);
+				if (temp1 + temp3 > 0)
 					temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
 				else
 					temp2 = "";
 				temp2.Trim();
-		if (Calc(temp2) == "true")
-			LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
-		else
-			goto Nextline; //skip line
+				if (Calc(temp2) == "true")
+					LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
+				else
+					goto Nextline; //skip line
 			}
 
-		//CreateElevator command
-		if (LineData.Slice(0, 14).CompareNoCase("createelevator") == true)
+			//CreateElevator command
+			if (LineData.Slice(0, 14).CompareNoCase("createelevator") == true)
 			{
-		tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 3)
+				//if (tempdata.GetSize() < 3)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Then Err.Raise 1000
-		ElevatorArray[Current]->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atoi(tempdata[2]));
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Then Err.Raise 1000
+				ElevatorArray[Current]->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atoi(tempdata[2]));
 				tempdata.DeleteAll();
 			}
 
-		//AddFloor command
-		if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
+			//AddFloor command
+			if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-			buffer = Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 8)
+				//if (tempdata.GetSize() < 8)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
-		//create floor
+				//create floor
 				ElevatorArray[Current]->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
 
 				tempdata.DeleteAll();
 			}
 
 			//AddWall command
-		if (LineData.Slice(0, 7).CompareNoCase("addwall") == true)
+			if (LineData.Slice(0, 7).CompareNoCase("addwall") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(8).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(8).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 11)
+				//if (tempdata.GetSize() < 11)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				if (csString(tempdata[12]).CompareNoCase("true") == true)
 					revX = true;
@@ -1181,27 +1180,27 @@ recalc:
 				else
 					revZ = false;
 
-		//create wall
+				//create wall
 				ElevatorArray[Current]->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), revX, revY, revZ);
 
 				tempdata.DeleteAll();
 			}
 
 			//AddDoors command
-		if (LineData.Slice(0, 8).CompareNoCase("adddoors") == true)
+			if (LineData.Slice(0, 8).CompareNoCase("adddoors") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 11)
+				//if (tempdata.GetSize() < 11)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				if (csString(tempdata[5]).CompareNoCase("true") == true)
 					ElevatorArray[Current]->AddDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), true, atof(tempdata[6]), atof(tempdata[7]));
@@ -1212,20 +1211,20 @@ recalc:
 			}
 
 			//AddShaftDoors command
-		if (LineData.Slice(0, 13).CompareNoCase("addshaftdoors") == true)
+			if (LineData.Slice(0, 13).CompareNoCase("addshaftdoors") == true)
 			{
-		//get data
-		tempdata.SplitString(LineData.Slice(14).GetData(), ",");
+				//get data
+				tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-		//if (tempdata.GetSize() < 11)
+				//if (tempdata.GetSize() < 11)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				ElevatorArray[Current]->AddShaftDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]));
 
@@ -1238,8 +1237,8 @@ recalc:
 				//get data
 				tempdata.SplitString(LineData.Slice(12).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
@@ -1262,8 +1261,8 @@ recalc:
 				//get data
 				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
@@ -1286,8 +1285,8 @@ recalc:
 				//get data
 				tempdata.SplitString(LineData.Slice(17).GetData(), ",");
 
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
@@ -1311,63 +1310,62 @@ recalc:
 			}
 
 			//handle elevator range
-		if (RangeL != RangeH && LineData.Slice(0, 14).CompareNoCase("<endelevators>") == true)
+			if (RangeL != RangeH && LineData.Slice(0, 14).CompareNoCase("<endelevators>") == true)
 			{
 				if (Current < RangeH)
 				{
-			Current++;
-			i = RangeStart;  //loop back
-			goto Nextline;
+					Current++;
+					i = RangeStart;  //loop back
+					goto Nextline;
 				}
-		else
+				else
 				{
-			Section = 0; //break out of loop
-			Context = "None";
-			goto Nextline;
+					Section = 0; //break out of loop
+					Context = "None";
+					goto Nextline;
 				}
 			}
 		}
 
-	//Process textures
-	if (Section == 5)
+		//Process textures
+		if (Section == 5)
 		{
-		if (LineData.Slice(0, 5).CompareNoCase("load ") == true)
+			if (LineData.Slice(0, 5).CompareNoCase("load ") == true)
 			{
-		tempdata.SplitString(LineData.Slice(5).GetData(), ",");
+				tempdata.SplitString(LineData.Slice(5).GetData(), ",");
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-			buffer = tempdata[temp3];
+					buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
 				}
-		//if (tempdata.GetSize() < 1)
+				//if (tempdata.GetSize() < 1)
 					//Err.Raise 1003;
 				buffer = tempdata[0];
 				buffer.Insert(0, "/root/");
 				LoadTexture(buffer.GetData(), tempdata[1]);
 				tempdata.DeleteAll();
 			}
-		if (LineData.Slice(0, 9).CompareNoCase("loadrange") == true)
+			if (LineData.Slice(0, 9).CompareNoCase("loadrange") == true)
 			{
-		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+				tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-			buffer = tempdata[temp3];
+					buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
 				}
-		//if (tempdata.GetSize() < 1)
+				//if (tempdata.GetSize() < 1)
 					//Err.Raise 1003;
-		//If IsNumeric(tempdata(0)) = False Or IsNumeric(tempdata(1)) = False Then Err.Raise 1000
-		RangeL = atoi(tempdata[0]);
-		RangeH = atoi(tempdata[1]);
-		for (Current = RangeL; Current <= RangeH; Current++)
+				//If IsNumeric(tempdata(0)) = False Or IsNumeric(tempdata(1)) = False Then Err.Raise 1000
+				RangeL = atoi(tempdata[0]);
+				RangeH = atoi(tempdata[1]);
+				for (Current = RangeL; Current <= RangeH; Current++)
 				{
-			//DoEvents
-			temp2 = tempdata[2];
+					temp2 = tempdata[2];
 					buffer = Current;
 					temp2.ReplaceAll("%number%", buffer.Trim());
 					temp6 = tempdata[3];
 					temp6.ReplaceAll("%number%", buffer.Trim());
-			LoadTexture("/root/" + temp2, temp6);
+					LoadTexture("/root/" + temp2, temp6);
 				}
 				tempdata.DeleteAll();
 			}

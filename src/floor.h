@@ -34,13 +34,9 @@ class Floor
 public:
 
 	csRef<iMeshWrapper> Level; //level mesh
-	csRef<iMeshObject> Level_object;
-	csRef<iMeshObjectFactory> Level_factory;
 	csRef<iThingFactoryState> Level_state;
 
 	csRef<iMeshWrapper> Interfloor; //interfloor mesh
-	csRef<iMeshObject> Interfloor_object;
-	csRef<iMeshObjectFactory> Interfloor_factory;
 	csRef<iThingFactoryState> Interfloor_state;
 
 	int Number; //floor number

@@ -109,28 +109,18 @@ public:
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
-		csRef<iMeshObject> Elevator_object;
-		csRef<iMeshObjectFactory> Elevator_factory;
 		csRef<iThingFactoryState> Elevator_state;
 		csRef<iMovable> Elevator_movable;
 	csRef<iMeshWrapper> FloorIndicator; //floor indicator object
-		csRef<iMeshObject> FloorIndicator_object;
-		csRef<iMeshObjectFactory> FloorIndicator_factory;
 		csRef<iThingFactoryState> FloorIndicator_state;
 		csRef<iMovable> FloorIndicator_movable;
 	csRef<iMeshWrapper> ElevatorDoorL; //left inside door
-		csRef<iMeshObject> ElevatorDoorL_object;
-		csRef<iMeshObjectFactory> ElevatorDoorL_factory;
 		csRef<iThingFactoryState> ElevatorDoorL_state;
 		csRef<iMovable> ElevatorDoorL_movable;
 	csRef<iMeshWrapper> ElevatorDoorR; //right inside door
-		csRef<iMeshObject> ElevatorDoorR_object;
-		csRef<iMeshObjectFactory> ElevatorDoorR_factory;
 		csRef<iThingFactoryState> ElevatorDoorR_state;
 		csRef<iMovable> ElevatorDoorR_movable;
 	csRef<iMeshWrapper> Plaque; //plaque object
-		csRef<iMeshObject> Plaque_object;
-		csRef<iMeshObjectFactory> Plaque_factory;
 		csRef<iThingFactoryState> Plaque_state;
 		csRef<iMovable> Plaque_movable;
 

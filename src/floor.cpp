@@ -42,9 +42,7 @@ Floor::Floor(int number)
 	buffer.Insert(0, "Level ");
 	buffer.Trim();
 	Level = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	Level_object = Level->GetMeshObject ();
-	Level_factory = Level_object->GetFactory();
-	Level_state = scfQueryInterface<iThingFactoryState> (Level_factory);
+	Level_state = scfQueryInterface<iThingFactoryState> (Level->GetMeshObject()->GetFactory());
 	Level->SetZBufMode(CS_ZBUF_USE);
 
 	//Create interfloor mesh
@@ -52,9 +50,7 @@ Floor::Floor(int number)
 	buffer.Insert(0, "Interfloor ");
 	buffer.Trim();
 	Interfloor = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	Interfloor_object = Level->GetMeshObject ();
-	Interfloor_factory = Level_object->GetFactory();
-	Interfloor_state = scfQueryInterface<iThingFactoryState> (Level_factory);
+	Interfloor_state = scfQueryInterface<iThingFactoryState> (Interfloor->GetMeshObject()->GetFactory());
 	Interfloor->SetZBufMode(CS_ZBUF_USE);
 
 	//set enabled flag
@@ -87,11 +83,6 @@ Floor::~Floor()
 			delete CallButtonArray[i];
 		CallButtonArray[i] = 0;
 	}
-	CallButtonArray.DeleteAll();
-	floor_polys.DeleteAll();
-	ifloor_polys.DeleteAll();
-	wall_polys.DeleteAll();
-	iwall_polys.DeleteAll();
 }
 
 void Floor::SetCameraFloor()

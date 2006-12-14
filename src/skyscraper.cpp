@@ -97,6 +97,7 @@ bool Skyscraper::OnInit(void)
 	//load dialogs
 	DebugPanel *dpanel = new DebugPanel(NULL, -1);
 	dpanel->Show(true);
+	dpanel->SetPosition(wxPoint(10, 10));
 
 	//run simulation
 	Simcore->Run();
