@@ -24,7 +24,8 @@
 */
 
 #include <crystalspace.h>
-#include <sstream>
+#include <string>
+#include <ctype.h>
 #include "globals.h"
 
 bool IsEven(int Number)
@@ -39,14 +40,11 @@ bool IsEven(int Number)
 
 bool IsNumeric(const char *expression)
 {
-	//returns true if the string is numeric; otherwise returns false
-	csString s;
-	s = expression;
-	char test;
-	for (int i = 0; i < s.Length(); i++)
+	//test to see if a string is numeric
+	
+	for (int i = 0; i < strlen(expression) - 1; i++)
 	{
-		test = s.GetAt(i);
-		if((test <= '0' || test >= '9') && test != '.')
+		if (isdigit(expression[i]) == false && expression[i] != '-' && expression[i] != '.')
 			return false;
 	}
 	return true;
