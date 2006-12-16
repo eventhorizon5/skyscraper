@@ -259,7 +259,10 @@
   <p align="left"><strong>1. Name</strong> - the name of the current floor, required<br>
     Example: <font size="2" face="Courier New, Courier, mono">Name = Floor %floor%</font></p>
   <p align="left"><strong>2. ID</strong> - the floor indicator name for the current 
-    floor, such as L (for Lobby), LL (lower level), M (Mezzanine), etc<br>
+    floor, such as L (for Lobby), LL (lower level), M (Mezzanine), etc. This is 
+    also used to determine what texture should be loaded for the elevator floor 
+    indicators and floor signs. The texture name would be &quot;Button[ID]&quot; 
+    - so if the ID is 10, the texture name would be &quot;Button10&quot;.<br>
     <font size="2" face="Courier New, Courier, mono">ID = %floor%</font></p>
   <p align="left"><strong>3. Type</strong> - the type of floor the current floor 
     is. The types are still being defined, but the currently used ones are Basement, 
@@ -277,8 +280,8 @@
     the space between floors, starting right above the current floor's ceiling 
     and ending right below the next floor's floor, required.<br>
     <font size="2" face="Courier New, Courier, mono">InterfloorHeight = 2.24</font></p>
-  <p align="left"><br>
-    <strong>Commands:</strong></p>
+  <p align="left">&nbsp;</p>
+  <p align="left"> <strong>Commands:</strong></p>
   <p align="left"><strong>1. Exit</strong> - exits the current floor section</p>
   <p align="left"><strong>2. AddFloor</strong> - adds a textured floor with the 
     specified dimensions to the current floor/level<br>
@@ -535,6 +538,13 @@
     panel created with CreatePanel. <em>Row</em> and <em>Column</em> are the same 
     as the AddFloorButton command, and <em>Type</em> can be either &quot;open&quot;, 
     &quot;close&quot;, &quot;cancel&quot;, &quot;stop&quot; or &quot;alarm&quot;.</p>
+  <p align="left"><strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em> 
+    direction</em>, <em>CenterX, CenterZ, width, height, voffset</em></font> </p>
+  <p align="left">The AddFloorIndicator command creates a floor indicator at the 
+    position (relative to the elevator) specified by CenterX and CenterZ. Direction 
+    is the direction the indicator faces, and can be either &quot;left&quot;, 
+    &quot;right&quot;, &quot;front&quot; or &quot;back&quot;.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 
