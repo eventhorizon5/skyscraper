@@ -61,6 +61,7 @@ Floor::Floor(int number)
 	ID = "";
 	FloorType = "";
 	Description = "";
+	IndicatorTexture = "";
 	Altitude = 0;
 	Height = 0;
 	InterfloorHeight = 0;

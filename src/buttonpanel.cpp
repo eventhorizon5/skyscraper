@@ -100,23 +100,23 @@ void ButtonPanel::AddButton(const char *name, const char *texture, int row, int 
 {
 	//create the button polygon
 	double xpos, ypos, zpos;
-	ypos = Origin.y - (Height / 2) + (GridSize.y * (row + 1));
+	ypos = (Origin.y + Height) - (GridSize.y * (row + 1));
 	if (Direction == "front" || Direction == "back")
 	{
-		xpos = Origin.x - (Width / 2) + (GridSize.x * (column + 1));
+		xpos = (Origin.x - (Width / 2)) + (GridSize.x * column);
 		if (Direction == "front")
-			zpos = Origin.z - 0.2;
+			zpos = Origin.z - 0.01;
 		else
-			zpos = Origin.z + 0.2;
+			zpos = Origin.z + 0.01;
 		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos + GridSize.x - Spacing, zpos, GridSize.y - Spacing, GridSize.y - Spacing, ypos, ypos, 1, 1, false, false, false, false);
 	}
 	else
 	{
 		if (Direction == "left")
-			xpos = Origin.x - 0.2;
+			xpos = Origin.x - 0.01;
 		else
-			xpos = Origin.x + 0.2;
-		zpos = Origin.z - (Width / 2) + (GridSize.x * (column + 1));
+			xpos = Origin.x + 0.01;
+		zpos = (Origin.z - (Width / 2)) + (GridSize.x * column);
 		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos, zpos + GridSize.x - Spacing, GridSize.y - Spacing, GridSize.y - Spacing, ypos, ypos, 1, 1, false, false, false, false);
 	}
 }
@@ -172,8 +172,9 @@ void ButtonPanel::Move(csVector3 position)
 	ButtonPanelMesh->GetMovable()->UpdateMove();
 }
 
-void ButtonPanel::SetToElevatorPosition()
+void ButtonPanel::SetToElevatorAltitude()
 {
-	ButtonPanelMesh->GetMovable()->SetPosition(sbs->ElevatorArray[elevator]->GetPosition());
+	csVector3 pos = ButtonPanelMesh->GetMovable()->GetPosition();
+	ButtonPanelMesh->GetMovable()->SetPosition(csVector3(pos.x, sbs->ElevatorArray[elevator]->GetPosition().y, pos.z));
 	ButtonPanelMesh->GetMovable()->UpdateMove();
 }

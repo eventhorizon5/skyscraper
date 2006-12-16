@@ -302,11 +302,19 @@ void Camera::ClickedObject()
 	csVector3 endbeam = MainCamera->GetTransform().This2Other(v3d);
 
 	// Now do the actual intersection.
-	csSectorHitBeamResult result = sbs->area->HitBeam(startbeam, endbeam);
+	csSectorHitBeamResult result = sbs->area->HitBeam(startbeam, endbeam, true);
 	if (!result.mesh)
 		return;
+	
+	//get mesh name
 	meshname = result.mesh->QueryObject()->GetName();
-	sbs->Report("Clicked on object: " + meshname);
+
+	//get polygon name
+	csRef<iThingFactoryState> state = scfQueryInterface<iThingFactoryState> (result.mesh->GetMeshObject()->GetFactory());
+	polyname = state->GetPolygonName(result.polygon_idx);
+
+	//show result
+	sbs->Report("Clicked on object - Mesh: " + meshname + ", Polygon: " + polyname);
 
 	//check call buttons
 	if (meshname.Find("Call Button") != -1)
@@ -314,7 +322,8 @@ void Camera::ClickedObject()
 		//user clicked on a call button
 		int floor = atoi(meshname.Slice(12, meshname.Find(":") - 12));
 		int number = atoi(meshname.Slice(meshname.Find(":") + 1));
-		sbs->FloorArray[floor]->CallButtonArray[number]->Press(sbs->GetPolygonIndex(result, 2));
+		//press button
+		sbs->FloorArray[floor]->CallButtonArray[number]->Press(result.polygon_idx);
 	}
 
 	//check elevator buttons
@@ -322,13 +331,21 @@ void Camera::ClickedObject()
 	{
 		//user clicked on an elevator button
 		int elevator = atoi(meshname.Slice(13));
-		sbs->ElevatorArray[elevator]->Panel->Press(sbs->GetPolygonIndex(result, 2));
+		//press button
+		sbs->ElevatorArray[elevator]->Panel->Press(result.polygon_idx);
 	}
 }
 
-const char * Camera::GetClickedMeshName()
+const char *Camera::GetClickedMeshName()
 {
 	//return name of last clicked mesh
 
 	return meshname.GetData();
+}
+
+const char *Camera::GetClickedPolyName()
+{
+	//return name of last clicked polygon
+
+	return polyname.GetData();
 }

@@ -752,6 +752,7 @@ void Elevator::MoveElevatorToFloor()
 {
 	//Main processing routine; sends elevator to floor specified in GotoFloor
 	static bool IsRunning = false;
+	static int oldfloor;
 
 	//exit if doors are moving
 	if (OpenDoor != 0)
@@ -767,6 +768,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//get elevator's current floor
 		ElevatorFloor = GetFloor();
+		oldfloor = ElevatorFloor;
 
 		//If elevator is already on specified floor, open doors and exit
 		if (ElevatorFloor == GotoFloor)
@@ -999,6 +1001,12 @@ void Elevator::MoveElevatorToFloor()
 		}
 	}
 
+	//update floor indicators
+	if (GetFloor() != oldfloor)
+		UpdateFloorIndicators();
+
+	oldfloor = GetFloor();
+
 	//exit if elevator's running
 	if (abs(ElevatorRate) != 0)
 		return;
@@ -1028,7 +1036,7 @@ void Elevator::MoveElevatorToFloor()
 		Plaque_movable->SetPosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
 		Plaque_movable->UpdateMove();
 		if (Panel)
-			Panel->SetToElevatorPosition();
+			Panel->SetToElevatorAltitude();
 
 		//move sounds
 	}
@@ -1073,13 +1081,24 @@ int Elevator::AddFloor(const char *name, const char *texture, double x1, double 
 	return sbs->AddFloorMain(Elevator_state, name, texture, x1, z1, x2, z2, voffset1, voffset2, tw, th);
 }
 
-int Elevator::AddFloorIndicator(const char *basename, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
+int Elevator::AddFloorIndicator(const char *direction, double CenterX, double CenterZ, double width, double height, double voffset)
 {
 	//Creates a floor indicator at the specified location
-	csString texture;
-	BaseName = basename;
-	texture = BaseName + sbs->FloorArray[OriginFloor]->ID;
-	return sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), x1, z1, x2, z2, height, height, voffset, voffset, 0, 0, false, false, false);
+	int index = -1;
+	csString texture = "Button" + sbs->FloorArray[OriginFloor]->ID;
+	csString tmpdirection = direction;
+	tmpdirection.Downcase();
+
+	if (tmpdirection == "front")
+		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, height, voffset, voffset, 1, 1, false, false, false, false);
+	if (tmpdirection == "back")
+		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), CenterX + (width / 2), CenterZ, CenterX - (width / 2), CenterZ, height, height, voffset, voffset, 1, 1, false, false, false, false);
+	if (tmpdirection == "left")
+		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, height, voffset, voffset, 1, 1, false, false, false, false);
+	if (tmpdirection == "right")
+		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, height, voffset, voffset, 1, 1, false, false, false, false);
+
+	return index;
 }
 
 int Elevator::AddDoors(const char *texture, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th)
@@ -1415,4 +1434,14 @@ void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, con
 		Panel = new ButtonPanel(Number, texture, rows, columns, direction, CenterX, CenterZ, width, height, voffset, spacing, tw, th);
 	else
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panel already exists");
+}
+
+void Elevator::UpdateFloorIndicators()
+{
+	//changes the number texture on the floor indicators to the elevator's current floor
+	
+	csString texture = "Button" + sbs->FloorArray[GetFloor()]->ID;
+	
+	for (int i = 0; i < FloorIndicator_state->GetPolygonCount(); i++)
+		sbs->SetTexture(FloorIndicator_state, i, texture.GetData(), false, 1, 1);
 }

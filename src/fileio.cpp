@@ -613,6 +613,8 @@ recalc:
 				FloorArray[Current]->FloorType = temp2;
 			if (LineData.Slice(0, 11).CompareNoCase("description") == true)
 				FloorArray[Current]->Description = temp2;
+			if (LineData.Slice(0, 16).CompareNoCase("indicatortexture") == true)
+				FloorArray[Current]->IndicatorTexture = temp2;
 
 			//calculate altitude
 			if (FloorCheck == 3)
@@ -1296,6 +1298,25 @@ recalc:
 
 				tempdata.DeleteAll();
 			}
+
+			//AddFloorIndicator command
+			if (LineData.Slice(0, 17).CompareNoCase("addfloorindicator") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(18).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+				ElevatorArray[Current]->AddFloorIndicator(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
+
+				tempdata.DeleteAll();
+			}
+
 
 			//Set command
 			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)

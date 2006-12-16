@@ -61,7 +61,8 @@ public:
 	void CheckElevator();
 	void CheckShaft();
 	void ClickedObject();
-	const char * GetClickedMeshName();
+	const char *GetClickedMeshName();
+	const char *GetClickedPolyName();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera
@@ -69,6 +70,7 @@ private:
 	csVector3 StartRotation; //camera's startup rotation
 	double rotX, rotY, rotZ;
 	csString meshname; //last clicked mesh name
+	csString polyname; //last clicked polygon name
 };
 
 #endif

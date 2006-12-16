@@ -174,7 +174,7 @@ public:
 	void DumpVertices(csRef<iThingFactoryState> mesh);
 	void ListAltitudes();
 	void CreateShaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor);
-	int GetPolygonIndex(csSectorHitBeamResult &result, int range_start, int range_end = 0);
+	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool BothSides, double tw, double th);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);

@@ -44,6 +44,7 @@ public:
 	csString ID;
 	csString FloorType;
 	csString Description;
+	csString IndicatorTexture; //elevator indicator texture name
 	double Altitude; //floor altitude
 	double Height; //floor height (not including interfloor height)
 	double InterfloorHeight; //height of interfloor area

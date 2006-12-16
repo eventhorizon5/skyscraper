@@ -614,12 +614,6 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	if (DrawBothSides == true)
 		dest->AddQuad(v4, v3, v2, v1);
 
-	material = engine->GetMaterialList ()->FindByName (texture);
-
-	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
-	if (DrawBothSides == true)
-		dest->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
-
 	//reverse vector portions if specified
 	if (revX == true)
 	{
@@ -643,24 +637,8 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 		v4.z = z2;
 	}
 
-	//texture mapping is set from first 3 coordinates
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
-		v1,
-		csVector2 (0, 0),
-		v2,
-		csVector2 (tw, 0),
-		v3,
-		csVector2 (tw, th));
-	if (DrawBothSides == true)
-	{
-		dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
-			v1,
-			csVector2 (tw, 0),
-			v2,
-			csVector2 (0, 0),
-			v3,
-			csVector2 (0, th));
-	}
+	//set texture
+	SetTexture(dest, firstidx, texture, DrawBothSides, tw, th);
 
 	//set polygon names
 	csString NewName;
@@ -689,20 +667,9 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	if (DrawBothSides == true)
 		dest->AddQuad(v4, v3, v2, v1);
-	material = engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
-	if (DrawBothSides == true)
-		dest->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
 	
-	//texture mapping is set from first 3 coordinates
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx + 1),
-		csVector2 (0, 0),
-		csVector2 (tw, 0),
-		csVector2 (tw, th));
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
-		csVector2 (0, th),
-		csVector2 (tw, th),
-		csVector2 (tw, 0));
+	//set texture
+	SetTexture(dest, firstidx, texture, DrawBothSides, tw, th);
 
 	//set polygon names
 	csString NewName;
@@ -1393,21 +1360,32 @@ void SBS::CreateShaft(int number, int type, double CenterX, double CenterZ, int 
 	ShaftArray[number] = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
 }
 
-int SBS::GetPolygonIndex(csSectorHitBeamResult &result, int range_start, int range_end)
+void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool BothSides, double tw, double th)
 {
-	//get the index of the clicked polygon
+	//sets a polygon's texture
 
-	csRef<iThingFactoryState> state = scfQueryInterface<iThingFactoryState> (result.mesh->GetMeshObject()->GetFactory());
-	csVector3 isect = result.isect;
-	
-	if (range_end == 0)
-		range_end = state->GetPolygonCount();
+	material = engine->GetMaterialList()->FindByName(texture);
 
-	for (int i = range_start; i < range_end; i++)
+	mesh->SetPolygonMaterial(csPolygonRange(index, index), material);
+	if (BothSides == true)
+		mesh->SetPolygonMaterial(csPolygonRange(index + 1, index + 1), material);
+
+	//texture mapping is set from first 3 coordinates
+	mesh->SetPolygonTextureMapping (csPolygonRange(index, index),
+		mesh->GetPolygonVertex(index, 0),
+		csVector2 (0, 0),
+		mesh->GetPolygonVertex(index, 1),
+		csVector2 (tw, 0),
+		mesh->GetPolygonVertex(index, 2),
+		csVector2 (tw, th));
+	if (BothSides == true)
 	{
-		if (state->PointOnPolygon(i, result.isect) == true)
-			return i;
+		mesh->SetPolygonTextureMapping (csPolygonRange(index + 1, index + 1),
+			mesh->GetPolygonVertex(index + 1, 3),
+			csVector2 (tw, 0),
+			mesh->GetPolygonVertex(index + 1, 2),
+			csVector2 (0, 0),
+			mesh->GetPolygonVertex(index + 1, 1),
+			csVector2 (0, th));
 	}
-	
-	return -1;
 }

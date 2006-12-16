@@ -50,7 +50,7 @@ public:
 	void DeleteButton(int row, int column);
 	void Press(int index);
 	void Move(csVector3 position);
-	void SetToElevatorPosition();
+	void SetToElevatorAltitude();
 
 private:
 	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
