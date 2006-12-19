@@ -1099,6 +1099,9 @@ int Elevator::AddFloorIndicator(const char *direction, double CenterX, double Ce
 	if (tmpdirection == "right")
 		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, height, voffset, voffset, 1, 1, false, false, false, false);
 
+	if (index != -1 && !orig_indicator)
+		orig_indicator = FloorIndicator_state->GetPolygonMaterial(index);
+	
 	return index;
 }
 
@@ -1442,7 +1445,7 @@ void Elevator::UpdateFloorIndicators()
 	//changes the number texture on the floor indicators to the elevator's current floor
 	
 	csString texture = "Button" + sbs->GetFloor(GetFloor())->ID;
-	
+
 	for (int i = 0; i < FloorIndicator_state->GetPolygonCount(); i++)
-		sbs->SetTexture(FloorIndicator_state, i, texture.GetData(), false, 1, 1);
+		sbs->ChangeTexture(FloorIndicator->GetMeshObject(), orig_indicator, texture.GetData());
 }

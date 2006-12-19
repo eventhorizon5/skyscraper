@@ -1346,6 +1346,22 @@ void SBS::CreateShaft(int number, int type, double CenterX, double CenterZ, int 
 	ShaftArray[ShaftArray.GetSize() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
 }
 
+iMaterialWrapper *SBS::ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> oldmat, const char *texture)
+{
+	//changes a texture
+
+	csRef<iThingState> thingstate = scfQueryInterface<iThingState> (mesh);
+
+	//get new material
+	csRef<iMaterialWrapper> newmat = engine->GetMaterialList()->FindByName(texture);
+
+	//switch material
+	thingstate->ClearReplacedMaterials();
+	thingstate->ReplaceMaterial(oldmat, newmat);
+
+	return newmat;
+}
+
 void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool BothSides, double tw, double th)
 {
 	//sets a polygon's texture

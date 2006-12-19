@@ -146,6 +146,7 @@ private:
 	csRefArray<iThingFactoryState> ShaftDoorL_state; //shaft door array state
 	csRefArray<iMeshWrapper> ShaftDoorR; //shaft door array
 	csRefArray<iThingFactoryState> ShaftDoorR_state; //shaft door array state
+	csRef<iMaterialWrapper> orig_indicator;
 
 	//functions
 	void MoveElevatorToFloor();
