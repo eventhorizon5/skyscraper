@@ -164,46 +164,30 @@
     <strong>5. Version</strong> - Version of the building (can be text), optional<br>
     <font size="2" face="Courier New, Courier, mono">Version = 1</font><br>
     <br>
-    <strong>6. Floors</strong> - total number of above-ground floors the building 
-    has, starting with 0 (for a 15-story building, you would enter 14), required<br>
-    <font size="2" face="Courier New, Courier, mono">Floors = 20</font><br>
-    <br>
-    <strong>7. Basements</strong> - total number of below-ground floors the building 
-    has, required<br>
-    <font size="2" face="Courier New, Courier, mono">Basements = 2</font><br>
-    <br>
-    <strong>8. Elevators</strong> - total number of elevators, required<br>
-    <font size="2" face="Courier New, Courier, mono">Elevators = 6</font><br>
-    <br>
-    <strong>9. Shafts</strong> - total number of shafts, required<br>
-    <font size="2" face="Courier New, Courier, mono">Shafts = 1</font></p>
-  <p align="left"> <strong>10. Stairs</strong> - total number of stairwells, required<br>
-    <font size="2" face="Courier New, Courier, mono">Stairs = 3</font><br>
-    <br>
-    <strong>11. HorizScale</strong> - horizontal scaling modifier; default is 
-    1, optional<br>
+    <strong>6. HorizScale</strong> - horizontal scaling modifier; default is 1, 
+    optional<br>
     <font size="2" face="Courier New, Courier, mono">HorizScale = 2</font> (makes 
     each horizontal foot become 2 feet, keeping vertical feet at the default)<br>
     <br>
-    <strong>12. CameraAltitude</strong> - camera's normal altitude in feet above 
+    <strong>7. CameraAltitude</strong> - camera's normal altitude in feet above 
     the floor, required<br>
     <font size="2" face="Courier New, Courier, mono">CameraAltitude = 3.2</font><br>
     <br>
-    <strong>13. CameraFloor</strong> - camera's starting floor, starting with 
-    0 (like Floors command), required<br>
+    <strong>8. CameraFloor</strong> - camera's starting floor, starting with 0 
+    (like Floors command), required<br>
     <font size="2" face="Courier New, Courier, mono">CameraFloor = 0</font><br>
     <br>
-    <strong>14. CameraPosition</strong> - camera's starting position in X (left/right) 
+    <strong>9. CameraPosition</strong> - camera's starting position in X (left/right) 
     and Z (in/out) feet coordinates, required<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CameraPosition = 
     <em>X</em>, <em>Z</em></font><br>
     <font size="2" face="Courier New, Courier, mono">CameraPosition = 0, -10</font><br>
     <br>
-    <strong>15. CameraDirection</strong> - direction the camera's facing on startup, 
+    <strong>10. CameraDirection</strong> - direction the camera's facing on startup, 
     in X (left/right), Y (up down), and Z (in/out) feet coordinates, required<br>
     <font size="2" face="Courier New, Courier, mono">CameraDirection = 0, 10, 
     28.8</font></p>
-  <p align="left"><strong>16. CameraRotation</strong> - rotation of the camera 
+  <p align="left"><strong>11. CameraRotation</strong> - rotation of the camera 
     on startup, required<br>
     <font size="2" face="Courier New, Courier, mono">CameraRotation = 0, 0, 0</font></p>
   <p align="left">&nbsp;</p>
@@ -245,6 +229,10 @@
     <font size="2" face="Courier New, Courier, mono">&lt;EndFloors&gt;<br>
     </font>For example, to work with floors 5-10, you would type:<font size="2" face="Courier New, Courier, mono"><br>
     &lt;Floors 5 to 10&gt;</font></p>
+  <p align="left">Floors above ground start with 0 (so a 15-story building would 
+    have floors 0-14). Also, floors must be made in the proper order: basement 
+    levels must be made first in decending order (-1, -2, -3 etc), and then above-ground 
+    floors in ascending order (0, 1, 2, etc).</p>
   <p align="left"><strong>Variables:</strong></p>
   <p align="left"><font size="2" face="Courier New, Courier, mono"><strong>%floor%</strong></font> 
     - contains the current floor number<br>
@@ -424,7 +412,7 @@
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">7. The <em>Elevator</em> Section</font></strong></p>
   <p align="left">The <em>Elevator</em> section allows you to create elevators 
-    for your building.</p>
+    for your building. Elevators are numbered, starting with 1.</p>
   <p align="left">The section headers and footers are similar to the ones in the 
     Floor section.<br>
     To specify a single elevator, you would type something like:<br>

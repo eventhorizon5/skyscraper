@@ -25,13 +25,6 @@
     Description = The famous 108-story Sears Tower, tallest building in the US
     Version = 1
     CameraAltitude = 5
-    Shafts = 0
-    Floors = 110 #111 total floors/levels, 0 =lobby, 1=mezzanine, then 2-108, roof, and penthouse roof
-    #Basements = 4
-    Basements = 0
-    #Elevators = 104
-    Elevators = 0
-    Stairs = 0
     HorizScale = 1
     CameraFloor = 0
     CameraPosition = -50, 0
@@ -109,25 +102,25 @@
 <EndTextures>
 
 #Lower Levels
-#<Floors -4 to -2>
-#    ID = LL(%floor% + 1)
-#    Name = Lower Level (%floor% + 1)
-#    Type = Basement
-#    Description = Lower Level (%floor% + 1)
-#    Height = 12.24
-#    InterfloorHeight = 0
-#
-#<EndFloors>
+<Floors -4 to -2>
+    ID = LL(%floor% + 1)
+    Name = Lower Level (%floor% + 1)
+    Type = Basement
+    Description = Lower Level (%floor% + 1)
+    Height = 12.24
+    InterfloorHeight = 0
+
+<EndFloors>
 
 #Franklin Concourse
-#<Floor -1>
-#    ID = C
-#    Name = Franklin Concourse
-#    Type = Lobby
-#    Description = Rear Entrance Lobby Level
-#    Height = 12.24
-#    InterfloorHeight = 0
-#<EndFloor>
+<Floor -1>
+    ID = C
+    Name = Franklin Concourse
+    Type = Lobby
+    Description = Rear Entrance Lobby Level
+    Height = 12.24
+    InterfloorHeight = 0
+<EndFloor>
 
 #Plaza
 <Floor 0>

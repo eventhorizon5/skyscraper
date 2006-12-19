@@ -6,11 +6,6 @@
     Name = My Building
     Designer = Me
     CameraAltitude = 3.2
-    Shafts = 1
-    Floors = 9 #10 total floors/levels, 0 to 9
-    Basements = 0
-    Elevators = 1
-    Stairs = 0
     HorizScale = 1
     CameraFloor = 0
     CameraPosition = 0, -60
@@ -76,12 +71,17 @@
     AddFloor Roof, Brick, -20, 20, 20, -20, %fullheight%, %fullheight%, 0, 0, True #roof
 <EndFloor>
 
+#Shaft 1
+AddShaft 1, 2, 6, 14, 0, 9
+
 <Elevator 1>
     #standard elevator; 7 feet wide, 6 feet deep
     Speed = 0.7
     Acceleration = 0.004
     Deceleration = 0.002
     OpenSpeed = 0.2
+    ServicedFloors = 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    AssignedShaft = 1
     CreateElevator 0, 6, 0
 
     AddFloor Floor, Wood2, -3.5, -3, 3.5, 3, 0, 0, 0, 0 #floor
@@ -94,5 +94,6 @@
     AddWall Right Panel, Wood1, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 2, 2, false, false, false #right panel
     
     AddDoors ElevDoors, 0, -3, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0, -3.1, 2, 2 #shaft doors
     
 <EndElevator>
