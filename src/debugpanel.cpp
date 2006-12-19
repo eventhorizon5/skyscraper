@@ -153,18 +153,18 @@ void Timer::Notify()
 	dp->t_camerafloor->SetLabel(wxVariant((long)sbs->camera->CurrentFloor).GetString());
 	dp->t_object->SetLabel(wxString::FromAscii(sbs->camera->GetClickedMeshName()));
 
-	if (sbs->Elevators > 0)
+	if (sbs->Elevators() > 0)
 	{
 		dp->bEditElevator->Enable(true);
 		dp->t_elevnumber->SetLabel(wxVariant((long)sbs->ElevatorNumber).GetString());
-		dp->t_elevfloor->SetLabel(wxVariant((long)sbs->ElevatorArray[sbs->ElevatorNumber]->GetFloor()).GetString());
+		dp->t_elevfloor->SetLabel(wxVariant((long)sbs->GetElevator(sbs->ElevatorNumber)->GetFloor()).GetString());
 	}
 	else
 		dp->bEditElevator->Enable(false);
 
 	if (ee->IsShown() == true)
 	{
-		Elevator *elevator = sbs->ElevatorArray.Get(ee->sNumber->GetThumbPosition() + 1);
+		Elevator *elevator = sbs->GetElevator(ee->sNumber->GetThumbPosition() + 1);
 		ee->tElevator->SetLabel(wxT("Number " + wxVariant((long)ee->sNumber->GetThumbPosition() + 1).GetString()));
 		ee->tFloor->SetLabel(wxT("Floor " + wxVariant((long)ee->sFloor->GetThumbPosition()).GetString()));
 		ee->txtAcceleration->SetValue(wxVariant(RoundDouble(elevator->Acceleration, 2)).GetString());
@@ -209,7 +209,7 @@ void Timer::Notify()
 
 	if (mc->IsShown() == true)
 	{
-		mc->chkFloor->SetValue(sbs->FloorArray[sbs->camera->CurrentFloor]->IsEnabled);
+		mc->chkFloor->SetValue(sbs->GetFloor(sbs->camera->CurrentFloor)->IsEnabled);
 		mc->chkColumnFrame->SetValue(sbs->IsColumnFrameEnabled);
 		mc->chkSky->SetValue(sbs->IsSkyboxEnabled);
 		mc->chkLandscape->SetValue(sbs->IsLandscapeEnabled);

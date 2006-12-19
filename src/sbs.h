@@ -28,6 +28,7 @@
 #include "elevator.h"
 #include "shaft.h"
 #include "camera.h"
+#include "stairs.h"
 
 //global functions
 double AutoSize(double n1, double n2, bool iswidth, bool external, double offset);
@@ -54,6 +55,31 @@ struct iEvent;
 class DemoSequenceManager;
 class csTransform;
 
+struct FloorMap
+{
+	int number; //floor number
+	Floor *object; //floor object reference
+};
+
+struct ElevatorMap
+{
+	int number; //elevator number
+	Elevator *object; //elevator object reference
+};
+
+struct ShaftMap
+{
+	int number; //shaft number
+	Shaft *object; //shaft object reference
+};
+
+struct StairsMap
+{
+	int number; //stairs number
+	Stairs *object; //stairs object reference
+};
+
+//SBS class
 class SBS
 {
 public:
@@ -96,14 +122,8 @@ public:
 	//Internal data
 	double Gravity; //gravity variable for physics algorithms
 	bool IsRunning; //is sim engine running?
-	int Shafts; //number of shafts
-	int TotalFloors; //number of above-ground floors including 0
+	int Floors; //number of above-ground floors including 0
 	int Basements; //number of basement floors
-	int Elevators; //number of elevators
-	int StairsNum; //number of stairwells
-	csArray<Floor*> FloorArray; //pointer array to floor objects
-	csArray<Elevator*> ElevatorArray; //pointer array to elevator objects
-	csArray<Shaft*> ShaftArray; //pointer array to shaft objects
 	Camera *camera; //camera object
 	bool RenderOnly; //skip sim processing and only render graphics
 	bool InputOnly; //skip sim processing and only run input and rendering code
@@ -175,6 +195,16 @@ public:
 	void ListAltitudes();
 	void CreateShaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor);
 	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool BothSides, double tw, double th);
+	void NewElevator(int number);
+	void NewFloor(int number);
+	int Elevators();
+	int TotalFloors(); //all floors including basements
+	int Shafts();
+	int StairsNum();
+	Floor *GetFloor(int number);
+	Elevator *GetElevator(int number);
+	Shaft *GetShaft(int number);
+	Stairs *GetStairs(int number);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);
@@ -214,6 +244,12 @@ private:
 	//conversion buffers
 	char intbuffer[65];
 	char buffer[20];
+
+	//object arrays
+	csArray<FloorMap> FloorArray; //floor object array
+	csArray<ElevatorMap> ElevatorArray; //elevator object array
+	csArray<ShaftMap> ShaftArray; //shaft object array
+	csArray<StairsMap> StairsArray; //stairs object array
 
 	//private functions
 	void PrintBanner();

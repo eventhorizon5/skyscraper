@@ -113,5 +113,5 @@ void MeshControl::On_chkExternal_Change(wxCommandEvent& event)
 
 void MeshControl::On_chkFloor_Change(wxCommandEvent& event)
 {
-	sbs->FloorArray[sbs->camera->CurrentFloor]->Enabled(chkFloor->GetValue());
+	sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(chkFloor->GetValue());
 }

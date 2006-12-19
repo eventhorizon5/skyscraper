@@ -32,8 +32,16 @@ class Stairs
 {
 public:
 
-	Stairs(int type, double CenterX, double CenterZ, double width, double length, double risersize, double treadsize);
+	int StairsNum; //number
+	int startfloor; //starting floor
+	int endfloor; //ending floor
+	csVector3 origin; //origin vector
+
+	Stairs(int number, int CenterX, int CenterZ, int _startfloor, int _endfloor);
 	~Stairs();
+	int AddStairs(int floor, const char *name, const char *texture, const char *direction, double CenterX, double CenterZ, double width, double risersize, double treadsize, int num_stairs, double voffset, double tw, double th);
+	int AddWall(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ);
+	int AddFloor(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
 
 private:
 	csRefArray<iMeshWrapper> StairDoorArray; //stair door array

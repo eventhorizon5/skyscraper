@@ -44,7 +44,7 @@ Shaft::Shaft(int number, int type, double CenterX, double CenterZ, int _startflo
 	ShaftNumber = number;
 	startfloor = _startfloor;
 	endfloor = _endfloor;
-	origin = csVector3(CenterX, sbs->FloorArray[_startfloor]->Altitude, CenterZ);
+	origin = csVector3(CenterX, sbs->GetFloor(_startfloor)->Altitude, CenterZ);
 	InsideShaft = false;
 	top = 0;
 	bottom = 0;
@@ -81,13 +81,13 @@ Shaft::~Shaft()
 
 int Shaft::AddWall(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ)
 {
-	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], name, texture, x1, z1, x2, z2, height1, height2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th, revX, revY, revZ);
+	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], name, texture, x1, z1, x2, z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th, revX, revY, revZ);
 }
 
 int Shaft::AddFloor(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
 	//get shaft extents
-	double altitude = sbs->FloorArray[floor]->Altitude;
+	double altitude = sbs->GetFloor(floor)->Altitude;
 
 	if (altitude + voffset1 < bottom)
 		bottom = altitude + voffset1;
@@ -98,7 +98,7 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, double x1,
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, x1, z1, x2, z2, sbs->FloorArray[floor]->Altitude + voffset1, sbs->FloorArray[floor]->Altitude + voffset2, tw, th);
+	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, x1, z1, x2, z2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th);
 }
 
 void Shaft::Enabled(int floor, bool value)
@@ -123,8 +123,8 @@ void Shaft::Enabled(int floor, bool value)
 
 	for (int i = elevators[0]; i < elevators.GetSize(); i++)
 	{
-		for(int j = sbs->ElevatorArray[i]->ServicedFloors[0]; j < sbs->ElevatorArray[i]->ServicedFloors.GetSize(); j++)
-			sbs->ElevatorArray[i]->ShaftDoorsEnabled(j, value);
+		for(int j = sbs->GetElevator(i)->ServicedFloors[0]; j < sbs->GetElevator(i)->ServicedFloors.GetSize(); j++)
+			sbs->GetElevator(i)->ShaftDoorsEnabled(j, value);
 	}
 }
 

@@ -38,9 +38,9 @@ ButtonPanel::ButtonPanel(int _elevator, const char *texture, int rows, int colum
 
 	elevator = _elevator;
 	Direction = direction;
-	Origin.x = sbs->ElevatorArray[elevator]->Origin.x + CenterX;
-	Origin.y = sbs->ElevatorArray[elevator]->Origin.y + voffset;
-	Origin.z = sbs->ElevatorArray[elevator]->Origin.z + CenterZ;
+	Origin.x = sbs->GetElevator(elevator)->Origin.x + CenterX;
+	Origin.y = sbs->GetElevator(elevator)->Origin.y + voffset;
+	Origin.z = sbs->GetElevator(elevator)->Origin.z + CenterZ;
 	Width = width;
 	Height = height;
 	Rows = rows;
@@ -138,30 +138,30 @@ void ButtonPanel::Press(int index)
 	if (IsNumeric(name) == true)
 	{
 		int floor = atoi(name.GetData());
-		int elev_floor = sbs->ElevatorArray[elevator]->GetFloor();
-		int elev_dir = sbs->ElevatorArray[elevator]->Direction;
+		int elev_floor = sbs->GetElevator(elevator)->GetFloor();
+		int elev_dir = sbs->GetElevator(elevator)->Direction;
 		
 		//elevator is above floor
 		if (elev_floor > floor)
-			sbs->ElevatorArray[elevator]->AddRoute(floor, -1);
+			sbs->GetElevator(elevator)->AddRoute(floor, -1);
 
 		//elevator is on or below floor
 		if (elev_floor <= floor)
-			sbs->ElevatorArray[elevator]->AddRoute(floor, 1);
+			sbs->GetElevator(elevator)->AddRoute(floor, 1);
 	}
 	else
 	{
 		name.Downcase();
-		if (name == "open" && sbs->ElevatorArray[elevator]->Direction == 0)
-			sbs->ElevatorArray[elevator]->OpenDoors();
-		if (name == "close" && sbs->ElevatorArray[elevator]->Direction == 0)
-			sbs->ElevatorArray[elevator]->CloseDoors();
+		if (name == "open" && sbs->GetElevator(elevator)->Direction == 0)
+			sbs->GetElevator(elevator)->OpenDoors();
+		if (name == "close" && sbs->GetElevator(elevator)->Direction == 0)
+			sbs->GetElevator(elevator)->CloseDoors();
 		if (name == "cancel")
-			sbs->ElevatorArray[elevator]->CancelLastRoute();
+			sbs->GetElevator(elevator)->CancelLastRoute();
 		if (name == "stop")
-			sbs->ElevatorArray[elevator]->StopElevator();
+			sbs->GetElevator(elevator)->StopElevator();
 		if (name == "alarm")
-			sbs->ElevatorArray[elevator]->Alarm();
+			sbs->GetElevator(elevator)->Alarm();
 	}
 }
 
@@ -175,6 +175,6 @@ void ButtonPanel::Move(csVector3 position)
 void ButtonPanel::SetToElevatorAltitude()
 {
 	csVector3 pos = ButtonPanelMesh->GetMovable()->GetPosition();
-	ButtonPanelMesh->GetMovable()->SetPosition(csVector3(pos.x, sbs->ElevatorArray[elevator]->GetPosition().y, pos.z));
+	ButtonPanelMesh->GetMovable()->SetPosition(csVector3(pos.x, sbs->GetElevator(elevator)->GetPosition().y, pos.z));
 	ButtonPanelMesh->GetMovable()->UpdateMove();
 }

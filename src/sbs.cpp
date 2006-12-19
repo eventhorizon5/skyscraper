@@ -69,11 +69,8 @@ SBS::SBS()
 	BuildingVersion = "";
 	Gravity = 32.15; // 9.8 m/s/s
 	IsRunning = false;
-	Shafts = 0;
-	TotalFloors = 0;
+	Floors = 0;
 	Basements = 0;
-	Elevators = 0;
-	StairsNum = 0;
 	RenderOnly = false;
 	InputOnly = false;
 	IsFalling = false;
@@ -107,27 +104,27 @@ SBS::~SBS()
 	camera = 0;
 
 	//delete floors
-	for (int i = -Basements; i <= TotalFloors; i++)
+	for (int i = 0; i < TotalFloors(); i++)
 	{
-		if (FloorArray[i])
-			delete FloorArray[i];
-		FloorArray[i] = 0;
+		if (FloorArray[i].object)
+			delete FloorArray[i].object;
+		FloorArray[i].object = 0;
 	}
 
 	//delete elevators
-	for (int i = 1; i <= Elevators; i++)
+	for (int i = 0; i < Elevators(); i++)
 	{
-		if (ElevatorArray[i])
-			delete ElevatorArray[i];
-		ElevatorArray[i] = 0;
+		if (ElevatorArray[i].object)
+			delete ElevatorArray[i].object;
+		ElevatorArray[i].object = 0;
 	}
 
 	//delete shafts
-	for (int i = 1; i <= Shafts; i++)
+	for (int i = 0; i < Shafts(); i++)
 	{
-		if (ShaftArray[i])
-			delete ShaftArray[i];
-		ShaftArray[i] = 0;
+		if (ShaftArray[i].object)
+			delete ShaftArray[i].object;
+		ShaftArray[i].object = 0;
 	}
 }
 
@@ -179,25 +176,25 @@ void SBS::Start()
 	EnableSkybox(true);
 
 	//turn off floors
-	for (int i = -Basements; i <= TotalFloors; i++)
-		FloorArray[i]->Enabled(false);
+	for (int i = 0; i < TotalFloors(); i++)
+		FloorArray[i].object->Enabled(false);
 
 	//turn off shafts
-	for (int i = 1; i < ShaftArray.GetSize(); i++)
+	for (int i = 0; i < Shafts(); i++)
 	{
-		if (ShaftArray[i])
-			ShaftArray[i]->EnableWholeShaft(false);
+		if (ShaftArray[i].object)
+			ShaftArray[i].object->EnableWholeShaft(false);
 	}
 
 	//turn on shaft elevator doors
-	for (int i = 1; i <= Elevators; i++)
+	for (int i = 0; i < Elevators(); i++)
 	{
-		if (ElevatorArray[i])
-			ElevatorArray[i]->ShaftDoorsEnabled(camera->StartFloor, true);
+		if (ElevatorArray[i].object)
+			ElevatorArray[i].object->ShaftDoorsEnabled(camera->StartFloor, true);
 	}
 
 	//turn on first/lobby floor
-	FloorArray[0]->Enabled(true);
+	GetFloor(0)->Enabled(true);
 
 }
 
@@ -391,8 +388,8 @@ void SBS::SetupFrame()
 		camera->UpdateCameraFloor();
 
 		//run elevator handlers
-		for (int i = 1; i <= Elevators; i++)
-			ElevatorArray[i]->MonitorLoop();
+		for (int i = 0; i < Elevators(); i++)
+			GetElevator(i)->MonitorLoop();
 
 		//check if the user is in an elevator
 		camera->CheckElevator();
@@ -802,22 +799,6 @@ int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const 
 
 void SBS::InitMeshes()
 {
-	//initialize floor and elevator object container arrays
-	int i;
-	FloorArray.DeleteAll();
-	FloorArray.SetSize(Basements + TotalFloors + 1);
-
-	for (i = -Basements; i <= TotalFloors; i++)
-		FloorArray[i] = new Floor(i);
-
-	ElevatorArray.DeleteAll();
-	ElevatorArray.SetSize(Elevators + 1);
-
-	for (i = 1; i <= Elevators; i++)
-		ElevatorArray[i] = new Elevator(i);
-
-	ShaftArray.SetSize(Shafts + 1);
-
 	//create object meshes
 	Buildings = engine->CreateSectorWallsMesh (area, "Buildings");
 	Buildings_state = scfQueryInterface<iThingFactoryState> (Buildings->GetMeshObject()->GetFactory());
@@ -1308,17 +1289,17 @@ int SBS::GetFloorNumber(double altitude)
 	//Returns floor number located at a specified altitude
 
 	//check to see if altitude is below bottom floor
-	if (altitude < FloorArray[-Basements]->Altitude)
+	if (altitude < GetFloor(-Basements)->Altitude)
 		return -Basements;
 
-	for (int i = -Basements + 1; i <= TotalFloors; i++)
+	for (int i = -Basements + 1; i <= Floors; i++)
 	{
 		//check to see if altitude is within a floor (between the current floor's base and
 		//the lower floor's base)
-		if ((FloorArray[i]->Altitude > altitude) && (FloorArray[i - 1]->Altitude <= altitude))
+		if ((GetFloor(i)->Altitude > altitude) && (GetFloor(i - 1)->Altitude <= altitude))
 			return i - 1;
 		//check to see if altitude is above top floor's altitude
-		if ((i == TotalFloors) && (altitude > FloorArray[i]->Altitude))
+		if ((i == Floors) && (altitude > GetFloor(i)->Altitude))
 			return i;
 	}
 }
@@ -1349,15 +1330,20 @@ void SBS::ListAltitudes()
 	//dumps the floor altitude list
 
 	Report("--- Floor Altitudes ---\n");
-	for (int i = -Basements; i <= TotalFloors; i++)
-		Report(csString(_itoa(i, intbuffer, 10)) + "(" + FloorArray[i]->ID + ")\t----\t" + csString(_gcvt(FloorArray[i]->FullHeight(), 6, buffer)) + "\t----\t" + csString(_gcvt(FloorArray[i]->Altitude, 6, buffer)));
+	for (int i = -Basements; i <= Floors; i++)
+		Report(csString(_itoa(i, intbuffer, 10)) + "(" + GetFloor(i)->ID + ")\t----\t" + csString(_gcvt(GetFloor(i)->FullHeight(), 6, buffer)) + "\t----\t" + csString(_gcvt(GetFloor(i)->Altitude, 6, buffer)));
 }
 
 void SBS::CreateShaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor)
 {
 	//create a shaft object
 
-	ShaftArray[number] = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
+	for (int i = 0; i < ShaftArray.GetSize(); i++)
+		if (ShaftArray[i].number == number)
+			return;
+	ShaftArray.SetSize(ShaftArray.GetSize() + 1);
+	ShaftArray[ShaftArray.GetSize() - 1].number = number;
+	ShaftArray[ShaftArray.GetSize() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
 }
 
 void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool BothSides, double tw, double th)
@@ -1388,4 +1374,91 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 			mesh->GetPolygonVertex(index + 1, 1),
 			csVector2 (0, th));
 	}
+}
+
+void SBS::NewElevator(int number)
+{
+	//create a new elevator object
+	for (int i = 0; i < ElevatorArray.GetSize(); i++)
+		if (ElevatorArray[i].number == number)
+			return;
+	ElevatorArray.SetSize(ElevatorArray.GetSize() + 1);
+	ElevatorArray[ElevatorArray.GetSize() - 1].number = number;
+	ElevatorArray[ElevatorArray.GetSize() - 1].object = new Elevator(number);
+}
+
+void SBS::NewFloor(int number)
+{
+	//create a new floor object
+	for (int i = 0; i < FloorArray.GetSize(); i++)
+		if (FloorArray[i].number == number)
+			return;
+	FloorArray.SetSize(FloorArray.GetSize() + 1);
+	FloorArray[FloorArray.GetSize() - 1].number = number;
+	FloorArray[FloorArray.GetSize() - 1].object = new Floor(number);
+
+	if (number < 0)
+		Basements++;
+	else
+		Floors++;
+}
+
+int SBS::Elevators()
+{
+	//return the number of elevators
+	return ElevatorArray.GetSize();
+}
+
+int SBS::TotalFloors()
+{
+	//return the number of floors
+	return FloorArray.GetSize();
+}
+
+int SBS::Shafts()
+{
+	//return the number of shafts
+	return ShaftArray.GetSize();
+}
+
+int SBS::StairsNum()
+{
+	//return the number of stairs
+	return StairsArray.GetSize();
+}
+
+Floor *SBS::GetFloor(int number)
+{
+	//return pointer to floor object
+
+	for (int i = 0; i < FloorArray.GetSize(); i++)
+		if (FloorArray[i].number == number)
+			return FloorArray[i].object;
+}
+
+Elevator *SBS::GetElevator(int number)
+{
+	//return pointer to elevator object
+
+	for (int i = 0; i < ElevatorArray.GetSize(); i++)
+		if (ElevatorArray[i].number == number)
+			return ElevatorArray[i].object;
+}
+
+Shaft *SBS::GetShaft(int number)
+{
+	//return pointer to shaft object
+
+	for (int i = 0; i < ShaftArray.GetSize(); i++)
+		if (ShaftArray[i].number == number)
+			return ShaftArray[i].object;
+}
+
+Stairs *SBS::GetStairs(int number)
+{
+	//return pointer to stairs object
+
+	for (int i = 0; i < StairsArray.GetSize(); i++)
+		if (StairsArray[i].number == number)
+			return StairsArray[i].object;
 }

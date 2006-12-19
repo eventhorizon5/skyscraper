@@ -133,11 +133,11 @@ void Elevator::CreateElevator(double x, double z, int floor)
 	//x and z are the center coordinates
 
 	//set data
-	Origin = csVector3(x, sbs->FloorArray[floor]->Altitude, z);
+	Origin = csVector3(x, sbs->GetFloor(floor)->Altitude, z);
 	OriginFloor = floor;
 
 	//add elevator to associated shaft's list
-	sbs->ShaftArray[AssignedShaft]->elevators.InsertSorted(Number);
+	sbs->GetShaft(AssignedShaft)->elevators.InsertSorted(Number);
 
 	//move objects to positions
 	Elevator_movable->SetPosition(Origin);
@@ -321,12 +321,13 @@ int Elevator::GetFloor()
 {
 	//Determine floor that the elevator is on
 
-	for (int i = -sbs->Basements; i <= sbs->TotalFloors; i++)
+	//for (int i = -sbs->Basements; i <= sbs->TotalFloors; i++)
+	for (int i = -sbs->Basements; i <= sbs->Floors; i++)
 	{
-		if (i < sbs->TotalFloors)
-			if ((GetPosition().y >= sbs->FloorArray[i]->Altitude) && (GetPosition().y < sbs->FloorArray[i + 1]->Altitude))
+		if (i < sbs->Floors)
+			if ((GetPosition().y >= sbs->GetFloor(i)->Altitude) && (GetPosition().y < sbs->GetFloor(i + 1)->Altitude))
 				return i;
-			if ((i == sbs->TotalFloors) && (GetPosition().y >= sbs->FloorArray[i]->Altitude))
+			if ((i == sbs->Floors) && (GetPosition().y >= sbs->GetFloor(i)->Altitude))
 				return i;
 	}
 
@@ -806,13 +807,13 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//Determine distance to destination floor
-		DistanceToTravel = abs(abs(sbs->FloorArray[GotoFloor]->Altitude) - abs(ElevatorStart));
-		Destination = sbs->FloorArray[GotoFloor]->Altitude;
+		DistanceToTravel = abs(abs(sbs->GetFloor(GotoFloor)->Altitude) - abs(ElevatorStart));
+		Destination = sbs->GetFloor(GotoFloor)->Altitude;
 		CalculateStoppingDistance = true;
 
 		//If user is riding this elevator, then turn off floor
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-			sbs->FloorArray[sbs->camera->CurrentFloor]->Enabled(false);
+			sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 
 		//Turn off sky, buildings, and landscape
 		sbs->EnableSkybox(false);
@@ -866,26 +867,26 @@ void Elevator::MoveElevatorToFloor()
 	if (sbs->AutoShafts == true && sbs->InElevator == true && sbs->ElevatorNumber == Number)
 	{
 		int i = GetFloor();
-		sbs->ShaftArray[AssignedShaft]->Enabled(i, true);
+		sbs->GetShaft(AssignedShaft)->Enabled(i, true);
 		ShaftDoorsEnabled(i, true);
-		if (i > sbs->ShaftArray[AssignedShaft]->startfloor)
+		if (i > sbs->GetShaft(AssignedShaft)->startfloor)
 		{
-			sbs->ShaftArray[AssignedShaft]->Enabled(i - 1, true);
+			sbs->GetShaft(AssignedShaft)->Enabled(i - 1, true);
 			ShaftDoorsEnabled(i - 1, true);
 		}
-		if (i < sbs->ShaftArray[AssignedShaft]->endfloor)
+		if (i < sbs->GetShaft(AssignedShaft)->endfloor)
 		{
-			sbs->ShaftArray[AssignedShaft]->Enabled(i + 1, true);
+			sbs->GetShaft(AssignedShaft)->Enabled(i + 1, true);
 			ShaftDoorsEnabled(i + 1, true);
 		}
-		if (i > sbs->ShaftArray[AssignedShaft]->startfloor + 1)
+		if (i > sbs->GetShaft(AssignedShaft)->startfloor + 1)
 		{
-			sbs->ShaftArray[AssignedShaft]->Enabled(i - 2, false);
+			sbs->GetShaft(AssignedShaft)->Enabled(i - 2, false);
 			ShaftDoorsEnabled(i - 2, false);
 		}
-		if (i < sbs->ShaftArray[AssignedShaft]->endfloor - 1)
+		if (i < sbs->GetShaft(AssignedShaft)->endfloor - 1)
 		{
-			sbs->ShaftArray[AssignedShaft]->Enabled(i + 2, false);
+			sbs->GetShaft(AssignedShaft)->Enabled(i + 2, false);
 			ShaftDoorsEnabled(i + 2, false);
 		}
 	}
@@ -1058,7 +1059,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//Turn on floor
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-			sbs->FloorArray[GotoFloor]->Enabled(true);
+			sbs->GetFloor(GotoFloor)->Enabled(true);
 
 		//open doors
 		OpenDoors();
@@ -1085,7 +1086,7 @@ int Elevator::AddFloorIndicator(const char *direction, double CenterX, double Ce
 {
 	//Creates a floor indicator at the specified location
 	int index = -1;
-	csString texture = "Button" + sbs->FloorArray[OriginFloor]->ID;
+	csString texture = "Button" + sbs->GetFloor(OriginFloor)->ID;
 	csString tmpdirection = direction;
 	tmpdirection.Downcase();
 
@@ -1214,8 +1215,8 @@ int Elevator::AddShaftDoors(const char *texture, double CenterX, double CenterZ,
 		ShaftDoorR[i]->GetMovable()->UpdateMove();
 
 		//create doors
-		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);
-		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->FloorArray[ServicedFloors[i]]->Altitude, sbs->FloorArray[ServicedFloors[i]]->Altitude, tw, th, false, false, false);
+		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude, sbs->GetFloor(ServicedFloors[i])->Altitude, tw, th, false, false, false);
+		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude, sbs->GetFloor(ServicedFloors[i])->Altitude, tw, th, false, false, false);
 
 		//make doors invisible on start
 		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
@@ -1440,7 +1441,7 @@ void Elevator::UpdateFloorIndicators()
 {
 	//changes the number texture on the floor indicators to the elevator's current floor
 	
-	csString texture = "Button" + sbs->FloorArray[GetFloor()]->ID;
+	csString texture = "Button" + sbs->GetFloor(GetFloor())->ID;
 	
 	for (int i = 0; i < FloorIndicator_state->GetPolygonCount(); i++)
 		sbs->SetTexture(FloorIndicator_state, i, texture.GetData(), false, 1, 1);

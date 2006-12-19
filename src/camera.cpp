@@ -168,7 +168,7 @@ csVector3 Camera::GetStartRotation()
 
 void Camera::SetToStartPosition()
 {
-	SetPosition(csVector3(StartPositionX, sbs->FloorArray[StartFloor]->Altitude + DefaultAltitude, StartPositionZ));
+	SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->Altitude + DefaultAltitude, StartPositionZ));
 }
 
 void Camera::SetToStartDirection()
@@ -228,9 +228,9 @@ void Camera::CheckElevator()
 	//first checks to see if camera is within an elevator's height range, and then
 	//checks for a collision with the elevator's floor below
 
-	for (int i = 1; i <= sbs->Elevators; i++)
+	for (int i = 1; i <= sbs->Elevators(); i++)
 	{
-		if (sbs->ElevatorArray[i]->IsInElevator(GetPosition()) == true)
+		if (sbs->GetElevator(i)->IsInElevator(GetPosition()) == true)
 		{
 			sbs->InElevator = true;
 			sbs->ElevatorNumber = i;
@@ -247,32 +247,32 @@ void Camera::CheckShaft()
 	if (sbs->AutoShafts == false)
 		return;
 
-	for (int i = 1; i < sbs->ShaftArray.GetSize(); i++)
+	for (int i = 1; i < sbs->Shafts(); i++)
 	{
-		if (sbs->ShaftArray[i]->IsInShaft(GetPosition()) == true)
+		if (sbs->GetShaft(i)->IsInShaft(GetPosition()) == true)
 		{
-			if (sbs->ShaftArray[i]->InsideShaft == false && sbs->InElevator == false)
+			if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == false)
 			{
-				sbs->ShaftArray[i]->InsideShaft = true;
+				sbs->GetShaft(i)->InsideShaft = true;
 
 				//turn on entire shaft
-				sbs->ShaftArray[i]->EnableWholeShaft(true);
+				sbs->GetShaft(i)->EnableWholeShaft(true);
 			}
-			else if (sbs->ShaftArray[i]->InsideShaft == true && sbs->InElevator == true)
+			else if (sbs->GetShaft(i)->InsideShaft == true && sbs->InElevator == true)
 			{
-				sbs->ShaftArray[i]->InsideShaft = false;
+				sbs->GetShaft(i)->InsideShaft = false;
 
 				//turn off shaft except for camera floor
-				sbs->ShaftArray[i]->EnableWholeShaft(false);
-				sbs->ShaftArray[i]->Enabled(sbs->camera->CurrentFloor, true);
+				sbs->GetShaft(i)->EnableWholeShaft(false);
+				sbs->GetShaft(i)->Enabled(sbs->camera->CurrentFloor, true);
 			}
 		}
-		else if (sbs->ShaftArray[i]->InsideShaft == true)
+		else if (sbs->GetShaft(i)->InsideShaft == true)
 		{
-			sbs->ShaftArray[i]->InsideShaft = false;
+			sbs->GetShaft(i)->InsideShaft = false;
 
 			//turn off entire shaft
-			sbs->ShaftArray[i]->EnableWholeShaft(false);
+			sbs->GetShaft(i)->EnableWholeShaft(false);
 		}
 	}
 }
@@ -323,7 +323,7 @@ void Camera::ClickedObject()
 		int floor = atoi(meshname.Slice(12, meshname.Find(":") - 12));
 		int number = atoi(meshname.Slice(meshname.Find(":") + 1));
 		//press button
-		sbs->FloorArray[floor]->CallButtonArray[number]->Press(result.polygon_idx);
+		sbs->GetFloor(floor)->CallButtonArray[number]->Press(result.polygon_idx);
 	}
 
 	//check elevator buttons
@@ -332,7 +332,7 @@ void Camera::ClickedObject()
 		//user clicked on an elevator button
 		int elevator = atoi(meshname.Slice(13));
 		//press button
-		sbs->ElevatorArray[elevator]->Panel->Press(result.polygon_idx);
+		sbs->GetElevator(elevator)->Panel->Press(result.polygon_idx);
 	}
 }
 
