@@ -388,7 +388,7 @@ void SBS::SetupFrame()
 		camera->UpdateCameraFloor();
 
 		//run elevator handlers
-		for (int i = 0; i < Elevators(); i++)
+		for (int i = 1; i <= Elevators(); i++)
 			GetElevator(i)->MonitorLoop();
 
 		//check if the user is in an elevator
