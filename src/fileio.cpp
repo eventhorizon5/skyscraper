@@ -460,6 +460,21 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.DeleteAll();
 		}
 
+		//AddStairwell command
+		if (LineData.Slice(0, 15).CompareNoCase("createstairwell") == true)
+		{
+			tempdata.SplitString(LineData.Slice(16).GetData(), ",");
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+
+			CreateStairwell(atoi(tempdata[0]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+
+			tempdata.DeleteAll();
+		}
+
 		//Process globals
 		if (Section == 1)
 		{
@@ -668,6 +683,28 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//AddStairsFloor command
+			if (LineData.Slice(0, 14).CompareNoCase("addstairsfloor") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				//if (tempdata.GetSize() < 8)
+					//Err.Raise 1003;
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
+
+				//create floor
+				GetStairs(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+
+				tempdata.DeleteAll();
+			}
+
 			//AddInterFloorFloor command
 			if (LineData.Slice(0, 18).CompareNoCase("addinterfloorfloor") == true)
 			{
@@ -759,6 +796,41 @@ recalc:
 
 				//create wall
 				GetShaft(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), revX, revY, revZ);
+
+				tempdata.DeleteAll();
+			}
+
+			//AddStairsWall command
+			if (LineData.Slice(0, 13).CompareNoCase("addstairswall") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(14).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				//if (tempdata.GetSize() < 11)
+					//Err.Raise 1003;
+				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+
+				if (csString(tempdata[13]).CompareNoCase("true") == true)
+					revX = true;
+				else
+					revX = false;
+				if (csString(tempdata[14]).CompareNoCase("true") == true)
+					revY = true;
+				else
+					revY = false;
+				if (csString(tempdata[15]).CompareNoCase("true") == true)
+					revZ = true;
+				else
+					revZ = false;
+
+				//create wall
+				GetStairs(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), revX, revY, revZ);
 
 				tempdata.DeleteAll();
 			}

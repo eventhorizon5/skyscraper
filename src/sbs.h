@@ -194,6 +194,7 @@ public:
 	void DumpVertices(csRef<iThingFactoryState> mesh);
 	void ListAltitudes();
 	void CreateShaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor);
+	void CreateStairwell(int number, double CenterX, double CenterZ, int _startfloor, int _endfloor);
 	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool BothSides, double tw, double th);
 	iMaterialWrapper *ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> oldmat, const char *texture);
 	void NewElevator(int number);

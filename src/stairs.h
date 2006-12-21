@@ -42,8 +42,13 @@ public:
 	int AddStairs(int floor, const char *name, const char *texture, const char *direction, double CenterX, double CenterZ, double width, double risersize, double treadsize, int num_stairs, double voffset, double tw, double th);
 	int AddWall(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ);
 	int AddFloor(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
+	void Enabled(int floor, bool value);
+	void EnableWholeStairwell(bool value);
+	bool IsInStairwell(const csVector3 &position);
 
 private:
+	csRefArray<iMeshWrapper> StairArray; //stairwell array
+	csRefArray<iThingFactoryState> StairArray_state; //stairwell mesh array state
 	csRefArray<iMeshWrapper> StairDoorArray; //stair door array
 	csRefArray<iThingFactoryState> StairDoorArray_state; //stair mesh array state
 };

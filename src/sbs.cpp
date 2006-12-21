@@ -1346,6 +1346,18 @@ void SBS::CreateShaft(int number, int type, double CenterX, double CenterZ, int 
 	ShaftArray[ShaftArray.GetSize() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
 }
 
+void SBS::CreateStairwell(int number, double CenterX, double CenterZ, int _startfloor, int _endfloor)
+{
+	//create a stairwell object
+
+	for (int i = 0; i < StairsArray.GetSize(); i++)
+		if (StairsArray[i].number == number)
+			return;
+	StairsArray.SetSize(StairsArray.GetSize() + 1);
+	StairsArray[StairsArray.GetSize() - 1].number = number;
+	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
+}
+
 iMaterialWrapper *SBS::ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> oldmat, const char *texture)
 {
 	//changes a texture
