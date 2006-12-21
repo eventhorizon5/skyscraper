@@ -131,6 +131,15 @@
     will take up, and does not create the actual shaft walls. Later on when you 
     create the walls/floors for the shaft, make sure that you make a floor at 
     the very bottom and very top of the shaft (they can extend beyond the walls).</p>
+  <p align="left"><strong>e. CreateStairwell</strong> - creates a stairwell at 
+    a specified location and floor range<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">CreateStairwell number, 
+    centerx, centerz, startfloor, endfloor</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddShaft 1, 10, 
+    10, 0, 9</font></p>
+  <p align="left">The number parameter specifies the stairwell number to create. 
+    This command just tells the simulator the area that the stairwell will take 
+    up, and does not create the actual walls.</p>
   <p align="left"><br>
     <strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
@@ -340,13 +349,32 @@
   <p align="left">The parameters are the same as the AddWall command, and the 
     <em>number</em> value is the shaft number to use. Also, the x1, z1, x2, and 
     z2 parameters are offsets of the shaft's origin (similar to creating elevator 
-    walls and floors) </p>
-  <p align="left"><strong>8. CallButtonElevators</strong> - comma-separated list 
+    walls and floors)</p>
+  <p align="left"><strong>8. AddStairsFloor</strong> - adds a textured floor to 
+    the specified stairwell, on the current floor<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsFloor <em>number, 
+    name, texturename</em>, <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, 
+    <em>voffset1</em>, <em>voffset2, tw</em>, <em>th</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddStairsFloor 1, 
+    My Floor, brick, -10, -10, 10, 10, 0, 0, 0</font></p>
+  <p align="left">The parameters are the same as the AddFloor command, and the 
+    <em>number</em> value is the stairwell number to use</p>
+  <p align="left"><strong>9. AddStairsWall</strong> - adds a textured wall to 
+    the specified stairwell, on the current floor<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsWall <em>number, 
+    name, texturename</em>, <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, 
+    <em>height1</em>, <em>height2</em>, <em>voffset1</em>, <em>voffset2</em>, 
+    <em>tw</em>, <em>th</em>, <em>revx, revy, revz</em></font></p>
+  <p align="left">The parameters are the same as the AddWall command, and the 
+    <em>number</em> value is the stairwell number to use. Also, the x1, z1, x2, 
+    and z2 parameters are offsets of the stairwell's origin (similar to creating 
+    elevator walls and floors) </p>
+  <p align="left"><strong>10. CallButtonElevators</strong> - comma-separated list 
     of elevators the next created call button set will work with (this must be 
     specified before CreateCallButtons)<br>
     Example: <font size="2" face="Courier New, Courier, mono">CallButtonElevators 
     = 1, 2, 3, 4</font></p>
-  <p align="left"> <strong>9. CreateCallButtons</strong> - creates a call button 
+  <p align="left"> <strong>11. CreateCallButtons</strong> - creates a call button 
     set<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateCallButtons<em> 
     BackTexture</em>, <em>UpButtonTexture</em>, <em>DownButtonTexture, CenterX, 
