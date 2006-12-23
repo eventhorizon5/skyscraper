@@ -141,7 +141,6 @@ void SBS::Start()
 	IsRunning = true;
 
 	//clear user variables
-	UserVariable.DeleteAll();
 	UserVariable.SetSize(256);
 
 	//load building data file

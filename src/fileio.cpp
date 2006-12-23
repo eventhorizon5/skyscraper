@@ -460,7 +460,7 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.DeleteAll();
 		}
 
-		//AddStairwell command
+		//CreateStairwell command
 		if (LineData.Slice(0, 15).CompareNoCase("createstairwell") == true)
 		{
 			tempdata.SplitString(LineData.Slice(16).GetData(), ",");
@@ -471,7 +471,7 @@ int SBS::LoadBuilding(const char * filename)
 			}
 
 			if (!GetStairs(atoi(tempdata[0])))
-				CreateStairwell(atoi(tempdata[0]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+				CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]));
 
 			tempdata.DeleteAll();
 		}
