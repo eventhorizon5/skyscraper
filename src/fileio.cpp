@@ -470,7 +470,8 @@ int SBS::LoadBuilding(const char * filename)
 				tempdata.Put(temp3, buffer);
 			}
 
-			CreateStairwell(atoi(tempdata[0]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+			if (!GetStairs(atoi(tempdata[0])))
+				CreateStairwell(atoi(tempdata[0]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
 
 			tempdata.DeleteAll();
 		}
@@ -700,7 +701,8 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
-				GetStairs(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				if (GetStairs(atoi(tempdata[0])))
+					GetStairs(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 
 				tempdata.DeleteAll();
 			}
@@ -830,7 +832,8 @@ recalc:
 					revZ = false;
 
 				//create wall
-				GetStairs(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), revX, revY, revZ);
+				if (GetStairs(atoi(tempdata[0])))
+					GetStairs(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), revX, revY, revZ);
 
 				tempdata.DeleteAll();
 			}
@@ -930,6 +933,25 @@ recalc:
 
 				//create call button
 				GetFloor(Current)->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), ShowBack, atof(tempdata[10]), atof(tempdata[11]));
+				tempdata.DeleteAll();
+			}
+
+			//AddStairs command
+			if (LineData.Slice(0, 9).CompareNoCase("addstairs") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(10).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+				//create stairs
+				if (GetStairs(atoi(tempdata[0])))
+					GetStairs(atoi(tempdata[0]))->AddStairs(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atoi(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 				tempdata.DeleteAll();
 			}
 

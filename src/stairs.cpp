@@ -70,7 +70,57 @@ Stairs::~Stairs()
 
 int Stairs::AddStairs(int floor, const char *name, const char *texture, const char *direction, double CenterX, double CenterZ, double width, double risersize, double treadsize, int num_stairs, double voffset, double tw, double th)
 {
-	return 0;
+	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
+	//direction is where the stairs base is - front, back, left, or right.
+
+	csString buffer, buffer2, buffer3;
+	int index = -1;
+	int tmpindex = 0;
+	buffer3 = name;
+	buffer3.Trim();
+
+	for (int i = 1; i <= num_stairs - 1; i++)
+	{
+		double pos;
+		buffer2 = i;
+		if (direction == "right")
+		{
+			pos = CenterX + ((treadsize * (num_stairs - 1)) / 2) - (treadsize * i);
+			buffer = buffer3 + " " + buffer2 + "-riser";
+			tmpindex = AddWall(floor, buffer.GetData(), texture, pos + treadsize, -(width / 2), pos + treadsize, width / 2, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th, false, false, false);
+			buffer = buffer3 + " " + buffer2 + "-tread";
+			AddFloor(floor, buffer.GetData(), texture, pos, -(width / 2), pos + treadsize, width / 2, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+		}
+		if (direction == "left")
+		{
+			pos = CenterX - ((treadsize * (num_stairs - 1)) / 2) + (treadsize * i);
+			buffer = buffer3 + " " + buffer2 + "-riser";
+			tmpindex = AddWall(floor, buffer.GetData(), texture, pos - treadsize, width / 2, pos - treadsize, -(width / 2), risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th, false, false, false);
+			buffer = buffer3 + " " + buffer2 + "-tread";
+			AddFloor(floor, buffer.GetData(), texture, pos, width / 2, pos - treadsize, -(width / 2), voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+		}
+		if (direction == "back")
+		{
+			pos = CenterZ + ((treadsize * (num_stairs - 1)) / 2) - (treadsize * i);
+			buffer = buffer3 + " " + buffer2 + "-riser";
+			tmpindex = AddWall(floor, buffer.GetData(), texture, width / 2, pos + treadsize, -(width / 2), pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th, false, false, false);
+			buffer = buffer3 + " " + buffer2 + "-tread";
+			AddFloor(floor, buffer.GetData(), texture, width / 2, pos, -(width / 2), pos + treadsize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+		}
+		if (direction == "front")
+		{
+			pos = CenterZ - ((treadsize * (num_stairs - 1)) / 2) + (treadsize * i);
+			buffer = buffer3 + " " + buffer2 + "-riser";
+			tmpindex = AddWall(floor, buffer.GetData(), texture, -(width / 2), pos - treadsize, width / 2, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th, false, false, false);
+			buffer = buffer3 + " " + buffer2 + "-tread";
+			AddFloor(floor, buffer.GetData(), texture, -(width / 2), pos, width / 2, pos - treadsize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+		}
+		
+		if (index == -1)
+			index = tmpindex;
+	}
+	
+	return index;
 }
 
 int Stairs::AddWall(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ)

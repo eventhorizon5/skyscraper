@@ -1462,6 +1462,7 @@ Floor *SBS::GetFloor(int number)
 	for (int i = 0; i < FloorArray.GetSize(); i++)
 		if (FloorArray[i].number == number)
 			return FloorArray[i].object;
+	return 0;
 }
 
 Elevator *SBS::GetElevator(int number)
@@ -1471,6 +1472,7 @@ Elevator *SBS::GetElevator(int number)
 	for (int i = 0; i < ElevatorArray.GetSize(); i++)
 		if (ElevatorArray[i].number == number)
 			return ElevatorArray[i].object;
+	return 0;
 }
 
 Shaft *SBS::GetShaft(int number)
@@ -1480,6 +1482,7 @@ Shaft *SBS::GetShaft(int number)
 	for (int i = 0; i < ShaftArray.GetSize(); i++)
 		if (ShaftArray[i].number == number)
 			return ShaftArray[i].object;
+	return 0;
 }
 
 Stairs *SBS::GetStairs(int number)
@@ -1489,4 +1492,5 @@ Stairs *SBS::GetStairs(int number)
 	for (int i = 0; i < StairsArray.GetSize(); i++)
 		if (StairsArray[i].number == number)
 			return StairsArray[i].object;
+	return 0;
 }
