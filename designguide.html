@@ -405,6 +405,24 @@
   <p align="left">The up and down buttons will be automatically created based 
     on the range of the first specified elevator in the CallButtonElevators command 
     (above).</p>
+  <p align="left"><strong>12. AddStairs</strong> - creates a custom staircase 
+    at the specified location.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddStairs number, 
+    name, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_stairs, 
+    voffset, tw, th</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddStairs 1, TestStairs, 
+    Brick, left, 10, 15, 5, 0.5, 0.5, 10, 0, 0, 0</font></p>
+  <p align="left">The <em>direction</em> parameter specifies the direction the 
+    staircase faces (where the bottom step is), and so if a staircase goes up 
+    from left to right, the direction would be <em>left</em>. <em>Width</em> specifies 
+    the step width; <em>risersize</em> specifies the height of each step riser 
+    (vertical portion); <em>treadsize</em> specifies the length of each step tread 
+    (horizontal portion); <em>num_stairs</em> specifies the total number of steps 
+    to create (including the top platform that is level with the above floor, 
+    but not including the base platform of the floor below). To calculate the 
+    length of the staircase, simply multiply <em>num_stairs</em> with <em>treadsize</em>. 
+    To determine the height of the staircase, multiply <em>num_stairs</em> with 
+    <em>risersize</em>, and add the <em>voffset</em> value.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">6. The <em>External</em> Section</font></strong></p>
   <p align="left">The <em>External</em> section defines parts of the building's 
