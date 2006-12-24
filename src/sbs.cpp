@@ -237,11 +237,11 @@ double AutoSize(double n1, double n2, bool iswidth, bool external, double offset
 	}
 
 	if (iswidth == true)
-		return abs(n1 - n2) * size1;
+		return fabs(n1 - n2) * size1;
 	else
 	{
 		if (external == false)
-			return abs(n1 - n2) * size2;
+			return fabs(n1 - n2) * size2;
 		else
 			return size2;
 	}
@@ -854,11 +854,11 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
-		tempw1 = abs(x.y - x.x);
-		tempw2 = abs(z.y - z.x);
+		tempw1 = fabs(x.y - x.x);
+		tempw2 = fabs(z.y - z.x);
 		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
 	}
-	th2 = AutoSize(0, abs(y.y - y.x), false, IsExternal, th);
+	th2 = AutoSize(0, fabs(y.y - y.x), false, IsExternal, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray1.GetVertices(), num);
@@ -958,11 +958,11 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
-		tempw1 = abs(x.y - x.x);
-		tempw2 = abs(z.y - z.x);
+		tempw1 = fabs(x.y - x.x);
+		tempw2 = fabs(z.y - z.x);
 		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
 	}
-	th2 = AutoSize(0, abs(y.y - y.x), false, IsExternal, th);
+	th2 = AutoSize(0, fabs(y.y - y.x), false, IsExternal, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
@@ -1308,11 +1308,11 @@ double SBS::GetDistance(double x1, double x2, double z1, double z2)
 	//returns the distance between 2 2D vectors
 
 	if (z1 == z2)
-		return abs(x1 - x2);
+		return fabs(x1 - x2);
 	if (x1 == x2)
-		return abs(z1 - z2);
+		return fabs(z1 - z2);
 	if ((x1 != x2) && (z2 != x2))
-		return sqrt(pow(abs(x1 - x2), 2) + pow(abs(z1 - z2), 2)); //calculate diagonals
+		return sqrt(pow(fabs(x1 - x2), 2) + pow(fabs(z1 - z2), 2)); //calculate diagonals
 }
 
 void SBS::DumpVertices(csRef<iThingFactoryState> mesh)

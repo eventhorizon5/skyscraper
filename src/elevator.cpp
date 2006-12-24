@@ -807,7 +807,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//Determine distance to destination floor
-		DistanceToTravel = abs(abs(sbs->GetFloor(GotoFloor)->Altitude) - abs(ElevatorStart));
+		DistanceToTravel = fabs(fabs(sbs->GetFloor(GotoFloor)->Altitude) - fabs(ElevatorStart));
 		Destination = sbs->GetFloor(GotoFloor)->Altitude;
 		CalculateStoppingDistance = true;
 
@@ -930,7 +930,7 @@ void Elevator::MoveElevatorToFloor()
 			StoppingDistance = (ElevatorStart - GetPosition().y) * (Acceleration / Deceleration);
 	}
 
-	if (abs(ElevatorRate) == ElevatorSpeed)
+	if (fabs(ElevatorRate) == ElevatorSpeed)
 		CalculateStoppingDistance = false;
 
 	//Deceleration routines with floor overrun correction (there's still problems, but it works pretty good)
@@ -1009,7 +1009,7 @@ void Elevator::MoveElevatorToFloor()
 	oldfloor = GetFloor();
 
 	//exit if elevator's running
-	if (abs(ElevatorRate) != 0)
+	if (fabs(ElevatorRate) != 0)
 		return;
 
 	if (EmergencyStop == false)
