@@ -77,13 +77,7 @@ Floor::Floor(int number)
 Floor::~Floor()
 {
 	//Destructor
-
-	for (int i = 0; i < CallButtonArray.GetSize(); i++)
-	{
-		if (CallButtonArray[i])
-			delete CallButtonArray[i];
-		CallButtonArray[i] = 0;
-	}
+	CallButtonArray.DeleteAll();
 }
 
 void Floor::SetCameraFloor()

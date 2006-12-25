@@ -104,28 +104,16 @@ SBS::~SBS()
 	camera = 0;
 
 	//delete floors
-	for (int i = 0; i < TotalFloors(); i++)
-	{
-		if (FloorArray[i].object)
-			delete FloorArray[i].object;
-		FloorArray[i].object = 0;
-	}
+	FloorArray.DeleteAll();	
 
 	//delete elevators
-	for (int i = 0; i < Elevators(); i++)
-	{
-		if (ElevatorArray[i].object)
-			delete ElevatorArray[i].object;
-		ElevatorArray[i].object = 0;
-	}
+	ElevatorArray.DeleteAll();
 
 	//delete shafts
-	for (int i = 0; i < Shafts(); i++)
-	{
-		if (ShaftArray[i].object)
-			delete ShaftArray[i].object;
-		ShaftArray[i].object = 0;
-	}
+	ShaftArray.DeleteAll();
+
+	//delete stairs
+	StairsArray.DeleteAll();
 }
 
 void SBS::Start()
@@ -205,9 +193,6 @@ void SBS::Run()
 
 	//start simulation
 	csDefaultRunLoop (object_reg);
-	//stimer = new STimer();
-	//stimer->Start(1000 / FrameRate);
-
 }
 
 void SBS::Wait(long milliseconds)

@@ -37,7 +37,7 @@ public:
 	int endfloor; //ending floor
 	csVector3 origin; //origin vector
 
-	Stairs(int number, int CenterX, int CenterZ, int _startfloor, int _endfloor);
+	Stairs(int number, double CenterX, double CenterZ, int _startfloor, int _endfloor);
 	~Stairs();
 	int AddStairs(int floor, const char *name, const char *texture, const char *direction, double CenterX, double CenterZ, double width, double risersize, double treadsize, int num_stairs, double voffset, double tw, double th);
 	int AddWall(int floor, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ);

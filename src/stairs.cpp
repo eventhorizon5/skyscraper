@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Stairs::Stairs(int number, int CenterX, int CenterZ, int _startfloor, int _endfloor)
+Stairs::Stairs(int number, double CenterX, double CenterZ, int _startfloor, int _endfloor)
 {
 	StairsNum = number;
 	startfloor = _startfloor;

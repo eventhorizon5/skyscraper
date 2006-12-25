@@ -139,7 +139,7 @@ void ButtonPanel::Press(int index)
 	{
 		int floor = atoi(name.GetData());
 		int elev_floor = sbs->GetElevator(elevator)->GetFloor();
-		int elev_dir = sbs->GetElevator(elevator)->Direction;
+		//int elev_dir = sbs->GetElevator(elevator)->Direction;
 		
 		//elevator is above floor
 		if (elev_floor > floor)

@@ -138,7 +138,7 @@ public:
 	bool FrameSync; //synchronize movement to frame rate
 	bool EnableCollisions; //turns collisions on/off
 	double HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
-	csStringArray UserVariable;
+	csArray<csString> UserVariable;
 	bool IsBuildingsEnabled; //contains status of buildings object
 	bool IsColumnFrameEnabled; //contains status of column frame object
 	bool IsExternalEnabled; //contains status of external object
@@ -149,7 +149,7 @@ public:
 
 	//File I/O
 	csString BuildingFile;
-	csStringArray BuildingData;
+	csArray<csString> BuildingData;
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
