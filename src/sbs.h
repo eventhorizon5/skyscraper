@@ -175,7 +175,6 @@ public:
 	void FinishFrame();
 	void GetInput();
 	void Render();
-	void PushFrame();
 	int CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th);
 	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
 	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal);

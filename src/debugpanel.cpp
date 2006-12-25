@@ -93,12 +93,11 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 
 DebugPanel::~DebugPanel()
 {
+	timer->Stop();
 	delete timer;
 	timer = 0;
-	delete mc;
-	mc = 0;
-	delete ee;
-	ee = 0;
+	mc->Destroy();
+	ee->Destroy();
 }
 
 void DebugPanel::On_bListAltitudes_Click(wxCommandEvent& event)

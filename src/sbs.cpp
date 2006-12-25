@@ -29,17 +29,8 @@
 #include "unix.h"
 
 SBS *sbs; //self reference
-wxTimer *stimer; //timer object
 
 iObjectRegistry* object_reg;
-
-//Runloop Timer
-class STimer : public wxTimer
-{
-public:
-	STimer() { };
-	virtual void Notify();
-};
 
 SBS::SBS()
 {
@@ -437,22 +428,6 @@ static bool SBSEventHandler(iEvent& Event)
 		return sbs->HandleEvent (Event);
 	else
 		return false;
-}
-
-void STimer::Notify()
-{
-	//timer loop code
-	sbs->PushFrame();
-}
-
-void SBS::PushFrame()
-{
-	//timer loop event queue processor
-	if (!equeue)
-		return;
-	if (vc)
-		vc->Advance();
-	equeue->Process();
 }
 
 bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle)

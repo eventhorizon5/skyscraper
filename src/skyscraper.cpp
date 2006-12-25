@@ -104,8 +104,7 @@ bool Skyscraper::OnInit(void)
 	Simcore->Run();
 
 	//clean up
-	delete dpanel;
-	dpanel = 0;
+	dpanel->Destroy();
 	delete Simcore;
 	Simcore = 0;
 	Cleanup();
