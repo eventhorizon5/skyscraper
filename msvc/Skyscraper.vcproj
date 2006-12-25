@@ -366,6 +366,10 @@
 				RelativePath="..\skyscraper.ico"
 				>
 			</File>
+			<File
+				RelativePath=".\Skyscraper.rc"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
