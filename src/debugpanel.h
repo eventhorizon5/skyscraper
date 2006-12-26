@@ -77,6 +77,8 @@ class DebugPanel: public wxDialog
 			ID_chkFrameLimiter
 		};
 		//*)
+		wxTimer *timer;
+
 
 	protected:
 

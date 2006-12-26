@@ -37,7 +37,6 @@ extern SBS *sbs; //external pointer to the SBS engine
 DebugPanel *dp; //self pointer
 MeshControl *mc;
 editelevator *ee;
-wxTimer *timer;
 
 BEGIN_EVENT_TABLE(DebugPanel,wxDialog)
 //(*EventTable(DebugPanel)
@@ -93,7 +92,6 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 
 DebugPanel::~DebugPanel()
 {
-	timer->Stop();
 	delete timer;
 	timer = 0;
 	mc->Destroy();
