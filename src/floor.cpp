@@ -369,5 +369,5 @@ void Floor::EnableGroup(bool value)
 	//enables or disables all floors in group list
 
 	for (int i = 0; i < Group.GetSize(); i++)
-		sbs->GetFloor(i)->Enabled(value);
+		sbs->GetFloor(Group[i])->Enabled(value);
 }
