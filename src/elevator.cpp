@@ -813,7 +813,10 @@ void Elevator::MoveElevatorToFloor()
 
 		//If user is riding this elevator, then turn off floor
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		{
 			sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
+			sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
+		}
 
 		//Turn off sky, buildings, and landscape
 		sbs->EnableSkybox(false);
@@ -1057,9 +1060,12 @@ void Elevator::MoveElevatorToFloor()
 		//update elevator's floor number
 		GetFloor();
 
-		//Turn on floor
+		//Turn on floor(s)
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		{
 			sbs->GetFloor(GotoFloor)->Enabled(true);
+			sbs->GetFloor(GotoFloor)->EnableGroup(true);
+		}
 
 		//open doors
 		OpenDoors();

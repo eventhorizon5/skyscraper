@@ -54,6 +54,7 @@ public:
 	csArray<int> ifloor_polys; //index refs to interfloor floor polygons
 	csArray<int> wall_polys; //index refs to wall polygons
 	csArray<int> iwall_polys; //index refs to interfloor wall polygons
+	csArray<int> Group; //floor group
 
 	//functions
 	Floor(int number);
@@ -72,6 +73,9 @@ public:
 	double FullHeight();
 	void AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th);
 	void CutFloor(double x1, double x2, double z1, double z2);
+	void AddGroupFloor(int number);
+	void RemoveGroupFloor(int number);
+	void EnableGroup(bool value);
 
 private:
 

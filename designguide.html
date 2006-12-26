@@ -277,8 +277,18 @@
     the space between floors, starting right above the current floor's ceiling 
     and ending right below the next floor's floor, required.<br>
     <font size="2" face="Courier New, Courier, mono">InterfloorHeight = 2.24</font></p>
-  <p align="left">&nbsp;</p>
-  <p align="left"> <strong>Commands:</strong></p>
+  <p align="left"><strong>7. Group</strong> - group floors together. This is a 
+    list of comma-separated floor numbers (or a range specified with the - symbol) 
+    that should be enabled along with this floor when the user arrives at this 
+    floor. For example, if a 2-story room has a balcony, and the room base and 
+    balcony are separate floors, you would specify the other floor's number in 
+    this parameter.<br>
+    Examples:<br>
+    <font size="2" face="Courier New, Courier, mono">Group = 5</font><br>
+    <font size="2" face="Courier New, Courier, mono">Group = 4, 5<br>
+    Group = 4 - 10</font></p>
+  <p align="left"><br>
+    <strong>Commands:</strong></p>
   <p align="left"><strong>1. Exit</strong> - exits the current floor section</p>
   <p align="left"><strong>2. AddFloor</strong> - adds a textured floor with the 
     specified dimensions to the current floor/level<br>

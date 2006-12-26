@@ -345,3 +345,29 @@ void Floor::CutFloor(double x1, double x2, double z1, double z2)
 
 	}
 }
+
+void Floor::AddGroupFloor(int number)
+{
+	//adds a floor number to the group list.
+	//Groups are used to enable multiple floors at the same time when
+	//a user arrives at a floor
+
+	if (Group.Find(number) == csArrayItemNotFound)
+		Group.InsertSorted(number);
+}
+
+void Floor::RemoveGroupFloor(int number)
+{
+	//removes a floor number from the group list
+
+	if (Group.Find(number) != csArrayItemNotFound)
+		Group.Delete(number);
+}
+
+void Floor::EnableGroup(bool value)
+{
+	//enables or disables all floors in group list
+
+	for (int i = 0; i < Group.GetSize(); i++)
+		sbs->GetFloor(i)->Enabled(value);
+}

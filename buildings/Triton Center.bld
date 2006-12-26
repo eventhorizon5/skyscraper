@@ -142,6 +142,7 @@
     Description = Lobby
     Height = 12.24
     InterfloorHeight = 0
+    Group = 1 #enable mezzanine also, since both are merged
 
     #Floor
     #AddFloor Floor, Marble4, -75, -70, 75, 70, 0, 0, 0, 0, False
@@ -165,6 +166,7 @@
     Description = Mezzanine level above lobby
     Height = 24.48
     InterfloorHeight = 0
+    Group = 0 #enable lobby also, since both are merged
 
     AddFloor Floor, Granite, -42.5, 25.8, 42.5, -25.8, 0, 0, 0, 0, False
     AddFloor Ceiling, Ceiling1, -42.5, 25.8, 42.5, -25.8, -0.05, -0.05, 0, 0, False
@@ -585,6 +587,7 @@
     Description = 2-story Grand Ballroom with exterior decks on the setback
     Height = 9
     InterfloorHeight = 2.24
+    Group = 136 #enable 136 also, since both are merged
 
     #Floor
     AddFloor Floor, Granite, 39, 70, -39, -70, 0, 0, 0, 0, False
@@ -618,6 +621,7 @@
     Description = Balcony above the main ballroom level
     Height = 12
     InterfloorHeight = 2.24
+    Group = 135 #enable 135 also, since both are merged
 
     #Floor
     AddFloor Floor, Granite, 39, 70, -39, 0, 0, 0, 0, 0, False

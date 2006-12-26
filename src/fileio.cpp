@@ -593,6 +593,27 @@ recalc:
 				GetFloor(Current)->Description = temp2;
 			if (LineData.Slice(0, 16).CompareNoCase("indicatortexture") == true)
 				GetFloor(Current)->IndicatorTexture = temp2;
+			if (LineData.Slice(0, 5).CompareNoCase("group") == true)
+			{
+				//copy string listing of group floors into array
+				tempdata.SplitString(temp2.GetData(), ",");
+				for (int i = 0; i < tempdata.GetSize(); i++)
+				{
+					csString tmpstring = tempdata[i];
+					tmpstring.Trim();
+					if (tmpstring.Find("-") > 0)
+					{
+						//found a range marker
+						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-")));
+						int end = atoi(tmpstring.Slice(tmpstring.Find("-") + 1));
+						for (int k = start; k <= end; k++)
+							GetFloor(Current)->AddGroupFloor(k);
+					}
+					else
+						GetFloor(Current)->AddGroupFloor(atoi(tempdata[i]));
+				}
+				tempdata.DeleteAll();
+			}
 
 			//calculate altitude
 			if (FloorCheck == 3)
