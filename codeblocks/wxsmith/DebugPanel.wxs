@@ -1,7 +1,7 @@
 <resource>
-    <object class="wxDialog" name="DebugPanel">
+    <object class="wxFrame" name="DebugPanel">
         <title>Simulator Control Panel</title>
-        <style>wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX</style>
+        <style>wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX</style>
         <object class="wxButton" name="ID_bListAltitudes" variable="bListAltitudes" member="yes">
             <label>List Altitudes</label>
             <handler entry="EVT_BUTTON" function="On_bListAltitudes_Click" />
