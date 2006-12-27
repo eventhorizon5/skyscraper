@@ -60,9 +60,9 @@ ButtonPanel::ButtonPanel(int _elevator, const char *texture, int rows, int colum
 
 	//create panel back
 	if (Direction == "front" || Direction == "back")
-		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, Origin.x - (Width / 2), Origin.z, Origin.x + (Width / 2), Origin.z, Height, Height, Origin.y, Origin.y, tw, th, false, false, false);
+		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, Origin.x - (Width / 2), Origin.z, Origin.x + (Width / 2), Origin.z, Height, Height, Origin.y, Origin.y, 0, tw, th, false, false, false);
 	else
-		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, Origin.x, Origin.z - (Width / 2), Origin.x, Origin.z + (Width / 2), Height, Height, Origin.y, Origin.y, tw, th, false, false, false);
+		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, Origin.x, Origin.z - (Width / 2), Origin.x, Origin.z + (Width / 2), Height, Height, Origin.y, Origin.y, 0, tw, th, false, false, false);
 }
 
 ButtonPanel::~ButtonPanel()
@@ -108,7 +108,7 @@ void ButtonPanel::AddButton(const char *name, const char *texture, int row, int 
 			zpos = Origin.z - 0.01;
 		else
 			zpos = Origin.z + 0.01;
-		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos + GridSize.x - Spacing, zpos, GridSize.y - Spacing, GridSize.y - Spacing, ypos, ypos, 1, 1, false, false, false, false);
+		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos + GridSize.x - Spacing, zpos, GridSize.y - Spacing, GridSize.y - Spacing, ypos, ypos, 0, 1, 1, false, false, false, false);
 	}
 	else
 	{
@@ -117,7 +117,7 @@ void ButtonPanel::AddButton(const char *name, const char *texture, int row, int 
 		else
 			xpos = Origin.x + 0.01;
 		zpos = (Origin.z - (Width / 2)) + (GridSize.x * column);
-		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos, zpos + GridSize.x - Spacing, GridSize.y - Spacing, GridSize.y - Spacing, ypos, ypos, 1, 1, false, false, false, false);
+		sbs->AddWallMain(ButtonPanel_state, name, texture, xpos, zpos, xpos, zpos + GridSize.x - Spacing, GridSize.y - Spacing, GridSize.y - Spacing, ypos, ypos, 0, 1, 1, false, false, false, false);
 	}
 }
 

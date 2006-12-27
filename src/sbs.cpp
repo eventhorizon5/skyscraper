@@ -558,7 +558,7 @@ void Cleanup()
 	csInitializer::DestroyApplication (object_reg);
 }
 
-int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
+int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double thickness, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
 {
 	//Adds a wall with the specified dimensions
 	csVector3 v1 (x1, altitude1 + height_in1, z1); //left top
@@ -566,17 +566,60 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	csVector3 v3 (x2, altitude2, z2); //right base
 	csVector3 v4 (x1, altitude1, z1); //left base
 
+	csVector3 v5 = v1;
+	csVector3 v6 = v2;
+	csVector3 v7 = v3;
+	csVector3 v8 = v4;
+
+	//expand to specified thickness
+	if (fabs(x1 - x2) > fabs(z1 - z2))
+	{
+		v1.z -= thickness / 2;
+		v2.z -= thickness / 2;
+		v3.z -= thickness / 2;
+		v4.z -= thickness / 2;
+		v5.z += thickness / 2;
+		v6.z += thickness / 2;
+		v7.z += thickness / 2;
+		v8.z += thickness / 2;
+	}
+	else
+	{
+		v1.x -= thickness / 2;
+		v2.x -= thickness / 2;
+		v3.x -= thickness / 2;
+		v4.x -= thickness / 2;
+		v5.x += thickness / 2;
+		v6.x += thickness / 2;
+		v7.x += thickness / 2;
+		v8.x += thickness / 2;
+	}
+
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	if (DrawBothSides == true)
-		dest->AddQuad(v4, v3, v2, v1);
+	{
+		dest->AddQuad(v4, v3, v2, v1); //back face of front wall
+		if (thickness > 0)
+		{
+			dest->AddQuad(v8, v7, v6, v5); //back wall
+			dest->AddQuad(v5, v6, v7, v8); //back face of back wall
+			dest->AddQuad(v5, v1, v4, v8); //left wall
+			dest->AddQuad(v8, v4, v1, v5); //back face of left wall
+			dest->AddQuad(v2, v6, v7, v3); //right wall
+			dest->AddQuad(v3, v7, v6, v2); //back face of right wall
+		}
+	}
 
 	//reverse vector portions if specified
 	if (revX == true)
 	{
-		v1.x = x2;
-		v2.x = x1;
-		v3.x = x1;
-		v4.x = x2;
+		double tmpx1, tmpx2;
+		tmpx1 = v1.x;
+		tmpx2 = v2.x;
+		v1.x = tmpx2;
+		v2.x = tmpx1;
+		v3.x = tmpx1;
+		v4.x = tmpx2;
 	}
 	if (revY == true)
 	{
@@ -587,14 +630,22 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	}
 	if (revZ == true)
 	{
-		v1.z = z2;
-		v2.z = z1;
-		v3.z = z1;
-		v4.z = z2;
+		double tmpz1, tmpz2;
+		tmpz1 = v1.z;
+		tmpz2 = v2.z;
+		v1.z = tmpz2;
+		v2.z = tmpz1;
+		v3.z = tmpz1;
+		v4.z = tmpz2;
 	}
 
 	//set texture
-	SetTexture(dest, firstidx, texture, DrawBothSides, tw, th);
+	int sides = 0;
+	if (DrawBothSides == true)
+		sides = 1;
+	if (thickness > 0)
+		sides = 2;
+	SetTexture(dest, firstidx, texture, sides, tw, th);
 
 	//set polygon names
 	csString NewName;
@@ -607,25 +658,65 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 		NewName = name;
 		NewName.Append(":1");
 		dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+		if(thickness > 0)
+		{
+			for (int i = 2; i <= 7; i++)
+			{
+				NewName = name;
+				NewName.Append(":" + csString(_itoa(i, intbuffer, 10)));
+				dest->SetPolygonName(csPolygonRange(firstidx + i, firstidx + i), NewName);
+			}
+		}
 	}
 
 	return firstidx;
 }
 
-int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th, bool DrawBothSides)
+int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double thickness, double tw, double th, bool DrawBothSides)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	csVector3 v1 (x1, altitude1, z1); //bottom left
-	csVector3 v4 (x2, altitude2, z1); //bottom right
-	csVector3 v3 (x2, altitude2, z2); //top right
 	csVector3 v2 (x1, altitude1, z2); //top left
+	csVector3 v3 (x2, altitude2, z2); //top right
+	csVector3 v4 (x2, altitude2, z1); //bottom right
+
+	csVector3 v5 = v1;
+	csVector3 v6 = v2;
+	csVector3 v7 = v3;
+	csVector3 v8 = v4;
+
+	//expand to specified thickness
+	v1.y += thickness / 2;
+	v2.y += thickness / 2;
+	v3.y += thickness / 2;
+	v4.y += thickness / 2;
+	v5.y -= thickness / 2;
+	v6.y -= thickness / 2;
+	v7.y -= thickness / 2;
+	v8.y -= thickness / 2;
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	if (DrawBothSides == true)
-		dest->AddQuad(v4, v3, v2, v1);
+	{
+		dest->AddQuad(v4, v3, v2, v1); //back face of front wall
+		if (thickness > 0)
+		{
+			dest->AddQuad(v8, v7, v6, v5); //back wall
+			dest->AddQuad(v5, v6, v7, v8); //back face of back wall
+			dest->AddQuad(v5, v1, v4, v8); //left wall
+			dest->AddQuad(v8, v4, v1, v5); //back face of left wall
+			dest->AddQuad(v2, v6, v7, v3); //right wall
+			dest->AddQuad(v3, v7, v6, v2); //back face of right wall
+		}
+	}
 	
 	//set texture
-	SetTexture(dest, firstidx, texture, DrawBothSides, tw, th);
+	int sides = 0;
+	if (DrawBothSides == true)
+		sides = 1;
+	if (thickness > 0)
+		sides = 2;
+	SetTexture(dest, firstidx, texture, sides, tw, th);
 
 	//set polygon names
 	csString NewName;
@@ -638,6 +729,15 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 		NewName = name;
 		NewName.Append(":1");
 		dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+		if(thickness > 0)
+		{
+			for (int i = 2; i <= 7; i++)
+			{
+				NewName = name;
+				NewName.Append(":" + csString(_itoa(i, intbuffer, 10)));
+				dest->SetPolygonName(csPolygonRange(firstidx + i, firstidx + i), NewName);
+			}
+		}
 	}
 
 	return firstidx;
@@ -1251,7 +1351,7 @@ int SBS::GetFloorNumber(double altitude)
 	if (altitude < GetFloor(-Basements)->Altitude)
 		return -Basements;
 
-	for (int i = -Basements + 1; i <= Floors; i++)
+	for (int i = -Basements + 1; i < Floors; i++)
 	{
 		//check to see if altitude is within a floor (between the current floor's base and
 		//the lower floor's base)
@@ -1333,15 +1433,20 @@ iMaterialWrapper *SBS::ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> 
 	return newmat;
 }
 
-void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool BothSides, double tw, double th)
+void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, int Sides, double tw, double th)
 {
 	//sets a polygon's texture
+	//if sides is 0, just texture the front wall.
+	//if sides is 1, texture front and back walls.
+	//if sides is 2, texture all 4 walls
 
 	material = engine->GetMaterialList()->FindByName(texture);
 
 	mesh->SetPolygonMaterial(csPolygonRange(index, index), material);
-	if (BothSides == true)
+	if (Sides > 0)
 		mesh->SetPolygonMaterial(csPolygonRange(index + 1, index + 1), material);
+	if (Sides == 2)
+		mesh->SetPolygonMaterial(csPolygonRange(index + 2, index + 7), material);
 
 	//texture mapping is set from first 3 coordinates
 	mesh->SetPolygonTextureMapping (csPolygonRange(index, index),
@@ -1351,7 +1456,7 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		csVector2 (tw, 0),
 		mesh->GetPolygonVertex(index, 2),
 		csVector2 (tw, th));
-	if (BothSides == true)
+	if (Sides > 0)
 	{
 		mesh->SetPolygonTextureMapping (csPolygonRange(index + 1, index + 1),
 			mesh->GetPolygonVertex(index + 1, 3),
@@ -1360,6 +1465,20 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 			csVector2 (0, 0),
 			mesh->GetPolygonVertex(index + 1, 1),
 			csVector2 (0, th));
+
+		if (Sides == 2)
+		{
+			for (int i = 2; i <= 7; i++)
+			{
+				mesh->SetPolygonTextureMapping (csPolygonRange(index + i, index + i),
+					mesh->GetPolygonVertex(index + i, 3),
+					csVector2 (tw, 0),
+					mesh->GetPolygonVertex(index + i, 2),
+					csVector2 (0, 0),
+					mesh->GetPolygonVertex(index + i, 1),
+					csVector2 (0, th));
+			}
+		}
 	}
 }
 
