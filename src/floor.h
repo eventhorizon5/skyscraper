@@ -60,13 +60,13 @@ public:
 	Floor(int number);
 	~Floor();
 	void SetCameraFloor();
-	int AddFloor(const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double thickness, double tw, double th, bool isexternal);
+	int AddFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, double tw_s, double th_s, bool isexternal);
 	void DeleteFloor(int index);
-	int AddInterfloorFloor(const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double thickness, double tw, double th);
+	int AddInterfloorFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, double tw_s, double th_s);
 	void DeleteInterfloorFloor(int index);
-	int AddWall(const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double thickness, double tw, double th, bool revX, bool revY, bool revZ, bool isexternal);
+	int AddWall(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, double tw_s, double th_s, bool revX, bool revY, bool revZ, bool isexternal);
 	void DeleteWall(int index);
-	int AddInterfloorWall(const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double thickness, double tw, double th);
+	int AddInterfloorWall(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw_s, double th_s, double tw, double th);
 	void DeleteInterfloorWall(int index);
 	void Enabled(bool value);
 	void AddAutoFloor(const char *name, const char *texture, double voffset, double tw, double th);

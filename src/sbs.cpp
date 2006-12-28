@@ -558,7 +558,7 @@ void Cleanup()
 	csInitializer::DestroyApplication (object_reg);
 }
 
-int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double thickness, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides)
+int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, double tw_s, double th_s, bool revX, bool revY, bool revZ, bool DrawBothSides)
 {
 	//Adds a wall with the specified dimensions
 	csVector3 v1 (x1, altitude1 + height_in1, z1); //left top
@@ -672,7 +672,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	return firstidx;
 }
 
-int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double thickness, double tw, double th, bool DrawBothSides)
+int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th, double tw_s, double th_s, bool DrawBothSides)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	csVector3 v1 (x1, altitude1, z1); //bottom left
@@ -1358,7 +1358,7 @@ int SBS::GetFloorNumber(double altitude)
 		if ((GetFloor(i)->Altitude > altitude) && (GetFloor(i - 1)->Altitude <= altitude))
 			return i - 1;
 		//check to see if altitude is above top floor's altitude
-		if ((i == Floors) && (altitude > GetFloor(i)->Altitude))
+		if ((i == Floors - 1) && (altitude > GetFloor(i)->Altitude))
 			return i;
 	}
 }

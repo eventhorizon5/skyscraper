@@ -166,8 +166,8 @@ public:
 	void Run();
 	int CreateSky();
 	void AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b);
-	int AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double thickness, double tw, double th, bool revX, bool revY, bool revZ, bool DrawBothSides = true);
-	int AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double thickness, double tw, double th, bool DrawBothSides = true);
+	int AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, double tw_s, double th_s, bool revX, bool revY, bool revZ, bool DrawBothSides = true);
+	int AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th, double tw_s, double th_s, bool DrawBothSides = true);
 	void DeleteWall(csRef<iThingFactoryState> dest, int index);
 	void DeleteFloor(csRef<iThingFactoryState> dest, int index);
 	bool HandleEvent(iEvent& Event);

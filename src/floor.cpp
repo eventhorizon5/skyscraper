@@ -88,11 +88,11 @@ void Floor::SetCameraFloor()
 	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + sbs->camera->DefaultAltitude, camlocation.z));
 }
 
-int Floor::AddFloor(const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double thickness, double tw, double th, bool isexternal)
+int Floor::AddFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, double tw_s, double th_s, bool isexternal)
 {
 	//Adds a floor with the specified dimensions and vertical offset
-	double tw2;
-	double th2;
+	double tw2, tw_s2;
+	double th2, th_s2;
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -103,15 +103,17 @@ int Floor::AddFloor(const char *name, const char *texture, double x1, double z1,
 	//Call texture autosizing formulas
 	tw2 = AutoSize(x1, x2, true, isexternal, tw);
 	th2 = AutoSize(z1, z2, false, isexternal, th);
+	tw_s2 = AutoSize(0, thickness, true, isexternal, tw_s);
+	th_s2 = AutoSize(x1, x2, false, isexternal, th_s);
 
 	if (isexternal == false)
 	{
-		int index = sbs->AddFloorMain(Level_state, name, texture, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, thickness, tw2, th2);
+		int index = sbs->AddFloorMain(Level_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2, tw_s2, th_s2);
 		floor_polys.Push(index);
 		return floor_polys.GetSize() - 1;
 	}
 	else
-		return sbs->AddFloorMain(sbs->External_state, name, texture, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, thickness, tw2, th2);
+		return sbs->AddFloorMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2, tw_s2, th_s2);
 }
 
 void Floor::DeleteFloor(int index)
@@ -124,11 +126,11 @@ void Floor::DeleteFloor(int index)
 	}
 }
 
-int Floor::AddInterfloorFloor(const char *name, const char *texture, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double thickness, double tw, double th)
+int Floor::AddInterfloorFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, double tw_s, double th_s)
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
-	double tw2;
-	double th2;
+	double tw2, tw_s2;
+	double th2, th_s2;
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -139,8 +141,10 @@ int Floor::AddInterfloorFloor(const char *name, const char *texture, double x1, 
 	//Texture autosizing formulas
 	tw2 = AutoSize(x1, x2, true, false, tw);
 	th2 = AutoSize(z1, z2, false, false, th);
+	tw_s2 = AutoSize(0, thickness, true, false, tw_s);
+	th_s2 = AutoSize(x1, x2, false, false, th_s);
 
-	int index = sbs->AddFloorMain(Interfloor_state, name, texture, x1, z1, x2, z2, Altitude + Height + voffset1, Altitude + Height + voffset2, thickness, tw2, th2);
+	int index = sbs->AddFloorMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2, tw_s2, th_s2);
 	ifloor_polys.Push(index);
 	return ifloor_polys.GetSize() - 1;
 }
@@ -155,11 +159,11 @@ void Floor::DeleteInterfloorFloor(int index)
 	}
 }
 
-int Floor::AddWall(const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double thickness, double tw, double th, bool revX, bool revY, bool revZ, bool isexternal)
+int Floor::AddWall(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, double tw_s, double th_s, bool revX, bool revY, bool revZ, bool isexternal)
 {
 	//Adds a wall with the specified dimensions
 	double tw2 = tw;
-	double th2;
+	double th2, tw_s2, th_s2;
 	double tempw1;
 	double tempw2;
 
@@ -188,15 +192,17 @@ int Floor::AddWall(const char *name, const char *texture, double x1, double z1, 
 		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, isexternal, tw);
 	}
 	th2 = AutoSize(0, height_in1, false, isexternal, th);
+	tw_s2 = AutoSize(0, thickness, true, isexternal, tw_s);
+	th_s2 = AutoSize(0, height_in1, false, isexternal, th_s);
 
 	if (isexternal == false)
 	{
-		int index = sbs->AddWallMain(Level_state, name, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, thickness, tw2, th2, revX, revY, revZ);
+		int index = sbs->AddWallMain(Level_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2, tw_s2, th_s2, revX, revY, revZ);
 		wall_polys.Push(index);
 		return wall_polys.GetSize() - 1;
 	}
 	else
-		return sbs->AddWallMain(sbs->External_state, name, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, thickness, tw2, th2, revX, revY, revZ);
+		return sbs->AddWallMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2, tw_s2, th_s2, revX, revY, revZ);
 }
 
 void Floor::DeleteWall(int index)
@@ -209,11 +215,11 @@ void Floor::DeleteWall(int index)
 	}
 }
 
-int Floor::AddInterfloorWall(const char *name, const char *texture, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double thickness, double tw, double th)
+int Floor::AddInterfloorWall(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, double tw_s, double th_s)
 {
 	//Adds an interfloor wall with the specified dimensions
 	double tw2 = tw;
-	double th2;
+	double th2, tw_s2, th_s2;
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -227,8 +233,10 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, double x1, d
 	if (x1 == x2)
 		tw2 = AutoSize(z1, z2, true, false, tw);
 	th2 = AutoSize(0, height_in1, false, false, th);
+	tw_s2 = AutoSize(0, thickness, true, false, tw_s);
+	th_s2 = AutoSize(0, height_in1, false, false, th_s);
 
-	int index = sbs->AddWallMain(Interfloor_state, name, texture, x1, z1, x2, z2, height_in1, height_in2, Altitude + Height + voffset1, Altitude + Height + voffset2, thickness, tw2, th2, false, false, false);
+	int index = sbs->AddWallMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2, tw_s2, th_s2, false, false, false);
 	iwall_polys.Push(index);
 	return iwall_polys.GetSize() - 1;
 }
