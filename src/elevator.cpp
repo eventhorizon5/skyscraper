@@ -822,6 +822,8 @@ void Elevator::MoveElevatorToFloor()
 		sbs->EnableSkybox(false);
 		sbs->EnableBuildings(false);
 		sbs->EnableLandscape(false);
+		sbs->EnableExternal(false); //temporary - remove when window objects are made
+		sbs->EnableColumnFrame(false);
 
 		//Play starting sound
 		//"\data\elevstart.wav"
@@ -1074,6 +1076,8 @@ void Elevator::MoveElevatorToFloor()
 		sbs->EnableSkybox(true);
 		sbs->EnableBuildings(true);
 		sbs->EnableLandscape(true);
+		sbs->EnableExternal(true); //temporary - remove when window objects are made
+		sbs->EnableColumnFrame(true);
 	}
 	EmergencyStop = false;
 }
