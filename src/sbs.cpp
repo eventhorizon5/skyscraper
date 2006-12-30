@@ -729,14 +729,34 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	csVector3 v8 = v4;
 
 	//expand to specified thickness
-	v1.y += thickness / 2;
-	v2.y += thickness / 2;
-	v3.y += thickness / 2;
-	v4.y += thickness / 2;
-	v5.y -= thickness / 2;
-	v6.y -= thickness / 2;
-	v7.y -= thickness / 2;
-	v8.y -= thickness / 2;
+	if (wall_orientation == 0)
+	{
+		//left
+		v5.y += thickness;
+		v6.y += thickness;
+		v7.y += thickness;
+		v8.y += thickness;
+	}
+	if (wall_orientation == 1)
+	{
+		//center
+		v1.y += thickness / 2;
+		v2.y += thickness / 2;
+		v3.y += thickness / 2;
+		v4.y += thickness / 2;
+		v5.y -= thickness / 2;
+		v6.y -= thickness / 2;
+		v7.y -= thickness / 2;
+		v8.y -= thickness / 2;
+	}
+	if (wall_orientation == 2)
+	{
+		//right
+		v5.y -= thickness;
+		v6.y -= thickness;
+		v7.y -= thickness;
+		v8.y -= thickness;
+	}
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	if (DrawSides > 0)
@@ -1619,7 +1639,7 @@ Stairs *SBS::GetStairs(int number)
 void SBS::SetWallOrientation(const char *direction)
 {
 	//changes internal wall orientation parameter.
-	//direction can either be "left", "center", or "right".
+	//direction can either be "left" (negative), "center" (0), or "right" (positive).
 	//default on startup is 1, or center.
 	//the parameter is used to determine the location of the wall/floor's
 	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
