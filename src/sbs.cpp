@@ -85,6 +85,7 @@ SBS::SBS()
 	mouse_y = 0;
 	MouseDown = false;
 	wall_orientation = 1;
+	floor_orientation = 2;
 }
 
 SBS::~SBS()
@@ -718,6 +719,11 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th, int DrawSides)
 {
 	//Adds a floor with the specified dimensions and vertical offset
+
+	//if DrawSides is 0, just create top
+	//if DrawSides is 1, create top and bottom
+	//if DrawSides is 2, create top, bottom, and sides
+
 	csVector3 v1 (x1, altitude1, z1); //bottom left
 	csVector3 v2 (x1, altitude1, z2); //top left
 	csVector3 v3 (x2, altitude2, z2); //top right
@@ -729,15 +735,15 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	csVector3 v8 = v4;
 
 	//expand to specified thickness
-	if (wall_orientation == 0)
+	if (floor_orientation == 0)
 	{
-		//left
+		//bottom
 		v1.y += thickness;
 		v2.y += thickness;
 		v3.y += thickness;
 		v4.y += thickness;
 	}
-	if (wall_orientation == 1)
+	if (floor_orientation == 1)
 	{
 		//center
 		v1.y += thickness / 2;
@@ -749,9 +755,9 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 		v7.y -= thickness / 2;
 		v8.y -= thickness / 2;
 	}
-	if (wall_orientation == 2)
+	if (floor_orientation == 2)
 	{
-		//right
+		//top
 		v5.y -= thickness;
 		v6.y -= thickness;
 		v7.y -= thickness;
@@ -1641,7 +1647,7 @@ void SBS::SetWallOrientation(const char *direction)
 	//changes internal wall orientation parameter.
 	//direction can either be "left" (negative), "center" (0), or "right" (positive).
 	//default on startup is 1, or center.
-	//the parameter is used to determine the location of the wall/floor's
+	//the parameter is used to determine the location of the wall's
 	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
 
 	csString temp = direction;
@@ -1658,4 +1664,28 @@ void SBS::SetWallOrientation(const char *direction)
 int SBS::GetWallOrientation()
 {
 	return wall_orientation;
+}
+
+void SBS::SetFloorOrientation(const char *direction)
+{
+	//changes internal floor orientation parameter.
+	//direction can either be "bottom" (negative), "center" (0), or "top" (positive).
+	//default on startup is 2, or top.
+	//the parameter is used to determine the location of the floor's
+	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
+
+	csString temp = direction;
+	temp.Downcase();
+
+	if (temp == "bottom")
+		floor_orientation = 0;
+	if (temp == "center")
+		floor_orientation = 1;
+	if (temp == "top")
+		floor_orientation = 2;
+}
+
+int SBS::GetFloorOrientation()
+{
+	return floor_orientation;
 }

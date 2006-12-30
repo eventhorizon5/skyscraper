@@ -208,6 +208,8 @@ public:
 	Stairs *GetStairs(int number);
 	void SetWallOrientation(const char *direction);
 	int GetWallOrientation();
+	void SetFloorOrientation(const char *direction);
+	int GetFloorOrientation();
 
 	//file loader functions
 	int LoadBuilding(const char * filename);
@@ -248,8 +250,9 @@ private:
 	char intbuffer[65];
 	char buffer[20];
 
-	//wall orientation
+	//orientations
 	int wall_orientation;
+	int floor_orientation;
 
 	//object arrays
 	csArray<FloorMap> FloorArray; //floor object array

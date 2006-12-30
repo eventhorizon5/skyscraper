@@ -486,6 +486,16 @@ int SBS::LoadBuilding(const char * filename)
 			SetWallOrientation(temp2.GetData());
 		}
 
+		//SetFloorOrientation command
+		if (LineData.Slice(0, 16).CompareNoCase("floororientation") == true)
+		{
+			//get text after equal sign
+			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			temp2.Trim();
+			
+			SetFloorOrientation(temp2.GetData());
+		}
+
 		//Process globals
 		if (Section == 1)
 		{

@@ -140,8 +140,8 @@
   <p align="left">The number parameter specifies the stairwell number to create. 
     This command just tells the simulator the area that the stairwell will take 
     up, and does not create the actual walls.</p>
-  <p align="left"><strong>f. WallOrientation</strong> - changes the internal orientation 
-    parameter, which is used for determining the wall and floor thickness boundaries 
+  <p align="left"><strong>f. WallOrientation</strong> - changes the internal wall 
+    orientation parameter, which is used for determining the wall thickness boundaries 
     in relation to their coordinates.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> WallOrientation = 
     <em>direction</em></font><br>
@@ -155,6 +155,20 @@
     right (positive) of those. If right is used, then again the coordinates define 
     the wall's right edge, and the full thickness is to the left (negative) of 
     those.</p>
+  <p align="left"><strong>g. FloorOrientation</strong> - changes the internal 
+    floor orientation parameter, which is used for determining the floor thickness 
+    boundaries in relation to their coordinates.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> FloorOrientation 
+    = <em>direction</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">FloorOrientation 
+    = bottom</font></p>
+  <p align="left">The direction parameter can either be bottom, center, or top. 
+    Top is default. For example, if center is used, than half of the floor's thickness 
+    is above (positive) it's x1/x2 or z1/z2 coordinates, and half is below (negative) 
+    the coordinates. If bottom is used, than the coordinates define the floor's 
+    bottom edge, and the full thickness is the top (positive). If top is used, 
+    then again the coordinates define the floor's top edge, and the full thickness 
+    is the bottom (negative).</p>
   <p align="left"><br>
     <strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
