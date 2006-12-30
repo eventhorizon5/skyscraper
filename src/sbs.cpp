@@ -84,6 +84,7 @@ SBS::SBS()
 	mouse_x = 0;
 	mouse_y = 0;
 	MouseDown = false;
+	wall_orientation = 1;
 }
 
 SBS::~SBS()
@@ -578,25 +579,65 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	//expand to specified thickness
 	if (fabs(x1 - x2) > fabs(z1 - z2))
 	{
-		v1.z -= thickness / 2;
-		v2.z -= thickness / 2;
-		v3.z -= thickness / 2;
-		v4.z -= thickness / 2;
-		v5.z += thickness / 2;
-		v6.z += thickness / 2;
-		v7.z += thickness / 2;
-		v8.z += thickness / 2;
+		if (wall_orientation == 0)
+		{
+			//left
+			v5.z += thickness;
+			v6.z += thickness;
+			v7.z += thickness;
+			v8.z += thickness;
+		}
+		if (wall_orientation == 1)
+		{
+			//center
+			v1.z -= thickness / 2;
+			v2.z -= thickness / 2;
+			v3.z -= thickness / 2;
+			v4.z -= thickness / 2;
+			v5.z += thickness / 2;
+			v6.z += thickness / 2;
+			v7.z += thickness / 2;
+			v8.z += thickness / 2;
+		}
+		if (wall_orientation == 2)
+		{
+			//right
+			v5.z -= thickness;
+			v6.z -= thickness;
+			v7.z -= thickness;
+			v8.z -= thickness;
+		}
 	}
 	else
 	{
-		v1.x -= thickness / 2;
-		v2.x -= thickness / 2;
-		v3.x -= thickness / 2;
-		v4.x -= thickness / 2;
-		v5.x += thickness / 2;
-		v6.x += thickness / 2;
-		v7.x += thickness / 2;
-		v8.x += thickness / 2;
+		if (wall_orientation == 0)
+		{
+			//left
+			v5.x += thickness;
+			v6.x += thickness;
+			v7.x += thickness;
+			v8.x += thickness;
+		}
+		if (wall_orientation == 1)
+		{
+			//center
+			v1.x -= thickness / 2;
+			v2.x -= thickness / 2;
+			v3.x -= thickness / 2;
+			v4.x -= thickness / 2;
+			v5.x += thickness / 2;
+			v6.x += thickness / 2;
+			v7.x += thickness / 2;
+			v8.x += thickness / 2;
+		}
+		if (wall_orientation == 2)
+		{
+			//right
+			v5.x -= thickness;
+			v6.x -= thickness;
+			v7.x -= thickness;
+			v8.x -= thickness;
+		}
 	}
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
@@ -1573,4 +1614,28 @@ Stairs *SBS::GetStairs(int number)
 		if (StairsArray[i].number == number)
 			return StairsArray[i].object;
 	return 0;
+}
+
+void SBS::SetWallOrientation(const char *direction)
+{
+	//changes internal wall orientation parameter.
+	//direction can either be "left", "center", or "right".
+	//default on startup is 1, or center.
+	//the parameter is used to determine the location of the wall/floor's
+	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
+
+	csString temp = direction;
+	temp.Downcase();
+
+	if (temp == "left")
+		wall_orientation = 0;
+	if (temp == "center")
+		wall_orientation = 1;
+	if (temp == "right")
+		wall_orientation = 2;
+}
+
+int SBS::GetWallOrientation()
+{
+	return wall_orientation;
 }

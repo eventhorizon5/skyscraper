@@ -206,6 +206,8 @@ public:
 	Elevator *GetElevator(int number);
 	Shaft *GetShaft(int number);
 	Stairs *GetStairs(int number);
+	void SetWallOrientation(const char *direction);
+	int GetWallOrientation();
 
 	//file loader functions
 	int LoadBuilding(const char * filename);
@@ -245,6 +247,9 @@ private:
 	//conversion buffers
 	char intbuffer[65];
 	char buffer[20];
+
+	//wall orientation
+	int wall_orientation;
 
 	//object arrays
 	csArray<FloorMap> FloorArray; //floor object array

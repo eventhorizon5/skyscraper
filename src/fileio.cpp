@@ -476,6 +476,16 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.DeleteAll();
 		}
 
+		//SetWallOrientation command
+		if (LineData.Slice(0, 15).CompareNoCase("wallorientation") == true)
+		{
+			//get text after equal sign
+			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			temp2.Trim();
+			
+			SetWallOrientation(temp2.GetData());
+		}
+
 		//Process globals
 		if (Section == 1)
 		{
