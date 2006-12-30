@@ -582,10 +582,10 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 		if (wall_orientation == 0)
 		{
 			//left
-			v5.z += thickness;
-			v6.z += thickness;
-			v7.z += thickness;
-			v8.z += thickness;
+			v1.z += thickness;
+			v2.z += thickness;
+			v3.z += thickness;
+			v4.z += thickness;
 		}
 		if (wall_orientation == 1)
 		{
@@ -613,10 +613,10 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 		if (wall_orientation == 0)
 		{
 			//left
-			v5.x += thickness;
-			v6.x += thickness;
-			v7.x += thickness;
-			v8.x += thickness;
+			v1.x += thickness;
+			v2.x += thickness;
+			v3.x += thickness;
+			v4.x += thickness;
 		}
 		if (wall_orientation == 1)
 		{
@@ -732,10 +732,10 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	if (wall_orientation == 0)
 	{
 		//left
-		v5.y += thickness;
-		v6.y += thickness;
-		v7.y += thickness;
-		v8.y += thickness;
+		v1.y += thickness;
+		v2.y += thickness;
+		v3.y += thickness;
+		v4.y += thickness;
 	}
 	if (wall_orientation == 1)
 	{
