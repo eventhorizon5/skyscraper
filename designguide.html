@@ -140,6 +140,18 @@
   <p align="left">The number parameter specifies the stairwell number to create. 
     This command just tells the simulator the area that the stairwell will take 
     up, and does not create the actual walls.</p>
+  <p align="left"><strong>f. WallOrientation</strong> - changes the internal orientation 
+    parameter, which is used for determining the wall and floor thickness boundaries 
+    in relation to their coordinates.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> WallOrientation = 
+    <em>direction</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">WallOrientation 
+    = left</font></p>
+  <p align="left">The direction parameter can either be left, center, or right. 
+    Center is default. For example, if center is used, than half of the wall's 
+    depth is to the right of it's x1/x2 or z1/z2 coordinates, and half is to the 
+    left of the coordinates. If left is used, than the wall's edge is the coordinates, 
+    and the full thickness is to the right of those.</p>
   <p align="left"><br>
     <strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
