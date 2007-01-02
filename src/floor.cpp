@@ -91,8 +91,8 @@ void Floor::SetCameraFloor()
 int Floor::AddFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, int DrawSides, bool isexternal)
 {
 	//Adds a floor with the specified dimensions and vertical offset
-	double tw2, tw_s2;
-	double th2, th_s2;
+	double tw2;
+	double th2;
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -127,8 +127,8 @@ void Floor::DeleteFloor(int index)
 int Floor::AddInterfloorFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, int DrawSides)
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
-	double tw2, tw_s2;
-	double th2, th_s2;
+	double tw2;
+	double th2;
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -159,7 +159,7 @@ int Floor::AddWall(const char *name, const char *texture, double thickness, doub
 {
 	//Adds a wall with the specified dimensions
 	double tw2 = tw;
-	double th2, tw_s2, th_s2;
+	double th2;
 	double tempw1;
 	double tempw2;
 
@@ -213,7 +213,7 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, double thick
 {
 	//Adds an interfloor wall with the specified dimensions
 	double tw2 = tw;
-	double th2, tw_s2, th_s2;
+	double th2;
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
