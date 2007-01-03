@@ -566,6 +566,23 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	//if DrawSides is 1, create front and back
 	//if DrawSides is 2, create front, back, left and right sides
 
+	//convert to clockwise coordinates
+	double temp;
+	if (x1 > x2)
+	{
+		//reverse coordinates
+		temp = x1;
+		x1 = x2;
+		x2 = temp;
+	}
+	if (z1 > z2)
+	{
+		//reverse coordinates
+		temp = z1;
+		z1 = z2;
+		z2 = temp;
+	}
+	
 	//Adds a wall with the specified dimensions
 	csVector3 v1 (x1, altitude1 + height_in1, z1); //left top
 	csVector3 v2 (x2, altitude2 + height_in2, z2); //right top
@@ -643,17 +660,11 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	if (DrawSides > 0)
-	{
-		dest->AddQuad(v4, v3, v2, v1); //back face of front wall
-		dest->AddQuad(v8, v7, v6, v5); //back wall
-		dest->AddQuad(v5, v6, v7, v8); //back face of back wall
-	}
+		dest->AddQuad(v6, v5, v8, v7); //back wall
 	if (DrawSides > 1)
 	{
 		dest->AddQuad(v5, v1, v4, v8); //left wall
-		dest->AddQuad(v8, v4, v1, v5); //back face of left wall
 		dest->AddQuad(v2, v6, v7, v3); //right wall
-		dest->AddQuad(v3, v7, v6, v2); //back face of right wall
 	}
 
 	//reverse vector portions if specified
@@ -696,16 +707,13 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	dest->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
 	if (DrawSides > 0)
 	{
-		for (int i = 1; i <= 3; i++)
-		{
-			NewName = name;
-			NewName.Append(":" + csString(_itoa(i, intbuffer, 10)));
-			dest->SetPolygonName(csPolygonRange(firstidx + i, firstidx + i), NewName);
-		}
+		NewName = name;
+		NewName.Append(":1");
+		dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
 	}
 	if (DrawSides > 1)
 	{
-		for (int i = 4; i <= 7; i++)
+		for (int i = 2; i <= 3; i++)
 		{
 			NewName = name;
 			NewName.Append(":" + csString(_itoa(i, intbuffer, 10)));
@@ -724,6 +732,23 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	//if DrawSides is 1, create top and bottom
 	//if DrawSides is 2, create top, bottom, and sides
 
+	//convert to clockwise coordinates
+	double temp;
+	if (x1 > x2)
+	{
+		//reverse coordinates
+		temp = x1;
+		x1 = x2;
+		x2 = temp;
+	}
+	if (z1 > z2)
+	{
+		//reverse coordinates
+		temp = z1;
+		z1 = z2;
+		z2 = temp;
+	}
+	
 	csVector3 v1 (x1, altitude1, z1); //bottom left
 	csVector3 v2 (x1, altitude1, z2); //top left
 	csVector3 v3 (x2, altitude2, z2); //top right
@@ -766,17 +791,11 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 
 	int firstidx = dest->AddQuad(v1, v2, v3, v4);
 	if (DrawSides > 0)
-	{
-		dest->AddQuad(v4, v3, v2, v1); //back face of front wall
-		dest->AddQuad(v8, v7, v6, v5); //back wall
-		dest->AddQuad(v5, v6, v7, v8); //back face of back wall
-	}
+		dest->AddQuad(v6, v5, v8, v7); //back wall
 	if (DrawSides > 1)
 	{
 		dest->AddQuad(v5, v1, v4, v8); //left wall
-		dest->AddQuad(v8, v4, v1, v5); //back face of left wall
 		dest->AddQuad(v2, v6, v7, v3); //right wall
-		dest->AddQuad(v3, v7, v6, v2); //back face of right wall
 	}
 	
 	//set texture
@@ -790,16 +809,13 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	dest->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
 	if (DrawSides > 0)
 	{
-		for (int i = 1; i <= 3; i++)
-		{
-			NewName = name;
-			NewName.Append(":" + csString(_itoa(i, intbuffer, 10)));
-			dest->SetPolygonName(csPolygonRange(firstidx + i, firstidx + i), NewName);
-		}
+		NewName = name;
+		NewName.Append(":1");
+		dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
 	}
 	if(DrawSides > 1)
 	{
-		for (int i = 4; i <= 7; i++)
+		for (int i = 2; i <= 3; i++)
 		{
 			NewName = name;
 			NewName.Append(":" + csString(_itoa(i, intbuffer, 10)));
@@ -1342,8 +1358,8 @@ void SBS::EnableSkybox(bool value)
 csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 {
 	//returns the smallest and largest values from a specified coordinate type
-	//(x, y, or z) from a vector array.
-	//first parameter must be a vector array object
+	//(x, y, or z) from a vertex array (polygon).
+	//first parameter must be a vertex array object
 	//second must be either 1 (for x), 2 (for y) or 3 (for z)
 
 	double esmall;
@@ -1511,9 +1527,9 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 
 	mesh->SetPolygonMaterial(csPolygonRange(index, index), material);
 	if (Sides > 0)
-		mesh->SetPolygonMaterial(csPolygonRange(index + 1, index + 3), material);
+		mesh->SetPolygonMaterial(csPolygonRange(index + 1, index + 1), material);
 	if (Sides == 2)
-		mesh->SetPolygonMaterial(csPolygonRange(index + 4, index + 7), material);
+		mesh->SetPolygonMaterial(csPolygonRange(index + 2, index + 3), material);
 
 	//texture mapping is set from first 3 coordinates
 	mesh->SetPolygonTextureMapping (csPolygonRange(index, index),
@@ -1525,20 +1541,17 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		csVector2 (tw, th));
 	if (Sides > 0)
 	{
-		for (int i = 1; i <= 3; i++)
-		{
-			mesh->SetPolygonTextureMapping (csPolygonRange(index + i, index + i),
-				mesh->GetPolygonVertex(index + i, 3),
-				csVector2 (tw, 0),
-				mesh->GetPolygonVertex(index + i, 2),
-				csVector2 (0, 0),
-				mesh->GetPolygonVertex(index + i, 1),
-				csVector2 (0, th));
-		}
+		mesh->SetPolygonTextureMapping (csPolygonRange(index + 1, index + 1),
+			mesh->GetPolygonVertex(index + 1, 3),
+			csVector2 (tw, 0),
+			mesh->GetPolygonVertex(index + 1, 2),
+			csVector2 (0, 0),
+			mesh->GetPolygonVertex(index + 1, 1),
+			csVector2 (0, th));
 	}
 	if (Sides > 1)
 	{
-		for (int i = 4; i <= 7; i++)
+		for (int i = 2; i <= 3; i++)
 		{
 			mesh->SetPolygonTextureMapping (csPolygonRange(index + i, index + i),
 				mesh->GetPolygonVertex(index + i, 3),
