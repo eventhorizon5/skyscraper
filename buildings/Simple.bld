@@ -39,36 +39,38 @@
     InterfloorHeight = 2.24
 
     #Floor
-    AddFloor Floor, Granite, 0.5, -20, 20, 20, -20, 0, 0, 0, 0, 1, False
+    AddFloor Floor, Granite, 0.5, -20, 20, 20, -20, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Ceiling, Marble3, 0.5, -20, 20, 20, -20, %height% - 0.05, %height% - 0.05, 0, 0, 1, False
+    AddFloor Ceiling, Marble3, 0.5, -20, 20, 20, -20, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
-    AddWall Front, MainWindows, 0.5, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, 1, True
-    AddWall Right, MainWindows, 0.5, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, 1, True
-    AddWall Back, MainWindows, 0.5, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, 1, True
-    AddWall Left, MainWindows, 0.5, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, False, False, False, 1, True
+    WallOrientation = left
+    AddWall Front, MainWindows, 0.5, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left, MainWindows, 0.5, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    WallOrientation = right
+    AddWall Right, MainWindows, 0.5, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back, MainWindows, 0.5, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
 
     #Interfloor bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, -20, 20, 20, 20, 0, 0, 0, 0, 1
+    AddInterfloorFloor IFloor, Brick, 0.5, -20, 20, 20, 20, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor ITop, Brick, 0.5, -20, 20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0, 1
+    AddInterfloorFloor ITop, Brick, 0.5, -20, 20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
-    #AddInterfloorWall IFront, Brick, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, 1
-    #AddInterfloorWall IRight, Brick, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, 1
-    #AddInterfloorWall IBack, Brick, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, 1
-    #AddInterfloorWall ILeft, Brick, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, 1
+    #AddInterfloorWall IFront, Brick, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall IRight, Brick, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall IBack, Brick, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall ILeft, Brick, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
 <Floor 0>
-    AddFloor Outside Ground, Brick, 0, -150, -150, 150, 150, -0.1, -0.1, 1, 8, 1, True #outside ground
+    AddFloor Outside Ground, Brick, 0, -150, -150, 150, 150, -0.1, -0.1, 1, 8, True #outside ground
 <EndFloor>
 
 <Floor 9>
-    AddFloor Roof, Brick, 0.5, -20, 20, 20, -20, %fullheight%, %fullheight%, 0, 0, 1, True #roof
+    AddFloor Roof, Brick, 0.5, -20, 20, 20, -20, %fullheight%, %fullheight%, 0, 0, True #roof
 <EndFloor>
 
 #Shaft 1
@@ -84,16 +86,35 @@ AddShaft 1, 2, 6, 14, 0, 9
     AssignedShaft = 1
     CreateElevator 0, 6, 0
 
-    AddFloor Floor, Wood2, 0.3, -3.5, -3, 3.5, 3, 0, 0, 0, 0, 1 #floor
-    AddFloor Ceiling, Elev1, 0.3, -3.5, -3, 3.5, 3, 8, 8, 0, 0, 1 #ceiling
-    AddWall Back, Wood1, 0.3, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false, 1 #back wall
-    AddWall Right, Wood1, 0.3, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false, 1 #right wall
-    AddWall Left, Wood1, 0.3, -3.5, -3, -3.5, 3, 8, 8, 0, 0, 2, 2, false, false, false, 1 #left wall
-
-    AddWall Left Panel, Wood1, 0.3, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 2, 2, false, false, false, 1 #left panel
-    AddWall Right Panel, Wood1, 0.3, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 2, 2, false, false, false, 1 #right panel
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    AddFloor Floor, Wood2, 0.2, -3.5, -3.2, 3.5, 3, 0, 0, 0, 0
     
-    AddDoors ElevDoors, 0.3, 0, -3, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.3, 0, -3.1, 2, 2 #shaft doors
+    #ceiling
+    FloorOrientation = bottom
+    AddFloor Ceiling, Elev1, 0.2, -3.5, -3.2, 3.5, 3, 8, 8, 0, 0 #ceiling
+    
+    #back and right walls
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    AddWall Back, Wood1, 0.2, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 2, 2 #back wall
+    AddWall Right, Wood1, 0.2, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 2, 2 #right wall
+    
+    #left wall
+    WallOrientation = left
+    AddWall Left, Wood1, 0.2, -3.5, -3, -3.5, 3, 8, 8, 0, 0, 2, 2 #left wall
+
+    #panels
+    DrawWalls = true, true, false, true, false, false
+    AddWall Left Panel, Wood1, 0.2, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 0.66, 2 #left panel
+    DrawWalls = true, true, true, false, false, false
+    AddWall Right Panel, Wood1, 0.2, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 0.66, 2 #right panel
+    
+    #doors
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    AddDoors ElevDoors, 0.2, 0, -3.01, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.3, 2, 2 #shaft doors
     
 <EndElevator>
