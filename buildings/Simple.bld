@@ -5,7 +5,7 @@
 <Globals>
     Name = My Building
     Designer = Me
-    CameraAltitude = 3.2
+    CameraAltitude = 5
     HorizScale = 1
     CameraFloor = 0
     CameraPosition = 0, -60
