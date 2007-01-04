@@ -121,6 +121,7 @@ void ButtonPanel::AddButton(const char *name, const char *texture, int row, int 
 		}
 		else
 		{
+			//back
 			xpos = (Origin.x + (Width / 2)) - (GridSize.x * column);
 			zpos = Origin.z + 0.01;
 			sbs->AddWallMain(ButtonPanel_state, name, texture, 0, xpos, zpos, xpos - GridSize.x + Spacing, zpos, GridSize.y - Spacing, GridSize.y - Spacing, ypos, ypos, 1, 1);
@@ -136,6 +137,7 @@ void ButtonPanel::AddButton(const char *name, const char *texture, int row, int 
 		}
 		else
 		{
+			//right
 			xpos = Origin.x + 0.01;
 			zpos = (Origin.z - (Width / 2)) + (GridSize.x * column);
 			sbs->AddWallMain(ButtonPanel_state, name, texture, 0, xpos, zpos, xpos, zpos + GridSize.x - Spacing, GridSize.y - Spacing, GridSize.y - Spacing, ypos, ypos, 1, 1);

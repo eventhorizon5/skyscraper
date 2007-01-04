@@ -581,20 +581,29 @@ void Cleanup()
 int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th)
 {
 	//convert to clockwise coordinates
-	double temp;
-	if (x1 > x2)
+	if (DrawFront == false || GetDrawWallsCount() != 1)
 	{
-		//reverse coordinates
-		temp = x1;
-		x1 = x2;
-		x2 = temp;
-	}
-	if (z1 > z2)
-	{
-		//reverse coordinates
-		temp = z1;
-		z1 = z2;
-		z2 = temp;
+		double temp;
+		if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
+		{
+			//reverse coordinates if the difference between x coordinates is greater
+			temp = x1;
+			x1 = x2;
+			x2 = temp;
+			temp = z1;
+			z1 = z2;
+			z2 = temp;
+		}
+		if (z1 > z2 && fabs(z1 - z2) > fabs(x1 - x2))
+		{
+			//reverse coordinates if the difference between z coordinates is greater
+			temp = x1;
+			x1 = x2;
+			x2 = temp;
+			temp = z1;
+			z1 = z2;
+			z2 = temp;
+		}
 	}
 	
 	//Adds a wall with the specified dimensions
@@ -778,20 +787,29 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	//Adds a floor with the specified dimensions and vertical offset
 
 	//convert to clockwise coordinates
-	double temp;
-	if (x1 > x2)
+	if (DrawFront == false || GetDrawWallsCount() != 1)
 	{
-		//reverse coordinates
-		temp = x1;
-		x1 = x2;
-		x2 = temp;
-	}
-	if (z1 > z2)
-	{
-		//reverse coordinates
-		temp = z1;
-		z1 = z2;
-		z2 = temp;
+		double temp;
+		if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
+		{
+			//reverse coordinates if the difference between x coordinates is greater
+			temp = x1;
+			x1 = x2;
+			x2 = temp;
+			temp = z1;
+			z1 = z2;
+			z2 = temp;
+		}
+		if (z1 > z2 && fabs(z1 - z2) > fabs(x1 - x2))
+		{
+			//reverse coordinates if the difference between z coordinates is greater
+			temp = x1;
+			x1 = x2;
+			x2 = temp;
+			temp = z1;
+			z1 = z2;
+			z2 = temp;
+		}
 	}
 	
 	csVector3 v1 (x1, altitude1, z1); //bottom left

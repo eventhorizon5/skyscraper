@@ -929,7 +929,7 @@ recalc:
 			}
 
 			//AddStairs command
-			if (LineData.Slice(0, 9).CompareNoCase("addstairs") == true)
+			if (LineData.Slice(0, 10).CompareNoCase("addstairs ") == true)
 			{
 				//get data
 				tempdata.SplitString(LineData.Slice(10).GetData(), ",");
@@ -943,7 +943,7 @@ recalc:
 
 				//create stairs
 				if (GetStairs(atoi(tempdata[0])))
-					GetStairs(atoi(tempdata[0]))->AddStairs(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atoi(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+					GetStairs(atoi(tempdata[0]))->AddStairs(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atoi(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 				tempdata.DeleteAll();
 			}
 
