@@ -49,7 +49,7 @@ BEGIN
             VALUE "FileDescription", "Virtual Skyscraper Simulator\0"
             VALUE "FileVersion", "1, 1, 0, 0\0"
             VALUE "InternalName", "Skyscraper\0"
-            VALUE "LegalCopyright", "©2006 Ryan Thoryk, released under the GPL\0"
+            VALUE "LegalCopyright", "©2007 Ryan Thoryk, released under the GPL\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "Skyscraper.exe\0"
             VALUE "PrivateBuild", "\0"

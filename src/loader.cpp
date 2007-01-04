@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.1 Alpha - Loader Form
-	Copyright (C)2005-2006 Ryan Thoryk
+	Copyright (C)2005-2007 Ryan Thoryk
 	http://www.tliquest.net/skyscraper
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
