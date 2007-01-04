@@ -322,7 +322,7 @@ int Elevator::GetFloor()
 	//Determine floor that the elevator is on
 
 	//for (int i = -sbs->Basements; i <= sbs->TotalFloors; i++)
-	for (int i = -sbs->Basements; i <= sbs->Floors; i++)
+	for (int i = -sbs->Basements; i < sbs->Floors; i++)
 	{
 		if (i < sbs->Floors)
 			if ((GetPosition().y >= sbs->GetFloor(i)->Altitude) && (GetPosition().y < sbs->GetFloor(i + 1)->Altitude))
@@ -811,19 +811,20 @@ void Elevator::MoveElevatorToFloor()
 		Destination = sbs->GetFloor(GotoFloor)->Altitude;
 		CalculateStoppingDistance = true;
 
-		//If user is riding this elevator, then turn off floor
+		//If user is riding this elevator, then turn off objects
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		{
+			//turn off floor
 			sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 			sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
+			
+			//Turn off sky, buildings, and landscape
+			sbs->EnableSkybox(false);
+			sbs->EnableBuildings(false);
+			sbs->EnableLandscape(false);
+			sbs->EnableExternal(false); //temporary - remove when window objects are made
+			sbs->EnableColumnFrame(false);
 		}
-
-		//Turn off sky, buildings, and landscape
-		sbs->EnableSkybox(false);
-		sbs->EnableBuildings(false);
-		sbs->EnableLandscape(false);
-		sbs->EnableExternal(false); //temporary - remove when window objects are made
-		sbs->EnableColumnFrame(false);
 
 		//Play starting sound
 		//"\data\elevstart.wav"
@@ -1062,22 +1063,24 @@ void Elevator::MoveElevatorToFloor()
 		//update elevator's floor number
 		GetFloor();
 
-		//Turn on floor(s)
+		//Turn on objects if user is in elevator
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		{
+			//turn on floor
 			sbs->GetFloor(GotoFloor)->Enabled(true);
 			sbs->GetFloor(GotoFloor)->EnableGroup(true);
+			
+			//Turn on sky, buildings, and landscape
+			sbs->EnableSkybox(true);
+			sbs->EnableBuildings(true);
+			sbs->EnableLandscape(true);
+			sbs->EnableExternal(true); //temporary - remove when window objects are made
+			sbs->EnableColumnFrame(true);
 		}
 
 		//open doors
 		OpenDoors();
 
-		//Turn on sky, buildings, and landscape
-		sbs->EnableSkybox(true);
-		sbs->EnableBuildings(true);
-		sbs->EnableLandscape(true);
-		sbs->EnableExternal(true); //temporary - remove when window objects are made
-		sbs->EnableColumnFrame(true);
 	}
 	EmergencyStop = false;
 }
@@ -1388,7 +1391,7 @@ csHitBeamResult Elevator::HitBeam(const csVector3 &start, const csVector3 &end)
 
 bool Elevator::IsInElevator(const csVector3 &position)
 {
-	if (position.y > GetPosition().y && position.y < Height)
+	if (position.y > GetPosition().y && position.y < GetPosition().y + Height)
 	{
 		csHitBeamResult result = ElevatorMesh->HitBeam(position, csVector3(position.x, position.y - Height, position.z));
 		return result.hit;

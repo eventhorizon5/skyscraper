@@ -232,15 +232,23 @@ void Camera::CheckElevator()
 	//first checks to see if camera is within an elevator's height range, and then
 	//checks for a collision with the elevator's floor below
 
+	bool test = false;
 	for (int i = 1; i <= sbs->Elevators(); i++)
 	{
 		if (sbs->GetElevator(i)->IsInElevator(GetPosition()) == true)
 		{
+			test = true;
 			sbs->InElevator = true;
 			sbs->ElevatorNumber = i;
 			sbs->ElevatorSync = true;
 			return;
 		}
+	}
+	//user is not in an elevator if all elevators returned false
+	if (test == false)
+	{
+		sbs->InElevator = false;
+		sbs->ElevatorSync = false;
 	}
 }
 
