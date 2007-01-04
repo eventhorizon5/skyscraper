@@ -194,6 +194,11 @@ void Camera::Gravity()
 		sbs->IsFalling = false;
 		original_position = 0;
 		old_time = 0;
+		
+		//step routine
+		double height = result.closest_isect.y - (GetPosition().y - DefaultAltitude);
+		if (height < DefaultAltitude / 2) //only climb up if height is less than half the default altitude
+			SetPosition(csVector3(GetPosition().x, result.closest_isect.y + DefaultAltitude, GetPosition().z));
 	}
 	else
 	{
@@ -214,10 +219,9 @@ void Camera::Gravity()
 
 		result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, csVector3(GetPosition().x, original_position, GetPosition().z), csVector3(GetPosition().x, original_position - distance, GetPosition().z), false);
 		if (result.closest_mesh)
-			SetPosition(csVector3(GetPosition().x, (GetPosition().y - sqrt(result.sqdistance)) + DefaultAltitude, GetPosition().z));
+			SetPosition(csVector3(GetPosition().x, result.closest_isect.y + DefaultAltitude, GetPosition().z));
 		else
 			SetPosition(csVector3(GetPosition().x, original_position - distance, GetPosition().z));
-
 	}
 }
 
