@@ -79,12 +79,12 @@ Shaft::~Shaft()
 
 }
 
-int Shaft::AddWall(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, int DrawSides)
+int Shaft::AddWall(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th)
 {
-	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th, revX, revY, revZ, DrawSides);
+	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th);
 }
 
-int Shaft::AddFloor(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, int DrawSides)
+int Shaft::AddFloor(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
 	//get shaft extents
 	double altitude = sbs->GetFloor(floor)->Altitude;
@@ -98,7 +98,7 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, double thi
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th, DrawSides);
+	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th);
 }
 
 void Shaft::Enabled(int floor, bool value)

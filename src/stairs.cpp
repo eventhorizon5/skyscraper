@@ -81,6 +81,9 @@ int Stairs::AddStairs(int floor, const char *name, const char *texture, const ch
 	buffer3 = name;
 	buffer3.Trim();
 
+	sbs->DrawWalls(true, true, true, true, true, true);
+	sbs->ReverseExtents(false, false, false);
+
 	for (int i = 1; i <= num_stairs; i++)
 	{
 		double pos;
@@ -89,54 +92,56 @@ int Stairs::AddStairs(int floor, const char *name, const char *texture, const ch
 		{
 			pos = CenterX + ((treadsize * (num_stairs - 1)) / 2) - (treadsize * i);
 			buffer = buffer3 + " " + buffer2 + "-riser";
-			tmpindex = AddWall(floor, buffer.GetData(), texture, thickness, pos + treadsize, -(width / 2), pos + treadsize, width / 2, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th, false, false, false, 2);
+			tmpindex = AddWall(floor, buffer.GetData(), texture, thickness, pos + treadsize, -(width / 2), pos + treadsize, width / 2, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
-				AddFloor(floor, buffer.GetData(), texture, thickness, pos, -(width / 2), pos + treadsize, width / 2, voffset + (risersize * i), voffset + (risersize * i), tw, th, 2);
+				AddFloor(floor, buffer.GetData(), texture, thickness, pos, -(width / 2), pos + treadsize, width / 2, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 		}
 		if (Direction == "left")
 		{
 			pos = CenterX - ((treadsize * (num_stairs - 1)) / 2) + (treadsize * i);
 			buffer = buffer3 + " " + buffer2 + "-riser";
-			tmpindex = AddWall(floor, buffer.GetData(), texture, thickness, pos - treadsize, width / 2, pos - treadsize, -(width / 2), risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th, false, false, false, 2);
+			tmpindex = AddWall(floor, buffer.GetData(), texture, thickness, pos - treadsize, width / 2, pos - treadsize, -(width / 2), risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
-				AddFloor(floor, buffer.GetData(), texture, thickness, pos, width / 2, pos - treadsize, -(width / 2), voffset + (risersize * i), voffset + (risersize * i), tw, th, 2);
+				AddFloor(floor, buffer.GetData(), texture, thickness, pos, width / 2, pos - treadsize, -(width / 2), voffset + (risersize * i), voffset + (risersize * i), tw, th);
 		}
 		if (Direction == "back")
 		{
 			pos = CenterZ + ((treadsize * (num_stairs - 1)) / 2) - (treadsize * i);
 			buffer = buffer3 + " " + buffer2 + "-riser";
-			tmpindex = AddWall(floor, buffer.GetData(), texture, thickness, width / 2, pos + treadsize, -(width / 2), pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th, false, false, false, 2);
+			tmpindex = AddWall(floor, buffer.GetData(), texture, thickness, width / 2, pos + treadsize, -(width / 2), pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
-				AddFloor(floor, buffer.GetData(), texture, thickness, width / 2, pos, -(width / 2), pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), tw, th, 2);
+				AddFloor(floor, buffer.GetData(), texture, thickness, width / 2, pos, -(width / 2), pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 		}
 		if (Direction == "front")
 		{
 			pos = CenterZ - ((treadsize * (num_stairs - 1)) / 2) + (treadsize * i);
 			buffer = buffer3 + " " + buffer2 + "-riser";
-			tmpindex = AddWall(floor, buffer.GetData(), texture, thickness, -(width / 2), pos - treadsize, width / 2, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th, false, false, false, 2);
+			tmpindex = AddWall(floor, buffer.GetData(), texture, thickness, -(width / 2), pos - treadsize, width / 2, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
-				AddFloor(floor, buffer.GetData(), texture, thickness, -(width / 2), pos, width / 2, pos - treadsize, voffset + (risersize * i), voffset + (risersize * i), tw, th, 2);
+				AddFloor(floor, buffer.GetData(), texture, thickness, -(width / 2), pos, width / 2, pos - treadsize, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 		}
 		
 		if (index == -1)
 			index = tmpindex;
 	}
+	sbs->ResetWalls();
+	sbs->ResetExtents();
 	
 	return index;
 }
 
-int Stairs::AddWall(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, int DrawSides)
+int Stairs::AddWall(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th)
 {
-	return sbs->AddWallMain(StairArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, revX, revY, revZ, DrawSides);
+	return sbs->AddWallMain(StairArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 }
 
-int Stairs::AddFloor(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, int DrawSides)
+int Stairs::AddFloor(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
 {
-	return sbs->AddFloorMain(StairArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th, DrawSides);
+	return sbs->AddFloorMain(StairArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th);
 }
 
 void Stairs::Enabled(int floor, bool value)

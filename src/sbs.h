@@ -166,8 +166,8 @@ public:
 	void Run();
 	int CreateSky();
 	void AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b);
-	int AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th, bool revX, bool revY, bool revZ, int DrawSides = 1);
-	int AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th, int DrawSides = 1);
+	int AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th);
+	int AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th);
 	void DeleteWall(csRef<iThingFactoryState> dest, int index);
 	void DeleteFloor(csRef<iThingFactoryState> dest, int index);
 	bool HandleEvent(iEvent& Event);
@@ -177,9 +177,9 @@ public:
 	void Render();
 	int CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th);
 	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
-	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal);
-	int AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal);
-	int AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, double tw, double th, bool revX, bool revY, bool revZ, bool IsExternal);
+	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal);
+	int AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, double tw, double th, bool IsExternal);
+	int AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, double tw, double th, bool IsExternal);
 	csString Calc(const char *expression);
 	csVector2 GetExtents(csPoly3D &varray, int coord);
 	void InitMeshes();
@@ -194,7 +194,7 @@ public:
 	void ListAltitudes();
 	void CreateShaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor);
 	void CreateStairwell(int number, double CenterX, double CenterZ, int _startfloor, int _endfloor);
-	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, int Sides, double tw, double th);
+	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, double tw, double th);
 	iMaterialWrapper *ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> oldmat, const char *texture);
 	void NewElevator(int number);
 	void NewFloor(int number);
@@ -210,6 +210,11 @@ public:
 	int GetWallOrientation();
 	void SetFloorOrientation(const char *direction);
 	int GetFloorOrientation();
+	void DrawWalls(bool Front, bool Back, bool Left, bool Right, bool Top, bool Bottom);
+	void ResetWalls(bool ToDefaults = false);
+	void ReverseExtents(bool X, bool Y, bool Z);
+	void ResetExtents(bool ToDefaults = false);
+	int GetDrawWallsCount();
 
 	//file loader functions
 	int LoadBuilding(const char * filename);
@@ -253,6 +258,26 @@ private:
 	//orientations
 	int wall_orientation;
 	int floor_orientation;
+
+	//wall/floor sides
+	bool DrawFront; //or top, if floor
+	bool DrawBack; //or bottom, if floor
+	bool DrawLeft;
+	bool DrawRight;
+	bool DrawTop; //or back, if floor
+	bool DrawBottom; //or front, if floor
+
+	//old wall/floor sides
+	bool DrawFrontOld; //or top, if floor
+	bool DrawBackOld; //or bottom, if floor
+	bool DrawLeftOld;
+	bool DrawRightOld;
+	bool DrawTopOld; //or back, if floor
+	bool DrawBottomOld; //or front, if floor
+
+	//texture mapping
+	bool RevX, RevY, RevZ;
+	bool RevXold, RevYold, RevZold;
 
 	//object arrays
 	csArray<FloorMap> FloorArray; //floor object array

@@ -82,8 +82,8 @@ public:
 	const csVector3 GetPosition();
 	void OpenDoors(int whichdoors = 1, int floor = 0);
 	void CloseDoors(int whichdoors = 1, int floor = 0);
-	int AddWall(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th, bool revX, bool revY, bool revZ, int DrawSides = 1);
-	int AddFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, int DrawSides = 1);
+	int AddWall(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th);
+	int AddFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
 	int AddFloorIndicator(const char *direction, double CenterX, double CenterZ, double width, double height, double voffset);
 	int AddDoors(const char *texture, double thickness, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th);
 	int AddShaftDoors(const char *texture, double thickness, double CenterX, double CenterZ, double tw, double th);
