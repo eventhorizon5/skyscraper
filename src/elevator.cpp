@@ -833,11 +833,14 @@ void Elevator::MoveElevatorToFloor()
 		ElevatorRate = Direction * (ElevatorSpeed * Acceleration);
 
 		//get starting frame rate and hold value
-		FPSModifierStatic = sbs->FPSModifier;
+		//FPSModifierStatic = sbs->FPSModifier;
 
 		//notify about movement
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
 	}
+
+	//temporary check for FPSModifier
+	FPSModifierStatic = sbs->FPSModifier;
 
 	if (EmergencyStop == true && Brakes == false)
 	{
