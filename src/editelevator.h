@@ -146,6 +146,8 @@ class editelevator: public wxDialog
 			ID_txtErrorOffset
 		};
 		//*)
+		void Loop();
+		void SetMainValues();
 
 	protected:
 
