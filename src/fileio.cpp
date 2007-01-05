@@ -32,7 +32,7 @@
 #include "callbutton.h"
 #include "unix.h"
 
-double AltitudeCheck;
+float AltitudeCheck;
 
 int SBS::LoadBuilding(const char * filename)
 {

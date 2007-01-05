@@ -113,7 +113,7 @@ void Camera::UpdateCameraFloor()
 	CurrentFloor = sbs->GetFloorNumber(MainCamera->GetTransform().GetOrigin().y);
 }
 
-bool Camera::Move(csVector3 vector, double speed)
+bool Camera::Move(csVector3 vector, float speed)
 {
 	//collision detection
 	if (sbs->EnableCollisions == true)
@@ -122,7 +122,7 @@ bool Camera::Move(csVector3 vector, double speed)
 		if (vector != CS_VEC_DOWN)
 			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed), false);
 		else
-			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed) - DefaultAltitude, false);
+			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed) - csVector3(0, DefaultAltitude, 0), false);
 
 		if (result.closest_mesh)
 			return false;
@@ -133,7 +133,7 @@ bool Camera::Move(csVector3 vector, double speed)
 	return true;
 }
 
-void Camera::Rotate(csVector3 vector, double speed)
+void Camera::Rotate(csVector3 vector, float speed)
 {
 	//rotates the camera in a relative amount
 
@@ -184,8 +184,9 @@ void Camera::SetToStartRotation()
 void Camera::Gravity()
 {
 	csTraceBeamResult result;
-	double new_time;
-	static double old_time, original_position, distance;
+	csTicks new_time;
+	static csTicks old_time;
+	static float original_position, distance;
 
 	result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), csVector3(GetPosition().x, GetPosition().y - DefaultAltitude, GetPosition().z), false);
 	if (result.closest_mesh)
@@ -196,7 +197,7 @@ void Camera::Gravity()
 		old_time = 0;
 		
 		//step routine
-		double height = result.closest_isect.y - (GetPosition().y - DefaultAltitude);
+		float height = result.closest_isect.y - (GetPosition().y - DefaultAltitude);
 		if (height < DefaultAltitude / 2) //only climb up if height is less than half the default altitude
 			SetPosition(csVector3(GetPosition().x, result.closest_isect.y + DefaultAltitude, GetPosition().z));
 	}
@@ -211,11 +212,11 @@ void Camera::Gravity()
 		}
 		sbs->IsFalling = true;
 		new_time = sbs->vc->GetCurrentTicks();
-		double time_rate = (new_time - old_time) / 1000;
+		csTicks time_rate = (new_time - old_time) / 1000;
 
 		//get distance value
 		//d = 0.5 * g * t^2
-		distance = 0.5 * sbs->Gravity * pow(time_rate, 2);
+		distance = 0.5 * sbs->Gravity * pow(time_rate, 2.0f);
 
 		result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, csVector3(GetPosition().x, original_position, GetPosition().z), csVector3(GetPosition().x, original_position - distance, GetPosition().z), false);
 		if (result.closest_mesh)

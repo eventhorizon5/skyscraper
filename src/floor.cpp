@@ -88,11 +88,11 @@ void Floor::SetCameraFloor()
 	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + sbs->camera->DefaultAltitude, camlocation.z));
 }
 
-int Floor::AddFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th, bool isexternal)
+int Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th, bool isexternal)
 {
 	//Adds a floor with the specified dimensions and vertical offset
-	double tw2;
-	double th2;
+	float tw2;
+	float th2;
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -124,11 +124,11 @@ void Floor::DeleteFloor(int index)
 	}
 }
 
-int Floor::AddInterfloorFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
+int Floor::AddInterfloorFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
-	double tw2;
-	double th2;
+	float tw2;
+	float th2;
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -155,13 +155,13 @@ void Floor::DeleteInterfloorFloor(int index)
 	}
 }
 
-int Floor::AddWall(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th, bool isexternal)
+int Floor::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th, bool isexternal)
 {
 	//Adds a wall with the specified dimensions
-	double tw2 = tw;
-	double th2;
-	double tempw1;
-	double tempw2;
+	float tw2 = tw;
+	float th2;
+	float tempw1;
+	float tempw2;
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -209,11 +209,11 @@ void Floor::DeleteWall(int index)
 	}
 }
 
-int Floor::AddInterfloorWall(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double voffset1, double voffset2, double tw, double th)
+int Floor::AddInterfloorWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds an interfloor wall with the specified dimensions
-	double tw2 = tw;
-	double th2;
+	float tw2 = tw;
+	float th2;
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -272,11 +272,11 @@ void Floor::Enabled(bool value)
 	}
 
 	//call buttons
-	for (int i = 0; i < CallButtonArray.GetSize(); i++)
+	for (size_t i = 0; i < CallButtonArray.GetSize(); i++)
 		CallButtonArray[i]->Enabled(value);
 }
 
-void Floor::AddAutoFloor(const char *name, const char *texture, double voffset, double tw, double th)
+void Floor::AddAutoFloor(const char *name, const char *texture, float voffset, float tw, float th)
 {
 	/* Autogenerate a floor
 
@@ -293,13 +293,13 @@ void Floor::AddAutoFloor(const char *name, const char *texture, double voffset, 
 	//return index;
 }
 
-double Floor::FullHeight()
+float Floor::FullHeight()
 {
 	//calculate full height of a floor
 	return Height + InterfloorHeight;
 }
 
-void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th)
+void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//adds call buttons
 
@@ -308,14 +308,14 @@ void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, con
 	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, DownButtonTexture, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 }
 
-void Floor::CutFloor(double x1, double x2, double z1, double z2)
+void Floor::CutFloor(float x1, float x2, float z1, float z2)
 {
 	//cuts a rectangular hole in the listed floor polygons (floor, ceiling, etc)
 
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5;
 
 	//step through each floor polygon
-	for (int i = 0; i <= floor_polys.GetSize() - 1; i++)
+	for (size_t i = 0; i <= floor_polys.GetSize() - 1; i++)
 	{
 		temppoly.MakeEmpty();
 		temppoly2.MakeEmpty();
@@ -368,6 +368,6 @@ void Floor::EnableGroup(bool value)
 {
 	//enables or disables all floors in group list
 
-	for (int i = 0; i < Group.GetSize(); i++)
+	for (size_t i = 0; i < Group.GetSize(); i++)
 		sbs->GetFloor(Group[i])->Enabled(value);
 }

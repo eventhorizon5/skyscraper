@@ -58,7 +58,7 @@ SBS::SBS()
 	BuildingLocation = "";
 	BuildingDescription = "";
 	BuildingVersion = "";
-	Gravity = 32.15; // 9.8 m/s/s
+	Gravity = 32.15f; // 9.8 m/s/s
 	IsRunning = false;
 	Floors = 0;
 	Basements = 0;
@@ -211,12 +211,12 @@ void SBS::Wait(long milliseconds)
 
 }
 
-double AutoSize(double n1, double n2, bool iswidth, bool external, double offset)
+float AutoSize(float n1, float n2, bool iswidth, bool external, float offset)
 {
 //Texture autosizing formulas
 
-	double size1;
-	double size2;
+	float size1;
+	float size2;
 
 	if (offset == 0)
 		offset = 1;
@@ -260,7 +260,7 @@ void SBS::GetInput()
 	current_time = vc->GetCurrentTicks ();
 
 	// Now rotate the camera according to keyboard state
-	double speed = (elapsed_time / 1000.0) * (0.06 * 20);
+	float speed = (elapsed_time / 1000.0) * (0.06 * 20);
 
 	//get mouse pointer coordinates
 	mouse_x = mouse->GetLastX();
@@ -323,7 +323,7 @@ void SBS::GetInput()
 			camera->Rotate(CS_VEC_LEFT, speed);
 		if (kbd->GetKeyState (CSKEY_UP))
 		{
-			double KeepAltitude;
+			float KeepAltitude;
 			KeepAltitude = camera->GetPosition().y;
 			camera->Move (CS_VEC_FORWARD, speed * 8);
 			if (camera->GetPosition().y != KeepAltitude)
@@ -331,7 +331,7 @@ void SBS::GetInput()
 		}
 		if (kbd->GetKeyState (CSKEY_DOWN))
 		{
-			double KeepAltitude;
+			float KeepAltitude;
 			KeepAltitude = camera->GetPosition().y;
 			camera->Move (CS_VEC_BACKWARD, speed * 8);
 			if (camera->GetPosition().y != KeepAltitude)
@@ -571,7 +571,7 @@ bool SBS::LoadTexture(const char *filename, const char *name)
 	return true;
 }
 
-void SBS::AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b)
+void SBS::AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b)
 {
 	ll = area->GetLights();
 	light = engine->CreateLight(name, csVector3(x, y, z), radius, csColor(r, g, b));
@@ -586,12 +586,12 @@ void Cleanup()
 	csInitializer::DestroyApplication (object_reg);
 }
 
-int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th)
+int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
 {
 	//convert to clockwise coordinates
 	if (DrawFront == false || GetDrawWallsCount() != 1)
 	{
-		double temp;
+		float temp;
 		if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
 		{
 			//reverse coordinates if the difference between x coordinates is greater
@@ -758,7 +758,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	//reverse vector portions if specified
 	if (RevX == true)
 	{
-		double tmpx1, tmpx2;
+		float tmpx1, tmpx2;
 		tmpx1 = v1.x;
 		tmpx2 = v2.x;
 		v1.x = tmpx2;
@@ -775,7 +775,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	}
 	if (RevZ == true)
 	{
-		double tmpz1, tmpz2;
+		float tmpz1, tmpz2;
 		tmpz1 = v1.z;
 		tmpz2 = v2.z;
 		v1.z = tmpz2;
@@ -790,14 +790,14 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	return index;
 }
 
-int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th)
+int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
 	//convert to clockwise coordinates
 	if (DrawFront == false || GetDrawWallsCount() != 1)
 	{
-		double temp;
+		float temp;
 		if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
 		{
 			//reverse coordinates if the difference between x coordinates is greater
@@ -980,7 +980,7 @@ bool SBS::ReportError (const char* msg, ...)
 	return false;
 }
 
-int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th)
+int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th)
 {
 	//create 4 walls
 
@@ -1008,15 +1008,15 @@ int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const c
 	return firstidx;
 }
 
-int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th)
+int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th)
 {
 	//create 4 walls from a central point
 
 	iMaterialWrapper* tm;
-	double x1;
-	double x2;
-	double z1;
-	double z2;
+	float x1;
+	float x2;
+	float z1;
+	float z2;
 
 	x1 = CenterX - (WidthX / 2);
 	x2 = CenterX + (WidthX / 2);
@@ -1065,13 +1065,13 @@ void SBS::InitMeshes()
 	ColumnFrame->SetZBufMode(CS_ZBUF_USE);
 }
 
-int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, double tw, double th, bool IsExternal)
+int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th, bool IsExternal)
 {
 	//Adds a wall from a specified array of 3D vectors
-	double tw2 = tw;
-	double th2;
-	double tempw1;
-	double tempw2;
+	float tw2 = tw;
+	float th2;
+	float tempw1;
+	float tempw2;
 	int num;
 	int i;
 	csPoly3D varray1;
@@ -1170,13 +1170,13 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 	return firstidx;
 }
 
-int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, double tw, double th, bool IsExternal)
+int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th, bool IsExternal)
 {
 	//Adds a wall from a specified array of 3D vectors
-	double tw2 = tw;
-	double th2;
-	double tempw1;
-	double tempw2;
+	float tw2 = tw;
+	float th2;
+	float tempw1;
+	float tempw2;
 	int num;
 	int i;
 	csPoly3D varray1;
@@ -1274,7 +1274,7 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 	return firstidx;
 }
 
-int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal)
+int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th, bool IsExternal)
 {
 	//Adds a triangular wall with the specified dimensions
 	csPoly3D varray;
@@ -1468,9 +1468,9 @@ csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 	//first parameter must be a vertex array object
 	//second must be either 1 (for x), 2 (for y) or 3 (for z)
 
-	double esmall;
-	double ebig;
-	double tempnum;
+	float esmall;
+	float ebig;
+	float tempnum;
 	int i;
 	int num = varray.GetVertexCount();
 
@@ -1532,7 +1532,7 @@ int SBS::CreateSky()
 	return firstidx;
 }
 
-int SBS::GetFloorNumber(double altitude)
+int SBS::GetFloorNumber(float altitude)
 {
 	//Returns floor number located at a specified altitude
 
@@ -1550,9 +1550,10 @@ int SBS::GetFloorNumber(double altitude)
 		if ((i == Floors - 1) && (altitude > GetFloor(i)->Altitude))
 			return i;
 	}
+	return 0;
 }
 
-double SBS::GetDistance(double x1, double x2, double z1, double z2)
+float SBS::GetDistance(float x1, float x2, float z1, float z2)
 {
 	//returns the distance between 2 2D vectors
 
@@ -1562,6 +1563,7 @@ double SBS::GetDistance(double x1, double x2, double z1, double z2)
 		return fabs(z1 - z2);
 	if ((x1 != x2) && (z2 != x2))
 		return sqrt(pow(fabs(x1 - x2), 2) + pow(fabs(z1 - z2), 2)); //calculate diagonals
+	return 0;
 }
 
 void SBS::DumpVertices(csRef<iThingFactoryState> mesh)
@@ -1582,11 +1584,11 @@ void SBS::ListAltitudes()
 		Report(csString(_itoa(i, intbuffer, 10)) + "(" + GetFloor(i)->ID + ")\t----\t" + csString(_gcvt(GetFloor(i)->FullHeight(), 6, buffer)) + "\t----\t" + csString(_gcvt(GetFloor(i)->Altitude, 6, buffer)));
 }
 
-void SBS::CreateShaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor)
+void SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a shaft object
 
-	for (int i = 0; i < ShaftArray.GetSize(); i++)
+	for (size_t i = 0; i < ShaftArray.GetSize(); i++)
 		if (ShaftArray[i].number == number)
 			return;
 	ShaftArray.SetSize(ShaftArray.GetSize() + 1);
@@ -1594,11 +1596,11 @@ void SBS::CreateShaft(int number, int type, double CenterX, double CenterZ, int 
 	ShaftArray[ShaftArray.GetSize() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
 }
 
-void SBS::CreateStairwell(int number, double CenterX, double CenterZ, int _startfloor, int _endfloor)
+void SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a stairwell object
 
-	for (int i = 0; i < StairsArray.GetSize(); i++)
+	for (size_t i = 0; i < StairsArray.GetSize(); i++)
 		if (StairsArray[i].number == number)
 			return;
 	StairsArray.SetSize(StairsArray.GetSize() + 1);
@@ -1622,7 +1624,7 @@ iMaterialWrapper *SBS::ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> 
 	return newmat;
 }
 
-void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, double tw, double th)
+void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, float tw, float th)
 {
 	//sets a polygon's texture
 
@@ -1645,7 +1647,7 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 void SBS::NewElevator(int number)
 {
 	//create a new elevator object
-	for (int i = 0; i < ElevatorArray.GetSize(); i++)
+	for (size_t i = 0; i < ElevatorArray.GetSize(); i++)
 		if (ElevatorArray[i].number == number)
 			return;
 	ElevatorArray.SetSize(ElevatorArray.GetSize() + 1);
@@ -1656,7 +1658,7 @@ void SBS::NewElevator(int number)
 void SBS::NewFloor(int number)
 {
 	//create a new floor object
-	for (int i = 0; i < FloorArray.GetSize(); i++)
+	for (size_t i = 0; i < FloorArray.GetSize(); i++)
 		if (FloorArray[i].number == number)
 			return;
 	FloorArray.SetSize(FloorArray.GetSize() + 1);
@@ -1697,7 +1699,7 @@ Floor *SBS::GetFloor(int number)
 {
 	//return pointer to floor object
 
-	for (int i = 0; i < FloorArray.GetSize(); i++)
+	for (size_t i = 0; i < FloorArray.GetSize(); i++)
 		if (FloorArray[i].number == number)
 			return FloorArray[i].object;
 	return 0;
@@ -1707,7 +1709,7 @@ Elevator *SBS::GetElevator(int number)
 {
 	//return pointer to elevator object
 
-	for (int i = 0; i < ElevatorArray.GetSize(); i++)
+	for (size_t i = 0; i < ElevatorArray.GetSize(); i++)
 		if (ElevatorArray[i].number == number)
 			return ElevatorArray[i].object;
 	return 0;
@@ -1717,7 +1719,7 @@ Shaft *SBS::GetShaft(int number)
 {
 	//return pointer to shaft object
 
-	for (int i = 0; i < ShaftArray.GetSize(); i++)
+	for (size_t i = 0; i < ShaftArray.GetSize(); i++)
 		if (ShaftArray[i].number == number)
 			return ShaftArray[i].object;
 	return 0;
@@ -1727,7 +1729,7 @@ Stairs *SBS::GetStairs(int number)
 {
 	//return pointer to stairs object
 
-	for (int i = 0; i < StairsArray.GetSize(); i++)
+	for (size_t i = 0; i < StairsArray.GetSize(); i++)
 		if (StairsArray[i].number == number)
 			return StairsArray[i].object;
 	return 0;

@@ -42,7 +42,7 @@ bool IsNumeric(const char *expression)
 {
 	//test to see if a string is numeric
 	
-	for (int i = 0; i < strlen(expression) - 1; i++)
+	for (size_t i = 0; i < strlen(expression) - 1; i++)
 	{
 		if (isdigit(expression[i]) == false && expression[i] != '-' && expression[i] != '.')
 			return false;
@@ -75,5 +75,24 @@ double RoundDouble(double value, int decimalplaces)
 	// function returns the rounded version [thanks to the 0.5]
 	double base = 10;
 	decimalpts = pow(base, decimalplaces);
+	return (floor((value * decimalpts) + 0.5) / decimalpts) * resultmult;
+}
+
+float RoundFloat(float value, int decimals)
+{
+	//found at http://www.codeguru.com/forum/archive/index.php/t-180415.html
+	float decimalpts, resultmult;
+
+	if (value < 0.0)
+	{
+		value = fabs(value);
+		resultmult = -1.0;
+	}
+	else
+		resultmult = 1.0;
+
+	// decimalpts effectively moves the decimal points over so the floor()
+	// function returns the rounded version [thanks to the 0.5]
+	decimalpts = pow(10.0, decimals);
 	return (floor((value * decimalpts) + 0.5) / decimalpts) * resultmult;
 }

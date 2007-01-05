@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Shaft::Shaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor)
+Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//constructor
 	//creates a shaft in the location specified by x1, x2, z1, and z2
@@ -79,15 +79,15 @@ Shaft::~Shaft()
 
 }
 
-int Shaft::AddWall(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th)
+int Shaft::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th);
 }
 
-int Shaft::AddFloor(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
+int Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
 	//get shaft extents
-	double altitude = sbs->GetFloor(floor)->Altitude;
+	float altitude = sbs->GetFloor(floor)->Altitude;
 
 	if (altitude + voffset1 < bottom)
 		bottom = altitude + voffset1;
@@ -121,16 +121,16 @@ void Shaft::Enabled(int floor, bool value)
 		}
 	}
 
-	for (int i = elevators[0]; i < elevators.GetSize(); i++)
+	for (size_t i = elevators[0]; i < elevators.GetSize(); i++)
 	{
-		for(int j = sbs->GetElevator(i)->ServicedFloors[0]; j < sbs->GetElevator(i)->ServicedFloors.GetSize(); j++)
+		for(size_t j = sbs->GetElevator(i)->ServicedFloors[0]; j < sbs->GetElevator(i)->ServicedFloors.GetSize(); j++)
 			sbs->GetElevator(i)->ShaftDoorsEnabled(j, value);
 	}
 }
 
 bool Shaft::IsShaft(csRef<iMeshWrapper> test)
 {
-	for (int i = 0; i < ShaftArray.GetSize(); i++)
+	for (size_t i = 0; i < ShaftArray.GetSize(); i++)
 	{
 		if (test == ShaftArray[i])
 			return true;

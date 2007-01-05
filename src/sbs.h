@@ -31,7 +31,7 @@
 #include "stairs.h"
 
 //global functions
-double AutoSize(double n1, double n2, bool iswidth, bool external, double offset);
+float AutoSize(float n1, float n2, bool iswidth, bool external, float offset);
 static bool SBSEventHandler(iEvent& Event);
 void Cleanup();
 
@@ -120,7 +120,7 @@ public:
 	csString BuildingVersion;
 
 	//Internal data
-	double Gravity; //gravity variable for physics algorithms
+	float Gravity; //gravity variable for physics algorithms
 	bool IsRunning; //is sim engine running?
 	int Floors; //number of above-ground floors including 0
 	int Basements; //number of basement floors
@@ -134,17 +134,17 @@ public:
 	bool ElevatorSync; //true if user should move with elevator
 	bool FrameLimiter; //frame limiter toggle
 	int FrameRate; //max frame rate
-	double FPSModifier; //modification value for FPS changes
+	float FPSModifier; //modification value for FPS changes
 	bool FrameSync; //synchronize movement to frame rate
 	bool EnableCollisions; //turns collisions on/off
-	double HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
+	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
 	csArray<csString> UserVariable;
 	bool IsBuildingsEnabled; //contains status of buildings object
 	bool IsColumnFrameEnabled; //contains status of column frame object
 	bool IsExternalEnabled; //contains status of external object
 	bool IsLandscapeEnabled; //contains status of landscape object
 	bool IsSkyboxEnabled; //contains status of skybox object
-	double FPS; //current frame rate
+	float FPS; //current frame rate
 	bool AutoShafts; //true if shafts should turn on and off automatically
 
 	//File I/O
@@ -165,9 +165,9 @@ public:
 	void Start();
 	void Run();
 	int CreateSky();
-	void AddLight(const char *name, double x, double y, double z, double radius, double r, double g, double b);
-	int AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height_in1, double height_in2, double altitude1, double altitude2, double tw, double th);
-	int AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double altitude1, double altitude2, double tw, double th);
+	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
+	int AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
+	int AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
 	void DeleteWall(csRef<iThingFactoryState> dest, int index);
 	void DeleteFloor(csRef<iThingFactoryState> dest, int index);
 	bool HandleEvent(iEvent& Event);
@@ -175,11 +175,11 @@ public:
 	void FinishFrame();
 	void GetInput();
 	void Render();
-	int CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double x2, double z1, double z2, double height_in, double voffset, double tw, double th);
-	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, double CenterX, double CenterZ, double WidthX, double LengthZ, double height_in, double voffset, double tw, double th);
-	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double tw, double th, bool IsExternal);
-	int AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, double tw, double th, bool IsExternal);
-	int AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, double tw, double th, bool IsExternal);
+	int CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th);
+	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th);
+	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th, bool IsExternal);
+	int AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th, bool IsExternal);
+	int AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th, bool IsExternal);
 	csString Calc(const char *expression);
 	csVector2 GetExtents(csPoly3D &varray, int coord);
 	void InitMeshes();
@@ -188,13 +188,13 @@ public:
 	void EnableExternal(bool value);
 	void EnableColumnFrame(bool value);
 	void EnableSkybox(bool value);
-	int GetFloorNumber(double altitude);
-	double GetDistance(double x1, double x2, double z1, double z2);
+	int GetFloorNumber(float altitude);
+	float GetDistance(float x1, float x2, float z1, float z2);
 	void DumpVertices(csRef<iThingFactoryState> mesh);
 	void ListAltitudes();
-	void CreateShaft(int number, int type, double CenterX, double CenterZ, int _startfloor, int _endfloor);
-	void CreateStairwell(int number, double CenterX, double CenterZ, int _startfloor, int _endfloor);
-	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, double tw, double th);
+	void CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	void CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, float tw, float th);
 	iMaterialWrapper *ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> oldmat, const char *texture);
 	void NewElevator(int number);
 	void NewFloor(int number);

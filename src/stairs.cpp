@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Stairs::Stairs(int number, double CenterX, double CenterZ, int _startfloor, int _endfloor)
+Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	StairsNum = number;
 	startfloor = _startfloor;
@@ -68,7 +68,7 @@ Stairs::~Stairs()
 
 }
 
-int Stairs::AddStairs(int floor, const char *name, const char *texture, const char *direction, double CenterX, double CenterZ, double width, double risersize, double treadsize, int num_stairs, double voffset, double tw, double th)
+int Stairs::AddStairs(int floor, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th)
 {
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
 	//direction is where the stairs base is - front, back, left, or right.
@@ -89,9 +89,9 @@ int Stairs::AddStairs(int floor, const char *name, const char *texture, const ch
 
 	for (int i = 1; i <= num_stairs; i++)
 	{
-		double pos;
+		float pos;
 		buffer2 = i;
-		double thickness;
+		float thickness;
 		if (i < num_stairs - 1)
 			thickness = treadsize * 2;
 		if (i == num_stairs - 1)
@@ -173,12 +173,12 @@ int Stairs::AddStairs(int floor, const char *name, const char *texture, const ch
 	return index;
 }
 
-int Stairs::AddWall(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th)
+int Stairs::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	return sbs->AddWallMain(StairArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 }
 
-int Stairs::AddFloor(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
+int Stairs::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
 	return sbs->AddFloorMain(StairArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th);
 }
@@ -211,8 +211,8 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 {
 	//determine if user is in the stairwell
 	
-	double bottom = sbs->GetFloor(startfloor)->Altitude;
-	double top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
+	float bottom = sbs->GetFloor(startfloor)->Altitude;
+	float top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 
 	if (position.y > bottom && position.y < top)
 	{

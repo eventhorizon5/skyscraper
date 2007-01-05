@@ -35,15 +35,15 @@ public:
 	int elevator;
 	csString Direction;
 	csVector3 Origin;
-	double Width;
-	double Height;
-	double Spacing;
+	float Width;
+	float Height;
+	float Spacing;
 	int Rows;
 	int Columns;
 	csVector2 GridSize;
 
 	//functions
-	ButtonPanel(int _elevator, const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double spacing, double tw, double th);
+	ButtonPanel(int _elevator, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacing, float tw, float th);
 	~ButtonPanel();
 	void AddFloorButton(const char *texture, int row, int column, int floor);
 	void AddControlButton(const char *texture, int row, int column, const char *type);

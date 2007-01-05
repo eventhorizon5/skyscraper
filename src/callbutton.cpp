@@ -31,13 +31,13 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, double CenterX, double CenterZ, double voffset, const char *direction, double BackWidth, double BackHeight, bool ShowBack, double tw, double th)
+CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a set of call buttons
 
 	IsEnabled = true;
 	Elevators.SetSize(elevators.GetSize());
-	for (int i = 0; i < elevators.GetSize(); i++)
+	for (size_t i = 0; i < elevators.GetSize(); i++)
 		Elevators[i] = elevators[i];
 
 	//create object mesh
@@ -76,36 +76,36 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	//create buttons
 	if (Direction == "front" || Direction == "back")
 	{
-		double offset;
+		float offset;
 		int index;
 		if (Direction == "front")
 		{
-			offset = -0.01;
+			offset = -0.01f;
 			index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, 0, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.75), sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.75), 1, 1);
 			index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, 0, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.25), sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.25), 1, 1);
 		}
 		else
 		{
 			//back
-			offset = 0.01;
+			offset = 0.01f;
 			index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, 0, CenterX + (BackWidth / 4), CenterZ + offset, CenterX - (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.75), sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.75), 1, 1);
 			index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, 0, CenterX + (BackWidth / 4), CenterZ + offset, CenterX - (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.25), sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.25), 1, 1);
 		}
 	}
 	else
 	{
-		double offset;
+		float offset;
 		int index;
 		if (Direction == "left")
 		{
-			offset = -0.01;
+			offset = -0.01f;
 			index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, 0, CenterX + offset, CenterZ + (BackWidth / 4), CenterX + offset, CenterZ - (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.75), sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.75), 1, 1);
 			index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, 0, CenterX + offset, CenterZ + (BackWidth / 4), CenterX + offset, CenterZ - (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.25), sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.25), 1, 1);
 		}
 		else
 		{
 			//right
-			offset = 0.01;
+			offset = 0.01f;
 			index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, 0, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.75), sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.75), 1, 1);
 			index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, 0, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.25), sbs->GetFloor(floor)->Altitude + voffset + (BackHeight * 0.25), 1, 1);
 		}
@@ -146,7 +146,7 @@ void CallButton::Call(int direction)
 	int closest = sbs->GetElevator(Elevators[0])->GetFloor();
 	int closest_elev = 0;
 
-	for (int i = Elevators[0]; i < Elevators.GetSize(); i++)
+	for (size_t i = Elevators[0]; i < Elevators.GetSize(); i++)
 	{
 		int current = sbs->GetElevator(Elevators[i])->GetFloor();
 

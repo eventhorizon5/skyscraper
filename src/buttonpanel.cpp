@@ -32,7 +32,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-ButtonPanel::ButtonPanel(int _elevator, const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double spacing, double tw, double th)
+ButtonPanel::ButtonPanel(int _elevator, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacing, float tw, float th)
 {
 	//Create an elevator button panel
 
@@ -107,7 +107,7 @@ void ButtonPanel::AddControlButton(const char *texture, int row, int column, con
 void ButtonPanel::AddButton(const char *name, const char *texture, int row, int column)
 {
 	//create the button polygon
-	double xpos, ypos, zpos;
+	float xpos, ypos, zpos;
 	ypos = (Origin.y + Height) - (GridSize.y * (row + 1));
 	sbs->DrawWalls(true, false, false, false, false, false);
 	sbs->ReverseExtents(false, false, false);

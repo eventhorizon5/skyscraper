@@ -37,11 +37,11 @@ public:
 	int endfloor; //ending floor
 	csVector3 origin; //origin vector
 
-	Stairs(int number, double CenterX, double CenterZ, int _startfloor, int _endfloor);
+	Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Stairs();
-	int AddStairs(int floor, const char *name, const char *texture, const char *direction, double CenterX, double CenterZ, double width, double risersize, double treadsize, int num_stairs, double voffset, double tw, double th);
-	int AddWall(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th);
-	int AddFloor(int floor, const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
+	int AddStairs(int floor, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th);
+	int AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
+	int AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
 	void Enabled(int floor, bool value);
 	void EnableWholeStairwell(bool value);
 	bool IsInStairwell(const csVector3 &position);

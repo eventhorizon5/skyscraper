@@ -37,37 +37,37 @@ public:
 	csString Name; //elevator name
 	int QueuePositionDirection; //queue processing direction
 	bool PauseQueueSearch; //pause queue processor
-	int LastQueueFloor[1]; //last route added to either queue
-	double ElevatorSpeed; //maximum elevator speed
+	int LastQueueFloor[2]; //last route added to either queue
+	float ElevatorSpeed; //maximum elevator speed
 	bool MoveElevator; //Tells elevator to start going to specified floor
 	int MoveElevatorFloor; //floor to move elevator to
 	int GotoFloor; //floor to go to
-	double Acceleration; //percentage of speed increase
-	double Deceleration; //deceleration value; may be removed
-	double OpenSpeed; //elevator opening/closing speed
+	float Acceleration; //percentage of speed increase
+	float Deceleration; //deceleration value; may be removed
+	float OpenSpeed; //elevator opening/closing speed
 	int OriginFloor; //elevator starting floor
 	csVector3 Origin; //3D elevator origin vector
 	bool DoorDirection; //if direction is false, doors are on the left/right side
-	double DoorAcceleration; //door acceleration
-	double TempDeceleration; //temporary deceleration value, used in overrun correction
-	double ErrorOffset;
-	double DistanceToTravel; //distance in Y to travel
-	double ElevatorRate;
-	double DoorWidth; //elevator door width
-	double DoorHeight; //elevator door height
+	float DoorAcceleration; //door acceleration
+	float TempDeceleration; //temporary deceleration value, used in overrun correction
+	float ErrorOffset;
+	float DistanceToTravel; //distance in Y to travel
+	float ElevatorRate;
+	float DoorWidth; //elevator door width
+	float DoorHeight; //elevator door height
 	csVector3 DoorOrigin; //elevator door origin
 	csVector3 ShaftDoorOrigin; //shaft door origin
 	csArray<int> ServicedFloors; //list of floors this elevator services
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
-	double Height; //elevator height
+	float Height; //elevator height
 	ButtonPanel *Panel; //elevator button panel object
 
 	//functions
 	Elevator(int number);
 	~Elevator();
-	void CreateElevator(double x, double z, int floor);
+	void CreateElevator(float x, float z, int floor);
 	void AddRoute(int floor, int direction);
 	void DeleteRoute(int floor, int direction);
 	void CancelLastRoute();
@@ -82,25 +82,25 @@ public:
 	const csVector3 GetPosition();
 	void OpenDoors(int whichdoors = 1, int floor = 0);
 	void CloseDoors(int whichdoors = 1, int floor = 0);
-	int AddWall(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th);
-	int AddFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th);
-	int AddFloorIndicator(const char *direction, double CenterX, double CenterZ, double width, double height, double voffset);
-	int AddDoors(const char *texture, double thickness, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th);
-	int AddShaftDoors(const char *texture, double thickness, double CenterX, double CenterZ, double tw, double th);
-	int AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th);
-	void CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double spacing, double tw, double th);
+	int AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
+	int AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
+	int AddFloorIndicator(const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
+	int AddDoors(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
+	int AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
+	int AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
+	void CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacing, float tw, float th);
 	void DumpQueues();
 	void Enabled(bool value);
 	void ShaftDoorsEnabled(int floor, bool value);
 	bool IsElevator(csRef<iMeshWrapper> test);
 	bool IsInElevator(const csVector3 &position);
 	csHitBeamResult HitBeam(const csVector3 &start, const csVector3 &end);
-	double GetElevatorStart();
+	float GetElevatorStart();
 	bool AreDoorsOpen();
-	double GetDestination();
-	double GetStoppingDistance();
+	float GetDestination();
+	float GetStoppingDistance();
 	bool GetBrakeStatus();
-	double GetCurrentDoorSpeed();
+	float GetCurrentDoorSpeed();
 	bool GetEmergencyStopStatus();
 	void DumpServicedFloors();
 	void AddServicedFloor(int number);
@@ -127,18 +127,18 @@ private:
 	//Internal elevator simulation data
 	csArray<int> UpQueue; //up call queue
 	csArray<int> DownQueue; //down call queue
-	double ElevatorStart; //elevator vertical starting location
+	float ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
 	bool DoorsOpen; //elevator door state
 	csArray<bool> ShaftDoorsOpen; //shaft door state
 	int OpenDoor; //1=open doors, -1=close doors
-	double Destination; //elevator destination Y value
-	double StoppingDistance; //distance needed to stop the elevator
+	float Destination; //elevator destination Y value
+	float StoppingDistance; //distance needed to stop the elevator
 	bool CalculateStoppingDistance;
 	bool Brakes;
-	double ElevatorDoorSpeed;
+	float ElevatorDoorSpeed;
 	bool ElevWait;
-	double FPSModifierStatic;
+	float FPSModifierStatic;
 	bool EmergencyStop;
 	int WhichDoors;
 	int ShaftDoorFloor;

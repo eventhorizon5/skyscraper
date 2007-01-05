@@ -31,12 +31,12 @@
 class Camera
 {
 public:
-	double DefaultAltitude; //default vertical offset of camera from each floor
+	float DefaultAltitude; //default vertical offset of camera from each floor
 	int CurrentFloor; //floor camera's on
-	double OriginalPosition;
+	float OriginalPosition;
 	int StartFloor; //Starting floor
-	double StartPositionX; //starting position on X axis
-	double StartPositionZ; //starting position on Z axis
+	float StartPositionX; //starting position on X axis
+	float StartPositionZ; //starting position on Z axis
 
 	//functions
 	Camera();
@@ -48,8 +48,8 @@ public:
 	csVector3 GetDirection();
 	csVector3 GetRotation();
 	void UpdateCameraFloor();
-	bool Move(csVector3 vector, double speed);
-	void Rotate(csVector3 vector, double speed);
+	bool Move(csVector3 vector, float speed);
+	void Rotate(csVector3 vector, float speed);
 	void SetStartDirection(csVector3 vector);
 	csVector3 GetStartDirection();
 	void SetStartRotation(csVector3 vector);
@@ -68,7 +68,7 @@ private:
 	csRef<iCamera> MainCamera; //main first-person view camera
 	csVector3 StartDirection; //direction camera faces on start
 	csVector3 StartRotation; //camera's startup rotation
-	double rotX, rotY, rotZ;
+	float rotX, rotY, rotZ;
 	csString meshname; //last clicked mesh name
 	csString polyname; //last clicked polygon name
 };

@@ -127,7 +127,7 @@ Elevator::~Elevator()
 	Panel = 0;
 }
 
-void Elevator::CreateElevator(double x, double z, int floor)
+void Elevator::CreateElevator(float x, float z, int floor)
 {
 	//Creates elevator at specified location and floor
 	//x and z are the center coordinates
@@ -286,7 +286,7 @@ void Elevator::ProcessCallQueue()
 	if (QueuePositionDirection == 1)
 	{
 		//search through up queue
-		for (int i = 0; i < UpQueue.GetSize(); i++)
+		for (size_t i = 0; i < UpQueue.GetSize(); i++)
 		{
 			if (UpQueue[i] > GetFloor() || (UpQueue[i] < GetFloor() && UpQueue.GetSize() == 1))
 			{
@@ -302,7 +302,7 @@ void Elevator::ProcessCallQueue()
 	else if (QueuePositionDirection == -1)
 	{
 		//search through down queue
-		for (int i = 0; i < DownQueue.GetSize(); i++)
+		for (size_t i = 0; i < DownQueue.GetSize(); i++)
 		{
 			if (DownQueue[i] < GetFloor() || (DownQueue[i] > GetFloor() && DownQueue.GetSize() == 1))
 			{
@@ -321,7 +321,6 @@ int Elevator::GetFloor()
 {
 	//Determine floor that the elevator is on
 
-	//for (int i = -sbs->Basements; i <= sbs->TotalFloors; i++)
 	for (int i = -sbs->Basements; i < sbs->Floors; i++)
 	{
 		if (i < sbs->Floors)
@@ -499,7 +498,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	//ShaftDoorFloor is the floor the shaft doors are on - only has effect if whichdoors is 3
 
 	static bool IsRunning = false;
-	static double OpenChange;
+	static float OpenChange;
 	static float marker1;
 	static float marker2;
 	static int index;
@@ -523,7 +522,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		}
 		else
 		{
-			OpenChange = 0.0001;
+			OpenChange = 0.0001f;
 			marker1 = DoorWidth / 16;
 			marker2 = (DoorWidth / 2) - (DoorWidth / 16);
 		}
@@ -807,8 +806,8 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//Determine distance to destination floor
-		DistanceToTravel = fabs(fabs(sbs->GetFloor(GotoFloor)->Altitude) - fabs(ElevatorStart));
 		Destination = sbs->GetFloor(GotoFloor)->Altitude;
+		DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
 		CalculateStoppingDistance = true;
 
 		//If user is riding this elevator, then turn off objects
@@ -907,17 +906,17 @@ void Elevator::MoveElevatorToFloor()
 	{
 		//regular motion
 		if (Direction == 1)
-			ElevatorRate = ElevatorRate + (ElevatorSpeed * Acceleration);
+			ElevatorRate += ElevatorSpeed * Acceleration;
 		if (Direction == -1)
-			ElevatorRate = ElevatorRate - (ElevatorSpeed * Acceleration);
+			ElevatorRate -= ElevatorSpeed * Acceleration;
 	}
 	else
 	{
 		//slow down
 		if (Direction == 1)
-			ElevatorRate = ElevatorRate + (ElevatorSpeed * TempDeceleration);
+			ElevatorRate += ElevatorSpeed * TempDeceleration;
 		if (Direction == -1)
-			ElevatorRate = ElevatorRate - (ElevatorSpeed * TempDeceleration);
+			ElevatorRate -= ElevatorSpeed * TempDeceleration;
 	}
 
 	//change speeds
@@ -1088,17 +1087,17 @@ void Elevator::MoveElevatorToFloor()
 	EmergencyStop = false;
 }
 
-int Elevator::AddWall(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double height1, double height2, double voffset1, double voffset2, double tw, double th)
+int Elevator::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	return sbs->AddWallMain(Elevator_state, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 }
 
-int Elevator::AddFloor(const char *name, const char *texture, double thickness, double x1, double z1, double x2, double z2, double voffset1, double voffset2, double tw, double th)
+int Elevator::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
 	return sbs->AddFloorMain(Elevator_state, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th);
 }
 
-int Elevator::AddFloorIndicator(const char *direction, double CenterX, double CenterZ, double width, double height, double voffset)
+int Elevator::AddFloorIndicator(const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
 	int index = -1;
@@ -1125,12 +1124,12 @@ int Elevator::AddFloorIndicator(const char *direction, double CenterX, double Ce
 	return index;
 }
 
-int Elevator::AddDoors(const char *texture, double thickness, double CenterX, double CenterZ, double width, double height, bool direction, double tw, double th)
+int Elevator::AddDoors(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator origin)
 	//if direction is false, doors are on the left/right side; otherwise front/back
-	double x1, x2, x3, x4;
-	double z1, z2, z3, z4;
+	float x1, x2, x3, x4;
+	float z1, z2, z3, z4;
 
 	//set door parameters
 	DoorDirection = direction;
@@ -1172,12 +1171,12 @@ int Elevator::AddDoors(const char *texture, double thickness, double CenterX, do
 	return firstidx;
 }
 
-int Elevator::AddShaftDoors(const char *texture, double thickness, double CenterX, double CenterZ, double tw, double th)
+int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoors function
-	double x1, x2, x3, x4;
-	double z1, z2, z3, z4;
+	float x1, x2, x3, x4;
+	float z1, z2, z3, z4;
 
 	//set door parameters
 	ShaftDoorOrigin = csVector3(Origin.x + CenterX, Origin.y, Origin.z + CenterZ);
@@ -1212,7 +1211,7 @@ int Elevator::AddShaftDoors(const char *texture, double thickness, double Center
 	sbs->ReverseExtents(false, false, false);
 
 	//create doors
-	for (int i = 0; i < ServicedFloors.GetSize(); i++)
+	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
 	{
 		//create meshes
 		buffer3 = Number;
@@ -1263,7 +1262,7 @@ int Elevator::AddShaftDoors(const char *texture, double thickness, double Center
 	return 0;
 }
 
-int Elevator::AddPlaque(const char *texture, double x1, double z1, double x2, double z2, double height, double voffset, double tw, double th)
+int Elevator::AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
 	sbs->DrawWalls(true, false, false, false, false, false);
 	sbs->ReverseExtents(false, false, false);
@@ -1284,10 +1283,10 @@ void Elevator::DumpQueues()
 
 	sbs->Report("--- Elevator " + csString(_itoa(Number, intbuffer, 10)) + " Queues ---\n");
 	sbs->Report("Up:");
-	for (int i = 0; i < UpQueue.GetSize(); i++)
+	for (size_t i = 0; i < UpQueue.GetSize(); i++)
 		sbs->Report(csString(_itoa(i, intbuffer, 10)) + " - " + csString(_itoa(UpQueue[i], intbuffer, 10)));
 	sbs->Report("Down:");
-	for (int i = 0; i < DownQueue.GetSize(); i++)
+	for (size_t i = 0; i < DownQueue.GetSize(); i++)
 		sbs->Report(csString(_itoa(i, intbuffer, 10)) + " - " + csString(_itoa(DownQueue[i], intbuffer, 10)));
 }
 
@@ -1402,7 +1401,7 @@ bool Elevator::IsInElevator(const csVector3 &position)
 	return false;
 }
 
-double Elevator::GetElevatorStart()
+float Elevator::GetElevatorStart()
 {
 	//returns the internal elevator starting position
 	return ElevatorStart;
@@ -1414,13 +1413,13 @@ bool Elevator::AreDoorsOpen()
 	return DoorsOpen;
 }
 
-double Elevator::GetDestination()
+float Elevator::GetDestination()
 {
 	//returns the internal destination value
 	return Destination;
 }
 
-double Elevator::GetStoppingDistance()
+float Elevator::GetStoppingDistance()
 {
 	//returns the internal stopping distance value
 	return StoppingDistance;
@@ -1432,7 +1431,7 @@ bool Elevator::GetBrakeStatus()
 	return Brakes;
 }
 
-double Elevator::GetCurrentDoorSpeed()
+float Elevator::GetCurrentDoorSpeed()
 {
 	//returns the internal door speed value
 	return ElevatorDoorSpeed;
@@ -1449,7 +1448,7 @@ void Elevator::DumpServicedFloors()
 	//dump serviced floors list
 
 	sbs->Report("--- Elevator " + csString(_itoa(Number, intbuffer, 10)) + "'s Serviced Floors ---\n");
-	for (int i = 0; i < ServicedFloors.GetSize(); i++)
+	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
 		sbs->Report(csString(_itoa(i, intbuffer, 10)) + " - " + csString(_itoa(ServicedFloors[i], intbuffer, 10)));
 }
 
@@ -1465,7 +1464,7 @@ void Elevator::RemoveServicedFloor(int number)
 		ServicedFloors.Delete(number);
 }
 
-void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, double CenterX, double CenterZ, double width, double height, double voffset, double spacing, double tw, double th)
+void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacing, float tw, float th)
 {
 	//create a new button panel object and store the pointer
 	if (!Panel)
