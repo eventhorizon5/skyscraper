@@ -49,8 +49,8 @@ SBS::SBS()
 	ElevatorNumber = 1;
 
 	//Set default frame rate
-	FrameRate = 40;
-	FrameLimiter = true;
+	FrameRate = 30;
+	FrameLimiter = false; //off by default
 
 	//initialize other variables
 	BuildingName = "";
@@ -434,7 +434,15 @@ bool SBS::HandleEvent(iEvent& Event)
 	else if (Event.Name == FinalProcess)
 	{
 		if (FrameLimiter == true)
-			wxMilliSleep(1000 / FrameRate);
+		{
+			//csSleep(1000 / FrameRate);
+			csTicks sleeptime = 1000 / (FrameRate * 0.62);
+			csTicks elapsed = vc->GetElapsedTicks();
+
+			if(elapsed < sleeptime)
+				csSleep(sleeptime - elapsed);
+		}
+
 
 		FinishFrame ();
 		return true;
