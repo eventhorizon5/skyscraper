@@ -321,16 +321,7 @@ int Elevator::GetFloor()
 {
 	//Determine floor that the elevator is on
 
-	for (int i = -sbs->Basements; i < sbs->Floors; i++)
-	{
-		if (i < sbs->Floors)
-			if ((GetPosition().y >= sbs->GetFloor(i)->Altitude) && (GetPosition().y < sbs->GetFloor(i + 1)->Altitude))
-				return i;
-			if ((i == sbs->Floors) && (GetPosition().y >= sbs->GetFloor(i)->Altitude))
-				return i;
-	}
-
-	return 0;
+	return sbs->GetFloorNumber(GetPosition().y);
 }
 
 void Elevator::MonitorLoop()
@@ -502,6 +493,10 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	static float marker1;
 	static float marker2;
 	static int index;
+	static float stopping_distance;
+	static float temp_change;
+	static bool accelerating;
+	static float door_error;
 
 	//todo: turn off autoclose timer
 
@@ -564,11 +559,12 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	{
 		if ((DoorOrigin.z - tmpMovable->GetPosition().z <= marker1 && open == true) || (DoorOrigin.z - tmpMovable->GetPosition().z > marker2 && open == false))
 		{
+			accelerating = true;
 			if (open == true)
 				ElevatorDoorSpeed += OpenChange;
 			else
 				ElevatorDoorSpeed -= OpenChange;
-
+			
 			if (elevdoors == true)
 			{
 				//move elevator doors
@@ -585,6 +581,10 @@ void Elevator::MoveDoors(bool open, bool emergency)
 				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
+
+			//get stopping distance
+			stopping_distance = DoorOrigin.z - tmpMovable->GetPosition().z;
+
 			return;
 		}
 	}
@@ -592,6 +592,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	{
 		if ((DoorOrigin.x - tmpMovable->GetPosition().x <= marker1 && open == true) || (DoorOrigin.x - tmpMovable->GetPosition().x > marker2 && open == false))
 		{
+			accelerating = true;
 			if (open == true)
 				ElevatorDoorSpeed += OpenChange;
 			else
@@ -614,6 +615,9 @@ void Elevator::MoveDoors(bool open, bool emergency)
 				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
+
+			//get stopping distance
+			stopping_distance = DoorOrigin.x - tmpMovable->GetPosition().x;
 
 			return;
 		}
@@ -671,13 +675,22 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		}
 	}
 
+	if (accelerating == true)
+	{
+		accelerating = false;
+		if (DoorDirection == false)
+			temp_change = OpenChange * (stopping_distance / (tmpMovable->GetPosition().z - (DoorOrigin.z - (DoorWidth / 2))));
+		else
+			temp_change = OpenChange * (stopping_distance / (tmpMovable->GetPosition().x - (DoorOrigin.x - (DoorWidth / 2))));
+	}
+
 	//slow down doors
 	if ((ElevatorDoorSpeed > 0 && open == true) || (ElevatorDoorSpeed < 0 && open == false))
 	{
 		if (open == true)
-			ElevatorDoorSpeed -= OpenChange;
+			ElevatorDoorSpeed -= temp_change;
 		else
-			ElevatorDoorSpeed += OpenChange;
+			ElevatorDoorSpeed += temp_change;
 		if (DoorDirection == false)
 		{
 			if (elevdoors == true)
@@ -719,6 +732,104 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			}
 		}
 		return;
+	}
+
+	//get error value
+	if (open == true && DoorDirection == false)
+		door_error = tmpMovable->GetPosition().z - (DoorOrigin.z - (DoorWidth / 2));
+	if (open == true && DoorDirection == true)
+		door_error = tmpMovable->GetPosition().x - (DoorOrigin.x - (DoorWidth / 2));
+	if (open == false && DoorDirection == false)
+		door_error = DoorOrigin.z - tmpMovable->GetPosition().z;
+	if (open == false && DoorDirection == true)
+		door_error = DoorOrigin.x - tmpMovable->GetPosition().x;
+
+	//place doors in positions (fixes any overrun errors)
+	if (open == true)
+	{
+		if (DoorDirection == false)
+		{
+			if (elevdoors == true)
+			{
+				//move elevator doors
+				ElevatorDoorL_movable->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z - (DoorWidth / 2)));
+				ElevatorDoorL_movable->UpdateMove();
+				ElevatorDoorR_movable->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z + (DoorWidth / 2)));
+				ElevatorDoorR_movable->UpdateMove();
+			}
+
+			if (shaftdoors == true)
+			{
+				//move shaft doors
+				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z - (DoorWidth / 2)));
+				ShaftDoorL[index]->GetMovable()->UpdateMove();
+				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z + (DoorWidth / 2)));
+				ShaftDoorR[index]->GetMovable()->UpdateMove();
+			}
+		}
+		else
+		{
+			if (elevdoors == true)
+			{
+				//move elevator doors
+				ElevatorDoorL_movable->SetPosition(csVector3(Origin.x - (DoorWidth / 2), GetPosition().y, Origin.z));
+				ElevatorDoorL_movable->UpdateMove();
+				ElevatorDoorR_movable->SetPosition(csVector3(Origin.x + (DoorWidth / 2), GetPosition().y, Origin.z));
+				ElevatorDoorR_movable->UpdateMove();
+			}
+
+			if (shaftdoors == true)
+			{
+				//move shaft doors
+				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x - (DoorWidth / 2), GetPosition().y, Origin.z));
+				ShaftDoorL[index]->GetMovable()->UpdateMove();
+				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x + (DoorWidth / 2), GetPosition().y, Origin.z));
+				ShaftDoorR[index]->GetMovable()->UpdateMove();
+			}
+		}
+	}
+	else
+	{
+		if (DoorDirection == false)
+		{
+			if (elevdoors == true)
+			{
+				//move elevator doors
+				ElevatorDoorL_movable->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ElevatorDoorL_movable->UpdateMove();
+				ElevatorDoorR_movable->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ElevatorDoorR_movable->UpdateMove();
+			}
+
+			if (shaftdoors == true)
+			{
+				//move shaft doors
+				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ShaftDoorL[index]->GetMovable()->UpdateMove();
+				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ShaftDoorR[index]->GetMovable()->UpdateMove();
+			}
+		}
+		else
+		{
+			if (elevdoors == true)
+			{
+				//move elevator doors
+				ElevatorDoorL_movable->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ElevatorDoorL_movable->UpdateMove();
+				ElevatorDoorR_movable->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ElevatorDoorR_movable->UpdateMove();
+			}
+
+			if (shaftdoors == true)
+			{
+				//move shaft doors
+				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ShaftDoorL[index]->GetMovable()->UpdateMove();
+				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ShaftDoorR[index]->GetMovable()->UpdateMove();
+			}
+		}
 	}
 
 	//reset values
@@ -832,14 +943,11 @@ void Elevator::MoveElevatorToFloor()
 		ElevatorRate = Direction * (ElevatorSpeed * Acceleration);
 
 		//get starting frame rate and hold value
-		//FPSModifierStatic = sbs->FPSModifier;
+		FPSModifierStatic = sbs->FPSModifier;
 
 		//notify about movement
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
 	}
-
-	//temporary check for FPSModifier
-	FPSModifierStatic = sbs->FPSModifier;
 
 	if (EmergencyStop == true && Brakes == false)
 	{
@@ -921,9 +1029,15 @@ void Elevator::MoveElevatorToFloor()
 
 	//change speeds
 	if ((Direction == 1) && (ElevatorRate > ElevatorSpeed))
+	{
 		ElevatorRate = ElevatorSpeed;
+		CalculateStoppingDistance = false;
+	}
 	if ((Direction == -1) && (ElevatorRate < -ElevatorSpeed))
+	{
 		ElevatorRate = -ElevatorSpeed;
+		CalculateStoppingDistance = false;
+	}
 	if ((Direction == 1) && (Brakes == true) && (ElevatorRate > 0))
 		ElevatorRate = 0;
 	if ((Direction == -1) && (Brakes == true) && (ElevatorRate < 0))
@@ -937,9 +1051,6 @@ void Elevator::MoveElevatorToFloor()
 		else if (Direction == -1)
 			StoppingDistance = (ElevatorStart - GetPosition().y) * (Acceleration / Deceleration);
 	}
-
-	if (fabs(ElevatorRate) == ElevatorSpeed)
-		CalculateStoppingDistance = false;
 
 	//Deceleration routines with floor overrun correction (there's still problems, but it works pretty good)
 	//since this function cycles at a slower/less granular rate (cycles according to frames per sec), an error factor is present where the elevator overruns the dest floor,
@@ -960,6 +1071,7 @@ void Elevator::MoveElevatorToFloor()
 			//start deceleration
 			Direction = -1;
 			Brakes = true;
+			ElevatorRate -= ElevatorSpeed * TempDeceleration;
 			//stop sounds
 			//play elevator stopping sound
 			//"\data\elevstop.wav"
@@ -973,6 +1085,7 @@ void Elevator::MoveElevatorToFloor()
 			//slow down elevator
 			Direction = -1;
 			Brakes = true;
+			ElevatorRate -= ElevatorSpeed * TempDeceleration;
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -991,6 +1104,7 @@ void Elevator::MoveElevatorToFloor()
 			//start deceleration
 			Direction = 1;
 			Brakes = true;
+			ElevatorRate += ElevatorSpeed * TempDeceleration;
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1004,6 +1118,7 @@ void Elevator::MoveElevatorToFloor()
 			//slow down elevator
 			Direction = 1;
 			Brakes = true;
+			ElevatorRate += ElevatorSpeed * TempDeceleration;
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1130,6 +1245,7 @@ int Elevator::AddDoors(const char *texture, float thickness, float CenterX, floa
 	//if direction is false, doors are on the left/right side; otherwise front/back
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
+	float spacing = 0.025f; //spacing between doors
 
 	//set door parameters
 	DoorDirection = direction;
@@ -1145,15 +1261,15 @@ int Elevator::AddDoors(const char *texture, float thickness, float CenterX, floa
 		x3 = CenterX;
 		x4 = CenterX;
 		z1 = CenterZ - (width / 2);
-		z2 = CenterZ;
-		z3 = CenterZ;
+		z2 = CenterZ - spacing; 
+		z3 = CenterZ + spacing;
 		z4 = CenterZ + (width / 2);
 	}
 	else
 	{
 		x1 = CenterX - (width / 2);
-		x2 = CenterX;
-		x3 = CenterX;
+		x2 = CenterX - spacing;
+		x3 = CenterX + spacing;
 		x4 = CenterX + (width / 2);
 		z1 = CenterZ;
 		z2 = CenterZ;
@@ -1177,6 +1293,7 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 	//uses some parameters (width, height, direction) from AddDoors function
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
+	float spacing = 0.025f; //spacing between doors
 
 	//set door parameters
 	ShaftDoorOrigin = csVector3(Origin.x + CenterX, Origin.y, Origin.z + CenterZ);
@@ -1189,15 +1306,15 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		x3 = CenterX;
 		x4 = CenterX;
 		z1 = CenterZ - (DoorWidth / 2);
-		z2 = CenterZ;
-		z3 = CenterZ;
+		z2 = CenterZ - spacing;
+		z3 = CenterZ + spacing;
 		z4 = CenterZ + (DoorWidth / 2);
 	}
 	else
 	{
 		x1 = CenterX - (DoorWidth / 2);
-		x2 = CenterX;
-		x3 = CenterX;
+		x2 = CenterX - spacing;
+		x3 = CenterX + spacing;
 		x4 = CenterX + (DoorWidth / 2);
 		z1 = CenterZ;
 		z2 = CenterZ;
