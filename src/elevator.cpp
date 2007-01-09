@@ -1293,7 +1293,6 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 	//uses some parameters (width, height, direction) from AddDoors function
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
-	float spacing = 0.025f; //spacing between doors
 
 	//set door parameters
 	ShaftDoorOrigin = csVector3(Origin.x + CenterX, Origin.y, Origin.z + CenterZ);
@@ -1306,15 +1305,15 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		x3 = CenterX;
 		x4 = CenterX;
 		z1 = CenterZ - (DoorWidth / 2);
-		z2 = CenterZ - spacing;
-		z3 = CenterZ + spacing;
+		z2 = CenterZ;
+		z3 = CenterZ;
 		z4 = CenterZ + (DoorWidth / 2);
 	}
 	else
 	{
 		x1 = CenterX - (DoorWidth / 2);
-		x2 = CenterX - spacing;
-		x3 = CenterX + spacing;
+		x2 = CenterX;
+		x3 = CenterX;
 		x4 = CenterX + (DoorWidth / 2);
 		z1 = CenterZ;
 		z2 = CenterZ;
