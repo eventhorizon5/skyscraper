@@ -858,24 +858,6 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
-			//AddAutoFloor command
-			if (LineData.Slice(0, 12).CompareNoCase("addautofloor") == true)
-			{
-				//get data
-				tempdata.SplitString(LineData.Slice(13).GetData(), ",");
-
-				//calculate inline math
-				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
-				{
-					buffer = Calc(tempdata[temp3]);
-					tempdata.Put(temp3, buffer);
-				}
-
-				//create wall
-				GetFloor(Current)->AddAutoFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]));
-				tempdata.DeleteAll();
-			}
-
 			//Set command
 			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
 			{
