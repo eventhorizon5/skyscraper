@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase26.lib wxmsw26_core.lib wxmsw26_gl.lib"
+				AdditionalDependencies="libcrystalspace.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase26.lib wxmsw26_core.lib wxmsw26_gl.lib kernel32.lib user32.lib gdi32.lib shell32.lib advapi32.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="1"
@@ -172,7 +172,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase26d.lib wxmsw26d_core.lib wxmsw26d_gl.lib"
+				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase26d.lib wxmsw26d_core.lib wxmsw26d_gl.lib kernel32.lib user32.lib gdi32.lib shell32.lib advapi32.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="2"
