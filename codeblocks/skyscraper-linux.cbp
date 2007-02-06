@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Skyscraper" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../skyscraper" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../" />
+				<Option object_output="Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-D_FILE_OFFSET_BITS=64" />
+					<Add option="-D_LARGE_FILES" />
+					<Add option="-D_LARGEFILE_SOURCE=1" />
+					<Add option="-DNO_GCC_PRAGMA" />
+					<Add option="-DGTK_NO_CHECK_CASTS" />
+					<Add option="-D__WXGTK__" />
+					<Add option="-D__CRYSTAL_SPACE__" />
+					<Add option="-DCS_DEBUG" />
+					<Add option="-DwxUSE_GUI=1" />
+					<Add option="-D__WXDEBUG__" />
+					<Add directory="/usr/local/CS/include" />
+					<Add directory="/usr/lib/wx/include/gtk2-unicode-release-2.6" />
+					<Add directory="/usr/include/wx-2.6" />
+				</Compiler>
+				<Linker>
+					<Add library="crystalspace" />
+					<Add library="pthread" />
+					<Add library="z" />
+					<Add library="m" />
+					<Add library="dl" />
+					<Add library="nsl" />
+					<Add library="wx_gtk2ud_core-2.6" />
+					<Add library="wx_baseud-2.6" />
+					<Add directory="/usr/local/CS/out/linuxx86/debug/libs" />
+					<Add directory="/usr/local/lib" />
+				</Linker>
+				<MakeCommands>
+					<Build command="jam" />
+					<CompileFile command="jam $file" />
+					<Clean command="jam clean" />
+					<DistClean command="jam distclean" />
+				</MakeCommands>
+			</Target>
+			<Target title="Release">
+				<Option output="../skyscraper" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../" />
+				<Option object_output="Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../src/buttonpanel.cpp" />
+		<Unit filename="../src/buttonpanel.h" />
+		<Unit filename="../src/callbutton.cpp" />
+		<Unit filename="../src/callbutton.h" />
+		<Unit filename="../src/camera.cpp" />
+		<Unit filename="../src/camera.h" />
+		<Unit filename="../src/cameracontrol.cpp" />
+		<Unit filename="../src/cameracontrol.h" />
+		<Unit filename="../src/debugpanel.cpp" />
+		<Unit filename="../src/debugpanel.h" />
+		<Unit filename="../src/editelevator.cpp" />
+		<Unit filename="../src/editelevator.h" />
+		<Unit filename="../src/elevator.cpp" />
+		<Unit filename="../src/elevator.h" />
+		<Unit filename="../src/fileio.cpp" />
+		<Unit filename="../src/floor.cpp" />
+		<Unit filename="../src/floor.h" />
+		<Unit filename="../src/globals.cpp" />
+		<Unit filename="../src/globals.h" />
+		<Unit filename="../src/loader.cpp" />
+		<Unit filename="../src/loader.h" />
+		<Unit filename="../src/meshcontrol.cpp" />
+		<Unit filename="../src/meshcontrol.h" />
+		<Unit filename="../src/sbs.cpp" />
+		<Unit filename="../src/sbs.h" />
+		<Unit filename="../src/shaft.cpp" />
+		<Unit filename="../src/shaft.h" />
+		<Unit filename="../src/skyscraper.cpp" />
+		<Unit filename="../src/skyscraper.h" />
+		<Unit filename="../src/stairs.cpp" />
+		<Unit filename="../src/stairs.h" />
+		<Unit filename="../src/unix.cpp" />
+		<Unit filename="../src/unix.h" />
+		<Extensions>
+			<code_completion />
+			<debugger>
+				<search_path add="/usr/src/wxwidgets/build" />
+			</debugger>
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
+			</wxsmith>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
