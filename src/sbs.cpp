@@ -23,16 +23,23 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <wx/timer.h>
+//#include <wx/timer.h>
+#include <wx/wx.h>
 #include <crystalspace.h>
+#include "ivideo/wxwin.h"
 #include "sbs.h"
 #include "unix.h"
+
+BEGIN_EVENT_TABLE(SBS, wxFrame)
+  EVT_SHOW(SBS::OnShow)
+  EVT_ICONIZE(SBS::OnIconize)
+END_EVENT_TABLE()
 
 SBS *sbs; //self reference
 
 iObjectRegistry* object_reg;
 
-SBS::SBS()
+SBS::SBS() : wxFrame(0, -1, wxT("Scalable Building Simulator"), wxDefaultPosition, wxSize(500, 500))
 {
 	sbs = this;
 
@@ -203,7 +210,12 @@ void SBS::Run()
 	Report("Running simulation...");
 
 	//start simulation
-	csDefaultRunLoop (object_reg);
+	//csDefaultRunLoop (object_reg);
+
+	//timer-based runloop
+	Pump* p = new Pump();
+	p->s = sbs;
+	p->Start(20);
 }
 
 void SBS::Wait(long milliseconds)
@@ -465,6 +477,7 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 
 	if (!csInitializer::RequestPlugins (object_reg,
 		CS_REQUEST_VFS,
+		CS_REQUEST_PLUGIN("crystalspace.graphics2d.wxgl", iGraphics2D),
 		CS_REQUEST_OPENGL3D,
 		CS_REQUEST_ENGINE,
 		CS_REQUEST_FONTSERVER,
@@ -504,8 +517,8 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 	if (!loader) return ReportError ("No loader!");
 	g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
 	if (!g3d) return ReportError ("No 3D driver!");
-	g2d = CS_QUERY_REGISTRY (object_reg, iGraphics2D);
-	if (!g2d) return ReportError ("No 2D driver!");
+	//g2d = CS_QUERY_REGISTRY (object_reg, iGraphics2D);
+	//if (!g2d) return ReportError ("No 2D driver!");
 	imageio = CS_QUERY_REGISTRY (object_reg, iImageIO);
 	if (!imageio) return ReportError ("No image loader!");
 	vfs = CS_QUERY_REGISTRY (object_reg, iVFS);
@@ -536,10 +549,24 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "\\");
 	#endif
 
-	iNativeWindow* nw = g2d->GetNativeWindow();
-	if (nw) nw->SetTitle(windowtitle);
+	//iNativeWindow* nw = g2d->GetNativeWindow();
+	//if (nw) nw->SetTitle(windowtitle);
 
-	font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
+	new wxPanel(this, -1, wxPoint(0, 0), wxSize(1, 1));
+	wxPanel* panel = new wxPanel(this, -1, wxPoint(50, 50), wxSize(400, 400));
+	Show(true);
+	panel->Show(true);
+
+	g2d = g3d->GetDriver2D();
+	csRef<iWxWindow> wxwin = SCF_QUERY_INTERFACE(g2d, iWxWindow);
+	if(!wxwin)
+	{
+		ReportError("Canvas is no iWxWindow plugin!");
+		return false;
+	}
+	wxwin->SetParent(panel);
+
+	//font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
 
 	// Open the main system. This will open all the previously loaded plug-ins.
 	if (!csInitializer::OpenApplication (object_reg))
@@ -1862,5 +1889,26 @@ int SBS::GetDrawWallsCount()
 		sides++;
 
 	return sides;
+}
+
+void SBS::PushFrame()
+{
+	if (!equeue)
+		return ;
+
+	if (vc)
+		vc->Advance();
+
+	equeue->Process();
+}
+
+void SBS::OnIconize(wxIconizeEvent& event)
+{
+	csPrintf("got iconize %d\n", (int)event.Iconized());
+}
+
+void SBS::OnShow(wxShowEvent& event)
+{
+	csPrintf("got show %d\n", (int)event.GetShow());
 }
 

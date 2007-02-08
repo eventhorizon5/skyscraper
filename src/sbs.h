@@ -80,7 +80,7 @@ struct StairsMap
 };
 
 //SBS class
-class SBS
+class SBS : public wxFrame
 {
 public:
 
@@ -157,6 +157,9 @@ public:
 	//public functions
 	SBS();
 	~SBS();
+	void PushFrame();
+	void OnIconize(wxIconizeEvent& event);
+	void OnShow(wxShowEvent& event);
 	void Report (const char* msg, ...);
 	bool ReportError (const char* msg, ...);
 	void Wait(long Milliseconds);
@@ -236,6 +239,8 @@ public:
 	csRef<iMeshWrapper> SkyBox; //skybox mesh
 		csRef<iThingFactoryState> SkyBox_state;
 
+	DECLARE_EVENT_TABLE()
+
 private:
 
 	csEventID FocusGained;
@@ -287,4 +292,16 @@ private:
 
 	//private functions
 	void PrintBanner();
+
+	//frame rate handler class
+	class Pump : public wxTimer
+	{
+	public:
+		SBS* s;
+		Pump() { };
+		virtual void Notify()
+		{
+			s->PushFrame();
+		}
+	};
 };

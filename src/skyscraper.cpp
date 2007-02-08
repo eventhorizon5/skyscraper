@@ -23,6 +23,7 @@
 */
 
 #define CS_IMPLEMENT_PLATFORM_APPLICATION
+#define CS_NO_MALLOC_OVERRIDE
 
 #include <wx/wx.h>
 #include <crystalspace.h>
@@ -35,10 +36,15 @@ CS_IMPLEMENT_APPLICATION
 IMPLEMENT_APP(Skyscraper)
 
 SBS *Simcore;
+DebugPanel *dpanel;
 
 #ifdef CS_PLATFORM_WIN32
 
-int main (int argc, char* argv[])
+#ifndef SW_SHOWNORMAL
+	#define SW_SHOWNORMAL 1
+#endif
+
+int main (int argc, const char* const argv[])
 {
 	return WinMain (GetModuleHandle (0), 0, GetCommandLineA (), SW_SHOWNORMAL);
 }
@@ -95,13 +101,18 @@ bool Skyscraper::OnInit(void)
 	Simcore->Start();
 
 	//load dialogs
-	DebugPanel *dpanel = new DebugPanel(NULL, -1);
+	dpanel = new DebugPanel(NULL, -1);
 	dpanel->Show(true);
 	dpanel->SetPosition(wxPoint(10, 10));
 
 	//run simulation
 	Simcore->Run();
 
+	return true;
+}
+
+int Skyscraper::OnExit()
+{
 	//clean up
 	dpanel->timer->Stop();
 	dpanel->Destroy();
@@ -109,10 +120,5 @@ bool Skyscraper::OnInit(void)
 	Simcore = 0;
 	Cleanup();
 
-	return true;
-}
-
-int Skyscraper::OnExit()
-{
 	return 0;
 }
