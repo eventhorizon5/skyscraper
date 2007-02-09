@@ -24,6 +24,7 @@
 */
 
 #include <wx/wx.h>
+#include <wx/variant.h>
 #include "globals.h"
 #include "ivideo/wxwin.h"
 #include "sbs.h"
@@ -51,7 +52,6 @@ SBS::SBS()
 
 	//Set default frame rate
 	FrameRate = 30;
-	FrameLimiter = false; //off by default
 
 	//initialize other variables
 	BuildingName = "";
@@ -206,13 +206,13 @@ void SBS::Run()
 
 	Report("Running simulation...");
 
-	//start simulation
-	//csDefaultRunLoop (object_reg);
-
-	//timer-based runloop
+	//start simulation with a timer-based runloop
 	p = new Pump();
 	p->s = sbs;
-	p->Start(20);
+	if (FrameLimiter == true)
+		p->Start(1000 / FrameRate);
+	else
+		p->Start(1);
 }
 
 void SBS::Wait(long milliseconds)
@@ -286,34 +286,34 @@ void SBS::GetInput()
 	if (mouse->GetLastButton(0) == false)
 		MouseDown = false;
 
-	//if (kbd->GetKeyState('a'))
+	//if (wxGetKeyState(WXK_ESCAPE))
+		//p->Stop();
 
-	if (kbd->GetKeyState (CSKEY_ESC))
-		if (equeue) equeue->GetEventOutlet()->Broadcast (csevQuit(object_reg));
-
-	if (kbd->GetKeyState (CSKEY_CTRL))
+	if (wxGetKeyState(WXK_F2))
+		Report(wxVariant(FPS).GetString());
+	if (wxGetKeyState(WXK_CONTROL))
 		speed *= 4;
 
-	if (kbd->GetKeyState (CSKEY_SHIFT))
+	if (wxGetKeyState(WXK_SHIFT))
 	{
 		// If the user is holding down shift, the arrow keys will cause
 		// the camera to strafe up, down, left or right from it's
 		// current position.
-		if (kbd->GetKeyState (CSKEY_RIGHT))
+		if (wxGetKeyState(WXK_RIGHT))
 			camera->Move (CS_VEC_RIGHT, speed * 8);
-		if (kbd->GetKeyState (CSKEY_LEFT))
+		if (wxGetKeyState(WXK_LEFT))
 			camera->Move (CS_VEC_LEFT, speed * 8);
-		if (kbd->GetKeyState (CSKEY_UP))
+		if (wxGetKeyState(WXK_UP))
 			camera->Move (CS_VEC_UP, speed * 8);
-		if (kbd->GetKeyState (CSKEY_DOWN))
+		if (wxGetKeyState(WXK_DOWN))
 			camera->Move (CS_VEC_DOWN, speed * 8);
 	}
-	else if (kbd->GetKeyState (CSKEY_ALT))
+	else if (wxGetKeyState(WXK_ALT))
 	{
 		//rotate on the Z axis if the Alt key is pressed with the left/right arrows
-		if (kbd->GetKeyState (CSKEY_RIGHT))
+		if (wxGetKeyState(WXK_RIGHT))
 			camera->Rotate(CS_VEC_FORWARD, speed);
-		if (kbd->GetKeyState (CSKEY_LEFT))
+		if (wxGetKeyState(WXK_LEFT))
 			camera->Rotate(CS_VEC_BACKWARD, speed);
 	}
 	else
@@ -322,15 +322,15 @@ void SBS::GetInput()
 		// axis; page up and page down cause the camera to rotate on the
 		// _camera's_ X axis (more on this in a second) and up and down
 		// arrows cause the camera to go forwards and backwards.
-		if (kbd->GetKeyState (CSKEY_RIGHT))
+		if (wxGetKeyState(WXK_RIGHT))
 			camera->Rotate(CS_VEC_UP, speed);
-		if (kbd->GetKeyState (CSKEY_LEFT))
+		if (wxGetKeyState(WXK_LEFT))
 			camera->Rotate(CS_VEC_DOWN, speed);
-		if (kbd->GetKeyState (CSKEY_PGUP))
+		if (wxGetKeyState(WXK_PAGEUP))
 			camera->Rotate(CS_VEC_RIGHT, speed);
-		if (kbd->GetKeyState (CSKEY_PGDN))
+		if (wxGetKeyState(WXK_PAGEDOWN))
 			camera->Rotate(CS_VEC_LEFT, speed);
-		if (kbd->GetKeyState (CSKEY_UP))
+		if (wxGetKeyState(WXK_UP))
 		{
 			float KeepAltitude;
 			KeepAltitude = camera->GetPosition().y;
@@ -338,7 +338,7 @@ void SBS::GetInput()
 			if (camera->GetPosition().y != KeepAltitude)
 				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
 		}
-		if (kbd->GetKeyState (CSKEY_DOWN))
+		if (wxGetKeyState(WXK_DOWN))
 		{
 			float KeepAltitude;
 			KeepAltitude = camera->GetPosition().y;
@@ -347,7 +347,7 @@ void SBS::GetInput()
 				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
 		}
 
-		if (kbd->GetKeyState (CSKEY_SPACE))
+		if (wxGetKeyState(WXK_SPACE))
 		{
 			//reset view
 			camera->SetToStartDirection();
@@ -355,9 +355,9 @@ void SBS::GetInput()
 		}
 
 		//values from old version
-		if (kbd->GetKeyState (CSKEY_HOME))
+		if (wxGetKeyState(WXK_HOME))
 			camera->Move (CS_VEC_UP, speed * 8);
-		if (kbd->GetKeyState (CSKEY_END))
+		if (wxGetKeyState(WXK_END))
 			camera->Move (CS_VEC_DOWN, speed * 8);
 	}
 }
@@ -442,17 +442,6 @@ bool SBS::HandleEvent(iEvent& Event)
 	}
 	else if (Event.Name == FinalProcess)
 	{
-		if (FrameLimiter == true)
-		{
-			//csSleep(1000 / FrameRate);
-			csTicks sleeptime = 1000 / (FrameRate * 0.62);
-			csTicks elapsed = vc->GetElapsedTicks();
-
-			if(elapsed < sleeptime)
-				csSleep(sleeptime - elapsed);
-		}
-
-
 		FinishFrame ();
 		return true;
 	}

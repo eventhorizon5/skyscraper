@@ -39,6 +39,7 @@ IMPLEMENT_APP(Skyscraper)
 BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_SHOW(MainScreen::OnShow)
   EVT_ICONIZE(MainScreen::OnIconize)
+  EVT_SIZE(MainScreen::OnSize)
 END_EVENT_TABLE()
 
 SBS *Simcore;
@@ -115,6 +116,9 @@ bool Skyscraper::OnInit(void)
 	dpanel->Show(true);
 	dpanel->SetPosition(wxPoint(10, 10));
 
+	//show main window
+	window->ShowWindow();
+
 	//run simulation
 	Simcore->Run();
 
@@ -140,8 +144,6 @@ MainScreen::MainScreen() : wxFrame(0, -1, wxT("Skyscraper 1.1 Alpha"), wxDefault
 	new wxPanel(this, -1, wxPoint(0, 0), wxSize(1, 1));
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
 	//this->SetTitle(wxString::FromAscii(windowtitle));
-	Show(true);
-	panel->Show(true);
 }
 
 MainScreen::~MainScreen()
@@ -157,4 +159,15 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 void MainScreen::OnShow(wxShowEvent& event)
 {
 	//csPrintf("got show %d\n", (int)event.GetShow());
+}
+
+void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+	
+}
+
+void MainScreen::ShowWindow()
+{
+	Show(true);
+	panel->Show(true);
 }
