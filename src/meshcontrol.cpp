@@ -24,7 +24,7 @@
 
 #include "debugpanel.h"
 #include "meshcontrol.h"
-#include <crystalspace.h>
+#include "globals.h"
 #include "sbs.h"
 #include "camera.h"
 #include "floor.h"

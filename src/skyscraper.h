@@ -22,15 +22,26 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "globals.h"
-
-int main (int argc, char* argv[]);
+int main (int argc, const char* const argv[]);
 
 class Skyscraper : public wxApp
 {
 public:
 	virtual bool OnInit(void);
 	virtual int OnExit(void);
+};
+
+class MainScreen : public wxFrame
+{
+public:
+	MainScreen();
+	~MainScreen();
+	void OnIconize(wxIconizeEvent& event);
+	void OnShow(wxShowEvent& event);
+	wxPanel *panel;
+
+	DECLARE_EVENT_TABLE()
+
 };
 
 DECLARE_APP(Skyscraper)

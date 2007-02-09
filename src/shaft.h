@@ -26,8 +26,6 @@
 #ifndef _SBS_SHAFT_H
 #define _SBS_SHAFT_H
 
-#include "globals.h"
-
 class Shaft
 {
 public:

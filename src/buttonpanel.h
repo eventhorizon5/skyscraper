@@ -26,8 +26,6 @@
 #ifndef _SBS_BUTTON_H
 #define _SBS_BUTTON_H
 
-#include "globals.h"
-
 class ButtonPanel
 {
 public:

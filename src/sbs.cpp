@@ -23,23 +23,17 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//#include <wx/timer.h>
 #include <wx/wx.h>
-#include <crystalspace.h>
+#include "globals.h"
 #include "ivideo/wxwin.h"
 #include "sbs.h"
 #include "unix.h"
-
-BEGIN_EVENT_TABLE(SBS, wxFrame)
-  EVT_SHOW(SBS::OnShow)
-  EVT_ICONIZE(SBS::OnIconize)
-END_EVENT_TABLE()
 
 SBS *sbs; //self reference
 
 iObjectRegistry* object_reg;
 
-SBS::SBS() : wxFrame(0, -1, wxT("Scalable Building Simulator"), wxDefaultPosition, wxSize(500, 500))
+SBS::SBS()
 {
 	sbs = this;
 
@@ -117,6 +111,9 @@ SBS::~SBS()
 {
 	//engine destructor
 
+	//stop timer
+	p->Stop();
+	
 	//delete camera object
 	delete camera;
 	camera = 0;
@@ -213,7 +210,7 @@ void SBS::Run()
 	//csDefaultRunLoop (object_reg);
 
 	//timer-based runloop
-	Pump* p = new Pump();
+	p = new Pump();
 	p->s = sbs;
 	p->Start(20);
 }
@@ -470,7 +467,7 @@ static bool SBSEventHandler(iEvent& Event)
 		return false;
 }
 
-bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle)
+bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 {
 	object_reg = csInitializer::CreateEnvironment (argc, argv);
 	if (!object_reg) return false;
@@ -549,14 +546,6 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "\\");
 	#endif
 
-	//iNativeWindow* nw = g2d->GetNativeWindow();
-	//if (nw) nw->SetTitle(windowtitle);
-
-	new wxPanel(this, -1, wxPoint(0, 0), wxSize(1, 1));
-	wxPanel* panel = new wxPanel(this, -1, wxPoint(50, 50), wxSize(400, 400));
-	Show(true);
-	panel->Show(true);
-
 	g2d = g3d->GetDriver2D();
 	csRef<iWxWindow> wxwin = SCF_QUERY_INTERFACE(g2d, iWxWindow);
 	if(!wxwin)
@@ -564,7 +553,7 @@ bool SBS::Initialize(int argc, const char* const argv[], const char *windowtitle
 		ReportError("Canvas is no iWxWindow plugin!");
 		return false;
 	}
-	wxwin->SetParent(panel);
+	wxwin->SetParent(RenderObject);
 
 	//font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
 
@@ -1901,14 +1890,3 @@ void SBS::PushFrame()
 
 	equeue->Process();
 }
-
-void SBS::OnIconize(wxIconizeEvent& event)
-{
-	csPrintf("got iconize %d\n", (int)event.Iconized());
-}
-
-void SBS::OnShow(wxShowEvent& event)
-{
-	csPrintf("got show %d\n", (int)event.GetShow());
-}
-

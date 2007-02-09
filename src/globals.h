@@ -23,6 +23,10 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <wx/panel.h>
+#include <wx/timer.h>
+#include <crystalspace.h>
+
 extern double AutoSize(double n1, double n2, bool iswidth);
 
 #ifndef _SBS_GLOBALS_H

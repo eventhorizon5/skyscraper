@@ -22,8 +22,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <wx/wx.h>
-#include <crystalspace.h>
+#include "globals.h"
 #include <stdlib.h>
 #include "sbs.h"
 #include "camera.h"

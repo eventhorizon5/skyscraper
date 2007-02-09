@@ -26,7 +26,6 @@
 #ifndef _SBS_FLOOR_H
 #define _SBS_FLOOR_H
 
-#include "globals.h"
 #include "callbutton.h"
 
 class Floor

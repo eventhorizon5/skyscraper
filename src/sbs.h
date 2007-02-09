@@ -23,7 +23,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "globals.h"
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"
@@ -80,7 +79,7 @@ struct StairsMap
 };
 
 //SBS class
-class SBS : public wxFrame
+class SBS
 {
 public:
 
@@ -158,13 +157,11 @@ public:
 	SBS();
 	~SBS();
 	void PushFrame();
-	void OnIconize(wxIconizeEvent& event);
-	void OnShow(wxShowEvent& event);
 	void Report (const char* msg, ...);
 	bool ReportError (const char* msg, ...);
 	void Wait(long Milliseconds);
 	bool LoadTexture(const char *filename, const char *name);
-	bool Initialize(int argc, const char* const argv[], const char *windowtitle);
+	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
 	void Start();
 	void Run();
 	int CreateSky();
@@ -239,8 +236,6 @@ public:
 	csRef<iMeshWrapper> SkyBox; //skybox mesh
 		csRef<iThingFactoryState> SkyBox_state;
 
-	DECLARE_EVENT_TABLE()
-
 private:
 
 	csEventID FocusGained;
@@ -304,4 +299,8 @@ private:
 			s->PushFrame();
 		}
 	};
+
+	//timer object
+	Pump* p;
+
 };

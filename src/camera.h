@@ -26,8 +26,6 @@
 #ifndef _SBS_CAMERA_H
 #define _SBS_CAMERA_H
 
-#include "globals.h"
-
 class Camera
 {
 public:

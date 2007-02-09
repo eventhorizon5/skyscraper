@@ -27,6 +27,7 @@
 
 #include <wx/wx.h>
 #include <crystalspace.h>
+#include "ivideo/wxwin.h"
 #include "skyscraper.h"
 #include "sbs.h"
 #include "debugpanel.h"
@@ -35,8 +36,14 @@
 CS_IMPLEMENT_APPLICATION
 IMPLEMENT_APP(Skyscraper)
 
+BEGIN_EVENT_TABLE(MainScreen, wxFrame)
+  EVT_SHOW(MainScreen::OnShow)
+  EVT_ICONIZE(MainScreen::OnIconize)
+END_EVENT_TABLE()
+
 SBS *Simcore;
 DebugPanel *dpanel;
+MainScreen *window;
 
 #ifdef CS_PLATFORM_WIN32
 
@@ -44,7 +51,7 @@ DebugPanel *dpanel;
 	#define SW_SHOWNORMAL 1
 #endif
 
-int main (int argc, char* argv[])
+int main (int argc, const char* const argv[])
 {
 	return WinMain (GetModuleHandle (0), 0, GetCommandLineA (), SW_SHOWNORMAL);
 }
@@ -72,14 +79,17 @@ bool Skyscraper::OnInit(void)
 	//Create new simulator object
 	Simcore = new SBS();
 
+	//Create main window
+	window = new MainScreen();
+
 	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
 	char** csargv;
 	csargv = (char**)cs_malloc(sizeof(char*) * argc);
 	for (int i = 0; i < argc; i++)
 		csargv[i] = strdup(wxString(argv[i]).mb_str().data());
-	if (!Simcore->Initialize(argc, csargv, "Skyscraper 1.1 Alpha"))
+	if (!Simcore->Initialize(argc, csargv, window->panel))
 	#else
-	if (!Simcore->Initialize(argc, argv, "Skyscraper 1.1 Alpha"))
+	if (!Simcore->Initialize(argc, argv, window->panel))
 	#endif
 	{
 		Simcore->ReportError("Error initializing system!");
@@ -118,7 +128,33 @@ int Skyscraper::OnExit()
 	dpanel->Destroy();
 	delete Simcore;
 	Simcore = 0;
+	delete window;
+	window = 0;
 	Cleanup();
 
 	return 0;
+}
+
+MainScreen::MainScreen() : wxFrame(0, -1, wxT("Skyscraper 1.1 Alpha"), wxDefaultPosition, wxSize(640, 480), wxDEFAULT_FRAME_STYLE)
+{
+	new wxPanel(this, -1, wxPoint(0, 0), wxSize(1, 1));
+	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
+	//this->SetTitle(wxString::FromAscii(windowtitle));
+	Show(true);
+	panel->Show(true);
+}
+
+MainScreen::~MainScreen()
+{
+
+}
+
+void MainScreen::OnIconize(wxIconizeEvent& event)
+{
+	//csPrintf("got iconize %d\n", (int)event.Iconized());
+}
+
+void MainScreen::OnShow(wxShowEvent& event)
+{
+	//csPrintf("got show %d\n", (int)event.GetShow());
 }

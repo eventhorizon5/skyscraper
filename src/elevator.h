@@ -26,7 +26,6 @@
 #ifndef _SBS_ELEVATOR_H
 #define _SBS_ELEVATOR_H
 
-#include "globals.h"
 #include "buttonpanel.h"
 
 class Elevator

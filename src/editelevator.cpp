@@ -24,7 +24,7 @@
 
 #include "debugpanel.h"
 #include "editelevator.h"
-#include <crystalspace.h>
+#include "globals.h"
 #include "sbs.h"
 #include "elevator.h"
 #include "unix.h"
