@@ -51,7 +51,7 @@ MainScreen *window;
 	#define SW_SHOWNORMAL 1
 #endif
 
-int main (int argc, const char* const argv[])
+int main (int argc, char* argv[])
 {
 	return WinMain (GetModuleHandle (0), 0, GetCommandLineA (), SW_SHOWNORMAL);
 }
