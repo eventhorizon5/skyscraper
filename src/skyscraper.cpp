@@ -82,6 +82,7 @@ bool Skyscraper::OnInit(void)
 
 	//Create main window
 	window = new MainScreen();
+	window->ShowWindow();
 
 	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
 	char** csargv;
@@ -117,7 +118,7 @@ bool Skyscraper::OnInit(void)
 	dpanel->SetPosition(wxPoint(10, 10));
 
 	//show main window
-	window->ShowWindow();
+	//window->ShowWindow();
 
 	//run simulation
 	Simcore->Run();
