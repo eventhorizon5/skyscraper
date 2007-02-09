@@ -290,7 +290,8 @@ void SBS::GetInput()
 		//p->Stop();
 
 	if (wxGetKeyState(WXK_F2))
-		Report(wxVariant(FPS).GetString());
+		Report(wxVariant(FPS).GetString().ToAscii());
+
 	if (wxGetKeyState(WXK_CONTROL))
 		speed *= 4;
 
