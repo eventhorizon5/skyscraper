@@ -164,7 +164,7 @@ void MainScreen::OnShow(wxShowEvent& event)
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-	
+	panel->SetSize(this->GetClientSize());	
 }
 
 void MainScreen::ShowWindow()

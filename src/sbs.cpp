@@ -26,7 +26,6 @@
 #include <wx/wx.h>
 #include <wx/variant.h>
 #include "globals.h"
-#include "ivideo/wxwin.h"
 #include "sbs.h"
 #include "unix.h"
 
@@ -105,6 +104,8 @@ SBS::SBS()
 	RevXold = false;
 	RevYold = false;
 	RevZold = false;
+	canvas_width = 0;
+	canvas_height = 0;
 }
 
 SBS::~SBS()
@@ -383,6 +384,23 @@ void SBS::SetupFrame()
 	else
 		FPSModifier = 1;
 
+	//resize canvas if needed
+	if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
+	{
+		//update canvas size values
+		canvas_width = canvas->GetSize().GetWidth();
+		canvas_height = canvas->GetSize().GetHeight();
+
+		//resize viewport
+		view->SetAutoResize(false);
+		wxwin->GetWindow()->SetSize(canvas->GetSize());
+		//view->GetCamera()->SetFOVAngle(90, canvas_width);
+		view->GetCamera()->SetPerspectiveCenter(canvas_width / 2, canvas_height / 2);
+		view->SetRectangle(0, 0, canvas_width, canvas_height);
+		g3d->SetDimensions(canvas_width, canvas_height);
+		view->ClearView();
+	}
+	
 	if (RenderOnly == false && InputOnly == false)
 	{
 		//Process gravity
@@ -504,8 +522,6 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (!loader) return ReportError ("No loader!");
 	g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
 	if (!g3d) return ReportError ("No 3D driver!");
-	//g2d = CS_QUERY_REGISTRY (object_reg, iGraphics2D);
-	//if (!g2d) return ReportError ("No 2D driver!");
 	imageio = CS_QUERY_REGISTRY (object_reg, iImageIO);
 	if (!imageio) return ReportError ("No image loader!");
 	vfs = CS_QUERY_REGISTRY (object_reg, iVFS);
@@ -537,13 +553,17 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	#endif
 
 	g2d = g3d->GetDriver2D();
-	csRef<iWxWindow> wxwin = SCF_QUERY_INTERFACE(g2d, iWxWindow);
+	g2d->AllowResize(true); //allow canvas resizing
+	wxwin = SCF_QUERY_INTERFACE(g2d, iWxWindow);
 	if(!wxwin)
 	{
 		ReportError("Canvas is no iWxWindow plugin!");
 		return false;
 	}
 	wxwin->SetParent(RenderObject);
+	canvas = RenderObject;
+	canvas_width = canvas->GetSize().GetWidth();
+	canvas_height = canvas->GetSize().GetHeight();
 
 	//font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
 

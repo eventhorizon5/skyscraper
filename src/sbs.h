@@ -279,6 +279,11 @@ private:
 	bool RevX, RevY, RevZ;
 	bool RevXold, RevYold, RevZold;
 
+	//canvas data
+	int canvas_width, canvas_height;
+	wxPanel* canvas;
+	csRef<iWxWindow> wxwin;
+
 	//object arrays
 	csArray<FloorMap> FloorArray; //floor object array
 	csArray<ElevatorMap> ElevatorArray; //elevator object array
