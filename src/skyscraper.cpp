@@ -116,6 +116,7 @@ bool Skyscraper::OnInit(void)
 	dpanel = new DebugPanel(NULL, -1);
 	dpanel->Show(true);
 	dpanel->SetPosition(wxPoint(10, 10));
+	window->Raise();
 
 	//show main window
 	//window->ShowWindow();
