@@ -328,9 +328,9 @@ void SBS::GetInput()
 			camera->Rotate(CS_VEC_UP, speed);
 		if (wxGetKeyState(WXK_LEFT))
 			camera->Rotate(CS_VEC_DOWN, speed);
-		if (wxGetKeyState(WXK_PAGEUP))
+		if (wxGetKeyState(WXK_PRIOR)) //page up
 			camera->Rotate(CS_VEC_RIGHT, speed);
-		if (wxGetKeyState(WXK_PAGEDOWN))
+		if (wxGetKeyState(WXK_NEXT)) //page down
 			camera->Rotate(CS_VEC_LEFT, speed);
 		if (wxGetKeyState(WXK_UP))
 		{
