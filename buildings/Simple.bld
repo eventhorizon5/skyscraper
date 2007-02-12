@@ -79,9 +79,9 @@ AddShaft 1, 2, 6, 14, 0, 9
 
 <Elevator 1>
     #standard elevator; 7 feet wide, 6 feet deep
-    Speed = 0.7
-    Acceleration = 0.004
-    Deceleration = 0.002
+    Speed = 5
+    Acceleration = 0.03
+    Deceleration = 0.02
     OpenSpeed = 0.2
     ServicedFloors = 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
     AssignedShaft = 1

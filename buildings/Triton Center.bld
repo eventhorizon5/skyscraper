@@ -953,9 +953,9 @@ AddShaft 4, 2, 6, -14, 0, 5
 
 <Elevator 1>
     #standard elevator; 7 feet wide, 6 feet deep
-    Speed = 0.7
-    Acceleration = 0.004
-    Deceleration = 0.002
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.0075
     OpenSpeed = 0.2
     ServicedFloors = 0 - 138
     AssignedShaft = 1
@@ -1015,9 +1015,9 @@ AddShaft 4, 2, 6, -14, 0, 5
 
 <Elevator 2>
     #standard elevator; 7 feet wide, 6 feet deep
-    Speed = 0.7
-    Acceleration = 0.004
-    Deceleration = 0.002
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.0075
     OpenSpeed = 0.2
     ServicedFloors = 0, 1, 2, 3, 4, 5
     AssignedShaft = 2
@@ -1060,9 +1060,9 @@ AddShaft 4, 2, 6, -14, 0, 5
 
 <Elevator 3>
     #standard elevator; 7 feet wide, 6 feet deep
-    Speed = 0.7
-    Acceleration = 0.004
-    Deceleration = 0.002
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.0075
     OpenSpeed = 0.2
     ServicedFloors = 0, 1, 2, 3, 4, 5
     AssignedShaft = 3
@@ -1103,9 +1103,9 @@ AddShaft 4, 2, 6, -14, 0, 5
 
 <Elevator 4>
     #standard elevator; 7 feet wide, 6 feet deep
-    Speed = 0.7
-    Acceleration = 0.004
-    Deceleration = 0.002
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.0075
     OpenSpeed = 0.2
     ServicedFloors = 0, 1, 2, 3, 4, 5
     AssignedShaft = 4
