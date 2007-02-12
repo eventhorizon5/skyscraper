@@ -393,8 +393,9 @@ void SBS::SetupFrame()
 
 		//resize viewport
 		view->SetAutoResize(false);
+		float oldfov = view->GetCamera()->GetFOVAngle();
 		wxwin->GetWindow()->SetSize(canvas->GetSize());
-		//view->GetCamera()->SetFOVAngle(90, canvas_width);
+		view->GetCamera()->SetFOVAngle(oldfov, canvas_width);
 		view->GetCamera()->SetPerspectiveCenter(canvas_width / 2, canvas_height / 2);
 		view->SetRectangle(0, 0, canvas_width, canvas_height);
 		g3d->SetDimensions(canvas_width, canvas_height);
