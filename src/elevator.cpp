@@ -517,7 +517,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		}
 		else
 		{
-			OpenChange = 0.0001f;
+			OpenChange = 0.003f;
 			marker1 = DoorWidth / 16;
 			marker2 = (DoorWidth / 2) - (DoorWidth / 16);
 		}
@@ -940,7 +940,7 @@ void Elevator::MoveElevatorToFloor()
 		//"\data\elevstart.wav"
 
 		//Get first rate increment value
-		ElevatorRate = Direction * (ElevatorSpeed * Acceleration);
+		ElevatorRate = Direction * (ElevatorSpeed * (Acceleration / sbs->FrameRate));
 
 		//get starting frame rate and hold value
 		FPSModifierStatic = sbs->FPSModifier;
@@ -964,20 +964,20 @@ void Elevator::MoveElevatorToFloor()
 	//"\data\elevmove.wav"
 
 	//move elevator objects and camera
-	Elevator_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+	Elevator_movable->MovePosition(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
 	Elevator_movable->UpdateMove();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->DefaultAltitude, sbs->camera->GetPosition().z));
-	ElevatorDoorL_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+	ElevatorDoorL_movable->MovePosition(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
 	ElevatorDoorL_movable->UpdateMove();
-	ElevatorDoorR_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+	ElevatorDoorR_movable->MovePosition(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
 	ElevatorDoorR_movable->UpdateMove();
-	FloorIndicator_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+	FloorIndicator_movable->MovePosition(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
 	FloorIndicator_movable->UpdateMove();
-	Plaque_movable->MovePosition(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+	Plaque_movable->MovePosition(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
 	Plaque_movable->UpdateMove();
 	if (Panel)
-		Panel->Move(csVector3(0, ElevatorRate * FPSModifierStatic, 0));
+		Panel->Move(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
 
 	//show partial shaft areas (3 floors at a time)
 	if (sbs->AutoShafts == true && sbs->InElevator == true && sbs->ElevatorNumber == Number)
@@ -1014,17 +1014,17 @@ void Elevator::MoveElevatorToFloor()
 	{
 		//regular motion
 		if (Direction == 1)
-			ElevatorRate += ElevatorSpeed * Acceleration;
+			ElevatorRate += ElevatorSpeed * (Acceleration / sbs->FrameRate);
 		if (Direction == -1)
-			ElevatorRate -= ElevatorSpeed * Acceleration;
+			ElevatorRate -= ElevatorSpeed * (Acceleration / sbs->FrameRate);
 	}
 	else
 	{
 		//slow down
 		if (Direction == 1)
-			ElevatorRate += ElevatorSpeed * TempDeceleration;
+			ElevatorRate += ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
 		if (Direction == -1)
-			ElevatorRate -= ElevatorSpeed * TempDeceleration;
+			ElevatorRate -= ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
 	}
 
 	//change speeds
@@ -1063,7 +1063,7 @@ void Elevator::MoveElevatorToFloor()
 	if ((Brakes == false) && (Direction == 1))
 	{
 		//determine if next jump altitude is over deceleration marker
-		if (((GetPosition().y + (ElevatorRate * FPSModifierStatic)) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
+		if (((GetPosition().y + ((ElevatorRate * FPSModifierStatic) / sbs->FrameRate)) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
@@ -1071,7 +1071,7 @@ void Elevator::MoveElevatorToFloor()
 			//start deceleration
 			Direction = -1;
 			Brakes = true;
-			ElevatorRate -= ElevatorSpeed * TempDeceleration;
+			ElevatorRate -= ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
 			//stop sounds
 			//play elevator stopping sound
 			//"\data\elevstop.wav"
@@ -1085,7 +1085,7 @@ void Elevator::MoveElevatorToFloor()
 			//slow down elevator
 			Direction = -1;
 			Brakes = true;
-			ElevatorRate -= ElevatorSpeed * TempDeceleration;
+			ElevatorRate -= ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1096,7 +1096,7 @@ void Elevator::MoveElevatorToFloor()
 	if (Brakes == false && Direction == -1)
 	{
 	//determine if next jump altitude is below deceleration marker
-		if (((GetPosition().y - (ElevatorRate * FPSModifierStatic)) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
+		if (((GetPosition().y - ((ElevatorRate * FPSModifierStatic) / sbs->FrameRate)) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
@@ -1104,7 +1104,7 @@ void Elevator::MoveElevatorToFloor()
 			//start deceleration
 			Direction = 1;
 			Brakes = true;
-			ElevatorRate += ElevatorSpeed * TempDeceleration;
+			ElevatorRate += ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1118,7 +1118,7 @@ void Elevator::MoveElevatorToFloor()
 			//slow down elevator
 			Direction = 1;
 			Brakes = true;
-			ElevatorRate += ElevatorSpeed * TempDeceleration;
+			ElevatorRate += ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
