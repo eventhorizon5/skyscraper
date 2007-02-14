@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="5" />
+	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="Skyscraper" />
 		<Option pch_mode="2" />
-		<Option default_target="" />
 		<Option compiler="msvc8" />
-		<Option virtualFolders="" />
 		<Build>
 			<Target title="Release|Win32">
 				<Option output="..\Skyscraper.exe" prefix_auto="0" extension_auto="0" />
@@ -101,219 +99,51 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Unit filename="..\skyscraper.ico">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\buttonpanel.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\buttonpanel.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\callbutton.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\callbutton.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\camera.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\camera.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\cameracontrol.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\cameracontrol.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\debugpanel.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\debugpanel.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\editelevator.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\editelevator.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\elevator.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\elevator.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\fileio.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\floor.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\floor.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\globals.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\globals.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\loader.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\loader.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\meshcontrol.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\meshcontrol.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\sbs.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\sbs.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\shaft.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\shaft.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\skyscraper.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\skyscraper.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\stairs.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\stairs.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\unix.cpp">
-			<Option compilerVar="CPP" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
-		<Unit filename="..\src\unix.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Release|Win32" />
-			<Option target="Debug|Win32" />
-		</Unit>
+		<Unit filename="..\skyscraper.ico" />
+		<Unit filename="..\src\buttonpanel.cpp" />
+		<Unit filename="..\src\buttonpanel.h" />
+		<Unit filename="..\src\callbutton.cpp" />
+		<Unit filename="..\src\callbutton.h" />
+		<Unit filename="..\src\camera.cpp" />
+		<Unit filename="..\src\camera.h" />
+		<Unit filename="..\src\cameracontrol.cpp" />
+		<Unit filename="..\src\cameracontrol.h" />
+		<Unit filename="..\src\debugpanel.cpp" />
+		<Unit filename="..\src\debugpanel.h" />
+		<Unit filename="..\src\editelevator.cpp" />
+		<Unit filename="..\src\editelevator.h" />
+		<Unit filename="..\src\elevator.cpp" />
+		<Unit filename="..\src\elevator.h" />
+		<Unit filename="..\src\fileio.cpp" />
+		<Unit filename="..\src\floor.cpp" />
+		<Unit filename="..\src\floor.h" />
+		<Unit filename="..\src\globals.cpp" />
+		<Unit filename="..\src\globals.h" />
+		<Unit filename="..\src\loader.cpp" />
+		<Unit filename="..\src\loader.h" />
+		<Unit filename="..\src\meshcontrol.cpp" />
+		<Unit filename="..\src\meshcontrol.h" />
+		<Unit filename="..\src\sbs.cpp" />
+		<Unit filename="..\src\sbs.h" />
+		<Unit filename="..\src\shaft.cpp" />
+		<Unit filename="..\src\shaft.h" />
+		<Unit filename="..\src\skyscraper.cpp" />
+		<Unit filename="..\src\skyscraper.h" />
+		<Unit filename="..\src\stairs.cpp" />
+		<Unit filename="..\src\stairs.h" />
+		<Unit filename="..\src\unix.cpp" />
+		<Unit filename="..\src\unix.h" />
 		<Extensions>
 			<code_completion />
-			<wxsmith>
-				<dialog wxs_file="Loader.wxs" class="Loader" src_file="..\src\loader.cpp" header_file="..\src\loader.h" xrc_file="" edit_mode="Source" />
-				<frame wxs_file="DebugPanel.wxs" class="DebugPanel" src_file="..\src\debugpanel.cpp" header_file="..\src\debugpanel.h" xrc_file="" edit_mode="Source" />
-				<dialog wxs_file="CameraControl.wxs" class="CameraControl" src_file="..\src\cameracontrol.cpp" header_file="..\src\cameracontrol.h" xrc_file="" edit_mode="Source" />
-				<dialog wxs_file="editelevator.wxs" class="editelevator" src_file="..\src\editelevator.cpp" header_file="..\src\editelevator.h" xrc_file="" edit_mode="Source" />
-				<dialog wxs_file="MeshControl.wxs" class="MeshControl" src_file="..\src\meshcontrol.cpp" header_file="..\src\meshcontrol.h" xrc_file="" edit_mode="Source" />
-				<configuration app_src_file="" main_resource="" init_all_handlers="necessary" />
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
+				<resources>
+					<wxDialog wxs="wxsmith/Loader.wxs" src="..\src\loader.cpp" hdr="..\src\loader.h" name="Loader" language="CPP" />
+					<wxFrame wxs="wxsmith/DebugPanel.wxs" src="..\src\debugpanel.cpp" hdr="..\src\debugpanel.h" name="DebugPanel" language="CPP" />
+					<wxDialog wxs="wxsmith/CameraControl.wxs" src="..\src\cameracontrol.cpp" hdr="..\src\cameracontrol.h" name="CameraControl" language="CPP" />
+					<wxDialog wxs="wxsmith/editelevator.wxs" src="..\src\editelevator.cpp" hdr="..\src\editelevator.h" name="editelevator" language="CPP" />
+					<wxDialog wxs="wxsmith/MeshControl.wxs" src="..\src\meshcontrol.cpp" hdr="..\src\meshcontrol.h" name="MeshControl" language="CPP" />
+				</resources>
 			</wxsmith>
 		</Extensions>
 	</Project>

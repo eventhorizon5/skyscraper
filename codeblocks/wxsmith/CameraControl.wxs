@@ -1,5 +1,5 @@
-<resource>
+<wxsmith>
     <object class="wxDialog" name="CameraControl">
         <title>Camera Control</title>
     </object>
-</resource>
+</wxsmith>

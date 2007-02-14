@@ -29,8 +29,6 @@
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/frame.h>
-#include <wx/intl.h>
-#include <wx/settings.h>
 #include <wx/stattext.h>
 //*)
 #include <wx/timer.h>
@@ -52,30 +50,27 @@ class DebugPanel: public wxFrame
 		virtual ~DebugPanel();
 
 		//(*Identifiers(DebugPanel)
-		enum Identifiers
-		{
-		    ID_bListAltitudes = 0x1000,
-		    st4c,
-		    st5c,
-		    st6c,
-		    st7c,
-		    st11c,
-		    ID_t_camerafloor,
-		    ID_t_camerap,
-		    ID_t_elevnumber,
-		    ID_t_elevfloor,
-		    ID_t_object,
-		    st22c,
-		    ID_chkCollisionDetection,
-		    ID_bMeshControl,
-		    ID_bInitRealtime,
-		    ID_bEditElevator,
-		    st55c,
-		    ID_chkFrameSync,
-		    ID_chkAutoShafts,
-		    ID_chkMainProcessing,
-		    ID_chkFrameLimiter
-		};
+		static const long ID_bListAltitudes;
+		static const long st4c;
+		static const long st5c;
+		static const long st6c;
+		static const long st7c;
+		static const long st11c;
+		static const long ID_t_camerafloor;
+		static const long ID_t_camerap;
+		static const long ID_t_elevnumber;
+		static const long ID_t_elevfloor;
+		static const long ID_t_object;
+		static const long st22c;
+		static const long ID_chkCollisionDetection;
+		static const long ID_bMeshControl;
+		static const long ID_bInitRealtime;
+		static const long ID_bEditElevator;
+		static const long st55c;
+		static const long ID_chkFrameSync;
+		static const long ID_chkAutoShafts;
+		static const long ID_chkMainProcessing;
+		static const long ID_chkFrameLimiter;
 		//*)
 		wxTimer *timer;
 
@@ -95,27 +90,27 @@ class DebugPanel: public wxFrame
 		void OnInit();
 
 		//(*Declarations(DebugPanel)
-		wxButton* bListAltitudes;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText2;
-		wxStaticText* StaticText3;
-		wxStaticText* StaticText4;
-		wxStaticText* StaticText8;
-		wxStaticText* t_camerafloor;
-		wxStaticText* t_camerap;
-		wxStaticText* t_elevnumber;
-		wxStaticText* t_elevfloor;
-		wxStaticText* t_object;
-		wxStaticText* StaticText17;
-		wxCheckBox* chkCollisionDetection;
-		wxButton* bMeshControl;
-		wxButton* bInitRealtime;
-		wxButton* bEditElevator;
-		wxStaticText* StaticText27;
-		wxCheckBox* chkFrameSync;
-		wxCheckBox* chkAutoShafts;
-		wxCheckBox* chkMainProcessing;
-		wxCheckBox* chkFrameLimiter;
+		wxButton*  bListAltitudes;
+		wxStaticText*  StaticText1;
+		wxStaticText*  StaticText2;
+		wxStaticText*  StaticText3;
+		wxStaticText*  StaticText4;
+		wxStaticText*  StaticText8;
+		wxStaticText*  t_camerafloor;
+		wxStaticText*  t_camerap;
+		wxStaticText*  t_elevnumber;
+		wxStaticText*  t_elevfloor;
+		wxStaticText*  t_object;
+		wxStaticText*  StaticText17;
+		wxCheckBox*  chkCollisionDetection;
+		wxButton*  bMeshControl;
+		wxButton*  bInitRealtime;
+		wxButton*  bEditElevator;
+		wxStaticText*  StaticText27;
+		wxCheckBox*  chkFrameSync;
+		wxCheckBox*  chkAutoShafts;
+		wxCheckBox*  chkMainProcessing;
+		wxCheckBox*  chkFrameLimiter;
 		//*)
 
 	private:

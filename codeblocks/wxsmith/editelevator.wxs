@@ -1,4 +1,4 @@
-<resource>
+<wxsmith>
     <object class="wxDialog" name="editelevator">
         <title>Elevator Parameters</title>
         <centered>1</centered>
@@ -208,7 +208,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtNumber" variable="txtNumber" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -226,7 +226,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtName" variable="txtName" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                         </object>
                                     </object>
@@ -248,7 +248,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtEnabled" variable="txtEnabled" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -266,7 +266,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtShaft" variable="txtShaft" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -284,7 +284,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtHeight" variable="txtHeight" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -302,7 +302,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDoorWidth" variable="txtDoorWidth" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -320,7 +320,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDoorHeight" variable="txtDoorHeight" member="yes">
-                                            <value></value>
+                                            <value />
                                             <pos>-1,75</pos>
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
@@ -339,7 +339,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDoorDirection" variable="txtDoorDirection" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -357,7 +357,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDoorsOpen" variable="txtDoorsOpen" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -375,7 +375,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtBrakes" variable="txtBrakes" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -393,7 +393,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtStop" variable="txtStop" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -432,7 +432,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtFloor" variable="txtFloor" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -447,7 +447,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtPosition" variable="txtPosition" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -462,7 +462,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtOrigin" variable="txtOrigin" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -477,7 +477,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtOriginFloor" variable="txtOriginFloor" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -492,7 +492,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtElevStart" variable="txtElevStart" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -507,7 +507,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtDoorOrigin" variable="txtDoorOrigin" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -522,7 +522,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtShaftDoorOrigin" variable="txtShaftDoorOrigin" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -553,7 +553,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtQueueDirection" variable="txtQueueDirection" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -568,7 +568,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtQueuePause" variable="txtQueuePause" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -583,7 +583,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtQueueLastUp" variable="txtQueueLastUp" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -598,7 +598,7 @@
                                                 <border>5</border>
                                                 <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                                 <object class="wxTextCtrl" name="ID_txtQueueLastDown" variable="txtQueueLastDown" member="yes">
-                                                    <value></value>
+                                                    <value />
                                                     <size>75,-1</size>
                                                     <style>wxTE_READONLY</style>
                                                 </object>
@@ -632,7 +632,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtSpeed" variable="txtSpeed" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                         </object>
                                     </object>
@@ -654,7 +654,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtAcceleration" variable="txtAcceleration" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                         </object>
                                     </object>
@@ -676,7 +676,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDeceleration" variable="txtDeceleration" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                         </object>
                                     </object>
@@ -698,7 +698,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtOpenSpeed" variable="txtOpenSpeed" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                         </object>
                                     </object>
@@ -720,7 +720,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDoorAcceleration" variable="txtDoorAcceleration" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                         </object>
                                     </object>
@@ -742,7 +742,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtRate" variable="txtRate" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -760,7 +760,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDirection" variable="txtDirection" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -778,7 +778,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDoorSpeed" variable="txtDoorSpeed" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -814,7 +814,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDestFloor" variable="txtDestFloor" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -829,7 +829,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtMoveElevator" variable="txtMoveElevator" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -844,7 +844,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtMoveElevatorFloor" variable="txtMoveElevatorFloor" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -859,7 +859,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDistance" variable="txtDistance" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -874,7 +874,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtDestination" variable="txtDestination" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -889,7 +889,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtStopDistance" variable="txtStopDistance" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -904,7 +904,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtTempDecel" variable="txtTempDecel" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -919,7 +919,7 @@
                                         <border>5</border>
                                         <flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
                                         <object class="wxTextCtrl" name="ID_txtErrorOffset" variable="txtErrorOffset" member="yes">
-                                            <value></value>
+                                            <value />
                                             <size>75,-1</size>
                                             <style>wxTE_READONLY</style>
                                         </object>
@@ -932,4 +932,4 @@
             </object>
         </object>
     </object>
-</resource>
+</wxsmith>

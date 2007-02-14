@@ -1,4 +1,4 @@
-<resource>
+<wxsmith>
     <object class="wxFrame" name="DebugPanel">
         <title>Simulator Control Panel</title>
         <style>wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX</style>
@@ -39,31 +39,31 @@
             <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_camerafloor" variable="t_camerafloor" member="yes">
-            <label></label>
+            <label />
             <pos>105,10</pos>
             <size>109,18</size>
             <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_camerap" variable="t_camerap" member="yes">
-            <label></label>
+            <label />
             <pos>105,30</pos>
             <size>109,18</size>
             <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_elevnumber" variable="t_elevnumber" member="yes">
-            <label></label>
+            <label />
             <pos>105,50</pos>
             <size>109,18</size>
             <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_elevfloor" variable="t_elevfloor" member="yes">
-            <label></label>
+            <label />
             <pos>105,70</pos>
             <size>109,18</size>
             <style>wxST_NO_AUTORESIZE</style>
         </object>
         <object class="wxStaticText" name="ID_t_object" variable="t_object" member="yes">
-            <label></label>
+            <label />
             <pos>105,90</pos>
             <size>109,18</size>
             <style>wxST_NO_AUTORESIZE</style>
@@ -123,4 +123,4 @@
             <pos>302,50</pos>
         </object>
     </object>
-</resource>
+</wxsmith>

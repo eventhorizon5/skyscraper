@@ -1,4 +1,4 @@
-<resource>
+<wxsmith>
     <object class="wxDialog" name="MeshControl">
         <title>Realtime Mesh Control</title>
         <style>wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX</style>
@@ -47,4 +47,4 @@
             <size>83,13</size>
         </object>
     </object>
-</resource>
+</wxsmith>

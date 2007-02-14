@@ -1,10 +1,10 @@
-<resource>
+<wxsmith>
     <object class="wxDialog" name="Loader">
         <title>Building Loader</title>
         <style>wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX|wxNO_3D</style>
         <object class="wxGenericDirCtrl" name="ID_SELECTOR" variable="Selector" member="yes">
-            <defaultfolder></defaultfolder>
-            <filter></filter>
+            <defaultfolder />
+            <filter />
             <pos>16,17</pos>
             <size>196,167</size>
         </object>
@@ -14,4 +14,4 @@
             <pos>71,199</pos>
         </object>
     </object>
-</resource>
+</wxsmith>

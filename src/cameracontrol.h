@@ -27,7 +27,6 @@
 
 //(*Headers(CameraControl)
 #include <wx/dialog.h>
-#include <wx/intl.h>
 //*)
 
 class CameraControl: public wxDialog
@@ -38,9 +37,6 @@ class CameraControl: public wxDialog
 		virtual ~CameraControl();
 
 		//(*Identifiers(CameraControl)
-		enum Identifiers
-		{
-		};
 		//*)
 
 	protected:

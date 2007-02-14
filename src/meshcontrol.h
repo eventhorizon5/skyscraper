@@ -29,8 +29,6 @@
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
-#include <wx/intl.h>
-#include <wx/settings.h>
 #include <wx/stattext.h>
 //*)
 
@@ -43,18 +41,15 @@ class MeshControl: public wxDialog
 		virtual ~MeshControl();
 
 		//(*Identifiers(MeshControl)
-		enum Identifiers
-		{
-			ID_bOk = 0x1000,
-			ID_chkFloor,
-			ID_STATICTEXT2,
-			ID_chkColumnFrame,
-			ID_chkSky,
-			ID_chkLandscape,
-			ID_chkBuildings,
-			ID_chkExternal,
-			ID_STATICTEXT1
-		};
+		static const long ID_bOk;
+		static const long ID_chkFloor;
+		static const long ID_STATICTEXT2;
+		static const long ID_chkColumnFrame;
+		static const long ID_chkSky;
+		static const long ID_chkLandscape;
+		static const long ID_chkBuildings;
+		static const long ID_chkExternal;
+		static const long ID_STATICTEXT1;
 		//*)
 
 	protected:
@@ -71,15 +66,15 @@ class MeshControl: public wxDialog
 		void OnInit();
 
 		//(*Declarations(MeshControl)
-		wxButton* bOk;
-		wxCheckBox* chkFloor;
-		wxStaticText* StaticText2;
-		wxCheckBox* chkColumnFrame;
-		wxCheckBox* chkSky;
-		wxCheckBox* chkLandscape;
-		wxCheckBox* chkBuildings;
-		wxCheckBox* chkExternal;
-		wxStaticText* StaticText1;
+		wxButton*  bOk;
+		wxCheckBox*  chkFloor;
+		wxStaticText*  StaticText2;
+		wxCheckBox*  chkColumnFrame;
+		wxCheckBox*  chkSky;
+		wxCheckBox*  chkLandscape;
+		wxCheckBox*  chkBuildings;
+		wxCheckBox*  chkExternal;
+		wxStaticText*  StaticText1;
 		//*)
 
 	private:

@@ -29,8 +29,6 @@
 #include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/dirctrl.h>
-#include <wx/intl.h>
-#include <wx/settings.h>
 //*)
 
 class Loader: public wxDialog
@@ -41,11 +39,8 @@ class Loader: public wxDialog
 		virtual ~Loader();
 
 		//(*Identifiers(Loader)
-		enum Identifiers
-		{
-			ID_SELECTOR = 0x1000,
-			ID_bOK
-		};
+		static const long ID_SELECTOR;
+		static const long ID_bOK;
 		//*)
 
 	protected:
@@ -56,8 +51,8 @@ class Loader: public wxDialog
 		//*)
 
 		//(*Declarations(Loader)
-		wxGenericDirCtrl* Selector;
-		wxButton* bOK;
+		wxGenericDirCtrl*  Selector;
+		wxButton*  bOK;
 		//*)
 
 	private:
