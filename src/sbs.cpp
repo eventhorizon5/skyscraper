@@ -223,7 +223,7 @@ void SBS::Wait(long milliseconds)
 
 float AutoSize(float n1, float n2, bool iswidth, bool external, float offset)
 {
-//Texture autosizing formulas
+	//Texture autosizing formulas
 
 	float size1;
 	float size2;
