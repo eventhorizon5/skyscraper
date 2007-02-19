@@ -25,10 +25,17 @@
 #ifndef DEBUGPANEL_H
 #define DEBUGPANEL_H
 
+#include <wx/wxprec.h>
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 //(*Headers(DebugPanel)
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/frame.h>
+#include <wx/sizer.h>
 #include <wx/stattext.h>
 //*)
 #include <wx/timer.h>
@@ -50,67 +57,72 @@ class DebugPanel: public wxFrame
 		virtual ~DebugPanel();
 
 		//(*Identifiers(DebugPanel)
-		static const long ID_bListAltitudes;
-		static const long st4c;
-		static const long st5c;
-		static const long st6c;
-		static const long st7c;
-		static const long st11c;
+		static const long ID_STATICTEXT1;
+		static const long ID_STATICTEXT2;
+		static const long ID_STATICTEXT3;
+		static const long ID_STATICTEXT4;
+		static const long ID_STATICTEXT5;
 		static const long ID_t_camerafloor;
 		static const long ID_t_camerap;
 		static const long ID_t_elevnumber;
 		static const long ID_t_elevfloor;
 		static const long ID_t_object;
-		static const long st22c;
+		static const long ID_STATICTEXT11;
 		static const long ID_chkCollisionDetection;
+		static const long ID_chkFrameLimiter;
+		static const long ID_chkMainProcessing;
+		static const long ID_chkAutoShafts;
+		static const long ID_chkFrameSync;
+		static const long ID_bListAltitudes;
 		static const long ID_bMeshControl;
 		static const long ID_bInitRealtime;
 		static const long ID_bEditElevator;
-		static const long st55c;
-		static const long ID_chkFrameSync;
-		static const long ID_chkAutoShafts;
-		static const long ID_chkMainProcessing;
-		static const long ID_chkFrameLimiter;
 		//*)
 		wxTimer *timer;
-
 
 	protected:
 
 		//(*Handlers(DebugPanel)
+		void On_chkCollisionDetection_Click(wxCommandEvent& event);
+		void On_chkFrameLimiter_Click(wxCommandEvent& event);
+		void On_chkMainProcessing_Click(wxCommandEvent& event);
+		void On_chkAutoShafts_Click(wxCommandEvent& event);
+		void On_chkFrameSync_Click(wxCommandEvent& event);
 		void On_bListAltitudes_Click(wxCommandEvent& event);
 		void On_bMeshControl_Click(wxCommandEvent& event);
 		void On_bInitRealtime_Click(wxCommandEvent& event);
-		void On_chkCollisionDetection_Change(wxCommandEvent& event);
-		void On_chkFrameLimiter_Change(wxCommandEvent& event);
-		void On_chkFrameSync_Change(wxCommandEvent& event);
-		void On_chkAutoShafts_Change(wxCommandEvent& event);
 		void On_bEditElevator_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
 		//(*Declarations(DebugPanel)
-		wxButton*  bListAltitudes;
-		wxStaticText*  StaticText1;
-		wxStaticText*  StaticText2;
-		wxStaticText*  StaticText3;
-		wxStaticText*  StaticText4;
-		wxStaticText*  StaticText8;
-		wxStaticText*  t_camerafloor;
-		wxStaticText*  t_camerap;
-		wxStaticText*  t_elevnumber;
-		wxStaticText*  t_elevfloor;
-		wxStaticText*  t_object;
-		wxStaticText*  StaticText17;
-		wxCheckBox*  chkCollisionDetection;
-		wxButton*  bMeshControl;
-		wxButton*  bInitRealtime;
-		wxButton*  bEditElevator;
-		wxStaticText*  StaticText27;
-		wxCheckBox*  chkFrameSync;
-		wxCheckBox*  chkAutoShafts;
-		wxCheckBox*  chkMainProcessing;
-		wxCheckBox*  chkFrameLimiter;
+		wxBoxSizer* BoxSizer1;
+		wxBoxSizer* BoxSizer2;
+		wxBoxSizer* BoxSizer4;
+		wxBoxSizer* BoxSizer6;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText3;
+		wxStaticText* StaticText4;
+		wxStaticText* StaticText5;
+		wxBoxSizer* BoxSizer7;
+		wxStaticText* t_camerafloor;
+		wxStaticText* t_camerap;
+		wxStaticText* t_elevnumber;
+		wxStaticText* t_elevfloor;
+		wxStaticText* t_object;
+		wxBoxSizer* BoxSizer5;
+		wxStaticText* StaticText11;
+		wxCheckBox* chkCollisionDetection;
+		wxCheckBox* chkFrameLimiter;
+		wxCheckBox* chkMainProcessing;
+		wxCheckBox* chkAutoShafts;
+		wxCheckBox* chkFrameSync;
+		wxBoxSizer* BoxSizer3;
+		wxButton* bListAltitudes;
+		wxButton* bMeshControl;
+		wxButton* bInitRealtime;
+		wxButton* bEditElevator;
 		//*)
 
 	private:

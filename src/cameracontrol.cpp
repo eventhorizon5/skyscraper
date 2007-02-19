@@ -1,13 +1,3 @@
-//(*InternalHeaders(CameraControl)
-#include <wx/bitmap.h>
-#include <wx/font.h>
-#include <wx/fontenum.h>
-#include <wx/fontmap.h>
-#include <wx/image.h>
-#include <wx/intl.h>
-#include <wx/settings.h>
-//*)
-
 /* $Id$ */
 
 /*
@@ -32,6 +22,15 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+//(*InternalHeaders(CameraControl)
+#include <wx/bitmap.h>
+#include <wx/font.h>
+#include <wx/fontenum.h>
+#include <wx/fontmap.h>
+#include <wx/image.h>
+#include <wx/intl.h>
+#include <wx/settings.h>
+//*)
 #include "cameracontrol.h"
 
 //(*IdInit(CameraControl)
@@ -51,6 +50,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 
 CameraControl::~CameraControl()
 {
+
 }
 
 

@@ -25,10 +25,17 @@
 #ifndef MESHCONTROL_H
 #define MESHCONTROL_H
 
+#include <wx/wxprec.h>
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 //(*Headers(MeshControl)
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
+#include <wx/sizer.h>
 #include <wx/stattext.h>
 //*)
 
@@ -41,40 +48,44 @@ class MeshControl: public wxDialog
 		virtual ~MeshControl();
 
 		//(*Identifiers(MeshControl)
-		static const long ID_bOk;
-		static const long ID_chkFloor;
-		static const long ID_STATICTEXT2;
-		static const long ID_chkColumnFrame;
-		static const long ID_chkSky;
-		static const long ID_chkLandscape;
-		static const long ID_chkBuildings;
-		static const long ID_chkExternal;
 		static const long ID_STATICTEXT1;
+		static const long ID_chkExternal;
+		static const long ID_chkBuildings;
+		static const long ID_chkLandscape;
+		static const long ID_chkSky;
+		static const long ID_chkColumnFrame;
+		static const long ID_STATICTEXT2;
+		static const long ID_chkFloor;
+		static const long ID_bOk;
 		//*)
 
 	protected:
 
 		//(*Handlers(MeshControl)
 		void On_bOk_Click(wxCommandEvent& event);
-		void On_chkExternal_Change(wxCommandEvent& event);
-		void On_chkBuildings_Change(wxCommandEvent& event);
-		void On_chkLandscape_Change(wxCommandEvent& event);
-		void On_chkSky_Change(wxCommandEvent& event);
-		void On_chkColumnFrame_Change(wxCommandEvent& event);
-		void On_chkFloor_Change(wxCommandEvent& event);
+		void On_chkColumnFrame_Click(wxCommandEvent& event);
+		void On_chkSky_Click(wxCommandEvent& event);
+		void On_chkLandscape_Click(wxCommandEvent& event);
+		void On_chkBuildings_Click(wxCommandEvent& event);
+		void On_chkExternal_Click(wxCommandEvent& event);
+		void On_chkFloor_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
 		//(*Declarations(MeshControl)
-		wxButton*  bOk;
-		wxCheckBox*  chkFloor;
-		wxStaticText*  StaticText2;
-		wxCheckBox*  chkColumnFrame;
-		wxCheckBox*  chkSky;
-		wxCheckBox*  chkLandscape;
-		wxCheckBox*  chkBuildings;
-		wxCheckBox*  chkExternal;
-		wxStaticText*  StaticText1;
+		wxBoxSizer* BoxSizer1;
+		wxBoxSizer* BoxSizer2;
+		wxBoxSizer* BoxSizer3;
+		wxStaticText* StaticText1;
+		wxCheckBox* chkExternal;
+		wxCheckBox* chkBuildings;
+		wxCheckBox* chkLandscape;
+		wxCheckBox* chkSky;
+		wxCheckBox* chkColumnFrame;
+		wxBoxSizer* BoxSizer4;
+		wxStaticText* StaticText2;
+		wxCheckBox* chkFloor;
+		wxButton* bOk;
 		//*)
 
 	private:

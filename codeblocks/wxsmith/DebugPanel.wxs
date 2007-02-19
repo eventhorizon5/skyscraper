@@ -1,126 +1,200 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
     <object class="wxFrame" name="DebugPanel">
         <title>Simulator Control Panel</title>
         <style>wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX</style>
-        <object class="wxButton" name="ID_bListAltitudes" variable="bListAltitudes" member="yes">
-            <label>List Altitudes</label>
-            <handler entry="EVT_BUTTON" function="On_bListAltitudes_Click" />
-            <pos>350,185</pos>
-            <size>85,25</size>
-        </object>
-        <object class="wxStaticText" name="st4c" variable="StaticText1" member="yes">
-            <label>Camera Floor:</label>
-            <pos>15,10</pos>
-            <size>74,13</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="st5c" variable="StaticText2" member="yes">
-            <label>Camera Position:</label>
-            <pos>15,30</pos>
-            <size>89,13</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="st6c" variable="StaticText3" member="yes">
-            <label>Elevator Number:</label>
-            <pos>15,50</pos>
-            <size>89,13</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="st7c" variable="StaticText4" member="yes">
-            <label>Elevator Floor:</label>
-            <pos>15,70</pos>
-            <size>79,13</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="st11c" variable="StaticText8" member="yes">
-            <label>Selected Object:</label>
-            <pos>15,90</pos>
-            <size>89,13</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="ID_t_camerafloor" variable="t_camerafloor" member="yes">
-            <label />
-            <pos>105,10</pos>
-            <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="ID_t_camerap" variable="t_camerap" member="yes">
-            <label />
-            <pos>105,30</pos>
-            <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="ID_t_elevnumber" variable="t_elevnumber" member="yes">
-            <label />
-            <pos>105,50</pos>
-            <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="ID_t_elevfloor" variable="t_elevfloor" member="yes">
-            <label />
-            <pos>105,70</pos>
-            <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="ID_t_object" variable="t_object" member="yes">
-            <label />
-            <pos>105,90</pos>
-            <size>109,18</size>
-            <style>wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxStaticText" name="st22c" variable="StaticText17" member="yes">
-            <label>Simulator Options</label>
-            <pos>295,10</pos>
-            <size>119,13</size>
-            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxCheckBox" name="ID_chkCollisionDetection" variable="chkCollisionDetection" member="yes">
-            <label>Collision Detection</label>
-            <handler entry="EVT_CHECKBOX" function="On_chkCollisionDetection_Change" />
-            <pos>302,35</pos>
-        </object>
-        <object class="wxButton" name="ID_bMeshControl" variable="bMeshControl" member="yes">
-            <label>Realtime Mesh Control</label>
-            <handler entry="EVT_BUTTON" function="On_bMeshControl_Click" />
-            <pos>325,215</pos>
-            <size>135,25</size>
-        </object>
-        <object class="wxButton" name="ID_bInitRealtime" variable="bInitRealtime" member="yes">
-            <label>Init Realtime</label>
-            <handler entry="EVT_BUTTON" function="On_bInitRealtime_Click" />
-            <pos>350,245</pos>
-            <size>85,25</size>
-        </object>
-        <object class="wxButton" name="ID_bEditElevator" variable="bEditElevator" member="yes">
-            <label>Edit Elevator</label>
-            <handler entry="EVT_BUTTON" function="On_bEditElevator_Click" />
-            <pos>355,275</pos>
-            <size>75,25</size>
-        </object>
-        <object class="wxStaticText" name="st55c" variable="StaticText27" member="yes">
-            <label>Measurements are in feet</label>
-            <pos>230,138</pos>
-            <size>94,33</size>
-            <style>wxALIGN_CENTRE|wxST_NO_AUTORESIZE</style>
-        </object>
-        <object class="wxCheckBox" name="ID_chkFrameSync" variable="chkFrameSync" member="yes">
-            <label>Framerate Sync</label>
-            <handler entry="EVT_CHECKBOX" function="On_chkFrameSync_Change" />
-            <pos>302,93</pos>
-        </object>
-        <object class="wxCheckBox" name="ID_chkAutoShafts" variable="chkAutoShafts" member="yes">
-            <label>Automatic Shafts</label>
-            <handler entry="EVT_CHECKBOX" function="On_chkAutoShafts_Change" />
-            <pos>302,79</pos>
-        </object>
-        <object class="wxCheckBox" name="ID_chkMainProcessing" variable="chkMainProcessing" member="yes">
-            <label>Main Sim Processing</label>
-            <pos>302,65</pos>
-        </object>
-        <object class="wxCheckBox" name="ID_chkFrameLimiter" variable="chkFrameLimiter" member="yes">
-            <label>Frame Limiter</label>
-            <handler entry="EVT_CHECKBOX" function="On_chkFrameLimiter_Change" />
-            <pos>302,50</pos>
+        <pos>10,10</pos>
+        <object class="wxBoxSizer" variable="BoxSizer1" member="yes">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <object class="wxBoxSizer" variable="BoxSizer2" member="yes">
+                    <object class="sizeritem">
+                        <object class="wxBoxSizer" variable="BoxSizer4" member="yes">
+                            <object class="sizeritem">
+                                <object class="wxBoxSizer" variable="BoxSizer6" member="yes">
+                                    <orient>wxVERTICAL</orient>
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+                                            <label>Camera Floor:</label>
+                                        </object>
+                                        <flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <border>5</border>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
+                                            <label>Camera Position:</label>
+                                        </object>
+                                        <flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <border>5</border>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
+                                            <label>Elevator Number:</label>
+                                        </object>
+                                        <flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <border>5</border>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
+                                            <label>Elevator Floor:</label>
+                                        </object>
+                                        <flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <border>5</border>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
+                                            <label>Selected Object:</label>
+                                        </object>
+                                        <flag>wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    </object>
+                                </object>
+                                <flag>wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+                                <border>5</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxBoxSizer" variable="BoxSizer7" member="yes">
+                                    <orient>wxVERTICAL</orient>
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText" name="ID_t_camerafloor" variable="t_camerafloor" member="yes">
+                                            <style>wxST_NO_AUTORESIZE</style>
+                                            <size>100,-1</size>
+                                        </object>
+                                        <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <border>5</border>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText" name="ID_t_camerap" variable="t_camerap" member="yes">
+                                            <style>wxST_NO_AUTORESIZE</style>
+                                            <size>100,-1</size>
+                                        </object>
+                                        <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <border>5</border>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText" name="ID_t_elevnumber" variable="t_elevnumber" member="yes">
+                                            <style>wxST_NO_AUTORESIZE</style>
+                                            <size>100,-1</size>
+                                        </object>
+                                        <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <border>5</border>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText" name="ID_t_elevfloor" variable="t_elevfloor" member="yes">
+                                            <style>wxST_NO_AUTORESIZE</style>
+                                            <size>100,-1</size>
+                                        </object>
+                                        <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <border>5</border>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <object class="wxStaticText" name="ID_t_object" variable="t_object" member="yes">
+                                            <style>wxST_NO_AUTORESIZE</style>
+                                            <size>100,-1</size>
+                                        </object>
+                                        <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                    </object>
+                                </object>
+                                <flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+                            </object>
+                        </object>
+                        <flag>wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+                        <border>10</border>
+                    </object>
+                    <object class="sizeritem">
+                        <object class="wxBoxSizer" variable="BoxSizer5" member="yes">
+                            <orient>wxVERTICAL</orient>
+                            <object class="sizeritem">
+                                <object class="wxStaticText" name="ID_STATICTEXT11" variable="StaticText11" member="yes">
+                                    <label>Simulator Options</label>
+                                </object>
+                                <flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>5</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxCheckBox" name="ID_chkCollisionDetection" variable="chkCollisionDetection" member="yes">
+                                    <label>Collision Detection</label>
+                                    <handler function="On_chkCollisionDetection_Click" entry="EVT_CHECKBOX" />
+                                </object>
+                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>5</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxCheckBox" name="ID_chkFrameLimiter" variable="chkFrameLimiter" member="yes">
+                                    <label>Frame Limiter</label>
+                                    <handler function="On_chkFrameLimiter_Click" entry="EVT_CHECKBOX" />
+                                </object>
+                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>5</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxCheckBox" name="ID_chkMainProcessing" variable="chkMainProcessing" member="yes">
+                                    <label>Main Sim Processing</label>
+                                    <handler function="On_chkMainProcessing_Click" entry="EVT_CHECKBOX" />
+                                </object>
+                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>5</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxCheckBox" name="ID_chkAutoShafts" variable="chkAutoShafts" member="yes">
+                                    <label>Automatic Shafts</label>
+                                    <handler function="On_chkAutoShafts_Click" entry="EVT_CHECKBOX" />
+                                </object>
+                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>5</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxCheckBox" name="ID_chkFrameSync" variable="chkFrameSync" member="yes">
+                                    <label>Framerate Sync</label>
+                                    <handler function="On_chkFrameSync_Click" entry="EVT_CHECKBOX" />
+                                </object>
+                                <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                            </object>
+                        </object>
+                        <flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+                    </object>
+                </object>
+                <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+                <border>10</border>
+            </object>
+            <object class="sizeritem">
+                <object class="wxBoxSizer" variable="BoxSizer3" member="yes">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <object class="wxButton" name="ID_bListAltitudes" variable="bListAltitudes" member="yes">
+                            <label>List Altitudes</label>
+                            <handler function="On_bListAltitudes_Click" entry="EVT_BUTTON" />
+                        </object>
+                        <flag>wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+                        <border>5</border>
+                    </object>
+                    <object class="sizeritem">
+                        <object class="wxButton" name="ID_bMeshControl" variable="bMeshControl" member="yes">
+                            <label>Realtime Mesh Control</label>
+                            <handler function="On_bMeshControl_Click" entry="EVT_BUTTON" />
+                        </object>
+                        <flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+                        <border>5</border>
+                    </object>
+                    <object class="sizeritem">
+                        <object class="wxButton" name="ID_bInitRealtime" variable="bInitRealtime" member="yes">
+                            <label>Init Realtime</label>
+                            <handler function="On_bInitRealtime_Click" entry="EVT_BUTTON" />
+                        </object>
+                        <flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+                        <border>5</border>
+                    </object>
+                    <object class="sizeritem">
+                        <object class="wxButton" name="ID_bEditElevator" variable="bEditElevator" member="yes">
+                            <label>Edit Elevator</label>
+                            <handler function="On_bEditElevator_Click" entry="EVT_BUTTON" />
+                        </object>
+                        <flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+                        <border>5</border>
+                    </object>
+                </object>
+                <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+                <border>10</border>
+            </object>
         </object>
     </object>
 </wxsmith>

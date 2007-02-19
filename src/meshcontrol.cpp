@@ -1,13 +1,3 @@
-//(*InternalHeaders(MeshControl)
-#include <wx/bitmap.h>
-#include <wx/font.h>
-#include <wx/fontenum.h>
-#include <wx/fontmap.h>
-#include <wx/image.h>
-#include <wx/intl.h>
-#include <wx/settings.h>
-//*)
-
 /* $Id$ */
 
 /*
@@ -32,6 +22,15 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+//(*InternalHeaders(MeshControl)
+#include <wx/bitmap.h>
+#include <wx/font.h>
+#include <wx/fontenum.h>
+#include <wx/fontmap.h>
+#include <wx/image.h>
+#include <wx/intl.h>
+#include <wx/settings.h>
+//*)
 #include "debugpanel.h"
 #include "meshcontrol.h"
 #include "globals.h"
@@ -44,48 +43,68 @@ extern SBS *sbs; //external pointer to the SBS engine
 MeshControl *p; //self pointer
 
 //(*IdInit(MeshControl)
-const long MeshControl::ID_bOk = wxNewId();
-const long MeshControl::ID_chkFloor = wxNewId();
-const long MeshControl::ID_STATICTEXT2 = wxNewId();
-const long MeshControl::ID_chkColumnFrame = wxNewId();
-const long MeshControl::ID_chkSky = wxNewId();
-const long MeshControl::ID_chkLandscape = wxNewId();
-const long MeshControl::ID_chkBuildings = wxNewId();
-const long MeshControl::ID_chkExternal = wxNewId();
 const long MeshControl::ID_STATICTEXT1 = wxNewId();
+const long MeshControl::ID_chkExternal = wxNewId();
+const long MeshControl::ID_chkBuildings = wxNewId();
+const long MeshControl::ID_chkLandscape = wxNewId();
+const long MeshControl::ID_chkSky = wxNewId();
+const long MeshControl::ID_chkColumnFrame = wxNewId();
+const long MeshControl::ID_STATICTEXT2 = wxNewId();
+const long MeshControl::ID_chkFloor = wxNewId();
+const long MeshControl::ID_bOk = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(MeshControl,wxDialog)
-//(*EventTable(MeshControl)
-//*)
+	//(*EventTable(MeshControl)
+	//*)
 END_EVENT_TABLE()
 
 MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(MeshControl)
-	Create(parent,id,_("Realtime Mesh Control"),wxDefaultPosition,wxDefaultSize,wxCAPTION|wxTHICK_FRAME|wxSYSTEM_MENU|wxRESIZE_BOX|wxCLOSE_BOX|wxMINIMIZE_BOX,_T("id"));
-	bOk = new wxButton(this,ID_bOk,_("OK"),wxPoint(75,145),wxDefaultSize,0,wxDefaultValidator,_T("ID_bOk"));
-	chkFloor = new wxCheckBox(this,ID_chkFloor,_("Level"),wxPoint(139,26),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkFloor"));
-	chkFloor->SetValue(false);
-	StaticText2 = new wxStaticText(this,ID_STATICTEXT2,_("Per-Floor Meshes"),wxPoint(138,7),wxDefaultSize,0,_T("ID_STATICTEXT2"));
-	chkColumnFrame = new wxCheckBox(this,ID_chkColumnFrame,_("Column Frame"),wxPoint(7,99),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkColumnFrame"));
-	chkColumnFrame->SetValue(false);
-	chkSky = new wxCheckBox(this,ID_chkSky,_("Sky"),wxPoint(7,80),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkSky"));
-	chkSky->SetValue(false);
-	chkLandscape = new wxCheckBox(this,ID_chkLandscape,_("Landscape"),wxPoint(7,62),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkLandscape"));
-	chkLandscape->SetValue(false);
-	chkBuildings = new wxCheckBox(this,ID_chkBuildings,_("Buildings"),wxPoint(7,45),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkBuildings"));
-	chkBuildings->SetValue(false);
-	chkExternal = new wxCheckBox(this,ID_chkExternal,_("External"),wxPoint(7,26),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkExternal"));
+	Create(parent,id,_("Realtime Mesh Control"),wxDefaultPosition,wxDefaultSize,wxDEFAULT_DIALOG_STYLE,_T("id"));
+	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
+	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
+	StaticText1 = new wxStaticText(this,ID_STATICTEXT1,_("Primary Meshes"),wxDefaultPosition,wxDefaultSize,0,_T("ID_STATICTEXT1"));
+	BoxSizer3->Add(StaticText1,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	chkExternal = new wxCheckBox(this,ID_chkExternal,_("External"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkExternal"));
 	chkExternal->SetValue(false);
-	StaticText1 = new wxStaticText(this,ID_STATICTEXT1,_("Primary Meshes"),wxPoint(7,8),wxSize(83,13),0,_T("ID_STATICTEXT1"));
+	BoxSizer3->Add(chkExternal,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	chkBuildings = new wxCheckBox(this,ID_chkBuildings,_("Buildings"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkBuildings"));
+	chkBuildings->SetValue(false);
+	BoxSizer3->Add(chkBuildings,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	chkLandscape = new wxCheckBox(this,ID_chkLandscape,_("Landscape"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkLandscape"));
+	chkLandscape->SetValue(false);
+	BoxSizer3->Add(chkLandscape,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	chkSky = new wxCheckBox(this,ID_chkSky,_("Sky"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkSky"));
+	chkSky->SetValue(false);
+	BoxSizer3->Add(chkSky,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	chkColumnFrame = new wxCheckBox(this,ID_chkColumnFrame,_("ColumnFrame"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkColumnFrame"));
+	chkColumnFrame->SetValue(false);
+	BoxSizer3->Add(chkColumnFrame,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	BoxSizer2->Add(BoxSizer3,0,wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL,10);
+	BoxSizer4 = new wxBoxSizer(wxVERTICAL);
+	StaticText2 = new wxStaticText(this,ID_STATICTEXT2,_("Per-Floor Meshes"),wxDefaultPosition,wxDefaultSize,0,_T("ID_STATICTEXT2"));
+	BoxSizer4->Add(StaticText2,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	chkFloor = new wxCheckBox(this,ID_chkFloor,_("Level"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkFloor"));
+	chkFloor->SetValue(false);
+	BoxSizer4->Add(chkFloor,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	BoxSizer2->Add(BoxSizer4,0,wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL,0);
+	BoxSizer1->Add(BoxSizer2,0,wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,10);
+	bOk = new wxButton(this,ID_bOk,_("OK"),wxPoint(75,145),wxDefaultSize,0,wxDefaultValidator,_T("ID_bOk"));
+	BoxSizer1->Add(bOk,0,wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,10);
+	SetSizer(BoxSizer1);
+	BoxSizer1->Fit(this);
+	BoxSizer1->SetSizeHints(this);
+	Center();
+	Connect(ID_chkExternal,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkExternal_Click);
+	Connect(ID_chkBuildings,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkBuildings_Click);
+	Connect(ID_chkLandscape,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkLandscape_Click);
+	Connect(ID_chkSky,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkSky_Click);
+	Connect(ID_chkColumnFrame,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkColumnFrame_Click);
+	Connect(ID_chkFloor,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkFloor_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
-	Connect(ID_chkFloor,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkFloor_Change);
-	Connect(ID_chkColumnFrame,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkColumnFrame_Change);
-	Connect(ID_chkSky,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkSky_Change);
-	Connect(ID_chkLandscape,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkLandscape_Change);
-	Connect(ID_chkBuildings,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkBuildings_Change);
-	Connect(ID_chkExternal,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkExternal_Change);
 	//*)
 	p = this;
 	OnInit();
@@ -93,7 +112,6 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 
 MeshControl::~MeshControl()
 {
-
 }
 
 
@@ -107,32 +125,32 @@ void MeshControl::On_bOk_Click(wxCommandEvent& event)
 	p->Hide();
 }
 
-void MeshControl::On_chkColumnFrame_Change(wxCommandEvent& event)
+void MeshControl::On_chkColumnFrame_Click(wxCommandEvent& event)
 {
 	sbs->EnableColumnFrame(chkColumnFrame->GetValue());
 }
 
-void MeshControl::On_chkSky_Change(wxCommandEvent& event)
+void MeshControl::On_chkSky_Click(wxCommandEvent& event)
 {
 	sbs->EnableSkybox(chkSky->GetValue());
 }
 
-void MeshControl::On_chkLandscape_Change(wxCommandEvent& event)
+void MeshControl::On_chkLandscape_Click(wxCommandEvent& event)
 {
 	sbs->EnableLandscape(chkLandscape->GetValue());
 }
 
-void MeshControl::On_chkBuildings_Change(wxCommandEvent& event)
+void MeshControl::On_chkBuildings_Click(wxCommandEvent& event)
 {
 	sbs->EnableBuildings(chkBuildings->GetValue());
 }
 
-void MeshControl::On_chkExternal_Change(wxCommandEvent& event)
+void MeshControl::On_chkExternal_Click(wxCommandEvent& event)
 {
 	sbs->EnableExternal(chkExternal->GetValue());
 }
 
-void MeshControl::On_chkFloor_Change(wxCommandEvent& event)
+void MeshControl::On_chkFloor_Click(wxCommandEvent& event)
 {
 	sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(chkFloor->GetValue());
 }

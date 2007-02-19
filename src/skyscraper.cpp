@@ -143,6 +143,7 @@ int Skyscraper::OnExit()
 
 MainScreen::MainScreen() : wxFrame(0, -1, wxT("Skyscraper 1.1 Alpha"), wxDefaultPosition, wxSize(640, 480), wxDEFAULT_FRAME_STYLE)
 {
+	this->Center();
 	new wxPanel(this, -1, wxPoint(0, 0), wxSize(1, 1));
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
 	//this->SetTitle(wxString::FromAscii(windowtitle));

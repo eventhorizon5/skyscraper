@@ -1,13 +1,3 @@
-//(*InternalHeaders(editelevator)
-#include <wx/bitmap.h>
-#include <wx/font.h>
-#include <wx/fontenum.h>
-#include <wx/fontmap.h>
-#include <wx/image.h>
-#include <wx/intl.h>
-#include <wx/settings.h>
-//*)
-
 /* $Id$ */
 
 /*
@@ -32,6 +22,15 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+//(*InternalHeaders(editelevator)
+#include <wx/bitmap.h>
+#include <wx/font.h>
+#include <wx/fontenum.h>
+#include <wx/fontmap.h>
+#include <wx/image.h>
+#include <wx/intl.h>
+#include <wx/settings.h>
+//*)
 #include "debugpanel.h"
 #include "editelevator.h"
 #include "globals.h"

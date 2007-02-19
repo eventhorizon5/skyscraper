@@ -25,10 +25,17 @@
 #ifndef LOADER_H
 #define LOADER_H
 
+#include <wx/wxprec.h>
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 //(*Headers(Loader)
 #include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/dirctrl.h>
+#include <wx/sizer.h>
 //*)
 
 class Loader: public wxDialog
@@ -40,19 +47,19 @@ class Loader: public wxDialog
 
 		//(*Identifiers(Loader)
 		static const long ID_SELECTOR;
-		static const long ID_bOK;
+		static const long ID_BUTTON1;
 		//*)
 
 	protected:
 
 		//(*Handlers(Loader)
-		void OnInit(wxInitDialogEvent& event);
 		void On_bOK_Click(wxCommandEvent& event);
 		//*)
 
 		//(*Declarations(Loader)
-		wxGenericDirCtrl*  Selector;
-		wxButton*  bOK;
+		wxBoxSizer* BoxSizer1;
+		wxGenericDirCtrl* Selector;
+		wxButton* bOK;
 		//*)
 
 	private:

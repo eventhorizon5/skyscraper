@@ -1,13 +1,3 @@
-//(*InternalHeaders(DebugPanel)
-#include <wx/bitmap.h>
-#include <wx/font.h>
-#include <wx/fontenum.h>
-#include <wx/fontmap.h>
-#include <wx/image.h>
-#include <wx/intl.h>
-#include <wx/settings.h>
-//*)
-
 /* $Id$ */
 
 /*
@@ -32,6 +22,15 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+//(*InternalHeaders(DebugPanel)
+#include <wx/bitmap.h>
+#include <wx/font.h>
+#include <wx/fontenum.h>
+#include <wx/fontmap.h>
+#include <wx/image.h>
+#include <wx/intl.h>
+#include <wx/settings.h>
+//*)
 #include "debugpanel.h"
 #include "meshcontrol.h"
 #include "editelevator.h"
@@ -48,72 +47,107 @@ MeshControl *mc;
 editelevator *ee;
 
 //(*IdInit(DebugPanel)
-const long DebugPanel::ID_bListAltitudes = wxNewId();
-const long DebugPanel::st4c = wxNewId();
-const long DebugPanel::st5c = wxNewId();
-const long DebugPanel::st6c = wxNewId();
-const long DebugPanel::st7c = wxNewId();
-const long DebugPanel::st11c = wxNewId();
+const long DebugPanel::ID_STATICTEXT1 = wxNewId();
+const long DebugPanel::ID_STATICTEXT2 = wxNewId();
+const long DebugPanel::ID_STATICTEXT3 = wxNewId();
+const long DebugPanel::ID_STATICTEXT4 = wxNewId();
+const long DebugPanel::ID_STATICTEXT5 = wxNewId();
 const long DebugPanel::ID_t_camerafloor = wxNewId();
 const long DebugPanel::ID_t_camerap = wxNewId();
 const long DebugPanel::ID_t_elevnumber = wxNewId();
 const long DebugPanel::ID_t_elevfloor = wxNewId();
 const long DebugPanel::ID_t_object = wxNewId();
-const long DebugPanel::st22c = wxNewId();
+const long DebugPanel::ID_STATICTEXT11 = wxNewId();
 const long DebugPanel::ID_chkCollisionDetection = wxNewId();
+const long DebugPanel::ID_chkFrameLimiter = wxNewId();
+const long DebugPanel::ID_chkMainProcessing = wxNewId();
+const long DebugPanel::ID_chkAutoShafts = wxNewId();
+const long DebugPanel::ID_chkFrameSync = wxNewId();
+const long DebugPanel::ID_bListAltitudes = wxNewId();
 const long DebugPanel::ID_bMeshControl = wxNewId();
 const long DebugPanel::ID_bInitRealtime = wxNewId();
 const long DebugPanel::ID_bEditElevator = wxNewId();
-const long DebugPanel::st55c = wxNewId();
-const long DebugPanel::ID_chkFrameSync = wxNewId();
-const long DebugPanel::ID_chkAutoShafts = wxNewId();
-const long DebugPanel::ID_chkMainProcessing = wxNewId();
-const long DebugPanel::ID_chkFrameLimiter = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(DebugPanel,wxFrame)
-//(*EventTable(DebugPanel)
-//*)
+	//(*EventTable(DebugPanel)
+	//*)
 END_EVENT_TABLE()
 
 DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(DebugPanel)
-	Create(parent,id,_("Simulator Control Panel"),wxDefaultPosition,wxDefaultSize,wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX,_T("id"));
-	bListAltitudes = new wxButton(this,ID_bListAltitudes,_("List Altitudes"),wxPoint(350,185),wxSize(85,25),0,wxDefaultValidator,_T("ID_bListAltitudes"));
-	StaticText1 = new wxStaticText(this,st4c,_("Camera Floor:"),wxPoint(15,10),wxSize(74,13),wxST_NO_AUTORESIZE,_T("st4c"));
-	StaticText2 = new wxStaticText(this,st5c,_("Camera Position:"),wxPoint(15,30),wxSize(89,13),wxST_NO_AUTORESIZE,_T("st5c"));
-	StaticText3 = new wxStaticText(this,st6c,_("Elevator Number:"),wxPoint(15,50),wxSize(89,13),wxST_NO_AUTORESIZE,_T("st6c"));
-	StaticText4 = new wxStaticText(this,st7c,_("Elevator Floor:"),wxPoint(15,70),wxSize(79,13),wxST_NO_AUTORESIZE,_T("st7c"));
-	StaticText8 = new wxStaticText(this,st11c,_("Selected Object:"),wxPoint(15,90),wxSize(89,13),wxST_NO_AUTORESIZE,_T("st11c"));
-	t_camerafloor = new wxStaticText(this,ID_t_camerafloor,wxEmptyString,wxPoint(105,10),wxSize(109,18),wxST_NO_AUTORESIZE,_T("ID_t_camerafloor"));
-	t_camerap = new wxStaticText(this,ID_t_camerap,wxEmptyString,wxPoint(105,30),wxSize(109,18),wxST_NO_AUTORESIZE,_T("ID_t_camerap"));
-	t_elevnumber = new wxStaticText(this,ID_t_elevnumber,wxEmptyString,wxPoint(105,50),wxSize(109,18),wxST_NO_AUTORESIZE,_T("ID_t_elevnumber"));
-	t_elevfloor = new wxStaticText(this,ID_t_elevfloor,wxEmptyString,wxPoint(105,70),wxSize(109,18),wxST_NO_AUTORESIZE,_T("ID_t_elevfloor"));
-	t_object = new wxStaticText(this,ID_t_object,wxEmptyString,wxPoint(105,90),wxSize(109,18),wxST_NO_AUTORESIZE,_T("ID_t_object"));
-	StaticText17 = new wxStaticText(this,st22c,_("Simulator Options"),wxPoint(295,10),wxSize(119,13),wxALIGN_CENTRE|wxST_NO_AUTORESIZE,_T("st22c"));
-	chkCollisionDetection = new wxCheckBox(this,ID_chkCollisionDetection,_("Collision Detection"),wxPoint(302,35),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkCollisionDetection"));
+	Create(parent,id,_("Simulator Control Panel"),wxPoint(10,10),wxDefaultSize,wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX,_T("id"));
+	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
+	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
+	BoxSizer6 = new wxBoxSizer(wxVERTICAL);
+	StaticText1 = new wxStaticText(this,ID_STATICTEXT1,_("Camera Floor:"),wxDefaultPosition,wxDefaultSize,0,_T("ID_STATICTEXT1"));
+	BoxSizer6->Add(StaticText1,0,wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL,5);
+	StaticText2 = new wxStaticText(this,ID_STATICTEXT2,_("Camera Position:"),wxDefaultPosition,wxDefaultSize,0,_T("ID_STATICTEXT2"));
+	BoxSizer6->Add(StaticText2,0,wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL,5);
+	StaticText3 = new wxStaticText(this,ID_STATICTEXT3,_("Elevator Number:"),wxDefaultPosition,wxDefaultSize,0,_T("ID_STATICTEXT3"));
+	BoxSizer6->Add(StaticText3,0,wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL,5);
+	StaticText4 = new wxStaticText(this,ID_STATICTEXT4,_("Elevator Floor:"),wxDefaultPosition,wxDefaultSize,0,_T("ID_STATICTEXT4"));
+	BoxSizer6->Add(StaticText4,0,wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL,5);
+	StaticText5 = new wxStaticText(this,ID_STATICTEXT5,_("Selected Object:"),wxDefaultPosition,wxDefaultSize,0,_T("ID_STATICTEXT5"));
+	BoxSizer6->Add(StaticText5,0,wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL,0);
+	BoxSizer4->Add(BoxSizer6,0,wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,5);
+	BoxSizer7 = new wxBoxSizer(wxVERTICAL);
+	t_camerafloor = new wxStaticText(this,ID_t_camerafloor,wxEmptyString,wxDefaultPosition,wxSize(100,-1),wxST_NO_AUTORESIZE,_T("ID_t_camerafloor"));
+	BoxSizer7->Add(t_camerafloor,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	t_camerap = new wxStaticText(this,ID_t_camerap,wxEmptyString,wxDefaultPosition,wxSize(100,-1),wxST_NO_AUTORESIZE,_T("ID_t_camerap"));
+	BoxSizer7->Add(t_camerap,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	t_elevnumber = new wxStaticText(this,ID_t_elevnumber,wxEmptyString,wxDefaultPosition,wxSize(100,-1),wxST_NO_AUTORESIZE,_T("ID_t_elevnumber"));
+	BoxSizer7->Add(t_elevnumber,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	t_elevfloor = new wxStaticText(this,ID_t_elevfloor,wxEmptyString,wxDefaultPosition,wxSize(100,-1),wxST_NO_AUTORESIZE,_T("ID_t_elevfloor"));
+	BoxSizer7->Add(t_elevfloor,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	t_object = new wxStaticText(this,ID_t_object,wxEmptyString,wxDefaultPosition,wxSize(100,-1),wxST_NO_AUTORESIZE,_T("ID_t_object"));
+	BoxSizer7->Add(t_object,0,wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,0);
+	BoxSizer4->Add(BoxSizer7,0,wxALL|wxALIGN_RIGHT|wxALIGN_TOP,0);
+	BoxSizer2->Add(BoxSizer4,0,wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP,10);
+	BoxSizer5 = new wxBoxSizer(wxVERTICAL);
+	StaticText11 = new wxStaticText(this,ID_STATICTEXT11,_("Simulator Options"),wxDefaultPosition,wxDefaultSize,0,_T("ID_STATICTEXT11"));
+	BoxSizer5->Add(StaticText11,0,wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,5);
+	chkCollisionDetection = new wxCheckBox(this,ID_chkCollisionDetection,_("Collision Detection"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkCollisionDetection"));
 	chkCollisionDetection->SetValue(false);
-	bMeshControl = new wxButton(this,ID_bMeshControl,_("Realtime Mesh Control"),wxPoint(325,215),wxSize(135,25),0,wxDefaultValidator,_T("ID_bMeshControl"));
-	bInitRealtime = new wxButton(this,ID_bInitRealtime,_("Init Realtime"),wxPoint(350,245),wxSize(85,25),0,wxDefaultValidator,_T("ID_bInitRealtime"));
-	bEditElevator = new wxButton(this,ID_bEditElevator,_("Edit Elevator"),wxPoint(355,275),wxSize(75,25),0,wxDefaultValidator,_T("ID_bEditElevator"));
-	StaticText27 = new wxStaticText(this,st55c,_("Measurements are in feet"),wxPoint(230,138),wxSize(94,33),wxALIGN_CENTRE|wxST_NO_AUTORESIZE,_T("st55c"));
-	chkFrameSync = new wxCheckBox(this,ID_chkFrameSync,_("Framerate Sync"),wxPoint(302,93),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkFrameSync"));
-	chkFrameSync->SetValue(false);
-	chkAutoShafts = new wxCheckBox(this,ID_chkAutoShafts,_("Automatic Shafts"),wxPoint(302,79),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkAutoShafts"));
-	chkAutoShafts->SetValue(false);
-	chkMainProcessing = new wxCheckBox(this,ID_chkMainProcessing,_("Main Sim Processing"),wxPoint(302,65),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkMainProcessing"));
-	chkMainProcessing->SetValue(false);
-	chkFrameLimiter = new wxCheckBox(this,ID_chkFrameLimiter,_("Frame Limiter"),wxPoint(302,50),wxDefaultSize,0,wxDefaultValidator,_T("ID_chkFrameLimiter"));
+	BoxSizer5->Add(chkCollisionDetection,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	chkFrameLimiter = new wxCheckBox(this,ID_chkFrameLimiter,_("Frame Limiter"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkFrameLimiter"));
 	chkFrameLimiter->SetValue(false);
+	BoxSizer5->Add(chkFrameLimiter,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	chkMainProcessing = new wxCheckBox(this,ID_chkMainProcessing,_("Main Sim Processing"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkMainProcessing"));
+	chkMainProcessing->SetValue(false);
+	BoxSizer5->Add(chkMainProcessing,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	chkAutoShafts = new wxCheckBox(this,ID_chkAutoShafts,_("Automatic Shafts"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkAutoShafts"));
+	chkAutoShafts->SetValue(false);
+	BoxSizer5->Add(chkAutoShafts,0,wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,5);
+	chkFrameSync = new wxCheckBox(this,ID_chkFrameSync,_("Framerate Sync"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_chkFrameSync"));
+	chkFrameSync->SetValue(false);
+	BoxSizer5->Add(chkFrameSync,0,wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL,0);
+	BoxSizer2->Add(BoxSizer5,0,wxALL|wxALIGN_RIGHT|wxALIGN_TOP,0);
+	BoxSizer1->Add(BoxSizer2,0,wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,10);
+	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
+	bListAltitudes = new wxButton(this,ID_bListAltitudes,_("List Altitudes"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_bListAltitudes"));
+	BoxSizer3->Add(bListAltitudes,0,wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,5);
+	bMeshControl = new wxButton(this,ID_bMeshControl,_("Realtime Mesh Control"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_bMeshControl"));
+	BoxSizer3->Add(bMeshControl,0,wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,5);
+	bInitRealtime = new wxButton(this,ID_bInitRealtime,_("Init Realtime"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_bInitRealtime"));
+	BoxSizer3->Add(bInitRealtime,0,wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,5);
+	bEditElevator = new wxButton(this,ID_bEditElevator,_("Edit Elevator"),wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,_T("ID_bEditElevator"));
+	BoxSizer3->Add(bEditElevator,0,wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,5);
+	BoxSizer1->Add(BoxSizer3,0,wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,10);
+	SetSizer(BoxSizer1);
+	BoxSizer1->Fit(this);
+	BoxSizer1->SetSizeHints(this);
+	Connect(ID_chkCollisionDetection,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkCollisionDetection_Click);
+	Connect(ID_chkFrameLimiter,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkFrameLimiter_Click);
+	Connect(ID_chkMainProcessing,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkMainProcessing_Click);
+	Connect(ID_chkAutoShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoShafts_Click);
+	Connect(ID_chkFrameSync,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkFrameSync_Click);
 	Connect(ID_bListAltitudes,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bListAltitudes_Click);
-	Connect(ID_chkCollisionDetection,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkCollisionDetection_Change);
 	Connect(ID_bMeshControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
 	Connect(ID_bInitRealtime,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bInitRealtime_Click);
 	Connect(ID_bEditElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEditElevator_Click);
-	Connect(ID_chkFrameSync,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkFrameSync_Change);
-	Connect(ID_chkAutoShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoShafts_Change);
-	Connect(ID_chkFrameLimiter,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkFrameLimiter_Change);
 	//*)
 	dp = this;
 	OnInit();
@@ -125,6 +159,31 @@ DebugPanel::~DebugPanel()
 	timer = 0;
 	mc->Destroy();
 	ee->Destroy();
+}
+
+void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
+{
+	sbs->EnableCollisions = chkCollisionDetection->GetValue();
+}
+
+void DebugPanel::On_chkFrameLimiter_Click(wxCommandEvent& event)
+{
+	sbs->FrameLimiter = chkFrameLimiter->GetValue();
+}
+
+void DebugPanel::On_chkMainProcessing_Click(wxCommandEvent& event)
+{
+
+}
+
+void DebugPanel::On_chkAutoShafts_Click(wxCommandEvent& event)
+{
+	sbs->AutoShafts = chkAutoShafts->GetValue();
+}
+
+void DebugPanel::On_chkFrameSync_Click(wxCommandEvent& event)
+{
+	sbs->FrameSync = chkFrameSync->GetValue();
 }
 
 void DebugPanel::On_bListAltitudes_Click(wxCommandEvent& event)
@@ -142,19 +201,9 @@ void DebugPanel::On_bInitRealtime_Click(wxCommandEvent& event)
 
 }
 
-void DebugPanel::On_chkFrameLimiter_Change(wxCommandEvent& event)
+void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 {
-	sbs->FrameLimiter = chkFrameLimiter->GetValue();
-}
-
-void DebugPanel::On_chkFrameSync_Change(wxCommandEvent& event)
-{
-	sbs->FrameSync = chkFrameSync->GetValue();
-}
-
-void DebugPanel::On_chkCollisionDetection_Change(wxCommandEvent& event)
-{
-	sbs->EnableCollisions = chkCollisionDetection->GetValue();
+	ee->Show();
 }
 
 void DebugPanel::OnInit()
@@ -200,14 +249,4 @@ void Timer::Notify()
 		mc->chkBuildings->SetValue(sbs->IsBuildingsEnabled);
 		mc->chkExternal->SetValue(sbs->IsExternalEnabled);
 	}
-}
-
-void DebugPanel::On_chkAutoShafts_Change(wxCommandEvent& event)
-{
-	sbs->AutoShafts = chkAutoShafts->GetValue();
-}
-
-void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
-{
-	ee->Show();
 }
