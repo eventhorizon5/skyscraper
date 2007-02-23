@@ -85,7 +85,7 @@ void Floor::SetCameraFloor()
 	//Moves camera to specified floor (sets altitude to the floor's altitude plus CameraAltitude)
 
 	csVector3 camlocation = sbs->camera->GetPosition();
-	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + sbs->camera->DefaultAltitude, camlocation.z));
+	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + InterfloorHeight + sbs->camera->DefaultAltitude, camlocation.z));
 }
 
 int Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th, bool isexternal)
@@ -106,12 +106,12 @@ int Floor::AddFloor(const char *name, const char *texture, float thickness, floa
 
 	if (isexternal == false)
 	{
-		int index = sbs->AddFloorMain(Level_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+		int index = sbs->AddFloorMain(Level_state, name, texture, thickness, x1, z1, x2, z2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
 		floor_polys.Push(index);
 		return floor_polys.GetSize() - 1;
 	}
 	else
-		return sbs->AddFloorMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+		return sbs->AddFloorMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
 }
 
 void Floor::DeleteFloor(int index)
@@ -140,7 +140,7 @@ int Floor::AddInterfloorFloor(const char *name, const char *texture, float thick
 	tw2 = AutoSize(x1, x2, true, false, tw);
 	th2 = AutoSize(z1, z2, false, false, th);
 
-	int index = sbs->AddFloorMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2);
+	int index = sbs->AddFloorMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 	ifloor_polys.Push(index);
 	return ifloor_polys.GetSize() - 1;
 }
@@ -191,12 +191,12 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 
 	if (isexternal == false)
 	{
-		int index = sbs->AddWallMain(Level_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+		int index = sbs->AddWallMain(Level_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
 		wall_polys.Push(index);
 		return wall_polys.GetSize() - 1;
 	}
 	else
-		return sbs->AddWallMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+		return sbs->AddWallMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
 }
 
 void Floor::DeleteWall(int index)
@@ -228,7 +228,7 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, float thickn
 		tw2 = AutoSize(z1, z2, true, false, tw);
 	th2 = AutoSize(0, height_in1, false, false, th);
 
-	int index = sbs->AddWallMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + Height + voffset1, Altitude + Height + voffset2, tw2, th2);
+	int index = sbs->AddWallMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 	iwall_polys.Push(index);
 	return iwall_polys.GetSize() - 1;
 }
@@ -279,7 +279,7 @@ void Floor::Enabled(bool value)
 float Floor::FullHeight()
 {
 	//calculate full height of a floor
-	return Height + InterfloorHeight;
+	return InterfloorHeight + Height;
 }
 
 void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)

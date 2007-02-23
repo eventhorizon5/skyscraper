@@ -168,7 +168,7 @@ csVector3 Camera::GetStartRotation()
 
 void Camera::SetToStartPosition()
 {
-	SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->Altitude + DefaultAltitude, StartPositionZ));
+	SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->Altitude + sbs->GetFloor(StartFloor)->InterfloorHeight + DefaultAltitude, StartPositionZ));
 }
 
 void Camera::SetToStartDirection()
@@ -195,7 +195,7 @@ void Camera::Gravity()
 		sbs->IsFalling = false;
 		original_position = 0;
 		old_time = 0;
-		
+
 		//step routine
 		float height = result.closest_isect.y - (GetPosition().y - DefaultAltitude);
 		if (height < DefaultAltitude / 2) //only climb up if height is less than half the default altitude
@@ -318,7 +318,7 @@ void Camera::ClickedObject()
 	csSectorHitBeamResult result = sbs->area->HitBeam(startbeam, endbeam, true);
 	if (!result.mesh)
 		return;
-	
+
 	//get mesh name
 	meshname = result.mesh->QueryObject()->GetName();
 

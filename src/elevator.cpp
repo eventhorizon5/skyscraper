@@ -564,7 +564,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 				ElevatorDoorSpeed += OpenChange;
 			else
 				ElevatorDoorSpeed -= OpenChange;
-			
+
 			if (elevdoors == true)
 			{
 				//move elevator doors
@@ -917,7 +917,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//Determine distance to destination floor
-		Destination = sbs->GetFloor(GotoFloor)->Altitude;
+		Destination = sbs->GetFloor(GotoFloor)->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight;
 		DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
 		CalculateStoppingDistance = true;
 
@@ -927,7 +927,7 @@ void Elevator::MoveElevatorToFloor()
 			//turn off floor
 			sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 			sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
-			
+
 			//Turn off sky, buildings, and landscape
 			sbs->EnableSkybox(false);
 			sbs->EnableBuildings(false);
@@ -1186,7 +1186,7 @@ void Elevator::MoveElevatorToFloor()
 			//turn on floor
 			sbs->GetFloor(GotoFloor)->Enabled(true);
 			sbs->GetFloor(GotoFloor)->EnableGroup(true);
-			
+
 			//Turn on sky, buildings, and landscape
 			sbs->EnableSkybox(true);
 			sbs->EnableBuildings(true);
@@ -1235,7 +1235,7 @@ int Elevator::AddFloorIndicator(const char *direction, float CenterX, float Cent
 
 	if (index != -1 && !orig_indicator)
 		orig_indicator = FloorIndicator_state->GetPolygonMaterial(index);
-	
+
 	return index;
 }
 
@@ -1261,7 +1261,7 @@ int Elevator::AddDoors(const char *texture, float thickness, float CenterX, floa
 		x3 = CenterX;
 		x4 = CenterX;
 		z1 = CenterZ - (width / 2);
-		z2 = CenterZ - spacing; 
+		z2 = CenterZ - spacing;
 		z3 = CenterZ + spacing;
 		z4 = CenterZ + (width / 2);
 	}
@@ -1360,8 +1360,8 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		ShaftDoorR[i]->GetMovable()->UpdateMove();
 
 		//create doors
-		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, thickness, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude, sbs->GetFloor(ServicedFloors[i])->Altitude, tw, th);
-		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, thickness, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude, sbs->GetFloor(ServicedFloors[i])->Altitude, tw, th);
+		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, thickness, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight, tw, th);
+		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, thickness, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight, tw, th);
 
 		//make doors invisible on start
 		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
@@ -1592,7 +1592,7 @@ void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, con
 void Elevator::UpdateFloorIndicators()
 {
 	//changes the number texture on the floor indicators to the elevator's current floor
-	
+
 	csString texture = "Button" + sbs->GetFloor(GetFloor())->ID;
 
 	for (int i = 0; i < FloorIndicator_state->GetPolygonCount(); i++)
