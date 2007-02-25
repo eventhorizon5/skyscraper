@@ -166,8 +166,8 @@
     Height = 24.48
     InterfloorHeight = 0
 
-    AddFloor Floor, Granite, 0.5, -42.5, 25.8, 42.5, -25.8, 0, 0, 0, 0, False
-    #AddFloor Ceiling, Ceiling1, 0.5, -42.5, 25.8, 42.5, -25.8, -0.05, -0.05, 0, 0, False
+    AddFloor Floor, Granite, 0.5, -42.5, -25.8, 42.5, 25.8, 0, 0, 0, 0, False
+    #AddFloor Ceiling, Ceiling1, 0.5, -42.5, -25.8, 42.5, 25.8, -0.05, -0.05, 0, 0, False
 
     #External walls
     #front
@@ -196,10 +196,10 @@
     InterfloorHeight = 2.24
 
     #Floor
-    AddFloor Floor, Granite, 0.5, -112.5, 112.5, 112.5, -112.5, 0, 0, 0, 0, False
+    AddFloor Floor, Granite, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Ceiling, Marble3, 0.5, -112.5, 112.5, 112.5, -112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Marble3, 0.5, -112.5, -112.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     #front
@@ -220,10 +220,10 @@
     AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
     
     #Interfloor bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, -112.5, 112.5, 112.5, 112.5, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor ITop, Brick, 0.5, -112.5, 112.5, 112.5, 112.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     AddInterfloorWall IFront, Brick, 0.5, -112.5, -112.5, 112.5, -112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
@@ -250,10 +250,10 @@
     InterfloorHeight = 0
 
     #Floor
-    AddFloor Floor, Brick, 0.5, -112.5, 112.5, 112.5, -112.5, 0, 0, 0, 0, False
+    AddFloor Floor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
 
     #Ceiling
-    AddFloor Ceiling, Brick, 0.5, -112.5, 112.5, 112.5, -112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
     AddWall Vents Front, VentsInt, 0.5, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
@@ -262,10 +262,10 @@
     AddWall Vents Left, VentsInt, 0.5, -112.5, 112.5, -112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
 
     #Interfloor bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, -112.5, 112.5, 112.5, 112.5, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
 
     #Interfloor top
-    AddInterfloorFloor ITop, Brick, 0.5, -112.5, 112.5, 112.5, 112.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     AddInterfloorWall IFront, Brick, 0.5, -112.5, -112.5, 112.5, -112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
@@ -357,12 +357,12 @@
     #Floor
     AddFloor Southwest Floor, Granite, 0.5, -112.5, -112.5, 37.5, 37.5, 0, 0, 0, 0, False
     AddFloor Northeast Floor, Granite, 0.5, -37.5, 37.5, 112.5, 112.5, 0, 0, 0, 0, False
-    AddFloor East Floor, Granite, 37.5, 0.5, -37.5, 112.5, 37.5, 0, 0, 0, 0, False
+    AddFloor East Floor, Granite, 0.5, 37.5, -37.5, 112.5, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
     AddFloor Southwest Ceiling, Marble3, 0.5, -112.5, -112.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
     AddFloor Northeast Ceiling, Marble3, 0.5, -37.5, 37.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
-    AddFloor East Ceiling, Marble3, 37.5, 0.5, -37.5, 112.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor East Ceiling, Marble3, 0.5, 37.5, 37.5, 112.5, -37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     #front
@@ -416,7 +416,7 @@
     #Floor
     AddFloor Southwest Floor, Brick, 0.5, -112.5, -112.5, 37.5, 37.5, 0, 0, 0, 0, False
     AddFloor Northeast Floor, Brick, 0.5, -37.5, 37.5, 112.5, 112.5, 0, 0, 0, 0, False
-    AddFloor East Floor, Brick, 37.5, 0.5, -37.5, 112.5, 37.5, 0, 0, 0, 0, False
+    AddFloor East Floor, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
     AddFloor Southwest Ceiling, Brick, 0.5, -112.5, -112.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
@@ -438,10 +438,10 @@
     AddWall Vents Right2, VentsInt, 0.5, 112.5, -37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
 
     #Interfloor bottom
-    #AddInterfloorFloor IFloor, Brick, 0.5, 63, 70, -63, -70, 0, 0, 0, 0
+    #AddInterfloorFloor IFloor, Brick, 0.5, -63, -70, 63, 70, 0, 0, 0, 0
 
     #Interfloor top
-    #AddInterfloorFloor ITop, Brick, 0.5, 63, 70, -63, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    #AddInterfloorFloor ITop, Brick, 0.5, -63, -70, 63, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     #AddInterfloorWall IBack, Brick, 0.5, 63, 70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
@@ -469,7 +469,7 @@
 #middle level setbacks
 <Floor 65>
     AddFloor Northeast Setback, Brick, 0.5, 37.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, True
-    AddFloor Southwest Setback, Brick, 0.5, -112.5, -37.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Southwest Setback, Brick, 0.5, -112.5, -112.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, True
 <EndFloor>
 
 #zone 3 lower skeleton
@@ -506,10 +506,10 @@
     AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
 
     #Interfloor bottom
-    #AddInterfloorFloor IFloor, Granite, 0.5, 51, 70, -51, -70, 0, 0, 0, 0
+    #AddInterfloorFloor IFloor, Granite, 0.5, -51, -70, 51, 70, 0, 0, 0, 0
 
     #Interfloor top
-    #AddInterfloorFloor ITop, Brick, 0.5, 51, 70, -51, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    #AddInterfloorFloor ITop, Brick, 0.5, -51, -70, 51, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     #AddInterfloorWall IBack, Brick, 0.5, 51, 70, -51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
@@ -574,10 +574,10 @@
     AddWall Vents Right3, VentsInt, 0.5, 112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
 
     #Interfloor bottom
-    #AddInterfloorFloor IFloor, Granite, 0.5, 51, 70, -51, -70, 0, 0, 0, 0
+    #AddInterfloorFloor IFloor, Granite, 0.5, -51, -70, 51, 70, 0, 0, 0, 0
 
     #Interfloor top
-    #AddInterfloorFloor ITop, Brick, 0.5, 51, 70, -51, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    #AddInterfloorFloor ITop, Brick, 0.5, -51, -70, 51, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     #AddInterfloorWall IBack, Brick, 0.5, 51, 70, -51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
@@ -816,5 +816,5 @@
     InterfloorHeight = 0
 
     #Floor
-    #AddFloor Roof, Brick, 0.5, 27, 70, -27, -70, 0, 0, 0, 0, True
+    #AddFloor Roof, Brick, 0.5, -27, -70, 27, 70, 0, 0, 0, 0, True
 <EndFloor>
