@@ -1360,8 +1360,8 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		ShaftDoorR[i]->GetMovable()->UpdateMove();
 
 		//create doors
-		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, thickness, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight, tw, th);
-		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, thickness, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight, tw, th);
+		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, thickness, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(ServicedFloors[i])->InterfloorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(ServicedFloors[i])->InterfloorHeight, tw, th);
+		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, thickness, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(ServicedFloors[i])->InterfloorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(ServicedFloors[i])->InterfloorHeight, tw, th);
 
 		//make doors invisible on start
 		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
