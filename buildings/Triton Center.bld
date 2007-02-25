@@ -152,6 +152,8 @@
     InterfloorHeight = 0
     Group = 1 #enable mezzanine also, since both are merged
 
+    Set 1 = %fullheight% + 2.24
+    
     #Floor
     FloorOrientation = top
     #AddFloor Floor, Marble4, 0.5, -75, -70, 75, 70, 0, 0, 0, 0, False
@@ -163,11 +165,11 @@
 
     #Lobby Front
     WallOrientation = left
-    AddWall Front, LobbyFront, 0.5, -75 + 0.1, -70 + 0.1, 75 - 0.1, -70 + 0.1, %height% * 3, %height% * 3, 0, 0, 0.3, 1, True
-    AddWall Left, LobbyFront, 0.5, -75 + 0.1, 70 - 0.1, -75 + 0.1, -70 + 0.1, %height% * 3, %height% * 3, 0, 0, 0.3, 1, True
+    AddWall Front, LobbyFront, 0.5, -75 + 0.1, -70 + 0.1, 75 - 0.1, -70 + 0.1, %1% * 3, %1% * 3, 0, 0, 0.3, 1, True
+    AddWall Left, LobbyFront, 0.5, -75 + 0.1, 70 - 0.1, -75 + 0.1, -70 + 0.1, %1% * 3, %1% * 3, 0, 0, 0.3, 1, True
     WallOrientation = right
-    AddWall Right, LobbyFront, 0.5, 75 - 0.1, -70 + 0.1, 75 - 0.1, 70 - 0.1, %height% * 3, %height% * 3, 0, 0, 0.3, 1, True
-    AddWall Back, LobbyFront, 0.5, 75 - 0.1, 70 - 0.1, -75 + 0.1, 70 - 0.1, %height% * 3, %height% * 3, 0, 0, 0.3, 1, True
+    AddWall Right, LobbyFront, 0.5, 75 - 0.1, -70 + 0.1, 75 - 0.1, 70 - 0.1, %1% * 3, %1% * 3, 0, 0, 0.3, 1, True
+    AddWall Back, LobbyFront, 0.5, 75 - 0.1, 70 - 0.1, -75 + 0.1, 70 - 0.1, %1% * 3, %1% * 3, 0, 0, 0.3, 1, True
 <EndFloor>
 
 #mezzanine
@@ -181,9 +183,9 @@
     Group = 0 #enable lobby also, since both are merged
 
     FloorOrientation = top
-    AddFloor Floor, Granite, 0.5, -42.5, 25.8, 42.5, -25.8, 0, 0, 0, 0, False
+    AddFloor Floor, Granite, 0.5, -42.5, -25.8, 42.5, 25.8, 0, 0, 0, 0, False
     FloorOrientation = bottom
-    AddFloor Ceiling, Ceiling1, 0.5, -42.5, 25.8, 42.5, -25.8, -0.05, -0.05, 0, 0, False
+    AddFloor Ceiling, Ceiling1, 0.5, -42.5, -25.8, 42.5, 25.8, -0.05, -0.05, 0, 0, False
 <EndFloor>
 
 #zone 1 skeleton
@@ -193,11 +195,11 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Granite, 0.5, -75, 70, 75, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Granite, 0.5, -75, -70, 75, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, -75, 70, 75, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Marble3, 0.5, -75, -70, 75, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -209,11 +211,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, -75, 70, 75, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -75, -70, 75, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, -75, 70, 75, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -75, -70, 75, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -254,11 +256,11 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Brick, 0.5, -75, 70, 75, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Brick, 0.5, -75, -70, 75, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Brick, 0.5, -75, 70, 75, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Brick, 0.5, -75, -70, 75, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
     WallOrientation = left
@@ -270,11 +272,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, -75, 70, 75, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -75, -70, 75, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, -75, 70, 75, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -75, -70, 75, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -298,8 +300,8 @@
 #zone 1 setbacks
 <Floor 39>
     FloorOrientation = top
-    AddFloor Left Setback, Brick, 0.5, -75, 70, -63, -70, %fullheight%, %fullheight%, 0, 0, True
-    AddFloor Right Setback, Brick, 0.5, 75, 70, 63, -70, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Left Setback, Brick, 0.5, -75, -70, -63, 70, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Right Setback, Brick, 0.5, 63, -70, 75, 70, %fullheight%, %fullheight%, 0, 0, True
 <EndFloor>
 
 #zone 2 skeleton
@@ -309,11 +311,11 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Granite, 0.5, 63, 70, -63, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Granite, 0.5, -63, -70, 63, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, 63, 70, -63, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Marble3, 0.5, -63, -70, 63, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -325,11 +327,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, 63, 70, -63, -70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -63, -70, 63, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, 63, 70, -63, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -63, -70, 63, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -369,11 +371,11 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Brick, 0.5, 63, 70, -63, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Brick, 0.5, -63, -70, 63, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Brick, 0.5, 63, 70, -63, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Brick, 0.5, -63, -70, 63, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External vents
     WallOrientation = left
@@ -393,11 +395,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, 63, 70, -63, -70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -63, -70, 63, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, 63, 70, -63, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -63, -70, 63, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -411,8 +413,8 @@
 #zone 2 setbacks
 <Floor 79>
     FloorOrientation = top
-    AddFloor Left Setback, Brick, 0.5, -63, 70, -51, -70, %fullheight%, %fullheight%, 0, 0, True
-    AddFloor Right Setback, Brick, 0.5, 63, 70, 51, -70, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Left Setback, Brick, 0.5, -63, -70, -51, 70, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Right Setback, Brick, 0.5, 51, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, True
 <EndFloor>
 
 #zone 3A skeleton
@@ -426,11 +428,11 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Granite, 0.5, 51, 70, -51, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Granite, 0.5, -51, -70, 51, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, 51, 70, -51, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Marble3, 0.5, -51, -70, 51, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -442,11 +444,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Granite, 0.5, 51, 70, -51, -70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Granite, 0.5, -51, -70, 51, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, 51, 70, -51, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -51, -70, 51, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -522,11 +524,11 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Brick, 0.5, 51, 70, -51, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Brick, 0.5, -51, -70, 51, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Brick, 0.5, 51, 70, -51, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Brick, 0.5, -51, -70, 51, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External vents
     WallOrientation = left
@@ -546,11 +548,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Granite, 0.5, 51, 70, -51, -70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Granite, 0.5, -51, -70, 51, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, 51, 70, -51, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -51, -70, 51, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -564,8 +566,8 @@
 #zone 3A setbacks
 <Floor 119>
     FloorOrientation = top
-    AddFloor Left Setback, Brick, 0.5, -51, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, True
-    AddFloor Right Setback, Brick, 0.5, 51, 70, 39, -70, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Left Setback, Brick, 0.5, -51, -70, -39, 70, %fullheight%, %fullheight%, 0, 0, True
+    AddFloor Right Setback, Brick, 0.5, 39, -70, 51, 70, %fullheight%, %fullheight%, 0, 0, True
 <EndFloor>
 
 #zone 3B skeleton
@@ -577,11 +579,11 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Granite, 0.5, 39, 70, -39, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Granite, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, 39, 70, -39, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Marble3, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -593,11 +595,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, 39, 70, -39, -70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, 39, 70, -39, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -670,16 +672,12 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Granite, 0.5, 39, 70, -39, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Granite, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, 39, 70, -39, 0, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Marble3, 0.5, -39, 0, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
     
-    #cover over interfloor gap
-    WallOrientation = left
-    AddWall Filler, Marble3, 0.2, -39, 0, 39, 0, %fullheight% - %height%, %fullheight% - %height%, %height% - 0.05, %height% - 0.05, 0, 0, False
-
     #External walls
     AddWall Left, MainWindows, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
     AddWall Front, MainWindows, 0.5, -39, -70, 39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
@@ -689,11 +687,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, 39, 70, -39, 0, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -39, 0, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, 39, 70, -39, 0, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -39, 0, 39, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -715,11 +713,15 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Granite, 0.5, 39, 70, -39, 0, 0, 0, 0, 0, False
+    AddFloor Floor, Granite, 0.5, -39, 0, 39, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, 39, 70, -39, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Marble3, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
+
+    #cover over interfloor gap
+    WallOrientation = left
+    AddWall Filler, Marble3, 0.2, -39, 0, 39, 0, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -731,11 +733,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, 39, 70, -39, -70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor IFloor, Brick, 0.5, 39, 70, -39, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -757,11 +759,11 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Granite, 0.5, 39, 70, -39, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Granite, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, 39, 70, -39, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Marble3, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -773,11 +775,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, 39, 70, -39, -70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, 39, 70, -39, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -799,11 +801,11 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Brick, 0.5, 39, 70, -39, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Ceiling1, 0.5, 39, 70, -39, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Ceiling1, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -815,11 +817,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, 39, 70, -39, -70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, 39, 70, -39, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -841,11 +843,11 @@
 
     #Floor
     FloorOrientation = top
-    AddFloor Floor, Brick, 0.5, 39, 70, -39, -70, 0, 0, 0, 0, False
+    AddFloor Floor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Brick, 0.5, 39, 70, -39, -70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Brick, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External vents
     WallOrientation = left
@@ -865,11 +867,11 @@
 
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, 39, 70, -39, -70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor ITop, Brick, 0.5, 39, 70, -39, -70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -892,7 +894,7 @@
 
     #Roof Base
     FloorOrientation = top
-    AddFloor Roof, Brick, 0.5, 39, 70, -39, -70, 0, 0, 0, 0, True
+    AddFloor Roof, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, True
 
     #Antennae
     CreateWallBox2 External, Left Antenna, Concrete, 0, -40, 4, 4, 300, 0, 0, 25
