@@ -327,8 +327,8 @@
     the current floor, required<br>
     <font size="2" face="Courier New, Courier, mono">Height = 9.5</font></p>
   <p align="left"><strong>6. InterfloorHeight</strong> - the height in feet of 
-    the space between floors, starting right above the current floor's ceiling 
-    and ending right below the next floor's floor, required.<br>
+    the space between floors (below each floor), starting at the floor's altitude, 
+    and ending right below the level's floor; required.<br>
     <font size="2" face="Courier New, Courier, mono">InterfloorHeight = 2.24</font></p>
   <p align="left"><strong>7. Group</strong> - group floors together. This is a 
     list of comma-separated floor numbers (or a range specified with the - symbol) 
@@ -372,7 +372,7 @@
     <em>isexternal</em> determines if the wall is part of the building's external 
     framework (true) or if it's part of the current floor (false).</p>
   <p align="left"><strong>4. AddInterfloorFloor</strong> - adds a textured floor 
-    above the ceiling of the current floor/level<br>
+    below the floor of the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddInterfloorFloor 
     <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>, 
     <em>z2</em>, <em>voffset1</em>, <em>voffset2, tw</em>, <em>th</em></font><br>
@@ -380,9 +380,9 @@
     My IFloor, brick, 0.5, -10, -10, 10, 10, 0, 0, 0, 0</font></p>
   <p align="left">The parameters are the same as the AddFloor command, except 
     the <em>voffset</em> values are the height offset in feet above the current 
-    floor's ceiling.</p>
+    floor's altitude, and not above the base floor level.</p>
   <p align="left"><strong>5. AddInterfloorWall</strong> - adds a textured wall 
-    above the ceiling of the current floor/level<br>
+    below the floor of the current floor/level<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddInterfloorWall 
     <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>, 
     <em>z2</em>, <em>height1</em>, <em>height2</em>, <em>voffset1</em>, <em>voffset2</em>, 
