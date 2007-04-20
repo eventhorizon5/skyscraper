@@ -3,7 +3,7 @@
 /*
 	Skyscraper 1.1 Alpha - Simulation Frontend
 	Copyright (C)2005-2007 Ryan Thoryk
-	http://www.tliquest.net/skyscraper
+	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
 

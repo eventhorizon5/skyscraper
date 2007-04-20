@@ -4,7 +4,7 @@
 	Scalable Building Simulator - Stairs Subsystem Class
 	The Skyscraper Project - Version 1.1 Alpha
 	Copyright (C)2005-2007 Ryan Thoryk
-	http://www.tliquest.net/skyscraper
+	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
 
@@ -163,13 +163,13 @@ int Stairs::AddStairs(int floor, const char *name, const char *texture, const ch
 				AddFloor(floor, buffer.GetData(), texture, 0, -(width / 2), pos, width / 2, pos - treadsize, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 			}
 		}
-		
+
 		if (index == -1)
 			index = tmpindex;
 	}
 	sbs->ResetWalls(true);
 	sbs->ResetExtents();
-	
+
 	return index;
 }
 
@@ -210,7 +210,7 @@ void Stairs::EnableWholeStairwell(bool value)
 bool Stairs::IsInStairwell(const csVector3 &position)
 {
 	//determine if user is in the stairwell
-	
+
 	float bottom = sbs->GetFloor(startfloor)->Altitude;
 	float top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 

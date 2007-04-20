@@ -4,7 +4,7 @@
 	Scalable Building Simulator - Elevator Button Panel Class
 	The Skyscraper Project - Version 1.1 Alpha
 	Copyright (C)2005-2007 Ryan Thoryk
-	http://www.tliquest.net/skyscraper
+	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
 
@@ -166,7 +166,7 @@ void ButtonPanel::Press(int index)
 		int floor = atoi(name.GetData());
 		int elev_floor = sbs->GetElevator(elevator)->GetFloor();
 		//int elev_dir = sbs->GetElevator(elevator)->Direction;
-		
+
 		//elevator is above floor
 		if (elev_floor > floor)
 			sbs->GetElevator(elevator)->AddRoute(floor, -1);

@@ -4,7 +4,7 @@
 	Scalable Building Simulator - Global functions
 	The Skyscraper Project - Version 1.1 Alpha
 	Copyright (C)2005-2007 Ryan Thoryk
-	http://www.tliquest.net/skyscraper
+	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
 
@@ -40,7 +40,7 @@ bool IsEven(int Number)
 bool IsNumeric(const char *expression)
 {
 	//test to see if a string is numeric
-	
+
 	for (size_t i = 0; i < strlen(expression) - 1; i++)
 	{
 		if (isdigit(expression[i]) == false && expression[i] != '-' && expression[i] != '.')

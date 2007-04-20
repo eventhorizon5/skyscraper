@@ -13,8 +13,8 @@ AC_INIT(
     [ryan@tliquest.net])
 CS_PACKAGEINFO(
     [Skyscraper],
-    [Copyright (C)2004-2006 Ryan Thoryk],
-    [http://www.tliquest.net/skyscraper])
+    [Copyright (C)2004-2007 Ryan Thoryk],
+    [http://www.skyscrapersim.com])
 AC_CONFIG_SRCDIR([mk/jam/build.jam])
 AC_CONFIG_AUX_DIR([mk/autoconf])
 AC_CANONICAL_HOST

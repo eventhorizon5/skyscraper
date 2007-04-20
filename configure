@@ -1785,8 +1785,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 PACKAGE_LONGNAME="Skyscraper"
-    PACKAGE_COPYRIGHT="Copyright (C)2004-2006 Ryan Thoryk"
-    PACKAGE_HOMEPAGE="http://www.tliquest.net/skyscraper"
+    PACKAGE_COPYRIGHT="Copyright (C)2004-2007 Ryan Thoryk"
+    PACKAGE_HOMEPAGE="http://www.skyscrapersim.com"
 
 
 ac_aux_dir=

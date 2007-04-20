@@ -4,7 +4,7 @@
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 1.1 Alpha
 	Copyright (C)2005-2007 Ryan Thoryk
-	http://www.tliquest.net/skyscraper
+	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
 
@@ -114,13 +114,13 @@ SBS::~SBS()
 
 	//stop timer
 	p->Stop();
-	
+
 	//delete camera object
 	delete camera;
 	camera = 0;
 
 	//delete floors
-	FloorArray.DeleteAll();	
+	FloorArray.DeleteAll();
 
 	//delete elevators
 	ElevatorArray.DeleteAll();
@@ -401,7 +401,7 @@ void SBS::SetupFrame()
 		g3d->SetDimensions(canvas_width, canvas_height);
 		view->ClearView();
 	}
-	
+
 	if (RenderOnly == false && InputOnly == false)
 	{
 		//Process gravity
@@ -640,7 +640,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 			z2 = temp;
 		}
 	}
-	
+
 	//Adds a wall with the specified dimensions
 	csVector3 v1 (x1, altitude1 + height_in1, z1); //left top
 	csVector3 v2 (x2, altitude2 + height_in2, z2); //right top
@@ -846,7 +846,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 			z2 = temp;
 		}
 	}
-	
+
 	csVector3 v1 (x1, altitude1, z1); //bottom left
 	csVector3 v2 (x1, altitude1, z2); //top left
 	csVector3 v3 (x2, altitude2, z2); //top right
@@ -952,7 +952,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
-	
+
 	//set texture
 	SetTexture(dest, index, texture, tw, th);
 

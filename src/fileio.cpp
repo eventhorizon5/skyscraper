@@ -3,7 +3,7 @@
 /*
 	Skyscraper 1.1 Alpha - File I/O Processing Routines
 	Copyright (C)2005-2007 Ryan Thoryk
-	http://www.tliquest.net/skyscraper
+	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
 
@@ -446,7 +446,7 @@ int SBS::LoadBuilding(const char * filename)
 			//get text after equal sign
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
 			temp2.Trim();
-			
+
 			SetWallOrientation(temp2.GetData());
 		}
 
@@ -456,7 +456,7 @@ int SBS::LoadBuilding(const char * filename)
 			//get text after equal sign
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
 			temp2.Trim();
-			
+
 			SetFloorOrientation(temp2.GetData());
 		}
 
