@@ -276,6 +276,23 @@ void Floor::Enabled(bool value)
 		CallButtonArray[i]->Enabled(value);
 }
 
+void Floor::AddAutoFloor(const char *name, const char *texture, float voffset, float tw, float th)
+{
+	/* Autogenerate a floor
+
+		this function splits the "external" mesh's polygons at a certain altitude
+		(y plane), discards the lower ones, makes a list the vertices at the Y value,
+		does a clockwise sort using the Graham scan method, and creates a new floor
+		polygon from the sorted vertices.
+
+	*/
+
+	//int index;
+	//index = sbs->AddCustomFloor(Level_state, texture, varray3, tw, th, false, false, false, false);
+	//FloorList.Push(index);
+	//return index;
+}
+
 float Floor::FullHeight()
 {
 	//calculate full height of a floor
@@ -289,6 +306,44 @@ void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, con
 	CallButtonArray.SetSize(CallButtonArray.GetSize() + 1);
 	int Current = CallButtonArray.GetSize() - 1;
 	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, DownButtonTexture, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+}
+
+void Floor::CutFloor(float x1, float x2, float z1, float z2)
+{
+	//cuts a rectangular hole in the listed floor polygons (floor, ceiling, etc)
+
+	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5;
+
+	//step through each floor polygon
+	for (size_t i = 0; i <= floor_polys.GetSize() - 1; i++)
+	{
+		temppoly.MakeEmpty();
+		temppoly2.MakeEmpty();
+		temppoly3.MakeEmpty();
+		temppoly4.MakeEmpty();
+		temppoly5.MakeEmpty();
+
+		//copy polygon vertices
+		for (int j = 0; j <= Level_state->GetPolygonVertexCount(floor_polys[i]); j++)
+			temppoly.AddVertex(Level_state->GetPolygonVertex(floor_polys[i], j));
+
+		//get left side
+		temppoly.SplitWithPlaneX(temppoly2, temppoly, x1);
+
+		//get right side
+		temppoly2.SplitWithPlaneX(temppoly2, temppoly3, x2);
+
+		//get lower
+		temppoly3.SplitWithPlaneZ(temppoly4, temppoly3, z1);
+
+		//get upper
+		temppoly4.SplitWithPlaneZ(temppoly4, temppoly5, z2);
+
+		//reconstruct 4 resulting polygons into single polygon
+
+		//delete original floor polygon and create a new one
+
+	}
 }
 
 void Floor::AddGroupFloor(int number)

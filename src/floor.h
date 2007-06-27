@@ -68,8 +68,10 @@ public:
 	int AddInterfloorWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th);
 	void DeleteInterfloorWall(int index);
 	void Enabled(bool value);
+	void AddAutoFloor(const char *name, const char *texture, float voffset, float tw, float th);
 	float FullHeight();
 	void AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	void CutFloor(float x1, float x2, float z1, float z2);
 	void AddGroupFloor(int number);
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
