@@ -314,7 +314,7 @@ void Floor::CutFloor(float x1, float x2, float z1, float z2)
 
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5;
 
-	//step through each floor polygon
+	//step through each floor polygon (floor, ceiling, etc)
 	for (size_t i = 0; i <= floor_polys.GetSize() - 1; i++)
 	{
 		temppoly.MakeEmpty();
@@ -339,9 +339,7 @@ void Floor::CutFloor(float x1, float x2, float z1, float z2)
 		//get upper
 		temppoly4.SplitWithPlaneZ(temppoly4, temppoly5, z2);
 
-		//reconstruct 4 resulting polygons into single polygon
-
-		//delete original floor polygon and create a new one
+		//create splitted polygons
 
 	}
 }
