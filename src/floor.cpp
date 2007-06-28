@@ -313,6 +313,8 @@ void Floor::CutFloor(float x1, float x2, float z1, float z2)
 	//cuts a rectangular hole in the listed floor polygons (floor, ceiling, etc)
 
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5;
+	int addpolys;
+	int tmpindex = -1;
 
 	//step through each floor polygon (floor, ceiling, etc)
 	for (size_t i = 0; i <= floor_polys.GetSize() - 1; i++)
@@ -322,6 +324,7 @@ void Floor::CutFloor(float x1, float x2, float z1, float z2)
 		temppoly3.MakeEmpty();
 		temppoly4.MakeEmpty();
 		temppoly5.MakeEmpty();
+		addpolys = 0;
 
 		//copy polygon vertices
 		for (int j = 0; j <= Level_state->GetPolygonVertexCount(floor_polys[i]); j++)
@@ -339,8 +342,34 @@ void Floor::CutFloor(float x1, float x2, float z1, float z2)
 		//get upper
 		temppoly4.SplitWithPlaneZ(temppoly4, temppoly5, z2);
 
-		//create splitted polygons
+		//delete original polygon
+		Level_state->RemovePolygon(floor_polys[i]);
 
+		//create splitted polygons
+		if (temppoly.GetVertexCount() > 0)
+		{
+			addpolys++;
+			tmpindex = Level_state->AddQuad(temppoly[1], temppoly[2], temppoly[3], temppoly[4]);
+			floor_polys.Push(tmpindex);
+		}
+		if (temppoly2.GetVertexCount() > 0)
+		{
+			addpolys++;
+			tmpindex = Level_state->AddQuad(temppoly2[1], temppoly2[2], temppoly2[3], temppoly2[4]);
+			floor_polys.Push(tmpindex);
+		}
+		if (temppoly3.GetVertexCount() > 0)
+		{
+			addpolys++;
+			tmpindex = Level_state->AddQuad(temppoly3[1], temppoly3[2], temppoly3[3], temppoly3[4]);
+			floor_polys.Push(tmpindex);
+		}
+		if (temppoly4.GetVertexCount() > 0)
+		{
+			addpolys++;
+			tmpindex = Level_state->AddQuad(temppoly4[1], temppoly4[2], temppoly4[3], temppoly4[4]);
+			floor_polys.Push(tmpindex);
+		}
 	}
 }
 
