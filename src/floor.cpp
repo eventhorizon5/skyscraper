@@ -111,7 +111,7 @@ int Floor::AddFloor(const char *name, const char *texture, float thickness, floa
 		return floor_polys.GetSize() - 1;
 	}
 	else
-		return sbs->AddFloorMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
+		return sbs->AddFloorMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
 
 void Floor::DeleteFloor(int index)
@@ -196,7 +196,7 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 		return wall_polys.GetSize() - 1;
 	}
 	else
-		return sbs->AddWallMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
+		return sbs->AddWallMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
 
 void Floor::DeleteWall(int index)

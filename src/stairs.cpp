@@ -37,7 +37,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	endfloor = _endfloor;
 	origin.x = CenterX;
 	origin.z = CenterZ;
-	origin.y = sbs->GetFloor(startfloor)->Altitude;
+	origin.y = sbs->GetFloor(startfloor)->Altitude + sbs->GetFloor(startfloor)->InterfloorHeight;
 
 	csString buffer, buffer2, buffer3;
 
@@ -58,7 +58,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 		tmpstate = scfQueryInterface<iThingFactoryState> (StairArray[i - startfloor]->GetMeshObject()->GetFactory());
 		StairArray_state[i - startfloor] = tmpstate;
 		StairArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
-		StairArray[i - startfloor]->GetMovable()->SetPosition(csVector3(origin.x, sbs->GetFloor(i)->Altitude, origin.z));
+		StairArray[i - startfloor]->GetMovable()->SetPosition(csVector3(origin.x, sbs->GetFloor(i)->Altitude + sbs->GetFloor(i)->InterfloorHeight, origin.z));
 		StairArray[i - startfloor]->GetMovable()->UpdateMove();
 	}
 }
@@ -211,7 +211,7 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 {
 	//determine if user is in the stairwell
 
-	float bottom = sbs->GetFloor(startfloor)->Altitude;
+	float bottom = sbs->GetFloor(startfloor)->Altitude + sbs->GetFloor(startfloor)->InterfloorHeight;
 	float top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 
 	if (position.y > bottom && position.y < top)
