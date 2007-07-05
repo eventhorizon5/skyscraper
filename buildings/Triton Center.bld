@@ -152,7 +152,7 @@
     InterfloorHeight = 0
     Group = 1 #enable mezzanine also, since both are merged
 
-    Set 1 = %fullheight% + 2.24
+    Set 1 = %fullheight%
     
     #Floor
     FloorOrientation = top
