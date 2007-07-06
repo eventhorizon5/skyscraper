@@ -608,6 +608,11 @@ recalc:
 				else
 					FloorCheck = 3;
 			}
+			if (LineData.Slice(0, 8).CompareNoCase("altitude") == true)
+			{
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
+				GetFloor(Current)->Altitude = atof(temp2.GetData());
+			}
 			if (LineData.Slice(0, 2).CompareNoCase("id") == true)
 				GetFloor(Current)->ID = Calc(temp2);
 			if (LineData.Slice(0, 4).CompareNoCase("name") == true)
@@ -644,14 +649,15 @@ recalc:
 			if (FloorCheck == 3)
 			{
 				FloorCheck = 0;
-				if (Current == 0)
-					GetFloor(Current)->Altitude = 0;
-				if (Current > 0)
-					GetFloor(Current)->Altitude = GetFloor(Current - 1)->Altitude + GetFloor(Current - 1)->FullHeight();
-				if (Current == -1)
-					GetFloor(Current)->Altitude = -GetFloor(Current)->FullHeight();
-				if (Current < -1)
-					GetFloor(Current)->Altitude = GetFloor(Current + 1)->Altitude - GetFloor(Current)->FullHeight();
+				if (GetFloor(Current)->Altitude == 0)
+				{
+					if (Current > 0)
+						GetFloor(Current)->Altitude = GetFloor(Current - 1)->Altitude + GetFloor(Current - 1)->FullHeight();
+					if (Current == -1)
+						GetFloor(Current)->Altitude = -GetFloor(Current)->FullHeight();
+					if (Current < -1)
+						GetFloor(Current)->Altitude = GetFloor(Current + 1)->Altitude - GetFloor(Current)->FullHeight();
+				}
 			}
 
 			//IF statement
