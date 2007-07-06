@@ -41,8 +41,7 @@ struct iFont;
 struct iFile;
 struct iKeyboardDriver;
 struct iImageLoader;
-struct iLoaderPlugin;
-struct iMeshWrapper;
+struct iLoaderPlugin; struct iMeshWrapper;
 struct iConsoleOutput;
 struct iVirtualClock;
 struct iObjectRegistry;
@@ -215,6 +214,7 @@ public:
 	void ReverseExtents(bool X, bool Y, bool Z);
 	void ResetExtents(bool ToDefaults = false);
 	int GetDrawWallsCount();
+	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);

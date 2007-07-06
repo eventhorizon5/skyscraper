@@ -22,6 +22,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <wx/wx.h>
+#include <wx/variant.h>
 #include "globals.h"
 #include <stdlib.h>
 #include "sbs.h"
@@ -499,6 +501,40 @@ int SBS::LoadBuilding(const char * filename)
 						csString(tempdata[2]).CompareNoCase("true"));
 
 			tempdata.DeleteAll();
+		}
+
+		//Intersection points
+		temp5 = csString(LineData).Downcase().Find("isect(", 0);
+		while (temp5 > -1)
+		{
+			temp1 = LineData.Find("(", 0);
+			temp3 = LineData.Find(")", 0);
+			tempdata.SplitString(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData(), ",");
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+
+			buffer = tempdata[0];
+			buffer.Downcase();
+			if (buffer == "floor")
+			tmpMesh = GetFloor(Current)->Level_state;
+			if (buffer == "external")
+				tmpMesh = External_state;
+			if (buffer == "landscape")
+				tmpMesh = Landscape_state;
+			if (buffer == "buildings")
+				tmpMesh = Buildings_state;
+			if (buffer == "columnframe")
+				tmpMesh = ColumnFrame_state;
+
+			csVector3 isect = GetPoint(tmpMesh, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
+			tempdata.DeleteAll();
+			
+			buffer = csString(LineData).Slice(0, temp5 - 1) + csString(wxVariant(isect.x).GetString().ToAscii()) + csString(wxVariant(isect.y).GetString().ToAscii()) + csString(wxVariant(isect.z).GetString().ToAscii()) + csString(LineData).Slice(temp3 + 1);
+			LineData = buffer.GetData();
+
 		}
 
 		//Process globals
