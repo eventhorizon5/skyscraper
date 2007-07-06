@@ -133,7 +133,7 @@ void Elevator::CreateElevator(float x, float z, int floor)
 	//x and z are the center coordinates
 
 	//set data
-	Origin = csVector3(x, sbs->GetFloor(floor)->Altitude, z);
+	Origin = csVector3(x, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, z);
 	OriginFloor = floor;
 
 	//add elevator to associated shaft's list
