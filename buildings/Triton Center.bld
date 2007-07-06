@@ -108,6 +108,7 @@
     Type = Basement
     Height = 9.5
     InterfloorHeight = 2.24
+    if(%floor% = -1) Altitude = -2.24
 
     #Floor
     FloorOrientation = top
@@ -148,8 +149,9 @@
     Name = Lobby
     Type = Lobby
     Description = Lobby
-    Height = 12.24
-    InterfloorHeight = 0
+    Height = 10
+    InterfloorHeight = 2.24
+    Altitude = -2.24
     Group = 1 #enable mezzanine also, since both are merged
 
     Set 1 = %fullheight%
