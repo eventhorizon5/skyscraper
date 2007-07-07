@@ -1902,7 +1902,7 @@ void SBS::PushFrame()
 	equeue->Process();
 }
 
-csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end)
+csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end)
 {
 	//do a line intersection with a specified mesh, and return
 	//the intersection point
