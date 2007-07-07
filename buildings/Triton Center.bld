@@ -44,6 +44,7 @@
     Load data/marbl3.jpg, Wall1
     Load data/marb123.jpg, Wall2
     Load data/cutston.jpg, Ceiling1
+    Load data/intext.jpg, InterExt
     Load data/text12.jpg, Wall3
     Load data/text16.jpg, ElevDoors
     Load data/marb148.jpg, ElevExtPanels
@@ -205,11 +206,15 @@
 
     #External walls
     WallOrientation = left
-    AddWall Front, MainWindows, 0.5, -75, -70, 75, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Left, MainWindows, 0.5, -75, 70, -75, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Front, MainWindows, 0.5, -75, -70, 75, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Front, InterExt, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Left, MainWindows, 0.5, -75, 70, -75, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Left, InterExt, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
     WallOrientation = right
-    AddWall Right, MainWindows, 0.5, 75, -70, 75, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Back, MainWindows, 0.5, 75, 70, -75, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Right, MainWindows, 0.5, 75, -70, 75, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Right, InterExt, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Back, MainWindows, 0.5, 75, 70, -75, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Back, InterExt, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -253,8 +258,7 @@
     Type = Service
     Description = Zone 1 mechanical
     Height = 15
-    InterfloorHeight = 0
-    InterfloorHeight = 2.24
+    InterfloorHeight = 1
 
     #Floor
     FloorOrientation = top
@@ -266,11 +270,11 @@
 
     #Internal vents
     WallOrientation = left
-    AddWall Vents Front, VentsInt, 0.5, -75, -70, 75, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 0.5, False
-    AddWall Vents Left, VentsInt, 0.5, -75, 70, -75, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 0.5, False
+    AddWall Vents Front, VentsInt, 0.5, -75, -70, 75, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
+    AddWall Vents Left, VentsInt, 0.5, -75, 70, -75, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
     WallOrientation = right
-    AddWall Vents Right, VentsInt, 0.5, 75, -70, 75, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 0.5, False
-    AddWall Vents Back, VentsInt, 0.5, 75, 70, -75, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 0.5, False
+    AddWall Vents Right, VentsInt, 0.5, 75, -70, 75, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
+    AddWall Vents Back, VentsInt, 0.5, 75, 70, -75, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -321,11 +325,15 @@
 
     #External walls
     WallOrientation = left
-    AddWall Front, MainWindows, 0.5, -63, -70, 63, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Left, MainWindows, 0.5, -63, 70, -63, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Front, MainWindows, 0.5, -63, -70, 63, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Front, InterExt, 0.5, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Left, MainWindows, 0.5, -63, 70, -63, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Left, InterExt, 0.5, -63, 70, -63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
     WallOrientation = right
-    AddWall Back, MainWindows, 0.5, 63, 70, -63, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Right, MainWindows, 0.5, 63, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Right, MainWindows, 0.5, 63, -70, 63, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Right, InterExt, 0.5, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Back, MainWindows, 0.5, 63, 70, -63, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Back, InterExt, 0.5, 63, 70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -389,11 +397,11 @@
 
     #Internal vents
     WallOrientation = left
-    AddWall Vents Left, VentsInt, 0.5, -63, 70, -63, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
-    AddWall Vents Front, VentsInt, 0.5, -63, -70, 63, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    AddWall Vents Left, VentsInt, 0.5, -63, 70, -63, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
+    AddWall Vents Front, VentsInt, 0.5, -63, -70, 63, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
     WallOrientation = right
-    AddWall Vents Back, VentsInt, 0.5, 63, 70, -63, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
-    AddWall Vents Right, VentsInt, 0.5, 63, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    AddWall Vents Back, VentsInt, 0.5, 63, 70, -63, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
+    AddWall Vents Right, VentsInt, 0.5, 63, -70, 63, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -426,7 +434,7 @@
     if(%floor% = 100) Height = 10 #skylobby height
     if(%floor% = 101) Height = 10 #service floor height
     if(%floor% > 101) Height = 9 #condo height
-    InterfloorHeight = 2.24
+    InterfloorHeight = 1.5
 
     #Floor
     FloorOrientation = top
@@ -438,11 +446,15 @@
 
     #External walls
     WallOrientation = left
-    AddWall Left, MainWindows, 0.5, -51, 70, -51, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Front, MainWindows, 0.5, -51, -70, 51, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Front, MainWindows, 0.5, -51, -70, 51, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Front, InterExt, 0.5, -51, -70, 51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Left, MainWindows, 0.5, -51, 70, -51, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Left, InterExt, 0.5, -51, 70, -51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
     WallOrientation = right
-    AddWall Back, MainWindows, 0.5, 51, 70, -51, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Right, MainWindows, 0.5, 51, -70, 51, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Right, MainWindows, 0.5, 51, -70, 51, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Right, InterExt, 0.5, 51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Back, MainWindows, 0.5, 51, 70, -51, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Back, InterExt, 0.5, 51, 70, -51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -542,11 +554,11 @@
 
     #Internal vents
     WallOrientation = left
-    AddWall Vents Left, VentsInt, 0.5, -51, 70, -51, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
-    AddWall Vents Front, VentsInt, 0.5, -51, -70, 51, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    AddWall Vents Left, VentsInt, 0.5, -51, 70, -51, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
+    AddWall Vents Front, VentsInt, 0.5, -51, -70, 51, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
     WallOrientation = right
-    AddWall Vents Back, VentsInt, 0.5, 51, 70, -51, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
-    AddWall Vents Right, VentsInt, 0.5, 51, -70, 51, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    AddWall Vents Back, VentsInt, 0.5, 51, 70, -51, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
+    AddWall Vents Right, VentsInt, 0.5, 51, -70, 51, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -576,8 +588,9 @@
 <Floors 120 to 134>
 
     Height = 9 #residential height
+    InterfloorHeight = 1.5
     if(%floor% > 129) Height = 10 #other height
-    InterfloorHeight = 2.24
+    if(%floor% > 129) InterfloorHeight = 2.24
 
     #Floor
     FloorOrientation = top
@@ -589,11 +602,15 @@
 
     #External walls
     WallOrientation = left
-    AddWall Left, MainWindows, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Front, MainWindows, 0.5, -39, -70, 39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Front, MainWindows, 0.5, -39, -70, 39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Front, InterExt, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Left, MainWindows, 0.5, -39, 70, -39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Left, InterExt, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
     WallOrientation = right
-    AddWall Back, MainWindows, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Right, MainWindows, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Right, MainWindows, 0.5, 39, -70, 39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Right, InterExt, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Back, MainWindows, 0.5, 39, 70, -39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Back, InterExt, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -681,11 +698,16 @@
     AddFloor Ceiling, Marble3, 0.5, -39, 0, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
     
     #External walls
-    AddWall Left, MainWindows, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Front, MainWindows, 0.5, -39, -70, 39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    WallOrientation = left
+    AddWall Front, MainWindows, 0.5, -39, -70, 39, -70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Front, InterExt, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Left, MainWindows, 0.5, -39, 70, -39, -70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Left, InterExt, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
     WallOrientation = right
-    AddWall Back, MainWindows, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Right, MainWindows, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Right, MainWindows, 0.5, 39, -70, 39, 70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Right, InterExt, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Back, MainWindows, 0.5, 39, 70, -39, 70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Back, InterExt, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -725,29 +747,21 @@
     WallOrientation = left
     AddWall Filler, Marble3, 0.2, -39, 0, 39, 0, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, False
 
-    #External walls
-    WallOrientation = left
-    AddWall Left, MainWindows, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Front, MainWindows, 0.5, -39, -70, 39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    WallOrientation = right
-    AddWall Back, MainWindows, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Right, MainWindows, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-
     #Interfloor bottom
     FloorOrientation = bottom
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
+    #AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    #AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
-    AddInterfloorWall ILeft, Brick, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall IFront, Brick, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall ILeft, Brick, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall IFront, Brick, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = right
-    AddInterfloorWall IBack, Brick, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall IRight, Brick, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall IBack, Brick, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall IRight, Brick, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloor>
 
 #Skydeck
@@ -769,11 +783,15 @@
 
     #External walls
     WallOrientation = left
-    AddWall Left, MainWindows, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Front, MainWindows, 0.5, -39, -70, 39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Front, MainWindows, 0.5, -39, -70, 39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Front, InterExt, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Left, MainWindows, 0.5, -39, 70, -39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Left, InterExt, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
     WallOrientation = right
-    AddWall Back, MainWindows, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Right, MainWindows, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Right, MainWindows, 0.5, 39, -70, 39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Right, InterExt, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Back, MainWindows, 0.5, 39, 70, -39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Back, InterExt, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -811,11 +829,15 @@
 
     #External walls
     WallOrientation = left
-    AddWall Left, MainWindows, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Front, MainWindows, 0.5, -39, -70, 39, -70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Front, MainWindows, 0.5, -39, -70, 39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Front, InterExt, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Left, MainWindows, 0.5, -39, 70, -39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Left, InterExt, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
     WallOrientation = right
-    AddWall Back, MainWindows, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
-    AddWall Right, MainWindows, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, 0, 0, 0.7, 0, True
+    AddWall Right, MainWindows, 0.5, 39, -70, 39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Right, InterExt, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    AddWall Back, MainWindows, 0.5, 39, 70, -39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall Back, InterExt, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -861,11 +883,11 @@
 
     #Internal vents
     WallOrientation = left
-    AddWall Vents Left, VentsInt, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
-    AddWall Vents Front, VentsInt, 0.5, -39, -70, 39, -70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    AddWall Vents Left, VentsInt, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
+    AddWall Vents Front, VentsInt, 0.5, -39, -70, 39, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
     WallOrientation = right
-    AddWall Vents Back, VentsInt, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
-    AddWall Vents Right, VentsInt, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    AddWall Vents Back, VentsInt, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
+    AddWall Vents Right, VentsInt, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0.27, 0.5, False
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -959,7 +981,7 @@ AddShaft 4, 2, 6, -14, 0, 5
     #standard elevator; 7 feet wide, 6 feet deep
     Speed = 21
     Acceleration = 0.015
-    Deceleration = 0.0075
+    Deceleration = 0.01
     OpenSpeed = 0.2
     ServicedFloors = 0 - 138
     AssignedShaft = 1
@@ -1021,7 +1043,7 @@ AddShaft 4, 2, 6, -14, 0, 5
     #standard elevator; 7 feet wide, 6 feet deep
     Speed = 21
     Acceleration = 0.015
-    Deceleration = 0.0075
+    Deceleration = 0.01
     OpenSpeed = 0.2
     ServicedFloors = 0, 1, 2, 3, 4, 5
     AssignedShaft = 2
@@ -1066,7 +1088,7 @@ AddShaft 4, 2, 6, -14, 0, 5
     #standard elevator; 7 feet wide, 6 feet deep
     Speed = 21
     Acceleration = 0.015
-    Deceleration = 0.0075
+    Deceleration = 0.01
     OpenSpeed = 0.2
     ServicedFloors = 0, 1, 2, 3, 4, 5
     AssignedShaft = 3
@@ -1109,7 +1131,7 @@ AddShaft 4, 2, 6, -14, 0, 5
     #standard elevator; 7 feet wide, 6 feet deep
     Speed = 21
     Acceleration = 0.015
-    Deceleration = 0.0075
+    Deceleration = 0.01
     OpenSpeed = 0.2
     ServicedFloors = 0, 1, 2, 3, 4, 5
     AssignedShaft = 4
