@@ -71,12 +71,14 @@ public:
 	void AddAutoFloor(const char *name, const char *texture, float voffset, float tw, float th);
 	float FullHeight();
 	void AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	void CutFloor(float x1, float x2, float z1, float z2);
+	void CutFloor(csVector2 start, csVector2 end);
+	void CutWall(csVector3 start, csVector3 end);
 	void AddGroupFloor(int number);
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
 
 private:
+	void Cut(csVector3 start, csVector3 end, bool IsWall);
 
 };
 

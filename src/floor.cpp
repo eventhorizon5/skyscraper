@@ -308,16 +308,36 @@ void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, con
 	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, DownButtonTexture, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 }
 
-void Floor::CutFloor(float x1, float x2, float z1, float z2)
+void Floor::CutFloor(csVector2 start, csVector2 end)
+{
+	//cuts a rectangular hole in the listed floor polygons (floor, ceiling, etc)
+
+	Cut(csVector3(start.x, 0, start.y), csVector3(end.x, 0, end.y), false);
+}
+
+void Floor::CutWall(csVector3 start, csVector3 end)
+{
+	//cuts a rectangular hole in the listed floor polygons (floor, ceiling, etc)
+
+	Cut(start, end, true);
+}
+
+void Floor::Cut(csVector3 start, csVector3 end, bool IsWall)
 {
 	//cuts a rectangular hole in the listed floor polygons (floor, ceiling, etc)
 
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5;
 	int addpolys;
 	int tmpindex = -1;
+	csArray<int> *polys;
+
+	if (IsWall == true)
+		polys = &floor_polys;
+	else
+		polys = &wall_polys;
 
 	//step through each floor polygon (floor, ceiling, etc)
-	for (size_t i = 0; i <= floor_polys.GetSize() - 1; i++)
+	for (size_t i = 0; i <= polys->GetSize() - 1; i++)
 	{
 		temppoly.MakeEmpty();
 		temppoly2.MakeEmpty();
@@ -327,48 +347,91 @@ void Floor::CutFloor(float x1, float x2, float z1, float z2)
 		addpolys = 0;
 
 		//copy polygon vertices
-		for (int j = 0; j <= Level_state->GetPolygonVertexCount(floor_polys[i]); j++)
-			temppoly.AddVertex(Level_state->GetPolygonVertex(floor_polys[i], j));
+		for (int j = 0; j <= Level_state->GetPolygonVertexCount(polys->Get(i)); j++)
+			temppoly.AddVertex(Level_state->GetPolygonVertex(polys->Get(i), j));
 
-		//get left side
-		temppoly.SplitWithPlaneX(temppoly2, temppoly, x1);
+		if (IsWall == true)
+		{
+			if (start.x - end.x > start.z - end.z)
+			{
+				//wall is facing forward/backward
 
-		//get right side
-		temppoly2.SplitWithPlaneX(temppoly2, temppoly3, x2);
+				//get left side
+				temppoly.SplitWithPlaneX(temppoly2, temppoly, start.x);
 
-		//get lower
-		temppoly3.SplitWithPlaneZ(temppoly4, temppoly3, z1);
+				//get right side
+				temppoly2.SplitWithPlaneX(temppoly2, temppoly3, end.x);
 
-		//get upper
-		temppoly4.SplitWithPlaneZ(temppoly4, temppoly5, z2);
+				//get lower
+				temppoly3.SplitWithPlaneY(temppoly4, temppoly3, start.y);
+
+				//get upper
+				temppoly4.SplitWithPlaneY(temppoly4, temppoly5, end.y);
+			}
+			else
+			{
+				//wall is facing left/right
+
+				//get left side
+				temppoly.SplitWithPlaneZ(temppoly2, temppoly, start.z);
+
+				//get right side
+				temppoly2.SplitWithPlaneZ(temppoly2, temppoly3, end.z);
+
+				//get lower
+				temppoly3.SplitWithPlaneY(temppoly4, temppoly3, start.y);
+
+				//get upper
+				temppoly4.SplitWithPlaneY(temppoly4, temppoly5, end.y);
+			}
+		}
+		else
+		{
+			//get left side
+			temppoly.SplitWithPlaneX(temppoly2, temppoly, start.x);
+
+			//get right side
+			temppoly2.SplitWithPlaneX(temppoly2, temppoly3, end.x);
+
+			//get lower
+			temppoly3.SplitWithPlaneZ(temppoly4, temppoly3, start.z);
+
+			//get upper
+			temppoly4.SplitWithPlaneZ(temppoly4, temppoly5, end.z);
+		}
 
 		//delete original polygon
-		Level_state->RemovePolygon(floor_polys[i]);
+		Level_state->RemovePolygon(polys->Get(i));
+		polys->DeleteIndex(i);
 
 		//create splitted polygons
 		if (temppoly.GetVertexCount() > 0)
 		{
 			addpolys++;
 			tmpindex = Level_state->AddQuad(temppoly[1], temppoly[2], temppoly[3], temppoly[4]);
-			floor_polys.Push(tmpindex);
+			polys->Insert(i, tmpindex);
+			i++;
 		}
 		if (temppoly2.GetVertexCount() > 0)
 		{
 			addpolys++;
 			tmpindex = Level_state->AddQuad(temppoly2[1], temppoly2[2], temppoly2[3], temppoly2[4]);
-			floor_polys.Push(tmpindex);
+			polys->Insert(i, tmpindex);
+			i++;
 		}
 		if (temppoly3.GetVertexCount() > 0)
 		{
 			addpolys++;
 			tmpindex = Level_state->AddQuad(temppoly3[1], temppoly3[2], temppoly3[3], temppoly3[4]);
-			floor_polys.Push(tmpindex);
+			polys->Insert(i, tmpindex);
+			i++;
 		}
 		if (temppoly4.GetVertexCount() > 0)
 		{
 			addpolys++;
 			tmpindex = Level_state->AddQuad(temppoly4[1], temppoly4[2], temppoly4[3], temppoly4[4]);
-			floor_polys.Push(tmpindex);
+			polys->Insert(i, tmpindex);
+			i++;
 		}
 	}
 }
