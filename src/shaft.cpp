@@ -154,3 +154,17 @@ bool Shaft::IsInShaft(const csVector3 &position)
 	}
 	return false;
 }
+
+bool Shaft::CutFloors(csVector2 start, csVector3 end, float startvoffset, float endvoffset)
+{
+	float voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
+	float voffset2 = sbs->GetFloor(endfloor)->Altitude + endvoffset;
+	
+	for (int i = startfloor; i <= endfloor; i++)
+	{
+		//Cut through floor polygons on all associated levels
+		sbs->GetFloor(i)->Cut(csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y));
+	}
+
+}
+
