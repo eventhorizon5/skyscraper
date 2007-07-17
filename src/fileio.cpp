@@ -405,8 +405,6 @@ int SBS::LoadBuilding(const char * filename)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
 			int index = AddCustomFloor(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]), extcheck);
-			if (buffer == "floor")
-				GetFloor(Current)->floor_polys.Push(index);
 
 			tempdata.DeleteAll();
 		}

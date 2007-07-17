@@ -49,10 +49,6 @@ public:
 	float InterfloorHeight; //height of interfloor area
 	bool IsEnabled; //is floor enabled?
 	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
-	csArray<int> floor_polys; //index refs to floor polygons
-	csArray<int> ifloor_polys; //index refs to interfloor floor polygons
-	csArray<int> wall_polys; //index refs to wall polygons
-	csArray<int> iwall_polys; //index refs to interfloor wall polygons
 	csArray<int> Group; //floor group
 
 	//functions
@@ -71,14 +67,12 @@ public:
 	void AddAutoFloor(const char *name, const char *texture, float voffset, float tw, float th);
 	float FullHeight();
 	void AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	void CutFloor(csVector2 start, csVector2 end);
-	void CutWall(csVector3 start, csVector3 end);
+	void Cut(csVector3 start, csVector3 end);
 	void AddGroupFloor(int number);
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
 
 private:
-	void Cut(csVector3 start, csVector3 end, bool IsWall);
 
 };
 
