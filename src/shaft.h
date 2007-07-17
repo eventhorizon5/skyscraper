@@ -49,7 +49,7 @@ public:
 	bool IsShaft(csRef<iMeshWrapper> test);
 	void EnableWholeShaft(bool value);
 	bool IsInShaft(const csVector3 &position);
-	bool CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset);
+	void CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array
