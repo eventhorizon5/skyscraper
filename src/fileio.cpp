@@ -424,6 +424,21 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.DeleteAll();
 		}
 
+		//ShaftCut command
+		if (LineData.Slice(0, 9).CompareNoCase("shaftcut ") == true)
+		{
+			tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+
+			GetShaft(atoi(tempdata[0]))->CutFloors(csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
+
+			tempdata.DeleteAll();
+		}
+
 		//CreateStairwell command
 		if (LineData.Slice(0, 15).CompareNoCase("createstairwell") == true)
 		{
