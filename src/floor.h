@@ -73,7 +73,7 @@ public:
 	void EnableGroup(bool value);
 
 private:
-
+	void PerformCut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end);
 };
 
 #endif
