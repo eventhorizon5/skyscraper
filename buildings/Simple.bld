@@ -76,6 +76,7 @@
 
 #Shaft 1
 AddShaft 1, 2, 6, 14, 0, 9
+ShaftCut 1, -4, -3.5, 4, 3.5, 0, 5
 
 <Elevator 1>
     #standard elevator; 7 feet wide, 6 feet deep
