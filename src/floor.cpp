@@ -237,23 +237,6 @@ void Floor::Enabled(bool value)
 		CallButtonArray[i]->Enabled(value);
 }
 
-void Floor::AddAutoFloor(const char *name, const char *texture, float voffset, float tw, float th)
-{
-	/* Autogenerate a floor
-
-		this function splits the "external" mesh's polygons at a certain altitude
-		(y plane), discards the lower ones, makes a list the vertices at the Y value,
-		does a clockwise sort using the Graham scan method, and creates a new floor
-		polygon from the sorted vertices.
-
-	*/
-
-	//int index;
-	//index = sbs->AddCustomFloor(Level_state, texture, varray3, tw, th, false, false, false, false);
-	//FloorList.Push(index);
-	//return index;
-}
-
 float Floor::FullHeight()
 {
 	//calculate full height of a floor
