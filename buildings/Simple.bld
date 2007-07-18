@@ -75,7 +75,7 @@
 <EndFloor>
 
 #Shaft 1
-AddShaft 1, 2, 6, 14, 0, 9
+AddShaft 1, 2, 0, 6, 0, 9
 ShaftCut 1, -4, -3.5, 4, 3.5, 0, 5
 
 <Elevator 1>
