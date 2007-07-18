@@ -80,7 +80,7 @@
   <p align="left">Example:<font size="2" face="Courier New, Courier, mono"><br>
     Set 1 = Floor(5).Altitude</font></p>
   <p align="left"><br>
-    <strong>6. Global commands; can be used anywhere in the script</strong><br>
+    <strong>6. Global commands or functions that can be used anywhere in the script</strong><br>
     <br>
     <strong>a. CreateWallBox</strong> - creates 4 walls (box) at the specified 
     coordinate locations<br>
@@ -193,6 +193,36 @@
     and determine if the texture mapping data should be reversed, per axis. If 
     the texture looks strange in the simulator, mess around with the <em>x</em> 
     and <em>z</em> values (<em>y</em> flips the texture upside down).</p>
+  <p align="left"><strong>j. ShaftCut</strong> - used in conjunction with a shaft 
+    object - performs a vertical box cut on all floor objects (floors, ceilings, 
+    interfloor, etc) in the specified range.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> ShaftCut number, 
+    startx, startz, endx, endz, start_voffset, end_voffset</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">ShaftCut 1, -4, -3.5, 4, 
+    3.5, 0, 5</font></p>
+  <p align="left"><em>Number</em> is the number of the shaft object to work with. 
+    <em>Startx</em>, <em>startz</em>, <em>endx</em>, and <em>endz</em> are two 
+    sets off coordinates that specify the cut box's start position and end position, 
+    relative to the shaft's central position. <em>Start_voffset</em> is the position 
+    above the starting floor's altitude to start the cut at, and <em>end_voffset</em> 
+    is the position above the ending floor's altitude to end the cut at. The example 
+    cuts a box for shaft 1, with a width from -4 to 4, and a length from -3.5 
+    to 3.5, starting at the starting floor's altitude, and ending at 5 feet above 
+    the ending floor's altitude.</p>
+  <p align="left"><strong>k. Isect</strong> - the Isect function calculates the 
+    position that a line intersects with a certain object, such as a floor. This 
+    is mainly used with angled walls that span multiple floors, to find the edge 
+    location of the wall at each level without doing any manual calculations. 
+    Since this is a function, it can be used in-line anywhere.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> isect(destobject, 
+    objectname, startx, starty, startz, endx, endy, endz)</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">isect(external, 
+    wall1, 10, 10, 0, -10, 10, 0)</font></p>
+  <p align="left"><em>Destobject</em> is the destination object to get the object 
+    from (floor, external, landscape, buildings, or columnframe). <em>Startx</em>, 
+    <em>starty</em>, and <em>startz</em> make up the position of the starting 
+    position, and <em>endx</em>, <em>endy</em> and <em>endz</em> make up the ending 
+    position. The first intersection of the named object is the return value.</p>
   <p align="left"><br>
     <strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
