@@ -54,6 +54,9 @@ public:
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array
 	csRefArray<iThingFactoryState> ShaftArray_state; //shaft mesh array state
+
+	char intbuffer[65];
+	char buffer[20];
 };
 
 #endif

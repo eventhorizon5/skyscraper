@@ -27,6 +27,7 @@
 #include "shaft.h"
 #include "sbs.h"
 #include "camera.h"
+#include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
 
@@ -157,12 +158,12 @@ bool Shaft::IsInShaft(const csVector3 &position)
 
 void Shaft::CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset)
 {
+	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
+	
 	float voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
 	float voffset2 = sbs->GetFloor(endfloor)->Altitude + endvoffset;
+	sbs->Report("Cutting for shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + "...");
 	
 	for (int i = startfloor; i <= endfloor; i++)
-	{
-		//Cut through floor polygons on all associated levels
 		sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y));
-	}
 }
