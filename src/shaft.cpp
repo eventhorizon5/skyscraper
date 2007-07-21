@@ -165,5 +165,5 @@ void Shaft::CutFloors(csVector2 start, csVector2 end, float startvoffset, float 
 	sbs->Report("Cutting for shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + "...");
 	
 	for (int i = startfloor; i <= endfloor; i++)
-		sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y));
+		sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false);
 }
