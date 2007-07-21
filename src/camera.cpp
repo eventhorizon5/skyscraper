@@ -347,6 +347,19 @@ void Camera::ClickedObject()
 		//press button
 		sbs->GetElevator(elevator)->Panel->Press(result.polygon_idx);
 	}
+
+	//check doors
+	if (meshname.Find("Door") != -1)
+	{
+		//user clicked on a door
+		int doornumber = atoi(meshname.Slice(5));
+
+		//open or close door
+		if (sbs->GetDoor(doornumber)->IsOpen == false)
+			sbs->GetDoor(doornumber)->OpenDoor();
+		else
+			sbs->GetDoor(doornumber)->CloseDoor();
+	}
 }
 
 const char *Camera::GetClickedMeshName()
