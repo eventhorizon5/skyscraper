@@ -28,6 +28,7 @@
 #include "shaft.h"
 #include "camera.h"
 #include "stairs.h"
+#include "door.h"
 
 //global functions
 float AutoSize(float n1, float n2, bool iswidth, bool external, float offset);
@@ -75,6 +76,12 @@ struct StairsMap
 {
 	int number; //stairs number
 	Stairs *object; //stairs object reference
+};
+
+struct DoorMap
+{
+	int number; //door number
+	Door *object; //door object reference
 };
 
 //SBS class
@@ -201,10 +208,12 @@ public:
 	int TotalFloors(); //all floors including basements
 	int Shafts();
 	int StairsNum();
+	int Doors();
 	Floor *GetFloor(int number);
 	Elevator *GetElevator(int number);
 	Shaft *GetShaft(int number);
 	Stairs *GetStairs(int number);
+	Door *GetDoor(int number);
 	void SetWallOrientation(const char *direction);
 	int GetWallOrientation();
 	void SetFloorOrientation(const char *direction);
@@ -215,6 +224,8 @@ public:
 	void ResetExtents(bool ToDefaults = false);
 	int GetDrawWallsCount();
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
+	int CreateDoor(csRef<iThingFactoryState> cutmesh, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
+	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);
@@ -289,6 +300,7 @@ private:
 	csArray<ElevatorMap> ElevatorArray; //elevator object array
 	csArray<ShaftMap> ShaftArray; //shaft object array
 	csArray<StairsMap> StairsArray; //stairs object array
+	csArray<DoorMap> DoorArray; //door object array
 
 	//private functions
 	void PrintBanner();
