@@ -516,6 +516,23 @@
     length of the staircase, simply multiply <em>num_stairs</em> with <em>treadsize</em>. 
     To determine the height of the staircase, multiply <em>num_stairs</em> with 
     <em>risersize</em>, and add the <em>voffset</em> value.</p>
+  <p align="left"><strong>13. AddDoor</strong> - adds a textured door in the specified 
+    location, and performs a wall cut on that area (this must be called after 
+    the associated wall is created)<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor <em> texturename, 
+    thickness</em>, <em>direction, CenterX</em>, <em>CenterZ</em>, <em>width</em>, 
+    <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
+  <p align="left">Direction specifies the direction the door faces and also the 
+    direction it opens. These are the values:<br>
+    1 - faces left, opens left<br>
+    2 - faces left, opens right<br>
+    3 - faces right, opens right<br>
+    4 - faces right, opens left<br>
+    5 - faces front, opens front<br>
+    6 - faces front, opens back<br>
+    7 - faces back, opens back<br>
+    8 - faces back, opens front<br>
+  </p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">6. The <em>External</em> Section</font></strong></p>
   <p align="left">The <em>External</em> section defines parts of the building's 
