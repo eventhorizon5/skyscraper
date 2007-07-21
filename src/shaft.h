@@ -50,6 +50,7 @@ public:
 	void EnableWholeShaft(bool value);
 	bool IsInShaft(const csVector3 &position);
 	void CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset);
+	void CutWall(int floor, csVector3 start, csVector3 end);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array

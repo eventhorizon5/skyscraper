@@ -167,3 +167,11 @@ void Shaft::CutFloors(csVector2 start, csVector2 end, float startvoffset, float 
 	for (int i = startfloor; i <= endfloor; i++)
 		sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false);
 }
+
+void Shaft::CutWall(int floor, csVector3 start, csVector3 end)
+{
+	//Cut through a wall segment
+	//the Y values in start and end are both relative to the floor's altitude
+
+	sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, sbs->GetFloor(floor)->Altitude + start.y, start.z), csVector3(end.x, sbs->GetFloor(floor)->Altitude + end.y, end.z));
+}

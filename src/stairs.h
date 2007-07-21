@@ -43,6 +43,7 @@ public:
 	void Enabled(int floor, bool value);
 	void EnableWholeStairwell(bool value);
 	bool IsInStairwell(const csVector3 &position);
+	int AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array

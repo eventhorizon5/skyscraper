@@ -1293,6 +1293,7 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 	//uses some parameters (width, height, direction) from AddDoors function
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
+	float base;
 
 	//set door parameters
 	ShaftDoorOrigin = csVector3(Origin.x + CenterX, Origin.y, Origin.z + CenterZ);
@@ -1329,6 +1330,14 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 	//create doors
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
 	{
+		base = sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(ServicedFloors[i])->InterfloorHeight;
+		
+		//cut shaft walls
+		if (DoorDirection == false)
+			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1, DoorHeight, z1), csVector3(x4 + thickness, base, z4));
+		else
+			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1, DoorHeight, z1), csVector3(x4, base, z4 + thickness));
+		
 		//create meshes
 		buffer3 = Number;
 		buffer4 = i;
@@ -1360,8 +1369,8 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		ShaftDoorR[i]->GetMovable()->UpdateMove();
 
 		//create doors
-		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, thickness, x1, z1, x2, z2, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(ServicedFloors[i])->InterfloorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(ServicedFloors[i])->InterfloorHeight, tw, th);
-		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, thickness, x3, z3, x4, z4, DoorHeight, DoorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(ServicedFloors[i])->InterfloorHeight, sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(ServicedFloors[i])->InterfloorHeight, tw, th);
+		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, thickness, x1, z1, x2, z2, DoorHeight, DoorHeight, base, base, tw, th);
+		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, thickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base, base, tw, th);
 
 		//make doors invisible on start
 		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);

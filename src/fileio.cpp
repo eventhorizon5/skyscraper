@@ -1002,6 +1002,25 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//AddStairsDoor command
+			if (LineData.Slice(0, 14).CompareNoCase("addstairsdoor ") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(14).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+				//create door
+				if (GetStairs(atoi(tempdata[0])))
+					GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], atof(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				tempdata.DeleteAll();
+			}
+
 			//handle floor range
 			if (RangeL != RangeH && LineData.Slice(0, 11).CompareNoCase("<endfloors>") == true)
 			{

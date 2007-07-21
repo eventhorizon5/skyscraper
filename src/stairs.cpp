@@ -221,3 +221,10 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 	}
 	return false;
 }
+
+int Stairs::AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+{
+	//interface to the SBS AddDoor function
+	
+	return sbs->CreateDoor(StairArray_state[floor - startfloor], texture, thickness, direction, CenterX, CenterZ, width, height, voffset + sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, tw, th);
+}
