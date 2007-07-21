@@ -984,6 +984,24 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//AddDoor command
+			if (LineData.Slice(0, 8).CompareNoCase("adddoor ") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(8).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+				//create door
+				GetFloor(Current)->AddDoor(tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
+				tempdata.DeleteAll();
+			}
+
 			//handle floor range
 			if (RangeL != RangeH && LineData.Slice(0, 11).CompareNoCase("<endfloors>") == true)
 			{
