@@ -66,13 +66,11 @@ public:
 	void Enabled(bool value);
 	float FullHeight();
 	void AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	void Cut(csVector3 start, csVector3 end);
+	void Cut(csVector3 start, csVector3 end, bool fast);
 	void AddGroupFloor(int number);
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
-
-private:
-	void PerformCut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end);
+	int AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 };
 
 #endif

@@ -252,174 +252,14 @@ void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, con
 	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, DownButtonTexture, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 }
 
-void Floor::Cut(csVector3 start, csVector3 end)
+void Floor::Cut(csVector3 start, csVector3 end, bool fast)
 {
-	//caller to performcut function
+	//caller to SBS cut function
+	//if fast is specified, skips the interfloor scan
 
-	PerformCut(Level_state, start, end);
-	PerformCut(Interfloor_state, start, end);
-}
-
-void Floor::PerformCut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end)
-{
-	//cuts a rectangular hole in the polygons within the specified range
-
-	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
-	int addpolys;
-	int tmpindex;
-	int tmpindex_tmp;
-
-	//step through each polygon
-	for (size_t i = 0; i < state->GetPolygonCount(); i++)
-	{
-		temppoly.MakeEmpty();
-		temppoly2.MakeEmpty();
-		temppoly3.MakeEmpty();
-		temppoly4.MakeEmpty();
-		temppoly5.MakeEmpty();
-		worker.MakeEmpty();
-		addpolys = 0;
-		tmpindex = -1;
-		tmpindex_tmp = -1;
-
-		//copy source polygon vertices
-		for (int j = 0; j < state->GetPolygonVertexCount(i); j++)
-			temppoly.AddVertex(state->GetPolygonVertex(i, j));
-
-		//make sure the polygon is not outside the cut area
-		if (temppoly.ClassifyX(start.x) != CS_POL_FRONT &&
-			temppoly.ClassifyX(end.x) != CS_POL_BACK &&
-			temppoly.ClassifyY(start.y) != CS_POL_FRONT &&
-			temppoly.ClassifyY(end.y) != CS_POL_BACK &&
-			temppoly.ClassifyZ(start.z) != CS_POL_FRONT &&
-			temppoly.ClassifyZ(end.z) != CS_POL_BACK)
-		{
-			//is polygon a wall?
-			if ((end.x - start.x) > (end.y - start.y) && (end.z - start.z) > (end.y - start.y))
-			{
-				//wall
-				if (start.x - end.x > start.z - end.z)
-				{
-					//wall is facing forward/backward
-
-					//get left side
-					worker = temppoly;
-					worker.SplitWithPlaneX(temppoly, temppoly2, start.x);
-					worker.MakeEmpty();
-
-					//get right side
-					worker = temppoly2;
-					worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
-					worker.MakeEmpty();
-
-					//get lower
-					worker = temppoly3;
-					worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
-					worker.MakeEmpty();
-
-					//get upper
-					worker = temppoly4;
-					worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
-					worker.MakeEmpty();
-				}
-				else
-				{
-					//wall is facing left/right
-
-					//get left side
-					worker = temppoly;
-					worker.SplitWithPlaneZ(temppoly, temppoly2, start.z);
-					worker.MakeEmpty();
-
-					//get right side
-					worker = temppoly2;
-					worker.SplitWithPlaneZ(temppoly3, temppoly2, end.z);
-					worker.MakeEmpty();
-
-					//get lower
-					worker = temppoly3;
-					worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
-					worker.MakeEmpty();
-
-					//get upper
-					worker = temppoly4;
-					worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
-					worker.MakeEmpty();
-				}
-			}
-			else
-			{
-				//floor
-
-				//get left side
-				worker = temppoly;
-				worker.SplitWithPlaneX(temppoly, temppoly2, start.x);
-				worker.MakeEmpty();
-
-				//get right side
-				worker = temppoly2;
-				worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
-				worker.MakeEmpty();
-
-				//get lower
-				worker = temppoly3;
-				worker.SplitWithPlaneZ(temppoly3, temppoly4, start.z);
-				worker.MakeEmpty();
-
-				//get upper
-				worker = temppoly4;
-				worker.SplitWithPlaneZ(temppoly5, temppoly4, end.z);
-				worker.MakeEmpty();
-			}
-
-			//get texture data from original polygon
-			iMaterialWrapper *oldmat = state->GetPolygonMaterial(i);
-			csVector3 oldvector;
-			csMatrix3 mapping;
-			state->GetPolygonTextureMapping(i, mapping, oldvector);
-		
-			//delete original polygon
-			state->RemovePolygon(i);
-			i--;
-
-			//create splitted polygons
-			if (temppoly.GetVertexCount() > 0)
-			{
-				addpolys++;
-				tmpindex_tmp = state->AddPolygon(temppoly.GetVertices(), temppoly.GetVertexCount());
-				if (tmpindex == -1)
-					tmpindex = tmpindex_tmp;
-			}
-			if (temppoly2.GetVertexCount() > 0)
-			{
-				addpolys++;
-				tmpindex_tmp = state->AddPolygon(temppoly2.GetVertices(), temppoly2.GetVertexCount());
-				if (tmpindex == -1)
-					tmpindex = tmpindex_tmp;
-			}
-			if (temppoly3.GetVertexCount() > 0)
-			{
-				addpolys++;
-				tmpindex_tmp = state->AddPolygon(temppoly3.GetVertices(), temppoly3.GetVertexCount());
-				if (tmpindex == -1)
-					tmpindex = tmpindex_tmp;
-			}
-			if (temppoly4.GetVertexCount() > 0)
-			{
-				addpolys++;
-				tmpindex_tmp = state->AddPolygon(temppoly4.GetVertices(), temppoly4.GetVertexCount());
-				if (tmpindex == -1)
-					tmpindex = tmpindex_tmp;
-			}
-
-			//apply material to new polygon set
-			if (addpolys > 0)
-			{
-				state->SetPolygonMaterial(csPolygonRange(tmpindex, tmpindex + addpolys - 1), oldmat);
-				state->SetPolygonTextureMapping(csPolygonRange(tmpindex, tmpindex + addpolys - 1), mapping, oldvector);
-			}
-		}
-	}
+	sbs->Cut(Level_state, start, end);
+	if (fast == false)
+		sbs->Cut(Interfloor_state, start, end);
 }
 
 void Floor::AddGroupFloor(int number)
@@ -446,4 +286,11 @@ void Floor::EnableGroup(bool value)
 
 	for (size_t i = 0; i < Group.GetSize(); i++)
 		sbs->GetFloor(Group[i])->Enabled(value);
+}
+
+int Floor::AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+{
+	//interface to the SBS AddDoor function
+	
+	return sbs->CreateDoor(Level_state, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude, tw, th);
 }
