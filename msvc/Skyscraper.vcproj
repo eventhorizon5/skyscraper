@@ -239,6 +239,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\door.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\editelevator.cpp"
 				>
 			</File>
@@ -309,6 +313,10 @@
 			</File>
 			<File
 				RelativePath="..\src\debugpanel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\door.h"
 				>
 			</File>
 			<File
