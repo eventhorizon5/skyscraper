@@ -231,6 +231,15 @@
     WallOrientation = right
     AddInterfloorWall IRight, Brick, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall IBack, Brick, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    
+    #sample walls
+    WallOrientation = right
+    AddWall LeftTest, Wall1, 0.3, 2, 9, 2, 19, %height%, %height%, 0, 0, 0, 0, False
+    AddWall FrontTest, Wall1, 0.3, 2, 9, 11, 9, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall RightTest, Wall1, 0.3, 11, 9, 11, 19, %height%, %height%, 0, 0, 0, 0, False
+    AddWall BackTest, Wall1, 0.3, 2, 19, 11, 19, %height%, %height%, 0, 0, 0, 0, False
+
 <EndFloors>
 
 # conference levels
@@ -955,25 +964,30 @@
 
 #Shaft 1
 AddShaft 1, 2, 6, 14, 0, 138
+ShaftCut 1, -4.5, -5, 5, 5, 0, 5
 
 #Shaft 2
 AddShaft 2, 2, -6, 14, 0, 5
+#ShaftCut 2, -4.5, -5, 5, 5, 0, 5
 
 #Shaft 3
 AddShaft 3, 2, -6, -14, 0, 5
+#ShaftCut 3, -4.5, -5, 5, 5, 0, 5
 
 #Shaft 4
 AddShaft 4, 2, 6, -14, 0, 5
+#ShaftCut 4, -4.5, -5, 5, 5, 0, 5
 
 #Shafts
 <Floors 0 to 138>
     FloorOrientation = top
-    if(%floor% = 0) AddShaftFloor 1, Base, Brick, 0.5, -3.1, -5, 5, 5, 0, 0, 0, 0
-    if(%floor% = 138) AddShaftFloor 1, Top, Brick, 0.5, -3.1, -5, 5, 5, %fullheight%, %fullheight%, 0, 0
+    if(%floor% = 0) AddShaftFloor 1, Base, Brick, 0.5, -4, -5, 5, 5, 0, 0, 0, 0
+    if(%floor% = 138) AddShaftFloor 1, Top, Brick, 0.5, -4, -5, 5, 5, %fullheight%, %fullheight%, 0, 0
     WallOrientation = left
-    AddShaftWall 1, Front, Brick, 0.5, -3.1, -5, 5, -5, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 1, Front, Brick, 0.5, -4, -5, 5, -5, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 1, Left, Brick, 0.5, -4, -5, -4, 5, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
-    AddShaftWall 1, Back, Brick, 0.5, -3.1, 5, 5, 5, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 1, Back, Brick, 0.5, -4, 5, 5, 5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 1, Right, Brick, 0.5, 5, -5, 5, 5, %fullheight%, %fullheight%, 0, 0, 0, 0
 <EndFloors>
 
