@@ -124,10 +124,13 @@ void Shaft::Enabled(int floor, bool value)
 		}
 	}
 
-	for (size_t i = elevators[0]; i < elevators.GetSize(); i++)
+	for (size_t i = 0; i < elevators.GetSize(); i++)
 	{
-		for(size_t j = sbs->GetElevator(i)->ServicedFloors[0]; j < sbs->GetElevator(i)->ServicedFloors.GetSize(); j++)
-			sbs->GetElevator(i)->ShaftDoorsEnabled(j, value);
+		for(size_t j = 0; j < sbs->GetElevator(elevators[i])->ServicedFloors.GetSize(); j++)
+		{
+			if (sbs->GetElevator(elevators[i])->ServicedFloors[j] == floor)
+				sbs->GetElevator(elevators[i])->ShaftDoorsEnabled(sbs->GetElevator(elevators[i])->ServicedFloors[j], value);
+		}
 	}
 }
 

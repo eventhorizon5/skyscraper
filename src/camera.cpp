@@ -284,8 +284,9 @@ void Camera::CheckShaft()
 		{
 			sbs->GetShaft(i)->InsideShaft = false;
 
-			//turn off entire shaft
+			//turn off shaft except for camera floor
 			sbs->GetShaft(i)->EnableWholeShaft(false);
+			sbs->GetShaft(i)->Enabled(sbs->camera->CurrentFloor, true);
 		}
 	}
 }

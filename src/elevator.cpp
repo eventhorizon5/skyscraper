@@ -761,9 +761,9 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z - (DoorWidth / 2)));
+				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z - (DoorWidth / 2)));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z + (DoorWidth / 2)));
+				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z + (DoorWidth / 2)));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -781,9 +781,9 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x - (DoorWidth / 2), GetPosition().y, Origin.z));
+				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x - (DoorWidth / 2), 0, Origin.z));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x + (DoorWidth / 2), GetPosition().y, Origin.z));
+				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x + (DoorWidth / 2), 0, Origin.z));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -804,9 +804,9 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -824,9 +824,9 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x, GetPosition().y, Origin.z));
+				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -984,27 +984,14 @@ void Elevator::MoveElevatorToFloor()
 	{
 		int i = GetFloor();
 		sbs->GetShaft(AssignedShaft)->Enabled(i, true);
-		ShaftDoorsEnabled(i, true);
 		if (i > sbs->GetShaft(AssignedShaft)->startfloor)
-		{
 			sbs->GetShaft(AssignedShaft)->Enabled(i - 1, true);
-			ShaftDoorsEnabled(i - 1, true);
-		}
 		if (i < sbs->GetShaft(AssignedShaft)->endfloor)
-		{
 			sbs->GetShaft(AssignedShaft)->Enabled(i + 1, true);
-			ShaftDoorsEnabled(i + 1, true);
-		}
 		if (i > sbs->GetShaft(AssignedShaft)->startfloor + 1)
-		{
 			sbs->GetShaft(AssignedShaft)->Enabled(i - 2, false);
-			ShaftDoorsEnabled(i - 2, false);
-		}
 		if (i < sbs->GetShaft(AssignedShaft)->endfloor - 1)
-		{
 			sbs->GetShaft(AssignedShaft)->Enabled(i + 2, false);
-			ShaftDoorsEnabled(i + 2, false);
-		}
 	}
 
 	//move sounds
