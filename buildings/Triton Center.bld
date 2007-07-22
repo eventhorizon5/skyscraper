@@ -173,6 +173,14 @@
     WallOrientation = right
     AddWall Right, LobbyFront, 0.5, 75 - 0.1, -70 + 0.1, 75 - 0.1, 70 - 0.1, %1% * 3, %1% * 3, 0, 0, 0.3, 1, True
     AddWall Back, LobbyFront, 0.5, 75 - 0.1, 70 - 0.1, -75 + 0.1, 70 - 0.1, %1% * 3, %1% * 3, 0, 0, 0.3, 1, True
+
+    #sample walls
+    WallOrientation = right
+    AddWall LeftTest, Wall1, 0.3, 2, 8.7, 2, 19.3, %height%, %height%, 0, 0, 0, 0, False
+    AddWall FrontTest, Wall1, 0.3, 1.7, 9, 11.3, 9, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall RightTest, Wall1, 0.3, 11, 8.7, 11, 19.3, %height%, %height%, 0, 0, 0, 0, False
+    AddWall BackTest, Wall1, 0.3, 1.7, 19, 11.3, 19, %height%, %height%, 0, 0, 0, 0, False
 <EndFloor>
 
 #mezzanine
@@ -231,15 +239,6 @@
     WallOrientation = right
     AddInterfloorWall IRight, Brick, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall IBack, Brick, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    
-    #sample walls
-    WallOrientation = right
-    AddWall LeftTest, Wall1, 0.3, 2, 9, 2, 19, %height%, %height%, 0, 0, 0, 0, False
-    AddWall FrontTest, Wall1, 0.3, 2, 9, 11, 9, %height%, %height%, 0, 0, 0, 0, False
-    WallOrientation = left
-    AddWall RightTest, Wall1, 0.3, 11, 9, 11, 19, %height%, %height%, 0, 0, 0, 0, False
-    AddWall BackTest, Wall1, 0.3, 2, 19, 11, 19, %height%, %height%, 0, 0, 0, 0, False
-
 <EndFloors>
 
 # conference levels
@@ -963,26 +962,26 @@
 <EndFloor>
 
 #Shaft 1
-AddShaft 1, 2, 6, 14, 0, 138
-ShaftCut 1, -4.5, -5, 5, 5, 0, 5
+AddShaft 1, 2, 6, 14, 0, 141
+ShaftCut 1, -4, -5, 5, 5, 0, 5
 
 #Shaft 2
 AddShaft 2, 2, -6, 14, 0, 5
-#ShaftCut 2, -4.5, -5, 5, 5, 0, 5
+#ShaftCut 2, -4, -5, 5, 5, 0, 5
 
 #Shaft 3
 AddShaft 3, 2, -6, -14, 0, 5
-#ShaftCut 3, -4.5, -5, 5, 5, 0, 5
+#ShaftCut 3, -4, -5, 5, 5, 0, 5
 
 #Shaft 4
 AddShaft 4, 2, 6, -14, 0, 5
-#ShaftCut 4, -4.5, -5, 5, 5, 0, 5
+#ShaftCut 4, -4, -5, 5, 5, 0, 5
 
 #Shafts
-<Floors 0 to 138>
+<Floors 0 to 141>
     FloorOrientation = top
     if(%floor% = 0) AddShaftFloor 1, Base, Brick, 0.5, -4, -5, 5, 5, 0, 0, 0, 0
-    if(%floor% = 138) AddShaftFloor 1, Top, Brick, 0.5, -4, -5, 5, 5, %fullheight%, %fullheight%, 0, 0
+    if(%floor% = 141) AddShaftFloor 1, Top, Brick, 0.5, -4, -5, 5, 5, %fullheight%, %fullheight%, 0, 0
     WallOrientation = left
     AddShaftWall 1, Front, Brick, 0.5, -4, -5, 5, -5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 1, Left, Brick, 0.5, -4, -5, -4, 5, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -991,13 +990,23 @@ AddShaft 4, 2, 6, -14, 0, 5
     AddShaftWall 1, Right, Brick, 0.5, 5, -5, 5, 5, %fullheight%, %fullheight%, 0, 0, 0, 0
 <EndFloors>
 
+<Floors 0 to 141>
+    #sample walls
+    WallOrientation = right
+    AddWall LeftTest, Wall1, 0.3, 2, 8.7, 2, 19.3, %height%, %height%, 0, 0, 0, 0, False
+    AddWall FrontTest, Wall1, 0.3, 1.7, 9, 11.3, 9, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall RightTest, Wall1, 0.3, 11, 8.7, 11, 19.3, %height%, %height%, 0, 0, 0, 0, False
+    AddWall BackTest, Wall1, 0.3, 1.7, 19, 11.3, 19, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
 <Elevator 1>
     #standard elevator; 7 feet wide, 6 feet deep
     Speed = 21
     Acceleration = 0.015
     Deceleration = 0.01
     OpenSpeed = 0.2
-    ServicedFloors = 0 - 138
+    ServicedFloors = 0 - 141
     AssignedShaft = 1
     CreateElevator 6, 14, 0
 
@@ -1186,9 +1195,9 @@ AddShaft 4, 2, 6, -14, 0, 5
 <EndElevator>
 
 #call buttons
-<Floors 0 to 137>
+<Floors 0 to 141>
     CallButtonElevators = 1
-    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 3, 5, 4.5, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 1.69, 10.5, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #stairs 1
@@ -1197,6 +1206,15 @@ CreateStairwell 1, 50, 50, 0, 10
 <Floors 0 to 10>
     AddStairs 1, Stairs, Stairs, left, 0, 0, 5, 0.5, 0.5, 10, 0, 0, 0
     AddStairsFloor 1, Landing, Brick, 0.5, 5, 0, 10, 5, 5, 5, 1, 1
+<EndFloors>
+
+<Floors 0 to 141>
+    #elevator entry walls
+    DrawWalls = true, true, false, false, false, false
+    AddWall ElevLeft, Wall1, 0, 1.7, 12.25, 2.5, 12.25, 8, 8, 0, 0, 0, 0, False
+    AddWall ElevRight, Wall1, 0, 1.7, 15.75, 2.5, 15.75, 8, 8, 0, 0, 0, 0, False
+    AddFloor ElevBottom, Ceiling1, 0, 2, 12.25, 2.7, 15.75, 0, 0, 0, 0, False
+    AddFloor ElevTop, Ceiling1, 0, 1.7, 12.25, 2.7, 15.75, 8, 8, 0, 0, False
 <EndFloors>
 
 # Main load-bearing columns
