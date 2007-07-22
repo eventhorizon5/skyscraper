@@ -1336,13 +1336,13 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		//cut shaft and floor walls
 		if (DoorDirection == false)
 		{
-			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1 - 1, base, z1), csVector3(x1 + 1, base + DoorHeight, z4));
-			sbs->GetFloor(ServicedFloors[i])->Cut(csVector3(x1 - 1, base, z1), csVector3(x1 + 1, base + DoorHeight, z4), true, false, true);
+			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1 - 2, base, z1), csVector3(x1 + 2, base + DoorHeight, z4));
+			sbs->GetFloor(ServicedFloors[i])->Cut(csVector3(Origin.x + x1 - 2, base, Origin.z + z1), csVector3(Origin.x + x1 + 2, base + DoorHeight, Origin.z + z4), true, false, true);
 		}
 		else
 		{
-			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1, base, z1 - 1), csVector3(x4, base + DoorHeight, z1 + 1));
-			sbs->GetFloor(ServicedFloors[i])->Cut(csVector3(x1, base, z1 - 1), csVector3(x4, base + DoorHeight, z1 + 1), true, false, true);
+			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1, base, z1 - 2), csVector3(x4, base + DoorHeight, z1 + 2));
+			sbs->GetFloor(ServicedFloors[i])->Cut(csVector3(Origin.x + x1, base, Origin.z + z1 - 2), csVector3(Origin.x + x4, base + DoorHeight, Origin.z + z1 + 2), true, false, true);
 		}
 		
 		//create meshes

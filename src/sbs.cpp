@@ -1939,6 +1939,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 	int tmpindex;
 	int tmpindex_tmp;
 	int polycount;
+	bool polycheck;
 
 	//step through each polygon
 	polycount = state->GetPolygonCount();
@@ -1953,9 +1954,13 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 		addpolys = 0;
 		tmpindex = -1;
 		tmpindex_tmp = -1;
+		csVector2 extentsx, extentsy, extentsz;
+		polycheck = false;
 
 		//copy source polygon vertices
 		csString name = state->GetPolygonName(i);
+		if (name.Find("LeftTest") != -1)
+			polycheck = false;
 		for (int j = 0; j < state->GetPolygonVertexCount(i); j++)
 			temppoly.AddVertex(state->GetPolygonVertex(i, j));
 
@@ -1967,57 +1972,65 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 			temppoly.ClassifyZ(start.z) != CS_POL_FRONT &&
 			temppoly.ClassifyZ(end.z) != CS_POL_BACK)
 		{
+			extentsx = GetExtents(temppoly, 1);
+			extentsy = GetExtents(temppoly, 2);
+			extentsz = GetExtents(temppoly, 3);
+
 			//is polygon a wall?
-			if (start.y != end.y && cutwalls == true)
+			if (extentsy.x != extentsy.y)
 			{
-				//wall
-				if (abs(start.x - end.x) > abs(start.z - end.z))
+				if (cutwalls == true)
 				{
-					//wall is facing forward/backward
+					//wall
+					if (abs(extentsx.x - extentsx.y) > abs(extentsz.x - extentsz.y))
+					{
+						//wall is facing forward/backward
 
-					//get left side
-					worker = temppoly;
-					worker.SplitWithPlaneX(temppoly, temppoly2, start.x);
-					worker.MakeEmpty();
+						//get left side
+						worker = temppoly;
+						worker.SplitWithPlaneX(temppoly, temppoly2, start.x);
+						worker.MakeEmpty();
 
-					//get right side
-					worker = temppoly2;
-					worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
-					worker.MakeEmpty();
+						//get right side
+						worker = temppoly2;
+						worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
+						worker.MakeEmpty();
 
-					//get lower
-					worker = temppoly3;
-					worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
-					worker.MakeEmpty();
+						//get lower
+						worker = temppoly3;
+						worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
+						worker.MakeEmpty();
 
-					//get upper
-					worker = temppoly4;
-					worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
-					worker.MakeEmpty();
-				}
-				else
-				{
-					//wall is facing left/right
+						//get upper
+						worker = temppoly4;
+						worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
+						worker.MakeEmpty();
+					}
+					else
+					{
+						//wall is facing left/right
 
-					//get left side
-					worker = temppoly;
-					worker.SplitWithPlaneZ(temppoly, temppoly2, start.z);
-					worker.MakeEmpty();
+						//get left side
+						worker = temppoly;
+						worker.SplitWithPlaneZ(temppoly, temppoly2, start.z);
+						worker.MakeEmpty();
 
-					//get right side
-					worker = temppoly2;
-					worker.SplitWithPlaneZ(temppoly3, temppoly2, end.z);
-					worker.MakeEmpty();
+						//get right side
+						worker = temppoly2;
+						worker.SplitWithPlaneZ(temppoly3, temppoly2, end.z);
+						worker.MakeEmpty();
 
-					//get lower
-					worker = temppoly3;
-					worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
-					worker.MakeEmpty();
+						//get lower
+						worker = temppoly3;
+						worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
+						worker.MakeEmpty();
 
-					//get upper
-					worker = temppoly4;
-					worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
-					worker.MakeEmpty();
+						//get upper
+						worker = temppoly4;
+						worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
+						worker.MakeEmpty();
+					}
+					polycheck = true;
 				}
 			}
 			else if (cutfloors == true)
@@ -2043,58 +2056,63 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 				worker = temppoly4;
 				worker.SplitWithPlaneZ(temppoly5, temppoly4, end.z);
 				worker.MakeEmpty();
+
+				polycheck = true;
 			}
 
-			//get texture data from original polygon
-			iMaterialWrapper *oldmat = state->GetPolygonMaterial(i);
-			csVector3 oldvector;
-			csMatrix3 mapping;
-			state->GetPolygonTextureMapping(i, mapping, oldvector);
+			if (polycheck == true)
+			{
+				//get texture data from original polygon
+				iMaterialWrapper *oldmat = state->GetPolygonMaterial(i);
+				csVector3 oldvector;
+				csMatrix3 mapping;
+				state->GetPolygonTextureMapping(i, mapping, oldvector);
 		
-			//delete original polygon
-			state->RemovePolygon(i);
-			i--;
-			polycount--;
+				//delete original polygon
+				state->RemovePolygon(i);
+				i--;
+				polycount--;
 
-			//create splitted polygons
-			if (temppoly.GetVertexCount() > 0)
-			{
-				addpolys++;
-				tmpindex_tmp = state->AddPolygon(temppoly.GetVertices(), temppoly.GetVertexCount());
-				state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
-				if (tmpindex == -1)
-					tmpindex = tmpindex_tmp;
-			}
-			if (temppoly2.GetVertexCount() > 0)
-			{
-				addpolys++;
-				tmpindex_tmp = state->AddPolygon(temppoly2.GetVertices(), temppoly2.GetVertexCount());
-				state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
-				if (tmpindex == -1)
-					tmpindex = tmpindex_tmp;
-			}
-			if (temppoly3.GetVertexCount() > 0)
-			{
-				addpolys++;
-				tmpindex_tmp = state->AddPolygon(temppoly3.GetVertices(), temppoly3.GetVertexCount());
-				state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
-				if (tmpindex == -1)
-					tmpindex = tmpindex_tmp;
-			}
-			if (temppoly4.GetVertexCount() > 0)
-			{
-				addpolys++;
-				tmpindex_tmp = state->AddPolygon(temppoly4.GetVertices(), temppoly4.GetVertexCount());
-				state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
-				if (tmpindex == -1)
-					tmpindex = tmpindex_tmp;
-			}
+				//create splitted polygons
+				if (temppoly.GetVertexCount() > 0)
+				{
+					addpolys++;
+					tmpindex_tmp = state->AddPolygon(temppoly.GetVertices(), temppoly.GetVertexCount());
+					state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
+					if (tmpindex == -1)
+						tmpindex = tmpindex_tmp;
+				}
+				if (temppoly2.GetVertexCount() > 0)
+				{
+					addpolys++;
+					tmpindex_tmp = state->AddPolygon(temppoly2.GetVertices(), temppoly2.GetVertexCount());
+					state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
+					if (tmpindex == -1)
+						tmpindex = tmpindex_tmp;
+				}
+				if (temppoly3.GetVertexCount() > 0)
+				{
+					addpolys++;
+					tmpindex_tmp = state->AddPolygon(temppoly3.GetVertices(), temppoly3.GetVertexCount());
+					state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
+					if (tmpindex == -1)
+						tmpindex = tmpindex_tmp;
+				}
+				if (temppoly4.GetVertexCount() > 0)
+				{
+					addpolys++;
+					tmpindex_tmp = state->AddPolygon(temppoly4.GetVertices(), temppoly4.GetVertexCount());
+					state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
+					if (tmpindex == -1)
+						tmpindex = tmpindex_tmp;
+				}
 
-			//apply material to new polygon set
-			if (addpolys > 0)
-			{
-				state->SetPolygonMaterial(csPolygonRange(tmpindex, tmpindex + addpolys - 1), oldmat);
-				state->SetPolygonTextureMapping(csPolygonRange(tmpindex, tmpindex + addpolys - 1), mapping, oldvector);
+				//apply material to new polygon set
+				if (addpolys > 0)
+				{
+					state->SetPolygonMaterial(csPolygonRange(tmpindex, tmpindex + addpolys - 1), oldmat);
+					state->SetPolygonTextureMapping(csPolygonRange(tmpindex, tmpindex + addpolys - 1), mapping, oldvector);
+				}
 			}
 		}
 	}
