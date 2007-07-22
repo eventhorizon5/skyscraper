@@ -1293,7 +1293,7 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 	//uses some parameters (width, height, direction) from AddDoors function
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
-	float base;
+	float base, base2;
 
 	//set door parameters
 	ShaftDoorOrigin = csVector3(Origin.x + CenterX, Origin.y, Origin.z + CenterZ);
@@ -1330,13 +1330,20 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 	//create doors
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
 	{
-		base = sbs->GetFloor(ServicedFloors[i])->Altitude + sbs->GetFloor(ServicedFloors[i])->InterfloorHeight;
-		
-		//cut shaft walls
+		base = sbs->GetFloor(ServicedFloors[i])->InterfloorHeight;
+		base2 = sbs->GetFloor(ServicedFloors[i])->Altitude + base;
+
+		//cut shaft and floor walls
 		if (DoorDirection == false)
-			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1, DoorHeight, z1), csVector3(x4 + thickness, base, z4));
+		{
+			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1 - 1, base, z1), csVector3(x1 + 1, base + DoorHeight, z4));
+			sbs->GetFloor(ServicedFloors[i])->Cut(csVector3(x1 - 1, base, z1), csVector3(x1 + 1, base + DoorHeight, z4), true, false, true);
+		}
 		else
-			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1, DoorHeight, z1), csVector3(x4, base, z4 + thickness));
+		{
+			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1, base, z1 - 1), csVector3(x4, base + DoorHeight, z1 + 1));
+			sbs->GetFloor(ServicedFloors[i])->Cut(csVector3(x1, base, z1 - 1), csVector3(x4, base + DoorHeight, z1 + 1), true, false, true);
+		}
 		
 		//create meshes
 		buffer3 = Number;
@@ -1369,8 +1376,8 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		ShaftDoorR[i]->GetMovable()->UpdateMove();
 
 		//create doors
-		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, thickness, x1, z1, x2, z2, DoorHeight, DoorHeight, base, base, tw, th);
-		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, thickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base, base, tw, th);
+		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, thickness, x1, z1, x2, z2, DoorHeight, DoorHeight, base2, base2, tw, th);
+		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, thickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base2, base2, tw, th);
 
 		//make doors invisible on start
 		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);

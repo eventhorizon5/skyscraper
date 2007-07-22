@@ -49,6 +49,8 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	InsideShaft = false;
 	top = 0;
 	bottom = 0;
+	cutstart = 0;
+	cutend = 0;
 
 	csString buffer, buffer2, buffer3;
 
@@ -160,18 +162,31 @@ void Shaft::CutFloors(csVector2 start, csVector2 end, float startvoffset, float 
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 	
-	float voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
-	float voffset2 = sbs->GetFloor(endfloor)->Altitude + endvoffset;
 	sbs->Report("Cutting for shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + "...");
 	
+	float voffset1, voffset2;
+	cutstart = start;
+	cutend = end;
+
 	for (int i = startfloor; i <= endfloor; i++)
-		sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false);
+	{
+		voffset1 = 0;
+		voffset2 = sbs->GetFloor(i)->FullHeight();
+
+		if (i == startfloor)
+			voffset1 = startvoffset;
+		else if (i == endfloor)
+			voffset2 = endvoffset;
+
+		sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+	}
 }
 
 void Shaft::CutWall(int floor, csVector3 start, csVector3 end)
 {
 	//Cut through a wall segment
-	//the Y values in start and end are both relative to the floor's altitude
+	//the Y values in start and end are both relative to the floor's altitude + interfloor
 
-	sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, sbs->GetFloor(floor)->Altitude + start.y, start.z), csVector3(end.x, sbs->GetFloor(floor)->Altitude + end.y, end.z));
+	float base = sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight;
+	sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false);
 }

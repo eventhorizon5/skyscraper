@@ -40,6 +40,8 @@ public:
 	bool InsideShaft; //true if user/camera is in the shaft
 	float bottom; //shaft base
 	float top; //shaft top
+	csVector2 cutstart; //cut starting vector
+	csVector2 cutend; //cut ending vector
 
 	Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Shaft();

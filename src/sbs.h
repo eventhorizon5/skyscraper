@@ -225,7 +225,7 @@ public:
 	int GetDrawWallsCount();
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
 	int CreateDoor(csRef<iThingFactoryState> cutmesh, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
-	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end);
+	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);

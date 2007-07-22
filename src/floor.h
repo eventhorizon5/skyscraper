@@ -66,7 +66,7 @@ public:
 	void Enabled(bool value);
 	float FullHeight();
 	void AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	void Cut(csVector3 start, csVector3 end, bool fast);
+	void Cut(csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, bool fast);
 	void AddGroupFloor(int number);
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);

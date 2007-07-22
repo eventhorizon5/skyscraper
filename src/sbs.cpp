@@ -1927,17 +1927,22 @@ csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, cs
 	return isect;
 }
 
-void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end)
+void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors)
 {
 	//cuts a rectangular hole in the polygons within the specified range
+
+	if (cutwalls == false && cutfloors == false)
+		return;
 
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 	int addpolys;
 	int tmpindex;
 	int tmpindex_tmp;
+	int polycount;
 
 	//step through each polygon
-	for (size_t i = 0; i < state->GetPolygonCount(); i++)
+	polycount = state->GetPolygonCount();
+	for (size_t i = 0; i < polycount; i++)
 	{
 		temppoly.MakeEmpty();
 		temppoly2.MakeEmpty();
@@ -1950,6 +1955,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end)
 		tmpindex_tmp = -1;
 
 		//copy source polygon vertices
+		csString name = state->GetPolygonName(i);
 		for (int j = 0; j < state->GetPolygonVertexCount(i); j++)
 			temppoly.AddVertex(state->GetPolygonVertex(i, j));
 
@@ -1962,10 +1968,10 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end)
 			temppoly.ClassifyZ(end.z) != CS_POL_BACK)
 		{
 			//is polygon a wall?
-			if ((end.x - start.x) > (end.y - start.y) && (end.z - start.z) > (end.y - start.y))
+			if (start.y != end.y && cutwalls == true)
 			{
 				//wall
-				if (start.x - end.x > start.z - end.z)
+				if (abs(start.x - end.x) > abs(start.z - end.z))
 				{
 					//wall is facing forward/backward
 
@@ -2014,7 +2020,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end)
 					worker.MakeEmpty();
 				}
 			}
-			else
+			else if (cutfloors == true)
 			{
 				//floor
 
@@ -2048,12 +2054,14 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end)
 			//delete original polygon
 			state->RemovePolygon(i);
 			i--;
+			polycount--;
 
 			//create splitted polygons
 			if (temppoly.GetVertexCount() > 0)
 			{
 				addpolys++;
 				tmpindex_tmp = state->AddPolygon(temppoly.GetVertices(), temppoly.GetVertexCount());
+				state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
 				if (tmpindex == -1)
 					tmpindex = tmpindex_tmp;
 			}
@@ -2061,6 +2069,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end)
 			{
 				addpolys++;
 				tmpindex_tmp = state->AddPolygon(temppoly2.GetVertices(), temppoly2.GetVertexCount());
+				state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
 				if (tmpindex == -1)
 					tmpindex = tmpindex_tmp;
 			}
@@ -2068,6 +2077,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end)
 			{
 				addpolys++;
 				tmpindex_tmp = state->AddPolygon(temppoly3.GetVertices(), temppoly3.GetVertexCount());
+				state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
 				if (tmpindex == -1)
 					tmpindex = tmpindex_tmp;
 			}
@@ -2075,6 +2085,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end)
 			{
 				addpolys++;
 				tmpindex_tmp = state->AddPolygon(temppoly4.GetVertices(), temppoly4.GetVertexCount());
+				state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
 				if (tmpindex == -1)
 					tmpindex = tmpindex_tmp;
 			}
