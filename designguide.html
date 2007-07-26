@@ -533,6 +533,16 @@
     7 - faces back, opens back<br>
     8 - faces back, opens front<br>
   </p>
+  <p align="left"><strong>14. AddStairsDoor</strong> - adds a textured door for 
+    the specified stairwell, in a location relative to the stairwell's center. 
+    This also performs a wall cut on that area (this must be called after the 
+    associated wall is created)<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsDoor <em> 
+    number, texturename, thickness</em>, <em>direction, CenterX</em>, <em>CenterZ</em>, 
+    <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
+  <p align="left">Number specifies the stairwell number. Direction specifies the 
+    direction the door faces and also the direction it opens. For values of this, 
+    look at the AddDoor command above.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">6. The <em>External</em> Section</font></strong></p>
   <p align="left">The <em>External</em> section defines parts of the building's 
@@ -647,20 +657,24 @@
     command (so the regular elevator doors need to be created first). These doors 
     should be moved slightly away from the elevator doors (to separate them both). 
     Also, this command creates doors at all the floors specified in the ServicedFloors 
-    value. </p>
+    value, and cuts any shaft walls that are within the door area (and so this 
+    must be called after the shaft walls are created).</p>
   <p align="left"><strong>6. CreatePanel</strong> - creates a button panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreatePanel <em>texturename</em>, 
-    <em>rows, columns, direction, CenterX, CenterZ, width, height, voffset, spacing, 
-    tw, th<br>
+    <em>columns, rows, direction, CenterX, CenterZ, width, height, voffset, spacingX, 
+    spacingY, tw, th<br>
     </em></font> Example<font size="2" face="Courier New, Courier, mono"><em>: 
     </em><font size="2" face="Courier New, Courier, mono">CreatePanel Wall1, 5, 
-    5, right, -3, -3, 0.5, 1, 4, 0.5, 0, 0</font></font></p>
+    5, right, -3, -3, 0.5, 1, 4, 0.5, 0.5, 0, 0</font></font></p>
   <p align="left">The CreatePanel command creates a button panel at a position 
     relative to the elevator's center position (origin). <em>Rows</em> and <em>Columns</em> 
     define the grid size of the panel. <em>Direction</em> is either &quot;front&quot;, 
     &quot;back&quot;, &quot;left&quot; or &quot;right&quot;, defining which direction 
-    the panel faces. <em>Spacing</em> is the space (percent of a button size) 
-    between each button.</p>
+    the panel faces. <em>SpacingX</em> is the space (percent of a button's width) 
+    horizontally between each button, and spacingY is the space (percent of a 
+    button's height) vertically between each button. The system leaves one empty 
+    grid space on all 4 sides, to center the buttons. Not all positions need to 
+    be used; this is simply to provide a grid layout for the panel.</p>
   <p align="left"><strong>7. AddFloorButton</strong> - creates a floor button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorButton <em>texturename</em>, 

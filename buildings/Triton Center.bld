@@ -1044,7 +1044,7 @@ AddShaft 4, 2, 6, -14, 0, 5
     WallOrientation = left
 
     #panel
-    CreatePanel ElevExtPanels, 4, 3, right, -2.7, 2.63, 0.5, 1, 4.5, 0.3, 0, 0
+    CreatePanel ElevExtPanels, 3, 4, right, -2.7, 2.63, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button135, 1, 3, 135
     AddFloorButton Button79, 1, 2, 79
     AddFloorButton Button40, 1, 1, 40
