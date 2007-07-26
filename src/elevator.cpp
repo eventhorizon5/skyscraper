@@ -1583,11 +1583,11 @@ void Elevator::RemoveServicedFloor(int number)
 		ServicedFloors.Delete(number);
 }
 
-void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacing, float tw, float th)
+void Elevator::CreateButtonPanel(const char *texture, int columns, int rows, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th)
 {
 	//create a new button panel object and store the pointer
 	if (!Panel)
-		Panel = new ButtonPanel(Number, texture, rows, columns, direction, CenterX, CenterZ, width, height, voffset, spacing, tw, th);
+		Panel = new ButtonPanel(Number, texture, rows, columns, direction, CenterX, CenterZ, width, height, voffset, spacingX, spacingY, tw, th);
 	else
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panel already exists");
 }

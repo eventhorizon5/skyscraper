@@ -35,13 +35,14 @@ public:
 	csVector3 Origin;
 	float Width;
 	float Height;
-	float Spacing;
+	float SpacingX;
+	float SpacingY;
 	int Rows;
 	int Columns;
 	csVector2 GridSize;
 
 	//functions
-	ButtonPanel(int _elevator, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacing, float tw, float th);
+	ButtonPanel(int _elevator, const char *texture, int columns, int rows, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
 	~ButtonPanel();
 	void AddFloorButton(const char *texture, int row, int column, int floor);
 	void AddControlButton(const char *texture, int row, int column, const char *type);
