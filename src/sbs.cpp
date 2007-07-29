@@ -58,7 +58,7 @@ SBS::SBS()
 	BuildingLocation = "";
 	BuildingDescription = "";
 	BuildingVersion = "";
-	Gravity = 32.15f; // 9.8 m/s/s
+	Gravity = 9.8f; // 9.8 m/s/s
 	IsRunning = false;
 	Floors = 0;
 	Basements = 0;
@@ -2132,4 +2132,11 @@ int SBS::Doors()
 {
 	//return the number of doors
 	return DoorArray.GetSize();
+}
+
+float SBS::MetersToFeet(float meters)
+{
+	//converts meters to feet
+
+	return meters * 3.2808399f;
 }

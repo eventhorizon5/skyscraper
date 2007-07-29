@@ -151,6 +151,7 @@ public:
 	bool IsSkyboxEnabled; //contains status of skybox object
 	float FPS; //current frame rate
 	bool AutoShafts; //true if shafts should turn on and off automatically
+	float MetersToFeet(float meters); //converts meters to feet
 
 	//File I/O
 	csString BuildingFile;

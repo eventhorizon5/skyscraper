@@ -28,6 +28,7 @@
 #include "buttonpanel.h"
 #include "camera.h"
 #include "sbs.h"
+#include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
 
@@ -48,6 +49,7 @@ Camera::Camera()
 	StartPositionZ = 0;
 	StartDirection = csVector3(0, 0, 0);
 	StartRotation = csVector3(0, 0, 0);
+	FallRate = 0;
 
 }
 
@@ -195,6 +197,7 @@ void Camera::Gravity()
 		sbs->IsFalling = false;
 		original_position = 0;
 		old_time = 0;
+		FallRate = 0;
 
 		//step routine
 		float height = result.closest_isect.y - (GetPosition().y - DefaultAltitude);
@@ -212,11 +215,16 @@ void Camera::Gravity()
 		}
 		sbs->IsFalling = true;
 		new_time = sbs->vc->GetCurrentTicks();
-		csTicks time_rate = (new_time - old_time) / 1000;
-
+		csTicks time_rate = new_time - old_time;
 		//get distance value
 		//d = 0.5 * g * t^2
-		distance = 0.5 * sbs->Gravity * pow(time_rate, 2.0f);
+		distance = 0.5 * sbs->Gravity * pow(float(time_rate) / 1000, 2.0f);
+
+		//get rate in m/s (r = d/t)
+		FallRate = distance / (float(time_rate) / 1000);
+
+		//convert meters to feet
+		distance = sbs->MetersToFeet(distance);
 
 		result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, csVector3(GetPosition().x, original_position, GetPosition().z), csVector3(GetPosition().x, original_position - distance, GetPosition().z), false);
 		if (result.closest_mesh)

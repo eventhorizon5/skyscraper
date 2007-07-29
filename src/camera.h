@@ -35,6 +35,7 @@ public:
 	int StartFloor; //Starting floor
 	float StartPositionX; //starting position on X axis
 	float StartPositionZ; //starting position on Z axis
+	float FallRate; //falling rate in m/s
 
 	//functions
 	Camera();
@@ -69,6 +70,8 @@ private:
 	float rotX, rotY, rotZ;
 	csString meshname; //last clicked mesh name
 	csString polyname; //last clicked polygon name
+	char intbuffer[65];
+	char buffer[20];
 };
 
 #endif
