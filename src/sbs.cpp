@@ -29,6 +29,9 @@
 #include "sbs.h"
 #include "unix.h"
 
+#define ODE_ID 1
+#define BULLET_ID 2
+
 SBS *sbs; //self reference
 
 iObjectRegistry* object_reg;
@@ -106,6 +109,7 @@ SBS::SBS()
 	RevZold = false;
 	canvas_width = 0;
 	canvas_height = 0;
+	speed = 0;
 }
 
 SBS::~SBS()
@@ -130,6 +134,8 @@ SBS::~SBS()
 
 	//delete stairs
 	StairsArray.DeleteAll();
+
+	if (dyn) dyn->RemoveSystem (dynSys);
 }
 
 void SBS::Start()
@@ -270,7 +276,7 @@ void SBS::GetInput()
 	current_time = vc->GetCurrentTicks ();
 
 	// Now rotate the camera according to keyboard state
-	float speed = (elapsed_time / 1000.0) * (0.06 * 20);
+	speed = (elapsed_time / 1000.0) * (0.06 * 20);
 
 	//get mouse pointer coordinates
 	mouse_x = mouse->GetLastX();
@@ -426,9 +432,29 @@ void SBS::SetupFrame()
 
 	}
 
+	//Input
 	if (RenderOnly == false)
 		GetInput();
+	
+	//Physics
+	// For ODE it is recommended that all steps are done with the
+	// same size. So we always will call dynamics->Step(delta) with
+	// the constant delta. However, sometimes our elapsed time
+	// is not divisible by delta and in that case we have a small
+	// time (smaller then delta) left-over. We can't afford to drop
+	// that because then speed of physics simulation would differ
+	// depending on framerate. So we will put that remainder in
+	// remaining_delta and use that here too.
+	const float delta = 0.01f;
+	float et = remaining_delta + speed;
+	while (et >= delta)
+	{
+		dyn->Step (delta);
+		et -= delta;
+        }
+	remaining_delta = et;
 
+	//Call render loop
 	Render();
 }
 
@@ -537,6 +563,36 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (!plug) return ReportError ("No BugPlug!");
 	if (plug) plug->IncRef ();
 
+	csRef<iCommandLineParser> clp = CS_QUERY_REGISTRY (object_reg, iCommandLineParser);
+	phys_engine_name = clp->GetOption ("phys_engine");
+	if (phys_engine_name == "bullet")
+	{
+		phys_engine_id = BULLET_ID;
+		csRef<iPluginManager> plugmgr = CS_QUERY_REGISTRY (object_reg,
+		iPluginManager);
+		dyn = CS_LOAD_PLUGIN (plugmgr, "crystalspace.dynamics.bullet", iDynamics);
+	}
+	else
+	{
+		phys_engine_name = "ode";
+		phys_engine_id = ODE_ID;
+		csRef<iPluginManager> plugmgr = CS_QUERY_REGISTRY (object_reg,
+		iPluginManager);
+		dyn = CS_LOAD_PLUGIN (plugmgr, "crystalspace.dynamics.ode", iDynamics);
+	}
+	if (!dyn)
+		return ReportError("No iDynamics plugin!");
+	
+	// Load the box mesh factory.
+	boxFact = loader->LoadMeshObjectFactory ("/lib/std/sprite1");
+	if (boxFact == 0)
+		return ReportError("Error loading mesh object factory!");
+	
+	// Double the size.
+	csMatrix3 m; m *= .5;
+	csReversibleTransform t = csReversibleTransform (m, csVector3 (0));
+	boxFact->HardTransform (t);
+
 	stdrep = CS_QUERY_REGISTRY (object_reg, iStandardReporterListener);
 	if (!stdrep) return ReportError ("No stdrep plugin!");
 	stdrep->SetDebugFile ("/tmp/sbs_report.txt");
@@ -581,6 +637,23 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 
 	//create 3D environments
 	area = engine->CreateSector("area");
+
+	//create dynamic system
+	dynSys = dyn->CreateSystem ();
+	if (dynSys == 0)
+		return ReportError("Error creating dynamic system!");
+
+	dynSys->SetGravity (csVector3 (0,-7,0));
+
+	dynSys->SetRollingDampener(.995f);
+
+	if (phys_engine_id == ODE_ID)
+	{
+		csRef<iODEDynamicSystemState> osys= SCF_QUERY_INTERFACE (dynSys,
+		iODEDynamicSystemState);
+		osys->SetContactMaxCorrectingVel (.1f);
+		osys->SetContactSurfaceLayer (.0001f);
+	}
 
 	return true;
 }

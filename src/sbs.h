@@ -23,6 +23,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <ivaria/ode.h>
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"
@@ -114,6 +115,16 @@ public:
 	csRef<iMaterialWrapper> material;
 	csRef<iLightList> ll;
 	csRef<iSector> area;
+
+	csString phys_engine_name;
+	int phys_engine_id;
+
+	//Physics system
+	csRef<iDynamics> dyn;
+	csRef<iDynamicSystem> dynSys;
+	float remaining_delta;
+
+	csRef<iMeshFactoryWrapper> boxFact;
 
 	csTicks elapsed_time, current_time;
 
@@ -262,6 +273,7 @@ private:
 	//fps
 	int fps_frame_count;
 	int fps_tottime;
+	float speed;
 
 	//conversion buffers
 	char intbuffer[65];

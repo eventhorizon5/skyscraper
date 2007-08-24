@@ -37,9 +37,6 @@ Camera::Camera()
 	MainCamera = sbs->view->GetCamera();
 	MainCamera->SetSector(sbs->area);
 
-	// these are used store the current orientation of the camera
-	rotY = rotX = rotZ = 0;
-
 	//init variables
 	DefaultAltitude = 0;
 	CurrentFloor = 0;
@@ -50,7 +47,17 @@ Camera::Camera()
 	StartDirection = csVector3(0, 0, 0);
 	StartRotation = csVector3(0, 0, 0);
 	FallRate = 0;
+	
+	// Create the avatar.
+	avatar = sbs->engine->CreateMeshWrapper (sbs->boxFact, "box", sbs->area);
 
+	// Create a body and attach the mesh.
+	avatarbody = sbs->dynSys->CreateBody ();
+	avatarbody->SetProperties (1, csVector3 (0), csMatrix3 ());
+	avatarbody->AttachMesh (avatar);
+
+	// Create and attach a box collider.
+	avatarbody->AttachColliderSphere (1.5, csVector3 (0), 10, 1, 0.8f);
 }
 
 Camera::~Camera()
@@ -85,9 +92,6 @@ void Camera::SetRotation(csVector3 vector)
 	csMatrix3 rot = csXRotMatrix3 (vector.x) * csYRotMatrix3 (vector.y) * csZRotMatrix3 (vector.z);
 	csOrthoTransform ot (rot, MainCamera->GetTransform().GetOrigin ());
 	MainCamera->SetTransform (ot);
-	rotX = vector.x;
-	rotY = vector.y;
-	rotZ = vector.z;
 }
 
 csVector3 Camera::GetPosition()
@@ -131,7 +135,8 @@ bool Camera::Move(csVector3 vector, float speed)
 	}
 
 	//moves the camera in a relative amount specified by a vector
-	MainCamera->Move(vector * speed, sbs->EnableCollisions);
+	//MainCamera->Move(vector * speed, sbs->EnableCollisions);
+	avatarbody->SetLinearVelocity(MainCamera->GetTransform().GetT2O() * (vector * speed));
 	return true;
 }
 
@@ -139,10 +144,7 @@ void Camera::Rotate(csVector3 vector, float speed)
 {
 	//rotates the camera in a relative amount
 
-	rotX += vector.x * speed;
-	rotY += vector.y * speed;
-	rotZ += vector.z * speed;
-	SetRotation(csVector3(rotX, rotY, rotZ));
+	MainCamera->GetTransform().RotateThis(vector, speed);
 }
 
 void Camera::SetStartDirection(csVector3 vector)
@@ -158,9 +160,7 @@ csVector3 Camera::GetStartDirection()
 void Camera::SetStartRotation(csVector3 vector)
 {
 	StartRotation = vector;
-	rotX = vector.x;
-	rotY = vector.y;
-	rotZ = vector.z;
+	SetRotation(vector);
 }
 
 csVector3 Camera::GetStartRotation()
@@ -171,6 +171,7 @@ csVector3 Camera::GetStartRotation()
 void Camera::SetToStartPosition()
 {
 	SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->Altitude + sbs->GetFloor(StartFloor)->InterfloorHeight + DefaultAltitude, StartPositionZ));
+	avatarbody->SetPosition(GetPosition());
 }
 
 void Camera::SetToStartDirection()

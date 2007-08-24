@@ -67,11 +67,12 @@ private:
 	csRef<iCamera> MainCamera; //main first-person view camera
 	csVector3 StartDirection; //direction camera faces on start
 	csVector3 StartRotation; //camera's startup rotation
-	float rotX, rotY, rotZ;
 	csString meshname; //last clicked mesh name
 	csString polyname; //last clicked polygon name
 	char intbuffer[65];
 	char buffer[20];
+	csRef<iMeshWrapper> avatar;
+        csRef<iRigidBody> avatarbody;
 };
 
 #endif
