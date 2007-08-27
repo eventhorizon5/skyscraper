@@ -72,7 +72,8 @@ private:
 	char intbuffer[65];
 	char buffer[20];
 	csRef<iMeshWrapper> avatar;
-        csRef<iRigidBody> avatarbody;
+	csRef<iThingFactoryState> avatar_state;
+	csRef<iRigidBody> avatarbody;
 };
 
 #endif

@@ -124,8 +124,6 @@ public:
 	csRef<iDynamicSystem> dynSys;
 	float remaining_delta;
 
-	csRef<iMeshFactoryWrapper> boxFact;
-
 	csTicks elapsed_time, current_time;
 
 	//Building information

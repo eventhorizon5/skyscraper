@@ -49,12 +49,15 @@ Camera::Camera()
 	FallRate = 0;
 	
 	// Create the avatar.
-	avatar = sbs->engine->CreateMeshWrapper (sbs->boxFact, "box", sbs->area);
+	avatar = sbs->engine->CreateSectorWallsMesh(sbs->area, "body");
+	avatar_state = scfQueryInterface<iThingFactoryState> (avatar->GetMeshObject()->GetFactory());
+	avatar->SetZBufMode(CS_ZBUF_USE);
+	sbs->CreateWallBox2(avatar_state, "body", "Brick", 0, 0, 2, 1, 6, 0, 0, 0);
 
 	// Create a body and attach the mesh.
 	avatarbody = sbs->dynSys->CreateBody ();
 	avatarbody->SetProperties (1, csVector3 (0), csMatrix3 ());
-	avatarbody->AttachMesh (avatar);
+	avatarbody->AttachMesh(avatar);
 
 	// Create and attach a box collider.
 	avatarbody->AttachColliderSphere (1.5, csVector3 (0), 10, 1, 0.8f);

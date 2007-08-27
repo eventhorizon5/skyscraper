@@ -583,16 +583,6 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (!dyn)
 		return ReportError("No iDynamics plugin!");
 	
-	// Load the box mesh factory.
-	boxFact = loader->LoadMeshObjectFactory ("/lib/std/sprite1");
-	if (boxFact == 0)
-		return ReportError("Error loading mesh object factory!");
-	
-	// Double the size.
-	csMatrix3 m; m *= .5;
-	csReversibleTransform t = csReversibleTransform (m, csVector3 (0));
-	boxFact->HardTransform (t);
-
 	stdrep = CS_QUERY_REGISTRY (object_reg, iStandardReporterListener);
 	if (!stdrep) return ReportError ("No stdrep plugin!");
 	stdrep->SetDebugFile ("/tmp/sbs_report.txt");
