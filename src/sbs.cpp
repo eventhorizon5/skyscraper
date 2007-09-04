@@ -170,7 +170,7 @@ void SBS::Start()
 	engine->Prepare();
 
 	//initialize mesh colliders
-	csColliderHelper::InitializeCollisionWrappers (collision_sys, engine);
+	//csColliderHelper::InitializeCollisionWrappers (collision_sys, engine);
 
 	//move camera to start location
 	camera->SetToStartPosition();
@@ -286,7 +286,7 @@ void SBS::GetInput()
 	if (mouse->GetLastButton(0) == true && MouseDown == false)
 	{
 		MouseDown = true;
-		camera->ClickedObject();
+		//camera->ClickedObject();
 	}
 
 	//reset mouse state
@@ -411,8 +411,8 @@ void SBS::SetupFrame()
 	if (RenderOnly == false && InputOnly == false)
 	{
 		//Process gravity
-		if (EnableCollisions == true)
-			camera->Gravity();
+		//if (EnableCollisions == true)
+			//camera->Gravity();
 
 		//Determine floor that the camera is on
 		camera->UpdateCameraFloor();
@@ -422,11 +422,11 @@ void SBS::SetupFrame()
 			GetElevator(i)->MonitorLoop();
 
 		//check if the user is in an elevator
-		camera->CheckElevator();
+		//camera->CheckElevator();
 
 		//Check if the user is in a shaft
-		if (AutoShafts == true)
-			camera->CheckShaft();
+		//if (AutoShafts == true)
+			//camera->CheckShaft();
 
 		//check if the user is outside
 
@@ -563,25 +563,11 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (!plug) return ReportError ("No BugPlug!");
 	if (plug) plug->IncRef ();
 
-	csRef<iCommandLineParser> clp = CS_QUERY_REGISTRY (object_reg, iCommandLineParser);
-	phys_engine_name = clp->GetOption ("phys_engine");
-	if (phys_engine_name == "bullet")
-	{
-		phys_engine_id = BULLET_ID;
-		csRef<iPluginManager> plugmgr = CS_QUERY_REGISTRY (object_reg,
-		iPluginManager);
-		dyn = CS_LOAD_PLUGIN (plugmgr, "crystalspace.dynamics.bullet", iDynamics);
-	}
-	else
-	{
-		phys_engine_name = "ode";
-		phys_engine_id = ODE_ID;
-		csRef<iPluginManager> plugmgr = CS_QUERY_REGISTRY (object_reg,
-		iPluginManager);
-		dyn = CS_LOAD_PLUGIN (plugmgr, "crystalspace.dynamics.ode", iDynamics);
-	}
-	if (!dyn)
-		return ReportError("No iDynamics plugin!");
+	phys_engine_name = "ode";
+	phys_engine_id = ODE_ID;
+	csRef<iPluginManager> plugmgr = CS_QUERY_REGISTRY (object_reg, iPluginManager);
+	dyn = CS_LOAD_PLUGIN (plugmgr, "crystalspace.dynamics.ode", iDynamics);
+	if (!dyn) return ReportError("No iDynamics plugin!");
 	
 	stdrep = CS_QUERY_REGISTRY (object_reg, iStandardReporterListener);
 	if (!stdrep) return ReportError ("No stdrep plugin!");
@@ -633,17 +619,13 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (dynSys == 0)
 		return ReportError("Error creating dynamic system!");
 
-	dynSys->SetGravity (csVector3 (0,-7,0));
+	dynSys->SetGravity(csVector3 (0,-7,0));
 
 	dynSys->SetRollingDampener(.995f);
 
-	if (phys_engine_id == ODE_ID)
-	{
-		csRef<iODEDynamicSystemState> osys= SCF_QUERY_INTERFACE (dynSys,
-		iODEDynamicSystemState);
-		osys->SetContactMaxCorrectingVel (.1f);
-		osys->SetContactSurfaceLayer (.0001f);
-	}
+	csRef<iODEDynamicSystemState> osys= SCF_QUERY_INTERFACE (dynSys, iODEDynamicSystemState);
+	osys->SetContactMaxCorrectingVel (.1f);
+	osys->SetContactSurfaceLayer (.0001f);
 
 	return true;
 }

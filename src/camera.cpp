@@ -125,7 +125,7 @@ void Camera::UpdateCameraFloor()
 bool Camera::Move(csVector3 vector, float speed)
 {
 	//collision detection
-	if (sbs->EnableCollisions == true)
+	/*if (sbs->EnableCollisions == true)
 	{
 		csTraceBeamResult result;
 		if (vector != CS_VEC_DOWN)
@@ -135,7 +135,7 @@ bool Camera::Move(csVector3 vector, float speed)
 
 		if (result.closest_mesh)
 			return false;
-	}
+	}*/
 
 	//moves the camera in a relative amount specified by a vector
 	//MainCamera->Move(vector * speed, sbs->EnableCollisions);
