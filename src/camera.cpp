@@ -71,7 +71,8 @@ Camera::~Camera()
 void Camera::SetPosition(csVector3 vector)
 {
 	//sets the camera to an absolute position in 3D space
-	MainCamera->GetTransform().SetOrigin(vector);
+	avatarbody->SetPosition(vector);
+	UpdateCamera();
 }
 
 void Camera::SetDirection(csVector3 vector)
@@ -140,6 +141,7 @@ bool Camera::Move(csVector3 vector, float speed)
 	//moves the camera in a relative amount specified by a vector
 	//MainCamera->Move(vector * speed, sbs->EnableCollisions);
 	avatarbody->SetLinearVelocity(MainCamera->GetTransform().GetT2O() * (vector * speed));
+	UpdateCamera();
 	return true;
 }
 
@@ -174,7 +176,6 @@ csVector3 Camera::GetStartRotation()
 void Camera::SetToStartPosition()
 {
 	SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->Altitude + sbs->GetFloor(StartFloor)->InterfloorHeight + DefaultAltitude, StartPositionZ));
-	avatarbody->SetPosition(GetPosition());
 }
 
 void Camera::SetToStartDirection()
@@ -185,57 +186,6 @@ void Camera::SetToStartDirection()
 void Camera::SetToStartRotation()
 {
 	SetRotation(StartRotation);
-}
-
-void Camera::Gravity()
-{
-	csTraceBeamResult result;
-	csTicks new_time;
-	static csTicks old_time;
-	static float original_position, distance;
-
-	result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), csVector3(GetPosition().x, GetPosition().y - DefaultAltitude, GetPosition().z), false);
-	if (result.closest_mesh)
-	{
-		distance = 0;
-		sbs->IsFalling = false;
-		original_position = 0;
-		old_time = 0;
-		FallRate = 0;
-
-		//step routine
-		float height = result.closest_isect.y - (GetPosition().y - DefaultAltitude);
-		if (height < DefaultAltitude / 2) //only climb up if height is less than half the default altitude
-			SetPosition(csVector3(GetPosition().x, result.closest_isect.y + DefaultAltitude, GetPosition().z));
-	}
-	else
-	{
-		//fall routine
-
-		if (sbs->IsFalling == false)
-		{
-			old_time = sbs->vc->GetCurrentTicks();
-			original_position = GetPosition().y;
-		}
-		sbs->IsFalling = true;
-		new_time = sbs->vc->GetCurrentTicks();
-		csTicks time_rate = new_time - old_time;
-		//get distance value
-		//d = 0.5 * g * t^2
-		distance = 0.5 * sbs->Gravity * pow(float(time_rate) / 1000, 2.0f);
-
-		//get rate in m/s (r = d/t)
-		FallRate = distance / (float(time_rate) / 1000);
-
-		//convert meters to feet
-		distance = sbs->MetersToFeet(distance);
-
-		result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, csVector3(GetPosition().x, original_position, GetPosition().z), csVector3(GetPosition().x, original_position - distance, GetPosition().z), false);
-		if (result.closest_mesh)
-			SetPosition(csVector3(GetPosition().x, result.closest_isect.y + DefaultAltitude, GetPosition().z));
-		else
-			SetPosition(csVector3(GetPosition().x, original_position - distance, GetPosition().z));
-	}
 }
 
 void Camera::CheckElevator()
@@ -387,4 +337,17 @@ const char *Camera::GetClickedPolyName()
 	//return name of last clicked polygon
 
 	return polyname.GetData();
+}
+
+void Camera::UpdateCamera()
+{
+	//set the camera position to the avatar body position
+	MainCamera->GetTransform().SetOrigin(avatar->GetMovable()->GetTransform().GetOrigin());
+}
+
+void Camera::Stop()
+{
+	//stops camera/avatar movement
+	avatarbody->SetLinearVelocity(csVector3 (0, 0, 0));
+	avatarbody->SetAngularVelocity (csVector3 (0, 0, 0));
 }

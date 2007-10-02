@@ -109,7 +109,6 @@ public:
 	csRef<iStandardReporterListener> stdrep;
 	csRef<iEventQueue> equeue;
 	csRef<iBase> plug;
-	csRef<iCollideSystem> collision_sys;
 	csRef<iMouseDriver> mouse;
 
 	csRef<iMaterialWrapper> material;
@@ -148,8 +147,6 @@ public:
 	bool ElevatorSync; //true if user should move with elevator
 	bool FrameLimiter; //frame limiter toggle
 	int FrameRate; //max frame rate
-	float FPSModifier; //modification value for FPS changes
-	bool FrameSync; //synchronize movement to frame rate
 	bool EnableCollisions; //turns collisions on/off
 	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
 	csArray<csString> UserVariable;
@@ -160,7 +157,6 @@ public:
 	bool IsSkyboxEnabled; //contains status of skybox object
 	float FPS; //current frame rate
 	bool AutoShafts; //true if shafts should turn on and off automatically
-	float MetersToFeet(float meters); //converts meters to feet
 
 	//File I/O
 	csString BuildingFile;
@@ -236,6 +232,11 @@ public:
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
 	int CreateDoor(csRef<iThingFactoryState> cutmesh, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors);
+	void SetGravity(bool value);
+	bool GetGravity();
+	float MetersToFeet(float meters); //converts meters to feet
+	void InitColliders(); //initialize collision system
+	csRef<iDynamicsSystemCollider> CreateMeshCollider(iMeshWrapper *mesh);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);

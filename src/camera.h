@@ -56,12 +56,13 @@ public:
 	void SetToStartPosition();
 	void SetToStartDirection();
 	void SetToStartRotation();
-	void Gravity();
 	void CheckElevator();
 	void CheckShaft();
 	void ClickedObject();
 	const char *GetClickedMeshName();
 	const char *GetClickedPolyName();
+	void UpdateCamera();
+	void Stop();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera

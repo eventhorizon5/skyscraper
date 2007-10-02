@@ -183,7 +183,7 @@ void DebugPanel::On_chkAutoShafts_Click(wxCommandEvent& event)
 
 void DebugPanel::On_chkFrameSync_Click(wxCommandEvent& event)
 {
-	sbs->FrameSync = chkFrameSync->GetValue();
+
 }
 
 void DebugPanel::On_bListAltitudes_Click(wxCommandEvent& event)
@@ -213,7 +213,6 @@ void DebugPanel::OnInit()
 	chkFrameLimiter->SetValue(sbs->FrameLimiter);
 	//chkMainProcessing->SetValue();
 	chkAutoShafts->SetValue(sbs->AutoShafts);
-	chkFrameSync->SetValue(sbs->FrameSync);
 
 	mc = new MeshControl(dp, -1);
 	ee = new editelevator(dp, -1);

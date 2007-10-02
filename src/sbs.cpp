@@ -70,8 +70,6 @@ SBS::SBS()
 	IsFalling = false;
 	InStairwell = false;
 	InElevator = false;
-	FPSModifier = 1;
-	FrameSync = true;
 	EnableCollisions = true;
 	BuildingFile = "";
 	IsBuildingsEnabled = false;
@@ -169,8 +167,11 @@ void SBS::Start()
 	//Post-init startup code goes here, before the runloop
 	engine->Prepare();
 
-	//initialize mesh colliders
-	//csColliderHelper::InitializeCollisionWrappers (collision_sys, engine);
+	//initialize collision system
+	InitColliders();
+
+	//turn on physics autodisable (stops stable objects)
+	dynSys->EnableAutoDisable(true);
 
 	//move camera to start location
 	camera->SetToStartPosition();
@@ -271,16 +272,11 @@ void SBS::PrintBanner()
 
 void SBS::GetInput()
 {
-	// First get elapsed time from the virtual clock.
-	elapsed_time = vc->GetElapsedTicks ();
-	current_time = vc->GetCurrentTicks ();
-
-	// Now rotate the camera according to keyboard state
-	speed = (elapsed_time / 1000.0) * (0.06 * 20);
-
 	//get mouse pointer coordinates
 	mouse_x = mouse->GetLastX();
 	mouse_y = mouse->GetLastY();
+
+	int speedmod = 1;
 
 	//check if the user clicked on an object, and process it
 	if (mouse->GetLastButton(0) == true && MouseDown == false)
@@ -300,7 +296,16 @@ void SBS::GetInput()
 		Report(wxVariant(FPS).GetString().ToAscii());
 
 	if (wxGetKeyState(WXK_CONTROL))
-		speed *= 4;
+		speedmod = 4;
+
+	if (wxGetKeyState(WXK_F2))
+	{
+		//toggle gravity
+		if (GetGravity() == false)
+			SetGravity(true);
+		else
+			SetGravity(false);
+	}
 
 	if (wxGetKeyState(WXK_SHIFT))
 	{
@@ -308,21 +313,17 @@ void SBS::GetInput()
 		// the camera to strafe up, down, left or right from it's
 		// current position.
 		if (wxGetKeyState(WXK_RIGHT))
-			camera->Move (CS_VEC_RIGHT, speed * 8);
+			camera->Move (CS_VEC_RIGHT, 5 * speedmod);
 		if (wxGetKeyState(WXK_LEFT))
-			camera->Move (CS_VEC_LEFT, speed * 8);
-		if (wxGetKeyState(WXK_UP))
-			camera->Move (CS_VEC_UP, speed * 8);
-		if (wxGetKeyState(WXK_DOWN))
-			camera->Move (CS_VEC_DOWN, speed * 8);
+			camera->Move (CS_VEC_LEFT, 5 * speedmod);
 	}
 	else if (wxGetKeyState(WXK_ALT))
 	{
 		//rotate on the Z axis if the Alt key is pressed with the left/right arrows
 		if (wxGetKeyState(WXK_RIGHT))
-			camera->Rotate(CS_VEC_FORWARD, speed);
+			camera->Rotate(CS_VEC_TILT_RIGHT, speed * speedmod);
 		if (wxGetKeyState(WXK_LEFT))
-			camera->Rotate(CS_VEC_BACKWARD, speed);
+			camera->Rotate(CS_VEC_TILT_LEFT, speed * speedmod);
 	}
 	else
 	{
@@ -331,42 +332,33 @@ void SBS::GetInput()
 		// _camera's_ X axis (more on this in a second) and up and down
 		// arrows cause the camera to go forwards and backwards.
 		if (wxGetKeyState(WXK_RIGHT))
-			camera->Rotate(CS_VEC_UP, speed);
+			camera->Rotate(CS_VEC_ROT_RIGHT, speed * speedmod);
 		if (wxGetKeyState(WXK_LEFT))
-			camera->Rotate(CS_VEC_DOWN, speed);
+			camera->Rotate(CS_VEC_ROT_LEFT, speed * speedmod);
 		if (wxGetKeyState(WXK_PRIOR)) //page up
-			camera->Rotate(CS_VEC_RIGHT, speed);
+			camera->Rotate(CS_VEC_TILT_UP, speed * speedmod);
 		if (wxGetKeyState(WXK_NEXT)) //page down
-			camera->Rotate(CS_VEC_LEFT, speed);
+			camera->Rotate(CS_VEC_TILT_DOWN, speed * speedmod);
+
+		//forward and backward movements
 		if (wxGetKeyState(WXK_UP))
-		{
-			float KeepAltitude;
-			KeepAltitude = camera->GetPosition().y;
-			camera->Move (CS_VEC_FORWARD, speed * 8);
-			if (camera->GetPosition().y != KeepAltitude)
-				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
-		}
+			camera->Move(CS_VEC_FORWARD, 5 * speedmod);
 		if (wxGetKeyState(WXK_DOWN))
-		{
-			float KeepAltitude;
-			KeepAltitude = camera->GetPosition().y;
-			camera->Move (CS_VEC_BACKWARD, speed * 8);
-			if (camera->GetPosition().y != KeepAltitude)
-				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
-		}
+			camera->Move(CS_VEC_BACKWARD, 5 * speedmod);
 
 		if (wxGetKeyState(WXK_SPACE))
 		{
 			//reset view
+			camera->Stop();
 			camera->SetToStartDirection();
 			camera->SetToStartRotation();
 		}
 
 		//values from old version
 		if (wxGetKeyState(WXK_HOME))
-			camera->Move (CS_VEC_UP, speed * 8);
+			camera->Move (CS_VEC_UP, 5 * speedmod);
 		if (wxGetKeyState(WXK_END))
-			camera->Move (CS_VEC_DOWN, speed * 8);
+			camera->Move (CS_VEC_DOWN, 5 * speedmod);
 	}
 }
 
@@ -384,11 +376,11 @@ void SBS::SetupFrame()
 {
 	//Main simulator loop
 
-	//used to adjust speeds according to frame rate
-	if (FrameSync == true)
-		FPSModifier = FrameRate / FPS;
-	else
-		FPSModifier = 1;
+	// First get elapsed time from the virtual clock.
+	elapsed_time = vc->GetElapsedTicks ();
+	current_time = vc->GetCurrentTicks ();
+
+	speed = elapsed_time / 1000.0;
 
 	//resize canvas if needed
 	if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
@@ -557,8 +549,6 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (!console) return ReportError ("No ConsoleOutput!");
 	mouse = CS_QUERY_REGISTRY(object_reg, iMouseDriver);
 	if (!mouse) return ReportError("No Mouse Driver!");
-	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
-	if (!collision_sys) return ReportError("No collision detection driver!");
 	plug = CS_LOAD_PLUGIN_ALWAYS (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("No BugPlug!");
 	if (plug) plug->IncRef ();
@@ -619,7 +609,8 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (dynSys == 0)
 		return ReportError("Error creating dynamic system!");
 
-	dynSys->SetGravity(csVector3 (0,-7,0));
+	//turn on gravity
+	SetGravity(true);
 
 	dynSys->SetRollingDampener(.995f);
 
@@ -2184,4 +2175,33 @@ float SBS::MetersToFeet(float meters)
 	//converts meters to feet
 
 	return meters * 3.2808399f;
+}
+
+void SBS::SetGravity(bool value)
+{
+	if (value == true)
+		dynSys->SetGravity(csVector3(0, Gravity, 0));
+	else
+		dynSys->SetGravity(csVector3(0, 0, 0));
+}
+
+bool SBS::GetGravity()
+{
+	if (dynSys->GetGravity().y > 0)
+		return true;
+	else
+		return false;
+}
+
+void SBS::InitColliders()
+{
+	for (int i = 0; i < TotalFloors(); i++)
+		FloorArray[i].object->InitColliders();
+}
+
+csRef<iDynamicsSystemCollider> SBS::CreateMeshCollider(iMeshWrapper *mesh)
+{
+	csRef<iDynamicsSystemCollider> collider = dynSys->CreateCollider();
+	collider->CreateMeshGeometry(mesh);
+	return collider;
 }

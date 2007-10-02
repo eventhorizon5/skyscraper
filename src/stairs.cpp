@@ -43,6 +43,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 
 	StairArray.SetSize(endfloor - startfloor + 1);
 	StairArray_state.SetSize(endfloor - startfloor + 1);
+	StairArray_collider.SetSize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -227,4 +228,10 @@ int Stairs::AddDoor(int floor, const char *texture, float thickness, int directi
 	//interface to the SBS AddDoor function
 	
 	return sbs->CreateDoor(StairArray_state[floor - startfloor], texture, thickness, direction, CenterX, CenterZ, width, height, voffset + sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, tw, th);
+}
+
+void Stairs::InitColliders()
+{
+	for (int i = 0; i < StairArray.GetSize(); i++)
+		StairArray_collider[i] = sbs->CreateMeshCollider(StairArray[i]);
 }
