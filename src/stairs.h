@@ -44,16 +44,12 @@ public:
 	void EnableWholeStairwell(bool value);
 	bool IsInStairwell(const csVector3 &position);
 	int AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
-	void InitColliders();
 
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array
 	csRefArray<iThingFactoryState> StairArray_state; //stairwell mesh array state
-	csRefArray<iDynamicsSystemCollider> StairArray_collider; //stairwell mesh array collider
-
 	csRefArray<iMeshWrapper> StairDoorArray; //stair door array
-	csRefArray<iThingFactoryState> StairDoorArray_state; //stair door array state
-	csRefArray<iDynamicsSystemCollider> StairDoorArray_collider; //stair door array collider
+	csRefArray<iThingFactoryState> StairDoorArray_state; //stair mesh array state
 };
 
 #endif

@@ -506,6 +506,9 @@ void Elevator::MoveDoors(bool open, bool emergency)
 
 		IsRunning = true;
 
+		//get starting FPS and hold value
+		FPSModifierStatic = sbs->FPSModifier;
+
 		if (emergency == false)
 		{
 			OpenChange = OpenSpeed / 50;
@@ -938,6 +941,9 @@ void Elevator::MoveElevatorToFloor()
 
 		//Get first rate increment value
 		ElevatorRate = Direction * (ElevatorSpeed * (Acceleration / sbs->FrameRate));
+
+		//get starting frame rate and hold value
+		FPSModifierStatic = sbs->FPSModifier;
 
 		//notify about movement
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));

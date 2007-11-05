@@ -23,7 +23,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <ivaria/ode.h>
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"
@@ -109,19 +108,12 @@ public:
 	csRef<iStandardReporterListener> stdrep;
 	csRef<iEventQueue> equeue;
 	csRef<iBase> plug;
+	csRef<iCollideSystem> collision_sys;
 	csRef<iMouseDriver> mouse;
 
 	csRef<iMaterialWrapper> material;
 	csRef<iLightList> ll;
 	csRef<iSector> area;
-
-	csString phys_engine_name;
-	int phys_engine_id;
-
-	//Physics system
-	csRef<iDynamics> dyn;
-	csRef<iDynamicSystem> dynSys;
-	float remaining_delta;
 
 	csTicks elapsed_time, current_time;
 
@@ -147,6 +139,8 @@ public:
 	bool ElevatorSync; //true if user should move with elevator
 	bool FrameLimiter; //frame limiter toggle
 	int FrameRate; //max frame rate
+	float FPSModifier; //modification value for FPS changes
+	bool FrameSync; //synchronize movement to frame rate
 	bool EnableCollisions; //turns collisions on/off
 	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
 	csArray<csString> UserVariable;
@@ -157,6 +151,7 @@ public:
 	bool IsSkyboxEnabled; //contains status of skybox object
 	float FPS; //current frame rate
 	bool AutoShafts; //true if shafts should turn on and off automatically
+	float MetersToFeet(float meters); //converts meters to feet
 
 	//File I/O
 	csString BuildingFile;
@@ -232,11 +227,6 @@ public:
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
 	int CreateDoor(csRef<iThingFactoryState> cutmesh, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors);
-	void SetGravity(bool value);
-	bool GetGravity();
-	float MetersToFeet(float meters); //converts meters to feet
-	void InitColliders(); //initialize collision system
-	csRef<iDynamicsSystemCollider> CreateMeshCollider(iMeshWrapper *mesh);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);
@@ -272,7 +262,6 @@ private:
 	//fps
 	int fps_frame_count;
 	int fps_tottime;
-	float speed;
 
 	//conversion buffers
 	char intbuffer[65];

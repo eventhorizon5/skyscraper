@@ -295,9 +295,3 @@ int Floor::AddDoor(const char *texture, float thickness, int direction, float Ce
 	
 	return sbs->CreateDoor(Level_state, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude, tw, th);
 }
-
-void Floor::InitColliders()
-{
-	Level_collider = sbs->CreateMeshCollider(Level);
-	Interfloor_collider = sbs->CreateMeshCollider(Interfloor);
-}

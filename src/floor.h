@@ -34,11 +34,9 @@ public:
 
 	csRef<iMeshWrapper> Level; //level mesh
 	csRef<iThingFactoryState> Level_state;
-	csRef<iDynamicsSystemCollider> Level_collider;
 
 	csRef<iMeshWrapper> Interfloor; //interfloor mesh
 	csRef<iThingFactoryState> Interfloor_state;
-	csRef<iDynamicsSystemCollider> Interfloor_collider;
 
 	int Number; //floor number
 	csString Name; //floor name
@@ -73,7 +71,6 @@ public:
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
 	int AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
-	void InitColliders();
 };
 
 #endif
