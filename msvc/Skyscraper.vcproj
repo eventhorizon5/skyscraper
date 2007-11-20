@@ -49,7 +49,7 @@
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories=""
 				AdditionalUsingDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase26.lib wxmsw26_core.lib wxmsw26_gl.lib kernel32.lib user32.lib gdi32.lib shell32.lib advapi32.lib"
+				AdditionalDependencies="libcrystalspace.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="1"
@@ -145,7 +145,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories=""
 				AdditionalUsingDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -172,7 +172,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase26d.lib wxmsw26d_core.lib wxmsw26d_gl.lib kernel32.lib user32.lib gdi32.lib shell32.lib advapi32.lib"
+				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="2"
