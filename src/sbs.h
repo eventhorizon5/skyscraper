@@ -139,8 +139,6 @@ public:
 	bool ElevatorSync; //true if user should move with elevator
 	bool FrameLimiter; //frame limiter toggle
 	int FrameRate; //max frame rate
-	float FPSModifier; //modification value for FPS changes
-	bool FrameSync; //synchronize movement to frame rate
 	bool EnableCollisions; //turns collisions on/off
 	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
 	csArray<csString> UserVariable;
@@ -262,6 +260,7 @@ private:
 	//fps
 	int fps_frame_count;
 	int fps_tottime;
+	float remaining_delta;
 
 	//conversion buffers
 	char intbuffer[65];

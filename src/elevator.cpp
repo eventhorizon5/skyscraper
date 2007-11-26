@@ -506,9 +506,6 @@ void Elevator::MoveDoors(bool open, bool emergency)
 
 		IsRunning = true;
 
-		//get starting FPS and hold value
-		FPSModifierStatic = sbs->FPSModifier;
-
 		if (emergency == false)
 		{
 			OpenChange = OpenSpeed / 50;
@@ -568,17 +565,17 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 
@@ -601,18 +598,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 
@@ -631,18 +628,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 
@@ -656,18 +653,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 
@@ -696,18 +693,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * FPSModifierStatic));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * FPSModifierStatic));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -716,18 +713,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * FPSModifierStatic, 0, 0));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -942,9 +939,6 @@ void Elevator::MoveElevatorToFloor()
 		//Get first rate increment value
 		ElevatorRate = Direction * (ElevatorSpeed * (Acceleration / sbs->FrameRate));
 
-		//get starting frame rate and hold value
-		FPSModifierStatic = sbs->FPSModifier;
-
 		//notify about movement
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
 	}
@@ -964,20 +958,20 @@ void Elevator::MoveElevatorToFloor()
 	//"\data\elevmove.wav"
 
 	//move elevator objects and camera
-	Elevator_movable->MovePosition(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
+	Elevator_movable->MovePosition(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
 	Elevator_movable->UpdateMove();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->DefaultAltitude, sbs->camera->GetPosition().z));
-	ElevatorDoorL_movable->MovePosition(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
+	ElevatorDoorL_movable->MovePosition(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
 	ElevatorDoorL_movable->UpdateMove();
-	ElevatorDoorR_movable->MovePosition(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
+	ElevatorDoorR_movable->MovePosition(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
 	ElevatorDoorR_movable->UpdateMove();
-	FloorIndicator_movable->MovePosition(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
+	FloorIndicator_movable->MovePosition(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
 	FloorIndicator_movable->UpdateMove();
-	Plaque_movable->MovePosition(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
+	Plaque_movable->MovePosition(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
 	Plaque_movable->UpdateMove();
 	if (Panel)
-		Panel->Move(csVector3(0, (ElevatorRate * FPSModifierStatic) / sbs->FrameRate, 0));
+		Panel->Move(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
 
 	//show partial shaft areas (3 floors at a time)
 	if (sbs->AutoShafts == true && sbs->InElevator == true && sbs->ElevatorNumber == Number)
@@ -1050,7 +1044,7 @@ void Elevator::MoveElevatorToFloor()
 	if ((Brakes == false) && (Direction == 1))
 	{
 		//determine if next jump altitude is over deceleration marker
-		if (((GetPosition().y + ((ElevatorRate * FPSModifierStatic) / sbs->FrameRate)) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
+		if (((GetPosition().y + (ElevatorRate / sbs->FrameRate)) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
@@ -1083,7 +1077,7 @@ void Elevator::MoveElevatorToFloor()
 	if (Brakes == false && Direction == -1)
 	{
 	//determine if next jump altitude is below deceleration marker
-		if (((GetPosition().y - ((ElevatorRate * FPSModifierStatic) / sbs->FrameRate)) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
+		if (((GetPosition().y - (ElevatorRate / sbs->FrameRate)) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration

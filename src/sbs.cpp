@@ -67,8 +67,6 @@ SBS::SBS()
 	IsFalling = false;
 	InStairwell = false;
 	InElevator = false;
-	FPSModifier = 1;
-	FrameSync = true;
 	EnableCollisions = true;
 	BuildingFile = "";
 	IsBuildingsEnabled = false;
@@ -106,6 +104,7 @@ SBS::SBS()
 	RevZold = false;
 	canvas_width = 0;
 	canvas_height = 0;
+	remaining_delta = 0;
 }
 
 SBS::~SBS()
@@ -378,12 +377,6 @@ void SBS::SetupFrame()
 {
 	//Main simulator loop
 
-	//used to adjust speeds according to frame rate
-	if (FrameSync == true)
-		FPSModifier = FrameRate / FPS;
-	else
-		FPSModifier = 1;
-
 	//resize canvas if needed
 	if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
 	{
@@ -402,32 +395,42 @@ void SBS::SetupFrame()
 		view->ClearView();
 	}
 
-	if (RenderOnly == false && InputOnly == false)
+	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
+	//depending on frame rate
+	const float delta = 0.01f;
+	float elapsed = remaining_delta + (vc->GetElapsedTicks() / 1000.0);
+	while (elapsed >= delta)
 	{
-		//Process gravity
-		if (EnableCollisions == true)
-			camera->Gravity();
+		if (RenderOnly == false && InputOnly == false)
+		{
+			//Process gravity
+			if (EnableCollisions == true)
+				camera->Gravity();
 
-		//Determine floor that the camera is on
-		camera->UpdateCameraFloor();
+			//Determine floor that the camera is on
+			camera->UpdateCameraFloor();
 
-		//run elevator handlers
-		for (int i = 1; i <= Elevators(); i++)
-			GetElevator(i)->MonitorLoop();
+			//run elevator handlers
+			for (int i = 1; i <= Elevators(); i++)
+				GetElevator(i)->MonitorLoop();
 
-		//check if the user is in an elevator
-		camera->CheckElevator();
+			//check if the user is in an elevator
+			camera->CheckElevator();
 
-		//Check if the user is in a shaft
-		if (AutoShafts == true)
-			camera->CheckShaft();
+			//Check if the user is in a shaft
+			if (AutoShafts == true)
+				camera->CheckShaft();
 
-		//check if the user is outside
+			//check if the user is outside
 
+		}
+
+		if (RenderOnly == false)
+			GetInput();
+
+		elapsed -= delta;
 	}
-
-	if (RenderOnly == false)
-		GetInput();
+	remaining_delta = elapsed;
 
 	Render();
 }

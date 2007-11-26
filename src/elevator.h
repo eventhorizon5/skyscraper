@@ -137,7 +137,6 @@ private:
 	bool Brakes;
 	float ElevatorDoorSpeed;
 	bool ElevWait;
-	float FPSModifierStatic;
 	bool EmergencyStop;
 	int WhichDoors;
 	int ShaftDoorFloor;
