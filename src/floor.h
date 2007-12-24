@@ -71,6 +71,7 @@ public:
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
 	int AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	float CalculateAltitude();
 };
 
 #endif

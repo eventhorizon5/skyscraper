@@ -698,15 +698,7 @@ recalc:
 			if (FloorCheck == 3)
 			{
 				FloorCheck = 0;
-				if (GetFloor(Current)->Altitude == 0)
-				{
-					if (Current > 0)
-						GetFloor(Current)->Altitude = GetFloor(Current - 1)->Altitude + GetFloor(Current - 1)->FullHeight();
-					if (Current == -1)
-						GetFloor(Current)->Altitude = -GetFloor(Current)->FullHeight();
-					if (Current < -1)
-						GetFloor(Current)->Altitude = GetFloor(Current + 1)->Altitude - GetFloor(Current)->FullHeight();
-				}
+				GetFloor(Current)->CalculateAltitude();
 			}
 
 			//IF statement

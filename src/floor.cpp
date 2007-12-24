@@ -295,3 +295,20 @@ int Floor::AddDoor(const char *texture, float thickness, int direction, float Ce
 	
 	return sbs->CreateDoor(Level_state, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude, tw, th);
 }
+
+float Floor::CalculateAltitude()
+{
+	//calculate the floor's altitude in relation to floor below (or above it, if it's a basement level)
+	//and return the altitude value
+
+	if (Altitude == 0)
+	{
+		if (Number > 0)
+			Altitude = sbs->GetFloor(Number - 1)->Altitude + sbs->GetFloor(Number - 1)->FullHeight();
+		if (Number == -1)
+			Altitude = -FullHeight();
+		if (Number < -1)
+			Altitude = sbs->GetFloor(Number + 1)->Altitude - FullHeight();
+	}
+	return Altitude;
+}
