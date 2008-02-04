@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.1 Alpha - Camera Control Form
-	Copyright (C)2005-2007 Ryan Thoryk
+	Copyright (C)2005-2008 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net

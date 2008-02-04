@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Elevator Subsystem Class
 	The Skyscraper Project - Version 1.1 Alpha
-	Copyright (C)2005-2007 Ryan Thoryk
+	Copyright (C)2005-2008 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -565,17 +565,17 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
+				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
+				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 
@@ -598,18 +598,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
+				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
+				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 
@@ -628,18 +628,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
+				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
+				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 
@@ -653,18 +653,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
+				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
+				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 
@@ -693,18 +693,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
+				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
+				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -713,18 +713,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
+				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
+				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed, 0, 0));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed, 0, 0));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -937,7 +937,7 @@ void Elevator::MoveElevatorToFloor()
 		//"\data\elevstart.wav"
 
 		//Get first rate increment value
-		ElevatorRate = Direction * (ElevatorSpeed * (Acceleration / sbs->FrameRate));
+		ElevatorRate = Direction * (ElevatorSpeed * Acceleration);
 
 		//notify about movement
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
@@ -958,20 +958,20 @@ void Elevator::MoveElevatorToFloor()
 	//"\data\elevmove.wav"
 
 	//move elevator objects and camera
-	Elevator_movable->MovePosition(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
+	Elevator_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	Elevator_movable->UpdateMove();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->DefaultAltitude, sbs->camera->GetPosition().z));
-	ElevatorDoorL_movable->MovePosition(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
+	ElevatorDoorL_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	ElevatorDoorL_movable->UpdateMove();
-	ElevatorDoorR_movable->MovePosition(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
+	ElevatorDoorR_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	ElevatorDoorR_movable->UpdateMove();
-	FloorIndicator_movable->MovePosition(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
+	FloorIndicator_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	FloorIndicator_movable->UpdateMove();
-	Plaque_movable->MovePosition(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
+	Plaque_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	Plaque_movable->UpdateMove();
 	if (Panel)
-		Panel->Move(csVector3(0, ElevatorRate / sbs->FrameRate, 0));
+		Panel->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
 
 	//show partial shaft areas (3 floors at a time)
 	if (sbs->AutoShafts == true && sbs->InElevator == true && sbs->ElevatorNumber == Number)
@@ -995,17 +995,17 @@ void Elevator::MoveElevatorToFloor()
 	{
 		//regular motion
 		if (Direction == 1)
-			ElevatorRate += ElevatorSpeed * (Acceleration / sbs->FrameRate);
+			ElevatorRate += ElevatorSpeed * Acceleration;
 		if (Direction == -1)
-			ElevatorRate -= ElevatorSpeed * (Acceleration / sbs->FrameRate);
+			ElevatorRate -= ElevatorSpeed * Acceleration;
 	}
 	else
 	{
 		//slow down
 		if (Direction == 1)
-			ElevatorRate += ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
+			ElevatorRate += ElevatorSpeed * TempDeceleration;
 		if (Direction == -1)
-			ElevatorRate -= ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
+			ElevatorRate -= ElevatorSpeed * TempDeceleration;
 	}
 
 	//change speeds
@@ -1044,15 +1044,15 @@ void Elevator::MoveElevatorToFloor()
 	if ((Brakes == false) && (Direction == 1))
 	{
 		//determine if next jump altitude is over deceleration marker
-		if (((GetPosition().y + (ElevatorRate / sbs->FrameRate)) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
+		if (((GetPosition().y + ElevatorRate) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-			TempDeceleration = Deceleration * (StoppingDistance / (Destination - GetPosition().y));
+			TempDeceleration = (Deceleration * (StoppingDistance / (Destination - GetPosition().y))) * sbs->delta;
 			//start deceleration
 			Direction = -1;
 			Brakes = true;
-			ElevatorRate -= ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
+			ElevatorRate -= ElevatorSpeed * TempDeceleration;
 			//stop sounds
 			//play elevator stopping sound
 			//"\data\elevstop.wav"
@@ -1066,7 +1066,7 @@ void Elevator::MoveElevatorToFloor()
 			//slow down elevator
 			Direction = -1;
 			Brakes = true;
-			ElevatorRate -= ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
+			ElevatorRate -= ElevatorSpeed * TempDeceleration;
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1077,15 +1077,15 @@ void Elevator::MoveElevatorToFloor()
 	if (Brakes == false && Direction == -1)
 	{
 	//determine if next jump altitude is below deceleration marker
-		if (((GetPosition().y - (ElevatorRate / sbs->FrameRate)) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
+		if (((GetPosition().y - ElevatorRate) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-			TempDeceleration = Deceleration * (StoppingDistance / (GetPosition().y - Destination));
+			TempDeceleration = (Deceleration * (StoppingDistance / (GetPosition().y - Destination))) * sbs->delta;
 			//start deceleration
 			Direction = 1;
 			Brakes = true;
-			ElevatorRate += ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
+			ElevatorRate += ElevatorSpeed * TempDeceleration;
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1099,7 +1099,7 @@ void Elevator::MoveElevatorToFloor()
 			//slow down elevator
 			Direction = 1;
 			Brakes = true;
-			ElevatorRate += ElevatorSpeed * (TempDeceleration / sbs->FrameRate);
+			ElevatorRate += ElevatorSpeed * TempDeceleration;
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
