@@ -937,7 +937,7 @@ void Elevator::MoveElevatorToFloor()
 		//"\data\elevstart.wav"
 
 		//Get first rate increment value
-		ElevatorRate = Direction * (ElevatorSpeed * Acceleration);
+		ElevatorRate = Direction * (ElevatorSpeed * (Acceleration * sbs->delta));
 
 		//notify about movement
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
@@ -995,17 +995,17 @@ void Elevator::MoveElevatorToFloor()
 	{
 		//regular motion
 		if (Direction == 1)
-			ElevatorRate += ElevatorSpeed * Acceleration;
+			ElevatorRate += ElevatorSpeed * (Acceleration * sbs->delta);
 		if (Direction == -1)
-			ElevatorRate -= ElevatorSpeed * Acceleration;
+			ElevatorRate -= ElevatorSpeed * (Acceleration * sbs->delta);
 	}
 	else
 	{
 		//slow down
 		if (Direction == 1)
-			ElevatorRate += ElevatorSpeed * TempDeceleration;
+			ElevatorRate += ElevatorSpeed * (TempDeceleration * sbs->delta);
 		if (Direction == -1)
-			ElevatorRate -= ElevatorSpeed * TempDeceleration;
+			ElevatorRate -= ElevatorSpeed * (TempDeceleration * sbs->delta);
 	}
 
 	//change speeds
@@ -1044,15 +1044,15 @@ void Elevator::MoveElevatorToFloor()
 	if ((Brakes == false) && (Direction == 1))
 	{
 		//determine if next jump altitude is over deceleration marker
-		if (((GetPosition().y + ElevatorRate) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
+		if (((GetPosition().y + (ElevatorRate * sbs->delta)) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-			TempDeceleration = (Deceleration * (StoppingDistance / (Destination - GetPosition().y))) * sbs->delta;
+			TempDeceleration = Deceleration * (StoppingDistance / (Destination - GetPosition().y));
 			//start deceleration
 			Direction = -1;
 			Brakes = true;
-			ElevatorRate -= ElevatorSpeed * TempDeceleration;
+			ElevatorRate -= ElevatorSpeed * (TempDeceleration * sbs->delta);
 			//stop sounds
 			//play elevator stopping sound
 			//"\data\elevstop.wav"
@@ -1066,7 +1066,7 @@ void Elevator::MoveElevatorToFloor()
 			//slow down elevator
 			Direction = -1;
 			Brakes = true;
-			ElevatorRate -= ElevatorSpeed * TempDeceleration;
+			ElevatorRate -= ElevatorSpeed * (TempDeceleration * sbs->delta);
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1077,15 +1077,15 @@ void Elevator::MoveElevatorToFloor()
 	if (Brakes == false && Direction == -1)
 	{
 	//determine if next jump altitude is below deceleration marker
-		if (((GetPosition().y - ElevatorRate) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
+		if (((GetPosition().y - (ElevatorRate * sbs->delta)) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-			TempDeceleration = (Deceleration * (StoppingDistance / (GetPosition().y - Destination))) * sbs->delta;
+			TempDeceleration = Deceleration * (StoppingDistance / (GetPosition().y - Destination));
 			//start deceleration
 			Direction = 1;
 			Brakes = true;
-			ElevatorRate += ElevatorSpeed * TempDeceleration;
+			ElevatorRate += ElevatorSpeed * (TempDeceleration * sbs->delta);
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1099,7 +1099,7 @@ void Elevator::MoveElevatorToFloor()
 			//slow down elevator
 			Direction = 1;
 			Brakes = true;
-			ElevatorRate += ElevatorSpeed * TempDeceleration;
+			ElevatorRate += ElevatorSpeed * (TempDeceleration * sbs->delta);
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
