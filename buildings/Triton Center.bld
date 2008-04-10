@@ -1204,8 +1204,11 @@ AddShaft 4, 2, 6, -14, 0, 5
 CreateStairwell 1, 50, 50, 0, 10
 
 <Floors 0 to 10>
-    AddStairs 1, Stairs, Stairs, left, 0, 0, 5, 0.5, 0.5, 10, 0, 0, 0
-    AddStairsFloor 1, Landing, Brick, 0.5, 5, 0, 10, 5, 5, 5, 1, 1
+    AddStairs 1, StairsLower, Stairs, left, 0, 0, 5, 0.5, 0.5, 10, 0, 0, 0
+    AddStairs 1, StairsUpper, Stairs, right, 0, 5, 5, 0.5, 0.5, 10, 5, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 1, LandingLower, Brick, 0.5, 2.5, -2.5, 7.5, 7.5, 5, 5, 1, 1
+    AddStairsFloor 1, LandingUpper, Brick, 0.5, -7.5, -2.5, -2.5, 7.5, 10, 10, 1, 1
 <EndFloors>
 
 <Floors 0 to 141>
