@@ -119,7 +119,7 @@ bool Skyscraper::OnInit(void)
 	window->Raise();
 
 	//show main window
-	//window->ShowWindow();
+	window->ShowWindow();
 
 	//run simulation
 	Simcore->Run();
