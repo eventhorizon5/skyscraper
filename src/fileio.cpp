@@ -455,6 +455,21 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.DeleteAll();
 		}
 
+		//CutStairwell command
+		if (LineData.Slice(0, 13).CompareNoCase("cutstairwell ") == true)
+		{
+			tempdata.SplitString(LineData.Slice(13).GetData(), ",");
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+
+			GetStairs(atoi(tempdata[0]))->CutFloors(csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
+
+			tempdata.DeleteAll();
+		}
+				
 		//SetWallOrientation command
 		if (LineData.Slice(0, 15).CompareNoCase("wallorientation") == true)
 		{

@@ -34,6 +34,8 @@ public:
 	int startfloor; //starting floor
 	int endfloor; //ending floor
 	csVector3 origin; //origin vector
+	csVector2 cutstart; //cut starting vector
+        csVector2 cutend; //cut ending vector
 
 	Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Stairs();
@@ -44,12 +46,17 @@ public:
 	void EnableWholeStairwell(bool value);
 	bool IsInStairwell(const csVector3 &position);
 	int AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
-
+	void CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset);
+	void CutWall(int floor, csVector3 start, csVector3 end);
+	
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array
 	csRefArray<iThingFactoryState> StairArray_state; //stairwell mesh array state
 	csRefArray<iMeshWrapper> StairDoorArray; //stair door array
 	csRefArray<iThingFactoryState> StairDoorArray_state; //stair mesh array state
+
+	char intbuffer[65];
+        char buffer[20];
 };
 
 #endif

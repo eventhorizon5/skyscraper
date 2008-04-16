@@ -27,6 +27,7 @@
 #include "stairs.h"
 #include "sbs.h"
 #include "camera.h"
+#include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
 
@@ -38,6 +39,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	origin.x = CenterX;
 	origin.z = CenterZ;
 	origin.y = sbs->GetFloor(startfloor)->Altitude + sbs->GetFloor(startfloor)->InterfloorHeight;
+	cutstart = 0;
+        cutend = 0;
 
 	csString buffer, buffer2, buffer3;
 
@@ -227,4 +230,37 @@ int Stairs::AddDoor(int floor, const char *texture, float thickness, int directi
 	//interface to the SBS AddDoor function
 	
 	return sbs->CreateDoor(StairArray_state[floor - startfloor], texture, thickness, direction, CenterX, CenterZ, width, height, voffset + sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, tw, th);
+}
+
+void Stairs::CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset)
+{
+	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
+	
+	sbs->Report("Cutting for stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + "...");
+	
+	float voffset1, voffset2;
+	cutstart = start;
+	cutend = end;
+
+	for (int i = startfloor; i <= endfloor; i++)
+	{
+		voffset1 = 0;
+		voffset2 = sbs->GetFloor(i)->FullHeight();
+
+		if (i == startfloor)
+			voffset1 = startvoffset;
+		else if (i == endfloor)
+			voffset2 = endvoffset;
+
+		sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+	}
+}
+
+void Stairs::CutWall(int floor, csVector3 start, csVector3 end)
+{
+	//Cut through a wall segment
+	//the Y values in start and end are both relative to the floor's altitude + interfloor
+
+	float base = sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight;
+	sbs->Cut(StairArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false);
 }
