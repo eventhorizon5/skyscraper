@@ -1202,6 +1202,7 @@ AddShaft 4, 2, 6, -14, 0, 5
 
 #stairs 1
 CreateStairwell 1, 50, 50, 0, 10
+CutStairwell 1, -7.5, -2.5, 7.5, 8.5, 0, 5
 
 <Floors 0 to 10>
     AddStairs 1, StairsLower, Stairs, left, 0, 0, 5, 0.5, 0.5, 10, 0, 0, 0
