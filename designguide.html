@@ -200,16 +200,23 @@
     startx, startz, endx, endz, start_voffset, end_voffset</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">ShaftCut 1, -4, -3.5, 4, 
     3.5, 0, 5</font></p>
-  <p align="left"><em>Number</em> is the number of the shaft object to work with. 
-    <em>Startx</em>, <em>startz</em>, <em>endx</em>, and <em>endz</em> are two 
-    sets off coordinates that specify the cut box's start position and end position, 
-    relative to the shaft's central position. <em>Start_voffset</em> is the position 
-    above the starting floor's altitude to start the cut at, and <em>end_voffset</em> 
-    is the position above the ending floor's altitude to end the cut at. The example 
-    cuts a box for shaft 1, with a width from -4 to 4, and a length from -3.5 
-    to 3.5, starting at the starting floor's altitude, and ending at 5 feet above 
+  <p align="left"><em>Number</em> is the number of the shaft object to work with.
+    <em>Startx</em>, <em>startz</em>, <em>endx</em>, and <em>endz</em> are two
+    sets of coordinates that specify the cut box's start position and end position,
+    relative to the shaft's central position. <em>Start_voffset</em> is the position
+    above the starting floor's altitude to start the cut at, and <em>end_voffset</em>
+    is the position above the ending floor's altitude to end the cut at. The example
+    cuts a box for shaft 1, with a width from -4 to 4, and a length from -3.5
+    to 3.5, starting at the starting floor's altitude, and ending at 5 feet above
     the ending floor's altitude.</p>
-  <p align="left"><strong>k. Isect</strong> - the Isect function calculates the 
+  <p align="left"><strong>k. CutStairwell</strong> - used in conjunction with a stairwell 
+    object - performs a vertical box cut on all floor objects (floors, ceilings,
+    interfloor, etc) in the specified range. For the parameters, see the ShaftCut command.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> CutStairwell number,
+    startx, startz, endx, endz, start_voffset, end_voffset</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">CutStairwell 1, -4, -3.5, 4,
+    3.5, 0, 5</font></p>
+  <p align="left"><strong>l. Isect</strong> - the Isect function calculates the 
     position that a line intersects with a certain object, such as a floor. This 
     is mainly used with angled walls that span multiple floors, to find the edge 
     location of the wall at each level without doing any manual calculations. 
