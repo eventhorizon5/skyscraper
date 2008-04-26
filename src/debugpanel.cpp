@@ -223,7 +223,7 @@ void DebugPanel::OnInit()
 
 void Timer::Notify()
 {
-	dp->t_camerap->SetLabel(wxVariant(RoundFloat(sbs->camera->GetPosition().x, 2)).GetString() + wxT(", ") + wxVariant(RoundFloat(sbs->camera->GetPosition().y, 2)).GetString() + wxT(", ") + wxVariant(RoundFloat(sbs->camera->GetPosition().z, 2)).GetString());
+	dp->t_camerap->SetLabel(TruncateNumber(sbs->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(sbs->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(sbs->camera->GetPosition().z, 2));
 	dp->t_camerafloor->SetLabel(wxVariant((long)sbs->camera->CurrentFloor).GetString());
 	dp->t_object->SetLabel(wxString::FromAscii(sbs->camera->GetClickedMeshName()));
 
@@ -248,4 +248,22 @@ void Timer::Notify()
 		mc->chkBuildings->SetValue(sbs->IsBuildingsEnabled);
 		mc->chkExternal->SetValue(sbs->IsExternalEnabled);
 	}
+}
+
+wxString TruncateNumber(double value, int decimals)
+{
+	//truncates the numeric value to the specified number of decimal places (does not round)
+	wxString number = wxVariant(value).GetString();
+	if (decimals < 1)
+		return number;
+	return number.Truncate(number.find('.') + decimals + 1);
+}
+
+wxString TruncateNumber(float value, int decimals)
+{
+	//truncates the numeric value to the specified number of decimal places (does not round)
+	wxString number = wxVariant(value).GetString();
+	if (decimals < 1)
+		return number;
+	return number.Truncate(number.find('.') + decimals + 1);
 }

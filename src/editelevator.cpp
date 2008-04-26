@@ -569,45 +569,45 @@ void editelevator::Loop()
 	tFloor->SetLabel(wxT("Floor " + wxVariant((long)sFloor->GetThumbPosition()).GetString()));
 	txtBrakes->SetValue(wxString::FromAscii(BoolToString(elevator->GetBrakeStatus())));
 	txtDestFloor->SetValue(wxVariant((long)elevator->GotoFloor).GetString());
-	txtDestination->SetValue(wxVariant(RoundFloat(elevator->GetDestination(), 2)).GetString());
+	txtDestination->SetValue(TruncateNumber(elevator->GetDestination(), 2));
 	txtDirection->SetValue(wxVariant((long)elevator->Direction).GetString());
-	txtDistance->SetValue(wxVariant(RoundFloat(elevator->DistanceToTravel, 2)).GetString());
+	txtDistance->SetValue(TruncateNumber(elevator->DistanceToTravel, 2));
 	txtDoorDirection->SetValue(wxString::FromAscii(BoolToString(elevator->DoorDirection)));
-	txtDoorHeight->SetValue(wxVariant(RoundFloat(elevator->DoorHeight, 2)).GetString());
-	txtDoorOrigin->SetValue(wxVariant(RoundFloat(elevator->DoorOrigin.x, 2)).GetString() + wxT(", ") + wxVariant(RoundFloat(elevator->DoorOrigin.y, 2)).GetString() + wxT(", ") + wxVariant(RoundFloat(elevator->DoorOrigin.z, 2)).GetString());
+	txtDoorHeight->SetValue(TruncateNumber(elevator->DoorHeight, 2));
+	txtDoorOrigin->SetValue(TruncateNumber(elevator->DoorOrigin.x, 2) + wxT(", ") + TruncateNumber(elevator->DoorOrigin.y, 2) + wxT(", ") + TruncateNumber(elevator->DoorOrigin.z, 2));
 	txtDoorsOpen->SetValue(wxString::FromAscii(BoolToString(elevator->AreDoorsOpen())));
-	txtDoorSpeed->SetValue(wxVariant(RoundFloat(elevator->GetCurrentDoorSpeed(), 2)).GetString());
-	txtDoorWidth->SetValue(wxVariant(RoundFloat(elevator->DoorWidth, 2)).GetString());
-	txtElevStart->SetValue(wxVariant(RoundFloat(elevator->GetElevatorStart(), 2)).GetString());
+	txtDoorSpeed->SetValue(TruncateNumber(elevator->GetCurrentDoorSpeed(), 2));
+	txtDoorWidth->SetValue(TruncateNumber(elevator->DoorWidth, 2));
+	txtElevStart->SetValue(TruncateNumber(elevator->GetElevatorStart(), 2));
 	txtEnabled->SetValue(wxString::FromAscii(BoolToString(elevator->IsEnabled)));
-	txtErrorOffset->SetValue(wxVariant(RoundFloat(elevator->ErrorOffset, 2)).GetString());
+	txtErrorOffset->SetValue(TruncateNumber(elevator->ErrorOffset, 2));
 	txtFloor->SetValue(wxVariant((long)elevator->GetFloor()).GetString());
-	txtHeight->SetValue(wxVariant(RoundFloat(elevator->Height, 2)).GetString());
+	txtHeight->SetValue(TruncateNumber(elevator->Height, 2));
 	txtMoveElevator->SetValue(wxString::FromAscii(BoolToString(elevator->MoveElevator)));
 	txtMoveElevatorFloor->SetValue(wxVariant((long)elevator->MoveElevatorFloor).GetString());
 	txtNumber->SetValue(wxVariant((long)elevator->Number).GetString());
-	txtOrigin->SetValue(wxVariant(RoundFloat(elevator->Origin.x, 2)).GetString() + wxT(", ") + wxVariant(RoundFloat(elevator->Origin.y, 2)).GetString() + wxT(", ") + wxVariant(RoundFloat(elevator->Origin.z, 2)).GetString());
+	txtOrigin->SetValue(TruncateNumber(elevator->Origin.x, 2) + wxT(", ") + TruncateNumber(elevator->Origin.y, 2) + wxT(", ") + TruncateNumber(elevator->Origin.z, 2));
 	txtOriginFloor->SetValue(wxVariant((long)elevator->OriginFloor).GetString());
-	txtPosition->SetValue(wxVariant(RoundFloat(elevator->GetPosition().x, 2)).GetString() + wxT(", ") + wxVariant(RoundFloat(elevator->GetPosition().y, 2)).GetString() + wxT(", ") + wxVariant(RoundFloat(elevator->GetPosition().z, 2)).GetString());
+	txtPosition->SetValue(TruncateNumber(elevator->GetPosition().x, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().y, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().z, 2));
 	txtQueueDirection->SetValue(wxVariant((long)elevator->QueuePositionDirection).GetString());
 	txtQueueLastDown->SetValue(wxVariant((long)elevator->LastQueueFloor[0]).GetString());
 	txtQueueLastUp->SetValue(wxVariant((long)elevator->LastQueueFloor[1]).GetString());
 	txtQueuePause->SetValue(wxString::FromAscii(BoolToString(elevator->PauseQueueSearch)));
-	txtRate->SetValue(wxVariant(RoundFloat(elevator->ElevatorRate, 2)).GetString());
+	txtRate->SetValue(TruncateNumber(elevator->ElevatorRate, 2));
 	txtShaft->SetValue(wxVariant((long)elevator->AssignedShaft).GetString());
-	txtShaftDoorOrigin->SetValue(wxVariant(RoundFloat(elevator->ShaftDoorOrigin.x, 2)).GetString() + wxT(", ") + wxVariant(RoundFloat(elevator->ShaftDoorOrigin.y, 2)).GetString() + wxT(", ") + wxVariant(RoundFloat(elevator->ShaftDoorOrigin.z, 2)).GetString());
+	txtShaftDoorOrigin->SetValue(TruncateNumber(elevator->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(elevator->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(elevator->ShaftDoorOrigin.z, 2));
 	txtStop->SetValue(wxString::FromAscii(BoolToString(elevator->GetEmergencyStopStatus())));
-	txtStopDistance->SetValue(wxVariant(RoundFloat(elevator->GetStoppingDistance(), 2)).GetString());
-	txtTempDecel->SetValue(wxVariant(RoundFloat(elevator->TempDeceleration, 2)).GetString());
+	txtStopDistance->SetValue(TruncateNumber(elevator->GetStoppingDistance(), 2));
+	txtTempDecel->SetValue(TruncateNumber(elevator->TempDeceleration, 2));
 }
 
 void editelevator::SetMainValues()
 {
 	//set changable values
 	txtName->SetValue(wxString::FromAscii(elevator->Name.GetData()));
-	txtSpeed->SetValue(wxVariant(RoundFloat(elevator->ElevatorSpeed, 4)).GetString());
-	txtAcceleration->SetValue(wxVariant(RoundFloat(elevator->Acceleration, 4)).GetString());
-	txtDeceleration->SetValue(wxVariant(RoundFloat(elevator->Deceleration, 4)).GetString());
-	txtOpenSpeed->SetValue(wxVariant(RoundFloat(elevator->OpenSpeed, 4)).GetString());
-	txtDoorAcceleration->SetValue(wxVariant(RoundFloat(elevator->DoorAcceleration, 4)).GetString());
+	txtSpeed->SetValue(TruncateNumber(elevator->ElevatorSpeed, 4));
+	txtAcceleration->SetValue(TruncateNumber(elevator->Acceleration, 4));
+	txtDeceleration->SetValue(TruncateNumber(elevator->Deceleration, 4));
+	txtOpenSpeed->SetValue(TruncateNumber(elevator->OpenSpeed, 4));
+	txtDoorAcceleration->SetValue(TruncateNumber(elevator->DoorAcceleration, 4));
 }
