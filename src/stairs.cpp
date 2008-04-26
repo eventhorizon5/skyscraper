@@ -245,7 +245,7 @@ void Stairs::CutFloors(csVector2 start, csVector2 end, float startvoffset, float
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		voffset1 = 0;
-		voffset2 = sbs->GetFloor(i)->FullHeight();
+		voffset2 = sbs->GetFloor(i)->FullHeight() + 1;
 
 		if (i == startfloor)
 			voffset1 = startvoffset;
