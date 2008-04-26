@@ -36,7 +36,5 @@ extern double AutoSize(double n1, double n2, bool iswidth);
 bool IsEven(int Number);
 bool IsNumeric(const char *expression);
 const char *BoolToString(bool item);
-double RoundDouble(double value, int decimalplaces);
-float RoundFloat(float value, int decimals);
 
 #endif
