@@ -164,15 +164,15 @@
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble4, 0.5, -75, -70, 75, 70, %height% * 3, %height% * 3, 0, 0, False
-
+    AddFloor Ceiling, Ceiling1, 0.5, -42.5, -25.8, 42.5, 25.8, %height% - 0.05, %height% - 0.05, 0, 0, False
+    
     #Lobby Front
     WallOrientation = left
-    AddWall Front, LobbyFront, 0.5, -75 + 0.1, -70 + 0.1, 75 - 0.1, -70 + 0.1, %1% * 3, %1% * 3, 0, 0, 0.3, 1, True
-    AddWall Left, LobbyFront, 0.5, -75 + 0.1, 70 - 0.1, -75 + 0.1, -70 + 0.1, %1% * 3, %1% * 3, 0, 0, 0.3, 1, True
+    AddWall Front, LobbyFront, 0.5, -75 + 0.1, -70 + 0.1, 75 - 0.1, -70 + 0.1, %1% * 3, %1% * 3, 2.24, 2.24, 0.3, 1, True
+    AddWall Left, LobbyFront, 0.5, -75 + 0.1, 70 - 0.1, -75 + 0.1, -70 + 0.1, %1% * 3, %1% * 3, 2.24, 2.24, 0.3, 1, True
     WallOrientation = right
-    AddWall Right, LobbyFront, 0.5, 75 - 0.1, -70 + 0.1, 75 - 0.1, 70 - 0.1, %1% * 3, %1% * 3, 0, 0, 0.3, 1, True
-    AddWall Back, LobbyFront, 0.5, 75 - 0.1, 70 - 0.1, -75 + 0.1, 70 - 0.1, %1% * 3, %1% * 3, 0, 0, 0.3, 1, True
+    AddWall Right, LobbyFront, 0.5, 75 - 0.1, -70 + 0.1, 75 - 0.1, 70 - 0.1, %1% * 3, %1% * 3, 2.24, 2.24, 0.3, 1, True
+    AddWall Back, LobbyFront, 0.5, 75 - 0.1, 70 - 0.1, -75 + 0.1, 70 - 0.1, %1% * 3, %1% * 3, 2.24, 2.24, 0.3, 1, True
 
     #sample walls
     WallOrientation = right
@@ -196,7 +196,8 @@
     FloorOrientation = top
     AddFloor Floor, Granite, 0.5, -42.5, -25.8, 42.5, 25.8, 0, 0, 0, 0, False
     FloorOrientation = bottom
-    AddFloor Ceiling, Ceiling1, 0.5, -42.5, -25.8, 42.5, 25.8, -0.05, -0.05, 0, 0, False
+    AddFloor Ceiling, Marble4, 0.5, -75, -70, 75, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
+
 <EndFloor>
 
 #zone 1 skeleton
@@ -234,11 +235,11 @@
 
     #Interfloor walls
     WallOrientation = left
-    AddInterfloorWall IFront, Brick, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ILeft, Brick, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if(%floor% > 2) AddInterfloorWall IFront, Brick, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if(%floor% > 2) AddInterfloorWall ILeft, Brick, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = right
-    AddInterfloorWall IRight, Brick, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall IBack, Brick, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if(%floor% > 2) AddInterfloorWall IRight, Brick, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if(%floor% > 2) AddInterfloorWall IBack, Brick, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
 # conference levels
@@ -1205,37 +1206,33 @@ CreateStairwell 1, 50, 50, 0, 20
 CutStairwell 1, -7.5, -2.5, 7.5, 8.5, 0, 5
 
 <Floor 0>
-    FloorOrientation = bottom
-    AddStairs 1, StairsLower, Stairs, left, 0, 0, 3.5, 0.51, 0.58, 12, 0, 0, 0
-    AddStairs 1, StairsUpper, Stairs, right, 0, 3.5, 3.5, 0.51, 0.58, 12, 6.12, 0, 0
+    AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, 0.5, 0.778, 10, 0, 0, 0
+    AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, 0.5, 0.778, 10, 5, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -1.75, -3.5, 6.75, 0, 0, 1, 1
-    AddStairsFloor 1, LandingUpper, Brick, 0.5, 3.5, -1.75, 8.5, 6.75, 6.12, 6.12, 1, 1
+    AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 5, 5, 1, 1
 <EndFloor>
 
 <Floor 1>
-    FloorOrientation = bottom
-    AddStairs 1, StairsLower1, Stairs, left, 0, 0, 3.5, 0.51, 0.58, 12, 0, 0, 0
-    AddStairs 1, StairsUpper1, Stairs, right, 0, 3.5, 3.5, 0.51, 0.58, 12, 6.12, 0, 0
+    AddStairs 1, StairsLower1, Stairs, left, 0, -1.75, 3.5, 0.5567, 0.637, 12, 0, 0, 0
+    AddStairs 1, StairsUpper1, Stairs, right, 0, 1.75, 3.5, 0.5567, 0.637, 12, 6.68, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -1.75, -3.5, 6.75, 0, 0, 1, 1
-    AddStairsFloor 1, LandingUpper, Brick, 0.5, 3.5, -1.75, 8.5, 6.75, 6.12, 6.12, 1, 1
+    AddStairsFloor 1, LandingLower1, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper1, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 6.68, 6.68, 1, 1
 
-    FloorOrientation = bottom
-    AddStairs 1, StairsLower2, Stairs, left, 0, 0, 3.5, 0.51, 0.58, 12, 12.24, 0, 0
-    AddStairs 1, StairsUpper2, Stairs, right, 0, 3.5, 3.5, 0.51, 0.58, 12, 18.36, 0, 0
+    AddStairs 1, StairsLower2, Stairs, left, 0, -1.75, 3.5, 0.5567, 0.637, 12, 13.36, 0, 0
+    AddStairs 1, StairsUpper2, Stairs, right, 0, 1.75, 3.5, 0.5567, 0.637, 12, 20.04, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -1.75, -3.5, 6.75, 12.24, 12.24, 1, 1
-    AddStairsFloor 1, LandingUpper, Brick, 0.5, 3.5, -1.75, 8.5, 6.75, 18.36, 18.36, 1, 1
+    AddStairsFloor 1, LandingLower2, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 13.36, 13.36, 1, 1
+    AddStairsFloor 1, LandingUpper2, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 20.04, 20.04, 1, 1
 <EndFloor>
 
 <Floors 2 to 20>
-    FloorOrientation = bottom
-    AddStairs 1, StairsLower, Stairs, left, 0, 0, 3.5, 0.51, 0.58, 12, 0, 0, 0
-    AddStairs 1, StairsUpper, Stairs, right, 0, 3.5, 3.5, 0.51, 0.58, 12, 6.12, 0, 0
+    AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, 0.51, 0.637, 12, 0, 0, 0
+    AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, 0.51, 0.637, 12, 6.12, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -1.75, -3.5, 6.75, 0, 0, 1, 1
-    AddStairsFloor 1, LandingUpper, Brick, 0.5, 3.5, -1.75, 8.5, 6.75, 6.12, 6.12, 1, 1
+    AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 6.12, 6.12, 1, 1
 <EndFloors>
 
 #elevator entry walls
