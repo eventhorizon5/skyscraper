@@ -150,7 +150,13 @@ public:
 	bool IsSkyboxEnabled; //contains status of skybox object
 	float FPS; //current frame rate
 	bool AutoShafts; //true if shafts should turn on and off automatically
-	float MetersToFeet(float meters); //converts meters to feet
+	bool AutoStairs; //true if stairwells should turn on and off automatically
+	bool ShowFullShafts; //true if entire shaft should be displayed while user is in an elevator
+	bool ShowFullStairs; //true if entire stairwell should be displayed while user is in it
+	int ShaftDisplayRange; //number of shaft floors to display while in elevator; has no effect if ShowFullShafts is true
+	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if ShowFullStairs is true
+	int ShaftOutsideDisplayRange; //number of shaft floors to display while outside of shaft
+	int StairsOutsideDisplayRange; //number of stairwell floors to display while outside of stairwell
 
 	//File I/O
 	csString BuildingFile;
@@ -226,6 +232,7 @@ public:
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
 	int CreateDoor(csRef<iThingFactoryState> cutmesh, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors);
+	float MetersToFeet(float meters); //converts meters to feet
 
 	//file loader functions
 	int LoadBuilding(const char * filename);

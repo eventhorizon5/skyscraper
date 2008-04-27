@@ -59,6 +59,7 @@ public:
 	void Gravity();
 	void CheckElevator();
 	void CheckShaft();
+	void CheckStairwell();
 	void ClickedObject();
 	const char *GetClickedMeshName();
 	const char *GetClickedPolyName();

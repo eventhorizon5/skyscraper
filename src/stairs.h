@@ -35,7 +35,9 @@ public:
 	int endfloor; //ending floor
 	csVector3 origin; //origin vector
 	csVector2 cutstart; //cut starting vector
-        csVector2 cutend; //cut ending vector
+	csVector2 cutend; //cut ending vector
+	bool InsideStairwell; //true if user/camera is in the stairwell
+	bool IsEnabled; //true if the entire stairwell has been enabled
 
 	Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Stairs();
@@ -48,6 +50,7 @@ public:
 	int AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset);
 	void CutWall(int floor, csVector3 start, csVector3 end);
+	void EnableRange(int floor, int range);
 	
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array
@@ -56,7 +59,7 @@ private:
 	csRefArray<iThingFactoryState> StairDoorArray_state; //stair mesh array state
 
 	char intbuffer[65];
-        char buffer[20];
+	char buffer[20];
 };
 
 #endif

@@ -42,6 +42,7 @@ public:
 	float top; //shaft top
 	csVector2 cutstart; //cut starting vector
 	csVector2 cutend; //cut ending vector
+	bool IsEnabled; //true if the entire shaft has been enabled
 
 	Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
@@ -53,6 +54,7 @@ public:
 	bool IsInShaft(const csVector3 &position);
 	void CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset);
 	void CutWall(int floor, csVector3 start, csVector3 end);
+	void EnableRange(int floor, int range);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array

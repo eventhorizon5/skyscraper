@@ -263,12 +263,9 @@ void Camera::CheckElevator()
 
 void Camera::CheckShaft()
 {
-	//check to see if user (camera) is in the shaft
+	//check to see if user (camera) is in a shaft
 
-	if (sbs->AutoShafts == false)
-		return;
-
-	for (int i = 1; i < sbs->Shafts(); i++)
+	for (int i = 1; i <= sbs->Shafts(); i++)
 	{
 		if (sbs->GetShaft(i)->IsInShaft(GetPosition()) == true)
 		{
@@ -283,18 +280,62 @@ void Camera::CheckShaft()
 			{
 				sbs->GetShaft(i)->InsideShaft = false;
 
-				//turn off shaft except for camera floor
-				sbs->GetShaft(i)->EnableWholeShaft(false);
-				sbs->GetShaft(i)->Enabled(sbs->camera->CurrentFloor, true);
+				//turn off entire shaft if ShowFullShafts is false
+				if (sbs->ShowFullShafts == false)
+					sbs->GetShaft(i)->EnableWholeShaft(false);
+				else
+					sbs->GetShaft(i)->EnableWholeShaft(true);
+			}
+			else if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == true && sbs->ShowFullShafts == false)
+			{
+				//if user is in an elevator, show a range of the shaft at a time
+				sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftDisplayRange);
 			}
 		}
 		else if (sbs->GetShaft(i)->InsideShaft == true)
 		{
 			sbs->GetShaft(i)->InsideShaft = false;
 
-			//turn off shaft except for camera floor
+			//turn off shaft
 			sbs->GetShaft(i)->EnableWholeShaft(false);
-			sbs->GetShaft(i)->Enabled(sbs->camera->CurrentFloor, true);
+		}
+		else if (sbs->GetShaft(i)->InsideShaft == false)
+		{
+			//show specified shaft range if outside the shaft
+			sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftOutsideDisplayRange);
+		}
+	}
+}
+
+void Camera::CheckStairwell()
+{
+	//check to see if user (camera) is in a stairwell
+
+	for (int i = 1; i <= sbs->StairsNum(); i++)
+	{
+		if (sbs->GetStairs(i)->IsInStairwell(GetPosition()) == true)
+		{
+			if (sbs->GetStairs(i)->InsideStairwell == false)
+			{
+				sbs->GetStairs(i)->InsideStairwell = true;
+
+				//turn on entire stairwell if ShowFullStairs is true
+				if (sbs->ShowFullStairs == true)
+					sbs->GetStairs(i)->EnableWholeStairwell(true);
+			}
+		}
+		else if (sbs->GetStairs(i)->InsideStairwell == true)
+		{
+			sbs->GetStairs(i)->InsideStairwell = false;
+
+			//turn off stairwell if ShowFullStairs is true
+			if (sbs->ShowFullStairs == true)
+				sbs->GetStairs(i)->EnableWholeStairwell(false);
+		}
+		else if (sbs->GetStairs(i)->InsideStairwell == false)
+		{
+			//show specified stairwell range if outside the stairwell
+			sbs->GetStairs(i)->EnableRange(CurrentFloor, sbs->StairsOutsideDisplayRange);
 		}
 	}
 }

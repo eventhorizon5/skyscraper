@@ -40,7 +40,9 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	origin.z = CenterZ;
 	origin.y = sbs->GetFloor(startfloor)->Altitude + sbs->GetFloor(startfloor)->InterfloorHeight;
 	cutstart = 0;
-        cutend = 0;
+	cutend = 0;
+	InsideStairwell = false;
+	IsEnabled = true;
 
 	csString buffer, buffer2, buffer3;
 
@@ -206,8 +208,12 @@ void Stairs::Enabled(int floor, bool value)
 void Stairs::EnableWholeStairwell(bool value)
 {
 	//turn on/off entire stairwell
-	for (int i = startfloor; i <= endfloor; i++)
-		Enabled(i, value);
+	if ((value == false && IsEnabled == true) || (value == true && IsEnabled == false))
+	{
+		for (int i = startfloor; i <= endfloor; i++)
+			Enabled(i, value);
+	}
+	IsEnabled = value;
 }
 
 bool Stairs::IsInStairwell(const csVector3 &position)
@@ -263,4 +269,38 @@ void Stairs::CutWall(int floor, csVector3 start, csVector3 end)
 
 	float base = sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight;
 	sbs->Cut(StairArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false);
+}
+
+void Stairs::EnableRange(int floor, int range)
+{
+	//turn on a range of floors
+	//if range is 3, show stairwell on current floor (floor), and 1 floor below and above (3 total floors)
+	//if range is 1, show only the current floor (floor)
+
+	//range must be greater than 0
+	if (range < 1)
+		range = 1;
+
+	//range must be an odd number; if it's even, then add 1
+	if (IsEven(range) == true)
+		range++;
+
+	int additionalfloors;
+	if (range > 1)
+		additionalfloors = (range - 1) / 2;
+	else
+		additionalfloors = 0;
+
+	//disable floors 1 floor outside of range
+	if (floor - additionalfloors - 1 >= startfloor)
+		Enabled(floor - additionalfloors - 1, false);
+	if (floor + additionalfloors + 1 <= endfloor)
+		Enabled(floor + additionalfloors + 1, false);
+
+	//enable floors within range
+	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
+	{
+		if (i >= startfloor && i <= endfloor)
+			Enabled(i, true);
+	}
 }

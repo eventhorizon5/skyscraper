@@ -78,6 +78,7 @@ SBS::SBS()
 	fps_tottime = 0;
 	FPS = 0;
 	AutoShafts = true;
+	AutoStairs = true;
 	ElevatorSync = false;
 	mouse_x = 0;
 	mouse_y = 0;
@@ -106,6 +107,12 @@ SBS::SBS()
 	canvas_height = 0;
 	remaining_delta = 0;
 	delta = 0.01f;
+	ShowFullShafts = false;
+	ShowFullStairs = false;
+	ShaftDisplayRange = 3;
+	StairsDisplayRange = 3;
+	ShaftOutsideDisplayRange = 3;
+	StairsOutsideDisplayRange = 3;
 }
 
 SBS::~SBS()
@@ -189,6 +196,13 @@ void SBS::Start()
 			ShaftArray[i].object->EnableWholeShaft(false);
 	}
 
+	//turn off stairwells
+	for (int i = 0; i < StairsNum(); i++)
+	{
+		if (StairsArray[i].object)
+			StairsArray[i].object->EnableWholeStairwell(false);
+	}
+
 	//turn on shaft elevator doors
 	for (int i = 0; i < Elevators(); i++)
 	{
@@ -196,8 +210,8 @@ void SBS::Start()
 			ElevatorArray[i].object->ShaftDoorsEnabled(camera->StartFloor, true);
 	}
 
-	//turn on first/lobby floor
-	GetFloor(0)->Enabled(true);
+	//turn on start floor
+	GetFloor(camera->StartFloor)->Enabled(true);
 
 }
 
@@ -417,9 +431,13 @@ void SBS::SetupFrame()
 			//check if the user is in an elevator
 			camera->CheckElevator();
 
-			//Check if the user is in a shaft
+			//check if the user is in a shaft
 			if (AutoShafts == true)
 				camera->CheckShaft();
+
+			//check if the user is in a stairwell
+			if (AutoStairs == true)
+				camera->CheckStairwell();
 
 			//check if the user is outside
 

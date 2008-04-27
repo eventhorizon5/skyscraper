@@ -47,6 +47,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	endfloor = _endfloor;
 	origin = csVector3(CenterX, sbs->GetFloor(_startfloor)->Altitude, CenterZ);
 	InsideShaft = false;
+	IsEnabled = true;
 	top = 0;
 	bottom = 0;
 	cutstart = 0;
@@ -147,8 +148,12 @@ bool Shaft::IsShaft(csRef<iMeshWrapper> test)
 void Shaft::EnableWholeShaft(bool value)
 {
 	//turn on/off entire shaft
-	for (int i = startfloor; i <= endfloor; i++)
-		Enabled(i, value);
+	if ((value == false && IsEnabled == true) || (value == true && IsEnabled == false))
+	{
+		for (int i = startfloor; i <= endfloor; i++)
+			Enabled(i, value);
+	}
+	IsEnabled = value;
 }
 
 bool Shaft::IsInShaft(const csVector3 &position)
@@ -192,4 +197,38 @@ void Shaft::CutWall(int floor, csVector3 start, csVector3 end)
 
 	float base = sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight;
 	sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false);
+}
+
+void Shaft::EnableRange(int floor, int range)
+{
+	//turn on a range of floors
+	//if range is 3, show shaft on current floor (floor), and 1 floor below and above (3 total floors)
+	//if range is 1, show only the current floor (floor)
+
+	//range must be greater than 0
+	if (range < 1)
+		range = 1;
+
+	//range must be an odd number; if it's even, then add 1
+	if (IsEven(range) == true)
+		range++;
+
+	int additionalfloors;
+	if (range > 1)
+		additionalfloors = (range - 1) / 2;
+	else
+		additionalfloors = 0;
+
+	//disable floors 1 floor outside of range
+	if (floor - additionalfloors - 1 >= startfloor)
+		Enabled(floor - additionalfloors - 1, false);
+	if (floor + additionalfloors + 1 <= endfloor)
+		Enabled(floor + additionalfloors + 1, false);
+
+	//enable floors within range
+	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
+	{
+		if (i >= startfloor && i <= endfloor)
+			Enabled(i, true);
+	}
 }
