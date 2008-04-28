@@ -30,6 +30,7 @@
     Load data/front.jpg, SkyFront
     Load data/back.jpg, SkyBack
     Load data/text13.jpg, Stairs
+    Load data/mason01.jpg, Concrete
 <EndTextures>
 
 <Floors 0 to 9>
@@ -47,7 +48,8 @@
 
     #External walls
     WallOrientation = left
-    AddWall Front, MainWindows, 0.5, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    if(%floor% > 0) AddWall Front, MainWindows, 0.5, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    if(%floor% = 0) AddWall Front, MainWindows, 0.5, -10, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left, MainWindows, 0.5, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     WallOrientation = right
     AddWall Right, MainWindows, 0.5, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -122,8 +124,22 @@ ShaftCut 1, -4, -3.5, 4, 3.5, 0, 5
 <EndElevator>
 
 #stairs 1
-CreateStairwell 1, 15, 15, 0, 5
+CreateStairwell 1, 10, 15, 0, 9
+CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
 
-<Floors 0 to 5>
-    AddStairs 1, Stairs, Stairs, left, 0, 0, 5, 0.5, 0.5, 10, 0, 0, 0
+<Floors 0 to 8>
+    AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, 0.5, 0.778, %fullheight%, 0, 0, 0
+    AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, 0.5, 0.778, %fullheight%, 5, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 5, 5, 1, 1
+
+    AddStairsWall 1, LeftWall, Concrete, 0.1, -8.5, 3.5, 8.5, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddStairsWall 1, CenterWall, Concrete, 0.1, 8.5, -3.5, 8.5, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddStairsWall 1, RightWall, Concrete, 0.1, -8.5, -3.5, 8.5, -3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
 <EndFloors>
+<Floor 9>
+    AddStairsFloor 1, LandingFront, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingSide, Brick, 0.5, -3.5, 0, 8.5, 3.5, 5, 5, 1, 1
+<EndFloor>
+
