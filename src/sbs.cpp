@@ -212,6 +212,7 @@ void SBS::Start()
 
 	//turn on start floor
 	GetFloor(camera->StartFloor)->Enabled(true);
+	GetFloor(camera->StartFloor)->EnableGroup(true);
 
 }
 
