@@ -311,8 +311,6 @@ void Camera::CheckStairwell()
 {
 	//check to see if user (camera) is in a stairwell
 
-	int tempfloor;
-
 	for (int i = 1; i <= sbs->StairsNum(); i++)
 	{
 		if (sbs->GetStairs(i)->IsInStairwell(GetPosition()) == true)
