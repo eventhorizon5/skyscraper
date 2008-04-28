@@ -73,6 +73,7 @@ private:
 	csString polyname; //last clicked polygon name
 	char intbuffer[65];
 	char buffer[20];
+	int FloorTemp; //previous floor check value
 };
 
 #endif

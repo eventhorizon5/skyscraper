@@ -292,9 +292,9 @@ void Stairs::EnableRange(int floor, int range)
 		additionalfloors = 0;
 
 	//disable floors 1 floor outside of range
-	if (floor - additionalfloors - 1 >= startfloor)
+	if (floor - additionalfloors - 1 >= startfloor && floor - additionalfloors - 1 <= endfloor)
 		Enabled(floor - additionalfloors - 1, false);
-	if (floor + additionalfloors + 1 <= endfloor)
+	if (floor + additionalfloors + 1 >= startfloor && floor + additionalfloors + 1 <= endfloor)
 		Enabled(floor + additionalfloors + 1, false);
 
 	//enable floors within range

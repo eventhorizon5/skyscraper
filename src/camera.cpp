@@ -50,7 +50,7 @@ Camera::Camera()
 	StartDirection = csVector3(0, 0, 0);
 	StartRotation = csVector3(0, 0, 0);
 	FallRate = 0;
-
+	FloorTemp = 0;
 }
 
 Camera::~Camera()
@@ -311,6 +311,8 @@ void Camera::CheckStairwell()
 {
 	//check to see if user (camera) is in a stairwell
 
+	int tempfloor;
+
 	for (int i = 1; i <= sbs->StairsNum(); i++)
 	{
 		if (sbs->GetStairs(i)->IsInStairwell(GetPosition()) == true)
@@ -322,6 +324,20 @@ void Camera::CheckStairwell()
 				//turn on entire stairwell if ShowFullStairs is true
 				if (sbs->ShowFullStairs == true)
 					sbs->GetStairs(i)->EnableWholeStairwell(true);
+			}
+			if (sbs->GetStairs(i)->InsideStairwell == true)
+			{
+				//show specified stairwell range while in the stairwell
+				sbs->GetStairs(i)->EnableRange(CurrentFloor, sbs->StairsDisplayRange);
+
+				//if user walked to a different floor, enable new floor and disable previous
+				if (CurrentFloor != FloorTemp)
+				{
+					sbs->GetFloor(FloorTemp)->Enabled(false);
+					sbs->GetFloor(FloorTemp)->EnableGroup(false);
+					sbs->GetFloor(CurrentFloor)->Enabled(true);
+					sbs->GetFloor(CurrentFloor)->EnableGroup(true);
+				}
 			}
 		}
 		else if (sbs->GetStairs(i)->InsideStairwell == true)
@@ -338,6 +354,7 @@ void Camera::CheckStairwell()
 			sbs->GetStairs(i)->EnableRange(CurrentFloor, sbs->StairsOutsideDisplayRange);
 		}
 	}
+	FloorTemp = CurrentFloor;
 }
 
 void Camera::ClickedObject()

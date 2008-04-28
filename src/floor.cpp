@@ -283,10 +283,15 @@ void Floor::RemoveGroupFloor(int number)
 
 void Floor::EnableGroup(bool value)
 {
-	//enables or disables all floors in group list
+	//enable floors grouped with this floor
 
-	for (size_t i = 0; i < Group.GetSize(); i++)
-		sbs->GetFloor(Group[i])->Enabled(value);
+	if (Group.GetSize() > 0)
+	{
+		for (size_t i = 0; i < Group.GetSize(); i++)
+		{
+			sbs->GetFloor(Group[i])->Enabled(value);
+		}
+	}
 }
 
 int Floor::AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
