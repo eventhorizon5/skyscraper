@@ -1018,7 +1018,6 @@ ShaftCut 17, -4.62, -5, 4.62, 5, 0, 5
 
 #Shafts
 <Floors 0 to 141>
-ShaftCut 1, -4.6, -13.5, 4.6, 13.5, 0, 5
     FloorOrientation = top
     if(%floor% = 0) AddShaftFloor 1, Base, Brick, 0.5, -4.6, -13.5, 4.6, 13.5, 0, 0, 0, 
     WallOrientation = left
