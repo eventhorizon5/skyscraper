@@ -1017,7 +1017,7 @@ AddShaft 17, 1, 0, 42, -1, 141
 ShaftCut 17, -4.62, -5, 4.62, 5, 0, 5
 
 #Shafts
-<Floors 0 to 141>
+<Floors 0 to 10>
     FloorOrientation = top
     if(%floor% = 0) AddShaftFloor 1, Base, Brick, 0.5, -4.6, -13.5, 4.6, 13.5, 0, 0, 0, 
     WallOrientation = left
@@ -1054,7 +1054,7 @@ ShaftCut 17, -4.62, -5, 4.62, 5, 0, 5
     Acceleration = 0.015
     Deceleration = 0.01
     OpenSpeed = 0.2
-    ServicedFloors = 0 - 141
+    ServicedFloors = 0 - 10
     AssignedShaft = 1
     CreateElevator -9.4, 9, 0
 
@@ -1156,7 +1156,7 @@ ShaftCut 17, -4.62, -5, 4.62, 5, 0, 5
 <EndElevator>
 
 #call buttons
-<Floors 0 to 141>
+<Floors 0 to 10>
     CallButtonElevators = 1
     CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 1.69, 10.5, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
