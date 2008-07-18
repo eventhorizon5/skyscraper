@@ -1981,8 +1981,6 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 
 		//copy source polygon vertices
 		csString name = state->GetPolygonName(i);
-		if (name.Find("LeftTest") != -1)
-			polycheck = false;
 		for (int j = 0; j < state->GetPolygonVertexCount(i); j++)
 			temppoly.AddVertex(state->GetPolygonVertex(i, j));
 
@@ -2092,11 +2090,12 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 		
 				//delete original polygon
 				state->RemovePolygon(i);
-				i--;
+				if (i > 0)
+					i--;
 				polycount--;
 
 				//create splitted polygons
-				if (temppoly.GetVertexCount() > 0)
+				if (temppoly.GetVertexCount() > 2)
 				{
 					addpolys++;
 					tmpindex_tmp = state->AddPolygon(temppoly.GetVertices(), temppoly.GetVertexCount());
@@ -2104,7 +2103,8 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
-				if (temppoly2.GetVertexCount() > 0)
+				temppoly.MakeEmpty();
+				if (temppoly2.GetVertexCount() > 2)
 				{
 					addpolys++;
 					tmpindex_tmp = state->AddPolygon(temppoly2.GetVertices(), temppoly2.GetVertexCount());
@@ -2112,7 +2112,8 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
-				if (temppoly3.GetVertexCount() > 0)
+				temppoly2.MakeEmpty();
+				if (temppoly3.GetVertexCount() > 2)
 				{
 					addpolys++;
 					tmpindex_tmp = state->AddPolygon(temppoly3.GetVertices(), temppoly3.GetVertexCount());
@@ -2120,7 +2121,8 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
-				if (temppoly4.GetVertexCount() > 0)
+				temppoly3.MakeEmpty();
+				if (temppoly4.GetVertexCount() > 2)
 				{
 					addpolys++;
 					tmpindex_tmp = state->AddPolygon(temppoly4.GetVertices(), temppoly4.GetVertexCount());
@@ -2128,6 +2130,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
+				temppoly4.MakeEmpty();
 
 				//apply material to new polygon set
 				if (addpolys > 0)
