@@ -869,35 +869,38 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	//Adds a floor with the specified dimensions and vertical offset
 
 	//convert to clockwise coordinates
-	if (DrawMainN == false || GetDrawWallsCount() != 1)
+	float temp;
+	if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
 	{
-		float temp;
-		if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
-		{
-			//reverse coordinates if the difference between x coordinates is greater
-			temp = x1;
-			x1 = x2;
-			x2 = temp;
-			temp = z1;
-			z1 = z2;
-			z2 = temp;
-		}
-		if (z1 > z2 && fabs(z1 - z2) > fabs(x1 - x2))
-		{
-			//reverse coordinates if the difference between z coordinates is greater
-			temp = x1;
-			x1 = x2;
-			x2 = temp;
-			temp = z1;
-			z1 = z2;
-			z2 = temp;
-		}
+		//reverse coordinates if the difference between x coordinates is greater
+		temp = x1;
+		x1 = x2;
+		x2 = temp;
+		temp = z1;
+		z1 = z2;
+		z2 = temp;
+		temp = altitude1;
+		altitude1 = altitude2;
+		altitude2 = temp;
+	}
+	if (z1 > z2 && fabs(z1 - z2) > fabs(x1 - x2))
+	{
+		//reverse coordinates if the difference between z coordinates is greater
+		temp = x1;
+		x1 = x2;
+		x2 = temp;
+		temp = z1;
+		z1 = z2;
+		z2 = temp;
+		temp = altitude1;
+		altitude1 = altitude2;
+		altitude2 = temp;
 	}
 
 	csVector3 v1 (x1, altitude1, z1); //bottom left
-	csVector3 v2 (x1, altitude1, z2); //top left
+	csVector3 v2 (x2, altitude1, z1); //bottom right
 	csVector3 v3 (x2, altitude2, z2); //top right
-	csVector3 v4 (x2, altitude2, z1); //bottom right
+	csVector3 v4 (x1, altitude2, z2); //top left
 
 	csVector3 v5 = v1;
 	csVector3 v6 = v2;
@@ -908,30 +911,30 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	if (floor_orientation == 0)
 	{
 		//bottom
-		v1.y += thickness;
-		v2.y += thickness;
-		v3.y += thickness;
-		v4.y += thickness;
+		v5.y += thickness;
+		v6.y += thickness;
+		v7.y += thickness;
+		v8.y += thickness;
 	}
 	if (floor_orientation == 1)
 	{
 		//center
-		v1.y += thickness / 2;
-		v2.y += thickness / 2;
-		v3.y += thickness / 2;
-		v4.y += thickness / 2;
-		v5.y -= thickness / 2;
-		v6.y -= thickness / 2;
-		v7.y -= thickness / 2;
-		v8.y -= thickness / 2;
+		v1.y -= thickness / 2;
+		v2.y -= thickness / 2;
+		v3.y -= thickness / 2;
+		v4.y -= thickness / 2;
+		v5.y += thickness / 2;
+		v6.y += thickness / 2;
+		v7.y += thickness / 2;
+		v8.y += thickness / 2;
 	}
 	if (floor_orientation == 2)
 	{
 		//top
-		v5.y -= thickness;
-		v6.y -= thickness;
-		v7.y -= thickness;
-		v8.y -= thickness;
+		v1.y -= thickness;
+		v2.y -= thickness;
+		v3.y -= thickness;
+		v4.y -= thickness;
 	}
 
 	//create polygons and set names
@@ -941,7 +944,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 
 	if (DrawMainN == true)
 	{
-		tmpindex = dest->AddQuad(v1, v2, v3, v4); //front wall
+		tmpindex = dest->AddQuad(v1, v2, v3, v4); //bottom wall
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.Append(":front");
@@ -952,7 +955,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 
 	if (DrawMainP == true)
 	{
-		tmpindex = dest->AddQuad(v6, v5, v8, v7); //back wall
+		tmpindex = dest->AddQuad(v8, v7, v6, v5); //top wall
 		NewName = name;
 		NewName.Append(":back");
 		dest->SetPolygonName(csPolygonRange(tmpindex, tmpindex), NewName);
@@ -962,7 +965,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 
 	if (DrawSideN == true)
 	{
-		tmpindex = dest->AddQuad(v5, v1, v4, v8); //left wall
+		tmpindex = dest->AddQuad(v8, v5, v1, v4); //left wall
 		NewName = name;
 		NewName.Append(":left");
 		dest->SetPolygonName(csPolygonRange(tmpindex, tmpindex), NewName);
@@ -972,17 +975,17 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 
 	if (DrawSideP == true)
 	{
-		tmpindex = dest->AddQuad(v2, v6, v7, v3); //right wall
+		tmpindex = dest->AddQuad(v6, v7, v3, v2); //right wall
 		NewName = name;
 		NewName.Append(":right");
 		dest->SetPolygonName(csPolygonRange(tmpindex, tmpindex), NewName);
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
-
+	
 	if (DrawTop == true)
 	{
-		tmpindex = dest->AddQuad(v5, v6, v2, v1); //top wall
+		tmpindex = dest->AddQuad(v5, v6, v2, v1); //front wall
 		NewName = name;
 		NewName.Append(":top");
 		dest->SetPolygonName(csPolygonRange(tmpindex, tmpindex), NewName);
@@ -992,7 +995,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 
 	if (DrawBottom == true)
 	{
-		tmpindex = dest->AddQuad(v4, v3, v7, v8); //bottom wall
+		tmpindex = dest->AddQuad(v7, v8, v4, v3); //back wall
 		NewName = name;
 		NewName.Append(":bottom");
 		dest->SetPolygonName(csPolygonRange(tmpindex, tmpindex), NewName);
