@@ -637,8 +637,17 @@ void Cleanup()
 
 int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
 {
+	//determine axis of wall
+	int axis = 0;
+	if (fabs(x1 - x2) > fabs(z1 - z2))
+		//x axis
+		axis = 1;
+	else
+		//z axis
+		axis = 2;
+	
 	//convert to clockwise coordinates (x-axis wall test)
-	if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
+	if (x1 > x2 && axis == 1)
 	{
 		//wall's along the x axis and coordinates are counterclockwise; reverse coordinates (to make clockwise)
 		float temp = x1;
@@ -655,8 +664,8 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 		height_in2 = temp;
 	}
 
-	//determine if wall is z-axis based
-	if (fabs(z1 - z2) > fabs(x1 - x2))
+	//make sure coordinates are counterclockwise if wall is on z axis
+	if (axis == 2)
 	{
 		//only perform if coordinates are clockwise; otherwise ignore
 		if (z1 < z2)
@@ -689,8 +698,9 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	csVector3 v8 = v4;
 
 	//expand to specified thickness
-	if (fabs(x1 - x2) > fabs(z1 - z2))
+	if (axis == 1)
 	{
+		//x axis
 		if (wall_orientation == 0)
 		{
 			//left
@@ -722,33 +732,34 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	}
 	else
 	{
+		//z axis
 		if (wall_orientation == 0)
 		{
 			//left
-			v1.x += thickness;
-			v2.x += thickness;
-			v3.x += thickness;
-			v4.x += thickness;
+			v5.x += thickness;
+                        v6.x += thickness;
+                        v7.x += thickness;
+                        v8.x += thickness;
 		}
 		if (wall_orientation == 1)
 		{
 			//center
-			v1.x += thickness / 2;
-			v2.x += thickness / 2;
-			v3.x += thickness / 2;
-			v4.x += thickness / 2;
-			v5.x -= thickness / 2;
-			v6.x -= thickness / 2;
-			v7.x -= thickness / 2;
-			v8.x -= thickness / 2;
+			v1.x -= thickness / 2;
+                        v2.x -= thickness / 2;
+                        v3.x -= thickness / 2;
+                        v4.x -= thickness / 2;
+                        v5.x += thickness / 2;
+                        v6.x += thickness / 2;
+                        v7.x += thickness / 2;
+                        v8.x += thickness / 2;
 		}
 		if (wall_orientation == 2)
 		{
 			//right
-			v5.x -= thickness;
-			v6.x -= thickness;
-			v7.x -= thickness;
-			v8.x -= thickness;
+			v1.x -= thickness;
+                        v2.x -= thickness;
+                        v3.x -= thickness;
+                        v4.x -= thickness;
 		}
 	}
 
