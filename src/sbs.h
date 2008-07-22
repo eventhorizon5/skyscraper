@@ -224,7 +224,7 @@ public:
 	int GetWallOrientation();
 	void SetFloorOrientation(const char *direction);
 	int GetFloorOrientation();
-	void DrawWalls(bool Front, bool Back, bool Left, bool Right, bool Top, bool Bottom);
+	void DrawWalls(bool MainN, bool MainP, bool SideN, bool SideP, bool Top, bool Bottom);
 	void ResetWalls(bool ToDefaults = false);
 	void ReverseExtents(bool X, bool Y, bool Z);
 	void ResetExtents(bool ToDefaults = false);
@@ -279,18 +279,18 @@ private:
 	int floor_orientation;
 
 	//wall/floor sides
-	bool DrawFront; //or top, if floor
-	bool DrawBack; //or bottom, if floor
-	bool DrawLeft;
-	bool DrawRight;
+	bool DrawMainN; //or top, if floor
+	bool DrawMainP; //or bottom, if floor
+	bool DrawSideN;
+	bool DrawSideP;
 	bool DrawTop; //or back, if floor
 	bool DrawBottom; //or front, if floor
 
 	//old wall/floor sides
-	bool DrawFrontOld; //or top, if floor
-	bool DrawBackOld; //or bottom, if floor
-	bool DrawLeftOld;
-	bool DrawRightOld;
+	bool DrawMainNOld; //or top, if floor
+	bool DrawMainPOld; //or bottom, if floor
+	bool DrawSideNOld;
+	bool DrawSidePOld;
 	bool DrawTopOld; //or back, if floor
 	bool DrawBottomOld; //or front, if floor
 

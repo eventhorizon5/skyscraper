@@ -85,16 +85,16 @@ SBS::SBS()
 	MouseDown = false;
 	wall_orientation = 1;
 	floor_orientation = 2;
-	DrawFront = true;
-	DrawBack = true;
-	DrawLeft = false;
-	DrawRight = false;
+	DrawMainN = true;
+	DrawMainP = true;
+	DrawSideN = false;
+	DrawSideP = false;
 	DrawTop = false;
 	DrawBottom = false;
-	DrawFrontOld = true;
-	DrawBackOld = true;
-	DrawLeftOld = false;
-	DrawRightOld = false;
+	DrawMainNOld = true;
+	DrawMainPOld = true;
+	DrawSideNOld = false;
+	DrawSidePOld = false;
 	DrawTopOld = false;
 	DrawBottomOld = false;
 	RevX = false;
@@ -637,29 +637,43 @@ void Cleanup()
 
 int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
 {
-	//convert to clockwise coordinates
-	if (DrawFront == false || GetDrawWallsCount() != 1)
+	//convert to clockwise coordinates (x-axis wall test)
+	if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
 	{
-		float temp;
-		if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
+		//wall's along the x axis and coordinates are counterclockwise; reverse coordinates (to make clockwise)
+		float temp = x1;
+		x1 = x2;
+		x2 = temp;
+		temp = z1;
+		z1 = z2;
+		z2 = temp;
+		temp = altitude1;
+		altitude1 = altitude2;
+		altitude2 = temp;
+		temp = height_in1;
+		height_in1 = height_in2;
+		height_in2 = temp;
+	}
+
+	//determine if wall is z-axis based
+	if (fabs(z1 - z2) > fabs(x1 - x2))
+	{
+		//only perform if coordinates are clockwise; otherwise ignore
+		if (z1 < z2)
 		{
-			//reverse coordinates if the difference between x coordinates is greater
-			temp = x1;
+			//wall's along the z axis; reverse coordinates (to make counterclockwise)
+			float temp = x1;
 			x1 = x2;
 			x2 = temp;
 			temp = z1;
 			z1 = z2;
 			z2 = temp;
-		}
-		if (z1 > z2 && fabs(z1 - z2) > fabs(x1 - x2))
-		{
-			//reverse coordinates if the difference between z coordinates is greater
-			temp = x1;
-			x1 = x2;
-			x2 = temp;
-			temp = z1;
-			z1 = z2;
-			z2 = temp;
+			temp = altitude1;
+			altitude1 = altitude2;
+			altitude2 = temp;
+			temp = height_in1;
+			height_in1 = height_in2;
+			height_in2 = temp;
 		}
 	}
 
@@ -743,7 +757,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	int tmpindex = -1;
 	csString NewName;
 
-	if (DrawFront == true)
+	if (DrawMainN == true)
 	{
 		tmpindex = dest->AddQuad(v1, v2, v3, v4); //front wall
 		NewName = name;
@@ -754,7 +768,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
-	if (DrawBack == true)
+	if (DrawMainP == true)
 	{
 		tmpindex = dest->AddQuad(v6, v5, v8, v7); //back wall
 		NewName = name;
@@ -764,7 +778,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
-	if (DrawLeft == true)
+	if (DrawSideN == true)
 	{
 		tmpindex = dest->AddQuad(v5, v1, v4, v8); //left wall
 		NewName = name;
@@ -774,7 +788,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
-	if (DrawRight == true)
+	if (DrawSideP == true)
 	{
 		tmpindex = dest->AddQuad(v2, v6, v7, v3); //right wall
 		NewName = name;
@@ -844,7 +858,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	//Adds a floor with the specified dimensions and vertical offset
 
 	//convert to clockwise coordinates
-	if (DrawFront == false || GetDrawWallsCount() != 1)
+	if (DrawMainN == false || GetDrawWallsCount() != 1)
 	{
 		float temp;
 		if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
@@ -914,7 +928,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	int tmpindex = -1;
 	csString NewName;
 
-	if (DrawFront == true)
+	if (DrawMainN == true)
 	{
 		tmpindex = dest->AddQuad(v1, v2, v3, v4); //front wall
 		NewName = name;
@@ -925,7 +939,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
-	if (DrawBack == true)
+	if (DrawMainP == true)
 	{
 		tmpindex = dest->AddQuad(v6, v5, v8, v7); //back wall
 		NewName = name;
@@ -935,7 +949,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
-	if (DrawLeft == true)
+	if (DrawSideN == true)
 	{
 		tmpindex = dest->AddQuad(v5, v1, v4, v8); //left wall
 		NewName = name;
@@ -945,7 +959,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
-	if (DrawRight == true)
+	if (DrawSideP == true)
 	{
 		tmpindex = dest->AddQuad(v2, v6, v7, v3); //right wall
 		NewName = name;
@@ -1842,23 +1856,23 @@ int SBS::GetFloorOrientation()
 	return floor_orientation;
 }
 
-void SBS::DrawWalls(bool Front, bool Back, bool Left, bool Right, bool Top, bool Bottom)
+void SBS::DrawWalls(bool MainN, bool MainP, bool SideN, bool SideP, bool Top, bool Bottom)
 {
 	//sets which walls should be drawn
 
 	//first backup old parameters
-	DrawFrontOld = DrawFront;
-	DrawBackOld = DrawBack;
-	DrawLeftOld = DrawLeft;
-	DrawRightOld = DrawRight;
+	DrawMainNOld = DrawMainN;
+	DrawMainPOld = DrawMainP;
+	DrawSideNOld = DrawSideN;
+	DrawSidePOld = DrawSideP;
 	DrawTopOld = DrawTop;
 	DrawBottomOld = DrawBottom;
 
 	//now set new parameters
-	DrawFront = Front;
-	DrawBack = Back;
-	DrawLeft = Left;
-	DrawRight = Right;
+	DrawMainN = MainN;
+	DrawMainP = MainP;
+	DrawSideN = SideN;
+	DrawSideP = SideP;
 	DrawTop = Top;
 	DrawBottom = Bottom;
 
@@ -1872,7 +1886,7 @@ void SBS::ResetWalls(bool ToDefaults)
 	if (ToDefaults == true)
 		DrawWalls(true, true, false, false, false, false);
 	else
-		DrawWalls(DrawFrontOld, DrawBackOld, DrawLeftOld, DrawRightOld, DrawTopOld, DrawBottomOld);
+		DrawWalls(DrawMainNOld, DrawMainPOld, DrawSideNOld, DrawSidePOld, DrawTopOld, DrawBottomOld);
 }
 
 void SBS::ReverseExtents(bool X, bool Y, bool Z)
@@ -1907,13 +1921,13 @@ int SBS::GetDrawWallsCount()
 
 	int sides = 0;
 
-	if (DrawFront == true)
+	if (DrawMainN == true)
 		sides++;
-	if (DrawBack == true)
+	if (DrawMainP == true)
 		sides++;
-	if (DrawLeft == true)
+	if (DrawSideN == true)
 		sides++;
-	if (DrawRight == true)
+	if (DrawSideP == true)
 		sides++;
 	if (DrawTop == true)
 		sides++;
