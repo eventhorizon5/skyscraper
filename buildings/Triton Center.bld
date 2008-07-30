@@ -1461,7 +1461,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     AddWall Shaft18FrontE, Wall1, 0.33, -18 - 23.85, -4.25 + 12.6, 18 - 23.85, -4.25 + 12.6, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft18BackE, Wall1, 0.33, -18 - 23.85, 4.25 + 12.6, 18 - 23.85, 4.25 + 12.6, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Shaft18BackE, Wall1, 0.33, -18 - 23.85, 4.25 + 12.6, 18 - 23.85, 4.25 + 12.6, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, true, true, false, false
     AddWall Shaft18RightE, Wall1, 0.33, 18 - 23.85, -4.25 + 12.6, 18 - 23.85, 4.25 + 12.6, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
@@ -1501,7 +1501,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     AddShaftWall 20, Shaft20Left, Brick, 0.33, -18, -4.25, -18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddShaftWall 20, Shaft20Back, Brick, 0.33, -18, 4.25, 18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
+    #AddShaftWall 20, Shaft20Back, Brick, 0.33, -18, 4.25, 18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 20, Shaft20Right, Brick, 0.33, 18, -4.25, 18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
 
     #external shaft walls
@@ -1563,7 +1563,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     AddShaftWall 23, Shaft23Left, Brick, 0.33, -9, -4.25, -9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddShaftWall 23, Shaft23Back, Brick, 0.33, -9, 4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
+    #AddShaftWall 23, Shaft23Back, Brick, 0.33, -9, 4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 23, Shaft23Right, Brick, 0.33, 9, -4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
 
     #external shaft walls
@@ -1608,7 +1608,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     AddWall Shaft24FrontE, Wall1, 0.33, -4.5 - 10.17, -4.25 + 9.25, 4.5 - 10.17, -4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft24BackE, Wall1, 0.33, -4.5 - 10.17, 4.25 + 9.25, 4.5 - 10.17, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Shaft24BackE, Wall1, 0.33, -4.5 - 10.17, 4.25 + 9.25, 4.5 - 10.17, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, true, true, false, false
     AddWall Shaft24RightE, Wall1, 0.33, 4.5 - 10.17, -4.25 + 9.25, 4.5 - 10.17, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
@@ -1645,7 +1645,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     AddWall Shaft25FrontE, Wall1, 0.33, -4.5 - 19.17, -4.25 + 9.25, 4.5 - 19.17, -4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft25BackE, Wall1, 0.33, -4.5 - 19.17, 4.25 + 9.25, 4.5 - 19.17, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Shaft25BackE, Wall1, 0.33, -4.5 - 19.17, 4.25 + 9.25, 4.5 - 19.17, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, true, true, false, false
     AddWall Shaft25RightE, Wall1, 0.33, 4.5 - 19.17, -4.25 + 9.25, 4.5 - 19.17, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
 
@@ -1692,7 +1692,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     AddWall Shaft27FrontE, Wall1, 0.33, -9 + 14.67, -4.25 + 9.25, 9 + 14.67, -4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft27BackE, Wall1, 0.33, -9 + 14.67, 4.25 + 9.25, 9 + 14.67, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft27BackE, Wall1, 0.33, -0 + 14.67, 4.25 + 9.25, 9 + 14.67, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, true, true, false, false
     AddWall Shaft27RightE, Wall1, 0.33, 9 + 14.67, -4.25 + 9.25, 9 + 14.67, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
 
