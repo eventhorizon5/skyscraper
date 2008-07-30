@@ -225,7 +225,7 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 
 	if (position.y > bottom && position.y < top)
 	{
-		csHitBeamResult result = StairArray[startfloor]->HitBeam(position, csVector3(position.x, position.y - (top - bottom), position.z));
+		csHitBeamResult result = StairArray[0]->HitBeam(position, csVector3(position.x, position.y - (top - bottom), position.z));
 		return result.hit;
 	}
 	return false;
