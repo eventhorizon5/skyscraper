@@ -197,7 +197,11 @@ int SBS::LoadBuilding(const char * filename)
 			Report("Exiting building script");
 			break; //exit data file parser
 		}
-
+		if (LineData.Slice(0, 7).CompareNoCase("<break>") == true)
+		{
+			//breakpoint function for debugging scripts
+			Report("Script breakpoint reached");
+		}
 
 		//User variable conversion
 		temp1 = LineData.Find("%", 0);
