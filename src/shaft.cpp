@@ -232,3 +232,4 @@ void Shaft::EnableRange(int floor, int range)
 			Enabled(i, true);
 	}
 }
+
