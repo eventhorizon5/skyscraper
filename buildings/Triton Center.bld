@@ -1053,6 +1053,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors -1 to 38>
     #shaft 1
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 1, Shaft1Base, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1065,6 +1066,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 2
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 2, Shaft2Base, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1095,6 +1097,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors -1 to 16>
     #shaft 3
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 3, Shaft3Base, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1107,6 +1110,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 5
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 5, Shaft5Base, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1137,6 +1141,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors -1 to 28>
     #shaft 4
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 4, Shaft4Base, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1149,6 +1154,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 6
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 6, Shaft6Base, Brick, 0.5, -4.25, -13.5, 4.25, 13.5, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1181,6 +1187,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors -1 to 42>
     #shaft 7
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 7, Shaft7Base, Brick, 0.5, -4.75, -14.75, 4.75, 14.75, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1193,6 +1200,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 8
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 8, Shaft8Base, Brick, 0.5, -4.75, -14.75, 4.75, 14.75, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1228,6 +1236,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors -1 to 2>
     #shaft 9
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 9, Shaft9Base, Brick, 0.5, -4.25, -9, 4.25, 9, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1240,6 +1249,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 10
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 10, Shaft10Base, Brick, 0.5, -4.25, -9, 4.25, 9, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1279,6 +1289,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors -1 to 102>
     #shaft 11
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 11, Shaft11Base, Brick, 0.5, -4.75, -9.87, 4.75, 9.87, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1291,6 +1302,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 12
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 12, Shaft12Base, Brick, 0.5, -4.75, -9.87, 4.75, 9.87, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1328,6 +1340,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors -1 to 82>
     #shaft 13
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 13, Shaft13Base, Brick, 0.5, -9.75, -4.75, 9.75, 4.75, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1353,6 +1366,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors -1 to 141>
     #shaft 14
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 14, Shaft14Base, Brick, 0.5, -4.92, -16.75, 4.92, 16.75, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1365,6 +1379,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 15
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 15, Shaft15Base, Brick, 0.5, -4.75, -9.833, 4.75, 9.833, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1377,6 +1392,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 16
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = -1) AddShaftFloor 16, Shaft16Base, Brick, 0.5, -5.04, -5.08, 5.04, 5.08, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1389,6 +1405,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 17
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 17) AddShaftFloor 17, Shaft17Base, Brick, 0.5, -4.33, -4.75, 4.33, 4.75, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1444,6 +1461,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors 39 to 62>
     #shaft 18
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 39) AddShaftFloor 18, Shaft18Base, Brick, 0.5, -18, -4.25, 18, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1469,6 +1487,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors 39 to 52>
     #shaft 19
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 39) AddShaftFloor 19, Shaft19Base, Brick, 0.5, -18, -4.25, 18, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1494,6 +1513,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors 39 to 79>
     #shaft 20
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 39) AddShaftFloor 20, Shaft20Base, Brick, 0.5, -18, -4.25, 18, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1519,6 +1539,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors 39 to 72>
     #shaft 21
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 39) AddShaftFloor 21, Shaft21Base, Brick, 0.5, -18, -4.25, 18, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1544,6 +1565,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors 79 to 101>
     #shaft 22
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 79) AddShaftFloor 22, Shaft22Base, Brick, 0.5, -9, -4.25, 9, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1556,6 +1578,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     
     #shaft 23
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 79) AddShaftFloor 23, Shaft23Base, Brick, 0.5, -9, -4.25, 9, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1591,6 +1614,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors 79 to 134>
     #shaft 24
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 79) AddShaftFloor 24, Shaft24Base, Brick, 0.5, -4.5, -4.25, 4.5, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1616,6 +1640,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors 99 to 131>
     #shaft 25
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 99) AddShaftFloor 25, Shaft25Base, Brick, 0.5, -4.5, -4.25, 4.5, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1628,6 +1653,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 26
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 99) AddShaftFloor 26, Shaft26Base, Brick, 0.5, -9, -4.25, 9, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1663,6 +1689,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 <Floors 99 to 119>
     #shaft 27
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 99) AddShaftFloor 27, Shaft27Base, Brick, 0.5, -9, -4.25, 9, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1675,6 +1702,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
 
     #shaft 28
     FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
     if(%floor% = 99) AddShaftFloor 28, Shaft28Base, Brick, 0.5, -9, -4.25, 9, 4.25, 0, 0, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
