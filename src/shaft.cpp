@@ -72,7 +72,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftArray[i - startfloor]->GetMeshObject()->GetFactory());
 		ShaftArray_state[i - startfloor] = tmpstate;
 		ShaftArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
-		ShaftArray[i - startfloor]->GetMovable()->SetPosition(origin);
+		ShaftArray[i - startfloor]->GetMovable()->SetPosition(csVector3(origin.x, 0, origin.z));
 		ShaftArray[i - startfloor]->GetMovable()->UpdateMove();
 	}
 }
