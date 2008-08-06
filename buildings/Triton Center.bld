@@ -1019,10 +1019,10 @@ AddShaft 17, 1, 0, 42.25, -1, 141
 ShaftCut 17, -4.33, -4.75, 4.33, 4.75, 0, 5
 
 #Office zone 2 local shafts
-AddShaft 18, 2, -23.85, 8.25, 39, 62
-AddShaft 19, 2, -23.85, -8.25, 39, 52
-AddShaft 20, 2, 23.85, 8.25, 39, 79
-AddShaft 21, 2, 23.85, -8.25, 39, 72
+AddShaft 18, 2, -23.85, 9.25, 39, 62
+AddShaft 19, 2, -23.85, -10.75, 39, 52
+AddShaft 20, 2, 23.85, 9.25, 39, 79
+AddShaft 21, 2, 23.85, -10.75, 39, 72
 ShaftCut 18, -18, -4.25, 18, 4.25, 0, 5
 ShaftCut 19, -18, -4.25, 18, 4.25, 0, 5
 ShaftCut 20, -18, -4.25, 18, 4.25, 0, 5
@@ -1423,12 +1423,12 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     #shaft 16
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    #AddWall Shaft16FrontE, Wall1, 0.33, -5.04 + 14.416, -5.08 + 18.54, 5.04 + 14.416, -5.08 + 18.54, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Shaft16FrontE, Wall1, 0.33, -5.04 + 9.375, -5.08 + 18.54, 5.04 + 9.375, -5.08 + 18.54, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft16LeftE, Wall1, 0.33, -5.04 + 14.416, -5.08 + 18.54, -5.04 + 14.416, 5.08 + 18.54, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft16LeftE, Wall1, 0.33, -5.04 + 9.375, -5.08 + 18.54, -5.04 + 9.375, 5.08 + 18.54, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    #AddWall Shaft16RightE, Wall1, 0.33, 5.04 + 14.416, -5.08 + 18.54, 5.04 + 14.416, 5.08 + 18.54, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Shaft16RightE, Wall1, 0.33, 5.04 + 9.375, -5.08 + 18.54, 5.04 + 9.375, 5.08 + 18.54, %height%, %height%, 0, 0, 0, 0, False
 
     #shaft 17
     WallOrientation = right
@@ -1458,12 +1458,12 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     #shaft 18
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft18FrontE, Wall1, 0.33, -18 - 23.85, -4.25 + 8.25, 18 - 23.85, -4.25 + 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft18FrontE, Wall1, 0.33, -18 - 23.85, -4.25 + 9.25, 18 - 23.85, -4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    #AddWall Shaft18BackE, Wall1, 0.33, -18 - 23.85, 4.25 + 8.25, 18 - 23.85, 4.25 + 8.25, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Shaft18BackE, Wall1, 0.33, -18 - 23.85, 4.25 + 9.25, 18 - 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, true, true, false, false
-    AddWall Shaft18RightE, Wall1, 0.33, 18 - 23.85, -4.25 + 8.25, 18 - 23.85, 4.25 + 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft18RightE, Wall1, 0.33, 18 - 23.85, -4.25 + 9.25, 18 - 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 <Floors 39 to 52>
@@ -1483,12 +1483,12 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     #shaft 19
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft19FrontE, Wall1, 0.33, -18 - 23.85, -4.25 - 8.25, 18 - 23.85, -4.25 - 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft19FrontE, Wall1, 0.33, -18 - 23.85, -4.25 - 10.75, 18 - 23.85, -4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft19BackE, Wall1, 0.33, -18 - 23.85, 4.25 - 8.25, 18 - 23.85, 4.25 - 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft19BackE, Wall1, 0.33, -18 - 23.85, 4.25 - 10.75, 18 - 23.85, 4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, true, true, false, false
-    AddWall Shaft19RightE, Wall1, 0.33, 18 - 23.85, -4.25 - 8.25, 18 - 23.85, 4.25 - 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft19RightE, Wall1, 0.33, 18 - 23.85, -4.25 - 10.75, 18 - 23.85, 4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 <Floors 39 to 79>
@@ -1508,12 +1508,12 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     #shaft 20
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft20FrontE, Wall1, 0.33, -18 + 23.85, -4.25 + 8.25, 18 + 23.85, -4.25 + 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft20FrontE, Wall1, 0.33, -18 + 23.85, -4.25 + 9.25, 18 + 23.85, -4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft20BackE, Wall1, 0.33, -18 + 23.85, 4.25 + 8.25, 18 + 23.85, 4.25 + 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft20BackE, Wall1, 0.33, -18 + 23.85, 4.25 + 9.25, 18 + 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, true, true, false, false
-    AddWall Shaft20RightE, Wall1, 0.33, 18 + 23.85, -4.25 + 8.25, 18 + 23.85, 4.25 + 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft20RightE, Wall1, 0.33, 18 + 23.85, -4.25 + 9.25, 18 + 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 <Floors 39 to 72>
@@ -1533,12 +1533,12 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     #shaft 21
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft21FrontE, Wall1, 0.33, -18 + 23.85, -4.25 - 8.25, 18 + 23.85, -4.25 - 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft21FrontE, Wall1, 0.33, -18 + 23.85, -4.25 - 10.75, 18 + 23.85, -4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft21BackE, Wall1, 0.33, -18 + 23.85, 4.25 - 8.25, 18 + 23.85, 4.25 - 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft21BackE, Wall1, 0.33, -18 + 23.85, 4.25 - 10.75, 18 + 23.85, 4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, true, true, false, false
-    AddWall Shaft21RightE, Wall1, 0.33, 18 + 23.85, -4.25 - 8.25, 18 + 23.85, 4.25 - 8.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft21RightE, Wall1, 0.33, 18 + 23.85, -4.25 - 10.75, 18 + 23.85, 4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 <Floors 79 to 101>
