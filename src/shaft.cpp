@@ -48,8 +48,8 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	origin = csVector3(CenterX, sbs->GetFloor(_startfloor)->Altitude, CenterZ);
 	InsideShaft = false;
 	IsEnabled = true;
-	top = 0;
-	bottom = 0;
+	top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->Height;
+	bottom = sbs->GetFloor(startfloor)->Altitude;
 	cutstart = 0;
 	cutend = 0;
 
