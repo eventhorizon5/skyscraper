@@ -176,16 +176,17 @@
   <p align="left"><strong>h. DrawWalls</strong> - specifies which parts of a wall 
     or floor should be drawn.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> DrawWalls = <em>MainNegative, 
-    MainPositive, SideNegative, SidePositive, top, bottom</em></font><br>
+    MainPositive, SideNegative, SidePositive, Top, Bottom</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">DrawWalls = true, 
     true, false, false, false, false</font></p>
-  <p align="left">The example shown is the default setting. Front is the front 
-    polygon (on the negative side if a wall, or top/positive if the object is 
-    a floor), back is the back polygon (on the positive side if a wall, or bottom/negative 
-    if a floor), left and right are both the spacing between walls (negative and 
-    positive respectively), and top and bottom are also, except top would refer 
-    to the back/positive if a floor, and bottom would refer to the front/negative 
-    if a floor.</p>
+  <p align="left">The example shown is the default setting. This can seem complex, 
+    but I'll provide a graphic soon to explain it more easily. MainNegative is 
+    the main (that makes up the length if a wall, or the main area if a floor) 
+    face on the negative side, MainPositive is the main face on the positive side, 
+    SideNegative is the side (the part that is along the thickness) face on the 
+    negative side, SidePositive is the side face on the positive side; Top refers 
+    to either the top side if a wall, or to the positive X face if a floor; Bottom 
+    refers to either the bottom side if a wall, or the negative X face if a floor.</p>
   <p align="left"><strong>i. ReverseExtents</strong> - specifies which parts of 
     a wall or floor should be drawn.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ReverseExtents = 
