@@ -102,7 +102,7 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th);
+	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, altitude + voffset1, altitude + voffset2, tw, th);
 }
 
 void Shaft::Enabled(int floor, bool value)
