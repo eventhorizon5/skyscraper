@@ -1420,19 +1420,20 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     #shaft 14
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    #AddWall Shaft14FrontE, Wall1, 0.33, -4.92 + -9.417, -16.75 + 30.71, 4.92 + -9.417, -16.75 + 30.71, %height%, %height%, 0, 0, 0, 0, False
+    if(%floor% > 134) AddWall Shaft14FrontE, Wall1, 0.33, -4.92 + -9.417, -16.75 + 30.71, 4.92 + -9.417, -16.75 + 30.71, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = true, false, true, true, false, false
-    #AddWall Shaft14LeftE, Wall1, 0.33, -4.92 + -9.417, -16.75 + 30.71, -4.92 + -9.417, 16.75 + 30.71, %height%, %height%, 0, 0, 0, 0, False
+    if(%floor% > 119) AddWall Shaft14LeftE, Wall1, 0.33, -4.92 + -9.417, -16.75 + 30.71, -4.92 + -9.417, 16.75 + 30.71, %height%, %height%, 0, 0, 0, 0, False
+    if(%floor% < 120) AddWall Shaft14LeftE, Wall1, 0.33, -4.92 + -9.417, 11.5 + 30.71, -4.92 + -9.417, 16.75 + 30.71, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft14BackE, Wall1, 0.33, -4.92 + -9.417, 16.75 + 30.71, 4.92 + -9.417, 16.75 + 30.71, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, false, false, false, false
-    #AddWall Shaft14RightE, Wall1, 0.33, 4.92 + -9.417, -16.75 + 30.71, 4.92 + -9.417, 16.75 + 30.71, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft14RightE, Wall1, 0.33, 4.92 + -9.417, -16.75 + 30.71, 4.92 + -9.417, 7.08 + 30.71, %height%, %height%, 0, 0, 0, 0, False
 
     #shaft 15
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    #AddWall Shaft15LeftE, Wall1, 0.33, -4.75 + 9.083, -9.833 + 33.33, -4.75 + 9.083, 9.833 + 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft15LeftE, Wall1, 0.33, -4.75 + 9.083, -9.833 + 33.33, -4.75 + 9.083, 3.833 + 33.33, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft15RightE, Wall1, 0.33, 4.75 + 9.083, -9.833 + 33.33, 4.75 + 9.083, 9.833 + 33.33, %height%, %height%, 0, 0, 0, 0, False
@@ -1440,7 +1441,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     #shaft 16
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    #AddWall Shaft16FrontE, Wall1, 0.33, -5.04 + 9.375, -5.08 + 18.54, 5.04 + 9.375, -5.08 + 18.54, %height%, %height%, 0, 0, 0, 0, False
+    if(%floor% > 119) AddWall Shaft16FrontE, Wall1, 0.33, -5.04 + 9.375, -5.08 + 18.54, 5.04 + 9.375, -5.08 + 18.54, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = true, false, false, false, false, false
     AddWall Shaft16LeftE, Wall1, 0.33, -5.04 + 9.375, -5.08 + 18.54, -5.04 + 9.375, 5.08 + 18.54, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
@@ -1477,9 +1478,10 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
     AddWall Shaft18FrontE, Wall1, 0.33, -18 - 23.85, -4.25 + 9.25, 18 - 23.85, -4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft18LeftE, Wall1, 0.33, -18 - 23.85, -4.25 + 9.25, -18 - 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    #AddWall Shaft18BackE, Wall1, 0.33, -18 - 23.85, 4.25 + 9.25, 18 - 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft18BackE, Wall1, 0.33, -10.5 - 23.85, 4.25 + 9.25, 0 - 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, true, true, false, false
     AddWall Shaft18RightE, Wall1, 0.33, 18 - 23.85, -4.25 + 9.25, 18 - 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
@@ -1503,6 +1505,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
     AddWall Shaft19FrontE, Wall1, 0.33, -18 - 23.85, -4.25 - 10.75, 18 - 23.85, -4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft19LeftE, Wall1, 0.33, -18 - 23.85, -4.25 - 10.75, -18 - 23.85, 4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft19BackE, Wall1, 0.33, -18 - 23.85, 4.25 - 10.75, 18 - 23.85, 4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
@@ -1529,9 +1532,10 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
     AddWall Shaft20FrontE, Wall1, 0.33, -18 + 23.85, -4.25 + 9.25, 18 + 23.85, -4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft20LeftE, Wall1, 0.33, -18 + 23.85, -4.25 + 9.25, -18 + 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft20BackE, Wall1, 0.33, -18 + 23.85, 4.25 + 9.25, 18 + 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft20BackE, Wall1, 0.33, 10 + 23.85, 4.25 + 9.25, 18 + 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, true, true, false, false
     AddWall Shaft20RightE, Wall1, 0.33, 18 + 23.85, -4.25 + 9.25, 18 + 23.85, 4.25 + 9.25, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
@@ -1555,6 +1559,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
     AddWall Shaft21FrontE, Wall1, 0.33, -18 + 23.85, -4.25 - 10.75, 18 + 23.85, -4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft21LeftE, Wall1, 0.33, -18 + 23.85, -4.25 - 10.75, -18 + 23.85, 4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft21BackE, Wall1, 0.33, -18 + 23.85, 4.25 - 10.75, 18 + 23.85, 4.25 - 10.75, %height%, %height%, 0, 0, 0, 0, False
