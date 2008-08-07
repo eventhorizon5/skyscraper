@@ -1378,7 +1378,7 @@ csString SBS::Calc(const char *expression)
 	tmpcalc.Trim();
 
 	//general math
-	temp1 = tmpcalc.Find("+", 0);
+	temp1 = tmpcalc.Find("+", 1);
 	if (temp1 > 0)
 	{
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) + atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
@@ -1386,7 +1386,7 @@ csString SBS::Calc(const char *expression)
 			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
 		return tmpcalc.GetData();
 	}
-	temp1 = tmpcalc.Find("-", 0);
+	temp1 = tmpcalc.Find("-", 1);
 	if (temp1 > 0)
 	{
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) - atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
@@ -1394,7 +1394,7 @@ csString SBS::Calc(const char *expression)
 			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
 		return tmpcalc.GetData();
 	}
-	temp1 = tmpcalc.Find("/", 0);
+	temp1 = tmpcalc.Find("/", 1);
 	if (temp1 > 0)
 	{
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) / atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
@@ -1402,7 +1402,7 @@ csString SBS::Calc(const char *expression)
 			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
 		return tmpcalc.GetData();
 	}
-	temp1 = tmpcalc.Find("*", 0);
+	temp1 = tmpcalc.Find("*", 1);
 	if (temp1 > 0)
 	{
 		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) * atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
@@ -1412,7 +1412,7 @@ csString SBS::Calc(const char *expression)
 	}
 
 	//boolean operators
-	temp1 = tmpcalc.Find("=", 0);
+	temp1 = tmpcalc.Find("=", 1);
 	if (temp1 > 0)
 	{
 		if (atof(tmpcalc.Slice(0, temp1)) == atof(tmpcalc.Slice(temp1 + 1)))
@@ -1420,7 +1420,7 @@ csString SBS::Calc(const char *expression)
 		else
 			return "false";
 	}
-	temp1 = tmpcalc.Find("!", 0);
+	temp1 = tmpcalc.Find("!", 1);
 	if (temp1 > 0)
 	{
 		if (atof(tmpcalc.Slice(0, temp1)) != atof(tmpcalc.Slice(temp1 + 1)))
@@ -1428,7 +1428,7 @@ csString SBS::Calc(const char *expression)
 		else
 			return "false";
 	}
-	temp1 = tmpcalc.Find("<", 0);
+	temp1 = tmpcalc.Find("<", 1);
 	if (temp1 > 0)
 	{
 		if (atof(tmpcalc.Slice(0, temp1)) < atof(tmpcalc.Slice(temp1 + 1)))
@@ -1436,7 +1436,7 @@ csString SBS::Calc(const char *expression)
 		else
 			return "false";
 	}
-	temp1 = tmpcalc.Find(">", 0);
+	temp1 = tmpcalc.Find(">", 1);
 	if (temp1 > 0)
 	{
 		if (atof(tmpcalc.Slice(0, temp1)) > atof(tmpcalc.Slice(temp1 + 1)))
