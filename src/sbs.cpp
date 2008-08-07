@@ -1376,43 +1376,65 @@ csString SBS::Calc(const char *expression)
 	csString tmpcalc = expression;
 	char buffer[20];
 	tmpcalc.Trim();
+	csString one;
+	csString two;
 
 	//general math
-	temp1 = tmpcalc.Find("+", 1);
+	temp1 = tmpcalc.Find("+", 0);
 	if (temp1 > 0)
 	{
-		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) + atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
-		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-		return tmpcalc.GetData();
+		one = tmpcalc.Slice(0, temp1).Trim();
+		two = tmpcalc.Slice(temp1 + 1).Trim();
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
 	}
-	temp1 = tmpcalc.Find("-", 1);
+	temp1 = tmpcalc.Find("-", 0);
 	if (temp1 > 0)
 	{
-		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) - atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
-		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-		return tmpcalc.GetData();
+		one = tmpcalc.Slice(0, temp1).Trim();
+		two = tmpcalc.Slice(temp1 + 1).Trim();
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
 	}
-	temp1 = tmpcalc.Find("/", 1);
+	temp1 = tmpcalc.Find("/", 0);
 	if (temp1 > 0)
 	{
-		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) / atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
-		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-		return tmpcalc.GetData();
+		one = tmpcalc.Slice(0, temp1).Trim();
+		two = tmpcalc.Slice(temp1 + 1).Trim();
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
 	}
-	temp1 = tmpcalc.Find("*", 1);
+	temp1 = tmpcalc.Find("*", 0);
 	if (temp1 > 0)
 	{
-		tmpcalc = _gcvt(atof(tmpcalc.Slice(0, temp1).GetData()) * atof(tmpcalc.Slice(temp1 + 1).GetData()), 12, buffer);
-		if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-			tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-		return tmpcalc.GetData();
+		one = tmpcalc.Slice(0, temp1).Trim();
+		two = tmpcalc.Slice(temp1 + 1).Trim();
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
 	}
 
 	//boolean operators
-	temp1 = tmpcalc.Find("=", 1);
+	temp1 = tmpcalc.Find("=", 0);
 	if (temp1 > 0)
 	{
 		if (atof(tmpcalc.Slice(0, temp1)) == atof(tmpcalc.Slice(temp1 + 1)))
