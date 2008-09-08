@@ -414,7 +414,7 @@ void Camera::ClickedObject()
 	}
 
 	//check doors
-	if (meshname.Find("Door") != -1)
+	if (meshname.Find("Door") != -1 && meshname.Find("ElevatorDoor") == -1)
 	{
 		//user clicked on a door
 		int doornumber = atoi(meshname.Slice(5));
