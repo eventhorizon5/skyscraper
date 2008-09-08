@@ -1201,16 +1201,27 @@ int Elevator::AddFloorIndicator(const char *direction, float CenterX, float Cent
 	csString tmpdirection = direction;
 	tmpdirection.Downcase();
 
-	sbs->DrawWalls(true, false, false, false, false, false);
 	sbs->ReverseExtents(false, false, false);
 	if (tmpdirection == "front")
+	{
+		sbs->DrawWalls(true, false, false, false, false, false);
 		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), 0, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, height, voffset, voffset, 1, 1);
+	}
 	if (tmpdirection == "back")
-		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), 0, CenterX + (width / 2), CenterZ, CenterX - (width / 2), CenterZ, height, height, voffset, voffset, 1, 1);
+	{
+		sbs->DrawWalls(false, true, false, false, false, false);
+		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), 0, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, height, voffset, voffset, 1, 1);
+	}
 	if (tmpdirection == "left")
-		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), 0, CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, height, voffset, voffset, 1, 1);
-	if (tmpdirection == "right")
+	{
+		sbs->DrawWalls(true, false, false, false, false, false);
 		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), 0, CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, height, voffset, voffset, 1, 1);
+	}
+	if (tmpdirection == "right")
+	{
+		sbs->DrawWalls(false, true, false, false, false, false);
+		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), 0, CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, height, voffset, voffset, 1, 1);
+	}
 	sbs->ResetWalls();
 	sbs->ResetExtents();
 
