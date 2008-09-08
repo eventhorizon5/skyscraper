@@ -1745,7 +1745,7 @@ DrawWalls = true, true, false, false, false, false
 
 #Elevators
 
-#Office Zone1 Locals
+#Office Zone1 Locals 27-37
 <Elevator 1>
     Speed = 21
     Acceleration = 0.015
@@ -1922,6 +1922,525 @@ DrawWalls = true, true, false, false, false, false
 
 <EndElevators>
 
+
+#Office Zone1 Locals 15-26
+<Elevator 7>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 15 - 26
+    AssignedShaft = 4
+    CreateElevator 19.125, 9, 0
+<EndElevator>
+
+<Elevator 8>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 15 - 26
+    AssignedShaft = 4
+    CreateElevator 19.125, 0, 0
+<EndElevator>
+
+<Elevator 9>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 15 - 26
+    AssignedShaft = 4
+    CreateElevator 19.125, -9, 0
+<EndElevator>
+
+<Elevators 7 to 9>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+
+    #back wall (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    
+    #front and left walls
+    WallOrientation = left
+    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+    AddWall Left, Wood1, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 2, 2
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, true, true, false, false
+    AddWall Left Panel, Wood1, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    DrawWalls = true, true, true, true, false, false
+    AddWall Right Panel, Wood1, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+
+    #doors
+    WallOrientation = left
+    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 2, 2 #shaft doors
+    WallOrientation = left
+
+    #panel
+    CreatePanel ElevExtPanels, 3, 7, left, 2.7, -2.63, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    AddFloorButton Button24, 1, 1, 24
+    AddFloorButton Button25, 1, 2, 25
+    AddFloorButton Button26, 1, 3, 26
+    AddFloorButton Button21, 2, 1, 21
+    AddFloorButton Button22, 2, 2, 22
+    AddFloorButton Button23, 2, 3, 23
+    AddFloorButton Button18, 3, 1, 18
+    AddFloorButton Button19, 3, 2, 19
+    AddFloorButton Button20, 3, 3, 20
+    AddFloorButton Button15, 4, 1, 15
+    AddFloorButton Button16, 4, 2, 16
+    AddFloorButton Button17, 4, 3, 17
+    AddFloorButton ButtonL, 5, 2, 0
+    AddControlButton ButtonOpen, 6, 1, open
+    AddControlButton ButtonClose, 6, 3, close
+    AddControlButton ButtonCancel, 7, 1, cancel
+    AddControlButton ButtonStop, 7, 2, stop
+    AddControlButton ButtonAlarm, 7, 3, alarm
+    
+    #Floor Indicator
+    AddFloorIndicator left, 2.7, -2.63, 0.7, 0.5, 6.5
+
+<EndElevators>
+
+<Elevator 10>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 15 - 26
+    AssignedShaft = 6
+    CreateElevator 36.96, 9, 0
+<EndElevator>
+
+<Elevator 11>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 15 - 26
+    AssignedShaft = 6
+    CreateElevator 36.96, 0, 0
+<EndElevator>
+
+<Elevator 12>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 15 - 26
+    AssignedShaft = 6
+    CreateElevator 36.96, -9, 0
+<EndElevator>
+
+<Elevators 10 to 12>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+
+    #back and right walls (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Right, Wood1, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    
+    #front wall
+    WallOrientation = left
+    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+
+    #panels
+    WallOrientation = left
+    DrawWalls = true, true, true, true, false, false
+    AddWall Left Panel, Wood1, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    DrawWalls = true, true, true, true, false, false
+    AddWall Right Panel, Wood1, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+
+    #doors
+    WallOrientation = right
+    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 2, 2 #shaft doors
+    WallOrientation = left
+
+    #panel
+    CreatePanel ElevExtPanels, 3, 7, right, -2.7, 2.63, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    AddFloorButton Button24, 1, 1, 24
+    AddFloorButton Button25, 1, 2, 25
+    AddFloorButton Button26, 1, 3, 26
+    AddFloorButton Button21, 2, 1, 21
+    AddFloorButton Button22, 2, 2, 22
+    AddFloorButton Button23, 2, 3, 23
+    AddFloorButton Button18, 3, 1, 18
+    AddFloorButton Button19, 3, 2, 19
+    AddFloorButton Button20, 3, 3, 20
+    AddFloorButton Button15, 4, 1, 15
+    AddFloorButton Button16, 4, 2, 16
+    AddFloorButton Button17, 4, 3, 17
+    AddFloorButton ButtonL, 5, 2, 0
+    AddControlButton ButtonOpen, 6, 1, open
+    AddControlButton ButtonClose, 6, 3, close
+    AddControlButton ButtonCancel, 7, 1, cancel
+    AddControlButton ButtonStop, 7, 2, stop
+    AddControlButton ButtonAlarm, 7, 3, alarm
+    
+    #Floor Indicator
+    AddFloorIndicator right, -2.7, 2.63, 0.7, 0.5, 6.5
+
+<EndElevators>
+
+
+#Office Zone1 Locals 2-14
+<Elevator 13>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 2 - 14
+    AssignedShaft = 5
+    CreateElevator -36.96, 9, 0
+<EndElevator>
+
+<Elevator 14>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 2 - 14
+    AssignedShaft = 5
+    CreateElevator -36.96, 0, 0
+<EndElevator>
+
+<Elevator 15>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 2 - 14
+    AssignedShaft = 5
+    CreateElevator -36.96, -9, 0
+<EndElevator>
+
+<Elevators 13 to 15>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+
+    #back wall (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    
+    #front and left walls
+    WallOrientation = left
+    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+    AddWall Left, Wood1, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 2, 2
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, true, true, false, false
+    AddWall Left Panel, Wood1, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    DrawWalls = true, true, true, true, false, false
+    AddWall Right Panel, Wood1, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+
+    #doors
+    WallOrientation = left
+    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 2, 2 #shaft doors
+    WallOrientation = left
+
+    #panel
+    CreatePanel ElevExtPanels, 3, 7, left, 2.7, -2.63, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    AddFloorButton Button12, 1, 1, 12
+    AddFloorButton Button13, 1, 2, 13
+    AddFloorButton Button14, 1, 3, 14
+    AddFloorButton Button9, 2, 1, 9
+    AddFloorButton Button10, 2, 2, 10
+    AddFloorButton Button11, 2, 3, 11
+    AddFloorButton Button6, 3, 1, 6
+    AddFloorButton Button7, 3, 2, 7
+    AddFloorButton Button8, 3, 3, 8
+    AddFloorButton Button3, 4, 1, 3
+    AddFloorButton Button4, 4, 2, 4
+    AddFloorButton Button5, 4, 3, 5
+    AddFloorButton ButtonL, 5, 1, 0
+    AddFloorButton Button2, 5, 3, 2
+    AddControlButton ButtonOpen, 6, 1, open
+    AddControlButton ButtonClose, 6, 3, close
+    AddControlButton ButtonCancel, 7, 1, cancel
+    AddControlButton ButtonStop, 7, 2, stop
+    AddControlButton ButtonAlarm, 7, 3, alarm
+    
+    #Floor Indicator
+    AddFloorIndicator left, 2.7, -2.63, 0.7, 0.5, 6.5
+
+<EndElevators>
+
+<Elevator 16>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 2 - 14
+    AssignedShaft = 3
+    CreateElevator -19.125, 9, 0
+<EndElevator>
+
+<Elevator 17>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 2 - 14
+    AssignedShaft = 3
+    CreateElevator -19.125, 0, 0
+<EndElevator>
+
+<Elevator 18>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 2 - 14
+    AssignedShaft = 3
+    CreateElevator -19.125, -9, 0
+<EndElevator>
+
+<Elevators 16 to 18>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+
+    #back and right walls (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Right, Wood1, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    
+    #front wall
+    WallOrientation = left
+    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+
+    #panels
+    WallOrientation = left
+    DrawWalls = true, true, true, true, false, false
+    AddWall Left Panel, Wood1, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    DrawWalls = true, true, true, true, false, false
+    AddWall Right Panel, Wood1, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+
+    #doors
+    WallOrientation = right
+    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 2, 2 #shaft doors
+    WallOrientation = left
+
+    #panel
+    CreatePanel ElevExtPanels, 3, 7, right, -2.7, 2.63, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    AddFloorButton Button12, 1, 1, 12
+    AddFloorButton Button13, 1, 2, 13
+    AddFloorButton Button14, 1, 3, 14
+    AddFloorButton Button9, 2, 1, 9
+    AddFloorButton Button10, 2, 2, 10
+    AddFloorButton Button11, 2, 3, 11
+    AddFloorButton Button6, 3, 1, 6
+    AddFloorButton Button7, 3, 2, 7
+    AddFloorButton Button8, 3, 3, 8
+    AddFloorButton Button3, 4, 1, 3
+    AddFloorButton Button4, 4, 2, 4
+    AddFloorButton Button5, 4, 3, 5
+    AddFloorButton ButtonL, 5, 1, 0
+    AddFloorButton Button2, 5, 3, 2
+    AddControlButton ButtonOpen, 6, 1, open
+    AddControlButton ButtonClose, 6, 3, close
+    AddControlButton ButtonCancel, 7, 1, cancel
+    AddControlButton ButtonStop, 7, 2, stop
+    AddControlButton ButtonAlarm, 7, 3, alarm
+    
+    #Floor Indicator
+    AddFloorIndicator right, -2.7, 2.63, 0.7, 0.5, 6.5
+
+<EndElevators>
+
+
+#Office Express
+<Elevator 19>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 40
+    AssignedShaft = 7
+    CreateElevator -11.833, -29.083, 0
+<EndElevator>
+
+<Elevator 20>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 40
+    AssignedShaft = 7
+    CreateElevator -11.833, -38.916, 0
+<EndElevator>
+
+<Elevator 21>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 40
+    AssignedShaft = 7
+    CreateElevator -11.833, -48.75, 0
+<EndElevator>
+
+<Elevators 19 to 21>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+
+    #back wall (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    
+    #front and left walls
+    WallOrientation = left
+    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
+    AddWall Left, Wood1, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 2, 2
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, true, true, false, false
+    AddWall Left Panel, Wood1, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    DrawWalls = true, true, true, true, false, false
+    AddWall Right Panel, Wood1, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+
+    #doors
+    WallOrientation = left
+    AddDoors ElevDoors, 0.2, 3.76, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 4.06, 0, 2, 2 #shaft doors
+    WallOrientation = left
+
+    #panel
+    CreatePanel ElevExtPanels, 3, 4, left, 2.7, -2.63, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    AddFloorButton ButtonL, 1, 1, 0
+    AddFloorButton Button40, 1, 3, 40
+    AddControlButton ButtonOpen, 3, 1, open
+    AddControlButton ButtonClose, 3, 3, close
+    AddControlButton ButtonCancel, 4, 1, cancel
+    AddControlButton ButtonStop, 4, 2, stop
+    AddControlButton ButtonAlarm, 4, 3, alarm
+    
+    #Floor Indicator
+    AddFloorIndicator left, 2.7, -2.63, 0.7, 0.5, 6.5
+
+<EndElevators>
+
+<Elevator 22>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 40
+    AssignedShaft = 8
+    CreateElevator 11.833, -29.083, 0
+<EndElevator>
+
+<Elevator 23>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 40
+    AssignedShaft = 8
+    CreateElevator 11.833, -38.916, 0
+<EndElevator>
+
+<Elevator 24>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0, 40
+    AssignedShaft = 8
+    CreateElevator 11.833, -48.75, 0
+<EndElevator>
+
+<Elevators 22 to 24>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+
+    #back and right walls (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    AddWall Right, Wood1, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    
+    #front wall
+    WallOrientation = left
+    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
+
+    #panels
+    WallOrientation = left
+    DrawWalls = true, true, true, true, false, false
+    AddWall Left Panel, Wood1, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    DrawWalls = true, true, true, true, false, false
+    AddWall Right Panel, Wood1, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+
+    #doors
+    WallOrientation = right
+    AddDoors ElevDoors, 0.2, -3.76, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, -4.06, 0, 2, 2 #shaft doors
+    WallOrientation = left
+
+    #panel
+    CreatePanel ElevExtPanels, 3, 4, right, -2.7, 2.63, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    AddFloorButton ButtonL, 1, 1, 0
+    AddFloorButton Button40, 1, 3, 40
+    AddControlButton ButtonOpen, 3, 1, open
+    AddControlButton ButtonClose, 3, 3, close
+    AddControlButton ButtonCancel, 4, 1, cancel
+    AddControlButton ButtonStop, 4, 2, stop
+    AddControlButton ButtonAlarm, 4, 3, alarm
+    
+    #Floor Indicator
+    AddFloorIndicator right, -2.7, 2.63, 0.7, 0.5, 6.5
+
+<EndElevators>
 
 #call buttons
 <Floors 0 to 10>
