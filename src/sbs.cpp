@@ -737,29 +737,29 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 		{
 			//left
 			v5.x += thickness;
-                        v6.x += thickness;
-                        v7.x += thickness;
-                        v8.x += thickness;
+            v6.x += thickness;
+            v7.x += thickness;
+            v8.x += thickness;
 		}
 		if (wall_orientation == 1)
 		{
 			//center
 			v1.x -= thickness / 2;
-                        v2.x -= thickness / 2;
-                        v3.x -= thickness / 2;
-                        v4.x -= thickness / 2;
-                        v5.x += thickness / 2;
-                        v6.x += thickness / 2;
-                        v7.x += thickness / 2;
-                        v8.x += thickness / 2;
+            v2.x -= thickness / 2;
+            v3.x -= thickness / 2;
+            v4.x -= thickness / 2;
+            v5.x += thickness / 2;
+            v6.x += thickness / 2;
+            v7.x += thickness / 2;
+            v8.x += thickness / 2;
 		}
 		if (wall_orientation == 2)
 		{
 			//right
 			v1.x -= thickness;
-                        v2.x -= thickness;
-                        v3.x -= thickness;
-                        v4.x -= thickness;
+            v2.x -= thickness;
+            v3.x -= thickness;
+            v4.x -= thickness;
 		}
 	}
 
@@ -2042,6 +2042,8 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 			temppoly.ClassifyZ(start.z) != CS_POL_FRONT &&
 			temppoly.ClassifyZ(end.z) != CS_POL_BACK)
 		{
+			//Report("Cutting polygon " + name);
+			
 			extentsx = GetExtents(temppoly, 1);
 			extentsy = GetExtents(temppoly, 2);
 			extentsz = GetExtents(temppoly, 3);
