@@ -50,6 +50,7 @@ public:
 	void Press(int index);
 	void Move(csVector3 position);
 	void SetToElevatorAltitude();
+	void Enabled(bool value);
 
 private:
 	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object

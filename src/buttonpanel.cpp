@@ -85,6 +85,7 @@ ButtonPanel::ButtonPanel(int _elevator, const char *texture, int columns, int ro
 	}
 	sbs->ResetWalls();
 	sbs->ResetExtents();
+	Enabled(false); //disable mesh at startup
 }
 
 ButtonPanel::~ButtonPanel()
@@ -221,3 +222,21 @@ void ButtonPanel::SetToElevatorAltitude()
 	ButtonPanelMesh->GetMovable()->SetPosition(csVector3(pos.x, sbs->GetElevator(elevator)->GetPosition().y, pos.z));
 	ButtonPanelMesh->GetMovable()->UpdateMove();
 }
+
+void ButtonPanel::Enabled(bool value)
+{
+	//enable or disable button panel
+	if (value == true)
+	{
+		ButtonPanelMesh->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ButtonPanelMesh->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ButtonPanelMesh->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		ButtonPanelMesh->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+                ButtonPanelMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+                ButtonPanelMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+	}
+}
+

@@ -1423,10 +1423,6 @@ void Elevator::Enabled(bool value)
 		ElevatorMesh->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
 		ElevatorMesh->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
 
-		FloorIndicator->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		FloorIndicator->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		FloorIndicator->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-
 		ElevatorDoorL->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
 		ElevatorDoorL->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
 		ElevatorDoorL->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
@@ -1434,10 +1430,6 @@ void Elevator::Enabled(bool value)
 		ElevatorDoorR->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
 		ElevatorDoorR->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
 		ElevatorDoorR->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-
-		Plaque->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		Plaque->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		Plaque->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
 
 		IsEnabled = true;
 	}
@@ -1447,10 +1439,6 @@ void Elevator::Enabled(bool value)
 		ElevatorMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		ElevatorMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 
-		FloorIndicator->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		FloorIndicator->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		FloorIndicator->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
 		ElevatorDoorL->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
 		ElevatorDoorL->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		ElevatorDoorL->GetFlags().Set (CS_ENTITY_NOHITBEAM);
@@ -1459,11 +1447,38 @@ void Elevator::Enabled(bool value)
 		ElevatorDoorR->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		ElevatorDoorR->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 
-		Plaque->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		Plaque->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		Plaque->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
 		IsEnabled = false;
+	}
+}
+
+void Elevator::EnableObjects(bool value)
+{
+	//enable or disable interior objects, such as floor indicator, button panel and plaque
+	if (value == true)
+	{
+		FloorIndicator->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		FloorIndicator->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		FloorIndicator->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+
+		Plaque->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		Plaque->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+	        Plaque->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+
+		if (Panel)
+			Panel->Enabled(true);
+	}
+	else
+	{
+		FloorIndicator->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+                FloorIndicator->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+                FloorIndicator->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+
+                Plaque->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+                Plaque->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+                Plaque->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+
+                if (Panel)
+			Panel->Enabled(false);
 	}
 }
 

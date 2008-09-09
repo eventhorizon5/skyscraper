@@ -90,6 +90,7 @@ public:
 	void CreateButtonPanel(const char *texture, int columns, int rows, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
 	void DumpQueues();
 	void Enabled(bool value);
+	void EnableObjects(bool value);
 	void ShaftDoorsEnabled(int floor, bool value);
 	bool IsElevator(csRef<iMeshWrapper> test);
 	bool IsInElevator(const csVector3 &position);

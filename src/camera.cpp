@@ -250,8 +250,11 @@ void Camera::CheckElevator()
 			sbs->InElevator = true;
 			sbs->ElevatorNumber = i;
 			sbs->ElevatorSync = true;
+			sbs->GetElevator(i)->EnableObjects(true);
 			return;
 		}
+		else
+			sbs->GetElevator(i)->EnableObjects(false); //turn off objects if user is not in the checked elevator
 	}
 	//user is not in an elevator if all elevators returned false
 	if (test == false)

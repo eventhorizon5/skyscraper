@@ -79,6 +79,7 @@ bool Skyscraper::OnInit(void)
 
 	//Create new simulator object
 	Simcore = new SBS();
+	Simcore->EnableCollisions = false;
 
 	//Create main window
 	window = new MainScreen();
