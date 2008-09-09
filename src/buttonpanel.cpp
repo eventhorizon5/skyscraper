@@ -45,8 +45,10 @@ ButtonPanel::ButtonPanel(int _elevator, const char *texture, int columns, int ro
 	Height = height;
 	Rows = rows;
 	Columns = columns;
-	GridSize.x = Width / (Columns + 2); //leave 1 empty grid space on both sides
-	GridSize.y = Height / (Rows + 2); //leave 1 empty grid space on both sides
+	SpacingX = (Columns + 3) * spacingX; //get button equivalent of spacing
+	SpacingY = (Rows + 3) * spacingY; //get button equivalent of spacing
+	GridSize.x = Width / (Columns + SpacingX + 2); //leave 2 extra spaces
+	GridSize.y = Height / (Rows + SpacingY + 2); //leave 2 extra spaces
 	SpacingX = GridSize.x * spacingX;
 	SpacingY = GridSize.y * spacingY;
 
@@ -120,24 +122,24 @@ void ButtonPanel::AddButton(const char *name, const char *texture, int row, int 
 {
 	//create the button polygon
 	float xpos, ypos, zpos;
-	ypos = (Origin.y + Height) - (GridSize.y * (row + 1)) + (SpacingY / 2);
+	ypos = (Origin.y + Height) - (GridSize.y * (row + 1)) + SpacingY;
 	sbs->ReverseExtents(false, false, false);
 	if (Direction == "front" || Direction == "back")
 	{
 		if (Direction == "front")
 		{
 			sbs->DrawWalls(true, false, false, false, false, false);
-			xpos = (Origin.x - (Width / 2)) + (GridSize.x * column) + (SpacingX / 2);
+			xpos = (Origin.x - (Width / 2)) + (GridSize.x * (column + 1)) + SpacingX;
 			zpos = Origin.z - 0.01;
-			sbs->AddWallMain(ButtonPanel_state, name, texture, 0, xpos, zpos, xpos + GridSize.x - (SpacingX / 2), zpos, GridSize.y - (SpacingY / 2), GridSize.y - (SpacingY / 2), ypos, ypos, 1, 1);
+			sbs->AddWallMain(ButtonPanel_state, name, texture, 0, xpos, zpos, xpos + GridSize.x, zpos, GridSize.y, GridSize.y, ypos, ypos, 1, 1);
 		}
 		else
 		{
 			//back
 			sbs->DrawWalls(false, true, false, false, false, false);
-			xpos = (Origin.x + (Width / 2)) - (GridSize.x * column) - (SpacingX / 2);
+			xpos = (Origin.x + (Width / 2)) - (GridSize.x * (column + 1)) - SpacingX;
 			zpos = Origin.z + 0.01;
-			sbs->AddWallMain(ButtonPanel_state, name, texture, 0, xpos, zpos, xpos - GridSize.x + (SpacingX / 2), zpos, GridSize.y - (SpacingY / 2), GridSize.y - (SpacingY / 2), ypos, ypos, 1, 1);
+			sbs->AddWallMain(ButtonPanel_state, name, texture, 0, xpos, zpos, xpos - GridSize.x, zpos, GridSize.y, GridSize.y, ypos, ypos, 1, 1);
 		}
 	}
 	else
@@ -146,16 +148,16 @@ void ButtonPanel::AddButton(const char *name, const char *texture, int row, int 
 		{
 			sbs->DrawWalls(true, false, false, false, false, false);
 			xpos = Origin.x - 0.01;
-			zpos = (Origin.z + (Width / 2)) - (GridSize.x * column) - (SpacingX / 2);
-			sbs->AddWallMain(ButtonPanel_state, name, texture, 0, xpos, zpos, xpos, zpos - GridSize.x + (SpacingX / 2), GridSize.y - (SpacingY / 2), GridSize.y - (SpacingY / 2), ypos, ypos, 1, 1);
+			zpos = (Origin.z + (Width / 2)) - (GridSize.x * (column + 1)) - SpacingX;
+			sbs->AddWallMain(ButtonPanel_state, name, texture, 0, xpos, zpos, xpos, zpos - GridSize.x, GridSize.y, GridSize.y, ypos, ypos, 1, 1);
 		}
 		else
 		{
 			//right
 			sbs->DrawWalls(false, true, false, false, false, false);
 			xpos = Origin.x + 0.01;
-			zpos = (Origin.z - (Width / 2)) + (GridSize.x * column) + (SpacingX / 2);
-			sbs->AddWallMain(ButtonPanel_state, name, texture, 0, xpos, zpos, xpos, zpos + GridSize.x - (SpacingX / 2), GridSize.y - (SpacingY / 2), GridSize.y - (SpacingY / 2), ypos, ypos, 1, 1);
+			zpos = (Origin.z - (Width / 2)) + (GridSize.x * (column + 1)) + SpacingX;
+			sbs->AddWallMain(ButtonPanel_state, name, texture, 0, xpos, zpos, xpos, zpos + GridSize.x, GridSize.y, GridSize.y, ypos, ypos, 1, 1);
 		}
 	}
 	sbs->ResetWalls();
