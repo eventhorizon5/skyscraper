@@ -32,11 +32,11 @@
 #endif
 
 //(*Headers(DebugPanel)
-#include <wx/button.h>
-#include <wx/checkbox.h>
-#include <wx/frame.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/checkbox.h>
+#include <wx/button.h>
+#include <wx/frame.h>
 //*)
 #include <wx/timer.h>
 #include <wx/variant.h>
@@ -62,11 +62,13 @@ class DebugPanel: public wxFrame
 		static const long ID_STATICTEXT3;
 		static const long ID_STATICTEXT4;
 		static const long ID_STATICTEXT5;
+		static const long ID_STATICTEXT6;
 		static const long ID_t_camerafloor;
 		static const long ID_t_camerap;
 		static const long ID_t_elevnumber;
 		static const long ID_t_elevfloor;
 		static const long ID_t_object;
+		static const long ID_STATICTEXT7;
 		static const long ID_STATICTEXT11;
 		static const long ID_chkCollisionDetection;
 		static const long ID_chkFrameLimiter;
@@ -96,33 +98,35 @@ class DebugPanel: public wxFrame
 		void OnInit();
 
 		//(*Declarations(DebugPanel)
-		wxBoxSizer* BoxSizer1;
-		wxBoxSizer* BoxSizer2;
 		wxBoxSizer* BoxSizer4;
 		wxBoxSizer* BoxSizer6;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText2;
-		wxStaticText* StaticText3;
-		wxStaticText* StaticText4;
-		wxStaticText* StaticText5;
-		wxBoxSizer* BoxSizer7;
-		wxStaticText* t_camerafloor;
-		wxStaticText* t_camerap;
-		wxStaticText* t_elevnumber;
-		wxStaticText* t_elevfloor;
-		wxStaticText* t_object;
 		wxBoxSizer* BoxSizer5;
-		wxStaticText* StaticText11;
-		wxCheckBox* chkCollisionDetection;
-		wxCheckBox* chkFrameLimiter;
-		wxCheckBox* chkMainProcessing;
-		wxCheckBox* chkAutoShafts;
-		wxCheckBox* chkFrameSync;
-		wxBoxSizer* BoxSizer3;
+		wxBoxSizer* BoxSizer7;
+		wxStaticText* t_elevfloor;
+		wxStaticText* StaticText2;
 		wxButton* bListAltitudes;
-		wxButton* bMeshControl;
-		wxButton* bInitRealtime;
+		wxStaticText* StaticText6;
 		wxButton* bEditElevator;
+		wxCheckBox* chkMainProcessing;
+		wxButton* bMeshControl;
+		wxStaticText* StaticText11;
+		wxStaticText* t_framerate;
+		wxStaticText* StaticText1;
+		wxBoxSizer* BoxSizer2;
+		wxStaticText* StaticText3;
+		wxCheckBox* chkCollisionDetection;
+		wxStaticText* t_elevnumber;
+		wxStaticText* t_object;
+		wxStaticText* StaticText5;
+		wxCheckBox* chkFrameSync;
+		wxButton* bInitRealtime;
+		wxBoxSizer* BoxSizer1;
+		wxStaticText* t_camerap;
+		wxStaticText* t_camerafloor;
+		wxBoxSizer* BoxSizer3;
+		wxCheckBox* chkAutoShafts;
+		wxStaticText* StaticText4;
+		wxCheckBox* chkFrameLimiter;
 		//*)
 
 	private:
