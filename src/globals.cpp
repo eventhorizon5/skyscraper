@@ -31,7 +31,9 @@ bool IsEven(int Number)
 {
 	//Determine if the passed number is even.
 	//If number divides evenly, return true
-	if ((Number / 2) == int(Number / 2))
+	
+	float temp = Number;
+	if ((temp / 2) == int(temp / 2))
 		return true;
 	else
 		return false;
