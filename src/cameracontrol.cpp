@@ -23,13 +23,8 @@
 */
 
 //(*InternalHeaders(CameraControl)
-#include <wx/bitmap.h>
-#include <wx/font.h>
-#include <wx/fontenum.h>
-#include <wx/fontmap.h>
-#include <wx/image.h>
 #include <wx/intl.h>
-#include <wx/settings.h>
+#include <wx/string.h>
 //*)
 #include "cameracontrol.h"
 
@@ -44,7 +39,7 @@ END_EVENT_TABLE()
 CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(CameraControl)
-	Create(parent,id,_("Camera Control"),wxDefaultPosition,wxDefaultSize,wxDEFAULT_DIALOG_STYLE,_T("id"));
+	Create(parent, id, _("Camera Control"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
 	//*)
 }
 

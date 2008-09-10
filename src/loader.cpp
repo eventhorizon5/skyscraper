@@ -23,13 +23,8 @@
 */
 
 //(*InternalHeaders(Loader)
-#include <wx/bitmap.h>
-#include <wx/font.h>
-#include <wx/fontenum.h>
-#include <wx/fontmap.h>
-#include <wx/image.h>
 #include <wx/intl.h>
-#include <wx/settings.h>
+#include <wx/string.h>
 //*)
 #include "loader.h"
 
@@ -46,16 +41,17 @@ END_EVENT_TABLE()
 Loader::Loader(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(Loader)
-	Create(parent,id,_("Select a Building"),wxDefaultPosition,wxDefaultSize,wxDEFAULT_DIALOG_STYLE,_T("id"));
+	Create(parent, id, _("Select a Building"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
-	Selector = new wxGenericDirCtrl(this,ID_SELECTOR,wxEmptyString,wxPoint(16,17),wxSize(196,167),0,wxEmptyString,0,_T("ID_SELECTOR"));
-	BoxSizer1->Add(Selector,0,wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,10);
-	bOK = new wxButton(this,ID_BUTTON1,_("OK"),wxPoint(71,199),wxDefaultSize,0,wxDefaultValidator,_T("ID_BUTTON1"));
-	BoxSizer1->Add(bOK,0,wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,10);
+	Selector = new wxGenericDirCtrl(this, ID_SELECTOR, wxEmptyString, wxPoint(16,17), wxSize(196,167), 0, wxEmptyString, 0, _T("ID_SELECTOR"));
+	BoxSizer1->Add(Selector, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
+	bOK = new wxButton(this, ID_BUTTON1, _("OK"), wxPoint(71,199), wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
+	BoxSizer1->Add(bOK, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
+	
 	Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Loader::On_bOK_Click);
 	//*)
 	Selector->SetFilter(_("Building files (*.bld)|*.bld"));

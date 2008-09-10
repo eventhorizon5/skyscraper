@@ -32,10 +32,10 @@
 #endif
 
 //(*Headers(Loader)
+#include <wx/sizer.h>
+#include <wx/dirctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
-#include <wx/dirctrl.h>
-#include <wx/sizer.h>
 //*)
 
 class Loader: public wxDialog
@@ -57,9 +57,9 @@ class Loader: public wxDialog
 		//*)
 
 		//(*Declarations(Loader)
-		wxBoxSizer* BoxSizer1;
-		wxGenericDirCtrl* Selector;
 		wxButton* bOK;
+		wxGenericDirCtrl* Selector;
+		wxBoxSizer* BoxSizer1;
 		//*)
 
 	private:
