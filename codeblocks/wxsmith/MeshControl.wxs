@@ -1,100 +1,109 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
-    <object class="wxDialog" name="MeshControl">
-        <title>Realtime Mesh Control</title>
-        <centered>1</centered>
-        <object class="wxBoxSizer" variable="BoxSizer1" member="yes">
-            <orient>wxVERTICAL</orient>
-            <object class="sizeritem">
-                <object class="wxBoxSizer" variable="BoxSizer2" member="yes">
-                    <object class="sizeritem">
-                        <object class="wxBoxSizer" variable="BoxSizer3" member="yes">
-                            <orient>wxVERTICAL</orient>
-                            <object class="sizeritem">
-                                <object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
-                                    <label>Primary Meshes</label>
-                                </object>
-                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                <border>5</border>
-                            </object>
-                            <object class="sizeritem">
-                                <object class="wxCheckBox" name="ID_chkExternal" variable="chkExternal" member="yes">
-                                    <label>External</label>
-                                    <handler function="On_chkExternal_Click" entry="EVT_CHECKBOX" />
-                                </object>
-                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                <border>5</border>
-                            </object>
-                            <object class="sizeritem">
-                                <object class="wxCheckBox" name="ID_chkBuildings" variable="chkBuildings" member="yes">
-                                    <label>Buildings</label>
-                                    <handler function="On_chkBuildings_Click" entry="EVT_CHECKBOX" />
-                                </object>
-                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                <border>5</border>
-                            </object>
-                            <object class="sizeritem">
-                                <object class="wxCheckBox" name="ID_chkLandscape" variable="chkLandscape" member="yes">
-                                    <label>Landscape</label>
-                                    <handler function="On_chkLandscape_Click" entry="EVT_CHECKBOX" />
-                                </object>
-                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                <border>5</border>
-                            </object>
-                            <object class="sizeritem">
-                                <object class="wxCheckBox" name="ID_chkSky" variable="chkSky" member="yes">
-                                    <label>Sky</label>
-                                    <handler function="On_chkSky_Click" entry="EVT_CHECKBOX" />
-                                </object>
-                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                <border>5</border>
-                            </object>
-                            <object class="sizeritem">
-                                <object class="wxCheckBox" name="ID_chkColumnFrame" variable="chkColumnFrame" member="yes">
-                                    <label>ColumnFrame</label>
-                                    <handler function="On_chkColumnFrame_Click" entry="EVT_CHECKBOX" />
-                                </object>
-                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                <border>5</border>
-                            </object>
-                        </object>
-                        <flag>wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
-                        <border>10</border>
-                    </object>
-                    <object class="sizeritem">
-                        <object class="wxBoxSizer" variable="BoxSizer4" member="yes">
-                            <orient>wxVERTICAL</orient>
-                            <object class="sizeritem">
-                                <object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
-                                    <label>Per-Floor Meshes</label>
-                                </object>
-                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                <border>5</border>
-                            </object>
-                            <object class="sizeritem">
-                                <object class="wxCheckBox" name="ID_chkFloor" variable="chkFloor" member="yes">
-                                    <label>Level</label>
-                                    <handler function="On_chkFloor_Click" entry="EVT_CHECKBOX" />
-                                </object>
-                                <flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                <border>5</border>
-                            </object>
-                        </object>
-                        <flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
-                    </object>
-                </object>
-                <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-                <border>10</border>
-            </object>
-            <object class="sizeritem">
-                <object class="wxButton" name="ID_bOk" variable="bOk" member="yes">
-                    <label>OK</label>
-                    <pos>75,145</pos>
-                    <handler function="On_bOk_Click" entry="EVT_BUTTON" />
-                </object>
-                <flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-                <border>10</border>
-            </object>
-        </object>
-    </object>
+	<object class="wxDialog" name="MeshControl">
+		<title>Realtime Mesh Control</title>
+		<centered>1</centered>
+		<id_arg>0</id_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="yes">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="yes">
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer3" member="yes">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+									<label>Primary Meshes</label>
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkExternal" variable="chkExternal" member="yes">
+									<label>External</label>
+									<handler function="On_chkExternal_Click" entry="EVT_CHECKBOX" />
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkBuildings" variable="chkBuildings" member="yes">
+									<label>Buildings</label>
+									<handler function="On_chkBuildings_Click" entry="EVT_CHECKBOX" />
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkLandscape" variable="chkLandscape" member="yes">
+									<label>Landscape</label>
+									<handler function="On_chkLandscape_Click" entry="EVT_CHECKBOX" />
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkSky" variable="chkSky" member="yes">
+									<label>Sky</label>
+									<handler function="On_chkSky_Click" entry="EVT_CHECKBOX" />
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkColumnFrame" variable="chkColumnFrame" member="yes">
+									<label>ColumnFrame</label>
+									<handler function="On_chkColumnFrame_Click" entry="EVT_CHECKBOX" />
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkElevators" variable="chkElevators" member="yes">
+									<label>Elevators</label>
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+						<border>10</border>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer4" member="yes">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
+									<label>Per-Floor Meshes</label>
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkFloor" variable="chkFloor" member="yes">
+									<label>Level</label>
+									<handler function="On_chkFloor_Click" entry="EVT_CHECKBOX" />
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>10</border>
+			</object>
+			<object class="sizeritem">
+				<object class="wxButton" name="ID_bOk" variable="bOk" member="yes">
+					<label>OK</label>
+					<pos>75,145</pos>
+					<handler function="On_bOk_Click" entry="EVT_BUTTON" />
+				</object>
+				<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>10</border>
+			</object>
+		</object>
+	</object>
 </wxsmith>
