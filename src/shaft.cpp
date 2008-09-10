@@ -57,6 +57,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 
 	ShaftArray.SetSize(endfloor - startfloor + 1);
 	ShaftArray_state.SetSize(endfloor - startfloor + 1);
+	EnableArray.SetSize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -74,6 +75,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 		ShaftArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
 		ShaftArray[i - startfloor]->GetMovable()->SetPosition(csVector3(origin.x, 0, origin.z));
 		ShaftArray[i - startfloor]->GetMovable()->UpdateMove();
+		EnableArray[i - startfloor] = true;
 	}
 }
 
@@ -107,30 +109,35 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 
 void Shaft::Enabled(int floor, bool value)
 {
-	//turns shaft on/off for a specific floor
-	if (value == true)
+	if (IsEnabledFloor(floor) != value)
 	{
-		ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		//leave bottom and top on
-		if (floor != startfloor && floor != endfloor)
+		//turns shaft on/off for a specific floor
+		if (value == true)
 		{
-			ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-			ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-			ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+			ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+			ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+			ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+			EnableArray[floor - startfloor] = true;
 		}
-	}
-
-	for (size_t i = 0; i < elevators.GetSize(); i++)
-	{
-		for(size_t j = 0; j < sbs->GetElevator(elevators[i])->ServicedFloors.GetSize(); j++)
+		else
 		{
-			if (sbs->GetElevator(elevators[i])->ServicedFloors[j] == floor)
-				sbs->GetElevator(elevators[i])->ShaftDoorsEnabled(sbs->GetElevator(elevators[i])->ServicedFloors[j], value);
+			//leave bottom and top on
+			if (floor != startfloor && floor != endfloor)
+			{
+				ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+				ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+				ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+				EnableArray[floor - startfloor] = false;
+			}
+		}
+
+		for (size_t i = 0; i < elevators.GetSize(); i++)
+		{
+			for(size_t j = 0; j < sbs->GetElevator(elevators[i])->ServicedFloors.GetSize(); j++)
+			{
+				if (sbs->GetElevator(elevators[i])->ServicedFloors[j] == floor)
+					sbs->GetElevator(elevators[i])->ShaftDoorsEnabled(sbs->GetElevator(elevators[i])->ServicedFloors[j], value);
+			}
 		}
 	}
 }
@@ -233,3 +240,7 @@ void Shaft::EnableRange(int floor, int range)
 	}
 }
 
+bool Shaft::IsEnabledFloor(int floor)
+{
+	return EnableArray[floor - startfloor];
+}

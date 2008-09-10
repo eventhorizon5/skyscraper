@@ -55,10 +55,12 @@ public:
 	void CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset);
 	void CutWall(int floor, csVector3 start, csVector3 end);
 	void EnableRange(int floor, int range);
+	bool IsEnabledFloor(int floor);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array
 	csRefArray<iThingFactoryState> ShaftArray_state; //shaft mesh array state
+	csArray<bool> EnableArray;
 
 	char intbuffer[65];
 	char buffer[20];
