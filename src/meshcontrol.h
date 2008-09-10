@@ -32,11 +32,11 @@
 #endif
 
 //(*Headers(MeshControl)
-#include <wx/button.h>
-#include <wx/checkbox.h>
-#include <wx/dialog.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/checkbox.h>
+#include <wx/button.h>
+#include <wx/dialog.h>
 //*)
 
 class MeshControl: public wxDialog
@@ -54,6 +54,7 @@ class MeshControl: public wxDialog
 		static const long ID_chkLandscape;
 		static const long ID_chkSky;
 		static const long ID_chkColumnFrame;
+		static const long ID_chkElevators;
 		static const long ID_STATICTEXT2;
 		static const long ID_chkFloor;
 		static const long ID_bOk;
@@ -69,23 +70,25 @@ class MeshControl: public wxDialog
 		void On_chkBuildings_Click(wxCommandEvent& event);
 		void On_chkExternal_Click(wxCommandEvent& event);
 		void On_chkFloor_Click(wxCommandEvent& event);
+		void On_chkElevators_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
 		//(*Declarations(MeshControl)
-		wxBoxSizer* BoxSizer1;
-		wxBoxSizer* BoxSizer2;
-		wxBoxSizer* BoxSizer3;
-		wxStaticText* StaticText1;
-		wxCheckBox* chkExternal;
-		wxCheckBox* chkBuildings;
-		wxCheckBox* chkLandscape;
-		wxCheckBox* chkSky;
-		wxCheckBox* chkColumnFrame;
 		wxBoxSizer* BoxSizer4;
+		wxCheckBox* chkColumnFrame;
+		wxCheckBox* chkBuildings;
+		wxCheckBox* chkExternal;
 		wxStaticText* StaticText2;
+		wxStaticText* StaticText1;
+		wxBoxSizer* BoxSizer2;
 		wxCheckBox* chkFloor;
+		wxCheckBox* chkElevators;
 		wxButton* bOk;
+		wxBoxSizer* BoxSizer1;
+		wxBoxSizer* BoxSizer3;
+		wxCheckBox* chkSky;
+		wxCheckBox* chkLandscape;
 		//*)
 
 	private:
