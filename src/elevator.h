@@ -92,6 +92,7 @@ public:
 	void Enabled(bool value);
 	void EnableObjects(bool value);
 	void ShaftDoorsEnabled(int floor, bool value);
+	void ShaftDoorsEnabledRange(int floor, int range);
 	bool IsElevator(csRef<iMeshWrapper> test);
 	bool IsInElevator(const csVector3 &position);
 	csHitBeamResult HitBeam(const csVector3 &start, const csVector3 &end);

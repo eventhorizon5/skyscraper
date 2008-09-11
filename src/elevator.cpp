@@ -973,21 +973,6 @@ void Elevator::MoveElevatorToFloor()
 	if (Panel)
 		Panel->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
 
-	//show partial shaft areas (3 floors at a time)
-	if (sbs->AutoShafts == true && sbs->InElevator == true && sbs->ElevatorNumber == Number)
-	{
-		int i = GetFloor();
-		sbs->GetShaft(AssignedShaft)->Enabled(i, true);
-		if (i > sbs->GetShaft(AssignedShaft)->startfloor)
-			sbs->GetShaft(AssignedShaft)->Enabled(i - 1, true);
-		if (i < sbs->GetShaft(AssignedShaft)->endfloor)
-			sbs->GetShaft(AssignedShaft)->Enabled(i + 1, true);
-		if (i > sbs->GetShaft(AssignedShaft)->startfloor + 1)
-			sbs->GetShaft(AssignedShaft)->Enabled(i - 2, false);
-		if (i < sbs->GetShaft(AssignedShaft)->endfloor - 1)
-			sbs->GetShaft(AssignedShaft)->Enabled(i + 2, false);
-	}
-
 	//move sounds
 
 	//motion calculation
@@ -1174,13 +1159,32 @@ void Elevator::MoveElevatorToFloor()
 			sbs->EnableLandscape(true);
 			sbs->EnableExternal(true); //temporary - remove when window objects are made
 			sbs->EnableColumnFrame(true);
+
+			//reset shaft doors
+			for (int i = 1; i <= sbs->Shafts(); i++)
+			{
+				sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, false, true);
+				sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
+			}
 		}
 
 		//open doors
 		OpenDoors();
 
 	}
-	EmergencyStop = false;
+	else
+	{
+		EmergencyStop = false;
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		{
+			//reset shaft doors
+			for (int i = 1; i <= sbs->Shafts(); i++)
+			{
+				sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, false, true);
+				sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
+			}
+		}
+	}
 }
 
 int Elevator::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
@@ -1272,8 +1276,8 @@ int Elevator::AddDoors(const char *texture, float thickness, float CenterX, floa
 	//create doors
 	sbs->DrawWalls(true, true, true, true, true, true);
 	sbs->ReverseExtents(false, false, false);
-	int firstidx = sbs->AddWallMain(ElevatorDoorL_state, "Door", texture, thickness, x1, z1, x2, z2, height, height, Origin.y, Origin.y, tw, th);
-	sbs->AddWallMain(ElevatorDoorR_state, "Door", texture, thickness, x3, z3, x4, z4, height, height, Origin.y, Origin.y, tw, th);
+	int firstidx = sbs->AddWallMain(ElevatorDoorL_state, "Door", texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
+	sbs->AddWallMain(ElevatorDoorR_state, "Door", texture, thickness, x3, z3, x4, z4, height, height, 0, 0, tw, th);
 	sbs->ResetWalls();
 	sbs->ResetExtents();
 	return firstidx;
@@ -1288,7 +1292,7 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 	float base, base2;
 
 	//set door parameters
-	ShaftDoorOrigin = csVector3(Origin.x + CenterX, Origin.y, Origin.z + CenterZ);
+	ShaftDoorOrigin = csVector3(Origin.x + CenterX, 0, Origin.z + CenterZ);
 
 	//set up coordinates
 	if (DoorDirection == false)
@@ -1514,6 +1518,35 @@ void Elevator::ShaftDoorsEnabled(int floor, bool value)
 		ShaftDoorR[index]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		ShaftDoorR[index]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
+}
+
+void Elevator::ShaftDoorsEnabledRange(int floor, int range)
+{
+	//turn on a range of floors
+	//if range is 3, show shaft door on current floor (floor), and 1 floor below and above (3 total floors)
+	//if range is 1, show door on only the current floor (floor)
+
+	//range must be greater than 0
+	if (range < 1)
+		range = 1;
+
+	//range must be an odd number; if it's even, then add 1
+	if (IsEven(range) == true)
+		range++;
+
+	int additionalfloors;
+	if (range > 1)
+		additionalfloors = (range - 1) / 2;
+	else
+		additionalfloors = 0;
+
+	//disable doors 1 floor outside of range
+	ShaftDoorsEnabled(floor - additionalfloors - 1, false);
+	ShaftDoorsEnabled(floor + additionalfloors + 1, false);
+
+	//enable doors within range
+	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
+		ShaftDoorsEnabled(i, true);
 }
 
 bool Elevator::IsElevator(csRef<iMeshWrapper> test)
