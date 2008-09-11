@@ -39,7 +39,7 @@ ButtonPanel::ButtonPanel(int _elevator, const char *texture, int columns, int ro
 	elevator = _elevator;
 	Direction = direction;
 	Origin.x = sbs->GetElevator(elevator)->Origin.x + CenterX;
-	Origin.y = sbs->GetElevator(elevator)->Origin.y + voffset;
+	Origin.y = voffset;
 	Origin.z = sbs->GetElevator(elevator)->Origin.z + CenterZ;
 	Width = width;
 	Height = height;
@@ -60,6 +60,9 @@ ButtonPanel::ButtonPanel(int _elevator, const char *texture, int columns, int ro
 	ButtonPanelMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	ButtonPanel_state = scfQueryInterface<iThingFactoryState> (ButtonPanelMesh->GetMeshObject()->GetFactory());
 	ButtonPanelMesh->SetZBufMode(CS_ZBUF_USE);
+
+	//move
+	SetToElevatorAltitude();
 
 	//create panel back
 	sbs->ReverseExtents(false, false, false);
@@ -235,8 +238,8 @@ void ButtonPanel::Enabled(bool value)
 	else
 	{
 		ButtonPanelMesh->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-                ButtonPanelMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-                ButtonPanelMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+		ButtonPanelMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ButtonPanelMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
 }
 
