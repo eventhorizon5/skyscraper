@@ -193,7 +193,7 @@ void SBS::Start()
 	for (int i = 0; i < Shafts(); i++)
 	{
 		if (ShaftArray[i].object)
-			ShaftArray[i].object->EnableWholeShaft(false);
+			ShaftArray[i].object->EnableWholeShaft(false, true);
 	}
 
 	//turn off stairwells
