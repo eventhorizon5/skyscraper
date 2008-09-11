@@ -47,6 +47,7 @@ const long MeshControl::ID_chkColumnFrame = wxNewId();
 const long MeshControl::ID_chkElevators = wxNewId();
 const long MeshControl::ID_STATICTEXT2 = wxNewId();
 const long MeshControl::ID_chkFloor = wxNewId();
+const long MeshControl::ID_chkShafts = wxNewId();
 const long MeshControl::ID_bOk = wxNewId();
 //*)
 
@@ -89,6 +90,9 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	chkFloor = new wxCheckBox(this, ID_chkFloor, _("Level"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkFloor"));
 	chkFloor->SetValue(false);
 	BoxSizer4->Add(chkFloor, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	chkShafts = new wxCheckBox(this, ID_chkShafts, _("Shafts"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkShafts"));
+	chkShafts->SetValue(false);
+	BoxSizer4->Add(chkShafts, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer4, 0, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 0);
 	BoxSizer1->Add(BoxSizer2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	bOk = new wxButton(this, ID_bOk, _("OK"), wxPoint(75,145), wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOk"));
@@ -103,8 +107,8 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkLandscape,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkLandscape_Click);
 	Connect(ID_chkSky,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkSky_Click);
 	Connect(ID_chkColumnFrame,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkColumnFrame_Click);
-	Connect(ID_chkElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkElevators_Click);
 	Connect(ID_chkFloor,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkFloor_Click);
+	Connect(ID_chkShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkShafts_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
 	//*)
 	p = this;
@@ -168,4 +172,10 @@ void MeshControl::On_chkElevators_Click(wxCommandEvent& event)
 		for (int i = 1; i <= sbs->Elevators(); i++)
 			sbs->GetElevator(i)->Enabled(false);
 	}
+}
+
+void MeshControl::On_chkShafts_Click(wxCommandEvent& event)
+{
+	for (int i = 1; i <= sbs->Shafts(); i++)
+		sbs->GetShaft(i)->Enabled(sbs->camera->CurrentFloor, chkShafts->GetValue(), true);
 }

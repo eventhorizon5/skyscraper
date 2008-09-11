@@ -57,6 +57,7 @@ class MeshControl: public wxDialog
 		static const long ID_chkElevators;
 		static const long ID_STATICTEXT2;
 		static const long ID_chkFloor;
+		static const long ID_chkShafts;
 		static const long ID_bOk;
 		//*)
 
@@ -71,12 +72,14 @@ class MeshControl: public wxDialog
 		void On_chkExternal_Click(wxCommandEvent& event);
 		void On_chkFloor_Click(wxCommandEvent& event);
 		void On_chkElevators_Click(wxCommandEvent& event);
+		void On_chkShafts_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
 		//(*Declarations(MeshControl)
 		wxBoxSizer* BoxSizer4;
 		wxCheckBox* chkColumnFrame;
+		wxCheckBox* chkShafts;
 		wxCheckBox* chkBuildings;
 		wxCheckBox* chkExternal;
 		wxStaticText* StaticText2;
