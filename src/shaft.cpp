@@ -107,9 +107,9 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, altitude + voffset1, altitude + voffset2, tw, th);
 }
 
-void Shaft::Enabled(int floor, bool value)
+void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 {
-	if (IsEnabledFloor(floor) != value)
+	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor)
 	{
 		//turns shaft on/off for a specific floor
 		if (value == true)
@@ -129,14 +129,18 @@ void Shaft::Enabled(int floor, bool value)
 				ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 				EnableArray[floor - startfloor] = false;
 			}
+			else
+				return;
 		}
-
-		for (size_t i = 0; i < elevators.GetSize(); i++)
+		if (EnableShaftDoors == true)
 		{
-			for(size_t j = 0; j < sbs->GetElevator(elevators[i])->ServicedFloors.GetSize(); j++)
+			for (size_t i = 0; i < elevators.GetSize(); i++)
 			{
-				if (sbs->GetElevator(elevators[i])->ServicedFloors[j] == floor)
-					sbs->GetElevator(elevators[i])->ShaftDoorsEnabled(sbs->GetElevator(elevators[i])->ServicedFloors[j], value);
+				for(size_t j = 0; j < sbs->GetElevator(elevators[i])->ServicedFloors.GetSize(); j++)
+				{
+					if (sbs->GetElevator(elevators[i])->ServicedFloors[j] == floor)
+						sbs->GetElevator(elevators[i])->ShaftDoorsEnabled(sbs->GetElevator(elevators[i])->ServicedFloors[j], value);
+				}
 			}
 		}
 	}
@@ -152,13 +156,13 @@ bool Shaft::IsShaft(csRef<iMeshWrapper> test)
 	return false;
 }
 
-void Shaft::EnableWholeShaft(bool value)
+void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors)
 {
 	//turn on/off entire shaft
 	if ((value == false && IsEnabled == true) || (value == true && IsEnabled == false))
 	{
 		for (int i = startfloor; i <= endfloor; i++)
-			Enabled(i, value);
+			Enabled(i, value, EnableShaftDoors);
 	}
 	IsEnabled = value;
 }
@@ -206,9 +210,9 @@ void Shaft::CutWall(int floor, csVector3 start, csVector3 end)
 	sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false);
 }
 
-void Shaft::EnableRange(int floor, int range)
+void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
 {
-	//turn on a range of floors
+	//turn on/off a range of floors
 	//if range is 3, show shaft on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show only the current floor (floor)
 
@@ -227,20 +231,24 @@ void Shaft::EnableRange(int floor, int range)
 		additionalfloors = 0;
 
 	//disable floors 1 floor outside of range
-	if (floor - additionalfloors - 1 >= startfloor && floor - additionalfloors - 1 <= endfloor)
-		Enabled(floor - additionalfloors - 1, false);
-	if (floor + additionalfloors + 1 >= startfloor && floor + additionalfloors + 1 <= endfloor)
-		Enabled(floor + additionalfloors + 1, false);
+	if (value == true)
+	{
+		if (floor - additionalfloors - 1 >= startfloor && floor - additionalfloors - 1 <= endfloor)
+			Enabled(floor - additionalfloors - 1, false, EnableShaftDoors);
+		if (floor + additionalfloors + 1 >= startfloor && floor + additionalfloors + 1 <= endfloor)
+			Enabled(floor + additionalfloors + 1, false, EnableShaftDoors);
+	}
 
 	//enable floors within range
 	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
 	{
 		if (i >= startfloor && i <= endfloor)
-			Enabled(i, true);
+			Enabled(i, value, EnableShaftDoors);
 	}
 }
 
 bool Shaft::IsEnabledFloor(int floor)
 {
-	return EnableArray[floor - startfloor];
+	if (floor >= startfloor && floor <= endfloor)
+		return EnableArray[floor - startfloor];
 }
