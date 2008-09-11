@@ -277,7 +277,7 @@ void Camera::CheckShaft()
 				sbs->GetShaft(i)->InsideShaft = true;
 
 				//turn on entire shaft
-				sbs->GetShaft(i)->EnableWholeShaft(true);
+				sbs->GetShaft(i)->EnableWholeShaft(true, true);
 			}
 			else if (sbs->GetShaft(i)->InsideShaft == true && sbs->InElevator == true)
 			{
@@ -285,14 +285,15 @@ void Camera::CheckShaft()
 
 				//turn off entire shaft if ShowFullShafts is false
 				if (sbs->ShowFullShafts == false)
-					sbs->GetShaft(i)->EnableWholeShaft(false);
+					sbs->GetShaft(i)->EnableWholeShaft(false, true);
 				else
-					sbs->GetShaft(i)->EnableWholeShaft(true);
+					sbs->GetShaft(i)->EnableWholeShaft(true, true);
 			}
 			else if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == true && sbs->ShowFullShafts == false)
 			{
 				//if user is in an elevator, show a range of the shaft at a time
-				sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftDisplayRange);
+				sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftDisplayRange, true, false);
+				sbs->GetElevator(sbs->ElevatorNumber)->ShaftDoorsEnabledRange(CurrentFloor, sbs->ShaftDisplayRange);
 			}
 		}
 		else if (sbs->GetShaft(i)->InsideShaft == true)
@@ -300,12 +301,12 @@ void Camera::CheckShaft()
 			sbs->GetShaft(i)->InsideShaft = false;
 
 			//turn off shaft
-			sbs->GetShaft(i)->EnableWholeShaft(false);
+			sbs->GetShaft(i)->EnableWholeShaft(false, true);
 		}
 		else if (sbs->GetShaft(i)->InsideShaft == false)
 		{
 			//show specified shaft range if outside the shaft
-			sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftOutsideDisplayRange);
+			sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftOutsideDisplayRange, true, true);
 		}
 	}
 }
