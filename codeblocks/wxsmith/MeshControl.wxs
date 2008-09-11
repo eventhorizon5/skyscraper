@@ -88,6 +88,14 @@
 								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkShafts" variable="chkShafts" member="yes">
+									<label>Shafts</label>
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
 						</object>
 						<flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
 					</object>
