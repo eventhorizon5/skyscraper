@@ -2848,7 +2848,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
 
     #panel
-    CreatePanel ElevExtPanels, 3, 4, back, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 4, front, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button80, 1, 2, 80
     AddFloorButton ButtonL, 2, 2, 0
     AddControlButton ButtonOpen, 3, 1, open
@@ -2858,7 +2858,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 4, 3, alarm
     
     #Floor Indicator
-    AddFloorIndicator back, 2.63, 2.7, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 2.63, 2.7, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -2907,7 +2907,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
 
     #panel
-    CreatePanel ElevExtPanels, 3, 4, back, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 4, front, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button137, 1, 2, 137
     AddFloorButton ButtonL, 2, 2, 0
     AddControlButton ButtonOpen, 3, 1, open
@@ -2917,7 +2917,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 4, 3, alarm
     
     #Floor Indicator
-    AddFloorIndicator back, 2.63, 2.7, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 2.63, 2.7, 0.7, 0.5, 6.5
 
 <EndElevator>
 
@@ -2998,7 +2998,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
 
     #panel
-    CreatePanel ElevExtPanels, 3, 6, back, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 6, front, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button48, 1, 1, 48
     AddFloorButton Button49, 1, 2, 49
     AddFloorButton Button50, 1, 3, 50
@@ -3017,7 +3017,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 6, 3, alarm
     
     #Floor Indicator
-    AddFloorIndicator back, 2.63, 2.7, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 2.63, 2.7, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3098,7 +3098,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
 
     #panel
-    CreatePanel ElevExtPanels, 3, 6, back, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 6, front, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button68, 1, 1, 68
     AddFloorButton Button69, 1, 2, 69
     AddFloorButton Button70, 1, 3, 70
@@ -3117,7 +3117,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 6, 3, alarm
     
     #Floor Indicator
-    AddFloorIndicator back, 2.63, 2.7, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 2.63, 2.7, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3198,7 +3198,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
 
     #panel
-    CreatePanel ElevExtPanels, 3, 6, front, -2.63, -2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 6, back, -2.63, -2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button58, 1, 1, 58
     AddFloorButton Button59, 1, 2, 59
     AddFloorButton Button60, 1, 3, 60
@@ -3217,7 +3217,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 6, 3, alarm
     
     #Floor Indicator
-    AddFloorIndicator front, -2.63, -2.7, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -2.63, -2.7, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3298,7 +3298,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
 
     #panel
-    CreatePanel ElevExtPanels, 3, 5, front, -2.63, -2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 5, back, -2.63, -2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button68, 1, 1, 76
     AddFloorButton Button69, 1, 2, 77
     AddFloorButton Button70, 1, 3, 78
@@ -3315,7 +3315,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 5, 3, alarm
     
     #Floor Indicator
-    AddFloorIndicator front, -2.63, -2.7, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -2.63, -2.7, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3538,7 +3538,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
 
     #panel
-    CreatePanel ElevExtPanels, 3, 7, front, -2.63, -2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 7, back, -2.63, -2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button129, 1, 1, 129
     AddFloorButton Button132, 1, 3, 132
     AddFloorButton Button126, 2, 1, 126
@@ -3559,7 +3559,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 7, 3, alarm
     
     #Floor Indicator
-    AddFloorIndicator front, -2.63, -2.7, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -2.63, -2.7, 0.7, 0.5, 6.5
 
 <EndElevator>
 
@@ -3572,10 +3572,10 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 25
-    CreateElevator -19.25, 8.541, 80
+    CreateElevator -19.25, 8.541, 100
     
     #panel
-    CreatePanel ElevExtPanels, 3, 6, back, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 6, back, -2.63, -2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button97, 1, 1, 127
     AddFloorButton Button98, 1, 2, 128
     AddFloorButton Button99, 1, 3, 129
@@ -3601,7 +3601,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 27
-    CreateElevator 10.25, 8.541, 80
+    CreateElevator 10.25, 8.541, 100
 <EndElevator>
 
 <Elevator 61>
@@ -3611,12 +3611,12 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 27
-    CreateElevator 19.25, 8.541, 80
+    CreateElevator 19.25, 8.541, 100
 <EndElevator>
 
 <Elevators 60 to 61>
     #panel
-    CreatePanel ElevExtPanels, 3, 8, back, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 8, back, -2.63, -2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button97, 1, 1, 116
     AddFloorButton Button98, 1, 2, 117
     AddFloorButton Button99, 1, 3, 118
@@ -3677,7 +3677,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
  
     #Floor Indicator
-    AddFloorIndicator front, -2.63, -2.7, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -2.63, -2.7, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3688,7 +3688,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 26
-    CreateElevator -10.167, -9.21, 80
+    CreateElevator -10.167, -9.21, 100
 <EndElevator>
 
 <Elevator 63>
@@ -3698,7 +3698,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 26
-    CreateElevator -19.25, -9.21, 80
+    CreateElevator -19.25, -9.21, 100
 <EndElevator>
 
 <Elevator 64>
@@ -3708,7 +3708,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 28
-    CreateElevator 10.25, -9.21, 80
+    CreateElevator 10.25, -9.21, 100
 <EndElevator>
 
 <Elevator 65>
@@ -3718,12 +3718,12 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 28
-    CreateElevator 19.25, -9.21, 80
+    CreateElevator 19.25, -9.21, 100
 <EndElevator>
 
 <Elevators 62 to 63>
     #panel
-    CreatePanel ElevExtPanels, 3, 6, back, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 6, front, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button97, 1, 1, 127
     AddFloorButton Button98, 1, 2, 128
     AddFloorButton Button99, 1, 3, 129
@@ -3744,7 +3744,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevators 64 to 65>
     #panel
-    CreatePanel ElevExtPanels, 3, 8, back, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevExtPanels, 3, 8, front, 2.63, 2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button97, 1, 1, 116
     AddFloorButton Button98, 1, 2, 117
     AddFloorButton Button99, 1, 3, 118
@@ -3805,7 +3805,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
 
     #Floor Indicator
-    AddFloorIndicator back, 2.63, 2.7, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 2.63, 2.7, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3819,19 +3819,7 @@ DrawWalls = true, true, false, false, false, false
     ServicedFloors = 0 - 138
     AssignedShaft = 14
     CreateElevator -8.46, 18.542, 0
-<EndElevator>
 
-<Elevator 67>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
-    OpenSpeed = 0.2
-    ServicedFloors = 0 - 138
-    AssignedShaft = 16
-    CreateElevator 8.46, 18.542, 0
-<EndElevator>
-
-<Elevators 66 to 67>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3879,8 +3867,65 @@ DrawWalls = true, true, false, false, false, false
     
     #Floor Indicator
     AddFloorIndicator left, 2.7, -2.63, 0.7, 0.5, 6.5
+<EndElevator>
 
-<EndElevators>
+<Elevator 67>
+    Speed = 21
+    Acceleration = 0.015
+    Deceleration = 0.01
+    OpenSpeed = 0.2
+    ServicedFloors = 0 - 138
+    AssignedShaft = 16
+    CreateElevator 8.46, 18.542, 0
+
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    AddFloor Floor, Wood2, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    AddFloor Ceiling, Elev1, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
+
+    #back and right walls (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    AddWall Back, Wood1, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 2, 2
+    AddWall Right, Wood1, 0.2, 3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0, 2, 2
+    
+    #front wall
+    WallOrientation = left
+    AddWall Front, Wood1, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 2, 2
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, true, true, false, false
+    AddWall Left Panel, Wood1, 0.2, -3.625, -4.125, -3.625, -1.75, 8, 8, 0, 0, 0.66, 2
+    DrawWalls = true, true, true, true, false, false
+    AddWall Right Panel, Wood1, 0.2, -3.625, 1.75, -3.625, 4.125, 8, 8, 0, 0, 0.66, 2
+
+    #doors
+    WallOrientation = left
+    AddDoors ElevDoors, 0.2, -3.76, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, -4.06, 0, 2, 2 #shaft doors
+    WallOrientation = left
+
+    #panel
+    CreatePanel ElevExtPanels, 3, 4, right, -2.7, 2.63, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    AddFloorButton Button134, 1, 1, 134
+    AddFloorButton Button135, 1, 2, 135
+    AddFloorButton Button136, 1, 3, 136
+    AddFloorButton ButtonL, 2, 1, 0
+    AddFloorButton ButtonM, 2, 3, 1
+    AddControlButton ButtonOpen, 3, 1, open
+    AddControlButton ButtonClose, 3, 3, close
+    AddControlButton ButtonCancel, 4, 1, cancel
+    AddControlButton ButtonStop, 4, 2, stop
+    AddControlButton ButtonAlarm, 4, 3, alarm
+    
+    #Floor Indicator
+    AddFloorIndicator right, -2.7, 2.63, 0.7, 0.5, 6.5
+<EndElevator>
 
 
 #Freight Elevator
