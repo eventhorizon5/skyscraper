@@ -289,9 +289,9 @@ void Camera::CheckShaft()
 				else
 					sbs->GetShaft(i)->EnableWholeShaft(true, true);
 			}
-			else if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == true && sbs->ShowFullShafts == false)
+			else if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == true && sbs->ShowFullShafts == false && sbs->GetElevator(sbs->ElevatorNumber)->MoveElevator == true)
 			{
-				//if user is in an elevator, show a range of the shaft at a time
+				//if user is in an elevator, show a range of the shaft at a time (while it's moving)
 				sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftDisplayRange, true, false);
 				sbs->GetElevator(sbs->ElevatorNumber)->ShaftDoorsEnabledRange(CurrentFloor, sbs->ShaftDisplayRange);
 			}
