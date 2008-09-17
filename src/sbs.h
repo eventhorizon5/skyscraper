@@ -233,6 +233,7 @@ public:
 	int CreateDoor(csRef<iThingFactoryState> cutmesh, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors);
 	float MetersToFeet(float meters); //converts meters to feet
+	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
 
 	//file loader functions
 	int LoadBuilding(const char * filename);
@@ -328,4 +329,8 @@ private:
 	//timer object
 	Pump* p;
 
+	//doorway data
+	bool wall1;
+	bool wall2;
+	csVector2 wall_extents_x, wall_extents_z, wall_extents_y;
 };

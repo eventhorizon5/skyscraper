@@ -645,7 +645,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	else
 		//z axis
 		axis = 2;
-	
+
 	//convert to clockwise coordinates (x-axis wall test)
 	if (x1 > x2 && axis == 1)
 	{
@@ -982,7 +982,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
-	
+
 	if (DrawTop == true)
 	{
 		tmpindex = dest->AddQuad(v5, v6, v2, v1); //front wall
@@ -2012,6 +2012,8 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 	int tmpindex_tmp;
 	int polycount;
 	bool polycheck;
+	wall1 = false;
+	wall2 = false;
 
 	//step through each polygon
 	polycount = state->GetPolygonCount();
@@ -2043,7 +2045,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 			temppoly.ClassifyZ(end.z) != CS_POL_BACK)
 		{
 			//Report("Cutting polygon " + name);
-			
+
 			extentsx = GetExtents(temppoly, 1);
 			extentsy = GetExtents(temppoly, 2);
 			extentsz = GetExtents(temppoly, 3);
@@ -2103,6 +2105,23 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 						worker.MakeEmpty();
 					}
 					polycheck = true;
+					//store extents of temppoly5 for door sides if needed
+					if (name.Find("Shaft") > -1 && (wall1 == false || wall2 == false))
+					{
+						if (name.GetAt(name.Length() - 1) == 'E')
+						{
+							wall2 = true;
+							wall_extents_x.x = GetExtents(temppoly5, 1).x;
+							wall_extents_z.x = GetExtents(temppoly5, 3).x;
+							wall_extents_y = GetExtents(temppoly5, 2);
+						}
+						else
+						{
+							wall1 = true;
+							wall_extents_x.y = GetExtents(temppoly5, 1).x;
+							wall_extents_z.y = GetExtents(temppoly5, 3).x;
+						}
+					}
 				}
 			}
 			else if (cutfloors == true)
@@ -2139,7 +2158,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 				csVector3 oldvector;
 				csMatrix3 mapping;
 				state->GetPolygonTextureMapping(i, mapping, oldvector);
-		
+
 				//delete original polygon
 				state->RemovePolygon(i);
 				if (i > 0)
@@ -2216,4 +2235,40 @@ float SBS::MetersToFeet(float meters)
 	//converts meters to feet
 
 	return meters * 3.2808399f;
+}
+
+int SBS::AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th)
+{
+	//add joining doorway polygons if needed
+	int index = 0;
+	if (wall1 == true && wall2 == true)
+	{
+		wall1 = false;
+		wall2 = false;
+		if (abs(wall_extents_x.x - wall_extents_x.y) > abs(wall_extents_z.x - wall_extents_z.y))
+		{
+			//doorway is facing forward/backward
+			DrawWalls(true, false, false, false, false, false);
+			index = AddWallMain(mesh, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.x, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th);
+			AddFloorMain(mesh, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, tw, th);
+			ResetWalls();
+			DrawWalls(false, true, false, false, false, false);
+			AddWallMain(mesh, "DoorwayRight", texture, 0, wall_extents_x.y, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th);
+			AddFloorMain(mesh, "DoorwayBottom", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.x, wall_extents_y.x, tw, th);
+			ResetWalls();
+		}
+		else
+		{
+			//doorway is facing left/right
+			DrawWalls(false, true, false, false, false, false);
+			AddWallMain(mesh, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.y, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th);
+			AddFloorMain(mesh, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, tw, th);
+			ResetWalls();
+			DrawWalls(true, false, false, false, false, false);
+			AddWallMain(mesh, "DoorwayRight", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th);
+			AddFloorMain(mesh, "DoorwayBottom", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.x, wall_extents_y.x, tw, th);
+			ResetWalls();
+		}
+	}
+	return index;
 }

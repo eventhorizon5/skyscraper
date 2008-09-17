@@ -1340,7 +1340,10 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 			sbs->GetShaft(AssignedShaft)->CutWall(ServicedFloors[i], csVector3(x1, base, z1 - 2), csVector3(x4, base + DoorHeight, z1 + 2));
 			sbs->GetFloor(ServicedFloors[i])->Cut(csVector3(Origin.x + x1, base, Origin.z + z1 - 2), csVector3(Origin.x + x4, base + DoorHeight, Origin.z + z1 + 2), true, false, true);
 		}
-		
+
+		//create doorway walls
+		sbs->AddDoorwayWalls(sbs->GetFloor(ServicedFloors[i])->Level_state, "Brick", 0, 0);
+
 		//create meshes
 		buffer3 = Number;
 		buffer4 = i;
