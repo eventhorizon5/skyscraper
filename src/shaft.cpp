@@ -251,4 +251,6 @@ bool Shaft::IsEnabledFloor(int floor)
 {
 	if (floor >= startfloor && floor <= endfloor)
 		return EnableArray[floor - startfloor];
+	else
+		return false;
 }
