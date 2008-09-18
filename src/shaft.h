@@ -53,7 +53,7 @@ public:
 	void EnableWholeShaft(bool value, bool EnableShaftDoors);
 	bool IsInShaft(const csVector3 &position);
 	void CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset);
-	void CutWall(int floor, csVector3 start, csVector3 end);
+	void CutWall(int floor, csVector3 start, csVector3 end, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range, bool value, bool EnableShaftDoors);
 	bool IsEnabledFloor(int floor);
 

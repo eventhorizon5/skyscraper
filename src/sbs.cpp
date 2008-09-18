@@ -113,6 +113,8 @@ SBS::SBS()
 	StairsDisplayRange = 3;
 	ShaftOutsideDisplayRange = 3;
 	StairsOutsideDisplayRange = 3;
+	wall1 = false;
+	wall2 = false;
 }
 
 SBS::~SBS()
@@ -1999,7 +2001,7 @@ csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, cs
 	return isect;
 }
 
-void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors)
+void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, const char *checkstring)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 
@@ -2012,8 +2014,10 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 	int tmpindex_tmp;
 	int polycount;
 	bool polycheck;
-	wall1 = false;
-	wall2 = false;
+	if (checkwallnumber == 1)
+		wall1 = false;
+	if (checkwallnumber == 2)
+		wall2 = false;
 
 	//step through each polygon
 	polycount = state->GetPolygonCount();
@@ -2106,20 +2110,23 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 					}
 					polycheck = true;
 					//store extents of temppoly5 for door sides if needed
-					if (name.Find("Shaft") > -1 && (wall1 == false || wall2 == false))
+					if (checkwallnumber > 0 && checkwallnumber < 3)
 					{
-						if (name.GetAt(name.Length() - 1) == 'E')
+						if (name.Find(checkstring) >= 0 && (wall1 == false || wall2 == false))
 						{
-							wall2 = true;
-							wall_extents_x.x = GetExtents(temppoly5, 1).x;
-							wall_extents_z.x = GetExtents(temppoly5, 3).x;
-							wall_extents_y = GetExtents(temppoly5, 2);
-						}
-						else
-						{
-							wall1 = true;
-							wall_extents_x.y = GetExtents(temppoly5, 1).x;
-							wall_extents_z.y = GetExtents(temppoly5, 3).x;
+							if (checkwallnumber == 2)
+							{
+								wall2 = true;
+								wall_extents_x.x = GetExtents(temppoly5, 1).x;
+								wall_extents_z.x = GetExtents(temppoly5, 3).x;
+								wall_extents_y = GetExtents(temppoly5, 2);
+							}
+							else
+							{
+								wall1 = true;
+								wall_extents_x.y = GetExtents(temppoly5, 1).x;
+								wall_extents_z.y = GetExtents(temppoly5, 3).x;
+							}
 						}
 					}
 				}

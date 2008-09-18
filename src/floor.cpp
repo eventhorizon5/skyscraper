@@ -252,15 +252,15 @@ void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, con
 	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, DownButtonTexture, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 }
 
-void Floor::Cut(csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, bool fast)
+void Floor::Cut(csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, const char *checkstring)
 {
 	//caller to SBS cut function
 	//Y values are relative to the floor's altitude
 	//if fast is specified, skips the interfloor scan
 
-	sbs->Cut(Level_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
+	sbs->Cut(Level_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, checkwallnumber, checkstring);
 	if (fast == false)
-		sbs->Cut(Interfloor_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
+		sbs->Cut(Interfloor_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, checkwallnumber, checkstring);
 }
 
 void Floor::AddGroupFloor(int number)
