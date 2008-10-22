@@ -85,6 +85,33 @@
 AddShaft 1, 2, 0, 6, 0, 9
 ShaftCut 1, -4, -3.5, 4, 3.5, 0, 5
 
+<Floors 0 to 9>
+	FloorOrientation = top
+	DrawWalls = true, true, false, false, false, false
+	if(%floor% = 0) AddShaftFloor 1, Shaft1Base, brick, 0.5, -4, -3.5, 4, 3.5, -2, -2, 0, 0
+	if(%floor% = 9) AddShaftFloor 1, Shaft1Top, brick, 0.5, -4, -3.5, 4, 3.5, %fullheight% + 2, %fullheight% + 2, 0, 0
+	WallOrientation = left
+	DrawWalls = false, true, false, false, false, false
+	AddShaftWall 1, Shaft1Left, brick, 0.5, -4, -3.5, -4, 3.5, %height%, %height%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Front, brick, 0.5, -4, -3.5, 4, -3.5, %height%, %height%, 0, 0, 0, 0
+	WallOrientation = right
+	DrawWalls = true, false, false, false, false, false
+	AddShaftWall 1, Shaft1Right, brick, 0.5, 4, -3.5, 4, 3.5, %height%, %height%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Back, brick, 0.5, -4, 3.5, 4, 3.5, %height%, %height%, 0, 0, 0, 0
+	
+	WallOrientation = right
+	DrawWalls = true, false, true, true, false, false
+	AddWall Shaft1Left, Marble3, 0.33, -4, -3.5 + 6, -4, 3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1Front, Marble3, 0.33, -4, -3.5 + 6, 4, -3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
+	WallOrientation = left
+	DrawWalls = false, true, true, true, false, false
+	AddWall Shaft1Right, Marble3, 0.33, 4, -3.5 + 6, 4, 3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1Back, Marble3, 0.33, -4, 3.5 + 6, 4, 3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+#reset drawwalls
+DrawWalls = true, true, false, false, false, false
+
 <Elevator 1>
     #standard elevator; 7 feet wide, 6 feet deep
     Speed = 5
