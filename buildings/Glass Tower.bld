@@ -67,12 +67,6 @@
   Load data/windows11.jpg, Windows11
   Load data/downtown.jpg, Downtown
   Load data/suburbs.jpg, Suburbs
-  Load data/top.jpg, SkyTop
-  Load data/bottom.jpg, SkyBottom
-  Load data/left.jpg, SkyLeft
-  Load data/right.jpg, SkyRight
-  Load data/front.jpg, SkyFront
-  Load data/back.jpg, SkyBack
   Load data/plaque.jpg, Plaque
   Load data/floorsign.jpg, FloorSign
   Load data/floorsignballroom.jpg, FloorSignBallroom
