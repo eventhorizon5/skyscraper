@@ -258,9 +258,9 @@ void Floor::Cut(csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, b
 	//Y values are relative to the floor's altitude
 	//if fast is specified, skips the interfloor scan
 
-	sbs->Cut(Level_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, checkwallnumber, checkstring);
+	sbs->Cut(Level_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, Altitude, 0), checkwallnumber, checkstring);
 	if (fast == false)
-		sbs->Cut(Interfloor_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, checkwallnumber, checkstring);
+		sbs->Cut(Interfloor_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, Altitude, 0), checkwallnumber, checkstring);
 }
 
 void Floor::AddGroupFloor(int number)
@@ -298,7 +298,7 @@ int Floor::AddDoor(const char *texture, float thickness, int direction, float Ce
 {
 	//interface to the SBS AddDoor function
 	
-	return sbs->CreateDoor(Level_state, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude, tw, th);
+	return sbs->CreateDoor(Level_state, csVector3(0, Altitude, 0), texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude, tw, th);
 }
 
 float Floor::CalculateAltitude()
