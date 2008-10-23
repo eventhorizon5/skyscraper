@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(csRef<iThingFactoryState> cutmesh, int number, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, int number, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//creates a door, and performs a cut operation on the area that it takes up.
 	//this must be used *after* the wall is created
@@ -77,9 +77,9 @@ Door::Door(csRef<iThingFactoryState> cutmesh, int number, const char *texture, f
 
 	//cut area
 	if (Direction < 5)
-		sbs->Cut(cutmesh, csVector3(x1 - 2, altitude, z1), csVector3(x2 + 2, altitude + height, z2), true, false);
+		sbs->Cut(cutmesh, csVector3(x1 - 2, altitude, z1), csVector3(x2 + 2, altitude + height, z2), true, false, cutmesh_origin);
 	else
-		sbs->Cut(cutmesh, csVector3(x1, altitude, z1 - 2), csVector3(x2, altitude + height, z2 + 2), true, false);
+		sbs->Cut(cutmesh, csVector3(x1, altitude, z1 - 2), csVector3(x2, altitude + height, z2 + 2), true, false, cutmesh_origin);
 
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);

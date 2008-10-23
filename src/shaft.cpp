@@ -207,7 +207,7 @@ void Shaft::CutWall(int floor, csVector3 start, csVector3 end, int checkwallnumb
 	//the Y values in start and end are both relative to the floor's altitude + interfloor
 
 	float base = sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight;
-	sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, checkwallnumber, checkstring);
+	sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, origin, checkwallnumber, checkstring);
 }
 
 void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
