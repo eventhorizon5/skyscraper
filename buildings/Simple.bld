@@ -23,12 +23,6 @@
     Load data/text16.jpg, Wood2
     Load data/text16.jpg, ElevDoors
     Load data/marb148.jpg, ElevExtPanels
-    Load data/top.jpg, SkyTop
-    Load data/bottom.jpg, SkyBottom
-    Load data/left.jpg, SkyLeft
-    Load data/right.jpg, SkyRight
-    Load data/front.jpg, SkyFront
-    Load data/back.jpg, SkyBack
     Load data/text13.jpg, Stairs
     Load data/mason01.jpg, Concrete
 <EndTextures>
@@ -88,25 +82,25 @@ ShaftCut 1, -4, -3.5, 4, 3.5, 0, 5
 <Floors 0 to 9>
 	FloorOrientation = top
 	DrawWalls = true, true, false, false, false, false
-	if(%floor% = 0) AddShaftFloor 1, Shaft1Base, brick, 0.5, -4, -3.5, 4, 3.5, -2, -2, 0, 0
-	if(%floor% = 9) AddShaftFloor 1, Shaft1Top, brick, 0.5, -4, -3.5, 4, 3.5, %fullheight% + 2, %fullheight% + 2, 0, 0
+	if(%floor% = 0) AddShaftFloor 1, Shaft1Base, Brick, 0.5, -4, -3.5, 4, 3.5, -2, -2, 0, 0
+	if(%floor% = 9) AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4, -3.5, 4, 3.5, %fullheight% + 2, %fullheight% + 2, 0, 0
 	WallOrientation = left
 	DrawWalls = false, true, false, false, false, false
-	AddShaftWall 1, Shaft1Left, brick, 0.5, -4, -3.5, -4, 3.5, %height%, %height%, 0, 0, 0, 0
-	AddShaftWall 1, Shaft1Front, brick, 0.5, -4, -3.5, 4, -3.5, %height%, %height%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Left, Brick, 0.5, -4, -3.5, -4, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Front, Brick, 0.5, -4, -3.5, 4, -3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
 	WallOrientation = right
 	DrawWalls = true, false, false, false, false, false
-	AddShaftWall 1, Shaft1Right, brick, 0.5, 4, -3.5, 4, 3.5, %height%, %height%, 0, 0, 0, 0
-	AddShaftWall 1, Shaft1Back, brick, 0.5, -4, 3.5, 4, 3.5, %height%, %height%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Right, Brick, 0.5, 4, -3.5, 4, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Back, Brick, 0.5, -4, 3.5, 4, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
 	
 	WallOrientation = right
 	DrawWalls = true, false, true, true, false, false
-	AddWall Shaft1Left, Marble3, 0.33, -4, -3.5 + 6, -4, 3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
-	AddWall Shaft1Front, Marble3, 0.33, -4, -3.5 + 6, 4, -3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1LeftE, Marble3, 0.33, -4, -3.5 + 6, -4, 3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1FrontE, Marble3, 0.33, -4, -3.5 + 6, 4, -3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
 	WallOrientation = left
 	DrawWalls = false, true, true, true, false, false
-	AddWall Shaft1Right, Marble3, 0.33, 4, -3.5 + 6, 4, 3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
-	AddWall Shaft1Back, Marble3, 0.33, -4, 3.5 + 6, 4, 3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1RightE, Marble3, 0.33, 4, -3.5 + 6, 4, 3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1BackE, Marble3, 0.33, -4, 3.5 + 6, 4, 3.5 + 6, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 #reset drawwalls
