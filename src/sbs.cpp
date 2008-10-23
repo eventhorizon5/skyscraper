@@ -2141,7 +2141,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 								wall2 = true;
 								wall_extents_x.x = GetExtents(temppoly5, 1).x + mesh_origin.x;
 								wall_extents_z.x = GetExtents(temppoly5, 3).x + mesh_origin.z;
-								wall_extents_y = GetExtents(temppoly5, 2);
+								wall_extents_y = GetExtents(temppoly5, 2) + mesh_origin.y;
 							}
 							else
 							{
