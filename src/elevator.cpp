@@ -1369,9 +1369,9 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		ShaftDoorR[i]->SetZBufMode(CS_ZBUF_USE);
 
 		//reposition meshes
-		ShaftDoorL[i]->GetMovable()->SetPosition(Origin);
+		ShaftDoorL[i]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z));
 		ShaftDoorL[i]->GetMovable()->UpdateMove();
-		ShaftDoorR[i]->GetMovable()->SetPosition(Origin);
+		ShaftDoorR[i]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z));
 		ShaftDoorR[i]->GetMovable()->UpdateMove();
 
 		//create doors
