@@ -122,7 +122,7 @@ bool Camera::Move(csVector3 vector, float speed)
 	{
 		csTraceBeamResult result;
 		if (vector != CS_VEC_DOWN)
-			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed), false);
+			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed) + csVector3(0.5, 0, 0.5), false);
 		else
 			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed) - csVector3(0, DefaultAltitude, 0), false);
 
