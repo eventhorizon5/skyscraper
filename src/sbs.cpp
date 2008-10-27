@@ -2026,6 +2026,7 @@ csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, cs
 void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, int checkwallnumber, const char *checkstring)
 {
 	//cuts a rectangular hole in the polygons within the specified range
+	//mesh_origin in a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
 
 	if (cutwalls == false && cutfloors == false)
 		return;

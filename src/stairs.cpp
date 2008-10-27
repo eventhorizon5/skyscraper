@@ -271,9 +271,9 @@ void Stairs::CutWall(bool relative, int floor, csVector3 start, csVector3 end)
 	float base = sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight;
 
 	if (relative == true)
-		sbs->Cut(StairArray_state[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, origin);
+		sbs->Cut(StairArray_state[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0));
 	else
-		sbs->Cut(StairArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, origin);
+		sbs->Cut(StairArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0));
 }
 
 void Stairs::EnableRange(int floor, int range)
