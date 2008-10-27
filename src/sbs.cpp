@@ -1951,7 +1951,7 @@ void SBS::ResetWalls(bool ToDefaults)
 
 void SBS::ReverseExtents(bool X, bool Y, bool Z)
 {
-	//sets which walls should be drawn
+	//Reverses texture mapping per axis
 
 	//first backup old parameters
 	RevXold = RevX;
@@ -1966,8 +1966,8 @@ void SBS::ReverseExtents(bool X, bool Y, bool Z)
 
 void SBS::ResetExtents(bool ToDefaults)
 {
-	//if ToDefaults is true, this resets the DrawWalls data to the defaults.
-	//if ToDefaults is false, this reverts the DrawWalls data to the previous settings.
+	//if ToDefaults is true, this resets the extents data to the defaults.
+	//if ToDefaults is false, this reverts the extents data to the previous settings.
 
 	if (ToDefaults == true)
 		ReverseExtents(false, false, false);
@@ -2092,17 +2092,32 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 						worker.MakeEmpty();
 
 						//get right side
-						worker = temppoly2;
+						if (temppoly2.GetVertexCount() > 0)
+							worker = temppoly2;
+						else
+							worker = temppoly;
 						worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
 						worker.MakeEmpty();
 
 						//get lower
-						worker = temppoly3;
+						if (temppoly3.GetVertexCount() > 0)
+							worker = temppoly3;
+						else if (temppoly2.GetVertexCount() > 0)
+							worker = temppoly2;
+						else if (temppoly.GetVertexCount() > 0)
+							worker = temppoly;
 						worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
 						worker.MakeEmpty();
 
 						//get upper
-						worker = temppoly4;
+						if (temppoly4.GetVertexCount() > 0)
+							worker = temppoly4;
+						else if (temppoly3.GetVertexCount() > 0)
+							worker = temppoly3;
+						else if (temppoly2.GetVertexCount() > 0)
+							worker = temppoly2;
+						else if (temppoly.GetVertexCount() > 0)
+							worker = temppoly;
 						worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
 						worker.MakeEmpty();
 					}
@@ -2116,17 +2131,32 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 						worker.MakeEmpty();
 
 						//get right side
-						worker = temppoly2;
+						if (temppoly2.GetVertexCount() > 0)
+							worker = temppoly2;
+						else
+							worker = temppoly;
 						worker.SplitWithPlaneZ(temppoly3, temppoly2, end.z);
 						worker.MakeEmpty();
 
 						//get lower
-						worker = temppoly3;
+						if (temppoly3.GetVertexCount() > 0)
+							worker = temppoly3;
+						else if (temppoly2.GetVertexCount() > 0)
+							worker = temppoly2;
+						else if (temppoly.GetVertexCount() > 0)
+							worker = temppoly;
 						worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
 						worker.MakeEmpty();
 
 						//get upper
-						worker = temppoly4;
+						if (temppoly4.GetVertexCount() > 0)
+							worker = temppoly4;
+						else if (temppoly3.GetVertexCount() > 0)
+							worker = temppoly3;
+						else if (temppoly2.GetVertexCount() > 0)
+							worker = temppoly2;
+						else if (temppoly.GetVertexCount() > 0)
+							worker = temppoly;
 						worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
 						worker.MakeEmpty();
 					}
@@ -2163,17 +2193,32 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 				worker.MakeEmpty();
 
 				//get right side
-				worker = temppoly2;
+				if (temppoly2.GetVertexCount() > 0)
+					worker = temppoly2;
+				else
+					worker = temppoly;
 				worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
 				worker.MakeEmpty();
 
 				//get lower
-				worker = temppoly3;
+				if (temppoly3.GetVertexCount() > 0)
+					worker = temppoly3;
+				else if (temppoly2.GetVertexCount() > 0)
+					worker = temppoly2;
+				else if (temppoly.GetVertexCount() > 0)
+					worker = temppoly;
 				worker.SplitWithPlaneZ(temppoly3, temppoly4, start.z);
 				worker.MakeEmpty();
 
 				//get upper
-				worker = temppoly4;
+				if (temppoly4.GetVertexCount() > 0)
+					worker = temppoly4;
+				else if (temppoly3.GetVertexCount() > 0)
+					worker = temppoly3;
+				else if (temppoly2.GetVertexCount() > 0)
+					worker = temppoly2;
+				else if (temppoly.GetVertexCount() > 0)
+					worker = temppoly;
 				worker.SplitWithPlaneZ(temppoly5, temppoly4, end.z);
 				worker.MakeEmpty();
 
