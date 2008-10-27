@@ -2320,30 +2320,24 @@ int SBS::AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, fl
 	{
 		wall1 = false;
 		wall2 = false;
+		DrawWalls(true, true, false, false, false, false);
 		if (abs(wall_extents_x.x - wall_extents_x.y) > abs(wall_extents_z.x - wall_extents_z.y))
 		{
 			//doorway is facing forward/backward
-			DrawWalls(false, true, false, false, false, false);
 			index = AddWallMain(mesh, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.x, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th);
 			AddFloorMain(mesh, "DoorwayBottom", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.x, wall_extents_y.x, tw, th);
-			ResetWalls();
-			DrawWalls(true, false, false, false, false, false);
 			AddWallMain(mesh, "DoorwayRight", texture, 0, wall_extents_x.y, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th);
 			AddFloorMain(mesh, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, tw, th);
-			ResetWalls();
 		}
 		else
 		{
 			//doorway is facing left/right
-			DrawWalls(true, false, false, false, false, false);
 			AddWallMain(mesh, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.y, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th);
 			AddFloorMain(mesh, "DoorwayBottom", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.x, wall_extents_y.x, tw, th);
-			ResetWalls();
-			DrawWalls(false, true, false, false, false, false);
 			AddWallMain(mesh, "DoorwayRight", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th);
 			AddFloorMain(mesh, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, tw, th);
-			ResetWalls();
 		}
+		ResetWalls();
 	}
 	return index;
 }
