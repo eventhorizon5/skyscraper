@@ -48,7 +48,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	origin = csVector3(CenterX, sbs->GetFloor(_startfloor)->Altitude, CenterZ);
 	InsideShaft = false;
 	IsEnabled = true;
-	top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->Height;
+	top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 	bottom = sbs->GetFloor(startfloor)->Altitude;
 	cutstart = 0;
 	cutend = 0;
@@ -73,8 +73,6 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftArray[i - startfloor]->GetMeshObject()->GetFactory());
 		ShaftArray_state[i - startfloor] = tmpstate;
 		ShaftArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
-		ShaftArray[i - startfloor]->GetMovable()->SetPosition(csVector3(origin.x, 0, origin.z));
-		ShaftArray[i - startfloor]->GetMovable()->UpdateMove();
 		EnableArray[i - startfloor] = true;
 	}
 }
@@ -87,7 +85,7 @@ Shaft::~Shaft()
 
 int Shaft::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
-	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th);
+	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th);
 }
 
 int Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
@@ -104,7 +102,7 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, altitude + voffset1, altitude + voffset2, tw, th);
+	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw, th);
 }
 
 void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
@@ -177,7 +175,7 @@ bool Shaft::IsInShaft(const csVector3 &position)
 	return false;
 }
 
-void Shaft::CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset)
+void Shaft::CutFloors(bool relative, csVector2 start, csVector2 end, float startvoffset, float endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 	
@@ -197,17 +195,24 @@ void Shaft::CutFloors(csVector2 start, csVector2 end, float startvoffset, float 
 		else if (i == endfloor)
 			voffset2 = endvoffset;
 
-		sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+		if (relative == true)
+			sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+		else
+			sbs->GetFloor(i)->Cut(csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, false);
 	}
 }
 
-void Shaft::CutWall(int floor, csVector3 start, csVector3 end, int checkwallnumber, const char *checkstring)
+void Shaft::CutWall(bool relative, int floor, csVector3 start, csVector3 end, int checkwallnumber, const char *checkstring)
 {
 	//Cut through a wall segment
-	//the Y values in start and end are both relative to the floor's altitude + interfloor
+	//the Y values in start and end are both relative to the floor's altitude
 
 	float base = sbs->GetFloor(floor)->Altitude;
-	sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, origin, checkwallnumber, checkstring);
+
+	if (relative == true)
+		sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, origin, checkwallnumber, checkstring);
+	else
+		sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, origin, checkwallnumber, checkstring);
 }
 
 void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)

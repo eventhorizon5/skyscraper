@@ -63,8 +63,6 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 		tmpstate = scfQueryInterface<iThingFactoryState> (StairArray[i - startfloor]->GetMeshObject()->GetFactory());
 		StairArray_state[i - startfloor] = tmpstate;
 		StairArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
-		StairArray[i - startfloor]->GetMovable()->SetPosition(csVector3(origin.x, sbs->GetFloor(i)->Altitude + sbs->GetFloor(i)->InterfloorHeight, origin.z));
-		StairArray[i - startfloor]->GetMovable()->UpdateMove();
 	}
 }
 
@@ -180,12 +178,12 @@ int Stairs::AddStairs(int floor, const char *name, const char *texture, const ch
 
 int Stairs::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
-	return sbs->AddWallMain(StairArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
+	return sbs->AddWallMain(StairArray_state[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset1, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset2, tw, th);
 }
 
 int Stairs::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
-	return sbs->AddFloorMain(StairArray_state[floor - startfloor], name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th);
+	return sbs->AddFloorMain(StairArray_state[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset1, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset2, tw, th);
 }
 
 void Stairs::Enabled(int floor, bool value)
@@ -235,10 +233,10 @@ int Stairs::AddDoor(int floor, const char *texture, float thickness, int directi
 {
 	//interface to the SBS AddDoor function
 	
-	return sbs->CreateDoor(StairArray_state[floor - startfloor], origin, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, tw, th);
+	return sbs->CreateDoor(StairArray_state[floor - startfloor], origin, texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, voffset + sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, tw, th);
 }
 
-void Stairs::CutFloors(csVector2 start, csVector2 end, float startvoffset, float endvoffset)
+void Stairs::CutFloors(bool relative, csVector2 start, csVector2 end, float startvoffset, float endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 	
@@ -258,17 +256,24 @@ void Stairs::CutFloors(csVector2 start, csVector2 end, float startvoffset, float
 		else if (i == endfloor)
 			voffset2 = endvoffset;
 
-		sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+		if (relative == true)
+			sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+		else
+			sbs->GetFloor(i)->Cut(csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, false);
 	}
 }
 
-void Stairs::CutWall(int floor, csVector3 start, csVector3 end)
+void Stairs::CutWall(bool relative, int floor, csVector3 start, csVector3 end)
 {
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's altitude + interfloor
 
 	float base = sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight;
-	sbs->Cut(StairArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, origin);
+
+	if (relative == true)
+		sbs->Cut(StairArray_state[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, origin);
+	else
+		sbs->Cut(StairArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, origin);
 }
 
 void Stairs::EnableRange(int floor, int range)
