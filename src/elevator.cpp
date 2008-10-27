@@ -1332,7 +1332,7 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		//cut shaft and floor walls
 		if (DoorDirection == false)
 		{
-			sbs->GetShaft(AssignedShaft)->CutWall(false, ServicedFloors[i], csVector3(Origin.x + x1 - 2, base, Origin.z + z1), csVector3(Origin.x + x1 + 2, base + DoorHeight, Origin.x + z4), 1, "Shaft");
+			sbs->GetShaft(AssignedShaft)->CutWall(false, ServicedFloors[i], csVector3(Origin.x + x1 - 2, base, Origin.z + z1), csVector3(Origin.x + x1 + 2, base + DoorHeight, Origin.z + z4), 1, "Shaft");
 			sbs->GetFloor(ServicedFloors[i])->Cut(csVector3(Origin.x + x1 - 2, base, Origin.z + z1), csVector3(Origin.x + x1 + 2, base + DoorHeight, Origin.z + z4), true, false, true, 2, "Shaft");
 		}
 		else
