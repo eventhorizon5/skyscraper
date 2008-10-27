@@ -3975,39 +3975,39 @@ CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
 
 # Main load-bearing columns
 #Top set
-CreateWallBox2 ColumnFrame, MainTop1, Brick, 35.5, 68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, MainTop2, Brick, -35.5, 68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, MainTop1, Brick, 35.5, 68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, MainTop2, Brick, -35.5, 68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
 #Bottom set
-CreateWallBox2 ColumnFrame, MainBottom1, Brick, 35.5, -68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, MainBottom2, Brick, -35.5, -68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, MainBottom1, Brick, 35.5, -68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, MainBottom2, Brick, -35.5, -68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
 #Left set
-CreateWallBox2 ColumnFrame, MainLeft1, Brick, -71.5, 47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, MainLeft2, Brick, -71.5, -47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, MainLeft1, Brick, -71.5, 47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, MainLeft2, Brick, -71.5, -47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
 #Right set
-CreateWallBox2 ColumnFrame, MainRight1, Brick, 71.5, 47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, MainRight2, Brick, 71.5, -47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, MainRight1, Brick, 71.5, 47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, MainRight2, Brick, 71.5, -47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
 
 # Core load-bearing columns
 #Set 1
-CreateWallBox2 ColumnFrame, CoreSet1A, Brick, -42.6, 21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet1B, Brick, -42.6, 7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet1C, Brick, -42.6, -7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet1D, Brick, -42.6, -21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet1A, Brick, -42.6, 21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet1B, Brick, -42.6, 7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet1C, Brick, -42.6, -7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet1D, Brick, -42.6, -21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
 
 #Set 2
-CreateWallBox2 ColumnFrame, CoreSet2A, Brick, -13.5, 21, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet2B, Brick, -13.5, 7, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet2C, Brick, -13.5, -7, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet2D, Brick, -13.5, -21, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet2A, Brick, -13.5, 21, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet2B, Brick, -13.5, 7, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet2C, Brick, -13.5, -7, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet2D, Brick, -13.5, -21, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
 
 #Set 3
-CreateWallBox2 ColumnFrame, CoreSet3A, Brick, 13.5, 21, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet3B, Brick, 13.5, 7, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet3C, Brick, 13.5, -7, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet3D, Brick, 13.5, -21, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet3A, Brick, 13.5, 21, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet3B, Brick, 13.5, 7, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet3C, Brick, 13.5, -7, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet3D, Brick, 13.5, -21, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
 
 #Set 4
-CreateWallBox2 ColumnFrame, CoreSet4A, Brick, 42.6, 21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet4B, Brick, 42.6, 7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet4C, Brick, 42.6, -7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-CreateWallBox2 ColumnFrame, CoreSet4D, Brick, 42.6, -21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet4A, Brick, 42.6, 21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet4B, Brick, 42.6, 7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet4C, Brick, 42.6, -7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
+#CreateWallBox2 ColumnFrame, CoreSet4D, Brick, 42.6, -21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
