@@ -60,8 +60,20 @@ actions GenerateWin32VersionRc
 // This file is generated automatically.
 
 1 VERSIONINFO
-FILEVERSION $(PACKAGE_VERSION_LIST[1]), $(PACKAGE_VERSION_LIST[2]), $(PACKAGE_VERSION_LIST[3]), $(PACKAGE_VERSION_LIST[4])
-PRODUCTVERSION $(PACKAGE_VERSION_LIST[1]), $(PACKAGE_VERSION_LIST[2]), $(PACKAGE_VERSION_LIST[3]), $(PACKAGE_VERSION_LIST[4])
+FILEVERSION 
+__EOF__
+
+	# Remove any RC tag
+	echo '$(PACKAGE_VERSION_LIST[1]),$(PACKAGE_VERSION_LIST[2]),$(PACKAGE_VERSION_LIST[3]),$(PACKAGE_VERSION_LIST[4])' | $(SED) 's/RC\([0-9]\)//g' | $(SED) 's/[^0123456789._,]//g' >> $(<)
+
+cat >> $(<) << __EOF__
+PRODUCTVERSION 
+__EOF__
+
+	# Remove any RC tag
+	echo '$(PACKAGE_VERSION_LIST[1]),$(PACKAGE_VERSION_LIST[2]),$(PACKAGE_VERSION_LIST[3]),$(PACKAGE_VERSION_LIST[4])' | $(SED) 's/RC\([0-9]\)//g' | $(SED) 's/[^0123456789._,]//g' >> $(<)
+
+cat >> $(<) << __EOF__
 #ifdef CS_DEBUG
 FILEFLAGS 0x1
 #else
@@ -85,6 +97,11 @@ FILEFLAGS 0x0
       VALUE "WWW", "$(PACKAGE_HOMEPAGE)"
     }
   }
+  BLOCK "VarFileInfo"
+  {
+      VALUE "Translation", 0x409, 1200
+  }
+
 }
 __EOF__
 }
@@ -108,7 +125,7 @@ __EOF__
 
     # Filter out non-numerical characters from the version number. Windows does
     # not like them.
-    echo '$(PACKAGE_VERSION_LIST[1]).$(PACKAGE_VERSION_LIST[2]).$(PACKAGE_VERSION_LIST[3]).$(PACKAGE_VERSION_LIST[4])' | $(SED) 's/[^0123456789.]//g' | $(SED) 's/\(.*\)/    version="\1"/' >> $(<)
+    echo '$(PACKAGE_VERSION_LIST[1]).$(PACKAGE_VERSION_LIST[2]).$(PACKAGE_VERSION_LIST[3]).$(PACKAGE_VERSION_LIST[4])' | $(SED) 's/RC\([0-9]\)//g' | $(SED) 's/[^0123456789.]//g' | $(SED) 's/\(.*\)/    version="\1"/' >> $(<)
   
     cat >> $(<) << __EOF__
     processorArchitecture="X86"
@@ -222,15 +239,18 @@ rule ConstructApplicationTarget
 }
 rule ConstructStaticLibraryTarget
 {
-  return lib$(<)$(SUFLIB) ;
+  local libbase = [ LibraryBaseName $(<) ] ;
+  return lib$(libbase)$(SUFLIB) ;
 }
 rule ConstructSharedLibraryTarget
 {
-  return $(<)-$(COMPILER.TYPE).dll ;
+  local libbase = [ LibraryBaseName $(<) ] ;
+  return $(libbase)-$(COMPILER.C++.TYPE).dll ;
 }
 rule ConstructSharedLibraryLinkLib
 {
-  return lib$(<)$(SUFLIB) ;
+  local libbase = [ LibraryBaseName $(<) ] ;
+  return lib$(libbase)$(SUFLIB) ;
 }
 rule ConstructPluginTarget
 {
@@ -400,8 +420,23 @@ rule SystemLinkApplication
 
 rule SystemInstallApplication
 {
-  Depends install_bin :
-    [ DoInstall $(<) : $(bindir) $(2) : $(INSTALL_PROGRAM) ] ;
+  local suffix = $(4) ;
+  if "$(suffix)"
+  {
+    local target_suffixed = $(<)-$(suffix) ;
+    local installed =
+      [ DoInstallFile $(<) : $(bindir) $(2) : $(target_suffixed) : $(INSTALL_PROGRAM) ] ;
+    Depends install_bin : $(installed) ;
+    NotFile $(target_suffixed) ;
+    local linktarget = $(<:D=$(bindir)) ;
+    Depends install_bin : [ 
+      InstallSymLink $(linktarget) : $(target_suffixed) ] ;
+  }
+  else
+  {
+    Depends install_bin :
+      [ DoInstall $(<) : $(bindir) $(2) : $(INSTALL_PROGRAM) ] ;
+  }
 }
 
 rule SystemInstallPlugin
@@ -457,9 +492,14 @@ rule MakeDllDefFile
   }
 }
 
+# SystemLinkSharedLibrary barename : target : objects : linklib
 rule SystemLinkSharedLibrary
 {
-  LFlags $(<) : $(LINKLIBS) ;
+  local barename = $(1) ;
+  local target = $(2) ;
+  local objects = $(3) ;
+  local linklib = $(4) ;
+  LFlags $(target) : $(LINKLIBS) ;
   
   # The "crystalspace" library is so massive that it blows Jam's command line
   # length limit when all object files are passed in at once to some command.
@@ -475,34 +515,34 @@ rule SystemLinkSharedLibrary
   # DLL. Conveniently (somewhat), all exported symbols are into a section
   # ".drectve" of an object file by gcc. After extracting these sections and
   # some postprocessing, we finally have all .DEF entries. Phew.
-  local lib = $(<).a ;
-  MakeLocate $(lib) $(lib)($(>:BS)) : $(LOCATE.OBJECTS)/libs ;
-  Depends $(lib) : $(lib)($(>:BS)) ;
+  local lib = $(target).a ;
+  MakeLocate $(lib) $(lib)($(objects:BS)) : $(LOCATE.OBJECTS)/libs ;
+  Depends $(lib) : $(lib)($(objects:BS)) ;
   local i ;
-  for i in $(>)
+  for i in $(objects)
   {
     Depends $(lib)($(i:BS)) : $(i) ;
   }
-  Archive $(lib) : $(>) ;
+  Archive $(lib) : $(objects) ;
   Ranlib $(lib) ;
-  #RmTemps $(lib) : $(>) ;
+  #RmTemps $(lib) : $(objects) ;
   
-  Depends $(<) : $(lib) ;
+  Depends $(target) : $(lib) ;
   
-  local def = $(<).def ;
-  MakeDllDefFile $(def) : $(>) ;
-  Depends $(<) : $(def) ;
+  local def = $(target).def ;
+  MakeDllDefFile $(def) : $(objects) ;
+  Depends $(target) : $(def) ;
   Clean clean : $(def) ;
-  Clean $(<)clean : $(def) ;
-  Depends $(<)clean : $(def)clean ;
+  Clean $(barename)clean : $(def) ;
+  Depends $(barename)clean : $(def)clean ;
   
-  EXPORTDEFS on $(<) = $(def) ;
-  IMPLIB on $(<) = $(3) ;
-  Depends $(3) : $(<) ;
-  LinkSharedLibrary $(<) : $(lib) ;
+  EXPORTDEFS on $(target) = $(def) ;
+  IMPLIB on $(target) = $(linklib) ;
+  Depends $(linklib) : $(target) ;
+  LinkSharedLibrary $(target) : $(lib) ;
 
   Clean clean : $(target) ;
-  Clean $(<)clean : $(target) ;
+  Clean $(barename)clean : $(target) ;
 }
 
 actions ExtractDrectve
@@ -551,13 +591,11 @@ else
 {
   actions LinkPlugin bind NEEDLIBS bind EXTRAOBJECTS bind EXPORTDEFS
   {
-    $(CMD.DLLWRAP) --driver-name=$(CMD.LINK) --dllname $(<:B) --def=$(EXPORTDEFS) -o $(<) $(>) $(EXTRAOBJECTS) $(NEEDLIBS) $(LINKLIBS)
+    $(CMD.DLLWRAP) --driver-name=$(CMD.LINK[1]) --dllname $(<:B) --def=$(EXPORTDEFS) -o $(<) $(>) $(EXTRAOBJECTS) $(NEEDLIBS) $(LINKLIBS)
   }
 }
 
 actions LinkSharedLibrary bind NEEDLIBS bind EXTRAOBJECTS bind EXPORTDEFS bind IMPLIB
 {
-  $(CMD.DLLWRAP) --driver-name=$(CMD.LINK) --dllname $(<:B).dll --def=$(EXPORTDEFS) --implib $(IMPLIB) -o $(<) $(>) $(EXTRAOBJECTS) $(NEEDLIBS) $(LINKLIBS)
-  touch $(IMPLIB) # ensure the IMPLIB is always newer than the DLL, 
-                  # since the IMPLIB depends on the DLL.
+  $(CMD.DLLWRAP) --driver-name=$(CMD.LINK[1]) --dllname $(<:B).dll --def=$(EXPORTDEFS) --implib $(IMPLIB) -o $(<) $(>) $(EXTRAOBJECTS) $(NEEDLIBS) $(LINKLIBS)
 }

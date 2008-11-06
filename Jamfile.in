@@ -40,12 +40,14 @@ MsvcGenSubDir TOP msvc 7 : 7 ;
 MsvcGenSubDir TOP msvc 71 : 71 ;
 MsvcGenSubDir TOP msvc 8 : 8 ;
 MsvcGenTemplateDir TOP mk msvcgen ;
-# Set up the workspace we want msvcgen to synthesize.
-MsvcGenWorkspace skyscraper ;
 
 # Customize the build configurations to contain some defines required by
-# CrystalSpace.
-MsvcGenVariable customize : mk/msvcgen/custom.cslib ;
+# CrystalSpace.  NOTE: The file with the customization options is assumed
+# to reside in mk/msvcgen/.
+MsvcGenVariable customize : custom.cslib ;
+
+# Set up the workspace we want msvcgen to synthesize.
+MsvcGenWorkspace skyscraper ;
 
 local hash = "\$" ;
 MsvcGenConfig CRYSTAL.AVAILABLE : yes ;
@@ -95,10 +97,10 @@ if $(CEL.DESIRED) = yes
 MsvcGenConfig WX.AVAILABLE : yes ;
 MsvcGenConfig WX.CFLAGS : "/D \"wxUSE_GUI=1\" /D \"WXUSINGDLL=1\"" ;
 MsvcGenConfig WX.LFLAGS ;
-MsvcGenConfig WX.LIBS : "wxbase26.lib wxmsw26_core.lib" ;
+MsvcGenConfig WX.LIBS : "wxbase28.lib wxmsw28_core.lib" ;
 MsvcGenConfig WX.CFLAGS.DEBUG : "/D \"wxUSE_GUI=1\" /D \"WXDEBUG=1\" /D \"WXUSINGDLL=1\"" ;
 MsvcGenConfig WX.LFLAGS.DEBUG ;
-MsvcGenConfig WX.LIBS.DEBUG : "wxbase26d.lib wxmsw26d_core.lib" ;
+MsvcGenConfig WX.LIBS.DEBUG : "wxbase28d.lib wxmsw28d_core.lib" ;
 
 # Set project-specific compiler and linker options for msvcgen.
 #MsvcDefine MY_DEFINE : "my value" ;

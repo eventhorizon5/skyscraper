@@ -1,6 +1,6 @@
 # checklib.m4                                                  -*- Autoconf -*-
 #==============================================================================
-# Copyright (C)2003-2005 by Eric Sunshine <sunshine@sunshineco.com>
+# Copyright (C)2003-2006 by Eric Sunshine <sunshine@sunshineco.com>
 #
 #    This library is free software; you can redistribute it and/or modify it
 #    under the terms of the GNU Library General Public License as published by
@@ -73,11 +73,12 @@ m4_define([cs_pkg_paths_default],
 #                   [OTHER-LFLAGS], [OTHER-LIBS], [ALIASES])
 #	Very roughly similar in concept to AC_CHECK_LIB(), but allows caller to
 #	to provide list of directories in which to search for LIBRARY; allows
-#	user to override library location via --with-LIBRARY=dir; and consults
-#	`pkg-config' (if present) and `LIBRARY-config' (if present, i.e.
-#	`sdl-config') in order to obtain compiler and linker flags.  LIBRARY is
-#	the name of the library or MacOS/X framework which is to be located
-#	(for example, "readline" for `libreadline.a' or `readline.framework').
+#	user to augment the library search path via --with-LIBRARY=dir; and
+#       consults `pkg-config' (if present) and `LIBRARY-config' (if present,
+#       i.e. `sdl-config') in order to obtain compiler and linker flags.
+#       LIBRARY is the name of the library or MacOS/X framework which is to be 
+#       located	(for example, "readline" for `libreadline.a' or 
+#       `readline.framework').
 #	PROGRAM, which is typically composed with AC_LANG_PROGRAM(), is a
 #	program which references at least one function or symbol in LIBRARY.
 #	SEARCH-LIST is a whitespace-delimited list of paths in which to search
@@ -119,43 +120,64 @@ m4_define([cs_pkg_paths_default],
 #------------------------------------------------------------------------------
 AC_DEFUN([CS_CHECK_LIB_WITH],
     [AC_ARG_WITH([$1], [AC_HELP_STRING([--with-$1=dir],
-	[specify location of lib$1 if not detected automatically; searches
-	dir/include, dir/lib, and dir])])
+	[specify additional location to search lib$1 if not detected automatically; 
+	directories searched include dir/include, dir/lib, and dir])])
 
     # Backward compatibility: Recognize --with-lib$1 as alias for --with-$1.
-    AS_IF([test -n "$with_lib$1" && test -z "$with_$1"],
-	[with_$1="$with_lib$1"])
+    AS_IF([test -n "$_CS_CLW_WITH_DEPRECATED([$1])" &&
+           test -z "$_CS_CLW_WITH([$1])"],
+	[_CS_CLW_WITH([$1])="$_CS_CLW_WITH_DEPRECATED([$1])"])
 
-    AS_IF([test -z "$with_$1"], [with_$1=yes])
-    AS_IF([test "$with_$1" != no],
-	[# If --with-$1 value is same as cached value, then assume other
+    AS_IF([test -z "$_CS_CLW_WITH([$1])"], [_CS_CLW_WITH([$1])=yes])
+    AS_IF([test "$_CS_CLW_WITH([$1])" != no],
+	[
+	# If --with-$1 value is same as cached value, then assume other
 	 # cached values are also valid; otherwise, ignore all cached values.
-	AS_IF([test "$with_$1" != "$cs_cv_with_$1"],
+	AS_IF([test "$_CS_CLW_WITH([$1])" != "$_CS_CLW_WITH_CVAR([$1])"],
 	    [cs_ignore_cache=yes], [cs_ignore_cache=no])
 
+	# Put relevant subdirs of the library directory into PATH and PKGCONFIG
+	PATH_SAVE="$PATH"
+	AS_IF([test $_CS_CLW_WITH([$1]) != yes],
+	    [PATH="$_CS_CLW_WITH([$1])/bin$PATH_SEPARATOR$PATH"
+	    _CS_CHECK_PKG_CONFIG_PREPARE_PATH([$_CS_CLW_WITH([$1]),
+		$_CS_CLW_WITH([$1])/lib/pkgconfig])])
+	    
 	cs_check_lib_flags=''
-	AS_IF([test $with_$1 = yes],
-	    [m4_foreach([cs_check_lib_alias], [$1, $10],
-		[_CS_CHECK_LIB_PKG_CONFIG_FLAGS([cs_check_lib_flags],
-		    cs_check_lib_alias)
-		_CS_CHECK_LIB_CONFIG_FLAGS([cs_check_lib_flags],
-		    cs_check_lib_alias)
-		])])
+	m4_foreach([cs_check_lib_alias], 
+	    [m4_ifval([$10], [$1, $10], [$1])],
+	    [_CS_CHECK_LIB_PKG_CONFIG_FLAGS([cs_check_lib_flags],
+		cs_check_lib_alias)
+	    _CS_CHECK_LIB_CONFIG_FLAGS([cs_check_lib_flags],
+		cs_check_lib_alias)
+	    ])
 
-	AS_IF([test $with_$1 != yes],
-	    [cs_check_lib_paths=$with_$1],
+	AS_IF([test $_CS_CLW_WITH([$1]) != yes],
+	    [cs_check_lib_paths=$_CS_CLW_WITH([$1])],
 	    [cs_check_lib_paths="| cs_lib_paths_default $3"])
-	m4_foreach([cs_check_lib_alias], [$1, $10],
+	m4_foreach([cs_check_lib_alias], 
+	    [m4_ifval([$10], [$1, $10], [$1])],
 	    [_CS_CHECK_LIB_CREATE_FLAGS([cs_check_lib_flags],
 		cs_check_lib_alias, [$cs_check_lib_paths])
 	    ])
 
-	CS_CHECK_BUILD([for lib$1], [cs_cv_lib$1], [$2], [$cs_check_lib_flags],
-	    [$4], [], [], [$cs_ignore_cache], [$7], [$8], [$9])],
-	[cs_cv_lib$1=no])
+	CS_CHECK_BUILD([for lib$1], [_CS_CLW_LIB_CVAR([$1])], [$2],
+            [$cs_check_lib_flags], [$4], [], [], [$cs_ignore_cache],
+            [$7], [$8], [$9])
+	    
+	PATH="$PATH_SAVE"
+	AS_IF([test $_CS_CLW_WITH([$1]) != yes],
+	    [_CS_CHECK_PKG_CONFIG_UNPREPARE_PATH])
+	],
+	[_CS_CLW_LIB_CVAR([$1])=no])
 
-    cs_cv_with_$1="$with_$1"
-    AS_IF([test "$cs_cv_lib$1" = yes], [$5], [$6])])
+    _CS_CLW_WITH_CVAR([$1])="$_CS_CLW_WITH([$1])"
+    AS_IF([test "$_CS_CLW_LIB_CVAR([$1])" = yes], [$5], [$6])])
+
+AC_DEFUN([_CS_CLW_WITH], [AS_TR_SH([with_$1])])
+AC_DEFUN([_CS_CLW_WITH_DEPRECATED], [AS_TR_SH([with_lib$1])])
+AC_DEFUN([_CS_CLW_WITH_CVAR], [AS_TR_SH([cs_cv_with_$1])])
+AC_DEFUN([_CS_CLW_LIB_CVAR], [AS_TR_SH([cs_cv_lib$1])])
 
 
 
@@ -172,7 +194,6 @@ m4_define([CS_PKG_CONFIG_MIN], [0.9.0])
 AC_DEFUN([CS_CHECK_PKG_CONFIG],
     [AS_IF([test "$cs_prog_pkg_config_checked" != yes],
 	[CS_CHECK_TOOLS([PKG_CONFIG], [pkg-config])
-	_CS_CHECK_PKG_CONFIG_PREPARE_PATH
 	cs_prog_pkg_config_checked=yes])
     AS_IF([test -z "$cs_cv_prog_pkg_config_ok"],
 	[AS_IF([test -n "$PKG_CONFIG"],
@@ -182,10 +203,15 @@ AC_DEFUN([CS_CHECK_PKG_CONFIG],
 	    [cs_cv_prog_pkg_config_ok=no])])])
 
 AC_DEFUN([_CS_CHECK_PKG_CONFIG_PREPARE_PATH],
-    [PKG_CONFIG_PATH="m4_foreach([cs_pkg_path], [cs_pkg_paths_default],
+    [PKG_CONFIG_PATH_SAVE_1="$PKG_CONFIG_PATH"
+    PKG_CONFIG_PATH="m4_foreach([cs_pkg_path], [cs_pkg_paths_default],
+	[cs_pkg_path$PATH_SEPARATOR])$PKG_CONFIG_PATH"
+    PKG_CONFIG_PATH="m4_foreach([cs_pkg_path], [$1], 
 	[cs_pkg_path$PATH_SEPARATOR])$PKG_CONFIG_PATH"
     export PKG_CONFIG_PATH])
-
+AC_DEFUN([_CS_CHECK_PKG_CONFIG_UNPREPARE_PATH],
+    [PKG_CONFIG_PATH="$PKG_CONFIG_PATH_SAVE_1"
+    export PKG_CONFIG_PATH])
 
 
 #------------------------------------------------------------------------------

@@ -54,11 +54,6 @@ rule Plugin
   $(<)_TARGET = $(target) ;
   $(<)_METAFILE = $(metafile) ;
 
-  # create target clean rule
-  Always $(<)clean ;
-  NotFile $(<)clean ;
-  Clean $(<)clean : $(objects) ; # create target clean rule 
-
   # Create a target for eventual static linking
   if ! $(NO_STATIC_LINKING)
   {
@@ -116,16 +111,25 @@ rule Plugin
   MakeLocate $(target) : $(LOCATE.TARGETS) ;
   SystemLinkPlugin $(<) : $(objects) : $(3) ;
   
-  local debugfile = [ SplitDebugInfo $(target) ] ;
-  Clean $(<)clean : $(debugfile) ;
-  if ! [ IsElem noinstall : $(3) ]
+  local cleanextra ;
+  if $(LINK.DEBUG.INFO.SEPARATE) = "yes"
   {
-    NoCare $(debugfile) ;
-    Depends install_plugin : [ DoInstall $(debugfile) : $(plugindir) : $(INSTALL_DATA) ] ;
+    local debugfile = [ SplitDebugInfo $(target) ] ;
+    cleanextra += $(debugfile) ;
+    if ! [ IsElem noinstall : $(3) ]
+    {
+      NoCare $(debugfile) ;
+      Depends install_plugin : [ DoInstall $(debugfile) : $(plugindir) : $(INSTALL_DATA) ] ;
+    }
   }
 
-  CFlags $(<) : $(PLUGIN.CFLAGS) : nostatic ;
-  LFlags $(<) : $(LINKLIBS) $(PLUGIN.LFLAGS) : nostatic ;
+  CFlags $(<) : $(PLUGIN.CFLAGS) ;
+  LFlags $(<) : $(LINKLIBS) $(PLUGIN.LFLAGS) ;
+
+  # create target clean rule
+  Always $(<)clean ;
+  NotFile $(<)clean ;
+  Clean $(<)clean : $(objects) $(cleanextra) ;
 
   if ! [ IsElem nohelp : $(3) ]
   {

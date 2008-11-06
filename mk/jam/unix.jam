@@ -40,15 +40,18 @@ rule ConstructApplicationTarget
 }
 rule ConstructStaticLibraryTarget
 {
-  return lib$(<)$(SUFLIB) ;
+  local libbase = [ LibraryBaseName $(<) ] ;
+  return lib$(libbase)$(SUFLIB) ;
 }
 rule ConstructSharedLibraryTarget
 {
-  return lib$(<).so.$(PACKAGE_VERSION) ; 
+  local libbase = [ LibraryBaseName $(<) ] ;
+  return lib$(libbase).so ; 
 }
 rule ConstructSharedLibraryLinkLib
 {
-  return lib$(<).so.$(PACKAGE_VERSION) ; 
+  local libbase = [ LibraryBaseName $(<) ] ;
+  return lib$(libbase).so ; 
 }
 rule ConstructPluginTarget
 {
@@ -71,8 +74,23 @@ rule SystemLinkApplication
 
 rule SystemInstallApplication
 {
-  Depends install_bin :
-    [ DoInstall $(<) : $(bindir) $(2) : $(INSTALL_PROGRAM) ] ;
+  local suffix = $(4) ;
+  if "$(suffix)"
+  {
+    local target_suffixed = $(<)-$(suffix) ;
+    local installed =
+      [ DoInstallFile $(<) : $(bindir) $(2) : $(target_suffixed) : $(INSTALL_PROGRAM) ] ;
+    Depends install_bin : $(installed) ;
+    NotFile $(target_suffixed) ;
+    local linktarget = $(<:D=$(bindir)) ;
+    Depends install_bin : [ 
+      InstallSymLink $(linktarget) : $(target_suffixed) ] ;
+  }
+  else
+  {
+    Depends install_bin :
+      [ DoInstall $(<) : $(bindir) $(2) : $(INSTALL_PROGRAM) ] ;
+  }
 }
 
 rule SystemInstallPlugin
@@ -113,19 +131,35 @@ rule SystemLinkPlugin
   Clean $(<)clean : $(target) ;
 }
 
+# SystemLinkSharedLibrary barename : target : objects : linklib
 rule SystemLinkSharedLibrary
 {
-  LFlags $(<) : $(LINKLIBS) ;
-  Depends $(<) : $(>) ;
-  local response = $(<).resp ;
-  MakeLocate $(response) : $(LOCATE.OBJECTS)/libs ;
-  ResponseFile $(response) : $(>) ;
-  Depends $(response) : $(>) ;
-  Depends $(<) : $(response) ;
-  LinkSharedLibrary $(<) : $(response) ;
+  local barename = $(1) ;
+  local target = $(2) ;
+  local objects = $(3) ;
+  local linklib = $(4) ;
+  LFlags $(target) : $(LINKLIBS) ;
+  Depends $(target) : $(objects) ;
+  if $(LINKER.RESPONSEFILES) = "yes"
+  {
+    local response = $(target).resp ;
+    MakeLocate $(response) : $(LOCATE.OBJECTS)/libs ;
+    ResponseFile $(response) : $(objects) ;
+    Depends $(response) : $(objects) ;
+    Depends $(target) : $(response) ;
+    LinkSharedLibraryRsp $(target) : $(response) ;
+    Clean clean : $(response) ;
+    Clean $(barename)clean : $(response) ;
+  }
+  else
+  {
+    LinkSharedLibraryFirst $(target) : $(objects[1]) ;
+    LinkSharedLibraryIncremental $(target) : $(objects[2-]) ;
+    LinkSharedLibraryFinal $(target) ;
+  }
 
-  Clean clean : $(<) ;
-  Clean $(<)clean : $(<) ;
+  Clean clean : $(target) ;
+  Clean $(barename)clean : $(target) ;
 }
 
 actions LinkApplication bind NEEDLIBS bind EXTRAOBJECTS
@@ -149,7 +183,25 @@ else
   }
 }
 
-actions LinkSharedLibrary bind NEEDLIBS bind EXTRAOBJECTS
+actions piecemeal together LinkSharedLibraryFirst bind NEEDLIBS bind EXTRAOBJECTS
+{
+  $(CMD.LD) -r -o $(<).il $(>)
+}
+
+actions piecemeal together LinkSharedLibraryIncremental bind NEEDLIBS bind EXTRAOBJECTS
+{
+  $(CMD.LD) -r -o $(<).il.new $(<).il $(>)
+  $(MV) $(<).il.new $(<).il
+}
+
+actions LinkSharedLibraryFinal bind NEEDLIBS bind EXTRAOBJECTS
+{
+  $(CMD.LINK) -shared -o $(<) $(<).il $(EXTRAOBJECTS) $(NEEDLIBS) $(LINKLIBS) \
+    -Wl,-soname,$(<:BS)
+  $(RM) $(<).il
+}
+
+actions LinkSharedLibraryRsp bind NEEDLIBS bind EXTRAOBJECTS
 {
   $(CMD.LINK) -shared -o $(<) -Wl,@$(>) $(EXTRAOBJECTS) $(NEEDLIBS) $(LINKLIBS) \
     -Wl,-soname,$(<:BS)

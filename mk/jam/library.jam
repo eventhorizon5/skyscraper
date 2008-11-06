@@ -21,6 +21,11 @@
 # Suppress ar's noisy report that it created the archive we asked it to create.
 if $(AR) && $(AR[2]) = ru { AR = $(AR[1]) ruc ; }
 
+# Library versioning control. When set to "yes", the string in 
+# LIBRARY_VERSION_TAG will be appended to names of libraries.
+LIBRARY_VERSIONING ?= yes ;
+LIBRARY_VERSION_TAG ?= "$(PACKAGE_VERSION_LIST[1]).$(PACKAGE_VERSION_LIST[2])" ;
+
 ##  Library libname : sources [ : options ]
 ##    Build a library out of sourcefiles. All sourcefiles will be passed
 ##    to the Objects rule which tries to compile them into object-files. You
@@ -67,11 +72,6 @@ rule Library
   $(<)_SOURCES = $(sources) ;
   $(<)_TARGET = $(target) ;
 
-  # create target clean rule
-  Always $(<)clean ;
-  NotFile $(<)clean ;
-  Clean $(<)clean : $(objects) ; # create target clean rule 
-
   # so 'jam foo' works when it's really foo.exe (Windows) or foo.app (MacOS/X)
   if $(target) != $(<)
   {
@@ -105,6 +105,12 @@ rule Library
   }
   CFlags $(<) : $(LIBRARY.CFLAGS) ;
   LFlags $(<) : $(LIBRARY.LFLAGS) ;
+
+  # create target clean rule
+  Always $(<)clean ;
+  NotFile $(<)clean ;
+  Clean $(<)clean : $(objects) $($(<)_CLEANEXTRA) ;
+  Clean clean : $(objects) $($(<)_CLEANEXTRA) ;
 
   if ! [ IsElem nohelp : $(options) ]
   {
@@ -206,8 +212,6 @@ rule LibraryStatic
   }
 
   Archive $(target) : $(objects) ;
-  Clean $(<)clean : $(target) ;
-  Depends clean : $(<)clean ;
 
   if $(RANLIB)
   {
@@ -219,12 +223,15 @@ rule LibraryStatic
   {
     RmTemps $(target) : $(objects) ;
   }
+
+  $(<)_CLEANEXTRA += $(target) ;
 }
 
-# LibraryStatic libname : sources : options : decoratedtarget
+# LibraryShared libname : sources : options : decoratedtarget
 rule LibraryShared
 {
-  local objects = $(>) ;
+  local libname = $(1) ;
+  local objects = $(2) ;
   local options = $(3) ;
   local target = $(4) ;
   local linklib = [ ConstructSharedLibraryLinkLib $(<) : $(options) ] ;
@@ -252,37 +259,64 @@ rule LibraryShared
     # Add to global library list
     if [ IsElem optional : $(options) ]
     {
-      INSTALLEDLIBS_OPTIONAL += $(<) ;
+      INSTALLEDLIBS_OPTIONAL += $(libname) ;
     }
     else
     {
-      INSTALLEDLIBS += $(<) ;
+      INSTALLEDLIBS += $(libname) ;
     }
   }
 
-  Depends $(<) : $(linklib) ;
+  Depends $(libname) : $(linklib) ;
+  MakeLocate $(linklib) : $(LOCATE.OBJECTS)/libs ;
+  SEARCH on $(linklib) = $(LOCATE.OBJECTS)/libs ;
   if $(linklib) != $(target)
   {
     Depends $(linklib) : $(target) ;
-    MakeLocate $(linklib) : $(LOCATE.OBJECTS)/libs ;
-    SEARCH on $(linklib) = $(LOCATE.OBJECTS)/libs ;
+    MakeLocate $(target) : $(BUILDTOP) ;
+    SEARCH on $(target) = $(BUILDTOP) ;
   }
   Depends $(target) : $(objects) ;
-  Clean $(<)clean : $(linklib) $(target) ;
-  Depends clean : $(<)clean ;
+  $(libname)_CLEANEXTRA += $(target) ;
   Depends $(target) : $(deplibs) ;
     
-  CFlags $(<) : [ FDefines CS_$(<:U)_LIB  ] ;
-  LFlags $(<) : $(LINKLIBS) ;
+  CFlags $(libname) : [ FDefines CS_$(libname:U)_LIB  ] ;
+  LFlags $(libname) : $(LINKLIBS) ;
     
-  SystemLinkSharedLibrary $(target) : $(objects) $(deplibs) : $(linklib) ;
+  SystemLinkSharedLibrary $(libname) : $(target) : $(objects) $(deplibs) : $(linklib) ;
   
-  local debugfile = [ SplitDebugInfo $(target) ] ;
-  Clean $(<)clean : $(debugfile) ;
-  if ! [ IsElem noinstall : $(options) ]
+  if $(LINK.DEBUG.INFO.SEPARATE) = "yes"
   {
-    NoCare $(debugfile) ;
-    Depends install_lib : [ DoInstall $(debugfile) : $(libdir) : $(INSTALL_DATA) ] ;
+    local debugfile = [ SplitDebugInfo $(target) ] ;
+    $(libname)_CLEANEXTRA += $(debugfile) ;
+    if ! [ IsElem noinstall : $(options) ]
+    {
+      NoCare $(debugfile) ;
+      Depends install_lib : [ DoInstall $(debugfile) : $(libdir) : $(INSTALL_DATA) ] ;
+    }
+  }
+  
+  # This is really only needed for Win32: the link library (ie import library)
+  # should be newer than the shared library (ie DLL) since the former depends
+  # on the latter. 
+  # But: the dllwrap call itself results in a shared lib newer than the link
+  # lib, and the debug info splitting will touch the shared lib again.
+  # So to make sure the link lib is newest touch it.
+  Touch $(linklib) ;
+}
+
+# LibraryBaseName
+#   Construct library base name string from library name - appends version if
+#   LIBRARY_VERSIONING is "yes".
+rule LibraryBaseName
+{
+  if $(LIBRARY_VERSIONING) = "yes"
+  {
+    return "$(1)-$(LIBRARY_VERSION_TAG)" ;
+  }
+  else
+  {
+    return "$(1)" ;
   }
 }
 

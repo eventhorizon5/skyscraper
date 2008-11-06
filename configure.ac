@@ -13,7 +13,7 @@ AC_INIT(
     [ryan@tliquest.net])
 CS_PACKAGEINFO(
     [Skyscraper],
-    [Copyright (C)2004-2007 Ryan Thoryk],
+    [Copyright (C)2004-2008 Ryan Thoryk],
     [http://www.skyscrapersim.com])
 AC_CONFIG_SRCDIR([mk/jam/build.jam])
 AC_CONFIG_AUX_DIR([mk/autoconf])
@@ -107,12 +107,12 @@ AC_ARG_WITH([cs], [AC_HELP_STRING([--without-cs],
 AS_IF([test -z "$with_cs"], [with_cs=yes])
 
 AS_IF([test $with_cs != no],
-[CS_PATH_CRYSTAL_EMIT([0.99], [],
+[CS_PATH_CRYSTAL_EMIT([1.1], [],
   [AC_MSG_ERROR([
 *** Crystal Space could not be found or was unusable. The latest version is
 *** always available from http://www.crystalspace3d.org/
 *** Also, be sure that you have either installed Crystal Space or set the
-*** CRYSTAL environment variable properly.
+*** CRYSTAL_1_1 environment variable properly.
 ])], [crystalspace])])
 
 #----------------------------------------------------------------------------
@@ -128,7 +128,7 @@ AS_IF([test -z "$with_wx"], [with_wx=yes])
 AS_IF([test $with_wx != no],
 [
 AM_OPTIONS_WXCONFIG
-reqwx=2.6.3
+reqwx=2.8.6
 AM_PATH_WXCONFIG($reqwx, wxWin=1)
 if test "$wxWin" != 1; then
 	AC_MSG_ERROR([
@@ -189,7 +189,7 @@ m4_if(cel_desired, [yes],
 AS_IF([test -z "$with_cel"], [with_cel=yes])
 
 AS_IF([test $with_cel != no],
-[CS_PATH_CEL_EMIT([0.99], [],
+[CS_PATH_CEL_EMIT([1.1], [],
   [AC_MSG_ERROR([
 *** CEL could not be found or was unusable. The latest version is always
 *** available from http://cel.crystalspace3d.org/
