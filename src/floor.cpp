@@ -258,9 +258,9 @@ void Floor::Cut(csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, b
 	//Y values are relative to the floor's altitude
 	//if fast is specified, skips the interfloor scan
 
-	sbs->Cut(Level_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), checkwallnumber, checkstring);
+	sbs->Cut(Level_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
 	if (fast == false)
-		sbs->Cut(Interfloor_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), checkwallnumber, checkstring);
+		sbs->Cut(Interfloor_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
 }
 
 void Floor::AddGroupFloor(int number)

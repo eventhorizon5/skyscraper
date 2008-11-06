@@ -210,9 +210,9 @@ void Shaft::CutWall(bool relative, int floor, csVector3 start, csVector3 end, in
 	float base = sbs->GetFloor(floor)->Altitude;
 
 	if (relative == true)
-		sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), checkwallnumber, checkstring);
+		sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
 	else
-		sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), checkwallnumber, checkstring);
+		sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
 }
 
 void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)

@@ -231,7 +231,7 @@ public:
 	int GetDrawWallsCount();
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
 	int CreateDoor(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
-	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, int checkwallnumber = 0, const char *checkstring = "");
+	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
 	float MetersToFeet(float meters); //converts meters to feet
 	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
 
@@ -330,7 +330,6 @@ private:
 	Pump* p;
 
 	//doorway data
-	bool wall1;
-	bool wall2;
+	bool wall1a, wall1b, wall2a, wall2b;
 	csVector2 wall_extents_x, wall_extents_z, wall_extents_y;
 };

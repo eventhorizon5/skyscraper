@@ -50,6 +50,7 @@ Door::Door(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, int numb
 	Direction = direction;
 	IsOpen = false;
 	float x1, z1, x2, z2;
+	origin = csVector3(CenterX, altitude, CenterZ);
 
 	//set up coordinates
 	if (direction < 5)
@@ -77,9 +78,9 @@ Door::Door(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, int numb
 
 	//cut area
 	if (Direction < 5)
-		sbs->Cut(cutmesh, csVector3(x1 - 2, altitude, z1), csVector3(x2 + 2, altitude + height, z2), true, false, cutmesh_origin);
+		sbs->Cut(cutmesh, csVector3(x1 - 2, altitude, z1), csVector3(x2 + 2, altitude + height, z2), true, false, cutmesh_origin, origin);
 	else
-		sbs->Cut(cutmesh, csVector3(x1, altitude, z1 - 2), csVector3(x2, altitude + height, z2 + 2), true, false, cutmesh_origin);
+		sbs->Cut(cutmesh, csVector3(x1, altitude, z1 - 2), csVector3(x2, altitude + height, z2 + 2), true, false, cutmesh_origin, origin);
 
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);

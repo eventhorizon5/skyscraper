@@ -113,8 +113,10 @@ SBS::SBS()
 	StairsDisplayRange = 3;
 	ShaftOutsideDisplayRange = 3;
 	StairsOutsideDisplayRange = 3;
-	wall1 = false;
-	wall2 = false;
+	wall1a = false;
+	wall1b = false;
+	wall2a = false;
+	wall2b = false;
 }
 
 SBS::~SBS()
@@ -2023,10 +2025,11 @@ csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, cs
 	return isect;
 }
 
-void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, int checkwallnumber, const char *checkstring)
+void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber, const char *checkstring)
 {
 	//cuts a rectangular hole in the polygons within the specified range
-	//mesh_origin in a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
+	//mesh_origin is a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
+	//object_origin is for the object's (such as a shaft) central position, used for calculating wall offsets
 
 	if (cutwalls == false && cutfloors == false)
 		return;
@@ -2038,9 +2041,15 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 	int polycount;
 	bool polycheck;
 	if (checkwallnumber == 1)
-		wall1 = false;
+	{
+		wall1a = false;
+		wall1b = false;
+	}
 	if (checkwallnumber == 2)
-		wall2 = false;
+	{
+		wall2a = false;
+		wall2b = false;
+	}
 
 	//step through each polygon
 	polycount = state->GetPolygonCount();
@@ -2165,20 +2174,35 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 					//store extents of temppoly5 for door sides if needed
 					if (checkwallnumber > 0 && checkwallnumber < 3)
 					{
-						if (name.Find(checkstring) >= 0 && (wall1 == false || wall2 == false))
+						if (name.Find(checkstring) >= 0)
 						{
-							if (checkwallnumber == 2)
+							float extent;
+							if (checkwallnumber == 2 && (wall2a == false || wall2b == false))
 							{
-								wall2 = true;
-								wall_extents_x.x = GetExtents(temppoly5, 1).x + mesh_origin.x;
-								wall_extents_z.x = GetExtents(temppoly5, 3).x + mesh_origin.z;
+								//level walls
+								if (wall2a == true)
+									wall2b = true;
+								wall2a = true;
+								extent = GetExtents(temppoly5, 1).x + mesh_origin.x;
+								if (wall2b == false || (wall2b == true && abs(extent - object_origin.x) > abs(wall_extents_x.x - object_origin.x)))
+									wall_extents_x.x = extent;
+								extent = GetExtents(temppoly5, 3).x + mesh_origin.z;
+								if (wall2b == false || (wall2b == true && abs(extent - object_origin.z) > abs(wall_extents_z.x - object_origin.z)))
+									wall_extents_z.x = extent;
 								wall_extents_y = GetExtents(temppoly5, 2) + mesh_origin.y;
 							}
-							else
+							else if (wall1a == false || wall1b == false)
 							{
-								wall1 = true;
-								wall_extents_x.y = GetExtents(temppoly5, 1).y + mesh_origin.x;
-								wall_extents_z.y = GetExtents(temppoly5, 3).y + mesh_origin.z;
+								//shaft walls
+								if (wall1a == true)
+									wall1b = true;
+								wall1a = true;
+								extent = GetExtents(temppoly5, 1).y + mesh_origin.x;
+								if (wall1b == false || (wall1b == true && abs(extent - object_origin.x) < abs(wall_extents_x.y - object_origin.x)))
+									wall_extents_x.y = extent;
+								extent = GetExtents(temppoly5, 3).y + mesh_origin.z;
+								if (wall1b == false || (wall1b == true && abs(extent - object_origin.z) < abs(wall_extents_z.y - object_origin.z)))
+									wall_extents_z.y = extent;
 							}
 						}
 					}
@@ -2316,10 +2340,12 @@ int SBS::AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, fl
 {
 	//add joining doorway polygons if needed
 	int index = 0;
-	if (wall1 == true && wall2 == true)
+	if (wall1a == true && wall2a == true)
 	{
-		wall1 = false;
-		wall2 = false;
+		wall1a = false;
+		wall1b = false;
+		wall2a = false;
+		wall2b = false;
 		DrawWalls(true, true, false, false, false, false);
 		if (abs(wall_extents_x.x - wall_extents_x.y) > abs(wall_extents_z.x - wall_extents_z.y))
 		{
