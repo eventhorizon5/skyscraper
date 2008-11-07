@@ -3114,7 +3114,7 @@ DrawWalls = true, true, false, false, false, false
     AddWall Right Panel, Wood1, 0.2, 2.1, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
     
     #doors
-    WallOrientation = left
+    WallOrientation = right
     DrawWalls = true, true, true, true, true, true
     AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
     AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
@@ -3214,7 +3214,7 @@ DrawWalls = true, true, false, false, false, false
     AddWall Right Panel, Wood1, 0.2, 2.1, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
     
     #doors
-    WallOrientation = left
+    WallOrientation = right
     DrawWalls = true, true, true, true, true, true
     AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
     AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
@@ -3292,7 +3292,7 @@ DrawWalls = true, true, false, false, false, false
     AddWall Right Panel, Wood1, 0.2, 2.1, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
     
     #doors
-    WallOrientation = left
+    WallOrientation = right
     DrawWalls = true, true, true, true, true, true
     AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
     AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
@@ -3454,7 +3454,7 @@ DrawWalls = true, true, false, false, false, false
     AddWall Right Panel, Wood1, 0.2, 2.1, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
     
     #doors
-    WallOrientation = left
+    WallOrientation = right
     DrawWalls = true, true, true, true, true, true
     AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
     AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
@@ -3593,7 +3593,7 @@ DrawWalls = true, true, false, false, false, false
     AddWall Right Panel, Wood1, 0.2, 2.1, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
     
     #doors
-    WallOrientation = left
+    WallOrientation = right
     DrawWalls = true, true, true, true, true, true
     AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
     AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
@@ -3828,7 +3828,7 @@ DrawWalls = true, true, false, false, false, false
     AddWall Right Panel, Wood1, 0.2, -3.625, 1.75, -3.625, 4.125, 8, 8, 0, 0, 0.66, 2
 
     #doors
-    WallOrientation = left
+    WallOrientation = right
     AddDoors ElevDoors, 0.2, -3.626, 0, 3.5, 8, false, 2, 2 #doors
     AddShaftDoors ElevDoors, 0.2, -3.926, 0, 2, 2 #shaft doors
     WallOrientation = left
@@ -3962,15 +3962,6 @@ CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
     AddStairsWall 1, LeftWall, Concrete, 0.1, -8.5, 3.5, 8.5, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddStairsWall 1, CenterWall, Concrete, 0.1, 8.5, -3.5, 8.5, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddStairsWall 1, RightWall, Concrete, 0.1, -8.5, -3.5, 8.5, -3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
-<EndFloors>
-
-#elevator entry walls
-<Floors 0 to 141>
-    DrawWalls = true, true, false, false, false, false
-    AddWall ElevLeft, Wall1, 0, 1.7, 12.25, 2.5, 12.25, 8, 8, 0, 0, 0, 0, False
-    AddWall ElevRight, Wall1, 0, 1.7, 15.75, 2.5, 15.75, 8, 8, 0, 0, 0, 0, False
-    AddFloor ElevBottom, Ceiling1, 0, 2, 12.25, 2.7, 15.75, 0, 0, 0, 0, False
-    AddFloor ElevTop, Ceiling1, 0, 1.7, 12.25, 2.7, 15.75, 8, 8, 0, 0, False
 <EndFloors>
 
 # Main load-bearing columns
