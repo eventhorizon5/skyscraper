@@ -967,46 +967,46 @@ AddShaft 3, 2, -18.083, 0, -1, 16
 AddShaft 4, 2, 18.083, 0, -1, 28
 AddShaft 5, 2, -37.25, 0, -1, 16
 AddShaft 6, 2, 37.25, 0, -1, 28
-ShaftCut 1, -3.92, -13.5, 3.92, 13.5, 0, 5
-ShaftCut 2, -3.92, -13.5, 3.92, 13.5, 0, 5
-ShaftCut 3, -3.92, -13.5, 3.92, 13.5, 0, 5
-ShaftCut 4, -3.92, -13.5, 3.92, 13.5, 0, 5
-ShaftCut 5, -3.92, -13.5, 3.92, 13.5, 0, 5
-ShaftCut 6, -3.92, -13.5, 3.92, 13.5, 0, 5
+ShaftCut 1, -4.25, -13.5, 4.25 - 0.33, 13.5, 0, 5
+ShaftCut 2, -4.25 + 0.33, -13.5, 4.25, 13.5, 0, 5
+ShaftCut 3, -4.25, -13.5, 4.25 - 0.33, 13.5, 0, 5
+ShaftCut 4, -4.25 + 0.33, -13.5, 4.25, 13.5, 0, 5
+ShaftCut 5, -4.25, -13.5, 4.25 - 0.33, 13.5, 0, 5
+ShaftCut 6, -4.25 + 0.33, -13.5, 4.25, 13.5, 0, 5
 
 #office express shafts
 AddShaft 7, 2, -12.583, -38.75, -1, 42
 AddShaft 8, 2, 12.583, -38.75, -1, 42
-ShaftCut 7, -4.75, -14.75, 4.75, 14.75, 0, 5
-ShaftCut 8, -4.75, -14.75, 4.75, 14.75, 0, 5
+ShaftCut 7, -4.75, -14.75, 4.75 - 0.33, 14.75, 0, 5
+ShaftCut 8, -4.75 + 0.33, -14.75, 4.75, 14.75, 0, 5
 
 #Lobby/parking shafts
 AddShaft 9, 2, -46.95, -33, -1, 2
 AddShaft 10, 2, 46.95, -33, -1, 2
-ShaftCut 9, -4.25, -9, 4.25, 9, 0, 5
-ShaftCut 10, -4.25, -9, 4.25, 9, 0, 5
+ShaftCut 9, -4.25, -9, 4.25 - 0.33, 9, 0, 5
+ShaftCut 10, -4.25 + 0.33, -9, 4.25, 9, 0, 5
 
 #Residential express shafts
 AddShaft 11, 2, -39.166, 23.375, -1, 102
 AddShaft 12, 2, -19, 23.375, -1, 102
-ShaftCut 11, -4.75, -9.87, 4.75, 9.87, 0, 5
-ShaftCut 12, -4.75, -9.87, 4.75, 9.87, 0, 5
+ShaftCut 11, -4.75, -9.87, 4.75 - 0.33, 9.87, 0, 5
+ShaftCut 12, -4.75 + 0.33, -9.87, 4.75, 9.87, 0, 5
 
 #Hotel express shaft
 AddShaft 13, 2, 24.08, 18.08, -1, 82
-ShaftCut 13, -9.75, -4.75, 9.75, 4.75, 0, 5
+ShaftCut 13, -9.75, -4.75, 9.75, 4.75 - 0.33, 0, 5
 
 #Service/skydeck shaft
 AddShaft 14, 2, -9.417, 30.71, -1, 141
-ShaftCut 14, -4.92, -16.75, 4.92, 16.75, 0, 5
+ShaftCut 14, -4.92, -16.75, 4.92 - 0.33, 16.75 - 0.33, 0, 5
 
 #Upper express shaft
 AddShaft 15, 2, 9.083, 33.33, -1, 141
-ShaftCut 15, -4.75, -9.833, 4.75, 9.833, 0, 5
+ShaftCut 15, -4.75, -9.833, 4.75 - 0.33, 9.833, 0, 5
 
 #Service shaft 2
 AddShaft 16, 2, 9.375, 18.54, -1, 141
-ShaftCut 16, -5.04, -5.08, 5.04, 5.08, 0, 5
+ShaftCut 16, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
 
 #Core utility shaft
 AddShaft 17, 1, 0, 42.25, -1, 141
@@ -1017,30 +1017,30 @@ AddShaft 18, 2, -23.85, 9.25, 39, 62
 AddShaft 19, 2, -23.85, -10.75, 39, 52
 AddShaft 20, 2, 23.85, 9.25, 39, 79
 AddShaft 21, 2, 23.85, -10.75, 39, 72
-ShaftCut 18, -18, -4.25, 18, 4.25, 0, 5
-ShaftCut 19, -18, -4.25, 18, 4.25, 0, 5
-ShaftCut 20, -18, -4.25, 18, 4.25, 0, 5
-ShaftCut 21, -18, -4.25, 18, 4.25, 0, 5
+ShaftCut 18, -18, -4.25 + 0.33, 18, 4.25, 0, 5
+ShaftCut 19, -18, -4.25, 18, 4.25 - 0.33, 0, 5
+ShaftCut 20, -18, -4.25 + 0.33, 18, 4.25, 0, 5
+ShaftCut 21, -18, -4.25, 18, 4.25 - 0.33, 0, 5
 
 #Hotel local shafts
 AddShaft 22, 2, -14.67, -18.42, 79, 101
 AddShaft 23, 2, -14.67, -37.58, 79, 101
-ShaftCut 22, -9, -4.25, 9, 4.25, 0, 5
-ShaftCut 23, -9, -4.25, 9, 4.25, 0, 5
+ShaftCut 22, -9, -4.25 + 0.33, 9, 4.25, 0, 5
+ShaftCut 23, -9, -4.25, 9, 4.25 - 0.33, 0, 5
 
 #Pool express
 AddShaft 24, 2, -10.17, 9.25, 79, 134
-ShaftCut 24, -4.5, -4.25, 4.5, 4.25, 0, 5
+ShaftCut 24, -4.5, -4.25 + 0.33, 4.5, 4.25, 0, 5
 
 #Residential local shafts
 AddShaft 25, 2, -19.17, 9.25, 99, 131
 AddShaft 26, 2, -14.67, -9.25, 99, 131
 AddShaft 27, 2, 14.67, 9.25, 99, 119
 AddShaft 28, 2, 14.67, -9.25, 99, 119
-ShaftCut 25, -4.5, -4.25, 4.5, 4.25, 0, 5
-ShaftCut 26, -9, -4.25, 9, 4.25, 0, 5
-ShaftCut 27, -9, -4.25, 9, 4.25, 0, 5
-ShaftCut 28, -9, -4.25, 9, 4.25, 0, 5
+ShaftCut 25, -4.5, -4.25 + 0.33, 4.5, 4.25, 0, 5
+ShaftCut 26, -9, -4.25, 9, 4.25 - 0.33, 0, 5
+ShaftCut 27, -9, -4.25 + 0.33, 9, 4.25, 0, 5
+ShaftCut 28, -9, -4.25, 9, 4.25 - 0.33, 0, 5
 
 
 #Shaft Walls
@@ -2216,7 +2216,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 7
-    CreateElevator -11.833, -29.083, 0
+    CreateElevator -12.414, -29.083, 0
 <EndElevator>
 
 <Elevator 20>
@@ -2226,7 +2226,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 7
-    CreateElevator -11.833, -38.916, 0
+    CreateElevator -12.414, -38.916, 0
 <EndElevator>
 
 <Elevator 21>
@@ -2236,7 +2236,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 7
-    CreateElevator -11.833, -48.75, 0
+    CreateElevator -12.414, -48.75, 0
 <EndElevator>
 
 <Elevators 19 to 21>
@@ -2294,7 +2294,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 8
-    CreateElevator 11.833, -29.083, 0
+    CreateElevator 12.414, -29.083, 0
 <EndElevator>
 
 <Elevator 23>
@@ -2304,7 +2304,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 8
-    CreateElevator 11.833, -38.916, 0
+    CreateElevator 12.414, -38.916, 0
 <EndElevator>
 
 <Elevator 24>
@@ -2314,7 +2314,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 8
-    CreateElevator 11.833, -48.75, 0
+    CreateElevator 12.414, -48.75, 0
 <EndElevator>
 
 <Elevators 22 to 24>
@@ -2374,7 +2374,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0 - 1
     AssignedShaft = 10
-    CreateElevator 47.375, -28.75, 0
+    CreateElevator 46.656, -28.75, 0
 <EndElevator>
 
 <Elevator 26>
@@ -2384,7 +2384,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0 - 1
     AssignedShaft = 10
-    CreateElevator 47.375, -37.75, 0
+    CreateElevator 46.656, -37.75, 0
 <EndElevator>
 
 <Elevators 25 to 26>
@@ -2442,7 +2442,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0 - 1
     AssignedShaft = 9
-    CreateElevator -47.375, -28.75, 0
+    CreateElevator -46.656, -28.75, 0
 <EndElevator>
 
 <Elevator 28>
@@ -2452,7 +2452,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0 - 1
     AssignedShaft = 9
-    CreateElevator -47.375, -37.75, 0
+    CreateElevator -46.656, -37.75, 0
 <EndElevator>
 
 <Elevators 27 to 28>
@@ -2512,7 +2512,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 100
     AssignedShaft = 11
-    CreateElevator -38.583, 28.253, 0
+    CreateElevator -39.335, 28.253, 0
 <EndElevator>
 
 <Elevator 30>
@@ -2522,7 +2522,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 100
     AssignedShaft = 11
-    CreateElevator -38.583, 18.42, 0
+    CreateElevator -39.335, 18.42, 0
 <EndElevator>
 
 <Elevators 29 to 30>
@@ -2580,7 +2580,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 100
     AssignedShaft = 12
-    CreateElevator -19.583, 28.253, 0
+    CreateElevator -18.831, 28.253, 0
 <EndElevator>
 
 <Elevator 32>
@@ -2590,7 +2590,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 100
     AssignedShaft = 12
-    CreateElevator -19.583, 18.42, 0
+    CreateElevator -18.831, 18.42, 0
 <EndElevator>
 
 <Elevators 31 to 32>
@@ -2650,7 +2650,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 1, 134 - 136
     AssignedShaft = 15
-    CreateElevator 9.666, 38.42, 0
+    CreateElevator 9.252, 38.42, 0
 <EndElevator>
 
 <Elevator 34>
@@ -2660,7 +2660,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 1, 134 - 136
     AssignedShaft = 15
-    CreateElevator 9.666, 28.42, 0
+    CreateElevator 9.252, 28.42, 0
 <EndElevator>
 
 <Elevators 33 to 34>
@@ -2723,7 +2723,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 80
     AssignedShaft = 13
-    CreateElevator 19.083, 18.75, 0
+    CreateElevator 19.083, 18.249, 0
 <EndElevator>
 
 <Elevator 36>
@@ -2733,7 +2733,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 80
     AssignedShaft = 13
-    CreateElevator 28.917, 18.75, 0
+    CreateElevator 28.917, 18.249, 0
 <EndElevator>
 
 <Elevators 35 to 36>
@@ -2794,7 +2794,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0, 137
     AssignedShaft = 14
-    CreateElevator -9.166, 42.75, 0
+    CreateElevator -9.166, 42.879, 0
 
     #floor
     FloorOrientation = top
@@ -2853,7 +2853,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40 - 50
     AssignedShaft = 19
-    CreateElevator -37.25, -9.96, 40
+    CreateElevator -37.25, -10.456, 40
 <EndElevator>
 
 <Elevator 39>
@@ -2863,7 +2863,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40 - 50
     AssignedShaft = 19
-    CreateElevator -28.25, -9.96, 40
+    CreateElevator -28.25, -10.456, 40
 <EndElevator>
 
 <Elevator 40>
@@ -2873,7 +2873,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40 - 50
     AssignedShaft = 19
-    CreateElevator -19.25, -9.96, 40
+    CreateElevator -19.25, -10.456, 40
 <EndElevator>
 
 <Elevator 41>
@@ -2883,7 +2883,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40 - 50
     AssignedShaft = 19
-    CreateElevator -10.25, -9.96, 40
+    CreateElevator -10.25, -10.456, 40
 <EndElevator>
 
 <Elevators 38 to 41>
@@ -2953,7 +2953,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 61 - 70
     AssignedShaft = 21
-    CreateElevator 10.583, -9.96, 40
+    CreateElevator 10.583, -10.456, 40
 <EndElevator>
 
 <Elevator 43>
@@ -2963,7 +2963,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 61 - 70
     AssignedShaft = 21
-    CreateElevator 19.583, -9.96, 40
+    CreateElevator 19.583, -10.456, 40
 <EndElevator>
 
 <Elevator 44>
@@ -2973,7 +2973,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 61 - 70
     AssignedShaft = 21
-    CreateElevator 28.583, -9.96, 40
+    CreateElevator 28.583, -10.456, 40
 <EndElevator>
 
 <Elevator 45>
@@ -2983,7 +2983,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 61 - 70
     AssignedShaft = 21
-    CreateElevator 37.583, -9.96, 40
+    CreateElevator 37.583, -10.456, 40
 <EndElevator>
 
 <Elevators 42 to 45>
@@ -3053,7 +3053,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 51 - 60
     AssignedShaft = 18
-    CreateElevator -37.25, 8.625, 40
+    CreateElevator -37.25, 8.956, 40
 <EndElevator>
 
 <Elevator 47>
@@ -3063,7 +3063,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 51 - 60
     AssignedShaft = 18
-    CreateElevator -28.25, 8.625, 40
+    CreateElevator -28.25, 8.956, 40
 <EndElevator>
 
 <Elevator 48>
@@ -3073,7 +3073,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 51 - 60
     AssignedShaft = 18
-    CreateElevator -19.25, 8.625, 40
+    CreateElevator -19.25, 8.956, 40
 <EndElevator>
 
 <Elevator 49>
@@ -3083,7 +3083,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 51 - 60
     AssignedShaft = 18
-    CreateElevator -10.25, 8.625, 40
+    CreateElevator -10.25, 8.956, 40
 <EndElevator>
 
 <Elevators 46 to 49>
@@ -3153,7 +3153,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 71 - 78
     AssignedShaft = 20
-    CreateElevator 10.583, 8.625, 40
+    CreateElevator 10.583, 8.956, 40
 <EndElevator>
 
 <Elevator 51>
@@ -3163,7 +3163,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 71 - 78
     AssignedShaft = 20
-    CreateElevator 19.583, 8.625, 40
+    CreateElevator 19.583, 8.956, 40
 <EndElevator>
 
 <Elevator 52>
@@ -3173,7 +3173,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 71 - 78
     AssignedShaft = 20
-    CreateElevator 28.583, 8.625, 40
+    CreateElevator 28.583, 8.956, 40
 <EndElevator>
 
 <Elevator 53>
@@ -3183,7 +3183,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 40, 71 - 78
     AssignedShaft = 20
-    CreateElevator 37.583, 8.625, 40
+    CreateElevator 37.583, 8.956, 40
 <EndElevator>
 
 <Elevators 50 to 53>
@@ -3251,7 +3251,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 22
-    CreateElevator -19.167, -19.125, 80
+    CreateElevator -19.167, -18.714, 80
 <EndElevator>
 
 <Elevator 55>
@@ -3261,7 +3261,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 22
-    CreateElevator -10.167, -19.125, 80
+    CreateElevator -10.167, -18.714, 80
 <EndElevator>
 
 <Elevators 54 to 55>
@@ -3337,7 +3337,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 23
-    CreateElevator -19.167, -36.875, 80
+    CreateElevator -19.167, -37.286, 80
 <EndElevator>
 
 <Elevator 57>
@@ -3347,7 +3347,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 23
-    CreateElevator -10.167, -36.875, 80
+    CreateElevator -10.167, -37.286, 80
 <EndElevator>
 
 <Elevators 56 to 57>
@@ -3425,7 +3425,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 80, 100, 120 - 129, 132
     AssignedShaft = 24
-    CreateElevator -10.167, 8.541, 80
+    CreateElevator -10.167, 8.956, 80
     
     #floor
     FloorOrientation = top
@@ -3495,7 +3495,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 25
-    CreateElevator -19.25, 8.541, 100
+    CreateElevator -19.25, 8.956, 100
     
     #panel
     CreatePanel ElevExtPanels, 3, 6, back, -2.63, -2.7, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
@@ -3524,7 +3524,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 27
-    CreateElevator 10.25, 8.541, 100
+    CreateElevator 10.25, 8.956, 100
 <EndElevator>
 
 <Elevator 61>
@@ -3534,7 +3534,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 27
-    CreateElevator 19.25, 8.541, 100
+    CreateElevator 19.25, 8.956, 100
 <EndElevator>
 
 <Elevators 60 to 61>
@@ -3611,7 +3611,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 26
-    CreateElevator -10.167, -9.21, 100
+    CreateElevator -10.167, -8.956, 100
 <EndElevator>
 
 <Elevator 63>
@@ -3621,7 +3621,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 26
-    CreateElevator -19.25, -9.21, 100
+    CreateElevator -19.25, -8.956, 100
 <EndElevator>
 
 <Elevator 64>
@@ -3631,7 +3631,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 28
-    CreateElevator 10.25, -9.21, 100
+    CreateElevator 10.25, -8.956, 100
 <EndElevator>
 
 <Elevator 65>
@@ -3641,7 +3641,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 28
-    CreateElevator 19.25, -9.21, 100
+    CreateElevator 19.25, -8.956, 100
 <EndElevator>
 
 <Elevators 62 to 63>
@@ -3741,7 +3741,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0 - 138
     AssignedShaft = 14
-    CreateElevator -8.46, 18.542, 0
+    CreateElevator -9.453, 18.542, 0
 
     #floor
     FloorOrientation = top
@@ -3799,7 +3799,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0 - 138
     AssignedShaft = 16
-    CreateElevator 8.46, 18.542, 0
+    CreateElevator 9.291, 18.542, 0
 
     #floor
     FloorOrientation = top
@@ -3859,7 +3859,7 @@ DrawWalls = true, true, false, false, false, false
     OpenSpeed = 0.2
     ServicedFloors = 0 - 138
     AssignedShaft = 14
-    CreateElevator -8.75, 30.375, 0
+    CreateElevator -9.245, 30.375, 0
 
     #floor
     FloorOrientation = top
