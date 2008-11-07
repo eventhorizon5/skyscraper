@@ -2268,8 +2268,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.76, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 4.06, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 4.051, 0, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -2346,8 +2346,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.76, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, -4.06, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, -3.751, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, -4.051, 0, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -2554,8 +2554,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.76, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 4.06, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 4.051, 0, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -2622,8 +2622,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.76, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, -4.06, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, -3.751, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, -4.051, 0, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -2692,8 +2692,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.76, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 4.06, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 4.051, 0, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -2766,8 +2766,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.751, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 4.051, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -2825,8 +2825,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.751, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 4.051, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -2916,8 +2916,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -3016,8 +3016,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -3116,8 +3116,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -3216,8 +3216,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -3294,8 +3294,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -3380,8 +3380,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -3456,8 +3456,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -3595,8 +3595,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
     WallOrientation = left
  
     #Floor Indicator
@@ -3723,8 +3723,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.76, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 4.06, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 2, 2 #shaft doors
     WallOrientation = left
 
     #Floor Indicator
@@ -3771,8 +3771,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.76, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 4.06, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.626, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 3.926, 0, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -3829,8 +3829,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, -3.76, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, -4.06, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, -3.626, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, -3.926, 0, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
@@ -3889,8 +3889,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.76, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 4.06, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.918, 0, 3.5, 8, false, 2, 2 #doors
+    AddShaftDoors ElevDoors, 0.2, 4.218, 0, 2, 2 #shaft doors
     WallOrientation = left
 
     #panel
