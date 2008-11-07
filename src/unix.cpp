@@ -24,6 +24,7 @@
 */
 
 #include <string>
+#include <algorithm>
 #include "unix.h"
 
 #ifndef CS_PLATFORM_WIN32
