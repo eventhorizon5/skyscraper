@@ -1493,7 +1493,7 @@ void Elevator::ShaftDoorsEnabled(int floor, bool value)
 {
 	//turns shaft elevator doors on/off
 
-	int index = ServicedFloors.Find(floor);
+	uint index = ServicedFloors.Find(floor);
 	if (index == csArrayItemNotFound)
 		return;
 

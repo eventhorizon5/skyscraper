@@ -2053,7 +2053,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 
 	//step through each polygon
 	polycount = state->GetPolygonCount();
-	for (size_t i = 0; i < polycount; i++)
+	for (int i = 0; i < polycount; i++)
 	{
 		temppoly.MakeEmpty();
 		temppoly2.MakeEmpty();
@@ -2092,7 +2092,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 				if (cutwalls == true)
 				{
 					//wall
-					if (abs(extentsx.x - extentsx.y) > abs(extentsz.x - extentsz.y))
+					if (abs(int(extentsx.x - extentsx.y)) > abs(int(extentsz.x - extentsz.y)))
 					{
 						//wall is facing forward/backward
 
@@ -2184,10 +2184,10 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 									wall2b = true;
 								wall2a = true;
 								extent = GetExtents(temppoly5, 1).x + mesh_origin.x;
-								if (wall2b == false || (wall2b == true && abs(extent - object_origin.x) > abs(wall_extents_x.x - object_origin.x)))
+								if (wall2b == false || (wall2b == true && abs(int(extent - object_origin.x)) > abs(int(wall_extents_x.x - object_origin.x))))
 									wall_extents_x.x = extent;
 								extent = GetExtents(temppoly5, 3).x + mesh_origin.z;
-								if (wall2b == false || (wall2b == true && abs(extent - object_origin.z) > abs(wall_extents_z.x - object_origin.z)))
+								if (wall2b == false || (wall2b == true && abs(int(extent - object_origin.z)) > abs(int(wall_extents_z.x - object_origin.z))))
 									wall_extents_z.x = extent;
 								wall_extents_y = GetExtents(temppoly5, 2) + mesh_origin.y;
 							}
@@ -2198,10 +2198,10 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 									wall1b = true;
 								wall1a = true;
 								extent = GetExtents(temppoly5, 1).y + mesh_origin.x;
-								if (wall1b == false || (wall1b == true && abs(extent - object_origin.x) < abs(wall_extents_x.y - object_origin.x)))
+								if (wall1b == false || (wall1b == true && abs(int(extent - object_origin.x)) < abs(int(wall_extents_x.y - object_origin.x))))
 									wall_extents_x.y = extent;
 								extent = GetExtents(temppoly5, 3).y + mesh_origin.z;
-								if (wall1b == false || (wall1b == true && abs(extent - object_origin.z) < abs(wall_extents_z.y - object_origin.z)))
+								if (wall1b == false || (wall1b == true && abs(int(extent - object_origin.z)) < abs(int(wall_extents_z.y - object_origin.z))))
 									wall_extents_z.y = extent;
 							}
 						}
@@ -2346,7 +2346,7 @@ int SBS::AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, fl
 		wall2a = false;
 		wall2b = false;
 		DrawWalls(true, true, false, false, false, false);
-		if (abs(wall_extents_x.x - wall_extents_x.y) > abs(wall_extents_z.x - wall_extents_z.y))
+		if (abs(int(wall_extents_x.x - wall_extents_x.y)) > abs(int(wall_extents_z.x - wall_extents_z.y)))
 		{
 			//doorway is facing forward/backward
 			index = AddWallMain(mesh, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.x, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th);
