@@ -1526,7 +1526,7 @@ ShaftCut 28, -9, -4.25, 9, 4.25 - 0.33, 0, 5
     AddShaftWall 23, Shaft23Front, Brick, 0.33, -9, -4.25, 9, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 23, Shaft23Left, Brick, 0.33, -9, -4.25, -9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
-    #AddShaftWall 23, Shaft23Back, Brick, 0.33, -9, 4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 23, Shaft23Back, Brick, 0.33, -9, 4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 23, Shaft23Right, Brick, 0.33, 9, -4.25, 9, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
 
     #external shaft walls
