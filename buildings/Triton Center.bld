@@ -36,7 +36,7 @@
     Load data/lobbyfront.jpg, LobbyFront
     Load data/windows11h.jpg, MainWindows
     Load data/granite.jpg, Granite
-    Load data/symb5.jpg, Marble3
+    Load data/symb5.jpg, Wood3
     Load data/marb047.jpg, Marble4
     Load data/elev1.jpg, Elev1
     Load data/textur15.jpg, Wood1
@@ -167,16 +167,6 @@
     WallOrientation = right
     AddWall Right, LobbyFront, 0.5, 75 - 0.1, -70 + 0.1, 75 - 0.1, 70 - 0.1, %1% * 3, %1% * 3, 2.24, 2.24, 0.3, 1, True
     AddWall Back, LobbyFront, 0.5, 75 - 0.1, 70 - 0.1, -75 + 0.1, 70 - 0.1, %1% * 3, %1% * 3, 2.24, 2.24, 0.3, 1, True
-
-    #walls
-
-    #sample walls
-    #WallOrientation = right
-    #AddWall LeftTest, Wall1, 0.3, 2, 8.7, 2, 19.3, %height%, %height%, 0, 0, 0, 0, False
-    #AddWall FrontTest, Wall1, 0.3, 1.7, 9, 11.3, 9, %height%, %height%, 0, 0, 0, 0, False
-    #WallOrientation = left
-    #AddWall RightTest, Wall1, 0.3, 11, 8.7, 11, 19.3, %height%, %height%, 0, 0, 0, 0, False
-    #AddWall BackTest, Wall1, 0.3, 1.7, 19, 11.3, 19, %height%, %height%, 0, 0, 0, 0, False
 <EndFloor>
 
 #mezzanine
@@ -185,15 +175,14 @@
     Name = Mezzanine
     Type = Mezzanine
     Description = Mezzanine level above lobby
-    Height = 24.48
-    InterfloorHeight = 0
+    Height = 22.98
+    InterfloorHeight = 1.5
     Group = 0 #enable lobby also, since both are merged
 
     FloorOrientation = top
     AddFloor Floor, Granite, 0.5, -42.5, -25.8, 42.5, 25.8, 0, 0, 0, 0, False
     FloorOrientation = bottom
     AddFloor Ceiling, Marble4, 0.5, -75, -70, 75, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
-
 <EndFloor>
 
 #zone 1 skeleton
@@ -207,7 +196,7 @@
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, -75, -70, 75, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Wood3, 0.5, -75, -70, 75, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -326,7 +315,7 @@
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, -63, -70, 63, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Wood3, 0.5, -63, -70, 63, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -447,7 +436,7 @@
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, -51, -70, 51, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Wood3, 0.5, -51, -70, 51, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -603,7 +592,7 @@
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Wood3, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
@@ -700,7 +689,7 @@
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, -39, 0, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Wood3, 0.5, -39, 0, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
     
     #External walls
     WallOrientation = left
@@ -746,11 +735,11 @@
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Wood3, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #cover over interfloor gap
     WallOrientation = left
-    AddWall Filler, Marble3, 0.2, -39, 0, 39, 0, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, False
+    AddWall Filler, Wood3, 0.2, -39, 0, 39, 0, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -784,7 +773,7 @@
 
     #Ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Marble3, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Wood3, 0.5, -39, -70, 39, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     WallOrientation = left
