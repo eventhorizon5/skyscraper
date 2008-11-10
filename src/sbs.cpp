@@ -2260,8 +2260,7 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 
 				//delete original polygon
 				state->RemovePolygon(i);
-				if (i > 0)
-					i--;
+				i--;
 				polycount--;
 
 				//create splitted polygons
