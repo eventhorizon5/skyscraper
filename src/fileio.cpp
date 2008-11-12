@@ -933,7 +933,7 @@ recalc:
 				//if (temp3 < 0 !! temp3 > UBound(UserVariable))
 					//Err.Raise 1001
 				UserVariable[temp3] = Calc(temp2);
-				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+				//Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 			}
 
 			//CallButtonElevators command
