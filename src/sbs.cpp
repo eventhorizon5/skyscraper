@@ -1434,6 +1434,11 @@ csString SBS::Calc(const char *expression)
 						two = "";
 					tmpcalc = one + newdata + two;
 				}
+				else
+				{
+					ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+					return "false";
+				}
 			}
 			else
 				break;
@@ -1444,6 +1449,7 @@ csString SBS::Calc(const char *expression)
 		do
 		{
 			operators = 0;
+			end = 0;
 			for (int i = 1; i < tmpcalc.Length(); i++)
 			{
 				if (tmpcalc.GetAt(i) == '+' || tmpcalc.GetAt(i) == '/' || tmpcalc.GetAt(i) == '*')
@@ -1458,6 +1464,11 @@ csString SBS::Calc(const char *expression)
 					if (operators == 2)
 						end = i;
 				}
+			}
+			if (end >= tmpcalc.Length() - 1 && operators > 0)
+			{
+				ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+				return "false";
 			}
 			if (operators > 1)
 			{
