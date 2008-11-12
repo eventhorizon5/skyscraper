@@ -85,11 +85,55 @@ Shaft::~Shaft()
 
 int Shaft::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
-	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th);
+	float tw2 = tw;
+	float th2;
+	float tempw1;
+	float tempw2;
+
+	//Set horizontal scaling
+	x1 = x1 * sbs->HorizScale;
+	x2 = x2 * sbs->HorizScale;
+	z1 = z1 * sbs->HorizScale;
+	z2 = z2 * sbs->HorizScale;
+
+	//Call texture autosizing formulas
+	if (z1 == z2)
+		tw2 = AutoSize(x1, x2, true, false, tw);
+	if (x1 == x2)
+		tw2 = AutoSize(z1, z2, true, false, tw);
+	if ((z1 != z2) && (x1 != x2))
+	{
+		//calculate diagonals
+		if (x1 > x2)
+			tempw1 = x1 - x2;
+		else
+			tempw1 = x2 - x1;
+		if (z1 > z2)
+			tempw2 = z1 - z2;
+		else
+			tempw2 = z2 - z1;
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, false, tw);
+	}
+	th2 = AutoSize(0, height1, false, false, th);
+
+	return sbs->AddWallMain(ShaftArray_state[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw2, th2);
 }
 
 int Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
+	float tw2;
+	float th2;
+	
+	//Set horizontal scaling
+	x1 = x1 * sbs->HorizScale;
+	x2 = x2 * sbs->HorizScale;
+	z1 = z1 * sbs->HorizScale;
+	z2 = z2 * sbs->HorizScale;
+
+	//Call texture autosizing formulas
+	tw2 = AutoSize(x1, x2, true, false, tw);
+	th2 = AutoSize(z1, z2, false, false, th);
+
 	//get shaft extents
 	float altitude = sbs->GetFloor(floor)->Altitude;
 
@@ -102,7 +146,7 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw, th);
+	return sbs->AddFloorMain(ShaftArray_state[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw2, th2);
 }
 
 void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
