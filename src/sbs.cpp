@@ -1386,66 +1386,149 @@ csString SBS::Calc(const char *expression)
 {
 	//performs a calculation operation on a string
 	//for example, the string "1 + 1" would output to "2"
+	//supports multiple and nested operations (within parenthesis)
 
 	int temp1;
 	csString tmpcalc = expression;
 	char buffer[20];
-	tmpcalc.Trim();
 	csString one;
 	csString two;
+	int start, end;
 
-	//general math
-	temp1 = tmpcalc.Find("+", 1);
-	if (temp1 > 0)
+	//first remove all whitespace from the string
+	tmpcalc.ReplaceAll(" ", "");
+
+	if (tmpcalc.Find("=", 0) == -1 && tmpcalc.Find("!", 0) == -1 && tmpcalc.Find("<", 0) == -1 && tmpcalc.Find(">", 0) == -1)
 	{
-		one = tmpcalc.Slice(0, temp1).Trim();
-		two = tmpcalc.Slice(temp1 + 1).Trim();
-		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		//find parenthesis
+		do
 		{
-			tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-			return tmpcalc.GetData();
-		}
-	}
-	temp1 = tmpcalc.Find("-", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.Slice(0, temp1).Trim();
-		two = tmpcalc.Slice(temp1 + 1).Trim();
-		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+			start = tmpcalc.Find("(", 0);
+			if (start >= 0)
+			{
+				//find matching parenthesis
+				int match = 1;
+				int end = -1;
+				for (int i = start + 1; i < tmpcalc.Length(); i++)
+				{
+					if (tmpcalc.GetAt(i) == '(')
+						match++;
+					if (tmpcalc.GetAt(i) == ')')
+						match--;
+					if (match == 0)
+					{
+						end = i;
+						break;
+					}
+				}
+				if (end != -1)
+				{
+					//call function recursively
+					csString newdata;
+					newdata = Calc(tmpcalc.Slice(start + 1, end - start - 1));
+					//construct new string
+					one = tmpcalc.Slice(0, start);
+					if (end < tmpcalc.Length() - 1)
+						two = tmpcalc.Slice(end + 1);
+					else
+						two = "";
+					tmpcalc = one + newdata + two;
+				}
+			}
+			else
+				break;
+		} while (1 == 1);
+
+		//find number of operators and recurse if multiple found
+		int operators;
+		do
 		{
-			tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			operators = 0;
+			for (int i = 1; i < tmpcalc.Length(); i++)
+			{
+				if (tmpcalc.GetAt(i) == '+' || tmpcalc.GetAt(i) == '/' || tmpcalc.GetAt(i) == '*')
+				{
+					operators++;
+					if (operators == 2)
+						end = i;
+				}
+				if (tmpcalc.GetAt(i) == '-' && tmpcalc.GetAt(i - 1) != '-' && tmpcalc.GetAt(i - 1) != '+' && tmpcalc.GetAt(i - 1) != '/' && tmpcalc.GetAt(i - 1) != '*')
+				{
+					operators++;
+					if (operators == 2)
+						end = i;
+				}
+			}
+			if (operators > 1)
+			{
+				csString newdata;
+				newdata = Calc(tmpcalc.Slice(0, end));
+				//construct new string
+				two = tmpcalc.Slice(end);
+				tmpcalc = newdata + two;
+			}
+			else
+				break;
+		} while (1 == 1);
+		
+		//return value if none found
+		if (operators == 0)
 			return tmpcalc.GetData();
-		}
-	}
-	temp1 = tmpcalc.Find("/", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.Slice(0, temp1).Trim();
-		two = tmpcalc.Slice(temp1 + 1).Trim();
-		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+	
+		//otherwise perform math
+		temp1 = tmpcalc.Find("+", 1);
+		if (temp1 > 0)
 		{
-			tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-			return tmpcalc.GetData();
+			one = tmpcalc.Slice(0, temp1);
+			two = tmpcalc.Slice(temp1 + 1);
+			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+			{
+				tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
+				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+				return tmpcalc.GetData();
+			}
 		}
-	}
-	temp1 = tmpcalc.Find("*", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.Slice(0, temp1).Trim();
-		two = tmpcalc.Slice(temp1 + 1).Trim();
-		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		temp1 = tmpcalc.Find("-", 1);
+		if (temp1 > 0)
 		{
-			tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-			return tmpcalc.GetData();
+			one = tmpcalc.Slice(0, temp1);
+			two = tmpcalc.Slice(temp1 + 1);
+			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+			{
+				tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
+				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+				return tmpcalc.GetData();
+			}
 		}
+		temp1 = tmpcalc.Find("/", 1);
+		if (temp1 > 0)
+		{
+			one = tmpcalc.Slice(0, temp1);
+			two = tmpcalc.Slice(temp1 + 1);
+			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+			{
+				tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
+				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+				return tmpcalc.GetData();
+			}
+		}
+		temp1 = tmpcalc.Find("*", 1);
+		if (temp1 > 0)
+		{
+			one = tmpcalc.Slice(0, temp1);
+			two = tmpcalc.Slice(temp1 + 1);
+			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+			{
+				tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
+				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+				return tmpcalc.GetData();
+			}
+		}
+		return tmpcalc.GetData();
 	}
 
 	//boolean operators
