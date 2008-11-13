@@ -40,6 +40,7 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_SHOW(MainScreen::OnShow)
   EVT_ICONIZE(MainScreen::OnIconize)
   EVT_SIZE(MainScreen::OnSize)
+  EVT_CLOSE(MainScreen::OnClose)
 END_EVENT_TABLE()
 
 SBS *Simcore;
@@ -130,6 +131,7 @@ bool Skyscraper::OnInit(void)
 int Skyscraper::OnExit()
 {
 	//clean up
+	Simcore->Stop();
 	dpanel->timer->Stop();
 	dpanel->Destroy();
 	delete Simcore;
@@ -167,6 +169,13 @@ void MainScreen::OnShow(wxShowEvent& event)
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 	panel->SetSize(this->GetClientSize());
+}
+
+void MainScreen::OnClose(wxCloseEvent& event)
+{
+	Simcore->Stop();
+	dpanel->timer->Stop();
+	wxGetApp().Exit();
 }
 
 void MainScreen::ShowWindow()

@@ -39,6 +39,7 @@ public:
 	void OnIconize(wxIconizeEvent& event);
 	void OnShow(wxShowEvent& event);
     void OnSize(wxSizeEvent& event);
+	void OnClose(wxCloseEvent& event);
 	void ShowWindow();
 	wxPanel *panel;
 

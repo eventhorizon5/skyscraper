@@ -2458,3 +2458,9 @@ int SBS::AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, fl
 	}
 	return index;
 }
+
+void SBS::Stop()
+{
+	//stop timer
+	p->Stop();
+}
