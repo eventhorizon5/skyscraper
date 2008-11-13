@@ -65,6 +65,7 @@ int SBS::LoadBuilding(const char * filename)
 	csString Context = "None";
 	char intbuffer[65];
 	csString buffer;
+	int startpos = 0;
 
 	while (i < BuildingData.GetSize() - 1)
 	{
@@ -203,33 +204,52 @@ int SBS::LoadBuilding(const char * filename)
 			Report("Script breakpoint reached");
 		}
 
-		//User variable conversion
-		temp1 = LineData.Find("%", 0);
-		if (temp1 > 0)
-			temp3 = LineData.Find("%", temp1 + 1);
-		else
-			temp3 = 0;
-
-		if (temp1 + temp3 > 0)
+		startpos = 0;
+		do
 		{
-			temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
-			if (IsNumeric(temp2.GetData()) == true)
+			//User variable conversion
+			temp1 = LineData.Find("%", startpos);
+			if (temp1 > startpos)
 			{
-				//if (temp2 < 0 !! temp2 > UBound(UserVariable))
-					//Err.Raise 1001
-				while (temp1 + temp3 > 0)
+				temp3 = LineData.Find("%", temp1 + 1);
+				if (temp3 < LineData.Length() - 1)
+					startpos = temp3 + 1;
+				else
 				{
-					LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
-					temp1 = LineData.Find("%", 0);
-					if (temp1 > 0)
-						temp3 = LineData.Find("%", temp1 + 1);
-					else
-						temp3 = 0;
-					if (temp1 + temp3 > 0)
-						temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
+					temp1 = 0;
+					temp3 = 0;
+					break;
 				}
 			}
-		}
+			else
+			{
+				//none (or no more) variables found
+				temp1 = 0;
+				temp3 = 0;
+				break;
+			}
+
+			if (temp1 + temp3 > 0)
+			{
+				temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
+				if (IsNumeric(temp2.GetData()) == true)
+				{
+					//if (temp2 < 0 !! temp2 > UBound(UserVariable))
+						//Err.Raise 1001
+					while (temp1 + temp3 > 0)
+					{
+						LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
+						temp1 = LineData.Find("%", 0);
+						if (temp1 > 0)
+							temp3 = LineData.Find("%", temp1 + 1);
+						else
+							temp3 = 0;
+						if (temp1 + temp3 > 0)
+							temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
+					}
+				}
+			}
+		} while (1 == 1);
 
 		//Floor object conversion
 		temp5 = csString(LineData).Downcase().Find("floor(", 0);
