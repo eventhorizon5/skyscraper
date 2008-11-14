@@ -202,6 +202,7 @@ int SBS::LoadBuilding(const char * filename)
 		{
 			//breakpoint function for debugging scripts
 			Report("Script breakpoint reached");
+			goto Nextline;
 		}
 
 		startpos = 0;
