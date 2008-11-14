@@ -237,17 +237,7 @@ int SBS::LoadBuilding(const char * filename)
 				{
 					//if (temp2 < 0 !! temp2 > UBound(UserVariable))
 						//Err.Raise 1001
-					while (temp1 + temp3 > 0)
-					{
-						LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
-						temp1 = LineData.Find("%", 0);
-						if (temp1 > 0)
-							temp3 = LineData.Find("%", temp1 + 1);
-						else
-							temp3 = 0;
-						if (temp1 + temp3 > 0)
-							temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
-					}
+					LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
 				}
 			}
 		} while (1 == 1);
