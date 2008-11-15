@@ -697,6 +697,56 @@
 										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+											<label>AccelJerk:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtAccelJerk" variable="txtAccelJerk" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetAccelJerk" variable="bSetAccelJerk" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT29" variable="StaticText29" member="yes">
+											<label>DecelJerk:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDecelJerk" variable="txtDecelJerk" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetDecelJerk" variable="bSetDecelJerk" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT26" variable="StaticText26" member="yes">
 											<label>Rate:</label>
 										</object>
@@ -746,6 +796,28 @@
 									</object>
 									<object class="spacer">
 										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
+											<label>JerkRate:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtJerkRate" variable="txtJerkRate" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
 									</object>
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
