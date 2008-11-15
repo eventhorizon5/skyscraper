@@ -1779,30 +1779,36 @@ DrawWalls = true, true, false, false, false, false
 
 #Office Zone1 Locals 27-37
 <Elevator 1>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 1
     CreateElevator -9.289, 9, 0
 <EndElevator>
 
 <Elevator 2>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 1
     CreateElevator -9.289, 0, 0
 <EndElevator>
 
 <Elevator 3>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 1
     CreateElevator -9.289, -9, 0
@@ -1867,30 +1873,36 @@ DrawWalls = true, true, false, false, false, false
 <EndElevators>
 
 <Elevator 4>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 2
     CreateElevator 9.289, 9, 0
 <EndElevator>
 
 <Elevator 5>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 2
     CreateElevator 9.289, 0, 0
 <EndElevator>
 
 <Elevator 6>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 27 - 37
     AssignedShaft = 2
     CreateElevator 9.289, -9, 0
@@ -1957,30 +1969,36 @@ DrawWalls = true, true, false, false, false, false
 
 #Office Zone1 Locals 15-26
 <Elevator 7>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 15 - 26
     AssignedShaft = 4
     CreateElevator 18.377, 9, 0
 <EndElevator>
 
 <Elevator 8>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 15 - 26
     AssignedShaft = 4
     CreateElevator 18.377, 0, 0
 <EndElevator>
 
 <Elevator 9>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 15 - 26
     AssignedShaft = 4
     CreateElevator 18.377, -9, 0
@@ -2046,30 +2064,36 @@ DrawWalls = true, true, false, false, false, false
 <EndElevators>
 
 <Elevator 10>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 15 - 26
     AssignedShaft = 6
     CreateElevator 36.956, 9, 0
 <EndElevator>
 
 <Elevator 11>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 15 - 26
     AssignedShaft = 6
     CreateElevator 36.956, 0, 0
 <EndElevator>
 
 <Elevator 12>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 15 - 26
     AssignedShaft = 6
     CreateElevator 36.956, -9, 0
@@ -2137,30 +2161,36 @@ DrawWalls = true, true, false, false, false, false
 
 #Office Zone1 Locals 2-14
 <Elevator 13>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 2 - 14
     AssignedShaft = 5
     CreateElevator -36.956, 9, 0
 <EndElevator>
 
 <Elevator 14>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 2 - 14
     AssignedShaft = 5
     CreateElevator -36.956, 0, 0
 <EndElevator>
 
 <Elevator 15>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 2 - 14
     AssignedShaft = 5
     CreateElevator -36.956, -9, 0
@@ -2227,30 +2257,36 @@ DrawWalls = true, true, false, false, false, false
 <EndElevators>
 
 <Elevator 16>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 2 - 14
     AssignedShaft = 3
     CreateElevator -18.377, 9, 0
 <EndElevator>
 
 <Elevator 17>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 2 - 14
     AssignedShaft = 3
     CreateElevator -18.377, 0, 0
 <EndElevator>
 
 <Elevator 18>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 2 - 14
     AssignedShaft = 3
     CreateElevator -18.377, -9, 0
@@ -2320,9 +2356,11 @@ DrawWalls = true, true, false, false, false, false
 #Office Express
 <Elevator 19>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 7
     CreateElevator -12.414, -29.083, 0
@@ -2330,9 +2368,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 20>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 7
     CreateElevator -12.414, -38.916, 0
@@ -2340,9 +2380,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 21>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 7
     CreateElevator -12.414, -48.75, 0
@@ -2398,9 +2440,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 22>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 8
     CreateElevator 12.414, -29.083, 0
@@ -2408,9 +2452,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 23>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 8
     CreateElevator 12.414, -38.916, 0
@@ -2418,9 +2464,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 24>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 40
     AssignedShaft = 8
     CreateElevator 12.414, -48.75, 0
@@ -2477,20 +2525,24 @@ DrawWalls = true, true, false, false, false, false
 
 #Parking, LL and Mezzanine elevators
 <Elevator 25>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0 - 1
     AssignedShaft = 10
     CreateElevator 47.244, -28.75, 0
 <EndElevator>
 
 <Elevator 26>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0 - 1
     AssignedShaft = 10
     CreateElevator 47.244, -37.75, 0
@@ -2545,20 +2597,24 @@ DrawWalls = true, true, false, false, false, false
 <EndElevators>
 
 <Elevator 27>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0 - 1
     AssignedShaft = 9
     CreateElevator -47.244, -28.75, 0
 <EndElevator>
 
 <Elevator 28>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0 - 1
     AssignedShaft = 9
     CreateElevator -47.244, -37.75, 0
@@ -2616,9 +2672,11 @@ DrawWalls = true, true, false, false, false, false
 #Residential Express
 <Elevator 29>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 100
     AssignedShaft = 11
     CreateElevator -38.997, 28.253, 0
@@ -2626,9 +2684,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 30>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 100
     AssignedShaft = 11
     CreateElevator -38.997, 18.42, 0
@@ -2684,9 +2744,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 31>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 100
     AssignedShaft = 12
     CreateElevator -19.169, 28.253, 0
@@ -2694,9 +2756,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 32>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 100
     AssignedShaft = 12
     CreateElevator -19.169, 18.42, 0
@@ -2754,9 +2818,11 @@ DrawWalls = true, true, false, false, false, false
 #Upper Express
 <Elevator 33>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 1, 134 - 136
     AssignedShaft = 15
     CreateElevator 9.252, 38.42, 0
@@ -2764,9 +2830,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 34>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 1, 134 - 136
     AssignedShaft = 15
     CreateElevator 9.252, 28.42, 0
@@ -2827,9 +2895,11 @@ DrawWalls = true, true, false, false, false, false
 #Hotel Express
 <Elevator 35>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 80
     AssignedShaft = 13
     CreateElevator 19.083, 18.249, 0
@@ -2837,9 +2907,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 36>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 80
     AssignedShaft = 13
     CreateElevator 28.917, 18.249, 0
@@ -2898,9 +2970,11 @@ DrawWalls = true, true, false, false, false, false
 #Skydeck Express
 <Elevator 37>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 137
     AssignedShaft = 14
     CreateElevator -9.166, 42.879, 0
@@ -2956,40 +3030,48 @@ DrawWalls = true, true, false, false, false, false
 
 #Office Zone2 locals 41-50
 <Elevator 38>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40 - 50
     AssignedShaft = 19
     CreateElevator -37.25, -10.456, 40
 <EndElevator>
 
 <Elevator 39>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40 - 50
     AssignedShaft = 19
     CreateElevator -28.25, -10.456, 40
 <EndElevator>
 
 <Elevator 40>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40 - 50
     AssignedShaft = 19
     CreateElevator -19.25, -10.456, 40
 <EndElevator>
 
 <Elevator 41>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40 - 50
     AssignedShaft = 19
     CreateElevator -10.25, -10.456, 40
@@ -3056,40 +3138,48 @@ DrawWalls = true, true, false, false, false, false
 
 #Office Zone2 locals 61-70
 <Elevator 42>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 61 - 70
     AssignedShaft = 21
     CreateElevator 10.583, -10.456, 40
 <EndElevator>
 
 <Elevator 43>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 61 - 70
     AssignedShaft = 21
     CreateElevator 19.583, -10.456, 40
 <EndElevator>
 
 <Elevator 44>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 61 - 70
     AssignedShaft = 21
     CreateElevator 28.583, -10.456, 40
 <EndElevator>
 
 <Elevator 45>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 61 - 70
     AssignedShaft = 21
     CreateElevator 37.583, -10.456, 40
@@ -3156,40 +3246,48 @@ DrawWalls = true, true, false, false, false, false
 
 #Office Zone2 locals 51-60
 <Elevator 46>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 51 - 60
     AssignedShaft = 18
     CreateElevator -37.25, 8.956, 40
 <EndElevator>
 
 <Elevator 47>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 51 - 60
     AssignedShaft = 18
     CreateElevator -28.25, 8.956, 40
 <EndElevator>
 
 <Elevator 48>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 51 - 60
     AssignedShaft = 18
     CreateElevator -19.25, 8.956, 40
 <EndElevator>
 
 <Elevator 49>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 51 - 60
     AssignedShaft = 18
     CreateElevator -10.25, 8.956, 40
@@ -3256,40 +3354,48 @@ DrawWalls = true, true, false, false, false, false
 
 #Office Zone2 locals 71-78
 <Elevator 50>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 71 - 78
     AssignedShaft = 20
     CreateElevator 10.583, 8.956, 40
 <EndElevator>
 
 <Elevator 51>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 71 - 78
     AssignedShaft = 20
     CreateElevator 19.583, 8.956, 40
 <EndElevator>
 
 <Elevator 52>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 71 - 78
     AssignedShaft = 20
     CreateElevator 28.583, 8.956, 40
 <EndElevator>
 
 <Elevator 53>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 40, 71 - 78
     AssignedShaft = 20
     CreateElevator 37.583, 8.956, 40
@@ -3354,20 +3460,24 @@ DrawWalls = true, true, false, false, false, false
 
 #Hotel locals 82-99
 <Elevator 54>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 22
     CreateElevator -19.167, -18.714, 80
 <EndElevator>
 
 <Elevator 55>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 22
     CreateElevator -10.167, -18.714, 80
@@ -3440,20 +3550,24 @@ DrawWalls = true, true, false, false, false, false
 <EndElevators>
 
 <Elevator 56>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 23
     CreateElevator -19.167, -37.286, 80
 <EndElevator>
 
 <Elevator 57>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 23
     CreateElevator -10.167, -37.286, 80
@@ -3528,10 +3642,12 @@ DrawWalls = true, true, false, false, false, false
 
 #Pool express
 <Elevator 58>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 16
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 80, 100, 120 - 129, 132
     AssignedShaft = 24
     CreateElevator -10.167, 8.956, 80
@@ -3598,10 +3714,12 @@ DrawWalls = true, true, false, false, false, false
 
 #Residential locals
 <Elevator 59>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 25
     CreateElevator -19.25, 8.956, 100
@@ -3627,20 +3745,24 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevator 60>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 27
     CreateElevator 10.25, 8.956, 100
 <EndElevator>
 
 <Elevator 61>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 27
     CreateElevator 19.25, 8.956, 100
@@ -3714,40 +3836,48 @@ DrawWalls = true, true, false, false, false, false
 <EndElevators>
 
 <Elevator 62>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 26
     CreateElevator -10.167, -8.956, 100
 <EndElevator>
 
 <Elevator 63>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 26
     CreateElevator -19.25, -8.956, 100
 <EndElevator>
 
 <Elevator 64>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 28
     CreateElevator 10.25, -8.956, 100
 <EndElevator>
 
 <Elevator 65>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 100, 102 - 118
     AssignedShaft = 28
     CreateElevator 19.25, -8.956, 100
@@ -3845,9 +3975,11 @@ DrawWalls = true, true, false, false, false, false
 #Service Elevators
 <Elevator 66>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0 - 138
     AssignedShaft = 14
     CreateElevator -8.953, 18.542, 0
@@ -3903,9 +4035,11 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 67>
     Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Acceleration = 0.3
+    Deceleration = 0.3
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0 - 138
     AssignedShaft = 16
     CreateElevator 8.791, 18.542, 0
@@ -3962,10 +4096,12 @@ DrawWalls = true, true, false, false, false, false
 
 #Freight Elevator
 <Elevator 68>
-    Speed = 21
-    Acceleration = 0.015
-    Deceleration = 0.01
+    Speed = 15
+    Acceleration = 0.2
+    Deceleration = 0.2
     OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0 - 138
     AssignedShaft = 14
     CreateElevator -9.245, 30.375, 0
