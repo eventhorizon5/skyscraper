@@ -53,6 +53,8 @@ Elevator::Elevator(int number)
 	OpenDoor = 0;
 	Acceleration = 0;
 	Deceleration = 0;
+	AccelJerk = 1;
+	DecelJerk = 1;
 	OpenSpeed = 0;
 	ElevatorStart = 0;
 	ElevatorFloor = 0;
@@ -76,6 +78,8 @@ Elevator::Elevator(int number)
 	DoorAcceleration = 0;
 	TempDeceleration = 0;
 	ErrorOffset = 0;
+	JerkRate = 0;
+	JerkPos = 0;
 
 	//create object meshes
 	buffer = Number;
@@ -936,9 +940,6 @@ void Elevator::MoveElevatorToFloor()
 		//Play starting sound
 		//"\data\elevstart.wav"
 
-		//Get first rate increment value
-		ElevatorRate = Direction * (ElevatorSpeed * (Acceleration * sbs->delta));
-
 		//notify about movement
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
 	}
@@ -978,19 +979,35 @@ void Elevator::MoveElevatorToFloor()
 	//motion calculation
 	if (Brakes == false)
 	{
+		//calculate jerk rate
+		if (JerkRate < 1)
+		{
+			JerkRate += AccelJerk * sbs->delta;
+			JerkPos = ElevatorRate;
+		}
+		if (JerkRate > 1)
+			JerkRate = 1;
+
 		//regular motion
 		if (Direction == 1)
-			ElevatorRate += ElevatorSpeed * (Acceleration * sbs->delta);
+			ElevatorRate += ElevatorSpeed * ((Acceleration * JerkRate) * sbs->delta);
 		if (Direction == -1)
-			ElevatorRate -= ElevatorSpeed * (Acceleration * sbs->delta);
+			ElevatorRate -= ElevatorSpeed * ((Acceleration * JerkRate) * sbs->delta);
 	}
 	else
 	{
 		//slow down
+
+		//calculate jerk rate
+		if (ElevatorRate <= (JerkPos * (AccelJerk / DecelJerk)))
+			JerkRate -= DecelJerk * sbs->delta;
+		if (JerkRate < 0.01)
+			JerkRate = 0.01;
+
 		if (Direction == 1)
-			ElevatorRate += ElevatorSpeed * (TempDeceleration * sbs->delta);
+			ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 		if (Direction == -1)
-			ElevatorRate -= ElevatorSpeed * (TempDeceleration * sbs->delta);
+			ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 	}
 
 	//change speeds
@@ -1037,7 +1054,7 @@ void Elevator::MoveElevatorToFloor()
 			//start deceleration
 			Direction = -1;
 			Brakes = true;
-			ElevatorRate -= ElevatorSpeed * (TempDeceleration * sbs->delta);
+			ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 			//stop sounds
 			//play elevator stopping sound
 			//"\data\elevstop.wav"
@@ -1051,7 +1068,7 @@ void Elevator::MoveElevatorToFloor()
 			//slow down elevator
 			Direction = -1;
 			Brakes = true;
-			ElevatorRate -= ElevatorSpeed * (TempDeceleration * sbs->delta);
+			ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1070,7 +1087,7 @@ void Elevator::MoveElevatorToFloor()
 			//start deceleration
 			Direction = 1;
 			Brakes = true;
-			ElevatorRate += ElevatorSpeed * (TempDeceleration * sbs->delta);
+			ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1084,7 +1101,7 @@ void Elevator::MoveElevatorToFloor()
 			//slow down elevator
 			Direction = 1;
 			Brakes = true;
-			ElevatorRate += ElevatorSpeed * (TempDeceleration * sbs->delta);
+			ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 			//stop sounds
 			//play stopping sound
 			//"\data\elevstop.wav"
@@ -1133,6 +1150,7 @@ void Elevator::MoveElevatorToFloor()
 
 	//reset values if at destination floor
 	ElevatorRate = 0;
+	JerkRate = 0;
 	Direction = 0;
 	Brakes = false;
 	Destination = 0;
@@ -1145,6 +1163,7 @@ void Elevator::MoveElevatorToFloor()
 	{
 		//update elevator's floor number
 		GetFloor();
+		UpdateFloorIndicators();
 
 		//Turn on objects if user is in elevator
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
@@ -1665,4 +1684,14 @@ void Elevator::UpdateFloorIndicators()
 
 	for (int i = 0; i < FloorIndicator_state->GetPolygonCount(); i++)
 		sbs->ChangeTexture(FloorIndicator->GetMeshObject(), orig_indicator, texture.GetData());
+}
+
+float Elevator::GetJerkRate()
+{
+	return JerkRate;
+}
+
+float Elevator::GetJerkPosition()
+{
+	return JerkPos;
 }

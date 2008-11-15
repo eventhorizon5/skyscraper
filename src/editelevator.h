@@ -120,12 +120,20 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT25;
 		static const long ID_txtDoorAcceleration;
 		static const long ID_bSetDoorAccel;
+		static const long ID_STATICTEXT1;
+		static const long ID_txtAccelJerk;
+		static const long ID_bSetAccelJerk;
+		static const long ID_STATICTEXT29;
+		static const long ID_txtDecelJerk;
+		static const long ID_bSetDecelJerk;
 		static const long ID_STATICTEXT26;
 		static const long ID_txtRate;
 		static const long ID_STATICTEXT27;
 		static const long ID_txtDirection;
 		static const long ID_STATICTEXT28;
 		static const long ID_txtDoorSpeed;
+		static const long ID_STATICTEXT2;
+		static const long ID_txtJerkRate;
 		static const long ID_STATICTEXT30;
 		static const long ID_txtDestFloor;
 		static const long ID_STATICTEXT31;
@@ -169,6 +177,9 @@ class editelevator: public wxDialog
 		void On_bDumpQueues_Click(wxCommandEvent& event);
 		void OnchkVisibleClick(wxCommandEvent& event);
 		void On_chkVisible_Click(wxCommandEvent& event);
+		void On_bSetJerk_Click(wxCommandEvent& event);
+		void On_bSetDecelJerk_Click(wxCommandEvent& event);
+		void On_bSetAccelJerk_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -190,8 +201,10 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtOpenSpeed;
 		wxButton* bSetOpenSpeed;
 		wxTextCtrl* txtDoorWidth;
+		wxTextCtrl* txtJerkRate;
 		wxButton* bSetSpeed;
 		wxTextCtrl* txtNumber;
+		wxStaticText* StaticText29;
 		wxBoxSizer* BoxSizer10;
 		wxBoxSizer* BoxSizer7;
 		wxTextCtrl* txtQueueLastUp;
@@ -201,6 +214,7 @@ class editelevator: public wxDialog
 		wxScrollBar* sNumber;
 		wxStaticText* StaticText33;
 		wxStaticText* StaticText13;
+		wxStaticText* StaticText2;
 		wxStaticText* StaticText30;
 		wxStaticText* StaticText14;
 		wxTextCtrl* txtDestFloor;
@@ -208,6 +222,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText26;
 		wxStaticText* StaticText6;
 		wxScrollBar* sFloor;
+		wxTextCtrl* txtAccelJerk;
 		wxButton* bSetName;
 		wxStaticText* StaticText40;
 		wxButton* bOpen;
@@ -225,7 +240,9 @@ class editelevator: public wxDialog
 		wxButton* bCloseManual;
 		wxTextCtrl* txtStopDistance;
 		wxStaticText* StaticText31;
+		wxButton* bSetDecelJerk;
 		wxFlexGridSizer* FlexGridSizer2;
+		wxStaticText* StaticText1;
 		wxStaticText* StaticText27;
 		wxBoxSizer* BoxSizer2;
 		wxStaticText* StaticText3;
@@ -255,6 +272,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText7;
 		wxButton* bClose;
 		wxButton* bDumpQueues;
+		wxButton* bSetAccelJerk;
 		wxTextCtrl* txtQueueLastDown;
 		wxTextCtrl* txtDirection;
 		wxTextCtrl* txtDoorsOpen;
@@ -286,6 +304,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText17;
 		wxStaticText* StaticText4;
 		wxTextCtrl* txtTempDecel;
+		wxTextCtrl* txtDecelJerk;
 		wxCheckBox* chkVisible;
 		wxStaticText* StaticText16;
 		wxTextCtrl* txtDestination;

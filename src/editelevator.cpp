@@ -114,12 +114,20 @@ const long editelevator::ID_bSetOpenSpeed = wxNewId();
 const long editelevator::ID_STATICTEXT25 = wxNewId();
 const long editelevator::ID_txtDoorAcceleration = wxNewId();
 const long editelevator::ID_bSetDoorAccel = wxNewId();
+const long editelevator::ID_STATICTEXT1 = wxNewId();
+const long editelevator::ID_txtAccelJerk = wxNewId();
+const long editelevator::ID_bSetAccelJerk = wxNewId();
+const long editelevator::ID_STATICTEXT29 = wxNewId();
+const long editelevator::ID_txtDecelJerk = wxNewId();
+const long editelevator::ID_bSetDecelJerk = wxNewId();
 const long editelevator::ID_STATICTEXT26 = wxNewId();
 const long editelevator::ID_txtRate = wxNewId();
 const long editelevator::ID_STATICTEXT27 = wxNewId();
 const long editelevator::ID_txtDirection = wxNewId();
 const long editelevator::ID_STATICTEXT28 = wxNewId();
 const long editelevator::ID_txtDoorSpeed = wxNewId();
+const long editelevator::ID_STATICTEXT2 = wxNewId();
+const long editelevator::ID_txtJerkRate = wxNewId();
 const long editelevator::ID_STATICTEXT30 = wxNewId();
 const long editelevator::ID_txtDestFloor = wxNewId();
 const long editelevator::ID_STATICTEXT31 = wxNewId();
@@ -350,6 +358,18 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer6->Add(txtDoorAcceleration, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bSetDoorAccel = new wxButton(this, ID_bSetDoorAccel, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetDoorAccel"));
 	FlexGridSizer6->Add(bSetDoorAccel, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
+	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("AccelJerk:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
+	FlexGridSizer6->Add(StaticText1, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	txtAccelJerk = new wxTextCtrl(this, ID_txtAccelJerk, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtAccelJerk"));
+	FlexGridSizer6->Add(txtAccelJerk, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetAccelJerk = new wxButton(this, ID_bSetAccelJerk, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetAccelJerk"));
+	FlexGridSizer6->Add(bSetAccelJerk, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText29 = new wxStaticText(this, ID_STATICTEXT29, _("DecelJerk:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT29"));
+	FlexGridSizer6->Add(StaticText29, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	txtDecelJerk = new wxTextCtrl(this, ID_txtDecelJerk, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtDecelJerk"));
+	FlexGridSizer6->Add(txtDecelJerk, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetDecelJerk = new wxButton(this, ID_bSetDecelJerk, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetDecelJerk"));
+	FlexGridSizer6->Add(bSetDecelJerk, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText26 = new wxStaticText(this, ID_STATICTEXT26, _("Rate:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT26"));
 	FlexGridSizer6->Add(StaticText26, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	txtRate = new wxTextCtrl(this, ID_txtRate, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtRate"));
@@ -365,6 +385,11 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	txtDoorSpeed = new wxTextCtrl(this, ID_txtDoorSpeed, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtDoorSpeed"));
 	FlexGridSizer6->Add(txtDoorSpeed, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer6->Add(-1,-1,0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
+	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("JerkRate:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+	FlexGridSizer6->Add(StaticText2, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	txtJerkRate = new wxTextCtrl(this, ID_txtJerkRate, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtJerkRate"));
+	FlexGridSizer6->Add(txtJerkRate, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer7->Add(FlexGridSizer6, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	BoxSizer3->Add(StaticBoxSizer7, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer8 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Destination"));
@@ -427,7 +452,8 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bSetDeceleration,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDeceleration_Click);
 	Connect(ID_bSetOpenSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetOpenSpeed_Click);
 	Connect(ID_bSetDoorAccel,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDoorAccel_Click);
-	Connect(ID_CHECKBOX1, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&editelevator::On_chkVisible_Click);
+	Connect(ID_bSetAccelJerk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAccelJerk_Click);
+	Connect(ID_bSetDecelJerk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDecelJerk_Click);
 	//*)
 	OnInit();
 }
@@ -601,6 +627,7 @@ void editelevator::Loop()
 	txtStop->SetValue(wxString::FromAscii(BoolToString(elevator->GetEmergencyStopStatus())));
 	txtStopDistance->SetValue(TruncateNumber(elevator->GetStoppingDistance(), 2));
 	txtTempDecel->SetValue(TruncateNumber(elevator->TempDeceleration, 2));
+	txtJerkRate->SetValue(TruncateNumber(elevator->GetJerkRate(), 4));
 }
 
 void editelevator::SetMainValues()
@@ -612,6 +639,8 @@ void editelevator::SetMainValues()
 	txtDeceleration->SetValue(TruncateNumber(elevator->Deceleration, 4));
 	txtOpenSpeed->SetValue(TruncateNumber(elevator->OpenSpeed, 4));
 	txtDoorAcceleration->SetValue(TruncateNumber(elevator->DoorAcceleration, 4));
+	txtAccelJerk->SetValue(TruncateNumber(elevator->AccelJerk, 4));
+	txtDecelJerk->SetValue(TruncateNumber(elevator->DecelJerk, 4));
 	chkVisible->SetValue(elevator->IsEnabled);
 }
 
@@ -619,3 +648,16 @@ void editelevator::On_chkVisible_Click(wxCommandEvent& event)
 {
 	elevator->Enabled(chkVisible->GetValue());
 }
+
+void editelevator::On_bSetAccelJerk_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->AccelJerk = atof(txtAccelJerk->GetValue().ToAscii());
+}
+
+void editelevator::On_bSetDecelJerk_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->DecelJerk = atof(txtDecelJerk->GetValue().ToAscii());
+}
+

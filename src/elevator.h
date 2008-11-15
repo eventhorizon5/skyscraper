@@ -43,6 +43,8 @@ public:
 	int GotoFloor; //floor to go to
 	float Acceleration; //percentage of speed increase
 	float Deceleration; //deceleration value; may be removed
+	float AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
+	float DecelJerk;
 	float OpenSpeed; //elevator opening/closing speed
 	int OriginFloor; //elevator starting floor
 	csVector3 Origin; //3D elevator origin vector
@@ -107,6 +109,8 @@ public:
 	void AddServicedFloor(int number);
 	void RemoveServicedFloor(int number);
 	void UpdateFloorIndicators();
+	float GetJerkRate();
+	float GetJerkPosition();
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -146,6 +150,8 @@ private:
 	csRefArray<iThingFactoryState> ShaftDoorL_state; //shaft door array state
 	csRefArray<iMeshWrapper> ShaftDoorR; //shaft door array
 	csRefArray<iThingFactoryState> ShaftDoorR_state; //shaft door array state
+	float JerkRate;
+	float JerkPos;
 	csRef<iMaterialWrapper> orig_indicator;
 
 	//functions

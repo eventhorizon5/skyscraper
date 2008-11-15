@@ -1189,6 +1189,16 @@ recalc:
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
 				GetElevator(Current)->OpenSpeed = atof(temp2.GetData());
 			}
+			if (LineData.Slice(0, 9).CompareNoCase("acceljerk") == true)
+			{
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
+				GetElevator(Current)->AccelJerk = atof(temp2.GetData());
+			}
+			if (LineData.Slice(0, 9).CompareNoCase("deceljerk") == true)
+			{
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
+				GetElevator(Current)->DecelJerk = atof(temp2.GetData());
+			}
 			if (LineData.Slice(0, 14).CompareNoCase("servicedfloors") == true)
 			{
 				//copy string listing of serviced floors into array
