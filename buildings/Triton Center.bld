@@ -2817,11 +2817,11 @@ DrawWalls = true, true, false, false, false, false
 
 #Upper Express
 <Elevator 33>
-    Speed = 21
-    Acceleration = 0.3
-    Deceleration = 0.3
+    Speed = 30
+    Acceleration = 0.1
+    Deceleration = 0.1
     OpenSpeed = 0.2
-    AccelJerk = 0.3
+    AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 1, 134 - 136
     AssignedShaft = 15
@@ -2829,11 +2829,11 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevator 34>
-    Speed = 21
-    Acceleration = 0.3
-    Deceleration = 0.3
+    Speed = 30
+    Acceleration = 0.1
+    Deceleration = 0.1
     OpenSpeed = 0.2
-    AccelJerk = 0.3
+    AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 1, 134 - 136
     AssignedShaft = 15
@@ -2969,11 +2969,11 @@ DrawWalls = true, true, false, false, false, false
 
 #Skydeck Express
 <Elevator 37>
-    Speed = 21
-    Acceleration = 0.3
-    Deceleration = 0.3
+    Speed = 30
+    Acceleration = 0.1
+    Deceleration = 0.1
     OpenSpeed = 0.2
-    AccelJerk = 0.3
+    AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 137
     AssignedShaft = 14
