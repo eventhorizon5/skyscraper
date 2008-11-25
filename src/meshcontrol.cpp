@@ -132,6 +132,7 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkAllFloors,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllFloors_Click);
         Connect(ID_chkAllShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllShafts_Click);
         Connect(ID_chkAllStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllStairs_Click);
+	Connect(ID_chkElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkElevators_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
 	//*)
 	p = this;
