@@ -104,6 +104,13 @@
 			</debugger>
 			<wxsmith version="1">
 				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
+				<resources>
+                                        <wxDialog wxs="wxsmith/Loader.wxs" src="../src/loader.cpp" hdr="../src/loader.h" name="Loader" language="CPP" />
+                                        <wxFrame wxs="wxsmith/DebugPanel.wxs" src="../src/debugpanel.cpp" hdr="../src/debugpanel.h" name="DebugPanel" language="CPP" />
+                                        <wxDialog wxs="wxsmith/CameraControl.wxs" src="../src/cameracontrol.cpp" hdr="../src/cameracontrol.h" name="CameraControl" language="CPP" />
+                                        <wxDialog wxs="wxsmith/editelevator.wxs" src="../src/editelevator.cpp" hdr="../src/editelevator.h" name="editelevator" language="CPP" />
+                                        <wxDialog wxs="wxsmith/MeshControl.wxs" src="../src/meshcontrol.cpp" hdr="../src/meshcontrol.h" name="MeshControl" language="CPP" />
+                                </resources>
 			</wxsmith>
 		</Extensions>
 	</Project>
