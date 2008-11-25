@@ -54,11 +54,13 @@ class editelevator: public wxDialog
 		static const long ID_bGo;
 		static const long ID_bOpen;
 		static const long ID_bOpenManual;
+		static const long ID_bOpenShaftDoor;
 		static const long ID_bStop;
 		static const long ID_bEnqueueUp;
 		static const long ID_bEnqueueDown;
 		static const long ID_bClose;
 		static const long ID_bCloseManual;
+		static const long ID_bCloseShaftDoor;
 		static const long ID_bAlarm;
 		static const long ID_STATICTEXT3;
 		static const long ID_txtNumber;
@@ -180,6 +182,8 @@ class editelevator: public wxDialog
 		void On_bSetJerk_Click(wxCommandEvent& event);
 		void On_bSetDecelJerk_Click(wxCommandEvent& event);
 		void On_bSetAccelJerk_Click(wxCommandEvent& event);
+		void On_bOpenShaftDoor_Click(wxCommandEvent& event);
+		void On_bCloseShaftDoor_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -192,6 +196,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText9;
 		wxBoxSizer* BoxSizer6;
 		wxTextCtrl* txtQueuePause;
+		wxButton* bOpenShaftDoor;
 		wxTextCtrl* txtDoorSpeed;
 		wxStaticText* StaticText20;
 		wxButton* bAlarm;
@@ -235,6 +240,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText11;
 		wxTextCtrl* txtMoveElevator;
+		wxButton* bCloseShaftDoor;
 		wxStaticText* StaticText18;
 		wxTextCtrl* txtRate;
 		wxButton* bCloseManual;
