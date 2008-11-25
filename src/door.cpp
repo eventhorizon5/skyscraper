@@ -75,6 +75,8 @@ Door::Door(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, int numb
 	DoorMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, name.GetData());
 	DoorMesh_state = scfQueryInterface<iThingFactoryState> (DoorMesh->GetMeshObject()->GetFactory());
 	DoorMesh->SetZBufMode(CS_ZBUF_USE);
+	DoorMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	DoorMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	//cut area
 	if (Direction < 5)

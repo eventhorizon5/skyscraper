@@ -63,6 +63,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 		tmpstate = scfQueryInterface<iThingFactoryState> (StairArray[i - startfloor]->GetMeshObject()->GetFactory());
 		StairArray_state[i - startfloor] = tmpstate;
 		StairArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
+		StairArray[i - startfloor]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+		StairArray[i - startfloor]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 	}
 }
 

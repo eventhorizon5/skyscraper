@@ -89,6 +89,8 @@ Elevator::Elevator(int number)
 	Elevator_state = scfQueryInterface<iThingFactoryState> (ElevatorMesh->GetMeshObject()->GetFactory());
 	Elevator_movable = ElevatorMesh->GetMovable();
 	ElevatorMesh->SetZBufMode(CS_ZBUF_USE);
+	ElevatorMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	ElevatorMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	buffer = Number;
 	buffer.Insert(0, "FloorIndicator ");
@@ -97,6 +99,8 @@ Elevator::Elevator(int number)
 	FloorIndicator_state = scfQueryInterface<iThingFactoryState> (FloorIndicator->GetMeshObject()->GetFactory());
 	FloorIndicator_movable = FloorIndicator->GetMovable();
 	FloorIndicator->SetZBufMode(CS_ZBUF_USE);
+	FloorIndicator->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	FloorIndicator->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	buffer = Number;
 	buffer.Insert(0, "ElevatorDoorL ");
@@ -105,6 +109,8 @@ Elevator::Elevator(int number)
 	ElevatorDoorL_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorL->GetMeshObject()->GetFactory());
 	ElevatorDoorL_movable = ElevatorDoorL->GetMovable();
 	ElevatorDoorL->SetZBufMode(CS_ZBUF_USE);
+	ElevatorDoorL->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	ElevatorDoorL->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	buffer = Number;
 	buffer.Insert(0, "ElevatorDoorR ");
@@ -113,6 +119,8 @@ Elevator::Elevator(int number)
 	ElevatorDoorR_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorR->GetMeshObject()->GetFactory());
 	ElevatorDoorR_movable = ElevatorDoorR->GetMovable();
 	ElevatorDoorR->SetZBufMode(CS_ZBUF_USE);
+	ElevatorDoorR->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	ElevatorDoorR->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	buffer = Number;
 	buffer.Insert(0, "Plaque ");
@@ -121,6 +129,8 @@ Elevator::Elevator(int number)
 	Plaque_state = scfQueryInterface<iThingFactoryState> (Plaque->GetMeshObject()->GetFactory());
 	Plaque_movable = Plaque->GetMovable();
 	Plaque->SetZBufMode(CS_ZBUF_USE);
+	Plaque->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	Plaque->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 }
 
 Elevator::~Elevator()
@@ -1382,6 +1392,8 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorL[i]->GetMeshObject()->GetFactory());
 		ShaftDoorL_state[i] = tmpstate;
 		ShaftDoorL[i]->SetZBufMode(CS_ZBUF_USE);
+		ShaftDoorL[i]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+		ShaftDoorL[i]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 		//door R
 		tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer2.GetData());
@@ -1389,6 +1401,8 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorR[i]->GetMeshObject()->GetFactory());
 		ShaftDoorR_state[i] = tmpstate;
 		ShaftDoorR[i]->SetZBufMode(CS_ZBUF_USE);
+		ShaftDoorR[i]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+		ShaftDoorR[i]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 		//reposition meshes
 		ShaftDoorL[i]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z));

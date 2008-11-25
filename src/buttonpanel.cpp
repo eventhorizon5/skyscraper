@@ -60,6 +60,8 @@ ButtonPanel::ButtonPanel(int _elevator, const char *texture, int columns, int ro
 	ButtonPanelMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	ButtonPanel_state = scfQueryInterface<iThingFactoryState> (ButtonPanelMesh->GetMeshObject()->GetFactory());
 	ButtonPanelMesh->SetZBufMode(CS_ZBUF_USE);
+	ButtonPanelMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	ButtonPanelMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	//move
 	SetToElevatorAltitude();

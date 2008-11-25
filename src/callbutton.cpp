@@ -49,6 +49,8 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	CallButtonMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	CallButton_state = scfQueryInterface<iThingFactoryState> (CallButtonMesh->GetMeshObject()->GetFactory());
 	CallButtonMesh->SetZBufMode(CS_ZBUF_USE);
+	CallButtonMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	CallButtonMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	//set variables
 	floor = floornum;
