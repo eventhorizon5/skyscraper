@@ -375,6 +375,11 @@ void Elevator::OpenDoorsEmergency(int whichdoors, int floor)
 	//Slowly opens the elevator doors no matter where elevator is.
 	//If lined up with shaft doors, then opens the shaft doors also
 
+	//WhichDoors is the doors to move:
+	//1 = both shaft and elevator doors
+	//2 = only elevator doors
+	//3 = only shaft doors
+
 	if (OpenDoor != 0)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
@@ -406,6 +411,11 @@ void Elevator::CloseDoorsEmergency(int whichdoors, int floor)
 	//Slowly closes the elevator doors no matter where elevator is.
 	//If lined up with shaft doors, then closes the shaft doors also
 
+	//WhichDoors is the doors to move:
+	//1 = both shaft and elevator doors
+	//2 = only elevator doors
+	//3 = only shaft doors
+
 	if (OpenDoor != 0)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
@@ -435,6 +445,11 @@ void Elevator::OpenDoors(int whichdoors, int floor)
 {
 	//Opens elevator doors
 
+	//WhichDoors is the doors to move:
+	//1 = both shaft and elevator doors
+	//2 = only elevator doors
+	//3 = only shaft doors
+
 	if (OpenDoor != 0)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
@@ -463,6 +478,11 @@ void Elevator::OpenDoors(int whichdoors, int floor)
 void Elevator::CloseDoors(int whichdoors, int floor)
 {
 	//Closes elevator doors
+
+	//WhichDoors is the doors to move:
+	//1 = both shaft and elevator doors
+	//2 = only elevator doors
+	//3 = only shaft doors
 
 	if (OpenDoor != 0)
 	{

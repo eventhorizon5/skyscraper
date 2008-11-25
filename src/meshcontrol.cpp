@@ -130,8 +130,8 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkShafts_Click);
 	Connect(ID_chkStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkStairs_Click);
 	Connect(ID_chkAllFloors,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllFloors_Click);
-        Connect(ID_chkAllShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllShafts_Click);
-        Connect(ID_chkAllStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllStairs_Click);
+	Connect(ID_chkAllShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllShafts_Click);
+	Connect(ID_chkAllStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllStairs_Click);
 	Connect(ID_chkElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkElevators_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
 	//*)
@@ -206,21 +206,30 @@ void MeshControl::On_chkShafts_Click(wxCommandEvent& event)
 
 void MeshControl::On_chkStairs_Click(wxCommandEvent& event)
 {
-
+	for (int i = 1; i <= sbs->StairsNum(); i++)
+		sbs->GetStairs(i)->Enabled(sbs->camera->CurrentFloor, chkStairs->GetValue());
 }
 
 void MeshControl::On_chkAllFloors_Click(wxCommandEvent& event)
 {
-
+	for (int i = 0; i <= sbs->TotalFloors(); i++)
+		sbs->GetFloor(i)->Enabled(chkAllFloors->GetValue());
 }
 
 void MeshControl::On_chkAllShafts_Click(wxCommandEvent& event)
 {
-
+	for (int i = 1; i <= sbs->Shafts(); i++)
+	{
+		for (int j = -sbs->Basements; j <= sbs->Floors; j++)
+			sbs->GetShaft(i)->Enabled(j, chkAllShafts->GetValue(), true);
+	}
 }
 
 void MeshControl::On_chkAllStairs_Click(wxCommandEvent& event)
 {
-
+	for (int i = 1; i <= sbs->StairsNum(); i++)
+	{
+		for (int j = -sbs->Basements; j <= sbs->Floors; j++)
+			sbs->GetStairs(i)->Enabled(j, chkAllStairs->GetValue());
+	}
 }
-
