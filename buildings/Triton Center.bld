@@ -35,6 +35,7 @@
     Load data/brick1.jpg, Brick
     Load data/lobbyfront.jpg, LobbyFront
     Load data/windows11h.jpg, MainWindows
+    Load data/windows11h_inside.png, MainWindowsInt
     Load data/granite.jpg, Granite
     Load data/symb5.jpg, Wood3
     Load data/marb047.jpg, Marble4
@@ -45,6 +46,7 @@
     Load data/marb123.jpg, Wall2
     Load data/cutston.jpg, Ceiling1
     Load data/intext.jpg, InterExt
+    Load data/intext.jpg, InterInt
     Load data/text12.jpg, Wall3
     Load data/text16.jpg, ElevDoors
     Load data/marb148.jpg, ElevExtPanels
@@ -198,17 +200,25 @@
     FloorOrientation = bottom
     AddFloor Ceiling, Wood3, 0.5, -75, -70, 75, 70, %height% - 0.05, %height% - 0.05, 0, 0, False
 
-    #External walls
+    #External walls/windows
     WallOrientation = left
-    AddWall Front, MainWindows, 0.5, -75, -70, 75, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
-    AddWall Front, InterExt, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
-    AddWall Left, MainWindows, 0.5, -75, 70, -75, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
-    AddWall Left, InterExt, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall FrontWindowsInt, MainWindowsInt, 0.25, -75, -70 + 0.25, 75, -70 + 0.25, %height%, %height%, 0, 0, 2.615, 0
+    AddWall LeftWindowsInt, MainWindowsInt, 0.25, -75 + 0.25, 70 + 0.25, -75, -70, %height%, %height%, 0, 0, 2.615, 0
+    AddWall RightWindows, MainWindows, 0.25, 75 - 0.25, -70, 75 - 0.25, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall BackWindows, MainWindows, 0.25, 75, 70 - 0.25, -75, 70 - 0.25, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    if(%floor% > 2) AddWall IRight, InterExt, 0.25, 75 - 0.25, -70, 75 - 0.25, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    if(%floor% > 2) AddWall IBack, InterExt, 0.25, 75, 70 - 0.25, -75, 70 - 0.25, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
     WallOrientation = right
-    AddWall Right, MainWindows, 0.5, 75, -70, 75, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
-    AddWall Right, InterExt, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
-    AddWall Back, MainWindows, 0.5, 75, 70, -75, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
-    AddWall Back, InterExt, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    DrawWalls = true, false, false, false, false, false
+    AddWall FrontWindows, MainWindows, 0.25, -75, -70 + 0.25, 75, -70 + 0.25, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall LeftWindows, MainWindows, 0.25, -75 + 0.25, 70, -75 + 0.25, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0.7, 0, True
+    AddWall RightWindowsInt, MainWindowsInt, 0.25, 75 - 0.25, -70, 75 - 0.25, 70, %height%, %height%, 0, 0, 2.615, 0
+    AddWall BackWindowsInt, MainWindowsInt, 0.25, 75, 70 - 0.25, -75, 70 - 0.25, %height%, %height%, 0, 0, 2.615, 0
+    if(%floor% > 2) AddWall IFront, InterExt, 0.25, -75, -70 + 0.25, 75, -70 + 0.25, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+    if(%floor% > 2) AddWall ILeft, InterExt, 0.25, -75 + 0.25, 70, -75 + 0.25, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0.7, 0, True
+
+    DrawWalls = true, true, false, false, false, false
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -220,11 +230,16 @@
 
     #Interfloor walls
     WallOrientation = left
-    if(%floor% > 2) AddInterfloorWall IFront, Brick, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    if(%floor% > 2) AddInterfloorWall ILeft, Brick, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    DrawWalls = false, true, false, false, false, false
+    if(%floor% > 2) AddInterfloorWall IFrontInt, InterInt, 0.25, -75, -70 + 0.25, 75, -70 + 0.25, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if(%floor% > 2) AddInterfloorWall ILeftInt, InterInt, 0.25, -75 + 0.25, 70, -75 + 0.25, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = right
-    if(%floor% > 2) AddInterfloorWall IRight, Brick, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    if(%floor% > 2) AddInterfloorWall IBack, Brick, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    DrawWalls = true, false, false, false, false, false
+    if(%floor% > 2) AddInterfloorWall IRightInt, InterInt, 0.25, 75 - 0.25, -70, 75 - 0.25, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if(%floor% > 2) AddInterfloorWall IBackInt, InterInt, 0.25, 75, 70 - 0.25, -75, 70 - 0.25, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+
+    DrawWalls = true, true, false, false, false, false
+
 <EndFloors>
 
 # conference levels
