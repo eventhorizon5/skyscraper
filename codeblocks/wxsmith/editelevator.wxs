@@ -102,10 +102,6 @@
 										</object>
 										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
-									<object class="spacer">
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
-										<size>-1,10</size>
-									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bOpen" variable="bOpen" member="yes">
 											<label>Open</label>
@@ -120,9 +116,14 @@
 										</object>
 										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
-									<object class="spacer">
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
-										<size>-1,10</size>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bOpenShaftDoor" variable="bOpenShaftDoor" member="yes">
+											<label>Open Shaft Doors</label>
+											<handler function="On_bOpenShaftDoor_Click" variable="bOpenShaftDoor" member="yes">
+										</object>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bStop" variable="bStop" member="yes">
@@ -152,10 +153,6 @@
 										</object>
 										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
-									<object class="spacer">
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
-										<size>-1,10</size>
-									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bClose" variable="bClose" member="yes">
 											<label>Close</label>
@@ -170,9 +167,13 @@
 										</object>
 										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
-									<object class="spacer">
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
-										<size>-1,10</size>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bCloseShaftDoor" variable="bCloseShaftDoor" member="yes">
+											<label>Close Shaft Doors</label>
+										</object>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bAlarm" variable="bAlarm" member="yes">
@@ -191,7 +192,7 @@
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+				<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 			</object>
 			<object class="sizeritem">
 				<object class="wxBoxSizer" variable="BoxSizer3" member="yes">
@@ -716,6 +717,7 @@
 										<object class="wxButton" name="ID_bSetAccelJerk" variable="bSetAccelJerk" member="yes">
 											<label>Set</label>
 											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetAccelJerk_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
@@ -741,6 +743,7 @@
 										<object class="wxButton" name="ID_bSetDecelJerk" variable="bSetDecelJerk" member="yes">
 											<label>Set</label>
 											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetDecelJerk_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
