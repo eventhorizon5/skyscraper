@@ -212,7 +212,7 @@ void MeshControl::On_chkStairs_Click(wxCommandEvent& event)
 
 void MeshControl::On_chkAllFloors_Click(wxCommandEvent& event)
 {
-	for (int i = 0; i <= sbs->TotalFloors(); i++)
+	for (int i = -sbs->Basements; i < sbs->Floors; i++)
 		sbs->GetFloor(i)->Enabled(chkAllFloors->GetValue());
 }
 
