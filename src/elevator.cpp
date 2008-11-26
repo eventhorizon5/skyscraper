@@ -863,13 +863,6 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		}
 	}
 
-	//reset values
-	ElevatorDoorSpeed = 0;
-	OpenDoor = 0;
-	WhichDoors = 0;
-
-	//turn on autoclose timer
-
 	//the doors are open or closed now
 	if (WhichDoors != 3)
 	{
@@ -886,8 +879,14 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			ShaftDoorsOpen[ServicedFloors.Find(ShaftDoorFloor)] = false;
 	}
 
-	IsRunning = false;
+	//reset values
+	ElevatorDoorSpeed = 0;
+	OpenDoor = 0;
+	WhichDoors = 0;
 
+	//turn on autoclose timer
+
+	IsRunning = false;
 }
 
 void Elevator::MoveElevatorToFloor()
