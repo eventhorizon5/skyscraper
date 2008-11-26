@@ -235,6 +235,21 @@
     <em>starty</em>, and <em>startz</em> make up the position of the starting 
     position, and <em>endx</em>, <em>endy</em> and <em>endz</em> make up the ending 
     position. The first intersection of the named object is the return value.</p>
+  <p align="left"><strong>m. SetAutoSize</strong> - enables or disables texture 
+    autosizing<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> SetAutoSize = <em>AutoWidth, 
+    AutoHeight </em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">SetAutoSize = true, 
+    true</font></p>
+  <p align="left">This command will determine if the simulator should automatically 
+    size texture appropriately when applied to an object, such as a wall or floor. 
+    By default, both are enabled. The <em>AutoWidth</em> and <em>AutoHeight</em> 
+    parameters correspond to the &quot;<em>tw</em>&quot; and &quot;<em>th</em>&quot; 
+    parameters of the <em>AddWall</em>, <em>AddFloor</em>, etc commands. If any 
+    are false, then the parameters specified in the <em>AddWall</em> etc commands 
+    relate to the number of times a texture is tiled; so if <em>AutoHeight</em> 
+    is set to False, and &quot;2&quot; is specified in the &quot;<em>th</em>&quot; 
+    value of <em>AddWall</em>, then the texture will be tiled twice vertically.</p>
   <p align="left"><br>
     <strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
