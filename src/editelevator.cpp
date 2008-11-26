@@ -669,12 +669,12 @@ void editelevator::On_bSetDecelJerk_Click(wxCommandEvent& event)
 void editelevator::On_bOpenShaftDoor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->OpenDoors(3, sNumber->GetThumbPosition() + 1);
+		elevator->OpenDoors(3, sFloor->GetThumbPosition());
 }
 
 void editelevator::On_bCloseShaftDoor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->CloseDoors(3, sNumber->GetThumbPosition() + 1);
+		elevator->CloseDoors(3, sFloor->GetThumbPosition());
 }
 
