@@ -580,6 +580,26 @@ int SBS::LoadBuilding(const char * filename)
 
 		}
 
+		//SetAutoSize command
+		if (LineData.Slice(0, 11).CompareNoCase("setautosize") == true)
+		{
+			//get text after equal sign
+			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			temp2.Trim();
+
+			tempdata.SplitString(temp2.GetData(), ",");
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+
+			SetAutoSize(csString(tempdata[0]).CompareNoCase("true"),
+						csString(tempdata[1]).CompareNoCase("true"));
+
+			tempdata.DeleteAll();
+		}
+
 		//Process globals
 		if (Section == 1)
 		{

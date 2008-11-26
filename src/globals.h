@@ -28,8 +28,6 @@
 #include <crystalspace.h>
 #include "ivideo/wxwin.h"
 
-extern double AutoSize(double n1, double n2, bool iswidth);
-
 #ifndef _SBS_GLOBALS_H
 #define _SBS_GLOBALS_H
 

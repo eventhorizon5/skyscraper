@@ -31,7 +31,6 @@
 #include "door.h"
 
 //global functions
-float AutoSize(float n1, float n2, bool iswidth, bool external, float offset);
 static bool SBSEventHandler(iEvent& Event);
 void Cleanup();
 
@@ -173,6 +172,7 @@ public:
 	bool ReportError (const char* msg, ...);
 	void Wait(long Milliseconds);
 	bool LoadTexture(const char *filename, const char *name);
+	float AutoSize(float n1, float n2, bool iswidth, bool external, float offset);
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
 	void Start();
 	void Run();
@@ -228,6 +228,8 @@ public:
 	void ResetWalls(bool ToDefaults = false);
 	void ReverseExtents(bool X, bool Y, bool Z);
 	void ResetExtents(bool ToDefaults = false);
+	void SetAutoSize(bool x, bool y);
+	csVector2 GetAutoSize();
 	int GetDrawWallsCount();
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
 	int CreateDoor(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
@@ -299,6 +301,7 @@ private:
 	//texture mapping
 	bool RevX, RevY, RevZ;
 	bool RevXold, RevYold, RevZold;
+	bool AutoX, AutoY; //autosizing
 
 	//canvas data
 	int canvas_width, canvas_height;

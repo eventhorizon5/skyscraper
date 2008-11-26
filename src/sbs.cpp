@@ -117,6 +117,8 @@ SBS::SBS()
 	wall1b = false;
 	wall2a = false;
 	wall2b = false;
+	AutoX = true;
+	AutoY = true;
 }
 
 SBS::~SBS()
@@ -246,37 +248,41 @@ void SBS::Wait(long milliseconds)
 
 }
 
-float AutoSize(float n1, float n2, bool iswidth, bool external, float offset)
+float SBS::AutoSize(float n1, float n2, bool iswidth, bool external, float offset)
 {
 	//Texture autosizing formulas
 
-	float size1;
-	float size2;
+	float size1 = offset;
+	float size2 = offset;
 
 	if (offset == 0)
 		offset = 1;
 
 	if (external == false)
 	{
-		size1 = 0.269 * offset;
-		size2 = 0.25 * offset;
+		if (AutoX == true)
+			size1 = 0.269 * offset;
+		if (AutoY == true)
+			size2 = 0.25 * offset;
 	}
 	else
 	{
-		size1 = 0.072 * offset;
-		size2 = 1 * offset;
+		if (AutoX == true)
+			size1 = 0.072 * offset;
+		if (AutoY == true)
+			size2 = offset;
 	}
 
-	if (iswidth == true)
+	if (iswidth == true && AutoX == true)
 		return fabs(n1 - n2) * size1;
 	else
 	{
-		if (external == false)
+		if (external == false && AutoY == true)
 			return fabs(n1 - n2) * size2;
 		else
 			return size2;
 	}
-	return 0;
+	return offset;
 }
 
 void SBS::PrintBanner()
@@ -2479,3 +2485,9 @@ void SBS::Stop()
 	p->Stop();
 }
 
+void SBS::SetAutoSize(bool x, bool y)
+{
+	//enable or disable texture autosizing
+	AutoX = x;
+	AutoY = y;
+}
