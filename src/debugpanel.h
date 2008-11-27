@@ -41,13 +41,6 @@
 #include <wx/timer.h>
 #include <wx/variant.h>
 
-class Timer : public wxTimer
-{
-public:
-	Timer() { };
-	virtual void Notify();
-};
-
 class DebugPanel: public wxFrame
 {
 	friend class Timer;
@@ -80,7 +73,13 @@ class DebugPanel: public wxFrame
 		static const long ID_bInitRealtime;
 		static const long ID_bEditElevator;
 		//*)
-		wxTimer *timer;
+		class Timer : public wxTimer
+		{
+			public:
+			Timer() { };
+			virtual void Notify();
+		};
+		Timer *timer;
 
 	protected:
 

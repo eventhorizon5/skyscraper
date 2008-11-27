@@ -224,7 +224,7 @@ void DebugPanel::OnInit()
 	timer->Start(40);
 }
 
-void Timer::Notify()
+void DebugPanel::Timer::Notify()
 {
 	dp->t_camerap->SetLabel(TruncateNumber(sbs->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(sbs->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(sbs->camera->GetPosition().z, 2));
 	dp->t_camerafloor->SetLabel(wxVariant((long)sbs->camera->CurrentFloor).GetString());

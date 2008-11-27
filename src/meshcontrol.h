@@ -40,7 +40,7 @@
 
 class MeshControl: public wxDialog
 {
-	friend class Timer;
+	friend class DebugPanel;
 	public:
 
 		MeshControl(wxWindow* parent,wxWindowID id = -1);
