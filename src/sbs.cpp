@@ -127,6 +127,7 @@ SBS::~SBS()
 
 	//stop and delete timer
 	p->Stop();
+	p->s = 0;
 	delete p;
 	p = 0;
 
