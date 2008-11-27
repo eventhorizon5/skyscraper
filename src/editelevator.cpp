@@ -79,6 +79,9 @@ const long editelevator::ID_STATICTEXT12 = wxNewId();
 const long editelevator::ID_txtBrakes = wxNewId();
 const long editelevator::ID_STATICTEXT13 = wxNewId();
 const long editelevator::ID_txtStop = wxNewId();
+const long editelevator::ID_STATICTEXT42 = wxNewId();
+const long editelevator::ID_txtDoorTimer = wxNewId();
+const long editelevator::ID_bSetDoorTimer = wxNewId();
 const long editelevator::ID_STATICTEXT14 = wxNewId();
 const long editelevator::ID_txtFloor = wxNewId();
 const long editelevator::ID_STATICTEXT15 = wxNewId();
@@ -272,6 +275,12 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	txtStop = new wxTextCtrl(this, ID_txtStop, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtStop"));
 	FlexGridSizer1->Add(txtStop, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(-1,-1,0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
+	StaticText42 = new wxStaticText(this, ID_STATICTEXT42, _("DoorTimer:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT42"));
+	FlexGridSizer1->Add(StaticText42, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	txtDoorTimer = new wxTextCtrl(this, ID_txtDoorTimer, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtDoorTimer"));
+	FlexGridSizer1->Add(txtDoorTimer, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	bSetDoorTimer = new wxButton(this, ID_bSetDoorTimer, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetDoorTimer"));
+	FlexGridSizer1->Add(bSetDoorTimer, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer2->Add(FlexGridSizer1, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	BoxSizer3->Add(StaticBoxSizer2, 0, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
@@ -451,6 +460,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bCloseShaftDoor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bCloseShaftDoor_Click);
 	Connect(ID_bAlarm,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bAlarm_Click);
 	Connect(ID_bSetName,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetName_Click);
+	Connect(ID_bSetDoorTimer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDoorTimer_Click);
 	Connect(ID_bSetSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetSpeed_Click);
 	Connect(ID_bSetAcceleration,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAcceleration_Click);
 	Connect(ID_bSetDeceleration,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDeceleration_Click);
@@ -638,6 +648,7 @@ void editelevator::SetMainValues()
 {
 	//set changable values
 	txtName->SetValue(wxString::FromAscii(elevator->Name.GetData()));
+	txtDoorTimer->SetValue(wxVariant((int)elevator->DoorTimer).GetString());
 	txtSpeed->SetValue(TruncateNumber(elevator->ElevatorSpeed, 4));
 	txtAcceleration->SetValue(TruncateNumber(elevator->Acceleration, 4));
 	txtDeceleration->SetValue(TruncateNumber(elevator->Deceleration, 4));
@@ -678,3 +689,9 @@ void editelevator::On_bCloseShaftDoor_Click(wxCommandEvent& event)
 		elevator->CloseDoors(3, sFloor->GetThumbPosition());
 }
 
+
+void editelevator::On_bSetDoorTimer_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->DoorTimer = atoi(txtDoorTimer->GetValue().ToAscii());
+}
