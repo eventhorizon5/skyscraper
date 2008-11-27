@@ -65,7 +65,7 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	wxStaticBoxSizer* StaticBoxSizer3;
 	wxStaticBoxSizer* StaticBoxSizer1;
 	wxBoxSizer* BoxSizer3;
-
+	
 	Create(parent, wxID_ANY, _("Realtime Mesh Control"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
@@ -120,19 +120,19 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
-
+	
 	Connect(ID_chkExternal,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkExternal_Click);
 	Connect(ID_chkBuildings,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkBuildings_Click);
 	Connect(ID_chkLandscape,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkLandscape_Click);
 	Connect(ID_chkSky,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkSky_Click);
 	Connect(ID_chkColumnFrame,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkColumnFrame_Click);
+	Connect(ID_chkElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkElevators_Click);
 	Connect(ID_chkFloor,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkFloor_Click);
 	Connect(ID_chkShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkShafts_Click);
 	Connect(ID_chkStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkStairs_Click);
 	Connect(ID_chkAllFloors,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllFloors_Click);
 	Connect(ID_chkAllShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllShafts_Click);
 	Connect(ID_chkAllStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllStairs_Click);
-	Connect(ID_chkElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkElevators_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
 	//*)
 	p = this;
