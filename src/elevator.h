@@ -64,6 +64,7 @@ public:
 	int Direction; //-1=down, 1=up, 0=stopped
 	float Height; //elevator height
 	ButtonPanel *Panel; //elevator button panel object
+	int DoorTimer; //door autoclose timer value, in milliseconds
 
 	//functions
 	Elevator(int number);
@@ -161,6 +162,20 @@ private:
 	char intbuffer[65];
 	char buffer[20];
 
+	//door autoclose timer
+	class Timer : public wxTimer
+	{
+	public:
+		Elevator *elevator;
+		Timer(Elevator *parent)
+		{
+			elevator = parent;
+		};
+		virtual void Notify();
+	};
+
+	//timer object
+	Timer* timer;
 };
 
 #endif

@@ -1245,6 +1245,11 @@ recalc:
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
 				GetElevator(Current)->AssignedShaft = atoi(temp2.GetData());
 			}
+			if (LineData.Slice(0, 9).CompareNoCase("doortimer") == true)
+			{
+				//If IsNumeric(temp2) = False Then Err.Raise 1000
+				GetElevator(Current)->DoorTimer = atof(temp2.GetData());
+			}
 
 			//replace variables with actual values
 			buffer = Current;

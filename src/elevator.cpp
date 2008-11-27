@@ -80,6 +80,7 @@ Elevator::Elevator(int number)
 	ErrorOffset = 0;
 	JerkRate = 0;
 	JerkPos = 0;
+	DoorTimer = 5000;
 
 	//create object meshes
 	buffer = Number;
@@ -131,6 +132,9 @@ Elevator::Elevator(int number)
 	Plaque->SetZBufMode(CS_ZBUF_USE);
 	Plaque->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
 	Plaque->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+
+	//create timer
+	timer = new Timer(this);
 }
 
 Elevator::~Elevator()
@@ -885,6 +889,8 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	WhichDoors = 0;
 
 	//turn on autoclose timer
+	if (emergency == false)
+		timer->Start(DoorTimer, true);
 
 	IsRunning = false;
 }
@@ -1727,4 +1733,13 @@ float Elevator::GetJerkRate()
 float Elevator::GetJerkPosition()
 {
 	return JerkPos;
+}
+
+void Elevator::Timer::Notify()
+{
+	//door autoclose timer
+
+	//close doors if open
+	if (elevator->AreDoorsOpen() == true)
+		elevator->CloseDoors();
 }
