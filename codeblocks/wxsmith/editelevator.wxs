@@ -395,6 +395,32 @@
 									<object class="spacer">
 										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT42" variable="StaticText42" member="yes">
+											<label>DoorTimer:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDoorTimer" variable="txtDoorTimer" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetDoorTimer" variable="bSetDoorTimer" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bDoorTimer_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 							</object>
