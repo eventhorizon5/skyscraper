@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
 	<object class="wxDialog" name="editelevator">
 		<title>Elevator Parameters</title>
@@ -170,6 +170,7 @@
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bCloseShaftDoor" variable="bCloseShaftDoor" member="yes">
 											<label>Close Shaft Doors</label>
+											<handler function="On_bCloseShaftDoor_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
