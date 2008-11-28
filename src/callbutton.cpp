@@ -59,60 +59,67 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	Direction.Downcase();
 	Direction.Trim();
 
-	sbs->DrawWalls(true, false, false, false, false, false);
 	sbs->ReverseExtents(false, false, false);
 
 	//create panel
 	if (ShowBack == true)
 	{
-		if (Direction == "front")
+		if (Direction == "front" || Direction == "back")
+		{
+			if (Direction == "front")
+				sbs->DrawWalls(true, false, false, false, false, false);
+			else
+				sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddWallMain(CallButton_state, "Panel", BackTexture, 0, CenterX - (BackWidth / 2), CenterZ, CenterX + (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
-		if (Direction == "back")
-			sbs->AddWallMain(CallButton_state, "Panel", BackTexture, 0, CenterX + (BackWidth / 2), CenterZ, CenterX - (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
-		if (Direction == "left")
+			sbs->ResetWalls();
+		}
+		if (Direction == "left" || Direction == "right")
+		{
+			if (Direction == "left")
+				sbs->DrawWalls(true, false, false, false, false, false);
+			else
+				sbs->DrawWalls(false, true, false, false, false, false);
 			sbs->AddWallMain(CallButton_state, "Panel", BackTexture, 0, CenterX, CenterZ + (BackWidth / 2), CenterX, CenterZ - (BackWidth / 2), BackHeight, BackHeight, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
-		if (Direction == "right")
-			sbs->AddWallMain(CallButton_state, "Panel", BackTexture, 0, CenterX, CenterZ - (BackWidth / 2), CenterX, CenterZ + (BackWidth / 2), BackHeight, BackHeight, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
+			sbs->ResetWalls();
+		}
 	}
 
 	//create buttons
 	if (Direction == "front" || Direction == "back")
 	{
 		float offset;
-		int index;
 		if (Direction == "front")
 		{
+			sbs->DrawWalls(true, false, false, false, false, false);
 			offset = -0.01f;
-			index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, 0, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), 1, 1);
-			index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, 0, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), 1, 1);
 		}
 		else
 		{
-			//back
+			sbs->DrawWalls(false, true, false, false, false, false);
 			offset = 0.01f;
-			index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, 0, CenterX + (BackWidth / 4), CenterZ + offset, CenterX - (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), 1, 1);
-			index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, 0, CenterX + (BackWidth / 4), CenterZ + offset, CenterX - (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), 1, 1);
 		}
+		sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, 0, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), 1, 1);
+		sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, 0, CenterX - (BackWidth / 4), CenterZ + offset, CenterX + (BackWidth / 4), CenterZ + offset, BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), 1, 1);
+		sbs->ResetWalls();
 	}
 	else
 	{
 		float offset;
-		int index;
 		if (Direction == "left")
 		{
+			sbs->DrawWalls(true, false, false, false, false, false);
 			offset = -0.01f;
-			index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, 0, CenterX + offset, CenterZ + (BackWidth / 4), CenterX + offset, CenterZ - (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), 1, 1);
-			index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, 0, CenterX + offset, CenterZ + (BackWidth / 4), CenterX + offset, CenterZ - (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), 1, 1);
 		}
 		else
 		{
 			//right
+			sbs->DrawWalls(false, true, false, false, false, false);
 			offset = 0.01f;
-			index = sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, 0, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), 1, 1);
-			index = sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, 0, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), 1, 1);
 		}
+		sbs->AddWallMain(CallButton_state, "Up", UpButtonTexture, 0, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.75), 1, 1);
+		sbs->AddWallMain(CallButton_state, "Down", DownButtonTexture, 0, CenterX + offset, CenterZ - (BackWidth / 4), CenterX + offset, CenterZ + (BackWidth / 4), BackHeight / 4, BackHeight / 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight * 0.25), 1, 1);
+		sbs->ResetWalls();
 	}
-	sbs->ResetWalls();
 	sbs->ResetExtents();
 }
 
@@ -185,8 +192,8 @@ void CallButton::Press(int index)
 		return;
 
 	csString name = CallButton_state->GetPolygonName(index);
-	if (name == "Up")
-		Call (1);
-	if (name == "Down")
-		Call (-1);
+	if (name.Slice(0, 2) == "Up")
+		Call(1);
+	if (name.Slice(0, 4) == "Down")
+		Call(-1);
 }
