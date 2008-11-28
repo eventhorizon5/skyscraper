@@ -29,6 +29,14 @@ class Skyscraper : public wxApp
 public:
 	virtual bool OnInit(void);
 	virtual int OnExit(void);
+
+	//file loader functions
+	int LoadBuilding(const char * filename);
+	int LoadDataFile(const char * filename);
+
+	//File I/O
+	csString BuildingFile;
+	csArray<csString> BuildingData;
 };
 
 class MainScreen : public wxFrame

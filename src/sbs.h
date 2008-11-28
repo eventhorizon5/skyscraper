@@ -157,10 +157,6 @@ public:
 	int ShaftOutsideDisplayRange; //number of shaft floors to display while outside of shaft
 	int StairsOutsideDisplayRange; //number of stairwell floors to display while outside of stairwell
 
-	//File I/O
-	csString BuildingFile;
-	csArray<csString> BuildingData;
-
 	//mouse coordinates
 	int mouse_x, mouse_y;
 
@@ -237,10 +233,6 @@ public:
 	float MetersToFeet(float meters); //converts meters to feet
 	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
 	void Stop();
-
-	//file loader functions
-	int LoadBuilding(const char * filename);
-	int LoadDataFile(const char * filename);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

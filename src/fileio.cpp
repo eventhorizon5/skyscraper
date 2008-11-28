@@ -26,6 +26,7 @@
 #include <wx/variant.h>
 #include "globals.h"
 #include <stdlib.h>
+#include "skyscraper.h"
 #include "sbs.h"
 #include "camera.h"
 #include "floor.h"
@@ -35,8 +36,9 @@
 #include "unix.h"
 
 float AltitudeCheck;
+extern SBS *Simcore;
 
-int SBS::LoadBuilding(const char * filename)
+int Skyscraper::LoadBuilding(const char * filename)
 {
 	//building loader/script interpreter
 
@@ -90,29 +92,29 @@ int SBS::LoadBuilding(const char * filename)
 		{
 			Section = 1;
 			Context = "Globals";
-			Report("Processing globals...");
+			Simcore->Report("Processing globals...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endglobals>") == true)
 		{
-			InitMeshes();
+			Simcore->InitMeshes();
 			Section = 0;
 			Context = "None";
-			Report("Finished globals");
+			Simcore->Report("Finished globals");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<external>") == true)
 		{
 			Section = 3;
 			Context = "External";
-			Report("Processing external objects...");
+			Simcore->Report("Processing external objects...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endexternal>") == true)
 		{
 			Section = 0;
 			Context = "None";
-			Report("Finished external");
+			Simcore->Report("Finished external");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<floors") == true)
@@ -126,7 +128,7 @@ int SBS::LoadBuilding(const char * filename)
 				//Err.Raise 1004;
 			Current = RangeL;
 			RangeStart = i;
-			Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
+			Simcore->Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<floor ") == true)
@@ -138,14 +140,14 @@ int SBS::LoadBuilding(const char * filename)
 			Current = atoi(LineData.Slice(7, LineData.Length() - 7).GetData());
 			//if (Current < -Basements !! Current > TotalFloors)
 				//Err.Raise 1005
-			Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
+			Simcore->Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endfloor>") == true)
 		{
 			Section = 0;
 			Context = "None";
-			Report("Finished floor");
+			Simcore->Report("Finished floor");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<elevators") == true)
@@ -157,7 +159,7 @@ int SBS::LoadBuilding(const char * filename)
 			Context = "Elevator range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
 			Current = RangeL;
 			RangeStart = i;
-			Report("Processing elevators " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
+			Simcore->Report("Processing elevators " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<elevator ") == true)
@@ -167,41 +169,41 @@ int SBS::LoadBuilding(const char * filename)
 			RangeL = 0;
 			RangeH = 0;
 			Current = atoi(LineData.Slice(10, LineData.Length() - 10).GetData());
-			Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
+			Simcore->Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endelevator>") == true)
 		{
 			Section = 0;
 			Context = "None";
-			Report("Finished elevator");
+			Simcore->Report("Finished elevator");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<textures>") == true)
 		{
 			Section = 5;
 			Context = "Textures";
-			Report("Processing textures...");
+			Simcore->Report("Processing textures...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 13).CompareNoCase("<endtextures>") == true)
 		{
 			Section = 0;
 			Context = "None";
-			Report("Finished textures");
+			Simcore->Report("Finished textures");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 5).CompareNoCase("<end>") == true)
 		{
 			Section = 0;
 			Context = "None";
-			Report("Exiting building script");
+			Simcore->Report("Exiting building script");
 			break; //exit data file parser
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<break>") == true)
 		{
 			//breakpoint function for debugging scripts
-			Report("Script breakpoint reached");
+			Simcore->Report("Script breakpoint reached");
 			goto Nextline;
 		}
 
@@ -235,9 +237,9 @@ int SBS::LoadBuilding(const char * filename)
 				temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
 				if (IsNumeric(temp2.GetData()) == true)
 				{
-					//if (temp2 < 0 !! temp2 > UBound(UserVariable))
+					//if (temp2 < 0 !! temp2 > UBound(Simcore->UserVariable))
 						//Err.Raise 1001
-					LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
+					LineData.ReplaceAll("%" + temp2 + "%", Simcore->UserVariable[atoi(temp2.GetData())]);
 				}
 			}
 		} while (1 == 1);
@@ -260,7 +262,7 @@ int SBS::LoadBuilding(const char * filename)
 			temp1 = buffer.Find(temp6.GetData(), 0);
 			if (temp1 > 0)
 			{
-				buffer = GetFloor(temp4)->FullHeight();
+				buffer = Simcore->GetFloor(temp4)->FullHeight();
 				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
 			}
 			//altitude parameter
@@ -271,7 +273,7 @@ int SBS::LoadBuilding(const char * filename)
 			temp1 = buffer.Find(temp6.GetData(), 0);
 			if (temp1 > 0)
 			{
-				buffer = GetFloor(temp4)->Altitude;
+				buffer = Simcore->GetFloor(temp4)->Altitude;
 				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
 			}
 			temp5 = csString(LineData).Downcase().Find("floor(", 0);
@@ -283,33 +285,33 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 			//if (tempdata.GetSize < 9)
 				//Err.Raise 1003;
 			if (csString(tempdata[0]).CompareNoCase("floor") == true)
-				tmpMesh = GetFloor(Current)->Level_state;
+				tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			else
 			{
 			if (Section == 2)
 				{
-					buffer = GetFloor(Current)->Altitude + atof(tempdata[8]);
+					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[8]);
 					tempdata.Put(8, buffer);
 				}
 			}
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
-				tmpMesh = External_state;
+				tmpMesh = Simcore->External_state;
 			if (buffer == "landscape")
-				tmpMesh = Landscape_state;
+				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
-				tmpMesh = Buildings_state;
+				tmpMesh = Simcore->Buildings_state;
 			if (buffer == "columnframe")
-				tmpMesh = ColumnFrame_state;
+				tmpMesh = Simcore->ColumnFrame_state;
 			//if IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
-			CreateWallBox2(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+			Simcore->CreateWallBox2(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 			tempdata.DeleteAll();
 		}
 
@@ -319,33 +321,33 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 			//if (tempdata.GetSize < 9)
 				//Err.Raise 1003
 			if (csString(tempdata[0]).CompareNoCase("floor") == true)
-				tmpMesh = GetFloor(Current)->Level_state;
+				tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			else
 			{
 				if (Section == 2)
 				{
-					buffer = GetFloor(Current)->Altitude + atof(tempdata[8]);
+					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[8]);
 					tempdata.Put(8, buffer);
 				}
 			}
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
-				tmpMesh = External_state;
+				tmpMesh = Simcore->External_state;
 			if (buffer == "landscape")
-				tmpMesh = Landscape_state;
+				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
-				tmpMesh = Buildings_state;
+				tmpMesh = Simcore->Buildings_state;
 			if (buffer == "columnframe")
-				tmpMesh = ColumnFrame_state;
+				tmpMesh = Simcore->ColumnFrame_state;
 			//If IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
-			CreateWallBox(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+			Simcore->CreateWallBox(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 			tempdata.DeleteAll();
 		}
 
@@ -356,25 +358,25 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "floor")
-				tmpMesh = GetFloor(Current)->Level_state;
+				tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			if (buffer == "external")
 			{
-				tmpMesh = External_state;
+				tmpMesh = Simcore->External_state;
 				extcheck = true;
 			}
 			if (buffer == "landscape")
-				tmpMesh = Landscape_state;
+				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
-				tmpMesh = Buildings_state;
+				tmpMesh = Simcore->Buildings_state;
 			if (buffer == "columnframe")
-				tmpMesh = ColumnFrame_state;
+				tmpMesh = Simcore->ColumnFrame_state;
 
 			csPoly3D varray;
 			int alength;
@@ -382,7 +384,7 @@ int SBS::LoadBuilding(const char * filename)
 			for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
-			AddCustomWall(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]), extcheck);
+			Simcore->AddCustomWall(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]), extcheck);
 			tempdata.DeleteAll();
 		}
 
@@ -393,25 +395,25 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "floor")
-			tmpMesh = GetFloor(Current)->Level_state;
+			tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			if (buffer == "external")
 			{
-				tmpMesh = External_state;
+				tmpMesh = Simcore->External_state;
 				extcheck = true;
 			}
 			if (buffer == "landscape")
-				tmpMesh = Landscape_state;
+				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
-				tmpMesh = Buildings_state;
+				tmpMesh = Simcore->Buildings_state;
 			if (buffer == "columnframe")
-				tmpMesh = ColumnFrame_state;
+				tmpMesh = Simcore->ColumnFrame_state;
 
 			csPoly3D varray;
 			int alength;
@@ -419,7 +421,7 @@ int SBS::LoadBuilding(const char * filename)
 			for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
-			int index = AddCustomFloor(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]), extcheck);
+			int index = Simcore->AddCustomFloor(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]), extcheck);
 
 			tempdata.DeleteAll();
 		}
@@ -430,11 +432,11 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
-			CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+			Simcore->CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
 
 			tempdata.DeleteAll();
 		}
@@ -445,11 +447,11 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
-			GetShaft(atoi(tempdata[0]))->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
+			Simcore->GetShaft(atoi(tempdata[0]))->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
 
 			tempdata.DeleteAll();
 		}
@@ -460,12 +462,12 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(LineData.Slice(16).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
-			if (!GetStairs(atoi(tempdata[0])))
-				CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]));
+			if (!Simcore->GetStairs(atoi(tempdata[0])))
+				Simcore->CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]));
 
 			tempdata.DeleteAll();
 		}
@@ -476,11 +478,11 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(LineData.Slice(13).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
-			GetStairs(atoi(tempdata[0]))->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
+			Simcore->GetStairs(atoi(tempdata[0]))->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
 
 			tempdata.DeleteAll();
 		}
@@ -492,7 +494,7 @@ int SBS::LoadBuilding(const char * filename)
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
 			temp2.Trim();
 
-			SetWallOrientation(temp2.GetData());
+			Simcore->SetWallOrientation(temp2.GetData());
 		}
 
 		//SetFloorOrientation command
@@ -502,7 +504,7 @@ int SBS::LoadBuilding(const char * filename)
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
 			temp2.Trim();
 
-			SetFloorOrientation(temp2.GetData());
+			Simcore->SetFloorOrientation(temp2.GetData());
 		}
 
 		//DrawWalls command
@@ -515,11 +517,11 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(temp2.GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
-			DrawWalls(csString(tempdata[0]).CompareNoCase("true"),
+			Simcore->DrawWalls(csString(tempdata[0]).CompareNoCase("true"),
 						csString(tempdata[1]).CompareNoCase("true"),
 						csString(tempdata[2]).CompareNoCase("true"),
 						csString(tempdata[3]).CompareNoCase("true"),
@@ -535,11 +537,11 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
-			ReverseExtents(csString(tempdata[0]).CompareNoCase("true"),
+			Simcore->ReverseExtents(csString(tempdata[0]).CompareNoCase("true"),
 						csString(tempdata[1]).CompareNoCase("true"),
 						csString(tempdata[2]).CompareNoCase("true"));
 
@@ -555,24 +557,24 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "floor")
-			tmpMesh = GetFloor(Current)->Level_state;
+			tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			if (buffer == "external")
-				tmpMesh = External_state;
+				tmpMesh = Simcore->External_state;
 			if (buffer == "landscape")
-				tmpMesh = Landscape_state;
+				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
-				tmpMesh = Buildings_state;
+				tmpMesh = Simcore->Buildings_state;
 			if (buffer == "columnframe")
-				tmpMesh = ColumnFrame_state;
+				tmpMesh = Simcore->ColumnFrame_state;
 
-			csVector3 isect = GetPoint(tmpMesh, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
+			csVector3 isect = Simcore->GetPoint(tmpMesh, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 			tempdata.DeleteAll();
 			
 			buffer = csString(LineData).Slice(0, temp5 - 1) + csString(wxVariant(isect.x).GetString().ToAscii()) + csString(wxVariant(isect.y).GetString().ToAscii()) + csString(wxVariant(isect.z).GetString().ToAscii()) + csString(LineData).Slice(temp3 + 1);
@@ -590,11 +592,11 @@ int SBS::LoadBuilding(const char * filename)
 			tempdata.SplitString(temp2.GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Simcore->Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
-			SetAutoSize(csString(tempdata[0]).CompareNoCase("true"),
+			Simcore->SetAutoSize(csString(tempdata[0]).CompareNoCase("true"),
 						csString(tempdata[1]).CompareNoCase("true"));
 
 			tempdata.DeleteAll();
@@ -609,49 +611,49 @@ int SBS::LoadBuilding(const char * filename)
 
 			//store variable values
 			if (LineData.Slice(0, 4).CompareNoCase("name") == true)
-				BuildingName = temp2;
+				Simcore->BuildingName = temp2;
 			if (LineData.Slice(0, 8).CompareNoCase("designer") == true)
-				BuildingDesigner = temp2;
+				Simcore->BuildingDesigner = temp2;
 			if (LineData.Slice(0, 8).CompareNoCase("location") == true)
-				BuildingLocation = temp2;
+				Simcore->BuildingLocation = temp2;
 			if (LineData.Slice(0, 11).CompareNoCase("description") == true)
-				BuildingDescription = temp2;
+				Simcore->BuildingDescription = temp2;
 			if (LineData.Slice(0, 7).CompareNoCase("version") == true)
-				BuildingVersion = temp2;
+				Simcore->BuildingVersion = temp2;
 			if (LineData.Slice(0, 14).CompareNoCase("cameraaltitude") == true)
 			{
 				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-				camera->DefaultAltitude = atof(temp2.GetData());
+				Simcore->camera->DefaultAltitude = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 11).CompareNoCase("camerafloor") == true)
 			{
 				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-				camera->StartFloor = atoi(temp2.GetData());
+				Simcore->camera->StartFloor = atoi(temp2.GetData());
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("horizscale") == true)
 			{
 				//if (IsNumeric(temp2) == false)
 					//Err.Raise 1000;
-				HorizScale = atof(temp2.GetData());
+				Simcore->HorizScale = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 14).CompareNoCase("cameraposition") == true)
 			{
-				camera->StartPositionX  = atof(temp2.Slice(0, temp2.Find(",", 0)).GetData());
-				camera->StartPositionZ  = atof(temp2.Slice(temp2.Find(",", 0) + 1).GetData());
+				Simcore->camera->StartPositionX  = atof(temp2.Slice(0, temp2.Find(",", 0)).GetData());
+				Simcore->camera->StartPositionZ  = atof(temp2.Slice(temp2.Find(",", 0) + 1).GetData());
 			}
 			if (LineData.Slice(0, 15).CompareNoCase("cameradirection") == true)
 			{
 				temp3 = temp2.Find(",", 0);
 				temp4 = temp2.Find(",", temp3 + 1);
-				camera->SetStartDirection(csVector3(atof(temp2.Slice(0, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
+				Simcore->camera->SetStartDirection(csVector3(atof(temp2.Slice(0, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
 			}
 			if (LineData.Slice(0, 14).CompareNoCase("camerarotation") == true)
 			{
 				temp3 = temp2.Find(",", 0);
 				temp4 = temp2.Find(",", temp3 + 1);
-				camera->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
+				Simcore->camera->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
 			}
 
 			//Set command
@@ -660,10 +662,10 @@ int SBS::LoadBuilding(const char * filename)
 				temp1 = LineData.Find("=", 0);
 				temp3 = atoi(LineData.Slice(4, temp1 - 5));
 				temp2 = LineData.Slice(temp1 + 1);
-				//if (temp3 < 0 !! temp3 > UBound(UserVariable))
+				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
 					//Err.Raise 1001
-				UserVariable[temp3] = Calc(temp2);
-				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+				Simcore->UserVariable[temp3] = Simcore->Calc(temp2);
+				Simcore->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
 		}
 
@@ -672,16 +674,16 @@ int SBS::LoadBuilding(const char * filename)
 		{
 
 			//create floor if not created already
-			NewFloor(Current);
+			Simcore->NewFloor(Current);
 recalc:
 			//replace variables with actual values
 			buffer = Current;
 			LineData.ReplaceAll("%floor%", buffer);
-			buffer = GetFloor(Current)->Height;
+			buffer = Simcore->GetFloor(Current)->Height;
 			LineData.ReplaceAll("%height%", buffer);
-			buffer = GetFloor(Current)->FullHeight();
+			buffer = Simcore->GetFloor(Current)->FullHeight();
 			LineData.ReplaceAll("%fullheight%", buffer);
-			buffer = GetFloor(Current)->InterfloorHeight;
+			buffer = Simcore->GetFloor(Current)->InterfloorHeight;
 			LineData.ReplaceAll("%interfloorheight%", buffer);
 
 			//get text after equal sign
@@ -692,7 +694,7 @@ recalc:
 			if (LineData.Slice(0, 6).CompareNoCase("height") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetFloor(Current)->Height = atof(temp2.GetData());
+				Simcore->GetFloor(Current)->Height = atof(temp2.GetData());
 				if (FloorCheck < 2)
 					FloorCheck = 1;
 				else
@@ -701,7 +703,7 @@ recalc:
 			if (LineData.Slice(0, 16).CompareNoCase("interfloorheight") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetFloor(Current)->InterfloorHeight = atof(temp2.GetData());
+				Simcore->GetFloor(Current)->InterfloorHeight = atof(temp2.GetData());
 				if (FloorCheck == 0)
 					FloorCheck = 2;
 				else
@@ -710,18 +712,18 @@ recalc:
 			if (LineData.Slice(0, 8).CompareNoCase("altitude") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetFloor(Current)->Altitude = atof(temp2.GetData());
+				Simcore->GetFloor(Current)->Altitude = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 2).CompareNoCase("id") == true)
-				GetFloor(Current)->ID = Calc(temp2);
+				Simcore->GetFloor(Current)->ID = Simcore->Calc(temp2);
 			if (LineData.Slice(0, 4).CompareNoCase("name") == true)
-				GetFloor(Current)->Name = temp2;
+				Simcore->GetFloor(Current)->Name = temp2;
 			if (LineData.Slice(0, 4).CompareNoCase("type") == true)
-				GetFloor(Current)->FloorType = temp2;
+				Simcore->GetFloor(Current)->FloorType = temp2;
 			if (LineData.Slice(0, 11).CompareNoCase("description") == true)
-				GetFloor(Current)->Description = temp2;
+				Simcore->GetFloor(Current)->Description = temp2;
 			if (LineData.Slice(0, 16).CompareNoCase("indicatortexture") == true)
-				GetFloor(Current)->IndicatorTexture = temp2;
+				Simcore->GetFloor(Current)->IndicatorTexture = temp2;
 			if (LineData.Slice(0, 5).CompareNoCase("group") == true)
 			{
 				//copy string listing of group floors into array
@@ -736,10 +738,10 @@ recalc:
 						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-")));
 						int end = atoi(tmpstring.Slice(tmpstring.Find("-") + 1));
 						for (int k = start; k <= end; k++)
-							GetFloor(Current)->AddGroupFloor(k);
+							Simcore->GetFloor(Current)->AddGroupFloor(k);
 					}
 					else
-						GetFloor(Current)->AddGroupFloor(atoi(tempdata[i]));
+						Simcore->GetFloor(Current)->AddGroupFloor(atoi(tempdata[i]));
 				}
 				tempdata.DeleteAll();
 			}
@@ -748,7 +750,7 @@ recalc:
 			if (FloorCheck == 3)
 			{
 				FloorCheck = 0;
-				GetFloor(Current)->CalculateAltitude();
+				Simcore->GetFloor(Current)->CalculateAltitude();
 			}
 
 			//IF statement
@@ -761,7 +763,7 @@ recalc:
 				else
 					temp2 = "";
 				temp2.Trim();
-				if (Calc(temp2) == "true")
+				if (Simcore->Calc(temp2) == "true")
 				{
 					LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
 					goto recalc;
@@ -788,7 +790,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 8)
@@ -796,7 +798,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
-				GetFloor(Current)->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"));
+				Simcore->GetFloor(Current)->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"));
 
 				tempdata.DeleteAll();
 			}
@@ -810,7 +812,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 8)
@@ -818,7 +820,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
-				GetShaft(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
+				Simcore->GetShaft(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
 
 				tempdata.DeleteAll();
 			}
@@ -832,7 +834,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 8)
@@ -840,8 +842,8 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
-				if (GetStairs(atoi(tempdata[0])))
-					GetStairs(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
+				if (Simcore->GetStairs(atoi(tempdata[0])))
+					Simcore->GetStairs(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
 
 				tempdata.DeleteAll();
 			}
@@ -855,7 +857,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 7)
@@ -863,7 +865,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
-				GetFloor(Current)->AddInterfloorFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				Simcore->GetFloor(Current)->AddInterfloorFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 				tempdata.DeleteAll();
 			}
 
@@ -876,7 +878,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -884,7 +886,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
-				GetFloor(Current)->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), csString(tempdata[13]).CompareNoCase("true"));
+				Simcore->GetFloor(Current)->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), csString(tempdata[13]).CompareNoCase("true"));
 
 				tempdata.DeleteAll();
 			}
@@ -898,7 +900,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -906,7 +908,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
-				GetShaft(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+				Simcore->GetShaft(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
 
 				tempdata.DeleteAll();
 			}
@@ -920,7 +922,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -928,8 +930,8 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
-				if (GetStairs(atoi(tempdata[0])))
-					GetStairs(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+				if (Simcore->GetStairs(atoi(tempdata[0])))
+					Simcore->GetStairs(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
 
 				tempdata.DeleteAll();
 			}
@@ -943,7 +945,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 10)
@@ -951,7 +953,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
-				GetFloor(Current)->AddInterfloorWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+				Simcore->GetFloor(Current)->AddInterfloorWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 				tempdata.DeleteAll();
 			}
 
@@ -961,10 +963,10 @@ recalc:
 				temp1 = LineData.Find("=", 0);
 				temp3 = atoi(LineData.Slice(4, temp1 - 5));
 				temp2 = LineData.Slice(temp1 + 1);
-				//if (temp3 < 0 !! temp3 > UBound(UserVariable))
+				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
 					//Err.Raise 1001
-				UserVariable[temp3] = Calc(temp2);
-				//Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+				Simcore->UserVariable[temp3] = Simcore->Calc(temp2);
+				//Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
 
 			//CallButtonElevators command
@@ -989,7 +991,7 @@ recalc:
 			{
 				if (callbutton_elevators.GetSize() == 0)
 				{
-					Report("Error: Trying to create call buttons, but no elevators specified");
+					Simcore->Report("Error: Trying to create call buttons, but no elevators specified");
 					goto Nextline;
 				}
 
@@ -998,12 +1000,12 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
 				//create call button
-				GetFloor(Current)->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), csString(tempdata[9]).CompareNoCase("true"), atof(tempdata[10]), atof(tempdata[11]));
+				Simcore->GetFloor(Current)->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), csString(tempdata[9]).CompareNoCase("true"), atof(tempdata[10]), atof(tempdata[11]));
 				tempdata.DeleteAll();
 			}
 
@@ -1016,13 +1018,13 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
 				//create stairs
-				if (GetStairs(atoi(tempdata[0])))
-					GetStairs(atoi(tempdata[0]))->AddStairs(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atoi(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+				if (Simcore->GetStairs(atoi(tempdata[0])))
+					Simcore->GetStairs(atoi(tempdata[0]))->AddStairs(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atoi(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 				tempdata.DeleteAll();
 			}
 
@@ -1035,12 +1037,12 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
 				//create door
-				GetFloor(Current)->AddDoor(tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
+				Simcore->GetFloor(Current)->AddDoor(tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
 				tempdata.DeleteAll();
 			}
 
@@ -1053,13 +1055,13 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
 				//create door
-				if (GetStairs(atoi(tempdata[0])))
-					GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], atof(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				if (Simcore->GetStairs(atoi(tempdata[0])))
+					Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], atof(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 				tempdata.DeleteAll();
 			}
 
@@ -1111,7 +1113,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 13)
@@ -1119,7 +1121,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
 
 				//create triangle wall
-				AddTriangleWall(External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), true);
+				Simcore->AddTriangleWall(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), true);
 				tempdata.DeleteAll();
 			}
 
@@ -1132,7 +1134,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -1140,7 +1142,7 @@ recalc:
 				//if IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
-				AddWallMain(External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+				Simcore->AddWallMain(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 				tempdata.DeleteAll();
 			}
 
@@ -1153,7 +1155,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 7)
@@ -1161,7 +1163,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
-				AddFloorMain(External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				Simcore->AddFloorMain(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 				tempdata.DeleteAll();
 			}
 
@@ -1171,10 +1173,10 @@ recalc:
 				temp1 = LineData.Find("=", 0);
 				temp3 = atoi(LineData.Slice(4, temp1 - 5));
 				temp2 = LineData.Slice(temp1 + 1);
-				//if (temp3 < 0 !! temp3 > UBound(UserVariable))
+				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
 					//Err.Raise 1001
-				UserVariable[temp3] = Calc(temp2);
-				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+				Simcore->UserVariable[temp3] = Simcore->Calc(temp2);
+				Simcore->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
 		}
 
@@ -1183,7 +1185,7 @@ recalc:
 		{
 
 			//create elevator if not created already
-			NewElevator(Current);
+			Simcore->NewElevator(Current);
 
 			//get text after equal sign
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
@@ -1192,32 +1194,32 @@ recalc:
 			if (LineData.Slice(0, 5).CompareNoCase("speed") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetElevator(Current)->ElevatorSpeed = atof(temp2.GetData());
+				Simcore->GetElevator(Current)->ElevatorSpeed = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 12).CompareNoCase("acceleration") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetElevator(Current)->Acceleration = atof(temp2.GetData());
+				Simcore->GetElevator(Current)->Acceleration = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 12).CompareNoCase("deceleration") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetElevator(Current)->Deceleration = atof(temp2.GetData());
+				Simcore->GetElevator(Current)->Deceleration = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("openspeed") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetElevator(Current)->OpenSpeed = atof(temp2.GetData());
+				Simcore->GetElevator(Current)->OpenSpeed = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("acceljerk") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetElevator(Current)->AccelJerk = atof(temp2.GetData());
+				Simcore->GetElevator(Current)->AccelJerk = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("deceljerk") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetElevator(Current)->DecelJerk = atof(temp2.GetData());
+				Simcore->GetElevator(Current)->DecelJerk = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 14).CompareNoCase("servicedfloors") == true)
 			{
@@ -1233,22 +1235,22 @@ recalc:
 						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-")));
 						int end = atoi(tmpstring.Slice(tmpstring.Find("-") + 1));
 						for (int k = start; k <= end; k++)
-							GetElevator(Current)->AddServicedFloor(k);
+							Simcore->GetElevator(Current)->AddServicedFloor(k);
 					}
 					else
-						GetElevator(Current)->AddServicedFloor(atoi(tempdata[i]));
+						Simcore->GetElevator(Current)->AddServicedFloor(atoi(tempdata[i]));
 				}
 				tempdata.DeleteAll();
 			}
 			if (LineData.Slice(0, 13).CompareNoCase("assignedshaft") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetElevator(Current)->AssignedShaft = atoi(temp2.GetData());
+				Simcore->GetElevator(Current)->AssignedShaft = atoi(temp2.GetData());
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("doortimer") == true)
 			{
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				GetElevator(Current)->DoorTimer = atof(temp2.GetData());
+				Simcore->GetElevator(Current)->DoorTimer = atof(temp2.GetData());
 			}
 
 			//replace variables with actual values
@@ -1265,7 +1267,7 @@ recalc:
 				else
 					temp2 = "";
 				temp2.Trim();
-				if (Calc(temp2) == "true")
+				if (Simcore->Calc(temp2) == "true")
 					LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
 				else
 					goto Nextline; //skip line
@@ -1277,13 +1279,13 @@ recalc:
 				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 3)
 					//Err.Raise 1003;
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Then Err.Raise 1000
-				GetElevator(Current)->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atoi(tempdata[2]));
+				Simcore->GetElevator(Current)->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atoi(tempdata[2]));
 				tempdata.DeleteAll();
 			}
 
@@ -1296,7 +1298,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 8)
@@ -1304,7 +1306,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
-				GetElevator(Current)->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				Simcore->GetElevator(Current)->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 
 				tempdata.DeleteAll();
 			}
@@ -1318,7 +1320,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -1326,7 +1328,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
-				GetElevator(Current)->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+				Simcore->GetElevator(Current)->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 
 				tempdata.DeleteAll();
 			}
@@ -1340,14 +1342,14 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
 					//Err.Raise 1003;
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
-				GetElevator(Current)->AddDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), csString(tempdata[6]).CompareNoCase("true"), atof(tempdata[7]), atof(tempdata[8]));
+				Simcore->GetElevator(Current)->AddDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), csString(tempdata[6]).CompareNoCase("true"), atof(tempdata[7]), atof(tempdata[8]));
 
 				tempdata.DeleteAll();
 			}
@@ -1361,14 +1363,14 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
 					//Err.Raise 1003;
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
-				GetElevator(Current)->AddShaftDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
+				Simcore->GetElevator(Current)->AddShaftDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
 
 				tempdata.DeleteAll();
 			}
@@ -1382,11 +1384,11 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
-				GetElevator(Current)->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+				Simcore->GetElevator(Current)->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 
 				tempdata.DeleteAll();
 			}
@@ -1394,9 +1396,9 @@ recalc:
 			//AddFloorButton command
 			if (LineData.Slice(0, 14).CompareNoCase("addfloorbutton") == true)
 			{
-				if (!GetElevator(Current)->Panel)
+				if (!Simcore->GetElevator(Current)->Panel)
 				{
-					Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+					Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 					goto Nextline;
 				}
 
@@ -1406,11 +1408,11 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
-				GetElevator(Current)->Panel->AddFloorButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]));
+				Simcore->GetElevator(Current)->Panel->AddFloorButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]));
 
 				tempdata.DeleteAll();
 			}
@@ -1418,9 +1420,9 @@ recalc:
 			//AddControlButton command
 			if (LineData.Slice(0, 16).CompareNoCase("addcontrolbutton") == true)
 			{
-				if (!GetElevator(Current)->Panel)
+				if (!Simcore->GetElevator(Current)->Panel)
 				{
-					Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+					Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 					goto Nextline;
 				}
 
@@ -1430,11 +1432,11 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
-				GetElevator(Current)->Panel->AddControlButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3]);
+				Simcore->GetElevator(Current)->Panel->AddControlButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3]);
 
 				tempdata.DeleteAll();
 			}
@@ -1448,11 +1450,11 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Calc(tempdata[temp3]);
+					buffer = Simcore->Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
-				GetElevator(Current)->AddFloorIndicator(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
+				Simcore->GetElevator(Current)->AddFloorIndicator(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
 
 				tempdata.DeleteAll();
 			}
@@ -1464,10 +1466,10 @@ recalc:
 				temp1 = LineData.Find("=", 0);
 				temp3 = atoi(LineData.Slice(4, temp1 - 5));
 				temp2 = LineData.Slice(temp1 + 1);
-				//if (temp3 < 0 !! temp3 > UBound(UserVariable))
+				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
 					//Err.Raise 1001
-				UserVariable[temp3] = Calc(temp2);
-				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+				Simcore->UserVariable[temp3] = Simcore->Calc(temp2);
+				Simcore->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
 
 			//handle elevator range
@@ -1503,7 +1505,7 @@ recalc:
 					//Err.Raise 1003;
 				buffer = tempdata[0];
 				buffer.Insert(0, "/root/");
-				LoadTexture(buffer.GetData(), tempdata[1]);
+				Simcore->LoadTexture(buffer.GetData(), tempdata[1]);
 				tempdata.DeleteAll();
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("loadrange") == true)
@@ -1526,7 +1528,7 @@ recalc:
 					temp2.ReplaceAll("%number%", buffer.Trim());
 					temp6 = tempdata[3];
 					temp6.ReplaceAll("%number%", buffer.Trim());
-					LoadTexture("/root/" + temp2, temp6);
+					Simcore->LoadTexture("/root/" + temp2, temp6);
 				}
 				tempdata.DeleteAll();
 			}
@@ -1539,18 +1541,18 @@ Nextline:
 	return 0;
 }
 
-int SBS::LoadDataFile(const char * filename)
+int Skyscraper::LoadDataFile(const char * filename)
 {
 	//loads a building data file into the runtime buffer
 	bool streamnotfinished = true;
 	char buffer[1000];
 
 	//make sure file exists
-	if (vfs->Exists(filename) == false)
+	if (Simcore->vfs->Exists(filename) == false)
 		return 1;
 
 	//load file
-	csRef<iFile> file (vfs->Open(filename, VFS_FILE_READ));
+	csRef<iFile> file (Simcore->vfs->Open(filename, VFS_FILE_READ));
 
 	//exit if an error occurred while loading
 	if (!file)

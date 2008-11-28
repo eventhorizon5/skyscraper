@@ -62,6 +62,7 @@ int main (int argc, char* argv[])
 
 bool Skyscraper::OnInit(void)
 {
+	BuildingFile = "";
 	srand (time (0));
 
 	//set building file
@@ -101,10 +102,20 @@ bool Skyscraper::OnInit(void)
 	}
 
 	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-	Simcore->BuildingFile = Selector->GetFilename().mb_str().data();
+	BuildingFile = Selector->GetFilename().mb_str().data();
 	#else
-	Simcore->BuildingFile = Selector->GetFilename();
+	BuildingFile = Selector->GetFilename();
 	#endif
+
+	//load building data file
+	Simcore->Report("\nLoading building data from " + BuildingFile + "...\n");
+
+	//Pause for 1 second
+	csSleep(1000);
+
+	BuildingFile.Insert(0, "/root/buildings/");
+	LoadBuilding(BuildingFile.GetData());
+	//if (LoadBuilding(BuildingFile.GetData()) != 0)
 
 	//delete dialog
 	delete Selector;

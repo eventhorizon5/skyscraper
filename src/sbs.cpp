@@ -68,7 +68,6 @@ SBS::SBS()
 	InStairwell = false;
 	InElevator = false;
 	EnableCollisions = true;
-	BuildingFile = "";
 	IsBuildingsEnabled = false;
 	IsColumnFrameEnabled = false;
 	IsExternalEnabled = false;
@@ -154,28 +153,8 @@ SBS::~SBS()
 
 void SBS::Start()
 {
-	//set up viewport
-	view = csPtr<iView>(new csView (engine, g3d));
-	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
-
-	//create camera object
-	camera = new Camera();
-
 	//set running value
 	IsRunning = true;
-
-	//clear user variables
-	UserVariable.SetSize(256);
-
-	//load building data file
-	Report("\nLoading building data from " + BuildingFile + "...\n");
-
-	//Pause for 1 second
-	csSleep(1000);
-
-	BuildingFile.Insert(0, "/root/buildings/");
-	LoadBuilding(BuildingFile.GetData());
-	//if (LoadBuilding(BuildingFile.GetData()) != 0)
 
 	//create skybox
 	CreateSky();
@@ -631,6 +610,16 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	LoadTexture("/root/data/back.jpg", "SkyBack");
 	LoadTexture("/root/data/brick1.jpg", "Default");
 	csPrintf("Done\n");
+
+	//set up viewport
+	view = csPtr<iView>(new csView (engine, g3d));
+	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
+
+	//create camera object
+	camera = new Camera();
+
+	//clear user variables
+	UserVariable.SetSize(256);
 
 	return true;
 }
