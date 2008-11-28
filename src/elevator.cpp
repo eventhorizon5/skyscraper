@@ -462,7 +462,13 @@ void Elevator::OpenDoors(int whichdoors, int floor)
 
 	//check if elevator doors are already open
 	if (DoorsOpen == true && whichdoors != 3)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors already open; resetting timer");
+		//reset timer
+		timer->Stop();
+		timer->Start(DoorTimer, true);
 		return;
+	}
 
 	//check if shaft doors are already open
 	if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == true && whichdoors == 3)
@@ -496,7 +502,10 @@ void Elevator::CloseDoors(int whichdoors, int floor)
 
 	//check if elevator doors are already closed
 	if (DoorsOpen == false && whichdoors != 3)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors already closed");
 		return;
+	}
 
 	//check if shaft doors are already closed
 	if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == false && whichdoors == 3)
