@@ -395,13 +395,15 @@ void Elevator::OpenDoorsEmergency(int whichdoors, int floor)
 		return;
 
 	//check if shaft doors are already open
-	if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == true && whichdoors == 3)
-		return;
-
-	if (whichdoors != 3)
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening doors");
+	if (whichdoors == 3)
+	{
+		if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == true && whichdoors == 3)
+			return;
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+	}
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening doors");
 
 	OpenDoor = 2;
 	WhichDoors = whichdoors;
@@ -431,13 +433,15 @@ void Elevator::CloseDoorsEmergency(int whichdoors, int floor)
 		return;
 
 	//check if shaft doors are already closed
-	if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == false && whichdoors == 3)
-		return;
-
-	if (whichdoors != 3)
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing doors");
+	if (whichdoors == 3)
+	{
+		if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == false && whichdoors == 3)
+			return;
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+	}
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing doors");
 
 	OpenDoor = -2;
 	WhichDoors = whichdoors;
@@ -471,13 +475,15 @@ void Elevator::OpenDoors(int whichdoors, int floor)
 	}
 
 	//check if shaft doors are already open
-	if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == true && whichdoors == 3)
-		return;
-
-	if (whichdoors != 3)
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening doors");
+	if (whichdoors == 3)
+	{
+		if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == true)
+			return;
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+	}
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening doors");
 
 	OpenDoor = 1;
 	WhichDoors = whichdoors;
@@ -508,13 +514,15 @@ void Elevator::CloseDoors(int whichdoors, int floor)
 	}
 
 	//check if shaft doors are already closed
-	if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == false && whichdoors == 3)
-		return;
-
-	if (whichdoors != 3)
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing doors");
+	if (whichdoors == 3)
+	{
+		if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == false && whichdoors == 3)
+			return;
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+	}
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing doors");
 
 	OpenDoor = -1;
 	WhichDoors = whichdoors;
