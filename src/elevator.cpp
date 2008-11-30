@@ -1727,7 +1727,7 @@ void Elevator::CreateButtonPanel(const char *texture, int columns, int rows, con
 {
 	//create a new button panel object and store the pointer
 	if (!Panel)
-		Panel = new ButtonPanel(Number, texture, rows, columns, direction, CenterX, CenterZ, width, height, voffset, spacingX, spacingY, tw, th);
+		Panel = new ButtonPanel(Number, texture, columns, rows, direction, CenterX, CenterZ, width, height, voffset, spacingX, spacingY, tw, th);
 	else
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panel already exists");
 }
