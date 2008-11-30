@@ -109,6 +109,7 @@ public:
 	csRef<iBase> plug;
 	csRef<iCollideSystem> collision_sys;
 	csRef<iMouseDriver> mouse;
+	csRef<iReporter> rep;
 
 	csRef<iMaterialWrapper> material;
 	csRef<iLightList> ll;

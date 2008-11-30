@@ -530,33 +530,35 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 		return false;
 	}
 
-	csRef<iPluginManager> plugin_mgr (CS_QUERY_REGISTRY (object_reg, iPluginManager));
+	csRef<iPluginManager> plugin_mgr = csQueryRegistry<iPluginManager> (object_reg);
 
-	vc = CS_QUERY_REGISTRY (object_reg, iVirtualClock);
-	kbd = CS_QUERY_REGISTRY (object_reg, iKeyboardDriver);
-	if (!kbd) return ReportError ("No keyboard driver!");
-	engine = CS_QUERY_REGISTRY (object_reg, iEngine);
-	if (!engine) return ReportError ("No engine!");
-	loader = CS_QUERY_REGISTRY (object_reg, iLoader);
-	if (!loader) return ReportError ("No loader!");
-	g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
-	if (!g3d) return ReportError ("No 3D driver!");
-	imageio = CS_QUERY_REGISTRY (object_reg, iImageIO);
-	if (!imageio) return ReportError ("No image loader!");
-	vfs = CS_QUERY_REGISTRY (object_reg, iVFS);
-	if (!vfs) return ReportError ("No VFS!");
-	console = CS_QUERY_REGISTRY (object_reg, iConsoleOutput);
-	if (!console) return ReportError ("No ConsoleOutput!");
-	mouse = CS_QUERY_REGISTRY(object_reg, iMouseDriver);
-	if (!mouse) return ReportError("No Mouse Driver!");
+	vc = csQueryRegistry<iVirtualClock> (object_reg);
+	if (!vc) return ReportError("Failed to locate Virtual Clock");
+	kbd = csQueryRegistry<iKeyboardDriver> (object_reg);
+	if (!kbd) return ReportError ("Failed to locate Keyboard Driver");
+	engine = csQueryRegistry<iEngine> (object_reg);
+	if (!engine) return ReportError ("Failed to locate 3D engine");
+	loader = csQueryRegistry<iLoader> (object_reg);
+	if (!loader) return ReportError ("Failed to locate Loader");
+	g3d = csQueryRegistry<iGraphics3D> (object_reg);
+	if (!g3d) return ReportError ("Failed to locate 3D renderer");
+	imageio = csQueryRegistry<iImageIO> (object_reg);
+	if (!imageio) return ReportError ("Failed to locate image loader");
+	vfs = csQueryRegistry<iVFS> (object_reg);
+	if (!vfs) return ReportError ("Failed to locate VFS");
+	console = csQueryRegistry<iConsoleOutput> (object_reg);
+	if (!console) return ReportError ("Failed to locate console output driver");
+	mouse = csQueryRegistry<iMouseDriver> (object_reg);
+	if (!mouse) return ReportError("Failed to locate mouse driver");
 	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
-	if (!collision_sys) return ReportError("No collision detection driver!");
-	plug = CS_LOAD_PLUGIN_ALWAYS (plugin_mgr, "crystalspace.utilities.bugplug");
-	if (!plug) return ReportError ("No BugPlug!");
+	if (!collision_sys) return ReportError("Failed to locate collision detection driver");
+	plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
+	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	if (plug) plug->IncRef ();
+	rep = csQueryRegistry<iReporter> (object_reg);
 
-	stdrep = CS_QUERY_REGISTRY (object_reg, iStandardReporterListener);
-	if (!stdrep) return ReportError ("No stdrep plugin!");
+	stdrep = csQueryRegistry<iStandardReporterListener> (object_reg);
+	if (!stdrep) return ReportError ("Failed to locate stdrep plugin!");
 	stdrep->SetDebugFile ("/tmp/sbs_report.txt");
 	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_BUG, true, false, false, false, true, false);
 	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_ERROR, true, false, false, false, true, false);
@@ -573,7 +575,7 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 
 	g2d = g3d->GetDriver2D();
 	g2d->AllowResize(true); //allow canvas resizing
-	wxwin = SCF_QUERY_INTERFACE(g2d, iWxWindow);
+	wxwin = scfQueryInterface<iWxWindow> (g2d);
 	if(!wxwin)
 	{
 		ReportError("Canvas is no iWxWindow plugin!");
@@ -590,7 +592,7 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (!csInitializer::OpenApplication (object_reg))
 		return ReportError ("Error opening system!");
 
-	equeue = CS_QUERY_REGISTRY(object_reg, iEventQueue);
+	equeue = csQueryRegistry<iEventQueue> (object_reg);
 
 	// First disable the lighting cache. Our app is simple enough
 	// not to need this.
@@ -1045,7 +1047,6 @@ void SBS::Report (const char* msg, ...)
 {
 	va_list arg;
 	va_start (arg, msg);
-	csRef<iReporter> rep (CS_QUERY_REGISTRY (object_reg, iReporter));
 	if (rep)
 		rep->ReportV (CS_REPORTER_SEVERITY_NOTIFY, "sbs", msg, arg);
 	else
@@ -1061,7 +1062,6 @@ bool SBS::ReportError (const char* msg, ...)
 {
 	va_list arg;
 	va_start (arg, msg);
-	csRef<iReporter> rep (CS_QUERY_REGISTRY (object_reg, iReporter));
 	if (rep)
 		rep->ReportV (CS_REPORTER_SEVERITY_ERROR, "sbs", msg, arg);
 	else
