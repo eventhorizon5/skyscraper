@@ -706,27 +706,33 @@
     define the grid size of the panel. <em>Direction</em> is either &quot;front&quot;, 
     &quot;back&quot;, &quot;left&quot; or &quot;right&quot;, defining which direction 
     the panel faces. <em>SpacingX</em> is the space (percent of a button's width) 
-    horizontally between each button, and spacingY is the space (percent of a 
-    button's height) vertically between each button. The system leaves one empty 
-    grid space on all 4 sides, to center the buttons. Not all positions need to 
-    be used; this is simply to provide a grid layout for the panel.</p>
+    horizontally between each button, and <em>spacingY</em> is the space (percent 
+    of a button's height) vertically between each button. Not all positions need 
+    to be used; this is simply to provide a grid layout for the panel.</p>
   <p align="left"><strong>7. AddFloorButton</strong> - creates a floor button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorButton <em>texturename</em>, 
-    <em>row, column, floor</em></font></p>
+    <em>row, column, floor, width, height</em></font></p>
   <p align="left">The AddFloorButton command creates a floor button on the button 
     panel created with CreatePanel. <em>Row</em> and <em>Column</em> specify the 
-    position on the grid where the button should be (the engine also leaves one 
-    button-sized space on each side open). <em>Floor</em> specifies the floor 
-    number that this button calls.</p>
+    position on the grid where the button should be. <em>Floor</em> specifies 
+    the floor number that this button calls. <em>Width</em> and <em>Height</em> 
+    specify the width and height of the button, as a percentage of a single grid 
+    unit size (1 being 100%, 0.5 being 50%). If both values are 0, the default 
+    of 1 is used for both values. If only one of the values is 0, then the exact 
+    size other is used; for example, if <em>width</em> is 0 and <em>height</em> 
+    is 1 (or any other number), then the width will end up being the same size 
+    as the height.</p>
   <p align="left"><strong>8. AddControlButton</strong> - creates a control button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddControlButton 
-    <em>texturename</em>, <em>row, column, type</em></font> </p>
+    <em>texturename</em>, <em>row, column, type, width, height</em></font></p>
   <p align="left">The AddControlButton command creates a command button on the 
     panel created with CreatePanel. <em>Row</em> and <em>Column</em> are the same 
     as the AddFloorButton command, and <em>Type</em> can be either &quot;open&quot;, 
-    &quot;close&quot;, &quot;cancel&quot;, &quot;stop&quot; or &quot;alarm&quot;.</p>
+    &quot;close&quot;, &quot;cancel&quot;, &quot;stop&quot; or &quot;alarm&quot;. 
+    See the above command for a description of the <em>Width</em> and <em>Height</em> 
+    values.</p>
   <p align="left"><strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em> 
     direction</em>, <em>CenterX, CenterZ, width, height, voffset</em></font> </p>
