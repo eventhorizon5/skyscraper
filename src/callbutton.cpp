@@ -185,7 +185,7 @@ void CallButton::Call(int direction)
 		int current = sbs->GetElevator(Elevators[i])->GetFloor();
 
 		//if elevator is closer than the previously checked one
-		if (abs(current) < closest)
+		if (abs(current - floor) < closest)
 		{
 			//and if it's above the current floor and should be called down, or below the
 			//current floor and called up
