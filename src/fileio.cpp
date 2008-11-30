@@ -1412,7 +1412,7 @@ recalc:
 					tempdata.Put(temp3, buffer);
 				}
 
-				Simcore->GetElevator(Current)->Panel->AddFloorButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]));
+				Simcore->GetElevator(Current)->Panel->AddFloorButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
 
 				tempdata.DeleteAll();
 			}
@@ -1436,7 +1436,7 @@ recalc:
 					tempdata.Put(temp3, buffer);
 				}
 
-				Simcore->GetElevator(Current)->Panel->AddControlButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3]);
+				Simcore->GetElevator(Current)->Panel->AddControlButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]));
 
 				tempdata.DeleteAll();
 			}

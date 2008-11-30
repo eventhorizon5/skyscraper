@@ -44,8 +44,8 @@ public:
 	//functions
 	ButtonPanel(int _elevator, const char *texture, int columns, int rows, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
 	~ButtonPanel();
-	void AddFloorButton(const char *texture, int row, int column, int floor);
-	void AddControlButton(const char *texture, int row, int column, const char *type);
+	void AddFloorButton(const char *texture, int row, int column, int floor, float width, float height);
+	void AddControlButton(const char *texture, int row, int column, const char *type, float width, float height);
 	void DeleteButton(int row, int column);
 	void Press(int index);
 	void Move(csVector3 position);
@@ -56,7 +56,7 @@ private:
 	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
 	csRef<iThingFactoryState> ButtonPanel_state;
 
-	void AddButton(const char *name, const char *texture, int row, int column);
+	void AddButton(const char *name, const char *texture, int row, int column, float bwidth, float bheight);
 };
 
 #endif
