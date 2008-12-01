@@ -58,7 +58,7 @@ SBS::SBS()
 	BuildingLocation = "";
 	BuildingDescription = "";
 	BuildingVersion = "";
-	Gravity = 9.8f; // 9.8 m/s/s
+	Gravity = 9.806f; // 9.806 m/s/s
 	IsRunning = false;
 	Floors = 0;
 	Basements = 0;
@@ -596,8 +596,8 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 
 	// First disable the lighting cache. Our app is simple enough
 	// not to need this.
-		engine->SetLightingCacheMode (0);
-		engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
+	engine->SetLightingCacheMode (0);
+	engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
 
 	//create 3D environments
 	area = engine->CreateSector("area");
