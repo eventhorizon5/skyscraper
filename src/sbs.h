@@ -34,25 +34,6 @@
 static bool SBSEventHandler(iEvent& Event);
 void Cleanup();
 
-struct iEngine;
-struct iSector;
-struct iView;
-struct iFont;
-struct iFile;
-struct iKeyboardDriver;
-struct iImageLoader;
-struct iLoaderPlugin; struct iMeshWrapper;
-struct iConsoleOutput;
-struct iVirtualClock;
-struct iObjectRegistry;
-struct iGraphics3D;
-struct iGraphics2D;
-struct iLoader;
-struct iVFS;
-struct iEvent;
-class DemoSequenceManager;
-class csTransform;
-
 struct FloorMap
 {
 	int number; //floor number
@@ -110,10 +91,15 @@ public:
 	csRef<iCollideSystem> collision_sys;
 	csRef<iMouseDriver> mouse;
 	csRef<iReporter> rep;
+	csRef<FramePrinter> printer;
+	csRef<iDynamics> dyn;
+	csRef<iDynamicSystem> dynSys;
+	csRef<iFontServer> fontserver;
 
 	csRef<iMaterialWrapper> material;
 	csRef<iLightList> ll;
 	csRef<iSector> area;
+	csRef<iFont> courierFont;
 
 	csTicks elapsed_time, current_time;
 	float delta;
@@ -181,7 +167,6 @@ public:
 	void DeleteFloor(csRef<iThingFactoryState> dest, int index);
 	bool HandleEvent(iEvent& Event);
 	void SetupFrame();
-	void FinishFrame();
 	void GetInput();
 	void Render();
 	int CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th);
@@ -234,6 +219,8 @@ public:
 	float MetersToFeet(float meters); //converts meters to feet
 	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
 	void Stop();
+	void WriteShadow (int x, int y, int fg, const char *str, ...);
+	void Write(int x, int y, int fg, int bg, const char *str, ...);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -255,17 +242,14 @@ private:
 
 	csEventID FocusGained;
 	csEventID FocusLost;
-	csEventID Process;
-	csEventID FinalProcess;
 	csEventID KeyboardDown;
+	csEventID KeyboardUp;
 
 	//mouse status
 	bool MouseDown;
 
-	//fps
-	int fps_frame_count;
-	int fps_tottime;
-	float remaining_delta;
+	//keyboard state
+	bool updown_status;
 
 	//conversion buffers
 	char intbuffer[65];
@@ -329,4 +313,9 @@ private:
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
 	csVector2 wall_extents_x, wall_extents_z, wall_extents_y;
+
+	//physics state
+	csRef<iODEDynamicSystemState> dynstate;
+
+	CS_DECLARE_EVENT_SHORTCUTS;
 };

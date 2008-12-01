@@ -117,21 +117,8 @@ void Camera::UpdateCameraFloor()
 
 bool Camera::Move(csVector3 vector, float speed)
 {
-	//collision detection
-	if (sbs->EnableCollisions == true)
-	{
-		csTraceBeamResult result;
-		if (vector != CS_VEC_DOWN)
-			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed) + (vector * 0.5), false);
-		else
-			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed) - csVector3(0, DefaultAltitude, 0), false);
-
-		if (result.closest_mesh)
-			return false;
-	}
-
 	//moves the camera in a relative amount specified by a vector
-	MainCamera->Move(vector * speed, sbs->EnableCollisions);
+	avatarbody->SetLinearVelocity(MainCamera->GetTransform().GetT2O() * (vector * speed));
 	return true;
 }
 
@@ -139,10 +126,7 @@ void Camera::Rotate(csVector3 vector, float speed)
 {
 	//rotates the camera in a relative amount
 
-	rotX += vector.x * speed;
-	rotY += vector.y * speed;
-	rotZ += vector.z * speed;
-	SetRotation(csVector3(rotX, rotY, rotZ));
+	MainCamera->GetTransform().RotateThis(vector, speed);
 }
 
 void Camera::SetStartDirection(csVector3 vector)
@@ -443,4 +427,30 @@ const char *Camera::GetClickedPolyName()
 	//return name of last clicked polygon
 
 	return polyname.GetData();
+}
+
+void Camera::Loop()
+{
+	//camera runloop
+	
+	//set camera to avatar's position
+	//MainCamera->GetTransform().SetOrigin(avatar->GetMovable()->GetTransform().GetOrigin());
+}
+
+void Camera::Stop()
+{
+	//stop velocities
+	avatarbody->SetLinearVelocity(csVector3(0, 0, 0));
+	avatarbody->SetAngularVelocity(csVector3(0, 0, 0));
+}
+
+void Camera::CreateAvatar()
+{
+	//create main avatar
+	avatarbody = sbs->dynSys->CreateBody();
+	avatarbody->SetProperties(1, csVector3(0), csMatrix3());
+	avatarbody->SetPosition(GetPosition());
+
+	//create and attach a sphere collider
+	avatarbody->AttachColliderSphere(0.8f, csVector3(0), 10, 1, 0.8f);
 }

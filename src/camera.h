@@ -63,6 +63,9 @@ public:
 	void ClickedObject();
 	const char *GetClickedMeshName();
 	const char *GetClickedPolyName();
+	void Loop();
+	void Stop();
+	void CreateAvatar();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera
@@ -74,6 +77,8 @@ private:
 	char intbuffer[65];
 	char buffer[20];
 	int FloorTemp; //previous floor check value
+	csRef<iMeshWrapper> avatar;
+	csRef<iRigidBody> avatarbody;
 };
 
 #endif
