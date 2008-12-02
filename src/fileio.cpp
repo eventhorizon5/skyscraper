@@ -1007,7 +1007,6 @@ recalc:
 				//create call button
 				Simcore->GetFloor(Current)->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), csString(tempdata[9]).CompareNoCase("true"), atof(tempdata[10]), atof(tempdata[11]));
 				tempdata.DeleteAll();
-				callbutton_elevators.DeleteAll();
 			}
 
 			//AddStairs command
