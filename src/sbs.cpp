@@ -76,6 +76,7 @@ SBS::SBS()
 	fps_frame_count = 0;
 	fps_tottime = 0;
 	FPS = 0;
+	FrameLimiter = false;
 	AutoShafts = true;
 	AutoStairs = true;
 	ElevatorSync = false;
@@ -145,6 +146,9 @@ SBS::~SBS()
 
 	//delete stairs
 	StairsArray.DeleteAll();
+
+	//delete frame printer object
+	printer.Invalidate();
 
 	//delete wx canvas
 	delete canvas;
@@ -323,11 +327,11 @@ void SBS::GetInput()
 	}
 	else if (wxGetKeyState(WXK_ALT))
 	{
-		//rotate on the Z axis if the Alt key is pressed with the left/right arrows
+		//tilt (rotate on the Z axis) if the Alt key is pressed with the left/right arrows
 		if (wxGetKeyState(WXK_RIGHT))
-			camera->Rotate(CS_VEC_FORWARD, speed);
+			camera->Rotate(CS_VEC_TILT_RIGHT, speed);
 		if (wxGetKeyState(WXK_LEFT))
-			camera->Rotate(CS_VEC_BACKWARD, speed);
+			camera->Rotate(CS_VEC_TILT_LEFT, speed);
 	}
 	else
 	{
@@ -336,13 +340,13 @@ void SBS::GetInput()
 		// _camera's_ X axis (more on this in a second) and up and down
 		// arrows cause the camera to go forwards and backwards.
 		if (wxGetKeyState(WXK_RIGHT))
-			camera->Rotate(CS_VEC_UP, speed);
+			camera->Rotate(CS_VEC_ROT_RIGHT, speed);
 		if (wxGetKeyState(WXK_LEFT))
-			camera->Rotate(CS_VEC_DOWN, speed);
+			camera->Rotate(CS_VEC_ROT_LEFT, speed);
 		if (wxGetKeyState(WXK_PRIOR)) //page up
-			camera->Rotate(CS_VEC_RIGHT, speed);
+			camera->Rotate(CS_VEC_TILT_UP, speed);
 		if (wxGetKeyState(WXK_NEXT)) //page down
-			camera->Rotate(CS_VEC_LEFT, speed);
+			camera->Rotate(CS_VEC_TILT_DOWN, speed);
 		if (wxGetKeyState(WXK_UP))
 		{
 			float KeepAltitude;
@@ -450,17 +454,10 @@ void SBS::SetupFrame()
 	Render();
 }
 
-void SBS::FinishFrame()
-{
-	g3d->FinishDraw();
-	g3d->Print(0);
-}
-
-
 bool SBS::HandleEvent(iEvent& Event)
 {
 	//Event handler
-	if (Event.Name == Process)
+	if (Event.Name == Frame)
 	{
 		// First get elapsed time from the virtual clock.
 		elapsed_time = vc->GetElapsedTicks ();
@@ -475,12 +472,7 @@ bool SBS::HandleEvent(iEvent& Event)
 			fps_tottime = 0;
 		}
 
-		SetupFrame ();
-		return true;
-	}
-	else if (Event.Name == FinalProcess)
-	{
-		FinishFrame ();
+		SetupFrame();
 		return true;
 	}
 	return false;
@@ -516,12 +508,12 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 
 	FocusGained = csevFocusGained (object_reg);
 	FocusLost = csevFocusLost (object_reg);
-	Process = csevProcess (object_reg);
-	FinalProcess = csevFinalProcess (object_reg);
 	KeyboardDown = csevKeyboardDown (object_reg);
 
 	if (!csInitializer::SetupEventHandler (object_reg, SBSEventHandler))
 		return ReportError ("Couldn't initialize event handler!");
+
+	CS_INITIALIZE_EVENT_SHORTCUTS (object_reg);
 
 	// Check for commandline help.
 	if (csCommandLineHelper::CheckHelp (object_reg))
@@ -576,11 +568,7 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	g2d = g3d->GetDriver2D();
 	g2d->AllowResize(true); //allow canvas resizing
 	wxwin = scfQueryInterface<iWxWindow> (g2d);
-	if(!wxwin)
-	{
-		ReportError("Canvas is no iWxWindow plugin!");
-		return false;
-	}
+	if(!wxwin) return ReportError("Canvas is no iWxWindow plugin!");
 	wxwin->SetParent(RenderObject);
 	canvas = RenderObject;
 	canvas_width = canvas->GetSize().GetWidth();
@@ -592,6 +580,10 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (!csInitializer::OpenApplication (object_reg))
 		return ReportError ("Error opening system!");
 
+	//initialize frame printer
+	printer.AttachNew(new FramePrinter(object_reg));
+
+	//initialize event queue
 	equeue = csQueryRegistry<iEventQueue> (object_reg);
 
 	// First disable the lighting cache. Our app is simple enough
