@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.1 Alpha - Edit Elevator Form
+	Skyscraper 1.2 Alpha - Edit Elevator Form
 	Copyright (C)2005-2008 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

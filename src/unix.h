@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Unix STL Globals
-	The Skyscraper Project - Version 1.1 Alpha
+	The Skyscraper Project - Version 1.2 Alpha
 	Copyright (C)2005-2008 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

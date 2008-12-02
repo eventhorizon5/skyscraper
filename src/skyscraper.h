@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.1 Alpha - Simulation Frontend
+	Skyscraper 1.2 Alpha - Simulation Frontend
 	Copyright (C)2005-2008 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
