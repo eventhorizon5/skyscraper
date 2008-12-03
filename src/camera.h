@@ -35,7 +35,27 @@ public:
 	int StartFloor; //Starting floor
 	float StartPositionX; //starting position on X axis
 	float StartPositionZ; //starting position on Z axis
-	float FallRate; //falling rate in m/s
+	float cfg_jumpspeed; //Initial speed of jumping.
+	float cfg_walk_accelerate; //walk acceleration
+	float cfg_walk_maxspeed; //walk maximum speed
+	float cfg_walk_maxspeed_mult; //multiplier for max speed
+	float cfg_walk_maxspeed_multreal; //is multiplier used?
+	float cfg_walk_brake; //walk brake deceleration
+	float cfg_rotate_accelerate; //rotate acceleration
+	float cfg_rotate_maxspeed; //rotate maximum speed
+	float cfg_rotate_brake; //rotate brake deceleration
+	float cfg_look_accelerate; //look acceleration
+	float cfg_body_height; //body height
+	float cfg_body_width; //body width
+	float cfg_body_depth; //body depth
+	float cfg_legs_height; //legs height
+	float cfg_legs_width; //legs width
+	float cfg_legs_depth; //legs depth
+	csVector3 desired_velocity;
+	csVector3 velocity;
+	csVector3 desired_angle_velocity;
+	csVector3 angle_velocity;
+	float speed; //movement speed base
 
 	//functions
 	Camera();
@@ -56,24 +76,36 @@ public:
 	void SetToStartPosition();
 	void SetToStartDirection();
 	void SetToStartRotation();
-	void Gravity();
 	void CheckElevator();
 	void CheckShaft();
 	void CheckStairwell();
 	void ClickedObject();
 	const char *GetClickedMeshName();
 	const char *GetClickedPolyName();
+	void CreateColliders();
+	void Loop();
+	void Strafe(float speed);
+	void Step(float speed);
+	void Float(float speed);
+	void Jump();
+	void Look(float speed);
+	void Turn(float speed);
+	void InterpolateMovement();
+	void SetGravity(float gravity);
+	float GetGravity();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera
 	csVector3 StartDirection; //direction camera faces on start
 	csVector3 StartRotation; //camera's startup rotation
-	float rotX, rotY, rotZ;
 	csString meshname; //last clicked mesh name
 	csString polyname; //last clicked polygon name
 	char intbuffer[65];
 	char buffer[20];
 	int FloorTemp; //previous floor check value
+
+	//collision
+	csColliderActor collider_actor;
 };
 
 #endif

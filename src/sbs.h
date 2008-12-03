@@ -108,7 +108,6 @@ public:
 	csString BuildingVersion;
 
 	//Internal data
-	float Gravity; //gravity variable for physics algorithms
 	bool IsRunning; //is sim engine running?
 	int Floors; //number of above-ground floors including 0
 	int Basements; //number of basement floors
@@ -213,6 +212,7 @@ public:
 	int CreateDoor(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
 	float MetersToFeet(float meters); //converts meters to feet
+	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
 	void Stop();
 

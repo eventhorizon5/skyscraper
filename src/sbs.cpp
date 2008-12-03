@@ -58,7 +58,6 @@ SBS::SBS()
 	BuildingLocation = "";
 	BuildingDescription = "";
 	BuildingVersion = "";
-	Gravity = 9.806f; // 9.806 m/s/s
 	IsRunning = false;
 	Floors = 0;
 	Basements = 0;
@@ -168,6 +167,10 @@ void SBS::Start()
 
 	//initialize mesh colliders
 	csColliderHelper::InitializeCollisionWrappers (collision_sys, engine);
+
+	//initialize camera/actor
+	camera->CreateColliders();
+	camera->SetGravity(MetersToFeet(9.806)); // 9.806 m/s/s
 
 	//move camera to start location
 	camera->SetToStartPosition();
@@ -285,7 +288,11 @@ void SBS::GetInput()
 	current_time = vc->GetCurrentTicks ();
 
 	// Now rotate the camera according to keyboard state
-	float speed = (elapsed_time / 1000.0) * (0.06 * 20);
+	//float speed = elapsed_time / 1000.0f;
+
+	//fix for the camera velocities due to the non-event driven key system
+	camera->desired_velocity.Set(0, 0, 0);
+	camera->desired_angle_velocity.Set(0, 0, 0);
 
 	//get mouse pointer coordinates
 	mouse_x = mouse->GetLastX();
@@ -308,63 +315,42 @@ void SBS::GetInput()
 	if (wxGetKeyState(WXK_F2))
 		Report(wxVariant(FPS).GetString().ToAscii());
 
-	if (wxGetKeyState(WXK_CONTROL))
-		speed *= 4;
+	camera->speed = 1;
 
-	if (wxGetKeyState(WXK_SHIFT))
+	if (wxGetKeyState(WXK_CONTROL))
+		camera->speed = 0.5;
+	else if (wxGetKeyState(WXK_SHIFT))
+		camera->speed = 2;
+	
+	if (wxGetKeyState(WXK_ALT))
 	{
-		// If the user is holding down shift, the arrow keys will cause
-		// the camera to strafe up, down, left or right from it's
-		// current position.
+		//strafe movement
 		if (wxGetKeyState(WXK_RIGHT))
-			camera->Move (CS_VEC_RIGHT, speed * 8);
+			camera->Strafe(1);
 		if (wxGetKeyState(WXK_LEFT))
-			camera->Move (CS_VEC_LEFT, speed * 8);
+			camera->Strafe(-1);
 		if (wxGetKeyState(WXK_UP))
-			camera->Move (CS_VEC_UP, speed * 8);
+			camera->Float(1);
 		if (wxGetKeyState(WXK_DOWN))
-			camera->Move (CS_VEC_DOWN, speed * 8);
-	}
-	else if (wxGetKeyState(WXK_ALT))
-	{
-		//tilt (rotate on the Z axis) if the Alt key is pressed with the left/right arrows
-		if (wxGetKeyState(WXK_RIGHT))
-			camera->Rotate(CS_VEC_TILT_RIGHT, speed);
-		if (wxGetKeyState(WXK_LEFT))
-			camera->Rotate(CS_VEC_TILT_LEFT, speed);
+			camera->Float(-1);
 	}
 	else
 	{
-		// left and right cause the camera to rotate on the global Y
-		// axis; page up and page down cause the camera to rotate on the
-		// _camera's_ X axis (more on this in a second) and up and down
-		// arrows cause the camera to go forwards and backwards.
 		if (wxGetKeyState(WXK_RIGHT))
-			camera->Rotate(CS_VEC_ROT_RIGHT, speed);
+			camera->Turn(1);
 		if (wxGetKeyState(WXK_LEFT))
-			camera->Rotate(CS_VEC_ROT_LEFT, speed);
+			camera->Turn(-1);
 		if (wxGetKeyState(WXK_PRIOR)) //page up
-			camera->Rotate(CS_VEC_TILT_UP, speed);
+			camera->Look(1);
 		if (wxGetKeyState(WXK_NEXT)) //page down
-			camera->Rotate(CS_VEC_TILT_DOWN, speed);
+			camera->Look(-1);
 		if (wxGetKeyState(WXK_UP))
-		{
-			float KeepAltitude;
-			KeepAltitude = camera->GetPosition().y;
-			camera->Move (CS_VEC_FORWARD, speed * 8);
-			if (camera->GetPosition().y != KeepAltitude)
-				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
-		}
+			camera->Step(1);
 		if (wxGetKeyState(WXK_DOWN))
-		{
-			float KeepAltitude;
-			KeepAltitude = camera->GetPosition().y;
-			camera->Move (CS_VEC_BACKWARD, speed * 8);
-			if (camera->GetPosition().y != KeepAltitude)
-				camera->SetPosition(csVector3(camera->GetPosition().x, KeepAltitude, camera->GetPosition().z));
-		}
-
+			camera->Step(-1);
 		if (wxGetKeyState(WXK_SPACE))
+			camera->Jump();
+		if (wxGetKeyState(WXK_F3))
 		{
 			//reset view
 			camera->SetToStartDirection();
@@ -373,9 +359,9 @@ void SBS::GetInput()
 
 		//values from old version
 		if (wxGetKeyState(WXK_HOME))
-			camera->Move (CS_VEC_UP, speed * 8);
+			camera->Float(1);
 		if (wxGetKeyState(WXK_END))
-			camera->Move (CS_VEC_DOWN, speed * 8);
+			camera->Float(-1);
 	}
 }
 
@@ -419,8 +405,8 @@ void SBS::SetupFrame()
 		if (RenderOnly == false && InputOnly == false)
 		{
 			//Process gravity
-			if (EnableCollisions == true)
-				camera->Gravity();
+			//if (EnableCollisions == true)
+				//camera->Gravity();
 
 			//Determine floor that the camera is on
 			camera->UpdateCameraFloor();
@@ -450,6 +436,9 @@ void SBS::SetupFrame()
 
 	if (RenderOnly == false)
 		GetInput();
+
+	//process camera loop
+	camera->Loop();
 
 	Render();
 }
@@ -2427,8 +2416,13 @@ int SBS::Doors()
 float SBS::MetersToFeet(float meters)
 {
 	//converts meters to feet
-
 	return meters * 3.2808399f;
+}
+
+float SBS::FeetToMeters(float feet)
+{
+	//converts feet to meters
+	return feet * 3.2808399f;
 }
 
 int SBS::AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th)

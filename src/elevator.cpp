@@ -1014,7 +1014,7 @@ void Elevator::MoveElevatorToFloor()
 	Elevator_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	Elevator_movable->UpdateMove();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->DefaultAltitude, sbs->camera->GetPosition().z));
+		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
 	ElevatorDoorL_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	ElevatorDoorL_movable->UpdateMove();
 	ElevatorDoorR_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
@@ -1185,7 +1185,7 @@ void Elevator::MoveElevatorToFloor()
 		Elevator_movable->SetPosition(csVector3(GetPosition().x, Destination, GetPosition().z));
 		Elevator_movable->UpdateMove();
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->DefaultAltitude, sbs->camera->GetPosition().z));
+			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
 		ElevatorDoorL_movable->SetPosition(csVector3(ElevatorDoorL_movable->GetPosition().x, Destination, ElevatorDoorL_movable->GetPosition().z));
 		ElevatorDoorL_movable->UpdateMove();
 		ElevatorDoorR_movable->SetPosition(csVector3(ElevatorDoorR_movable->GetPosition().x, Destination, ElevatorDoorR_movable->GetPosition().z));
