@@ -37,9 +37,6 @@ Camera::Camera()
 	MainCamera = sbs->view->GetCamera();
 	MainCamera->SetSector(sbs->area);
 
-	// these are used store the current orientation of the camera
-	rotY = rotX = rotZ = 0;
-
 	//init variables
 	DefaultAltitude = 0;
 	CurrentFloor = 0;
@@ -49,8 +46,28 @@ Camera::Camera()
 	StartPositionZ = 0;
 	StartDirection = csVector3(0, 0, 0);
 	StartRotation = csVector3(0, 0, 0);
-	FallRate = 0;
 	FloorTemp = 0;
+	velocity.Set(0, 0, 0);
+	desired_velocity.Set(0, 0, 0);
+	angle_velocity.Set(0, 0, 0);
+	desired_angle_velocity.Set(0, 0, 0);
+	cfg_jumpspeed = 0.08f;
+	cfg_walk_accelerate = 0.015f;
+	cfg_walk_maxspeed = 0.1f;
+	cfg_walk_maxspeed_mult = 10.0f;
+	cfg_walk_maxspeed_multreal = 1.0f;
+	cfg_walk_brake = 0.020f;
+	cfg_rotate_accelerate = 0.005f;
+	cfg_rotate_maxspeed = 0.015f;
+	cfg_rotate_brake = 0.015f;
+	cfg_look_accelerate = 0.028f;
+	cfg_body_height = 2.7f;
+	cfg_body_width = 1.64f;
+	cfg_body_depth = 1.64f;
+	cfg_legs_height = 2.3f;
+	cfg_legs_width = 1.312f;
+	cfg_legs_depth = 1.312f;
+	speed = 1;
 }
 
 Camera::~Camera()
@@ -73,29 +90,13 @@ void Camera::SetDirection(csVector3 vector)
 void Camera::SetRotation(csVector3 vector)
 {
 	//sets the camera's rotation to an absolute position
-
-	// We now assign a new rotation transformation to the camera.  You
-	// can think of the rotation this way: starting from the zero
-	// position, you first rotate "rotY" radians on your Y axis to get
-	// the first rotation.  From there you rotate "rotX" radians on the
-	// your X axis to get the final rotation.  We multiply the
-	// individual rotations on each axis together to get a single
-	// rotation matrix.  The rotations are applied in right to left
-	// order .
-	csMatrix3 rot = csXRotMatrix3 (vector.x) * csYRotMatrix3 (vector.y) * csZRotMatrix3 (vector.z);
-	csOrthoTransform ot (rot, MainCamera->GetTransform().GetOrigin ());
-	MainCamera->SetTransform (ot);
-	rotX = vector.x;
-	rotY = vector.y;
-	rotZ = vector.z;
+	collider_actor.SetRotation(vector);
 }
 
 csVector3 Camera::GetPosition()
 {
 	//returns the camera's current position
-	return csVector3(MainCamera->GetTransform().GetOrigin().x,
-				MainCamera->GetTransform().GetOrigin().y,
-				MainCamera->GetTransform().GetOrigin().z);
+	return MainCamera->GetTransform().GetOrigin();
 }
 
 csVector3 Camera::GetDirection()
@@ -107,7 +108,7 @@ csVector3 Camera::GetDirection()
 csVector3 Camera::GetRotation()
 {
 	//returns the camera's current rotation
-	return csVector3(0, 0, 0);
+	return collider_actor.GetRotation();
 }
 
 void Camera::UpdateCameraFloor()
@@ -117,19 +118,6 @@ void Camera::UpdateCameraFloor()
 
 bool Camera::Move(csVector3 vector, float speed)
 {
-	//collision detection
-	if (sbs->EnableCollisions == true)
-	{
-		csTraceBeamResult result;
-		if (vector != CS_VEC_DOWN)
-			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed) + (vector * 0.5), false);
-		else
-			result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), GetPosition() + (vector * speed) - csVector3(0, DefaultAltitude, 0), false);
-
-		if (result.closest_mesh)
-			return false;
-	}
-
 	//moves the camera in a relative amount specified by a vector
 	MainCamera->Move(vector * speed, sbs->EnableCollisions);
 	return true;
@@ -138,11 +126,8 @@ bool Camera::Move(csVector3 vector, float speed)
 void Camera::Rotate(csVector3 vector, float speed)
 {
 	//rotates the camera in a relative amount
-
-	rotX += vector.x * speed;
-	rotY += vector.y * speed;
-	rotZ += vector.z * speed;
-	SetRotation(csVector3(rotX, rotY, rotZ));
+	csVector3 rot = GetRotation() * vector * speed;
+	collider_actor.SetRotation(rot);
 }
 
 void Camera::SetStartDirection(csVector3 vector)
@@ -158,9 +143,6 @@ csVector3 Camera::GetStartDirection()
 void Camera::SetStartRotation(csVector3 vector)
 {
 	StartRotation = vector;
-	rotX = vector.x;
-	rotY = vector.y;
-	rotZ = vector.z;
 }
 
 csVector3 Camera::GetStartRotation()
@@ -181,57 +163,6 @@ void Camera::SetToStartDirection()
 void Camera::SetToStartRotation()
 {
 	SetRotation(StartRotation);
-}
-
-void Camera::Gravity()
-{
-	csTraceBeamResult result;
-	csTicks new_time;
-	static csTicks old_time;
-	static float original_position, distance;
-
-	result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, GetPosition(), csVector3(GetPosition().x, GetPosition().y - DefaultAltitude, GetPosition().z), false);
-	if (result.closest_mesh)
-	{
-		distance = 0;
-		sbs->IsFalling = false;
-		original_position = 0;
-		old_time = 0;
-		FallRate = 0;
-
-		//step routine
-		float height = result.closest_isect.y - (GetPosition().y - DefaultAltitude);
-		if (height < DefaultAltitude / 2) //only climb up if height is less than half the default altitude
-			SetPosition(csVector3(GetPosition().x, result.closest_isect.y + DefaultAltitude, GetPosition().z));
-	}
-	else
-	{
-		//fall routine
-
-		if (sbs->IsFalling == false)
-		{
-			old_time = sbs->vc->GetCurrentTicks();
-			original_position = GetPosition().y;
-		}
-		sbs->IsFalling = true;
-		new_time = sbs->vc->GetCurrentTicks();
-		csTicks time_rate = new_time - old_time;
-		//get distance value
-		//d = 0.5 * g * t^2
-		distance = 0.5 * sbs->Gravity * pow(float(time_rate) / 1000, 2.0f);
-
-		//get rate in m/s (r = d/t)
-		FallRate = distance / (float(time_rate) / 1000);
-
-		//convert meters to feet
-		distance = sbs->MetersToFeet(distance);
-
-		result = csColliderHelper::TraceBeam(sbs->collision_sys, sbs->area, csVector3(GetPosition().x, original_position, GetPosition().z), csVector3(GetPosition().x, original_position - distance, GetPosition().z), false);
-		if (result.closest_mesh)
-			SetPosition(csVector3(GetPosition().x, result.closest_isect.y + DefaultAltitude, GetPosition().z));
-		else
-			SetPosition(csVector3(GetPosition().x, original_position - distance, GetPosition().z));
-	}
 }
 
 void Camera::CheckElevator()
@@ -443,4 +374,113 @@ const char *Camera::GetClickedPolyName()
 	//return name of last clicked polygon
 
 	return polyname.GetData();
+}
+
+void Camera::CreateColliders()
+{
+	// Define the player bounding box.
+
+	collider_actor.SetCollideSystem(sbs->collision_sys);
+	collider_actor.SetEngine(sbs->engine);
+	csVector3 legs (cfg_legs_width, cfg_legs_height, cfg_legs_depth);
+	csVector3 body (cfg_body_width, cfg_body_height, cfg_body_depth);
+	csVector3 shift (0, -(cfg_legs_height + cfg_body_height), 0);
+	collider_actor.InitializeColliders (MainCamera, legs, body, shift);
+	collider_actor.SetCamera(MainCamera, true);
+}
+
+void Camera::Loop()
+{
+	//set collision detection status
+	collider_actor.SetCD(sbs->EnableCollisions);
+
+	//calculate acceleration
+	InterpolateMovement();
+
+	//general movement
+	float delta = sbs->vc->GetElapsedTicks() / 1000.0f;
+	collider_actor.Move(delta, speed, velocity, angle_velocity);
+}
+
+void Camera::Strafe(float speed)
+{
+	speed *= cfg_walk_maxspeed_multreal;
+	desired_velocity.x = 140.0f * speed * cfg_walk_maxspeed	* cfg_walk_maxspeed_multreal;
+}
+
+void Camera::Step(float speed)
+{
+	speed *= cfg_walk_maxspeed_multreal;
+	desired_velocity.z = 140.0f * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
+}
+
+void Camera::Float(float speed)
+{
+	speed *= cfg_walk_maxspeed_multreal;
+	desired_velocity.y = 140.0f * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
+}
+
+void Camera::Jump()
+{
+	velocity.y = 110.0f * cfg_jumpspeed;
+	desired_velocity.y = 0.0f;
+}
+
+void Camera::Look(float speed)
+{
+	desired_angle_velocity.x = 150.0f * speed * cfg_rotate_maxspeed;
+}
+
+void Camera::Turn(float speed)
+{
+	desired_angle_velocity.y = 100.0f * speed * cfg_rotate_maxspeed * cfg_walk_maxspeed_multreal;
+}
+
+void Camera::InterpolateMovement()
+{
+	//calculate acceleration
+	float elapsed = sbs->vc->GetElapsedTicks() / 1000.0f;
+	elapsed *= 1700.0f;
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		if (velocity[i] < desired_velocity[i])
+		{
+			velocity[i] += cfg_walk_accelerate * elapsed;
+			if (velocity[i] > desired_velocity[i])
+				velocity[i] = desired_velocity[i];
+		}
+		else
+		{
+			velocity[i] -= cfg_walk_accelerate * elapsed;
+			if (velocity[i] < desired_velocity[i])
+				velocity[i] = desired_velocity[i];
+		}
+	}
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		if (angle_velocity[i] < desired_angle_velocity[i])
+		{
+			angle_velocity[i] += cfg_rotate_accelerate * elapsed;
+			if (angle_velocity[i] > desired_angle_velocity[i])
+				angle_velocity[i] = desired_angle_velocity[i];
+		}
+		else
+		{
+			angle_velocity[i] -= cfg_rotate_accelerate * elapsed;
+			if (angle_velocity[i] < desired_angle_velocity[i])
+				angle_velocity[i] = desired_angle_velocity[i];
+		}
+	}
+}
+
+void Camera::SetGravity(float gravity)
+{
+	collider_actor.SetGravity(gravity);
+}
+
+float Camera::GetGravity()
+{
+	return collider_actor.GetGravity();
 }
