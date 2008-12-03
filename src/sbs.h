@@ -34,25 +34,6 @@
 static bool SBSEventHandler(iEvent& Event);
 void Cleanup();
 
-struct iEngine;
-struct iSector;
-struct iView;
-struct iFont;
-struct iFile;
-struct iKeyboardDriver;
-struct iImageLoader;
-struct iLoaderPlugin; struct iMeshWrapper;
-struct iConsoleOutput;
-struct iVirtualClock;
-struct iObjectRegistry;
-struct iGraphics3D;
-struct iGraphics2D;
-struct iLoader;
-struct iVFS;
-struct iEvent;
-class DemoSequenceManager;
-class csTransform;
-
 struct FloorMap
 {
 	int number; //floor number
@@ -110,6 +91,7 @@ public:
 	csRef<iCollideSystem> collision_sys;
 	csRef<iMouseDriver> mouse;
 	csRef<iReporter> rep;
+	csRef<FramePrinter> printer;
 
 	csRef<iMaterialWrapper> material;
 	csRef<iLightList> ll;
@@ -180,7 +162,6 @@ public:
 	void DeleteFloor(csRef<iThingFactoryState> dest, int index);
 	bool HandleEvent(iEvent& Event);
 	void SetupFrame();
-	void FinishFrame();
 	void GetInput();
 	void Render();
 	int CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th);
@@ -255,8 +236,6 @@ private:
 
 	csEventID FocusGained;
 	csEventID FocusLost;
-	csEventID Process;
-	csEventID FinalProcess;
 	csEventID KeyboardDown;
 
 	//mouse status
@@ -270,6 +249,8 @@ private:
 	//conversion buffers
 	char intbuffer[65];
 	char buffer[20];
+
+	CS_DECLARE_EVENT_SHORTCUTS;
 
 	//orientations
 	int wall_orientation;
