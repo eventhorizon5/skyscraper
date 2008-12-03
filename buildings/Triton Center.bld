@@ -4417,6 +4417,14 @@ DrawWalls = true, true, false, false, false, false
     CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 12.583 - 4.75 - 0.33 - 0.1, -38.75 - 3.916 - 1, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
+#Lobby/Parking Elevators
+<Floors 0 to 1>
+	 CallButtonElevators = 25, 26
+	 CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 46.95 + 4.75 + 0.33 + 0.1, -33, 4, right, 0.5, 1, true, 0, 0
+	 CallButtonElevators = 27, 28
+	 CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -46.95 - 4.75 - 0.33 - 0.1, -33, 4, left, 0.5, 1, true, 0, 0
+<EndFloors>
+
 #Zone2 Locals
 <Floor 40>
     CallButtonElevators = 38, 39, 40, 41
@@ -4470,6 +4478,17 @@ DrawWalls = true, true, false, false, false, false
     CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -19 - 4.75 - 0.33 - 0.1, 23.375, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
+#Upper Express
+<Floors 0 to 1>
+	 CallButtonElevators = 33, 34
+	 CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 9.083 + 4.75 + 0.33 + 0.1, 33.33, 4, right, 0.5, 1, true, 0, 0
+<EndFloors>
+
+<Floors 134 to 136>
+	 CallButtonElevators = 33, 34
+	 CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 9.083 + 4.75 + 0.33 + 0.1, 33.33, 4, right, 0.5, 1, true, 0, 0
+<EndFloors>
+
 #Hotel Express
 <Floor 0>
     CallButtonElevators = 35, 36
@@ -4481,52 +4500,121 @@ DrawWalls = true, true, false, false, false, false
     CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 24.08, 18.08 + 4.75 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
+#Hotel Locals
+<Floor 80>
+	 CallButtonElevators = 54, 55, 56, 57
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -14.67, -18.42 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -14.67, -37.58 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
+<EndFloor>
 
-#stairs 1
-#CreateStairwell 1, 50, 50, 0, 20
-#CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
+<Floor 82 to 99>
+	 CallButtonElevators = 54, 55, 56, 57
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -14.67, -18.42 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -14.67, -37.58 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
+<EndFloor>
 
-#<Floor 0>
-#    AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, 0.5, 0.778, 10, 0, 0, 0
-#    AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, 0.5, 0.778, 10, 5, 0, 0
-#    FloorOrientation = top
-#    AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 0, 0, 1, 1
-#    AddStairsFloor 1, LandingUpper, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 5, 5, 1, 1
+#Residential Locals
+<Floor 100>
+	 CallButtonElevators = 59, 62, 63
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -14.67, -9.25 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
+	 CallButtonElevators = 60, 61, 64, 65
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 14.67, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 14.67, -9.25 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
+<EndFloor>
 
-#    AddStairsWall 1, LeftWall, Concrete, 0.1, -8.5, 3.5, 8.5, 3.5, %height%, %height%, 0, 0, 0, 0
-#    AddStairsWall 1, CenterWall, Concrete, 0.1, 8.5, -3.5, 8.5, 3.5, %height%, %height%, 0, 0, 0, 0
-#    AddStairsWall 1, RightWall, Concrete, 0.1, -8.5, -3.5, 8.5, -3.5, %height%, %height%, 0, 0, 0, 0
-#<EndFloor>
+<Floors 102 to 118>
+	 CallButtonElevators = 60, 61, 64, 65
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 14.67, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, 14.67, -9.25 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
+<EndFloors>
 
-#<Floor 1>
-#    AddStairs 1, StairsLower1, Stairs, left, 0, -1.75, 3.5, 0.5567, 0.637, 12, 0, 0, 0
-#    AddStairs 1, StairsUpper1, Stairs, right, 0, 1.75, 3.5, 0.5567, 0.637, 12, 6.68, 0, 0
-#    FloorOrientation = top
-#    AddStairsFloor 1, LandingLower1, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 0, 0, 1, 1
-#    AddStairsFloor 1, LandingUpper1, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 6.68, 6.68, 1, 1
+<Floors 120 to 129>
+	 CallButtonElevators = 59, 62, 63
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -14.67, -9.25 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
+<EndFloors>
 
-#    AddStairs 1, StairsLower2, Stairs, left, 0, -1.75, 3.5, 0.5567, 0.637, 12, 13.36, 0, 0
-#    AddStairs 1, StairsUpper2, Stairs, right, 0, 1.75, 3.5, 0.5567, 0.637, 12, 20.04, 0, 0
-#    FloorOrientation = top
-#    AddStairsFloor 1, LandingLower2, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 13.36, 13.36, 1, 1
-#    AddStairsFloor 1, LandingUpper2, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 20.04, 20.04, 1, 1
+#Pool Express
+<Floor 80>
+	 CallButtonElevators = 58
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -14.67, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+<EndFloor>
 
-#    AddStairsWall 1, LeftWall, Concrete, 0.1, -8.5, 3.5, 8.5, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
-#    AddStairsWall 1, CenterWall, Concrete, 0.1, 8.5, -3.5, 8.5, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
-#    AddStairsWall 1, RightWall, Concrete, 0.1, -8.5, -3.5, 8.5, -3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
-#<EndFloor>
+<Floor 100>
+	 CallButtonElevators = 58
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -14.67, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+<EndFloor>
 
-#<Floors 2 to 20>
-#    AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, 0.51, 0.637, 12, 0, 0, 0
-#    AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, 0.51, 0.637, 12, 6.12, 0, 0
-#    FloorOrientation = top
-#    AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 0, 0, 1, 1
-#    AddStairsFloor 1, LandingUpper, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 6.12, 6.12, 1, 1
+<Floors 120 to 129>
+	 CallButtonElevators = 58
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -14.67, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+<EndFloors>
 
-#    AddStairsWall 1, LeftWall, Concrete, 0.1, -8.5, 3.5, 8.5, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
-#    AddStairsWall 1, CenterWall, Concrete, 0.1, 8.5, -3.5, 8.5, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
-#    AddStairsWall 1, RightWall, Concrete, 0.1, -8.5, -3.5, 8.5, -3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
-#<EndFloors>
+<Floor 132>
+	 CallButtonElevators = 58
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -14.67, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+<EndFloor>
+
+#Skydeck Express
+<Floor 0>
+	 CallButtonElevators = 37
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -5.25, 30.71 + 16.75 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
+<EndFloor>
+
+<Floor 137>
+	 CallButtonElevators = 37
+    CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -5.25, 30.71 + 16.75 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
+<EndFloor>
+
+#Service Elevators
+<Floors 0 to 138>
+	 CallButtonElevators = 66
+	 CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -9.417 + 4.92 + 0.33 + 0.1, 18.542 + 4.125, 4, right, 0.5, 1, true, 0, 0
+	 CallButtonElevators = 67
+	 CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -9.375 - 5.08 - 0.33 - 0.1, 18.542 + 4.125, 4, right, 0.5, 1, true, 0, 0
+	 CallButtonElevators = 68
+	 CreateCallButtons ElevExtPanels, CallButtonsTex, CallButtonsTex, -9.417 + 4.92 + 0.33 + 0.1, 30.375 + 4.125, 4, right, 0.5, 1, true, 0, 0
+<EndFloors>
+
+
+#North Stairwell A
+CreateStairwell 1, -46.67, -3.708, 0, 39
+CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
+
+<Floor 0>
+    AddStairs 1, StairsLower, Stairs, front, -1.75, 0, 3.5, 0.5, 0.778, 10, 0, 0, 0
+    AddStairs 1, StairsUpper, Stairs, back, 1.75, 0, 3.5, 0.5, 0.778, 10, 5, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -4.708, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 4.708, 4.5, 9.708, 5, 5, 1, 1
+<EndFloor>
+
+<Floor 1>
+    AddStairs 1, StairsLower1, Stairs, left, 0, -1.75, 3.5, 0.5567, 0.637, 12, 0, 0, 0
+    AddStairs 1, StairsUpper1, Stairs, right, 0, 1.75, 3.5, 0.5567, 0.637, 12, 6.68, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 1, LandingLower1, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper1, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 6.68, 6.68, 1, 1
+
+    AddStairs 1, StairsLower2, Stairs, left, 0, -1.75, 3.5, 0.5567, 0.637, 12, 13.36, 0, 0
+    AddStairs 1, StairsUpper2, Stairs, right, 0, 1.75, 3.5, 0.5567, 0.637, 12, 20.04, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 1, LandingLower2, Brick, 0.5, -8.5, -3.5, -3.5, 3.5, 13.36, 13.36, 1, 1
+    AddStairsFloor 1, LandingUpper2, Brick, 0.5, 3.5, -3.5, 8.5, 3.5, 20.04, 20.04, 1, 1
+<EndFloor>
+
+<Floors 2 to 38>
+    AddStairs 1, StairsLower, Stairs, front, -1.75, 0, 3.5, 0.5, 0.637, 12, 0, 0, 0
+    AddStairs 1, StairsUpper, Stairs, back, 1.75, 0, 3.5, 0.5, 0.637, 12, 6.12, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -4.708, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 4.708, 4.5, 9.708, 6.12, 6.12, 1, 1
+<EndFloors>
+
+<Floors 0 to 39>
+    AddStairsWall 1, LeftWall, Concrete, 0.1, -4.5, -9.708, -4.5, 9.708, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddStairsWall 1, BackWall, Concrete, 0.1, -4.5, 9.708, 4.5, 9.708, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddStairsWall 1, RightWall, Concrete, 0.1, 4.5, -9.708, 4.5, 9.708, %fullheight%, %fullheight%, 0, 0, 0, 0
+<EndFloors>
 
 # Main load-bearing columns
 #Top set
