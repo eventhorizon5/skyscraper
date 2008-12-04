@@ -66,7 +66,6 @@ SBS::SBS()
 	IsFalling = false;
 	InStairwell = false;
 	InElevator = false;
-	EnableCollisions = true;
 	IsBuildingsEnabled = false;
 	IsColumnFrameEnabled = false;
 	IsExternalEnabled = false;
@@ -170,7 +169,6 @@ void SBS::Start()
 
 	//initialize camera/actor
 	camera->CreateColliders();
-	camera->SetGravity(MetersToFeet(9.806)); // 9.806 m/s/s
 
 	//move camera to start location
 	camera->SetToStartPosition();
@@ -404,10 +402,6 @@ void SBS::SetupFrame()
 	{
 		if (RenderOnly == false && InputOnly == false)
 		{
-			//Process gravity
-			//if (EnableCollisions == true)
-				//camera->Gravity();
-
 			//Determine floor that the camera is on
 			camera->UpdateCameraFloor();
 

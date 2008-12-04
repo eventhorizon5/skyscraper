@@ -68,6 +68,9 @@ Camera::Camera()
 	cfg_legs_width = 1.312f;
 	cfg_legs_depth = 1.312f;
 	speed = 1;
+	EnableCollisions = true;
+	GravityStatus = true;
+	SetGravity(sbs->MetersToFeet(9.806)); // 9.806 m/s/s
 }
 
 Camera::~Camera()
@@ -119,7 +122,7 @@ void Camera::UpdateCameraFloor()
 bool Camera::Move(csVector3 vector, float speed)
 {
 	//moves the camera in a relative amount specified by a vector
-	MainCamera->Move(vector * speed, sbs->EnableCollisions);
+	MainCamera->Move(vector * speed, EnableCollisions);
 	return true;
 }
 
@@ -392,7 +395,7 @@ void Camera::CreateColliders()
 void Camera::Loop()
 {
 	//set collision detection status
-	collider_actor.SetCD(sbs->EnableCollisions);
+	collider_actor.SetCD(EnableCollisions);
 
 	//calculate acceleration
 	InterpolateMovement();
@@ -477,10 +480,25 @@ void Camera::InterpolateMovement()
 
 void Camera::SetGravity(float gravity)
 {
-	collider_actor.SetGravity(gravity);
+	Gravity = gravity;
+	collider_actor.SetGravity(Gravity);
 }
 
 float Camera::GetGravity()
 {
-	return collider_actor.GetGravity();
+	return Gravity;
+}
+
+void Camera::EnableGravity(bool value)
+{
+	if (value == true)
+		collider_actor.SetGravity(Gravity);
+	else
+		collider_actor.SetGravity(0.0f);
+	GravityStatus = value;
+}
+
+bool Camera::GetGravityStatus()
+{
+	return GravityStatus;
 }

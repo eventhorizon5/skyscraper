@@ -64,6 +64,7 @@ class DebugPanel: public wxFrame
 		static const long ID_STATICTEXT7;
 		static const long ID_STATICTEXT11;
 		static const long ID_chkCollisionDetection;
+		static const long ID_chkGravity;
 		static const long ID_chkFrameLimiter;
 		static const long ID_chkMainProcessing;
 		static const long ID_chkAutoShafts;
@@ -93,12 +94,14 @@ class DebugPanel: public wxFrame
 		void On_bMeshControl_Click(wxCommandEvent& event);
 		void On_bInitRealtime_Click(wxCommandEvent& event);
 		void On_bEditElevator_Click(wxCommandEvent& event);
+		void On_chkGravity_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
 		//(*Declarations(DebugPanel)
 		wxBoxSizer* BoxSizer4;
 		wxBoxSizer* BoxSizer6;
+		wxCheckBox* chkGravity;
 		wxBoxSizer* BoxSizer5;
 		wxBoxSizer* BoxSizer7;
 		wxStaticText* t_elevfloor;

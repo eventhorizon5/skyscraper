@@ -56,6 +56,7 @@ public:
 	csVector3 desired_angle_velocity;
 	csVector3 angle_velocity;
 	float speed; //movement speed base
+	bool EnableCollisions; //enable collision detection
 
 	//functions
 	Camera();
@@ -93,6 +94,8 @@ public:
 	void InterpolateMovement();
 	void SetGravity(float gravity);
 	float GetGravity();
+	void EnableGravity(bool value);
+	bool GetGravityStatus();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera
@@ -103,6 +106,8 @@ private:
 	char intbuffer[65];
 	char buffer[20];
 	int FloorTemp; //previous floor check value
+	float Gravity;
+	bool GravityStatus;
 
 	//collision
 	csColliderActor collider_actor;

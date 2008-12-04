@@ -56,6 +56,7 @@ const long DebugPanel::ID_t_object = wxNewId();
 const long DebugPanel::ID_STATICTEXT7 = wxNewId();
 const long DebugPanel::ID_STATICTEXT11 = wxNewId();
 const long DebugPanel::ID_chkCollisionDetection = wxNewId();
+const long DebugPanel::ID_chkGravity = wxNewId();
 const long DebugPanel::ID_chkFrameLimiter = wxNewId();
 const long DebugPanel::ID_chkMainProcessing = wxNewId();
 const long DebugPanel::ID_chkAutoShafts = wxNewId();
@@ -94,19 +95,19 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer6->Add(StaticText6, 1, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer4->Add(BoxSizer6, 0, wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	BoxSizer7 = new wxBoxSizer(wxVERTICAL);
-	t_camerafloor = new wxStaticText(this, ID_t_camerafloor, wxEmptyString, wxDefaultPosition, wxSize(100,-1), wxST_NO_AUTORESIZE, _T("ID_t_camerafloor"));
+	t_camerafloor = new wxStaticText(this, ID_t_camerafloor, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_camerafloor"));
 	BoxSizer7->Add(t_camerafloor, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	t_camerap = new wxStaticText(this, ID_t_camerap, wxEmptyString, wxDefaultPosition, wxSize(100,-1), wxST_NO_AUTORESIZE, _T("ID_t_camerap"));
+	t_camerap = new wxStaticText(this, ID_t_camerap, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_camerap"));
 	BoxSizer7->Add(t_camerap, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	t_elevnumber = new wxStaticText(this, ID_t_elevnumber, wxEmptyString, wxDefaultPosition, wxSize(100,-1), wxST_NO_AUTORESIZE, _T("ID_t_elevnumber"));
+	t_elevnumber = new wxStaticText(this, ID_t_elevnumber, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_elevnumber"));
 	BoxSizer7->Add(t_elevnumber, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	t_elevfloor = new wxStaticText(this, ID_t_elevfloor, wxEmptyString, wxDefaultPosition, wxSize(100,-1), wxST_NO_AUTORESIZE, _T("ID_t_elevfloor"));
+	t_elevfloor = new wxStaticText(this, ID_t_elevfloor, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_elevfloor"));
 	BoxSizer7->Add(t_elevfloor, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	t_object = new wxStaticText(this, ID_t_object, wxEmptyString, wxDefaultPosition, wxSize(100,-1), wxST_NO_AUTORESIZE, _T("ID_t_object"));
-	BoxSizer7->Add(t_object, 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
-	t_framerate = new wxStaticText(this, ID_STATICTEXT7, wxEmptyString, wxDefaultPosition, wxSize(100,-1), wxST_NO_AUTORESIZE, _T("ID_STATICTEXT7"));
-	BoxSizer7->Add(t_framerate, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer4->Add(BoxSizer7, 0, wxALL|wxALIGN_RIGHT|wxALIGN_TOP, 0);
+	t_object = new wxStaticText(this, ID_t_object, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_object"));
+	BoxSizer7->Add(t_object, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	t_framerate = new wxStaticText(this, ID_STATICTEXT7, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_STATICTEXT7"));
+	BoxSizer7->Add(t_framerate, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer4->Add(BoxSizer7, 0, wxALIGN_RIGHT|wxALIGN_TOP, 5);
 	BoxSizer2->Add(BoxSizer4, 0, wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 10);
 	BoxSizer5 = new wxBoxSizer(wxVERTICAL);
 	StaticText11 = new wxStaticText(this, ID_STATICTEXT11, _("Simulator Options"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
@@ -114,6 +115,9 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	chkCollisionDetection = new wxCheckBox(this, ID_chkCollisionDetection, _("Collision Detection"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkCollisionDetection"));
 	chkCollisionDetection->SetValue(false);
 	BoxSizer5->Add(chkCollisionDetection, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	chkGravity = new wxCheckBox(this, ID_chkGravity, _("Gravity"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkGravity"));
+	chkGravity->SetValue(false);
+	BoxSizer5->Add(chkGravity, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkFrameLimiter = new wxCheckBox(this, ID_chkFrameLimiter, _("Frame Limiter"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkFrameLimiter"));
 	chkFrameLimiter->SetValue(false);
 	BoxSizer5->Add(chkFrameLimiter, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -125,7 +129,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer5->Add(chkAutoShafts, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkFrameSync = new wxCheckBox(this, ID_chkFrameSync, _("Framerate Sync"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkFrameSync"));
 	chkFrameSync->SetValue(false);
-	BoxSizer5->Add(chkFrameSync, 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
+	BoxSizer5->Add(chkFrameSync, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer5, 0, wxALL|wxALIGN_RIGHT|wxALIGN_TOP, 0);
 	BoxSizer1->Add(BoxSizer2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
@@ -141,8 +145,9 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
-	
+
 	Connect(ID_chkCollisionDetection,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkCollisionDetection_Click);
+	Connect(ID_chkGravity,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkGravity_Click);
 	Connect(ID_chkFrameLimiter,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkFrameLimiter_Click);
 	Connect(ID_chkMainProcessing,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkMainProcessing_Click);
 	Connect(ID_chkAutoShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoShafts_Click);
@@ -166,7 +171,7 @@ DebugPanel::~DebugPanel()
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
 {
-	sbs->EnableCollisions = chkCollisionDetection->GetValue();
+	sbs->camera->EnableCollisions = chkCollisionDetection->GetValue();
 }
 
 void DebugPanel::On_chkFrameLimiter_Click(wxCommandEvent& event)
@@ -212,7 +217,8 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 void DebugPanel::OnInit()
 {
 	//set check boxes
-	chkCollisionDetection->SetValue(sbs->EnableCollisions);
+	chkCollisionDetection->SetValue(sbs->camera->EnableCollisions);
+	chkGravity->SetValue(sbs->camera->GetGravityStatus());
 	chkFrameLimiter->SetValue(sbs->FrameLimiter);
 	//chkMainProcessing->SetValue();
 	chkAutoShafts->SetValue(sbs->AutoShafts);
@@ -270,4 +276,10 @@ wxString TruncateNumber(float value, int decimals)
 	if (decimals < 1)
 		return number;
 	return number.Truncate(number.find('.') + decimals + 1);
+}
+
+void DebugPanel::On_chkGravity_Click(wxCommandEvent& event)
+{
+	//enables or disables gravity
+	sbs->camera->EnableGravity(chkGravity->GetValue());
 }
