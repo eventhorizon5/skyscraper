@@ -148,7 +148,7 @@ public:
 	void Report (const char* msg, ...);
 	bool ReportError (const char* msg, ...);
 	void Wait(long Milliseconds);
-	bool LoadTexture(const char *filename, const char *name);
+	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
 	float AutoSize(float n1, float n2, bool iswidth, bool external, float offset);
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
 	void Start();
@@ -309,4 +309,14 @@ private:
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
 	csVector2 wall_extents_x, wall_extents_z, wall_extents_y;
+
+	//texture information structure
+	struct TextureInfo
+	{
+		csString name;
+		float widthmult;
+		float heightmult;
+	};
+
+	csArray<TextureInfo> textureinfo;
 };

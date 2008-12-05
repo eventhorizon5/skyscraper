@@ -319,7 +319,7 @@ void SBS::GetInput()
 		camera->speed = 0.5;
 	else if (wxGetKeyState(WXK_SHIFT))
 		camera->speed = 2;
-	
+
 	if (wxGetKeyState(WXK_ALT))
 	{
 		//strafe movement
@@ -579,13 +579,13 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 
 	//load default textures
 	csPrintf("Loading default textures...");
-	LoadTexture("/root/data/top.jpg", "SkyTop");
-	LoadTexture("/root/data/bottom.jpg", "SkyBottom");
-	LoadTexture("/root/data/left.jpg", "SkyLeft");
-	LoadTexture("/root/data/right.jpg", "SkyRight");
-	LoadTexture("/root/data/front.jpg", "SkyFront");
-	LoadTexture("/root/data/back.jpg", "SkyBack");
-	LoadTexture("/root/data/brick1.jpg", "Default");
+	LoadTexture("/root/data/top.jpg", "SkyTop", 1, 1);
+	LoadTexture("/root/data/bottom.jpg", "SkyBottom", 1, 1);
+	LoadTexture("/root/data/left.jpg", "SkyLeft", 1, 1);
+	LoadTexture("/root/data/right.jpg", "SkyRight", 1, 1);
+	LoadTexture("/root/data/front.jpg", "SkyFront", 1, 1);
+	LoadTexture("/root/data/back.jpg", "SkyBack", 1, 1);
+	LoadTexture("/root/data/brick1.jpg", "Default", 1, 1);
 	csPrintf("Done\n");
 
 	//set up viewport
@@ -601,7 +601,7 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	return true;
 }
 
-bool SBS::LoadTexture(const char *filename, const char *name)
+bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult)
 {
 	// Load the texture from the standard library.  This is located in
 	// CS/data/standard.zip and mounted as /lib/std using the Virtual
@@ -611,6 +611,11 @@ bool SBS::LoadTexture(const char *filename, const char *name)
 		ReportError("Error loading texture");
 		return false;
 	}
+	TextureInfo info;
+	info.name = name;
+	info.widthmult = widthmult;
+	info.heightmult = heightmult;
+	textureinfo.Push(info);
 	return true;
 }
 
@@ -1466,11 +1471,11 @@ csString SBS::Calc(const char *expression)
 			else
 				break;
 		} while (1 == 1);
-		
+
 		//return value if none found
 		if (operators == 0)
 			return tmpcalc.GetData();
-	
+
 		//otherwise perform math
 		temp1 = tmpcalc.Find("+", 1);
 		if (temp1 > 0)
