@@ -233,41 +233,27 @@ void SBS::Wait(long milliseconds)
 
 }
 
-float SBS::AutoSize(float n1, float n2, bool iswidth, bool external, float offset)
+float SBS::AutoSize(const char * texturename, float n1, float n2, bool iswidth, float offset)
 {
 	//Texture autosizing formulas
-
-	float size1 = offset;
-	float size2 = offset;
 
 	if (offset == 0)
 		offset = 1;
 
-	if (external == false)
+	if (iswidth == true)
 	{
 		if (AutoX == true)
-			size1 = 0.269 * offset;
-		if (AutoY == true)
-			size2 = 0.25 * offset;
-	}
-	else
-	{
-		if (AutoX == true)
-			size1 = 0.072 * offset;
-		if (AutoY == true)
-			size2 = offset;
-	}
-
-	if (iswidth == true && AutoX == true)
-		return fabs(n1 - n2) * size1;
-	else
-	{
-		if (external == false && AutoY == true)
-			return fabs(n1 - n2) * size2;
+			return fabs(n1 - n2) * offset;
 		else
-			return size2;
+			return offset;
 	}
-	return offset;
+	else
+	{
+		if (AutoY == true)
+			return fabs(n1 - n2) * offset;
+		else
+			return offset;
+	}
 }
 
 void SBS::PrintBanner()
@@ -1179,17 +1165,17 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 
 	//Call texture autosizing formulas
 	if (z.x == z.y)
-		tw2 = AutoSize(x.x, x.y, true, IsExternal, tw);
+		tw2 = AutoSize(texture, x.x, x.y, true, tw);
 	if (x.x == x.y)
-		tw2 = AutoSize(z.x, z.y, true, IsExternal, tw);
+		tw2 = AutoSize(texture, z.x, z.y, true, tw);
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
 		tempw1 = fabs(x.y - x.x);
 		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
+		tw2 = AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = AutoSize(0, fabs(y.y - y.x), false, IsExternal, th);
+	th2 = AutoSize(texture, 0, fabs(y.y - y.x), false, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray1.GetVertices(), num);
@@ -1283,17 +1269,17 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 
 	//Call texture autosizing formulas
 	if (z.x == z.y)
-		tw2 = AutoSize(x.x, x.y, true, IsExternal, tw);
+		tw2 = AutoSize(texture, x.x, x.y, true, tw);
 	if (x.x == x.y)
-		tw2 = AutoSize(z.x, z.y, true, IsExternal, tw);
+		tw2 = AutoSize(texture, z.x, z.y, true, tw);
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
 		tempw1 = fabs(x.y - x.x);
 		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
+		tw2 = AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = AutoSize(0, fabs(y.y - y.x), false, IsExternal, th);
+	th2 = AutoSize(texture, 0, fabs(y.y - y.x), false, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
@@ -1827,6 +1813,8 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 	//sets a polygon's texture
 
 	material = engine->GetMaterialList()->FindByName(texture);
+	csString texname = texture;
+	float tw2 = tw, th2 = th;
 
 	if (material == 0)
 	{
@@ -1837,6 +1825,19 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		ReportError(message);
 		//set to default material
 		material = engine->GetMaterialList()->FindByName("Default");
+		texname = "Default";
+	}
+
+	//get per-texture tiling values from the textureinfo array
+	for (int i = 0; i < textureinfo.GetSize(); i++)
+	{
+		if (textureinfo[i].name = texname)
+		{
+			//multiply the tiling parameters (tw and th) by
+			//the stored multipliers for that texture
+			tw2 = textureinfo[i].widthmult * tw;
+			th2 = textureinfo[i].heightmult * th;
+		}
 	}
 
 	for (int i = index; i < index + GetDrawWallsCount(); i++)
@@ -1847,9 +1848,9 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 			mesh->GetPolygonVertex(i, 0),
 			csVector2 (0, 0),
 			mesh->GetPolygonVertex(i, 1),
-			csVector2 (tw, 0),
+			csVector2 (tw2, 0),
 			mesh->GetPolygonVertex(i, 2),
-			csVector2 (tw, th));
+			csVector2 (tw2, th2));
 	}
 }
 

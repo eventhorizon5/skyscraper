@@ -193,9 +193,9 @@ int Stairs::AddWall(int floor, const char *name, const char *texture, float thic
 
 	//Call texture autosizing formulas
 	if (z1 == z2)
-		tw2 = sbs->AutoSize(x1, x2, true, false, tw);
+		tw2 = sbs->AutoSize(texture, x1, x2, true, tw);
 	if (x1 == x2)
-		tw2 = sbs->AutoSize(z1, z2, true, false, tw);
+		tw2 = sbs->AutoSize(texture, z1, z2, true, tw);
 	if ((z1 != z2) && (x1 != x2))
 	{
 		//calculate diagonals
@@ -207,9 +207,9 @@ int Stairs::AddWall(int floor, const char *name, const char *texture, float thic
 			tempw2 = z1 - z2;
 		else
 			tempw2 = z2 - z1;
-		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, false, tw);
+		tw2 = sbs->AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = sbs->AutoSize(0, height1, false, false, th);
+	th2 = sbs->AutoSize(texture, 0, height1, false, th);
 
 	return sbs->AddWallMain(StairArray_state[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset1, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset2, tw, th);
 }
@@ -226,8 +226,8 @@ int Stairs::AddFloor(int floor, const char *name, const char *texture, float thi
 	z2 = z2 * sbs->HorizScale;
 
 	//Call texture autosizing formulas
-	tw2 = sbs->AutoSize(x1, x2, true, false, tw);
-	th2 = sbs->AutoSize(z1, z2, false, false, th);
+	tw2 = sbs->AutoSize(texture, x1, x2, true, tw);
+	th2 = sbs->AutoSize(texture, z1, z2, false, th);
 
 	return sbs->AddFloorMain(StairArray_state[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset1, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset2, tw2, th2);
 }

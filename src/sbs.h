@@ -149,7 +149,7 @@ public:
 	bool ReportError (const char* msg, ...);
 	void Wait(long Milliseconds);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
-	float AutoSize(float n1, float n2, bool iswidth, bool external, float offset);
+	float AutoSize(const char * texturename, float n1, float n2, bool iswidth, float offset);
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
 	void Start();
 	void Run();
