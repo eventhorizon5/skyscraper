@@ -32,69 +32,69 @@
 <EndGlobals>
 
 <Textures>
-    Load data/brick1.jpg, Brick
-    Load data/lobbyfront.jpg, LobbyFront
-    Load data/windows11h.jpg, MainWindows
-    Load data/windows11h_inside.png, MainWindowsInt
-    Load data/granite.jpg, Granite
-    Load data/symb5.jpg, Wood3
-    Load data/marb047.jpg, Marble4
-    Load data/elev1.jpg, Elev1
-    Load data/textur15.jpg, Wood1
-    Load data/text16.jpg, Wood2
-    Load data/marbl3.jpg, Wall1
-    Load data/marb123.jpg, Wall2
-    Load data/cutston.jpg, Ceiling1
-    Load data/intext.jpg, InterExt
-    Load data/intext.jpg, InterInt
-    Load data/text12.jpg, Wall3
-    Load data/text16.jpg, ElevDoors
-    Load data/marb148.jpg, ElevExtPanels
-    Load data/mason01.jpg, Concrete
-    Load data/text13.jpg, Stairs
-    Load data/wooddoor3.jpg, Door1
-    Load data/wooddoor1.jpg, Door2
-    Load data/servicedoor2.jpg, StairsDoor
-    Load data/miscdoor8.jpg, StairsDoor2
-    Load data/button1.jpg, CallButtonsTex
-    Load data/sidewalk1r.jpg, Road1
-    Load data/walkway.jpg, Walkway
-    Load data/sidewalkcorner1.jpg, Road2
-    Load data/sidewalkcorner2.jpg, Road3
-    Load data/sidewalkcorner3.jpg, Road4
-    Load data/roadfull.jpg, Road5
-    Load data/windows08.jpg, Windows8
-    Load data/windows11.jpg, Windows11
-    Load data/downtown.jpg, Downtown
-    Load data/suburbs.jpg, Suburbs
-    Load data/vents1b.jpg, VentsInt
-    Load data/vents1.jpg, VentsExt
-    Load data/plaque.jpg, Plaque
-    Load data/floorsign.jpg, FloorSign
-    Load data/floorsignballroom.jpg, FloorSignBallroom
-    Load data/floorsignbalcony.jpg, FloorSignBalcony
-    Load data/floorsignhotel.jpg, FloorSignHotel
-    Load data/floorsignlobby.jpg, FloorSignLobby
-    Load data/floorsignmaint.jpg, FloorSignMaint
-    Load data/floorsignmez.jpg, FloorSignMez
-    Load data/floorsignmechanical.jpg, FloorSignMechanical
-    Load data/floorsignobservatory.jpg, FloorSignObservatory
-    Load data/floorsignoffices.jpg, FloorSignOffices
-    Load data/floorsignpool.jpg, FloorSignPool
-    Load data/floorsignresidential.jpg, FloorSignResidential
-    Load data/floorsignroof.jpg, FloorSignRoof
-    Load data/floorsignskylobby.jpg, FloorSignSkylobby
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/lobbyfront.jpg, LobbyFront, 0.072, 1
+    Load data/windows11h.jpg, MainWindows, 0.072, 1
+    Load data/windows11h_inside.png, MainWindowsInt, 0.072, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 0.269, 0.25
+    Load data/symb5.jpg, Wood3, 0.269, 0.25
+    Load data/marb047.jpg, Marble4, 0.269, 0.25
+    Load data/elev1.jpg, Elev1, 0.269, 0.25
+    Load data/textur15.jpg, Wood1, 0.269, 0.25
+    Load data/text16.jpg, Wood2, 0.269, 0.25
+    Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/marb123.jpg, Wall2, 0.269, 0.25
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/intext.jpg, InterExt, 0.269, 0.25
+    Load data/intext.jpg, InterInt, 0.269, 0.25
+    Load data/text12.jpg, Wall3, 0.269, 0.25
+    Load data/text16.jpg, ElevDoors, 0.269, 0.25
+    Load data/marb148.jpg, ElevExtPanels, 0.269, 0.25
+    Load data/mason01.jpg, Concrete, 0.269, 0.25
+    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/wooddoor3.jpg, Door1, 1, 1
+    Load data/wooddoor1.jpg, Door2, 1, 1
+    Load data/servicedoor2.jpg, StairsDoor, 1, 1
+    Load data/miscdoor8.jpg, StairsDoor2, 1, 1
+    Load data/button1.jpg, CallButtonsTex, 1, 1
+    Load data/sidewalk1r.jpg, Road1, 1, 1
+    Load data/walkway.jpg, Walkway, 1, 1
+    Load data/sidewalkcorner1.jpg, Road2, 1, 1
+    Load data/sidewalkcorner2.jpg, Road3, 1, 1
+    Load data/sidewalkcorner3.jpg, Road4, 1, 1
+    Load data/roadfull.jpg, Road5, 1, 1
+    Load data/windows08.jpg, Windows8, 0.269, 0.25
+    Load data/windows11.jpg, Windows11, 0.269, 0.25
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/suburbs.jpg, Suburbs, 1, 1
+    Load data/vents1b.jpg, VentsInt, 0.269, 1
+    Load data/vents1.jpg, VentsExt, 0.269, 1
+    Load data/plaque.jpg, Plaque, 1, 1
+    Load data/floorsign.jpg, FloorSign, 1, 1
+    Load data/floorsignballroom.jpg, FloorSignBallroom, 1, 1
+    Load data/floorsignbalcony.jpg, FloorSignBalcony, 1, 1
+    Load data/floorsignhotel.jpg, FloorSignHotel, 1, 1
+    Load data/floorsignlobby.jpg, FloorSignLobby, 1, 1
+    Load data/floorsignmaint.jpg, FloorSignMaint, 1, 1
+    Load data/floorsignmez.jpg, FloorSignMez, 1, 1
+    Load data/floorsignmechanical.jpg, FloorSignMechanical, 1, 1
+    Load data/floorsignobservatory.jpg, FloorSignObservatory, 1, 1
+    Load data/floorsignoffices.jpg, FloorSignOffices, 1, 1
+    Load data/floorsignpool.jpg, FloorSignPool, 1, 1
+    Load data/floorsignresidential.jpg, FloorSignResidential, 1, 1
+    Load data/floorsignroof.jpg, FloorSignRoof, 1, 1
+    Load data/floorsignskylobby.jpg, FloorSignSkylobby, 1, 1
 
     #floor indicator/button pictures
-    Load data/floorindicators/L.jpg, ButtonL
-    Load data/floorindicators/M.jpg, ButtonM
-    Load data/floorindicators/R.jpg, ButtonR
-    Load data/floorindicators/open.jpg, ButtonOpen
-    Load data/floorindicators/close.jpg, ButtonClose
-    Load data/floorindicators/stop.jpg, ButtonStop
-    Load data/floorindicators/alarm.jpg, ButtonAlarm
-    Load data/floorindicators/cancel.jpg, ButtonCancel
-    LoadRange 2, 138, data/floorindicators/%number%.jpg, Button%number%
+    Load data/floorindicators/L.jpg, ButtonL, 1, 1
+    Load data/floorindicators/M.jpg, ButtonM, 1, 1
+    Load data/floorindicators/R.jpg, ButtonR, 1, 1
+    Load data/floorindicators/open.jpg, ButtonOpen, 1, 1
+    Load data/floorindicators/close.jpg, ButtonClose, 1, 1
+    Load data/floorindicators/stop.jpg, ButtonStop, 1, 1
+    Load data/floorindicators/alarm.jpg, ButtonAlarm, 1, 1
+    Load data/floorindicators/cancel.jpg, ButtonCancel, 1, 1
+    LoadRange 2, 138, data/floorindicators/%number%.jpg, Button%number%, 1, 1
 <EndTextures>
 
 # Basements
@@ -195,7 +195,7 @@
 
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Granite, 0.5, -42.5, -25.8, 42.5, 25.8, 0, 0, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -42.5, -25.8, 42.5, 25.8, 0, 0, 0, 0, False
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     AddFloor Ceiling, Marble4, 0.5, -75, -70, 75, 70, %height%, %height%, 0, 0, False
@@ -211,7 +211,7 @@
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Granite, 0.5, -75, -70, 75, 70, 0, 0, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -75, -70, 75, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
@@ -358,7 +358,7 @@
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Granite, 0.5, -63, -70, 63, 70, 0, 0, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -63, -70, 63, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
@@ -500,7 +500,7 @@
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Granite, 0.5, -51, -70, 51, 70, 0, 0, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -51, -70, 51, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
@@ -677,7 +677,7 @@
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Granite, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
@@ -802,7 +802,7 @@
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Granite, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
@@ -876,7 +876,7 @@
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Granite, 0.5, -39, 0, 39, 70, 0, 0, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -39, 0, 39, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
@@ -922,7 +922,7 @@
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Granite, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
