@@ -253,7 +253,8 @@
   <p align="left"><br>
     <strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
-    script and start the simulation. This is optional.</p>
+    script and start the simulation. This is optional.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">&lt;end&gt;</font></p>
   <p align="left">&nbsp;</p>
   <p align="left"> <strong><font size="+1">3. The <em>Globals</em> Section</font></strong></p>
   <p align="left">The <em>Globals</em> section contains the general information 
@@ -319,15 +320,17 @@
     <font size="2" face="Courier New, Courier, mono">&lt;EndTextures&gt;</font></p>
   <p align="left"><strong>1. Load</strong> - loads a texture<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Load <em>filename</em>, 
-    <em>name</em></font><br>
+    <em>name</em>, <em>tile_x</em>, 
+    <em>tile_y</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">Load data\brick1.jpg, 
-    Brick</font></p>
+    Brick, 1, 1</font></p>
   <p align="left"><strong>2. LoadRange</strong> - loads a numeric range of textures, 
     and the current number is available in the <em>number</em> variable (<font size="2" face="Courier New, Courier, mono">%number%</font>)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">LoadRange <em>startnumber</em>, 
-    <em>endnumber</em>, <em>filename</em>, <em>name</em></font><br>
+    <em>endnumber</em>, <em>filename</em>, <em>name</em>, 
+    <em>tile_x</em>, <em>tile_y</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">LoadRange 2, 138, 
-    data\floorindicators\%number%.jpg, Button%number%</font></p>
+    data\floorindicators\%number%.jpg, Button%number%, 1, 1</font></p>
   <p align="left">This example will load the file 2.jpg and name it Button2, 3.jpg 
     as Button3, and so on.</p>
   <p align="left">&nbsp;</p>
