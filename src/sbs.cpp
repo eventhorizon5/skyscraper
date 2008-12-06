@@ -1831,7 +1831,7 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 	//get per-texture tiling values from the textureinfo array
 	for (int i = 0; i < textureinfo.GetSize(); i++)
 	{
-		if (textureinfo[i].name = texname)
+		if (textureinfo[i].name == texname)
 		{
 			//multiply the tiling parameters (tw and th) by
 			//the stored multipliers for that texture
