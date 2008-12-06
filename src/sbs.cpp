@@ -1835,8 +1835,8 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		{
 			//multiply the tiling parameters (tw and th) by
 			//the stored multipliers for that texture
-			tw2 = textureinfo[i].widthmult * tw;
-			th2 = textureinfo[i].heightmult * th;
+			tw2 = tw / textureinfo[i].widthmult;
+			th2 = th / textureinfo[i].heightmult;
 		}
 	}
 

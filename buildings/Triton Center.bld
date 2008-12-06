@@ -32,26 +32,26 @@
 <EndGlobals>
 
 <Textures>
-    Load data/brick1.jpg, Brick, 0.269, 0.25
-    Load data/lobbyfront.jpg, LobbyFront, 0.072, 1
-    Load data/windows11h.jpg, MainWindows, 0.072, 1
-    Load data/windows11h_inside.png, MainWindowsInt, 0.072, 1
-    Load data/Carpet0013_S.jpg, Carpet1, 0.269, 0.25
-    Load data/symb5.jpg, Wood3, 0.269, 0.25
-    Load data/marb047.jpg, Marble4, 0.269, 0.25
-    Load data/elev1.jpg, Elev1, 0.269, 0.25
-    Load data/textur15.jpg, Wood1, 0.269, 0.25
-    Load data/text16.jpg, Wood2, 0.269, 0.25
-    Load data/marbl3.jpg, Wall1, 0.269, 0.25
-    Load data/marb123.jpg, Wall2, 0.269, 0.25
-    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
-    Load data/intext.jpg, InterExt, 0.269, 0.25
-    Load data/intext.jpg, InterInt, 0.269, 0.25
-    Load data/text12.jpg, Wall3, 0.269, 0.25
-    Load data/text16.jpg, ElevDoors, 0.269, 0.25
-    Load data/marb148.jpg, ElevExtPanels, 0.269, 0.25
-    Load data/mason01.jpg, Concrete, 0.269, 0.25
-    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/brick1.jpg, Brick, 3.72, 4
+    Load data/lobbyfront.jpg, LobbyFront, 13.89, 1
+    Load data/windows11h.jpg, MainWindows, 13.89, 1
+    Load data/windows11h_inside.png, MainWindowsInt, 13.89, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 3.72, 4
+    Load data/symb5.jpg, Wood3, 3.72, 4
+    Load data/marb047.jpg, Marble4, 3.72, 4
+    Load data/elev1.jpg, Elev1, 3.72, 4
+    Load data/textur15.jpg, Wood1, 3.72, 4
+    Load data/text16.jpg, Wood2, 3.72, 4
+    Load data/marbl3.jpg, Wall1, 3.72, 4
+    Load data/marb123.jpg, Wall2, 3.72, 4
+    Load data/cutston.jpg, Ceiling1, 3.72, 4
+    Load data/intext.jpg, InterExt, 3.72, 4
+    Load data/intext.jpg, InterInt, 3.72, 4
+    Load data/text12.jpg, Wall3, 3.72, 4
+    Load data/text16.jpg, ElevDoors, 3.72, 4
+    Load data/marb148.jpg, ElevExtPanels, 3.72, 4
+    Load data/mason01.jpg, Concrete, 3.72, 4
+    Load data/text13.jpg, Stairs, 3.72, 4
     Load data/wooddoor3.jpg, Door1, 1, 1
     Load data/wooddoor1.jpg, Door2, 1, 1
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
@@ -63,8 +63,8 @@
     Load data/sidewalkcorner2.jpg, Road3, 1, 1
     Load data/sidewalkcorner3.jpg, Road4, 1, 1
     Load data/roadfull.jpg, Road5, 1, 1
-    Load data/windows08.jpg, Windows8, 0.269, 0.25
-    Load data/windows11.jpg, Windows11, 0.269, 0.25
+    Load data/windows08.jpg, Windows8, 3.72, 4
+    Load data/windows11.jpg, Windows11, 3.72, 4
     Load data/downtown.jpg, Downtown, 1, 1
     Load data/suburbs.jpg, Suburbs, 1, 1
     Load data/vents1b.jpg, VentsInt, 0.269, 1
