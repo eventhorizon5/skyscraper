@@ -227,6 +227,9 @@ void ButtonPanel::Press(int index)
 		return;
 
 	csString name = ButtonPanel_state->GetPolygonName(index);
+	csString name2 = name;
+	if (name.Find(":") > 0)
+		name = name2.Slice(0, name.Find(":"));
 
 	if (IsNumeric(name) == true)
 	{

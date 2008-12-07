@@ -66,7 +66,6 @@ SBS::SBS()
 	IsFalling = false;
 	InStairwell = false;
 	InElevator = false;
-	EnableCollisions = true;
 	IsBuildingsEnabled = false;
 	IsColumnFrameEnabled = false;
 	IsExternalEnabled = false;
@@ -170,7 +169,6 @@ void SBS::Start()
 
 	//initialize camera/actor
 	camera->CreateColliders();
-	camera->SetGravity(MetersToFeet(9.806)); // 9.806 m/s/s
 
 	//move camera to start location
 	camera->SetToStartPosition();
@@ -235,41 +233,27 @@ void SBS::Wait(long milliseconds)
 
 }
 
-float SBS::AutoSize(float n1, float n2, bool iswidth, bool external, float offset)
+float SBS::AutoSize(const char * texturename, float n1, float n2, bool iswidth, float offset)
 {
 	//Texture autosizing formulas
-
-	float size1 = offset;
-	float size2 = offset;
 
 	if (offset == 0)
 		offset = 1;
 
-	if (external == false)
+	if (iswidth == true)
 	{
 		if (AutoX == true)
-			size1 = 0.269 * offset;
-		if (AutoY == true)
-			size2 = 0.25 * offset;
-	}
-	else
-	{
-		if (AutoX == true)
-			size1 = 0.072 * offset;
-		if (AutoY == true)
-			size2 = offset;
-	}
-
-	if (iswidth == true && AutoX == true)
-		return fabs(n1 - n2) * size1;
-	else
-	{
-		if (external == false && AutoY == true)
-			return fabs(n1 - n2) * size2;
+			return fabs(n1 - n2) * offset;
 		else
-			return size2;
+			return offset;
 	}
-	return offset;
+	else
+	{
+		if (AutoY == true)
+			return fabs(n1 - n2) * offset;
+		else
+			return offset;
+	}
 }
 
 void SBS::PrintBanner()
@@ -321,7 +305,7 @@ void SBS::GetInput()
 		camera->speed = 0.5;
 	else if (wxGetKeyState(WXK_SHIFT))
 		camera->speed = 2;
-	
+
 	if (wxGetKeyState(WXK_ALT))
 	{
 		//strafe movement
@@ -404,10 +388,6 @@ void SBS::SetupFrame()
 	{
 		if (RenderOnly == false && InputOnly == false)
 		{
-			//Process gravity
-			//if (EnableCollisions == true)
-				//camera->Gravity();
-
 			//Determine floor that the camera is on
 			camera->UpdateCameraFloor();
 
@@ -585,13 +565,13 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 
 	//load default textures
 	csPrintf("Loading default textures...");
-	LoadTexture("/root/data/top.jpg", "SkyTop");
-	LoadTexture("/root/data/bottom.jpg", "SkyBottom");
-	LoadTexture("/root/data/left.jpg", "SkyLeft");
-	LoadTexture("/root/data/right.jpg", "SkyRight");
-	LoadTexture("/root/data/front.jpg", "SkyFront");
-	LoadTexture("/root/data/back.jpg", "SkyBack");
-	LoadTexture("/root/data/brick1.jpg", "Default");
+	LoadTexture("/root/data/top.jpg", "SkyTop", 1, 1);
+	LoadTexture("/root/data/bottom.jpg", "SkyBottom", 1, 1);
+	LoadTexture("/root/data/left.jpg", "SkyLeft", 1, 1);
+	LoadTexture("/root/data/right.jpg", "SkyRight", 1, 1);
+	LoadTexture("/root/data/front.jpg", "SkyFront", 1, 1);
+	LoadTexture("/root/data/back.jpg", "SkyBack", 1, 1);
+	LoadTexture("/root/data/brick1.jpg", "Default", 1, 1);
 	csPrintf("Done\n");
 
 	//set up viewport
@@ -607,7 +587,7 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	return true;
 }
 
-bool SBS::LoadTexture(const char *filename, const char *name)
+bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult)
 {
 	// Load the texture from the standard library.  This is located in
 	// CS/data/standard.zip and mounted as /lib/std using the Virtual
@@ -617,6 +597,11 @@ bool SBS::LoadTexture(const char *filename, const char *name)
 		ReportError("Error loading texture");
 		return false;
 	}
+	TextureInfo info;
+	info.name = name;
+	info.widthmult = widthmult;
+	info.heightmult = heightmult;
+	textureinfo.Push(info);
 	return true;
 }
 
@@ -1180,17 +1165,17 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 
 	//Call texture autosizing formulas
 	if (z.x == z.y)
-		tw2 = AutoSize(x.x, x.y, true, IsExternal, tw);
+		tw2 = AutoSize(texture, x.x, x.y, true, tw);
 	if (x.x == x.y)
-		tw2 = AutoSize(z.x, z.y, true, IsExternal, tw);
+		tw2 = AutoSize(texture, z.x, z.y, true, tw);
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
 		tempw1 = fabs(x.y - x.x);
 		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
+		tw2 = AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = AutoSize(0, fabs(y.y - y.x), false, IsExternal, th);
+	th2 = AutoSize(texture, 0, fabs(y.y - y.x), false, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray1.GetVertices(), num);
@@ -1284,17 +1269,17 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 
 	//Call texture autosizing formulas
 	if (z.x == z.y)
-		tw2 = AutoSize(x.x, x.y, true, IsExternal, tw);
+		tw2 = AutoSize(texture, x.x, x.y, true, tw);
 	if (x.x == x.y)
-		tw2 = AutoSize(z.x, z.y, true, IsExternal, tw);
+		tw2 = AutoSize(texture, z.x, z.y, true, tw);
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
 		tempw1 = fabs(x.y - x.x);
 		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, IsExternal, tw);
+		tw2 = AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = AutoSize(0, fabs(y.y - y.x), false, IsExternal, th);
+	th2 = AutoSize(texture, 0, fabs(y.y - y.x), false, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
@@ -1472,11 +1457,11 @@ csString SBS::Calc(const char *expression)
 			else
 				break;
 		} while (1 == 1);
-		
+
 		//return value if none found
 		if (operators == 0)
 			return tmpcalc.GetData();
-	
+
 		//otherwise perform math
 		temp1 = tmpcalc.Find("+", 1);
 		if (temp1 > 0)
@@ -1828,6 +1813,8 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 	//sets a polygon's texture
 
 	material = engine->GetMaterialList()->FindByName(texture);
+	csString texname = texture;
+	float tw2 = tw, th2 = th;
 
 	if (material == 0)
 	{
@@ -1838,6 +1825,19 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		ReportError(message);
 		//set to default material
 		material = engine->GetMaterialList()->FindByName("Default");
+		texname = "Default";
+	}
+
+	//get per-texture tiling values from the textureinfo array
+	for (int i = 0; i < textureinfo.GetSize(); i++)
+	{
+		if (textureinfo[i].name == texname)
+		{
+			//multiply the tiling parameters (tw and th) by
+			//the stored multipliers for that texture
+			tw2 = tw / textureinfo[i].widthmult;
+			th2 = th / textureinfo[i].heightmult;
+		}
 	}
 
 	for (int i = index; i < index + GetDrawWallsCount(); i++)
@@ -1848,9 +1848,9 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 			mesh->GetPolygonVertex(i, 0),
 			csVector2 (0, 0),
 			mesh->GetPolygonVertex(i, 1),
-			csVector2 (tw, 0),
+			csVector2 (tw2, 0),
 			mesh->GetPolygonVertex(i, 2),
-			csVector2 (tw, th));
+			csVector2 (tw2, th2));
 	}
 }
 

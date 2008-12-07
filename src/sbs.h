@@ -121,7 +121,6 @@ public:
 	bool ElevatorSync; //true if user should move with elevator
 	bool FrameLimiter; //frame limiter toggle
 	int FrameRate; //max frame rate
-	bool EnableCollisions; //turns collisions on/off
 	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
 	csArray<csString> UserVariable;
 	bool IsBuildingsEnabled; //contains status of buildings object
@@ -149,8 +148,8 @@ public:
 	void Report (const char* msg, ...);
 	bool ReportError (const char* msg, ...);
 	void Wait(long Milliseconds);
-	bool LoadTexture(const char *filename, const char *name);
-	float AutoSize(float n1, float n2, bool iswidth, bool external, float offset);
+	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
+	float AutoSize(const char * texturename, float n1, float n2, bool iswidth, float offset);
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
 	void Start();
 	void Run();
@@ -310,4 +309,14 @@ private:
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
 	csVector2 wall_extents_x, wall_extents_z, wall_extents_y;
+
+	//texture information structure
+	struct TextureInfo
+	{
+		csString name;
+		float widthmult;
+		float heightmult;
+	};
+
+	csArray<TextureInfo> textureinfo;
 };

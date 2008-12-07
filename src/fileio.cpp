@@ -1505,7 +1505,7 @@ recalc:
 					//Err.Raise 1003;
 				buffer = tempdata[0];
 				buffer.Insert(0, "/root/");
-				Simcore->LoadTexture(buffer.GetData(), tempdata[1]);
+				Simcore->LoadTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]));
 				tempdata.DeleteAll();
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("loadrange") == true)
@@ -1528,7 +1528,7 @@ recalc:
 					temp2.ReplaceAll("%number%", buffer.Trim());
 					temp6 = tempdata[3];
 					temp6.ReplaceAll("%number%", buffer.Trim());
-					Simcore->LoadTexture("/root/" + temp2, temp6);
+					Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]));
 				}
 				tempdata.DeleteAll();
 			}

@@ -67,7 +67,7 @@
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_t_camerafloor" variable="t_camerafloor" member="yes">
 											<label></label>
-											<size>100,-1</size>
+											<size>150,-1</size>
 											<style>wxST_NO_AUTORESIZE</style>
 										</object>
 										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
@@ -76,7 +76,7 @@
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_t_camerap" variable="t_camerap" member="yes">
 											<label></label>
-											<size>100,-1</size>
+											<size>150,-1</size>
 											<style>wxST_NO_AUTORESIZE</style>
 										</object>
 										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
@@ -85,7 +85,7 @@
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_t_elevnumber" variable="t_elevnumber" member="yes">
 											<label></label>
-											<size>100,-1</size>
+											<size>150,-1</size>
 											<style>wxST_NO_AUTORESIZE</style>
 										</object>
 										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
@@ -94,7 +94,7 @@
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_t_elevfloor" variable="t_elevfloor" member="yes">
 											<label></label>
-											<size>100,-1</size>
+											<size>150,-1</size>
 											<style>wxST_NO_AUTORESIZE</style>
 										</object>
 										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
@@ -103,23 +103,25 @@
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_t_object" variable="t_object" member="yes">
 											<label></label>
-											<size>100,-1</size>
+											<size>150,-1</size>
 											<style>wxST_NO_AUTORESIZE</style>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT7" variable="t_framerate" member="yes">
 											<label></label>
-											<size>100,-1</size>
+											<size>150,-1</size>
 											<style>wxST_NO_AUTORESIZE</style>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+								<flag>wxALIGN_RIGHT|wxALIGN_TOP</flag>
+								<border>5</border>
 							</object>
 						</object>
 						<flag>wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -142,6 +144,15 @@
 								</object>
 								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkGravity" variable="chkGravity" member="yes">
+									<label>Gravity</label>
+									<handler function="On_chkGravity_Click" entry="EVT_CHECKBOX" />
+								</object>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
 							</object>
 							<object class="sizeritem">
 								<object class="wxCheckBox" name="ID_chkFrameLimiter" variable="chkFrameLimiter" member="yes">
@@ -172,7 +183,8 @@
 									<label>Framerate Sync</label>
 									<handler function="On_chkFrameSync_Click" entry="EVT_CHECKBOX" />
 								</object>
-								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
 							</object>
 						</object>
 						<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
