@@ -49,7 +49,7 @@
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;$(CRYSTAL)\include&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;"
 				AdditionalUsingDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;CS_BUILD_SHARED_LIBS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
@@ -70,7 +70,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;CS_BUILD_SHARED_LIBS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS"
 				Culture="1033"
 			/>
 			<Tool
@@ -78,12 +78,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib"
+				AdditionalDependencies="SBS.lib libcrystalspace.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(CRYSTAL)\out\release8\libs&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;"
+				AdditionalLibraryDirectories=".\Release;&quot;$(CRYSTAL)\out\release8\libs&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -148,7 +148,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(CRYSTAL)\include&quot;;&quot;$(WXWIN)\lib\vc_dll\mswd&quot;;&quot;$(WXWIN)\include&quot;"
 				AdditionalUsingDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;CS_BUILD_SHARED_LIBS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -169,7 +169,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;CS_BUILD_SHARED_LIBS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS"
 				Culture="1033"
 			/>
 			<Tool
@@ -177,12 +177,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib"
+				AdditionalDependencies="SBS.lib libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(CRYSTAL)\out\debug8\libs&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;"
+				AdditionalLibraryDirectories=".\Debug;&quot;$(CRYSTAL)\out\debug8\libs&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/Skyscraper.pdb"
 				SubSystem="1"
@@ -224,18 +224,6 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\src\buttonpanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\callbutton.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\camera.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\cameracontrol.cpp"
 				>
 			</File>
@@ -244,27 +232,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\door.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\editelevator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\elevator.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\fileio.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\floor.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\globals.cpp"
 				>
 			</File>
 			<File
@@ -276,23 +248,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\sbs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\shaft.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\skyscraper.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\stairs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\unix.cpp"
 				>
 			</File>
 		</Filter>
@@ -300,18 +256,6 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
-			<File
-				RelativePath="..\src\buttonpanel.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\callbutton.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\camera.h"
-				>
-			</File>
 			<File
 				RelativePath="..\src\cameracontrol.h"
 				>
@@ -321,23 +265,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\door.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\editelevator.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\elevator.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\floor.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\globals.h"
 				>
 			</File>
 			<File
@@ -349,23 +277,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\sbs.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\shaft.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\skyscraper.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\stairs.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\unix.h"
 				>
 			</File>
 		</Filter>

@@ -26,7 +26,7 @@
 #ifndef _SBS_CAMERA_H
 #define _SBS_CAMERA_H
 
-class Camera
+class SBSIMPEXP Camera
 {
 public:
 	float DefaultAltitude; //default vertical offset of camera from each floor

@@ -26,7 +26,7 @@
 #ifndef _SBS_SHAFT_H
 #define _SBS_SHAFT_H
 
-class Shaft
+class SBSIMPEXP Shaft
 {
 public:
 

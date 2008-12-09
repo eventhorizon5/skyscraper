@@ -28,7 +28,7 @@
 
 #include "buttonpanel.h"
 
-class Elevator
+class SBSIMPEXP Elevator
 {
 public:
 

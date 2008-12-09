@@ -26,7 +26,7 @@
 #ifndef _SBS_DOOR_H
 #define _SBS_DOOR_H
 
-class Door
+class SBSIMPEXP Door
 {
 public:
 

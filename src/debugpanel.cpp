@@ -36,7 +36,7 @@
 #include "elevator.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS *Simcore; //external pointer to the SBS engine
 DebugPanel *dp; //self pointer
 MeshControl *mc;
 editelevator *ee;
@@ -171,12 +171,12 @@ DebugPanel::~DebugPanel()
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
 {
-	sbs->camera->EnableCollisions = chkCollisionDetection->GetValue();
+	Simcore->camera->EnableCollisions = chkCollisionDetection->GetValue();
 }
 
 void DebugPanel::On_chkFrameLimiter_Click(wxCommandEvent& event)
 {
-	sbs->FrameLimiter = chkFrameLimiter->GetValue();
+	Simcore->FrameLimiter = chkFrameLimiter->GetValue();
 }
 
 void DebugPanel::On_chkMainProcessing_Click(wxCommandEvent& event)
@@ -186,7 +186,7 @@ void DebugPanel::On_chkMainProcessing_Click(wxCommandEvent& event)
 
 void DebugPanel::On_chkAutoShafts_Click(wxCommandEvent& event)
 {
-	sbs->AutoShafts = chkAutoShafts->GetValue();
+	Simcore->AutoShafts = chkAutoShafts->GetValue();
 }
 
 void DebugPanel::On_chkFrameSync_Click(wxCommandEvent& event)
@@ -196,7 +196,7 @@ void DebugPanel::On_chkFrameSync_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bListAltitudes_Click(wxCommandEvent& event)
 {
-	sbs->ListAltitudes();
+	Simcore->ListAltitudes();
 }
 
 void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
@@ -217,11 +217,11 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 void DebugPanel::OnInit()
 {
 	//set check boxes
-	chkCollisionDetection->SetValue(sbs->camera->EnableCollisions);
-	chkGravity->SetValue(sbs->camera->GetGravityStatus());
-	chkFrameLimiter->SetValue(sbs->FrameLimiter);
+	chkCollisionDetection->SetValue(Simcore->camera->EnableCollisions);
+	chkGravity->SetValue(Simcore->camera->GetGravityStatus());
+	chkFrameLimiter->SetValue(Simcore->FrameLimiter);
 	//chkMainProcessing->SetValue();
-	chkAutoShafts->SetValue(sbs->AutoShafts);
+	chkAutoShafts->SetValue(Simcore->AutoShafts);
 
 	mc = new MeshControl(dp, -1);
 	ee = new editelevator(dp, -1);
@@ -232,16 +232,16 @@ void DebugPanel::OnInit()
 
 void DebugPanel::Timer::Notify()
 {
-	dp->t_camerap->SetLabel(TruncateNumber(sbs->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(sbs->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(sbs->camera->GetPosition().z, 2));
-	dp->t_camerafloor->SetLabel(wxVariant((long)sbs->camera->CurrentFloor).GetString());
-	dp->t_object->SetLabel(wxString::FromAscii(sbs->camera->GetClickedMeshName()));
-	dp->t_framerate->SetLabel(TruncateNumber(sbs->FPS, 2));
+	dp->t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
+	dp->t_camerafloor->SetLabel(wxVariant((long)Simcore->camera->CurrentFloor).GetString());
+	dp->t_object->SetLabel(wxString::FromAscii(Simcore->camera->GetClickedMeshName()));
+	dp->t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
 
-	if (sbs->Elevators() > 0)
+	if (Simcore->Elevators() > 0)
 	{
 		dp->bEditElevator->Enable(true);
-		dp->t_elevnumber->SetLabel(wxVariant((long)sbs->ElevatorNumber).GetString());
-		dp->t_elevfloor->SetLabel(wxVariant((long)sbs->GetElevator(sbs->ElevatorNumber)->GetFloor()).GetString());
+		dp->t_elevnumber->SetLabel(wxVariant((long)Simcore->ElevatorNumber).GetString());
+		dp->t_elevfloor->SetLabel(wxVariant((long)Simcore->GetElevator(Simcore->ElevatorNumber)->GetFloor()).GetString());
 	}
 	else
 		dp->bEditElevator->Enable(false);
@@ -251,12 +251,12 @@ void DebugPanel::Timer::Notify()
 
 	if (mc->IsShown() == true)
 	{
-		mc->chkFloor->SetValue(sbs->GetFloor(sbs->camera->CurrentFloor)->IsEnabled);
-		mc->chkColumnFrame->SetValue(sbs->IsColumnFrameEnabled);
-		mc->chkSky->SetValue(sbs->IsSkyboxEnabled);
-		mc->chkLandscape->SetValue(sbs->IsLandscapeEnabled);
-		mc->chkBuildings->SetValue(sbs->IsBuildingsEnabled);
-		mc->chkExternal->SetValue(sbs->IsExternalEnabled);
+		mc->chkFloor->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsEnabled);
+		mc->chkColumnFrame->SetValue(Simcore->IsColumnFrameEnabled);
+		mc->chkSky->SetValue(Simcore->IsSkyboxEnabled);
+		mc->chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
+		mc->chkBuildings->SetValue(Simcore->IsBuildingsEnabled);
+		mc->chkExternal->SetValue(Simcore->IsExternalEnabled);
 	}
 }
 
@@ -281,5 +281,5 @@ wxString TruncateNumber(float value, int decimals)
 void DebugPanel::On_chkGravity_Click(wxCommandEvent& event)
 {
 	//enables or disables gravity
-	sbs->camera->EnableGravity(chkGravity->GetValue());
+	Simcore->camera->EnableGravity(chkGravity->GetValue());
 }
