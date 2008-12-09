@@ -26,7 +26,7 @@
 #ifndef _SBS_CALLBUTTON_H
 #define _SBS_CALLBUTTON_H
 
-class CallButton
+class SBSIMPEXP CallButton
 {
 public:
 

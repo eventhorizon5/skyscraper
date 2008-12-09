@@ -32,40 +32,40 @@
 
 //global functions
 static bool SBSEventHandler(iEvent& Event);
-void Cleanup();
+SBSIMPEXP void Cleanup();
 
-struct FloorMap
+struct SBSIMPEXP FloorMap
 {
 	int number; //floor number
 	Floor *object; //floor object reference
 };
 
-struct ElevatorMap
+struct SBSIMPEXP ElevatorMap
 {
 	int number; //elevator number
 	Elevator *object; //elevator object reference
 };
 
-struct ShaftMap
+struct SBSIMPEXP ShaftMap
 {
 	int number; //shaft number
 	Shaft *object; //shaft object reference
 };
 
-struct StairsMap
+struct SBSIMPEXP StairsMap
 {
 	int number; //stairs number
 	Stairs *object; //stairs object reference
 };
 
-struct DoorMap
+struct SBSIMPEXP DoorMap
 {
 	int number; //door number
 	Door *object; //door object reference
 };
 
 //SBS class
-class SBS
+class SBSIMPEXP SBS
 {
 public:
 

@@ -28,7 +28,7 @@
 
 #include "callbutton.h"
 
-class Floor
+class SBSIMPEXP Floor
 {
 public:
 

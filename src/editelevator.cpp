@@ -33,7 +33,7 @@
 #include "elevator.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS *Simcore; //external pointer to the SBS engine
 Elevator *elevator;
 
 //(*IdInit(editelevator)
@@ -480,56 +480,56 @@ editelevator::~editelevator()
 void editelevator::On_bCall_Click(wxCommandEvent& event)
 {
 	//calls elevator to the current camera floor
-	if (sbs->GetElevator(sNumber->GetThumbPosition() + 1)->GetFloor() > sbs->camera->CurrentFloor)
-		sbs->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sbs->camera->CurrentFloor, -1);
-	if (sbs->GetElevator(sNumber->GetThumbPosition() + 1)->GetFloor() < sbs->camera->CurrentFloor)
-		sbs->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sbs->camera->CurrentFloor, 1);
+	if (Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetFloor() > Simcore->camera->CurrentFloor)
+		Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(Simcore->camera->CurrentFloor, -1);
+	if (Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetFloor() < Simcore->camera->CurrentFloor)
+		Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(Simcore->camera->CurrentFloor, 1);
 }
 
 void editelevator::On_bEnqueueUp_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition(), 1);
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition(), 1);
 }
 
 void editelevator::On_bGo_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->GotoFloor = sFloor->GetThumbPosition();
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->MoveElevator = true;
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GotoFloor = sFloor->GetThumbPosition();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->MoveElevator = true;
 }
 
 void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition(), -1);
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition(), -1);
 }
 
 void editelevator::On_bOpen_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->OpenDoors();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->OpenDoors();
 }
 
 void editelevator::On_bClose_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->CloseDoors();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->CloseDoors();
 }
 
 void editelevator::On_bOpenManual_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->OpenDoorsEmergency();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->OpenDoorsEmergency();
 }
 
 void editelevator::On_bCloseManual_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->CloseDoorsEmergency();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->CloseDoorsEmergency();
 }
 
 void editelevator::On_bStop_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->StopElevator();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->StopElevator();
 }
 
 void editelevator::On_bAlarm_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->Alarm();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->Alarm();
 }
 
 void editelevator::On_bSetName_Click(wxCommandEvent& event)
@@ -570,26 +570,26 @@ void editelevator::On_bSetDoorAccel_Click(wxCommandEvent& event)
 
 void editelevator::On_bDumpFloors_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->DumpServicedFloors();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->DumpServicedFloors();
 }
 
 void editelevator::On_bDumpQueues_Click(wxCommandEvent& event)
 {
-	sbs->GetElevator(sNumber->GetThumbPosition() + 1)->DumpQueues();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->DumpQueues();
 }
 
 void editelevator::OnInit()
 {
-	if (sbs->Elevators() > 0)
+	if (Simcore->Elevators() > 0)
 	{
 		//set elevator range slider
-		//s_ElevNum->SetRange(1, sbs->Elevators());
-		sNumber->SetScrollbar(0, 1, sbs->Elevators(), 1);
+		//s_ElevNum->SetRange(1, Simcore->Elevators());
+		sNumber->SetScrollbar(0, 1, Simcore->Elevators(), 1);
 
 		//set floor range slider
-		//s_ElevFloor->SetRange(-sbs->Basements, sbs->TotalFloors);
-		//sFloor->SetScrollbar(0, 1, sbs->TotalFloors + 1, 1);
-		sFloor->SetScrollbar(0, 1, sbs->Floors + 1, 1);
+		//s_ElevFloor->SetRange(-Simcore->Basements, Simcore->TotalFloors);
+		//sFloor->SetScrollbar(0, 1, Simcore->TotalFloors + 1, 1);
+		sFloor->SetScrollbar(0, 1, Simcore->Floors + 1, 1);
 	}
 	else
 		sNumber->Enable(false);
@@ -600,7 +600,7 @@ void editelevator::Loop()
 	static int last_elevator;
 	int elev_num;
 	elev_num = sNumber->GetThumbPosition() + 1;
-	elevator = sbs->GetElevator(elev_num);
+	elevator = Simcore->GetElevator(elev_num);
 	if (elev_num != last_elevator)
 	{
 		//number changed; update values

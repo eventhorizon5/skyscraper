@@ -26,7 +26,7 @@
 #ifndef _SBS_STAIRS_H
 #define _SBS_STAIRS_H
 
-class Stairs
+class SBSIMPEXP Stairs
 {
 public:
 

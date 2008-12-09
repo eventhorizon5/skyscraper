@@ -31,8 +31,29 @@
 #ifndef _SBS_GLOBALS_H
 #define _SBS_GLOBALS_H
 
-bool IsEven(int Number);
-bool IsNumeric(const char *expression);
-const char *BoolToString(bool item);
+//DLL Exporting
+#ifdef _WIN32
+	#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__) || defined(__WATCOMC__)
+		#ifdef SBS_DLL
+			#define SBSIMPEXP __declspec(dllexport)
+			#define SBSIMPEXP_DATA(type) __declspec(dllexport) type
+		#else
+			#define SBSIMPEXP __declspec(dllimport)
+			#define SBSIMPEXP_DATA(type) __declspec(dllimport) type
+		#endif
+	#else
+		#define SBSIMPEXP
+		#define SBSIMPEXP_DATA(type) type
+	#endif
+#endif
+
+#ifndef SBSIMPEXP
+	#define SBSIMPEXP
+	#define SBSIMPEXP_DATA(type)
+#endif
+
+SBSIMPEXP bool IsEven(int Number);
+SBSIMPEXP bool IsNumeric(const char *expression);
+SBSIMPEXP const char *BoolToString(bool item);
 
 #endif

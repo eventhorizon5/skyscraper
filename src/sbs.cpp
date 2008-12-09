@@ -23,11 +23,20 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifdef _WIN32
+	#define CS_IMPLEMENT_PLATFORM_APPLICATION
+	#define CS_NO_MALLOC_OVERRIDE
+#endif
+
 #include <wx/wx.h>
 #include <wx/variant.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
+
+#ifdef _WIN32
+	CS_IMPLEMENT_APPLICATION
+#endif
 
 SBS *sbs; //self reference
 
