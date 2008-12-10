@@ -548,6 +548,16 @@ int Skyscraper::LoadBuilding(const char * filename)
 			tempdata.DeleteAll();
 		}
 
+		//ReverseAxis command
+		if (LineData.Slice(0, 11).CompareNoCase("reverseaxis") == true)
+		{
+			//get text after equal sign
+			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			temp2.Trim();
+
+			Simcore->ReverseAxis(temp2.CompareNoCase("true"));
+		}
+
 		//Intersection points
 		temp5 = csString(LineData).Downcase().Find("isect(", 0);
 		while (temp5 > -1)

@@ -126,6 +126,7 @@ SBS::SBS()
 	wall2b = false;
 	AutoX = true;
 	AutoY = true;
+	ReverseAxisValue = false;
 }
 
 SBS::~SBS()
@@ -891,10 +892,22 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 		altitude2 = temp;
 	}
 
-	csVector3 v1 (x1, altitude1, z1); //bottom left
-	csVector3 v2 (x2, altitude1, z1); //bottom right
-	csVector3 v3 (x2, altitude2, z2); //top right
-	csVector3 v4 (x1, altitude2, z2); //top left
+	csVector3 v1, v2, v3, v4;
+
+	if (ReverseAxisValue == false)
+	{
+		v1.Set(x1, altitude1, z1); //bottom left
+		v2.Set(x2, altitude1, z1); //bottom right
+		v3.Set(x2, altitude2, z2); //top right
+		v4.Set(x1, altitude2, z2); //top left
+	}
+	else
+	{
+		v1.Set(x1, altitude1, z1); //bottom left
+		v2.Set(x1, altitude1, z2); //bottom right
+		v3.Set(x2, altitude2, z2); //top right
+		v4.Set(x2, altitude2, z1); //top left
+	}
 
 	csVector3 v5 = v1;
 	csVector3 v6 = v2;
@@ -2475,4 +2488,15 @@ void SBS::SetAutoSize(bool x, bool y)
 	//enable or disable texture autosizing
 	AutoX = x;
 	AutoY = y;
+}
+
+void SBS::ReverseAxis(bool value)
+{
+	//reverse wall/floor altitude axis
+	ReverseAxisValue = value;
+}
+
+bool SBS::GetReverseAxis()
+{
+	return ReverseAxisValue;
 }

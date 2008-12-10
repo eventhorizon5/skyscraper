@@ -204,6 +204,8 @@ public:
 	void ResetWalls(bool ToDefaults = false);
 	void ReverseExtents(bool X, bool Y, bool Z);
 	void ResetExtents(bool ToDefaults = false);
+	void ReverseAxis(bool value);
+	bool GetReverseAxis();
 	void SetAutoSize(bool x, bool y);
 	csVector2 GetAutoSize();
 	int GetDrawWallsCount();
@@ -262,6 +264,7 @@ private:
 	bool DrawSideP;
 	bool DrawTop; //or back, if floor
 	bool DrawBottom; //or front, if floor
+	bool ReverseAxisValue;
 
 	//old wall/floor sides
 	bool DrawMainNOld; //or top, if floor
