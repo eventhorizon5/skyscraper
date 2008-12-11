@@ -6,3 +6,9 @@ floor signs.  To use it, just put the makesigns.scm file into your gimp scripts 
 
 Configuration options are in both the makesigns.scm file and the run.sh script.
 
+Font sizes used:
+sans: 64, 38 for others
+sans bold: 60, 36 for others
+sans condensed: 64, 46 for others
+sans bold condensed: 64, 44 for others
+
