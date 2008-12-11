@@ -60,5 +60,6 @@ do
 	if [ $number == 14 ]; then sym="B"; fi
 	echo $sym
 	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$sym.jpg\" \"$sym\" 64 \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
+	number=$((+number))
 done
 
