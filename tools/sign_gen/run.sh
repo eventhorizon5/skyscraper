@@ -1,5 +1,8 @@
 #!/bin/bash
 font="Nimbus Sans L"
+#font="Nimbus Sans L Bold"
+#font="Nimbus Sans L Condensed"
+#font="Nimbus Sans L Bold Condensed"
 fontsize=64
 number=1
 maxnumber=150
