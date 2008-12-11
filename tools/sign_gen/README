@@ -1,0 +1,8 @@
+Automatic Floor Sign Generator for the GIMP
+by Ryan Thoryk, 12/2008
+
+This folder contains scripts for the GIMP on Linux for easily creating
+floor signs.  To use it, just put the makesigns.scm file into your gimp scripts directory (for GIMP 2.4 it would be ~/.gimp-2.4/scripts) and run the "run.sh" script by typing "./run.sh".  It will create signs numbered from 1 to 150, and also misc signs in the current directory.
+
+Configuration options are in both the makesigns.scm file and the run.sh script.
+
