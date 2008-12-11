@@ -1,12 +1,13 @@
 #!/bin/bash
 font="Nimbus Sans L"
+fontsize=64
 number=1
 maxnumber=150
 
 while (( number <= maxnumber ))
 do
 	echo $number
-	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$number.jpg\" \"$number\" 64 \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
+	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$number.jpg\" \"$number\" $fontsize \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
 	number=$((++number))
 done
 
@@ -16,7 +17,7 @@ maxnumber=9
 while (( number <= maxnumber ))
 do
 	echo LL$number
-	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"LL$number.jpg\" \"LL$number\" 64 \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
+	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"LL$number.jpg\" \"LL$number\" $fontsize \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
 	number=$((++number))
 done
 
@@ -26,7 +27,7 @@ maxnumber=9
 while (( number <= maxnumber ))
 do
 	echo P$number
-        nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"P$number.jpg\" \"P$number\" 64 \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
+        nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"P$number.jpg\" \"P$number\" $fontsize \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
         number=$((++number))
 done
 
@@ -36,7 +37,7 @@ maxnumber=9
 while (( number <= maxnumber ))
 do
 	echo B$number
-        nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"B$number.jpg\" \"B$number\" 64 \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
+        nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"B$number.jpg\" \"B$number\" $fontsize \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
         number=$((++number))
 done
 
@@ -59,7 +60,7 @@ do
 	if [ $number == 13 ]; then sym="P"; fi
 	if [ $number == 14 ]; then sym="B"; fi
 	echo $sym
-	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$sym.jpg\" \"$sym\" 64 \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
-	number=$((+number))
+	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$sym.jpg\" \"$sym\" $fontsize \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
+	number=$((++number))
 done
 
