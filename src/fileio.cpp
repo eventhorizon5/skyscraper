@@ -354,7 +354,6 @@ int Skyscraper::LoadBuilding(const char * filename)
 		//AddCustomWall command
 		if (LineData.Slice(0, 14).CompareNoCase("addcustomwall ") == true)
 		{
-			bool extcheck = false;
 			tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
@@ -367,10 +366,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 			if (buffer == "floor")
 				tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			if (buffer == "external")
-			{
 				tmpMesh = Simcore->External_state;
-				extcheck = true;
-			}
 			if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
@@ -384,14 +380,13 @@ int Skyscraper::LoadBuilding(const char * filename)
 			for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
-			Simcore->AddCustomWall(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]), extcheck);
+			Simcore->AddCustomWall(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
 			tempdata.DeleteAll();
 		}
 
 		//AddCustomFloor command
 		if (LineData.Slice(0, 15).CompareNoCase("addcustomfloor ") == true)
 		{
-			bool extcheck = false;
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
@@ -404,10 +399,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 			if (buffer == "floor")
 			tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			if (buffer == "external")
-			{
 				tmpMesh = Simcore->External_state;
-				extcheck = true;
-			}
 			if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
@@ -421,7 +413,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 			for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
-			int index = Simcore->AddCustomFloor(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]), extcheck);
+			int index = Simcore->AddCustomFloor(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
 
 			tempdata.DeleteAll();
 		}
@@ -1131,7 +1123,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
 
 				//create triangle wall
-				Simcore->AddTriangleWall(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), true);
+				Simcore->AddTriangleWall(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 				tempdata.DeleteAll();
 			}
 

@@ -1163,7 +1163,7 @@ void SBS::InitMeshes()
 	ColumnFrame->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 }
 
-int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th, bool IsExternal)
+int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
 {
 	//Adds a wall from a specified array of 3D vectors
 	float tw2 = tw;
@@ -1268,7 +1268,7 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 	return firstidx;
 }
 
-int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th, bool IsExternal)
+int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
 {
 	//Adds a wall from a specified array of 3D vectors
 	float tw2 = tw;
@@ -1372,7 +1372,7 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 	return firstidx;
 }
 
-int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th, bool IsExternal)
+int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions
 	csPoly3D varray;
@@ -1383,7 +1383,7 @@ int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const
 	varray.AddVertex(x3, y3, z3);
 
 	//pass data on to AddCustomWall function
-	int firstidx = AddCustomWall(dest, name, texture, varray, tw, th, IsExternal);
+	int firstidx = AddCustomWall(dest, name, texture, varray, tw, th);
 
 	return firstidx;
 }
