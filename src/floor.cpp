@@ -79,10 +79,10 @@ Floor::~Floor()
 
 void Floor::SetCameraFloor()
 {
-	//Moves camera to specified floor (sets altitude to the floor's altitude plus CameraAltitude)
+	//Moves camera to specified floor (sets altitude to the floor's altitude plus DefaultAltitude)
 
 	csVector3 camlocation = sbs->camera->GetPosition();
-	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + InterfloorHeight + sbs->camera->DefaultAltitude, camlocation.z));
+	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + InterfloorHeight + sbs->camera->cfg_body_height + sbs->camera->cfg_legs_height, camlocation.z));
 }
 
 int Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th, bool isexternal)

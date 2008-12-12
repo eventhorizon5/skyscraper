@@ -622,12 +622,6 @@ int Skyscraper::LoadBuilding(const char * filename)
 				Simcore->BuildingDescription = temp2;
 			if (LineData.Slice(0, 7).CompareNoCase("version") == true)
 				Simcore->BuildingVersion = temp2;
-			if (LineData.Slice(0, 14).CompareNoCase("cameraaltitude") == true)
-			{
-				//if (IsNumeric(temp2) == false)
-					//Err.Raise 1000;
-				Simcore->camera->DefaultAltitude = atof(temp2.GetData());
-			}
 			if (LineData.Slice(0, 11).CompareNoCase("camerafloor") == true)
 			{
 				//if (IsNumeric(temp2) == false)

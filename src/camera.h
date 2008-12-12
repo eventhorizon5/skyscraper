@@ -29,7 +29,6 @@
 class SBSIMPEXP Camera
 {
 public:
-	float DefaultAltitude; //default vertical offset of camera from each floor
 	int CurrentFloor; //floor camera's on
 	float OriginalPosition;
 	int StartFloor; //Starting floor
