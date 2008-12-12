@@ -97,15 +97,15 @@
     Load data/floorsignskylobby.jpg, FloorSignSkylobby, 1, 1
 
     #floor indicator/button pictures
-    Load data/floorindicators/L.jpg, ButtonL, 1, 1
-    Load data/floorindicators/M.jpg, ButtonM, 1, 1
-    Load data/floorindicators/R.jpg, ButtonR, 1, 1
-    Load data/floorindicators/open.jpg, ButtonOpen, 1, 1
-    Load data/floorindicators/close.jpg, ButtonClose, 1, 1
-    Load data/floorindicators/stop.jpg, ButtonStop, 1, 1
-    Load data/floorindicators/alarm.jpg, ButtonAlarm, 1, 1
-    Load data/floorindicators/cancel.jpg, ButtonCancel, 1, 1
-    LoadRange 2, 138, data/floorindicators/%number%.jpg, Button%number%, 1, 1
+    Load signs/sans/L.jpg, ButtonL, 1, 1
+    Load signs/sans/M.jpg, ButtonM, 1, 1
+    Load signs/sans/R.jpg, ButtonR, 1, 1
+    Load signs/sans/Open.jpg, ButtonOpen, 1, 1
+    Load signs/sans/Close.jpg, ButtonClose, 1, 1
+    Load signs/sans/Stop.jpg, ButtonStop, 1, 1
+    Load signs/sans/Alarm.jpg, ButtonAlarm, 1, 1
+    Load signs/sans/CallCancel.jpg, ButtonCancel, 1, 1
+    LoadRange 2, 138, signs/sans/%number%.jpg, Button%number%, 1, 1
 <EndTextures>
 
 # Basements

@@ -539,10 +539,18 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 
 	//mount app's directory in VFS
 	#ifndef CS_PLATFORM_WIN32
-		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "/");
+		dir_char = "/";
 	#else
-		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "\\");
+		dir_char = "\\";
 	#endif
+	root_dir = csInstallationPathsHelper::GetAppDir(argv[0]) + dir_char;
+	vfs->Mount("/root/", root_dir);
+
+	//mount sign texture packs
+	vfs->Mount("/root/signs/sans", root_dir + "data" + dir_char + "signs-sans.zip");
+	vfs->Mount("/root/signs/sans_bold", root_dir + "data" + dir_char + "signs-sans_bold.zip");
+	vfs->Mount("/root/signs/sans_cond", root_dir + "data" + dir_char + "signs-sans_cond.zip");
+	vfs->Mount("/root/signs/sans_cond_bold", root_dir + "data" + dir_char + "signs-sans_cond_bold.zip");
 
 	g2d = g3d->GetDriver2D();
 	g2d->AllowResize(true); //allow canvas resizing

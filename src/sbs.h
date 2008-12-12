@@ -242,6 +242,10 @@ private:
 	//mouse status
 	bool MouseDown;
 
+	//app directory
+	csString root_dir;
+	csString dir_char;
+
 	//fps
 	int fps_frame_count;
 	int fps_tottime;
