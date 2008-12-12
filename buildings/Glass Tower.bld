@@ -25,7 +25,6 @@
     Location = 655 Market Street, San Francisco, CA
     Description = The fictitious 138-story building from the movie The Towering Inferno.
     Version = 1
-    CameraAltitude = 5
     CameraFloor = 0
     CameraPosition = 0, -300
     CameraDirection = 0, 10, 90
