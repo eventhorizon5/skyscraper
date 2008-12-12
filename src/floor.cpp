@@ -98,8 +98,8 @@ int Floor::AddFloor(const char *name, const char *texture, float thickness, floa
 	z2 = z2 * sbs->HorizScale;
 
 	//Call texture autosizing formulas
-	tw2 = sbs->AutoSize(texture, x1, x2, true, tw);
-	th2 = sbs->AutoSize(texture, z1, z2, false, th);
+	tw2 = sbs->AutoSize(x1, x2, true, tw);
+	th2 = sbs->AutoSize(z1, z2, false, th);
 
 	if (isexternal == false)
 		return sbs->AddFloorMain(Level_state, name, texture, thickness, x1, z1, x2, z2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
@@ -125,8 +125,8 @@ int Floor::AddInterfloorFloor(const char *name, const char *texture, float thick
 	z2 = z2 * sbs->HorizScale;
 
 	//Texture autosizing formulas
-	tw2 = sbs->AutoSize(texture, x1, x2, true, tw);
-	th2 = sbs->AutoSize(texture, z1, z2, false, th);
+	tw2 = sbs->AutoSize(x1, x2, true, tw);
+	th2 = sbs->AutoSize(z1, z2, false, th);
 
 	return sbs->AddFloorMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
@@ -152,9 +152,9 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 
 	//Call texture autosizing formulas
 	if (z1 == z2)
-		tw2 = sbs->AutoSize(texture, x1, x2, true, tw);
+		tw2 = sbs->AutoSize(x1, x2, true, tw);
 	if (x1 == x2)
-		tw2 = sbs->AutoSize(texture, z1, z2, true, tw);
+		tw2 = sbs->AutoSize(z1, z2, true, tw);
 	if ((z1 != z2) && (x1 != x2))
 	{
 		//calculate diagonals
@@ -166,9 +166,9 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 			tempw2 = z1 - z2;
 		else
 			tempw2 = z2 - z1;
-		tw2 = sbs->AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = sbs->AutoSize(texture, 0, height_in1, false, th);
+	th2 = sbs->AutoSize(0, height_in1, false, th);
 
 	if (isexternal == false)
 		return sbs->AddWallMain(Level_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
@@ -195,10 +195,10 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, float thickn
 
 	//Texture autosizing formulas
 	if (z1 == z2)
-		tw2 = sbs->AutoSize(texture, x1, x2, true, tw);
+		tw2 = sbs->AutoSize(x1, x2, true, tw);
 	if (x1 == x2)
-		tw2 = sbs->AutoSize(texture, z1, z2, true, tw);
-	th2 = sbs->AutoSize(texture, 0, height_in1, false, th);
+		tw2 = sbs->AutoSize(z1, z2, true, tw);
+	th2 = sbs->AutoSize(0, height_in1, false, th);
 
 	return sbs->AddWallMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }

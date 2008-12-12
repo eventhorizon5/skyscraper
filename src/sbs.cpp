@@ -243,7 +243,7 @@ void SBS::Wait(long milliseconds)
 
 }
 
-float SBS::AutoSize(const char * texturename, float n1, float n2, bool iswidth, float offset)
+float SBS::AutoSize(float n1, float n2, bool iswidth, float offset)
 {
 	//Texture autosizing formulas
 
@@ -862,7 +862,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	}
 
 	//set texture
-	SetTexture(dest, index, texture, tw, th);
+	SetTexture(dest, index, texture, true, tw, th);
 
 	return index;
 }
@@ -1019,7 +1019,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 		index = tmpindex;
 
 	//set texture
-	SetTexture(dest, index, texture, tw, th);
+	SetTexture(dest, index, texture, true, tw, th);
 
 	return index;
 }
@@ -1195,17 +1195,17 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 
 	//Call texture autosizing formulas
 	if (z.x == z.y)
-		tw2 = AutoSize(texture, x.x, x.y, true, tw);
+		tw2 = AutoSize(x.x, x.y, true, tw);
 	if (x.x == x.y)
-		tw2 = AutoSize(texture, z.x, z.y, true, tw);
+		tw2 = AutoSize(z.x, z.y, true, tw);
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
 		tempw1 = fabs(x.y - x.x);
 		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = AutoSize(texture, 0, fabs(y.y - y.x), false, th);
+	th2 = AutoSize(0, fabs(y.y - y.x), false, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray1.GetVertices(), num);
@@ -1213,6 +1213,33 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 
 	material = engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+
+	csString texname = texture;
+	float tw3 = tw2, th3 = th2;
+
+	if (material == 0)
+	{
+		//if material's not found, display a warning and use a default material
+		csString Texture = texture;
+		csString polyname = dest->GetPolygonName(firstidx);
+		csString message = "Texture '" + Texture + "' not found for polygon '" + polyname + "'; using default material";
+		ReportError(message);
+		//set to default material
+		material = engine->GetMaterialList()->FindByName("Default");
+		texname = "Default";
+	}
+
+	//get per-texture tiling values from the textureinfo array
+	for (int i = 0; i < textureinfo.GetSize(); i++)
+	{
+		if (textureinfo[i].name == texname)
+		{
+			//multiply the tiling parameters (tw and th) by
+			//the stored multipliers for that texture
+			tw3 = tw2 / textureinfo[i].widthmult;
+			th3 = th2 / textureinfo[i].heightmult;
+		}
+	}
 
 	//reverse extents if specified
 	float tmpv;
@@ -1245,16 +1272,16 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 		v1,
 		csVector2 (0, 0),
 		v2,
-		csVector2 (tw2, 0),
+		csVector2 (tw3, 0),
 		v3,
-		csVector2 (tw2, th2));
+		csVector2 (tw3, th3));
 	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
 		v1,
-		csVector2 (tw2, 0),
+		csVector2 (tw3, 0),
 		v2,
 		csVector2 (0, 0),
 		v3,
-		csVector2 (0, th2));
+		csVector2 (0, th3));
 
 	//set polygon names
 	csString NewName;
@@ -1299,17 +1326,17 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 
 	//Call texture autosizing formulas
 	if (z.x == z.y)
-		tw2 = AutoSize(texture, x.x, x.y, true, tw);
+		tw2 = AutoSize(x.x, x.y, true, tw);
 	if (x.x == x.y)
-		tw2 = AutoSize(texture, z.x, z.y, true, tw);
+		tw2 = AutoSize(z.x, z.y, true, tw);
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
 		tempw1 = fabs(x.y - x.x);
 		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = AutoSize(texture, 0, fabs(y.y - y.x), false, th);
+	th2 = AutoSize(0, fabs(y.y - y.x), false, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
@@ -1838,7 +1865,7 @@ iMaterialWrapper *SBS::ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> 
 	return newmat;
 }
 
-void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, float tw, float th)
+void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th)
 {
 	//sets a polygon's texture
 
@@ -1870,7 +1897,13 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		}
 	}
 
-	for (int i = index; i < index + GetDrawWallsCount(); i++)
+	int endindex;
+	if (has_thickness == true)
+		endindex = index + GetDrawWallsCount();
+	else
+		endindex = index;
+
+	for (int i = index; i < endindex; i++)
 	{
 		mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
 		//texture mapping is set from first 3 coordinates

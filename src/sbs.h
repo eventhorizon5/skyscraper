@@ -149,7 +149,7 @@ public:
 	bool ReportError (const char* msg, ...);
 	void Wait(long Milliseconds);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
-	float AutoSize(const char * texturename, float n1, float n2, bool iswidth, float offset);
+	float AutoSize(float n1, float n2, bool iswidth, float offset);
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
 	void Start();
 	void Run();
@@ -182,7 +182,7 @@ public:
 	void ListAltitudes();
 	void CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, float tw, float th);
+	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th);
 	iMaterialWrapper *ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> oldmat, const char *texture);
 	void NewElevator(int number);
 	void NewFloor(int number);
