@@ -2697,6 +2697,11 @@ void SBS::SetAutoSize(bool x, bool y)
 	AutoY = y;
 }
 
+csVector2 SBS::GetAutoSize()
+{
+	return csVector2(AutoX, AutoY);
+}
+
 void SBS::ReverseAxis(bool value)
 {
 	//reverse wall/floor altitude axis
