@@ -1431,185 +1431,351 @@ csString SBS::Calc(const char *expression)
 	//first remove all whitespace from the string
 	tmpcalc.ReplaceAll(" ", "");
 
-	if (tmpcalc.Find("=", 0) == -1 && tmpcalc.Find("!", 0) == -1 && tmpcalc.Find("<", 0) == -1 && tmpcalc.Find(">", 0) == -1)
+	//find parenthesis
+	do
 	{
-		//find parenthesis
-		do
+		start = tmpcalc.Find("(", 0);
+		if (start >= 0)
 		{
-			start = tmpcalc.Find("(", 0);
-			if (start >= 0)
+			//find matching parenthesis
+			int match = 1;
+			int end = -1;
+			for (int i = start + 1; i < tmpcalc.Length(); i++)
 			{
-				//find matching parenthesis
-				int match = 1;
-				int end = -1;
-				for (int i = start + 1; i < tmpcalc.Length(); i++)
+				if (tmpcalc.GetAt(i) == '(')
+					match++;
+				if (tmpcalc.GetAt(i) == ')')
+					match--;
+				if (match == 0)
 				{
-					if (tmpcalc.GetAt(i) == '(')
-						match++;
-					if (tmpcalc.GetAt(i) == ')')
-						match--;
-					if (match == 0)
-					{
-						end = i;
-						break;
-					}
+					end = i;
+					break;
 				}
-				if (end != -1)
-				{
-					//call function recursively
-					csString newdata;
-					newdata = Calc(tmpcalc.Slice(start + 1, end - start - 1));
-					//construct new string
-					one = tmpcalc.Slice(0, start);
-					if (end < tmpcalc.Length() - 1)
-						two = tmpcalc.Slice(end + 1);
-					else
-						two = "";
-					tmpcalc = one + newdata + two;
-				}
+			}
+			if (end != -1)
+			{
+				//call function recursively
+				csString newdata;
+				newdata = Calc(tmpcalc.Slice(start + 1, end - start - 1));
+				//construct new string
+				one = tmpcalc.Slice(0, start);
+				if (end < tmpcalc.Length() - 1)
+					two = tmpcalc.Slice(end + 1);
 				else
-				{
-					ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
-					return "false";
-				}
+					two = "";
+				tmpcalc = one + newdata + two;
 			}
 			else
-				break;
-		} while (1 == 1);
-
-		//find number of operators and recurse if multiple found
-		int operators;
-		do
-		{
-			operators = 0;
-			end = 0;
-			for (int i = 1; i < tmpcalc.Length(); i++)
-			{
-				if (tmpcalc.GetAt(i) == '+' || tmpcalc.GetAt(i) == '/' || tmpcalc.GetAt(i) == '*')
-				{
-					operators++;
-					if (operators == 2)
-						end = i;
-				}
-				if (tmpcalc.GetAt(i) == '-' && tmpcalc.GetAt(i - 1) != '-' && tmpcalc.GetAt(i - 1) != '+' && tmpcalc.GetAt(i - 1) != '/' && tmpcalc.GetAt(i - 1) != '*')
-				{
-					operators++;
-					if (operators == 2)
-						end = i;
-				}
-			}
-			if (end >= tmpcalc.Length() - 1 && operators > 0)
 			{
 				ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 				return "false";
 			}
-			if (operators > 1)
+		}
+		else
+			break;
+	} while (1 == 1);
+		//find number of operators and recurse if multiple found
+	int operators;
+	do
+	{
+		operators = 0;
+		end = 0;
+		for (int i = 1; i < tmpcalc.Length(); i++)
+		{
+			if (tmpcalc.GetAt(i) == '+' || tmpcalc.GetAt(i) == '/' || tmpcalc.GetAt(i) == '*')
 			{
-				csString newdata;
-				newdata = Calc(tmpcalc.Slice(0, end));
-				//construct new string
-				two = tmpcalc.Slice(end);
-				tmpcalc = newdata + two;
+				operators++;
+				if (operators == 2)
+					end = i;
 			}
-			else
-				break;
-		} while (1 == 1);
+			if (tmpcalc.GetAt(i) == '-' && tmpcalc.GetAt(i - 1) != '-' && tmpcalc.GetAt(i - 1) != '+' && tmpcalc.GetAt(i - 1) != '/' && tmpcalc.GetAt(i - 1) != '*')
+			{
+				operators++;
+				if (operators == 2)
+					end = i;
+			}
+		}
+		if (end >= tmpcalc.Length() - 1 && operators > 0)
+		{
+			ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+			return "false";
+		}
+		if (operators > 1)
+		{
+			csString newdata;
+			newdata = Calc(tmpcalc.Slice(0, end));
+			//construct new string
+			two = tmpcalc.Slice(end);
+			tmpcalc = newdata + two;
+		}
+		else
+			break;
+	} while (1 == 1);
 
-		//return value if none found
-		if (operators == 0)
-			return tmpcalc.GetData();
-
-		//otherwise perform math
-		temp1 = tmpcalc.Find("+", 1);
-		if (temp1 > 0)
-		{
-			one = tmpcalc.Slice(0, temp1);
-			two = tmpcalc.Slice(temp1 + 1);
-			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-			{
-				tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
-				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-				return tmpcalc.GetData();
-			}
-		}
-		temp1 = tmpcalc.Find("-", 1);
-		if (temp1 > 0)
-		{
-			one = tmpcalc.Slice(0, temp1);
-			two = tmpcalc.Slice(temp1 + 1);
-			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-			{
-				tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
-				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-				return tmpcalc.GetData();
-			}
-		}
-		temp1 = tmpcalc.Find("/", 1);
-		if (temp1 > 0)
-		{
-			one = tmpcalc.Slice(0, temp1);
-			two = tmpcalc.Slice(temp1 + 1);
-			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-			{
-				tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
-				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-				return tmpcalc.GetData();
-			}
-		}
-		temp1 = tmpcalc.Find("*", 1);
-		if (temp1 > 0)
-		{
-			one = tmpcalc.Slice(0, temp1);
-			two = tmpcalc.Slice(temp1 + 1);
-			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-			{
-				tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
-				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-				return tmpcalc.GetData();
-			}
-		}
+	//return value if none found
+	if (operators == 0)
 		return tmpcalc.GetData();
+
+	//otherwise perform math
+	temp1 = tmpcalc.Find("+", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("-", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("/", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("*", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	return tmpcalc.GetData();
+}
+
+bool SBS::IfProc(const char *expression)
+{
+	//IF statement processor
+
+	int temp1;
+	csString tmpcalc = expression;
+	char buffer[20];
+	csString one;
+	csString two;
+	int start, end;
+	bool check;
+	bool result = false;
+
+	//first remove all whitespace from the string
+	tmpcalc.ReplaceAll(" ", "");
+
+	//first check for bad and/or character sets
+	if (int(tmpcalc.Find("&&")) >= 0 || int(tmpcalc.Find("||")) >= 0 || int(tmpcalc.Find("==")) >= 0 || int(tmpcalc.Find("!=")) >= 0)
+	{
+		ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+			return false;
 	}
 
-	//boolean operators
+	//find parenthesis
+	do
+	{
+		start = tmpcalc.Find("(", 0);
+		if (start >= 0)
+		{
+			//find matching parenthesis
+			int match = 1;
+			int end = -1;
+			for (int i = start + 1; i < tmpcalc.Length(); i++)
+			{
+				if (tmpcalc.GetAt(i) == '(')
+					match++;
+				if (tmpcalc.GetAt(i) == ')')
+					match--;
+				if (match == 0)
+				{
+					end = i;
+					break;
+				}
+			}
+			if (end != -1)
+			{
+				//call function recursively
+				csString newdata;
+				if (IfProc(tmpcalc.Slice(start + 1, end - start - 1)) == true)
+					newdata = "true";
+				else
+					newdata = "false";
+				//construct new string
+				one = tmpcalc.Slice(0, start);
+				if (end < tmpcalc.Length() - 1)
+					two = tmpcalc.Slice(end + 1);
+				else
+					two = "";
+				tmpcalc = one + newdata + two;
+			}
+			else
+			{
+				ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+				return false;
+			}
+		}
+		else
+			break;
+	} while (1 == 1);
+	//find number of operators and recurse if multiple found
+	int operators;
+	do
+	{
+		operators = 0;
+		start = 0;
+		end = 0;
+		check = false;
+		for (int i = 1; i < tmpcalc.Length(); i++)
+		{
+			if (tmpcalc.GetAt(i) == '=' || tmpcalc.GetAt(i) == '!' || tmpcalc.GetAt(i) == '<' || tmpcalc.GetAt(i) == '>')
+			{
+				operators++;
+			}
+			if (tmpcalc.GetAt(i) == '&' || tmpcalc.GetAt(i) == '|')
+			{
+				check = true;
+				if (operators == 1)
+				{
+					operators = 2;
+					end = i;
+				}
+				else if (operators == 0)
+				{
+					operators = 1;
+					start = i + 1;
+					end = tmpcalc.Length();
+				}
+			}
+		}
+		//return error if multiple standard operators are found, but no and/or operator (ex. if[5 = 5 = 5])
+		if (operators > 1 && check == false)
+		{
+			ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+			return false;
+		}
+		if (operators > 1)
+		{
+			csString newdata;
+			if (IfProc(tmpcalc.Slice(start, end - start)) == true)
+				newdata = "true";
+			else
+				newdata = "false";
+			//construct new string
+			one = tmpcalc.Slice(0, start);
+			two = tmpcalc.Slice(end);
+			tmpcalc = one + newdata + two;
+		}
+		else
+			break;
+	} while (1 == 1);
+	//return value if none found
+	if (operators == 0)
+	{
+		if (tmpcalc == "true")
+			return true;
+		else
+			return false;
+	}
+
+	//otherwise perform comparisons
 	temp1 = tmpcalc.Find("=", 1);
 	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1)) == atof(tmpcalc.Slice(temp1 + 1)))
-			return "true";
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one == two)
+			return true;
 		else
-			return "false";
+			return false;
 	}
 	temp1 = tmpcalc.Find("!", 1);
 	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1)) != atof(tmpcalc.Slice(temp1 + 1)))
-			return "true";
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one != two)
+			return true;
 		else
-			return "false";
+			return false;
 	}
 	temp1 = tmpcalc.Find("<", 1);
 	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1)) < atof(tmpcalc.Slice(temp1 + 1)))
-			return "true";
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			if(atof(one.GetData()) < atof(two.GetData()))
+				return true;
+			else
+				return false;
+		}
 		else
-			return "false";
+			return false;
 	}
 	temp1 = tmpcalc.Find(">", 1);
 	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1)) > atof(tmpcalc.Slice(temp1 + 1)))
-			return "true";
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			if(atof(one.GetData()) > atof(two.GetData()))
+				return true;
+			else
+				return false;
+		}
 		else
-			return "false";
+			return false;
 	}
-
-	return tmpcalc.GetData();
+	temp1 = tmpcalc.Find("&", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one == "true" && two == "true")
+			return true;
+		else
+			return false;
+	}
+	temp1 = tmpcalc.Find("|", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one == "true" || two == "true")
+			return true;
+		else
+			return false;
+	}
+	if (tmpcalc == "true")
+		return true;
+	else
+		return false;
 }
 
 void SBS::EnableBuildings(bool value)

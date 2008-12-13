@@ -752,14 +752,14 @@ recalc:
 			//IF statement
 			if (LineData.Slice(0, 2).CompareNoCase("if") == true)
 			{
-				temp1 = LineData.Find("(", 0);
-				temp3 = LineData.Find(")", 0);
+				temp1 = LineData.Find("[", 0);
+				temp3 = LineData.Find("]", 0);
 				if (temp1 + temp3 > 0)
 					temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
 				else
 					temp2 = "";
 				temp2.Trim();
-				if (Simcore->Calc(temp2) == "true")
+				if (Simcore->IfProc(temp2) == true)
 				{
 					LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
 					goto recalc;
@@ -1256,14 +1256,14 @@ recalc:
 			//IF statement
 			if (LineData.Slice(0, 2).CompareNoCase("if") == true)
 			{
-				temp1 = LineData.Find("(", 0);
-				temp3 = LineData.Find(")", 0);
+				temp1 = LineData.Find("[", 0);
+				temp3 = LineData.Find("]", 0);
 				if (temp1 + temp3 > 0)
 					temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
 				else
 					temp2 = "";
 				temp2.Trim();
-				if (Simcore->Calc(temp2) == "true")
+				if (Simcore->IfProc(temp2) == true)
 					LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
 				else
 					goto Nextline; //skip line

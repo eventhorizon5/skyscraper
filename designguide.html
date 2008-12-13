@@ -55,14 +55,19 @@
     </font></p>
   <p align="left"><strong>3. IF statements</strong></p>
   <p align="left">Basic IF statements can be made, with the following syntax:<br>
-    <font size="2" face="Courier New, Courier, mono">if(<em>value1 sign value2</em>) 
-    <em>command</em></font></p>
+    <font size="2" face="Courier New, Courier, mono">if[<em>expression</em>] command</font></p>
+  <p align="left">Available signs are = (equals), &gt; (greater than), &lt; (less 
+    than), ! (is not), &amp; (and) and | (or). Expressions can also be enclosed 
+    in parenthesis.</p>
   <p align="left">For example, to set the height to 9.5 if the floor number is 
     less than 82:<br>
-    <font size="2" face="Courier New, Courier, mono">if(%floor% &lt; 82) Height 
+    <font size="2" face="Courier New, Courier, mono">if[%floor% &lt; 82] Height 
     = 9.5</font></p>
-  <p align="left">Available signs are = (equals), &gt; (greater than), &lt; (less 
-    than), and ! (is not)<br>
+  <p align="left">This example shows a complex expression:<br>
+    <font size="2" face="Courier New, Courier, mono">if[%floor% &lt; 82 &amp; 
+    (%height% = 3 | %height% = 5] Height = 9.5</font></p>
+  <p align="left">In the above example, the statement will be true if the <em>floor</em> 
+    value is less than 82 and if the <em>height</em> value is either 3 or 5.<br>
   </p>
   <p align="left"><strong>4. Inline calculations</strong></p>
   <p align="left">Values can be calculated inline by using the following math 
@@ -92,10 +97,11 @@
   <p align="left">The parameters in this command are very similar to the ones 
     in the AddWall command shown below in the Floor section, except for the <em>destobject</em> 
     parameter.</p>
-  <p align="left"><em>Destobject</em> can be either <em>external</em>, <em>landscape</em>, 
-    <em>buildings</em>, or <em>columnframe</em> (more will come soon). The <em>voffset</em> 
-    parameter would then be the altitude offset in feet of the specified destination 
-    object's base.</p>
+  <p align="left"><em>Destobject</em> can be either <em>floor </em>(only available 
+    within a Floor section)<em>, external</em>, <em>landscape</em>, <em>buildings</em>, 
+    or <em>columnframe</em> (more will come soon). The <em>voffset</em> parameter 
+    would then be the altitude offset in feet of the specified destination object's 
+    base.</p>
   <p align="left"><strong>b. CreateWallBox2</strong> - creates 4 walls (box) at 
     a specified central location<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateWallBox2 <em>destobject</em>, 
@@ -197,13 +203,18 @@
     and determine if the texture mapping data should be reversed, per axis. If 
     the texture looks strange in the simulator, mess around with the <em>x</em> 
     and <em>z</em> values (<em>y</em> flips the texture upside down).</p>
-  <p align="left"><strong>j. ShaftCut</strong> - used in conjunction with a shaft 
+  <p align="left"><strong>j. ReverseAxis</strong> - reverses the axis that the 
+    difference in altitude/voffset for walls and floors corresponds to. If this 
+    is set to false (default), then it corresponds to the Z axis; otherwise use 
+    the X axis.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> ReverseAxis = value</font></p>
+  <p align="left"> <strong>k. ShaftCut</strong> - used in conjunction with a shaft 
     object - performs a vertical box cut on all floor objects (floors, ceilings, 
     interfloor, etc) in the specified range.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ShaftCut number, 
     startx, startz, endx, endz, start_voffset, end_voffset</font><br>
-    Example: <font size="2" face="Courier New, Courier, mono">ShaftCut 1, -4, -3.5, 4, 
-    3.5, 0, 5</font></p>
+    Example: <font size="2" face="Courier New, Courier, mono">ShaftCut 1, -4, 
+    -3.5, 4, 3.5, 0, 5</font></p>
   <p align="left"><em>Number</em> is the number of the shaft object to work with. 
     <em>Startx</em>, <em>startz</em>, <em>endx</em>, and <em>endz</em> are two 
     sets of coordinates that specify the cut box's start position and end position, 
@@ -213,7 +224,7 @@
     cuts a box for shaft 1, with a width from -4 to 4, and a length from -3.5 
     to 3.5, starting at the starting floor's altitude, and ending at 5 feet above 
     the ending floor's altitude.</p>
-  <p align="left"><strong>k. CutStairwell</strong> - used in conjunction with 
+  <p align="left"><strong>l. CutStairwell</strong> - used in conjunction with 
     a stairwell object - performs a vertical box cut on all floor objects (floors, 
     ceilings, interfloor, etc) in the specified range. For the parameters, see 
     the ShaftCut command.<strong><br>
@@ -221,7 +232,7 @@
     number, startx, startz, endx, endz, start_voffset, end_voffset</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">CutStairwell 1, 
     -4, -3.5, 4, 3.5, 0, 5</font></p>
-  <p align="left"><strong>l. Isect</strong> - the Isect function calculates the 
+  <p align="left"><strong>m. Isect</strong> - the Isect function calculates the 
     position that a line intersects with a certain object, such as a floor. This 
     is mainly used with angled walls that span multiple floors, to find the edge 
     location of the wall at each level without doing any manual calculations. 
@@ -235,7 +246,7 @@
     <em>starty</em>, and <em>startz</em> make up the position of the starting 
     position, and <em>endx</em>, <em>endy</em> and <em>endz</em> make up the ending 
     position. The first intersection of the named object is the return value.</p>
-  <p align="left"><strong>m. SetAutoSize</strong> - enables or disables texture 
+  <p align="left"><strong>n. SetAutoSize</strong> - enables or disables texture 
     autosizing<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> SetAutoSize = <em>AutoWidth, 
     AutoHeight </em></font><br>

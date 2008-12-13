@@ -169,6 +169,7 @@ public:
 	int AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
 	int AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
 	csString Calc(const char *expression);
+	bool IfProc(const char *expression);
 	csVector2 GetExtents(csPoly3D &varray, int coord);
 	void InitMeshes();
 	void EnableBuildings(bool value);
