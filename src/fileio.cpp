@@ -276,6 +276,17 @@ int Skyscraper::LoadBuilding(const char * filename)
 				buffer = Simcore->GetFloor(temp4)->Altitude;
 				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
 			}
+			//interfloorheight parameter
+			buffer = temp4;
+			temp6 = "floor(" + buffer.Trim() + ").interfloorheight";
+			buffer = LineData;
+			buffer.Downcase();
+			temp1 = buffer.Find(temp6.GetData(), 0);
+			if (temp1 > 0)
+			{
+				buffer = Simcore->GetFloor(temp4)->InterfloorHeight;
+				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
+			}
 			temp5 = csString(LineData).Downcase().Find("floor(", 0);
 		}
 
