@@ -68,6 +68,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 	char intbuffer[65];
 	csString buffer;
 	int startpos = 0;
+	bool getfloordata = false;
 
 	while (i < BuildingData.GetSize() - 1)
 	{
@@ -245,12 +246,24 @@ int Skyscraper::LoadBuilding(const char * filename)
 		} while (1 == 1);
 
 		//Floor object conversion
+checkfloors:
 		temp5 = csString(LineData).Downcase().Find("floor(", 0);
 		while (temp5 > -1)
 		{
-			temp1 = LineData.Find("(", 0);
-			temp3 = LineData.Find(")", 0);
-			temp4 = atoi(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData());
+			temp1 = LineData.Find("(", temp5);
+			temp3 = LineData.Find(")", temp5);
+			if (Section == 2 && getfloordata == false)
+			{
+				//process floor-specific variables if in a floor section
+				getfloordata = true;
+				goto recalc;
+			}
+			else
+				getfloordata = false;
+			csString tempdata = Simcore->Calc(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData());
+			LineData = LineData.Slice(0, temp1 + 1) + tempdata + LineData.Slice(temp3);
+
+			temp4 = atoi(tempdata.GetData());
 			//if (temp4 < -Basements !! temp4 > TotalFloors)
 				//Err.Raise 1005;
 
@@ -692,6 +705,9 @@ recalc:
 			LineData.ReplaceAll("%fullheight%", buffer);
 			buffer = Simcore->GetFloor(Current)->InterfloorHeight;
 			LineData.ReplaceAll("%interfloorheight%", buffer);
+
+			if (getfloordata == true)
+				goto checkfloors;
 
 			//get text after equal sign
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
