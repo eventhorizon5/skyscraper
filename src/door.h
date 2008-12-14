@@ -35,7 +35,7 @@ public:
 	bool IsOpen;
 	csVector3 origin; //door origin
 
-	Door(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, int number, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
+	Door(int number, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	~Door();
 	void OpenDoor();
 	void CloseDoor();

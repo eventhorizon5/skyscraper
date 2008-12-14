@@ -301,8 +301,31 @@ void Floor::EnableGroup(bool value)
 int Floor::AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
-	
-	return sbs->CreateDoor(Level_state, csVector3(0, 0, 0), texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude, tw, th);
+
+	float x1, z1, x2, z2;
+	//set up coordinates
+	if (direction < 5)
+	{
+		x1 = CenterX;
+		x2 = CenterX;
+		z1 = CenterZ - (width / 2);
+		z2 = CenterZ + (width / 2);
+	}
+	else
+	{
+		x1 = CenterX - (width / 2);
+		x2 = CenterX + (width / 2);
+		z1 = CenterZ;
+		z2 = CenterZ;
+	}
+
+	//cut area
+	if (direction < 5)
+		Cut(csVector3(x1 - (width / 2), InterfloorHeight + voffset, z1), csVector3(x2 + (width / 2), InterfloorHeight + voffset + height, z2), true, false, true);
+	else
+		Cut(csVector3(x1, InterfloorHeight + voffset, z1 - (width / 2)), csVector3(x2, InterfloorHeight + voffset + height, z2 + (width / 2)), true, false, true);
+
+	return sbs->CreateDoor(texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude, tw, th);
 }
 
 float Floor::CalculateAltitude()

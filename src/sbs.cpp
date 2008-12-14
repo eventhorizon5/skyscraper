@@ -2626,13 +2626,13 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 	}
 }
 
-int SBS::CreateDoor(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+int SBS::CreateDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//create a door object
 
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
 	DoorArray[DoorArray.GetSize() - 1].number = DoorArray.GetSize();
-	DoorArray[DoorArray.GetSize() - 1].object = new Door(cutmesh, cutmesh_origin, DoorArray.GetSize(), texture, thickness, direction, CenterX, CenterZ, width, height, altitude, tw, th);
+	DoorArray[DoorArray.GetSize() - 1].object = new Door(DoorArray.GetSize(), texture, thickness, direction, CenterX, CenterZ, width, height, altitude, tw, th);
 	return DoorArray.GetSize();
 }
 
