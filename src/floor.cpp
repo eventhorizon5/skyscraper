@@ -321,9 +321,9 @@ int Floor::AddDoor(const char *texture, float thickness, int direction, float Ce
 
 	//cut area
 	if (direction < 5)
-		Cut(csVector3(x1 - (width / 2), InterfloorHeight + voffset, z1), csVector3(x2 + (width / 2), InterfloorHeight + voffset + height, z2), true, false, true);
+		Cut(csVector3(x1 - 0.5, InterfloorHeight + voffset, z1), csVector3(x2 + 0.5, InterfloorHeight + voffset + height, z2), true, false, true);
 	else
-		Cut(csVector3(x1, InterfloorHeight + voffset, z1 - (width / 2)), csVector3(x2, InterfloorHeight + voffset + height, z2 + (width / 2)), true, false, true);
+		Cut(csVector3(x1, InterfloorHeight + voffset, z1 - 0.5), csVector3(x2, InterfloorHeight + voffset + height, z2 + 0.5), true, false, true);
 
 	return sbs->CreateDoor(texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude, tw, th);
 }

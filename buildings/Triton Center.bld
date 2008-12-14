@@ -5312,8 +5312,8 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = left
     if[%floor% > 16] AddWall StairsRightE, %5%, 0.33, 4.5 + -46.67, -9.708 + -3.708 - 0.33, 4.5 + -46.67, 9.708 + -3.708, %height%, %height%, 0, 0, 0, 0, False
 
-    if[%floor% = 0 | %floor% = 1] AddStairsDoor 1, StairsDoor2, 0.2, 6, 2.4, -9.708, 4, 8, 0, 1, 1
-    if[%floor% ! 0 & %floor% ! 1] AddStairsDoor 1, StairsDoor, 0.2, 6, 2.4, -9.708, 4, 8, 0, 1, 1
+    if[%floor% = 0 | %floor% = 1] AddStairsDoor 1, StairsDoor2, 0.2, 6, 2.4, -9.708, 3.5, 8, 0, 1, 1
+    if[%floor% ! 0 & %floor% ! 1] AddStairsDoor 1, StairsDoor, 0.2, 6, 2.4, -9.708, 3.5, 8, 0, 1, 1
 
     DrawWalls = true, true, false, false, false, false
 <EndFloors>

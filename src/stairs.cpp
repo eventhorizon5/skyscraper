@@ -299,13 +299,13 @@ int Stairs::AddDoor(int floor, const char *texture, float thickness, int directi
 	//cut area
 	if (direction < 5)
 	{
-		CutWall(1, floor, csVector3(x1 - 0.2, voffset, z1), csVector3(x2 + 0.2, voffset + height, z2));
-		sbs->GetFloor(floor)->Cut(csVector3(origin.x + x1 - 0.2, sbs->GetFloor(floor)->InterfloorHeight + voffset, origin.z + z1), csVector3(origin.x + x2 + 0.2, sbs->GetFloor(floor)->InterfloorHeight + voffset + height, origin.z + z2), true, false, true);
+		CutWall(1, floor, csVector3(x1 - 0.5, voffset, z1), csVector3(x2 + 0.5, voffset + height, z2));
+		sbs->GetFloor(floor)->Cut(csVector3(origin.x + x1 - 0.5, sbs->GetFloor(floor)->InterfloorHeight + voffset, origin.z + z1), csVector3(origin.x + x2 + 0.5, sbs->GetFloor(floor)->InterfloorHeight + voffset + height, origin.z + z2), true, false, true);
 	}
 	else
 	{
-		CutWall(1, floor, csVector3(x1, voffset, z1 - 0.2), csVector3(x2, voffset + height, z2 + 0.2));
-		sbs->GetFloor(floor)->Cut(csVector3(origin.x + x1, sbs->GetFloor(floor)->InterfloorHeight + voffset, origin.z + z1 - 0.2), csVector3(origin.x + x2, sbs->GetFloor(floor)->InterfloorHeight + voffset + height, origin.z + z2 + 0.2), true, false, true);
+		CutWall(1, floor, csVector3(x1, voffset, z1 - 0.5), csVector3(x2, voffset + height, z2 + 0.5));
+		sbs->GetFloor(floor)->Cut(csVector3(origin.x + x1, sbs->GetFloor(floor)->InterfloorHeight + voffset, origin.z + z1 - 0.5), csVector3(origin.x + x2, sbs->GetFloor(floor)->InterfloorHeight + voffset + height, origin.z + z2 + 0.5), true, false, true);
 	}
 	
 	return sbs->CreateDoor(texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, voffset + sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, tw, th);
