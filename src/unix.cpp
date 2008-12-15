@@ -31,7 +31,7 @@
 
 using namespace std;
 
-char* itoa(int value, char*  str, int radix)
+const char* itoa(int value, char* str, int radix)
 {
 	int rem = 0;
 	int pos = 0;
@@ -81,10 +81,8 @@ char* itoa(int value, char*  str, int radix)
 }
 
 //strrev the standard way
-// the following directives to make the code portable
-// between windows and Linux.
 
-char* strrev(char* szT)
+const char* strrev(char* szT)
 {
 	if ( !szT )	// handle null passed strings.
 		return "";
@@ -100,7 +98,7 @@ char* strrev(char* szT)
 }
 
 // strrev STL way .
-char* StrRev(char* szT)
+const char* StrRev(char* szT)
 {
 	string s(szT);
 	reverse(s.begin(), s.end());

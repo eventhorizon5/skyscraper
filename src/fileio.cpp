@@ -437,7 +437,7 @@ checkfloors:
 			for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
-			int index = Simcore->AddCustomFloor(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
+			Simcore->AddCustomFloor(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
 
 			tempdata.DeleteAll();
 		}

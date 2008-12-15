@@ -1578,12 +1578,10 @@ bool SBS::IfProc(const char *expression)
 
 	int temp1;
 	csString tmpcalc = expression;
-	char buffer[20];
 	csString one;
 	csString two;
 	int start, end;
 	bool check;
-	bool result = false;
 
 	//first remove all whitespace from the string
 	tmpcalc.ReplaceAll(" ", "");
