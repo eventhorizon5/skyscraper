@@ -235,17 +235,21 @@ int Stairs::AddFloor(int floor, const char *name, const char *texture, float thi
 void Stairs::Enabled(int floor, bool value)
 {
 	//turns stairwell on/off for a specific floor
-	if (value == true)
+
+	if (floor >= startfloor && floor <= endfloor)
 	{
-		StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+		if (value == true)
+		{
+			StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+			StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+			StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+		}
+		else
+		{
+			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+		}
 	}
 }
 
