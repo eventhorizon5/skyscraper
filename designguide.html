@@ -78,10 +78,12 @@
     <font size="2" face="Courier New, Courier, mono">Set 1 = %floorheight% + 10</font></p>
   <p align="left"><font size="2" face="Courier New, Courier, mono"><br>
     </font><strong>5. Object parameters from the outside</strong></p>
-  <p align="left">Information about floors can be obtained outside the floor sections, 
-    by referencing the floor in this manner:</p>
+  <p align="left">Information about a certain floor can be obtained elsewhere 
+    in the script, by referencing the floor in this manner:</p>
   <p align="left"><font size="2" face="Courier New, Courier, mono">Floor(<em>number</em>).<em>parameter</em></font></p>
-  <p align="left">Available parameters are Altitude and FullHeight.</p>
+  <p align="left">Available parameters are Altitude, FullHeight and InterfloorHeight. 
+    Note that this function must only be called after the specified floor has 
+    been created.</p>
   <p align="left">Example:<font size="2" face="Courier New, Courier, mono"><br>
     Set 1 = Floor(5).Altitude</font></p>
   <p align="left"><br>
@@ -560,15 +562,17 @@
     <em>num_stairs</em> with <em>risersize</em>, and add the <em>voffset</em> 
     value. Note that the tread of the top step is not drawn (the top step is the 
     landing platform); therefore for a staircase containing 10 steps, the total 
-    staircase width would be comprised of 9 treads.</p>
+    staircase width would be comprised of 9 treads. The height is simply <em>num_stairs</em> 
+    times <em>risersize</em>.</p>
   <p align="left"><strong>13. AddDoor</strong> - adds a textured door in the specified 
     location, and performs a wall cut on that area (this must be called after 
     the associated wall is created)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor <em> texturename, 
     thickness</em>, <em>direction, CenterX</em>, <em>CenterZ</em>, <em>width</em>, 
     <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
-  <p align="left">Direction specifies the direction the door faces and also the 
-    direction it opens. These are the values:<br>
+  <p align="left">Direction specifies the direction the door faces (the side in 
+    which the handle is on the left) and also the direction it opens. These are 
+    the values:<br>
     1 - faces left, opens left<br>
     2 - faces left, opens right<br>
     3 - faces right, opens right<br>
