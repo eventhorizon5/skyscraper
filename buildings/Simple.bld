@@ -5,7 +5,6 @@
 <Globals>
     Name = My Building
     Designer = Me
-    CameraAltitude = 5
     HorizScale = 1
     CameraFloor = 0
     CameraPosition = 0, -60
@@ -14,18 +13,18 @@
 <EndGlobals>
 
 <Textures>
-    Load data/brick1.jpg, Brick
-    Load data/windows08.jpg, MainWindows
-    Load data/granite.jpg, Granite
-    Load data/symb5.jpg, Marble3
-    Load data/elev1.jpg, Elev1
-    Load data/textur15.jpg, Wood1
-    Load data/text16.jpg, Wood2
-    Load data/text16.jpg, ElevDoors
-    Load data/marb148.jpg, ElevExtPanels
-    Load data/text13.jpg, Stairs
-    Load data/mason01.jpg, Concrete
-    Load data/cutston.jpg, InterExt
+    Load data/brick1.jpg, Brick, 3.72, 4
+    Load data/windows08.jpg, MainWindows, 19.84, 1
+    Load data/granite.jpg, Granite, 3.72, 4
+    Load data/symb5.jpg, Marble3, 3.72, 4
+    Load data/elev1.jpg, Elev1, 3.72, 4
+    Load data/textur15.jpg, Wood1, 3.72, 4
+    Load data/text16.jpg, Wood2, 3.72, 4
+    Load data/text16.jpg, ElevDoors, 3.72, 4
+    Load data/marb148.jpg, ElevExtPanels, 3.72, 4
+    Load data/text13.jpg, Stairs, 3.72, 4
+    Load data/mason01.jpg, Concrete, 3.72, 4
+    Load data/cutston.jpg, InterExt, 3.72, 4
 <EndTextures>
 
 <Floor 0>
@@ -54,11 +53,13 @@
 
     #External walls
     WallOrientation = left
+    SetAutoSize = true, false
     AddWall Front, MainWindows, 0.5, -10, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     AddWall Left, MainWindows, 0.5, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     WallOrientation = right
     AddWall Right, MainWindows, 0.5, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     AddWall Back, MainWindows, 0.5, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    SetAutoSize = true, true
 <EndFloor>
 
 <Floors 1 to 9>
@@ -70,6 +71,7 @@
 
     #External walls
     WallOrientation = left
+    SetAutoSize = true, false
     AddWall Front, MainWindows, 0.5, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     AddWall Front, InterExt, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     AddWall Left, MainWindows, 0.5, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
@@ -79,6 +81,7 @@
     AddWall Right, InterExt, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     AddWall Back, MainWindows, 0.5, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     AddWall Back, InterExt, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 
     #Interfloor bottom
     AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, 0, 0
