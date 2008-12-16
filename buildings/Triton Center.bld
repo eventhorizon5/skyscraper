@@ -1381,8 +1381,8 @@ ShaftCut 20, -18, -4.25 + 0.33, 18, 4.25, 0, 5
 ShaftCut 21, -18, -4.25, 18, 4.25 - 0.33, 0, 5
 
 #Hotel local shafts
-AddShaft 22, 2, -14.67, -18.42, 79, 101
-AddShaft 23, 2, -14.67, -37.58, 79, 101
+AddShaft 22, 2, -14.67, -17.75, 79, 101
+AddShaft 23, 2, -14.67, -36.25, 79, 101
 ShaftCut 22, -9, -4.25 + 0.33, 9, 4.25, 0, 5
 ShaftCut 23, -9, -4.25, 9, 4.25 - 0.33, 0, 5
 
@@ -1707,7 +1707,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     if[%floor% < 38 | %floor% > 79] AddWall Shaft11BackE, %5%, 0.33, -4.75 + -39.166 - 0.33, 9.87 + 23.375, 4.75 + -39.166 + 0.33, 9.87 + 23.375, %3%, %3%, %4%, %4%, 0, 0, False
-    if[%floor% > 37 | %floor% < 80] AddWall Shaft11BackE, %5%, 0.33, -4.75 + -39.166 - 0.33, 9.87 + 23.375, 4.75 + -39.166, 9.87 + 23.375, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 37 & %floor% < 80] AddWall Shaft11BackE, %5%, 0.33, -4.75 + -39.166 - 0.33, 9.87 + 23.375, 4.75 + -39.166, 9.87 + 23.375, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < 38 | %floor% > 79] AddWall Shaft11RightE, %5%, 0.33, 4.75 + -39.166, -9.87 + 23.375 - 0.33, 4.75 + -39.166, 9.87 + 23.375 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 12
@@ -2022,22 +2022,22 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     #shaft 22
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft23FrontE, %5%, 0.33, -9 - 14.67 - 0.33, -4.25 - 18.42, 9 - 14.67 + 0.33, -4.25 - 18.42, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft23LeftE, %5%, 0.33, -9 - 14.67, -4.25 - 18.42 - 0.33, -9 - 14.67, 4.25 - 18.42 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft23FrontE, %5%, 0.33, -9 - 14.67 - 0.33, -4.25 - 17.75, 9 - 14.67, -4.25 - 17.75, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% < 100] AddWall Shaft23LeftE, %5%, 0.33, -9 - 14.67, -4.25 - 17.75 - 0.33, -9 - 14.67, 4.25 - 17.75 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 99] AddWall Shaft23LeftE, %5%, 0.33, -9 - 14.67, -4.25 - 17.75 - 0.33, -9 - 14.67, 4.25 - 17.75, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft23BackE, %5%, 0.33, -9 - 14.67 - 0.33, 4.25 - 18.42, 9 - 14.67 + 0.33, 4.25 - 18.42, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft23RightE, %5%, 0.33, 9 - 14.67, -4.25 - 18.42 - 0.33, 9 - 14.67, 4.25 - 18.42 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% < 99] AddWall Shaft23BackE, %5%, 0.33, -9 - 14.67 - 0.33, 4.25 - 17.75, 9 - 14.67, 4.25 - 17.75, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 23
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft23FrontE, %5%, 0.33, -9 - 14.67 - 0.33, -4.25 - 37.58, 9 - 14.67 + 0.33, -4.25 - 37.58, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft23LeftE, %5%, 0.33, -9 - 14.67, -4.25 - 37.58 - 0.33, -9 - 14.67, 4.25 - 37.58 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft23FrontE, %5%, 0.33, -9 - 14.67 - 0.33, -4.25 - 36.25, 9 - 14.67 + 0.33, -4.25 - 36.25, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft23LeftE, %5%, 0.33, -9 - 14.67, -4.25 - 36.25 - 0.33, -9 - 14.67, 4.25 - 36.25 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft23BackE, %5%, 0.33, -9 - 14.67 - 0.33, 4.25 - 37.58, 9 - 14.67 + 0.33, 4.25 - 37.58, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft23RightE, %5%, 0.33, 9 - 14.67, -4.25 - 37.58 - 0.33, 9 - 14.67, 4.25 - 37.58 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft23BackE, %5%, 0.33, -9 - 14.67 - 0.33, 4.25 - 36.25, 9 - 14.67 + 0.33, 4.25 - 36.25, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft23RightE, %5%, 0.33, 9 - 14.67, -4.25 - 36.25 - 0.33, 9 - 14.67, 4.25 - 36.25 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 <Floors 79 to 134>
@@ -2117,11 +2117,14 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     #shaft 26
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft26FrontE, %5%, 0.33, -9 - 14.67 - 0.33, -4.25 - 9.25, 9 - 14.67 + 0.33, -4.25 - 9.25, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft26LeftE, %5%, 0.33, -9 - 14.67, -4.25 - 9.25 - 0.33, -9 - 14.67, 4.25 - 9.25 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 101 & %floor% < 120] AddWall Shaft26FrontE, %5%, 0.33, -9 - 14.67 - 0.33, -4.25 - 9.25, 9 - 14.67, -4.25 - 9.25, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 119] AddWall Shaft26FrontE, %5%, 0.33, -9 - 14.67 - 0.33, -4.25 - 9.25, 9 - 14.67 + 0.33, -4.25 - 9.25, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% < 102] AddWall Shaft26LeftE, %5%, 0.33, -9 - 14.67, -4.25 - 9.25, -9 - 14.67, 4.25 - 9.25 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 101] AddWall Shaft26LeftE, %5%, 0.33, -9 - 14.67, -4.25 - 9.25 - 0.33, -9 - 14.67, 4.25 - 9.25 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft26BackE, %5%, 0.33, -9 - 14.67 - 0.33, 4.25 - 9.25, 9 - 14.67 + 0.33, 4.25 - 9.25, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% < 120] AddWall Shaft26BackE, %5%, 0.33, -9 - 14.67 - 0.33, 4.25 - 9.25, 9 - 14.67, 4.25 - 9.25, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 119] AddWall Shaft26BackE, %5%, 0.33, -9 - 14.67 - 0.33, 4.25 - 9.25, 9 - 14.67 + 0.33, 4.25 - 9.25, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 119] AddWall Shaft26RightE, %5%, 0.33, 9 - 14.67, -4.25 - 9.25 - 0.33, 9 - 14.67, 4.25 - 9.25 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
@@ -2169,10 +2172,10 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     #shaft 28
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft28FrontE, %5%, 0.33, -9 + 14.67 - 0.33, -4.25 - 9.25, 9 + 14.67 + 0.33, -4.25 - 9.25, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft28FrontE, %5%, 0.33, -9 + 14.67, -4.25 - 9.25, 9 + 14.67 + 0.33, -4.25 - 9.25, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft28BackE, %5%, 0.33, -9 + 14.67 - 0.33, 4.25 - 9.25, 9 + 14.67 + 0.33, 4.25 - 9.25, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft28BackE, %5%, 0.33, -9 + 14.67, 4.25 - 9.25, 9 + 14.67 + 0.33, 4.25 - 9.25, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft28RightE, %5%, 0.33, 9 + 14.67, -4.25 - 9.25 - 0.33, 9 + 14.67, 4.25 - 9.25 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
@@ -4078,7 +4081,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 22
-    CreateElevator -19.167, -18.714, 80
+    CreateElevator -19.167, -18.044, 80
 <EndElevator>
 
 <Elevator 55>
@@ -4090,7 +4093,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 22
-    CreateElevator -10.167, -18.714, 80
+    CreateElevator -10.167, -18.044, 80
 <EndElevator>
 
 <Elevators 54 to 55>
@@ -4170,7 +4173,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 23
-    CreateElevator -19.167, -37.286, 80
+    CreateElevator -19.167, -35.956, 80
 <EndElevator>
 
 <Elevator 57>
@@ -4182,7 +4185,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.2
     ServicedFloors = 80, 82 - 99
     AssignedShaft = 23
-    CreateElevator -10.167, -37.286, 80
+    CreateElevator -10.167, -35.956, 80
 <EndElevator>
 
 <Elevators 56 to 57>
@@ -5184,14 +5187,14 @@ DrawWalls = true, true, false, false, false, false
 #Hotel Locals
 <Floor 80>
     CallButtonElevators = 54, 55, 56, 57
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -18.42 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -37.58 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -17.75 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -36.25 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 82 to 99>
     CallButtonElevators = 54, 55, 56, 57
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -18.42 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -37.58 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -17.75 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -36.25 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Residential Locals
@@ -5578,64 +5581,86 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
 
 
 #West Stairwell
-CreateStairwell 5, 0, -14.17, 79, 119
-CutStairwell 5, -5.67, -8.835, 5.67, 8.835, 0, 5
+CreateStairwell 5, 0, -13.5, 79, 119
+CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
+
+<Floor 79>
+    Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 28 #determine riser size
+    AddStairs 5, StairsLower, Stairs, front, 3.255, 0.5, 4.17, %1%, 7 / 6, 7, 0, 0, 0
+    AddStairs 5, StairsUpper, Stairs, back, -3.255, 0.5, 4.17, %1%, 7 / 6, 7, %1% * 7, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 5, LandingLower, Brick, 0.5, -5.67, -8.5, 5.67, 8.5, 0, 0, 1, 1
+    AddStairsFloor 5, LandingUpper, Brick, 0.5, -5.67, 4, 5.67, 8.5, %1% * 7, %1% * 7, 1, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = left
+    AddStairsWall 5, LandingUpperCover, Brick, 0.1, -5.67, 4, 1.17, 4, 0.5, 0.5, (%1% * 7) - 0.5, (%1% * 7) - 0.5, 0, 1
+
+    AddStairs 5, StairsLower, Stairs, front, 3.255, 0.5, 4.17, %1%, 7 / 6, 7, %1% * 14, 0, 0
+    AddStairs 5, StairsUpper, Stairs, back, -3.255, 0.5, 4.17, %1%, 7 / 6, 7, %1% * 21, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 5, LandingLower, Brick, 0.5, -5.67, -8.5, 5.67, -3, %1% * 14, %1% * 14, 1, 1
+    AddStairsFloor 5, LandingUpper, Brick, 0.5, -5.67, 4, 5.67, 8.5, %1% * 21, %1% * 21, 1, 1
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 5, LandingLowerCover, Brick, 0.1, -1.17, -3, 5.67, -3, 0.5, 0.5, (%1% * 14) - 0.5, (%1% * 14) - 0.5, 0, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = left
+    AddStairsWall 5, LandingUpperCover, Brick, 0.1, -5.67, 4, 1.17, 4, 0.5, 0.5, (%1% * 21) - 0.5, (%1% * 21) - 0.5, 0, 1
+
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
+
+<Floors 80 to 119>
+    Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 18 #determine riser size
+    if[%floor% < 119] AddStairs 5, StairsLower, Stairs, front, 3.255, 0, 4.17, %1%, 8 / 8, 9, 0, 0, 0
+    if[%floor% < 119] AddStairs 5, StairsUpper, Stairs, back, -3.255, 0, 4.17, %1%, 8 / 8, 9, %1% * 9, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 5, LandingLower, Brick, 0.5, -5.67, -8.5, 5.67, -4, 0, 0, 1, 1
+    if[%floor% < 119] AddStairsFloor 5, LandingUpper, Brick, 0.5, -5.67, 4, 5.67, 8.5, %1% * 9, %1% * 9, 1, 1
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 5, LandingLowerCover, Brick, 0.1, -1.17, -4, 5.67, -4, 0.5, 0.5, -0.5, -0.5, 0, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = left
+    if[%floor% < 119] AddStairsWall 5, LandingUpperCover, Brick, 0.1, -5.67, 4, 1.17, 4, 0.5, 0.5, (%1% * 9) - 0.5, (%1% * 9) - 0.5, 0, 1
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
 
 <Floors 79 to 119>
-    Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
-    if[%floor% < 119] AddStairs 5, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
-    if[%floor% < 119] AddStairs 5, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
-    FloorOrientation = top
-    if[%floor% = 79] AddStairsFloor 5, LandingLower, Brick, 0.5, -5.67, -8.835, 5.67, 8.835, 0, 0, 1, 1
-    if[%floor% > 79] AddStairsFloor 5, LandingLower, Brick, 0.5, -5.67, -8.835, 5.67, -5, 0, 0, 1, 1
-    if[%floor% < 119] AddStairsFloor 5, LandingUpper, Brick, 0.5, -5.67, 5, 5.67, 8.835, %1% * 10, %1% * 10, 1, 1
-    DrawWalls = false, true, false, false, false, false
-    WallOrientation = right
-    AddStairsWall 5, LandingLowerCover, Brick, 0.1, 0, -5, 5.67, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
-    DrawWalls = true, false, false, false, false, false
-    WallOrientation = left
-    if[%floor% < 119] AddStairsWall 5, LandingUpperCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
-
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddStairsWall 5, StairsLeft, Concrete, 0.33, -5.67, -8.835, -5.67, 8.835, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 5, StairsFront, Concrete, 0.33, -5.67, -8.835, 5.67, -8.835, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 5, StairsLeft, Concrete, 0.33, -5.67, -8.5, -5.67, 8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 5, StairsFront, Concrete, 0.33, -5.67, -8.5, 5.67, -8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    AddStairsWall 5, StairsBack, Concrete, 0.33, -5.67, 8.835, 5.67, 8.835, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 5, StairsRight, Concrete, 0.33, 5.67, -8.835, 5.67, 8.835, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 5, StairsBack, Concrete, 0.33, -5.67, 8.5, 5.67, 8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 5, StairsRight, Concrete, 0.33, 5.67, -8.5, 5.67, 8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
     FloorOrientation = bottom
-    if[%floor% = 119] AddStairsFloor 5, StairsCeiling, Concrete, 0.5, -5.67, -8.835, 5.67, 8.835, 12, 12, 0, 0
+    if[%floor% = 119] AddStairsFloor 5, StairsCeiling, Concrete, 0.5, -5.67, -8.5, 5.67, 8.5, 12, 12, 0, 0
 
     Set 5 = Wall1
     if[%floor% = 79 | %floor% = 119] Set 5 = Stucco4
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    if[%floor% > 101] AddWall StairsLeftE, %5%, 0.33, -5.67 + -46.67, -8.835 + -3.708 - 0.33, -5.67 + -46.67, -3.708, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% = 79] AddWall StairsFrontE, %5%, 0.33, -5.67 + -46.67, -8.835 + -3.708, 5.67 + -46.67, -8.835 + -3.708, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% > 79 & %floor% < 99] AddWall StairsFrontE, %5%, 0.33, -5.67 + -46.67, -8.835 + -3.708, 5.67 + -46.67 + 0.33, -8.835 + -3.708, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% > 79 & %floor% < 102] AddWall StairsFrontE, %5%, 0.33, -5.67 + -46.67, -8.835 + -3.708, 5.67 + -46.67 + 0.33, -8.835 + -3.708, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% > 101] AddWall StairsFrontE, %5%, 0.33, -5.67 + -46.67 - 0.33, -8.835 + -3.708, 5.67 + -46.67 + 0.33, -8.835 + -3.708, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% < 99] AddWall StairsLeftE, %5%, 0.33, -5.67 + 0, -13.5, -5.67 + 0, 8.5 + -13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% > 101] AddWall StairsLeftE, %5%, 0.33, -5.67 + 0, -8.5 + -13.5 - 0.33, -5.67 + 0, -13.5, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% < 102] AddWall StairsFrontE, %5%, 0.33, -5.67 + 0, -8.5 + -13.5, 5.67 + 0 + 0.33, -8.5 + -13.5, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% > 101] AddWall StairsFrontE, %5%, 0.33, -5.67 + 0 - 0.33, -8.5 + -13.5, 5.67 + 0 + 0.33, -8.5 + -13.5, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    if[%floor% = 79] AddWall StairsRightE, %5%, 0.33, 5.67 + -46.67, 0 + -3.708 - 0.33, 5.67 + -46.67, 8.835 + -3.708, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% > 79 & %floor% < 99] AddWall StairsRightE, %5%, 0.33, 5.67 + -46.67, -8.835 + -3.708 - 0.33, 5.67 + -46.67, 8.835 + -3.708 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% > 98] AddWall StairsRightE, %5%, 0.33, 5.67 + -46.67, -8.835 + -3.708 - 0.33, 5.67 + -46.67, 0 + -3.708, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% = 79] AddWall StairsBackE, %5%, 0.33, -5.67 + -46.67 - 0.33, 8.835 + -3.708, 5.67 + -46.67 + 0.33, 8.835 + -3.708, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% > 79 & %floor% < 99] AddWall StairsBackE, %5%, 0.33, -5.67 + -46.67,-8.835 + -3.708, 5.67 + -46.67 + 0.33, 8.835 + -3.708, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% > 98] AddWall StairsBackE, %5%, 0.33, -5.67 + -46.67, 8.835 + -3.708, 5.67 + -46.67, 8.835 + -3.708, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% < 99] AddWall StairsRightE, %5%, 0.33, 5.67 + 0, -8.5 + -13.5 - 0.33, 5.67 + 0, 8.5 + -13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% > 98] AddWall StairsRightE, %5%, 0.33, 5.67 + 0, -8.5 + -13.5 - 0.33, 5.67 + 0, 0 + -13.5, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% < 99] AddWall StairsBackE, %5%, 0.33, -5.67 + 0 - 0.33, 8.5 + -13.5, 5.67 + 0 + 0.33, 8.5 + -13.5, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% > 98] AddWall StairsBackE, %5%, 0.33, -5.67 + 0, 8.5 + -13.5, 5.67 + 0, 8.5 + -13.5, %height%, %height%, 0, 0, 0, 0, False
 
     #doors
-    if[%floor% = 0 | %floor% = 1] AddStairsDoor 5, StairsDoor2, 0.2, 6, 2, -8.835, 3.5, 8, 0, 1, 1
-    if[%floor% ! 0 & %floor% ! 1 & %floor% ! 39] AddStairsDoor 5, StairsDoor, 0.2, 6, 2, -8.835, 3.5, 8, 0, 1, 1
+    AddStairsDoor 5, StairsDoor, 0.2, 6, 2, -8.5, 3.5, 8, 0, 1, 1
 
     #signs
     SetAutoSize = false, false
     DrawWalls = false, true, false, false, false, false
-    if[%floor% < 39] AddStairsWall 5, SignTop, FloorSign, 0, -2.5, -8.835 + 0.335, -1.5, -8.835 + 0.335, 0.25, 0.25, 5, 5, 1, 1
-    if[%floor% < 39 & %floor% ! 0 & %floor% ! 1] AddStairsWall 5, SignTop, Button%floor%, 0, -2.5, -8.835 + 0.335, -1.5, -8.835 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
-    if[%floor% = 0] AddStairsWall 5, SignTop, ButtonL, 0, -2.5, -8.835 + 0.335, -1.5, -8.835 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
-    if[%floor% = 1] AddStairsWall 5, SignTop, ButtonM, 0, -2.5, -8.835 + 0.335, -1.5, -8.835 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    AddStairsWall 5, SignTop, FloorSign, 0, -2.5, -8.5 + 0.335, -1.5, -8.5 + 0.335, 0.25, 0.25, 5, 5, 1, 1
+    AddStairsWall 5, SignTop, Button%floor%, 0, -2.5, -8.5 + 0.335, -1.5, -8.5 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
 
     SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
