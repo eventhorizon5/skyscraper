@@ -126,6 +126,7 @@ SBS::SBS()
 	wall2b = false;
 	AutoX = true;
 	AutoY = true;
+	ReverseAxisValue = false;
 }
 
 SBS::~SBS()
@@ -242,7 +243,7 @@ void SBS::Wait(long milliseconds)
 
 }
 
-float SBS::AutoSize(const char * texturename, float n1, float n2, bool iswidth, float offset)
+float SBS::AutoSize(float n1, float n2, bool iswidth, float offset)
 {
 	//Texture autosizing formulas
 
@@ -538,10 +539,18 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 
 	//mount app's directory in VFS
 	#ifndef CS_PLATFORM_WIN32
-		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "/");
+		dir_char = "/";
 	#else
-		vfs->Mount("/root/", csInstallationPathsHelper::GetAppDir(argv[0]) + "\\");
+		dir_char = "\\";
 	#endif
+	root_dir = csInstallationPathsHelper::GetAppDir(argv[0]) + dir_char;
+	vfs->Mount("/root/", root_dir);
+
+	//mount sign texture packs
+	vfs->Mount("/root/signs/sans", root_dir + "data" + dir_char + "signs-sans.zip");
+	vfs->Mount("/root/signs/sans_bold", root_dir + "data" + dir_char + "signs-sans_bold.zip");
+	vfs->Mount("/root/signs/sans_cond", root_dir + "data" + dir_char + "signs-sans_cond.zip");
+	vfs->Mount("/root/signs/sans_cond_bold", root_dir + "data" + dir_char + "signs-sans_cond_bold.zip");
 
 	g2d = g3d->GetDriver2D();
 	g2d->AllowResize(true); //allow canvas resizing
@@ -853,7 +862,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	}
 
 	//set texture
-	SetTexture(dest, index, texture, tw, th);
+	SetTexture(dest, index, texture, true, tw, th);
 
 	return index;
 }
@@ -891,10 +900,22 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 		altitude2 = temp;
 	}
 
-	csVector3 v1 (x1, altitude1, z1); //bottom left
-	csVector3 v2 (x2, altitude1, z1); //bottom right
-	csVector3 v3 (x2, altitude2, z2); //top right
-	csVector3 v4 (x1, altitude2, z2); //top left
+	csVector3 v1, v2, v3, v4;
+
+	if (ReverseAxisValue == false)
+	{
+		v1.Set(x1, altitude1, z1); //bottom left
+		v2.Set(x2, altitude1, z1); //bottom right
+		v3.Set(x2, altitude2, z2); //top right
+		v4.Set(x1, altitude2, z2); //top left
+	}
+	else
+	{
+		v1.Set(x1, altitude1, z1); //bottom left
+		v2.Set(x1, altitude1, z2); //bottom right
+		v3.Set(x2, altitude2, z2); //top right
+		v4.Set(x2, altitude2, z1); //top left
+	}
 
 	csVector3 v5 = v1;
 	csVector3 v6 = v2;
@@ -998,7 +1019,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 		index = tmpindex;
 
 	//set texture
-	SetTexture(dest, index, texture, tw, th);
+	SetTexture(dest, index, texture, true, tw, th);
 
 	return index;
 }
@@ -1142,7 +1163,7 @@ void SBS::InitMeshes()
 	ColumnFrame->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 }
 
-int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th, bool IsExternal)
+int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
 {
 	//Adds a wall from a specified array of 3D vectors
 	float tw2 = tw;
@@ -1174,17 +1195,17 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 
 	//Call texture autosizing formulas
 	if (z.x == z.y)
-		tw2 = AutoSize(texture, x.x, x.y, true, tw);
+		tw2 = AutoSize(x.x, x.y, true, tw);
 	if (x.x == x.y)
-		tw2 = AutoSize(texture, z.x, z.y, true, tw);
+		tw2 = AutoSize(z.x, z.y, true, tw);
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
 		tempw1 = fabs(x.y - x.x);
 		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = AutoSize(texture, 0, fabs(y.y - y.x), false, th);
+	th2 = AutoSize(0, fabs(y.y - y.x), false, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray1.GetVertices(), num);
@@ -1192,6 +1213,33 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 
 	material = engine->GetMaterialList ()->FindByName (texture);
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+
+	csString texname = texture;
+	float tw3 = tw2, th3 = th2;
+
+	if (material == 0)
+	{
+		//if material's not found, display a warning and use a default material
+		csString Texture = texture;
+		csString polyname = dest->GetPolygonName(firstidx);
+		csString message = "Texture '" + Texture + "' not found for polygon '" + polyname + "'; using default material";
+		ReportError(message);
+		//set to default material
+		material = engine->GetMaterialList()->FindByName("Default");
+		texname = "Default";
+	}
+
+	//get per-texture tiling values from the textureinfo array
+	for (int i = 0; i < textureinfo.GetSize(); i++)
+	{
+		if (textureinfo[i].name == texname)
+		{
+			//multiply the tiling parameters (tw and th) by
+			//the stored multipliers for that texture
+			tw3 = tw2 / textureinfo[i].widthmult;
+			th3 = th2 / textureinfo[i].heightmult;
+		}
+	}
 
 	//reverse extents if specified
 	float tmpv;
@@ -1224,16 +1272,16 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 		v1,
 		csVector2 (0, 0),
 		v2,
-		csVector2 (tw2, 0),
+		csVector2 (tw3, 0),
 		v3,
-		csVector2 (tw2, th2));
+		csVector2 (tw3, th3));
 	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
 		v1,
-		csVector2 (tw2, 0),
+		csVector2 (tw3, 0),
 		v2,
 		csVector2 (0, 0),
 		v3,
-		csVector2 (0, th2));
+		csVector2 (0, th3));
 
 	//set polygon names
 	csString NewName;
@@ -1247,7 +1295,7 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 	return firstidx;
 }
 
-int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th, bool IsExternal)
+int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
 {
 	//Adds a wall from a specified array of 3D vectors
 	float tw2 = tw;
@@ -1278,17 +1326,17 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 
 	//Call texture autosizing formulas
 	if (z.x == z.y)
-		tw2 = AutoSize(texture, x.x, x.y, true, tw);
+		tw2 = AutoSize(x.x, x.y, true, tw);
 	if (x.x == x.y)
-		tw2 = AutoSize(texture, z.x, z.y, true, tw);
+		tw2 = AutoSize(z.x, z.y, true, tw);
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
 		tempw1 = fabs(x.y - x.x);
 		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = AutoSize(texture, 0, fabs(y.y - y.x), false, th);
+	th2 = AutoSize(0, fabs(y.y - y.x), false, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
@@ -1351,7 +1399,7 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 	return firstidx;
 }
 
-int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th, bool IsExternal)
+int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions
 	csPoly3D varray;
@@ -1362,7 +1410,7 @@ int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const
 	varray.AddVertex(x3, y3, z3);
 
 	//pass data on to AddCustomWall function
-	int firstidx = AddCustomWall(dest, name, texture, varray, tw, th, IsExternal);
+	int firstidx = AddCustomWall(dest, name, texture, varray, tw, th);
 
 	return firstidx;
 }
@@ -1383,185 +1431,349 @@ csString SBS::Calc(const char *expression)
 	//first remove all whitespace from the string
 	tmpcalc.ReplaceAll(" ", "");
 
-	if (tmpcalc.Find("=", 0) == -1 && tmpcalc.Find("!", 0) == -1 && tmpcalc.Find("<", 0) == -1 && tmpcalc.Find(">", 0) == -1)
+	//find parenthesis
+	do
 	{
-		//find parenthesis
-		do
+		start = tmpcalc.Find("(", 0);
+		if (start >= 0)
 		{
-			start = tmpcalc.Find("(", 0);
-			if (start >= 0)
+			//find matching parenthesis
+			int match = 1;
+			int end = -1;
+			for (int i = start + 1; i < tmpcalc.Length(); i++)
 			{
-				//find matching parenthesis
-				int match = 1;
-				int end = -1;
-				for (int i = start + 1; i < tmpcalc.Length(); i++)
+				if (tmpcalc.GetAt(i) == '(')
+					match++;
+				if (tmpcalc.GetAt(i) == ')')
+					match--;
+				if (match == 0)
 				{
-					if (tmpcalc.GetAt(i) == '(')
-						match++;
-					if (tmpcalc.GetAt(i) == ')')
-						match--;
-					if (match == 0)
-					{
-						end = i;
-						break;
-					}
+					end = i;
+					break;
 				}
-				if (end != -1)
-				{
-					//call function recursively
-					csString newdata;
-					newdata = Calc(tmpcalc.Slice(start + 1, end - start - 1));
-					//construct new string
-					one = tmpcalc.Slice(0, start);
-					if (end < tmpcalc.Length() - 1)
-						two = tmpcalc.Slice(end + 1);
-					else
-						two = "";
-					tmpcalc = one + newdata + two;
-				}
+			}
+			if (end != -1)
+			{
+				//call function recursively
+				csString newdata;
+				newdata = Calc(tmpcalc.Slice(start + 1, end - start - 1));
+				//construct new string
+				one = tmpcalc.Slice(0, start);
+				if (end < tmpcalc.Length() - 1)
+					two = tmpcalc.Slice(end + 1);
 				else
-				{
-					ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
-					return "false";
-				}
+					two = "";
+				tmpcalc = one + newdata + two;
 			}
 			else
-				break;
-		} while (1 == 1);
-
-		//find number of operators and recurse if multiple found
-		int operators;
-		do
-		{
-			operators = 0;
-			end = 0;
-			for (int i = 1; i < tmpcalc.Length(); i++)
-			{
-				if (tmpcalc.GetAt(i) == '+' || tmpcalc.GetAt(i) == '/' || tmpcalc.GetAt(i) == '*')
-				{
-					operators++;
-					if (operators == 2)
-						end = i;
-				}
-				if (tmpcalc.GetAt(i) == '-' && tmpcalc.GetAt(i - 1) != '-' && tmpcalc.GetAt(i - 1) != '+' && tmpcalc.GetAt(i - 1) != '/' && tmpcalc.GetAt(i - 1) != '*')
-				{
-					operators++;
-					if (operators == 2)
-						end = i;
-				}
-			}
-			if (end >= tmpcalc.Length() - 1 && operators > 0)
 			{
 				ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 				return "false";
 			}
-			if (operators > 1)
+		}
+		else
+			break;
+	} while (1 == 1);
+		//find number of operators and recurse if multiple found
+	int operators;
+	do
+	{
+		operators = 0;
+		end = 0;
+		for (int i = 1; i < tmpcalc.Length(); i++)
+		{
+			if (tmpcalc.GetAt(i) == '+' || tmpcalc.GetAt(i) == '/' || tmpcalc.GetAt(i) == '*')
 			{
-				csString newdata;
-				newdata = Calc(tmpcalc.Slice(0, end));
-				//construct new string
-				two = tmpcalc.Slice(end);
-				tmpcalc = newdata + two;
+				operators++;
+				if (operators == 2)
+					end = i;
 			}
-			else
-				break;
-		} while (1 == 1);
+			if (tmpcalc.GetAt(i) == '-' && tmpcalc.GetAt(i - 1) != '-' && tmpcalc.GetAt(i - 1) != '+' && tmpcalc.GetAt(i - 1) != '/' && tmpcalc.GetAt(i - 1) != '*')
+			{
+				operators++;
+				if (operators == 2)
+					end = i;
+			}
+		}
+		if (end >= tmpcalc.Length() - 1 && operators > 0)
+		{
+			ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+			return "false";
+		}
+		if (operators > 1)
+		{
+			csString newdata;
+			newdata = Calc(tmpcalc.Slice(0, end));
+			//construct new string
+			two = tmpcalc.Slice(end);
+			tmpcalc = newdata + two;
+		}
+		else
+			break;
+	} while (1 == 1);
 
-		//return value if none found
-		if (operators == 0)
-			return tmpcalc.GetData();
-
-		//otherwise perform math
-		temp1 = tmpcalc.Find("+", 1);
-		if (temp1 > 0)
-		{
-			one = tmpcalc.Slice(0, temp1);
-			two = tmpcalc.Slice(temp1 + 1);
-			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-			{
-				tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
-				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-				return tmpcalc.GetData();
-			}
-		}
-		temp1 = tmpcalc.Find("-", 1);
-		if (temp1 > 0)
-		{
-			one = tmpcalc.Slice(0, temp1);
-			two = tmpcalc.Slice(temp1 + 1);
-			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-			{
-				tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
-				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-				return tmpcalc.GetData();
-			}
-		}
-		temp1 = tmpcalc.Find("/", 1);
-		if (temp1 > 0)
-		{
-			one = tmpcalc.Slice(0, temp1);
-			two = tmpcalc.Slice(temp1 + 1);
-			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-			{
-				tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
-				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-				return tmpcalc.GetData();
-			}
-		}
-		temp1 = tmpcalc.Find("*", 1);
-		if (temp1 > 0)
-		{
-			one = tmpcalc.Slice(0, temp1);
-			two = tmpcalc.Slice(temp1 + 1);
-			if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-			{
-				tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
-				if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-					tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-				return tmpcalc.GetData();
-			}
-		}
+	//return value if none found
+	if (operators == 0)
 		return tmpcalc.GetData();
+
+	//otherwise perform math
+	temp1 = tmpcalc.Find("+", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("-", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("/", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("*", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	return tmpcalc.GetData();
+}
+
+bool SBS::IfProc(const char *expression)
+{
+	//IF statement processor
+
+	int temp1;
+	csString tmpcalc = expression;
+	csString one;
+	csString two;
+	int start, end;
+	bool check;
+
+	//first remove all whitespace from the string
+	tmpcalc.ReplaceAll(" ", "");
+
+	//first check for bad and/or character sets
+	if (int(tmpcalc.Find("&&")) >= 0 || int(tmpcalc.Find("||")) >= 0 || int(tmpcalc.Find("==")) >= 0 || int(tmpcalc.Find("!=")) >= 0)
+	{
+		ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+			return false;
 	}
 
-	//boolean operators
+	//find parenthesis
+	do
+	{
+		start = tmpcalc.Find("(", 0);
+		if (start >= 0)
+		{
+			//find matching parenthesis
+			int match = 1;
+			int end = -1;
+			for (int i = start + 1; i < tmpcalc.Length(); i++)
+			{
+				if (tmpcalc.GetAt(i) == '(')
+					match++;
+				if (tmpcalc.GetAt(i) == ')')
+					match--;
+				if (match == 0)
+				{
+					end = i;
+					break;
+				}
+			}
+			if (end != -1)
+			{
+				//call function recursively
+				csString newdata;
+				if (IfProc(tmpcalc.Slice(start + 1, end - start - 1)) == true)
+					newdata = "true";
+				else
+					newdata = "false";
+				//construct new string
+				one = tmpcalc.Slice(0, start);
+				if (end < tmpcalc.Length() - 1)
+					two = tmpcalc.Slice(end + 1);
+				else
+					two = "";
+				tmpcalc = one + newdata + two;
+			}
+			else
+			{
+				ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+				return false;
+			}
+		}
+		else
+			break;
+	} while (1 == 1);
+	//find number of operators and recurse if multiple found
+	int operators;
+	do
+	{
+		operators = 0;
+		start = 0;
+		end = 0;
+		check = false;
+		for (int i = 1; i < tmpcalc.Length(); i++)
+		{
+			if (tmpcalc.GetAt(i) == '=' || tmpcalc.GetAt(i) == '!' || tmpcalc.GetAt(i) == '<' || tmpcalc.GetAt(i) == '>')
+			{
+				operators++;
+			}
+			if (tmpcalc.GetAt(i) == '&' || tmpcalc.GetAt(i) == '|')
+			{
+				check = true;
+				if (operators == 1)
+				{
+					operators = 2;
+					end = i;
+				}
+				else if (operators == 0)
+				{
+					operators = 1;
+					start = i + 1;
+					end = tmpcalc.Length();
+				}
+			}
+		}
+		//return error if multiple standard operators are found, but no and/or operator (ex. if[5 = 5 = 5])
+		if (operators > 1 && check == false)
+		{
+			ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+			return false;
+		}
+		if (operators > 1)
+		{
+			csString newdata;
+			if (IfProc(tmpcalc.Slice(start, end - start)) == true)
+				newdata = "true";
+			else
+				newdata = "false";
+			//construct new string
+			one = tmpcalc.Slice(0, start);
+			two = tmpcalc.Slice(end);
+			tmpcalc = one + newdata + two;
+		}
+		else
+			break;
+	} while (1 == 1);
+	//return value if none found
+	if (operators == 0)
+	{
+		if (tmpcalc == "true")
+			return true;
+		else
+			return false;
+	}
+
+	//otherwise perform comparisons
 	temp1 = tmpcalc.Find("=", 1);
 	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1)) == atof(tmpcalc.Slice(temp1 + 1)))
-			return "true";
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one == two)
+			return true;
 		else
-			return "false";
+			return false;
 	}
 	temp1 = tmpcalc.Find("!", 1);
 	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1)) != atof(tmpcalc.Slice(temp1 + 1)))
-			return "true";
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one != two)
+			return true;
 		else
-			return "false";
+			return false;
 	}
 	temp1 = tmpcalc.Find("<", 1);
 	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1)) < atof(tmpcalc.Slice(temp1 + 1)))
-			return "true";
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			if(atof(one.GetData()) < atof(two.GetData()))
+				return true;
+			else
+				return false;
+		}
 		else
-			return "false";
+			return false;
 	}
 	temp1 = tmpcalc.Find(">", 1);
 	if (temp1 > 0)
 	{
-		if (atof(tmpcalc.Slice(0, temp1)) > atof(tmpcalc.Slice(temp1 + 1)))
-			return "true";
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			if(atof(one.GetData()) > atof(two.GetData()))
+				return true;
+			else
+				return false;
+		}
 		else
-			return "false";
+			return false;
 	}
-
-	return tmpcalc.GetData();
+	temp1 = tmpcalc.Find("&", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one == "true" && two == "true")
+			return true;
+		else
+			return false;
+	}
+	temp1 = tmpcalc.Find("|", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one == "true" || two == "true")
+			return true;
+		else
+			return false;
+	}
+	if (tmpcalc == "true")
+		return true;
+	else
+		return false;
 }
 
 void SBS::EnableBuildings(bool value)
@@ -1817,7 +2029,7 @@ iMaterialWrapper *SBS::ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> 
 	return newmat;
 }
 
-void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, float tw, float th)
+void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th)
 {
 	//sets a polygon's texture
 
@@ -1849,7 +2061,13 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		}
 	}
 
-	for (int i = index; i < index + GetDrawWallsCount(); i++)
+	int endindex;
+	if (has_thickness == true)
+		endindex = index + GetDrawWallsCount();
+	else
+		endindex = index;
+
+	for (int i = index; i < endindex; i++)
 	{
 		mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
 		//texture mapping is set from first 3 coordinates
@@ -2406,13 +2624,13 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 	}
 }
 
-int SBS::CreateDoor(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+int SBS::CreateDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//create a door object
 
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
 	DoorArray[DoorArray.GetSize() - 1].number = DoorArray.GetSize();
-	DoorArray[DoorArray.GetSize() - 1].object = new Door(cutmesh, cutmesh_origin, DoorArray.GetSize(), texture, thickness, direction, CenterX, CenterZ, width, height, altitude, tw, th);
+	DoorArray[DoorArray.GetSize() - 1].object = new Door(DoorArray.GetSize(), texture, thickness, direction, CenterX, CenterZ, width, height, altitude, tw, th);
 	return DoorArray.GetSize();
 }
 
@@ -2475,4 +2693,20 @@ void SBS::SetAutoSize(bool x, bool y)
 	//enable or disable texture autosizing
 	AutoX = x;
 	AutoY = y;
+}
+
+csVector2 SBS::GetAutoSize()
+{
+	return csVector2(AutoX, AutoY);
+}
+
+void SBS::ReverseAxis(bool value)
+{
+	//reverse wall/floor altitude axis
+	ReverseAxisValue = value;
+}
+
+bool SBS::GetReverseAxis()
+{
+	return ReverseAxisValue;
 }

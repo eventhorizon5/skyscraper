@@ -68,6 +68,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 	char intbuffer[65];
 	csString buffer;
 	int startpos = 0;
+	bool getfloordata = false;
 
 	while (i < BuildingData.GetSize() - 1)
 	{
@@ -245,12 +246,24 @@ int Skyscraper::LoadBuilding(const char * filename)
 		} while (1 == 1);
 
 		//Floor object conversion
+checkfloors:
 		temp5 = csString(LineData).Downcase().Find("floor(", 0);
 		while (temp5 > -1)
 		{
-			temp1 = LineData.Find("(", 0);
-			temp3 = LineData.Find(")", 0);
-			temp4 = atoi(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData());
+			temp1 = LineData.Find("(", temp5);
+			temp3 = LineData.Find(")", temp5);
+			if (Section == 2 && getfloordata == false)
+			{
+				//process floor-specific variables if in a floor section
+				getfloordata = true;
+				goto recalc;
+			}
+			else
+				getfloordata = false;
+			csString tempdata = Simcore->Calc(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData());
+			LineData = LineData.Slice(0, temp1 + 1) + tempdata + LineData.Slice(temp3);
+
+			temp4 = atoi(tempdata.GetData());
 			//if (temp4 < -Basements !! temp4 > TotalFloors)
 				//Err.Raise 1005;
 
@@ -274,6 +287,17 @@ int Skyscraper::LoadBuilding(const char * filename)
 			if (temp1 > 0)
 			{
 				buffer = Simcore->GetFloor(temp4)->Altitude;
+				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
+			}
+			//interfloorheight parameter
+			buffer = temp4;
+			temp6 = "floor(" + buffer.Trim() + ").interfloorheight";
+			buffer = LineData;
+			buffer.Downcase();
+			temp1 = buffer.Find(temp6.GetData(), 0);
+			if (temp1 > 0)
+			{
+				buffer = Simcore->GetFloor(temp4)->InterfloorHeight;
 				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
 			}
 			temp5 = csString(LineData).Downcase().Find("floor(", 0);
@@ -354,7 +378,6 @@ int Skyscraper::LoadBuilding(const char * filename)
 		//AddCustomWall command
 		if (LineData.Slice(0, 14).CompareNoCase("addcustomwall ") == true)
 		{
-			bool extcheck = false;
 			tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
@@ -367,10 +390,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 			if (buffer == "floor")
 				tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			if (buffer == "external")
-			{
 				tmpMesh = Simcore->External_state;
-				extcheck = true;
-			}
 			if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
@@ -384,14 +404,13 @@ int Skyscraper::LoadBuilding(const char * filename)
 			for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
-			Simcore->AddCustomWall(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]), extcheck);
+			Simcore->AddCustomWall(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
 			tempdata.DeleteAll();
 		}
 
 		//AddCustomFloor command
 		if (LineData.Slice(0, 15).CompareNoCase("addcustomfloor ") == true)
 		{
-			bool extcheck = false;
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
@@ -404,10 +423,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 			if (buffer == "floor")
 			tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			if (buffer == "external")
-			{
 				tmpMesh = Simcore->External_state;
-				extcheck = true;
-			}
 			if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
@@ -421,7 +437,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 			for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
 				varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
-			int index = Simcore->AddCustomFloor(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]), extcheck);
+			Simcore->AddCustomFloor(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
 
 			tempdata.DeleteAll();
 		}
@@ -548,6 +564,16 @@ int Skyscraper::LoadBuilding(const char * filename)
 			tempdata.DeleteAll();
 		}
 
+		//ReverseAxis command
+		if (LineData.Slice(0, 11).CompareNoCase("reverseaxis") == true)
+		{
+			//get text after equal sign
+			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			temp2.Trim();
+
+			Simcore->ReverseAxis(temp2.CompareNoCase("true"));
+		}
+
 		//Intersection points
 		temp5 = csString(LineData).Downcase().Find("isect(", 0);
 		while (temp5 > -1)
@@ -620,12 +646,6 @@ int Skyscraper::LoadBuilding(const char * filename)
 				Simcore->BuildingDescription = temp2;
 			if (LineData.Slice(0, 7).CompareNoCase("version") == true)
 				Simcore->BuildingVersion = temp2;
-			if (LineData.Slice(0, 14).CompareNoCase("cameraaltitude") == true)
-			{
-				//if (IsNumeric(temp2) == false)
-					//Err.Raise 1000;
-				Simcore->camera->DefaultAltitude = atof(temp2.GetData());
-			}
 			if (LineData.Slice(0, 11).CompareNoCase("camerafloor") == true)
 			{
 				//if (IsNumeric(temp2) == false)
@@ -685,6 +705,9 @@ recalc:
 			LineData.ReplaceAll("%fullheight%", buffer);
 			buffer = Simcore->GetFloor(Current)->InterfloorHeight;
 			LineData.ReplaceAll("%interfloorheight%", buffer);
+
+			if (getfloordata == true)
+				goto checkfloors;
 
 			//get text after equal sign
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
@@ -756,14 +779,14 @@ recalc:
 			//IF statement
 			if (LineData.Slice(0, 2).CompareNoCase("if") == true)
 			{
-				temp1 = LineData.Find("(", 0);
-				temp3 = LineData.Find(")", 0);
+				temp1 = LineData.Find("[", 0);
+				temp3 = LineData.Find("]", 0);
 				if (temp1 + temp3 > 0)
 					temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
 				else
 					temp2 = "";
 				temp2.Trim();
-				if (Simcore->Calc(temp2) == "true")
+				if (Simcore->IfProc(temp2) == true)
 				{
 					LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
 					goto recalc;
@@ -1121,7 +1144,7 @@ recalc:
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
 
 				//create triangle wall
-				Simcore->AddTriangleWall(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), true);
+				Simcore->AddTriangleWall(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 				tempdata.DeleteAll();
 			}
 
@@ -1260,14 +1283,14 @@ recalc:
 			//IF statement
 			if (LineData.Slice(0, 2).CompareNoCase("if") == true)
 			{
-				temp1 = LineData.Find("(", 0);
-				temp3 = LineData.Find(")", 0);
+				temp1 = LineData.Find("[", 0);
+				temp3 = LineData.Find("]", 0);
 				if (temp1 + temp3 > 0)
 					temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
 				else
 					temp2 = "";
 				temp2.Trim();
-				if (Simcore->Calc(temp2) == "true")
+				if (Simcore->IfProc(temp2) == true)
 					LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
 				else
 					goto Nextline; //skip line

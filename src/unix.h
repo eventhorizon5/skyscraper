@@ -31,8 +31,8 @@
 #define	__strrev strrev
 #define	_gcvt gcvt
 
-char* itoa(int value, char*  str, int radix);
-char* strrev(char* szT);
-char* StrRev(char* szT);
+const char* itoa(int value, char*  str, int radix);
+const char* strrev(char* szT);
+const char* StrRev(char* szT);
 
 #endif

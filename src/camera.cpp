@@ -38,7 +38,6 @@ Camera::Camera()
 	MainCamera->SetSector(sbs->area);
 
 	//init variables
-	DefaultAltitude = 0;
 	CurrentFloor = 0;
 	OriginalPosition = 0;
 	StartFloor = 0;
@@ -155,7 +154,7 @@ csVector3 Camera::GetStartRotation()
 
 void Camera::SetToStartPosition()
 {
-	SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->Altitude + sbs->GetFloor(StartFloor)->InterfloorHeight + DefaultAltitude, StartPositionZ));
+	SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->Altitude + sbs->GetFloor(StartFloor)->InterfloorHeight + cfg_body_height + cfg_legs_height, StartPositionZ));
 }
 
 void Camera::SetToStartDirection()

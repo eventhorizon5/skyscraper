@@ -458,9 +458,16 @@ void Elevator::OpenDoors(int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	if (OpenDoor != 0)
+	if (OpenDoor != 0 && whichdoors != 3)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
+		return;
+	}
+
+	//don't open doors if emergency stop is enabled
+	if (EmergencyStop == true && whichdoors != 3)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": not on floor");
 		return;
 	}
 

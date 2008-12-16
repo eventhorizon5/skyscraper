@@ -149,7 +149,7 @@ public:
 	bool ReportError (const char* msg, ...);
 	void Wait(long Milliseconds);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
-	float AutoSize(const char * texturename, float n1, float n2, bool iswidth, float offset);
+	float AutoSize(float n1, float n2, bool iswidth, float offset);
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
 	void Start();
 	void Run();
@@ -165,10 +165,11 @@ public:
 	void Render();
 	int CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th);
 	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th);
-	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th, bool IsExternal);
-	int AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th, bool IsExternal);
-	int AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th, bool IsExternal);
+	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
+	int AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
+	int AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
 	csString Calc(const char *expression);
+	bool IfProc(const char *expression);
 	csVector2 GetExtents(csPoly3D &varray, int coord);
 	void InitMeshes();
 	void EnableBuildings(bool value);
@@ -182,7 +183,7 @@ public:
 	void ListAltitudes();
 	void CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, float tw, float th);
+	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th);
 	iMaterialWrapper *ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> oldmat, const char *texture);
 	void NewElevator(int number);
 	void NewFloor(int number);
@@ -204,11 +205,13 @@ public:
 	void ResetWalls(bool ToDefaults = false);
 	void ReverseExtents(bool X, bool Y, bool Z);
 	void ResetExtents(bool ToDefaults = false);
+	void ReverseAxis(bool value);
+	bool GetReverseAxis();
 	void SetAutoSize(bool x, bool y);
 	csVector2 GetAutoSize();
 	int GetDrawWallsCount();
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
-	int CreateDoor(csRef<iThingFactoryState> cutmesh, csVector3 cutmesh_origin, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
+	int CreateDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
@@ -240,6 +243,10 @@ private:
 	//mouse status
 	bool MouseDown;
 
+	//app directory
+	csString root_dir;
+	csString dir_char;
+
 	//fps
 	int fps_frame_count;
 	int fps_tottime;
@@ -262,6 +269,7 @@ private:
 	bool DrawSideP;
 	bool DrawTop; //or back, if floor
 	bool DrawBottom; //or front, if floor
+	bool ReverseAxisValue;
 
 	//old wall/floor sides
 	bool DrawMainNOld; //or top, if floor

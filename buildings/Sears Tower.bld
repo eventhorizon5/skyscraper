@@ -24,75 +24,24 @@
     Location = 233 S. Wacker Drive, Chicago, IL
     Description = The famous 108-story Sears Tower, tallest building in the US
     Version = 1
-    CameraAltitude = 5
     HorizScale = 1
     CameraFloor = 0
-    CameraPosition = -50, 0
+    CameraPosition = -200, 0
     CameraDirection = 28.8, 10, 0
     CameraRotation = 0, 0, 0
 <EndGlobals>
 
 <Textures>
-    Load data/brick1.jpg, Brick
-    Load data/lobbyfront.jpg, LobbyFront
-    Load data/searstower.jpg, MainWindows
-    Load data/granite.jpg, Granite
-    Load data/symb5.jpg, Marble3
-    Load data/marb047.jpg, Marble4
-    Load data/elev1.jpg, Elev1
-    Load data/textur15.jpg, Wood1
-    Load data/text16.jpg, Wood2
-    Load data/marbl3.jpg, Wall1
-    Load data/marb123.jpg, Wall2
-    Load data/cutston.jpg, Ceiling1
-    Load data/text12.jpg, Wall3
-    Load data/text16.jpg, ElevDoors
-    Load data/marb148.jpg, ElevExtPanels
-    Load data/mason01.jpg, Concrete
-    Load data/text13.jpg, Stairs
-    Load data/wooddoor3.jpg, Door1
-    Load data/wooddoor1.jpg, Door2
-    Load data/servicedoor2.jpg, StairsDoor
-    Load data/miscdoor8.jpg, StairsDoor2
-    Load data/button1.jpg, CallButtonsTex
-    Load data/sidewalk1r.jpg, Road1
-    Load data/walkway.jpg, Walkway
-    Load data/sidewalkcorner1.jpg, Road2
-    Load data/sidewalkcorner2.jpg, Road3
-    Load data/sidewalkcorner3.jpg, Road4
-    Load data/roadfull.jpg, Road5
-    Load data/windows08.jpg, Windows8
-    Load data/windows11.jpg, Windows11
-    Load data/downtown.jpg, Downtown
-    Load data/suburbs.jpg, Suburbs
-    Load data/vents1.jpg, VentsInt
-    Load data/vents1c.jpg, VentsExt
-    Load data/plaque.jpg, Plaque
-    Load data/floorsign.jpg, FloorSign
-    Load data/floorsignballroom.jpg, FloorSignBallroom
-    Load data/floorsignbalcony.jpg, FloorSignBalcony
-    Load data/floorsignhotel.jpg, FloorSignHotel
-    Load data/floorsignlobby.jpg, FloorSignLobby
-    Load data/floorsignmaint.jpg, FloorSignMaint
-    Load data/floorsignmez.jpg, FloorSignMez
-    Load data/floorsignmechanical.jpg, FloorSignMechanical
-    Load data/floorsignobservatory.jpg, FloorSignObservatory
-    Load data/floorsignoffices.jpg, FloorSignOffices
-    Load data/floorsignpool.jpg, FloorSignPool
-    Load data/floorsignresidential.jpg, FloorSignResidential
-    Load data/floorsignroof.jpg, FloorSignRoof
-    Load data/floorsignskylobby.jpg, FloorSignSkylobby
-
-    #floor indicator/button pictures
-    #Load data/floorindicators/L.jpg, ButtonL
-    #Load data/floorindicators/M.jpg, ButtonM
-    #Load data/floorindicators/R.jpg, ButtonR
-    #Load data/floorindicators/open.jpg, ButtonOpen
-    #Load data/floorindicators/close.jpg, ButtonClose
-    #Load data/floorindicators/stop.jpg, ButtonStop
-    #Load data/floorindicators/alarm.jpg, ButtonAlarm
-    #Load data/floorindicators/cancel.jpg, ButtonCancel
-    #LoadRange 2, 138, data/floorindicators/%number%.jpg, Button%number%
+    Load data/brick1.jpg, Brick, 3.72, 4
+    Load data/searstower.jpg, MainWindows, 14.854, 1
+    Load data/granite.jpg, Granite, 3.72, 4
+    Load data/symb5.jpg, Marble3, 3.72, 4
+    Load data/marb047.jpg, Marble4, 3.72, 4
+    Load data/cutston.jpg, Ceiling1, 3.72, 4
+    Load data/text12.jpg, Wall3, 3.72, 4
+    Load data/mason01.jpg, Concrete, 3.72, 4
+    Load data/vents1.jpg, VentsInt, 1, 1
+    Load data/vents1c.jpg, VentsExt, 1, 1
 <EndTextures>
 
 #Franklin Concourse
@@ -133,22 +82,24 @@
     #AddFloor Ceiling, Marble4, 0.5, -112.5, -112.5, 112.5, 112.5, %height%, %height%, 0, 0, False
 
     #Lobby Front
+    SetAutoSize = true, false
     #front
-    AddWall Front1, MainWindows, 0.5, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Front1, MainWindows, 0.5, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #back
-    AddWall Back1, MainWindows, 0.5, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Back1, MainWindows, 0.5, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #left
-    AddWall Left1, MainWindows, 0.5, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Left1, MainWindows, 0.5, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #right
-    AddWall Right1, MainWindows, 0.5, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Right1, MainWindows, 0.5, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloor>
 
 #mezzanine
@@ -164,22 +115,24 @@
     #AddFloor Ceiling, Ceiling1, 0.5, -42.5, -25.8, 42.5, 25.8, -0.05, -0.05, 0, 0, False
 
     #External walls
+    SetAutoSize = true, false
     #front
-    AddWall Front1, MainWindows, 0.5, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Front1, MainWindows, 0.5, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #back
-    AddWall Back1, MainWindows, 0.5, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Back1, MainWindows, 0.5, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #left
-    AddWall Left1, MainWindows, 0.5, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Left1, MainWindows, 0.5, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #right
-    AddWall Right1, MainWindows, 0.5, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Right1, MainWindows, 0.5, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloor>
 
 #zone 1 skeleton
@@ -196,22 +149,24 @@
     AddFloor Ceiling, Marble3, 0.5, -112.5, -112.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
+    SetAutoSize = true, false
     #front
-    AddWall Front1, MainWindows, 0.5, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Front1, MainWindows, 0.5, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #back
-    AddWall Back1, MainWindows, 0.5, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Back1, MainWindows, 0.5, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #left
-    AddWall Left1, MainWindows, 0.5, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Left1, MainWindows, 0.5, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #right
-    AddWall Right1, MainWindows, 0.5, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Right1, MainWindows, 0.5, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
     
     #Interfloor bottom
     AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
@@ -250,10 +205,12 @@
     AddFloor Ceiling, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
-    AddWall Vents Front, VentsInt, 0.5, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
-    AddWall Vents Right, VentsInt, 0.5, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
-    AddWall Vents Back, VentsInt, 0.5, 112.5, 112.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
-    AddWall Vents Left, VentsInt, 0.5, -112.5, 112.5, -112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
+    SetAutoSize = true, false
+    AddWall Vents Front, VentsInt, 0.5, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    AddWall Vents Right, VentsInt, 0.5, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    AddWall Vents Back, VentsInt, 0.5, 112.5, 112.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    AddWall Vents Left, VentsInt, 0.5, -112.5, 112.5, -112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    SetAutoSize = true, true
 
     #Interfloor bottom
     AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
@@ -271,10 +228,12 @@
 #Zone 1 mechanical vents
 <Floor 30>
     #External vents
+    SetAutoSize = true, false
     AddWall ExtVents Front, VentsExt, 0.5, -112.5, -112.5, 112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, True
     AddWall ExtVents Right, VentsExt, 0.5, 112.5, -112.5, 112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, True
     AddWall ExtVents Back, VentsExt, 0.5, 112.5, 112.5, -112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, True
     AddWall ExtVents Left, VentsExt, 0.5, -112.5, 112.5, -112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, True
+    SetAutoSize = true, true
 <EndFloor>
 
 #zone 2 lower skeleton
@@ -289,22 +248,24 @@
     AddFloor Ceiling, Marble3, 0.5, -112.5, -112.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
+    SetAutoSize = true, false
     #front
-    AddWall Front1, MainWindows, 0.5, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Front1, MainWindows, 0.5, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #back
-    AddWall Back1, MainWindows, 0.5, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Back1, MainWindows, 0.5, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #left
-    AddWall Left1, MainWindows, 0.5, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Left1, MainWindows, 0.5, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #right
-    AddWall Right1, MainWindows, 0.5, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Right1, MainWindows, 0.5, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 
     #Interfloor bottom
     AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
@@ -359,22 +320,24 @@
     AddFloor East Ceiling, Marble3, 0.5, 37.5, 37.5, 112.5, -37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
+    SetAutoSize = true, false
     #front
-    AddWall Front1, MainWindows, 0.5, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Front1, MainWindows, 0.5, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #back
-    AddWall Back1, MainWindows, 0.5, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Back1, MainWindows, 0.5, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #left
-    AddWall Left1, MainWindows, 0.5, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Left1, MainWindows, 0.5, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #right
-    AddWall Right1, MainWindows, 0.5, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Right1, MainWindows, 0.5, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 
     #Interfloor bottom
     AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
@@ -418,6 +381,7 @@
     AddFloor East Ceiling, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
+    SetAutoSize = true, false
     #front
     AddWall Vents Front1, VentsInt, 0.5, -112.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
     AddWall Vents Front2, VentsInt, 0.5, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
@@ -430,6 +394,7 @@
     #right
     AddWall Vents Right1, VentsInt, 0.5, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
     AddWall Vents Right2, VentsInt, 0.5, 112.5, -37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
+    SetAutoSize = true, true
 
     #Interfloor bottom
     #AddInterfloorFloor IFloor, Brick, 0.5, -63, -70, 63, 70, 0, 0, 0, 0
@@ -446,6 +411,7 @@
 
 <Floor 64>
     #External vents
+    SetAutoSize = true, false
     #front
     AddWall ExtVents Front1, VentsExt, 0.5, -112.5, -112.5, 37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
     AddWall ExtVents Front2, VentsExt, 0.5, 37.5, -112.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
@@ -458,6 +424,7 @@
     #right
     AddWall ExtVents Right1, VentsExt, 0.5, 37.5, -37.5, 112.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
     AddWall ExtVents Right2, VentsExt, 0.5, 112.5, -37.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    SetAutoSize = true, true
 <EndFloor>
 
 #middle level setbacks
@@ -482,22 +449,24 @@
     AddFloor North Ceiling, Marble3, 0.5, -37.5, 37.5, 37.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
+    SetAutoSize = true, false
     #front
-    AddWall Front1, MainWindows, 0.5, -37.5, -37.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Front1, MainWindows, 0.5, -37.5, -37.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front2, MainWindows, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front3, MainWindows, 0.5, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #back
-    AddWall Back1, MainWindows, 0.5, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Back1, MainWindows, 0.5, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back2, MainWindows, 0.5, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back3, MainWindows, 0.5, 37.5, 112.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #left
-    AddWall Left1, MainWindows, 0.5, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Left1, MainWindows, 0.5, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left2, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left3, MainWindows, 0.5, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #right
-    AddWall Right1, MainWindows, 0.5, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Right1, MainWindows, 0.5, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right2, MainWindows, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right3, MainWindows, 0.5, 112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 
     #Interfloor bottom
     #AddInterfloorFloor IFloor, Granite, 0.5, -51, -70, 51, 70, 0, 0, 0, 0
@@ -550,6 +519,7 @@
     AddFloor North Ceiling, Brick, 0.5, -37.5, 37.5, 37.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
+    SetAutoSize = true, false
     #front
     AddWall Vents Front1, VentsInt, 0.5, -37.5, -37.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
     AddWall Vents Front2, VentsInt, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
@@ -566,6 +536,7 @@
     AddWall Vents Right1, VentsInt, 0.5, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
     AddWall Vents Right2, VentsInt, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
     AddWall Vents Right3, VentsInt, 0.5, 112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
+    SetAutoSize = true, true
 
     #Interfloor bottom
     #AddInterfloorFloor IFloor, Granite, 0.5, -51, -70, 51, 70, 0, 0, 0, 0
@@ -582,6 +553,7 @@
 
 <Floor 88>
     #External vents
+    SetAutoSize = true, false
     #front
     AddWall ExtVents Front1, VentsExt, 0.5, -37.5, -37.5, -37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
     AddWall ExtVents Front2, VentsExt, 0.5, -37.5, -112.5, 37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
@@ -598,6 +570,7 @@
     AddWall ExtVents Right1, VentsExt, 0.5, 37.5, -37.5, 112.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
     AddWall ExtVents Right2, VentsExt, 0.5, 112.5, -37.5, 112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
     AddWall ExtVents Right3, VentsExt, 0.5, 112.5, 37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    SetAutoSize = true, true
 <EndFloor>
 
 #upper level setbacks
@@ -620,16 +593,18 @@
     AddFloor Ceiling, Marble3, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
+    SetAutoSize = true, false
     #front
-    AddWall Front1, MainWindows, 0.5, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front2, MainWindows, 0.5, -37.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Front1, MainWindows, 0.5, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front2, MainWindows, 0.5, -37.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #back
-    AddWall Back1, MainWindows, 0.5, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back2, MainWindows, 0.5, -37.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Back1, MainWindows, 0.5, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back2, MainWindows, 0.5, -37.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #left
-    AddWall Left1, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Left1, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #right
-    AddWall Left2, MainWindows, 0.5, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Left2, MainWindows, 0.5, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 
     #Interfloor bottom
     AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
@@ -677,16 +652,18 @@
     AddFloor Ceiling, Ceiling1, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
+    SetAutoSize = true, false
     #front
-    AddWall Front1, MainWindows, 0.5, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front2, MainWindows, 0.5, -37.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Front1, MainWindows, 0.5, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front2, MainWindows, 0.5, -37.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #back
-    AddWall Back1, MainWindows, 0.5, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back2, MainWindows, 0.5, -37.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Back1, MainWindows, 0.5, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back2, MainWindows, 0.5, -37.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #left
-    AddWall Left, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Left, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #right
-    AddWall Right, MainWindows, 0.5, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Right, MainWindows, 0.5, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 
     #Interfloor bottom
     AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
@@ -717,10 +694,12 @@
     AddFloor Ceiling, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
+    SetAutoSize = true, false
     AddWall Vents Front, VentsInt, 0.5, -112.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
     AddWall Vents Back, VentsInt, 0.5, -112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
     AddWall Vents Left, VentsInt, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
     AddWall Vents Right, VentsInt, 0.5, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
+    SetAutoSize = true, true
 
     #Interfloor bottom
     AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
@@ -737,10 +716,12 @@
 
 <Floor 106>
     #External vents
+    SetAutoSize = true, false
     AddWall ExtVents Front, VentsExt, 0.5, -112.5, -37.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
     AddWall ExtVents Back, VentsExt, 0.5, -112.5, 37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
     AddWall ExtVents Left, VentsExt, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
     AddWall ExtVents Right, VentsExt, 0.5, 37.5, -37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    SetAutoSize = true, true
 <EndFloor>
 
 #top floor mechanical/communications
@@ -759,16 +740,18 @@
     AddFloor Ceiling, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
+    SetAutoSize = true, false
     #front
-    AddWall Front1, MainWindows, 0.5, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Front2, MainWindows, 0.5, -37.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Front1, MainWindows, 0.5, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front2, MainWindows, 0.5, -37.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #back
-    AddWall Back1, MainWindows, 0.5, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
-    AddWall Back2, MainWindows, 0.5, -37.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Back1, MainWindows, 0.5, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back2, MainWindows, 0.5, -37.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #left
-    AddWall Left, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Left, MainWindows, 0.5, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #right
-    AddWall Right, MainWindows, 0.5, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.935, 0, True
+    AddWall Right, MainWindows, 0.5, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 
     #Interfloor bottom
     AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
@@ -796,8 +779,10 @@
     AddFloor Roof, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, True
 
     #Antennas
+    SetAutoSize = true, false
     CreateWallBox2 External, West Antenna, Concrete, -75, 0, 8, 8, 279, 0, 0, 25
     CreateWallBox2 External, East Antenna, Concrete, 0, 0, 8, 8, 257, 0, 0, 25
+    SetAutoSize = true, true
 <EndFloor>
 
 # Penthouse roof (or second level? - need info)

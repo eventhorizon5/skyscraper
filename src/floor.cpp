@@ -79,10 +79,10 @@ Floor::~Floor()
 
 void Floor::SetCameraFloor()
 {
-	//Moves camera to specified floor (sets altitude to the floor's altitude plus CameraAltitude)
+	//Moves camera to specified floor (sets altitude to the floor's altitude plus DefaultAltitude)
 
 	csVector3 camlocation = sbs->camera->GetPosition();
-	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + InterfloorHeight + sbs->camera->DefaultAltitude, camlocation.z));
+	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + InterfloorHeight + sbs->camera->cfg_body_height + sbs->camera->cfg_legs_height, camlocation.z));
 }
 
 int Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th, bool isexternal)
@@ -98,8 +98,8 @@ int Floor::AddFloor(const char *name, const char *texture, float thickness, floa
 	z2 = z2 * sbs->HorizScale;
 
 	//Call texture autosizing formulas
-	tw2 = sbs->AutoSize(texture, x1, x2, true, tw);
-	th2 = sbs->AutoSize(texture, z1, z2, false, th);
+	tw2 = sbs->AutoSize(x1, x2, true, tw);
+	th2 = sbs->AutoSize(z1, z2, false, th);
 
 	if (isexternal == false)
 		return sbs->AddFloorMain(Level_state, name, texture, thickness, x1, z1, x2, z2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
@@ -125,8 +125,8 @@ int Floor::AddInterfloorFloor(const char *name, const char *texture, float thick
 	z2 = z2 * sbs->HorizScale;
 
 	//Texture autosizing formulas
-	tw2 = sbs->AutoSize(texture, x1, x2, true, tw);
-	th2 = sbs->AutoSize(texture, z1, z2, false, th);
+	tw2 = sbs->AutoSize(x1, x2, true, tw);
+	th2 = sbs->AutoSize(z1, z2, false, th);
 
 	return sbs->AddFloorMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
@@ -152,9 +152,9 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 
 	//Call texture autosizing formulas
 	if (z1 == z2)
-		tw2 = sbs->AutoSize(texture, x1, x2, true, tw);
+		tw2 = sbs->AutoSize(x1, x2, true, tw);
 	if (x1 == x2)
-		tw2 = sbs->AutoSize(texture, z1, z2, true, tw);
+		tw2 = sbs->AutoSize(z1, z2, true, tw);
 	if ((z1 != z2) && (x1 != x2))
 	{
 		//calculate diagonals
@@ -166,9 +166,9 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 			tempw2 = z1 - z2;
 		else
 			tempw2 = z2 - z1;
-		tw2 = sbs->AutoSize(texture, 0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
 	}
-	th2 = sbs->AutoSize(texture, 0, height_in1, false, th);
+	th2 = sbs->AutoSize(0, height_in1, false, th);
 
 	if (isexternal == false)
 		return sbs->AddWallMain(Level_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
@@ -195,10 +195,10 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, float thickn
 
 	//Texture autosizing formulas
 	if (z1 == z2)
-		tw2 = sbs->AutoSize(texture, x1, x2, true, tw);
+		tw2 = sbs->AutoSize(x1, x2, true, tw);
 	if (x1 == x2)
-		tw2 = sbs->AutoSize(texture, z1, z2, true, tw);
-	th2 = sbs->AutoSize(texture, 0, height_in1, false, th);
+		tw2 = sbs->AutoSize(z1, z2, true, tw);
+	th2 = sbs->AutoSize(0, height_in1, false, th);
 
 	return sbs->AddWallMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
@@ -301,8 +301,31 @@ void Floor::EnableGroup(bool value)
 int Floor::AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
-	
-	return sbs->CreateDoor(Level_state, csVector3(0, 0, 0), texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude, tw, th);
+
+	float x1, z1, x2, z2;
+	//set up coordinates
+	if (direction < 5)
+	{
+		x1 = CenterX;
+		x2 = CenterX;
+		z1 = CenterZ - (width / 2);
+		z2 = CenterZ + (width / 2);
+	}
+	else
+	{
+		x1 = CenterX - (width / 2);
+		x2 = CenterX + (width / 2);
+		z1 = CenterZ;
+		z2 = CenterZ;
+	}
+
+	//cut area
+	if (direction < 5)
+		Cut(csVector3(x1 - 1, InterfloorHeight + voffset, z1), csVector3(x2 + 1, InterfloorHeight + voffset + height, z2), true, false, true);
+	else
+		Cut(csVector3(x1, InterfloorHeight + voffset, z1 - 1), csVector3(x2, InterfloorHeight + voffset + height, z2 + 1), true, false, true);
+
+	return sbs->CreateDoor(texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude + InterfloorHeight, tw, th);
 }
 
 float Floor::CalculateAltitude()

@@ -25,7 +25,6 @@
     Location = 655 Market Street, San Francisco, CA
     Description = The fictitious 138-story building from the movie The Towering Inferno.
     Version = 1
-    CameraAltitude = 5
     CameraFloor = 0
     CameraPosition = 0, -300
     CameraDirection = 0, 10, 90
@@ -33,66 +32,15 @@
 <EndGlobals>
 
 <Textures>
-  Load data/brick1.jpg, Brick
-  Load data/lobbyfront.jpg, LobbyFront
-  Load data/windows11e.jpg, MainWindows
-  Load data/windows11e-r1.jpg, MainWindowsR1
-  Load data/windows11f.jpg, MainWindowsInv
-  Load data/granite.jpg, Granite
-  Load data/symb5.jpg, Marble3
-  Load data/marb047.jpg, Marble4
-  Load data/elev1.jpg, Elev1
-  Load data/textur15.jpg, Wood1
-  Load data/text16.jpg, Wood2
-  Load data/marbl3.jpg, Wall1
-  Load data/marb123.jpg, Wall2
-  Load data/cutston.jpg, Ceiling1
-  Load data/text12.jpg, Wall3
-  Load data/text16.jpg, ElevDoors
-  Load data/marb148.jpg, ElevExtPanels
-  Load data/mason01.jpg, Concrete
-  Load data/text13.jpg, Stairs
-  Load data/wooddoor3.jpg, Door1
-  Load data/wooddoor1.jpg, Door2
-  Load data/servicedoor2.jpg, StairsDoor
-  Load data/miscdoor8.jpg, StairsDoor2
-  Load data/button1.jpg, CallButtonsTex
-  Load data/sidewalk1r.jpg, Road1
-  Load data/walkway.jpg, Walkway
-  Load data/sidewalkcorner1.jpg, Road2
-  Load data/sidewalkcorner2.jpg, Road3
-  Load data/sidewalkcorner3.jpg, Road4
-  Load data/roadfull.jpg, Road5
-  Load data/windows08.jpg, Windows8
-  Load data/windows11.jpg, Windows11
-  Load data/downtown.jpg, Downtown
-  Load data/suburbs.jpg, Suburbs
-  Load data/plaque.jpg, Plaque
-  Load data/floorsign.jpg, FloorSign
-  Load data/floorsignballroom.jpg, FloorSignBallroom
-  Load data/floorsignbalcony.jpg, FloorSignBalcony
-  Load data/floorsignhotel.jpg, FloorSignHotel
-  Load data/floorsignlobby.jpg, FloorSignLobby
-  Load data/floorsignmaint.jpg, FloorSignMaint
-  Load data/floorsignmez.jpg, FloorSignMez
-  Load data/floorsignmechanical.jpg, FloorSignMechanical
-  Load data/floorsignobservatory.jpg, FloorSignObservatory
-  Load data/floorsignoffices.jpg, FloorSignOffices
-  Load data/floorsignpool.jpg, FloorSignPool
-  Load data/floorsignresidential.jpg, FloorSignResidential
-  Load data/floorsignroof.jpg, FloorSignRoof
-  Load data/floorsignskylobby.jpg, FloorSignSkylobby
-
-  #floor indicator/button pictures
-  #Load data/floorindicators/L.jpg, ButtonL
-  #Load data/floorindicators/M.jpg, ButtonM
-  #Load data/floorindicators/R.jpg, ButtonR
-  #Load data/floorindicators/open.jpg, ButtonOpen
-  #Load data/floorindicators/close.jpg, ButtonClose
-  #Load data/floorindicators/stop.jpg, ButtonStop
-  #Load data/floorindicators/alarm.jpg, ButtonAlarm
-  #Load data/floorindicators/cancel.jpg, ButtonCancel
-  #LoadRange 2, 138, data/floorindicators/%number%.jpg, Button%number%
+  Load data/brick1.jpg, Brick, 3.72, 4
+  Load data/lobbyfront.jpg, LobbyFront, 46.3, 1
+  Load data/windows11e.jpg, MainWindows, 19.84, 1
+  Load data/granite.jpg, Granite, 3.72, 4
+  Load data/symb5.jpg, Marble3, 3.72, 4
+  Load data/marb047.jpg, Marble4, 3.72, 4
+  Load data/cutston.jpg, Ceiling1, 3.72, 4
+  Load data/cutston.jpg, Backing, 19.84, 1
+  Load data/mason01.jpg, Concrete, 3.72, 4
 <EndTextures>
 
 # Lobby
@@ -108,24 +56,26 @@
     #AddFloor Ceiling, Ceiling1, 0.5, -91, -85.3, 91, 85.3, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Lobby Front
-    AddWall Back Left, LobbyFront, 0.5, -52.4, 44.9, -18.3, 79, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
-    AddWall Back Left Corner, LobbyFront, 0.5, -47.1, 44.9, -52.4, 44.9, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
-    AddWall Back Right, LobbyFront, 0.5, -18.3, 79, 49.9, 52.8, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
-    AddWall Back Right Corner, LobbyFront, 0.5, 49.9, 52.8, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
-    AddWall Left Upper, LobbyFront, 0.5, -84.8, 10, -47.1, 44.9, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
-    AddWall Left Lower, LobbyFront, 0.5, -75.1, -16.9, -84.8, 10, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    SetAutoSize = true, false
+    AddWall Back Left, LobbyFront, 0.5, -52.4, 44.9, -18.3, 79, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back Left Corner, LobbyFront, 0.5, -47.1, 44.9, -52.4, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back Right, LobbyFront, 0.5, -18.3, 79, 49.9, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back Right Corner, LobbyFront, 0.5, 49.9, 52.8, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left Upper, LobbyFront, 0.5, -84.8, 10, -47.1, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left Lower, LobbyFront, 0.5, -75.1, -16.9, -84.8, 10, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = true, false, true
-    AddWall Front Left, LobbyFront, 0.5, -98.4, -52.1, -75.1, -16.9, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    AddWall Front Left, LobbyFront, 0.5, -98.4, -52.1, -75.1, -16.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = false, false, false
-    AddWall Front Center, LobbyFront, 0.5, -98.4, -52.1, -12.2, -51.8, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
-    AddWall Front Right Corner, LobbyFront, 0.5, -12.2, -51.8, -14.4, -47.8, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
-    AddWall Front Right Detachment, Brick, 0.5, -14.4, -47.8, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
-    AddWall Glass Elevator Back, LobbyFront, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
-    AddWall Right Bottom, LobbyFront, 0.5, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    AddWall Front Center, LobbyFront, 0.5, -98.4, -52.1, -12.2, -51.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front Right Corner, LobbyFront, 0.5, -12.2, -51.8, -14.4, -47.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front Right Detachment, Brick, 0.5, -14.4, -47.8, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Glass Elevator Back, LobbyFront, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right Bottom, LobbyFront, 0.5, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = true, false, true
-    AddWall Right Top, LobbyFront, 0.5, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    AddWall Right Top, LobbyFront, 0.5, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = false, false, false
-    AddWall Right Top Corner, LobbyFront, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0.3, 0, True
+    AddWall Right Top Corner, LobbyFront, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloor>
 
 # floors 2 to 39
@@ -146,6 +96,7 @@
     # Interfloor walls
 
     #External windows/walls
+    SetAutoSize = true, false
     AddWall Back Left, MainWindows, 0.5, -52.4, 44.9, -18.3, 79, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Back Left Corner, MainWindows, 0.5, -47.1, 44.9, -52.4, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Back Right, MainWindows, 0.5, -18.3, 79, 49.9, 52.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -158,12 +109,13 @@
     AddWall Front Center, MainWindows, 0.5, -98.4, -52.1, -12.2,-51.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Right Corner, MainWindows, 0.5, -12.2, -51.8, -14.4,-47.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Right Detachment, Brick, 0.5, -14.4, -47.8, -12.2,-45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Ceiling1, 0.5, -12.2, -45.6, 18.3,-45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Glass Elevator Back, Backing, 0.5, -12.2, -45.6, 18.3,-45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Right Bottom, MainWindows, 0.5, 18.3, -45.6, 83.4,-22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = true, false, true
     AddWall Right Top, MainWindows, 0.5, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = false, false, false
     AddWall Right Top Corner, MainWindows, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
     
     #AddAutoFloor Test, Granite, 0, 0, 0
 <EndFloors>
@@ -186,6 +138,7 @@
     # Interfloor walls
 
     #External windows/walls
+    SetAutoSize = true, false
     If(%floor% < 50) AddWall Back Left, MainWindows, 0.5, -52.4, 44.9, -18.3, 79, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Back Left Corner, MainWindows, 0.5, -47.1, 44.9, -52.4, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0.5, -84.8, 10, -47.1, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -196,12 +149,13 @@
     AddWall Front Center, MainWindows, 0.5, -98.4, -52.1, -12.2, -51.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Right Corner, MainWindows, 0.5, -12.2, -51.8, -14.4, -47.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Right Detachment, Brick, 0.5, -14.4, -47.8, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Ceiling1, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Glass Elevator Back, Backing, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Right Bottom, MainWindows, 0.5, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = true, false, true
     AddWall Right Top, MainWindows, 0.5, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = false, false, false
     AddWall Right Top Corner, MainWindows, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 # floors 59 to 64
@@ -222,18 +176,20 @@
     # Interfloor walls
 
     #External windows/walls
+    SetAutoSize = true, false
     ReverseExtents = true, true, true
     AddWall Front Left, MainWindows, 0.5, -98.4, -52.1, -75.1, -16.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = false, false, false
     AddWall Back Left Corner, MainWindows, 0.5, -47.1, 44.9, -52.4, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0.5, -84.8, 10, -47.1, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Lower, MainWindows, 0.5, -75.1, -16.9, -84.8, 10, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Ceiling1, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Glass Elevator Back, Backing, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Right Bottom, MainWindows, 0.5, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = true, true, true
     AddWall Right Top, MainWindows, 0.5, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = false, false, false
     AddWall Right Top Corner, MainWindows, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 # floors 65 to 78
@@ -254,18 +210,20 @@
     # Interfloor walls
 
     #External windows/walls
+    SetAutoSize = true, false
     If(%floor% < 77) AddWall Front Left Corner, MainWindows, 0.5, -75.1, -16.9, -76.9, -19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     If(%floor% > 75) AddWall Front, MainWindows, 0.5, -75.1, -16.9, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     If(%floor% > 65) AddWall Back, MainWindows, 0.5, -47.1, 44.9, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     If(%floor% < 66) AddWall Back Left Corner, MainWindows, 0.5, -47.1, 44.9, -52.4, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0.5, -84.8, 10, -47.1, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Lower, MainWindows, 0.5, -75.1, -16.9, -84.8, 10, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Ceiling1, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Glass Elevator Back, Backing, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Right Bottom, MainWindows, 0.5, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = true, false, true
     AddWall Right Top, MainWindows, 0.5, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = false, false, false
     AddWall Right Top Corner, MainWindows, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 # floors 79 to 86
@@ -286,16 +244,18 @@
     # Interfloor walls
 
     #External windows/walls
+    SetAutoSize = true, false
     AddWall Back, MainWindows, 0.5, -47.1, 44.9, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0.5, -84.8, 10, -47.1, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Lower, MainWindows, 0.5, -75.1, -16.9, -84.8, 10, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front, MainWindows, 0.5, -75.1, -16.9, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Ceiling1, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Glass Elevator Back, Backing, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Right Bottom, MainWindows, 0.5, 18.3, -45.6, 83.4, -22.3, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = true, false, true
     AddWall Right Top, MainWindows, 0.5, 83.4, -22.3, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     ReverseExtents = false, false, false
     AddWall Right Top Corner, MainWindows, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 # floors 87 to 113
@@ -316,12 +276,14 @@
     # Interfloor walls
 
     #External windows/walls
+    SetAutoSize = true, false
     AddWall Back, MainWindows, 0.5, -47.1, 44.9, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0.5, -84.8, 10, -47.1, 44.9, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Lower, MainWindows, 0.5, -75.1, -16.9, -84.8, 10, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front, MainWindows, 0.5, -75.1, -16.9, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Ceiling1, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Glass Elevator Back, Backing, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Right Top Corner, MainWindows, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 # floors 114 to 120
@@ -342,10 +304,12 @@
     # Interfloor walls
 
     #External windows/walls
+    SetAutoSize = true, false
     AddWall Back, MainWindows, 0.5, -47.1, 44.9, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front, MainWindows, 0.5, -75.1, -16.9, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Ceiling1, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Glass Elevator Back, Backing, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Right Top Corner, MainWindows, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 # floors 121 to 136
@@ -363,10 +327,12 @@
     # Interfloor walls
 
     #External windows/walls
+    SetAutoSize = true, false
     AddWall Back, MainWindows, 0.5, -47.1, 44.9, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front, MainWindows, 0.5, -75.1, -16.9, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Ceiling1, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Glass Elevator Back, Backing, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Right Top Corner, MainWindows, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 <Floor 134>
@@ -408,14 +374,17 @@
     # Interfloor walls
 
     #External windows/walls
+    SetAutoSize = true, false
     AddWall Back, Concrete, 0.5, -47.1, 44.9, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front, Concrete, 0.5, -75.1, -16.9, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Ceiling1, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Glass Elevator Back, Backing, 0.5, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Right Top Corner, Concrete, 0.5, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 <EndFloors>
 
 <External>
 
+    SetAutoSize = true, false
     # front setback
     AddCustomWall external, Main, MainWindows, -98.4, Floor(64).Altitude, -52.1, -76.9, Floor(78).Altitude, -19.4, -14.4, Floor(60).Altitude, -46.3, -12.2, Floor(58).Altitude, -51.8, 0, 20
     AddTriangleWall Left, MainWindows, -76.9, Floor(64).Altitude, -19.4, -76.9, Floor(78).Altitude, -19.4, -98.4, Floor(64).Altitude, -52.1, 0, -14
