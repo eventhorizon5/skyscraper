@@ -99,12 +99,7 @@
 <EndFloors>
 
 <Floor 0>
-    AddFloor Outside Ground, Brick, 0, -150, -150, 150, 150, %interfloorheight% - 0.01, %interfloorheight% - 0.01, 1, 8, True #outside ground
-    WallOrientation = left
-    AddWall New, Marble3, 0.5, 0, -40, 0, -30, %fullheight%, %fullheight%, 0, 0, 0, 0, False    
-    WallOrientation = center
-    AddDoor Brick, 2, 1, 0, -35, 3, 6, 0, 0, 0
-    WallOrientation = left
+    AddFloor Outside Ground, Brick, 0, -150, -150, 150, 150, %interfloorheight% - 0.01, %interfloorheight% - 0.01, 0.2, 0.2, True #outside ground
 <EndFloor>
 
 <Floor 9>
