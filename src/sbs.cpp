@@ -2324,8 +2324,10 @@ void SBS::PushFrame()
 		vc->Advance();
 
 	equeue->Process();
+#ifndef CS_PLATFORM_WIN32
 	while (App->Pending())
 		App->Dispatch();
+#endif
 }
 
 csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end)
