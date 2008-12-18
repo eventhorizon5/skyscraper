@@ -1058,6 +1058,8 @@ void Elevator::MoveElevatorToFloor()
 		//slow down
 
 		//calculate jerk rate
+		//check if the elevator rate is less than the amount that was stored in JerkPos
+		//(the elevator rate at the end of the JerkRate increments), adjusted to the ratio of acceljerk to deceljerk
 		if (ElevatorRate <= (JerkPos * (AccelJerk / DecelJerk)))
 			JerkRate -= DecelJerk * sbs->delta;
 		if (JerkRate < 0.01)
@@ -1089,6 +1091,9 @@ void Elevator::MoveElevatorToFloor()
 	if (CalculateStoppingDistance == true)
 	{
 		if (Direction == 1)
+			//stopping distance is the distance the elevator has travelled (usually to reach max speed), times
+			//the ratio of acceleration to deceleration (so if the deceleration is half of the acceleration,
+			//it will take twice the distance to stop)
 			StoppingDistance = (GetPosition().y - ElevatorStart) * (Acceleration / Deceleration);
 		else if (Direction == -1)
 			StoppingDistance = (ElevatorStart - GetPosition().y) * (Acceleration / Deceleration);

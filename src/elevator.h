@@ -141,18 +141,18 @@ private:
 	float Destination; //elevator destination Y value
 	float StoppingDistance; //distance needed to stop the elevator
 	bool CalculateStoppingDistance;
-	bool Brakes;
+	bool Brakes; //internal brake status
 	float ElevatorDoorSpeed;
 	bool ElevWait;
-	bool EmergencyStop;
+	bool EmergencyStop; //internal stop status
 	int WhichDoors;
 	int ShaftDoorFloor;
 	csRefArray<iMeshWrapper> ShaftDoorL; //shaft door array
 	csRefArray<iThingFactoryState> ShaftDoorL_state; //shaft door array state
 	csRefArray<iMeshWrapper> ShaftDoorR; //shaft door array
 	csRefArray<iThingFactoryState> ShaftDoorR_state; //shaft door array state
-	float JerkRate;
-	float JerkPos;
+	float JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
+	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	csRef<iMaterialWrapper> orig_indicator;
 
 	//functions
