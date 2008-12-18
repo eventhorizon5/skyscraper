@@ -1058,8 +1058,19 @@ void Elevator::MoveElevatorToFloor()
 		//slow down
 
 		//calculate jerk rate
-		if (ElevatorRate <= (JerkPos * (AccelJerk / DecelJerk)))
-			JerkRate -= DecelJerk * sbs->delta;
+		//check if the elevator rate is less than the amount that was stored in JerkPos
+		//(the elevator rate at the end of the JerkRate increments), adjusted to the ratio of acceljerk to deceljerk
+		if (Direction == -1)
+		{
+			if (ElevatorRate <= (JerkPos * (AccelJerk / DecelJerk)))
+				JerkRate -= DecelJerk * sbs->delta;
+		}
+		else
+		{
+			if (ElevatorRate >= (JerkPos * (AccelJerk / DecelJerk)))
+				JerkRate -= DecelJerk * sbs->delta;
+		}
+		//prevent jerkrate from reaching 0
 		if (JerkRate < 0.01)
 			JerkRate = 0.01;
 
@@ -1080,6 +1091,7 @@ void Elevator::MoveElevatorToFloor()
 		ElevatorRate = -ElevatorSpeed;
 		CalculateStoppingDistance = false;
 	}
+	//prevent the rate from going beyond 0
 	if ((Direction == 1) && (Brakes == true) && (ElevatorRate > 0))
 		ElevatorRate = 0;
 	if ((Direction == -1) && (Brakes == true) && (ElevatorRate < 0))
@@ -1089,6 +1101,9 @@ void Elevator::MoveElevatorToFloor()
 	if (CalculateStoppingDistance == true)
 	{
 		if (Direction == 1)
+			//stopping distance is the distance the elevator has travelled (usually to reach max speed), times
+			//the ratio of acceleration to deceleration (so if the deceleration is half of the acceleration,
+			//it will take twice the distance to stop)
 			StoppingDistance = (GetPosition().y - ElevatorStart) * (Acceleration / Deceleration);
 		else if (Direction == -1)
 			StoppingDistance = (ElevatorStart - GetPosition().y) * (Acceleration / Deceleration);
@@ -1105,7 +1120,7 @@ void Elevator::MoveElevatorToFloor()
 	if ((Brakes == false) && (Direction == 1))
 	{
 		//determine if next jump altitude is over deceleration marker
-		if (((GetPosition().y + (ElevatorRate * sbs->delta)) > (Destination - StoppingDistance)) && (GetPosition().y != (Destination - StoppingDistance)))
+		if (((GetPosition().y + (ElevatorRate * sbs->delta)) > (Destination - StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
@@ -1118,46 +1133,18 @@ void Elevator::MoveElevatorToFloor()
 			//play elevator stopping sound
 			//"\data\elevstop.wav"
 		}
-
-		//normal routine - this will rarely happen (only if the elevator happens to reach the exact deceleration marker)
-		if (GetPosition().y == (Destination - StoppingDistance))
-		{
-			TempDeceleration = Deceleration;
-			CalculateStoppingDistance = false;
-			//slow down elevator
-			Direction = -1;
-			Brakes = true;
-			ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
-			//stop sounds
-			//play stopping sound
-			//"\data\elevstop.wav"
-		}
 	}
 
 	//down movement
 	if (Brakes == false && Direction == -1)
 	{
 	//determine if next jump altitude is below deceleration marker
-		if (((GetPosition().y - (ElevatorRate * sbs->delta)) < (Destination + StoppingDistance)) && (GetPosition().y != (Destination + StoppingDistance)))
+		if (((GetPosition().y - (ElevatorRate * sbs->delta)) < (Destination + StoppingDistance)))
 		{
 			CalculateStoppingDistance = false;
 			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
 			TempDeceleration = Deceleration * (StoppingDistance / (GetPosition().y - Destination));
 			//start deceleration
-			Direction = 1;
-			Brakes = true;
-			ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
-			//stop sounds
-			//play stopping sound
-			//"\data\elevstop.wav"
-		}
-
-		//normal routine - this will rarely happen (only if the elevator happens to reach the exact deceleration marker)
-		if (GetPosition().y == (Destination + StoppingDistance))
-		{
-			TempDeceleration = Deceleration;
-			CalculateStoppingDistance = false;
-			//slow down elevator
 			Direction = 1;
 			Brakes = true;
 			ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);

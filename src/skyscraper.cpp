@@ -123,7 +123,7 @@ bool Skyscraper::OnInit(void)
 	Selector = 0;
 
 	//start simulation
-	Simcore->Start();
+	Simcore->Start(this);
 
 	//load dialogs
 	dpanel = new DebugPanel(NULL, -1);
