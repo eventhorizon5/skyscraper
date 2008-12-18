@@ -151,7 +151,7 @@ public:
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
 	float AutoSize(float n1, float n2, bool iswidth, float offset);
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
-	void Start();
+	void Start(wxApp *app);
 	void Run();
 	int CreateSky();
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
@@ -313,6 +313,9 @@ private:
 
 	//timer object
 	Pump* p;
+
+	//wx app object
+	wxApp *App;
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;

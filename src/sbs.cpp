@@ -30,6 +30,7 @@
 
 #include <wx/wx.h>
 #include <wx/variant.h>
+#include <wx/app.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -138,6 +139,7 @@ SBS::~SBS()
 	p->s = 0;
 	delete p;
 	p = 0;
+	App = 0;
 
 	//delete camera object
 	delete camera;
@@ -163,10 +165,12 @@ SBS::~SBS()
 	canvas = 0;
 }
 
-void SBS::Start()
+void SBS::Start(wxApp *app)
 {
 	//set running value
 	IsRunning = true;
+
+	App = app;
 
 	//create skybox
 	CreateSky();
@@ -2320,6 +2324,8 @@ void SBS::PushFrame()
 		vc->Advance();
 
 	equeue->Process();
+	while (App->Pending())
+		App->Dispatch();
 }
 
 csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end)
