@@ -502,7 +502,7 @@ checkfloors:
 
 			tempdata.DeleteAll();
 		}
-				
+
 		//SetWallOrientation command
 		if (LineData.Slice(0, 15).CompareNoCase("wallorientation") == true)
 		{
@@ -602,7 +602,7 @@ checkfloors:
 
 			csVector3 isect = Simcore->GetPoint(tmpMesh, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 			tempdata.DeleteAll();
-			
+
 			buffer = csString(LineData).Slice(0, temp5 - 1) + csString(wxVariant(isect.x).GetString().ToAscii()) + csString(wxVariant(isect.y).GetString().ToAscii()) + csString(wxVariant(isect.z).GetString().ToAscii()) + csString(LineData).Slice(temp3 + 1);
 			LineData = buffer.GetData();
 
@@ -1085,6 +1085,24 @@ recalc:
 				//create door
 				if (Simcore->GetStairs(atoi(tempdata[0])))
 					Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], atof(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				tempdata.DeleteAll();
+			}
+
+			//CutFloor command
+			if (LineData.Slice(0, 8).CompareNoCase("cutfloor") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(8).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Simcore->Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+				//perform cut on floor
+				Simcore->GetFloor(Current)->Cut(csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), csString(tempdata[6]).CompareNoCase("true"), csString(tempdata[6]).CompareNoCase("true"), false);
 				tempdata.DeleteAll();
 			}
 
