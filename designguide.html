@@ -592,6 +592,15 @@
   <p align="left">Number specifies the stairwell number. Direction specifies the 
     direction the door faces and also the direction it opens. For values of this, 
     look at the AddDoor command above.</p>
+  <p align="left"><strong>15. CutFloor</strong> - performs a manual box cut on 
+    an area within the current floor<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">CutFloor x1, y1, 
+    z1, x2, y2, z2, cutwalls, cutfloors<br>
+    </font>Example: <font size="2" face="Courier New, Courier, mono">CutFloor 
+    -5, -5, -5, 5, 5, 5, false, true</font></p>
+  <p align="left">The x, y and z values specify the start and end coordinates 
+    of the box cut. The Y values are relative to the current floor. If cutwalls 
+    is true, the function will cut walls; if cutfloors is true, it'll cut floors.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">6. The <em>External</em> Section</font></strong></p>
   <p align="left">The <em>External</em> section defines parts of the building's 
