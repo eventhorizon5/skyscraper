@@ -5766,6 +5766,12 @@ CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
 CreateStairwell 6, 4.7515, 51.66, 79, 141
 CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
 
+<Floors 119 to 120>
+    #extra cut operation
+    if[%floor% = 119] CutFloor -17 + 4.7515, 5, -4.5 + 51.66, -9 + 4.7515, %height% + 1, 4.5 + 51.66, false, true
+    if[%floor% = 120] CutFloor -17 + 4.7515, -%interfloorheight% - 1, -4.5 + 51.66, -9 + 4.7515, 5, 4.5 + 51.66, false, true
+<EndFloors>
+
 <Floor 79>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 24 #determine riser size
     AddStairs 6, StairsLower, Stairs, left, 0, -2.085, 4.17, %1%, 8 / 7, 8, 0, 0, 0
