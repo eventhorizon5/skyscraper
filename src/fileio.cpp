@@ -204,6 +204,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 		if (LineData.Slice(0, 7).CompareNoCase("<break>") == true)
 		{
 			//breakpoint function for debugging scripts
+breakpoint:
 			Simcore->Report("Script breakpoint reached");
 			goto Nextline;
 		}
@@ -502,7 +503,7 @@ checkfloors:
 
 			tempdata.DeleteAll();
 		}
-				
+
 		//SetWallOrientation command
 		if (LineData.Slice(0, 15).CompareNoCase("wallorientation") == true)
 		{
@@ -602,7 +603,7 @@ checkfloors:
 
 			csVector3 isect = Simcore->GetPoint(tmpMesh, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 			tempdata.DeleteAll();
-			
+
 			buffer = csString(LineData).Slice(0, temp5 - 1) + csString(wxVariant(isect.x).GetString().ToAscii()) + csString(wxVariant(isect.y).GetString().ToAscii()) + csString(wxVariant(isect.z).GetString().ToAscii()) + csString(LineData).Slice(temp3 + 1);
 			LineData = buffer.GetData();
 
@@ -803,6 +804,9 @@ recalc:
 			else
 				LineData = "<endfloor>";
 			}
+
+			if (LineData.Slice(0, 7).CompareNoCase("<break>") == true)
+				goto breakpoint;
 
 			//AddFloor command
 			if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
@@ -1088,6 +1092,24 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//Cut command
+			if (LineData.Slice(0, 3).CompareNoCase("cut") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(4).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Simcore->Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+				//perform cut on floor
+				Simcore->GetFloor(Current)->Cut(csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), csString(tempdata[6]).CompareNoCase("true"), csString(tempdata[7]).CompareNoCase("true"), false);
+				tempdata.DeleteAll();
+			}
+
 			//handle floor range
 			if (RangeL != RangeH && LineData.Slice(0, 11).CompareNoCase("<endfloors>") == true)
 			{
@@ -1187,6 +1209,24 @@ recalc:
 
 				//create floor
 				Simcore->AddFloorMain(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				tempdata.DeleteAll();
+			}
+
+			//Cut command
+			if (LineData.Slice(0, 3).CompareNoCase("cut") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(4).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Simcore->Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+
+				//perform cut
+				Simcore->Cut(Simcore->External_state, csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), csString(tempdata[6]).CompareNoCase("true"), csString(tempdata[7]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
 				tempdata.DeleteAll();
 			}
 
@@ -1295,6 +1335,9 @@ recalc:
 				else
 					goto Nextline; //skip line
 			}
+
+			if (LineData.Slice(0, 7).CompareNoCase("<break>") == true)
+				goto breakpoint;
 
 			//CreateElevator command
 			if (LineData.Slice(0, 14).CompareNoCase("createelevator") == true)
