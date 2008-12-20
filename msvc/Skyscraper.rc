@@ -50,12 +50,9 @@ BEGIN
             VALUE "FileVersion", "1, 1, 0, 0\0"
             VALUE "InternalName", "Skyscraper\0"
             VALUE "LegalCopyright", "©2008 Ryan Thoryk, released under the GPL\0"
-            VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "Skyscraper.exe\0"
-            VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "Skyscraper\0"
             VALUE "ProductVersion", "1, 1, 0, 0\0"
-            VALUE "SpecialBuild", "\0"
         END
     END
     BLOCK "VarFileInfo"
