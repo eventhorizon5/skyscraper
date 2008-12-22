@@ -25,7 +25,17 @@
     Load data/text13.jpg, Stairs, 3.72, 4
     Load data/mason01.jpg, Concrete, 3.72, 4
     Load data/cutston.jpg, InterExt, 3.72, 4
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/cutston.jpg, Ceiling1, 3.72, 4
 <EndTextures>
+
+# Ground
+SetAutoSize = false, false
+DrawWalls = false, true, false, false, false, false
+AddFloor Landscape, Ground, Downtown, 0, -2000, -2000, 2000, 2000, 0, 0, 1, 1
+Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
+DrawWalls = true, true, false, false, false, false
+SetAutoSize = true, true
 
 <Floor 0>
     ID = %floor%
@@ -98,10 +108,6 @@
     AddInterfloorWall IBack, Brick, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
-<Floor 0>
-    AddFloor Outside Ground, Brick, 0, -150, -150, 150, 150, %interfloorheight% - 0.01, %interfloorheight% - 0.01, 0.2, 0.2, True #outside ground
-<EndFloor>
-
 <Floor 9>
     AddFloor Roof, Brick, 0.5, -20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, True #roof
 <EndFloor>
@@ -113,8 +119,8 @@ ShaftCut 1, -4, -3.5, 4, 3.5, 0, 5
 <Floors 0 to 9>
 	FloorOrientation = top
 	DrawWalls = true, true, false, false, false, false
-	if(%floor% = 0) AddShaftFloor 1, Shaft1Base, Brick, 0.5, -4, -3.5, 4, 3.5, -2, -2, 0, 0
-	if(%floor% = 9) AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4, -3.5, 4, 3.5, %fullheight% + 2, %fullheight% + 2, 0, 0
+	if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -4, -3.5, 4, 3.5, -2, -2, 0, 0
+	if[%floor% = 9] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4, -3.5, 4, 3.5, %fullheight% + 2, %fullheight% + 2, 0, 0
 	WallOrientation = left
 	AddShaftWall 1, Shaft1Left, Brick, 0.5, -4, -3.5, -4, 3.5, %fullheight%, %fullheight%, 0, 0, 0, 0
 	AddShaftWall 1, Shaft1Front, Brick, 0.5, -4, -3.5, 4, -3.5, %fullheight%, %fullheight%, 0, 0, 0, 0

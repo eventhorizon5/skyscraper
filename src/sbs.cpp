@@ -366,7 +366,8 @@ void SBS::GetInput()
 void SBS::Render()
 {
 	// Tell 3D driver we're going to display 3D things.
-	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN ))
+	//if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN ))
+	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER ))
 		return;
 
 	// Tell the camera to render into the frame buffer.
@@ -1145,26 +1146,20 @@ void SBS::InitMeshes()
 	Buildings = engine->CreateSectorWallsMesh (area, "Buildings");
 	Buildings_state = scfQueryInterface<iThingFactoryState> (Buildings->GetMeshObject()->GetFactory());
 	Buildings->SetZBufMode(CS_ZBUF_USE);
-	Buildings->SetRenderPriority(engine->GetAlphaRenderPriority());
-	Buildings->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	External = engine->CreateSectorWallsMesh (area, "External");
 	External_state = scfQueryInterface<iThingFactoryState> (External->GetMeshObject()->GetFactory());
 	External->SetZBufMode(CS_ZBUF_USE);
-	External->SetRenderPriority(engine->GetAlphaRenderPriority());
-	External->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	//External->SetRenderPriority(engine->GetAlphaRenderPriority());
+	//External->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	Landscape = engine->CreateSectorWallsMesh (area, "Landscape");
 	Landscape_state = scfQueryInterface<iThingFactoryState> (Landscape->GetMeshObject()->GetFactory());
 	Landscape->SetZBufMode(CS_ZBUF_USE);
-	Landscape->SetRenderPriority(engine->GetAlphaRenderPriority());
-	Landscape->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	ColumnFrame = engine->CreateSectorWallsMesh (area, "ColumnFrame");
 	ColumnFrame_state = scfQueryInterface<iThingFactoryState> (ColumnFrame->GetMeshObject()->GetFactory());
 	ColumnFrame->SetZBufMode(CS_ZBUF_USE);
-	ColumnFrame->SetRenderPriority(engine->GetAlphaRenderPriority());
-	ColumnFrame->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 }
 
 int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
