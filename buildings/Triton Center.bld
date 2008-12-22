@@ -107,15 +107,13 @@
     LoadRange 1, 142, signs/sans/%number%.jpg, Button%number%, 1, 1
 <EndTextures>
 
-# External section
-<External>
-    SetAutoSize = false, false
-    DrawWalls = false, true, false, false, false, false
-    AddFloor Ground, Downtown, 0, -2000, -2000, 2000, 2000, 0, 0, 1, 1
-    Cut -75, -1, -70, 75, 1, 70, false, true
-    DrawWalls = true, true, false, false, false, false
-    SetAutoSize = true, true
-<EndExternal>
+# Ground
+SetAutoSize = false, false
+DrawWalls = false, true, false, false, false, false
+AddFloor Landscape, Ground, Downtown, 0, -2000, -2000, 2000, 2000, 0, 0, 1, 1
+Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
+DrawWalls = true, true, false, false, false, false
+SetAutoSize = true, true
 
 # Basements
 <Floors -1 to -10>
@@ -5756,7 +5754,7 @@ CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
     if[%floor% > 98] AddWall StairsBackE, %5%, 0.33, -5.67 + 0, 8.5 + -13.5, 5.67 + 0, 8.5 + -13.5, %height%, %height%, 0, 0, 0, 0, False
 
     #doors
-    if[%floor% = 79] AddStairsDoor 5, StairsDoor, 0.2, 4, 5.67, 6.5, 3.5, 8, 0, 1, 1
+    if[%floor% = 79] AddStairsDoor 5, StairsDoor, 0.2, 4, 5.67, 6, 3.5, 8, 0, 1, 1
     if[%floor% > 79] AddStairsDoor 5, StairsDoor, 0.2, 6, 2, -8.5, 3.5, 8, 0, 1, 1
 
     #signs

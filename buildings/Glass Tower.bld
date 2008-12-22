@@ -382,43 +382,41 @@
     SetAutoSize = true, true
 <EndFloors>
 
-<External>
+SetAutoSize = true, false
+# front setback
+AddCustomWall external, Main, MainWindows, -98.4, Floor(64).Altitude, -52.1, -76.9, Floor(78).Altitude, -19.4, -14.4, Floor(60).Altitude, -46.3, -12.2, Floor(58).Altitude, -51.8, 0, 20
+AddTriangleWall external, Left, MainWindows, -76.9, Floor(64).Altitude, -19.4, -76.9, Floor(78).Altitude, -19.4, -98.4, Floor(64).Altitude, -52.1, 0, -14
+AddTriangleWall external, Right Front, MainWindows, -12.2, Floor(58).Altitude, -51.8, -14.4, Floor(60).Altitude, -46.3, -14.4, Floor(58).Altitude, -47.8, 0, -2
+AddCustomWall external, Right Back, Brick, -14.4, Floor(58).Altitude, -47.8, -14.4, Floor(60).Altitude, -46.3, -16.9, Floor(60).Altitude, -43.4, -12.2, Floor(58).Altitude, -45.6, 0, -2
+ReverseExtents = false, false, true
+AddTriangleWall external, Back, MainWindows, -12.2, Floor(77).Altitude, -45.6, -75.1, Floor(77).Altitude, -16.9, -12.2, Floor(58).Altitude, -45.6, 0, 19
+ReverseExtents = false, true, false
+AddTriangleWall external, Bottom, MainWindows, -98.4, Floor(58).Altitude, -52.1, -98.4, Floor(64).Altitude, -52.1, -12.2, Floor(58).Altitude, -51.8, 0, -6
+ReverseExtents = false, false, false
+AddCustomWall external, Back Filler, Brick, -14.4, Floor(60).Altitude, -46.3, -16.9, Floor(60).Altitude, -43.4, -75.1, Floor(77).Altitude, -16.9, -73, Floor(77).Altitude, -21.2, 0, 1
+AddTriangleWall external, Top Triangle Filler 1, MainWindows, -75.1, Floor(77).Altitude, -16.9, -76.9, Floor(78).Altitude, -19.4, -73, Floor(77).Altitude, -21.2, 0, 1
+AddTriangleWall external, Top Triangle Filler 2, MainWindows, -75.1, Floor(77).Altitude, -16.9, -76.9, Floor(78).Altitude, -19.4, -76.9, Floor(77).Altitude, -19.4, 0, 1
 
-    SetAutoSize = true, false
-    # front setback
-    AddCustomWall external, Main, MainWindows, -98.4, Floor(64).Altitude, -52.1, -76.9, Floor(78).Altitude, -19.4, -14.4, Floor(60).Altitude, -46.3, -12.2, Floor(58).Altitude, -51.8, 0, 20
-    AddTriangleWall Left, MainWindows, -76.9, Floor(64).Altitude, -19.4, -76.9, Floor(78).Altitude, -19.4, -98.4, Floor(64).Altitude, -52.1, 0, -14
-    AddTriangleWall Right Front, MainWindows, -12.2, Floor(58).Altitude, -51.8, -14.4, Floor(60).Altitude, -46.3, -14.4, Floor(58).Altitude, -47.8, 0, -2
-    AddCustomWall external, Right Back, Brick, -14.4, Floor(58).Altitude, -47.8, -14.4, Floor(60).Altitude, -46.3, -16.9, Floor(60).Altitude, -43.4, -12.2, Floor(58).Altitude, -45.6, 0, -2
-    ReverseExtents = false, false, true
-    AddTriangleWall Back, MainWindows, -12.2, Floor(77).Altitude, -45.6, -75.1, Floor(77).Altitude, -16.9, -12.2, Floor(58).Altitude, -45.6, 0, 19
-    ReverseExtents = false, true, false
-    AddTriangleWall Bottom, MainWindows, -98.4, Floor(58).Altitude, -52.1, -98.4, Floor(64).Altitude, -52.1, -12.2, Floor(58).Altitude, -51.8, 0, -6
-    ReverseExtents = false, false, false
-    AddCustomWall external, Back Filler, Brick, -14.4, Floor(60).Altitude, -46.3, -16.9, Floor(60).Altitude, -43.4, -75.1, Floor(77).Altitude, -16.9, -73, Floor(77).Altitude, -21.2, 0, 1
-    AddTriangleWall Top Triangle Filler 1, MainWindows, -75.1, Floor(77).Altitude, -16.9, -76.9, Floor(78).Altitude, -19.4, -73, Floor(77).Altitude, -21.2, 0, 1
-    AddTriangleWall Top Triangle Filler 2, MainWindows, -75.1, Floor(77).Altitude, -16.9, -76.9, Floor(78).Altitude, -19.4, -76.9, Floor(77).Altitude, -19.4, 0, 1
-    
-    # back setback
-    AddTriangleWall Back, MainWindows, 47.1, Floor(66).Altitude, 46, 47.1, Floor(41).Altitude, 46, -49.3, Floor(66).Altitude, 44.9, 0, 25
-    ReverseExtents = false, false, true
-    AddCustomWall external, Main, MainWindows, 49.9, Floor(39).Altitude, 52.8, -18.3, Floor(50).Altitude, 79, -52.4, Floor(67).Altitude, 44.9, 47.1, Floor(41).Altitude, 46, 0, 28
-    AddTriangleWall Right, MainWindows, -18.3, Floor(39).Altitude, 79, -18.3, Floor(50).Altitude, 79, 49.9, Floor(39).Altitude, 52.8, 0, -11
-    ReverseExtents = false, false, false
-    AddTriangleWall Right Notch Base, MainWindows, 47.1, Floor(39).Altitude, 46, 47.1, Floor(41).Altitude, 46, 49.9, Floor(39).Altitude, 52.8, 0, -2
-    AddTriangleWall Left, MainWindows, -52.4, Floor(50).Altitude, 44.9, -52.4, Floor(67).Altitude, 44.9, -18.3, Floor(50).Altitude, 79.1, 0, -17
-    AddTriangleWall Left Notch Filler, MainWindows, -52.4, Floor(66).Altitude, 44.9, -49.3, Floor(66).Altitude, 44.9, -52.4, Floor(67).Altitude, 44.9, 0, 1
+# back setback
+AddTriangleWall external, Back, MainWindows, 47.1, Floor(66).Altitude, 46, 47.1, Floor(41).Altitude, 46, -49.3, Floor(66).Altitude, 44.9, 0, 25
+ReverseExtents = false, false, true
+AddCustomWall external, Main, MainWindows, 49.9, Floor(39).Altitude, 52.8, -18.3, Floor(50).Altitude, 79, -52.4, Floor(67).Altitude, 44.9, 47.1, Floor(41).Altitude, 46, 0, 28
+AddTriangleWall external, Right, MainWindows, -18.3, Floor(39).Altitude, 79, -18.3, Floor(50).Altitude, 79, 49.9, Floor(39).Altitude, 52.8, 0, -11
+ReverseExtents = false, false, false
+AddTriangleWall external, Right Notch Base, MainWindows, 47.1, Floor(39).Altitude, 46, 47.1, Floor(41).Altitude, 46, 49.9, Floor(39).Altitude, 52.8, 0, -2
+AddTriangleWall external, Left, MainWindows, -52.4, Floor(50).Altitude, 44.9, -52.4, Floor(67).Altitude, 44.9, -18.3, Floor(50).Altitude, 79.1, 0, -17
+AddTriangleWall external, Left Notch Filler, MainWindows, -52.4, Floor(66).Altitude, 44.9, -49.3, Floor(66).Altitude, 44.9, -52.4, Floor(67).Altitude, 44.9, 0, 1
 
-    # right setback
-    AddTriangleWall Main, MainWindows, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(86).Altitude, -22.3, 59.3, Floor(137).Altitude, 19.4, 0, 51
-    AddTriangleWall Front, MainWindows, 18.3, Floor(86).Altitude, -45.6, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(86).Altitude, -22.3, 0, -51
-    ReverseExtents = false, false, true
-    AddTriangleWall Back, MainWindows, 59.3, Floor(86).Altitude, 19.4, 59.3, Floor(137).Altitude, 19.4, 83.4, Floor(86).Altitude, -22.3, 0, -51
+# right setback
+AddTriangleWall external, Main, MainWindows, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(86).Altitude, -22.3, 59.3, Floor(137).Altitude, 19.4, 0, 51
+AddTriangleWall external, Front, MainWindows, 18.3, Floor(86).Altitude, -45.6, 18.3, Floor(137).Altitude, -45.6, 83.4, Floor(86).Altitude, -22.3, 0, -51
+ReverseExtents = false, false, true
+AddTriangleWall external, Back, MainWindows, 59.3, Floor(86).Altitude, 19.4, 59.3, Floor(137).Altitude, 19.4, 83.4, Floor(86).Altitude, -22.3, 0, -51
 
-    # left setback
-    ReverseExtents = false, false, false
-    AddTriangleWall Main, MainWindows, -75.1, Floor(137).Altitude, -16.9, -84.8, Floor(113).Altitude, 10, -47, Floor(137).Altitude, 44.9, -1, 24
-    ReverseExtents = true, false, false
-    AddTriangleWall Front, MainWindows, -75.1, Floor(113).Altitude, -16.9, -75.1, Floor(137).Altitude, -16.9, -84.8, Floor(113).Altitude, 10, 0, -24
-    AddTriangleWall Back, MainWindows, -47, Floor(113).Altitude, 44.9, -47, Floor(137).Altitude, 44.9, -84.8, Floor(113).Altitude, 10, 0, -24
-<EndExternal>
+# left setback
+ReverseExtents = false, false, false
+AddTriangleWall external, Main, MainWindows, -75.1, Floor(137).Altitude, -16.9, -84.8, Floor(113).Altitude, 10, -47, Floor(137).Altitude, 44.9, -1, 24
+ReverseExtents = true, false, false
+AddTriangleWall external, Front, MainWindows, -75.1, Floor(113).Altitude, -16.9, -75.1, Floor(137).Altitude, -16.9, -84.8, Floor(113).Altitude, 10, 0, -24
+AddTriangleWall external, Back, MainWindows, -47, Floor(113).Altitude, 44.9, -47, Floor(137).Altitude, 44.9, -84.8, Floor(113).Altitude, 10, 0, -24
+

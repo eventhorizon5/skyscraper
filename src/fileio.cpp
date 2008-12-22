@@ -104,20 +104,6 @@ int Skyscraper::LoadBuilding(const char * filename)
 			Simcore->Report("Finished globals");
 			goto Nextline;
 		}
-		if (LineData.CompareNoCase("<external>") == true)
-		{
-			Section = 3;
-			Context = "External";
-			Simcore->Report("Processing external objects...");
-			goto Nextline;
-		}
-		if (LineData.CompareNoCase("<endexternal>") == true)
-		{
-			Section = 0;
-			Context = "None";
-			Simcore->Report("Finished external");
-			goto Nextline;
-		}
 		if (LineData.Slice(0, 7).CompareNoCase("<floors") == true)
 		{
 			Section = 2;
@@ -302,6 +288,157 @@ checkfloors:
 				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
 			}
 			temp5 = csString(LineData).Downcase().Find("floor(", 0);
+		}
+
+		//Global commands
+
+		//AddTriangleWall command
+		if (LineData.Slice(0, 15).CompareNoCase("addtrianglewall") == true)
+		{
+			//get data
+			tempdata.SplitString(LineData.Slice(16).GetData(), ",");
+
+			//calculate inline math
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Simcore->Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+			//if (tempdata.GetSize() < 13)
+				//Err.Raise 1003;
+			//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
+
+			if (csString(tempdata[0]).CompareNoCase("floor") == true)
+				tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			else
+			{
+			if (Section == 2)
+				{
+					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[4]);
+					tempdata.Put(4, buffer);
+					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[7]);
+					tempdata.Put(7, buffer);
+				}
+			}
+			buffer = tempdata[0];
+			buffer.Downcase();
+			if (buffer == "external")
+				tmpMesh = Simcore->External_state;
+			if (buffer == "landscape")
+				tmpMesh = Simcore->Landscape_state;
+			if (buffer == "buildings")
+				tmpMesh = Simcore->Buildings_state;
+			if (buffer == "columnframe")
+				tmpMesh = Simcore->ColumnFrame_state;
+
+			//create triangle wall
+			Simcore->AddTriangleWall(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+			tempdata.DeleteAll();
+		}
+
+		//AddWall command
+		if (LineData.Slice(0, 7).CompareNoCase("addwall") == true && Section != 2 && Section != 4)
+		{
+			//get data
+			tempdata.SplitString(LineData.Slice(8).GetData(), ",");
+
+			//calculate inline math
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Simcore->Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+			//if (tempdata.GetSize() < 11)
+				//Err.Raise 1003;
+			//if IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+
+			buffer = tempdata[0];
+			buffer.Downcase();
+			if (buffer == "external")
+				tmpMesh = Simcore->External_state;
+			if (buffer == "landscape")
+				tmpMesh = Simcore->Landscape_state;
+			if (buffer == "buildings")
+				tmpMesh = Simcore->Buildings_state;
+			if (buffer == "columnframe")
+				tmpMesh = Simcore->ColumnFrame_state;
+
+			//create wall
+			Simcore->AddWallMain(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+			tempdata.DeleteAll();
+		}
+
+		//AddFloor
+		if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true && Section != 2 && Section != 4)
+		{
+			//get data
+			tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+
+			//calculate inline math
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Simcore->Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+			//if (tempdata.GetSize() < 7)
+				//Err.Raise 1003;
+			//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
+
+			buffer = tempdata[0];
+			buffer.Downcase();
+			if (buffer == "external")
+				tmpMesh = Simcore->External_state;
+			if (buffer == "landscape")
+				tmpMesh = Simcore->Landscape_state;
+			if (buffer == "buildings")
+				tmpMesh = Simcore->Buildings_state;
+			if (buffer == "columnframe")
+				tmpMesh = Simcore->ColumnFrame_state;
+
+			//create floor
+			Simcore->AddFloorMain(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
+			tempdata.DeleteAll();
+		}
+
+		//Cut command
+		if (LineData.Slice(0, 4).CompareNoCase("cut ") == true && Section != 2 && Section != 4)
+		{
+			//get data
+			tempdata.SplitString(LineData.Slice(5).GetData(), ",");
+
+			//calculate inline math
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Simcore->Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+
+			buffer = tempdata[0];
+			buffer.Downcase();
+			if (buffer == "external")
+				tmpMesh = Simcore->External_state;
+			if (buffer == "landscape")
+				tmpMesh = Simcore->Landscape_state;
+			if (buffer == "buildings")
+				tmpMesh = Simcore->Buildings_state;
+			if (buffer == "columnframe")
+				tmpMesh = Simcore->ColumnFrame_state;
+
+			//perform cut
+			Simcore->Cut(tmpMesh, csVector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), csVector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), csString(tempdata[7]).CompareNoCase("true"), csString(tempdata[8]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
+			tempdata.DeleteAll();
+		}
+
+		//Set command
+		if (LineData.Slice(0, 4).CompareNoCase("set ") == true && Section != 2 && Section != 4)
+		{
+			temp1 = LineData.Find("=", 0);
+			temp3 = atoi(LineData.Slice(4, temp1 - 5));
+			temp2 = LineData.Slice(temp1 + 1);
+			//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
+				//Err.Raise 1001
+			Simcore->UserVariable[temp3] = Simcore->Calc(temp2);
+			//Simcore->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 		}
 
 		//CreateWallBox2 command
@@ -675,18 +812,6 @@ checkfloors:
 				temp3 = temp2.Find(",", 0);
 				temp4 = temp2.Find(",", temp3 + 1);
 				Simcore->camera->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
-			}
-
-			//Set command
-			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
-			{
-				temp1 = LineData.Find("=", 0);
-				temp3 = atoi(LineData.Slice(4, temp1 - 5));
-				temp2 = LineData.Slice(temp1 + 1);
-				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
-					//Err.Raise 1001
-				Simcore->UserVariable[temp3] = Simcore->Calc(temp2);
-				Simcore->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
 		}
 
@@ -1142,104 +1267,6 @@ recalc:
 						goto Nextline;
 					}
 				}
-			}
-		}
-
-		//Process external
-		if (Section == 3)
-		{
-
-			//AddTriangleWall command
-			if (LineData.Slice(0, 15).CompareNoCase("addtrianglewall") == true)
-			{
-				//get data
-				tempdata.SplitString(LineData.Slice(16).GetData(), ",");
-
-				//calculate inline math
-				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
-				{
-					buffer = Simcore->Calc(tempdata[temp3]);
-					tempdata.Put(temp3, buffer);
-				}
-				//if (tempdata.GetSize() < 13)
-					//Err.Raise 1003;
-				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
-
-				//create triangle wall
-				Simcore->AddTriangleWall(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
-				tempdata.DeleteAll();
-			}
-
-			//AddWall command
-			if (LineData.Slice(0, 7).CompareNoCase("addwall") == true)
-			{
-				//get data
-				tempdata.SplitString(LineData.Slice(8).GetData(), ",");
-
-				//calculate inline math
-				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
-				{
-					buffer = Simcore->Calc(tempdata[temp3]);
-					tempdata.Put(temp3, buffer);
-				}
-				//if (tempdata.GetSize() < 11)
-					//Err.Raise 1003;
-				//if IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
-
-				//create wall
-				Simcore->AddWallMain(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
-				tempdata.DeleteAll();
-			}
-
-			//AddFloor
-			if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
-			{
-				//get data
-				tempdata.SplitString(LineData.Slice(9).GetData(), ",");
-
-				//calculate inline math
-				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
-				{
-					buffer = Simcore->Calc(tempdata[temp3]);
-					tempdata.Put(temp3, buffer);
-				}
-				//if (tempdata.GetSize() < 7)
-					//Err.Raise 1003;
-				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
-
-				//create floor
-				Simcore->AddFloorMain(Simcore->External_state, tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
-				tempdata.DeleteAll();
-			}
-
-			//Cut command
-			if (LineData.Slice(0, 3).CompareNoCase("cut") == true)
-			{
-				//get data
-				tempdata.SplitString(LineData.Slice(4).GetData(), ",");
-
-				//calculate inline math
-				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
-				{
-					buffer = Simcore->Calc(tempdata[temp3]);
-					tempdata.Put(temp3, buffer);
-				}
-
-				//perform cut
-				Simcore->Cut(Simcore->External_state, csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), csString(tempdata[6]).CompareNoCase("true"), csString(tempdata[7]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
-				tempdata.DeleteAll();
-			}
-
-			//Set command
-			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
-			{
-				temp1 = LineData.Find("=", 0);
-				temp3 = atoi(LineData.Slice(4, temp1 - 5));
-				temp2 = LineData.Slice(temp1 + 1);
-				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
-					//Err.Raise 1001
-				Simcore->UserVariable[temp3] = Simcore->Calc(temp2);
-				Simcore->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
 		}
 
