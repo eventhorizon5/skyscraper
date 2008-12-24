@@ -487,6 +487,8 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 		CS_REQUEST_REPORTER,
 		CS_REQUEST_REPORTERLISTENER,
 		CS_REQUEST_PLUGIN("crystalspace.collisiondetection.opcode", iCollideSystem),
+		CS_REQUEST_PLUGIN("crystalspace.sndsys.element.loader", iSndSysLoader),
+		CS_REQUEST_PLUGIN("crystalspace.sndsys.renderer.software", iSndSysRenderer),
 		CS_REQUEST_END))
 		return ReportError ("Couldn't init app!");
 
@@ -528,6 +530,10 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (!mouse) return ReportError("Failed to locate mouse driver");
 	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
 	if (!collision_sys) return ReportError("Failed to locate collision detection driver");
+	sndrenderer = csQueryRegistry<iSndSysRenderer> (object_reg);
+	if (!sndrenderer) return ReportError("Failed to locate sound renderer");
+	sndloader = csQueryRegistry<iSndSysLoader> (object_reg);
+	if (!sndloader) return ReportError("Failed to locate sound loader");
 	plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	if (plug) plug->IncRef ();
@@ -2712,4 +2718,9 @@ void SBS::ReverseAxis(bool value)
 bool SBS::GetReverseAxis()
 {
 	return ReverseAxisValue;
+}
+
+void SBS::SetListenerLocation(csVector3 location)
+{
+	sndrenderer->GetListener()->SetPosition(location);
 }

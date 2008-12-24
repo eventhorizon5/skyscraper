@@ -29,6 +29,7 @@
 #include "camera.h"
 #include "stairs.h"
 #include "door.h"
+#include "sound.h"
 
 //global functions
 static bool SBSEventHandler(iEvent& Event);
@@ -217,6 +218,7 @@ public:
 	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
 	void Stop();
+	void SetListenerLocation(csVector3 location);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -330,4 +332,9 @@ private:
 	};
 
 	csArray<TextureInfo> textureinfo;
+
+	//sound system
+	csRef<iSndSysRenderer> sndrenderer;
+	csRef<iSndSysLoader> sndloader;
+
 };
