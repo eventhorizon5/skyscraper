@@ -94,6 +94,10 @@ public:
 	csRef<iReporter> rep;
 	csRef<FramePrinter> printer;
 
+	//sound system
+	csRef<iSndSysRenderer> sndrenderer;
+	csRef<iSndSysLoader> sndloader;
+
 	csRef<iMaterialWrapper> material;
 	csRef<iLightList> ll;
 	csRef<iSector> area;
@@ -332,9 +336,4 @@ private:
 	};
 
 	csArray<TextureInfo> textureinfo;
-
-	//sound system
-	csRef<iSndSysRenderer> sndrenderer;
-	csRef<iSndSysLoader> sndloader;
-
 };
