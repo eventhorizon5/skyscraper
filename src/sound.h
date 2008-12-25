@@ -46,8 +46,11 @@ public:
 	float GetDirectionalRadiation();
 	void Loop(bool value);
 	bool GetLoopState();
-	void Pause(bool value);
+	void Pause();
 	bool IsPaused();
+	void Stop();
+	void Play();
+	void Reset();
 	void SetSpeed(int percent);
 	int GetSpeed();
 

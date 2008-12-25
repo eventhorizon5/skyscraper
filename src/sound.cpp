@@ -160,12 +160,9 @@ bool Sound::GetLoopState()
 		return false;
 }
 
-void Sound::Pause(bool value)
+void Sound::Pause()
 {
-	if (value == true)
-		sndstream->Pause();
-	else
-		sndstream->Unpause();
+	sndstream->Pause();
 }
 
 bool Sound::IsPaused()
@@ -184,4 +181,20 @@ void Sound::SetSpeed(int percent)
 int Sound::GetSpeed()
 {
 	return sndstream->GetPlayRatePercent();
+}
+
+void Sound::Stop()
+{
+	sndstream->Pause();
+	sndstream->ResetPosition();
+}
+
+void Sound::Play()
+{
+	sndstream->Unpause();
+}
+
+void Sound::Reset()
+{
+	sndstream->ResetPosition();
 }
