@@ -41,7 +41,9 @@
     Load data/marble22.jpg, Wall4, 4, 6
     Load data/symb5.jpg, Wood3, 3.72, 4
     Load data/marb047.jpg, Marble4, 3.72, 4
-    Load data/elev1.jpg, Elev1, 3.72, 4
+    Load data/Elev1.jpg, ElevCeiling, 3.72, 4
+    Load data/Carpet0006_S.jpg, ElevFloor, 4, 4
+    Load data/textur15.jpg, ElevWall 4, 4
     Load data/textur15.jpg, Wood1, 3.72, 4
     Load data/text16.jpg, Wood2, 3.72, 4
     Load data/marbl3.jpg, Wall1, 3.72, 4
@@ -2415,29 +2417,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -2510,29 +2511,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -2608,29 +2608,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -2704,29 +2703,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -2803,29 +2801,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
 
     #doors
     WallOrientation = left
@@ -2900,29 +2897,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -3000,29 +2996,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    AddWall Left, ElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -3085,29 +3080,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    AddWall Right, ElevWall, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -3161,29 +3155,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -3234,29 +3227,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -3310,29 +3302,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    AddWall Left, ElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -3383,29 +3374,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    AddWall Right, ElevWall, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -3459,29 +3449,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    AddWall Left, ElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -3536,29 +3525,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.916, -3.75, 3.916, 3.75, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.916, -3.75, 3.916, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Right, ElevWall, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Front, ElevWall, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Left, ElevWall, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.916, 3.75, -1.75, 3.75, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.916, 3.75, -1.75, 3.75, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.75, 3.916, 3.75, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, 3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -3598,29 +3586,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.916, -3.75, 3.916, 3.75, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.916, -3.75, 3.916, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Right, ElevWall, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Front, ElevWall, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Left, ElevWall, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.916, 3.75, -1.75, 3.75, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.916, 3.75, -1.75, 3.75, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.75, 3.916, 3.75, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, 3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -3698,29 +3685,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -3807,29 +3793,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -3916,29 +3901,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
@@ -4026,29 +4010,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
@@ -4110,29 +4093,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
@@ -4202,29 +4184,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -4281,29 +4262,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
@@ -4428,29 +4408,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
@@ -4566,29 +4545,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    AddWall Left Panel, ElevWall, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    AddWall Right Panel, ElevWall, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -4618,29 +4596,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.625, -4.125, -3.625, 4.125, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 0, 0
+    AddWall Left, ElevWall, 0.2, -3.625, -4.125, -3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.625, -4.125, 3.625, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, 3.625, -4.125, 3.625, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.625, 1.75, 3.625, 4.125, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, 3.625, 1.75, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -4738,29 +4715,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
+    AddWall Right, ElevWall, 0.2, 3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.625, -4.125, -3.625, -1.75, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, -3.625, -4.125, -3.625, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.625, 1.75, -3.625, 4.125, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, -3.625, 1.75, -3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -4877,29 +4853,28 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.917, -6.125, 3.917, 6.125, 0, 0, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.917, -6.125, 3.917, 6.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.917, -6.125, 3.917, 6.125, 8, 8, 0, 0
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.917, -6.125, 3.917, 6.125, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.917, 6.125, 3.917, 6.125, 8, 8, 0, 0, 2, 2
+    AddWall Back, ElevWall, 0.2, -3.917, 6.125, 3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.917, -6.125, 3.917, -6.125, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.917, -6.125, -3.917, 6.125, 8, 8, 0, 0, 2, 2
+    AddWall Front, ElevWall, 0.2, -3.917, -6.125, 3.917, -6.125, 8, 8, 0, 0, 0, 0
+    AddWall Left, ElevWall, 0.2, -3.917, -6.125, -3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.917, -6.125, 3.917, -2.25, 8, 8, 0, 0, 0.66, 2
+    AddWall Left Panel, ElevWall, 0.2, 3.917, -6.125, 3.917, -2.25, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.917, 2.25, 3.917, 6.125, 8, 8, 0, 0, 0.66, 2
+    AddWall Right Panel, ElevWall, 0.2, 3.917, 2.25, 3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -5867,7 +5842,7 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     AddWall StairsRightE, %5%, 0.33, 9.0815 + 4.7515, -4.5 + 51.66, 9.0815 + 4.7515, 4.5 + 51.66 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddWall StairsBackE, %5%, 0.33, -9.0815 + 4.7515 - 0.33, 4.5 + 51.66, 9.0815 + 4.7515 + 0.33, 4.5 + 51.66, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddWall StairsBackE, %5%, 0.33, -17 + 4.7515 - 0.33, 4.5 + 51.66, 9.0815 + 4.7515 + 0.33, 4.5 + 51.66, %height%, %height%, 0, 0, 0, 0, False
-    
+
     #doors
     if[%floor% = 79] AddStairsDoor 6, StairsDoor, 0.2, 2, -9.0815, 2, 3.5, 8, 0, 1, 1
     if[%floor% > 79] AddStairsDoor 6, StairsDoor, 0.2, 4, 9.0815, -2, 3.5, 8, 0, 1, 1
