@@ -195,6 +195,9 @@ breakpoint:
 			goto Nextline;
 		}
 
+		//reset texture override status
+		Simcore->TextureOverride = false;
+
 		startpos = 0;
 		do
 		{
@@ -762,6 +765,16 @@ checkfloors:
 
 			Simcore->SetAutoSize(csString(tempdata[0]).CompareNoCase("true"),
 						csString(tempdata[1]).CompareNoCase("true"));
+
+			tempdata.DeleteAll();
+		}
+
+		//TextureOverride command
+		if (LineData.Slice(0, 15).CompareNoCase("textureoverride") == true)
+		{
+			tempdata.SplitString(LineData.Slice(16).GetData(), ",");
+
+			Simcore->SetTextureOverride(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5]);
 
 			tempdata.DeleteAll();
 		}

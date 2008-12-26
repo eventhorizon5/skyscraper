@@ -144,6 +144,12 @@ Elevator::~Elevator()
 	if (Panel)
 		delete Panel;
 	Panel = 0;
+	if (mainsound)
+		delete mainsound;
+	mainsound = 0;
+	if (doorsound)
+		delete doorsound;
+	doorsound = 0;
 }
 
 void Elevator::CreateElevator(float x, float z, int floor)
@@ -176,6 +182,9 @@ void Elevator::CreateElevator(float x, float z, int floor)
 	ShaftDoorL_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorR_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorsOpen.SetSize(ServicedFloors.GetSize());
+
+	//create sound object
+	mainsound = new Sound("elevstart.wav");
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }

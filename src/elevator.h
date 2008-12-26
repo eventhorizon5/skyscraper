@@ -27,6 +27,7 @@
 #define _SBS_ELEVATOR_H
 
 #include "buttonpanel.h"
+#include "sound.h"
 
 class SBSIMPEXP Elevator
 {
@@ -175,7 +176,11 @@ private:
 	};
 
 	//timer object
-	Timer* timer;
+	Timer *timer;
+
+	//sound objects
+	Sound *mainsound;
+	Sound *doorsound;
 };
 
 #endif

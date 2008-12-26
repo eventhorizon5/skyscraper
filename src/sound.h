@@ -53,6 +53,7 @@ public:
 	void Reset();
 	void SetSpeed(int percent);
 	int GetSpeed();
+	void Load(const char *filename);
 
 private:
 

@@ -33,35 +33,7 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 Sound::Sound(const char *filename)
 {
-	sndbuffer = sbs->vfs->ReadFile(filename);
-	if (!sndbuffer)
-	{
-		sbs->ReportError("Can't load file '%s'", filename);
-		return;
-	}
-
-	snddata = sbs->sndloader->LoadSound(sndbuffer);
-	if (!snddata)
-	{
-		sbs->ReportError("Can't load sound '%s'", filename);
-		return;
-	}
-
-	sndstream = sbs->sndrenderer->CreateStream(snddata, CS_SND3D_ABSOLUTE);
-	if (!sndstream)
-	{
-		sbs->ReportError("Can't create stream for '%s'", filename);
-		return;
-	}
-
-	sndsource = sbs->sndrenderer->CreateSource(sndstream);
-	if (!sndsource)
-	{
-		sbs->ReportError("Can't create source for '%s'", filename);
-		return;
-	}
-	sndsource3d = scfQueryInterface<iSndSysSourceSoftware3D> (sndsource);
-
+	Load(filename);
 	sndsource3d->SetPosition(csVector3(0, 0, 0));
 	sndsource3d->SetVolume(1.0f);
 	sndstream->SetLoopState(CS_SNDSYS_STREAM_DONTLOOP);
@@ -197,4 +169,36 @@ void Sound::Play()
 void Sound::Reset()
 {
 	sndstream->ResetPosition();
+}
+
+void Sound::Load(const char *filename)
+{
+	sndbuffer = sbs->vfs->ReadFile(filename);
+	if (!sndbuffer)
+	{
+		sbs->ReportError("Can't load file '%s'", filename);
+		return;
+	}
+
+	snddata = sbs->sndloader->LoadSound(sndbuffer);
+	if (!snddata)
+	{
+		sbs->ReportError("Can't load sound '%s'", filename);
+		return;
+	}
+
+	sndstream = sbs->sndrenderer->CreateStream(snddata, CS_SND3D_ABSOLUTE);
+	if (!sndstream)
+	{
+		sbs->ReportError("Can't create stream for '%s'", filename);
+		return;
+	}
+
+	sndsource = sbs->sndrenderer->CreateSource(sndstream);
+	if (!sndsource)
+	{
+		sbs->ReportError("Can't create source for '%s'", filename);
+		return;
+	}
+	sndsource3d = scfQueryInterface<iSndSysSourceSoftware3D> (sndsource);
 }

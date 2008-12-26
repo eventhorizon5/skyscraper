@@ -142,6 +142,7 @@ public:
 	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if ShowFullStairs is true
 	int ShaftOutsideDisplayRange; //number of shaft floors to display while outside of shaft
 	int StairsOutsideDisplayRange; //number of stairwell floors to display while outside of stairwell
+	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
@@ -223,6 +224,7 @@ public:
 	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
 	void Stop();
 	void SetListenerLocation(csVector3 location);
+	void SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -336,4 +338,7 @@ private:
 	};
 
 	csArray<TextureInfo> textureinfo;
+
+	//override textures
+	csString mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
 };

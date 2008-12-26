@@ -128,6 +128,7 @@ SBS::SBS()
 	AutoX = true;
 	AutoY = true;
 	ReverseAxisValue = false;
+	TextureOverride = false;
 }
 
 SBS::~SBS()
@@ -873,7 +874,27 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	}
 
 	//set texture
-	SetTexture(dest, index, texture, true, tw, th);
+	if (TextureOverride == false)
+		SetTexture(dest, index, texture, true, tw, th);
+	else
+	{
+		int endindex = index + GetDrawWallsCount();
+		for (int i = index; i < endindex; i++)
+		{
+			if (i - index == 0)
+				SetTexture(dest, i, mainnegtex.GetData(), true, tw, th);
+			if (i - index == 1)
+				SetTexture(dest, i, mainpostex.GetData(), true, tw, th);
+			if (i - index == 2)
+				SetTexture(dest, i, sidenegtex.GetData(), true, tw, th);
+			if (i - index == 3)
+				SetTexture(dest, i, sidepostex.GetData(), true, tw, th);
+			if (i - index == 4)
+				SetTexture(dest, i, toptex.GetData(), true, tw, th);
+			if (i - index == 5)
+				SetTexture(dest, i, bottomtex.GetData(), true, tw, th);
+		}
+	}
 
 	return index;
 }
@@ -2036,7 +2057,7 @@ iMaterialWrapper *SBS::ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> 
 
 void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th)
 {
-	//sets a polygon's texture
+	//sets texture for a range of polygons
 
 	material = engine->GetMaterialList()->FindByName(texture);
 	csString texname = texture;
@@ -2072,17 +2093,32 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 	else
 		endindex = index;
 
-	for (int i = index; i < endindex; i++)
+	if (TextureOverride == false)
 	{
-		mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
-		//texture mapping is set from first 3 coordinates
-		mesh->SetPolygonTextureMapping (csPolygonRange(i, i),
-			mesh->GetPolygonVertex(i, 0),
-			csVector2 (0, 0),
-			mesh->GetPolygonVertex(i, 1),
-			csVector2 (tw2, 0),
-			mesh->GetPolygonVertex(i, 2),
-			csVector2 (tw2, th2));
+		for (int i = index; i < endindex; i++)
+		{
+			mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
+			//texture mapping is set from first 3 coordinates
+			mesh->SetPolygonTextureMapping (csPolygonRange(i, i),
+				mesh->GetPolygonVertex(i, 0),
+				csVector2 (0, 0),
+				mesh->GetPolygonVertex(i, 1),
+				csVector2 (tw2, 0),
+				mesh->GetPolygonVertex(i, 2),
+				csVector2 (tw2, th2));
+		}
+	}
+	else
+	{
+			mesh->SetPolygonMaterial(csPolygonRange(index, index), material);
+			//texture mapping is set from first 3 coordinates
+			mesh->SetPolygonTextureMapping (csPolygonRange(index, index),
+				mesh->GetPolygonVertex(index, 0),
+				csVector2 (0, 0),
+				mesh->GetPolygonVertex(index, 1),
+				csVector2 (tw2, 0),
+				mesh->GetPolygonVertex(index, 2),
+				csVector2 (tw2, th2));
 	}
 }
 
@@ -2723,4 +2759,16 @@ bool SBS::GetReverseAxis()
 void SBS::SetListenerLocation(csVector3 location)
 {
 	sndrenderer->GetListener()->SetPosition(location);
+}
+
+void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom)
+{
+	//set override textures and enable override
+	mainnegtex = mainneg;
+	mainpostex = mainpos;
+	sidenegtex = sideneg;
+	sidepostex = sidepos;
+	toptex = top;
+	bottomtex = bottom;
+	TextureOverride = true;
 }
