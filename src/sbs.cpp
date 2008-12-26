@@ -882,17 +882,17 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 		for (int i = index; i < endindex; i++)
 		{
 			if (i - index == 0)
-				SetTexture(dest, i, mainnegtex.GetData(), true, tw, th);
+				SetTexture(dest, i, mainnegtex.GetData(), false, tw, th);
 			if (i - index == 1)
-				SetTexture(dest, i, mainpostex.GetData(), true, tw, th);
+				SetTexture(dest, i, mainpostex.GetData(), false, tw, th);
 			if (i - index == 2)
-				SetTexture(dest, i, sidenegtex.GetData(), true, tw, th);
+				SetTexture(dest, i, sidenegtex.GetData(), false, tw, th);
 			if (i - index == 3)
-				SetTexture(dest, i, sidepostex.GetData(), true, tw, th);
+				SetTexture(dest, i, sidepostex.GetData(), false, tw, th);
 			if (i - index == 4)
-				SetTexture(dest, i, toptex.GetData(), true, tw, th);
+				SetTexture(dest, i, toptex.GetData(), false, tw, th);
 			if (i - index == 5)
-				SetTexture(dest, i, bottomtex.GetData(), true, tw, th);
+				SetTexture(dest, i, bottomtex.GetData(), false, tw, th);
 		}
 	}
 
@@ -1051,7 +1051,27 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 		index = tmpindex;
 
 	//set texture
-	SetTexture(dest, index, texture, true, tw, th);
+	if (TextureOverride == false)
+		SetTexture(dest, index, texture, true, tw, th);
+	else
+	{
+		int endindex = index + GetDrawWallsCount();
+		for (int i = index; i < endindex; i++)
+		{
+			if (i - index == 0)
+				SetTexture(dest, i, mainnegtex.GetData(), false, tw, th);
+			if (i - index == 1)
+				SetTexture(dest, i, mainpostex.GetData(), false, tw, th);
+			if (i - index == 2)
+				SetTexture(dest, i, sidenegtex.GetData(), false, tw, th);
+			if (i - index == 3)
+				SetTexture(dest, i, sidepostex.GetData(), false, tw, th);
+			if (i - index == 4)
+				SetTexture(dest, i, toptex.GetData(), false, tw, th);
+			if (i - index == 5)
+				SetTexture(dest, i, bottomtex.GetData(), false, tw, th);
+		}
+	}
 
 	return index;
 }
@@ -2084,6 +2104,7 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 			//the stored multipliers for that texture
 			tw2 = tw / textureinfo[i].widthmult;
 			th2 = th / textureinfo[i].heightmult;
+			break;
 		}
 	}
 
@@ -2765,10 +2786,16 @@ void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const cha
 {
 	//set override textures and enable override
 	mainnegtex = mainneg;
+	mainnegtex.Trim();
 	mainpostex = mainpos;
+	mainpostex.Trim();
 	sidenegtex = sideneg;
+	sidenegtex.Trim();
 	sidepostex = sidepos;
+	sidepostex.Trim();
 	toptex = top;
+	toptex.Trim();
 	bottomtex = bottom;
+	bottomtex.Trim();
 	TextureOverride = true;
 }

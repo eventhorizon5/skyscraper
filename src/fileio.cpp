@@ -195,9 +195,6 @@ breakpoint:
 			goto Nextline;
 		}
 
-		//reset texture override status
-		Simcore->TextureOverride = false;
-
 		startpos = 0;
 		do
 		{
@@ -777,6 +774,7 @@ checkfloors:
 			Simcore->SetTextureOverride(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5]);
 
 			tempdata.DeleteAll();
+			goto Nextline;
 		}
 
 		//Process globals
@@ -1639,6 +1637,9 @@ recalc:
 				tempdata.DeleteAll();
 			}
 		}
+
+		//reset texture override status
+		Simcore->TextureOverride = false;
 
 Nextline:
 		i++;

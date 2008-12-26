@@ -184,7 +184,7 @@ void Elevator::CreateElevator(float x, float z, int floor)
 	ShaftDoorsOpen.SetSize(ServicedFloors.GetSize());
 
 	//create sound object
-	mainsound = new Sound("elevstart.wav");
+	mainsound = new Sound("/root/data/elevstart.wav");
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }
