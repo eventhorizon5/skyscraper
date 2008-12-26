@@ -43,7 +43,9 @@
     Load data/marb047.jpg, Marble4, 3.72, 4
     Load data/elev1.jpg, ElevCeiling, 3.72, 4
     Load data/Carpet0006_S.jpg, ElevFloor, 4, 4
-    Load data/textur15.jpg, ElevWall, 4, 4
+    Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 4, 4
+    Load data/metal1.jpg, ServiceElevWall, 4, 4
+    Load data/diamond18.jpg, ElevWall, 4, 4
     Load data/textur15.jpg, Wood1, 3.72, 4
     Load data/text16.jpg, Wood2, 3.72, 4
     Load data/marbl3.jpg, Wall1, 3.72, 4
@@ -4765,8 +4767,8 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
-    AddFloor Floor, ElevFloor, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ServiceElevFloor, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
@@ -4776,15 +4778,15 @@ DrawWalls = true, true, false, false, false, false
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ServiceElevWall, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.625, -4.125, -3.625, 4.125, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ServiceElevWall, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ServiceElevWall, 0.2, -3.625, -4.125, -3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
@@ -4891,8 +4893,8 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
-    AddFloor Floor, ElevFloor, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ServiceElevFloor, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
@@ -4902,15 +4904,15 @@ DrawWalls = true, true, false, false, false, false
     #back and right walls (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ServiceElevWall, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ServiceElevWall, 0.2, 3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ServiceElevWall, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
@@ -5036,8 +5038,8 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
-    AddFloor Floor, ElevFloor, 0.2, -3.917, -6.125, 3.917, 6.125, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ServiceElevFloor, 0.2, -3.917, -6.125, 3.917, 6.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
@@ -5047,15 +5049,15 @@ DrawWalls = true, true, false, false, false, false
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.917, 6.125, 3.917, 6.125, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ServiceElevWall, 0.2, -3.917, 6.125, 3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.917, -6.125, 3.917, -6.125, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.917, -6.125, -3.917, 6.125, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ServiceElevWall, 0.2, -3.917, -6.125, 3.917, -6.125, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ServiceElevWall, 0.2, -3.917, -6.125, -3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
