@@ -295,8 +295,20 @@
     relate to the number of times a texture is tiled; so if <em>AutoHeight</em> 
     is set to False, and &quot;2&quot; is specified in the &quot;<em>th</em>&quot; 
     value of <em>AddWall</em>, then the texture will be tiled twice vertically.</p>
-  <p align="left"><br>
-    <strong>7. END command</strong></p>
+  <p align="left"><strong>r. TextureOverride</strong> - overrides textures for 
+    the next command. Currently only works with the different AddWall, AddFloor 
+    and AddInterFloor commands.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> TextureOverride <em>MainNegativeTex, 
+    MainPositiveTex, SideNegativeTex, SidePositiveTex, TopTex, Bottom</em></font><font size="2" face="Courier New, Courier, mono"><em>Tex</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">TextureOverride 
+    Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1</font></p>
+  <p align="left">This command will allow you to specify multiple textures for 
+    a single command such as AddWall. It will only work on the command immediately 
+    after this one. In the above example, the Main Positive side of the object 
+    will have the texture &quot;ElevFloor&quot;, but all other sides will use 
+    &quot;Metal1&quot;.</p>
+  <p align="left">&nbsp;</p>
+  <p align="left"> <strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
     script and start the simulation. This is optional.<br>
     Example: <font size="2" face="Courier New, Courier, mono">&lt;end&gt;</font></p>
@@ -362,6 +374,10 @@
   <p align="left"><strong>11. CameraRotation</strong> - rotation of the camera 
     on startup, required<br>
     <font size="2" face="Courier New, Courier, mono">CameraRotation = 0, 0, 0</font></p>
+  <p align="left"><strong>12. Sky</strong> - which skybox texture pack to use. 
+    In the following example, the chosen pack is &quot;noon&quot;, and the file 
+    &quot;sky-noon.zip&quot; will be loaded.<br>
+    <font size="2" face="Courier New, Courier, mono">Sky = noon</font></p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong> <font size="+1">4. The <em>Textures</em> Section</font></strong></p>
   <p align="left">The Textures section loads textures into the simulation and 
