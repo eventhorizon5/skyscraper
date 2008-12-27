@@ -137,6 +137,8 @@ public:
 	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if ShowFullStairs is true
 	int ShaftOutsideDisplayRange; //number of shaft floors to display while outside of shaft
 	int StairsOutsideDisplayRange; //number of stairwell floors to display while outside of stairwell
+	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
+	csString SkyName; //base filename of sky texture pack
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
@@ -153,7 +155,7 @@ public:
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
 	void Start(wxApp *app);
 	void Run();
-	int CreateSky();
+	int CreateSky(const char *filenamebase);
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
 	int AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
 	int AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
@@ -217,6 +219,7 @@ public:
 	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
 	void Stop();
+	void SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -330,4 +333,7 @@ private:
 	};
 
 	csArray<TextureInfo> textureinfo;
+
+	//override textures
+	csString mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
 };

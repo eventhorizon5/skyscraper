@@ -68,6 +68,7 @@ SBS::SBS()
 	BuildingLocation = "";
 	BuildingDescription = "";
 	BuildingVersion = "";
+	SkyName = "noon";
 	IsRunning = false;
 	Floors = 0;
 	Basements = 0;
@@ -128,6 +129,7 @@ SBS::SBS()
 	AutoX = true;
 	AutoY = true;
 	ReverseAxisValue = false;
+	TextureOverride = false;
 }
 
 SBS::~SBS()
@@ -173,7 +175,7 @@ void SBS::Start(wxApp *app)
 	App = app;
 
 	//create skybox
-	CreateSky();
+	CreateSky(SkyName);
 
 	//Post-init startup code goes here, before the runloop
 	engine->Prepare();
@@ -588,12 +590,6 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 
 	//load default textures
 	csPrintf("Loading default textures...");
-	LoadTexture("/root/data/top.jpg", "SkyTop", 1, 1);
-	LoadTexture("/root/data/bottom.jpg", "SkyBottom", 1, 1);
-	LoadTexture("/root/data/left.jpg", "SkyLeft", 1, 1);
-	LoadTexture("/root/data/right.jpg", "SkyRight", 1, 1);
-	LoadTexture("/root/data/front.jpg", "SkyFront", 1, 1);
-	LoadTexture("/root/data/back.jpg", "SkyBack", 1, 1);
 	LoadTexture("/root/data/brick1.jpg", "Default", 1, 1);
 	csPrintf("Done\n");
 
@@ -867,7 +863,27 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	}
 
 	//set texture
-	SetTexture(dest, index, texture, true, tw, th);
+	if (TextureOverride == false)
+		SetTexture(dest, index, texture, true, tw, th);
+	else
+	{
+		int endindex = index + GetDrawWallsCount();
+		for (int i = index; i < endindex; i++)
+		{
+			if (i - index == 0)
+				SetTexture(dest, i, mainnegtex.GetData(), false, tw, th);
+			if (i - index == 1)
+				SetTexture(dest, i, mainpostex.GetData(), false, tw, th);
+			if (i - index == 2)
+				SetTexture(dest, i, sidenegtex.GetData(), false, tw, th);
+			if (i - index == 3)
+				SetTexture(dest, i, sidepostex.GetData(), false, tw, th);
+			if (i - index == 4)
+				SetTexture(dest, i, toptex.GetData(), false, tw, th);
+			if (i - index == 5)
+				SetTexture(dest, i, bottomtex.GetData(), false, tw, th);
+		}
+	}
 
 	return index;
 }
@@ -1024,7 +1040,27 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 		index = tmpindex;
 
 	//set texture
-	SetTexture(dest, index, texture, true, tw, th);
+	if (TextureOverride == false)
+		SetTexture(dest, index, texture, true, tw, th);
+	else
+	{
+		int endindex = index + GetDrawWallsCount();
+		for (int i = index; i < endindex; i++)
+		{
+			if (i - index == 0)
+				SetTexture(dest, i, mainnegtex.GetData(), false, tw, th);
+			if (i - index == 1)
+				SetTexture(dest, i, mainpostex.GetData(), false, tw, th);
+			if (i - index == 2)
+				SetTexture(dest, i, sidenegtex.GetData(), false, tw, th);
+			if (i - index == 3)
+				SetTexture(dest, i, sidepostex.GetData(), false, tw, th);
+			if (i - index == 4)
+				SetTexture(dest, i, toptex.GetData(), false, tw, th);
+			if (i - index == 5)
+				SetTexture(dest, i, bottomtex.GetData(), false, tw, th);
+		}
+	}
 
 	return index;
 }
@@ -1908,13 +1944,24 @@ csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 	return csVector2(esmall, ebig);
 }
 
-int SBS::CreateSky()
+int SBS::CreateSky(const char *filenamebase)
 {
+	csString file = filenamebase;
+	vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
+
+	//load textures
+	LoadTexture("/root/sky/up.jpg", "SkyTop", 1, 1);
+	LoadTexture("/root/sky/down.jpg", "SkyBottom", 1, 1);
+	LoadTexture("/root/sky/left.jpg", "SkyLeft", 1, 1);
+	LoadTexture("/root/sky/right.jpg", "SkyRight", 1, 1);
+	LoadTexture("/root/sky/front.jpg", "SkyFront", 1, 1);
+	LoadTexture("/root/sky/back.jpg", "SkyBack", 1, 1);
+
 	SkyBox = (engine->CreateSectorWallsMesh (area, "SkyBox"));
 	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox->GetMeshObject()->GetFactory());
 	SkyBox->SetZBufMode(CS_ZBUF_USE);
 
-	int firstidx = SkyBox_state->AddInsideBox(csVector3(-2000, -1000, -2000), csVector3(2000, 3000, 2000));
+	int firstidx = SkyBox_state->AddInsideBox(csVector3(-2000, -2000, -2000), csVector3(2000, 2000, 2000));
 	material = engine->GetMaterialList ()->FindByName ("SkyBack");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
 	material = engine->GetMaterialList ()->FindByName ("SkyRight");
@@ -2030,7 +2077,7 @@ iMaterialWrapper *SBS::ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> 
 
 void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th)
 {
-	//sets a polygon's texture
+	//sets texture for a range of polygons
 
 	material = engine->GetMaterialList()->FindByName(texture);
 	csString texname = texture;
@@ -2057,6 +2104,7 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 			//the stored multipliers for that texture
 			tw2 = tw / textureinfo[i].widthmult;
 			th2 = th / textureinfo[i].heightmult;
+			break;
 		}
 	}
 
@@ -2066,17 +2114,32 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 	else
 		endindex = index;
 
-	for (int i = index; i < endindex; i++)
+	if (TextureOverride == false)
 	{
-		mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
-		//texture mapping is set from first 3 coordinates
-		mesh->SetPolygonTextureMapping (csPolygonRange(i, i),
-			mesh->GetPolygonVertex(i, 0),
-			csVector2 (0, 0),
-			mesh->GetPolygonVertex(i, 1),
-			csVector2 (tw2, 0),
-			mesh->GetPolygonVertex(i, 2),
-			csVector2 (tw2, th2));
+		for (int i = index; i < endindex; i++)
+		{
+			mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
+			//texture mapping is set from first 3 coordinates
+			mesh->SetPolygonTextureMapping (csPolygonRange(i, i),
+				mesh->GetPolygonVertex(i, 0),
+				csVector2 (0, 0),
+				mesh->GetPolygonVertex(i, 1),
+				csVector2 (tw2, 0),
+				mesh->GetPolygonVertex(i, 2),
+				csVector2 (tw2, th2));
+		}
+	}
+	else
+	{
+			mesh->SetPolygonMaterial(csPolygonRange(index, index), material);
+			//texture mapping is set from first 3 coordinates
+			mesh->SetPolygonTextureMapping (csPolygonRange(index, index),
+				mesh->GetPolygonVertex(index, 0),
+				csVector2 (0, 0),
+				mesh->GetPolygonVertex(index, 1),
+				csVector2 (tw2, 0),
+				mesh->GetPolygonVertex(index, 2),
+				csVector2 (tw2, th2));
 	}
 }
 
@@ -2712,4 +2775,22 @@ void SBS::ReverseAxis(bool value)
 bool SBS::GetReverseAxis()
 {
 	return ReverseAxisValue;
+}
+
+void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom)
+{
+	//set override textures and enable override
+	mainnegtex = mainneg;
+	mainnegtex.Trim();
+	mainpostex = mainpos;
+	mainpostex.Trim();
+	sidenegtex = sideneg;
+	sidenegtex.Trim();
+	sidepostex = sidepos;
+	sidepostex.Trim();
+	toptex = top;
+	toptex.Trim();
+	bottomtex = bottom;
+	bottomtex.Trim();
+	TextureOverride = true;
 }

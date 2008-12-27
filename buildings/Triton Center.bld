@@ -41,7 +41,11 @@
     Load data/marble22.jpg, Wall4, 4, 6
     Load data/symb5.jpg, Wood3, 3.72, 4
     Load data/marb047.jpg, Marble4, 3.72, 4
-    Load data/elev1.jpg, Elev1, 3.72, 4
+    Load data/elev1.jpg, ElevCeiling, 3.72, 4
+    Load data/Carpet0006_S.jpg, ElevFloor, 4, 4
+    Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 4, 4
+    Load data/metal1.jpg, ServiceElevWall, 4, 4
+    Load data/diamond18.jpg, ElevWall, 4, 4
     Load data/textur15.jpg, Wood1, 3.72, 4
     Load data/text16.jpg, Wood2, 3.72, 4
     Load data/marbl3.jpg, Wall1, 3.72, 4
@@ -58,6 +62,7 @@
     Load data/text16.jpg, ElevDoors, 3.72, 4
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
     Load data/marb148.jpg, ElevPanel, 1, 1
+    Load data/textur15.jpg, ElevPanelMain, 4, 4
     Load data/mason01.jpg, Concrete, 3.72, 4
     Load data/text13.jpg, Stairs, 3.72, 4
     Load data/wooddoor3.jpg, Door1, 1, 1
@@ -2415,29 +2420,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -2446,7 +2457,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 8, left, 2.924, -1.75 - 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 8, left, 3.125 - 0.2 - 0.001, -1.75 - 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button35, 2, 2, 35, 0, 1
     AddFloorButton Button36, 2, 3, 36, 0, 1
     AddFloorButton Button37, 2, 4, 37, 0, 1
@@ -2466,7 +2477,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 7, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 2.924, -1.75 - 1, 0.7, 0.5, 6.5
+    AddFloorIndicator left, 3.125 - 0.2 - 0.001, -1.75 - 1, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -2510,29 +2521,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -2542,7 +2559,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 8, right, -2.924, 1.75 + 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 8, right, -3.125 + 0.2 + 0.001, 1.75 + 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button35, 2, 2, 35, 0, 1
     AddFloorButton Button36, 2, 3, 36, 0, 1
     AddFloorButton Button37, 2, 4, 37, 0, 1
@@ -2562,7 +2579,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 7, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator right, -2.924, 1.75 + 1, 0.7, 0.5, 6.5
+    AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -2608,29 +2625,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -2639,7 +2662,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 9, left, 2.924, -1.75 - 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 9, left, 3.125 - 0.2 - 0.001, -1.75 - 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button24, 2, 2, 24, 0, 1
     AddFloorButton Button25, 2, 3, 25, 0, 1
     AddFloorButton Button26, 2, 4, 26, 0, 1
@@ -2660,7 +2683,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 8, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 2.924, -1.75 - 1, 0.7, 0.5, 6.5
+    AddFloorIndicator left, 3.125 - 0.2 - 0.001, -1.75 - 1, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -2704,29 +2727,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -2736,7 +2765,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 9, right, -2.924, 1.75 + 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 9, right, -3.125 + 0.2 + 0.001, 1.75 + 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button24, 2, 2, 24, 0, 1
     AddFloorButton Button25, 2, 3, 25, 0, 1
     AddFloorButton Button26, 2, 4, 26, 0, 1
@@ -2757,7 +2786,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 8, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator right, -2.924, 1.75 + 1, 0.7, 0.5, 6.5
+    AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -2803,29 +2832,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -2834,7 +2869,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 9, left, 2.924, -1.75 - 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 9, left, 3.125 - 0.2 - 0.001, -1.75 - 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button12, 2, 2, 12, 0, 1
     AddFloorButton Button13, 2, 3, 13, 0, 1
     AddFloorButton Button14, 2, 4, 14, 0, 1
@@ -2856,7 +2891,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 8, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 2.924, -1.75 - 1, 0.7, 0.5, 6.5
+    AddFloorIndicator left, 3.125 - 0.2 - 0.001, -1.75 - 1, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -2900,29 +2935,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -2932,7 +2973,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 9, right, -2.924, 1.75 + 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 9, right, -3.125 + 0.2 + 0.001, 1.75 + 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button12, 2, 2, 12, 0, 1
     AddFloorButton Button13, 2, 3, 13, 0, 1
     AddFloorButton Button14, 2, 4, 14, 0, 1
@@ -2954,7 +2995,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 8, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator right, -2.924, 1.75 + 1, 0.7, 0.5, 6.5
+    AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3000,29 +3041,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -3031,7 +3078,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 6, left, 3.54, -1.75 - 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 6, left, 3.75 - 0.2 - 0.001, -1.75 - 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button40, 2, 3, 40, 0, 1
     AddFloorButton ButtonL, 3, 3, 0, 0, 1
     AddControlButton ButtonOpen, 4, 2, open, 0, 1
@@ -3041,7 +3088,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 5, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 3.54, -1.75 - 1.083, 0.7, 0.5, 6.5
+    AddFloorIndicator left, 3.75 - 0.2 - 0.001, -1.75 - 1.083, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3085,29 +3132,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -3117,7 +3170,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 6, right, -3.54, 1.75 + 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 6, right, -3.75 + 0.2 + 0.001, 1.75 + 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button40, 2, 3, 40, 0, 1
     AddFloorButton ButtonL, 3, 3, 0, 0, 1
     AddControlButton ButtonOpen, 4, 2, open, 0, 1
@@ -3127,7 +3180,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 5, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator right, -3.54, 1.75 + 1.083, 0.7, 0.5, 6.5
+    AddFloorIndicator right, -3.75 + 0.2 + 0.001, 1.75 + 1.083, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3161,29 +3214,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -3192,7 +3251,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 6, left, 2.924, -1.75 - 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 6, left, 3.125 - 0.2 - 0.001, -1.75 - 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton ButtonL, 2, 3, 0, 0, 1
     AddFloorButton ButtonM, 3, 3, 1, 0, 1
     AddControlButton ButtonOpen, 4, 2, open, 0, 1
@@ -3202,7 +3261,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 5, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 2.924, -1.75 - 1, 0.7, 0.5, 6.5
+    AddFloorIndicator left, 3.125 - 0.2 - 0.001, -1.75 - 1, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3234,29 +3293,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -3266,7 +3331,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 6, right, -2.924, 1.75 + 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 6, right, -3.125 + 0.2 + 0.001, 1.75 + 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton ButtonL, 2, 3, 0, 0, 1
     AddFloorButton ButtonM, 3, 3, 1, 0, 1
     AddControlButton ButtonOpen, 4, 2, open, 0, 1
@@ -3276,7 +3341,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 5, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator right, -2.924, 1.75 + 1, 0.7, 0.5, 6.5
+    AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3310,29 +3375,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -3341,7 +3412,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 6, left, 3.54, -1.75 - 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 6, left, 3.75 - 0.2 - 0.001, -1.75 - 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button100, 2, 3, 100, 0, 1
     AddFloorButton ButtonL, 3, 3, 0, 0, 1
     AddControlButton ButtonOpen, 4, 2, open, 0, 1
@@ -3351,7 +3422,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 5, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 3.54, -1.75 - 1.083, 0.7, 0.5, 6.5
+    AddFloorIndicator left, 3.75 - 0.2 - 0.001, -1.75 - 1.083, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3383,29 +3454,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -3415,7 +3492,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 6, right, -3.54, 1.75 + 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 6, right, -3.75 + 0.2 + 0.001, 1.75 + 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button100, 2, 3, 100, 0, 1
     AddFloorButton ButtonL, 3, 3, 0, 0, 1
     AddControlButton ButtonOpen, 4, 2, open, 0, 1
@@ -3425,7 +3502,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 5, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator right, -3.54, 1.75 + 1.083, 0.7, 0.5, 6.5
+    AddFloorIndicator right, -3.75 + 0.2 + 0.001, 1.75 + 1.083, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3459,29 +3536,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 2, 2
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -3490,7 +3573,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 6, left, 3.54, -1.75 - 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 6, left, 3.75 - 0.2 - 0.001, -1.75 - 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button134, 2, 2, 134, 0, 1
     AddFloorButton Button135, 2, 3, 135, 0, 1
     AddFloorButton Button136, 2, 4, 136, 0, 1
@@ -3502,7 +3585,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 5, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 3.54, -1.75 - 1.083, 0.7, 0.5, 6.5
+    AddFloorIndicator left, 3.75 - 0.2 - 0.001, -1.75 - 1.083, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3536,29 +3619,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.916, -3.75, 3.916, 3.75, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.916, -3.75, 3.916, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.916, 3.75, -1.75, 3.75, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.916, 3.75, -1.75, 3.75, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.75, 3.916, 3.75, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -3568,7 +3657,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 6, front, 1.75 + 1.083, 3.54, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 6, front, 1.75 + 1.083, 3.75 - 0.2 - 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button80, 2, 3, 80, 0, 1
     AddFloorButton ButtonL, 3, 3, 0, 0, 1
     AddControlButton ButtonOpen, 4, 2, open, 0, 1
@@ -3578,7 +3667,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 5, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator front, 1.75 + 1.083, 3.54, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 1.75 + 1.083, 3.75 - 0.2 - 0.001, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3598,29 +3687,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.916, -3.75, 3.916, 3.75, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.916, -3.75, 3.916, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.916, 3.75, -1.75, 3.75, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.916, 3.75, -1.75, 3.75, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.75, 3.916, 3.75, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -3630,7 +3725,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 6, front, 1.75 + 1.083, 3.54, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 6, front, 1.75 + 1.083, 3.75 - 0.2 - 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button137, 2, 3, 137, 0, 1
     AddFloorButton ButtonL, 3, 3, 0, 0, 1
     AddControlButton ButtonOpen, 4, 2, open, 0, 1
@@ -3640,7 +3735,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 5, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator front, 1.75 + 1.083, 3.54, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 1.75 + 1.083, 3.75 - 0.2 - 0.001, 0.7, 0.5, 6.5
 
 <EndElevator>
 
@@ -3698,29 +3793,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -3730,7 +3831,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 8, front, 1.75 + 1, 2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 8, front, 1.75 + 1, 3.125 - 0.2 - 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button48, 2, 2, 48, 0, 1
     AddFloorButton Button49, 2, 3, 49, 0, 1
     AddFloorButton Button50, 2, 4, 50, 0, 1
@@ -3749,7 +3850,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 7, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator front, 1.75 + 1, 2.924, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 1.75 + 1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3807,29 +3908,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -3839,7 +3946,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 8, front, 1.75 + 1, 2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 8, front, 1.75 + 1, 3.125 - 0.2 - 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button68, 2, 2, 68, 0, 1
     AddFloorButton Button69, 2, 3, 69, 0, 1
     AddFloorButton Button70, 2, 4, 70, 0, 1
@@ -3858,7 +3965,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 7, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator front, 1.75 + 1, 2.924, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 1.75 + 1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -3916,29 +4023,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
@@ -3949,7 +4062,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 8, back, -1.75 - 1, -2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 8, back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button58, 2, 2, 58, 0, 1
     AddFloorButton Button59, 2, 3, 59, 0, 1
     AddFloorButton Button60, 2, 4, 60, 0, 1
@@ -3968,7 +4081,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 7, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator back, -1.75 - 1, -2.924, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -4026,29 +4139,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
@@ -4059,7 +4178,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 7, back, -1.75 - 1, -2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 7, back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button76, 2, 2, 76, 0, 1
     AddFloorButton Button77, 2, 3, 77, 0, 1
     AddFloorButton Button78, 2, 4, 78, 0, 1
@@ -4076,7 +4195,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 6, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator back, -1.75 - 1, -2.924, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -4110,29 +4229,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
@@ -4143,7 +4268,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 11, back, -1.75 - 1, -2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 11, back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button97, 2, 2, 97, 0, 1
     AddFloorButton Button98, 2, 3, 98, 0, 1
     AddFloorButton Button99, 2, 4, 99, 0, 1
@@ -4170,7 +4295,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 10, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator back, -1.75 - 1, -2.924, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -4202,29 +4327,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -4234,7 +4365,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 11, front, 1.75 + 1, 2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 11, front, 1.75 + 1, 3.125 - 0.2 - 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button97, 2, 2, 97, 0, 1
     AddFloorButton Button98, 2, 3, 98, 0, 1
     AddFloorButton Button99, 2, 4, 99, 0, 1
@@ -4261,7 +4392,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 10, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator front, 1.75 + 1, 2.924, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 1.75 + 1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -4281,29 +4412,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
@@ -4314,7 +4451,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 9, back, -1.75 - 1, -2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 9, back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button129, 2, 2, 129, 0, 1
     AddFloorButton Button132, 2, 4, 132, 0, 1
     AddFloorButton Button126, 3, 2, 126, 0, 1
@@ -4335,7 +4472,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 8, 4, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator back, -1.75 - 1, -2.924, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
 
 <EndElevator>
 
@@ -4353,7 +4490,7 @@ DrawWalls = true, true, false, false, false, false
     CreateElevator -19.25, 8.956, 100
 
     #panel
-    CreatePanel ElevPanel, 5, 8, back, -1.75 - 1, -2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 8, back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button127, 2, 2, 127, 0, 1
     AddFloorButton Button128, 2, 3, 128, 0, 1
     AddFloorButton Button129, 2, 4, 129, 0, 1
@@ -4398,7 +4535,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevators 60 to 61>
     #panel
-    CreatePanel ElevPanel, 5, 10, back, -1.75 - 1, -2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 10, back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button116, 2, 2, 116, 0, 1
     AddFloorButton Button117, 2, 3, 117, 0, 1
     AddFloorButton Button118, 2, 4, 118, 0, 1
@@ -4428,29 +4565,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
@@ -4461,7 +4604,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #Floor Indicator
-    AddFloorIndicator back, -1.75 - 1, -2.924, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -1.75 - 1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -4515,7 +4658,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevators 62 to 63>
     #panel
-    CreatePanel ElevPanel, 5, 8, front, 1.75 + 1, 2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 8, front, 1.75 + 1, 3.125 - 0.2 - 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button127, 2, 2, 127, 0, 1
     AddFloorButton Button128, 2, 3, 128, 0, 1
     AddFloorButton Button129, 2, 4, 129, 0, 1
@@ -4536,7 +4679,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevators 64 to 65>
     #panel
-    CreatePanel ElevPanel, 5, 10, front, 1.75 + 1, 2.924, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 5, 10, front, 1.75 + 1, 3.125 - 0.2 - 0.001, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
     AddFloorButton Button116, 2, 2, 116, 0, 1
     AddFloorButton Button117, 2, 3, 117, 0, 1
     AddFloorButton Button118, 2, 4, 118, 0, 1
@@ -4566,29 +4709,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, Wood1, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 2, 2 #right wall
+    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 2, 2 #front wall
-    AddWall Left, Wood1, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 2, 2 #left wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0.66, 2 #left panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    AddWall Right Panel, Wood1, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0.66, 2 #right panel
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
@@ -4598,7 +4747,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #Floor Indicator
-    AddFloorIndicator front, 1.75 + 1, 2.924, 0.7, 0.5, 6.5
+    AddFloorIndicator front, 1.75 + 1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6.5
 
 <EndElevators>
 
@@ -4618,29 +4767,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ServiceElevFloor, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 2, 2
+    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ServiceElevWall, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.625, -4.125, -3.625, 4.125, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ServiceElevWall, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ServiceElevWall, 0.2, -3.625, -4.125, -3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.625, -4.125, 3.625, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, 3.625, -4.125, 3.625, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.625, 1.75, 3.625, 4.125, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.625, 1.75, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -4649,7 +4804,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 7, 17, left, 3.424, -1.75 - 1.1875, 1, 2.6, 4.5 - (2.6 / 2), 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 7, 17, left, 3.625 - 0.2 - 0.001, -1.75 - 1.1875, 1, 2.6, 4.5 - (2.6 / 2), 0.3, 0.45, 0, 0
     AddFloorButton Button141, 2, 6, 141, 0, 1
     AddFloorButton Button140, 2, 5, 140, 0, 1
     AddFloorButton Button139, 2, 4, 139, 0, 1
@@ -4721,7 +4876,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 16, 6, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 3.424, -1.75 - 1.1875, 0.7, 0.5, 6.5
+    AddFloorIndicator left, 3.625 - 0.2 - 0.001, -1.75 - 1.1875, 0.7, 0.5, 6.5
 <EndElevator>
 
 <Elevator 67>
@@ -4738,29 +4893,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ServiceElevFloor, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 2, 2
-    AddWall Right, Wood1, 0.2, 3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0, 2, 2
+    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ServiceElevWall, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
+    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right, ServiceElevWall, 0.2, 3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ServiceElevWall, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, -3.625, -4.125, -3.625, -1.75, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.625, -4.125, -3.625, -1.75, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, -3.625, 1.75, -3.625, 4.125, 8, 8, 0, 0, 0.66, 2
+    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, -3.625, 1.75, -3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
@@ -4770,7 +4931,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 7, 20, right, -3.424, 1.75 + 1.1875, 1, 2.6, 4.5 - (2.6 / 2), 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 7, 20, right, -3.625 + 0.2 + 0.001, 1.75 + 1.1875, 1, 2.6, 4.5 - (2.6 / 2), 0.3, 0.45, 0, 0
     AddFloorButton Button79, 2, 6, 79, 0, 1
     AddFloorButton Button78, 2, 5, 78, 0, 1
     AddFloorButton Button77, 2, 4, 77, 0, 1
@@ -4858,7 +5019,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 19, 6, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator right, -3.424, 1.75 + 1.1875, 0.7, 0.5, 6.5
+    AddFloorIndicator right, -3.625 + 0.2 + 0.001, 1.75 + 1.1875, 0.7, 0.5, 6.5
 <EndElevator>
 
 
@@ -4877,29 +5038,35 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    AddFloor Floor, Wood2, 0.2, -3.917, -6.125, 3.917, 6.125, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevFloor, Metal1, Metal1, Metal1, Metal1
+    AddFloor Floor, ServiceElevFloor, 0.2, -3.917, -6.125, 3.917, 6.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    AddFloor Ceiling, Elev1, 0.2, -3.917, -6.125, 3.917, 6.125, 8, 8, 0, 0
+    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.917, -6.125, 3.917, 6.125, 8, 8, 0, 0
 
     #back wall (in global perspective)
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wood1, 0.2, -3.917, 6.125, 3.917, 6.125, 8, 8, 0, 0, 2, 2
+    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Back, ServiceElevWall, 0.2, -3.917, 6.125, 3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, Wood1, 0.2, -3.917, -6.125, 3.917, -6.125, 8, 8, 0, 0, 2, 2
-    AddWall Left, Wood1, 0.2, -3.917, -6.125, -3.917, 6.125, 8, 8, 0, 0, 2, 2
+    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Front, ServiceElevWall, 0.2, -3.917, -6.125, 3.917, -6.125, 8, 8, 0, 0, 0, 0
+    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    AddWall Left, ServiceElevWall, 0.2, -3.917, -6.125, -3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, true, true, false, false
-    AddWall Left Panel, Wood1, 0.2, 3.917, -6.125, 3.917, -2.25, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Left Panel, ElevPanelMain, 0.2, 3.917, -6.125, 3.917, -2.25, 8, 8, 0, 0, 0, 0
     DrawWalls = true, true, true, true, false, false
-    AddWall Right Panel, Wood1, 0.2, 3.917, 2.25, 3.917, 6.125, 8, 8, 0, 0, 0.66, 2
+    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.917, 2.25, 3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
@@ -4908,7 +5075,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 10, 22, left, 3.716, -2.25 - 1.9375, 2, 4.4, 3.5 - (4.4 / 2), 0.3, 0.45, 0, 0
+    CreatePanel ElevPanel, 10, 22, left, 3.917 - 0.2 - 0.001, -2.25 - 1.9375, 2, 4.4, 3.5 - (4.4 / 2), 0.3, 0.45, 0, 0
     AddFloorButton Button141, 2, 9, 141, 0, 1
     AddFloorButton Button140, 2, 8, 140, 0, 1
     AddFloorButton Button139, 2, 7, 139, 0, 1
@@ -5058,7 +5225,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton ButtonAlarm, 21, 7, alarm, 0, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 3.716, -2.25 - 1.9375, 0.7, 0.5, 6.5
+    AddFloorIndicator left, 3.917 - 0.2 - 0.001, -2.25 - 1.9375, 0.7, 0.5, 6.5
 
 <EndElevator>
 
@@ -5867,7 +6034,7 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     AddWall StairsRightE, %5%, 0.33, 9.0815 + 4.7515, -4.5 + 51.66, 9.0815 + 4.7515, 4.5 + 51.66 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddWall StairsBackE, %5%, 0.33, -9.0815 + 4.7515 - 0.33, 4.5 + 51.66, 9.0815 + 4.7515 + 0.33, 4.5 + 51.66, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddWall StairsBackE, %5%, 0.33, -17 + 4.7515 - 0.33, 4.5 + 51.66, 9.0815 + 4.7515 + 0.33, 4.5 + 51.66, %height%, %height%, 0, 0, 0, 0, False
-    
+
     #doors
     if[%floor% = 79] AddStairsDoor 6, StairsDoor, 0.2, 2, -9.0815, 2, 3.5, 8, 0, 1, 1
     if[%floor% > 79] AddStairsDoor 6, StairsDoor, 0.2, 4, 9.0815, -2, 3.5, 8, 0, 1, 1

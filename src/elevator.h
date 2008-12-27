@@ -175,7 +175,8 @@ private:
 	};
 
 	//timer object
-	Timer* timer;
+	Timer *timer;
+
 };
 
 #endif

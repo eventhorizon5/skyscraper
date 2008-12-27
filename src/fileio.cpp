@@ -766,6 +766,17 @@ checkfloors:
 			tempdata.DeleteAll();
 		}
 
+		//TextureOverride command
+		if (LineData.Slice(0, 15).CompareNoCase("textureoverride") == true)
+		{
+			tempdata.SplitString(LineData.Slice(16).GetData(), ",");
+
+			Simcore->SetTextureOverride(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5]);
+
+			tempdata.DeleteAll();
+			goto Nextline;
+		}
+
 		//Process globals
 		if (Section == 1)
 		{
@@ -784,6 +795,8 @@ checkfloors:
 				Simcore->BuildingDescription = temp2;
 			if (LineData.Slice(0, 7).CompareNoCase("version") == true)
 				Simcore->BuildingVersion = temp2;
+			if (LineData.Slice(0, 3).CompareNoCase("sky") == true)
+				Simcore->SkyName = temp2;
 			if (LineData.Slice(0, 11).CompareNoCase("camerafloor") == true)
 			{
 				//if (IsNumeric(temp2) == false)
@@ -1626,6 +1639,9 @@ recalc:
 				tempdata.DeleteAll();
 			}
 		}
+
+		//reset texture override status
+		Simcore->TextureOverride = false;
 
 Nextline:
 		i++;
