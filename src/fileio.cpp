@@ -795,6 +795,8 @@ checkfloors:
 				Simcore->BuildingDescription = temp2;
 			if (LineData.Slice(0, 7).CompareNoCase("version") == true)
 				Simcore->BuildingVersion = temp2;
+			if (LineData.Slice(0, 3).CompareNoCase("sky") == true)
+				Simcore->SkyName = temp2;
 			if (LineData.Slice(0, 11).CompareNoCase("camerafloor") == true)
 			{
 				//if (IsNumeric(temp2) == false)

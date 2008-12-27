@@ -68,6 +68,7 @@ SBS::SBS()
 	BuildingLocation = "";
 	BuildingDescription = "";
 	BuildingVersion = "";
+	SkyName = "noon";
 	IsRunning = false;
 	Floors = 0;
 	Basements = 0;
@@ -174,7 +175,7 @@ void SBS::Start(wxApp *app)
 	App = app;
 
 	//create skybox
-	CreateSky();
+	CreateSky(SkyName);
 
 	//Post-init startup code goes here, before the runloop
 	engine->Prepare();
@@ -595,12 +596,6 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 
 	//load default textures
 	csPrintf("Loading default textures...");
-	LoadTexture("/root/data/top.jpg", "SkyTop", 1, 1);
-	LoadTexture("/root/data/bottom.jpg", "SkyBottom", 1, 1);
-	LoadTexture("/root/data/left.jpg", "SkyLeft", 1, 1);
-	LoadTexture("/root/data/right.jpg", "SkyRight", 1, 1);
-	LoadTexture("/root/data/front.jpg", "SkyFront", 1, 1);
-	LoadTexture("/root/data/back.jpg", "SkyBack", 1, 1);
 	LoadTexture("/root/data/brick1.jpg", "Default", 1, 1);
 	csPrintf("Done\n");
 
@@ -1955,13 +1950,24 @@ csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 	return csVector2(esmall, ebig);
 }
 
-int SBS::CreateSky()
+int SBS::CreateSky(const char *filenamebase)
 {
+	csString file = filenamebase;
+	vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
+
+	//load textures
+	LoadTexture("/root/sky/up.jpg", "SkyTop", 1, 1);
+	LoadTexture("/root/sky/down.jpg", "SkyBottom", 1, 1);
+	LoadTexture("/root/sky/left.jpg", "SkyLeft", 1, 1);
+	LoadTexture("/root/sky/right.jpg", "SkyRight", 1, 1);
+	LoadTexture("/root/sky/front.jpg", "SkyFront", 1, 1);
+	LoadTexture("/root/sky/back.jpg", "SkyBack", 1, 1);
+
 	SkyBox = (engine->CreateSectorWallsMesh (area, "SkyBox"));
 	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox->GetMeshObject()->GetFactory());
 	SkyBox->SetZBufMode(CS_ZBUF_USE);
 
-	int firstidx = SkyBox_state->AddInsideBox(csVector3(-2000, -1000, -2000), csVector3(2000, 3000, 2000));
+	int firstidx = SkyBox_state->AddInsideBox(csVector3(-2000, -2000, -2000), csVector3(2000, 2000, 2000));
 	material = engine->GetMaterialList ()->FindByName ("SkyBack");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
 	material = engine->GetMaterialList ()->FindByName ("SkyRight");
