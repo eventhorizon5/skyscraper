@@ -203,7 +203,7 @@ breakpoint:
 			if (temp1 > startpos)
 			{
 				temp3 = LineData.Find("%", temp1 + 1);
-				if (temp3 < LineData.Length() - 1)
+				if (temp3 < LineData.Length())
 					startpos = temp3 + 1;
 				else
 				{

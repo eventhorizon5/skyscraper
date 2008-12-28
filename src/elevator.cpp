@@ -1364,6 +1364,11 @@ int Elevator::AddDoors(const char *texture, float thickness, float CenterX, floa
 	float z1, z2, z3, z4;
 	float spacing = 0.025f; //spacing between doors
 
+	if (tw == 0)
+		tw = 1;
+	if (th == 0)
+		th = 1;
+
 	//set door parameters
 	DoorDirection = direction;
 	DoorWidth = width;
@@ -1400,8 +1405,8 @@ int Elevator::AddDoors(const char *texture, float thickness, float CenterX, floa
 	int firstidx = sbs->AddWallMain(ElevatorDoorL_state, "Door", texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
 	sbs->AddWallMain(ElevatorDoorR_state, "Door", texture, thickness, x3, z3, x4, z4, height, height, 0, 0, tw, th);
 	//create connection pieces
-	sbs->AddWallMain(Elevator_state, "DoorF1", "Ceiling1", thickness, x1, z1, x4, z4, 1, 1, -1.001, -1.001, 0, 0);
-	sbs->AddWallMain(Elevator_state, "DoorF2", "Ceiling1", thickness, x1, z1, x4, z4, 1, 1, height + 0.001, height + 0.001, 0, 0);
+	sbs->AddWallMain(Elevator_state, "DoorF1", "Connection", thickness, x1, z1, x4, z4, 1, 1, -1.001, -1.001, 0, 0);
+	sbs->AddWallMain(Elevator_state, "DoorF2", "Connection", thickness, x1, z1, x4, z4, 1, 1, height + 0.001, height + 0.001, 0, 0);
 	sbs->ResetWalls();
 	sbs->ResetExtents();
 	return firstidx;
@@ -1414,6 +1419,11 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
 	float base, base2;
+
+	if (tw == 0)
+		tw = 1;
+	if (th == 0)
+		th = 1;
 
 	//set door parameters
 	ShaftDoorOrigin = csVector3(Origin.x + CenterX, 0, Origin.z + CenterZ);
@@ -1466,7 +1476,7 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		}
 
 		//create doorway walls
-		sbs->AddDoorwayWalls(sbs->GetFloor(ServicedFloors[i])->Level_state, "Brick", 0, 0);
+		sbs->AddDoorwayWalls(sbs->GetFloor(ServicedFloors[i])->Level_state, "ConnectionWall", 0, 0);
 
 		//create meshes
 		buffer3 = Number;
@@ -1509,8 +1519,8 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		//create connection pieces
 		float xoffset = Origin.x - sbs->GetShaft(AssignedShaft)->origin.x;
 		float zoffset = Origin.z - sbs->GetShaft(AssignedShaft)->origin.z;
-		sbs->GetShaft(AssignedShaft)->AddWall(ServicedFloors[i], "ShaftDoorF1", "Ceiling1", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base - 1.001, base - 1.001, 0, 0);
-		sbs->GetShaft(AssignedShaft)->AddWall(ServicedFloors[i], "ShaftDoorF2", "Ceiling1", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base + DoorHeight + 0.001, base + DoorHeight + 0.001, 0, 0);
+		sbs->GetShaft(AssignedShaft)->AddWall(ServicedFloors[i], "ShaftDoorF1", "Connection", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base - 1.001, base - 1.001, 0, 0);
+		sbs->GetShaft(AssignedShaft)->AddWall(ServicedFloors[i], "ShaftDoorF2", "Connection", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base + DoorHeight + 0.001, base + DoorHeight + 0.001, 0, 0);
 
 		//make doors invisible on start
 		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);

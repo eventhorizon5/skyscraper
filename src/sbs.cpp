@@ -597,6 +597,8 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	//load default textures
 	csPrintf("Loading default textures...");
 	LoadTexture("/root/data/brick1.jpg", "Default", 1, 1);
+	LoadTexture("/root/data/gray2-sm.jpg", "ConnectionWall", 1, 1);
+	LoadTexture("/root/data/metal1-sm.jpg", "Connection", 1, 1);
 	csPrintf("Done\n");
 
 	//set up viewport
@@ -2087,6 +2089,12 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 
 	material = engine->GetMaterialList()->FindByName(texture);
 	csString texname = texture;
+
+	if (tw == 0)
+		tw = 1;
+	if (th == 0)
+		th = 1;
+
 	float tw2 = tw, th2 = th;
 
 	if (material == 0)

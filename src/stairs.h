@@ -49,7 +49,7 @@ public:
 	bool IsInStairwell(const csVector3 &position);
 	int AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void CutFloors(bool relative, csVector2 start, csVector2 end, float startvoffset, float endvoffset);
-	void CutWall(bool relative, int floor, csVector3 start, csVector3 end);
+	void CutWall(bool relative, int floor, csVector3 start, csVector3 end, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range);
 	
 private:
