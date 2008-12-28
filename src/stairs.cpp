@@ -70,7 +70,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 
 Stairs::~Stairs()
 {
-
+	//delete doors
+	DoorArray.DeleteAll();
 }
 
 int Stairs::AddStairs(int floor, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th)
@@ -250,6 +251,9 @@ void Stairs::Enabled(int floor, bool value)
 			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 		}
+
+		//enable/disable door
+		EnableDoor(floor, value);
 	}
 }
 
@@ -279,9 +283,9 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 	return false;
 }
 
-int Stairs::AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+void Stairs::AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
-	//interface to the SBS AddDoor function
+	//add a door
 
 	float x1, z1, x2, z2;
 	//set up coordinates
@@ -315,7 +319,9 @@ int Stairs::AddDoor(int floor, const char *texture, float thickness, int directi
 	//create doorway walls
 	sbs->AddDoorwayWalls(StairArray_state[floor - startfloor], "ConnectionWall", 0, 0);
 
-	return sbs->CreateDoor(texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, voffset + sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, tw, th);
+	DoorArray.SetSize(DoorArray.GetSize() + 1);
+	DoorArray[DoorArray.GetSize() - 1].floornumber = floor;
+	DoorArray[DoorArray.GetSize() - 1].object = new Door("Door", texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
 }
 
 void Stairs::CutFloors(bool relative, csVector2 start, csVector2 end, float startvoffset, float endvoffset)
@@ -389,5 +395,16 @@ void Stairs::EnableRange(int floor, int range)
 	{
 		if (i >= startfloor && i <= endfloor)
 			Enabled(i, true);
+	}
+}
+
+void Stairs::EnableDoor(int floor, bool value)
+{
+	//turn on door(s) on the specified floor
+
+	for (int i = 0; i < DoorArray.GetSize(); i++)
+	{
+		if (DoorArray[i].floornumber = floor && DoorArray[i].object)
+			DoorArray[i].object->Enabled(value);
 	}
 }

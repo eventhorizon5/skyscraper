@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(int number, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(const char *name, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//creates a door, and performs a cut operation on the area that it takes up.
 	//this must be used *after* the wall is created
@@ -46,7 +46,7 @@ Door::Door(int number, const char *texture, float thickness, int direction, floa
 	//7 = faces back, opens back
 	//8 = faces back, opens front
 
-	Number = number;
+	Name = name;
 	Direction = direction;
 	IsOpen = false;
 	float x1, z1, x2, z2;
@@ -69,10 +69,7 @@ Door::Door(int number, const char *texture, float thickness, int direction, floa
 	}
 
 	//Create mesh
-	csString name = "Door ";
-	name += _itoa(Number, intbuffer, 10);
-	name.Trim();
-	DoorMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, name.GetData());
+	DoorMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, Name.GetData());
 	DoorMesh_state = scfQueryInterface<iThingFactoryState> (DoorMesh->GetMeshObject()->GetFactory());
 	DoorMesh->SetZBufMode(CS_ZBUF_USE);
 	DoorMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
@@ -84,6 +81,9 @@ Door::Door(int number, const char *texture, float thickness, int direction, floa
 	//sbs->AddWallMain(DoorMesh_state, name.GetData(), texture, thickness, x1, z1, x2, z2, height, height, altitude, altitude, tw, th);
 	sbs->ResetWalls();
 	sbs->ResetExtents();
+
+	//disable on creation
+	Enabled(false);
 }
 
 Door::~Door()
@@ -94,11 +94,26 @@ Door::~Door()
 
 void Door::OpenDoor()
 {
-	sbs->Report("Opening door " + csString(_itoa(Number, intbuffer, 10)));
+	sbs->Report("Opening door " + Name);
 }
 
 void Door::CloseDoor()
 {
-	sbs->Report("Closing door " + csString(_itoa(Number, intbuffer, 10)));
+	sbs->Report("Closing door " + Name);
 }
 
+void Door::Enabled(bool value)
+{
+	if (value == true)
+	{
+		DoorMesh->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		DoorMesh->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		DoorMesh->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		DoorMesh->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		DoorMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		DoorMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+	}
+}

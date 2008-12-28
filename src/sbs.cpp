@@ -2248,16 +2248,6 @@ Stairs *SBS::GetStairs(int number)
 	return 0;
 }
 
-Door *SBS::GetDoor(int number)
-{
-	//return pointer to door object
-
-	for (size_t i = 0; i < DoorArray.GetSize(); i++)
-		if (DoorArray[i].number == number)
-			return DoorArray[i].object;
-	return 0;
-}
-
 void SBS::SetWallOrientation(const char *direction)
 {
 	//changes internal wall orientation parameter.
@@ -2702,22 +2692,6 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 			}
 		}
 	}
-}
-
-int SBS::CreateDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
-{
-	//create a door object
-
-	DoorArray.SetSize(DoorArray.GetSize() + 1);
-	DoorArray[DoorArray.GetSize() - 1].number = DoorArray.GetSize();
-	DoorArray[DoorArray.GetSize() - 1].object = new Door(DoorArray.GetSize(), texture, thickness, direction, CenterX, CenterZ, width, height, altitude, tw, th);
-	return DoorArray.GetSize();
-}
-
-int SBS::Doors()
-{
-	//return the number of doors
-	return DoorArray.GetSize();
 }
 
 float SBS::MetersToFeet(float meters)

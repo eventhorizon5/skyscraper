@@ -26,6 +26,8 @@
 #ifndef _SBS_STAIRS_H
 #define _SBS_STAIRS_H
 
+#include "door.h"
+
 class SBSIMPEXP Stairs
 {
 public:
@@ -47,16 +49,25 @@ public:
 	void Enabled(int floor, bool value);
 	void EnableWholeStairwell(bool value);
 	bool IsInStairwell(const csVector3 &position);
-	int AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	void AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void CutFloors(bool relative, csVector2 start, csVector2 end, float startvoffset, float endvoffset);
 	void CutWall(bool relative, int floor, csVector3 start, csVector3 end, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range);
+	void EnableDoor(int floor, bool value);
 	
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array
 	csRefArray<iThingFactoryState> StairArray_state; //stairwell mesh array state
 	csRefArray<iMeshWrapper> StairDoorArray; //stair door array
 	csRefArray<iThingFactoryState> StairDoorArray_state; //stair mesh array state
+
+	struct DoorMap
+	{
+		int floornumber; //associated floor number
+		Door *object; //door object reference
+	};
+
+	csArray<DoorMap> DoorArray; //door object array
 
 	char intbuffer[65];
 	char buffer[20];
