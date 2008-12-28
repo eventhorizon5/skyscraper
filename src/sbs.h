@@ -28,7 +28,6 @@
 #include "shaft.h"
 #include "camera.h"
 #include "stairs.h"
-#include "door.h"
 
 //global functions
 static bool SBSEventHandler(iEvent& Event);
@@ -56,12 +55,6 @@ struct SBSIMPEXP StairsMap
 {
 	int number; //stairs number
 	Stairs *object; //stairs object reference
-};
-
-struct SBSIMPEXP DoorMap
-{
-	int number; //door number
-	Door *object; //door object reference
 };
 
 //SBS class
@@ -193,12 +186,10 @@ public:
 	int TotalFloors(); //all floors including basements
 	int Shafts();
 	int StairsNum();
-	int Doors();
 	Floor *GetFloor(int number);
 	Elevator *GetElevator(int number);
 	Shaft *GetShaft(int number);
 	Stairs *GetStairs(int number);
-	Door *GetDoor(int number);
 	void SetWallOrientation(const char *direction);
 	int GetWallOrientation();
 	void SetFloorOrientation(const char *direction);
@@ -213,13 +204,14 @@ public:
 	csVector2 GetAutoSize();
 	int GetDrawWallsCount();
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
-	int CreateDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
 	void Stop();
 	void SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom);
+	int AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
+	int AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -297,7 +289,6 @@ private:
 	csArray<ElevatorMap> ElevatorArray; //elevator object array
 	csArray<ShaftMap> ShaftArray; //shaft object array
 	csArray<StairsMap> StairsArray; //stairs object array
-	csArray<DoorMap> DoorArray; //door object array
 
 	//private functions
 	void PrintBanner();

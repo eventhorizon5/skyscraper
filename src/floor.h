@@ -27,6 +27,7 @@
 #define _SBS_FLOOR_H
 
 #include "callbutton.h"
+#include "door.h"
 
 class SBSIMPEXP Floor
 {
@@ -49,6 +50,7 @@ public:
 	float InterfloorHeight; //height of interfloor area
 	bool IsEnabled; //is floor enabled?
 	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
+	csArray<Door*> DoorArray; //pointer array to door objects
 	csArray<int> Group; //floor group
 
 	//functions
@@ -70,7 +72,7 @@ public:
 	void AddGroupFloor(int number);
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
-	int AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	void AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	float CalculateAltitude();
 };
 

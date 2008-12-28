@@ -41,12 +41,15 @@
     Load data/marble22.jpg, Wall4, 4, 6
     Load data/symb5.jpg, Wood3, 3.72, 4
     Load data/marb047.jpg, Marble4, 3.72, 4
-    Load data/elev1.jpg, ElevCeiling, 3.72, 4
+    Load data/elev1.jpg, ElevCeiling, 4, 4
     Load data/Carpet0006_S.jpg, ElevFloor, 4, 4
-    Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 4, 4
-    Load data/metal1.jpg, ServiceElevWall, 4, 4
-    Load data/diamond18.jpg, ElevWall, 4, 4
-    Load data/textur15.jpg, Wood1, 3.72, 4
+    Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 2, 2
+    Load data/Metalbare0085_3_S.jpg, ServiceElevWall, 4, 4
+    Load data/metal080.jpg, ServiceElevPanelMain, 2, 2
+    Load data/diamond18h.jpg, OfficeElevWall, 3, 3
+    Load data/diamond18b.jpg, ExpressElevWall, 3, 3
+    Load data/diamond18i.jpg, HotelElevWall, 3, 3
+    Load data/diamond18g.jpg, ResidentialElevWall, 3, 3
     Load data/text16.jpg, Wood2, 3.72, 4
     Load data/marbl3.jpg, Wall1, 3.72, 4
     Load data/marb123.jpg, Wall2, 3.72, 4
@@ -59,14 +62,15 @@
     Load data/intext.jpg, InterInt, 3.72, 4
     Load data/text12.jpg, Wall3, 3.72, 4
     Load data/metal1.jpg, Metal1, 4, 4
-    Load data/text16.jpg, ElevDoors, 3.72, 4
-    Load data/panel-back2.jpg, ElevExtPanels, 1, 1
+    Load data/metal1.jpg, ElevExt, 4, 4
+    Load data/text16.jpg, ElevDoors, 1, 1
+    Load data/marb148.jpg, ElevExtPanels, 1, 1
+    Load data/panel-back2.jpg, ElevExtPanels2, 1, 1
     Load data/marb148.jpg, ElevPanel, 1, 1
-    Load data/textur15.jpg, ElevPanelMain, 4, 4
-    Load data/mason01.jpg, Concrete, 3.72, 4
+    Load data/diamond18j.jpg, ElevPanelMain, 1, 1
+    Load data/cinderblocks.jpg, Concrete, 4, 4
+    Load data/cinderblocks.jpg, StairsWall, 4, 1
     Load data/text13.jpg, Stairs, 3.72, 4
-    Load data/wooddoor3.jpg, Door1, 1, 1
-    Load data/wooddoor1.jpg, Door2, 1, 1
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
     Load data/miscdoor8.jpg, StairsDoor2, 1, 1
     Load data/sidewalk1r.jpg, Road1, 1, 1
@@ -78,11 +82,10 @@
     Load data/windows08.jpg, Windows8, 3.72, 4
     Load data/windows11.jpg, Windows11, 3.72, 4
     Load data/downtown.jpg, Downtown, 1, 1
-    Load data/suburbs.jpg, Suburbs, 1, 1
     #Load data/vents1b.jpg, VentsInt, 1, 1
     Load data/bracing1.jpg, VentsInt, 1, 1
     Load data/vents1.jpg, VentsExt, 1, 1
-    Load data/plaque.jpg, Plaque, 1, 1
+    #Load data/plaque.jpg, Plaque, 1, 1
     Load data/buttonup.png, ButtonUp, 1, 1
     Load data/buttondown.png, ButtonDown, 1, 1
     Load data/floorsign.jpg, FloorSign, 1, 1
@@ -2312,7 +2315,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     if[%floor% < 38 | %floor% > 79] AddWall Shaft32BackE, %5%, 0.33, -2.46 + 19.46 + 0.33, 14.75 + -38.75, 2.46 + 19.46 + 0.33, 14.75 + -38.75, %3%, %3%, %4%, %4%, 0, 0, False
-    if[%floor% > 37 | %floor% < 80] AddWall Shaft32BackE, %5%, 0.33, -2.46 + 19.46 + 0.33, 14.75 + -38.75, 2.46 + 19.46, 14.75 + -38.75, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 37 & %floor% < 80] AddWall Shaft32BackE, %5%, 0.33, -2.46 + 19.46 + 0.33, 14.75 + -38.75, 2.46 + 19.46, 14.75 + -38.75, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < 38] AddWall Shaft32RightE, %5%, 0.33, 2.46 + 19.46, -14.75 + -38.75 - 0.33, 2.46 + 19.46, 14.75 + -38.75 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 37] AddWall Shaft32RightE, %5%, 0.33, 2.46 + 19.46, -14.75 + -38.75 - 0.33, 2.46 + 19.46, -4.666 + -38.75 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
@@ -2420,41 +2423,42 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, OfficeElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+
+    SetAutoSize = true, true
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 2, 2 #shaft doors
-    SetAutoSize = true, true
+    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
 
     #panel
     CreatePanel ElevPanel, 5, 8, left, 3.125 - 0.2 - 0.001, -1.75 - 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
@@ -2521,40 +2525,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, OfficeElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -2625,40 +2629,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, OfficeElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -2727,40 +2731,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, OfficeElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -2832,40 +2836,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, OfficeElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -2935,40 +2939,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, OfficeElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -3041,40 +3045,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ExpressElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ExpressElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ExpressElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 4.051, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 4.051, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -3132,40 +3136,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ExpressElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ExpressElevWall, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ExpressElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.751, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, -4.051, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, -3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, -4.051, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -3214,46 +3218,46 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ExpressElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ExpressElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ExpressElevWall, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
     CreatePanel ElevPanel, 5, 6, left, 3.125 - 0.2 - 0.001, -1.75 - 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
-    AddFloorButton ButtonL, 2, 3, 0, 0, 1
-    AddFloorButton ButtonM, 3, 3, 1, 0, 1
+    AddFloorButton ButtonM, 2, 3, 1, 0, 1
+    AddFloorButton ButtonL, 3, 3, 0, 0, 1
     AddControlButton ButtonOpen, 4, 2, open, 0, 1
     AddControlButton ButtonClose, 4, 4, close, 0, 1
     AddControlButton ButtonCancel, 5, 2, cancel, 0, 1
@@ -3293,47 +3297,47 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ExpressElevWall, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ExpressElevWall, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ExpressElevWall, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
     #panel
     CreatePanel ElevPanel, 5, 6, right, -3.125 + 0.2 + 0.001, 1.75 + 1, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
-    AddFloorButton ButtonL, 2, 3, 0, 0, 1
-    AddFloorButton ButtonM, 3, 3, 1, 0, 1
+    AddFloorButton ButtonM, 2, 3, 1, 0, 1
+    AddFloorButton ButtonL, 3, 3, 0, 0, 1
     AddControlButton ButtonOpen, 4, 2, open, 0, 1
     AddControlButton ButtonClose, 4, 4, close, 0, 1
     AddControlButton ButtonCancel, 5, 2, cancel, 0, 1
@@ -3375,40 +3379,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ExpressElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ExpressElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ExpressElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 4.051, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 4.051, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -3454,40 +3458,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ExpressElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ExpressElevWall, 0.2, 3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ExpressElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.916, -3.75, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.75, 1.75, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.751, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, -4.051, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, -3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, -4.051, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -3536,40 +3540,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ExpressElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ExpressElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ExpressElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 4.051, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 4.051, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -3619,41 +3623,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.916, -3.75, 3.916, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0 #ceiling
 
     #right wall
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ExpressElevWall, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ExpressElevWall, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ExpressElevWall, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.916, 3.75, -1.75, 3.75, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.751, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 4.051, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.751, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 4.051, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -3687,41 +3691,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.916, -3.75, 3.916, 3.75, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0 #ceiling
 
     #right wall
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ExpressElevWall, 0.2, 3.916, -3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ExpressElevWall, 0.2, -3.916, -3.75, 3.916, -3.75, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ExpressElevWall, 0.2, -3.916, -3.75, -3.916, 3.75, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.916, 3.75, -1.75, 3.75, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.75, 3.916, 3.75, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.751, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 4.051, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.751, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 4.051, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -3793,41 +3797,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, OfficeElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, OfficeElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -3908,41 +3912,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, OfficeElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, OfficeElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4023,41 +4027,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, OfficeElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, OfficeElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -4139,41 +4143,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, OfficeElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, OfficeElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -4229,41 +4233,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride HotelElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, HotelElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride HotelElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, HotelElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, HotelElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, HotelElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -4327,41 +4331,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride HotelElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, HotelElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, HotelElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, HotelElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevExt, HotelElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, HotelElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4412,41 +4416,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ExpressElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ExpressElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ExpressElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -4565,41 +4569,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #back and right walls
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Back, ElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride ResidentialElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ResidentialElevWall, 0.2, -3.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ResidentialElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ResidentialElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #left wall
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, ResidentialElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ResidentialElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, -3.125, -1.75, -3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -4709,41 +4713,41 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
     #right wall
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right, ElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
+    TextureOverride ResidentialElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ResidentialElevWall, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right wall
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Front, ElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
-    TextureOverride Metal1, ElevWall, Metal1, Metal1, Metal1, Metal1
-    AddWall Left, ElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, ResidentialElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ResidentialElevWall, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 0, 0 #front wall
+    TextureOverride ElevExt, ResidentialElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ResidentialElevWall, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 0, 0 #right panel
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #Floor Indicator
@@ -4767,40 +4771,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ServiceElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ServiceElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ServiceElevFloor, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Back, ServiceElevWall, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Front, ServiceElevWall, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left, ServiceElevWall, 0.2, -3.625, -4.125, -3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Left Panel, ElevPanelMain, 0.2, 3.625, -4.125, 3.625, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right Panel, ElevPanelMain, 0.2, 3.625, 1.75, 3.625, 4.125, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevPanelMain, 0.2, 3.625, -4.125, 3.625, -1.75, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevPanelMain, 0.2, 3.625, 1.75, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.626, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.926, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.626, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 3.926, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4893,40 +4897,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ServiceElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ServiceElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ServiceElevFloor, 0.2, -3.625, -4.125, 3.625, 4.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0
 
     #back and right walls (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Back, ServiceElevWall, 0.2, -3.625, 4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
-    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right, ServiceElevWall, 0.2, 3.625, -4.125, 3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #front wall
     WallOrientation = left
-    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Front, ServiceElevWall, 0.2, -3.625, -4.125, 3.625, -4.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
-    AddWall Left Panel, ElevPanelMain, 0.2, -3.625, -4.125, -3.625, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride Metal1, ElevPanelMain, Metal1, Metal1, Metal1, Metal1
-    AddWall Right Panel, ElevPanelMain, 0.2, -3.625, 1.75, -3.625, 4.125, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevPanelMain, 0.2, -3.625, -4.125, -3.625, -1.75, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevPanelMain, 0.2, -3.625, 1.75, -3.625, 4.125, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.626, 0, 3.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.926, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, -3.626, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, -3.926, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -5038,40 +5042,40 @@ DrawWalls = true, true, false, false, false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride Metal1, ServiceElevFloor, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ServiceElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Floor, ServiceElevFloor, 0.2, -3.917, -6.125, 3.917, 6.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.917, -6.125, 3.917, 6.125, 8, 8, 0, 0
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ServiceElevWall, Metal1, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Back, ServiceElevWall, 0.2, -3.917, 6.125, 3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #front and left walls
     WallOrientation = left
-    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Front, ServiceElevWall, 0.2, -3.917, -6.125, 3.917, -6.125, 8, 8, 0, 0, 0, 0
-    TextureOverride Metal1, ServiceElevWall, Metal1, Metal1, Metal1, Metal1
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left, ServiceElevWall, 0.2, -3.917, -6.125, -3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Left Panel, ElevPanelMain, 0.2, 3.917, -6.125, 3.917, -2.25, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, true, true, false, false
-    TextureOverride ElevPanelMain, Metal1, Metal1, Metal1, Metal1, Metal1
-    AddWall Right Panel, ElevPanelMain, 0.2, 3.917, 2.25, 3.917, 6.125, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevPanelMain, 0.2, 3.917, -6.125, 3.917, -2.25, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevPanelMain, 0.2, 3.917, 2.25, 3.917, 6.125, 8, 8, 0, 0, 0, 0
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.918, 0, 4.5, 8, false, 2, 2 #doors
-    AddShaftDoors ElevDoors, 0.2, 4.218, 0, 2, 2 #shaft doors
+    AddDoors ElevDoors, 0.2, 3.918, 0, 4.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 4.218, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -5429,11 +5433,11 @@ DrawWalls = true, true, false, false, false, false
 #Service Elevators
 <Floors 0 to 141>
     CallButtonElevators = 66
-    if[%floor% = 0 | %floor% > 78] CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.1, 18.542 + 4.125, 4, right, 0.5, 1, true, 0, 0
+    if[%floor% = 0 | %floor% > 78] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.1, 18.542 + 4.125, 4, right, 0.5, 1, true, 0, 0
     CallButtonElevators = 67
-    if[%floor% = 0 | %floor% < 80] CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 9.375 - 5.08 - 0.33 - 0.1, 18.542 + 4.125, 4, left, 0.5, 1, true, 0, 0
+    if[%floor% = 0 | %floor% < 80] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, 9.375 - 5.08 - 0.33 - 0.1, 18.542 + 4.125, 4, left, 0.5, 1, true, 0, 0
     CallButtonElevators = 68
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.1, 30.375 + 4.125, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.1, 30.375 + 4.125, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
 
 
@@ -5500,16 +5504,20 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
 <EndFloors>
 
 <Floors 0 to 39>
+    Set 6 = 3
+    if[%floor% = 1] Set 6 = 5
+    SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddStairsWall 1, StairsLeft, Concrete, 0.33, -4.5, -9.708, -4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 1, StairsFront, Concrete, 0.33, -4.5, -9.708, 4.5, -9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 1, StairsLeft, StairsWall, 0.33, -4.5, -9.708, -4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 1, StairsFront, StairsWall, 0.33, -4.5, -9.708, 4.5, -9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    AddStairsWall 1, StairsBack, Concrete, 0.33, -4.5, 9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 1, StairsRight, Concrete, 0.33, 4.5, -9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 1, StairsBack, StairsWall, 0.33, -4.5, 9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 1, StairsRight, StairsWall, 0.33, 4.5, -9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    SetAutoSize = true, true
     FloorOrientation = bottom
-    if[%floor% = 38] AddStairsFloor 1, StairsCeiling, Concrete, 0.5, -4.5, -9.708, 4.5, 9.708, 12, 12, 0, 0
+    if[%floor% = 38] AddStairsFloor 1, StairsCeiling, Ceiling1, 0.5, -4.5, -9.708, 4.5, 9.708, 12, 12, 0, 0
 
     Set 5 = Wall1
     if[%floor% = 38] Set 5 = Stucco4
@@ -5603,16 +5611,21 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
 <EndFloors>
 
 <Floors 0 to 39>
+    Set 6 = 3
+    if[%floor% = 1] Set 6 = 5
+    SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddStairsWall 2, StairsLeft, Concrete, 0.33, -4.5, -9.708, -4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 2, StairsFront, Concrete, 0.33, -4.5, -9.708, 4.5, -9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 2, StairsLeft, StairsWall, 0.33, -4.5, -9.708, -4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 2, StairsFront, StairsWall, 0.33, -4.5, -9.708, 4.5, -9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    AddStairsWall 2, StairsBack, Concrete, 0.33, -4.5, 9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 2, StairsRight, Concrete, 0.33, 4.5, -9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 2, StairsBack, StairsWall, 0.33, -4.5, 9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 2, StairsRight, StairsWall, 0.33, 4.5, -9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    SetAutoSize = true, true
     FloorOrientation = bottom
-    if[%floor% = 38] AddStairsFloor 2, StairsCeiling, Concrete, 0.5, -4.5, -9.708, 4.5, 9.708, 12, 12, 0, 0
+    if[%floor% = 38] AddStairsFloor 2, StairsCeiling, Ceiling1, 0.5, -4.5, -9.708, 4.5, 9.708, 12, 12, 0, 0
+
 
     Set 5 = Wall1
     if[%floor% = 38] Set 5 = Stucco4
@@ -5708,16 +5721,19 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
 <EndFloors>
 
 <Floors 38 to 79>
+    Set 6 = 3
+    SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddStairsWall 3, StairsLeft, Concrete, 0.33, -5.333, -9.708, -5.333, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 3, StairsFront, Concrete, 0.33, -5.333, -9.708, 5.333, -9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 3, StairsLeft, StairsWall, 0.33, -5.333, -9.708, -5.333, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 3, StairsFront, StairsWall, 0.33, -5.333, -9.708, 5.333, -9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    AddStairsWall 3, StairsBack, Concrete, 0.33, -5.333, 9.708, 5.333, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 3, StairsRight, Concrete, 0.33, 5.333, -9.708, 5.333, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 3, StairsBack, StairsWall, 0.33, -5.333, 9.708, 5.333, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 3, StairsRight, StairsWall, 0.33, 5.333, -9.708, 5.333, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    SetAutoSize = true, true
     FloorOrientation = bottom
-    if[%floor% = 79] AddStairsFloor 3, StairsCeiling, Concrete, 0.5, -5.333, -9.708, 5.333, 9.708, 12, 12, 0, 0
+    if[%floor% = 79] AddStairsFloor 3, StairsCeiling, Ceiling1, 0.5, -5.333, -9.708, 5.333, 9.708, 12, 12, 0, 0
 
     Set 5 = Wall1
     if[%floor% < 40 | %floor% = 79] Set 5 = Stucco4
@@ -5806,16 +5822,19 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
 <EndFloors>
 
 <Floors 38 to 79>
+    Set 6 = 3
+    SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddStairsWall 4, StairsLeft, Concrete, 0.33, -4.5, -9.708, -4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 4, StairsFront, Concrete, 0.33, -4.5, -9.708, 4.5, -9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 4, StairsLeft, StairsWall, 0.33, -4.5, -9.708, -4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 4, StairsFront, StairsWall, 0.33, -4.5, -9.708, 4.5, -9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    AddStairsWall 4, StairsBack, Concrete, 0.33, -4.5, 9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 4, StairsRight, Concrete, 0.33, 4.5, -9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 4, StairsBack, StairsWall, 0.33, -4.5, 9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 4, StairsRight, StairsWall, 0.33, 4.5, -9.708, 4.5, 9.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    SetAutoSize = true, true
     FloorOrientation = bottom
-    if[%floor% = 79] AddStairsFloor 4, StairsCeiling, Concrete, 0.5, -4.5, -9.708, 4.5, 9.708, 12, 12, 0, 0
+    if[%floor% = 79] AddStairsFloor 4, StairsCeiling, Ceiling1, 0.5, -4.5, -9.708, 4.5, 9.708, 12, 12, 0, 0
 
     Set 5 = Wall1
     if[%floor% < 40 | %floor% = 79] Set 5 = Stucco4
@@ -5894,16 +5913,19 @@ CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
 <EndFloors>
 
 <Floors 79 to 119>
+    Set 6 = 3
+    SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddStairsWall 5, StairsLeft, Concrete, 0.33, -5.67, -8.5, -5.67, 8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 5, StairsFront, Concrete, 0.33, -5.67, -8.5, 5.67, -8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 5, StairsLeft, StairsWall, 0.33, -5.67, -8.5, -5.67, 8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 5, StairsFront, StairsWall, 0.33, -5.67, -8.5, 5.67, -8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    AddStairsWall 5, StairsBack, Concrete, 0.33, -5.67, 8.5, 5.67, 8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 5, StairsRight, Concrete, 0.33, 5.67, -8.5, 5.67, 8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 5, StairsBack, StairsWall, 0.33, -5.67, 8.5, 5.67, 8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 5, StairsRight, StairsWall, 0.33, 5.67, -8.5, 5.67, 8.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    SetAutoSize = true, true
     FloorOrientation = bottom
-    if[%floor% = 119] AddStairsFloor 5, StairsCeiling, Concrete, 0.5, -5.67, -8.5, 5.67, 8.5, 12, 12, 0, 0
+    if[%floor% = 119] AddStairsFloor 5, StairsCeiling, Ceiling1, 0.5, -5.67, -8.5, 5.67, 8.5, 12, 12, 0, 0
 
     Set 5 = Wall1
     if[%floor% = 79 | %floor% = 119] Set 5 = Stucco4
@@ -6007,21 +6029,24 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
 <EndFloors>
 
 <Floors 79 to 141>
+    Set 6 = 3
+    SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddStairsWall 6, StairsLeft, Concrete, 0.33, -9.0815, -4.5, -9.0815, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    if[%floor% = 119 | %floor% = 138] AddStairsWall 6, StairsLeft2, Concrete, 0.33, -9.0815, -4.5, -9.0815, 4.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddStairsWall 6, StairsLeft, Concrete, 0.33, -17, -4.5, -17, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddStairsWall 6, StairsFront, Concrete, 0.33, -9.0815, -4.5, 9.0815, -4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddStairsWall 6, StairsFront, Concrete, 0.33, -17, -4.5, 9.0815, -4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddStairsWall 6, StairsLeft, StairsWall, 0.33, -9.0815, -4.5, -9.0815, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    if[%floor% = 119 | %floor% = 138] AddStairsWall 6, StairsLeft2, StairsWall, 0.33, -9.0815, -4.5, -9.0815, 4.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddStairsWall 6, StairsLeft, StairsWall, 0.33, -17, -4.5, -17, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddStairsWall 6, StairsFront, StairsWall, 0.33, -9.0815, -4.5, 9.0815, -4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddStairsWall 6, StairsFront, StairsWall, 0.33, -17, -4.5, 9.0815, -4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddStairsWall 6, StairsBack, Concrete, 0.33, -9.0815, 4.5, 9.0815, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddStairsWall 6, StairsBack, Concrete, 0.33, -17, 4.5, 9.0815, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 6, StairsRight, Concrete, 0.33, 9.0815, -4.5, 9.0815, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddStairsWall 6, StairsBack, StairsWall, 0.33, -9.0815, 4.5, 9.0815, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddStairsWall 6, StairsBack, StairsWall, 0.33, -17, 4.5, 9.0815, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    AddStairsWall 6, StairsRight, StairsWall, 0.33, 9.0815, -4.5, 9.0815, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
     FloorOrientation = bottom
-    if[%floor% = 120] AddStairsFloor 6, StairsCeiling, Concrete, 0.5, -17, -4.5, -9.0815 + 0.33, 4.5, %height%, %height%, 0, 0
-    if[%floor% = 141] AddStairsFloor 6, StairsCeiling, Concrete, 0.5, -9.0815, -4.5, 9.0815, 4.5, 12, 12, 0, 0
+    SetAutoSize = true, true
+    if[%floor% = 120] AddStairsFloor 6, StairsCeiling, Ceiling1, 0.5, -17, -4.5, -9.0815 + 0.33, 4.5, %height%, %height%, 0, 0
+    if[%floor% = 141] AddStairsFloor 6, StairsCeiling, Ceiling1, 0.5, -9.0815, -4.5, 9.0815, 4.5, 12, 12, 0, 0
 
     Set 5 = Wall1
     if[%floor% = 79 | %floor% = 119 | %floor% > 137] Set 5 = Stucco4

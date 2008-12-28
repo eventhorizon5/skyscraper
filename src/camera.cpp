@@ -351,7 +351,7 @@ void Camera::ClickedObject()
 	}
 
 	//check doors
-	if (meshname.Find("Door") == 0)
+	/*if (meshname.Find("Door") == 0)
 	{
 		//user clicked on a door
 		int doornumber = atoi(meshname.Slice(5));
@@ -361,7 +361,7 @@ void Camera::ClickedObject()
 			sbs->GetDoor(doornumber)->OpenDoor();
 		else
 			sbs->GetDoor(doornumber)->CloseDoor();
-	}
+	}*/
 }
 
 const char *Camera::GetClickedMeshName()

@@ -74,7 +74,12 @@ Floor::Floor(int number)
 Floor::~Floor()
 {
 	//Destructor
+
+	//delete call buttons
 	CallButtonArray.DeleteAll();
+
+	//delete doors
+	DoorArray.DeleteAll();
 }
 
 void Floor::SetCameraFloor()
@@ -239,6 +244,10 @@ void Floor::Enabled(bool value)
 	//call buttons
 	for (size_t i = 0; i < CallButtonArray.GetSize(); i++)
 		CallButtonArray[i]->Enabled(value);
+
+	//doors
+	for (size_t i = 0; i < DoorArray.GetSize(); i++)
+		DoorArray[i]->Enabled(value);
 }
 
 float Floor::FullHeight()
@@ -298,7 +307,7 @@ void Floor::EnableGroup(bool value)
 	}
 }
 
-int Floor::AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+void Floor::AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -325,7 +334,8 @@ int Floor::AddDoor(const char *texture, float thickness, int direction, float Ce
 	else
 		Cut(csVector3(x1, InterfloorHeight + voffset, z1 - 1), csVector3(x2, InterfloorHeight + voffset + height, z2 + 1), true, false, true);
 
-	return sbs->CreateDoor(texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude + InterfloorHeight, tw, th);
+	DoorArray.SetSize(DoorArray.GetSize() + 1);
+	DoorArray[DoorArray.GetSize() - 1] = new Door("Door", texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude + InterfloorHeight, tw, th);
 }
 
 float Floor::CalculateAltitude()

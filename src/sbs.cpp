@@ -119,7 +119,7 @@ SBS::SBS()
 	ShowFullShafts = false;
 	ShowFullStairs = false;
 	ShaftDisplayRange = 3;
-	StairsDisplayRange = 3;
+	StairsDisplayRange = 5;
 	ShaftOutsideDisplayRange = 3;
 	StairsOutsideDisplayRange = 3;
 	wall1a = false;
@@ -591,6 +591,8 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	//load default textures
 	csPrintf("Loading default textures...");
 	LoadTexture("/root/data/brick1.jpg", "Default", 1, 1);
+	LoadTexture("/root/data/gray2-sm.jpg", "ConnectionWall", 1, 1);
+	LoadTexture("/root/data/metal1-sm.jpg", "Connection", 1, 1);
 	csPrintf("Done\n");
 
 	//set up viewport
@@ -2081,6 +2083,12 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 
 	material = engine->GetMaterialList()->FindByName(texture);
 	csString texname = texture;
+
+	if (tw == 0)
+		tw = 1;
+	if (th == 0)
+		th = 1;
+
 	float tw2 = tw, th2 = th;
 
 	if (material == 0)
@@ -2231,16 +2239,6 @@ Stairs *SBS::GetStairs(int number)
 	for (size_t i = 0; i < StairsArray.GetSize(); i++)
 		if (StairsArray[i].number == number)
 			return StairsArray[i].object;
-	return 0;
-}
-
-Door *SBS::GetDoor(int number)
-{
-	//return pointer to door object
-
-	for (size_t i = 0; i < DoorArray.GetSize(); i++)
-		if (DoorArray[i].number == number)
-			return DoorArray[i].object;
 	return 0;
 }
 
@@ -2690,22 +2688,6 @@ void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, b
 	}
 }
 
-int SBS::CreateDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
-{
-	//create a door object
-
-	DoorArray.SetSize(DoorArray.GetSize() + 1);
-	DoorArray[DoorArray.GetSize() - 1].number = DoorArray.GetSize();
-	DoorArray[DoorArray.GetSize() - 1].object = new Door(DoorArray.GetSize(), texture, thickness, direction, CenterX, CenterZ, width, height, altitude, tw, th);
-	return DoorArray.GetSize();
-}
-
-int SBS::Doors()
-{
-	//return the number of doors
-	return DoorArray.GetSize();
-}
-
 float SBS::MetersToFeet(float meters)
 {
 	//converts meters to feet
@@ -2793,4 +2775,90 @@ void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const cha
 	bottomtex = bottom;
 	bottomtex.Trim();
 	TextureOverride = true;
+}
+
+int SBS::AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
+{
+	//meshname can either be:
+	//external, landscape, buildings or columnframe
+
+	//Adds a wall with the specified dimensions
+	float tw2 = tw;
+	float th2;
+	float tempw1;
+	float tempw2;
+	csString mesh = meshname;
+	mesh.Trim();
+
+	//Set horizontal scaling
+	x1 = x1 * HorizScale;
+	x2 = x2 * HorizScale;
+	z1 = z1 * HorizScale;
+	z2 = z2 * HorizScale;
+
+	//Call texture autosizing formulas
+	if (z1 == z2)
+		tw2 = AutoSize(x1, x2, true, tw);
+	if (x1 == x2)
+		tw2 = AutoSize(z1, z2, true, tw);
+	if ((z1 != z2) && (x1 != x2))
+	{
+		//calculate diagonals
+		if (x1 > x2)
+			tempw1 = x1 - x2;
+		else
+			tempw1 = x2 - x1;
+		if (z1 > z2)
+			tempw2 = z1 - z2;
+		else
+			tempw2 = z2 - z1;
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+	}
+	th2 = AutoSize(0, height_in1, false, th);
+
+	csRef<iThingFactoryState> tmpstate;
+	if (mesh.CompareNoCase("external") == true)
+		tmpstate = External_state;
+	if (mesh.CompareNoCase("buildings") == true)
+		tmpstate = Buildings_state;
+	if (mesh.CompareNoCase("landscape") == true)
+		tmpstate = Landscape_state;
+	if (mesh.CompareNoCase("columnframe") == true)
+		tmpstate = ColumnFrame_state;
+
+	return AddWallMain(tmpstate, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw2, th2);
+}
+
+int SBS::AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th)
+{
+	//meshname can either be:
+	//external, landscape, buildings or columnframe
+
+	//Adds a floor with the specified dimensions and vertical offset
+	float tw2;
+	float th2;
+	csString mesh = meshname;
+	mesh.Trim();
+
+	//Set horizontal scaling
+	x1 = x1 * HorizScale;
+	x2 = x2 * HorizScale;
+	z1 = z1 * HorizScale;
+	z2 = z2 * HorizScale;
+
+	//Call texture autosizing formulas
+	tw2 = AutoSize(x1, x2, true, tw);
+	th2 = AutoSize(z1, z2, false, th);
+
+	csRef<iThingFactoryState> tmpstate;
+	if (mesh.CompareNoCase("external") == true)
+		tmpstate = External_state;
+	if (mesh.CompareNoCase("buildings") == true)
+		tmpstate = Buildings_state;
+	if (mesh.CompareNoCase("landscape") == true)
+		tmpstate = Landscape_state;
+	if (mesh.CompareNoCase("columnframe") == true)
+		tmpstate = ColumnFrame_state;
+
+	return AddFloorMain(tmpstate, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw2, th2);
 }
