@@ -352,19 +352,8 @@ checkfloors:
 				//Err.Raise 1003;
 			//if IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
-			buffer = tempdata[0];
-			buffer.Downcase();
-			if (buffer == "external")
-				tmpMesh = Simcore->External_state;
-			if (buffer == "landscape")
-				tmpMesh = Simcore->Landscape_state;
-			if (buffer == "buildings")
-				tmpMesh = Simcore->Buildings_state;
-			if (buffer == "columnframe")
-				tmpMesh = Simcore->ColumnFrame_state;
-
 			//create wall
-			Simcore->AddWallMain(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+			Simcore->AddWall(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
 			tempdata.DeleteAll();
 		}
 
@@ -384,19 +373,8 @@ checkfloors:
 				//Err.Raise 1003;
 			//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
-			buffer = tempdata[0];
-			buffer.Downcase();
-			if (buffer == "external")
-				tmpMesh = Simcore->External_state;
-			if (buffer == "landscape")
-				tmpMesh = Simcore->Landscape_state;
-			if (buffer == "buildings")
-				tmpMesh = Simcore->Buildings_state;
-			if (buffer == "columnframe")
-				tmpMesh = Simcore->ColumnFrame_state;
-
 			//create floor
-			Simcore->AddFloorMain(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
+			Simcore->AddFloor(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
 			tempdata.DeleteAll();
 		}
 
@@ -404,7 +382,7 @@ checkfloors:
 		if (LineData.Slice(0, 4).CompareNoCase("cut ") == true && Section != 2 && Section != 4)
 		{
 			//get data
-			tempdata.SplitString(LineData.Slice(5).GetData(), ",");
+			tempdata.SplitString(LineData.Slice(4).GetData(), ",");
 
 			//calculate inline math
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)

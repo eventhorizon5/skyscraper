@@ -1264,12 +1264,58 @@ void Elevator::MoveElevatorToFloor()
 
 int Elevator::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
-	return sbs->AddWallMain(Elevator_state, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
+	//Adds a wall with the specified dimensions
+	float tw2 = tw;
+	float th2;
+	float tempw1;
+	float tempw2;
+
+	//Set horizontal scaling
+	x1 = x1 * sbs->HorizScale;
+	x2 = x2 * sbs->HorizScale;
+	z1 = z1 * sbs->HorizScale;
+	z2 = z2 * sbs->HorizScale;
+
+	//Call texture autosizing formulas
+	if (z1 == z2)
+		tw2 = sbs->AutoSize(x1, x2, true, tw);
+	if (x1 == x2)
+		tw2 = sbs->AutoSize(z1, z2, true, tw);
+	if ((z1 != z2) && (x1 != x2))
+	{
+		//calculate diagonals
+		if (x1 > x2)
+			tempw1 = x1 - x2;
+		else
+			tempw1 = x2 - x1;
+		if (z1 > z2)
+			tempw2 = z1 - z2;
+		else
+			tempw2 = z2 - z1;
+		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+	}
+	th2 = sbs->AutoSize(0, height1, false, th);
+
+	return sbs->AddWallMain(Elevator_state, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw2, th2);
 }
 
 int Elevator::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
-	return sbs->AddFloorMain(Elevator_state, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th);
+	//Adds a floor with the specified dimensions and vertical offset
+	float tw2;
+	float th2;
+
+	//Set horizontal scaling
+	x1 = x1 * sbs->HorizScale;
+	x2 = x2 * sbs->HorizScale;
+	z1 = z1 * sbs->HorizScale;
+	z2 = z2 * sbs->HorizScale;
+
+	//Call texture autosizing formulas
+	tw2 = sbs->AutoSize(x1, x2, true, tw);
+	th2 = sbs->AutoSize(z1, z2, false, th);
+
+	return sbs->AddFloorMain(Elevator_state, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw2, th2);
 }
 
 int Elevator::AddFloorIndicator(const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
