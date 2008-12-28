@@ -119,7 +119,7 @@ SBS::SBS()
 	ShowFullShafts = false;
 	ShowFullStairs = false;
 	ShaftDisplayRange = 3;
-	StairsDisplayRange = 3;
+	StairsDisplayRange = 5;
 	ShaftOutsideDisplayRange = 3;
 	StairsOutsideDisplayRange = 3;
 	wall1a = false;

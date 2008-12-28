@@ -313,7 +313,7 @@ int Stairs::AddDoor(int floor, const char *texture, float thickness, int directi
 	}
 
 	//create doorway walls
-	sbs->AddDoorwayWalls(sbs->GetFloor(floor)->Level_state, "ConnectionWall", 0, 0);
+	sbs->AddDoorwayWalls(StairArray_state[floor - startfloor], "ConnectionWall", 0, 0);
 
 	return sbs->CreateDoor(texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, voffset + sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, tw, th);
 }
