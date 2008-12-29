@@ -1310,7 +1310,8 @@ recalc:
 				{
 					csString tmpstring = tempdata[i];
 					tmpstring.Trim();
-					if (tmpstring.Find("-") > 0)
+					int searchpos = tmpstring.Find("-");
+					if (searchpos > 0)
 					{
 						//found a range marker
 						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-")));

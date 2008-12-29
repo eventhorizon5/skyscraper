@@ -206,7 +206,12 @@ void SBS::Start(wxApp *app)
 	for (int i = 0; i < Shafts(); i++)
 	{
 		if (ShaftArray[i].object)
+		{
 			ShaftArray[i].object->EnableWholeShaft(false, true);
+			//enable extents
+			ShaftArray[i].object->Enabled(ShaftArray[i].object->startfloor, true, true);
+			ShaftArray[i].object->Enabled(ShaftArray[i].object->endfloor, true, true);
+		}
 	}
 
 	//turn off stairwells
@@ -220,7 +225,11 @@ void SBS::Start(wxApp *app)
 	for (int i = 0; i < Elevators(); i++)
 	{
 		if (ElevatorArray[i].object)
+		{
 			ElevatorArray[i].object->ShaftDoorsEnabled(camera->StartFloor, true);
+			ElevatorArray[i].object->ShaftDoorsEnabled(ShaftArray[ElevatorArray[i].object->AssignedShaft].object->startfloor, true);
+			ElevatorArray[i].object->ShaftDoorsEnabled(ShaftArray[ElevatorArray[i].object->AssignedShaft].object->endfloor, true);
+		}
 	}
 
 	//turn on start floor
@@ -401,6 +410,9 @@ void SBS::SetupFrame()
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
 	float elapsed = remaining_delta + (vc->GetElapsedTicks() / 1000.0);
+	//limit the elapsed value to prevent major slowdowns during debugging
+	if (elapsed > 0.5)
+		elapsed = 0.5;
 	while (elapsed >= delta)
 	{
 		if (RenderOnly == false && InputOnly == false)

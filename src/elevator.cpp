@@ -1627,6 +1627,10 @@ void Elevator::ShaftDoorsEnabled(int floor, bool value)
 {
 	//turns shaft elevator doors on/off
 
+	//leave top and bottom on
+	if ((floor == sbs->GetShaft(AssignedShaft)->startfloor || floor == sbs->GetShaft(AssignedShaft)->endfloor) && value == false)
+		return;
+
 	uint index = ServicedFloors.Find(floor);
 	if (index == csArrayItemNotFound)
 		return;

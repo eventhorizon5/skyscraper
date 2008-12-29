@@ -85,7 +85,7 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	}
 
 	//create buttons
-	int bottomfloor = floornum > sbs->GetElevator(Elevators[0])->ServicedFloors[0];
+	int bottomfloor = sbs->GetElevator(Elevators[0])->ServicedFloors[0];
 	int topfloor = sbs->GetElevator(Elevators[0])->ServicedFloors[sbs->GetElevator(Elevators[0])->ServicedFloors.GetSize() - 1];
 
 	if (Direction == "front" || Direction == "back")

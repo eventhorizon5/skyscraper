@@ -64,7 +64,8 @@
     Load data/metal1.jpg, Metal1, 4, 4
     Load data/metal1.jpg, ElevExt, 4, 4
     Load data/text16.jpg, ElevDoors, 1, 1
-    Load data/marb148.jpg, ElevExtPanels, 1, 1
+    #Load data/marb148.jpg, ElevExtPanels, 1, 1
+    Load data/panel-back2.jpg, ElevExtPanels, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels2, 1, 1
     Load data/marb148.jpg, ElevPanel, 1, 1
     Load data/diamond18j.jpg, ElevPanelMain, 1, 1
@@ -3577,16 +3578,16 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 5, 6, left, 3.75 - 0.2 - 0.001, -1.75 - 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
-    AddFloorButton Button134, 2, 2, 134, 0, 1
-    AddFloorButton Button135, 2, 3, 135, 0, 1
-    AddFloorButton Button136, 2, 4, 136, 0, 1
-    AddFloorButton ButtonL, 3, 3, 0, 0, 1
-    AddControlButton ButtonOpen, 4, 2, open, 0, 1
-    AddControlButton ButtonClose, 4, 4, close, 0, 1
-    AddControlButton ButtonCancel, 5, 2, cancel, 0, 1
-    AddControlButton ButtonStop, 5, 3, stop, 0, 1
-    AddControlButton ButtonAlarm, 5, 4, alarm, 0, 1
+    CreatePanel ElevPanel, 6, 8, left, 3.75 - 0.2 - 0.001, -1.75 - 1.083, 0.5, 1, 4.5, 0.3, 0.45, 0, 0
+    AddFloorButton Button136, 2, 3, 136, 0, 1
+    AddFloorButton Button135, 3, 3, 135, 0, 1
+    AddFloorButton Button134, 4, 3, 134, 0, 1
+    AddFloorButton ButtonL, 5, 3, 0, 0, 1
+    AddControlButton ButtonOpen, 6, 2, open, 0, 1
+    AddControlButton ButtonClose, 6, 4, close, 0, 1
+    AddControlButton ButtonCancel, 7, 2, cancel, 0, 1
+    AddControlButton ButtonStop, 7, 3, stop, 0, 1
+    AddControlButton ButtonAlarm, 7, 4, alarm, 0, 1
 
     #Floor Indicator
     AddFloorIndicator left, 3.75 - 0.2 - 0.001, -1.75 - 1.083, 0.7, 0.5, 6.5
@@ -5401,22 +5402,22 @@ DrawWalls = true, true, false, false, false, false
 #Pool Express
 <Floor 80>
     CallButtonElevators = 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -6.835, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 100>
     CallButtonElevators = 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -6.835, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 120 to 129>
     CallButtonElevators = 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -6.835, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor 132>
     CallButtonElevators = 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -6.835, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Skydeck Express
@@ -5433,9 +5434,9 @@ DrawWalls = true, true, false, false, false, false
 #Service Elevators
 <Floors 0 to 141>
     CallButtonElevators = 66
-    if[%floor% = 0 | %floor% > 78] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.1, 18.542 + 4.125, 4, right, 0.5, 1, true, 0, 0
+    if[%floor% = 0 | %floor% > 78] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.1, 18.542 + 3.167, 4, right, 0.5, 1, true, 0, 0
     CallButtonElevators = 67
-    if[%floor% = 0 | %floor% < 80] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, 9.375 - 5.08 - 0.33 - 0.1, 18.542 + 4.125, 4, left, 0.5, 1, true, 0, 0
+    if[%floor% = 0 | %floor% < 80] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, 9.375 - 5.08 - 0.33 - 0.1, 18.542 - 3.167, 4, left, 0.5, 1, true, 0, 0
     CallButtonElevators = 68
     CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.1, 30.375 + 4.125, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
@@ -6056,7 +6057,7 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddWall StairsLeftE, %5%, 0.33, -17 + 4.7515, -4.5 + 51.66, -17 + 4.7515, 4.5 + 51.66 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddWall StairsRightE, %5%, 0.33, 9.0815 + 4.7515, -4.5 + 51.66, 9.0815 + 4.7515, 4.5 + 51.66 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall StairsRightE, %5%, 0.33, 9.0815 + 4.7515, -4.5 + 51.66 + 0.3, 9.0815 + 4.7515, 4.5 + 51.66 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddWall StairsBackE, %5%, 0.33, -9.0815 + 4.7515 - 0.33, 4.5 + 51.66, 9.0815 + 4.7515 + 0.33, 4.5 + 51.66, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddWall StairsBackE, %5%, 0.33, -17 + 4.7515 - 0.33, 4.5 + 51.66, 9.0815 + 4.7515 + 0.33, 4.5 + 51.66, %height%, %height%, 0, 0, 0, 0, False
 
