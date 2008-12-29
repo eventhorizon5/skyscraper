@@ -227,8 +227,8 @@ void SBS::Start(wxApp *app)
 		if (ElevatorArray[i].object)
 		{
 			ElevatorArray[i].object->ShaftDoorsEnabled(camera->StartFloor, true);
-			ElevatorArray[i].object->ShaftDoorsEnabled(ShaftArray[ElevatorArray[i].object->AssignedShaft].object->startfloor, true);
-			ElevatorArray[i].object->ShaftDoorsEnabled(ShaftArray[ElevatorArray[i].object->AssignedShaft].object->endfloor, true);
+			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->startfloor, true);
+			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->endfloor, true);
 		}
 	}
 
@@ -1981,7 +1981,7 @@ int SBS::CreateSky(const char *filenamebase)
 	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox->GetMeshObject()->GetFactory());
 	SkyBox->SetZBufMode(CS_ZBUF_USE);
 
-	int firstidx = SkyBox_state->AddInsideBox(csVector3(-2000, -2000, -2000), csVector3(2000, 2000, 2000));
+	int firstidx = SkyBox_state->AddInsideBox(csVector3(-5000, -5000, -5000), csVector3(5000, 5000, 5000));
 	material = engine->GetMaterialList ()->FindByName ("SkyBack");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
 	material = engine->GetMaterialList ()->FindByName ("SkyRight");
