@@ -176,6 +176,9 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 			else
 				return;
 		}
+		if (value == false && (floor == startfloor || floor == endfloor))
+			return;
+
 		if (EnableShaftDoors == true)
 		{
 			for (size_t i = 0; i < elevators.GetSize(); i++)
