@@ -272,15 +272,29 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 {
 	//determine if user is in the stairwell
 
+	bool hit = false;
+	bool hittmp = false;
 	float bottom = sbs->GetFloor(startfloor)->Altitude + sbs->GetFloor(startfloor)->InterfloorHeight;
 	float top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 
+	//determine floor
+	int floor = sbs->GetFloorNumber(position.y);
+
 	if (position.y > bottom && position.y < top)
 	{
-		csHitBeamResult result = StairArray[0]->HitBeam(position, csVector3(position.x, position.y - (top - bottom), position.z));
-		return result.hit;
+		//check both the current floor and floor below
+		csVector3 endposition;
+		endposition.Set(position.x, position.y - sbs->GetFloor(floor)->FullHeight(), position.z);
+		if (floor > startfloor)
+			hit = StairArray[(floor - 1) - startfloor]->HitBeam(position, endposition).hit;
+		if (floor >= startfloor && floor <= endfloor)
+		{
+			hittmp = StairArray[floor - startfloor]->HitBeam(position, endposition).hit;
+			if (hittmp == true)
+				hit = true;
+		}
 	}
-	return false;
+	return hit;
 }
 
 void Stairs::AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)

@@ -214,10 +214,7 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors)
 bool Shaft::IsInShaft(const csVector3 &position)
 {
 	if (position.y > bottom && position.y < top)
-	{
-		csHitBeamResult result = ShaftArray[0]->HitBeam(position, csVector3(position.x, position.y - (top - bottom), position.z));
-		return result.hit;
-	}
+		return ShaftArray[0]->HitBeam(position, csVector3(position.x, position.y - (top - bottom), position.z)).hit;
 	return false;
 }
 

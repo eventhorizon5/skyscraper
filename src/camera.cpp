@@ -51,11 +51,11 @@ Camera::Camera()
 	angle_velocity.Set(0, 0, 0);
 	desired_angle_velocity.Set(0, 0, 0);
 	cfg_jumpspeed = 0.08f;
-	cfg_walk_accelerate = 0.015f;
+	cfg_walk_accelerate = 0.040f;
 	cfg_walk_maxspeed = 0.1f;
 	cfg_walk_maxspeed_mult = 10.0f;
 	cfg_walk_maxspeed_multreal = 1.0f;
-	cfg_walk_brake = 0.020f;
+	cfg_walk_brake = 0.040f;
 	cfg_rotate_accelerate = 0.005f;
 	cfg_rotate_maxspeed = 0.015f;
 	cfg_rotate_brake = 0.015f;
