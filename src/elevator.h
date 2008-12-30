@@ -91,7 +91,7 @@ public:
 	int AddDoors(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
 	int AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
 	int AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
-	void CreateButtonPanel(const char *texture, int columns, int rows, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
+	void CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
 	void DumpQueues();
 	void Enabled(bool value);
 	void EnableObjects(bool value);
