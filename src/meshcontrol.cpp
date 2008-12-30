@@ -42,7 +42,6 @@ const long MeshControl::ID_chkExternal = wxNewId();
 const long MeshControl::ID_chkBuildings = wxNewId();
 const long MeshControl::ID_chkLandscape = wxNewId();
 const long MeshControl::ID_chkSky = wxNewId();
-const long MeshControl::ID_chkColumnFrame = wxNewId();
 const long MeshControl::ID_chkElevators = wxNewId();
 const long MeshControl::ID_chkFloor = wxNewId();
 const long MeshControl::ID_chkShafts = wxNewId();
@@ -76,15 +75,12 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	chkBuildings = new wxCheckBox(this, ID_chkBuildings, _("Buildings"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkBuildings"));
 	chkBuildings->SetValue(false);
 	StaticBoxSizer1->Add(chkBuildings, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	chkLandscape = new wxCheckBox(this, ID_chkLandscape, _("Landscape"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkLandscape"));
+	chkLandscape = new wxCheckBox(this, ID_chkLandscape, _("Landscape"), wxDefaultPosition, wxSize(100,-1), 0, wxDefaultValidator, _T("ID_chkLandscape"));
 	chkLandscape->SetValue(false);
 	StaticBoxSizer1->Add(chkLandscape, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkSky = new wxCheckBox(this, ID_chkSky, _("Sky"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkSky"));
 	chkSky->SetValue(false);
 	StaticBoxSizer1->Add(chkSky, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	chkColumnFrame = new wxCheckBox(this, ID_chkColumnFrame, _("ColumnFrame"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkColumnFrame"));
-	chkColumnFrame->SetValue(false);
-	StaticBoxSizer1->Add(chkColumnFrame, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkElevators = new wxCheckBox(this, ID_chkElevators, _("Elevators"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkElevators"));
 	chkElevators->SetValue(false);
 	StaticBoxSizer1->Add(chkElevators, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -125,7 +121,6 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkBuildings,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkBuildings_Click);
 	Connect(ID_chkLandscape,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkLandscape_Click);
 	Connect(ID_chkSky,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkSky_Click);
-	Connect(ID_chkColumnFrame,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkColumnFrame_Click);
 	Connect(ID_chkElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkElevators_Click);
 	Connect(ID_chkFloor,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkFloor_Click);
 	Connect(ID_chkShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkShafts_Click);
@@ -152,11 +147,6 @@ void MeshControl::OnInit()
 void MeshControl::On_bOk_Click(wxCommandEvent& event)
 {
 	p->Hide();
-}
-
-void MeshControl::On_chkColumnFrame_Click(wxCommandEvent& event)
-{
-	Simcore->EnableColumnFrame(chkColumnFrame->GetValue());
 }
 
 void MeshControl::On_chkSky_Click(wxCommandEvent& event)

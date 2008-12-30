@@ -122,7 +122,6 @@ public:
 	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
 	csArray<csString> UserVariable;
 	bool IsBuildingsEnabled; //contains status of buildings object
-	bool IsColumnFrameEnabled; //contains status of column frame object
 	bool IsExternalEnabled; //contains status of external object
 	bool IsLandscapeEnabled; //contains status of landscape object
 	bool IsSkyboxEnabled; //contains status of skybox object
@@ -175,7 +174,6 @@ public:
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
 	void EnableExternal(bool value);
-	void EnableColumnFrame(bool value);
 	void EnableSkybox(bool value);
 	int GetFloorNumber(float altitude);
 	float GetDistance(float x1, float x2, float z1, float z2);
@@ -228,9 +226,6 @@ public:
 
 	csRef<iMeshWrapper> Landscape; //landscape mesh
 		csRef<iThingFactoryState> Landscape_state;
-
-	csRef<iMeshWrapper> ColumnFrame; //column frame mesh
-		csRef<iThingFactoryState> ColumnFrame_state;
 
 	csRef<iMeshWrapper> SkyBox; //skybox mesh
 		csRef<iGeneralMeshState> SkyBox_state;

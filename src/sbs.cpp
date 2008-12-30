@@ -78,7 +78,6 @@ SBS::SBS()
 	InStairwell = false;
 	InElevator = false;
 	IsBuildingsEnabled = false;
-	IsColumnFrameEnabled = false;
 	IsExternalEnabled = false;
 	IsLandscapeEnabled = false;
 	IsSkyboxEnabled = false;
@@ -195,7 +194,6 @@ void SBS::Start(wxApp *app)
 	EnableBuildings(true);
 	EnableLandscape(true);
 	EnableExternal(true);
-	EnableColumnFrame(true);
 	EnableSkybox(true);
 
 	//turn off floors
@@ -1212,10 +1210,6 @@ void SBS::InitMeshes()
 	Landscape = engine->CreateSectorWallsMesh (area, "Landscape");
 	Landscape_state = scfQueryInterface<iThingFactoryState> (Landscape->GetMeshObject()->GetFactory());
 	Landscape->SetZBufMode(CS_ZBUF_USE);
-
-	ColumnFrame = engine->CreateSectorWallsMesh (area, "ColumnFrame");
-	ColumnFrame_state = scfQueryInterface<iThingFactoryState> (ColumnFrame->GetMeshObject()->GetFactory());
-	ColumnFrame->SetZBufMode(CS_ZBUF_USE);
 }
 
 int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
@@ -1883,24 +1877,6 @@ void SBS::EnableExternal(bool value)
 		External->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
 	IsExternalEnabled = value;
-}
-
-void SBS::EnableColumnFrame(bool value)
-{
-	//turns column frame on/off
-	if (value == true)
-	{
-		ColumnFrame->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ColumnFrame->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ColumnFrame->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		ColumnFrame->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ColumnFrame->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ColumnFrame->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-	}
-	IsColumnFrameEnabled = value;
 }
 
 void SBS::EnableSkybox(bool value)
@@ -2812,7 +2788,7 @@ void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const cha
 int SBS::AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
 {
 	//meshname can either be:
-	//external, landscape, buildings or columnframe
+	//external, landscape, or buildings
 
 	//Adds a wall with the specified dimensions
 	float tw2 = tw;
@@ -2855,8 +2831,6 @@ int SBS::AddWall(const char *meshname, const char *name, const char *texture, fl
 		tmpstate = Buildings_state;
 	if (mesh.CompareNoCase("landscape") == true)
 		tmpstate = Landscape_state;
-	if (mesh.CompareNoCase("columnframe") == true)
-		tmpstate = ColumnFrame_state;
 
 	return AddWallMain(tmpstate, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw2, th2);
 }
@@ -2864,7 +2838,7 @@ int SBS::AddWall(const char *meshname, const char *name, const char *texture, fl
 int SBS::AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th)
 {
 	//meshname can either be:
-	//external, landscape, buildings or columnframe
+	//external, landscape, or buildings
 
 	//Adds a floor with the specified dimensions and vertical offset
 	float tw2;
@@ -2889,8 +2863,6 @@ int SBS::AddFloor(const char *meshname, const char *name, const char *texture, f
 		tmpstate = Buildings_state;
 	if (mesh.CompareNoCase("landscape") == true)
 		tmpstate = Landscape_state;
-	if (mesh.CompareNoCase("columnframe") == true)
-		tmpstate = ColumnFrame_state;
 
 	return AddFloorMain(tmpstate, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw2, th2);
 }

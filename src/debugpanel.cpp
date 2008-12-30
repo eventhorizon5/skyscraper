@@ -145,7 +145,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
-
+	
 	Connect(ID_chkCollisionDetection,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkCollisionDetection_Click);
 	Connect(ID_chkGravity,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkGravity_Click);
 	Connect(ID_chkFrameLimiter,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkFrameLimiter_Click);
@@ -252,7 +252,6 @@ void DebugPanel::Timer::Notify()
 	if (mc->IsShown() == true)
 	{
 		mc->chkFloor->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsEnabled);
-		mc->chkColumnFrame->SetValue(Simcore->IsColumnFrameEnabled);
 		mc->chkSky->SetValue(Simcore->IsSkyboxEnabled);
 		mc->chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
 		mc->chkBuildings->SetValue(Simcore->IsBuildingsEnabled);

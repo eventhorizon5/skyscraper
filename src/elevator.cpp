@@ -1002,8 +1002,7 @@ void Elevator::MoveElevatorToFloor()
 			sbs->EnableSkybox(false);
 			sbs->EnableBuildings(false);
 			sbs->EnableLandscape(false);
-			sbs->EnableExternal(false); //temporary - remove when window objects are made
-			sbs->EnableColumnFrame(false);
+			sbs->EnableExternal(false);
 		}
 
 		//Play starting sound
@@ -1232,8 +1231,7 @@ void Elevator::MoveElevatorToFloor()
 			sbs->EnableSkybox(true);
 			sbs->EnableBuildings(true);
 			sbs->EnableLandscape(true);
-			sbs->EnableExternal(true); //temporary - remove when window objects are made
-			sbs->EnableColumnFrame(true);
+			sbs->EnableExternal(true);
 
 			//reset shaft doors
 			for (int i = 1; i <= sbs->Shafts(); i++)

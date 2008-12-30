@@ -328,8 +328,6 @@ checkfloors:
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
-			if (buffer == "columnframe")
-				tmpMesh = Simcore->ColumnFrame_state;
 
 			//create triangle wall
 			Simcore->AddTriangleWall(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
@@ -399,8 +397,6 @@ checkfloors:
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
-			if (buffer == "columnframe")
-				tmpMesh = Simcore->ColumnFrame_state;
 
 			//perform cut
 			Simcore->Cut(tmpMesh, csVector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), csVector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), csString(tempdata[7]).CompareNoCase("true"), csString(tempdata[8]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
@@ -448,8 +444,6 @@ checkfloors:
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
-			if (buffer == "columnframe")
-				tmpMesh = Simcore->ColumnFrame_state;
 			//if IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
 			Simcore->CreateWallBox2(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 			tempdata.DeleteAll();
@@ -484,8 +478,6 @@ checkfloors:
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
-			if (buffer == "columnframe")
-				tmpMesh = Simcore->ColumnFrame_state;
 			//If IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
 			Simcore->CreateWallBox(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 			tempdata.DeleteAll();
@@ -511,8 +503,6 @@ checkfloors:
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
-			if (buffer == "columnframe")
-				tmpMesh = Simcore->ColumnFrame_state;
 
 			csPoly3D varray;
 			int alength;
@@ -544,8 +534,6 @@ checkfloors:
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
-			if (buffer == "columnframe")
-				tmpMesh = Simcore->ColumnFrame_state;
 
 			csPoly3D varray;
 			int alength;
@@ -713,8 +701,6 @@ checkfloors:
 				tmpMesh = Simcore->Landscape_state;
 			if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
-			if (buffer == "columnframe")
-				tmpMesh = Simcore->ColumnFrame_state;
 
 			csVector3 isect = Simcore->GetPoint(tmpMesh, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 			tempdata.DeleteAll();
