@@ -32,7 +32,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-ButtonPanel::ButtonPanel(int _elevator, const char *texture, int columns, int rows, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th)
+ButtonPanel::ButtonPanel(int _elevator, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th)
 {
 	//Create an elevator button panel
 
