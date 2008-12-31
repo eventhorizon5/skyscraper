@@ -308,18 +308,15 @@ checkfloors:
 				//Err.Raise 1003;
 			//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
 
+			if (Section == 2)
+			{
+				 buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[4]);
+                                 tempdata.Put(4, buffer);
+                                 buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[7]);
+                                 tempdata.Put(7, buffer);
+			}
 			if (csString(tempdata[0]).CompareNoCase("floor") == true)
 				tmpMesh = Simcore->GetFloor(Current)->Level_state;
-			else
-			{
-			if (Section == 2)
-				{
-					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[4]);
-					tempdata.Put(4, buffer);
-					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[7]);
-					tempdata.Put(7, buffer);
-				}
-			}
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
@@ -426,16 +423,13 @@ checkfloors:
 			}
 			//if (tempdata.GetSize < 9)
 				//Err.Raise 1003;
+			if (Section == 2)
+			{
+				buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[8]);
+				tempdata.Put(8, buffer);
+			}
 			if (csString(tempdata[0]).CompareNoCase("floor") == true)
 				tmpMesh = Simcore->GetFloor(Current)->Level_state;
-			else
-			{
-			if (Section == 2)
-				{
-					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[8]);
-					tempdata.Put(8, buffer);
-				}
-			}
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
@@ -460,16 +454,13 @@ checkfloors:
 			}
 			//if (tempdata.GetSize < 9)
 				//Err.Raise 1003
+			if (Section == 2)
+			{
+				buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[8]);
+				tempdata.Put(8, buffer);
+			}
 			if (csString(tempdata[0]).CompareNoCase("floor") == true)
 				tmpMesh = Simcore->GetFloor(Current)->Level_state;
-			else
-			{
-				if (Section == 2)
-				{
-					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[8]);
-					tempdata.Put(8, buffer);
-				}
-			}
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
