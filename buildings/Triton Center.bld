@@ -516,6 +516,51 @@ SetAutoSize = true, true
     AddDoor Door, 0.2, 5, 38, 3.708 + 9.708 - 0.33 + 0.25, 3.5, 8, 0, 1, 1
 <EndFloor>
 
+# Zone 1 Column Frame
+<Floors 0 to 39>
+    Set 5 = Wall1
+    if[%floor% > 37] Set 5 = Stucco4
+    CreateWallBox2 Floor, ColumnL1, %5%, -75 + 2.6, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnL2, %5%, -75 + 2.6, 52.5 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnL3, %5%, -75 + 2.6, 35 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnL4, %5%, -75 + 2.6, 17.5 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnL5, %5%, -75 + 2.6, 0, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnL6, %5%, -75 + 2.6, -17.5 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnL7, %5%, -75 + 2.6, -35 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnL8, %5%, -75 + 2.6, -52.5 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnL9, %5%, -75 + 2.6, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+
+    CreateWallBox2 Floor, ColumnR1, %5%, 75 - 2.6, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnR2, %5%, 75 - 2.6, 52.5 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnR3, %5%, 75 - 2.6, 35 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnR4, %5%, 75 - 2.6, 17.5 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnR5, %5%, 75 - 2.6, 0, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnR6, %5%, 75 - 2.6, -17.5 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnR7, %5%, 75 - 2.6, -35 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnR8, %5%, 75 - 2.6, -52.5 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnR9, %5%, 75 - 2.6, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+ 
+    CreateWallBox2 Floor, ColumnB1, %5%, -60 + 2.6, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnB2, %5%, -45 + 2.6, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnB3, %5%, -30 + 2.6, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnB4, %5%, -15 + 2.6, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnB5, %5%, 0, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnB6, %5%, 15 - 2.6, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnB7, %5%, 30 - 2.6, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnB8, %5%, 45 - 2.6, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnB9, %5%, 60 - 2.6, 70 - 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+
+    CreateWallBox2 Floor, ColumnF1, %5%, -60 + 2.6, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnF2, %5%, -45 + 2.6, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnF3, %5%, -30 + 2.6, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnF4, %5%, -15 + 2.6, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnF5, %5%, 0, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnF6, %5%, 15 - 2.6, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnF7, %5%, 30 - 2.6, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnF8, %5%, 45 - 2.6, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+    CreateWallBox2 Floor, ColumnF9, %5%, 60 - 2.6, -70 + 2.6, 5, 5, %fullheight%, -%interfloorheight%, 0, 0
+<EndFloors>
+
 #zone 2 skeleton
 <Floors 40 to 78>
     Height = 10
@@ -6173,41 +6218,3 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
-# Main load-bearing columns
-#Top set
-#CreateWallBox2 ColumnFrame, MainTop1, Brick, 35.5, 68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, MainTop2, Brick, -35.5, 68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
-#Bottom set
-#CreateWallBox2 ColumnFrame, MainBottom1, Brick, 35.5, -68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, MainBottom2, Brick, -35.5, -68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
-#Left set
-#CreateWallBox2 ColumnFrame, MainLeft1, Brick, -71.5, 47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, MainLeft2, Brick, -71.5, -47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
-#Right set
-#CreateWallBox2 ColumnFrame, MainRight1, Brick, 71.5, 47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, MainRight2, Brick, 71.5, -47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
-
-# Core load-bearing columns
-#Set 1
-#CreateWallBox2 ColumnFrame, CoreSet1A, Brick, -42.6, 21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet1B, Brick, -42.6, 7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet1C, Brick, -42.6, -7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet1D, Brick, -42.6, -21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-
-#Set 2
-#CreateWallBox2 ColumnFrame, CoreSet2A, Brick, -13.5, 21, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet2B, Brick, -13.5, 7, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet2C, Brick, -13.5, -7, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet2D, Brick, -13.5, -21, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
-
-#Set 3
-#CreateWallBox2 ColumnFrame, CoreSet3A, Brick, 13.5, 21, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet3B, Brick, 13.5, 7, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet3C, Brick, 13.5, -7, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet3D, Brick, 13.5, -21, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
-
-#Set 4
-#CreateWallBox2 ColumnFrame, CoreSet4A, Brick, 42.6, 21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet4B, Brick, 42.6, 7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet4C, Brick, 42.6, -7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet4D, Brick, 42.6, -21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
