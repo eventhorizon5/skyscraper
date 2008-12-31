@@ -24,7 +24,7 @@
     Description = A fictitious Chicago-based 142-story skyscraper located on the northeast corner of Dearborn & Washington.
     Version = 3
     HorizScale = 1
-    CameraFloor = 78
+    CameraFloor = 0
     CameraPosition = 0, -41.6
     CameraDirection = 0, 10, 28.8
     CameraRotation = 0, 0, 0
@@ -496,6 +496,26 @@ SetAutoSize = true, true
     Group = 38
 <EndFloor>
 
+#Stairwell transfer hallways
+<Floor 38>
+    #North transfer
+    WallOrientation = right
+    AddWall Left, Stucco4, 0.5, -46.67 - 4.5 - 10, -3.708 - 9.708  + 0.33 - 0.5, -46.67 - 4.5 - 10, 37.367 + 4.167 + 0.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front, Stucco4, 0.5, -46.67 - 4.5 - 10 - 0.5, -3.708 - 9.708 + 0.33, -46.67 - 4.5 - 0.33, -3.708 - 9.708 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall Back, Stucco4, 0.5, -46.67 - 4.5 - 10 - 0.5, 37.367 + 4.167, -19 + 4.75 - 0.33, 37.367 + 4.167, %height%, %height%, 0, 0, 0, 0, False
+    AddDoor Door, 0.2, 5, -46.67 - 4.5 - 5, -3.708 - 9.708, 3.5, 8, 0, 1, 1
+
+    #South transfer
+    WallOrientation = right
+    AddWall Left, Stucco4, 0.5, 26.42 + 4.5 + 0.33, -33.708 + 9.708, 26.42 + 4.5 + 0.33, 3.708 + 9.708, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front, Stucco4, 0.5, 26.42 + 4.5 + 0.33, -33.708 + 4, 46.67 - 4.5 - 0.33 + 0.5, -33.708 + 4, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall Back, Stucco4, 0.5, 24.08 + 9.75 + 0.33, 3.708 + 9.708 - 0.33, 46.67 - 4.5 - 0.33, 3.708 + 9.708 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right, Stucco4, 0.5, 46.67 - 4.5 - 0.33, -33.708 + 4 - 0.5, 46.67 - 4.5 - 0.33, -9.792 - 3.792 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddDoor Door, 0.2, 5, 38, 3.708 + 9.708 - 0.33 + 0.25, 3.5, 8, 0, 1, 1
+<EndFloor>
+
 #zone 2 skeleton
 <Floors 40 to 78>
     Height = 10
@@ -632,6 +652,26 @@ SetAutoSize = true, true
     AddFloor Right Setback, Brick, 0.5, 51, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, True
 
     DrawWalls = true, true, false, false, false, false
+
+    #Stairwell transfer hallways
+    
+    #Northeast transfer
+    WallOrientation = right
+    AddWall Left, Stucco4, 0.5, -29.083 + 5.333 - 10, 23.537 + 9.708 + 0.33, -29.083 + 5.333 - 10, 51.66 + 4.5 - 0.33 + 0.5, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall Back, Stucco4, 0.5, -29.083 + 5.333 - 10 - 0.5, 51.66 + 4.5 - 0.33, 4.7515 - 9.0815 - 0.33, 51.66 + 4.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddDoor Door, 0.2, 8, -29.083 + 5.333 - 5, 51.66 + 4.5, 3.5, 8, 0, 1, 1
+
+    #Southwest transfer
+    WallOrientation = right
+    AddWall Left, Stucco4, 0.5, 5.67 + 0.33, -33.708 + 9.708 - 0.33 - 10 - 0.5, 5.67 + 0.33, -13.5 - 8.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front, Stucco4, 0.5, 5.67 + 0.33 - 0.5, -33.708 + 9.708 - 0.33 - 10, 26.42 - 4.5 - 0.33, -33.708 + 9.708 - 0.33 - 10, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall Back, Stucco4, 0.5, 5.67 + 0.33, -13.5 + 8.5 - 0.33, 5.67 + 0.33 + 10 + 0.5, -13.5 + 8.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back2, Stucco4, 0.5, 5.67 + 0.33 + 10, -33.708 + 9.708 - 0.33, 26.42 - 4.5 - 0.33, -33.708 + 9.708 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right, Stucco4, 0.5, 5.67 + 0.33 + 10, -33.708 + 9.708 - 0.33, 5.67 + 0.33 + 10, -13.5 + 8.5 - 0.33 + 0.5, %height%, %height%, 0, 0, 0, 0, False
+    AddDoor Door, 0.2, 6, 5.67 + 0.33 + 5, -33.708 + 9.708 - 0.33 - 10 - 0.25, 3.5, 8, 0, 1, 1
+
 <EndFloor>
 
 #zone 3A skeleton
@@ -5581,7 +5621,8 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
 
     #doors
     if[%floor% = 0 | %floor% = 1] AddStairsDoor 1, StairsDoor2, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
-    if[%floor% ! 0 & %floor% ! 1 & %floor% ! 39] AddStairsDoor 1, StairsDoor, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
+    if[%floor% ! 0 & %floor% ! 1 & %floor% < 38] AddStairsDoor 1, StairsDoor, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
+    if[%floor% = 38] AddStairsDoor 1, StairsDoor, 0.2, 2, -4.5, -7.208, 3.5, 8, 0, 1, 1
 
     #signs
     SetAutoSize = false, false
@@ -5691,8 +5732,9 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
 
     #doors
     if[%floor% = 0] AddStairsDoor 2, StairsDoor2, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
-    if[%floor% ! 0 & %floor% ! 1 & %floor% ! 39] AddStairsDoor 2, StairsDoor, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
+    if[%floor% ! 0 & %floor% ! 1 & %floor% < 38] AddStairsDoor 2, StairsDoor, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
     if[%floor% = 1] AddStairsDoor 2, StairsDoor, 0.2, 4, 4.5, 7.208, 3.5, 8, 0, 1, 1
+    if[%floor% = 38] AddStairsDoor 2, StairsDoor, 0.2, 3, -4.5, 7.208, 3.5, 8, 0, 1, 1
 
     #signs
     SetAutoSize = false, false
