@@ -96,11 +96,11 @@
     <strong>6. Global commands or functions that can be used anywhere in the script</strong></p>
   <p align="left">In this section, <em>Destobject</em> refers to the destination 
     object to create other objects in. It can be either <em>floor </em>(only available 
-    within a Floor section)<em>, external</em>, <em>landscape</em>, <em>buildings</em>, 
-    or <em>columnframe</em> (more will come soon). When the command is used inside 
-    a <em>Floor</em> section, and <em>Destobject</em> is not <em>floor</em>, the 
-    altitude of the current floor will be used, and altitude/y values specified 
-    in these commands will be offsets of that altitude.</p>
+    within a Floor section)<em>, external</em>, <em>landscape</em>, or <em>buildings</em> 
+    (more will come soon). When the command is used inside a <em>Floor</em> section, 
+    and <em>Destobject</em> is not <em>floor</em>, the altitude of the current 
+    floor will be used, and altitude/y values specified in these commands will 
+    be offsets of that altitude.</p>
   <p align="left"><br>
     <strong>a. AddTriangleWall</strong> - adds a textured triangular wall<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddTriangleWall <em>destobject, 
@@ -275,11 +275,11 @@
     Example: <font size="2" face="Courier New, Courier, mono">isect(external, 
     wall1, 10, 10, 0, -10, 10, 0)</font></p>
   <p align="left"><em>Destobject</em> is the destination object to get the object 
-    from (floor, external, landscape, buildings, or columnframe). <em>Startx</em>, 
-    <em>starty</em>, and <em>startz</em> make up the position of the starting 
-    position, and <em>endx</em>, <em>endy</em> and <em>endz</em> make up the ending 
-    position. The first intersection of the named object is the return value, 
-    in &quot;X, Y, Z&quot; format (for example, &quot;10, 1, 3&quot;).</p>
+    from (floor, external, landscape, or buildings). <em>Startx</em>, <em>starty</em>, 
+    and <em>startz</em> make up the position of the starting position, and <em>endx</em>, 
+    <em>endy</em> and <em>endz</em> make up the ending position. The first intersection 
+    of the named object is the return value, in &quot;X, Y, Z&quot; format (for 
+    example, &quot;10, 1, 3&quot;).</p>
   <p align="left"><strong>q. SetAutoSize</strong> - enables or disables texture 
     autosizing<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> SetAutoSize = <em>AutoWidth, 

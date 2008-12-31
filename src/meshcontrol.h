@@ -51,7 +51,6 @@ class MeshControl: public wxDialog
 		static const long ID_chkBuildings;
 		static const long ID_chkLandscape;
 		static const long ID_chkSky;
-		static const long ID_chkColumnFrame;
 		static const long ID_chkElevators;
 		static const long ID_chkFloor;
 		static const long ID_chkShafts;
@@ -66,7 +65,6 @@ class MeshControl: public wxDialog
 
 		//(*Handlers(MeshControl)
 		void On_bOk_Click(wxCommandEvent& event);
-		void On_chkColumnFrame_Click(wxCommandEvent& event);
 		void On_chkSky_Click(wxCommandEvent& event);
 		void On_chkLandscape_Click(wxCommandEvent& event);
 		void On_chkBuildings_Click(wxCommandEvent& event);
@@ -84,7 +82,6 @@ class MeshControl: public wxDialog
 		//(*Declarations(MeshControl)
 		wxCheckBox* chkAllShafts;
 		wxCheckBox* chkAllFloors;
-		wxCheckBox* chkColumnFrame;
 		wxCheckBox* chkShafts;
 		wxCheckBox* chkBuildings;
 		wxCheckBox* chkExternal;
