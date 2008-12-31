@@ -228,7 +228,7 @@ public:
 		csRef<iThingFactoryState> Landscape_state;
 
 	csRef<iMeshWrapper> SkyBox; //skybox mesh
-		csRef<iGeneralMeshState> SkyBox_state;
+		csRef<iThingFactoryState> SkyBox_state;
 
 private:
 

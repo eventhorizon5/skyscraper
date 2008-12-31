@@ -1953,21 +1953,12 @@ int SBS::CreateSky(const char *filenamebase)
 	LoadTexture("/root/sky/front.jpg", "SkyFront", 1, 1);
 	LoadTexture("/root/sky/back.jpg", "SkyBack", 1, 1);
 
-	CS::Geometry::DensityTextureMapper mapper (0.3f);
-	CS::Geometry::TesselatedBox box (csVector3(-5000, 0, -5000), csVector3(5000, 10000, 5000));
-	box.SetLevel(3);
-	box.SetMapper(&mapper);
-	box.SetFlags(CS::Geometry::Primitives::CS_PRIMBOX_INSIDE);
-	SkyBox = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(engine, area, "SkyBox", "SkyBox_factory", &box);
-	SkyBox_state = scfQueryInterface<iGeneralMeshState> (SkyBox->GetMeshObject());
+	SkyBox = (engine->CreateSectorWallsMesh (area, "SkyBox"));
+	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox->GetMeshObject()->GetFactory());
 	SkyBox->SetZBufMode(CS_ZBUF_USE);
 
+	int firstidx = SkyBox_state->AddInsideBox(csVector3(-5000, -5000, -5000), csVector3(5000, 5000, 5000));
 	material = engine->GetMaterialList ()->FindByName ("SkyBack");
-	SkyBox->GetMeshObject()->SetMaterialWrapper(material);
-
-	//int firstidx = SkyBox_state->AddInsideBox(csVector3(-5000, -5000, -5000), csVector3(5000, 5000, 5000));
-	//int firstidx = AddWallMain(SkyBox_state, "SkyLeft", "SkyLeft", 0, -5000, -5000, -5000, 5000, 5000, 5000, 0, 0, 1, 1);
-	/*material = engine->GetMaterialList ()->FindByName ("SkyBack");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
 	material = engine->GetMaterialList ()->FindByName ("SkyRight");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
@@ -1984,8 +1975,8 @@ int SBS::CreateSky(const char *filenamebase)
 		csVector2 (0, 1),
 		csVector2 (1, 1),
 		csVector2 (1, 0));
-	*/
-	return 0;
+
+	return firstidx;
 }
 
 int SBS::GetFloorNumber(float altitude)
