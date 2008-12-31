@@ -2156,8 +2156,8 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     #shaft 24
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    if[%floor% < 100] AddWall Shaft24FrontE, %5%, 0.33, -4.5 - 10.17 - 0.33, -4.25 + 9.25, 4.5 - 10.17 + 0.33, -4.25 + 9.25, %3%, %3%, %4%, %4%, 0, 0, False
-    if[%floor% > 99] AddWall Shaft24FrontE, %5%, 0.33, -4.5 - 10.17, -4.25 + 9.25, 4.5 - 10.17 + 0.33, -4.25 + 9.25, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% < 100 | %floor% > 131] AddWall Shaft24FrontE, %5%, 0.33, -4.5 - 10.17 - 0.33, -4.25 + 9.25, 4.5 - 10.17 + 0.33, -4.25 + 9.25, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 99 & %floor% < 132] AddWall Shaft24FrontE, %5%, 0.33, -4.5 - 10.17, -4.25 + 9.25, 4.5 - 10.17 + 0.33, -4.25 + 9.25, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < 99 | %floor% = 132] AddWall Shaft24LeftE, %5%, 0.33, -4.5 - 10.17, -4.25 + 9.25 - 0.33, -4.5 - 10.17, 4.25 + 9.25 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
