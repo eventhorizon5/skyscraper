@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.2 Alpha - Loader Form
-	Copyright (C)2005-2008 Ryan Thoryk
+	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
