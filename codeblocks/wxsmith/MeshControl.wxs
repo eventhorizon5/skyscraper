@@ -31,6 +31,7 @@
 							<object class="sizeritem">
 								<object class="wxCheckBox" name="ID_chkLandscape" variable="chkLandscape" member="yes">
 									<label>Landscape</label>
+									<size>100,-1</size>
 									<handler function="On_chkLandscape_Click" entry="EVT_CHECKBOX" />
 								</object>
 								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
@@ -40,14 +41,6 @@
 								<object class="wxCheckBox" name="ID_chkSky" variable="chkSky" member="yes">
 									<label>Sky</label>
 									<handler function="On_chkSky_Click" entry="EVT_CHECKBOX" />
-								</object>
-								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-								<border>5</border>
-							</object>
-							<object class="sizeritem">
-								<object class="wxCheckBox" name="ID_chkColumnFrame" variable="chkColumnFrame" member="yes">
-									<label>ColumnFrame</label>
-									<handler function="On_chkColumnFrame_Click" entry="EVT_CHECKBOX" />
 								</object>
 								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
