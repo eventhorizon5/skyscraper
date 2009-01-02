@@ -129,6 +129,7 @@ SBS::SBS()
 	AutoY = true;
 	ReverseAxisValue = false;
 	TextureOverride = false;
+	ProcessElevators = true;
 }
 
 SBS::~SBS()
@@ -419,11 +420,14 @@ void SBS::SetupFrame()
 			camera->UpdateCameraFloor();
 
 			//run elevator handlers
-			for (int i = 1; i <= Elevators(); i++)
-				GetElevator(i)->MonitorLoop();
+			if (ProcessElevators == true)
+			{
+				for (int i = 1; i <= Elevators(); i++)
+					GetElevator(i)->MonitorLoop();
 
-			//check if the user is in an elevator
-			camera->CheckElevator();
+				//check if the user is in an elevator
+				camera->CheckElevator();
+			}
 
 			//check if the user is in a shaft
 			if (AutoShafts == true)

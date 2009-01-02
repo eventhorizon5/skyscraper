@@ -128,6 +128,7 @@ public:
 	float FPS; //current frame rate
 	bool AutoShafts; //true if shafts should turn on and off automatically
 	bool AutoStairs; //true if stairwells should turn on and off automatically
+	bool ProcessElevators; //true if elevator system should be enabled
 	bool ShowFullShafts; //true if entire shaft should be displayed while user is in an elevator
 	bool ShowFullStairs; //true if entire stairwell should be displayed while user is in it
 	int ShaftDisplayRange; //number of shaft floors to display while in elevator; has no effect if ShowFullShafts is true
