@@ -1129,39 +1129,139 @@ bool SBS::ReportError (const char* msg, ...)
 	return false;
 }
 
-int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th)
+int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create 4 walls
 
-	iMaterialWrapper* tm;
+	int firstidx = 0;
+	int tmpidx = 0;
+	int range = 0;
+	int range2 = 0;
 
-	int firstidx = dest->AddInsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
-	tm = engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+	if (inside == true)
+	{
+		//generate a box visible from the inside
+		csBox3 box (csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
+		firstidx = dest->AddQuad( //front
+			box.GetCorner(CS_BOX_CORNER_xyz),
+			box.GetCorner(CS_BOX_CORNER_Xyz),
+			box.GetCorner(CS_BOX_CORNER_XYz),
+			box.GetCorner(CS_BOX_CORNER_xYz));
+		range++;
+		dest->AddQuad( //right
+			box.GetCorner(CS_BOX_CORNER_Xyz),
+			box.GetCorner(CS_BOX_CORNER_XyZ),
+			box.GetCorner(CS_BOX_CORNER_XYZ),
+			box.GetCorner(CS_BOX_CORNER_XYz));
+		range++;
+		dest->AddQuad( //back
+			box.GetCorner(CS_BOX_CORNER_XyZ),
+			box.GetCorner(CS_BOX_CORNER_xyZ),
+			box.GetCorner(CS_BOX_CORNER_xYZ),
+			box.GetCorner(CS_BOX_CORNER_XYZ));
+		range++;
+		dest->AddQuad( //left
+			box.GetCorner(CS_BOX_CORNER_xyZ),
+			box.GetCorner(CS_BOX_CORNER_xyz),
+			box.GetCorner(CS_BOX_CORNER_xYz),
+			box.GetCorner(CS_BOX_CORNER_xYZ));
+		range++;
+		if (bottom == true)
+		{
+			dest->AddQuad( //bottom
+				box.GetCorner(CS_BOX_CORNER_xyZ),
+				box.GetCorner(CS_BOX_CORNER_XyZ),
+				box.GetCorner(CS_BOX_CORNER_Xyz),
+				box.GetCorner(CS_BOX_CORNER_xyz));
+			range++;
+		}
+		if (top == true)
+		{
+			dest->AddQuad( //top
+				box.GetCorner(CS_BOX_CORNER_xYz),
+				box.GetCorner(CS_BOX_CORNER_XYz),
+				box.GetCorner(CS_BOX_CORNER_XYZ),
+				box.GetCorner(CS_BOX_CORNER_xYZ));
+			range++;
+		}
+	}
 
-	dest->AddOutsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
-	tm = engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
+	if (outside == true)
+	{
+		csBox3 box (csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
+		tmpidx = dest->AddQuad( //front
+			box.GetCorner(CS_BOX_CORNER_xYz),
+			box.GetCorner(CS_BOX_CORNER_XYz),
+			box.GetCorner(CS_BOX_CORNER_Xyz),
+			box.GetCorner(CS_BOX_CORNER_xyz));
+		range2++;
+		if (inside == false)
+			firstidx = tmpidx;
+		dest->AddQuad( //right
+			box.GetCorner(CS_BOX_CORNER_XYz),
+			box.GetCorner(CS_BOX_CORNER_XYZ),
+			box.GetCorner(CS_BOX_CORNER_XyZ),
+			box.GetCorner(CS_BOX_CORNER_Xyz));
+		range2++;
+		dest->AddQuad( //back
+			box.GetCorner(CS_BOX_CORNER_XYZ),
+			box.GetCorner(CS_BOX_CORNER_xYZ),
+			box.GetCorner(CS_BOX_CORNER_xyZ),
+			box.GetCorner(CS_BOX_CORNER_XyZ));
+		range2++;
+		dest->AddQuad( //left
+			box.GetCorner(CS_BOX_CORNER_xYZ),
+			box.GetCorner(CS_BOX_CORNER_xYz),
+			box.GetCorner(CS_BOX_CORNER_xyz),
+			box.GetCorner(CS_BOX_CORNER_xyZ));
+		range2++;
+		if (bottom == true)
+		{
+			dest->AddQuad( //bottom
+				box.GetCorner(CS_BOX_CORNER_xyz),
+				box.GetCorner(CS_BOX_CORNER_Xyz),
+				box.GetCorner(CS_BOX_CORNER_XyZ),
+				box.GetCorner(CS_BOX_CORNER_xyZ));
+			range2++;
+		}
+		if (top == true)
+		{
+			dest->AddQuad( //top
+				box.GetCorner(CS_BOX_CORNER_xYZ),
+				box.GetCorner(CS_BOX_CORNER_XYZ),
+				box.GetCorner(CS_BOX_CORNER_XYz),
+				box.GetCorner(CS_BOX_CORNER_xYz));
+			range2++;
+		}
+	}
 
-	//set polygon names
+	//texture mapping
+	iMaterialWrapper* tm = engine->GetMaterialList()->FindByName(texture);
+	dest->SetPolygonMaterial(csPolygonRange(firstidx, firstidx + range + range2), tm);
+	dest->SetPolygonTextureMapping(csPolygonRange(firstidx, firstidx + range + range2), 3);
+
+	//polygon names
 	csString NewName;
-	NewName = name;
-	NewName.Append(":0");
-	dest->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
-	NewName = name;
-	NewName.Append(":1");
-	dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+	if (inside == true)
+	{
+		NewName = name;
+		NewName.Append(":inside");
+		dest->SetPolygonName(csPolygonRange(firstidx, firstidx + range), NewName);
+	}
+	if (outside == true)
+	{
+		NewName = name;
+		NewName.Append(":outside");
+		dest->SetPolygonName(csPolygonRange(tmpidx, tmpidx + range2), NewName);
+	}
 
 	return firstidx;
 }
 
-int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th)
+int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create 4 walls from a central point
 
-	iMaterialWrapper* tm;
 	float x1;
 	float x2;
 	float z1;
@@ -1172,26 +1272,7 @@ int SBS::CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const 
 	z1 = CenterZ - (LengthZ / 2);
 	z2 = CenterZ + (LengthZ / 2);
 
-	int firstidx = dest->AddInsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
-	tm = engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-
-	dest->AddOutsideBox(csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
-	tm = engine->GetMaterialList ()->FindByName (texture);
-	dest->SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
-	dest->SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3); //see todo below
-
-	//set polygon names
-	csString NewName;
-	NewName = name;
-	NewName.Append(":0");
-	dest->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
-	NewName = name;
-	NewName.Append(":1");
-	dest->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
-
-	return firstidx;
+	return CreateWallBox(dest, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom);
 }
 
 void SBS::InitMeshes()
@@ -1957,7 +2038,7 @@ int SBS::CreateSky(const char *filenamebase)
 	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox->GetMeshObject()->GetFactory());
 	SkyBox->SetZBufMode(CS_ZBUF_USE);
 
-	int firstidx = SkyBox_state->AddInsideBox(csVector3(-5000, -5000, -5000), csVector3(5000, 5000, 5000));
+	int firstidx = SkyBox_state->AddInsideBox(csVector3(-2000, -2000, -2000), csVector3(2000, 2000, 2000));
 	material = engine->GetMaterialList ()->FindByName ("SkyBack");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
 	material = engine->GetMaterialList ()->FindByName ("SkyRight");

@@ -252,6 +252,7 @@ void DebugPanel::Timer::Notify()
 	if (mc->IsShown() == true)
 	{
 		mc->chkFloor->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsEnabled);
+		mc->chkColumnFrame->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsColumnFrameEnabled);
 		mc->chkSky->SetValue(Simcore->IsSkyboxEnabled);
 		mc->chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
 		mc->chkBuildings->SetValue(Simcore->IsBuildingsEnabled);

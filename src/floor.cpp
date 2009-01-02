@@ -57,6 +57,14 @@ Floor::Floor(int number)
 	Interfloor->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
 	Interfloor->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
+	//Create columnframe mesh
+	buffer = Number;
+	buffer.Insert(0, "ColumnFrame ");
+	buffer.Trim();
+	ColumnFrame = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
+	ColumnFrame_state = scfQueryInterface<iThingFactoryState> (ColumnFrame->GetMeshObject()->GetFactory());
+	ColumnFrame->SetZBufMode(CS_ZBUF_USE);
+
 	//set enabled flag
 	IsEnabled = true;
 
@@ -241,6 +249,8 @@ void Floor::Enabled(bool value)
 		IsEnabled = false;
 	}
 
+	EnableColumnFrame(value);
+
 	//call buttons
 	for (size_t i = 0; i < CallButtonArray.GetSize(); i++)
 		CallButtonArray[i]->Enabled(value);
@@ -353,4 +363,60 @@ float Floor::CalculateAltitude()
 			Altitude = sbs->GetFloor(Number + 1)->Altitude - FullHeight();
 	}
 	return Altitude;
+}
+
+void Floor::EnableColumnFrame(bool value)
+{
+	//enable/disable columnframe mesh
+	if (value == true)
+	{
+		ColumnFrame->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
+		ColumnFrame->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
+		ColumnFrame->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		ColumnFrame->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		ColumnFrame->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		ColumnFrame->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+	}
+	IsColumnFrameEnabled = value;
+}
+
+int Floor::ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+{
+	//create columnframe wall box
+	float tw2 = tw;
+	float th2;
+
+	//Set horizontal scaling
+	x1 = x1 * sbs->HorizScale;
+	x2 = x2 * sbs->HorizScale;
+	z1 = z1 * sbs->HorizScale;
+	z2 = z2 * sbs->HorizScale;
+
+	//Texture autosizing formulas
+	if (z1 == z2)
+		tw2 = sbs->AutoSize(x1, x2, true, tw);
+	if (x1 == x2)
+		tw2 = sbs->AutoSize(z1, z2, true, tw);
+	th2 = sbs->AutoSize(0, height_in, false, th);
+
+	return sbs->CreateWallBox(ColumnFrame_state, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom);
+}
+
+int Floor::ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+{
+	//create columnframe wall box from a central location
+	float x1;
+	float x2;
+	float z1;
+	float z2;
+
+	x1 = CenterX - (WidthX / 2);
+	x2 = CenterX + (WidthX / 2);
+	z1 = CenterZ - (LengthZ / 2);
+	z2 = CenterZ + (LengthZ / 2);
+
+	return ColumnWallBox(name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom);
 }
