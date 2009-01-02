@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
 	<object class="wxDialog" name="MeshControl">
 		<title>Realtime Mesh Control</title>
@@ -31,6 +31,7 @@
 							<object class="sizeritem">
 								<object class="wxCheckBox" name="ID_chkLandscape" variable="chkLandscape" member="yes">
 									<label>Landscape</label>
+									<size>100,-1</size>
 									<handler function="On_chkLandscape_Click" entry="EVT_CHECKBOX" />
 								</object>
 								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
@@ -40,14 +41,6 @@
 								<object class="wxCheckBox" name="ID_chkSky" variable="chkSky" member="yes">
 									<label>Sky</label>
 									<handler function="On_chkSky_Click" entry="EVT_CHECKBOX" />
-								</object>
-								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-								<border>5</border>
-							</object>
-							<object class="sizeritem">
-								<object class="wxCheckBox" name="ID_chkColumnFrame" variable="chkColumnFrame" member="yes">
-									<label>ColumnFrame</label>
-									<handler function="On_chkColumnFrame_Click" entry="EVT_CHECKBOX" />
 								</object>
 								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -99,6 +92,15 @@
 										<border>5</border>
 										<option>1</option>
 									</object>
+									<object class="sizeritem">
+										<object class="wxCheckBox" name="ID_chkColumnFrame" variable="chkColumnFrame" member="yes">
+											<label>Column Frame</label>
+											<handler function="On_chkColumnFrame_Click" entry="EVT_CHECKBOX" />
+										</object>
+										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -130,6 +132,15 @@
 										<object class="wxCheckBox" name="ID_chkAllStairs" variable="chkAllStairs" member="yes">
 											<label>All Stairs</label>
 											<handler function="On_chkAllStairs_Click" entry="EVT_CHECKBOX" />
+										</object>
+										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxCheckBox" name="ID_chkAllColumnFrames" variable="chkAllColumnFrames" member="yes">
+											<label>All Column Frames</label>
+											<handler function="On_chkAllColumnFrames_Click" entry="EVT_CHECKBOX" />
 										</object>
 										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>

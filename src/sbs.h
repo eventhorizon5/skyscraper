@@ -123,6 +123,7 @@ public:
 	float FPS; //current frame rate
 	bool AutoShafts; //true if shafts should turn on and off automatically
 	bool AutoStairs; //true if stairwells should turn on and off automatically
+	bool ProcessElevators; //true if elevator system should be enabled
 	bool ShowFullShafts; //true if entire shaft should be displayed while user is in an elevator
 	bool ShowFullStairs; //true if entire stairwell should be displayed while user is in it
 	int ShaftDisplayRange; //number of shaft floors to display while in elevator; has no effect if ShowFullShafts is true
@@ -157,8 +158,8 @@ public:
 	void SetupFrame();
 	void GetInput();
 	void Render();
-	int CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th);
-	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th);
+	int CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
+	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
 	int AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
 	int AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th);

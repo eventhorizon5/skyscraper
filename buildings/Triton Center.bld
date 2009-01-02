@@ -50,6 +50,7 @@
     Load data/diamond18b.jpg, ExpressElevWall, 3, 3
     Load data/diamond18i.jpg, HotelElevWall, 3, 3
     Load data/diamond18g.jpg, ResidentialElevWall, 3, 3
+    Load data/metal080.jpg, ColumnTex, 2, 2
     Load data/text16.jpg, Wood2, 3.72, 4
     Load data/marbl3.jpg, Wall1, 3.72, 4
     Load data/marb123.jpg, Wall2, 3.72, 4
@@ -350,22 +351,22 @@ SetAutoSize = true, true
     SetAutoSize = true, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall FrontWindowsInt, MainWindowsInt, 0.5, -75, -70, 75, -70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall LeftWindowsInt, MainWindowsInt, 0.5, -75, 70, -75, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall FrontWindowsInt, MainWindowsInt, 0, -75, -70, 75, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall LeftWindowsInt, MainWindowsInt, 0, -75, 70, -75, -70, %height%, %height%, 0, 0, 0, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall RightWindowsInt, MainWindowsInt, 0.5, 75, -70, 75, 70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall BackWindowsInt, MainWindowsInt, 0.5, 75, 70, -75, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall RightWindowsInt, MainWindowsInt, 0, 75, -70, 75, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall BackWindowsInt, MainWindowsInt, 0, 75, 70, -75, 70, %height%, %height%, 0, 0, 0, 1, False
 
     #External Windows
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall FrontWindows, MainWindows, 0.5, -75, -70, 75, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall LeftWindows, MainWindows, 0.5, -75, 70, -75, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall FrontWindows, MainWindows, 0, -75, -70, 75, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall LeftWindows, MainWindows, 0, -75, 70, -75, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall RightWindows, MainWindows, 0.5, 75, -70, 75, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall BackWindows, MainWindows, 0.5, 75, 70, -75, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall RightWindows, MainWindows, 0, 75, -70, 75, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall BackWindows, MainWindows, 0, 75, 70, -75, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     #Interfloor External
     WallOrientation = left
@@ -461,20 +462,20 @@ SetAutoSize = true, true
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Vents Front, VentsInt, 0.5, -75, -70, 75, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
-    AddWall Vents Left, VentsInt, 0.5, -75, 70, -75, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
+    AddWall Vents Left, VentsInt, 0.5, -75, 70, -75, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Vents Right, VentsInt, 0.5, 75, -70, 75, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
+    AddWall Vents Right, VentsInt, 0.5, 75, -70, 75, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
     AddWall Vents Back, VentsInt, 0.5, 75, 70, -75, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
 
     #External Vents
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 38] AddWall ExtVents Front, VentsExt, 0.5, -75, -70, 75, -70, %fullheight% * 2, %fullheight% * 2, 0, 0, 6, 1, True
-    if[%floor% = 38] AddWall ExtVents Left, VentsExt, 0.5, -75, 70, -75, -70, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    if[%floor% = 38] AddWall ExtVents Left, VentsExt, 0.5, -75, 70, -75, -70, %fullheight% * 2, %fullheight% * 2, 0, 0, 6, 1, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 38] AddWall ExtVents Right, VentsExt, 0.5, 75, -70, 75, 70, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    if[%floor% = 38] AddWall ExtVents Right, VentsExt, 0.5, 75, -70, 75, 70, %fullheight% * 2, %fullheight% * 2, 0, 0, 6, 1, True
     if[%floor% = 38] AddWall ExtVents Back, VentsExt, 0.5, 75, 70, -75, 70, %fullheight% * 2, %fullheight% * 2, 0, 0, 6, 1, True
     SetAutoSize = true, true
 
@@ -516,6 +517,37 @@ SetAutoSize = true, true
     AddDoor Door, 0.2, 5, 38, 3.708 + 9.708 - 0.33 + 0.25, 3.5, 8, 0, 1, 1
 <EndFloor>
 
+# Zone 1 Column Frame
+<Floors 0 to 39>
+    ColumnWallBox2 ColumnL1, ColumnTex, -75 + 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL2, ColumnTex, -75 + 1.6, 45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL3, ColumnTex, -75 + 1.6, 22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL4, ColumnTex, -75 + 1.6, 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL5, ColumnTex, -75 + 1.6, -22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL6, ColumnTex, -75 + 1.6, -45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL7, ColumnTex, -75 + 1.6, -68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+
+    ColumnWallBox2 ColumnR1, ColumnTex, 75 - 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR2, ColumnTex, 75 - 1.6, 45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR3, ColumnTex, 75 - 1.6, 22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR4, ColumnTex, 75 - 1.6, 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR5, ColumnTex, 75 - 1.6, -22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR6, ColumnTex, 75 - 1.6, -45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR7, ColumnTex, 75 - 1.6, -68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+ 
+    ColumnWallBox2 ColumnB1, ColumnTex, -48.93, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB2, ColumnTex, -24.47, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB3, ColumnTex, 0, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB4, ColumnTex, 24.47, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB5, ColumnTex, 48.93, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+
+    ColumnWallBox2 ColumnF1, ColumnTex, -48.93, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF2, ColumnTex, -24.47, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF3, ColumnTex, 0, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF4, ColumnTex, 24.47, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF5, ColumnTex, 48.93, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+<EndFloors>
+
 #zone 2 skeleton
 <Floors 40 to 78>
     Height = 10
@@ -535,22 +567,22 @@ SetAutoSize = true, true
     SetAutoSize = true, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall FrontWindowsInt, MainWindowsInt, 0.5, -63, -70, 63, -70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall LeftWindowsInt, MainWindowsInt, 0.5, -63, 70, -63, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall FrontWindowsInt, MainWindowsInt, 0, -63, -70, 63, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall LeftWindowsInt, MainWindowsInt, 0, -63, 70, -63, -70, %height%, %height%, 0, 0, 0, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall RightWindowsInt, MainWindowsInt, 0.5, 63, -70, 63, 70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall BackWindowsInt, MainWindowsInt, 0.5, 63, 70, -63, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall RightWindowsInt, MainWindowsInt, 0, 63, -70, 63, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall BackWindowsInt, MainWindowsInt, 0, 63, 70, -63, 70, %height%, %height%, 0, 0, 0, 1, False
 
     #External Windows
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall FrontWindows, MainWindows, 0.5, -63, -70, 63, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall LeftWindows, MainWindows, 0.5, -63, 70, -63, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall FrontWindows, MainWindows, 0, -63, -70, 63, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall LeftWindows, MainWindows, 0, -63, 70, -63, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall RightWindows, MainWindows, 0.5, 63, -70, 63, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall BackWindows, MainWindows, 0.5, 63, 70, -63, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall RightWindows, MainWindows, 0, 63, -70, 63, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall BackWindows, MainWindows, 0, 63, 70, -63, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     #Interfloor External
     WallOrientation = left
@@ -628,20 +660,20 @@ SetAutoSize = true, true
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Vents Front, VentsInt, 0.5, -63, -70, 63, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
-    AddWall Vents Left, VentsInt, 0.5, -63, 70, -63, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
+    AddWall Vents Left, VentsInt, 0.5, -63, 70, -63, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Vents Right, VentsInt, 0.5, 63, -70, 63, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
+    AddWall Vents Right, VentsInt, 0.5, 63, -70, 63, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
     AddWall Vents Back, VentsInt, 0.5, 63, 70, -63, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
 
     #External Vents
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
     AddWall ExtVents Front, VentsExt, 0.5, -63, -70, 63, -70, %fullheight%, %fullheight%, 0, 0, 5, 1, True
-    AddWall ExtVents Left, VentsExt, 0.5, -63, 70, -63, -70, %fullheight%, %fullheight%, 0, 0, 5, 1, True
+    AddWall ExtVents Left, VentsExt, 0.5, -63, 70, -63, -70, %fullheight%, %fullheight%, 0, 0, 6, 1, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall ExtVents Right, VentsExt, 0.5, 63, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, 5, 1, True
+    AddWall ExtVents Right, VentsExt, 0.5, 63, -70, 63, 70, %fullheight%, %fullheight%, 0, 0, 6, 1, True
     AddWall ExtVents Back, VentsExt, 0.5, 63, 70, -63, 70, %fullheight%, %fullheight%, 0, 0, 5, 1, True
     SetAutoSize = true, true
 
@@ -674,6 +706,35 @@ SetAutoSize = true, true
 
 <EndFloor>
 
+# Zone 2 Column Frame
+<Floors 40 to 79>
+    ColumnWallBox2 ColumnL1, ColumnTex, -63 + 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL2, ColumnTex, -63 + 1.6, 45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL3, ColumnTex, -63 + 1.6, 22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL4, ColumnTex, -63 + 1.6, 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL5, ColumnTex, -63 + 1.6, -22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL6, ColumnTex, -63 + 1.6, -45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL7, ColumnTex, -63 + 1.6, -68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+
+    ColumnWallBox2 ColumnR1, ColumnTex, 63 - 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR2, ColumnTex, 63 - 1.6, 45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR3, ColumnTex, 63 - 1.6, 22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR4, ColumnTex, 63 - 1.6, 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR5, ColumnTex, 63 - 1.6, -22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR6, ColumnTex, 63 - 1.6, -45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR7, ColumnTex, 63 - 1.6, -68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+ 
+    ColumnWallBox2 ColumnB1, ColumnTex, -63 + 1.6 + 24.56, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB2, ColumnTex, -63 + 1.6 + 49.12, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB3, ColumnTex, 63 - 1.6 - 49.12, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB4, ColumnTex, 63 - 1.6 - 24.56, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+
+    ColumnWallBox2 ColumnF1, ColumnTex, -63 + 1.6 + 24.56, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF2, ColumnTex, -63 + 1.6 + 49.12, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF3, ColumnTex, 63 - 1.6 - 49.12, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF4, ColumnTex, 63 - 1.6 - 24.56, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+<EndFloors>
+
 #zone 3A skeleton
 <Floors 80 to 118>
     Height = 8.5 #hotel height
@@ -697,22 +758,22 @@ SetAutoSize = true, true
     SetAutoSize = true, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall FrontWindowsInt, MainWindowsInt, 0.5, -51, -70, 51, -70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall LeftWindowsInt, MainWindowsInt, 0.5, -51, 70, -51, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall FrontWindowsInt, MainWindowsInt, 0, -51, -70, 51, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall LeftWindowsInt, MainWindowsInt, 0, -51, 70, -51, -70, %height%, %height%, 0, 0, 0, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall RightWindowsInt, MainWindowsInt, 0.5, 51, -70, 51, 70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall BackWindowsInt, MainWindowsInt, 0.5, 51, 70, -51, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall RightWindowsInt, MainWindowsInt, 0, 51, -70, 51, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall BackWindowsInt, MainWindowsInt, 0, 51, 70, -51, 70, %height%, %height%, 0, 0, 0, 1, False
 
     #External Windows
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall FrontWindows, MainWindows, 0.5, -51, -70, 51, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall LeftWindows, MainWindows, 0.5, -51, 70, -51, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall FrontWindows, MainWindows, 0, -51, -70, 51, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall LeftWindows, MainWindows, 0, -51, 70, -51, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall RightWindows, MainWindows, 0.5, 51, -70, 51, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall BackWindows, MainWindows, 0.5, 51, 70, -51, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall RightWindows, MainWindows, 0, 51, -70, 51, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall BackWindows, MainWindows, 0, 51, 70, -51, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     #Interfloor External
     WallOrientation = left
@@ -826,20 +887,20 @@ SetAutoSize = true, true
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Vents Front, VentsInt, 0.5, -51, -70, 51, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 4, 1, False
-    AddWall Vents Left, VentsInt, 0.5, -51, 70, -51, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
+    AddWall Vents Left, VentsInt, 0.5, -51, 70, -51, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Vents Right, VentsInt, 0.5, 51, -70, 51, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
+    AddWall Vents Right, VentsInt, 0.5, 51, -70, 51, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
     AddWall Vents Back, VentsInt, 0.5, 51, 70, -51, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 4, 1, False
 
     #External Vents
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
     AddWall ExtVents Front, VentsExt, 0.5, -51, -70, 51, -70, %fullheight%, %fullheight%, 0, 0, 4, 1, True
-    AddWall ExtVents Left, VentsExt, 0.5, -51, 70, -51, -70, %fullheight%, %fullheight%, 0, 0, 5, 1, True
+    AddWall ExtVents Left, VentsExt, 0.5, -51, 70, -51, -70, %fullheight%, %fullheight%, 0, 0, 6, 1, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall ExtVents Right, VentsExt, 0.5, 51, -70, 51, 70, %fullheight%, %fullheight%, 0, 0, 5, 1, True
+    AddWall ExtVents Right, VentsExt, 0.5, 51, -70, 51, 70, %fullheight%, %fullheight%, 0, 0, 6, 1, True
     AddWall ExtVents Back, VentsExt, 0.5, 51, 70, -51, 70, %fullheight%, %fullheight%, 0, 0, 4, 1, True
     SetAutoSize = true, true
 
@@ -851,6 +912,33 @@ SetAutoSize = true, true
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
+
+# Zone 3A Column Frame
+<Floors 80 to 119>
+    ColumnWallBox2 ColumnL1, ColumnTex, -51 + 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL2, ColumnTex, -51 + 1.6, 45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL3, ColumnTex, -51 + 1.6, 22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL4, ColumnTex, -51 + 1.6, 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL5, ColumnTex, -51 + 1.6, -22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL6, ColumnTex, -51 + 1.6, -45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL7, ColumnTex, -51 + 1.6, -68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+
+    ColumnWallBox2 ColumnR1, ColumnTex, 51 - 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR2, ColumnTex, 51 - 1.6, 45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR3, ColumnTex, 51 - 1.6, 22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR4, ColumnTex, 51 - 1.6, 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR5, ColumnTex, 51 - 1.6, -22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR6, ColumnTex, 51 - 1.6, -45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR7, ColumnTex, 51 - 1.6, -68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+ 
+    ColumnWallBox2 ColumnB1, ColumnTex, -24.7, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB2, ColumnTex, 0, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB3, ColumnTex, 24.7, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+
+    ColumnWallBox2 ColumnF1, ColumnTex, -24.7, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF2, ColumnTex, 0, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF3, ColumnTex, 24.7, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+<EndFloors>
 
 #zone 3B skeleton
 <Floors 120 to 134>
@@ -874,22 +962,22 @@ SetAutoSize = true, true
     SetAutoSize = true, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall FrontWindowsInt, MainWindowsInt, 0.5, -39, -70, 39, -70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall LeftWindowsInt, MainWindowsInt, 0.5, -39, 70, -39, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall FrontWindowsInt, MainWindowsInt, 0, -39, -70, 39, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall LeftWindowsInt, MainWindowsInt, 0, -39, 70, -39, -70, %height%, %height%, 0, 0, 0, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall RightWindowsInt, MainWindowsInt, 0.5, 39, -70, 39, 70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall BackWindowsInt, MainWindowsInt, 0.5, 39, 70, -39, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall RightWindowsInt, MainWindowsInt, 0, 39, -70, 39, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall BackWindowsInt, MainWindowsInt, 0, 39, 70, -39, 70, %height%, %height%, 0, 0, 0, 1, False
 
     #External Windows
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall FrontWindows, MainWindows, 0.5, -39, -70, 39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall LeftWindows, MainWindows, 0.5, -39, 70, -39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall FrontWindows, MainWindows, 0, -39, -70, 39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall LeftWindows, MainWindows, 0, -39, 70, -39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall RightWindows, MainWindows, 0.5, 39, -70, 39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall BackWindows, MainWindows, 0.5, 39, 70, -39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall RightWindows, MainWindows, 0, 39, -70, 39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall BackWindows, MainWindows, 0, 39, 70, -39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     #Interfloor External
     WallOrientation = left
@@ -999,22 +1087,22 @@ SetAutoSize = true, true
     SetAutoSize = true, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall FrontWindowsInt, MainWindowsInt, 0.5, -39, -70, 39, -70, %height% + 14.24, %height% + 14.24, 0, 0, 0, 2, False
-    AddWall LeftWindowsInt, MainWindowsInt, 0.5, -39, 70, -39, -70, %height% + 14.24, %height% + 14.24, 0, 0, 0, 2, False
+    AddWall FrontWindowsInt, MainWindowsInt, 0, -39, -70, 39, -70, %height% + 14.24, %height% + 14.24, 0, 0, 0, 2, False
+    AddWall LeftWindowsInt, MainWindowsInt, 0, -39, 70, -39, -70, %height% + 14.24, %height% + 14.24, 0, 0, 0, 2, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall RightWindowsInt, MainWindowsInt, 0.5, 39, -70, 39, 70, %height% + 14.24, %height% + 14.24, 0, 0, 0, 2, False
-    AddWall BackWindowsInt, MainWindowsInt, 0.5, 39, 70, -39, 70, %height% + 14.24, %height% + 14.24, 0, 0, 0, 2, False
+    AddWall RightWindowsInt, MainWindowsInt, 0, 39, -70, 39, 70, %height% + 14.24, %height% + 14.24, 0, 0, 0, 2, False
+    AddWall BackWindowsInt, MainWindowsInt, 0, 39, 70, -39, 70, %height% + 14.24, %height% + 14.24, 0, 0, 0, 2, False
 
     #External Windows
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall FrontWindows, MainWindows, 0.5, -39, -70, 39, -70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall LeftWindows, MainWindows, 0.5, -39, 70, -39, -70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall FrontWindows, MainWindows, 0, -39, -70, 39, -70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall LeftWindows, MainWindows, 0, -39, 70, -39, -70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall RightWindows, MainWindows, 0.5, 39, -70, 39, 70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall BackWindows, MainWindows, 0.5, 39, 70, -39, 70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall RightWindows, MainWindows, 0, 39, -70, 39, 70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall BackWindows, MainWindows, 0, 39, 70, -39, 70, %height% + 14.24, %height% + 14.24, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     #Interfloor External
     WallOrientation = left
@@ -1119,22 +1207,22 @@ SetAutoSize = true, true
     SetAutoSize = true, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall FrontWindowsInt, MainWindowsInt, 0.5, -39, -70, 39, -70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall LeftWindowsInt, MainWindowsInt, 0.5, -39, 70, -39, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall FrontWindowsInt, MainWindowsInt, 0, -39, -70, 39, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall LeftWindowsInt, MainWindowsInt, 0, -39, 70, -39, -70, %height%, %height%, 0, 0, 0, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall RightWindowsInt, MainWindowsInt, 0.5, 39, -70, 39, 70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall BackWindowsInt, MainWindowsInt, 0.5, 39, 70, -39, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall RightWindowsInt, MainWindowsInt, 0, 39, -70, 39, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall BackWindowsInt, MainWindowsInt, 0, 39, 70, -39, 70, %height%, %height%, 0, 0, 0, 1, False
 
     #External Windows
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall FrontWindows, MainWindows, 0.5, -39, -70, 39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall LeftWindows, MainWindows, 0.5, -39, 70, -39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall FrontWindows, MainWindows, 0, -39, -70, 39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall LeftWindows, MainWindows, 0, -39, 70, -39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall RightWindows, MainWindows, 0.5, 39, -70, 39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall BackWindows, MainWindows, 0.5, 39, 70, -39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall RightWindows, MainWindows, 0, 39, -70, 39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall BackWindows, MainWindows, 0, 39, 70, -39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     #Interfloor External
     WallOrientation = left
@@ -1193,22 +1281,22 @@ SetAutoSize = true, true
     SetAutoSize = true, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall FrontWindowsInt, MainWindowsInt, 0.5, -39, -70, 39, -70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall LeftWindowsInt, MainWindowsInt, 0.5, -39, 70, -39, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall FrontWindowsInt, MainWindowsInt, 0, -39, -70, 39, -70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall LeftWindowsInt, MainWindowsInt, 0, -39, 70, -39, -70, %height%, %height%, 0, 0, 0, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall RightWindowsInt, MainWindowsInt, 0.5, 39, -70, 39, 70, %height%, %height%, 0, 0, 0, 1, False
-    AddWall BackWindowsInt, MainWindowsInt, 0.5, 39, 70, -39, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall RightWindowsInt, MainWindowsInt, 0, 39, -70, 39, 70, %height%, %height%, 0, 0, 0, 1, False
+    AddWall BackWindowsInt, MainWindowsInt, 0, 39, 70, -39, 70, %height%, %height%, 0, 0, 0, 1, False
 
     #External Windows
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall FrontWindows, MainWindows, 0.5, -39, -70, 39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall LeftWindows, MainWindows, 0.5, -39, 70, -39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall FrontWindows, MainWindows, 0, -39, -70, 39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall LeftWindows, MainWindows, 0, -39, 70, -39, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall RightWindows, MainWindows, 0.5, 39, -70, 39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall BackWindows, MainWindows, 0.5, 39, 70, -39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall RightWindows, MainWindows, 0, 39, -70, 39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall BackWindows, MainWindows, 0, 39, 70, -39, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     #Interfloor External
     WallOrientation = left
@@ -1268,20 +1356,20 @@ SetAutoSize = true, true
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Vents Front, VentsInt, 0.5, -39, -70, 39, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
-    AddWall Vents Left, VentsInt, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
+    AddWall Vents Left, VentsInt, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
     AddWall Vents Right, VentsInt, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
-    AddWall Vents Back, VentsInt, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    AddWall Vents Back, VentsInt, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
 
     #External Vents
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
     AddWall ExtVents Front, VentsExt, 0.5, -39, -70, 39, -70, %fullheight%, %fullheight%, 0, 0, 3, 1, True
-    AddWall ExtVents Left, VentsExt, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, 5, 1, True
+    AddWall ExtVents Left, VentsExt, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, 0, 0, 6, 1, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall ExtVents Right, VentsExt, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, 0, 0, 5, 1, True
+    AddWall ExtVents Right, VentsExt, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, 0, 0, 6, 1, True
     AddWall ExtVents Back, VentsExt, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, 0, 0, 3, 1, True
     SetAutoSize = true, true
 
@@ -1303,8 +1391,8 @@ SetAutoSize = true, true
     AddFloor Roof, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, True
 
     #Antennae
-    CreateWallBox2 External, Left Antenna, Concrete, 0, -40, 4, 4, 300, 0, 0, 25
-    CreateWallBox2 External, Right Antenna, Concrete, 0, 40, 4, 4, 300, 0, 0, 25
+    CreateWallBox2 External, Left Antenna, Concrete, 0, -40, 4, 4, 300, 0, 0, 25, false, true, true, false
+    CreateWallBox2 External, Right Antenna, Concrete, 0, 40, 4, 4, 300, 0, 0, 25, false, true, true, false
 
     #Penthouse Floor
     #FloorOrientation = top
@@ -1346,6 +1434,31 @@ SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 
 <EndFloor>
+
+# Zone 3B Column Frame
+<Floors 120 to 141>
+    ColumnWallBox2 ColumnL1, ColumnTex, -39 + 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL2, ColumnTex, -39 + 1.6, 45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL3, ColumnTex, -39 + 1.6, 22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL4, ColumnTex, -39 + 1.6, 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL5, ColumnTex, -39 + 1.6, -22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL6, ColumnTex, -39 + 1.6, -45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL7, ColumnTex, -39 + 1.6, -68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+
+    ColumnWallBox2 ColumnR1, ColumnTex, 39 - 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR2, ColumnTex, 39 - 1.6, 45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR3, ColumnTex, 39 - 1.6, 22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR4, ColumnTex, 39 - 1.6, 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR5, ColumnTex, 39 - 1.6, -22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR6, ColumnTex, 39 - 1.6, -45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR7, ColumnTex, 39 - 1.6, -68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+ 
+    ColumnWallBox2 ColumnB1, ColumnTex, -39 + 1.6 + 24.93, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB2, ColumnTex, 39 - 1.6 - 24.93, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+
+    ColumnWallBox2 ColumnF1, ColumnTex, -39 + 1.6 + 24.93, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF2, ColumnTex, 39 - 1.6 - 24.93, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+<EndFloors>
 
 #Service Area Wall
 <Floors -1 to 141>
@@ -6173,41 +6286,3 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
-# Main load-bearing columns
-#Top set
-#CreateWallBox2 ColumnFrame, MainTop1, Brick, 35.5, 68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, MainTop2, Brick, -35.5, 68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
-#Bottom set
-#CreateWallBox2 ColumnFrame, MainBottom1, Brick, 35.5, -68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, MainBottom2, Brick, -35.5, -68.2, 3, 3, Floor(142).Altitude + 2, 0, 0, 0
-#Left set
-#CreateWallBox2 ColumnFrame, MainLeft1, Brick, -71.5, 47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, MainLeft2, Brick, -71.5, -47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
-#Right set
-#CreateWallBox2 ColumnFrame, MainRight1, Brick, 71.5, 47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, MainRight2, Brick, 71.5, -47, 3, 3, Floor(40).Altitude + 2, 0, 0, 0
-
-# Core load-bearing columns
-#Set 1
-#CreateWallBox2 ColumnFrame, CoreSet1A, Brick, -42.6, 21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet1B, Brick, -42.6, 7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet1C, Brick, -42.6, -7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet1D, Brick, -42.6, -21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-
-#Set 2
-#CreateWallBox2 ColumnFrame, CoreSet2A, Brick, -13.5, 21, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet2B, Brick, -13.5, 7, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet2C, Brick, -13.5, -7, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet2D, Brick, -13.5, -21, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
-
-#Set 3
-#CreateWallBox2 ColumnFrame, CoreSet3A, Brick, 13.5, 21, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet3B, Brick, 13.5, 7, 1, 2, Floor(142).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet3C, Brick, 13.5, -7, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet3D, Brick, 13.5, -21, 1, 2, Floor(130).Altitude + 2, 0, 0, 0
-
-#Set 4
-#CreateWallBox2 ColumnFrame, CoreSet4A, Brick, 42.6, 21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet4B, Brick, 42.6, 7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet4C, Brick, 42.6, -7, 1, 2, Floor(79).Altitude + 2, 0, 0, 0
-#CreateWallBox2 ColumnFrame, CoreSet4D, Brick, 42.6, -21, 1, 2, Floor(79).Altitude + 2, 0, 0, 0

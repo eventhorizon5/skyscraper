@@ -295,6 +295,15 @@ checkfloors:
 		//AddTriangleWall command
 		if (LineData.Slice(0, 15).CompareNoCase("addtrianglewall") == true)
 		{
+			if (Section == 2 && getfloordata == false)
+			{
+				//process floor-specific variables if in a floor section
+				getfloordata = true;
+				goto recalc;
+			}
+			else
+				getfloordata = false;
+
 			//get data
 			tempdata.SplitString(LineData.Slice(16).GetData(), ",");
 
@@ -308,18 +317,15 @@ checkfloors:
 				//Err.Raise 1003;
 			//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
 
+			if (Section == 2)
+			{
+				 buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[4]);
+                                 tempdata.Put(4, buffer);
+                                 buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[7]);
+                                 tempdata.Put(7, buffer);
+			}
 			if (csString(tempdata[0]).CompareNoCase("floor") == true)
 				tmpMesh = Simcore->GetFloor(Current)->Level_state;
-			else
-			{
-			if (Section == 2)
-				{
-					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[4]);
-					tempdata.Put(4, buffer);
-					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[7]);
-					tempdata.Put(7, buffer);
-				}
-			}
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
@@ -418,6 +424,15 @@ checkfloors:
 		//CreateWallBox2 command
 		if (LineData.Slice(0, 14).CompareNoCase("createwallbox2") == true)
 		{
+			if (Section == 2 && getfloordata == false)
+			{
+				//process floor-specific variables if in a floor section
+				getfloordata = true;
+				goto recalc;
+			}
+			else
+				getfloordata = false;
+
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
@@ -426,16 +441,13 @@ checkfloors:
 			}
 			//if (tempdata.GetSize < 9)
 				//Err.Raise 1003;
+			if (Section == 2)
+			{
+				buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[8]);
+				tempdata.Put(8, buffer);
+			}
 			if (csString(tempdata[0]).CompareNoCase("floor") == true)
 				tmpMesh = Simcore->GetFloor(Current)->Level_state;
-			else
-			{
-			if (Section == 2)
-				{
-					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[8]);
-					tempdata.Put(8, buffer);
-				}
-			}
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
@@ -445,14 +457,23 @@ checkfloors:
 			if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
 			//if IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
-			Simcore->CreateWallBox2(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+			Simcore->CreateWallBox2(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
 			tempdata.DeleteAll();
 		}
 
 		//CreateWallBox command
 		if (LineData.Slice(0, 14).CompareNoCase("createwallbox ") == true)
 		{
-			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+			if (Section == 2 && getfloordata == false)
+			{
+				//process floor-specific variables if in a floor section
+				getfloordata = true;
+				goto recalc;
+			}
+			else
+				getfloordata = false;
+
+			tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
 				buffer = Simcore->Calc(tempdata[temp3]);
@@ -460,16 +481,13 @@ checkfloors:
 			}
 			//if (tempdata.GetSize < 9)
 				//Err.Raise 1003
+			if (Section == 2)
+			{
+				buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[8]);
+				tempdata.Put(8, buffer);
+			}
 			if (csString(tempdata[0]).CompareNoCase("floor") == true)
 				tmpMesh = Simcore->GetFloor(Current)->Level_state;
-			else
-			{
-				if (Section == 2)
-				{
-					buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[8]);
-					tempdata.Put(8, buffer);
-				}
-			}
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
@@ -479,13 +497,22 @@ checkfloors:
 			if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
 			//If IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
-			Simcore->CreateWallBox(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+			Simcore->CreateWallBox(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
 			tempdata.DeleteAll();
 		}
 
 		//AddCustomWall command
 		if (LineData.Slice(0, 14).CompareNoCase("addcustomwall ") == true)
 		{
+			if (Section == 2 && getfloordata == false)
+			{
+				//process floor-specific variables if in a floor section
+				getfloordata = true;
+				goto recalc;
+			}
+			else
+				getfloordata = false;
+
 			tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
@@ -517,6 +544,15 @@ checkfloors:
 		//AddCustomFloor command
 		if (LineData.Slice(0, 15).CompareNoCase("addcustomfloor ") == true)
 		{
+			if (Section == 2 && getfloordata == false)
+			{
+				//process floor-specific variables if in a floor section
+				getfloordata = true;
+				goto recalc;
+			}
+			else
+				getfloordata = false;
+
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
@@ -682,6 +718,15 @@ checkfloors:
 		temp5 = csString(LineData).Downcase().Find("isect(", 0);
 		while (temp5 > -1)
 		{
+			if (Section == 2 && getfloordata == false)
+			{
+				//process floor-specific variables if in a floor section
+				getfloordata = true;
+				goto recalc;
+			}
+			else
+				getfloordata = false;
+
 			temp1 = LineData.Find("(", 0);
 			temp3 = LineData.Find(")", 0);
 			tempdata.SplitString(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData(), ",");
@@ -1083,6 +1128,36 @@ recalc:
 
 				//create wall
 				Simcore->GetFloor(Current)->AddInterfloorWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+				tempdata.DeleteAll();
+			}
+
+			//ColumnWallBox command
+			if (LineData.Slice(0, 14).CompareNoCase("columnwallbox ") == true)
+			{
+				tempdata.SplitString(LineData.Slice(14).GetData(), ",");
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Simcore->Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				//if (tempdata.GetSize < 9)
+					//Err.Raise 1003
+				Simcore->GetFloor(Current)->ColumnWallBox(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"));
+				tempdata.DeleteAll();
+			}
+
+			//ColumnWallBox2 command
+			if (LineData.Slice(0, 14).CompareNoCase("columnwallbox2") == true)
+			{
+				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Simcore->Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				//if (tempdata.GetSize < 9)
+					//Err.Raise 1003
+				Simcore->GetFloor(Current)->ColumnWallBox2(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"));
 				tempdata.DeleteAll();
 			}
 

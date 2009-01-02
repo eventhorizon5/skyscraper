@@ -39,6 +39,9 @@ public:
 	csRef<iMeshWrapper> Interfloor; //interfloor mesh
 	csRef<iThingFactoryState> Interfloor_state;
 
+	csRef<iMeshWrapper> ColumnFrame; //columnframe mesh
+	csRef<iThingFactoryState> ColumnFrame_state;
+
 	int Number; //floor number
 	csString Name; //floor name
 	csString ID;
@@ -49,6 +52,7 @@ public:
 	float Height; //floor height (not including interfloor height)
 	float InterfloorHeight; //height of interfloor area
 	bool IsEnabled; //is floor enabled?
+	bool IsColumnFrameEnabled; //is columnframe enabled?
 	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
 	csArray<Door*> DoorArray; //pointer array to door objects
 	csArray<int> Group; //floor group
@@ -74,6 +78,9 @@ public:
 	void EnableGroup(bool value);
 	void AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	float CalculateAltitude();
+	void EnableColumnFrame(bool value);
+	int ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
+	int ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 };
 
 #endif
