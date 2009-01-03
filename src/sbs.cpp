@@ -2134,11 +2134,11 @@ void SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfl
 	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
 }
 
-iMaterialWrapper *SBS::ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> oldmat, const char *texture)
+iMaterialWrapper *SBS::ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture)
 {
 	//changes a texture
 
-	csRef<iThingState> thingstate = scfQueryInterface<iThingState> (mesh);
+	csRef<iThingState> thingstate = scfQueryInterface<iThingState> (mesh->GetMeshObject());
 
 	//get new material
 	csRef<iMaterialWrapper> newmat = engine->GetMaterialList()->FindByName(texture);

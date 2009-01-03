@@ -180,13 +180,17 @@ void Camera::CheckElevator()
 		if (sbs->GetElevator(i)->IsInElevator(GetPosition()) == true)
 		{
 			test = true;
+			if (sbs->InElevator == false || sbs->ElevatorNumber != i)
+			{
+				sbs->GetElevator(i)->EnableObjects(true);
+				sbs->GetElevator(i)->UpdateFloorIndicators();
+			}
 			sbs->InElevator = true;
 			sbs->ElevatorNumber = i;
 			sbs->ElevatorSync = true;
-			sbs->GetElevator(i)->EnableObjects(true);
 			return;
 		}
-		else
+		else if (sbs->InElevator == true && sbs->ElevatorNumber == i)
 			sbs->GetElevator(i)->EnableObjects(false); //turn off objects if user is not in the checked elevator
 	}
 	//user is not in an elevator if all elevators returned false

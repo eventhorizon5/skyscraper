@@ -1154,7 +1154,7 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//update floor indicators
-	if (GetFloor() != oldfloor)
+	if (GetFloor() != oldfloor && sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		UpdateFloorIndicators();
 
 	oldfloor = GetFloor();
@@ -1208,11 +1208,12 @@ void Elevator::MoveElevatorToFloor()
 	{
 		//update elevator's floor number
 		GetFloor();
-		UpdateFloorIndicators();
 
 		//Turn on objects if user is in elevator
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		{
+			UpdateFloorIndicators();
+
 			//turn on floor
 			sbs->GetFloor(GotoFloor)->Enabled(true);
 			sbs->GetFloor(GotoFloor)->EnableGroup(true);
@@ -1601,7 +1602,7 @@ void Elevator::EnableObjects(bool value)
 
 		Plaque->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
 		Plaque->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-	        Plaque->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+		Plaque->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
 
 		if (Panel)
 			Panel->Enabled(true);
@@ -1609,14 +1610,14 @@ void Elevator::EnableObjects(bool value)
 	else
 	{
 		FloorIndicator->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-                FloorIndicator->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-                FloorIndicator->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+		FloorIndicator->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		FloorIndicator->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 
-                Plaque->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-                Plaque->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-                Plaque->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+		Plaque->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
+		Plaque->GetFlags().Set (CS_ENTITY_NOSHADOWS);
+		Plaque->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 
-                if (Panel)
+		if (Panel)
 			Panel->Enabled(false);
 	}
 }
@@ -1790,8 +1791,7 @@ void Elevator::UpdateFloorIndicators()
 
 	csString texture = "Button" + sbs->GetFloor(GetFloor())->ID;
 
-	for (int i = 0; i < FloorIndicator_state->GetPolygonCount(); i++)
-		sbs->ChangeTexture(FloorIndicator->GetMeshObject(), orig_indicator, texture.GetData());
+	sbs->ChangeTexture(FloorIndicator, orig_indicator, texture.GetData());
 }
 
 float Elevator::GetJerkRate()

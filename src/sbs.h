@@ -178,7 +178,7 @@ public:
 	void CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th);
-	iMaterialWrapper *ChangeTexture(iMeshObject *mesh, csRef<iMaterialWrapper> oldmat, const char *texture);
+	iMaterialWrapper *ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture);
 	void NewElevator(int number);
 	void NewFloor(int number);
 	int Elevators();
