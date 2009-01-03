@@ -776,8 +776,8 @@
     must be called after the shaft walls are created).</p>
   <p align="left"><strong>6. CreatePanel</strong> - creates a button panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreatePanel <em>texturename</em>, 
-    <em>rows, columns, direction, CenterX, CenterZ, width, height, voffset, spacingX, 
-    spacingY, tw, th<br>
+    <em>rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, 
+    spacingX, spacingY, voffset, tw, th<br>
     </em></font> Example<font size="2" face="Courier New, Courier, mono"><em>: 
     </em><font size="2" face="Courier New, Courier, mono">CreatePanel Wall1, 5, 
     5, right, -3, -3, 0.5, 1, 4, 0.5, 0.5, 0, 0</font></font></p>
@@ -788,7 +788,11 @@
     the panel faces. <em>SpacingX</em> is the space (percent of a button's width) 
     horizontally between each button, and <em>spacingY</em> is the space (percent 
     of a button's height) vertically between each button. Not all positions need 
-    to be used; this is simply to provide a grid layout for the panel.</p>
+    to be used; this is simply to provide a grid layout for the panel. This command 
+    also determines the width and height of the panel based on the spacing and 
+    button sizes. A simple formula for determining panel width or height is this 
+    - for width, it's (columns * buttonwidth) + (spacingX * (columns + 1)); for 
+    height, just swap columns with rows and spacingX with spacingY.</p>
   <p align="left"><strong>7. AddFloorButton</strong> - creates a floor button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorButton <em>texturename</em>, 
