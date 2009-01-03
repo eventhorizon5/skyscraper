@@ -349,9 +349,14 @@ void Camera::ClickedObject()
 	if (meshname.Find("Button Panel") != -1)
 	{
 		//user clicked on an elevator button
-		int elevator = atoi(meshname.Slice(13));
+		int elevator = atoi(meshname.Slice(13, meshname.Find(":") - 13));
+		int number = atoi(meshname.Slice(meshname.Find(":") + 1));
+
 		//press button
-		sbs->GetElevator(elevator)->Panel->Press(result.polygon_idx);
+		if (number == 1)
+			sbs->GetElevator(elevator)->Panel->Press(result.polygon_idx);
+		else
+			sbs->GetElevator(elevator)->Panel2->Press(result.polygon_idx);
 	}
 
 	//check doors

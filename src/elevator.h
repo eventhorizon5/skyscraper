@@ -65,6 +65,7 @@ public:
 	int Direction; //-1=down, 1=up, 0=stopped
 	float Height; //elevator height
 	ButtonPanel *Panel; //elevator button panel object
+	ButtonPanel *Panel2; //elevator button panel object
 	int DoorTimer; //door autoclose timer value, in milliseconds
 
 	//functions

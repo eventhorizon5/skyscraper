@@ -1542,12 +1542,6 @@ recalc:
 			//AddFloorButton command
 			if (LineData.Slice(0, 14).CompareNoCase("addfloorbutton") == true)
 			{
-				if (!Simcore->GetElevator(Current)->Panel)
-				{
-					Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
-					goto Nextline;
-				}
-
 				//get data
 				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 
@@ -1558,7 +1552,25 @@ recalc:
 					tempdata.Put(temp3, buffer);
 				}
 
-				Simcore->GetElevator(Current)->Panel->AddFloorButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
+				if (atoi(tempdata[0]) == 1)
+				{
+					if (!Simcore->GetElevator(Current)->Panel)
+					{
+						Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						goto Nextline;
+					}
+					Simcore->GetElevator(Current)->Panel->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+				}
+
+				if (atoi(tempdata[0]) == 2)
+				{
+					if (!Simcore->GetElevator(Current)->Panel2)
+					{
+						Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						goto Nextline;
+					}
+					Simcore->GetElevator(Current)->Panel2->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+				}
 
 				tempdata.DeleteAll();
 			}
@@ -1566,12 +1578,6 @@ recalc:
 			//AddControlButton command
 			if (LineData.Slice(0, 16).CompareNoCase("addcontrolbutton") == true)
 			{
-				if (!Simcore->GetElevator(Current)->Panel)
-				{
-					Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
-					goto Nextline;
-				}
-
 				//get data
 				tempdata.SplitString(LineData.Slice(17).GetData(), ",");
 
@@ -1582,7 +1588,25 @@ recalc:
 					tempdata.Put(temp3, buffer);
 				}
 
-				Simcore->GetElevator(Current)->Panel->AddControlButton(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]));
+				if (atoi(tempdata[0]) == 1)
+				{
+					if (!Simcore->GetElevator(Current)->Panel)
+					{
+						Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						goto Nextline;
+					}
+					Simcore->GetElevator(Current)->Panel->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]));
+				}
+
+				if (atoi(tempdata[0]) == 2)
+				{
+					if (!Simcore->GetElevator(Current)->Panel2)
+					{
+						Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						goto Nextline;
+					}
+					Simcore->GetElevator(Current)->Panel2->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]));
+				}
 
 				tempdata.DeleteAll();
 			}

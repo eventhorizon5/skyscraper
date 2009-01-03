@@ -32,9 +32,10 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-ButtonPanel::ButtonPanel(int _elevator, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
+ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
 {
 	//Create an elevator button panel
+	//index is for specifying multiple panels within the same elevator
 
 	elevator = _elevator;
 	Direction = direction;
@@ -55,9 +56,10 @@ ButtonPanel::ButtonPanel(int _elevator, const char *texture, int rows, int colum
 	Origin.y = voffset - (Height / 2);
 
 	//create mesh
-	csString buffer, buffer2;
+	csString buffer, buffer2, buffer3;
 	buffer2 = elevator;
-	buffer = "Button Panel " + buffer2;
+	buffer3 = index;
+	buffer = "Button Panel " + buffer2 + ":" + buffer3;
 	buffer.Trim();
 	ButtonPanelMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	ButtonPanel_state = scfQueryInterface<iThingFactoryState> (ButtonPanelMesh->GetMeshObject()->GetFactory());
@@ -73,22 +75,22 @@ ButtonPanel::ButtonPanel(int _elevator, const char *texture, int rows, int colum
 	if (Direction == "front")
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
-		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, 0, Origin.x - (Width / 2), Origin.z, Origin.x + (Width / 2), Origin.z, Height, Height, Origin.y, Origin.y, tw, th);
+		AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th);
 	}
 	if (Direction == "back")
 	{
 		sbs->DrawWalls(false, true, false, false, false, false);
-		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, 0, Origin.x - (Width / 2), Origin.z, Origin.x + (Width / 2), Origin.z, Height, Height, Origin.y, Origin.y, tw, th);
+		AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th);
 	}
 	if (Direction == "left")
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
-		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, 0, Origin.x, Origin.z - (Width / 2), Origin.x, Origin.z + (Width / 2), Height, Height, Origin.y, Origin.y, tw, th);
+		AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th);
 	}
 	if (Direction == "right")
 	{
 		sbs->DrawWalls(false, true, false, false, false, false);
-		sbs->AddWallMain(ButtonPanel_state, "Panel", texture, 0, Origin.x, Origin.z - (Width / 2), Origin.x, Origin.z + (Width / 2), Height, Height, Origin.y, Origin.y, tw, th);
+		AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th);
 	}
 	sbs->ResetWalls();
 	sbs->ResetExtents();
@@ -201,8 +203,11 @@ void ButtonPanel::Press(int index)
 
 	csString name = ButtonPanel_state->GetPolygonName(index);
 	csString name2 = name;
-	if (name.Find(":") > 0)
-		name = name2.Slice(0, name.Find(":"));
+
+	//strip off any text after and including a colon
+	int colon = name.Find(":");
+	if (colon > 0)
+		name = name2.Slice(0, colon);
 
 	if (IsNumeric(name) == true)
 	{
@@ -265,3 +270,39 @@ void ButtonPanel::Enabled(bool value)
 	}
 }
 
+int ButtonPanel::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+{
+	//Adds a wall with the specified dimensions
+	float tw2 = tw;
+	float th2;
+	float tempw1;
+	float tempw2;
+
+	//Set horizontal scaling
+	x1 = x1 * sbs->HorizScale;
+	x2 = x2 * sbs->HorizScale;
+	z1 = z1 * sbs->HorizScale;
+	z2 = z2 * sbs->HorizScale;
+
+	//Call texture autosizing formulas
+	if (z1 == z2)
+		tw2 = sbs->AutoSize(x1, x2, true, tw);
+	if (x1 == x2)
+		tw2 = sbs->AutoSize(z1, z2, true, tw);
+	if ((z1 != z2) && (x1 != x2))
+	{
+		//calculate diagonals
+		if (x1 > x2)
+			tempw1 = x1 - x2;
+		else
+			tempw1 = x2 - x1;
+		if (z1 > z2)
+			tempw2 = z1 - z2;
+		else
+			tempw2 = z2 - z1;
+		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+	}
+	th2 = sbs->AutoSize(0, height1, false, th);
+
+	return sbs->AddWallMain(ButtonPanel_state, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw2, th2);
+}

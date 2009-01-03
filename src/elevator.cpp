@@ -76,6 +76,7 @@ Elevator::Elevator(int number)
 	IsEnabled = true;
 	Height = 0;
 	Panel = 0;
+	Panel2 = 0;
 	DoorAcceleration = 0;
 	TempDeceleration = 0;
 	ErrorOffset = 0;
@@ -144,6 +145,9 @@ Elevator::~Elevator()
 	if (Panel)
 		delete Panel;
 	Panel = 0;
+	if (Panel2)
+		delete Panel2;
+	Panel2 = 0;
 	if (mainsound)
 		delete mainsound;
 	mainsound = 0;
@@ -1041,6 +1045,8 @@ void Elevator::MoveElevatorToFloor()
 	Plaque_movable->UpdateMove();
 	if (Panel)
 		Panel->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
+	if (Panel2)
+		Panel2->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
 
 	//move sounds
 
@@ -1199,6 +1205,8 @@ void Elevator::MoveElevatorToFloor()
 		Plaque_movable->UpdateMove();
 		if (Panel)
 			Panel->SetToElevatorAltitude();
+		if (Panel2)
+			Panel2->SetToElevatorAltitude();
 
 		//move sounds
 	}
@@ -1616,6 +1624,8 @@ void Elevator::EnableObjects(bool value)
 
 		if (Panel)
 			Panel->Enabled(true);
+		if (Panel2)
+			Panel2->Enabled(true);
 	}
 	else
 	{
@@ -1629,6 +1639,8 @@ void Elevator::EnableObjects(bool value)
 
 		if (Panel)
 			Panel->Enabled(false);
+		if (Panel2)
+			Panel2->Enabled(false);
 	}
 }
 
@@ -1790,9 +1802,11 @@ void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, con
 {
 	//create a new button panel object and store the pointer
 	if (!Panel)
-		Panel = new ButtonPanel(Number, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+		Panel = new ButtonPanel(Number, 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+	else if (!Panel2)
+		Panel2 = new ButtonPanel(Number, 2, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panel already exists");
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panels already exist");
 }
 
 void Elevator::UpdateFloorIndicators()
