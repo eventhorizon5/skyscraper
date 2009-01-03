@@ -5572,11 +5572,11 @@ DrawWalls = true, true, false, false, false, false
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -36.25 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
-<Floor 82 to 99>
+<Floors 82 to 99>
     CallButtonElevators = 54, 55, 56, 57
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -17.75 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -14.67, -36.25 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
-<EndFloor>
+<EndFloors>
 
 #Residential Locals
 <Floor 100>
