@@ -33,6 +33,7 @@
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/buttonup.png, ButtonUp, 1, 1
     Load data/buttondown.png, ButtonDown, 1, 1
+    Load data/marbl3.jpg, Wall1, 0.269, 0.25
 
     Load signs/sans/Open.jpg, ButtonOpen, 1, 1
     Load signs/sans/Close.jpg, ButtonClose, 1, 1
@@ -80,13 +81,13 @@ SetAutoSize = true, true
     if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    if[%floor% ! 0] AddWall Front, InterExt, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    if[%floor% ! 0] AddWall Left, InterExt, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     DrawWalls = false, true, false, false, false, false
     AddWall Right, MainWindows, 0, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     AddWall Back, MainWindows, 0, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    if[%floor% ! 0] AddWall Right, InterExt, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    if[%floor% ! 0] AddWall Back, InterExt, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Right, InterExt, 0, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Back, InterExt, 0, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 
     #Internal windows
@@ -151,13 +152,13 @@ ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 	AddShaftWall 1, Shaft1Back, Brick, 0.33, -4, 4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
 	
 	WallOrientation = right
-	DrawWalls = true, false, true, true, false, false
-	AddWall Shaft1LeftE, Ceiling1, 0.33, -4, -4.125 + 6, -4, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
-	AddWall Shaft1FrontE, Ceiling1, 0.33, -4, -4.125 + 6, 4, -4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+	DrawWalls = true, false, false, false, false, false
+	AddWall Shaft1LeftE, Wall1, 0.33, -4, -4.125 + 6 - 0.33, -4, 4.125 + 6 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1FrontE, Wall1, 0.33, -4 - 0.33, -4.125 + 6, 4 + 0.33, -4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
 	WallOrientation = left
-	DrawWalls = false, true, true, true, false, false
-	AddWall Shaft1RightE, Ceiling1, 0.33, 4, -4.125 + 6, 4, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
-	AddWall Shaft1BackE, Ceiling1, 0.33, -4, 4.125 + 6, 4, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+	DrawWalls = false, true, false, false, false, false
+	AddWall Shaft1RightE, Wall1, 0.33, 4, -4.125 + 6 - 0.33, 4, 4.125 + 6 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1BackE, Wall1, 0.33, -4 - 0.33, 4.125 + 6, 4 + 0.33, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 #reset drawwalls
@@ -262,11 +263,11 @@ CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
     
     SetAutoSize = true, false
     WallOrientation = right
-    AddStairsWall 1, LeftWall, StairsWall, 0.3, -8.5, -3.5, -8.5, 3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
-    AddStairsWall 1, FrontWall, StairsWall, 0.3, -8.5, -3.5, 8.5, -3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    AddStairsWall 1, LeftWall, StairsWall, 0.3, -8.5, -3.5 - 0.3, -8.5, 3.5 + 0.3, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    AddStairsWall 1, FrontWall, StairsWall, 0.3, -8.5 - 0.3, -3.5, 8.5 + 0.3, -3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
     WallOrientation = left
-    AddStairsWall 1, BackWall, StairsWall, 0.3, -8.5, 3.5, 8.5, 3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
-    AddStairsWall 1, RightWall, StairsWall, 0.3, 8.5, -3.5, 8.5, 3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    AddStairsWall 1, BackWall, StairsWall, 0.3, -8.5 - 0.3, 3.5, 8.5 + 0.3, 3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    AddStairsWall 1, RightWall, StairsWall, 0.3, 8.5, -3.5 - 0.3, 8.5, 3.5 + 0.3, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
     SetAutoSize = true, true
     
     AddStairsDoor 1, StairsDoor, 0.2, 1, -8.5, 0, 3.5, 8, 0, 1, 1
