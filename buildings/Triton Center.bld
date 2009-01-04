@@ -4745,7 +4745,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton 1, ButtonAlarm, 10, 4, alarm, 1, 1
 <EndElevators>
 
-<Elevators 58 to 61>
+<Elevators 59 to 61>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
