@@ -15,7 +15,8 @@
 
 <Textures>
     Load data/brick1.jpg, Brick, 3.72, 4
-    Load data/windows08.jpg, MainWindows, 19.84, 1
+    Load data/windows11h.jpg, MainWindows, 19.84, 1
+    Load data/windows11h_inside.png, MainWindowsInt, 19.84, 1
     Load data/granite.jpg, Granite, 3.72, 4
     Load data/symb5.jpg, Marble3, 3.72, 4
     Load data/text16.jpg, Wood2, 3.72, 4
@@ -61,15 +62,13 @@ SetAutoSize = true, true
     Altitude = -2.24
 <EndFloor>
 
-<Floors 1 to 9>
+<Floors 0 to 9>
     ID = %floor% + 1
     Name = Floor (%floor% + 1)
     Type = Office
     Height = 10
     InterfloorHeight = 2.24
-<EndFloors>
-
-<Floor 0>
+    
     #Floor
     DrawWalls = false, true, false, false, false, false
     AddFloor Floor, Granite, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, False
@@ -78,40 +77,30 @@ SetAutoSize = true, true
     DrawWalls = true, false, false, false, false, false
     AddFloor Ceiling, Marble3, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, 0, 0, False
 
-    #External walls
-    WallOrientation = left
+    #External windows
     SetAutoSize = true, false
-    DrawWalls = true, true, false, false, false, false
-    AddWall Front, MainWindows, 0.5, -10, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall Left, MainWindows, 0.5, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    WallOrientation = right
-    AddWall Right, MainWindows, 0.5, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall Back, MainWindows, 0.5, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Front, InterExt, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Left, InterExt, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right, MainWindows, 0, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Back, MainWindows, 0, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Right, InterExt, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Back, InterExt, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
-<EndFloor>
 
-<Floors 1 to 9>
-    #Floor
-    DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Granite, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, False
-
-    #Ceiling
-    DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Marble3, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, 0, 0, False
-
-    #External walls
-    WallOrientation = left
+    #Internal windows
     SetAutoSize = true, false
-    DrawWalls = true, true, false, false, false, false
-    AddWall Front, MainWindows, 0.5, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall Front, InterExt, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall Left, MainWindows, 0.5, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall Left, InterExt, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    WallOrientation = right
-    AddWall Right, MainWindows, 0.5, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall Right, InterExt, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall Back, MainWindows, 0.5, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall Back, InterExt, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -10, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, MainWindowsInt, 0, 20, -20, 20, 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWindowsInt, 0, 20, 20, -20, 20, %height%, %height%, 0, 0, 0, 0, False
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -271,7 +260,7 @@ CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
     AddStairsWall 1, LandingLowerCover, Brick, 0.1, -5, -3.5, -5, 0, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 1, LandingUpperCover, Brick, 0.1, 5, 0, 5, 3.5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    if[%floor% < 9] AddStairsWall 1, LandingUpperCover, Brick, 0.1, 5, 0, 5, 3.5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
     
     SetAutoSize = true, false
