@@ -1370,8 +1370,8 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 		{
 			//multiply the tiling parameters (tw and th) by
 			//the stored multipliers for that texture
-			tw3 = tw2 / textureinfo[i].widthmult;
-			th3 = th2 / textureinfo[i].heightmult;
+			tw3 = tw2 * textureinfo[i].widthmult;
+			th3 = th2 * textureinfo[i].heightmult;
 		}
 	}
 
@@ -2189,8 +2189,8 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		{
 			//multiply the tiling parameters (tw and th) by
 			//the stored multipliers for that texture
-			tw2 = tw / textureinfo[i].widthmult;
-			th2 = th / textureinfo[i].heightmult;
+			tw2 = tw * textureinfo[i].widthmult;
+			th2 = th * textureinfo[i].heightmult;
 			break;
 		}
 	}

@@ -31,14 +31,14 @@
 <EndGlobals>
 
 <Textures>
-    Load data/brick1.jpg, Brick, 3.72, 4
-    Load data/searstower.jpg, MainWindows, 14.854, 1
-    Load data/Carpet0013_S.jpg, Carpet1, 5, 5
-    Load data/symb5.jpg, Marble3, 3.72, 4
-    Load data/marb047.jpg, Marble4, 3.72, 4
-    Load data/cutston.jpg, Ceiling1, 3.72, 4
-    Load data/text12.jpg, Wall3, 3.72, 4
-    Load data/cinderblocks.jpg, Concrete, 4, 4
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/searstower.jpg, MainWindows, 0.067, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
+    Load data/symb5.jpg, Marble3, 0.269, 0.25
+    Load data/marb047.jpg, Marble4, 0.269, 0.25
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/text12.jpg, Wall3, 0.269, 0.25
+    Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
     Load data/vents1.jpg, VentsInt, 1, 1
     Load data/vents1c.jpg, VentsExt, 1, 1
 <EndTextures>
@@ -240,10 +240,10 @@
 <Floor 30>
     #External vents
     SetAutoSize = false, false
-    AddWall ExtVents Front, VentsExt, 0, -112.5, -112.5, 112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 5, 0, True
-    AddWall ExtVents Right, VentsExt, 0, 112.5, -112.5, 112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 5, 0, True
-    AddWall ExtVents Back, VentsExt, 0, 112.5, 112.5, -112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 5, 0, True
-    AddWall ExtVents Left, VentsExt, 0, -112.5, 112.5, -112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 5, 0, True
+    AddWall ExtVents Front, VentsExt, 0, -112.5, -112.5, 112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 15, 0, True
+    AddWall ExtVents Right, VentsExt, 0, 112.5, -112.5, 112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 15, 0, True
+    AddWall ExtVents Back, VentsExt, 0, 112.5, 112.5, -112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 15, 0, True
+    AddWall ExtVents Left, VentsExt, 0, -112.5, 112.5, -112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 15, 0, True
     SetAutoSize = true, true
 <EndFloor>
 
@@ -436,17 +436,17 @@
     #External vents
     SetAutoSize = false, false
     #front
-    AddWall ExtVents Front1, VentsExt, 0, -112.5, -112.5, 37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
+    AddWall ExtVents Front1, VentsExt, 0, -112.5, -112.5, 37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 10, 0, True
     AddWall ExtVents Front2, VentsExt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
     #back
     AddWall ExtVents Back1, VentsExt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
-    AddWall ExtVents Back2, VentsExt, 0, -37.5, 112.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
+    AddWall ExtVents Back2, VentsExt, 0, -37.5, 112.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 10, 0, True
     #left
-    AddWall ExtVents Left1, VentsExt, 0, -112.5, -112.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
+    AddWall ExtVents Left1, VentsExt, 0, -112.5, -112.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 10, 0, True
     AddWall ExtVents Left2, VentsExt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
     #right
     AddWall ExtVents Right1, VentsExt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
-    AddWall ExtVents Right2, VentsExt, 0, 112.5, -37.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
+    AddWall ExtVents Right2, VentsExt, 0, 112.5, -37.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 10, 0, True
     SetAutoSize = true, true
 <EndFloor>
 

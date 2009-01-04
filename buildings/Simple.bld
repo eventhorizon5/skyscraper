@@ -13,26 +13,24 @@
 <EndGlobals>
 
 <Textures>
-    Load data/brick1.jpg, Brick, 3.72, 4
-    Load data/windows11h.jpg, MainWindows, 19.84, 1
-    Load data/windows11h_inside.png, MainWindowsInt, 19.84, 1
-    Load data/granite.jpg, Granite, 3.72, 4
-    Load data/symb5.jpg, Marble3, 3.72, 4
-    Load data/text16.jpg, Wood2, 3.72, 4
-    Load data/text13.jpg, Stairs, 3.72, 4
-    Load data/cinderblocks.jpg, Concrete, 4, 4
-    Load data/cinderblocks.jpg, StairsWall, 4, 1
-    Load data/cutston.jpg, InterExt, 3.72, 4
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/windows11h.jpg, MainWindows, 0.05, 1
+    Load data/windows11h_inside.png, MainWindowsInt, 0.05, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
+    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
+    Load data/cinderblocks.jpg, StairsWall, 0.25, 1
+    Load data/cutston.jpg, InterExt, 0.269, 0.25
     Load data/downtown.jpg, Downtown, 1, 1
-    Load data/cutston.jpg, Ceiling1, 3.72, 4
-    Load data/metal1.jpg, ElevExt, 4, 4
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/text16.jpg, ElevDoors, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
     Load data/marb148.jpg, ElevPanel, 1, 1
     Load data/diamond18j.jpg, ElevWall, 1, 1
     Load data/diamond18j.jpg, ElevPanelMain, 1, 1
-    Load data/elev1.jpg, ElevCeiling, 4, 4
-    Load data/Carpet0006_S.jpg, ElevFloor, 4, 4
+    Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
+    Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/buttonup.png, ButtonUp, 1, 1
     Load data/buttondown.png, ButtonDown, 1, 1
 
@@ -70,11 +68,11 @@ SetAutoSize = true, true
     
     #Floor
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Granite, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, False
 
     #Ceiling
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Marble3, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, 0, 0, False
+    AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External windows
     SetAutoSize = true, false
@@ -154,12 +152,12 @@ ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 	
 	WallOrientation = right
 	DrawWalls = true, false, true, true, false, false
-	AddWall Shaft1LeftE, Marble3, 0.33, -4, -4.125 + 6, -4, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
-	AddWall Shaft1FrontE, Marble3, 0.33, -4, -4.125 + 6, 4, -4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1LeftE, Ceiling1, 0.33, -4, -4.125 + 6, -4, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1FrontE, Ceiling1, 0.33, -4, -4.125 + 6, 4, -4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
 	WallOrientation = left
 	DrawWalls = false, true, true, true, false, false
-	AddWall Shaft1RightE, Marble3, 0.33, 4, -4.125 + 6, 4, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
-	AddWall Shaft1BackE, Marble3, 0.33, -4, 4.125 + 6, 4, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1RightE, Ceiling1, 0.33, 4, -4.125 + 6, 4, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1BackE, Ceiling1, 0.33, -4, 4.125 + 6, 4, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 #reset drawwalls

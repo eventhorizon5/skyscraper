@@ -404,7 +404,11 @@
     Example: <font size="2" face="Courier New, Courier, mono">LoadRange 2, 138, 
     data\floorindicators\%number%.jpg, Button%number%, 1, 1</font></p>
   <p align="left">This example will load the file 2.jpg and name it Button2, 3.jpg 
-    as Button3, and so on.</p>
+    as Button3, and so on. The values <em>tile_x</em> and <em>tile_y</em> are 
+    per-texture multipliers. For example, if you set <em>tile_x</em> to 2, and 
+    you specify a texture width (tw) of 2 during an <em>AddFloor</em> command 
+    later, the tiling value will be 4 (2 times 2), and the texture will be repeated 
+    4 times horizontally.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">5. The <em>Floor</em> Sections</font></strong></p>
   <p align="left">There are 2 <em>Floor</em> sections available - <em>Floor</em> 
