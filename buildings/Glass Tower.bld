@@ -34,12 +34,12 @@
 <Textures>
   Load data/brick1.jpg, Brick, 3.72, 4
   Load data/lobbyfront.jpg, LobbyFront, 46.3, 1
-  Load data/windows11e.jpg, MainWindows, 19.84, 1
+  Load data/windows11e.jpg, MainWindows, 13.889, 1
   Load data/Carpet0013_S.jpg, Carpet1, 5, 5
   Load data/symb5.jpg, Marble3, 3.72, 4
   Load data/marb047.jpg, Marble4, 3.72, 4
   Load data/cutston.jpg, Ceiling1, 3.72, 4
-  Load data/stucco4b.jpg, Backing, 4, 4
+  Load data/cutston.jpg, Backing, 9, 1
   Load data/cinderblocks.jpg, Concrete, 4, 4
 <EndTextures>
 
