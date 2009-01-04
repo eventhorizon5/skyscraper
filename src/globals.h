@@ -55,5 +55,9 @@
 SBSIMPEXP bool IsEven(int Number);
 SBSIMPEXP bool IsNumeric(const char *expression);
 SBSIMPEXP const char *BoolToString(bool item);
+SBSIMPEXP float RadiansToDegrees(float radians);
+SBSIMPEXP float DegreesToRadians(float degrees);
+
+const double pi = 3.14159265;
 
 #endif
