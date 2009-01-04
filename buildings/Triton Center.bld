@@ -26,7 +26,6 @@
     HorizScale = 1
     CameraFloor = 0
     CameraPosition = 0, -41.6
-    CameraDirection = 0, 10, 28.8
     CameraRotation = 0, 0, 0
 <EndGlobals>
 

@@ -8,7 +8,6 @@
     HorizScale = 1
     CameraFloor = 0
     CameraPosition = 0, -60
-    CameraDirection = 0, 10, 28.8
     CameraRotation = 0, 0, 0
     Sky = noon
 <EndGlobals>

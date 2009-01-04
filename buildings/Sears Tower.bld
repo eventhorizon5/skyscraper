@@ -27,8 +27,7 @@
     HorizScale = 1
     CameraFloor = 0
     CameraPosition = -200, 0
-    CameraDirection = 28.8, 10, 0
-    CameraRotation = 0, 0, 0
+    CameraRotation = 0, 90, 0
 <EndGlobals>
 
 <Textures>
@@ -215,11 +214,11 @@
     AddFloor Ceiling, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
-    SetAutoSize = true, false
-    AddWall Vents Front, VentsInt, 0, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
-    AddWall Vents Right, VentsInt, 0, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
-    AddWall Vents Back, VentsInt, 0, 112.5, 112.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
-    AddWall Vents Left, VentsInt, 0, -112.5, 112.5, -112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 1, False
+    SetAutoSize = false, false
+    AddWall Vents Front, VentsInt, 0, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
+    AddWall Vents Right, VentsInt, 0, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
+    AddWall Vents Back, VentsInt, 0, 112.5, 112.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
+    AddWall Vents Left, VentsInt, 0, -112.5, 112.5, -112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -240,11 +239,11 @@
 #Zone 1 mechanical vents
 <Floor 30>
     #External vents
-    SetAutoSize = true, false
-    AddWall ExtVents Front, VentsExt, 0, -112.5, -112.5, 112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, True
-    AddWall ExtVents Right, VentsExt, 0, 112.5, -112.5, 112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, True
-    AddWall ExtVents Back, VentsExt, 0, 112.5, 112.5, -112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, True
-    AddWall ExtVents Left, VentsExt, 0, -112.5, 112.5, -112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 0.5, 0, True
+    SetAutoSize = false, false
+    AddWall ExtVents Front, VentsExt, 0, -112.5, -112.5, 112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 5, 0, True
+    AddWall ExtVents Right, VentsExt, 0, 112.5, -112.5, 112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 5, 0, True
+    AddWall ExtVents Back, VentsExt, 0, 112.5, 112.5, -112.5, 112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 5, 0, True
+    AddWall ExtVents Left, VentsExt, 0, -112.5, 112.5, -112.5, -112.5, %fullheight% * 3, %fullheight% * 3, 0, 0, 5, 0, True
     SetAutoSize = true, true
 <EndFloor>
 
@@ -403,19 +402,19 @@
     AddFloor East Ceiling, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
-    SetAutoSize = true, false
+    SetAutoSize = false, false
     #front
-    AddWall Vents Front1, VentsInt, 0, -112.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
-    AddWall Vents Front2, VentsInt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
+    AddWall Vents Front1, VentsInt, 0, -112.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
+    AddWall Vents Front2, VentsInt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
     #back
-    AddWall Vents Back1, VentsInt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
-    AddWall Vents Back2, VentsInt, 0, -37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
+    AddWall Vents Back1, VentsInt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Back2, VentsInt, 0, -37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
     #left
-    AddWall Vents Left1, VentsInt, 0, -112.5, -112.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
-    AddWall Vents Left2, VentsInt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
+    AddWall Vents Left1, VentsInt, 0, -112.5, -112.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
+    AddWall Vents Left2, VentsInt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
     #right
-    AddWall Vents Right1, VentsInt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
-    AddWall Vents Right2, VentsInt, 0, 112.5, -37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 6.25, False
+    AddWall Vents Right1, VentsInt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Right2, VentsInt, 0, 112.5, -37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -435,19 +434,19 @@
 
 <Floor 64>
     #External vents
-    SetAutoSize = true, false
+    SetAutoSize = false, false
     #front
-    AddWall ExtVents Front1, VentsExt, 0, -112.5, -112.5, 37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Front2, VentsExt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    AddWall ExtVents Front1, VentsExt, 0, -112.5, -112.5, 37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
+    AddWall ExtVents Front2, VentsExt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
     #back
-    AddWall ExtVents Back1, VentsExt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Back2, VentsExt, 0, -37.5, 112.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    AddWall ExtVents Back1, VentsExt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
+    AddWall ExtVents Back2, VentsExt, 0, -37.5, 112.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
     #left
-    AddWall ExtVents Left1, VentsExt, 0, -112.5, -112.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Left2, VentsExt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    AddWall ExtVents Left1, VentsExt, 0, -112.5, -112.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
+    AddWall ExtVents Left2, VentsExt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
     #right
-    AddWall ExtVents Right1, VentsExt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Right2, VentsExt, 0, 112.5, -37.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    AddWall ExtVents Right1, VentsExt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
+    AddWall ExtVents Right2, VentsExt, 0, 112.5, -37.5, 112.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 0, True
     SetAutoSize = true, true
 <EndFloor>
 
@@ -549,23 +548,23 @@
     AddFloor North Ceiling, Brick, 0.5, -37.5, 37.5, 37.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
-    SetAutoSize = true, false
+    SetAutoSize = false, false
     #front
-    AddWall Vents Front1, VentsInt, 0, -37.5, -37.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Front2, VentsInt, 0, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Front3, VentsInt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
+    AddWall Vents Front1, VentsInt, 0, -37.5, -37.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Front2, VentsInt, 0, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Front3, VentsInt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
     #back
-    AddWall Vents Back1, VentsInt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Back2, VentsInt, 0, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Back3, VentsInt, 0, 37.5, 112.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
+    AddWall Vents Back1, VentsInt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Back2, VentsInt, 0, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Back3, VentsInt, 0, 37.5, 112.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
     #left
-    AddWall Vents Left1, VentsInt, 0, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Left2, VentsInt, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Left3, VentsInt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
+    AddWall Vents Left1, VentsInt, 0, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Left2, VentsInt, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Left3, VentsInt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
     #right
-    AddWall Vents Right1, VentsInt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Right2, VentsInt, 0, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Right3, VentsInt, 0, 112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
+    AddWall Vents Right1, VentsInt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Right2, VentsInt, 0, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Right3, VentsInt, 0, 112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -585,23 +584,23 @@
 
 <Floor 88>
     #External vents
-    SetAutoSize = true, false
+    SetAutoSize = false, false
     #front
-    AddWall ExtVents Front1, VentsExt, 0, -37.5, -37.5, -37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Front2, VentsExt, 0, -37.5, -112.5, 37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Front3, VentsExt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    AddWall ExtVents Front1, VentsExt, 0, -37.5, -37.5, -37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    AddWall ExtVents Front2, VentsExt, 0, -37.5, -112.5, 37.5, -112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    AddWall ExtVents Front3, VentsExt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
     #back
-    AddWall ExtVents Back1, VentsExt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Back2, VentsExt, 0, -37.5, 112.5, 37.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Back3, VentsExt, 0, 37.5, 112.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    AddWall ExtVents Back1, VentsExt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    AddWall ExtVents Back2, VentsExt, 0, -37.5, 112.5, 37.5, 112.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    AddWall ExtVents Back3, VentsExt, 0, 37.5, 112.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
     #left
-    AddWall ExtVents Left1, VentsExt, 0, -112.5, -37.5, -37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Left2, VentsExt, 0, -112.5, -37.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Left3, VentsExt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    AddWall ExtVents Left1, VentsExt, 0, -112.5, -37.5, -37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    AddWall ExtVents Left2, VentsExt, 0, -112.5, -37.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    AddWall ExtVents Left3, VentsExt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
     #right
-    AddWall ExtVents Right1, VentsExt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Right2, VentsExt, 0, 112.5, -37.5, 112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Right3, VentsExt, 0, 112.5, 37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    AddWall ExtVents Right1, VentsExt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    AddWall ExtVents Right2, VentsExt, 0, 112.5, -37.5, 112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    AddWall ExtVents Right3, VentsExt, 0, 112.5, 37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
     SetAutoSize = true, true
 <EndFloor>
 
@@ -736,11 +735,11 @@
     AddFloor Ceiling, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
-    SetAutoSize = true, false
-    AddWall Vents Front, VentsInt, 0, -112.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Back, VentsInt, 0, -112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Left, VentsInt, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
-    AddWall Vents Right, VentsInt, 0, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0.27, 12.5, False
+    SetAutoSize = false, false
+    AddWall Vents Front, VentsInt, 0, -112.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
+    AddWall Vents Back, VentsInt, 0, -112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
+    AddWall Vents Left, VentsInt, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall Vents Right, VentsInt, 0, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -760,11 +759,11 @@
 
 <Floor 106>
     #External vents
-    SetAutoSize = true, false
-    AddWall ExtVents Front, VentsExt, 0, -112.5, -37.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Back, VentsExt, 0, -112.5, 37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Left, VentsExt, 0, -112.5, -37.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
-    AddWall ExtVents Right, VentsExt, 0, 37.5, -37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 0.5, 0, True
+    SetAutoSize = false, false
+    AddWall ExtVents Front, VentsExt, 0, -112.5, -37.5, 37.5, -37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 10, 1, True
+    AddWall ExtVents Back, VentsExt, 0, -112.5, 37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 10, 1, True
+    AddWall ExtVents Left, VentsExt, 0, -112.5, -37.5, -112.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
+    AddWall ExtVents Right, VentsExt, 0, 37.5, -37.5, 37.5, 37.5, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
     SetAutoSize = true, true
 <EndFloor>
 
