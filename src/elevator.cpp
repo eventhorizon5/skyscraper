@@ -83,6 +83,17 @@ Elevator::Elevator(int number)
 	JerkRate = 0;
 	JerkPos = 0;
 	DoorTimer = 5000;
+	DoorIsRunning = false;
+	OpenChange = 0;
+	marker1 = 0;
+	marker2 = 0;
+	index = 0;
+	stopping_distance = 0;
+	temp_change = 0;
+	accelerating = false;
+	door_error = 0;
+	ElevatorIsRunning = false;
+	oldfloor = 0;
 
 	//create object meshes
 	buffer = Number;
@@ -564,23 +575,13 @@ void Elevator::MoveDoors(bool open, bool emergency)
 
 	//ShaftDoorFloor is the floor the shaft doors are on - only has effect if whichdoors is 3
 
-	static bool IsRunning = false;
-	static float OpenChange;
-	static float marker1;
-	static float marker2;
-	static int index;
-	static float stopping_distance;
-	static float temp_change;
-	static bool accelerating;
-	static float door_error;
-
 	//todo: turn off autoclose timer
 
-	if (IsRunning == false)
+	if (DoorIsRunning == false)
 	{
 		//initialization code
 
-		IsRunning = true;
+		DoorIsRunning = true;
 
 		if (emergency == false)
 		{
@@ -930,22 +931,20 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	if (emergency == false)
 		timer->Start(DoorTimer, true);
 
-	IsRunning = false;
+	DoorIsRunning = false;
 }
 
 void Elevator::MoveElevatorToFloor()
 {
 	//Main processing routine; sends elevator to floor specified in GotoFloor
-	static bool IsRunning = false;
-	static int oldfloor;
 
 	//exit if doors are moving
 	if (OpenDoor != 0)
 		return;
 
-	if (IsRunning == false)
+	if (ElevatorIsRunning == false)
 	{
-		IsRunning = true;
+		ElevatorIsRunning = true;
 		csString dir_string;
 
 		//get elevator's current altitude
@@ -960,7 +959,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			sbs->Report("Elevator already on specified floor");
 			MoveElevator = false;
-			IsRunning = false;
+			ElevatorIsRunning = false;
 			OpenDoors();
 			return;
 		}
@@ -970,7 +969,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			sbs->Report("Destination floor not in ServicedFloors list");
 			MoveElevator = false;
-			IsRunning = false;
+			ElevatorIsRunning = false;
 			return;
 		}
 
@@ -1219,7 +1218,7 @@ void Elevator::MoveElevatorToFloor()
 	Destination = 0;
 	DistanceToTravel = 0;
 	ElevatorStart = 0;
-	IsRunning = false;
+	ElevatorIsRunning = false;
 	MoveElevator = false;
 
 	if (EmergencyStop == false)
