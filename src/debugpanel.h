@@ -52,12 +52,14 @@ class DebugPanel: public wxFrame
 		//(*Identifiers(DebugPanel)
 		static const long ID_STATICTEXT1;
 		static const long ID_STATICTEXT2;
+		static const long ID_STATICTEXT8;
 		static const long ID_STATICTEXT3;
 		static const long ID_STATICTEXT4;
 		static const long ID_STATICTEXT5;
 		static const long ID_STATICTEXT6;
 		static const long ID_t_camerafloor;
 		static const long ID_t_camerap;
+		static const long ID_t_rotation;
 		static const long ID_t_elevnumber;
 		static const long ID_t_elevfloor;
 		static const long ID_t_object;
@@ -110,6 +112,7 @@ class DebugPanel: public wxFrame
 		wxStaticText* StaticText2;
 		wxButton* bListAltitudes;
 		wxCheckBox* chkProcessElevators;
+		wxStaticText* t_rotation;
 		wxStaticText* StaticText6;
 		wxButton* bEditElevator;
 		wxButton* bMeshControl;
@@ -122,6 +125,7 @@ class DebugPanel: public wxFrame
 		wxStaticText* t_elevnumber;
 		wxStaticText* t_object;
 		wxStaticText* StaticText5;
+		wxStaticText* StaticText7;
 		wxCheckBox* chkFrameSync;
 		wxButton* bInitRealtime;
 		wxBoxSizer* BoxSizer1;
