@@ -75,12 +75,24 @@ Elevator::Elevator(int number)
 	IsEnabled = true;
 	Height = 0;
 	Panel = 0;
+	Panel2 = 0;
 	DoorAcceleration = 0;
 	TempDeceleration = 0;
 	ErrorOffset = 0;
 	JerkRate = 0;
 	JerkPos = 0;
 	DoorTimer = 5000;
+	DoorIsRunning = false;
+	OpenChange = 0;
+	marker1 = 0;
+	marker2 = 0;
+	index = 0;
+	stopping_distance = 0;
+	temp_change = 0;
+	accelerating = false;
+	door_error = 0;
+	ElevatorIsRunning = false;
+	oldfloor = 0;
 
 	//create object meshes
 	buffer = Number;
@@ -143,6 +155,9 @@ Elevator::~Elevator()
 	if (Panel)
 		delete Panel;
 	Panel = 0;
+	if (Panel2)
+		delete Panel2;
+	Panel2 = 0;
 }
 
 void Elevator::CreateElevator(float x, float z, int floor)
@@ -550,23 +565,13 @@ void Elevator::MoveDoors(bool open, bool emergency)
 
 	//ShaftDoorFloor is the floor the shaft doors are on - only has effect if whichdoors is 3
 
-	static bool IsRunning = false;
-	static float OpenChange;
-	static float marker1;
-	static float marker2;
-	static int index;
-	static float stopping_distance;
-	static float temp_change;
-	static bool accelerating;
-	static float door_error;
-
 	//todo: turn off autoclose timer
 
-	if (IsRunning == false)
+	if (DoorIsRunning == false)
 	{
 		//initialization code
 
-		IsRunning = true;
+		DoorIsRunning = true;
 
 		if (emergency == false)
 		{
@@ -916,22 +921,20 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	if (emergency == false)
 		timer->Start(DoorTimer, true);
 
-	IsRunning = false;
+	DoorIsRunning = false;
 }
 
 void Elevator::MoveElevatorToFloor()
 {
 	//Main processing routine; sends elevator to floor specified in GotoFloor
-	static bool IsRunning = false;
-	static int oldfloor;
 
 	//exit if doors are moving
 	if (OpenDoor != 0)
 		return;
 
-	if (IsRunning == false)
+	if (ElevatorIsRunning == false)
 	{
-		IsRunning = true;
+		ElevatorIsRunning = true;
 		csString dir_string;
 
 		//get elevator's current altitude
@@ -946,7 +949,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			sbs->Report("Elevator already on specified floor");
 			MoveElevator = false;
-			IsRunning = false;
+			ElevatorIsRunning = false;
 			OpenDoors();
 			return;
 		}
@@ -956,7 +959,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			sbs->Report("Destination floor not in ServicedFloors list");
 			MoveElevator = false;
-			IsRunning = false;
+			ElevatorIsRunning = false;
 			return;
 		}
 
@@ -1031,6 +1034,8 @@ void Elevator::MoveElevatorToFloor()
 	Plaque_movable->UpdateMove();
 	if (Panel)
 		Panel->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
+	if (Panel2)
+		Panel2->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
 
 	//move sounds
 
@@ -1189,6 +1194,8 @@ void Elevator::MoveElevatorToFloor()
 		Plaque_movable->UpdateMove();
 		if (Panel)
 			Panel->SetToElevatorAltitude();
+		if (Panel2)
+			Panel2->SetToElevatorAltitude();
 
 		//move sounds
 	}
@@ -1201,7 +1208,7 @@ void Elevator::MoveElevatorToFloor()
 	Destination = 0;
 	DistanceToTravel = 0;
 	ElevatorStart = 0;
-	IsRunning = false;
+	ElevatorIsRunning = false;
 	MoveElevator = false;
 
 	if (EmergencyStop == false)
@@ -1606,6 +1613,8 @@ void Elevator::EnableObjects(bool value)
 
 		if (Panel)
 			Panel->Enabled(true);
+		if (Panel2)
+			Panel2->Enabled(true);
 	}
 	else
 	{
@@ -1619,6 +1628,8 @@ void Elevator::EnableObjects(bool value)
 
 		if (Panel)
 			Panel->Enabled(false);
+		if (Panel2)
+			Panel2->Enabled(false);
 	}
 }
 
@@ -1776,13 +1787,15 @@ void Elevator::RemoveServicedFloor(int number)
 		ServicedFloors.Delete(number);
 }
 
-void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th)
+void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
 {
 	//create a new button panel object and store the pointer
 	if (!Panel)
-		Panel = new ButtonPanel(Number, texture, rows, columns, direction, CenterX, CenterZ, width, height, voffset, spacingX, spacingY, tw, th);
+		Panel = new ButtonPanel(Number, 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+	else if (!Panel2)
+		Panel2 = new ButtonPanel(Number, 2, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panel already exists");
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panels already exist");
 }
 
 void Elevator::UpdateFloorIndicators()

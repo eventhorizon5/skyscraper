@@ -64,6 +64,7 @@ public:
 	int Direction; //-1=down, 1=up, 0=stopped
 	float Height; //elevator height
 	ButtonPanel *Panel; //elevator button panel object
+	ButtonPanel *Panel2; //elevator button panel object
 	int DoorTimer; //door autoclose timer value, in milliseconds
 
 	//functions
@@ -177,6 +178,21 @@ private:
 	//timer object
 	Timer *timer;
 
+
+	//door internals
+	bool DoorIsRunning;
+	float OpenChange;
+	float marker1;
+	float marker2;
+	int index;
+	float stopping_distance;
+	float temp_change;
+	bool accelerating;
+	float door_error;
+
+	//elevator misc internals
+	bool ElevatorIsRunning;
+	int oldfloor;
 };
 
 #endif
