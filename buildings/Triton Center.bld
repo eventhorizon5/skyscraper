@@ -26,84 +26,64 @@
     HorizScale = 1
     CameraFloor = 0
     CameraPosition = 0, -41.6
-    CameraDirection = 0, 10, 28.8
     CameraRotation = 0, 0, 0
 <EndGlobals>
 
 <Textures>
-    Load data/brick1.jpg, Brick, 3.72, 4
-    Load data/lobbyfront.jpg, LobbyFront, 46.3, 1
-    Load data/windows11h.jpg, MainWindows, 19.84, 1
-    Load data/windows11h_inside.png, MainWindowsInt, 19.84, 1
-    Load data/Carpet0013_S.jpg, Carpet1, 5, 5
-    Load data/marbletile.jpg, MarbleTile, 4, 2
-    Load data/MarbleWhite0047b_S.jpg, WhiteMarble, 4, 6
-    Load data/marble22.jpg, Wall4, 4, 6
-    Load data/symb5.jpg, Wood3, 3.72, 4
-    Load data/marb047.jpg, Marble4, 3.72, 4
-    Load data/elev1.jpg, ElevCeiling, 4, 4
-    Load data/Carpet0006_S.jpg, ElevFloor, 4, 4
-    Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 2, 2
-    Load data/Metalbare0085_3_S.jpg, ServiceElevWall, 4, 4
-    Load data/metal080.jpg, ServiceElevPanelMain, 2, 2
-    Load data/diamond18h.jpg, OfficeElevWall, 3, 3
-    Load data/diamond18b.jpg, ExpressElevWall, 3, 3
-    Load data/diamond18i.jpg, HotelElevWall, 3, 3
-    Load data/diamond18g.jpg, ResidentialElevWall, 3, 3
-    Load data/metal080.jpg, ColumnTex, 2, 2
-    Load data/text16.jpg, Wood2, 3.72, 4
-    Load data/marbl3.jpg, Wall1, 3.72, 4
-    Load data/marb123.jpg, Wall2, 3.72, 4
-    Load data/stucco1.jpg, Stucco1, 4, 4
-    Load data/stucco2.jpg, Stucco2, 4, 4
-    Load data/stucco3.jpg, Stucco3, 4, 4
-    Load data/stucco4c.jpg, Stucco4, 4, 4
-    Load data/cutston.jpg, Ceiling1, 3.72, 4
-    Load data/intext.jpg, InterExt, 3.72, 4
-    Load data/intext.jpg, InterInt, 3.72, 4
-    Load data/text12.jpg, Wall3, 3.72, 4
-    Load data/metal1.jpg, Metal1, 4, 4
-    Load data/metal1.jpg, ElevExt, 4, 4
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/lobbyfront.jpg, LobbyFront, 0.022, 1
+    Load data/windows11h.jpg, MainWindows, 0.05, 1
+    Load data/windows11h_inside.png, MainWindowsInt, 0.05, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
+    Load data/symb5.jpg, Wood3, 0.269, 0.25
+    Load data/marb047.jpg, Marble4, 0.269, 0.25
+    Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
+    Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
+    Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 0.5, 0.5
+    Load data/Metalbare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
+    Load data/metal080.jpg, ServiceElevPanelMain, 0.5, 0.5
+    Load data/diamond18h.jpg, OfficeElevWall, 0.333, 0.333
+    Load data/diamond18b.jpg, ExpressElevWall, 0.333, 0.333
+    Load data/diamond18i.jpg, HotelElevWall, 0.333, 0.333
+    Load data/diamond18g.jpg, ResidentialElevWall, 0.333, 0.333
+    Load data/metal080.jpg, ColumnTex, 0.5, 0.5
+    Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/stucco4c.jpg, Stucco4, 0.25, 0.25
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/intext.jpg, InterExt, 0.269, 0.25
+    Load data/intext.jpg, InterInt, 0.269, 0.25
+    Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/text16.jpg, ElevDoors, 1, 1
     #Load data/marb148.jpg, ElevExtPanels, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels2, 1, 1
     Load data/marb148.jpg, ElevPanel, 1, 1
     Load data/diamond18j.jpg, ElevPanelMain, 1, 1
-    Load data/cinderblocks.jpg, Concrete, 4, 4
-    Load data/cinderblocks.jpg, StairsWall, 4, 1
-    Load data/text13.jpg, Stairs, 3.72, 4
+    Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
+    Load data/cinderblocks.jpg, StairsWall, 0.25, 1
+    Load data/text13.jpg, Stairs, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
     Load data/miscdoor8.jpg, StairsDoor2, 1, 1
-    Load data/sidewalk1r.jpg, Road1, 1, 1
-    Load data/walkway.jpg, Walkway, 1, 1
-    Load data/sidewalkcorner1.jpg, Road2, 1, 1
-    Load data/sidewalkcorner2.jpg, Road3, 1, 1
-    Load data/sidewalkcorner3.jpg, Road4, 1, 1
-    Load data/roadfull.jpg, Road5, 1, 1
-    Load data/windows08.jpg, Windows8, 3.72, 4
-    Load data/windows11.jpg, Windows11, 3.72, 4
     Load data/downtown.jpg, Downtown, 1, 1
-    #Load data/vents1b.jpg, VentsInt, 1, 1
     Load data/bracing1.jpg, VentsInt, 1, 1
     Load data/vents1.jpg, VentsExt, 1, 1
     #Load data/plaque.jpg, Plaque, 1, 1
     Load data/buttonup.png, ButtonUp, 1, 1
     Load data/buttondown.png, ButtonDown, 1, 1
     Load data/floorsign.jpg, FloorSign, 1, 1
-    Load data/floorsignballroom.jpg, FloorSignBallroom, 1, 1
-    Load data/floorsignbalcony.jpg, FloorSignBalcony, 1, 1
-    Load data/floorsignhotel.jpg, FloorSignHotel, 1, 1
-    Load data/floorsignlobby.jpg, FloorSignLobby, 1, 1
-    Load data/floorsignmaint.jpg, FloorSignMaint, 1, 1
-    Load data/floorsignmez.jpg, FloorSignMez, 1, 1
-    Load data/floorsignmechanical.jpg, FloorSignMechanical, 1, 1
-    Load data/floorsignobservatory.jpg, FloorSignObservatory, 1, 1
-    Load data/floorsignoffices.jpg, FloorSignOffices, 1, 1
-    Load data/floorsignpool.jpg, FloorSignPool, 1, 1
-    Load data/floorsignresidential.jpg, FloorSignResidential, 1, 1
-    Load data/floorsignroof.jpg, FloorSignRoof, 1, 1
-    Load data/floorsignskylobby.jpg, FloorSignSkylobby, 1, 1
+    #Load data/floorsignballroom.jpg, FloorSignBallroom, 1, 1
+    #Load data/floorsignbalcony.jpg, FloorSignBalcony, 1, 1
+    #Load data/floorsignhotel.jpg, FloorSignHotel, 1, 1
+    #Load data/floorsignlobby.jpg, FloorSignLobby, 1, 1
+    #Load data/floorsignmaint.jpg, FloorSignMaint, 1, 1
+    #Load data/floorsignmez.jpg, FloorSignMez, 1, 1
+    #Load data/floorsignmechanical.jpg, FloorSignMechanical, 1, 1
+    #Load data/floorsignobservatory.jpg, FloorSignObservatory, 1, 1
+    #Load data/floorsignoffices.jpg, FloorSignOffices, 1, 1
+    #Load data/floorsignpool.jpg, FloorSignPool, 1, 1
+    #Load data/floorsignresidential.jpg, FloorSignResidential, 1, 1
+    #Load data/floorsignroof.jpg, FloorSignRoof, 1, 1
+    #Load data/floorsignskylobby.jpg, FloorSignSkylobby, 1, 1
 
     #floor indicator/button pictures
     Load signs/sans/L.jpg, ButtonL, 1, 1
@@ -120,7 +100,7 @@
 # Ground
 SetAutoSize = false, false
 DrawWalls = false, true, false, false, false, false
-AddFloor Landscape, Ground, Downtown, 0, -2000, -2000, 2000, 2000, 0, 0, 1, 1
+AddFloor Landscape, Ground, Downtown, 0, -158400, -158400, 158400, 158400, 0, 0, 40, 40
 Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
 DrawWalls = true, true, false, false, false, false
 SetAutoSize = true, true
@@ -4765,7 +4745,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton 1, ButtonAlarm, 10, 4, alarm, 1, 1
 <EndElevators>
 
-<Elevators 58 to 61>
+<Elevators 59 to 61>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true

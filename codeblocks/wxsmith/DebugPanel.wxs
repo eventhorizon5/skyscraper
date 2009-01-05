@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
 	<object class="wxFrame" name="DebugPanel">
 		<title>Simulator Control Panel</title>
@@ -27,6 +27,14 @@
 										</object>
 										<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText7" member="yes">
+											<label>Camera Rotation:</label>
+										</object>
+										<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
@@ -81,6 +89,16 @@
 										</object>
 										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_t_rotation" variable="t_rotation" member="yes">
+											<label></label>
+											<size>150,-1</size>
+											<style>wxST_NO_AUTORESIZE</style>
+										</object>
+										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_t_elevnumber" variable="t_elevnumber" member="yes">

@@ -376,9 +376,16 @@ void SBS::GetInput()
 void SBS::Render()
 {
 	// Tell 3D driver we're going to display 3D things.
-	//if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN ))
-	if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER ))
-		return;
+	if (IsSkyboxEnabled == false)
+	{
+		if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN ))
+			return;
+	}
+	else
+	{
+		if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER ))
+			return;
+	}
 
 	// Tell the camera to render into the frame buffer.
 	view->Draw ();
@@ -1364,8 +1371,8 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 		{
 			//multiply the tiling parameters (tw and th) by
 			//the stored multipliers for that texture
-			tw3 = tw2 / textureinfo[i].widthmult;
-			th3 = th2 / textureinfo[i].heightmult;
+			tw3 = tw2 * textureinfo[i].widthmult;
+			th3 = th2 * textureinfo[i].heightmult;
 		}
 	}
 
@@ -2036,7 +2043,8 @@ int SBS::CreateSky(const char *filenamebase)
 	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox->GetMeshObject()->GetFactory());
 	SkyBox->SetZBufMode(CS_ZBUF_USE);
 
-	int firstidx = SkyBox_state->AddInsideBox(csVector3(-2000, -2000, -2000), csVector3(2000, 2000, 2000));
+	//create a skybox that extends 30 miles (30 * 5280 ft) in each direction
+	int firstidx = SkyBox_state->AddInsideBox(csVector3(-158400, -158400, -158400), csVector3(158400, 158400, 158400));
 	material = engine->GetMaterialList ()->FindByName ("SkyBack");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
 	material = engine->GetMaterialList ()->FindByName ("SkyRight");
@@ -2183,8 +2191,8 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		{
 			//multiply the tiling parameters (tw and th) by
 			//the stored multipliers for that texture
-			tw2 = tw / textureinfo[i].widthmult;
-			th2 = th / textureinfo[i].heightmult;
+			tw2 = tw * textureinfo[i].widthmult;
+			th2 = th * textureinfo[i].heightmult;
 			break;
 		}
 	}

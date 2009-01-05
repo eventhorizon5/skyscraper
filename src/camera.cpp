@@ -91,8 +91,29 @@ void Camera::SetDirection(csVector3 vector)
 
 void Camera::SetRotation(csVector3 vector)
 {
-	//sets the camera's rotation to an absolute position
-	collider_actor.SetRotation(vector);
+	//sets the camera's rotation in degrees
+
+	//keep rotation within 360 degree boundaries
+	if (vector.x > 360)
+		vector.x -= 360;
+	if (vector.x < 0)
+		vector.x += 360;
+	if (vector.y > 360)
+		vector.y -= 360;
+	if (vector.y < 0)
+		vector.y += 360;
+	if (vector.z > 360)
+		vector.z -= 360;
+	if (vector.z < 0)
+		vector.z += 360;
+
+	//convert to radians
+	csVector3 rot;
+	rot.x = DegreesToRadians(vector.x);
+	rot.y = DegreesToRadians(vector.y);
+	rot.z = DegreesToRadians(vector.z);
+
+	collider_actor.SetRotation(rot);
 }
 
 csVector3 Camera::GetPosition()
@@ -110,7 +131,25 @@ csVector3 Camera::GetDirection()
 csVector3 Camera::GetRotation()
 {
 	//returns the camera's current rotation
-	return collider_actor.GetRotation();
+	float x = RadiansToDegrees(collider_actor.GetRotation().x);
+	float y = RadiansToDegrees(collider_actor.GetRotation().y);
+	float z = RadiansToDegrees(collider_actor.GetRotation().z);
+
+	//keep values within the 0-360 range
+	if (x > 360)
+		x -= 360 * int(x / 360);
+	if (x < 0)
+		x = 360 + (x - (360 * int(x / 360)));
+	if (y > 360)
+		y -= 360 * int(y / 360);
+	if (y < 0)
+		y = 360 + (y - (360 * int(y / 360)));
+	if (z > 360)
+		z -= 360 * int(z / 360);
+	if (z < 0)
+		z = 360 + (z - (360 * int(z / 360)));
+
+	return csVector3(x, y, z);
 }
 
 void Camera::UpdateCameraFloor()
@@ -129,7 +168,8 @@ void Camera::Rotate(csVector3 vector, float speed)
 {
 	//rotates the camera in a relative amount
 	csVector3 rot = GetRotation() * vector * speed;
-	collider_actor.SetRotation(rot);
+
+	SetRotation(rot);
 }
 
 void Camera::SetStartDirection(csVector3 vector)

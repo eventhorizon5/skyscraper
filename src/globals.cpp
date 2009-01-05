@@ -58,3 +58,15 @@ const char *BoolToString(bool item)
 	else
 		return "false";
 }
+
+float RadiansToDegrees(float radians)
+{
+	//convert from radians to degrees
+	return radians * (180 / pi);
+}
+
+float DegreesToRadians(float degrees)
+{
+	//convert from degrees to radians
+	return degrees * (pi / 180);
+}
