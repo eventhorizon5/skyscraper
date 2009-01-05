@@ -2042,7 +2042,8 @@ int SBS::CreateSky(const char *filenamebase)
 	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox->GetMeshObject()->GetFactory());
 	SkyBox->SetZBufMode(CS_ZBUF_USE);
 
-	int firstidx = SkyBox_state->AddInsideBox(csVector3(-2000, -2000, -2000), csVector3(2000, 2000, 2000));
+	//create a skybox that extends 30 miles (30 * 5280 ft) in each direction
+	int firstidx = SkyBox_state->AddInsideBox(csVector3(-158400, -158400, -158400), csVector3(158400, 158400, 158400));
 	material = engine->GetMaterialList ()->FindByName ("SkyBack");
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
 	material = engine->GetMaterialList ()->FindByName ("SkyRight");
