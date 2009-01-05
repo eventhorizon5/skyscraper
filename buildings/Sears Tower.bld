@@ -43,6 +43,14 @@
     Load data/vents1c.jpg, VentsExt, 1, 1
 <EndTextures>
 
+# Ground
+SetAutoSize = false, false
+DrawWalls = false, true, false, false, false, false
+AddFloor Landscape, Ground, Downtown, 0, -158400, -158400, 158400, 158400, 0, 0, 40, 40
+Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
+DrawWalls = true, true, false, false, false, false
+SetAutoSize = true, true
+
 #Franklin Concourse
 <Floor -1>
     ID = C
@@ -75,8 +83,7 @@
 
     #Floor
     FloorOrientation = top
-    #AddFloor Floor, Marble4, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
-    AddFloor Floor, Marble4, 0.5, -418.2, -418.2, 418.2, 418.2, 0, 0, 0, 0, False
+    AddFloor Floor, Marble4, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
