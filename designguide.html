@@ -31,9 +31,8 @@
     building is included for you to get a good idea of the overall format of a 
     typical building data file. You might also want to open one of the other buildings 
     that come with Skyscraper (&quot;Triton Center.bld&quot;, &quot;Glass Tower.bld&quot;, 
-    etc) for examples on the more advanced functions. Eventually there will be 
-    a graphical designer app, but it'll be a while since I'm the only developer 
-    so far :)</p>
+    etc) for examples on the more advanced functions. Please note that the script 
+    syntax will change in the future.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">2. General Stuff</font></strong></p>
   <p align="left"><strong>1. Comments</strong></p>
@@ -43,7 +42,7 @@
   <p align="left">It's a good idea to use comment markers to add a title header 
     at the top of your building file. The Triton Center file has this header:<br>
     <font size="2" face="Courier New, Courier, mono">#The Triton Center<br>
-    #Copyright &copy;2003-2008 Ryan Thoryk</font></p>
+    #Copyright &copy;2003-2009 Ryan Thoryk</font></p>
   <p align="left"><br>
     <strong>2. Variables</strong></p>
   <p align="left">Variables are marked with percent signs (%), and most system 
@@ -81,9 +80,9 @@
   <p align="left">Parenthesis are also supported, for grouped operations. Here's 
     an example of a complex math expression:<br>
     <font size="2" face="Courier New, Courier, mono">Set 5 = %height% + (%interfloorheight% 
-    * (4 / %altitude))</font></p>
+    * (4 / %altitude%))</font></p>
   <p align="left"><font size="2" face="Courier New, Courier, mono"><br>
-    </font><strong>5. Object parameters from the outside</strong></p>
+    </font><strong>5. Object parameters from outside floor sections</strong></p>
   <p align="left">Information about a certain floor can be obtained elsewhere 
     in the script, by referencing the floor in this manner:</p>
   <p align="left"><font size="2" face="Courier New, Courier, mono">Floor(<em>number</em>).<em>parameter</em></font></p>
@@ -201,7 +200,11 @@
     is to the right (positive) of those. If right is used, then again the coordinates 
     define the wall's right (positive) edge, and the full thickness is to the 
     left (negative) of those. See this graphic for a good example:</p>
-  <p align="left"><img src="guide/wall_info.jpg" width="600" height="600"></p>
+  <p align="left"><img src="guide/wall_info.jpg"></p>
+  <p align="left">In the graphic above, the large box at the top shows what the 
+    X and Z coordinates correspond to. The lower examples show the wall orientation 
+    as left or right, and if either the difference in x values or z values is 
+    larger.</p>
   <p align="left"><strong>j. FloorOrientation</strong> - changes the internal 
     floor orientation parameter, which is used for determining the floor thickness 
     boundaries in relation to their coordinates.<br>
@@ -229,7 +232,12 @@
     SideNegative is the side (the part that is along the thickness) face on the 
     negative side, SidePositive is the side face on the positive side; Top refers 
     to either the top side if a wall, or to the positive X face if a floor; Bottom 
-    refers to either the bottom side if a wall, or the negative X face if a floor.</p>
+    refers to either the bottom side if a wall, or the negative X face if a floor. 
+    In the graphic above in the WallOrientation section, let's say that the large 
+    box's difference in x values are larger (meaning that it is horizontal from 
+    the left to the right), and that it has the same z values. With that, MainNegative 
+    would be the front wall, MainPositive the back, SideNegative the left, SidePositive 
+    the right, etc.</p>
   <p align="left"><strong>l. ReverseExtents</strong> - reverses texture mapping 
     per axis<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ReverseExtents = 
@@ -296,9 +304,13 @@
     parameters correspond to the &quot;<em>tw</em>&quot; and &quot;<em>th</em>&quot; 
     parameters of the <em>AddWall</em>, <em>AddFloor</em>, etc commands. If any 
     are false, then the parameters specified in the <em>AddWall</em> etc commands 
-    relate to the number of times a texture is tiled; so if <em>AutoHeight</em> 
-    is set to False, and &quot;2&quot; is specified in the &quot;<em>th</em>&quot; 
-    value of <em>AddWall</em>, then the texture will be tiled twice vertically.</p>
+    multiply the texture values stored with with the <em>Load</em> or <em>LoadRange</em> 
+    commands (see below); those values relate to the number of times a texture 
+    is tiled; so if <em>AutoHeight</em> is set to False, &quot;2&quot; is specified 
+    in the &quot;<em>th</em>&quot; value of <em>AddWall</em>, and the texture's 
+    stored &quot;th&quot; value is 1, then the texture will be tiled twice vertically. 
+    If either are true, the specified value will me multiplied by the related 
+    stored texture value and then autoadjusted.</p>
   <p align="left"><strong>r. TextureOverride</strong> - overrides textures for 
     the next command. Currently only works with the different AddWall, AddFloor 
     and AddInterFloor commands.<br>

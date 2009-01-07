@@ -1339,8 +1339,8 @@ SetAutoSize = true, true
     AddWall Vents Left, VentsInt, 0.5, -39, 70, -39, -70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Vents Right, VentsInt, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 5, 1, False
-    AddWall Vents Back, VentsInt, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
+    AddWall Vents Right, VentsInt, 0.5, 39, -70, 39, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 6, 1, False
+    AddWall Vents Back, VentsInt, 0.5, 39, 70, -39, 70, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
 
     #External Vents
     WallOrientation = left
