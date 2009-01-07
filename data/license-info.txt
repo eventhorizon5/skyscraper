@@ -1,0 +1,47 @@
+Some objects in this directory are by different authors and are covered
+by their licensing terms.  All other objects have been created by me (Ryan Thoryk).
+
+Third-party objects:
+
+-bracing1 - cropped version of MetalBulkheads0013_M.jpg from cgtextures.com
+-brick1 - unknown
+-Carpet0002_S.jpg - from cgtextures.com
+-Carpet0006_S.jpg - from cgtextures.com
+-Carpet0012_S.jpg - from cgtextures.com
+-Carpet0013_S.jpg - from cgtextures.com
+-Carpet0013_S.jpg - from cgtextures.com
+-Carpet0021b_S.jpg - from cgtextures.com
+-Carpet0021c_S.jpg - from cgtextures.com
+-Carpet0034_S.jpg - from cgtextures.com
+-cinderblocks.jpg - modified version of cinder-block-texture.jpg from photoshoptextures.com
+-cutston.jpg - unknown
+-diamond18.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-diamond18b.jpg to diamond18j.jpg - my own modifications of diamond18.jpg
+-intext.jpg - unknown
+-lobbyfront.jpg - unknown
+-marb047.jpg - unknown
+-marb148.jpg - unknown
+-marbl3.jpg - unknown
+-metal1.jpg - from telias.free.fr
+-metal1-sm.jpg - modified version of metal1.jpg
+-metal080.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-MetalBare0085_3_S.jpg - from cgtextures.com
+-miscdoor8.jpg - unknown
+-searstower.jpg - modified version of windows11.jpg
+-servicedoor2.jpg and servicedoor3.jpg - unknown
+-stucco1.jpg to stucco5.jpg - from telias.free.fr
+-stucco4b.jpg - modified version of stucco4.jpg
+-stucco4c.jpg - modified version of stucco4.jpg
+-symb5.jpg - unknown
+-text12.jpg - unknown
+-text13.jpg - unknown
+-text16.jpg - unknown
+-Threadplate0055_2_S.jpg - from cgtextures.com
+-vents1.jpg - unknown
+-vents1b.jpg - modified version of vents1.jpg
+-vents1c.jpg - modified version of vents1.jpg
+-windows11.jpg - unknown
+-windows11e.jpg - modified version of windows11.jpg
+-windows11h.jpg - modified version of windows11.jpg
+-windows11h-inside.jpg - modified version of windows11.jpg
+
