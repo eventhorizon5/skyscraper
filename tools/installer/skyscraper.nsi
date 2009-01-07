@@ -165,6 +165,7 @@ Section "Crystal Space libraries" SEC04
   File "${LOCAL_FILES}\vfs.dll"
   File "${LOCAL_FILES}\wxgl.dll"
   File "${LOCAL_FILES}\xmlshader.dll"
+  File "${LOCAL_FILES}\msvcr71.dll"
   SetOutPath "$INSTDIR\data\config"
   File /r "${LOCAL_FILES}\data\config\*.*"
   SetOutPath "$INSTDIR\data\shader"
