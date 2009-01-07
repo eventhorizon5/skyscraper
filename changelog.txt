@@ -1,3 +1,6 @@
+Version 1.1b (2.0 Alpha 1b) - Jan 7, 2009
+-added missing DLL for CS
+
 Version 1.1 (2.0 Alpha 1) - Jan 6, 2009
 -------------------------
 -complete rewrite from scratch, using C++ and the Crystal Space graphics engine
