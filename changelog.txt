@@ -1,15 +1,10 @@
-Changelog starts after 0.94 release
+Version 1.1 (2.0 Alpha 1) - Jan 6, 2009
+-------------------------
+-complete rewrite from scratch, using C++ and the Crystal Space graphics engine
+-numerous features added that were not found in the 1.0 release
 
-Pre-version 1.1
--------------
--massive code rewrites
--new modules created, old ones deleted
--API created
--building designer created
--added multiple elevator speed support
--added manual elevator open/close support
--C++ porting started
--TrueVision3D engine being dropped, Crystal Space engine added for C++ version
+
+Changelog from old 1.0 tree:
 
 Version 1.0
 1.0 is being released now due to the massive overhauls and redesigns that have

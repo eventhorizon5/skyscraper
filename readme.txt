@@ -36,7 +36,7 @@ For more information, see the LICENSE file.
 
 2. Introduction
 
-Skyscraper is a 3D virtual building simulator written in C++ using the CrystalSpace
+Skyscraper is a 3D virtual building simulator written in C++ using the Crystal Space
 graphics engine.  The goal of the Skyscraper project is to create a fully-featured,
 modular, multiplatform 3D realtime building simulation engine, including gaming support (single
 and network multiplayer). Everything possible is planned to be simulated, including
@@ -51,16 +51,18 @@ files.
 3. Release Notes
 
 This release is a complete rewrite of the original 1.0 version, and is part of an
-ongoing effort towards a 2.0 stable release.  Newer features, a completely redesigned
-simulation engine, externally loadable buildings, better graphics, and more are being
-developed.
+ongoing effort towards a 2.0 stable release.
 
 This software requires both the Crystal Space graphics engine library (1.2 or later) which
 can be found at http://www.crystalspace3d.org, and the wxWidgets library (version 2.6.3 or
 later) which can be found at http://www.wxwidgets.org.  The Windows packages comes bundled
-with Crystal Space 1.2.1 and wxWidgets 2.8.9 runtimes.
+with a custom-patched Crystal Space 1.2.1 and wxWidgets 2.8.9 runtimes.  The custom patch for
+Crystal Space is included and is called cs12-poly3d.patch - it applies to Crystal Space 1.2.1.  It does
+not work correctly with version 1.4.  The patch fixes a skybox related issue.
 
 See the changelog for new features, fixes, and other changes in this release.
+
+For third-party texture credits, see the file "license-info.txt" in the "data" folder.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -105,13 +107,13 @@ in the skyscraper/msvc directory.
 
 5. Usage
 
-Currently the application doesn't have a title screen as 1.0 did, but will eventually
-get one.  To use Skyscraper, run the program, and a building selection box will appear.
-Choose the building script to load, and in a few moments you will be walking around in that
-building.  The only buildings that are completely simulated currently are "Simple" and
-"Triton Center".  While in one of these buildings, you can click on objects such as elevator
-call buttons, etc to perform actions.  The door code hasn't been finished yet, and so doors
-(except for elevator doors) are currently non-existent.
+Currently the application doesn't have a title/menu screen as 1.0 did, but will eventually.
+To use Skyscraper, run the program, and a building selection box will appear.  Choose the
+building script to load, and in a few moments you will be walking around in that building.
+The only buildings that are completely simulated in this release are "Simple" and "Triton Center".
+While in one of these buildings, you can click on objects such as elevator call buttons, etc
+to perform actions.  The door code hasn't been finished yet, and so doors (except for elevator
+doors) are currently non-existent.  Sound support will exist in the next release.
 
 Keys currently used in the simulator:
 
@@ -121,8 +123,8 @@ PgDown - Look downwards
 Space - Jump
 Home - Float upwards (or jump if collision detection is on)
 End - Float downwards (or crouch if collision detection is on)
-F2 - display FPS on console
-F3 - Reset viewpoint
+F2 - print FPS on console
+F3 - Reset camera rotation to default
 Shift - Run (hold down with other keys)
 Control - Walk slowly (hold down with other keys)
 Alt - Strafe (hold down with other keys)

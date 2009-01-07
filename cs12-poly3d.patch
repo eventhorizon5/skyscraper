@@ -1,0 +1,28 @@
+diff -urN a/include/csgeom/poly3d.h b/include/csgeom/poly3d.h
+--- a/include/csgeom/poly3d.h	2008-11-30 13:43:38.000000000 -0600
++++ b/include/csgeom/poly3d.h	2009-01-04 17:35:00.000000000 -0600
+@@ -351,7 +351,7 @@
+ struct csCompressVertex
+ {
+   size_t orig_idx;
+-  int x, y, z;
++  float x, y, z;
+   size_t new_idx;
+   bool used;
+ };
+diff -urN a/libs/csgeom/poly3d.cpp b/libs/csgeom/poly3d.cpp
+--- a/libs/csgeom/poly3d.cpp	2008-11-30 13:45:22.000000000 -0600
++++ b/libs/csgeom/poly3d.cpp	2009-01-04 17:20:00.000000000 -0600
+@@ -884,9 +884,9 @@
+   for (i = 0; i < num_vertices; i++)
+   {
+     vt[i].orig_idx = i;
+-    vt[i].x = (int)ceil (vertices[i].x * 1000000);
+-    vt[i].y = (int)ceil (vertices[i].y * 1000000);
+-    vt[i].z = (int)ceil (vertices[i].z * 1000000);
++    vt[i].x = (float)ceil (vertices[i].x * 1000000.0);
++    vt[i].y = (float)ceil (vertices[i].y * 1000000.0);
++    vt[i].z = (float)ceil (vertices[i].z * 1000000.0);
+   }
+ 
+   // First sort so that all (nearly) equal vertices are together.
