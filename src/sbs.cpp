@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Core
-	The Skyscraper Project - Version 1.2 Alpha
+	The Skyscraper Project - Version 1.1 Alpha
 	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -282,7 +282,7 @@ float SBS::AutoSize(float n1, float n2, bool iswidth, float offset)
 
 void SBS::PrintBanner()
 {
-	csPrintf("\n Scalable Building Simulator 0.2 Alpha\n");
+	csPrintf("\n Scalable Building Simulator 0.1 Alpha\n");
 	csPrintf(" Copyright (C)2004-2009 Ryan Thoryk\n");
 	csPrintf(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
 	csPrintf(" software, and you are welcome to redistribute it under certain\n");
@@ -510,8 +510,6 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 		CS_REQUEST_REPORTER,
 		CS_REQUEST_REPORTERLISTENER,
 		CS_REQUEST_PLUGIN("crystalspace.collisiondetection.opcode", iCollideSystem),
-		//CS_REQUEST_PLUGIN("crystalspace.sndsys.element.loader", iSndSysLoader),
-		//CS_REQUEST_PLUGIN("crystalspace.sndsys.renderer.software", iSndSysRenderer),
 		CS_REQUEST_END))
 		return ReportError ("Couldn't init app!");
 
@@ -553,10 +551,6 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	if (!mouse) return ReportError("Failed to locate mouse driver");
 	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
 	if (!collision_sys) return ReportError("Failed to locate collision detection driver");
-	//sndrenderer = csQueryRegistry<iSndSysRenderer> (object_reg);
-	//if (!sndrenderer) return ReportError("Failed to locate sound renderer");
-	//sndloader = csQueryRegistry<iSndSysLoader> (object_reg);
-	//if (!sndloader) return ReportError("Failed to locate sound loader");
 	plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	if (plug) plug->IncRef ();
@@ -2844,11 +2838,6 @@ void SBS::ReverseAxis(bool value)
 bool SBS::GetReverseAxis()
 {
 	return ReverseAxisValue;
-}
-
-void SBS::SetListenerLocation(csVector3 location)
-{
-	sndrenderer->GetListener()->SetPosition(location);
 }
 
 void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom)

@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Elevator Subsystem Class
-	The Skyscraper Project - Version 1.2 Alpha
+	The Skyscraper Project - Version 1.1 Alpha
 	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -27,7 +27,6 @@
 #define _SBS_ELEVATOR_H
 
 #include "buttonpanel.h"
-#include "sound.h"
 
 class SBSIMPEXP Elevator
 {
@@ -179,9 +178,6 @@ private:
 	//timer object
 	Timer *timer;
 
-	//sound objects
-	Sound *mainsound;
-	Sound *doorsound;
 
 	//door internals
 	bool DoorIsRunning;
