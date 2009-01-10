@@ -52,8 +52,8 @@ var ICONS_GROUP
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
+;!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"
 !define MUI_FINISHPAGE_RUN "$INSTDIR\Skyscraper.exe"
-!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\README"
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
@@ -83,11 +83,11 @@ Section "Application" SEC01
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Skyscraper.lnk" "$INSTDIR\Skyscraper.exe"
   CreateShortCut "$DESKTOP\Skyscraper.lnk" "$INSTDIR\Skyscraper.exe"
   File "${LOCAL_FILES}\readme.txt"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Release Notes.lnk" "$INSTDIR\readme.txt"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Release Notes.lnk" "write.exe" '"$INSTDIR\readme.txt"'
   File "${LOCAL_FILES}\designguide.html"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Building Design Guide.lnk" "$INSTDIR\designguide.html"
   File "${LOCAL_FILES}\changelog.txt"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Changelog.lnk" "$INSTDIR\changelog.txt"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Changelog.lnk" "write.exe" '"$INSTDIR\changelog.txt"'
   SetOutPath "$INSTDIR\buildings"
   File "${LOCAL_FILES}\buildings\*.bld"
   SetOutPath "$INSTDIR\guide"
@@ -126,7 +126,8 @@ SectionEnd
 Section "Visual C++ 2005 runtime" SEC03
   SetOutPath "$INSTDIR"
   File "${LOCAL_FILES}\vcredist_x86.exe"
-  ExecWait '"$INSTDIR\vcredist_x86.exe /Q"'
+  Call CheckVCRedist
+  Delete "${LOCAL_FILES}\vcredist_x86.exe"
 SectionEnd
 
 Section "Crystal Space libraries" SEC04
@@ -214,6 +215,22 @@ FunctionEnd
 Function un.onInit
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
   Abort
+FunctionEnd
+
+;-------------------------------
+; Test if Visual Studio Redistributables 2005+ SP1 installed
+Function CheckVCRedist
+   Push $R0
+   ClearErrors
+   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{7299052b-02a4-4627-81f2-1818da5d550d}" "Version"
+
+   ; if VS 2005+ redist SP1 not installed, install it
+   IfErrors 0 VSRedistInstalled
+   ExecWait '"$INSTDIR\vcredist_x86.exe" /Q'
+   ;StrCpy $R0 "-1"
+
+VSRedistInstalled:
+   Exch $R0
 FunctionEnd
 
 Section Uninstall
