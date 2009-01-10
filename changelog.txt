@@ -1,5 +1,5 @@
-Version 1.1b (2.0 Alpha 1b) - Jan 7, 2009
--added missing DLL for CS
+Version 1.1b (2.0 Alpha 1b) - Jan 9, 2009
+-added missing DLL for CS, and fixed installer
 
 Version 1.1 (2.0 Alpha 1) - Jan 6, 2009
 -------------------------
