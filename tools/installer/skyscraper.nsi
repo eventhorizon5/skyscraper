@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Skyscraper"
-!define PRODUCT_VERSION "2.0 Alpha 1"
+!define PRODUCT_VERSION "2.0 Alpha 1b"
 !define PRODUCT_PUBLISHER "Ryan Thoryk"
 !define PRODUCT_WEB_SITE "http://www.skyscrapersim.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Skyscraper.exe"
@@ -21,9 +21,9 @@ VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "TLI Networks"
 VIAddVersionKey LegalCopyright "©2003-2009 Ryan Thoryk"
-VIAddVersionKey FileVersion "1.1.0.0"
-VIAddVersionKey ProductVersion "1.1.0.0"
-VIProductVersion 1.1.0.0
+VIAddVersionKey FileVersion "1.1.1.0"
+VIAddVersionKey ProductVersion "1.1.1.0"
+VIProductVersion 1.1.1.0
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -68,7 +68,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "skyscraper20alpha1.exe"
+OutFile "skyscraper20alpha1b.exe"
 InstallDir "$PROGRAMFILES\Skyscraper"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
