@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.2 Alpha - Loader Form
+	Skyscraper 1.3 Alpha - Loader Form
 	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

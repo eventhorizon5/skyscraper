@@ -9,7 +9,7 @@ AC_PREREQ([2.54])
 #----------------------------------------------------------------------------
 AC_INIT(
     [skyscraper],
-    [1.2],
+    [1.3],
     [ryan@tliquest.net])
 CS_PACKAGEINFO(
     [Skyscraper],
@@ -107,7 +107,7 @@ AC_ARG_WITH([cs], [AC_HELP_STRING([--without-cs],
 AS_IF([test -z "$with_cs"], [with_cs=yes])
 
 AS_IF([test $with_cs != no],
-[CS_PATH_CRYSTAL_EMIT([1.1], [],
+[CS_PATH_CRYSTAL_EMIT([1.2], [],
   [AC_MSG_ERROR([
 *** Crystal Space could not be found or was unusable. The latest version is
 *** always available from http://www.crystalspace3d.org/
