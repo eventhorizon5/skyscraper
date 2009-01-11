@@ -124,7 +124,21 @@
     <em>z2</em>, <em>altitude1</em>, <em>altitude2</em>, <em> tw</em>, <em>th</em></font></p>
   <p align="left">The command's parameters are the same as the Floor section's 
     AddFloor command.</p>
-  <p align="left"><strong>d. CreateWallBox</strong> - creates 4 walls (box) at 
+  <p align="left"><strong>d. AddGround</strong> - adds a tile-based ground<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddGround <em> name, 
+    texturename</em>, <em>x1</em>, <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>altitude</em>, 
+    <em>tile_x</em>, <em>tile_y<br>
+    </em></font>Example: <font size="2" face="Courier New, Courier, mono">AddGround 
+    AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920</font></p>
+  <p align="left">This command is mainly for creating large ground sections, since 
+    using the AddFloor function with a large amount of texture tiling causes interference 
+    problems. The X and Z values specify the total size of the ground, and the 
+    tile_x and tile_y specify the size of each tile square to create. For example, 
+    if the ground is 10,000 feet wide, and tile_x and tile_y are both 1000, then 
+    100 total tiles will be created; 10 wide and 10 deep. In the example above 
+    7920 is 1/40 of the total width (316800 which is 158400 * 2), so the tile 
+    grid will be 40x40 tiles.</p>
+  <p align="left"><strong>e. CreateWallBox</strong> - creates 4 walls (box) at 
     the specified coordinate locations<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateWallBox <em>destobject</em>, 
     <em>name, texturename</em>, <em>x1</em>, <em>x2</em>, <em>z1</em>, <em>z2</em>, 
@@ -137,7 +151,7 @@
     is created instead of a single wall. <em>Inside</em> and <em>outside</em> 
     determine if the wall should be visible from the inside/outside, and <em>top</em> 
     and <em>bottom</em> determine if the top and bottom walls should be drawn.</p>
-  <p align="left"><strong>e. CreateWallBox2</strong> - creates 4 walls (box) at 
+  <p align="left"><strong>f. CreateWallBox2</strong> - creates 4 walls (box) at 
     a specified central location<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateWallBox2 <em>destobject</em>, 
     <em>name, texturename</em>, <em>centerx</em>, <em>centerz</em>, <em>widthx</em>, 
@@ -149,7 +163,7 @@
     centerx</em> and <em>centerz</em> define the center of the box, and <em>widthx</em> 
     and <em>lengthz</em> specify the width and length off of the center.<br>
     <br>
-    <strong>f. AddCustomWall</strong> - creates a custom polygon (wall, floor, 
+    <strong>g. AddCustomWall</strong> - creates a custom polygon (wall, floor, 
     etc) with any number of vertex points. For example, a triangular wall has 
     3 vertex points, and a standard wall has 4. This function allows at least 
     3 vertices.<br>
@@ -164,7 +178,7 @@
     per axis. If the texture looks strange in the simulator, mess around with 
     the <em>revx</em> and <em>revz</em> values (<em>revy</em> flips the texture 
     upside down).</p>
-  <p align="left"><strong>g. AddShaft</strong> - creates a shaft at a specified 
+  <p align="left"><strong>h. AddShaft</strong> - creates a shaft at a specified 
     location and floor range<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddShaft number, 
     type, centerx, centerz, startfloor, endfloor</font><br>
@@ -176,7 +190,7 @@
     will take up, and does not create the actual shaft walls. Later on when you 
     create the walls/floors for the shaft, make sure that you make a floor at 
     the very bottom and very top of the shaft (they can extend beyond the walls).</p>
-  <p align="left"><strong>h. CreateStairwell</strong> - creates a stairwell at 
+  <p align="left"><strong>i. CreateStairwell</strong> - creates a stairwell at 
     a specified location and floor range<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateStairwell number, 
     centerx, centerz, startfloor, endfloor</font><br>
@@ -185,7 +199,7 @@
   <p align="left">The number parameter specifies the stairwell number to create. 
     This command just tells the simulator the area that the stairwell will take 
     up, and does not create the actual walls.</p>
-  <p align="left"><strong>i. WallOrientation</strong> - changes the internal wall 
+  <p align="left"><strong>j. WallOrientation</strong> - changes the internal wall 
     orientation parameter, which is used for determining the wall thickness boundaries 
     in relation to their coordinates.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> WallOrientation = 
@@ -205,7 +219,7 @@
     X and Z coordinates correspond to. The lower examples show the wall orientation 
     as left or right, and if either the difference in x values or z values is 
     larger.</p>
-  <p align="left"><strong>j. FloorOrientation</strong> - changes the internal 
+  <p align="left"><strong>k. FloorOrientation</strong> - changes the internal 
     floor orientation parameter, which is used for determining the floor thickness 
     boundaries in relation to their coordinates.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> FloorOrientation 
@@ -219,7 +233,7 @@
     bottom edge, and the full thickness is the top (positive). If top is used, 
     then again the coordinates define the floor's top edge, and the full thickness 
     is the bottom (negative).</p>
-  <p align="left"><strong>k. DrawWalls</strong> - specifies which parts of a wall 
+  <p align="left"><strong>l. DrawWalls</strong> - specifies which parts of a wall 
     or floor should be drawn.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> DrawWalls = <em>MainNegative, 
     MainPositive, SideNegative, SidePositive, Top, Bottom</em></font><br>
@@ -238,7 +252,7 @@
     the left to the right), and that it has the same z values. With that, MainNegative 
     would be the front wall, MainPositive the back, SideNegative the left, SidePositive 
     the right, etc.</p>
-  <p align="left"><strong>l. ReverseExtents</strong> - reverses texture mapping 
+  <p align="left"><strong>m. ReverseExtents</strong> - reverses texture mapping 
     per axis<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ReverseExtents = 
     <em>x, y, z</em></font><br>
@@ -248,12 +262,12 @@
     and determine if the texture mapping data should be reversed, per axis. If 
     the texture looks strange in the simulator, mess around with the <em>x</em> 
     and <em>z</em> values (<em>y</em> flips the texture upside down).</p>
-  <p align="left"><strong>m. ReverseAxis</strong> - reverses the axis that the 
+  <p align="left"><strong>n. ReverseAxis</strong> - reverses the axis that the 
     difference in altitude/voffset for walls and floors corresponds to. If this 
     is set to false (default), then it corresponds to the Z axis; otherwise use 
     the X axis.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ReverseAxis = value</font></p>
-  <p align="left"> <strong>n. ShaftCut</strong> - used in conjunction with a shaft 
+  <p align="left"> <strong>o. ShaftCut</strong> - used in conjunction with a shaft 
     object - performs a vertical box cut on all floor objects (floors, ceilings, 
     interfloor, etc) in the specified range.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ShaftCut number, 
@@ -269,7 +283,7 @@
     cuts a box for shaft 1, with a width from -4 to 4, and a length from -3.5 
     to 3.5, starting at the starting floor's altitude, and ending at 5 feet above 
     the ending floor's altitude.</p>
-  <p align="left"><strong>o. CutStairwell</strong> - used in conjunction with 
+  <p align="left"><strong>p. CutStairwell</strong> - used in conjunction with 
     a stairwell object - performs a vertical box cut on all floor objects (floors, 
     ceilings, interfloor, etc) in the specified range. For the parameters, see 
     the ShaftCut command.<strong><br>
@@ -277,7 +291,7 @@
     number, startx, startz, endx, endz, start_voffset, end_voffset</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">CutStairwell 1, 
     -4, -3.5, 4, 3.5, 0, 5</font></p>
-  <p align="left"><strong>p. Isect</strong> - the Isect function calculates the 
+  <p align="left"><strong>q. Isect</strong> - the Isect function calculates the 
     position that a line intersects with a certain object, such as a floor. This 
     is mainly used with angled walls that span multiple floors, to find the edge 
     location of the wall at each level without doing any manual calculations. 
@@ -292,7 +306,7 @@
     <em>endy</em> and <em>endz</em> make up the ending position. The first intersection 
     of the named object is the return value, in &quot;X, Y, Z&quot; format (for 
     example, &quot;10, 1, 3&quot;).</p>
-  <p align="left"><strong>q. SetAutoSize</strong> - enables or disables texture 
+  <p align="left"><strong>r. SetAutoSize</strong> - enables or disables texture 
     autosizing<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> SetAutoSize = <em>AutoWidth, 
     AutoHeight </em></font><br>
@@ -311,7 +325,7 @@
     stored &quot;th&quot; value is 1, then the texture will be tiled twice vertically. 
     If either are true, the specified value will me multiplied by the related 
     stored texture value and then autoadjusted.</p>
-  <p align="left"><strong>r. TextureOverride</strong> - overrides textures for 
+  <p align="left"><strong>s. TextureOverride</strong> - overrides textures for 
     the next command. Currently only works with the different AddWall, AddFloor 
     and AddInterFloor commands.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> TextureOverride <em>MainNegativeTex, 

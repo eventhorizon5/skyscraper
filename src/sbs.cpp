@@ -2205,13 +2205,13 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 
 	int endindex;
 	if (has_thickness == true)
-		endindex = index + GetDrawWallsCount();
+		endindex = index + GetDrawWallsCount() - 1;
 	else
 		endindex = index;
 
 	if (TextureOverride == false)
 	{
-		for (int i = index; i < endindex; i++)
+		for (int i = index; i <= endindex; i++)
 		{
 			mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
 			//texture mapping is set from first 3 coordinates
@@ -2949,4 +2949,73 @@ int SBS::AddFloor(const char *meshname, const char *name, const char *texture, f
 		tmpstate = Landscape_state;
 
 	return AddFloorMain(tmpstate, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw2, th2);
+}
+
+int SBS::AddGround(const char *name, const char *texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z)
+{
+	//Adds ground based on a tiled-floor layout, with the specified dimensions and vertical offset
+	//this does not support thickness
+
+	csVector3 v1, v2, v3, v4;
+
+	float minx, minz, maxx, maxz;
+
+	//get min and max values
+	if (x1 < x2)
+	{
+		minx = x1;
+		maxx = x2;
+	}
+	else
+	{
+		minx = x2;
+		maxx = x1;
+	}
+	if (z1 < z2)
+	{
+		minz = z1;
+		maxz = z2;
+	}
+	else
+	{
+		minz = z2;
+		maxz = z1;
+	}
+
+	int index = -1;
+	int tmpindex = -1;
+
+	//create polygon tiles
+	for (float i = minx; i < maxx; i += tile_x)
+	{
+		int sizex, sizez;
+
+		if (i + tile_x > maxx)
+			sizex = maxx - i;
+		else
+			sizex = tile_x;
+
+		for (float j = minz; j < maxz; j += tile_z)
+		{
+			if (j + tile_z > maxz)
+				sizez = maxz - i;
+			else
+				sizez = tile_z;
+
+			v1.Set(i + sizex, altitude, j + sizez); //bottom right
+			v2.Set(i, altitude, j + sizez); //bottom left
+			v3.Set(i, altitude, j); //top left
+			v4.Set(i + sizex, altitude, j); //top right
+
+			tmpindex = Landscape_state->AddQuad(v4, v3, v2, v1);
+			Landscape_state->SetPolygonName(csPolygonRange(tmpindex, tmpindex), name);
+			if (tmpindex > index && index == -1)
+				index = tmpindex;
+
+			//set texture
+			SetTexture(Landscape_state, tmpindex, texture, false, 1, 1);
+		}
+	}
+
+	return index;
 }
