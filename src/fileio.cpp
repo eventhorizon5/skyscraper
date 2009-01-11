@@ -382,6 +382,24 @@ checkfloors:
 			tempdata.DeleteAll();
 		}
 
+		//AddGround
+		if (LineData.Slice(0, 9).CompareNoCase("addground") == true)
+		{
+			//get data
+			tempdata.SplitString(LineData.Slice(10).GetData(), ",");
+
+			//calculate inline math
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Simcore->Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer);
+			}
+
+			//create tiled ground
+			Simcore->AddGround(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]));
+			tempdata.DeleteAll();
+		}
+
 		//Cut command
 		if (LineData.Slice(0, 4).CompareNoCase("cut ") == true && Section != 2 && Section != 4)
 		{

@@ -44,12 +44,8 @@
 <EndTextures>
 
 # Ground
-SetAutoSize = false, false
-DrawWalls = false, true, false, false, false, false
-AddFloor Landscape, Ground, Downtown, 0, -158400, -158400, 158400, 158400, 0, 0, 40, 40
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
 Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
-DrawWalls = true, true, false, false, false, false
-SetAutoSize = true, true
 
 #Franklin Concourse
 <Floor -1>

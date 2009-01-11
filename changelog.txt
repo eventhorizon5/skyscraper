@@ -1,5 +1,6 @@
 Version 1.2 (2.0 Alpha 2) - Jan 10, 2009
 -added missing DLL for CS, and fixed installer
+-added AddGround command, for creating tile grid-based grounds (fixes ground interference issue in 1.1)
 
 Version 1.1 (2.0 Alpha 1) - Jan 6, 2009
 -------------------------
