@@ -29,7 +29,6 @@
 #include "sbs.h"
 #include "camera.h"
 #include "shaft.h"
-#include "sound.h"
 #include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
@@ -159,12 +158,6 @@ Elevator::~Elevator()
 	if (Panel2)
 		delete Panel2;
 	Panel2 = 0;
-	if (mainsound)
-		delete mainsound;
-	mainsound = 0;
-	if (doorsound)
-		delete doorsound;
-	doorsound = 0;
 }
 
 void Elevator::CreateElevator(float x, float z, int floor)
@@ -197,9 +190,6 @@ void Elevator::CreateElevator(float x, float z, int floor)
 	ShaftDoorL_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorR_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorsOpen.SetSize(ServicedFloors.GetSize());
-
-	//create sound object
-	//mainsound = new Sound("/root/data/elevstart.wav");
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }

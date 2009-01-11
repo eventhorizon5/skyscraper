@@ -1,4 +1,4 @@
-Skyscraper 2.0 Alpha 1
+Skyscraper 2.0 Alpha 2
 Copyright (C)2003-2009 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
@@ -50,8 +50,8 @@ files.
 
 3. Release Notes
 
-This release is a complete rewrite of the original 1.0 version, and is part of an
-ongoing effort towards a 2.0 stable release.
+This release is a minor bugfix. The previous release (Alpha 1) was a complete rewrite of
+the original 1.0 version, and is part of an ongoing effort towards a 2.0 stable release.
 
 This software requires both the Crystal Space graphics engine library (1.2 or later) which
 can be found at http://www.crystalspace3d.org, and the wxWidgets library (version 2.6.3 or
