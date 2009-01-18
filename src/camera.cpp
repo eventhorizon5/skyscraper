@@ -451,6 +451,9 @@ void Camera::Loop()
 	//general movement
 	float delta = sbs->vc->GetElapsedTicks() / 1000.0f;
 	collider_actor.Move(delta, speed, velocity, angle_velocity);
+
+	//sync sound listener object to camera position
+	sbs->SetListenerLocation(GetPosition());
 }
 
 void Camera::Strafe(float speed)
