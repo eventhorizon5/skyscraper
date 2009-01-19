@@ -199,7 +199,11 @@ void Elevator::CreateElevator(float x, float z, int floor)
 	ShaftDoorsOpen.SetSize(ServicedFloors.GetSize());
 
 	//create sound object
-	//mainsound = new Sound("/root/data/elevstart.wav");
+	mainsound = new Sound("/root/data/elevstart.wav");
+	mainsound->SetPosition(Origin);
+	doorsound = new Sound("/root/data/elevatoropen.wav");
+	doorsound->SetPosition(Origin);
+	doorsound->Loop(false);
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }
@@ -599,8 +603,8 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		if (emergency == false)
 		{
 			//play elevator opening sound
-			//"data/elevatoropen.wav"
-			//"data/elevatorclose.wav"
+			doorsound->Load("/root/data/elevatoropen.wav");
+			doorsound->Play();
 		}
 
 		ElevatorDoorSpeed = 0;
@@ -1009,7 +1013,9 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//Play starting sound
-		//"\data\elevstart.wav"
+		mainsound->Load("/root/data/elevstart.wav");
+		mainsound->Loop(false);
+		mainsound->Play();
 
 		//notify about movement
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
@@ -1027,7 +1033,9 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//Movement sound
-	//"\data\elevmove.wav"
+	mainsound->Load("/root/data/elevmove.wav");
+	mainsound->Loop(true);
+	mainsound->Play();
 
 	//move elevator objects and camera
 	Elevator_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
@@ -1048,6 +1056,7 @@ void Elevator::MoveElevatorToFloor()
 		Panel2->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
 
 	//move sounds
+	mainsound->SetPosition(GetPosition());
 
 	//motion calculation
 	if (Brakes == false)
@@ -1144,8 +1153,11 @@ void Elevator::MoveElevatorToFloor()
 			Brakes = true;
 			ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 			//stop sounds
+			mainsound->Stop();
 			//play elevator stopping sound
-			//"\data\elevstop.wav"
+			mainsound->Load("/root/data/elevstop.wav");
+			mainsound->Loop(false);
+			mainsound->Play();
 		}
 	}
 
@@ -1163,8 +1175,11 @@ void Elevator::MoveElevatorToFloor()
 			Brakes = true;
 			ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 			//stop sounds
+			mainsound->Stop();
 			//play stopping sound
-			//"\data\elevstop.wav"
+			mainsound->Load("/root/data/elevstop.wav");
+			mainsound->Loop(false);
+			mainsound->Play();
 		}
 	}
 
@@ -1208,6 +1223,7 @@ void Elevator::MoveElevatorToFloor()
 			Panel2->SetToElevatorAltitude();
 
 		//move sounds
+		mainsound->SetPosition(GetPosition());
 	}
 
 	//reset values if at destination floor
@@ -1415,6 +1431,8 @@ int Elevator::AddDoors(const char *texture, float thickness, float CenterX, floa
 	sbs->AddWallMain(Elevator_state, "DoorF2", "Connection", thickness, x1, z1, x4, z4, 1, 1, height + 0.001, height + 0.001, 0, 0);
 	sbs->ResetWalls();
 	sbs->ResetExtents();
+	//relocate sound object
+	doorsound->SetPosition(csVector3(CenterX, Origin.y, CenterZ));
 	return firstidx;
 }
 
