@@ -1013,6 +1013,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//Play starting sound
+		mainsound->Stop();
 		mainsound->Load("/root/data/elevstart.wav");
 		mainsound->Loop(false);
 		mainsound->Play();
@@ -1032,10 +1033,13 @@ void Elevator::MoveElevatorToFloor()
 		Brakes = true;
 	}
 
-	//Movement sound
-	mainsound->Load("/root/data/elevmove.wav");
-	mainsound->Loop(true);
-	mainsound->Play();
+	if (mainsound->IsPlaying() == false)
+	{
+		//Movement sound
+		mainsound->Load("/root/data/elevmove.wav");
+		mainsound->Loop(true);
+		mainsound->Play();
+	}
 
 	//move elevator objects and camera
 	Elevator_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
@@ -1236,6 +1240,7 @@ void Elevator::MoveElevatorToFloor()
 	ElevatorStart = 0;
 	ElevatorIsRunning = false;
 	MoveElevator = false;
+	mainsound->Stop();
 
 	if (EmergencyStop == false)
 	{

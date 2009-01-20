@@ -54,13 +54,12 @@ public:
 	void SetSpeed(int percent);
 	int GetSpeed();
 	void Load(const char *filename);
+	bool IsPlaying();
 
 private:
 
 	//sound data
 	csString filename;
-	csRef<iDataBuffer> sndbuffer;
-	csRef<iSndSysData> snddata;
 	csRef<iSndSysStream> sndstream;
 
 	//sound source

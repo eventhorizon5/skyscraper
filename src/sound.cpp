@@ -34,9 +34,9 @@ extern SBS *sbs; //external pointer to the SBS engine
 Sound::Sound(const char *filename)
 {
 	Load(filename);
-	sndsource3d->SetPosition(csVector3(0, 0, 0));
-	sndsource3d->SetVolume(1.0f);
-	sndstream->SetLoopState(CS_SNDSYS_STREAM_DONTLOOP);
+	SetPosition(csVector3(0, 0, 0));
+	SetVolume(1.0);
+	Loop(false);
 }
 
 Sound::~Sound()
@@ -145,6 +145,15 @@ bool Sound::IsPaused()
 		return false;
 }
 
+bool Sound::IsPlaying()
+{
+	//returns true if sound is not paused, not looping, and has not completed it's frame count
+	if (IsPaused() == false && GetLoopState() == false && sndstream->GetPosition() < sndstream->GetFrameCount())
+		return true;
+	else
+		return false;
+}
+
 void Sound::SetSpeed(int percent)
 {
 	sndstream->SetPlayRatePercent(percent);
@@ -157,12 +166,13 @@ int Sound::GetSpeed()
 
 void Sound::Stop()
 {
-	sndstream->Pause();
-	sndstream->ResetPosition();
+	Pause();
+	Reset();
 }
 
 void Sound::Play()
 {
+	Reset();
 	sndstream->Unpause();
 }
 
@@ -173,14 +183,14 @@ void Sound::Reset()
 
 void Sound::Load(const char *filename)
 {
-	sndbuffer = sbs->vfs->ReadFile(filename);
+	csRef<iDataBuffer> sndbuffer = sbs->vfs->ReadFile(filename);
 	if (!sndbuffer)
 	{
 		sbs->ReportError("Can't load file '%s'", filename);
 		return;
 	}
 
-	snddata = sbs->sndloader->LoadSound(sndbuffer);
+	csRef<iSndSysData> snddata = sbs->sndloader->LoadSound(sndbuffer);
 	if (!snddata)
 	{
 		sbs->ReportError("Can't load sound '%s'", filename);
