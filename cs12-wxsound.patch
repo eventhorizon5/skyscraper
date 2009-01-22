@@ -1,143 +1,50 @@
-diff -urN cs121/include/ivideo/wxwin.h cs121-new/include/ivideo/wxwin.h
---- cs121/include/ivideo/wxwin.h	2008-04-22 07:17:06.000000000 -0500
-+++ cs121-new/include/ivideo/wxwin.h	2009-01-17 22:12:17.796454069 -0600
-@@ -47,6 +47,8 @@
-   virtual void SetParent(wxWindow* parent) = 0;
-   /// Get wxWidgets window object of the canvas.
-   virtual wxWindow* GetWindow() = 0;
-+  /// Returns the handle to the canvas' window.
-+  virtual HWND GetWindowHandle() = 0;
- };
- 
- #endif // _CS_IVIDEO_WXWIN_H_
-diff -urN cs121/mk/msvc8/plgsndsyswin.vcproj cs121-new/mk/msvc8/plgsndsyswin.vcproj
---- cs121/mk/msvc8/plgsndsyswin.vcproj	2008-04-22 07:18:37.000000000 -0500
-+++ cs121-new/mk/msvc8/plgsndsyswin.vcproj	2009-01-17 22:19:28.300454866 -0600
-@@ -27,7 +27,7 @@
- 				RuntimeLibrary="2"
- 				DebugInformationFormat="3"
- 				BufferSecurityCheck="FALSE"
--				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;_WINDOWS;WIN32"
-+				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;_WINDOWS;WIN32;wxUSE_GUI=1;WXUSINGDLL=1"
- 				OptimizeForProcessor="1"
- 				AdditionalOptions=" "
- 				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32"
-@@ -54,7 +54,7 @@
- 				DelayLoadDLLs=""
- 				ImportLibrary="..\..\out\release8\build\plgsndsyswin\plgsndsyswin.lib"
- 				AdditionalOptions=" "
--				AdditionalDependencies="delayimp.lib zlib.lib dsound.lib ddraw.lib dinput.lib"
-+				AdditionalDependencies="delayimp.lib zlib.lib dsound.lib ddraw.lib dinput.lib wxbase28.lib"
- 				IgnoreImportLibrary="TRUE"
- 				SuppressStartupBanner="TRUE"
- 				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
-@@ -102,7 +102,7 @@
- 				RuntimeTypeInfo="TRUE"
- 				RuntimeLibrary="3"
- 
--				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;_WINDOWS;WIN32"
-+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;_WINDOWS;WIN32;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1"
- 				OptimizeForProcessor="1"
- 				AdditionalOptions=" "
- 				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32"
-@@ -127,7 +127,7 @@
- 				DelayLoadDLLs=""
- 				ImportLibrary="..\..\out\debug8\build\plgsndsyswin\plgsndsyswin.lib"
- 				AdditionalOptions=" "
--				AdditionalDependencies="delayimp.lib zlib.lib dsound.lib ddraw.lib dinput.lib"
-+				AdditionalDependencies="delayimp.lib zlib.lib dsound.lib ddraw.lib dinput.lib wxbase28d.lib"
- 				IgnoreImportLibrary="TRUE"
- 				SuppressStartupBanner="TRUE"
- 				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
-@@ -175,7 +175,7 @@
- 				RuntimeTypeInfo="TRUE"
- 				RuntimeLibrary="3"
- 
--				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_MEMORY_TRACKER;_WINDOWS;WIN32"
-+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_MEMORY_TRACKER;_WINDOWS;WIN32;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1"
- 				OptimizeForProcessor="1"
- 				AdditionalOptions=" "
- 				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32"
-@@ -200,7 +200,7 @@
- 				DelayLoadDLLs=""
- 				ImportLibrary="..\..\out\debug8\build\plgsndsyswin\plgsndsyswin.lib"
- 				AdditionalOptions=" "
--				AdditionalDependencies="delayimp.lib zlib.lib dsound.lib ddraw.lib dinput.lib"
-+				AdditionalDependencies="delayimp.lib zlib.lib dsound.lib ddraw.lib dinput.lib wxbase28d.lib"
- 				IgnoreImportLibrary="TRUE"
- 				SuppressStartupBanner="TRUE"
- 				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
-@@ -248,7 +248,7 @@
- 				RuntimeTypeInfo="TRUE"
- 				RuntimeLibrary="3"
- 
--				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_REF_TRACKER;_WINDOWS;WIN32"
-+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_REF_TRACKER;_WINDOWS;WIN32;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1"
- 				OptimizeForProcessor="1"
- 				AdditionalOptions=" "
- 				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32"
-@@ -273,7 +273,7 @@
- 				DelayLoadDLLs=""
- 				ImportLibrary="..\..\out\debug8\build\plgsndsyswin\plgsndsyswin.lib"
- 				AdditionalOptions=" "
--				AdditionalDependencies="delayimp.lib zlib.lib dsound.lib ddraw.lib dinput.lib"
-+				AdditionalDependencies="delayimp.lib zlib.lib dsound.lib ddraw.lib dinput.lib wxbase28d.lib"
- 				IgnoreImportLibrary="TRUE"
- 				SuppressStartupBanner="TRUE"
- 				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
-diff -urN cs121/plugins/sndsys/renderer/software/drivers/directsound/driver_ds.cpp cs121-new/plugins/sndsys/renderer/software/drivers/directsound/driver_ds.cpp
---- cs121/plugins/sndsys/renderer/software/drivers/directsound/driver_ds.cpp	2008-04-22 07:19:29.000000000 -0500
-+++ cs121-new/plugins/sndsys/renderer/software/drivers/directsound/driver_ds.cpp	2009-01-17 22:15:08.016456836 -0600
-@@ -41,6 +41,8 @@
- #include "isndsys/ss_renderer.h"
- #include "driver_ds.h"
- 
-+#include "ivideo/wxwin.h"
-+#include "wx/glcanvas.h"
- 
- CS_IMPLEMENT_PLUGIN
- 
-@@ -146,10 +148,14 @@
-     return false;
-   }
-   csRef<iWin32Canvas> canvas = scfQueryInterface<iWin32Canvas> (g2d);
--  CS_ASSERT (canvas.IsValid());
-+  csRef<iWxWindow> wxcanvas = scfQueryInterface<iWxWindow> (g2d);
-+  if (canvas.IsValid())
-+	DirectSoundResult = m_pDirectSoundDevice->SetCooperativeLevel (canvas->GetWindowHandle(), DSSCL_PRIORITY);
-+  else if (wxcanvas.IsValid())
-+	DirectSoundResult = m_pDirectSoundDevice->SetCooperativeLevel (wxcanvas->GetWindowHandle(), DSSCL_PRIORITY);
-+  else
-+    return false;
- 
--  DirectSoundResult = m_pDirectSoundDevice->SetCooperativeLevel (canvas->GetWindowHandle(),
--    DSSCL_PRIORITY);
-   if (FAILED(DirectSoundResult))
-   {
-     RecordEvent(SSEL_ERROR, "Failed to set cooperative level to "
-diff -urN cs121/plugins/video/canvas/wxgl/GLWXDriver2D.cpp cs121-new/plugins/video/canvas/wxgl/GLWXDriver2D.cpp
---- cs121/plugins/video/canvas/wxgl/GLWXDriver2D.cpp	2008-04-22 07:19:45.000000000 -0500
-+++ cs121-new/plugins/video/canvas/wxgl/GLWXDriver2D.cpp	2009-01-17 22:15:08.020457268 -0600
-@@ -116,6 +116,11 @@
+diff -urN a/plugins/video/canvas/wxgl/GLWXDriver2D.cpp b/plugins/video/canvas/wxgl/GLWXDriver2D.cpp
+--- a/plugins/video/canvas/wxgl/GLWXDriver2D.cpp	2009-01-21 19:00:01.276455146 -0600
++++ b/plugins/video/canvas/wxgl/GLWXDriver2D.cpp	2009-01-21 18:59:52.012458452 -0600
+@@ -116,6 +116,13 @@
    return theCanvas;
  }
  
++#ifdef WIN32
 +HWND csGraphics2DWX::GetWindowHandle()
 +{
-+	return (HWND)myParent->GetHWND();
++  return (HWND)myParent->GetHWND();
 +}
++#endif
 +
  void* csGraphics2DWX::GetProcAddress (const char *funcname)
  {
  #ifdef WIN32
-diff -urN cs121/plugins/video/canvas/wxgl/GLWXDriver2D.h cs121-new/plugins/video/canvas/wxgl/GLWXDriver2D.h
---- cs121/plugins/video/canvas/wxgl/GLWXDriver2D.h	2008-04-22 07:19:45.000000000 -0500
-+++ cs121-new/plugins/video/canvas/wxgl/GLWXDriver2D.h	2009-01-17 22:15:08.020457268 -0600
-@@ -87,6 +87,7 @@
-    * @{ */
-   virtual void SetParent(wxWindow* wx);
+diff -urN a/plugins/video/canvas/wxgl/GLWXDriver2D.h b/plugins/video/canvas/wxgl/GLWXDriver2D.h
+--- a/plugins/video/canvas/wxgl/GLWXDriver2D.h	2009-01-21 19:00:01.280458066 -0600
++++ b/plugins/video/canvas/wxgl/GLWXDriver2D.h	2009-01-21 18:59:52.016458578 -0600
+@@ -27,10 +27,18 @@
+ 
+ class csGLCanvas;
+ 
++#ifdef WIN32
++class csGraphics2DWX : public scfImplementationExt3<csGraphics2DWX,
++                  csGraphics2DGLCommon,
++                  iWxWindow,
++				  iWin32Canvas,
++                  iOpenGLInterface>
++#else
+ class csGraphics2DWX : public scfImplementationExt2<csGraphics2DWX,
+                   csGraphics2DGLCommon,
+                   iWxWindow,
+                   iOpenGLInterface>
++#endif
+ {
+   wxWindow* myParent;
+   csGLCanvas* theCanvas;
+@@ -89,6 +97,10 @@
    virtual wxWindow* GetWindow();
-+  virtual HWND GetWindowHandle();
    /** @} */
  
++#ifdef WIN32
++  virtual HWND GetWindowHandle();
++#endif
++  
    void *GetProcAddress (const char *funcname);
+ };
+ 
