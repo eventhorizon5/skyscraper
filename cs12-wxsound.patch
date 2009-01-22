@@ -17,7 +17,7 @@ diff -urN a/plugins/video/canvas/wxgl/GLWXDriver2D.cpp b/plugins/video/canvas/wx
  #ifdef WIN32
 diff -urN a/plugins/video/canvas/wxgl/GLWXDriver2D.h b/plugins/video/canvas/wxgl/GLWXDriver2D.h
 --- a/plugins/video/canvas/wxgl/GLWXDriver2D.h	2009-01-21 19:00:01.280458066 -0600
-+++ b/plugins/video/canvas/wxgl/GLWXDriver2D.h	2009-01-21 18:59:52.016458578 -0600
++++ b/plugins/video/canvas/wxgl/GLWXDriver2D.h	2009-01-21 19:05:08.652453416 -0600
 @@ -27,10 +27,18 @@
  
  class csGLCanvas;
@@ -26,7 +26,7 @@ diff -urN a/plugins/video/canvas/wxgl/GLWXDriver2D.h b/plugins/video/canvas/wxgl
 +class csGraphics2DWX : public scfImplementationExt3<csGraphics2DWX,
 +                  csGraphics2DGLCommon,
 +                  iWxWindow,
-+				  iWin32Canvas,
++		  iWin32Canvas,
 +                  iOpenGLInterface>
 +#else
  class csGraphics2DWX : public scfImplementationExt2<csGraphics2DWX,
