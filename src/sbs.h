@@ -23,6 +23,10 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef _SBS_H
+#define _SBS_H
+
+#include "wx/app.h"
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"
@@ -144,13 +148,11 @@ public:
 	//public functions
 	SBS();
 	~SBS();
-	void PushFrame();
 	void Report (const char* msg, ...);
 	bool ReportError (const char* msg, ...);
-	void Wait(long Milliseconds);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
 	float AutoSize(float n1, float n2, bool iswidth, float offset);
-	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
+	bool Initialize(int argc, const char* const argv[], const char *windowtitle);
 	void Start(wxApp *app);
 	void Run();
 	int CreateSky(const char *filenamebase);
@@ -212,7 +214,6 @@ public:
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
-	void Stop();
 	void SetListenerLocation(csVector3 location);
 	void SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom);
 	int AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
@@ -236,7 +237,6 @@ private:
 
 	csEventID FocusGained;
 	csEventID FocusLost;
-	csEventID KeyboardDown;
 
 	//mouse status
 	bool MouseDown;
@@ -283,9 +283,7 @@ private:
 	bool AutoX, AutoY; //autosizing
 
 	//canvas data
-	int canvas_width, canvas_height;
-	wxPanel* canvas;
-	csRef<iWxWindow> wxwin;
+	//int canvas_width, canvas_height;
 
 	//object arrays
 	csArray<FloorMap> FloorArray; //floor object array
@@ -295,21 +293,6 @@ private:
 
 	//private functions
 	void PrintBanner();
-
-	//frame rate handler class
-	class Pump : public wxTimer
-	{
-	public:
-		SBS* s;
-		Pump() { };
-		virtual void Notify()
-		{
-			s->PushFrame();
-		}
-	};
-
-	//timer object
-	Pump* p;
 
 	//wx app object
 	wxApp *App;
@@ -331,3 +314,6 @@ private:
 	//override textures
 	csString mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
 };
+
+#endif
+
