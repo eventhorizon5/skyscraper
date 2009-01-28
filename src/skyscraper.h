@@ -46,9 +46,10 @@ public:
 	~MainScreen();
 	void OnIconize(wxIconizeEvent& event);
 	void OnShow(wxShowEvent& event);
-    void OnSize(wxSizeEvent& event);
+	void OnSize(wxSizeEvent& event);
 	void OnClose(wxCloseEvent& event);
 	void ShowWindow();
+	void OnIdle(wxIdleEvent& event);
 	wxPanel *panel;
 
 	DECLARE_EVENT_TABLE()

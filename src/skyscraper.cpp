@@ -42,6 +42,7 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_ICONIZE(MainScreen::OnIconize)
   EVT_SIZE(MainScreen::OnSize)
   EVT_CLOSE(MainScreen::OnClose)
+  EVT_IDLE(MainScreen::OnIdle)
 END_EVENT_TABLE()
 
 SBS *Simcore;
@@ -123,7 +124,7 @@ bool Skyscraper::OnInit(void)
 	Selector = 0;
 
 	//start simulation
-	Simcore->Start(this);
+	Simcore->Start();
 
 	//load dialogs
 	dpanel = new DebugPanel(NULL, -1);
@@ -132,10 +133,11 @@ bool Skyscraper::OnInit(void)
 	window->Raise();
 
 	//show main window
-	//window->ShowWindow();
+	window->ShowWindow();
 
 	//run simulation
-	Simcore->Run();
+	Simcore->Report("Running simulation...");
+	Simcore->IsRunning = true;
 
 	return true;
 }
@@ -143,7 +145,6 @@ bool Skyscraper::OnInit(void)
 int Skyscraper::OnExit()
 {
 	//clean up
-	Simcore->Stop();
 	dpanel->timer->Stop();
 	dpanel->Destroy();
 	delete Simcore;
@@ -185,7 +186,6 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void MainScreen::OnClose(wxCloseEvent& event)
 {
-	Simcore->Stop();
 	dpanel->timer->Stop();
 	wxGetApp().Exit();
 }
@@ -195,3 +195,10 @@ void MainScreen::ShowWindow()
 	Show(true);
 	panel->Show(true);
 }
+
+void MainScreen::OnIdle(wxIdleEvent& event)
+{
+	Simcore->PushFrame();
+	event.RequestMore();
+}
+

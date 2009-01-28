@@ -30,7 +30,6 @@
 
 #include <wx/wx.h>
 #include <wx/variant.h>
-#include <wx/app.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -136,13 +135,6 @@ SBS::~SBS()
 {
 	//engine destructor
 
-	//stop and delete timer
-	p->Stop();
-	p->s = 0;
-	delete p;
-	p = 0;
-	App = 0;
-
 	//delete camera object
 	delete camera;
 	camera = 0;
@@ -167,13 +159,8 @@ SBS::~SBS()
 	canvas = 0;
 }
 
-void SBS::Start(wxApp *app)
+void SBS::Start()
 {
-	//set running value
-	IsRunning = true;
-
-	App = app;
-
 	//create skybox
 	CreateSky(SkyName);
 
@@ -238,21 +225,6 @@ void SBS::Start(wxApp *app)
 	GetFloor(camera->StartFloor)->Enabled(true);
 	GetFloor(camera->StartFloor)->EnableGroup(true);
 
-}
-
-void SBS::Run()
-{
-	//start runloop
-
-	Report("Running simulation...");
-
-	//start simulation with a timer-based runloop
-	p = new Pump();
-	p->s = sbs;
-	if (FrameLimiter == true)
-		p->Start(1000 / FrameRate);
-	else
-		p->Start(1);
 }
 
 void SBS::Wait(long milliseconds)
@@ -321,7 +293,6 @@ void SBS::GetInput()
 		MouseDown = false;
 
 	//if (wxGetKeyState(WXK_ESCAPE))
-		//p->Stop();
 
 	if (wxGetKeyState(WXK_F2))
 		Report(wxVariant(FPS).GetString().ToAscii());
@@ -2471,8 +2442,8 @@ void SBS::PushFrame()
 
 	equeue->Process();
 #ifndef CS_PLATFORM_WIN32
-	while (App->Pending())
-		App->Dispatch();
+	//while (App->Pending())
+		//App->Dispatch();
 #endif
 }
 
@@ -2818,12 +2789,6 @@ int SBS::AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, fl
 		ResetWalls();
 	}
 	return index;
-}
-
-void SBS::Stop()
-{
-	//stop timer
-	p->Stop();
 }
 
 void SBS::SetAutoSize(bool x, bool y)
