@@ -23,8 +23,10 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <wx/panel.h>
 #include <wx/timer.h>
 #include <crystalspace.h>
+#include "ivideo/wxwin.h"
 
 #ifndef _SBS_GLOBALS_H
 #define _SBS_GLOBALS_H

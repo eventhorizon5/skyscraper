@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase28d.lib wxmsw28d_core.lib"
+				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib"
 				OutputFile="../SBS.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(CRYSTAL)\out\debug8\libs&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;"

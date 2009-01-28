@@ -22,11 +22,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SKYSCRAPER_H
-#define _SKYSCRAPER_H
-
-#include "sbs.h"
-
 int main (int argc, char* argv[]);
 
 class Skyscraper : public wxApp
@@ -44,7 +39,20 @@ public:
 	csArray<csString> BuildingData;
 };
 
+class MainScreen : public wxFrame
+{
+public:
+	MainScreen();
+	~MainScreen();
+	void OnIconize(wxIconizeEvent& event);
+	void OnShow(wxShowEvent& event);
+    void OnSize(wxSizeEvent& event);
+	void OnClose(wxCloseEvent& event);
+	void ShowWindow();
+	wxPanel *panel;
+
+	DECLARE_EVENT_TABLE()
+
+};
+
 DECLARE_APP(Skyscraper)
-
-#endif
-

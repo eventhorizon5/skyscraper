@@ -1,0 +1,50 @@
+diff -urN a/plugins/video/canvas/wxgl/GLWXDriver2D.cpp b/plugins/video/canvas/wxgl/GLWXDriver2D.cpp
+--- a/plugins/video/canvas/wxgl/GLWXDriver2D.cpp	2009-01-21 19:00:01.276455146 -0600
++++ b/plugins/video/canvas/wxgl/GLWXDriver2D.cpp	2009-01-21 18:59:52.012458452 -0600
+@@ -116,6 +116,13 @@
+   return theCanvas;
+ }
+ 
++#ifdef WIN32
++HWND csGraphics2DWX::GetWindowHandle()
++{
++  return (HWND)myParent->GetHWND();
++}
++#endif
++
+ void* csGraphics2DWX::GetProcAddress (const char *funcname)
+ {
+ #ifdef WIN32
+diff -urN a/plugins/video/canvas/wxgl/GLWXDriver2D.h b/plugins/video/canvas/wxgl/GLWXDriver2D.h
+--- a/plugins/video/canvas/wxgl/GLWXDriver2D.h	2009-01-21 19:00:01.280458066 -0600
++++ b/plugins/video/canvas/wxgl/GLWXDriver2D.h	2009-01-21 19:05:08.652453416 -0600
+@@ -27,10 +27,18 @@
+ 
+ class csGLCanvas;
+ 
++#ifdef WIN32
++class csGraphics2DWX : public scfImplementationExt3<csGraphics2DWX,
++                  csGraphics2DGLCommon,
++                  iWxWindow,
++		  iWin32Canvas,
++                  iOpenGLInterface>
++#else
+ class csGraphics2DWX : public scfImplementationExt2<csGraphics2DWX,
+                   csGraphics2DGLCommon,
+                   iWxWindow,
+                   iOpenGLInterface>
++#endif
+ {
+   wxWindow* myParent;
+   csGLCanvas* theCanvas;
+@@ -89,6 +97,10 @@
+   virtual wxWindow* GetWindow();
+   /** @} */
+ 
++#ifdef WIN32
++  virtual HWND GetWindowHandle();
++#endif
++  
+   void *GetProcAddress (const char *funcname);
+ };
+ 

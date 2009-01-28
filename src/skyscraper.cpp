@@ -27,18 +27,32 @@
 
 #include <wx/wx.h>
 #include <crystalspace.h>
+#include "ivideo/wxwin.h"
 #include "globals.h"
 #include "skyscraper.h"
+#include "sbs.h"
 #include "debugpanel.h"
 #include "loader.h"
 
 CS_IMPLEMENT_APPLICATION
 IMPLEMENT_APP(Skyscraper)
 
+BEGIN_EVENT_TABLE(MainScreen, wxFrame)
+  EVT_SHOW(MainScreen::OnShow)
+  EVT_ICONIZE(MainScreen::OnIconize)
+  EVT_SIZE(MainScreen::OnSize)
+  EVT_CLOSE(MainScreen::OnClose)
+END_EVENT_TABLE()
+
 SBS *Simcore;
 DebugPanel *dpanel;
+MainScreen *window;
 
 #ifdef CS_PLATFORM_WIN32
+
+#ifndef SW_SHOWNORMAL
+	#define SW_SHOWNORMAL 1
+#endif
 
 int main (int argc, char* argv[])
 {
@@ -69,14 +83,18 @@ bool Skyscraper::OnInit(void)
 	//Create new simulator object
 	Simcore = new SBS();
 
+	//Create main window
+	window = new MainScreen();
+	window->ShowWindow();
+
 	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
 	char** csargv;
 	csargv = (char**)cs_malloc(sizeof(char*) * argc);
 	for (int i = 0; i < argc; i++)
 		csargv[i] = strdup(wxString(argv[i]).mb_str().data());
-	if (!Simcore->Initialize(argc, csargv, "Skyscraper 1.3 Alpha"))
+	if (!Simcore->Initialize(argc, csargv, window->panel))
 	#else
-	if (!Simcore->Initialize(argc, argv, "Skyscraper 1.3 Alpha"))
+	if (!Simcore->Initialize(argc, argv, window->panel))
 	#endif
 	{
 		Simcore->ReportError("Error initializing system!");
@@ -111,7 +129,10 @@ bool Skyscraper::OnInit(void)
 	dpanel = new DebugPanel(NULL, -1);
 	dpanel->Show(true);
 	dpanel->SetPosition(wxPoint(10, 10));
-	dpanel->Update();
+	window->Raise();
+
+	//show main window
+	//window->ShowWindow();
 
 	//run simulation
 	Simcore->Run();
@@ -122,12 +143,55 @@ bool Skyscraper::OnInit(void)
 int Skyscraper::OnExit()
 {
 	//clean up
-
+	Simcore->Stop();
 	dpanel->timer->Stop();
 	dpanel->Destroy();
 	delete Simcore;
 	Simcore = 0;
+	delete window;
+	window = 0;
 	Cleanup();
 
 	return 0;
+}
+
+MainScreen::MainScreen() : wxFrame(0, -1, wxT("Skyscraper 1.3 Alpha"), wxDefaultPosition, wxSize(640, 480), wxDEFAULT_FRAME_STYLE)
+{
+	this->Center();
+	new wxPanel(this, -1, wxPoint(0, 0), wxSize(1, 1));
+	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
+	//this->SetTitle(wxString::FromAscii(windowtitle));
+}
+
+MainScreen::~MainScreen()
+{
+
+}
+
+void MainScreen::OnIconize(wxIconizeEvent& event)
+{
+	//csPrintf("got iconize %d\n", (int)event.Iconized());
+}
+
+void MainScreen::OnShow(wxShowEvent& event)
+{
+	//csPrintf("got show %d\n", (int)event.GetShow());
+}
+
+void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+	panel->SetSize(this->GetClientSize());
+}
+
+void MainScreen::OnClose(wxCloseEvent& event)
+{
+	Simcore->Stop();
+	dpanel->timer->Stop();
+	wxGetApp().Exit();
+}
+
+void MainScreen::ShowWindow()
+{
+	Show(true);
+	panel->Show(true);
 }
