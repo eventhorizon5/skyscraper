@@ -335,7 +335,9 @@ void Stairs::AddDoor(int floor, const char *texture, float thickness, int direct
 
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
 	DoorArray[DoorArray.GetSize() - 1].floornumber = floor;
-	DoorArray[DoorArray.GetSize() - 1].object = new Door("Door", texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
+	csString stairsnum = _itoa(StairsNum, intbuffer, 10);
+	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
+	DoorArray[DoorArray.GetSize() - 1].object = new Door("Stairwell " + stairsnum + ":Door " + num, texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
 }
 
 void Stairs::CutFloors(bool relative, csVector2 start, csVector2 end, float startvoffset, float endvoffset)
@@ -421,4 +423,22 @@ void Stairs::EnableDoor(int floor, bool value)
 		if (DoorArray[i].floornumber = floor && DoorArray[i].object)
 			DoorArray[i].object->Enabled(value);
 	}
+}
+
+void Stairs::OpenDoor(int number)
+{
+	//open door
+	DoorArray[number].object->Open();
+}
+
+void Stairs::CloseDoor(int number)
+{
+	//close door
+	DoorArray[number].object->Close();
+}
+
+bool Stairs::IsDoorOpen(int number)
+{
+	//check to see if door is open
+	return DoorArray[number].object->IsOpen();
 }

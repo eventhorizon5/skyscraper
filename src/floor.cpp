@@ -345,7 +345,9 @@ void Floor::AddDoor(const char *texture, float thickness, int direction, float C
 		Cut(csVector3(x1, InterfloorHeight + voffset, z1 - 1), csVector3(x2, InterfloorHeight + voffset + height, z2 + 1), true, false, true);
 
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
-	DoorArray[DoorArray.GetSize() - 1] = new Door("Door", texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude + InterfloorHeight, tw, th);
+	csString floornum = _itoa(Number, intbuffer, 10);
+	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
+	DoorArray[DoorArray.GetSize() - 1] = new Door("Floor " + floornum + ":Door " + num, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude + InterfloorHeight, tw, th);
 }
 
 float Floor::CalculateAltitude()

@@ -54,6 +54,9 @@ public:
 	void CutWall(bool relative, int floor, csVector3 start, csVector3 end, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range);
 	void EnableDoor(int floor, bool value);
+	void OpenDoor(int number);
+	void CloseDoor(int number);
+	bool IsDoorOpen(int number);
 	
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array

@@ -32,13 +32,14 @@ public:
 
 	csString Name; //door name
 	int Direction;
-	bool IsOpen;
+	bool OpenState;
 	csVector3 origin; //door origin
 
 	Door(const char *name, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	~Door();
-	void OpenDoor();
-	void CloseDoor();
+	void Open();
+	void Close();
+	bool IsOpen();
 	void Enabled(bool value);
 
 private:

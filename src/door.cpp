@@ -48,7 +48,7 @@ Door::Door(const char *name, const char *texture, float thickness, int direction
 
 	Name = name;
 	Direction = direction;
-	IsOpen = false;
+	OpenState = false;
 	float x1, z1, x2, z2;
 	origin = csVector3(CenterX, altitude, CenterZ);
 
@@ -78,7 +78,7 @@ Door::Door(const char *name, const char *texture, float thickness, int direction
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);
 	sbs->ReverseExtents(false, false, false);
-	//sbs->AddWallMain(DoorMesh_state, name.GetData(), texture, thickness, x1, z1, x2, z2, height, height, altitude, altitude, tw, th);
+	sbs->AddWallMain(DoorMesh_state, name, texture, thickness, x1, z1, x2, z2, height, height, altitude, altitude, tw, th);
 	sbs->ResetWalls();
 	sbs->ResetExtents();
 
@@ -92,14 +92,19 @@ Door::~Door()
 
 }
 
-void Door::OpenDoor()
+void Door::Open()
 {
 	sbs->Report("Opening door " + Name);
 }
 
-void Door::CloseDoor()
+void Door::Close()
 {
 	sbs->Report("Closing door " + Name);
+}
+
+bool Door::IsOpen()
+{
+	return false;
 }
 
 void Door::Enabled(bool value)

@@ -81,6 +81,10 @@ public:
 	void EnableColumnFrame(bool value);
 	int ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 	int ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
+
+private:
+	char intbuffer[65];
+	char buffer[20];
 };
 
 #endif
