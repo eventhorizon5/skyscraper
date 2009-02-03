@@ -1674,7 +1674,7 @@ void Elevator::ShaftDoorsEnabled(int floor, bool value)
 	if ((floor == sbs->GetShaft(AssignedShaft)->startfloor || floor == sbs->GetShaft(AssignedShaft)->endfloor) && value == false)
 		return;
 
-	uint index = ServicedFloors.Find(floor);
+	size_t index = ServicedFloors.Find(floor);
 	if (index == csArrayItemNotFound)
 		return;
 

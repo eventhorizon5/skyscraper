@@ -145,7 +145,8 @@ bool Skyscraper::OnInit(void)
 int Skyscraper::OnExit()
 {
 	//clean up
-	dpanel->timer->Stop();
+	if(dpanel->timer)
+		dpanel->timer->Stop();
 	dpanel->Destroy();
 	delete Simcore;
 	Simcore = 0;
@@ -186,7 +187,8 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void MainScreen::OnClose(wxCloseEvent& event)
 {
-	dpanel->timer->Stop();
+	if(dpanel->timer)
+		dpanel->timer->Stop();
 	wxGetApp().Exit();
 }
 
