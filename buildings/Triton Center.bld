@@ -96,7 +96,7 @@
     Load signs/sans/P3.jpg, ButtonP3, 1, 1
     Load signs/sans/P4.jpg, ButtonP4, 1, 1
     Load signs/sans/P5.jpg, ButtonP5, 1, 1
-    Load signs/sans/B.jpg, ButtonB, 1, 1
+    Load signs/sans/S.jpg, ButtonS, 1, 1
     Load signs/sans/Open.jpg, ButtonOpen, 1, 1
     Load signs/sans/Close.jpg, ButtonClose, 1, 1
     Load signs/sans/Stop.jpg, ButtonStop, 1, 1
@@ -117,49 +117,8 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Height = 9.5
     InterfloorHeight = 2.24
     Altitude = -13.98
-
-    #Floor
-    FloorOrientation = top
-    DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Brick, 0.5, -75, 70, 75, -70, 0, 0, 0, 0, False
-
-    #Ceiling
-    FloorOrientation = bottom
-    DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Brick, 0.5, -75, 70, 75, -70, %height%, %height%, 0, 0, False
-
-    #Interfloor bottom
-    FloorOrientation = bottom
-    DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -75, 70, 75, -70, 0, 0, 0, 0
-
-    #Interfloor top
-    FloorOrientation = top
-    DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -75, 70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0
-
-    DrawWalls = true, true, false, false, false, false
-
-    #Interfloor walls
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddInterfloorWall IFront, Brick, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ILeft, Brick, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddInterfloorWall IRight, Brick, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall IBack, Brick, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-
-    #Level Walls
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Front, Brick, 0.5, -75, -70, 75, -70, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Left, Brick, 0.5, -75, 70, -75, -70, %height%, %height%, 0, 0, 0, 0, False
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddWall Right, Brick, 0.5, 75, -70, 75, 70, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Back, Brick, 0.5, 75, 70, -75, 70, %height%, %height%, 0, 0, 0, 0, False
 <EndFloor>
+
 
 <Floor -2>
     ID = LL2
@@ -168,6 +127,51 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Height = 9.5
     InterfloorHeight = 2.24
 <EndFloor>
+
+<Floors -1 to -2>
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    <break>
+    AddFloor Floor, Carpet1, 0.5, -75, -70, 75, 70, 0, 0, 0, 0, False
+
+    #Ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -75, -70, 75, 70, %height%, %height%, 0, 0, False
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -75, -70, 75, 70, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
+
+    DrawWalls = true, true, false, false, false, false
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, Brick, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -75, -70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, Brick, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, -75, 70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+
+    #Level Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, Concrete, 0.5, -75, -70, 75, -70, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, Concrete, 0.5, -75, -70, -75, 70, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, Concrete, 0.5, 75, -70, 75, 70, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, Concrete, 0.5, -75, 70, 75, 70, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
 
 <Floor -3>
     ID = P1
@@ -210,33 +214,35 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
 <EndFloor>
 
 <Floor -8>
-    ID = B
+    ID = S
     Name = Service Basement
     Type = Basement
-    Height = 12
+    Height = 15
     InterfloorHeight = 2.24
 <EndFloor>
 
 <Floors -3 to -8>
+    Group = -7 - -3
+    
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Brick, 0.5, -105, 100, 105, -100, 0, 0, 0, 0, False
+    AddFloor Floor, Brick, 0.5, -105, -100, 105, 100, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Brick, 0.5, -105, 100, 105, -100, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, Brick, 0.5, -105, -100, 105, 100, %height%, %height%, 0, 0, False
 
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -105, 100, 105, -100, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -105, -100, 105, 100, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -105, 100, 105, -100, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -105, -100, 105, 100, %interfloorheight%, %interfloorheight%, 0, 0
 
     DrawWalls = true, true, false, false, false, false
 
@@ -244,21 +250,27 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddInterfloorWall IFront, Brick, 0.5, -105, -100, 105, -100, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ILeft, Brick, 0.5, -105, 100, -105, -100, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -105, -100, -105, 100, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
     AddInterfloorWall IRight, Brick, 0.5, 105, -100, 105, 100, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall IBack, Brick, 0.5, 105, 100, -105, 100, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, -105, 100, 105, 100, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 
     #Level Walls
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Front, Brick, 0.5, -105, -100, 105, -100, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Left, Brick, 0.5, -105, 100, -105, -100, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, Brick, 0.5, -105, -100, -105, 100, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
     AddWall Right, Brick, 0.5, 105, -100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Back, Brick, 0.5, 105, 100, -105, 100, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, Brick, 0.5, -105, 100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
+    
+    #cut for atrium
+    if[%floor% = -3] Cut -37, -1, -50, 37, %interfloorheight% + 1, 4, false, true
+    if[%floor% = -7] Cut -37, %interfloorheight% + 1, -50, 37, %fullheight% + 1, 4, false, true
+    if[%floor% > -7 & %floor% < -3] Cut -37, -1, -50, 37, %fullheight% + 1, 4, false, true
+    
 <EndFloors>
 
 #Lobby
@@ -3571,22 +3583,21 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 12, 5, left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, ButtonM, 2, 4, 1, 1, 1
     AddFloorButton 1, ButtonL, 2, 2, 0, 1, 1
-    AddFloorButton 1, ButtonLL1, 3, 4, 0, 1, 1 
-    AddFloorButton 1, ButtonLL2, 3, 2, 0, 1, 1 
-    AddFloorButton 1, ButtonP1, 4, 4, 0, 1, 1 
-    AddFloorButton 1, ButtonP2, 4, 2, 0, 1, 1 
-    AddFloorButton 1, ButtonP3, 5, 4, 0, 1, 1 
-    AddFloorButton 1, ButtonP4, 5, 2, 0, 1, 1 
-    AddFloorButton 1, ButtonP5, 6, 4, 0, 1, 1 
-    AddFloorButton 1, ButtonB, 6, 2, 0, 1, 1 
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddFloorButton 1, ButtonLL1, 3, 3, -1, 1, 1 
+    AddFloorButton 1, ButtonLL2, 4, 3, -2, 1, 1 
+    AddFloorButton 1, ButtonP1, 5, 3, -3, 1, 1 
+    AddFloorButton 1, ButtonP2, 6, 3, -4, 1, 1 
+    AddFloorButton 1, ButtonP3, 7, 3, -5, 1, 1 
+    AddFloorButton 1, ButtonP4, 8, 3, -6, 1, 1 
+    AddFloorButton 1, ButtonP5, 9, 3, -7, 1, 1 
+    AddControlButton 1, ButtonOpen, 10, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 10, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 11, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 11, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 11, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -3659,14 +3670,21 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 8, 5, right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, ButtonM, 2, 3, 1, 1, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 7, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 7, 4, alarm, 1, 1
+    CreatePanel ElevPanel, 12, 5, right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, ButtonM, 2, 4, 1, 1, 1
+    AddFloorButton 1, ButtonL, 2, 2, 0, 1, 1
+    AddFloorButton 1, ButtonLL1, 3, 3, -1, 1, 1 
+    AddFloorButton 1, ButtonLL2, 4, 3, -2, 1, 1 
+    AddFloorButton 1, ButtonP1, 5, 3, -3, 1, 1 
+    AddFloorButton 1, ButtonP2, 6, 3, -4, 1, 1 
+    AddFloorButton 1, ButtonP3, 7, 3, -5, 1, 1 
+    AddFloorButton 1, ButtonP4, 8, 3, -6, 1, 1 
+    AddFloorButton 1, ButtonP5, 9, 3, -7, 1, 1 
+    AddControlButton 1, ButtonOpen, 10, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 10, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 11, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 11, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 11, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -5267,7 +5285,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #right panel
-    CreatePanel ElevPanel, 12, 7, right, -3.625 + 0.2 + 0.001, 1.75 + 1.1875 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 13, 7, right, -3.625 + 0.2 + 0.001, 1.75 + 1.1875 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button79, 2, 6, 79, 1, 1
     AddFloorButton 1, Button78, 2, 5, 78, 1, 1
     AddFloorButton 1, Button77, 2, 4, 77, 1, 1
@@ -5308,59 +5326,67 @@ DrawWalls = true, true, false, false, false, false
     AddFloorButton 1, Button42, 9, 4, 42, 1, 1
     AddFloorButton 1, Button41, 9, 3, 41, 1, 1
     AddFloorButton 1, Button40, 9, 2, 40, 1, 1
-    AddControlButton 1, ButtonOpen, 11, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 11, 3, close, 1, 1
-    AddControlButton 1, ButtonCancel, 11, 4, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 11, 5, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 11, 6, alarm, 1, 1
+    AddFloorButton 1, Button39, 10, 6, 39, 1, 1
+    AddFloorButton 1, Button38, 10, 5, 38, 1, 1
+    AddFloorButton 1, Button37, 10, 4, 37, 1, 1
+    AddFloorButton 1, Button36, 10, 3, 36, 1, 1
+    AddFloorButton 1, Button35, 10, 2, 35, 1, 1
+    AddControlButton 1, ButtonOpen, 12, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 12, 3, close, 1, 1
+    AddControlButton 1, ButtonCancel, 12, 4, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 12, 5, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 12, 6, alarm, 1, 1
 
-    #right panel
-    CreatePanel ElevPanel, 12, 7, right, -3.625 + 0.2 + 0.001, -1.75 - 1.1875 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 2, Button39, 2, 6, 39, 1, 1
-    AddFloorButton 2, Button38, 2, 5, 38, 1, 1
-    AddFloorButton 2, Button37, 2, 4, 37, 1, 1
-    AddFloorButton 2, Button36, 2, 3, 36, 1, 1
-    AddFloorButton 2, Button35, 2, 2, 35, 1, 1
-    AddFloorButton 2, Button34, 3, 6, 34, 1, 1
-    AddFloorButton 2, Button33, 3, 5, 33, 1, 1
-    AddFloorButton 2, Button32, 3, 4, 32, 1, 1
-    AddFloorButton 2, Button31, 3, 3, 31, 1, 1
-    AddFloorButton 2, Button30, 3, 2, 30, 1, 1
-    AddFloorButton 2, Button29, 4, 6, 29, 1, 1
-    AddFloorButton 2, Button28, 4, 5, 28, 1, 1
-    AddFloorButton 2, Button27, 4, 4, 27, 1, 1
-    AddFloorButton 2, Button26, 4, 3, 26, 1, 1
-    AddFloorButton 2, Button25, 4, 2, 25, 1, 1
-    AddFloorButton 2, Button24, 5, 6, 24, 1, 1
-    AddFloorButton 2, Button23, 5, 5, 23, 1, 1
-    AddFloorButton 2, Button22, 5, 4, 22, 1, 1
-    AddFloorButton 2, Button21, 5, 3, 21, 1, 1
-    AddFloorButton 2, Button20, 5, 2, 20, 1, 1
-    AddFloorButton 2, Button19, 6, 6, 19, 1, 1
-    AddFloorButton 2, Button18, 6, 5, 18, 1, 1
-    AddFloorButton 2, Button17, 6, 4, 17, 1, 1
-    AddFloorButton 2, Button16, 6, 3, 16, 1, 1
-    AddFloorButton 2, Button15, 6, 2, 15, 1, 1
-    AddFloorButton 2, Button14, 7, 6, 14, 1, 1
-    AddFloorButton 2, Button13, 7, 5, 13, 1, 1
-    AddFloorButton 2, Button12, 7, 4, 12, 1, 1
-    AddFloorButton 2, Button11, 7, 3, 11, 1, 1
-    AddFloorButton 2, Button10, 7, 2, 10, 1, 1
-    AddFloorButton 2, Button9, 8, 6, 9, 1, 1
-    AddFloorButton 2, Button8, 8, 5, 8, 1, 1
-    AddFloorButton 2, Button7, 8, 4, 7, 1, 1
-    AddFloorButton 2, Button6, 8, 3, 6, 1, 1
-    AddFloorButton 2, Button5, 8, 2, 5, 1, 1
-    AddFloorButton 2, Button4, 9, 6, 4, 1, 1
-    AddFloorButton 2, Button3, 9, 5, 3, 1, 1
-    AddFloorButton 2, Button2, 9, 4, 2, 1, 1
-    AddFloorButton 2, ButtonM, 9, 3, 1, 1, 1
-    AddFloorButton 2, ButtonL, 9, 2, 0, 1, 1
-    AddControlButton 2, ButtonOpen, 11, 6, open, 1, 1
-    AddControlButton 2, ButtonClose, 11, 5, close, 1, 1
-    AddControlButton 2, ButtonCancel, 11, 4, cancel, 1, 1
-    AddControlButton 2, ButtonStop, 11, 3, stop, 1, 1
-    AddControlButton 2, ButtonAlarm, 11, 2, alarm, 1, 1
+    #left panel
+    CreatePanel ElevPanel, 13, 7, right, -3.625 + 0.2 + 0.001, -1.75 - 1.1875 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 2, Button34, 2, 6, 34, 1, 1
+    AddFloorButton 2, Button33, 2, 5, 33, 1, 1
+    AddFloorButton 2, Button32, 2, 4, 32, 1, 1
+    AddFloorButton 2, Button31, 2, 3, 31, 1, 1
+    AddFloorButton 2, Button30, 2, 2, 30, 1, 1
+    AddFloorButton 2, Button29, 3, 6, 29, 1, 1
+    AddFloorButton 2, Button28, 3, 5, 28, 1, 1
+    AddFloorButton 2, Button27, 3, 4, 27, 1, 1
+    AddFloorButton 2, Button26, 3, 3, 26, 1, 1
+    AddFloorButton 2, Button25, 3, 2, 25, 1, 1
+    AddFloorButton 2, Button24, 4, 6, 24, 1, 1
+    AddFloorButton 2, Button23, 4, 5, 23, 1, 1
+    AddFloorButton 2, Button22, 4, 4, 22, 1, 1
+    AddFloorButton 2, Button21, 4, 3, 21, 1, 1
+    AddFloorButton 2, Button20, 4, 2, 20, 1, 1
+    AddFloorButton 2, Button19, 5, 6, 19, 1, 1
+    AddFloorButton 2, Button18, 5, 5, 18, 1, 1
+    AddFloorButton 2, Button17, 5, 4, 17, 1, 1
+    AddFloorButton 2, Button16, 5, 3, 16, 1, 1
+    AddFloorButton 2, Button15, 5, 2, 15, 1, 1
+    AddFloorButton 2, Button14, 6, 6, 14, 1, 1
+    AddFloorButton 2, Button13, 6, 5, 13, 1, 1
+    AddFloorButton 2, Button12, 6, 4, 12, 1, 1
+    AddFloorButton 2, Button11, 6, 3, 11, 1, 1
+    AddFloorButton 2, Button10, 6, 2, 10, 1, 1
+    AddFloorButton 2, Button9, 7, 6, 9, 1, 1
+    AddFloorButton 2, Button8, 7, 5, 8, 1, 1
+    AddFloorButton 2, Button7, 7, 4, 7, 1, 1
+    AddFloorButton 2, Button6, 7, 3, 6, 1, 1
+    AddFloorButton 2, Button5, 7, 2, 5, 1, 1
+    AddFloorButton 2, Button4, 8, 6, 4, 1, 1
+    AddFloorButton 2, Button3, 8, 5, 3, 1, 1
+    AddFloorButton 2, Button2, 8, 4, 2, 1, 1
+    AddFloorButton 2, ButtonM, 8, 3, 1, 1, 1
+    AddFloorButton 2, ButtonL, 8, 2, 0, 1, 1
+    AddFloorButton 2, ButtonLL1, 9, 6, -1, 1, 1
+    AddFloorButton 2, ButtonLL2, 9, 5, -2, 1, 1
+    AddFloorButton 2, ButtonP1, 9, 4, -3, 1, 1
+    AddFloorButton 2, ButtonP2, 9, 3, -4, 1, 1
+    AddFloorButton 2, ButtonP3, 9, 2, -5, 1, 1
+    AddFloorButton 2, ButtonP4, 10, 5, -6, 1, 1
+    AddFloorButton 2, ButtonP5, 10, 4, -7, 1, 1
+    AddFloorButton 2, ButtonS, 10, 3, -8, 1, 1
+    AddControlButton 2, ButtonOpen, 12, 6, open, 1, 1
+    AddControlButton 2, ButtonClose, 12, 5, close, 1, 1
+    AddControlButton 2, ButtonCancel, 12, 4, cancel, 1, 1
+    AddControlButton 2, ButtonStop, 12, 3, stop, 1, 1
+    AddControlButton 2, ButtonAlarm, 12, 2, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -3.625 + 0.2 + 0.001, 1.75 + 1.1875 - 0.1, 0.7, 0.5, 6.5
@@ -5418,8 +5444,8 @@ DrawWalls = true, true, false, false, false, false
     AddShaftDoors ElevDoors, 0.2, 4.218, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
-    #panel
-    CreatePanel ElevPanel, 16, 8, left, 3.917 - 0.2 - 0.001, -2.25 - 1.9375 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    #right panel
+    CreatePanel ElevPanel, 17, 8, left, 3.917 - 0.2 - 0.001, -2.25 - 1.9375 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button141, 2, 7, 141, 1, 1
     AddFloorButton 1, Button140, 2, 6, 140, 1, 1
     AddFloorButton 1, Button139, 2, 5, 139, 1, 1
@@ -5492,83 +5518,92 @@ DrawWalls = true, true, false, false, false, false
     AddFloorButton 1, Button72, 13, 4, 72, 1, 1
     AddFloorButton 1, Button71, 13, 3, 71, 1, 1
     AddFloorButton 1, Button70, 13, 2, 70, 1, 1
-    AddControlButton 1, ButtonOpen, 15, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 15, 3, close, 1, 1
-    AddControlButton 1, ButtonCancel, 15, 4, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 15, 5, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 15, 6, alarm, 1, 1
+    AddFloorButton 1, Button69, 14, 7, 69, 1, 1
+    AddFloorButton 1, Button68, 14, 6, 68, 1, 1
+    AddFloorButton 1, Button67, 14, 5, 67, 1, 1
+    AddFloorButton 1, Button66, 14, 4, 66, 1, 1
+    AddFloorButton 1, Button65, 14, 3, 65, 1, 1
+    AddFloorButton 1, Button64, 14, 2, 64, 1, 1
+    AddControlButton 1, ButtonOpen, 16, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 16, 3, close, 1, 1
+    AddControlButton 1, ButtonCancel, 16, 4, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 16, 5, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 16, 6, alarm, 1, 1
 
+    #left panel
     CreatePanel ElevPanel, 16, 8, left, 3.917 - 0.2 - 0.001, 2.25 + 1.9375 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 2, Button69, 2, 7, 69, 1, 1
-    AddFloorButton 2, Button68, 2, 6, 68, 1, 1
-    AddFloorButton 2, Button67, 2, 5, 67, 1, 1
-    AddFloorButton 2, Button66, 2, 4, 66, 1, 1
-    AddFloorButton 2, Button65, 2, 3, 65, 1, 1
-    AddFloorButton 2, Button64, 2, 2, 64, 1, 1
-    AddFloorButton 2, Button63, 3, 7, 63, 1, 1
-    AddFloorButton 2, Button62, 3, 6, 62, 1, 1
-    AddFloorButton 2, Button61, 3, 5, 61, 1, 1
-    AddFloorButton 2, Button60, 3, 4, 60, 1, 1
-    AddFloorButton 2, Button59, 3, 3, 59, 1, 1
-    AddFloorButton 2, Button58, 3, 2, 58, 1, 1
-    AddFloorButton 2, Button57, 4, 7, 57, 1, 1
-    AddFloorButton 2, Button56, 4, 6, 56, 1, 1
-    AddFloorButton 2, Button55, 4, 5, 55, 1, 1
-    AddFloorButton 2, Button54, 4, 4, 54, 1, 1
-    AddFloorButton 2, Button53, 4, 3, 53, 1, 1
-    AddFloorButton 2, Button52, 4, 2, 52, 1, 1
-    AddFloorButton 2, Button51, 5, 7, 51, 1, 1
-    AddFloorButton 2, Button50, 5, 6, 50, 1, 1
-    AddFloorButton 2, Button49, 5, 5, 49, 1, 1
-    AddFloorButton 2, Button48, 5, 4, 48, 1, 1
-    AddFloorButton 2, Button47, 5, 3, 47, 1, 1
-    AddFloorButton 2, Button46, 5, 2, 46, 1, 1
-    AddFloorButton 2, Button45, 6, 7, 45, 1, 1
-    AddFloorButton 2, Button44, 6, 6, 44, 1, 1
-    AddFloorButton 2, Button43, 6, 5, 43, 1, 1
-    AddFloorButton 2, Button42, 6, 4, 42, 1, 1
-    AddFloorButton 2, Button41, 6, 3, 41, 1, 1
-    AddFloorButton 2, Button40, 6, 2, 40, 1, 1
-    AddFloorButton 2, Button39, 7, 7, 39, 1, 1
-    AddFloorButton 2, Button38, 7, 6, 38, 1, 1
-    AddFloorButton 2, Button37, 7, 5, 37, 1, 1
-    AddFloorButton 2, Button36, 7, 4, 36, 1, 1
-    AddFloorButton 2, Button35, 7, 3, 35, 1, 1
-    AddFloorButton 2, Button34, 7, 2, 34, 1, 1
-    AddFloorButton 2, Button33, 8, 7, 33, 1, 1
-    AddFloorButton 2, Button32, 8, 6, 32, 1, 1
-    AddFloorButton 2, Button31, 8, 5, 31, 1, 1
-    AddFloorButton 2, Button30, 8, 4, 30, 1, 1
-    AddFloorButton 2, Button29, 8, 3, 29, 1, 1
-    AddFloorButton 2, Button28, 8, 2, 28, 1, 1
-    AddFloorButton 2, Button27, 9, 7, 27, 1, 1
-    AddFloorButton 2, Button26, 9, 6, 26, 1, 1
-    AddFloorButton 2, Button25, 9, 5, 25, 1, 1
-    AddFloorButton 2, Button24, 9, 4, 24, 1, 1
-    AddFloorButton 2, Button23, 9, 3, 23, 1, 1
-    AddFloorButton 2, Button22, 9, 2, 22, 1, 1
+    AddFloorButton 2, Button63, 2, 7, 63, 1, 1
+    AddFloorButton 2, Button62, 2, 6, 62, 1, 1
+    AddFloorButton 2, Button61, 2, 5, 61, 1, 1
+    AddFloorButton 2, Button60, 2, 4, 60, 1, 1
+    AddFloorButton 2, Button59, 2, 3, 59, 1, 1
+    AddFloorButton 2, Button58, 2, 2, 58, 1, 1
+    AddFloorButton 2, Button57, 3, 7, 57, 1, 1
+    AddFloorButton 2, Button56, 3, 6, 56, 1, 1
+    AddFloorButton 2, Button55, 3, 5, 55, 1, 1
+    AddFloorButton 2, Button54, 3, 4, 54, 1, 1
+    AddFloorButton 2, Button53, 3, 3, 53, 1, 1
+    AddFloorButton 2, Button52, 3, 2, 52, 1, 1
+    AddFloorButton 2, Button51, 4, 7, 51, 1, 1
+    AddFloorButton 2, Button50, 4, 6, 50, 1, 1
+    AddFloorButton 2, Button49, 4, 5, 49, 1, 1
+    AddFloorButton 2, Button48, 4, 4, 48, 1, 1
+    AddFloorButton 2, Button47, 4, 3, 47, 1, 1
+    AddFloorButton 2, Button46, 4, 2, 46, 1, 1
+    AddFloorButton 2, Button45, 5, 7, 45, 1, 1
+    AddFloorButton 2, Button44, 5, 6, 44, 1, 1
+    AddFloorButton 2, Button43, 5, 5, 43, 1, 1
+    AddFloorButton 2, Button42, 5, 4, 42, 1, 1
+    AddFloorButton 2, Button41, 5, 3, 41, 1, 1
+    AddFloorButton 2, Button40, 5, 2, 40, 1, 1
+    AddFloorButton 2, Button39, 6, 7, 39, 1, 1
+    AddFloorButton 2, Button38, 6, 6, 38, 1, 1
+    AddFloorButton 2, Button37, 6, 5, 37, 1, 1
+    AddFloorButton 2, Button36, 6, 4, 36, 1, 1
+    AddFloorButton 2, Button35, 6, 3, 35, 1, 1
+    AddFloorButton 2, Button34, 6, 2, 34, 1, 1
+    AddFloorButton 2, Button33, 7, 7, 33, 1, 1
+    AddFloorButton 2, Button32, 7, 6, 32, 1, 1
+    AddFloorButton 2, Button31, 7, 5, 31, 1, 1
+    AddFloorButton 2, Button30, 7, 4, 30, 1, 1
+    AddFloorButton 2, Button29, 7, 3, 29, 1, 1
+    AddFloorButton 2, Button28, 7, 2, 28, 1, 1
+    AddFloorButton 2, Button27, 8, 7, 27, 1, 1
+    AddFloorButton 2, Button26, 8, 6, 26, 1, 1
+    AddFloorButton 2, Button25, 8, 5, 25, 1, 1
+    AddFloorButton 2, Button24, 8, 4, 24, 1, 1
+    AddFloorButton 2, Button23, 8, 3, 23, 1, 1
+    AddFloorButton 2, Button22, 8, 2, 22, 1, 1
     AddFloorButton 2, Button21, 9, 7, 21, 1, 1
-    AddFloorButton 2, Button20, 10, 6, 20, 1, 1
-    AddFloorButton 2, Button19, 10, 5, 19, 1, 1
-    AddFloorButton 2, Button18, 10, 4, 18, 1, 1
-    AddFloorButton 2, Button17, 10, 3, 17, 1, 1
-    AddFloorButton 2, Button16, 10, 2, 16, 1, 1
+    AddFloorButton 2, Button20, 9, 6, 20, 1, 1
+    AddFloorButton 2, Button19, 9, 5, 19, 1, 1
+    AddFloorButton 2, Button18, 9, 4, 18, 1, 1
+    AddFloorButton 2, Button17, 9, 3, 17, 1, 1
+    AddFloorButton 2, Button16, 9, 2, 16, 1, 1
     AddFloorButton 2, Button15, 10, 7, 15, 1, 1
-    AddFloorButton 2, Button14, 11, 6, 14, 1, 1
-    AddFloorButton 2, Button13, 11, 5, 13, 1, 1
-    AddFloorButton 2, Button12, 11, 4, 12, 1, 1
-    AddFloorButton 2, Button11, 11, 3, 11, 1, 1
-    AddFloorButton 2, Button10, 11, 2, 10, 1, 1
+    AddFloorButton 2, Button14, 10, 6, 14, 1, 1
+    AddFloorButton 2, Button13, 10, 5, 13, 1, 1
+    AddFloorButton 2, Button12, 10, 4, 12, 1, 1
+    AddFloorButton 2, Button11, 10, 3, 11, 1, 1
+    AddFloorButton 2, Button10, 10, 2, 10, 1, 1
     AddFloorButton 2, Button9, 11, 7, 9, 1, 1
-    AddFloorButton 2, Button8, 12, 6, 8, 1, 1
-    AddFloorButton 2, Button7, 12, 5, 7, 1, 1
-    AddFloorButton 2, Button6, 12, 4, 6, 1, 1
-    AddFloorButton 2, Button5, 12, 3, 5, 1, 1
-    AddFloorButton 2, Button4, 12, 2, 4, 1, 1
+    AddFloorButton 2, Button8, 11, 6, 8, 1, 1
+    AddFloorButton 2, Button7, 11, 5, 7, 1, 1
+    AddFloorButton 2, Button6, 11, 4, 6, 1, 1
+    AddFloorButton 2, Button5, 11, 3, 5, 1, 1
+    AddFloorButton 2, Button4, 11, 2, 4, 1, 1
     AddFloorButton 2, Button3, 12, 7, 3, 1, 1
-    AddFloorButton 2, Button2, 13, 6, 2, 1, 1
-    AddFloorButton 2, ButtonM, 13, 5, 1, 1, 1
-    AddFloorButton 2, ButtonL, 13, 2, 0, 1, 1
+    AddFloorButton 2, Button2, 12, 6, 2, 1, 1
+    AddFloorButton 2, ButtonM, 12, 5, 1, 1, 1
+    AddFloorButton 2, ButtonL, 12, 4, 0, 1, 1
+    AddFloorButton 2, ButtonLL1, 12, 3, -1, 1, 1
+    AddFloorButton 2, ButtonLL2, 12, 2, -2, 1, 1
+    AddFloorButton 2, ButtonP1, 13, 7, -3, 1, 1
+    AddFloorButton 2, ButtonP2, 13, 6, -4, 1, 1
+    AddFloorButton 2, ButtonP3, 13, 5, -5, 1, 1
+    AddFloorButton 2, ButtonP4, 13, 4, -6, 1, 1
+    AddFloorButton 2, ButtonP5, 13, 3, -7, 1, 1
+    AddFloorButton 2, ButtonS, 13, 2, -8, 1, 1
     AddControlButton 2, ButtonOpen, 15, 7, open, 1, 1
     AddControlButton 2, ButtonClose, 15, 6, close, 1, 1
     AddControlButton 2, ButtonCancel, 15, 5, cancel, 1, 1
@@ -5632,9 +5667,9 @@ DrawWalls = true, true, false, false, false, false
 #Lobby/Parking Elevators
 <Floors -7 to 1>
     CallButtonElevators = 25, 26
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 46.95 + 4.75 + 0.33 + 0.1, -33, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 46.95 + 4.25 + 0.33 + 0.1, -33, 4, right, 0.5, 1, true, 0, 0
     CallButtonElevators = 27, 28
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -46.95 - 4.75 - 0.33 - 0.1, -33, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -46.95 - 4.25 - 0.33 - 0.1, -33, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Zone2 Locals
@@ -5789,16 +5824,36 @@ DrawWalls = true, true, false, false, false, false
 
 
 #North Stairwell A
-CreateStairwell 1, -46.67, -3.708, 0, 39
+CreateStairwell 1, -46.67, -3.708, -7, 39
 CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
+
+<Floors -7 to -1>
+    Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
+    AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
+    AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    FloorOrientation = top
+    if[%floor% = -7] AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
+    if[%floor% > -7] AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = right
+    if[%floor% > -7] AddStairsWall 1, LandingLowerCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = left
+    AddStairsWall 1, LandingUpperCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
 
 <Floor 0>
     Set 1 = (%height% + Floor(1).InterfloorHeight) / 16 #determine riser size
     AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, 0, 0, 0
     AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
     AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 5, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 1, LandingLowerCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
     AddStairsWall 1, LandingUpperCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
@@ -5850,7 +5905,7 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
-<Floors 0 to 39>
+<Floors -7 to 39>
     Set 6 = 3
     if[%floor% = 1] Set 6 = 5
     if[%floor% = 38 | %floor% = 39] Set 6 = 4
@@ -5877,7 +5932,7 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% > 16] AddWall StairsFrontE, %5%, 0.33, -4.5 + -46.67 - 0.33, -9.708 + -3.708, 4.5 + -46.67 + 0.33, -9.708 + -3.708, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    if[%floor% > 16] AddWall StairsRightE, %5%, 0.33, 4.5 + -46.67, -9.708 + -3.708 - 0.33, 4.5 + -46.67, 9.708 + -3.708, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% < -1 | %floor% > 16] AddWall StairsRightE, %5%, 0.33, 4.5 + -46.67, -9.708 + -3.708 - 0.33, 4.5 + -46.67, 9.708 + -3.708, %height%, %height%, 0, 0, 0, 0, False
 
     #doors
     if[%floor% = 0 | %floor% = 1] AddStairsDoor 1, StairsDoor2, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
@@ -5888,9 +5943,16 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     SetAutoSize = false, false
     DrawWalls = false, true, false, false, false, false
     if[%floor% < 39] AddStairsWall 1, SignTop, FloorSign, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.25, 0.25, 5, 5, 1, 1
-    if[%floor% < 39 & %floor% ! 0 & %floor% ! 1] AddStairsWall 1, SignTop, Button%floor%, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% < 39 & %floor% > 1] AddStairsWall 1, SignTop, Button%floor%, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 0] AddStairsWall 1, SignTop, ButtonL, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 1] AddStairsWall 1, SignTop, ButtonM, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -1] AddStairsWall 1, SignTop, ButtonLL1, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -2] AddStairsWall 1, SignTop, ButtonLL2, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -3] AddStairsWall 1, SignTop, ButtonP1, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -4] AddStairsWall 1, SignTop, ButtonP2, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -5] AddStairsWall 1, SignTop, ButtonP3, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -6] AddStairsWall 1, SignTop, ButtonP4, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -7] AddStairsWall 1, SignTop, ButtonP5, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
 
     SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
@@ -5898,16 +5960,36 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
 
 
 #South Stairwell A
-CreateStairwell 2, 46.67, 3.708, 0, 39
+CreateStairwell 2, 46.67, 3.708, -7, 39
 CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
+
+<Floors -7 to -1>
+    Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
+    AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
+    AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    FloorOrientation = top
+    if[%floor% = -7] AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
+    if[%floor% > -7] AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = left
+    if[%floor% > -7] AddStairsWall 2, LandingLowerCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 2, LandingUpperCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
 
 <Floor 0>
     Set 1 = (%height% + Floor(1).InterfloorHeight) / 16 #determine riser size
     AddStairs 2, StairsLower, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 7, 8, 0, 0, 0
     AddStairs 2, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
     AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -5, %1% * 8, %1% * 8, 1, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = left
+    AddStairsWall 2, LandingLowerCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
     AddStairsWall 2, LandingUpperCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
@@ -5959,7 +6041,7 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
-<Floors 0 to 39>
+<Floors -7 to 39>
     Set 6 = 3
     if[%floor% = 1] Set 6 = 5
     if[%floor% = 38 | %floor% = 39] Set 6 = 4
@@ -5982,7 +6064,7 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% = 39] Set 5 = Stucco4
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    if[%floor% > 28] AddWall StairsLeftE, %5%, 0.33, -4.5 + 46.67, -9.708 + 3.708, -4.5 + 46.67, 9.708 + 3.708 + 0.33 + 0.084, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% < -1 | %floor% > 28] AddWall StairsLeftE, %5%, 0.33, -4.5 + 46.67, -9.708 + 3.708, -4.5 + 46.67, 9.708 + 3.708 + 0.33 + 0.084, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
     AddWall StairsRightE, %5%, 0.33, 4.5 + 46.67, -9.708 + 3.708, 4.5 + 46.67, 9.708 + 3.708 + 0.33 + 0.084, %height%, %height%, 0, 0, 0, 0, False
@@ -6000,9 +6082,16 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     SetAutoSize = false, false
     DrawWalls = true, false, false, false, false, false
     if[%floor% < 39] AddStairsWall 2, SignTop, FloorSign, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.25, 0.25, 5, 5, 1, 1
-    if[%floor% < 39 & %floor% ! 0 & %floor% ! 1] AddStairsWall 2, SignTop, Button%floor%, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% < 39 & %floor% > 1] AddStairsWall 2, SignTop, Button%floor%, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 0] AddStairsWall 2, SignTop, ButtonL, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 1] AddStairsWall 2, SignTop, ButtonM, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -1] AddStairsWall 2, SignTop, ButtonLL1, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -2] AddStairsWall 2, SignTop, ButtonLL2, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -3] AddStairsWall 2, SignTop, ButtonP1, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -4] AddStairsWall 2, SignTop, ButtonP2, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -5] AddStairsWall 2, SignTop, ButtonP3, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -6] AddStairsWall 2, SignTop, ButtonP4, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -7] AddStairsWall 2, SignTop, ButtonP5, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
 
     SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
