@@ -921,11 +921,18 @@ recalc:
 				{
 					csString tmpstring = tempdata[i];
 					tmpstring.Trim();
-					if (tmpstring.Find("-") > 0)
+					if (tmpstring.Find("-", 1) > 0)
 					{
 						//found a range marker
-						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-")));
-						int end = atoi(tmpstring.Slice(tmpstring.Find("-") + 1));
+						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-", 1)));
+						int end = atoi(tmpstring.Slice(tmpstring.Find("-", 1) + 1));
+						if (end < start)
+						{
+							int temp = start;
+							start = end;
+							end = temp;
+						}
+
 						for (int k = start; k <= end; k++)
 							Simcore->GetFloor(Current)->AddGroupFloor(k);
 					}
@@ -1389,12 +1396,12 @@ recalc:
 				{
 					csString tmpstring = tempdata[i];
 					tmpstring.Trim();
-					int searchpos = tmpstring.Find("-");
+					int searchpos = tmpstring.Find("-", 1);
 					if (searchpos > 0)
 					{
 						//found a range marker
-						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-")));
-						int end = atoi(tmpstring.Slice(tmpstring.Find("-") + 1));
+						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-", 1)));
+						int end = atoi(tmpstring.Slice(tmpstring.Find("-", 1) + 1));
 						for (int k = start; k <= end; k++)
 							Simcore->GetElevator(Current)->AddServicedFloor(k);
 					}
