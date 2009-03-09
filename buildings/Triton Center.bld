@@ -119,7 +119,6 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Altitude = -13.98
 <EndFloor>
 
-
 <Floor -2>
     ID = LL2
     Name = Lower Level 2
