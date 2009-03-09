@@ -132,7 +132,6 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    <break>
     AddFloor Floor, Carpet1, 0.5, -75, -70, 75, 70, 0, 0, 0, 0, False
 
     #Ceiling
