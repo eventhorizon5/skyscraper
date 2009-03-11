@@ -62,8 +62,9 @@
     Load data/downtown.jpg, Downtown, 1, 1
 
     #floor indicator/button pictures
-    Load signs/sans/L.jpg, ButtonL, 1, 1
+    Load signs/sans/P.jpg, ButtonP, 1, 1
     Load signs/sans/M.jpg, ButtonM, 1, 1
+    Load signs/sans/C.jpg, ButtonC, 1, 1
     Load signs/sans/Open.jpg, ButtonOpen, 1, 1
     Load signs/sans/Close.jpg, ButtonClose, 1, 1
     Load signs/sans/Stop.jpg, ButtonStop, 1, 1
@@ -76,36 +77,37 @@
 AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
 Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 
+#Lower Levels
+<Floors -1 to -3>
+    ID = LL%floor%
+    Name = Lower Level %floor%
+    Type = Basement
+    Description = Lower Level %floor%
+    Height = 12.24
+    InterfloorHeight = 0
+
+<EndFloors>
+
 #Franklin Concourse
-<Floor -1>
+<Floor 0>
     ID = C
     Name = Franklin Concourse
     Type = Lobby
     Description = Rear Entrance Lobby Level
     Height = 12.24
     InterfloorHeight = 0
+    Group = 0, 1, 2
 <EndFloor>
 
-#Lower Levels
-<Floors -2 to -4>
-    ID = LL(%floor% + 1)
-    Name = Lower Level (%floor% + 1)
-    Type = Basement
-    Description = Lower Level (%floor% + 1)
-    Height = 12.24
-    InterfloorHeight = 0
-
-<EndFloors>
-
 #Plaza
-<Floor 0>
+<Floor 1>
     ID = L
     Name = Lobby
     Type = Lobby
     Description = Lobby/Plaza
     Height = 12.24
     InterfloorHeight = 0
-    Group = 0, 1
+    Group = 0, 1, 2
     
     #Floor
     FloorOrientation = top
@@ -143,14 +145,14 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 <EndFloor>
 
 #mezzanine
-<Floor 1>
+<Floor 2>
     ID = M
     Name = Mezzanine
     Type = Mezzanine
     Description = Mezzanine level above lobby
     Height = 24.48
     InterfloorHeight = 0
-    Group = 0, 1
+    Group = 0, 1, 2
 
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
@@ -184,8 +186,71 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     SetAutoSize = true, true
 <EndFloor>
 
+#lower mechanical
+<Floor 3>
+    ID = %floor%
+    Name = Mechanical
+    Type = Service
+    Description = Lower Mechanical
+    Height = 12
+    InterfloorHeight = 2.24
+
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Carpet1, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
+
+    #Ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Marble3, 0.5, -112.5, -112.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+
+    DrawWalls = true, true, false, false, false, false
+
+    #External walls
+    SetAutoSize = true, false
+    WallOrientation = left
+    #front
+    AddWall Front1, MainWindows, 0, -112.5, -112.5, -37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front2, MainWindows, 0, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front3, MainWindows, 0, 37.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #left
+    AddWall Left1, MainWindows, 0, -112.5, -112.5, -112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left2, MainWindows, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Left3, MainWindows, 0, -112.5, 37.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #back
+    AddWall Back1, MainWindows, 0, -112.5, 112.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back2, MainWindows, 0, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Back3, MainWindows, 0, 37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #right
+    AddWall Right1, MainWindows, 0, 112.5, -112.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right2, MainWindows, 0, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Right3, MainWindows, 0, 112.5, 37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
+    
+    #Interfloor bottom
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, Brick, 0.5, -112.5, -112.5, 112.5, -112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -112.5, -112.5, -112.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, Brick, 0.5, 112.5, -112.5, 112.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, -112.5, 112.5, 112.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+<EndFloor>
+
 #zone 1 skeleton
-<Floors 2 to 29>
+<Floors 4 to 29>
     Height = 10
     if(%floor% = 28) Height = 15
     if(%floor% = 29) Height = 12
@@ -245,7 +310,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     AddInterfloorWall IBack, Brick, 0.5, -112.5, 112.5, 112.5, 112.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
-<Floors 2 to 29>
+<Floors 4 to 29>
     ID = %floor%
     Name = Offices
     Type = Office
@@ -1029,70 +1094,102 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 DrawWalls = true, true, false, false, false, false
 
 #zone 1 express shafts
-AddShaft 3, 2, -12.6, 61.7, -1, 36
-AddShaft 4, 2, 12.6, 61.7, -1, 36
+AddShaft 1, 2, -12.6, 56.772, -1, 36
+AddShaft 2, 2, 12.6, 56.772, -1, 36
+ShaftCut 1, -5, -19.352, 5 - 0.33, 19.352, 0, 5
+ShaftCut 2, -5 + 0.33, -19.352, 5, 19.352, 0, 5
+
+#zone 2 express shafts
+AddShaft 3, 2, -12.6, -61.7, -1, 69
+AddShaft 4, 2, 12.6, -61.7, -1, 69
 ShaftCut 3, -5, -14.335, 5 - 0.33, 14.335, 0, 5
 ShaftCut 4, -5 + 0.33, -14.335, 5, 14.335, 0, 5
 
-#zone 2 express shafts
-AddShaft 1, 2, -12.6, -61.7, -1, 69
-AddShaft 2, 2, 12.6, -61.7, -1, 69
-ShaftCut 1, -5, -14.335, 5 - 0.33, 14.335, 0, 5
-ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
+#zone 1 locals 1 (4-10)
+AddShaft 5, 2, -31.713, 14.083, 0, 11
+AddShaft 6, 2, -13.183, 14.083, 0, 11
+ShaftCut 5, -4.28, -13.836, 4.28 - 0.33, 13.836, 0, 5
+ShaftCut 6, -4.28 + 0.33, -13.836, 4.28, 13.836, 0, 5
+
+#zone 1 locals 2 (10-17)
+AddShaft 7, 2, 13.181, 14.083, 0, 18
+AddShaft 8, 2, 32.281, 14.083, 0, 18
+ShaftCut 7, -4.28, -13.836, 4.28 - 0.33, 13.836, 0, 5
+ShaftCut 8, -4.28 + 0.33, -13.836, 4.28, 13.836, 0, 5
+
+#zone 1 locals 3 (17-23)
+AddShaft 9, 2, 13.181, -14.083, 0, 24
+AddShaft 10, 2, 32.281, -14.083, 0, 24
+ShaftCut 9, -4.28, -13.836, 4.28 - 0.33, 13.836, 0, 5
+ShaftCut 10, -4.28 + 0.33, -13.836, 4.28, 13.836, 0, 5
+
+#zone 1 locals 4 (23-28)
+AddShaft 11, 2, -31.713, -14.083, 0, 29
+AddShaft 12, 2, -13.183, -14.083, 0, 29
+ShaftCut 11, -4.28, -13.836, 4.28 - 0.33, 13.836, 0, 5
+ShaftCut 12, -4.28 + 0.33, -13.836, 4.28, 13.836, 0, 5
 
 #zone 1 express shafts
 <Floors -1 to 36>
     Set 5 = Wall1
     if[%floor% = 31] Set 5 = Stucco4
     if[%floor% = 32] Set 5 = Stucco4
+    Set 6 = 5 #width
+    Set 7 = 19.352 #length
 
-    #shaft 3
+    #shaft 1
+    Set 10 = 1 #shaft number
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -1] AddShaftFloor 3, Shaft3Base, Brick, 0.5, -5, -14.335, 5, 14.335, 0, 0, 0, 0
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
-    AddShaftWall 3, Shaft3Front, Brick, 0.33, -5, -14.335, 5, -14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
-    AddShaftWall 3, Shaft3Left, Brick, 0.33, -5, -14.335, -5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
-    AddShaftWall 3, Shaft3Back, Brick, 0.33, -5, 14.335, 5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
-    AddShaftWall 3, Shaft3Right, Brick, 0.33, 5, -14.335, 5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
 
-    #shaft 4
+    #shaft 2
+    Set 10 = 2 #shaft number
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -1] AddShaftFloor 4, Shaft4Base, Brick, 0.5, -5, -14.335, 5, 14.335, 0, 0, 0, 0
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
-    AddShaftWall 4, Shaft4Front, Brick, 0.33, -5, -14.335, 5, -14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
-    AddShaftWall 4, Shaft4Left, Brick, 0.33, -5, -14.335, -5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
-    AddShaftWall 4, Shaft4Back, Brick, 0.33, -5, 14.335, 5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
-    AddShaftWall 4, Shaft4Right, Brick, 0.33, 5, -14.335, 5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
 
     #external shaft walls
     Set 3 = %height%
     Set 4 = 0
-    if[%floor% = 1] Set 3 = %fullheight%
-    if[%floor% = 1] Set 4 = -%interfloorheight%
 
-    #shaft 3
+    #shaft 1
+    Set 10 = 1 #shaft number
+    Set 8 = -12.6 #xpos
+    Set 9 = 56.772 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft3FrontE, %5%, 0.33, -5 + -12.6, -14.335 + 61.7, 5 + -12.6 + 0.33, -14.335 + 61.7, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft3BackE, %5%, 0.33, -5 + -12.6, 14.335 + 61.7, 5 + -12.6 + 0.33, 14.335 + 61.7, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft3RightE, %5%, 0.33, 5 + -12.6, -14.335 + 61.7 - 0.33, 5 + -12.6, 14.335 + 61.7 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 
-    #shaft 4
+    #shaft 2
+    Set 10 = 2 #shaft number
+    Set 8 = 12.6 #xpos
+    Set 9 = 56.772 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft4FrontE, %5%, 0.33, -5 + 12.6 - 0.33, -14.335 + 61.7, 5 + 12.6, -14.335 + 61.7, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft4LeftE, %5%, 0.33, -5 + 12.6, -14.335 + 61.7 - 0.33, -5 + 12.6, 14.335 + 61.7 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft4BackE, %5%, 0.33, -5 + 12.6 - 0.33, 14.335 + 61.7, 5 + 12.6, 14.335 + 61.7, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #zone 2 express shafts
@@ -1102,54 +1199,306 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     if[%floor% = 32] Set 5 = Stucco4
     if[%floor% = 64] Set 5 = Stucco4
     if[%floor% = 65] Set 5 = Stucco4
+    Set 6 = 5 #width
+    Set 7 = 14.335 #length
 
-    #shaft 1
+    #shaft 3
+    Set 10 = 3 #shaft number
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -1] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -5, -14.335, 5, 14.335, 0, 0, 0, 0
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
-    AddShaftWall 1, Shaft1Front, Brick, 0.33, -5, -14.335, 5, -14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
-    AddShaftWall 1, Shaft1Left, Brick, 0.33, -5, -14.335, -5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
-    AddShaftWall 1, Shaft1Back, Brick, 0.33, -5, 14.335, 5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
-    AddShaftWall 1, Shaft1Right, Brick, 0.33, 5, -14.335, 5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
 
-    #shaft 2
+    #shaft 4
+    Set 10 = 4 #shaft number
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -1] AddShaftFloor 2, Shaft2Base, Brick, 0.5, -5, -14.335, 5, 14.335, 0, 0, 0, 0
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
-    AddShaftWall 2, Shaft2Front, Brick, 0.33, -5, -14.335, 5, -14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
-    AddShaftWall 2, Shaft2Left, Brick, 0.33, -5, -14.335, -5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
-    AddShaftWall 2, Shaft2Back, Brick, 0.33, -5, 14.335, 5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
-    AddShaftWall 2, Shaft2Right, Brick, 0.33, 5, -14.335, 5, 14.335, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
 
     #external shaft walls
     Set 3 = %height%
     Set 4 = 0
-    if[%floor% = 1] Set 3 = %fullheight%
-    if[%floor% = 1] Set 4 = -%interfloorheight%
 
-    #shaft 1
+    #shaft 3
+    Set 10 = 3 #shaft number
+    Set 8 = -12.6 #xpos
+    Set 9 = -61.7 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft1FrontE, %5%, 0.33, -5 + -12.6, -14.335 + -61.7, 5 + -12.6 + 0.33, -14.335 + -61.7, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft1BackE, %5%, 0.33, -5 + -12.6, 14.335 + -61.7, 5 + -12.6 + 0.33, 14.335 + -61.7, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft1RightE, %5%, 0.33, 5 + -12.6, -14.335 + -61.7 - 0.33, 5 + -12.6, 14.335 + -61.7 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 
-    #shaft 2
+    #shaft 4
+    Set 10 = 4 #shaft number
+    Set 8 = 12.6 #xpos
+    Set 9 = -61.7 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft2FrontE, %5%, 0.33, -5 + 12.6 - 0.33, -14.335 + -61.7, 5 + 12.6, -14.335 + -61.7, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft2LeftE, %5%, 0.33, -5 + 12.6, -14.335 + -61.7 - 0.33, -5 + 12.6, 14.335 + -61.7 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft2BackE, %5%, 0.33, -5 + 12.6 - 0.33, 14.335 + -61.7, 5 + 12.6, 14.335 + -61.7, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+<EndFloors>
+
+#zone 1 local 1 shaft
+<Floors 0 to 11>
+    Set 5 = Wall1
+    Set 6 = 4.28 #width
+    Set 7 = 13.836 #length
+    
+    #shaft 5
+    Set 10 = 5 #shaft number
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #shaft 6
+    Set 10 = 6 #shaft number
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #external shaft walls
+    Set 3 = %height%
+    Set 4 = 0
+
+    #shaft 5
+    Set 10 = 5 #shaft number
+    Set 8 = -31.713 #xpos
+    Set 9 = 14.083 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+
+    #shaft 6
+    Set 10 = 6 #shaft number
+    Set 8 = -13.183 #xpos
+    Set 9 = 14.083 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+<EndFloors>
+
+#zone 1 local 2 shaft
+<Floors 0 to 18>
+    Set 5 = Wall1
+    Set 6 = 4.28 #width
+    Set 7 = 13.836 #length
+    
+    #shaft 7
+    Set 10 = 7 #shaft number
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #shaft 8
+    Set 10 = 8 #shaft number
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #external shaft walls
+    Set 3 = %height%
+    Set 4 = 0
+
+    #shaft 7
+    Set 10 = 7 #shaft number
+    Set 8 = 13.181 #xpos
+    Set 9 = 14.083 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+
+    #shaft 8
+    Set 10 = 8 #shaft number
+    Set 8 = 32.281 #xpos
+    Set 9 = 14.083 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+<EndFloors>
+
+#zone 1 local 3 shaft
+<Floors 0 to 24>
+    Set 5 = Wall1
+    Set 6 = 4.28 #width
+    Set 7 = 13.836 #length
+    
+    #shaft 9
+    Set 10 = 9 #shaft number
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #shaft 10
+    Set 10 = 10 #shaft number
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #external shaft walls
+    Set 3 = %height%
+    Set 4 = 0
+
+    #shaft 9
+    Set 10 = 9 #shaft number
+    Set 8 = 13.181 #xpos
+    Set 9 = -14.083 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+
+    #shaft 10
+    Set 10 = 10 #shaft number
+    Set 8 = 32.281 #xpos
+    Set 9 = -14.083 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+<EndFloors>
+
+#zone 1 local 4 shaft
+<Floors 0 to 29>
+    Set 5 = Wall1
+    Set 6 = 4.28 #width
+    Set 7 = 13.836 #length
+    
+    #shaft 11
+    Set 10 = 11 #shaft number
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #shaft 12
+    Set 10 = 12 #shaft number
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #external shaft walls
+    Set 3 = %height%
+    Set 4 = 0
+
+    #shaft 11
+    Set 10 = 11 #shaft number
+    Set 8 = -31.713 #xpos
+    Set 9 = -14.083 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+
+    #shaft 12
+    Set 10 = 12 #shaft number
+    Set 8 = -13.183 #xpos
+    Set 9 = -14.083 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #Zone 1 Express
@@ -1161,8 +1510,8 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
-    AssignedShaft = 3
-    CreateElevator -11.849, 52.965, 0
+    AssignedShaft = 1
+    CreateElevator -11.849, 71.513, 0
 <EndElevator>
 
 <Elevator 8>
@@ -1173,8 +1522,8 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
-    AssignedShaft = 3
-    CreateElevator -11.849, 61.7, 0
+    AssignedShaft = 1
+    CreateElevator -11.849, 61.837, 0
 <EndElevator>
 
 <Elevator 9>
@@ -1185,11 +1534,23 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
-    AssignedShaft = 3
-    CreateElevator -11.849, 70.435, 0
+    AssignedShaft = 1
+    CreateElevator -11.849, 52.236, 0
 <EndElevator>
 
-<Elevators 7 to 9>
+<Elevator 10>
+    Speed = 21
+    Acceleration = 0.3
+    Deceleration = 0.3
+    OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 1, 33, 34
+    AssignedShaft = 1
+    CreateElevator -11.849, 42.484, 0
+<EndElevator>
+
+<Elevators 7 to 10>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -1231,8 +1592,10 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
 
     #panel
     CreatePanel ElevPanel, 8, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button34, 2, 3, 34, 1, 1
     AddFloorButton 1, Button33, 2, 3, 33, 1, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
+    AddFloorButton 1, ButtonP, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonC, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -1244,18 +1607,6 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
 
 <EndElevators>
 
-<Elevator 10>
-    Speed = 21
-    Acceleration = 0.3
-    Deceleration = 0.3
-    OpenSpeed = 0.2
-    AccelJerk = 0.3
-    DecelJerk = 0.3
-    ServicedFloors = 0, 1, 33, 34
-    AssignedShaft = 4
-    CreateElevator 11.849, 52.965, 0
-<EndElevator>
-
 <Elevator 11>
     Speed = 21
     Acceleration = 0.3
@@ -1264,8 +1615,8 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
-    AssignedShaft = 4
-    CreateElevator 11.849, 61.7, 0
+    AssignedShaft = 2
+    CreateElevator 11.849, 71.513, 0
 <EndElevator>
 
 <Elevator 12>
@@ -1276,11 +1627,35 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
-    AssignedShaft = 4
-    CreateElevator 11.849, 70.435, 0
+    AssignedShaft = 2
+    CreateElevator 11.849, 61.837, 0
 <EndElevator>
 
-<Elevators 10 to 12>
+<Elevator 13>
+    Speed = 21
+    Acceleration = 0.3
+    Deceleration = 0.3
+    OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 1, 33, 34
+    AssignedShaft = 2
+    CreateElevator 11.849, 52.236, 0
+<EndElevator>
+
+<Elevator 14>
+    Speed = 21
+    Acceleration = 0.3
+    Deceleration = 0.3
+    OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 1, 33, 34
+    AssignedShaft = 2
+    CreateElevator 11.849, 42.484, 0
+<EndElevator>
+
+<Elevators 11 to 14>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -1323,8 +1698,10 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
 
     #panel
     CreatePanel ElevPanel, 8, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button34, 2, 3, 34, 1, 1
     AddFloorButton 1, Button33, 2, 3, 33, 1, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
+    AddFloorButton 1, ButtonP, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonC, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -1345,7 +1722,7 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 66, 67
-    AssignedShaft = 1
+    AssignedShaft = 3
     CreateElevator -11.849, -52.965, 0
 <EndElevator>
 
@@ -1357,7 +1734,7 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 66, 67
-    AssignedShaft = 1
+    AssignedShaft = 3
     CreateElevator -11.849, -61.7, 0
 <EndElevator>
 
@@ -1369,7 +1746,7 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 66, 67
-    AssignedShaft = 1
+    AssignedShaft = 3
     CreateElevator -11.849, -70.435, 0
 <EndElevator>
 
@@ -1415,8 +1792,10 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
 
     #panel
     CreatePanel ElevPanel, 8, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button67, 2, 3, 67, 1, 1
     AddFloorButton 1, Button66, 2, 3, 66, 1, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
+    AddFloorButton 1, ButtonP, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonC, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -1436,7 +1815,7 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 66, 67
-    AssignedShaft = 2
+    AssignedShaft = 4
     CreateElevator 11.849, -52.965, 0
 <EndElevator>
 
@@ -1448,7 +1827,7 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 66, 67
-    AssignedShaft = 2
+    AssignedShaft = 4
     CreateElevator 11.849, -61.7, 0
 <EndElevator>
 
@@ -1460,7 +1839,7 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 66, 67
-    AssignedShaft = 2
+    AssignedShaft = 4
     CreateElevator 11.849, -70.435, 0
 <EndElevator>
 
@@ -1507,8 +1886,10 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
 
     #panel
     CreatePanel ElevPanel, 8, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button67, 2, 3, 67, 1, 1
     AddFloorButton 1, Button66, 2, 3, 66, 1, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
+    AddFloorButton 1, ButtonP, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonC, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -1520,18 +1901,215 @@ ShaftCut 2, -5 + 0.33, -14.335, 5, 14.335, 0, 5
 
 <EndElevators>
 
+#Zone1 Locals 4-10 
+<Elevator 7>
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 27 - 37
+    AssignedShaft = 5
+    CreateElevator -31.07, 23.283, 0
+<EndElevator>
+
+<Elevator 8>
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 27 - 37
+    AssignedShaft = 5
+    CreateElevator -31.07, 14.212, 0
+<EndElevator>
+
+<Elevator 9>
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 27 - 37
+    AssignedShaft = 5
+    CreateElevator -31.07, -5.14, 0
+<EndElevator>
+
+<Elevators 7 to 9>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor, 0.2, -2.95, -3.45, 2.95, 3.45, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -2.95, -3.45, 2.95, 3.45, 8, 8, 0, 0
+
+    #back wall (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -2.95, 3.45, 2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    #front and left walls
+    WallOrientation = left
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -2.95, -3.45, 2.95, -3.45, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, OfficeElevWall, 0.2, -2.95, -3.45, -2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    SetAutoSize = true, true
+
+    #doors
+    WallOrientation = left
+    AddDoors ElevDoors, 0.2, 2.95 + 0.001, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, 2.95 + 0.001 + 0.3, 0, 0, 0 #shaft doors
+
+    #panel
+    CreatePanel ElevPanel, 9, 4, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button10, 2, 3, 10, 1, 1
+    AddFloorButton 1, Button9, 2, 2, 9, 1, 1
+    AddFloorButton 1, Button8, 3, 3, 8, 1, 1
+    AddFloorButton 1, Button7, 3, 2, 7, 1, 1
+    AddFloorButton 1, Button6, 4, 3, 6, 1, 1
+    AddFloorButton 1, Button5, 4, 2, 5, 1, 1
+    AddFloorButton 1, Button4, 5, 3, 4, 1, 1
+    AddFloorButton 1, ButtonM, 5, 2, 1, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 3, close, 1, 1
+    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
+
+<EndElevators>
+
+<Elevator 10>
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 27 - 37
+    AssignedShaft = 6
+    CreateElevator -13.834, 23.283, 0
+<EndElevator>
+
+<Elevator 11>
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 27 - 37
+    AssignedShaft = 6
+    CreateElevator -13.834, 14.212, 0
+<EndElevator>
+
+<Elevator 12>
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    OpenSpeed = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 27 - 37
+    AssignedShaft = 6
+    CreateElevator -13.834, -5.14, 0
+<EndElevator>
+
+<Elevators 10 to 12>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor, 0.2, -2.95, -3.45, 2.95, 3.45, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -2.95, -3.45, 2.95, 3.45, 8, 8, 0, 0
+
+    #back and right walls (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -2.95, 3.45, 2.95, 3.45, 8, 8, 0, 0, 0, 0
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, OfficeElevWall, 0.2, 2.95, -3.45, 2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    #front wall
+    WallOrientation = left
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -2.95, -3.45, 2.95, -3.45, 8, 8, 0, 0, 0, 0
+
+    #panels
+    WallOrientation = left
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    #doors
+    WallOrientation = right
+    AddDoors ElevDoors, 0.2, -2.95 - 0.001, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors ElevDoors, 0.2, -2.95 - 0.001 - 0.3, 0, 0, 0 #shaft doors
+    WallOrientation = left
+    SetAutoSize = true, true
+
+    #panel
+    CreatePanel ElevPanel, 9, 4, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button10, 2, 3, 10, 1, 1
+    AddFloorButton 1, Button9, 2, 2, 9, 1, 1
+    AddFloorButton 1, Button8, 3, 3, 8, 1, 1
+    AddFloorButton 1, Button7, 3, 2, 7, 1, 1
+    AddFloorButton 1, Button6, 4, 3, 6, 1, 1
+    AddFloorButton 1, Button5, 4, 2, 5, 1, 1
+    AddFloorButton 1, Button4, 5, 3, 4, 1, 1
+    AddFloorButton 1, ButtonM, 5, 2, 1, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 3, close, 1, 1
+    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
+
+<EndElevators>
+
 
 #Zone 1 Express
 <Floors 0 to 1>
-    CallButtonElevators = 7, 8, 9, 10, 11, 12
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, 61.7 - 4.75, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, 61.7 + 4.75, 4, left, 0.5, 1, true, 0, 0
+    CallButtonElevators = 7, 8, 9, 10, 11, 12, 13, 14
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, 56.772, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, 56.772, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 33 to 34>
-    CallButtonElevators = 7, 8, 9, 10, 11, 12
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, 61.7 - 4.75, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, 61.7 + 4.75, 4, left, 0.5, 1, true, 0, 0
+    CallButtonElevators = 7, 8, 9, 10, 11, 12, 13, 14
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, 56.772, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, 56.772, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Zone 2 Express
