@@ -1902,43 +1902,43 @@ ShaftCut 12, -4.28 + 0.33, -13.836, 4.28, 13.836, 0, 5
 <EndElevators>
 
 #Zone1 Locals 4-10 
-<Elevator 7>
+<Elevator 15>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
     OpenSpeed = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 27 - 37
+    ServicedFloors = 0, 4 - 10
     AssignedShaft = 5
     CreateElevator -31.07, 23.283, 0
 <EndElevator>
 
-<Elevator 8>
+<Elevator 16>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
     OpenSpeed = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 27 - 37
+    ServicedFloors = 0, 4 - 10
     AssignedShaft = 5
     CreateElevator -31.07, 14.212, 0
 <EndElevator>
 
-<Elevator 9>
+<Elevator 17>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
     OpenSpeed = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 27 - 37
+    ServicedFloors = 0, 4 - 10
     AssignedShaft = 5
     CreateElevator -31.07, -5.14, 0
 <EndElevator>
 
-<Elevators 7 to 9>
+<Elevators 15 to 17>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -2000,43 +2000,43 @@ ShaftCut 12, -4.28 + 0.33, -13.836, 4.28, 13.836, 0, 5
 
 <EndElevators>
 
-<Elevator 10>
+<Elevator 18>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
     OpenSpeed = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 27 - 37
+    ServicedFloors = 0, 4 - 10
     AssignedShaft = 6
     CreateElevator -13.834, 23.283, 0
 <EndElevator>
 
-<Elevator 11>
+<Elevator 19>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
     OpenSpeed = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 27 - 37
+    ServicedFloors = 0, 4 - 10
     AssignedShaft = 6
     CreateElevator -13.834, 14.212, 0
 <EndElevator>
 
-<Elevator 12>
+<Elevator 20>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
     OpenSpeed = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 27 - 37
+    ServicedFloors = 0, 4 - 10
     AssignedShaft = 6
     CreateElevator -13.834, -5.14, 0
 <EndElevator>
 
-<Elevators 10 to 12>
+<Elevators 18 to 20>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
