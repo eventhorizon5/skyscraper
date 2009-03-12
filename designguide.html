@@ -337,8 +337,44 @@
     after this one. In the above example, the Main Positive side of the object 
     will have the texture &quot;ElevFloor&quot;, but all other sides will use 
     &quot;Metal1&quot;.</p>
-  <p align="left">&nbsp;</p>
-  <p align="left"> <strong>7. END command</strong></p>
+  <p align="left"><strong>t. ShaftShowFloors</strong> - allows a range of floors 
+    to be shown either while inside the specified shaft or while inside an elevator 
+    in the shaft - primarily for glass elevators.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> ShaftShowFloors <em>ShaftNumber</em> 
+    = <em>range/list</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">ShaftShowFloors 
+    1 = 1 - 10</font></p>
+  <p align="left">In the above example, let's say the user is in an elevator in 
+    shaft 1, and is moving upwards from the 2nd floor. In this situation, the 
+    2nd floor will be visible/enabled while they're in the elevator (since it 
+    was in the range specified with this command), but when they reach the 11th 
+    floor, that floor will be invisible/disabled.</p>
+  <p align="left"><strong>u. ShaftShowOutside</strong> - allows objects outside 
+    the building (sky, landscape, etc) to be enabled while the user is both inside 
+    the specified shaft and on one of the specified floors - primarily for glass 
+    elevators.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> ShaftShowFloors <em>ShaftNumber</em> 
+    = <em>range/list</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">ShaftShowFloors 
+    1 = 1 - 10</font></p>
+  <p align="left">In the above example, if a user is riding an elevator in shaft 
+    1, the outside (sky, landscape, etc) will be enabled while the elevator is 
+    on any of the floors from 1 to 10. Once the elevator reaches the 11th floor, 
+    the outside will be disabled. This command can be mixed with <em>ShaftShowFloors</em> 
+    for mixed atrium/external glass elevators such as the ones in the Glass Tower, 
+    where the elevator moves upwards through an indoor atrium, and eventually 
+    outside above the atrium. In that situation, the floors that comprise the 
+    lower (atrium) section would be specified using <em>ShaftShowFloors</em> (such 
+    as 1-10), while the upper (outdoor) floors would be specified using <em>ShaftShowOutside</em> 
+    (such as 11-20).</p>
+  <p align="left"><strong>v. ShowFullShaft</strong> - determines if an entire 
+    shaft should always be shown, such as a glass elevator track.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> ShowFullShaft <em>ShaftNumber</em> 
+    = <em>value</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">ShowFullShaft 1 
+    = true</font></p>
+  <p>&nbsp;</p>
+  <p align="left"><strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
     script and start the simulation. This is optional.<br>
     Example: <font size="2" face="Courier New, Courier, mono">&lt;end&gt;</font></p>

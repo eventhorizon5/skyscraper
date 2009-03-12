@@ -67,6 +67,7 @@ public:
 	ButtonPanel *Panel; //elevator button panel object
 	ButtonPanel *Panel2; //elevator button panel object
 	int DoorTimer; //door autoclose timer value, in milliseconds
+	bool IsMoving; //is elevator moving?
 
 	//functions
 	Elevator(int number);

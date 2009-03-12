@@ -43,6 +43,11 @@ public:
 	csVector2 cutstart; //cut starting vector
 	csVector2 cutend; //cut ending vector
 	bool IsEnabled; //true if the entire shaft has been enabled
+	bool ShowFloors; //true if floors should be shown while inside the shaft/elevator; floor list in ShowFloorsList
+	bool ShowOutside; //true if outside should be shown while inside the shaft/elevator; floor list in ShowOutsideList
+	csArray<int> ShowFloorsList; //list of floors to enable while inside the shaft/elevator
+	csArray<int> ShowOutsideList; //list of floors that the outside should be enabled on
+	bool ShowFullShaft; //if true, always show full shaft during elevator movement instead of only a selected range
 
 	Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
@@ -56,6 +61,10 @@ public:
 	void CutWall(bool relative, int floor, csVector3 start, csVector3 end, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range, bool value, bool EnableShaftDoors);
 	bool IsEnabledFloor(int floor);
+	void AddShowFloor(int floor);
+	void RemoveShowFloor(int floor);
+	void AddShowOutside(int floor);
+	void RemoveShowOutside(int floor);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array

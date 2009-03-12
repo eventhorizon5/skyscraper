@@ -135,6 +135,7 @@ public:
 	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if ShowFullStairs is true
 	int ShaftOutsideDisplayRange; //number of shaft floors to display while outside of shaft
 	int StairsOutsideDisplayRange; //number of stairwell floors to display while outside of stairwell
+	int FloorDisplayRange; //number of floors to display while in elevator, if shaft's ShowFloors is true
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
 	csString SkyName; //base filename of sky texture pack
 
@@ -216,6 +217,7 @@ public:
 	int AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
 	int AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
 	int AddGround(const char *name, const char *texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z);
+	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

@@ -52,6 +52,9 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	bottom = sbs->GetFloor(startfloor)->Altitude;
 	cutstart = 0;
 	cutend = 0;
+	ShowFloors = false;
+	ShowOutside = false;
+	ShowFullShaft = false;
 
 	csString buffer, buffer2, buffer3;
 
@@ -304,4 +307,36 @@ bool Shaft::IsEnabledFloor(int floor)
 		return EnableArray[floor - startfloor];
 	else
 		return false;
+}
+
+void Shaft::AddShowFloor(int floor)
+{
+	//adds a floor number to the ShowFloors array
+
+	if (ShowFloorsList.Find(floor) == csArrayItemNotFound)
+		ShowFloorsList.InsertSorted(floor);
+}
+
+void Shaft::RemoveShowFloor(int floor)
+{
+	//removes a floor number from the ShowFloors array
+
+	if (ShowFloorsList.Find(floor) != csArrayItemNotFound)
+		ShowFloorsList.Delete(floor);
+}
+
+void Shaft::AddShowOutside(int floor)
+{
+	//adds a floor number to the ShowFloors array
+
+	if (ShowOutsideList.Find(floor) == csArrayItemNotFound)
+		ShowOutsideList.InsertSorted(floor);
+}
+
+void Shaft::RemoveShowOutside(int floor)
+{
+	//removes a floor number from the ShowFloors array
+
+	if (ShowOutsideList.Find(floor) != csArrayItemNotFound)
+		ShowOutsideList.Delete(floor);
 }

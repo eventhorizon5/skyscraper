@@ -251,6 +251,7 @@ void Camera::CheckShaft()
 		{
 			if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == false)
 			{
+				//user is in the shaft
 				sbs->GetShaft(i)->InsideShaft = true;
 
 				//turn on entire shaft
@@ -258,32 +259,62 @@ void Camera::CheckShaft()
 			}
 			else if (sbs->GetShaft(i)->InsideShaft == true && sbs->InElevator == true)
 			{
+				//user has moved from the shaft to an elevator
 				sbs->GetShaft(i)->InsideShaft = false;
 
 				//turn off entire shaft if ShowFullShafts is false
-				if (sbs->ShowFullShafts == false)
+				if (sbs->ShowFullShafts == false && sbs->GetShaft(i)->ShowFullShaft == false)
 					sbs->GetShaft(i)->EnableWholeShaft(false, true);
 				else
 					sbs->GetShaft(i)->EnableWholeShaft(true, true);
 			}
-			else if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == true && sbs->ShowFullShafts == false)
+			else if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == true && sbs->ShowFullShafts == false && sbs->GetShaft(i)->ShowFullShaft == false)
 			{
 				//if user is in an elevator, show a range of the shaft at a time (while it's moving)
 				sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftDisplayRange, true, false);
 				sbs->GetElevator(sbs->ElevatorNumber)->ShaftDoorsEnabledRange(CurrentFloor, sbs->ShaftDisplayRange);
 			}
+
+			if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == true && sbs->GetElevator(sbs->ElevatorNumber)->IsMoving == true)
+			{
+				//if specified, show floors or outside if user is in a moving elevator
+				sbs->EnableFloorRange(CurrentFloor, sbs->FloorDisplayRange, true, true, i);
+
+				if (sbs->GetShaft(i)->ShowOutside == true)
+				{
+					if (sbs->GetShaft(i)->ShowOutsideList.Find(CurrentFloor) != -1)
+					{
+						sbs->EnableSkybox(true);
+						sbs->EnableBuildings(true);
+						sbs->EnableLandscape(true);
+						sbs->EnableExternal(true);
+					}
+					else
+					{
+						sbs->EnableSkybox(false);
+						sbs->EnableBuildings(false);
+						sbs->EnableLandscape(false);
+						sbs->EnableExternal(false);
+					}
+				}
+			}
 		}
 		else if (sbs->GetShaft(i)->InsideShaft == true)
 		{
+			//user has moved out of the shaft
 			sbs->GetShaft(i)->InsideShaft = false;
 
 			//turn off shaft
-			sbs->GetShaft(i)->EnableWholeShaft(false, true);
+			if (sbs->GetShaft(i)->ShowFullShaft == false)
+				sbs->GetShaft(i)->EnableWholeShaft(false, true);
 		}
 		else if (sbs->GetShaft(i)->InsideShaft == false)
 		{
 			//show specified shaft range if outside the shaft
-			sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftOutsideDisplayRange, true, true);
+			if (sbs->GetShaft(i)->ShowFullShaft == false)
+				sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftOutsideDisplayRange, true, true);
+			else
+				sbs->GetShaft(i)->EnableWholeShaft(true, true);
 		}
 	}
 }

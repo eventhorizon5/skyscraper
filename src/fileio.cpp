@@ -630,6 +630,95 @@ checkfloors:
 			tempdata.DeleteAll();
 		}
 
+		//ShaftShowFloors command
+		if (LineData.Slice(0, 15).CompareNoCase("shaftshowfloors") == true)
+		{
+			//get shaft number
+			int shaftnum = atoi(LineData.Slice(15, LineData.Find("=") - 16));
+			Simcore->GetShaft(shaftnum)->ShowFloors = true;
+
+			//get text after equal sign
+			temp2 = LineData.Slice(LineData.Find("=") + 1);
+			temp2.Trim();
+
+			//copy string listing of floors into array
+			tempdata.SplitString(temp2.GetData(), ",");
+			for (int i = 0; i < tempdata.GetSize(); i++)
+			{
+				csString tmpstring = tempdata[i];
+				tmpstring.Trim();
+				if (tmpstring.Find("-", 1) > 0)
+				{
+					//found a range marker
+					int start = atoi(tmpstring.Slice(0, tmpstring.Find("-", 1)));
+					int end = atoi(tmpstring.Slice(tmpstring.Find("-", 1) + 1));
+					if (end < start)
+					{
+						int temp = start;
+						start = end;
+						end = temp;
+					}
+
+					for (int k = start; k <= end; k++)
+						Simcore->GetShaft(shaftnum)->AddShowFloor(k);
+				}
+				else
+					Simcore->GetShaft(shaftnum)->AddShowFloor(atoi(tempdata[i]));
+			}
+			tempdata.DeleteAll();
+		}
+
+		//ShaftShowOutside command
+		if (LineData.Slice(0, 16).CompareNoCase("shaftshowoutside") == true)
+		{
+			//get shaft number
+			int shaftnum = atoi(LineData.Slice(16, LineData.Find("=") - 17));
+			Simcore->GetShaft(shaftnum)->ShowOutside = true;
+
+			//get text after equal sign
+			temp2 = LineData.Slice(LineData.Find("=") + 1);
+			temp2.Trim();
+
+			//copy string listing of floors into array
+			tempdata.SplitString(temp2.GetData(), ",");
+			for (int i = 0; i < tempdata.GetSize(); i++)
+			{
+				csString tmpstring = tempdata[i];
+				tmpstring.Trim();
+				if (tmpstring.Find("-", 1) > 0)
+				{
+					//found a range marker
+					int start = atoi(tmpstring.Slice(0, tmpstring.Find("-", 1)));
+					int end = atoi(tmpstring.Slice(tmpstring.Find("-", 1) + 1));
+					if (end < start)
+					{
+						int temp = start;
+						start = end;
+						end = temp;
+					}
+
+					for (int k = start; k <= end; k++)
+						Simcore->GetShaft(shaftnum)->AddShowOutside(k);
+				}
+				else
+					Simcore->GetShaft(shaftnum)->AddShowOutside(atoi(tempdata[i]));
+			}
+			tempdata.DeleteAll();
+		}
+
+		//ShowFullShaft command
+		if (LineData.Slice(0, 13).CompareNoCase("showfullshaft") == true)
+		{
+			//get shaft number
+			int shaftnum = atoi(LineData.Slice(13, LineData.Find("=") - 14));
+
+			//get text after equal sign
+			temp2 = LineData.Slice(LineData.Find("=") + 1);
+			temp2.Trim();
+
+			Simcore->GetShaft(shaftnum)->ShowFullShaft = csString(temp2).CompareNoCase("true");
+		}
+
 		//CreateStairwell command
 		if (LineData.Slice(0, 15).CompareNoCase("createstairwell") == true)
 		{
@@ -661,7 +750,7 @@ checkfloors:
 			tempdata.DeleteAll();
 		}
 
-		//SetWallOrientation command
+		//WallOrientation command
 		if (LineData.Slice(0, 15).CompareNoCase("wallorientation") == true)
 		{
 			//get text after equal sign
@@ -671,7 +760,7 @@ checkfloors:
 			Simcore->SetWallOrientation(temp2.GetData());
 		}
 
-		//SetFloorOrientation command
+		//FloorOrientation command
 		if (LineData.Slice(0, 16).CompareNoCase("floororientation") == true)
 		{
 			//get text after equal sign

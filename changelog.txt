@@ -4,6 +4,7 @@ Version 1.3 (2.0 Alpha 3)
 -some sound testing
 -fixed a range bug that caused ranges to fail if the first value was negative
 -added basement levels to Triton Center
+-added ShaftShowFloors, ShaftShowOutside, and ShowFullShaft commands
 
 Version 1.2 (2.0 Alpha 2) - Jan 10, 2009
 -------------------------

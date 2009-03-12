@@ -120,6 +120,7 @@ SBS::SBS()
 	StairsDisplayRange = 5;
 	ShaftOutsideDisplayRange = 3;
 	StairsOutsideDisplayRange = 3;
+	FloorDisplayRange = 3;
 	wall1a = false;
 	wall1b = false;
 	wall2a = false;
@@ -2982,4 +2983,67 @@ int SBS::AddGround(const char *name, const char *texture, float x1, float z1, fl
 	}
 
 	return index;
+}
+
+void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber)
+{
+	//turn on/off a range of floors
+	//if range is 3, show shaft on current floor (floor), and 1 floor below and above (3 total floors)
+	//if range is 1, show only the current floor (floor)
+
+	//range must be greater than 0
+	if (range < 1)
+		range = 1;
+
+	//range must be an odd number; if it's even, then add 1
+	if (IsEven(range) == true)
+		range++;
+
+	int additionalfloors;
+	if (range > 1)
+		additionalfloors = (range - 1) / 2;
+	else
+		additionalfloors = 0;
+
+	//disable floors 1 floor outside of range
+	if (value == true)
+	{
+		if (floor - additionalfloors - 1 >= -Basements && floor - additionalfloors - 1 < Floors)
+			GetFloor(floor - additionalfloors - 1)->Enabled(false);
+		if (floor + additionalfloors + 1 >= -Basements && floor + additionalfloors + 1 < Floors)
+			GetFloor(floor + additionalfloors + 1)->Enabled(false);
+	}
+
+	//enable floors within range
+	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
+	{
+		if (i >= -Basements && i < Floors)
+		{
+			if (shaftnumber > 0)
+			{
+				//if a shaft is specified, only show the floor if it is in the related shaft's ShowFloorsList array
+				if (GetShaft(shaftnumber)->ShowFloors == true)
+				{
+					if (GetShaft(shaftnumber)->ShowFloorsList.Find(i) != -1 && value == true)
+					{
+						GetFloor(i)->Enabled(true);
+						if (enablegroups == true)
+							GetFloor(i)->EnableGroup(true);
+					}
+					else
+					{
+						GetFloor(i)->Enabled(false);
+						if (enablegroups == true)
+							GetFloor(i)->EnableGroup(false);
+					}
+				}
+			}
+			else
+			{
+				GetFloor(i)->Enabled(value);
+				if (enablegroups == true)
+					GetFloor(i)->EnableGroup(value);
+			}
+		}
+	}
 }

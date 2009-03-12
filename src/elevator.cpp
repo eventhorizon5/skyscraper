@@ -94,6 +94,7 @@ Elevator::Elevator(int number)
 	door_error = 0;
 	ElevatorIsRunning = false;
 	oldfloor = 0;
+	IsMoving = false;
 
 	//create object meshes
 	buffer = Number;
@@ -1002,14 +1003,32 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		{
 			//turn off floor
-			sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
-			sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
+			if (sbs->GetShaft(AssignedShaft)->ShowFloors == false)
+			{
+				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
+				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
+			}
+			else if (sbs->GetShaft(AssignedShaft)->ShowFloorsList.Find(sbs->camera->CurrentFloor) == -1)
+			{
+				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
+				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
+			}
 
 			//Turn off sky, buildings, and landscape
-			sbs->EnableSkybox(false);
-			sbs->EnableBuildings(false);
-			sbs->EnableLandscape(false);
-			sbs->EnableExternal(false);
+			if (sbs->GetShaft(AssignedShaft)->ShowOutside == false)
+			{
+				sbs->EnableSkybox(false);
+				sbs->EnableBuildings(false);
+				sbs->EnableLandscape(false);
+				sbs->EnableExternal(false);
+			}
+			else if (sbs->GetShaft(AssignedShaft)->ShowOutsideList.Find(sbs->camera->CurrentFloor) == -1)
+			{
+				sbs->EnableSkybox(false);
+				sbs->EnableBuildings(false);
+				sbs->EnableLandscape(false);
+				sbs->EnableExternal(false);
+			}
 		}
 
 		//Play starting sound
@@ -1020,6 +1039,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//notify about movement
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
+		IsMoving = true;
 	}
 
 	if (EmergencyStop == true && Brakes == false)
@@ -1240,6 +1260,7 @@ void Elevator::MoveElevatorToFloor()
 	ElevatorStart = 0;
 	ElevatorIsRunning = false;
 	MoveElevator = false;
+	IsMoving = false;
 	mainsound->Stop();
 
 	if (EmergencyStop == false)
