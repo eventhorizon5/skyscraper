@@ -227,7 +227,9 @@ breakpoint:
 				{
 					//if (temp2 < 0 !! temp2 > UBound(Simcore->UserVariable))
 						//Err.Raise 1001
+					//replace all occurances of the variable with it's value
 					LineData.ReplaceAll("%" + temp2 + "%", Simcore->UserVariable[atoi(temp2.GetData())]);
+					startpos -= 1;
 				}
 			}
 		} while (1 == 1);
