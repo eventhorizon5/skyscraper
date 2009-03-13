@@ -1,11 +1,17 @@
 #!/bin/bash
 font="Nimbus Sans L"
-#font="Nimbus Sans L Bold"
-#font="Nimbus Sans L Condensed"
-#font="Nimbus Sans L Bold Condensed"
 fontsize=64
+#font="Nimbus Sans L Bold"
+#fontsize=60
+#font="Nimbus Sans L Condensed"
+#fontsize=64
+#font="Nimbus Sans L Bold Condensed"
+#fontsize=64
+
+
+#floor numbers
 number=1
-maxnumber=150
+maxnumber=300
 
 while (( number <= maxnumber ))
 do
@@ -14,6 +20,7 @@ do
 	number=$((++number))
 done
 
+#LL numbers
 number=1
 maxnumber=9
 
@@ -24,6 +31,7 @@ do
 	number=$((++number))
 done
 
+#P numbers
 number=1
 maxnumber=9
 
@@ -34,6 +42,7 @@ do
         number=$((++number))
 done
 
+#B numbers
 number=1
 maxnumber=9
 
@@ -44,8 +53,9 @@ do
         number=$((++number))
 done
 
+#letter-based floors
 number=1
-end=14
+end=16
 while (( number <= end ))
 do
 	if [ $number == 1 ]; then sym="L"; fi
@@ -62,6 +72,8 @@ do
 	if [ $number == 12 ]; then sym="S"; fi
 	if [ $number == 13 ]; then sym="P"; fi
 	if [ $number == 14 ]; then sym="B"; fi
+	if [ $number == 15 ]; then sym="PL"; fi
+	if [ $number == 16 ]; then sym="CC"; fi
 	echo $sym
 	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$sym.jpg\" \"$sym\" $fontsize \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
 	number=$((++number))

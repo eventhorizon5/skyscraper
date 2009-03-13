@@ -1,9 +1,12 @@
 #!/bin/bash
 font="Nimbus Sans L"
-#font="Nimbus Sans L Bold"
-#font="Nimbus Sans L Condensed"
-#font="Nimbus Sans L Bold Condensed"
 fontsize=38
+#font="Nimbus Sans L Bold"
+#fontsize=36
+#font="Nimbus Sans L Condensed"
+#fontsize=46
+#font="Nimbus Sans L Bold Condensed"
+#fontsize=44
 
 number=1
 end=5
