@@ -101,7 +101,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 
 #Plaza
 <Floor 1>
-    ID = L
+    ID = P
     Name = Lobby
     Type = Lobby
     Description = Lobby/Plaza
@@ -1169,7 +1169,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 10 = 1 #shaft number
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    if[%floor% = -1] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -1182,7 +1182,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 10 = 2 #shaft number
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    if[%floor% = -1] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -1234,7 +1234,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 10 = 3 #shaft number
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    if[%floor% = -1] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -1247,7 +1247,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 10 = 4 #shaft number
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    if[%floor% = -1] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -1325,9 +1325,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 10 = 5 #shaft number
     Set 8 = -31.713 #xpos
     Set 9 = 14.083 #zpos
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
@@ -1339,7 +1336,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 9 = 14.083 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1386,9 +1382,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 10 = 7 #shaft number
     Set 8 = 13.181 #xpos
     Set 9 = 14.083 #zpos
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
@@ -1400,7 +1393,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 9 = 14.083 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1452,7 +1444,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 10
@@ -1463,9 +1454,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DrawWalls = true, false, false, false, false, false
     AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #zone 1 local 4 shafts
@@ -1489,7 +1477,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
 
     #shaft 12
     Set 10 = 12 #shaft number
-    Set 7 = 9.525 #length
+    Set 7 = 4.762 #length
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
@@ -1503,7 +1491,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
 
     #shaft 13
     Set 10 = 13 #shaft number
-    Set 7 = 9.147 #length
+    Set 7 = 4.573 #length
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
@@ -1529,34 +1517,26 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 12
     Set 10 = 12 #shaft number
-    Set 7 = 9.525 #length
+    Set 7 = 4.762 #length
     Set 8 = -13.183 #xpos
     Set 9 = -4.611 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 13
     Set 10 = 13 #shaft number
-    Set 7 = 9.147 #length
+    Set 7 = 4.573 #length
     Set 8 = -13.183 #xpos
     Set 9 = -23.262 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
     AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #zone 2 local 1 shaft
@@ -1599,9 +1579,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 10 = 14 #shaft number
     Set 8 = -31.713 #xpos
     Set 9 = 14.083 #zpos
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
@@ -1613,7 +1590,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 9 = 14.083 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1660,9 +1636,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 10 = 16 #shaft number
     Set 8 = 13.181 #xpos
     Set 9 = 14.083 #zpos
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
@@ -1674,7 +1647,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     Set 9 = 14.083 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -1726,7 +1698,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 19
@@ -1737,9 +1708,6 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DrawWalls = true, false, false, false, false, false
     AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #zone 2 local 4 shafts
@@ -1763,7 +1731,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
 
     #shaft 21
     Set 10 = 21 #shaft number
-    Set 7 = 9.525 #length
+    Set 7 = 4.762 #length
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
@@ -1777,7 +1745,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
 
     #shaft 22
     Set 10 = 22 #shaft number
-    Set 7 = 9.147 #length
+    Set 7 = 4.573 #length
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 0] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
@@ -1803,34 +1771,26 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 21
     Set 10 = 21 #shaft number
-    Set 7 = 9.525 #length
+    Set 7 = 4.762 #length
     Set 8 = -13.183 #xpos
     Set 9 = -4.611 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 22
     Set 10 = 22 #shaft number
-    Set 7 = 9.147 #length
+    Set 7 = 4.573 #length
     Set 8 = -13.183 #xpos
     Set 9 = -23.262 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
     AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #Zone 1 Express
@@ -2243,7 +2203,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 5
-    CreateElevator -31.07, 23.283, 0
+    CreateElevator -31.07, 23.283, 2
 <EndElevator>
 
 <Elevator 16>
@@ -2255,7 +2215,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 5
-    CreateElevator -31.07, 14.212, 0
+    CreateElevator -31.07, 14.212, 2
 <EndElevator>
 
 <Elevator 17>
@@ -2267,7 +2227,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 5
-    CreateElevator -31.07, -5.14, 0
+    CreateElevator -31.07, 5.131, 2
 <EndElevator>
 
 <Elevators 15 to 17>
@@ -2341,7 +2301,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 6
-    CreateElevator -13.834, 23.283, 0
+    CreateElevator -13.834, 23.283, 2
 <EndElevator>
 
 <Elevator 19>
@@ -2353,7 +2313,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 6
-    CreateElevator -13.834, 14.212, 0
+    CreateElevator -13.834, 14.212, 2
 <EndElevator>
 
 <Elevator 20>
@@ -2365,7 +2325,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 6
-    CreateElevator -13.834, -5.14, 0
+    CreateElevator -13.834, 5.131, 2
 <EndElevator>
 
 <Elevators 18 to 20>
@@ -2440,7 +2400,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 7
-    CreateElevator 13.824, 23.283, 0
+    CreateElevator 13.824, 23.283, 2
 <EndElevator>
 
 <Elevator 22>
@@ -2452,7 +2412,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 7
-    CreateElevator 13.824, 14.212, 0
+    CreateElevator 13.824, 14.212, 2
 <EndElevator>
 
 <Elevator 23>
@@ -2464,7 +2424,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 7
-    CreateElevator 13.824, -5.14, 0
+    CreateElevator 13.824, 5.131, 2
 <EndElevator>
 
 <Elevators 21 to 23>
@@ -2539,7 +2499,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 8
-    CreateElevator 31.64, 23.283, 0
+    CreateElevator 31.64, 23.283, 2
 <EndElevator>
 
 <Elevator 25>
@@ -2551,7 +2511,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 8
-    CreateElevator 31.64, 14.212, 0
+    CreateElevator 31.64, 14.212, 2
 <EndElevator>
 
 <Elevator 26>
@@ -2563,7 +2523,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 8
-    CreateElevator 31.64, -5.14, 0
+    CreateElevator 31.64, 5.131, 2
 <EndElevator>
 
 <Elevators 24 to 26>
@@ -2639,7 +2599,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 9
-    CreateElevator 13.824, -4.883, 0
+    CreateElevator 13.824, -4.883, 2
 <EndElevator>
 
 <Elevator 28>
@@ -2651,7 +2611,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 9
-    CreateElevator 13.824, -13.954, 0
+    CreateElevator 13.824, -13.954, 2
 <EndElevator>
 
 <Elevator 29>
@@ -2663,7 +2623,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 9
-    CreateElevator 13.824, -23.026, 0
+    CreateElevator 13.824, -23.026, 2
 <EndElevator>
 
 <Elevators 27 to 29>
@@ -2737,7 +2697,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 10
-    CreateElevator 31.64, -4.883, 0
+    CreateElevator 31.64, -4.883, 2
 <EndElevator>
 
 <Elevator 31>
@@ -2749,7 +2709,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 10
-    CreateElevator 31.64, -13.954, 0
+    CreateElevator 31.64, -13.954, 2
 <EndElevator>
 
 <Elevator 32>
@@ -2761,7 +2721,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 10
-    CreateElevator 31.64, -23.026, 0
+    CreateElevator 31.64, -23.026, 2
 <EndElevator>
 
 <Elevators 30 to 32>
@@ -2836,7 +2796,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
     AssignedShaft = 11
-    CreateElevator -31.07, -4.883, 0
+    CreateElevator -31.07, -4.883, 2
 <EndElevator>
 
 <Elevator 34>
@@ -2848,7 +2808,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
     AssignedShaft = 11
-    CreateElevator -31.07, -13.954, 0
+    CreateElevator -31.07, -13.954, 2
 <EndElevator>
 
 <Elevator 35>
@@ -2860,7 +2820,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
     AssignedShaft = 11
-    CreateElevator -31.07, -23.026, 0
+    CreateElevator -31.07, -23.026, 2
 <EndElevator>
 
 <Elevators 33 to 35>
@@ -2933,7 +2893,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
     AssignedShaft = 12
-    CreateElevator -13.834, -4.883, 0
+    CreateElevator -13.834, -4.883, 2
 <EndElevator>
 
 <Elevator 37>
@@ -2945,7 +2905,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
     AssignedShaft = 13
-    CreateElevator -13.834, -23.026, 0
+    CreateElevator -13.834, -23.026, 2
 <EndElevator>
 
 <Elevators 36 to 37>
@@ -3019,7 +2979,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 14
-    CreateElevator -31.07, 23.283, 0
+    CreateElevator -31.07, 23.283, 33
 <EndElevator>
 
 <Elevator 39>
@@ -3031,7 +2991,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 14
-    CreateElevator -31.07, 14.212, 0
+    CreateElevator -31.07, 14.212, 33
 <EndElevator>
 
 <Elevator 40>
@@ -3043,7 +3003,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 14
-    CreateElevator -31.07, -5.14, 0
+    CreateElevator -31.07, 5.131, 33
 <EndElevator>
 
 <Elevators 38 to 40>
@@ -3118,7 +3078,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 15
-    CreateElevator -13.834, 23.283, 0
+    CreateElevator -13.834, 23.283, 33
 <EndElevator>
 
 <Elevator 42>
@@ -3130,7 +3090,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 15
-    CreateElevator -13.834, 14.212, 0
+    CreateElevator -13.834, 14.212, 33
 <EndElevator>
 
 <Elevator 43>
@@ -3142,7 +3102,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 15
-    CreateElevator -13.834, -5.14, 0
+    CreateElevator -13.834, 5.131, 33
 <EndElevator>
 
 <Elevators 41 to 43>
@@ -3218,7 +3178,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 16
-    CreateElevator 13.824, 23.283, 0
+    CreateElevator 13.824, 23.283, 33
 <EndElevator>
 
 <Elevator 45>
@@ -3230,7 +3190,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 16
-    CreateElevator 13.824, 14.212, 0
+    CreateElevator 13.824, 14.212, 33
 <EndElevator>
 
 <Elevator 46>
@@ -3242,7 +3202,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 16
-    CreateElevator 13.824, -5.14, 0
+    CreateElevator 13.824, 5.131, 33
 <EndElevator>
 
 <Elevators 44 to 46>
@@ -3317,7 +3277,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 17
-    CreateElevator 31.64, 23.283, 0
+    CreateElevator 31.64, 23.283, 33
 <EndElevator>
 
 <Elevator 48>
@@ -3329,7 +3289,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 17
-    CreateElevator 31.64, 14.212, 0
+    CreateElevator 31.64, 14.212, 33
 <EndElevator>
 
 <Elevator 49>
@@ -3341,7 +3301,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 17
-    CreateElevator 31.64, -5.14, 0
+    CreateElevator 31.64, 5.131, 33
 <EndElevator>
 
 <Elevators 47 to 49>
@@ -3417,7 +3377,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 18
-    CreateElevator 13.824, -4.883, 0
+    CreateElevator 13.824, -4.883, 34
 <EndElevator>
 
 <Elevator 51>
@@ -3429,7 +3389,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 18
-    CreateElevator 13.824, -13.954, 0
+    CreateElevator 13.824, -13.954, 34
 <EndElevator>
 
 <Elevator 52>
@@ -3441,7 +3401,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 18
-    CreateElevator 13.824, -23.026, 0
+    CreateElevator 13.824, -23.026, 34
 <EndElevator>
 
 <Elevators 50 to 52>
@@ -3517,7 +3477,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 19
-    CreateElevator 31.64, -4.883, 0
+    CreateElevator 31.64, -4.883, 34
 <EndElevator>
 
 <Elevator 54>
@@ -3529,7 +3489,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 19
-    CreateElevator 31.64, -13.954, 0
+    CreateElevator 31.64, -13.954, 34
 <EndElevator>
 
 <Elevator 55>
@@ -3541,7 +3501,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 19
-    CreateElevator 31.64, -23.026, 0
+    CreateElevator 31.64, -23.026, 34
 <EndElevator>
 
 <Elevators 53 to 55>
@@ -3618,7 +3578,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
     AssignedShaft = 20
-    CreateElevator -31.07, -4.883, 0
+    CreateElevator -31.07, -4.883, 34
 <EndElevator>
 
 <Elevator 57>
@@ -3630,7 +3590,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
     AssignedShaft = 20
-    CreateElevator -31.07, -13.954, 0
+    CreateElevator -31.07, -13.954, 34
 <EndElevator>
 
 <Elevator 58>
@@ -3642,7 +3602,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
     AssignedShaft = 20
-    CreateElevator -31.07, -23.026, 0
+    CreateElevator -31.07, -23.026, 34
 <EndElevator>
 
 <Elevators 56 to 58>
@@ -3715,7 +3675,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
     AssignedShaft = 21
-    CreateElevator -13.834, -4.883, 0
+    CreateElevator -13.834, -4.883, 34
 <EndElevator>
 
 <Elevator 60>
@@ -3727,7 +3687,7 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
     AssignedShaft = 22
-    CreateElevator -13.834, -23.026, 0
+    CreateElevator -13.834, -23.026, 34
 <EndElevator>
 
 <Elevators 59 to 60>
