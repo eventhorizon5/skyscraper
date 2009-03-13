@@ -2,13 +2,18 @@ Automatic Floor Sign Generator for the GIMP
 by Ryan Thoryk, 12/2008
 
 This folder contains scripts for the GIMP on Linux for easily creating
-floor signs.  To use it, just put the makesigns.scm file into your gimp scripts directory (for GIMP 2.4 it would be ~/.gimp-2.4/scripts) and run the "run.sh" script by typing "./run.sh".  It will create signs numbered from 1 to 300, and also misc signs in the current directory.  The run2.sh script creates the elevator operational buttons.
+floor signs.  To use it, just put the makesigns.scm file into your gimp
+scripts directory (for GIMP 2.4 it would be ~/.gimp-2.4/scripts) and run
+the "run.sh" script with a number option specifying the font (explained below). To use the standard font (Sans), run it by typing "./run.sh 1".  It will
+create signs numbered from 1 to 300, misc signs, and elevator operational
+buttons.  It will then automatically create the zip archive containing the
+signs; simply copy this zip file into Skyscraper's "data" directory.
 
-Configuration options are in both the makesigns.scm file and the two run scripts.
+Configuration options are in both the makesigns.scm file and the run.sh script.
 
-Font sizes used:
-sans: 64, 38 for elevator buttons
-sans bold: 60, 36 for elevator buttons
-sans condensed: 64, 46 for elevator buttons
-sans bold condensed: 64, 44 for elevator buttons
+Font sizes used, and their number:
+1: sans: 64, 38 for elevator buttons
+2: sans bold: 60, 36 for elevator buttons
+3: sans condensed: 64, 46 for elevator buttons
+4: sans bold condensed: 64, 44 for elevator buttons
 

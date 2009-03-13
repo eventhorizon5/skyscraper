@@ -1,13 +1,29 @@
 #!/bin/bash
-font="Nimbus Sans L"
-fontsize=64
-#font="Nimbus Sans L Bold"
-#fontsize=60
-#font="Nimbus Sans L Condensed"
-#fontsize=64
-#font="Nimbus Sans L Bold Condensed"
-#fontsize=64
 
+if [[ $1 == 1 ]]; then
+	font="Nimbus Sans L"
+	fontsize=64
+	fontsize2=38
+	filename="signs-sans.zip"
+fi
+if [[ $1 == 2 ]]; then
+	font="Nimbus Sans L Bold"
+	fontsize=60
+	fontsize2=36
+	filename="signs-sans_bold.zip"
+fi
+if [[ $1 == 3 ]]; then
+	font="Nimbus Sans L Condensed"
+	fontsize=64
+	fontsize2=46
+	filename="signs-sans_cond.zip"
+fi
+if [[ $1 == 4 ]]; then
+	font="Nimbus Sans L Bold Condensed"
+	fontsize=64
+	fontsize2=44
+	filename="signs-sans_cond_bold.zip"
+fi
 
 #floor numbers
 number=1
@@ -78,4 +94,27 @@ do
 	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$sym.jpg\" \"$sym\" $fontsize \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
 	number=$((++number))
 done
+
+#elevator operational buttons
+number=1
+end=5
+while (( number <= end ))
+do
+        if [ $number == 1 ]; then sym="Alarm"; file="Alarm"; fi
+        if [ $number == 2 ]; then sym="Close"; file="Close"; fi
+        if [ $number == 3 ]; then sym="Open"; file="Open"; fi
+        if [ $number == 4 ]; then sym="Stop"; file="Stop"; fi
+        if [ $number == 5 ]; then sym="  Call\nCancel"; file="CallCancel"; fontsize2=$((fontsize2 - 6)); fi
+        echo $file
+        nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$file.jpg\" \"$sym\" $fontsize2 \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
+        number=$((++number))
+done
+
+#create zip archive
+echo Creating zip file...
+zip -9 $filename *.jpg
+
+#clean up
+rm *.jpg
+echo done - $filename created
 
