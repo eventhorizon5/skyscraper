@@ -25,6 +25,9 @@ if [[ $1 == 4 ]]; then
 	filename="signs-sans_cond_bold.zip"
 fi
 
+echo Creating $filename
+echo
+
 #floor numbers
 number=1
 maxnumber=300
