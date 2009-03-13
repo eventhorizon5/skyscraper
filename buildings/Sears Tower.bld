@@ -62,9 +62,9 @@
     Load data/downtown.jpg, Downtown, 1, 1
 
     #floor indicator/button pictures
-    Load signs/sans/P.jpg, ButtonP, 1, 1
+    Load signs/sans/PL.jpg, ButtonPLL, 1, 1
     Load signs/sans/M.jpg, ButtonM, 1, 1
-    Load signs/sans/C.jpg, ButtonC, 1, 1
+    Load signs/sans/CC.jpg, ButtonCC, 1, 1
     Load signs/sans/Open.jpg, ButtonOpen, 1, 1
     Load signs/sans/Close.jpg, ButtonClose, 1, 1
     Load signs/sans/Stop.jpg, ButtonStop, 1, 1
@@ -90,7 +90,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 
 #Franklin Concourse
 <Floor 0>
-    ID = C
+    ID = CC
     Name = Franklin Concourse
     Type = Lobby
     Description = Rear Entrance Lobby Level
@@ -101,7 +101,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 
 #Plaza
 <Floor 1>
-    ID = P
+    ID = PL
     Name = Lobby
     Type = Lobby
     Description = Lobby/Plaza
@@ -1886,8 +1886,8 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     CreatePanel ElevPanel, 8, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button34, 2, 3, 34, 1, 1
     AddFloorButton 1, Button33, 2, 3, 33, 1, 1
-    AddFloorButton 1, ButtonP, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonC, 4, 3, 0, 1, 1
+    AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonCL, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -1992,8 +1992,8 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     CreatePanel ElevPanel, 8, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button34, 2, 3, 34, 1, 1
     AddFloorButton 1, Button33, 2, 3, 33, 1, 1
-    AddFloorButton 1, ButtonP, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonC, 4, 3, 0, 1, 1
+    AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonCL, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -2086,8 +2086,8 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     CreatePanel ElevPanel, 8, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button67, 2, 3, 67, 1, 1
     AddFloorButton 1, Button66, 2, 3, 66, 1, 1
-    AddFloorButton 1, ButtonP, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonC, 4, 3, 0, 1, 1
+    AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonCL, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -2180,8 +2180,8 @@ ShaftCut 22, -4.28 + 0.33, -4.573, 4.28, 4.573, 0, 5
     CreatePanel ElevPanel, 8, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button67, 2, 3, 67, 1, 1
     AddFloorButton 1, Button66, 2, 3, 66, 1, 1
-    AddFloorButton 1, ButtonP, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonC, 4, 3, 0, 1, 1
+    AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonCL, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
