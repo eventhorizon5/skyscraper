@@ -33,6 +33,8 @@ public:
 	//file loader functions
 	int LoadBuilding(const char * filename);
 	int LoadDataFile(const char * filename);
+	csString Calc(const char *expression);
+	bool IfProc(const char *expression);
 
 	//File I/O
 	csString BuildingFile;

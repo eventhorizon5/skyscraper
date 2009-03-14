@@ -249,7 +249,7 @@ checkfloors:
 			}
 			else
 				getfloordata = false;
-			csString tempdata = Simcore->Calc(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData());
+			csString tempdata = Calc(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData());
 			LineData = LineData.Slice(0, temp1 + 1) + tempdata + LineData.Slice(temp3);
 
 			temp4 = atoi(tempdata.GetData());
@@ -312,7 +312,7 @@ checkfloors:
 			//calculate inline math
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 			//if (tempdata.GetSize() < 13)
@@ -351,7 +351,7 @@ checkfloors:
 			//calculate inline math
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 			//if (tempdata.GetSize() < 11)
@@ -372,7 +372,7 @@ checkfloors:
 			//calculate inline math
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 			//if (tempdata.GetSize() < 7)
@@ -393,7 +393,7 @@ checkfloors:
 			//calculate inline math
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -411,7 +411,7 @@ checkfloors:
 			//calculate inline math
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -437,7 +437,7 @@ checkfloors:
 			temp2 = LineData.Slice(temp1 + 1);
 			//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
 				//Err.Raise 1001
-			Simcore->UserVariable[temp3] = Simcore->Calc(temp2);
+			Simcore->UserVariable[temp3] = Calc(temp2);
 			//Simcore->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 		}
 
@@ -456,7 +456,7 @@ checkfloors:
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 			//if (tempdata.GetSize < 9)
@@ -496,7 +496,7 @@ checkfloors:
 			tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 			//if (tempdata.GetSize < 9)
@@ -536,7 +536,7 @@ checkfloors:
 			tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -576,7 +576,7 @@ checkfloors:
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -608,7 +608,7 @@ checkfloors:
 			tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -623,7 +623,7 @@ checkfloors:
 			tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -727,7 +727,7 @@ checkfloors:
 			tempdata.SplitString(LineData.Slice(16).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -743,7 +743,7 @@ checkfloors:
 			tempdata.SplitString(LineData.Slice(13).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -782,7 +782,7 @@ checkfloors:
 			tempdata.SplitString(temp2.GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -802,7 +802,7 @@ checkfloors:
 			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -841,7 +841,7 @@ checkfloors:
 			tempdata.SplitString(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -874,7 +874,7 @@ checkfloors:
 			tempdata.SplitString(temp2.GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
-				buffer = Simcore->Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
 
@@ -995,7 +995,7 @@ recalc:
 				Simcore->GetFloor(Current)->Altitude = atof(temp2.GetData());
 			}
 			if (LineData.Slice(0, 2).CompareNoCase("id") == true)
-				Simcore->GetFloor(Current)->ID = Simcore->Calc(temp2);
+				Simcore->GetFloor(Current)->ID = Calc(temp2);
 			if (LineData.Slice(0, 4).CompareNoCase("name") == true)
 				Simcore->GetFloor(Current)->Name = temp2;
 			if (LineData.Slice(0, 4).CompareNoCase("type") == true)
@@ -1050,7 +1050,7 @@ recalc:
 				else
 					temp2 = "";
 				temp2.Trim();
-				if (Simcore->IfProc(temp2) == true)
+				if (IfProc(temp2) == true)
 				{
 					LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
 					goto recalc;
@@ -1080,7 +1080,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 8)
@@ -1102,7 +1102,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 8)
@@ -1124,7 +1124,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 8)
@@ -1147,7 +1147,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 7)
@@ -1168,7 +1168,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -1190,7 +1190,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -1212,7 +1212,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -1235,7 +1235,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 10)
@@ -1253,7 +1253,7 @@ recalc:
 				tempdata.SplitString(LineData.Slice(14).GetData(), ",");
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize < 9)
@@ -1268,7 +1268,7 @@ recalc:
 				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize < 9)
@@ -1285,7 +1285,7 @@ recalc:
 				temp2 = LineData.Slice(temp1 + 1);
 				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
 					//Err.Raise 1001
-				Simcore->UserVariable[temp3] = Simcore->Calc(temp2);
+				Simcore->UserVariable[temp3] = Calc(temp2);
 				//Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
 
@@ -1320,7 +1320,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
@@ -1338,7 +1338,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
@@ -1357,7 +1357,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
@@ -1375,7 +1375,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
@@ -1394,7 +1394,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
@@ -1526,7 +1526,7 @@ recalc:
 				else
 					temp2 = "";
 				temp2.Trim();
-				if (Simcore->IfProc(temp2) == true)
+				if (IfProc(temp2) == true)
 					LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
 				else
 					goto Nextline; //skip line
@@ -1541,7 +1541,7 @@ recalc:
 				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 3)
@@ -1560,7 +1560,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 8)
@@ -1582,7 +1582,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -1604,7 +1604,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -1625,7 +1625,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 				//if (tempdata.GetSize() < 11)
@@ -1646,7 +1646,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
@@ -1664,7 +1664,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
@@ -1700,7 +1700,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
@@ -1736,7 +1736,7 @@ recalc:
 				//calculate inline math
 				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 				{
-					buffer = Simcore->Calc(tempdata[temp3]);
+					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
 
@@ -1754,7 +1754,7 @@ recalc:
 				temp2 = LineData.Slice(temp1 + 1);
 				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
 					//Err.Raise 1001
-				Simcore->UserVariable[temp3] = Simcore->Calc(temp2);
+				Simcore->UserVariable[temp3] = Calc(temp2);
 				Simcore->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
 
@@ -1866,4 +1866,365 @@ int Skyscraper::LoadDataFile(const char * filename)
 	}
 
 	return 0;
+}
+
+csString Skyscraper::Calc(const char *expression)
+{
+	//performs a calculation operation on a string
+	//for example, the string "1 + 1" would output to "2"
+	//supports multiple and nested operations (within parenthesis)
+
+	int temp1;
+	csString tmpcalc = expression;
+	char buffer[20];
+	csString one;
+	csString two;
+	int start, end;
+
+	//first remove all whitespace from the string
+	tmpcalc.ReplaceAll(" ", "");
+
+	//find parenthesis
+	do
+	{
+		start = tmpcalc.Find("(", 0);
+		if (start >= 0)
+		{
+			//find matching parenthesis
+			int match = 1;
+			int end = -1;
+			for (int i = start + 1; i < tmpcalc.Length(); i++)
+			{
+				if (tmpcalc.GetAt(i) == '(')
+					match++;
+				if (tmpcalc.GetAt(i) == ')')
+					match--;
+				if (match == 0)
+				{
+					end = i;
+					break;
+				}
+			}
+			if (end != -1)
+			{
+				//call function recursively
+				csString newdata;
+				newdata = Calc(tmpcalc.Slice(start + 1, end - start - 1));
+				//construct new string
+				one = tmpcalc.Slice(0, start);
+				if (end < tmpcalc.Length() - 1)
+					two = tmpcalc.Slice(end + 1);
+				else
+					two = "";
+				tmpcalc = one + newdata + two;
+			}
+			else
+			{
+				Simcore->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+				return "false";
+			}
+		}
+		else
+			break;
+	} while (1 == 1);
+		//find number of operators and recurse if multiple found
+	int operators;
+	do
+	{
+		operators = 0;
+		end = 0;
+		for (int i = 1; i < tmpcalc.Length(); i++)
+		{
+			if (tmpcalc.GetAt(i) == '+' || tmpcalc.GetAt(i) == '/' || tmpcalc.GetAt(i) == '*')
+			{
+				operators++;
+				if (operators == 2)
+					end = i;
+			}
+			if (tmpcalc.GetAt(i) == '-' && tmpcalc.GetAt(i - 1) != '-' && tmpcalc.GetAt(i - 1) != '+' && tmpcalc.GetAt(i - 1) != '/' && tmpcalc.GetAt(i - 1) != '*')
+			{
+				operators++;
+				if (operators == 2)
+					end = i;
+			}
+		}
+		if (end >= tmpcalc.Length() - 1 && operators > 0)
+		{
+			Simcore->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+			return "false";
+		}
+		if (operators > 1)
+		{
+			csString newdata;
+			newdata = Calc(tmpcalc.Slice(0, end));
+			//construct new string
+			two = tmpcalc.Slice(end);
+			tmpcalc = newdata + two;
+		}
+		else
+			break;
+	} while (1 == 1);
+
+	//return value if none found
+	if (operators == 0)
+		return tmpcalc.GetData();
+
+	//otherwise perform math
+	temp1 = tmpcalc.Find("+", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("-", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("/", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("*", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	return tmpcalc.GetData();
+}
+
+bool Skyscraper::IfProc(const char *expression)
+{
+	//IF statement processor
+
+	int temp1;
+	csString tmpcalc = expression;
+	csString one;
+	csString two;
+	int start, end;
+	bool check;
+
+	//first remove all whitespace from the string
+	tmpcalc.ReplaceAll(" ", "");
+
+	//first check for bad and/or character sets
+	if (int(tmpcalc.Find("&&")) >= 0 || int(tmpcalc.Find("||")) >= 0 || int(tmpcalc.Find("==")) >= 0 || int(tmpcalc.Find("!=")) >= 0)
+	{
+		Simcore->ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+		return false;
+	}
+
+	//find parenthesis
+	do
+	{
+		start = tmpcalc.Find("(", 0);
+		if (start >= 0)
+		{
+			//find matching parenthesis
+			int match = 1;
+			int end = -1;
+			for (int i = start + 1; i < tmpcalc.Length(); i++)
+			{
+				if (tmpcalc.GetAt(i) == '(')
+					match++;
+				if (tmpcalc.GetAt(i) == ')')
+					match--;
+				if (match == 0)
+				{
+					end = i;
+					break;
+				}
+			}
+			if (end != -1)
+			{
+				//call function recursively
+				csString newdata;
+				if (IfProc(tmpcalc.Slice(start + 1, end - start - 1)) == true)
+					newdata = "true";
+				else
+					newdata = "false";
+				//construct new string
+				one = tmpcalc.Slice(0, start);
+				if (end < tmpcalc.Length() - 1)
+					two = tmpcalc.Slice(end + 1);
+				else
+					two = "";
+				tmpcalc = one + newdata + two;
+			}
+			else
+			{
+				Simcore->ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+				return false;
+			}
+		}
+		else
+			break;
+	} while (1 == 1);
+	//find number of operators and recurse if multiple found
+	int operators;
+	do
+	{
+		operators = 0;
+		start = 0;
+		end = 0;
+		check = false;
+		for (int i = 1; i < tmpcalc.Length(); i++)
+		{
+			if (tmpcalc.GetAt(i) == '=' || tmpcalc.GetAt(i) == '!' || tmpcalc.GetAt(i) == '<' || tmpcalc.GetAt(i) == '>')
+			{
+				operators++;
+			}
+			if (tmpcalc.GetAt(i) == '&' || tmpcalc.GetAt(i) == '|')
+			{
+				check = true;
+				if (operators == 1)
+				{
+					operators = 2;
+					end = i;
+				}
+				else if (operators == 0)
+				{
+					operators = 1;
+					start = i + 1;
+					end = tmpcalc.Length();
+				}
+			}
+		}
+		//return error if multiple standard operators are found, but no and/or operator (ex. if[5 = 5 = 5])
+		if (operators > 1 && check == false)
+		{
+			Simcore->ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+			return false;
+		}
+		if (operators > 1)
+		{
+			csString newdata;
+			if (IfProc(tmpcalc.Slice(start, end - start)) == true)
+				newdata = "true";
+			else
+				newdata = "false";
+			//construct new string
+			one = tmpcalc.Slice(0, start);
+			two = tmpcalc.Slice(end);
+			tmpcalc = one + newdata + two;
+		}
+		else
+			break;
+	} while (1 == 1);
+	//return value if none found
+	if (operators == 0)
+	{
+		if (tmpcalc == "true")
+			return true;
+		else
+			return false;
+	}
+
+	//otherwise perform comparisons
+	temp1 = tmpcalc.Find("=", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one == two)
+			return true;
+		else
+			return false;
+	}
+	temp1 = tmpcalc.Find("!", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one != two)
+			return true;
+		else
+			return false;
+	}
+	temp1 = tmpcalc.Find("<", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			if(atof(one.GetData()) < atof(two.GetData()))
+				return true;
+			else
+				return false;
+		}
+		else
+			return false;
+	}
+	temp1 = tmpcalc.Find(">", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			if(atof(one.GetData()) > atof(two.GetData()))
+				return true;
+			else
+				return false;
+		}
+		else
+			return false;
+	}
+	temp1 = tmpcalc.Find("&", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one == "true" && two == "true")
+			return true;
+		else
+			return false;
+	}
+	temp1 = tmpcalc.Find("|", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (one == "true" || two == "true")
+			return true;
+		else
+			return false;
+	}
+	if (tmpcalc == "true")
+		return true;
+	else
+		return false;
 }
