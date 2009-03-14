@@ -161,6 +161,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     AddFloor Ceiling, Ceiling1, 0.5, -42.5, -25.8, 42.5, 25.8, -0.05, -0.05, 0, 0, False
+    AddFloor Ceiling, Ceiling1, 0.5, -112.5, -112.5, 112.5, 112.5, %height%, %height%, 0, 0, False
 
     DrawWalls = true, true, false, false, false, false
 
