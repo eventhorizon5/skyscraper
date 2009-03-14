@@ -31,12 +31,17 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Sound::Sound(const char *filename)
+Sound::Sound()
 {
-	Load(filename);
-	SetPosition(csVector3(0, 0, 0));
-	SetVolume(1.0);
-	Loop(false);
+	//first set default values
+	Position = csVector3(0);
+	Volume = 1.0;
+	MaxDistance = -1.0;
+	MinDistance = 1.0;
+	Direction = 0;
+	DirectionalRadiation = 0;
+	SoundLoop = false;
+	Speed = 100;
 }
 
 Sound::~Sound()
@@ -48,7 +53,9 @@ Sound::~Sound()
 void Sound::SetPosition(csVector3 position)
 {
 	//set position of sound object
-	sndsource3d->SetPosition(position);
+	Position = position;
+	if (sndsource3d)
+		sndsource3d->SetPosition(position);
 }
 
 csVector3 Sound::GetPosition()
@@ -60,7 +67,9 @@ csVector3 Sound::GetPosition()
 void Sound::SetVolume(float value)
 {
 	//set volume of sound
-	sndsource3d->SetVolume(value);
+	Volume = value;
+	if (sndsource3d)
+		sndsource3d->SetVolume(value);
 }
 
 float Sound::GetVolume()
@@ -71,7 +80,9 @@ float Sound::GetVolume()
 
 void Sound::SetMinimumDistance(float distance)
 {
-	sndsource3d->SetMinimumDistance(distance);
+	MinDistance = distance;
+	if (sndsource3d)
+		sndsource3d->SetMinimumDistance(distance);
 }
 
 float Sound::GetMinimumDistance()
@@ -82,7 +93,9 @@ float Sound::GetMinimumDistance()
 void Sound::SetMaximumDistance(float distance)
 {
 	//set the max distance at which the sound can be heard at full volume
-	sndsource3d->SetMaximumDistance(distance);
+	MaxDistance = distance;
+	if (sndsource3d)
+		sndsource3d->SetMaximumDistance(distance);
 }
 
 float Sound::GetMaximumDistance()
@@ -92,7 +105,9 @@ float Sound::GetMaximumDistance()
 
 void Sound::SetDirection(csVector3 direction)
 {
-	sndsource3d->SetDirection(direction);
+	Direction = direction;
+	if (sndsource3d)
+		sndsource3d->SetDirection(direction);
 }
 
 csVector3 Sound::GetDirection()
@@ -108,7 +123,9 @@ void Sound::SetDirectionalRadiation(float rad)
 	//from the position of the source and opening in the direction of the source.
 	//Set this value to 0.0f for an omni-directional sound. 
 
-	sndsource3d->SetDirectionalRadiation(rad);
+	DirectionalRadiation = rad;
+	if (sndsource3d)
+		sndsource3d->SetDirectionalRadiation(rad);
 }
 
 float Sound::GetDirectionalRadiation()
@@ -118,10 +135,14 @@ float Sound::GetDirectionalRadiation()
 
 void Sound::Loop(bool value)
 {
-	if (value == true)
-		sndstream->SetLoopState(CS_SNDSYS_STREAM_LOOP);
-	else
-		sndstream->SetLoopState(CS_SNDSYS_STREAM_DONTLOOP);
+	SoundLoop = value;
+	if (sndstream)
+	{
+		if (value == true)
+			sndstream->SetLoopState(CS_SNDSYS_STREAM_LOOP);
+		else
+			sndstream->SetLoopState(CS_SNDSYS_STREAM_DONTLOOP);
+	}
 }
 
 bool Sound::GetLoopState()
@@ -134,7 +155,8 @@ bool Sound::GetLoopState()
 
 void Sound::Pause()
 {
-	sndstream->Pause();
+	if (sndstream)
+		sndstream->Pause();
 }
 
 bool Sound::IsPaused()
@@ -147,8 +169,7 @@ bool Sound::IsPaused()
 
 bool Sound::IsPlaying()
 {
-	//returns true if sound is not paused, not looping, and has not completed it's frame count
-	if (IsPaused() == false && GetLoopState() == false && sndstream->GetPosition() < sndstream->GetFrameCount())
+	if (IsPaused() == false)
 		return true;
 	else
 		return false;
@@ -156,7 +177,9 @@ bool Sound::IsPlaying()
 
 void Sound::SetSpeed(int percent)
 {
-	sndstream->SetPlayRatePercent(percent);
+	Speed = percent;
+	if (sndstream)
+		sndstream->SetPlayRatePercent(percent);
 }
 
 int Sound::GetSpeed()
@@ -178,11 +201,18 @@ void Sound::Play()
 
 void Sound::Reset()
 {
-	sndstream->ResetPosition();
+	if (sndstream)
+		sndstream->ResetPosition();
 }
 
 void Sound::Load(const char *filename)
 {
+	//clear old object references
+	sndsource3d = 0;
+	sndsource = 0;
+	sndstream = 0;
+
+	//load new sound
 	csRef<iDataBuffer> sndbuffer = sbs->vfs->ReadFile(filename);
 	if (!sndbuffer)
 	{
@@ -211,4 +241,14 @@ void Sound::Load(const char *filename)
 		return;
 	}
 	sndsource3d = scfQueryInterface<iSndSysSourceSoftware3D> (sndsource);
+
+	//load previously stored values into new sound objects
+	SetPosition(Position);
+	SetVolume(Volume);
+	SetMaximumDistance(MaxDistance);
+	SetMinimumDistance(MinDistance);
+	SetDirection(Direction);
+	SetDirectionalRadiation(DirectionalRadiation);
+	Loop(SoundLoop);
+	SetSpeed(Speed);
 }

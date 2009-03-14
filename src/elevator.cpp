@@ -200,9 +200,9 @@ void Elevator::CreateElevator(float x, float z, int floor)
 	ShaftDoorsOpen.SetSize(ServicedFloors.GetSize());
 
 	//create sound object
-	mainsound = new Sound("/root/data/elevstart.wav");
+	mainsound = new Sound();
 	mainsound->SetPosition(Origin);
-	doorsound = new Sound("/root/data/elevatoropen.wav");
+	doorsound = new Sound();
 	doorsound->SetPosition(Origin);
 	doorsound->Loop(false);
 
@@ -603,9 +603,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 
 		if (emergency == false)
 		{
-			//play elevator opening sound
-			doorsound->Load("/root/data/elevatoropen.wav");
-			doorsound->Play();
+			if (open == true)
+			{
+				//play elevator opening sound
+				doorsound->Load("/root/data/elevatoropen.wav");
+				doorsound->Play();
+			}
+			else
+			{
+				//play elevator opening sound
+				doorsound->Load("/root/data/elevatorclose.wav");
+				doorsound->Play();
+			}
 		}
 
 		ElevatorDoorSpeed = 0;
@@ -1053,7 +1062,7 @@ void Elevator::MoveElevatorToFloor()
 		Brakes = true;
 	}
 
-	if (mainsound->IsPlaying() == false)
+	if (mainsound->IsPlaying() == false && Brakes == false)
 	{
 		//Movement sound
 		mainsound->Load("/root/data/elevmove.wav");

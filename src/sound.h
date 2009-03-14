@@ -30,7 +30,7 @@ class SBSIMPEXP Sound
 {
 public:
 
-	Sound(const char *filename);
+	Sound();
 	~Sound();
 	void SetPosition(csVector3 position);
 	csVector3 GetPosition();
@@ -65,6 +65,16 @@ private:
 	//sound source
 	csRef<iSndSysSource> sndsource;
 	csRef<iSndSysSourceSoftware3D> sndsource3d;
+
+	// sound parameters
+	csVector3 Position;
+	float Volume;
+	float MaxDistance;
+	float MinDistance;
+	csVector3 Direction;
+	float DirectionalRadiation;
+	bool SoundLoop;
+	int Speed;
 
 };
 
