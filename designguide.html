@@ -753,7 +753,8 @@
   <p align="left"><strong><font size="+1">6</font><font size="+1">. The <em>Elevator</em> 
     Section</font></strong></p>
   <p align="left">The <em>Elevator</em> section allows you to create elevators 
-    for your building. Elevators are numbered, starting with 1.</p>
+    for your building. Elevators are numbered, starting with 1. Parameters that 
+    have defaults listed are optional.</p>
   <p align="left">The section headers and footers are similar to the ones in the 
     Floor section.<br>
     To specify a single elevator, you would type something like:<br>
@@ -794,8 +795,24 @@
     that the elevator doors should stay open before automatically closing. The 
     default is 5000, or 5 seconds.<br>
     Example: <font size="2" face="Courier New, Courier, mono">DoorTimer = 10000</font></p>
-  <p align="left"><br>
-    <strong>Commands:</strong></p>
+  <p align="left"><strong>8. OpenSound</strong> - the sound file to play when 
+    the elevator doors open. Default is <em>elevatoropen.wav</em>.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">OpenSound = open.wav</font></p>
+  <p align="left"><strong>9. CloseSound</strong> - the sound file to play when 
+    the elevator doors close. Default is <em>elevatorclose.wav</em>.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">CloseSound = close.wav</font></p>
+  <p align="left"><strong>10. StartSound</strong> - the sound file to play when 
+    the elevator starts moving/speeds up. Default is <em>elevstart.wav</em>.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">StartSound = start.wav</font></p>
+  <p align="left"><strong>11. MoveSound</strong> - the sound file to play while 
+    the elevator is moving. This file is automatically looped by the simulator. 
+    Default is <em>elevmove.wav</em>.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">MoveSound = move.wav</font></p>
+  <p align="left"><strong>12. StopSound</strong> - the sound file to play when 
+    the elevator slows down and stops. Default is <em>elevstop.wav</em>.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">StopSound = stop.wav</font></p>
+  <p align="left"></p>
+  <p align="left"><strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
     the specified location<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateElevator <em>x</em>, 

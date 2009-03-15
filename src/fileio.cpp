@@ -1511,6 +1511,16 @@ recalc:
 				//If IsNumeric(temp2) = False Then Err.Raise 1000
 				Simcore->GetElevator(Current)->DoorTimer = atof(temp2.GetData());
 			}
+			if (LineData.Slice(0, 9).CompareNoCase("opensound") == true)
+				Simcore->GetElevator(Current)->OpenSound = temp2;
+			if (LineData.Slice(0, 10).CompareNoCase("closesound") == true)
+				Simcore->GetElevator(Current)->CloseSound = temp2;
+			if (LineData.Slice(0, 10).CompareNoCase("startsound") == true)
+				Simcore->GetElevator(Current)->StartSound = temp2;
+			if (LineData.Slice(0, 9).CompareNoCase("movesound") == true)
+				Simcore->GetElevator(Current)->MoveSound = temp2;
+			if (LineData.Slice(0, 9).CompareNoCase("stopsound") == true)
+				Simcore->GetElevator(Current)->StopSound = temp2;
 
 			//replace variables with actual values
 			buffer = Current;

@@ -95,6 +95,11 @@ Elevator::Elevator(int number)
 	ElevatorIsRunning = false;
 	oldfloor = 0;
 	IsMoving = false;
+	OpenSound = "elevatoropen.wav";
+	CloseSound = "elevatorclose.wav";
+	StartSound = "elevstart.wav";
+	MoveSound = "elevmove.wav";
+	StopSound = "elevstop.wav";
 
 	//create object meshes
 	buffer = Number;
@@ -606,13 +611,13 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			if (open == true)
 			{
 				//play elevator opening sound
-				doorsound->Load("/root/data/elevatoropen.wav");
+				doorsound->Load(OpenSound.GetData());
 				doorsound->Play();
 			}
 			else
 			{
-				//play elevator opening sound
-				doorsound->Load("/root/data/elevatorclose.wav");
+				//play elevator closing sound
+				doorsound->Load(CloseSound.GetData());
 				doorsound->Play();
 			}
 		}
@@ -1042,7 +1047,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//Play starting sound
 		mainsound->Stop();
-		mainsound->Load("/root/data/elevstart.wav");
+		mainsound->Load(StartSound.GetData());
 		mainsound->Loop(false);
 		mainsound->Play();
 
@@ -1065,7 +1070,7 @@ void Elevator::MoveElevatorToFloor()
 	if (mainsound->IsPlaying() == false && Brakes == false)
 	{
 		//Movement sound
-		mainsound->Load("/root/data/elevmove.wav");
+		mainsound->Load(MoveSound.GetData());
 		mainsound->Loop(true);
 		mainsound->Play();
 	}
@@ -1090,6 +1095,7 @@ void Elevator::MoveElevatorToFloor()
 
 	//move sounds
 	mainsound->SetPosition(GetPosition());
+	doorsound->SetPosition(csVector3(DoorOrigin.x, GetPosition().y + (DoorHeight / 2), DoorOrigin.z));
 
 	//motion calculation
 	if (Brakes == false)
@@ -1188,7 +1194,7 @@ void Elevator::MoveElevatorToFloor()
 			//stop sounds
 			mainsound->Stop();
 			//play elevator stopping sound
-			mainsound->Load("/root/data/elevstop.wav");
+			mainsound->Load(StopSound.GetData());
 			mainsound->Loop(false);
 			mainsound->Play();
 		}
@@ -1210,7 +1216,7 @@ void Elevator::MoveElevatorToFloor()
 			//stop sounds
 			mainsound->Stop();
 			//play stopping sound
-			mainsound->Load("/root/data/elevstop.wav");
+			mainsound->Load(StopSound.GetData());
 			mainsound->Loop(false);
 			mainsound->Play();
 		}
@@ -1467,7 +1473,7 @@ int Elevator::AddDoors(const char *texture, float thickness, float CenterX, floa
 	sbs->ResetWalls();
 	sbs->ResetExtents();
 	//relocate sound object
-	doorsound->SetPosition(csVector3(CenterX, Origin.y, CenterZ));
+	doorsound->SetPosition(csVector3(DoorOrigin.x, DoorOrigin.y + (DoorHeight / 2), DoorOrigin.z));
 	return firstidx;
 }
 

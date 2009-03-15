@@ -127,6 +127,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer5->Add(chkGravity, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkFrameLimiter = new wxCheckBox(this, ID_chkFrameLimiter, _("Frame Limiter"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkFrameLimiter"));
 	chkFrameLimiter->SetValue(false);
+	chkFrameLimiter->Disable();
 	BoxSizer5->Add(chkFrameLimiter, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkProcessElevators = new wxCheckBox(this, ID_chkProcessElevators, _("Process Elevators"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkProcessElevators"));
 	chkProcessElevators->SetValue(false);
@@ -139,6 +140,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer5->Add(chkAutoStairs, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkFrameSync = new wxCheckBox(this, ID_chkFrameSync, _("Framerate Sync"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkFrameSync"));
 	chkFrameSync->SetValue(false);
+	chkFrameSync->Disable();
 	BoxSizer5->Add(chkFrameSync, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer5, 0, wxALL|wxALIGN_RIGHT|wxALIGN_TOP, 0);
 	BoxSizer1->Add(BoxSizer2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);

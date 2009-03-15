@@ -68,6 +68,11 @@ public:
 	ButtonPanel *Panel2; //elevator button panel object
 	int DoorTimer; //door autoclose timer value, in milliseconds
 	bool IsMoving; //is elevator moving?
+	csString OpenSound; //door open sound
+	csString CloseSound; //door close sound
+	csString StartSound; //elevator start/speedup sound
+	csString MoveSound; //elevator move sound
+	csString StopSound; //elevator stop/slowdown sound
 
 	//functions
 	Elevator(int number);

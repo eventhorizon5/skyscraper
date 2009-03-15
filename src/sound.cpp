@@ -213,7 +213,9 @@ void Sound::Load(const char *filename)
 	sndstream = 0;
 
 	//load new sound
-	csRef<iDataBuffer> sndbuffer = sbs->vfs->ReadFile(filename);
+	csString full_filename = "/root/data/";
+	full_filename.Append(filename);
+	csRef<iDataBuffer> sndbuffer = sbs->vfs->ReadFile(full_filename.GetData());
 	if (!sndbuffer)
 	{
 		sbs->ReportError("Can't load file '%s'", filename);

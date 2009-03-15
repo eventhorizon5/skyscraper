@@ -34,6 +34,7 @@
     Load data/buttonup.png, ButtonUp, 1, 1
     Load data/buttondown.png, ButtonDown, 1, 1
     Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/servicedoor2.jpg, StairsDoor, 1, 1
 
     Load signs/sans/Open.jpg, ButtonOpen, 1, 1
     Load signs/sans/Close.jpg, ButtonClose, 1, 1

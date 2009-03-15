@@ -141,6 +141,8 @@ class editelevator: public wxDialog
 		static const long ID_txtJerkRate;
 		static const long ID_STATICTEXT30;
 		static const long ID_txtDestFloor;
+		static const long ID_STATICTEXT43;
+		static const long ID_txtIsMoving;
 		static const long ID_STATICTEXT31;
 		static const long ID_txtMoveElevator;
 		static const long ID_STATICTEXT32;
@@ -267,6 +269,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtPosition;
 		wxStaticText* StaticText21;
 		wxStaticText* StaticText39;
+		wxTextCtrl* txtIsMoving;
 		wxStaticText* StaticText23;
 		wxStaticText* StaticText24;
 		wxButton* bEnqueueUp;
@@ -292,6 +295,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtDoorHeight;
 		wxStaticText* StaticText28;
 		wxBoxSizer* BoxSizer1;
+		wxStaticText* StaticText43;
 		wxStaticText* StaticText41;
 		wxTextCtrl* txtName;
 		wxTextCtrl* txtMoveElevatorFloor;

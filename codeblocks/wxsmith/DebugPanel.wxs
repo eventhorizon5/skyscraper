@@ -175,6 +175,7 @@
 							<object class="sizeritem">
 								<object class="wxCheckBox" name="ID_chkFrameLimiter" variable="chkFrameLimiter" member="yes">
 									<label>Frame Limiter</label>
+									<enabled>0</enabled>
 									<handler function="On_chkFrameLimiter_Click" entry="EVT_CHECKBOX" />
 								</object>
 								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
@@ -208,6 +209,7 @@
 							<object class="sizeritem">
 								<object class="wxCheckBox" name="ID_chkFrameSync" variable="chkFrameSync" member="yes">
 									<label>Framerate Sync</label>
+									<enabled>0</enabled>
 									<handler function="On_chkFrameSync_Click" entry="EVT_CHECKBOX" />
 								</object>
 								<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
