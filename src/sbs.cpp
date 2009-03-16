@@ -35,12 +35,10 @@
 #include "unix.h"
 
 #ifdef _WIN32
-	CS_IMPLEMENT_APPLICATION
+	CS_IMPLEMENT_FOREIGN_DLL
 #endif
 
 SBS *sbs; //self reference
-
-iObjectRegistry* object_reg;
 
 SBS::SBS()
 {
@@ -89,7 +87,6 @@ SBS::SBS()
 	ElevatorSync = false;
 	mouse_x = 0;
 	mouse_y = 0;
-	MouseDown = false;
 	wall_orientation = 1;
 	floor_orientation = 2;
 	DrawMainN = true;
@@ -110,8 +107,6 @@ SBS::SBS()
 	RevXold = false;
 	RevYold = false;
 	RevZold = false;
-	canvas_width = 0;
-	canvas_height = 0;
 	remaining_delta = 0;
 	delta = 0.01f;
 	ShowFullShafts = false;
@@ -152,21 +147,13 @@ SBS::~SBS()
 	//delete stairs
 	StairsArray.DeleteAll();
 
-	//delete frame printer object
-	printer.Invalidate();
-
-	//delete wx canvas
-	delete canvas;
-	canvas = 0;
+	//clear self reference
+	sbs = 0;
 }
 
 void SBS::Start()
 {
-	//create skybox
-	CreateSky(SkyName);
-
 	//Post-init startup code goes here, before the runloop
-	engine->Prepare();
 
 	//initialize mesh colliders
 	csColliderHelper::InitializeCollisionWrappers (collision_sys, engine);
@@ -228,11 +215,6 @@ void SBS::Start()
 
 }
 
-void SBS::Wait(long milliseconds)
-{
-
-}
-
 float SBS::AutoSize(float n1, float n2, bool iswidth, float offset)
 {
 	//Texture autosizing formulas
@@ -262,131 +244,12 @@ void SBS::PrintBanner()
 	csPrintf(" Copyright (C)2004-2009 Ryan Thoryk\n");
 	csPrintf(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
 	csPrintf(" software, and you are welcome to redistribute it under certain\n");
-	csPrintf(" conditions. For details, see the file gpl.txt\n");
+	csPrintf(" conditions. For details, see the file gpl.txt\n\n");
 }
 
-void SBS::GetInput()
-{
-	// First get elapsed time from the virtual clock.
-	elapsed_time = vc->GetElapsedTicks ();
-	current_time = vc->GetCurrentTicks ();
-
-	// Now rotate the camera according to keyboard state
-	//float speed = elapsed_time / 1000.0f;
-
-	//fix for the camera velocities due to the non-event driven key system
-	camera->desired_velocity.Set(0, 0, 0);
-	camera->desired_angle_velocity.Set(0, 0, 0);
-
-	//get mouse pointer coordinates
-	mouse_x = mouse->GetLastX();
-	mouse_y = mouse->GetLastY();
-
-	//check if the user clicked on an object, and process it
-	if (mouse->GetLastButton(0) == true && MouseDown == false)
-	{
-		MouseDown = true;
-		camera->ClickedObject();
-	}
-
-	//reset mouse state
-	if (mouse->GetLastButton(0) == false)
-		MouseDown = false;
-
-	//if (wxGetKeyState(WXK_ESCAPE))
-
-	if (wxGetKeyState(WXK_F2))
-		Report(wxVariant(FPS).GetString().ToAscii());
-
-	camera->speed = 1;
-
-	if (wxGetKeyState(WXK_CONTROL))
-		camera->speed = 0.5;
-	else if (wxGetKeyState(WXK_SHIFT))
-		camera->speed = 2;
-
-	if (wxGetKeyState(WXK_ALT))
-	{
-		//strafe movement
-		if (wxGetKeyState(WXK_RIGHT))
-			camera->Strafe(1);
-		if (wxGetKeyState(WXK_LEFT))
-			camera->Strafe(-1);
-		if (wxGetKeyState(WXK_UP))
-			camera->Float(1);
-		if (wxGetKeyState(WXK_DOWN))
-			camera->Float(-1);
-	}
-	else
-	{
-		if (wxGetKeyState(WXK_RIGHT))
-			camera->Turn(1);
-		if (wxGetKeyState(WXK_LEFT))
-			camera->Turn(-1);
-		if (wxGetKeyState(WXK_PRIOR)) //page up
-			camera->Look(1);
-		if (wxGetKeyState(WXK_NEXT)) //page down
-			camera->Look(-1);
-		if (wxGetKeyState(WXK_UP))
-			camera->Step(1);
-		if (wxGetKeyState(WXK_DOWN))
-			camera->Step(-1);
-		if (wxGetKeyState(WXK_SPACE))
-			camera->Jump();
-		if (wxGetKeyState(WXK_F3))
-		{
-			//reset view
-			camera->SetToStartDirection();
-			camera->SetToStartRotation();
-		}
-
-		//values from old version
-		if (wxGetKeyState(WXK_HOME))
-			camera->Float(1);
-		if (wxGetKeyState(WXK_END))
-			camera->Float(-1);
-	}
-}
-
-void SBS::Render()
-{
-	// Tell 3D driver we're going to display 3D things.
-	if (IsSkyboxEnabled == false)
-	{
-		if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN ))
-			return;
-	}
-	else
-	{
-		if (!g3d->BeginDraw (engine->GetBeginDrawFlags () | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER ))
-			return;
-	}
-
-	// Tell the camera to render into the frame buffer.
-	view->Draw ();
-}
-
-void SBS::SetupFrame()
+void SBS::MainLoop()
 {
 	//Main simulator loop
-
-	//resize canvas if needed
-	if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
-	{
-		//update canvas size values
-		canvas_width = canvas->GetSize().GetWidth();
-		canvas_height = canvas->GetSize().GetHeight();
-
-		//resize viewport
-		view->SetAutoResize(false);
-		float oldfov = view->GetCamera()->GetFOVAngle();
-		wxwin->GetWindow()->SetSize(canvas->GetSize());
-		view->GetCamera()->SetFOVAngle(oldfov, canvas_width);
-		view->GetCamera()->SetPerspectiveCenter(canvas_width / 2, canvas_height / 2);
-		view->SetRectangle(0, 0, canvas_width, canvas_height);
-		g3d->SetDimensions(canvas_width, canvas_height);
-		view->ClearView();
-	}
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
@@ -426,169 +289,51 @@ void SBS::SetupFrame()
 		elapsed -= delta;
 	}
 	remaining_delta = elapsed;
-
-	if (RenderOnly == false)
-		GetInput();
-
-	//process camera loop
-	camera->Loop();
-
-	Render();
 }
 
-bool SBS::HandleEvent(iEvent& Event)
+void SBS::CalculateFrameRate()
 {
-	//Event handler
-	if (Event.Name == Frame)
+	// First get elapsed time from the virtual clock.
+	elapsed_time = vc->GetElapsedTicks ();
+
+	//calculate frame rate
+	fps_tottime += elapsed_time;
+	fps_frame_count++;
+	if (fps_tottime > 500)
 	{
-		// First get elapsed time from the virtual clock.
-		elapsed_time = vc->GetElapsedTicks ();
-
-		//calculate frame rate
-		fps_tottime += elapsed_time;
-		fps_frame_count++;
-		if (fps_tottime > 500)
-		{
-			FPS = (float (fps_frame_count) * 1000.0) / float (fps_tottime);
-			fps_frame_count = 0;
-			fps_tottime = 0;
-		}
-
-		SetupFrame();
-		return true;
+		FPS = (float (fps_frame_count) * 1000.0) / float (fps_tottime);
+		fps_frame_count = 0;
+		fps_tottime = 0;
 	}
-	return false;
 }
 
-static bool SBSEventHandler(iEvent& Event)
+void SBS::Initialize(iSCF* scf, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
+					 iCollideSystem* collideref, iReporter* reporterref, iSndSysRenderer* sndrenderref, iSndSysLoader* sndloaderref,
+					 iMaterialWrapper* matref, iSector* sectorref, const char* rootdirectory, const char* directory_char)
 {
-	if (sbs)
-		return sbs->HandleEvent (Event);
-	else
-		return false;
-}
-
-bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
-{
-	object_reg = csInitializer::CreateEnvironment (argc, argv);
-	if (!object_reg) return false;
-
-	if (!csInitializer::RequestPlugins (object_reg,
-		CS_REQUEST_VFS,
-		CS_REQUEST_PLUGIN("crystalspace.graphics2d.wxgl", iGraphics2D),
-		CS_REQUEST_OPENGL3D,
-		CS_REQUEST_ENGINE,
-		CS_REQUEST_FONTSERVER,
-		CS_REQUEST_IMAGELOADER,
-		CS_REQUEST_LEVELLOADER,
-		CS_REQUEST_CONSOLEOUT,
-		CS_REQUEST_REPORTER,
-		CS_REQUEST_REPORTERLISTENER,
-		CS_REQUEST_PLUGIN("crystalspace.collisiondetection.opcode", iCollideSystem),
-		CS_REQUEST_PLUGIN("crystalspace.sndsys.element.loader", iSndSysLoader),
-		CS_REQUEST_PLUGIN("crystalspace.sndsys.renderer.software", iSndSysRenderer),
-		CS_REQUEST_END))
-		return ReportError ("Couldn't init app!");
-
-	FocusGained = csevFocusGained (object_reg);
-	FocusLost = csevFocusLost (object_reg);
-	KeyboardDown = csevKeyboardDown (object_reg);
-
-	if (!csInitializer::SetupEventHandler (object_reg, SBSEventHandler))
-		return ReportError ("Couldn't initialize event handler!");
-
-	CS_INITIALIZE_EVENT_SHORTCUTS (object_reg);
-
-	// Check for commandline help.
-	if (csCommandLineHelper::CheckHelp (object_reg))
-	{
-		csCommandLineHelper::Help (object_reg);
-		return false;
-	}
-
-	csRef<iPluginManager> plugin_mgr = csQueryRegistry<iPluginManager> (object_reg);
-
-	vc = csQueryRegistry<iVirtualClock> (object_reg);
-	if (!vc) return ReportError("Failed to locate Virtual Clock");
-	kbd = csQueryRegistry<iKeyboardDriver> (object_reg);
-	if (!kbd) return ReportError ("Failed to locate Keyboard Driver");
-	engine = csQueryRegistry<iEngine> (object_reg);
-	if (!engine) return ReportError ("Failed to locate 3D engine");
-	loader = csQueryRegistry<iLoader> (object_reg);
-	if (!loader) return ReportError ("Failed to locate Loader");
-	g3d = csQueryRegistry<iGraphics3D> (object_reg);
-	if (!g3d) return ReportError ("Failed to locate 3D renderer");
-	imageio = csQueryRegistry<iImageIO> (object_reg);
-	if (!imageio) return ReportError ("Failed to locate image loader");
-	vfs = csQueryRegistry<iVFS> (object_reg);
-	if (!vfs) return ReportError ("Failed to locate VFS");
-	console = csQueryRegistry<iConsoleOutput> (object_reg);
-	if (!console) return ReportError ("Failed to locate console output driver");
-	mouse = csQueryRegistry<iMouseDriver> (object_reg);
-	if (!mouse) return ReportError("Failed to locate mouse driver");
-	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
-	if (!collision_sys) return ReportError("Failed to locate collision detection driver");
-	sndrenderer = csQueryRegistry<iSndSysRenderer> (object_reg);
-	if (!sndrenderer) return ReportError("Failed to locate sound renderer");
-	sndloader = csQueryRegistry<iSndSysLoader> (object_reg);
-	if (!sndloader) return ReportError("Failed to locate sound loader");
-	plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
-	if (!plug) return ReportError ("Failed to locate BugPlug!");
-	if (plug) plug->IncRef ();
-	rep = csQueryRegistry<iReporter> (object_reg);
-
-	stdrep = csQueryRegistry<iStandardReporterListener> (object_reg);
-	if (!stdrep) return ReportError ("Failed to locate stdrep plugin!");
-	stdrep->SetDebugFile ("/tmp/sbs_report.txt");
-	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_BUG, true, false, false, false, true, false);
-	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_ERROR, true, false, false, false, true, false);
-	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_WARNING, true, false, false, false, true, false);
-	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_NOTIFY, true, false, false, false, true, false);
-	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_DEBUG, true, false, false, false, true, false);
-
-	//mount app's directory in VFS
-	#ifndef CS_PLATFORM_WIN32
-		dir_char = "/";
-	#else
-		dir_char = "\\";
-	#endif
-	root_dir = csInstallationPathsHelper::GetAppDir(argv[0]) + dir_char;
-	vfs->Mount("/root/", root_dir);
+	//initialize CS references
+#ifdef _WIN32
+	iSCF::SCF = scf;
+#endif
+	engine = engineref;
+	loader = loaderref;
+	vc = vcref;
+	view = viewref;
+	vfs = vfsref;
+	collision_sys = collideref;
+	rep = reporterref;
+	sndrenderer = sndrenderref;
+	sndloader = sndloaderref;
+	material = matref;
+	area = sectorref;
+	root_dir = rootdirectory;
+	dir_char = directory_char;
 
 	//mount sign texture packs
 	vfs->Mount("/root/signs/sans", root_dir + "data" + dir_char + "signs-sans.zip");
 	vfs->Mount("/root/signs/sans_bold", root_dir + "data" + dir_char + "signs-sans_bold.zip");
 	vfs->Mount("/root/signs/sans_cond", root_dir + "data" + dir_char + "signs-sans_cond.zip");
 	vfs->Mount("/root/signs/sans_cond_bold", root_dir + "data" + dir_char + "signs-sans_cond_bold.zip");
-
-	g2d = g3d->GetDriver2D();
-	g2d->AllowResize(true); //allow canvas resizing
-	wxwin = scfQueryInterface<iWxWindow> (g2d);
-	if(!wxwin) return ReportError("Canvas is no iWxWindow plugin!");
-	wxwin->SetParent(RenderObject);
-	canvas = RenderObject;
-	canvas_width = canvas->GetSize().GetWidth();
-	canvas_height = canvas->GetSize().GetHeight();
-
-	//font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
-
-	// Open the main system. This will open all the previously loaded plug-ins.
-	if (!csInitializer::OpenApplication (object_reg))
-		return ReportError ("Error opening system!");
-
-	//initialize frame printer
-	printer.AttachNew(new FramePrinter(object_reg));
-
-	//initialize event queue
-	equeue = csQueryRegistry<iEventQueue> (object_reg);
-
-	// First disable the lighting cache. Our app is simple enough
-	// not to need this.
-	engine->SetLightingCacheMode (0);
-	engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
-
-	//create 3D environments
-	area = engine->CreateSector("area");
 
 	//load default textures
 	csPrintf("Loading default textures...");
@@ -597,17 +342,8 @@ bool SBS::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
 	LoadTexture("/root/data/metal1-sm.jpg", "Connection", 1, 1);
 	csPrintf("Done\n");
 
-	//set up viewport
-	view = csPtr<iView>(new csView (engine, g3d));
-	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
-
 	//create camera object
 	camera = new Camera();
-
-	//clear user variables
-	UserVariable.SetSize(256);
-
-	return true;
 }
 
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult)
@@ -630,17 +366,9 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 
 void SBS::AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b)
 {
-	ll = area->GetLights();
-	light = engine->CreateLight(name, csVector3(x, y, z), radius, csColor(r, g, b));
+	csRef<iLightList> ll = area->GetLights();
+	csRef<iLight> light = engine->CreateLight(name, csVector3(x, y, z), radius, csColor(r, g, b));
 	ll->Add(light);
-}
-
-void Cleanup()
-{
-	//cleanup
-	csPrintf ("Cleaning up...\n");
-	sbs = 0;
-	csInitializer::DestroyApplication (object_reg);
 }
 
 int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
@@ -2070,17 +1798,6 @@ int SBS::GetDrawWallsCount()
 		sides++;
 
 	return sides;
-}
-
-void SBS::PushFrame()
-{
-	if (!equeue)
-		return ;
-
-	if (vc)
-		vc->Advance();
-
-	equeue->Process();
 }
 
 csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end)

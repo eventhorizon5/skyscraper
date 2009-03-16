@@ -31,8 +31,6 @@
 #include "sound.h"
 
 //global functions
-static bool SBSEventHandler(iEvent& Event);
-SBSIMPEXP void Cleanup();
 
 struct SBSIMPEXP FloorMap
 {
@@ -63,36 +61,17 @@ class SBSIMPEXP SBS
 {
 public:
 
-	//Engine data
+	//CS engine objects
 	csRef<iEngine> engine;
 	csRef<iLoader> loader;
-	csRef<iGraphics3D> g3d;
-	csRef<iGraphics2D> g2d;
-	csRef<iKeyboardDriver> kbd;
 	csRef<iVirtualClock> vc;
 	csRef<iView> view;
-	csRef<iLight> light;
-	csRef<iConsoleOutput> console;
-	csRef<iFont> font;
 	csRef<iVFS> vfs;
-	csRef<iImageIO> imageio;
-	csRef<iCommandLineParser> cmdline;
-	csRef<iGeneralMeshState> gmSingle;
-	csRef<iStringSet> strings;
-	csRef<iStandardReporterListener> stdrep;
-	csRef<iEventQueue> equeue;
-	csRef<iBase> plug;
 	csRef<iCollideSystem> collision_sys;
-	csRef<iMouseDriver> mouse;
 	csRef<iReporter> rep;
-	csRef<FramePrinter> printer;
-
-	//sound system
 	csRef<iSndSysRenderer> sndrenderer;
 	csRef<iSndSysLoader> sndloader;
-
 	csRef<iMaterialWrapper> material;
-	csRef<iLightList> ll;
 	csRef<iSector> area;
 
 	csTicks elapsed_time, current_time;
@@ -120,7 +99,6 @@ public:
 	bool FrameLimiter; //frame limiter toggle
 	int FrameRate; //max frame rate
 	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
-	csArray<csString> UserVariable;
 	bool IsBuildingsEnabled; //contains status of buildings object
 	bool IsExternalEnabled; //contains status of external object
 	bool IsLandscapeEnabled; //contains status of landscape object
@@ -138,6 +116,8 @@ public:
 	int FloorDisplayRange; //number of floors to display while in elevator, if shaft's ShowFloors is true
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
 	csString SkyName; //base filename of sky texture pack
+	csString root_dir; //app directory
+	csString dir_char;
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
@@ -145,13 +125,13 @@ public:
 	//public functions
 	SBS();
 	~SBS();
-	void PushFrame();
 	void Report (const char* msg, ...);
 	bool ReportError (const char* msg, ...);
-	void Wait(long Milliseconds);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
 	float AutoSize(float n1, float n2, bool iswidth, float offset);
-	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
+	void Initialize(iSCF* scf, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
+					iCollideSystem* collideref, iReporter* reporterref, iSndSysRenderer* sndrenderref, iSndSysLoader* sndloaderref,
+					iMaterialWrapper* matref, iSector* sectorref, const char* rootdirectory, const char* directory_char);
 	void Start();
 	int CreateSky(const char *filenamebase);
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
@@ -159,10 +139,8 @@ public:
 	int AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
 	void DeleteWall(csRef<iThingFactoryState> dest, int index);
 	void DeleteFloor(csRef<iThingFactoryState> dest, int index);
-	bool HandleEvent(iEvent& Event);
-	void SetupFrame();
-	void GetInput();
-	void Render();
+	void CalculateFrameRate();
+	void MainLoop();
 	int CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 	int CreateWallBox2(csRef<iThingFactoryState> dest, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 	int AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
@@ -232,17 +210,6 @@ public:
 
 private:
 
-	csEventID FocusGained;
-	csEventID FocusLost;
-	csEventID KeyboardDown;
-
-	//mouse status
-	bool MouseDown;
-
-	//app directory
-	csString root_dir;
-	csString dir_char;
-
 	//fps
 	int fps_frame_count;
 	int fps_tottime;
@@ -251,8 +218,6 @@ private:
 	//conversion buffers
 	char intbuffer[65];
 	char buffer[20];
-
-	CS_DECLARE_EVENT_SHORTCUTS;
 
 	//orientations
 	int wall_orientation;
@@ -279,11 +244,6 @@ private:
 	bool RevX, RevY, RevZ;
 	bool RevXold, RevYold, RevZold;
 	bool AutoX, AutoY; //autosizing
-
-	//canvas data
-	int canvas_width, canvas_height;
-	wxPanel* canvas;
-	csRef<iWxWindow> wxwin;
 
 	//object arrays
 	csArray<FloorMap> FloorArray; //floor object array

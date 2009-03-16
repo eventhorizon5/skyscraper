@@ -93,7 +93,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 		{
 			Section = 1;
 			Context = "Globals";
-			Simcore->Report("Processing globals...");
+			Report("Processing globals...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endglobals>") == true)
@@ -101,7 +101,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 			Simcore->InitMeshes();
 			Section = 0;
 			Context = "None";
-			Simcore->Report("Finished globals");
+			Report("Finished globals");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<floors") == true)
@@ -115,7 +115,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 				//Err.Raise 1004;
 			Current = RangeL;
 			RangeStart = i;
-			Simcore->Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
+			Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<floor ") == true)
@@ -127,14 +127,14 @@ int Skyscraper::LoadBuilding(const char * filename)
 			Current = atoi(LineData.Slice(7, LineData.Length() - 7).GetData());
 			//if (Current < -Basements !! Current > TotalFloors)
 				//Err.Raise 1005
-			Simcore->Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
+			Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endfloor>") == true)
 		{
 			Section = 0;
 			Context = "None";
-			Simcore->Report("Finished floor");
+			Report("Finished floor");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<elevators") == true)
@@ -146,7 +146,7 @@ int Skyscraper::LoadBuilding(const char * filename)
 			Context = "Elevator range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
 			Current = RangeL;
 			RangeStart = i;
-			Simcore->Report("Processing elevators " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
+			Report("Processing elevators " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<elevator ") == true)
@@ -156,42 +156,42 @@ int Skyscraper::LoadBuilding(const char * filename)
 			RangeL = 0;
 			RangeH = 0;
 			Current = atoi(LineData.Slice(10, LineData.Length() - 10).GetData());
-			Simcore->Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
+			Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endelevator>") == true)
 		{
 			Section = 0;
 			Context = "None";
-			Simcore->Report("Finished elevator");
+			Report("Finished elevator");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<textures>") == true)
 		{
 			Section = 5;
 			Context = "Textures";
-			Simcore->Report("Processing textures...");
+			Report("Processing textures...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 13).CompareNoCase("<endtextures>") == true)
 		{
 			Section = 0;
 			Context = "None";
-			Simcore->Report("Finished textures");
+			Report("Finished textures");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 5).CompareNoCase("<end>") == true)
 		{
 			Section = 0;
 			Context = "None";
-			Simcore->Report("Exiting building script");
+			Report("Exiting building script");
 			break; //exit data file parser
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<break>") == true)
 		{
 			//breakpoint function for debugging scripts
 breakpoint:
-			Simcore->Report("Script breakpoint reached");
+			Report("Script breakpoint reached");
 			goto Nextline;
 		}
 
@@ -228,7 +228,7 @@ breakpoint:
 					//if (temp2 < 0 !! temp2 > UBound(Simcore->UserVariable))
 						//Err.Raise 1001
 					//replace all occurances of the variable with it's value
-					LineData.ReplaceAll("%" + temp2 + "%", Simcore->UserVariable[atoi(temp2.GetData())]);
+					LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
 					startpos -= 1;
 				}
 			}
@@ -437,8 +437,8 @@ checkfloors:
 			temp2 = LineData.Slice(temp1 + 1);
 			//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
 				//Err.Raise 1001
-			Simcore->UserVariable[temp3] = Calc(temp2);
-			//Simcore->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
+			UserVariable[temp3] = Calc(temp2);
+			//Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 		}
 
 		//CreateWallBox2 command
@@ -1285,7 +1285,7 @@ recalc:
 				temp2 = LineData.Slice(temp1 + 1);
 				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
 					//Err.Raise 1001
-				Simcore->UserVariable[temp3] = Calc(temp2);
+				UserVariable[temp3] = Calc(temp2);
 				//Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
 
@@ -1311,7 +1311,7 @@ recalc:
 			{
 				if (callbutton_elevators.GetSize() == 0)
 				{
-					Simcore->Report("Error: Trying to create call buttons, but no elevators specified");
+					Report("Error: Trying to create call buttons, but no elevators specified");
 					goto Nextline;
 				}
 
@@ -1682,7 +1682,7 @@ recalc:
 				{
 					if (!Simcore->GetElevator(Current)->Panel)
 					{
-						Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
 					Simcore->GetElevator(Current)->Panel->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
@@ -1692,7 +1692,7 @@ recalc:
 				{
 					if (!Simcore->GetElevator(Current)->Panel2)
 					{
-						Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
 					Simcore->GetElevator(Current)->Panel2->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
@@ -1718,7 +1718,7 @@ recalc:
 				{
 					if (!Simcore->GetElevator(Current)->Panel)
 					{
-						Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
 					Simcore->GetElevator(Current)->Panel->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]));
@@ -1728,7 +1728,7 @@ recalc:
 				{
 					if (!Simcore->GetElevator(Current)->Panel2)
 					{
-						Simcore->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
 					Simcore->GetElevator(Current)->Panel2->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]));
@@ -1764,8 +1764,8 @@ recalc:
 				temp2 = LineData.Slice(temp1 + 1);
 				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
 					//Err.Raise 1001
-				Simcore->UserVariable[temp3] = Calc(temp2);
-				Simcore->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
+				UserVariable[temp3] = Calc(temp2);
+				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 			}
 
 			//handle elevator range
@@ -1930,7 +1930,7 @@ csString Skyscraper::Calc(const char *expression)
 			}
 			else
 			{
-				Simcore->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+				ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 				return "false";
 			}
 		}
@@ -1960,7 +1960,7 @@ csString Skyscraper::Calc(const char *expression)
 		}
 		if (end >= tmpcalc.Length() - 1 && operators > 0)
 		{
-			Simcore->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+			ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 			return "false";
 		}
 		if (operators > 1)
@@ -2052,7 +2052,7 @@ bool Skyscraper::IfProc(const char *expression)
 	//first check for bad and/or character sets
 	if (int(tmpcalc.Find("&&")) >= 0 || int(tmpcalc.Find("||")) >= 0 || int(tmpcalc.Find("==")) >= 0 || int(tmpcalc.Find("!=")) >= 0)
 	{
-		Simcore->ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+		ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
 		return false;
 	}
 
@@ -2095,7 +2095,7 @@ bool Skyscraper::IfProc(const char *expression)
 			}
 			else
 			{
-				Simcore->ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+				ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
 				return false;
 			}
 		}
@@ -2135,7 +2135,7 @@ bool Skyscraper::IfProc(const char *expression)
 		//return error if multiple standard operators are found, but no and/or operator (ex. if[5 = 5 = 5])
 		if (operators > 1 && check == false)
 		{
-			Simcore->ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+			ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
 			return false;
 		}
 		if (operators > 1)

@@ -23,10 +23,48 @@
 */
 
 int main (int argc, char* argv[]);
+static bool SkyscraperEventHandler(iEvent& Event);
 
 class Skyscraper : public wxApp
 {
 public:
+
+	//CS Engine data
+	csRef<iEngine> engine;
+	csRef<iLoader> loader;
+	csRef<iGraphics3D> g3d;
+	csRef<iGraphics2D> g2d;
+	csRef<iKeyboardDriver> kbd;
+	csRef<iVirtualClock> vc;
+	csRef<iView> view;
+	csRef<iConsoleOutput> console;
+	csRef<iFont> font;
+	csRef<iVFS> vfs;
+	csRef<iImageIO> imageio;
+	csRef<iCommandLineParser> cmdline;
+	csRef<iStringSet> strings;
+	csRef<iStandardReporterListener> stdrep;
+	csRef<iEventQueue> equeue;
+	csRef<iBase> plug;
+	csRef<iCollideSystem> collision_sys;
+	csRef<iMouseDriver> mouse;
+	csRef<iReporter> rep;
+	csRef<FramePrinter> printer;
+
+	//sound system
+	csRef<iSndSysRenderer> sndrenderer;
+	csRef<iSndSysLoader> sndloader;
+
+	csRef<iMaterialWrapper> material;
+	csRef<iSector> area;
+
+	bool RenderOnly; //skip sim processing and only render graphics
+	bool InputOnly; //skip sim processing and only run input and rendering code
+	bool IsRunning;
+
+	csTicks elapsed_time, current_time;
+
+	void PushFrame();
 	virtual bool OnInit(void);
 	virtual int OnExit(void);
 
@@ -39,6 +77,36 @@ public:
 	//File I/O
 	csString BuildingFile;
 	csArray<csString> BuildingData;
+	csArray<csString> UserVariable;
+
+	//engine related stuff
+	void Render();
+	void GetInput();
+	void Report (const char* msg, ...);
+	bool ReportError (const char* msg, ...);
+	void SetupFrame();
+	bool HandleEvent(iEvent& Event);
+	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
+
+private:
+	csEventID FocusGained;
+	csEventID FocusLost;
+	csEventID KeyboardDown;
+
+	//mouse status
+	bool MouseDown;
+
+	//app directory
+	csString root_dir;
+	csString dir_char;
+
+	CS_DECLARE_EVENT_SHORTCUTS;
+
+	//canvas data
+	int canvas_width, canvas_height;
+	wxPanel* canvas;
+	csRef<iWxWindow> wxwin;
+
 };
 
 class MainScreen : public wxFrame
