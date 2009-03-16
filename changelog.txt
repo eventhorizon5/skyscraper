@@ -10,6 +10,7 @@ Version 1.3 (2.0 Alpha 3)
 -fixed sound code
 -added script parameters for specifying elevator sounds
 -fixed door sound location and movement
+-moved main Crystal Space code out of SBS core into frontend
 
 Version 1.2 (2.0 Alpha 2) - Jan 10, 2009
 -------------------------
