@@ -73,6 +73,8 @@ public:
 	csString StartSound; //elevator start/speedup sound
 	csString MoveSound; //elevator move sound
 	csString StopSound; //elevator stop/slowdown sound
+	csString IdleSound; //elevator idle sound
+	csString ChimeSound; //elevator chime sound
 
 	//functions
 	Elevator(int number);
@@ -188,6 +190,7 @@ private:
 	//sound objects
 	Sound *mainsound;
 	Sound *doorsound;
+	Sound *chime;
 
 	//door internals
 	bool DoorIsRunning;

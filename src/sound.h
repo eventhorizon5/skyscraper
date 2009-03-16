@@ -33,6 +33,7 @@ public:
 	Sound();
 	~Sound();
 	void SetPosition(csVector3 position);
+	void SetPositionY(float position);
 	csVector3 GetPosition();
 	void SetVolume(float value);
 	float GetVolume();

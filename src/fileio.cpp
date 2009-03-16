@@ -1521,6 +1521,10 @@ recalc:
 				Simcore->GetElevator(Current)->MoveSound = temp2;
 			if (LineData.Slice(0, 9).CompareNoCase("stopsound") == true)
 				Simcore->GetElevator(Current)->StopSound = temp2;
+			if (LineData.Slice(0, 9).CompareNoCase("idlesound") == true)
+                                Simcore->GetElevator(Current)->IdleSound = temp2;
+			if (LineData.Slice(0, 10).CompareNoCase("chimesound") == true)
+                                Simcore->GetElevator(Current)->ChimeSound = temp2;
 
 			//replace variables with actual values
 			buffer = Current;

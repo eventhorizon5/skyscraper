@@ -55,7 +55,15 @@ void Sound::SetPosition(csVector3 position)
 	//set position of sound object
 	Position = position;
 	if (sndsource3d)
-		sndsource3d->SetPosition(position);
+		sndsource3d->SetPosition(Position);
+}
+
+void Sound::SetPositionY(float position)
+{
+	//set vertical position of sound object
+	Position.y = position;
+	if (sndsource3d)
+		sndsource3d->SetPosition(Position);
 }
 
 csVector3 Sound::GetPosition()
@@ -69,7 +77,7 @@ void Sound::SetVolume(float value)
 	//set volume of sound
 	Volume = value;
 	if (sndsource3d)
-		sndsource3d->SetVolume(value);
+		sndsource3d->SetVolume(Volume);
 }
 
 float Sound::GetVolume()
@@ -82,7 +90,7 @@ void Sound::SetMinimumDistance(float distance)
 {
 	MinDistance = distance;
 	if (sndsource3d)
-		sndsource3d->SetMinimumDistance(distance);
+		sndsource3d->SetMinimumDistance(MinDistance);
 }
 
 float Sound::GetMinimumDistance()
@@ -95,7 +103,7 @@ void Sound::SetMaximumDistance(float distance)
 	//set the max distance at which the sound can be heard at full volume
 	MaxDistance = distance;
 	if (sndsource3d)
-		sndsource3d->SetMaximumDistance(distance);
+		sndsource3d->SetMaximumDistance(MaxDistance);
 }
 
 float Sound::GetMaximumDistance()
@@ -107,7 +115,7 @@ void Sound::SetDirection(csVector3 direction)
 {
 	Direction = direction;
 	if (sndsource3d)
-		sndsource3d->SetDirection(direction);
+		sndsource3d->SetDirection(Direction);
 }
 
 csVector3 Sound::GetDirection()
@@ -118,14 +126,14 @@ csVector3 Sound::GetDirection()
 void Sound::SetDirectionalRadiation(float rad)
 {
 	//from CS:
-	//The directional radiation applies to sound that are oriented in a particular direction. 
+	//The directional radiation applies to sound that are oriented in a particular direction.
 	//This value is expressed in radians and describes the half-angle of a cone spreading
 	//from the position of the source and opening in the direction of the source.
-	//Set this value to 0.0f for an omni-directional sound. 
+	//Set this value to 0.0f for an omni-directional sound.
 
 	DirectionalRadiation = rad;
 	if (sndsource3d)
-		sndsource3d->SetDirectionalRadiation(rad);
+		sndsource3d->SetDirectionalRadiation(DirectionalRadiation);
 }
 
 float Sound::GetDirectionalRadiation()
@@ -179,7 +187,7 @@ void Sound::SetSpeed(int percent)
 {
 	Speed = percent;
 	if (sndstream)
-		sndstream->SetPlayRatePercent(percent);
+		sndstream->SetPlayRatePercent(Speed);
 }
 
 int Sound::GetSpeed()

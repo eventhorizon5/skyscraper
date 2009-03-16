@@ -100,6 +100,8 @@ Elevator::Elevator(int number)
 	StartSound = "elevstart.wav";
 	MoveSound = "elevmove.wav";
 	StopSound = "elevstop.wav";
+	IdleSound = "elevidle.wav";
+	ChimeSound = "chime1.wav";
 
 	//create object meshes
 	buffer = Number;
@@ -171,6 +173,9 @@ Elevator::~Elevator()
 	if (doorsound)
 		delete doorsound;
 	doorsound = 0;
+	if (chime)
+		delete chime;
+	chime = 0;
 }
 
 void Elevator::CreateElevator(float x, float z, int floor)
@@ -209,7 +214,7 @@ void Elevator::CreateElevator(float x, float z, int floor)
 	mainsound->SetPosition(Origin);
 	doorsound = new Sound();
 	doorsound->SetPosition(Origin);
-	doorsound->Loop(false);
+	chime = new Sound();
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 }
@@ -391,9 +396,19 @@ void Elevator::MonitorLoop()
 		}
 	}
 
+	//play idle sound if in elevator
+	if (sbs->InElevator == true && sbs->ElevatorNumber == Number && mainsound->IsPlaying() == false && MoveElevator == false)
+	{
+		mainsound->Stop();
+		mainsound->Load(IdleSound.GetData());
+		mainsound->Loop(true);
+		mainsound->Play();
+	}
+
 	//call queue processor
 	ProcessCallQueue();
 
+	//door operations
 	if (OpenDoor == 1)
 		MoveDoors(true, false);
 	if (OpenDoor == -1)
@@ -403,6 +418,7 @@ void Elevator::MonitorLoop()
 	if (OpenDoor == -2)
 		MoveDoors(false, true);
 
+	//elevator movement
 	if (MoveElevator == true)
 		MoveElevatorToFloor();
 
@@ -1232,8 +1248,15 @@ void Elevator::MoveElevatorToFloor()
 	if (fabs(ElevatorRate) != 0)
 		return;
 
+	//finish move
 	if (EmergencyStop == false)
 	{
+		//play chime sound
+		chime->Load(ChimeSound.GetData());
+		chime->Loop(false);
+		chime->SetPositionY(Destination + DoorHeight);
+		chime->Play();
+
 		//store error offset value
 		if (Direction == -1)
 			ErrorOffset = GetPosition().y - Destination;
@@ -1598,6 +1621,9 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 	}
 	sbs->ResetWalls();
 	sbs->ResetExtents();
+
+	//relocate chime sound object
+	chime->SetPosition(csVector3(ShaftDoorOrigin.x, ShaftDoorOrigin.y + DoorHeight, ShaftDoorOrigin.z));
 
 	return 0;
 }
