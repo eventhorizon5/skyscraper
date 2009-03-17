@@ -398,13 +398,13 @@ void Elevator::MonitorLoop()
 		}
 	}
 
-	//play idle sound if in elevator
-	if (sbs->InElevator == true && sbs->ElevatorNumber == Number && idlesound->IsPlaying() == false)
+	//play idle sound if in elevator, or if doors open
+	if (((sbs->InElevator == true && sbs->ElevatorNumber == Number) || DoorsOpen == true) && idlesound->IsPlaying() == false)
 	{
 		idlesound->Loop(true);
 		idlesound->Play();
 	}
-	else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && idlesound->IsPlaying() == true)
+	else if (((sbs->InElevator == false || sbs->ElevatorNumber != Number) && DoorsOpen == false) && idlesound->IsPlaying() == true)
 		idlesound->Stop();
 
 	//call queue processor
