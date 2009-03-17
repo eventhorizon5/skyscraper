@@ -64,7 +64,7 @@ public:
 	void SetDirection(csVector3 vector);
 	void SetRotation(csVector3 vector);
 	csVector3 GetPosition();
-	csVector3 GetDirection();
+	void GetDirection(csVector3 &front, csVector3 &top);
 	csVector3 GetRotation();
 	void UpdateCameraFloor();
 	bool Move(csVector3 vector, float speed);

@@ -169,8 +169,13 @@ void Sound::Pause()
 
 bool Sound::IsPaused()
 {
-	if (sndstream->GetPauseState() == CS_SNDSYS_STREAM_PAUSED)
-		return true;
+	if (sndstream)
+	{
+		if (sndstream->GetPauseState() == CS_SNDSYS_STREAM_PAUSED)
+			return true;
+		else
+			return false;
+	}
 	else
 		return false;
 }

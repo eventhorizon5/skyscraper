@@ -89,10 +89,8 @@ bool Skyscraper::OnInit(void)
 	if (!Initialize(argc, argv, window->panel))
 	#endif
 	{
-		Simcore->ReportError("Error initializing system!");
-		skyscraper = 0;
-		csInitializer::DestroyApplication (object_reg);
-		exit(1);
+		ReportError("Error initializing Crystal Space");
+		return false;
 	}
 
 	BuildingFile = "";

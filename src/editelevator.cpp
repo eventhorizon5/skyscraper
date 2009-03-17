@@ -139,8 +139,6 @@ const long editelevator::ID_STATICTEXT43 = wxNewId();
 const long editelevator::ID_txtIsMoving = wxNewId();
 const long editelevator::ID_STATICTEXT31 = wxNewId();
 const long editelevator::ID_txtMoveElevator = wxNewId();
-const long editelevator::ID_STATICTEXT32 = wxNewId();
-const long editelevator::ID_txtMoveElevatorFloor = wxNewId();
 const long editelevator::ID_STATICTEXT33 = wxNewId();
 const long editelevator::ID_txtDistance = wxNewId();
 const long editelevator::ID_STATICTEXT34 = wxNewId();
@@ -419,10 +417,6 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer7->Add(StaticText31, 0, wxALIGN_LEFT|wxALIGN_TOP, 0);
 	txtMoveElevator = new wxTextCtrl(this, ID_txtMoveElevator, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMoveElevator"));
 	FlexGridSizer7->Add(txtMoveElevator, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	StaticText32 = new wxStaticText(this, ID_STATICTEXT32, _("MoveFlr:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT32"));
-	FlexGridSizer7->Add(StaticText32, 0, wxALIGN_LEFT|wxALIGN_TOP, 0);
-	txtMoveElevatorFloor = new wxTextCtrl(this, ID_txtMoveElevatorFloor, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMoveElevatorFloor"));
-	FlexGridSizer7->Add(txtMoveElevatorFloor, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticText33 = new wxStaticText(this, ID_STATICTEXT33, _("Distance:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT33"));
 	FlexGridSizer7->Add(StaticText33, 0, wxALIGN_LEFT|wxALIGN_TOP, 0);
 	txtDistance = new wxTextCtrl(this, ID_txtDistance, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtDistance"));
@@ -632,7 +626,6 @@ void editelevator::Loop()
 	txtFloor->SetValue(wxVariant((long)elevator->GetFloor()).GetString());
 	txtHeight->SetValue(TruncateNumber(elevator->Height, 2));
 	txtMoveElevator->SetValue(wxString::FromAscii(BoolToString(elevator->MoveElevator)));
-	txtMoveElevatorFloor->SetValue(wxVariant((long)elevator->MoveElevatorFloor).GetString());
 	txtNumber->SetValue(wxVariant((long)elevator->Number).GetString());
 	txtOrigin->SetValue(TruncateNumber(elevator->Origin.x, 2) + wxT(", ") + TruncateNumber(elevator->Origin.y, 2) + wxT(", ") + TruncateNumber(elevator->Origin.z, 2));
 	txtOriginFloor->SetValue(wxVariant((long)elevator->OriginFloor).GetString());

@@ -49,7 +49,6 @@ Elevator::Elevator(int number)
 	PauseQueueSearch = true;
 	ElevatorSpeed = 0;
 	MoveElevator = false;
-	MoveElevatorFloor = 0;
 	GotoFloor = 0;
 	OpenDoor = 0;
 	Acceleration = 0;
@@ -212,6 +211,9 @@ void Elevator::CreateElevator(float x, float z, int floor)
 	//create sound object
 	mainsound = new Sound();
 	mainsound->SetPosition(Origin);
+	idlesound = new Sound();
+	idlesound->SetPosition(Origin);
+	idlesound->Load(IdleSound.GetData());
 	doorsound = new Sound();
 	doorsound->SetPosition(Origin);
 	chime = new Sound();
@@ -397,13 +399,13 @@ void Elevator::MonitorLoop()
 	}
 
 	//play idle sound if in elevator
-	if (sbs->InElevator == true && sbs->ElevatorNumber == Number && mainsound->IsPlaying() == false && MoveElevator == false)
+	if (sbs->InElevator == true && sbs->ElevatorNumber == Number && idlesound->IsPlaying() == false)
 	{
-		mainsound->Stop();
-		mainsound->Load(IdleSound.GetData());
-		mainsound->Loop(true);
-		mainsound->Play();
+		idlesound->Loop(true);
+		idlesound->Play();
 	}
+	else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && idlesound->IsPlaying() == true)
+		idlesound->Stop();
 
 	//call queue processor
 	ProcessCallQueue();
@@ -1111,6 +1113,7 @@ void Elevator::MoveElevatorToFloor()
 
 	//move sounds
 	mainsound->SetPosition(GetPosition());
+	idlesound->SetPosition(GetPosition());
 	doorsound->SetPosition(csVector3(DoorOrigin.x, GetPosition().y + (DoorHeight / 2), DoorOrigin.z));
 
 	//motion calculation
@@ -1252,10 +1255,7 @@ void Elevator::MoveElevatorToFloor()
 	if (EmergencyStop == false)
 	{
 		//play chime sound
-		chime->Load(ChimeSound.GetData());
-		chime->Loop(false);
-		chime->SetPositionY(Destination + DoorHeight);
-		chime->Play();
+		Chime(GotoFloor);
 
 		//store error offset value
 		if (Direction == -1)
@@ -1919,4 +1919,13 @@ void Elevator::Timer::Notify()
 	//close doors if open
 	if (elevator->AreDoorsOpen() == true)
 		elevator->CloseDoors();
+}
+
+void Elevator::Chime(int floor)
+{
+	//play chime sound on specified floor
+	chime->Load(ChimeSound.GetData());
+	chime->Loop(false);
+	chime->SetPositionY(sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + DoorHeight);
+	chime->Play();
 }

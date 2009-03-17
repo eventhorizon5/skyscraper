@@ -122,10 +122,11 @@ csVector3 Camera::GetPosition()
 	return MainCamera->GetTransform().GetOrigin();
 }
 
-csVector3 Camera::GetDirection()
+void Camera::GetDirection(csVector3 &front, csVector3 &top)
 {
-	//returns the camera's current direction
-	return csVector3(0, 0, 0);
+	//returns the camera's current direction in front and top vectors
+	front = MainCamera->GetTransform().GetT2O().Col3();
+	top = MainCamera->GetTransform().GetT2O().Col2();
 }
 
 csVector3 Camera::GetRotation()
@@ -498,6 +499,11 @@ void Camera::Loop()
 
 	//sync sound listener object to camera position
 	sbs->SetListenerLocation(GetPosition());
+
+	//set direction of listener to camera's direction
+	csVector3 front, top;
+	GetDirection(front, top);
+	sbs->SetListenerDirection(front, top);
 }
 
 void Camera::Strafe(float speed)

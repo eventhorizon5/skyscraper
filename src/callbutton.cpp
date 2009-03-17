@@ -202,8 +202,12 @@ void CallButton::Call(int direction)
 	}
 
 	if (sbs->GetElevator(Elevators[closest_elev])->GetFloor() == floor)
+	{
+		//play chime sound
+		sbs->GetElevator(Elevators[closest_elev])->Chime(floor);
 		//open elevator if it's on the same floor
 		sbs->GetElevator(Elevators[closest_elev])->OpenDoors();
+	}
 	else
 		//otherwise add a route entry to this floor
 		sbs->GetElevator(Elevators[closest_elev])->AddRoute(floor, direction);

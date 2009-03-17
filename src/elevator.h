@@ -40,8 +40,7 @@ public:
 	int LastQueueFloor[2]; //last route added to either queue
 	float ElevatorSpeed; //maximum elevator speed
 	bool MoveElevator; //Tells elevator to start going to specified floor
-	int MoveElevatorFloor; //floor to move elevator to
-	int GotoFloor; //floor to go to
+	int GotoFloor; //floor to move elevator to
 	float Acceleration; //percentage of speed increase
 	float Deceleration; //deceleration value; may be removed
 	float AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
@@ -122,6 +121,7 @@ public:
 	void UpdateFloorIndicators();
 	float GetJerkRate();
 	float GetJerkPosition();
+	void Chime(int floor);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -189,6 +189,7 @@ private:
 
 	//sound objects
 	Sound *mainsound;
+	Sound *idlesound;
 	Sound *doorsound;
 	Sound *chime;
 

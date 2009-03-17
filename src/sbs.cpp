@@ -132,7 +132,8 @@ SBS::~SBS()
 	//engine destructor
 
 	//delete camera object
-	delete camera;
+	if (camera)
+		delete camera;
 	camera = 0;
 
 	//delete floors
@@ -2169,7 +2170,34 @@ bool SBS::GetReverseAxis()
 
 void SBS::SetListenerLocation(csVector3 location)
 {
+	//set position of sound listener object
 	sndrenderer->GetListener()->SetPosition(location);
+}
+
+void SBS::SetListenerDirection(csVector3 front, csVector3 top)
+{
+	//set direction of sound listener object
+	sndrenderer->GetListener()->SetDirection(front, top);
+}
+
+void SBS::SetListenerDistanceFactor(float factor)
+{
+	sndrenderer->GetListener()->SetDistanceFactor(factor);
+}
+
+float SBS::GetListenerDistanceFactor()
+{
+	return sndrenderer->GetListener()->GetDistanceFactor();
+}
+
+void SBS::SetListenerRollOffFactor(float factor)
+{
+	sndrenderer->GetListener()->SetRollOffFactor(factor);
+}
+
+float SBS::GetListenerRollOffFactor()
+{
+	return sndrenderer->GetListener()->GetRollOffFactor();
 }
 
 void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom)
