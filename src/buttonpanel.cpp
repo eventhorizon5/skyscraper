@@ -219,9 +219,30 @@ void ButtonPanel::Press(int index)
 		if (elev_floor > floor)
 			sbs->GetElevator(elevator)->AddRoute(floor, -1);
 
-		//elevator is on or below floor
-		if (elev_floor <= floor)
+		//elevator is below floor
+		if (elev_floor < floor)
 			sbs->GetElevator(elevator)->AddRoute(floor, 1);
+
+		//elevator is on floor
+		if (elev_floor == floor)
+		{
+			if (sbs->GetElevator(elevator)->Direction == 0)
+			{
+				//stopped - play chime and open doors
+				sbs->GetElevator(elevator)->Chime(floor);
+				sbs->GetElevator(elevator)->OpenDoors();
+			}
+			else if (sbs->GetElevator(elevator)->Direction == -1)
+			{
+				//elevator is on floor but already moving down; add an upward route
+				sbs->GetElevator(elevator)->AddRoute(floor, 1);
+			}
+			else if (sbs->GetElevator(elevator)->Direction == 1)
+			{
+				//elevator is on floor but already moving up; add a downward route
+				sbs->GetElevator(elevator)->AddRoute(floor, -1);
+			}
+		}
 	}
 	else
 	{
