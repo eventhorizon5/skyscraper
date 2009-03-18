@@ -73,6 +73,7 @@ bool Skyscraper::OnInit(void)
 	canvas_width = 0;
 	canvas_height = 0;
 	IsRunning = false;
+	StartupRunning = false;
 
 	//Create main window
 	window = new MainScreen();
@@ -92,6 +93,11 @@ bool Skyscraper::OnInit(void)
 		ReportError("Error initializing Crystal Space");
 		return false;
 	}
+
+	//draw background
+	//DrawBackground();
+	//StartupRunning = true;
+	//return true;
 
 	BuildingFile = "";
 	srand (time (0));
@@ -157,6 +163,7 @@ bool Skyscraper::OnInit(void)
 	Simcore->Report("Running simulation...");
 	Simcore->IsRunning = true;
 	IsRunning = true;
+	StartupRunning = false;
 
 	return true;
 }
@@ -209,6 +216,7 @@ int Skyscraper::OnExit()
 	sndrenderer = 0;
 	sndloader = 0;
 	material = 0;
+	image = 0;
 
 	csInitializer::DestroyApplication (object_reg);
 
@@ -258,7 +266,7 @@ void MainScreen::ShowWindow()
 
 void MainScreen::OnIdle(wxIdleEvent& event)
 {
-	if (skyscraper->IsRunning == true)
+	if (skyscraper->IsRunning == true || skyscraper->StartupRunning == true)
 		skyscraper->PushFrame();
 	event.RequestMore();
 }
@@ -284,6 +292,12 @@ void Skyscraper::Render()
 void Skyscraper::SetupFrame()
 {
 	//Main simulator loop
+	if (IsRunning == false)
+	{
+		GetMenuInput();
+		RenderMenu();
+		return;
+	}
 
 	//resize canvas if needed
 	if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
@@ -323,7 +337,8 @@ bool Skyscraper::HandleEvent(iEvent& Event)
 	//Event handler
 	if (Event.Name == Frame)
 	{
-		Simcore->CalculateFrameRate();
+		if (IsRunning == true)
+			Simcore->CalculateFrameRate();
 		SetupFrame();
 		return true;
 	}
@@ -406,6 +421,7 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	if (plug) plug->IncRef ();
 	rep = csQueryRegistry<iReporter> (object_reg);
+	if (!rep) return ReportError("Failed to locate reporter driver");
 
 	stdrep = csQueryRegistry<iStandardReporterListener> (object_reg);
 	if (!stdrep) return ReportError ("Failed to locate stdrep plugin!");
@@ -587,4 +603,34 @@ void Skyscraper::PushFrame()
 		vc->Advance();
 
 	equeue->Process();
+}
+
+void Skyscraper::DrawBackground()
+{
+	//draw menu background
+	csRef<iFile> imagefile = vfs->Open("/root/data/menu.jpg", VFS_FILE_READ);
+	if (imagefile.IsValid())
+	{
+		csRef<iDataBuffer> filedata = imagefile->GetAllData();
+		image = imageio->Load(filedata, CS_IMGFMT_TRUECOLOR);
+	}
+	int w = g2d->GetWidth();
+	int h = g2d->GetHeight();
+	g2d->SetClipRect(0, 0, w, h);
+	if (image.IsValid())
+		g2d->Blit(0, 0, w, h, (unsigned char*)image->GetImageData());
+}
+
+void Skyscraper::GetMenuInput()
+{
+	//input handler for main menu
+
+}
+
+void Skyscraper::RenderMenu()
+{
+	//render function for main menu
+	if (!g3d->BeginDraw(CSDRAW_2DGRAPHICS))
+		return;
+	//g2d->Clear(black);
 }

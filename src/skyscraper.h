@@ -50,6 +50,7 @@ public:
 	csRef<iMouseDriver> mouse;
 	csRef<iReporter> rep;
 	csRef<FramePrinter> printer;
+	csRef<iImage> image;
 
 	//sound system
 	csRef<iSndSysRenderer> sndrenderer;
@@ -61,12 +62,14 @@ public:
 	bool RenderOnly; //skip sim processing and only render graphics
 	bool InputOnly; //skip sim processing and only run input and rendering code
 	bool IsRunning;
+	bool StartupRunning;
 
 	csTicks elapsed_time, current_time;
 
 	void PushFrame();
 	virtual bool OnInit(void);
 	virtual int OnExit(void);
+	void DrawBackground();
 
 	//file loader functions
 	int LoadBuilding(const char * filename);
@@ -87,6 +90,8 @@ public:
 	void SetupFrame();
 	bool HandleEvent(iEvent& Event);
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
+	void GetMenuInput();
+	void RenderMenu();
 
 private:
 	csEventID FocusGained;
