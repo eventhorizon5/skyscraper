@@ -179,9 +179,12 @@ int Skyscraper::OnExit()
 	delete canvas;
 	canvas = 0;
 
-	if(dpanel->timer)
-		dpanel->timer->Stop();
-	dpanel->Destroy();
+	if(dpanel)
+	{
+		if(dpanel->timer)
+			dpanel->timer->Stop();
+		dpanel->Destroy();
+	}
 	delete Simcore;
 	Simcore = 0;
 	delete window;
@@ -253,8 +256,11 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void MainScreen::OnClose(wxCloseEvent& event)
 {
-	if(dpanel->timer)
-		dpanel->timer->Stop();
+	if(dpanel)
+	{
+		if(dpanel->timer)
+			dpanel->timer->Stop();
+	}
 	wxGetApp().Exit();
 }
 
