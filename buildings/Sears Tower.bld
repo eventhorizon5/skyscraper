@@ -26,7 +26,7 @@
     Version = 1
     HorizScale = 1
     CameraFloor = 0
-    CameraPosition = -200, 0
+    CameraPosition = -100, 0
     CameraRotation = 0, 90, 0
 <EndGlobals>
 
@@ -65,6 +65,9 @@
     Load signs/sans/PL.jpg, ButtonPL, 1, 1
     Load signs/sans/M.jpg, ButtonM, 1, 1
     Load signs/sans/CC.jpg, ButtonCC, 1, 1
+    Load signs/sans/LL1.jpg, ButtonLL1, 1, 1
+    Load signs/sans/LL2.jpg, ButtonLL2, 1, 1
+    Load signs/sans/LL3.jpg, ButtonLL3, 1, 1
     Load signs/sans/Open.jpg, ButtonOpen, 1, 1
     Load signs/sans/Close.jpg, ButtonClose, 1, 1
     Load signs/sans/Stop.jpg, ButtonStop, 1, 1
@@ -78,13 +81,46 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
 Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 
 #Lower Levels
-<Floors -1 to -3>
-    ID = LL%floor%
-    Name = Lower Level %floor%
+<Floor -1>
+    ID = LL1
+    Name = Lower Level 1
     Type = Basement
-    Description = Lower Level %floor%
+    Description = Lower Level 1
     Height = 12.24
     InterfloorHeight = 0
+<EndFloor>
+
+<Floor -2>
+    ID = LL2
+    Name = Lower Level 2
+    Type = Basement
+    Description = Lower Level 2
+    Height = 12.24
+    InterfloorHeight = 0
+<EndFloor>
+
+<Floor -3>
+    ID = LL3
+    Name = Lower Level 3
+    Type = Basement
+    Description = Lower Level 3
+    Height = 12.24
+    InterfloorHeight = 0
+<EndFloor>
+
+<Floors -1 to -3>
+
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
+
+    #Ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -112.5, -112.5, 112.5, 112.5, %height%, %height%, 0, 0, False
+
+    DrawWalls = true, true, false, false, false, false
 
 <EndFloors>
 
@@ -4793,7 +4829,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -2, 99, 103
     AssignedShaft = 31
-    CreateElevator -36.089, -2, 0
+    CreateElevator -42.471, -2, -2
 <EndElevator>
 
 <Elevator 79>
@@ -4805,7 +4841,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -2, 99, 103
     AssignedShaft = 31
-    CreateElevator -36.089, -12.828, 0
+    CreateElevator -42.471, -12.828, -2
 <EndElevator>
 
 <Elevators 78 to 79>
