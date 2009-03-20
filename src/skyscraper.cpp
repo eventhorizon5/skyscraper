@@ -614,17 +614,24 @@ void Skyscraper::PushFrame()
 void Skyscraper::DrawBackground()
 {
 	//draw menu background
-	csRef<iFile> imagefile = vfs->Open("/root/data/menu.jpg", VFS_FILE_READ);
+	csRef<iFile> imagefile = vfs->Open("/root/data/menu.png", VFS_FILE_READ);
 	if (imagefile.IsValid())
 	{
 		csRef<iDataBuffer> filedata = imagefile->GetAllData();
-		image = imageio->Load(filedata, CS_IMGFMT_TRUECOLOR);
+		image = imageio->Load(filedata, CS_IMGFMT_TRUECOLOR | CS_IMGFMT_ALPHA);
 	}
 	int w = g2d->GetWidth();
 	int h = g2d->GetHeight();
+	int w2 = image->GetWidth();
+	int h2 = image->GetHeight();
+	const int bx = (w - w2) / 2;
+	const int by = h / 2;
+	if (!g3d->BeginDraw(CSDRAW_2DGRAPHICS))
+		return;
+	g2d->Clear(0);
 	g2d->SetClipRect(0, 0, w, h);
 	if (image.IsValid())
-		g2d->Blit(0, 0, w, h, (unsigned char*)image->GetImageData());
+		g2d->Blit(0, 0, w2, h2, (unsigned char*)image->GetImageData());
 }
 
 void Skyscraper::GetMenuInput()
@@ -636,7 +643,5 @@ void Skyscraper::GetMenuInput()
 void Skyscraper::RenderMenu()
 {
 	//render function for main menu
-	if (!g3d->BeginDraw(CSDRAW_2DGRAPHICS))
-		return;
 	//g2d->Clear(black);
 }
