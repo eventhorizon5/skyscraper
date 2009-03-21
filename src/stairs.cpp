@@ -420,7 +420,7 @@ void Stairs::EnableDoor(int floor, bool value)
 
 	for (int i = 0; i < DoorArray.GetSize(); i++)
 	{
-		if (DoorArray[i].floornumber = floor && DoorArray[i].object)
+		if (DoorArray[i].floornumber == floor && DoorArray[i].object)
 			DoorArray[i].object->Enabled(value);
 	}
 }
