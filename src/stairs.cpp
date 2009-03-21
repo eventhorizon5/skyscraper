@@ -48,6 +48,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 
 	StairArray.SetSize(endfloor - startfloor + 1);
 	StairArray_state.SetSize(endfloor - startfloor + 1);
+	EnableArray.SetSize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -65,6 +66,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 		StairArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
 		StairArray[i - startfloor]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
 		StairArray[i - startfloor]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+		EnableArray[i - startfloor] = true;
 	}
 }
 
@@ -237,19 +239,21 @@ void Stairs::Enabled(int floor, bool value)
 {
 	//turns stairwell on/off for a specific floor
 
-	if (floor >= startfloor && floor <= endfloor)
+	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor)
 	{
 		if (value == true)
 		{
 			StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
 			StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
 			StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+			EnableArray[floor - startfloor] = true;
 		}
 		else
 		{
 			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
 			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+			EnableArray[floor - startfloor] = false;
 		}
 
 		//enable/disable door
@@ -441,4 +445,12 @@ bool Stairs::IsDoorOpen(int number)
 {
 	//check to see if door is open
 	return DoorArray[number].object->IsOpen();
+}
+
+bool Stairs::IsEnabledFloor(int floor)
+{
+	if (floor >= startfloor && floor <= endfloor)
+		return EnableArray[floor - startfloor];
+	else
+		return false;
 }
