@@ -1636,6 +1636,17 @@ Floor *SBS::GetFloor(int number)
 {
 	//return pointer to floor object
 
+	if (FloorArray.GetSize() > 0)
+	{
+		if (FloorArray[Basements + number].number == number)
+		{
+			if (FloorArray[Basements + number].object)
+				return FloorArray[Basements + number].object;
+			else
+				return 0;
+		}
+	}
+
 	for (size_t i = 0; i < FloorArray.GetSize(); i++)
 		if (FloorArray[i].number == number)
 			return FloorArray[i].object;
@@ -1645,6 +1656,17 @@ Floor *SBS::GetFloor(int number)
 Elevator *SBS::GetElevator(int number)
 {
 	//return pointer to elevator object
+
+	if (ElevatorArray.GetSize() > number - 1)
+	{
+		if (ElevatorArray[number - 1].number == number)
+		{
+			if (ElevatorArray[number - 1].object)
+				return ElevatorArray[number - 1].object;
+			else
+				return 0;
+		}
+	}
 
 	for (size_t i = 0; i < ElevatorArray.GetSize(); i++)
 		if (ElevatorArray[i].number == number)
@@ -1656,6 +1678,17 @@ Shaft *SBS::GetShaft(int number)
 {
 	//return pointer to shaft object
 
+	if (ShaftArray.GetSize() > number - 1)
+	{
+		if (ShaftArray[number - 1].number == number)
+		{
+			if (ShaftArray[number - 1].object)
+				return ShaftArray[number - 1].object;
+			else
+				return 0;
+		}
+	}
+
 	for (size_t i = 0; i < ShaftArray.GetSize(); i++)
 		if (ShaftArray[i].number == number)
 			return ShaftArray[i].object;
@@ -1665,6 +1698,17 @@ Shaft *SBS::GetShaft(int number)
 Stairs *SBS::GetStairs(int number)
 {
 	//return pointer to stairs object
+
+	if (StairsArray.GetSize() > number - 1)
+	{
+		if (StairsArray[number - 1].number == number)
+		{
+			if (StairsArray[number - 1].object)
+				return StairsArray[number - 1].object;
+			else
+				return 0;
+		}
+	}
 
 	for (size_t i = 0; i < StairsArray.GetSize(); i++)
 		if (StairsArray[i].number == number)
