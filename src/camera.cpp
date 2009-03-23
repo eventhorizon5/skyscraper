@@ -70,6 +70,8 @@ Camera::Camera()
 	EnableCollisions = true;
 	GravityStatus = true;
 	SetGravity(sbs->MetersToFeet(9.806)); // 9.806 m/s/s
+	lastfloor = 0;
+	lastfloorset = false;
 }
 
 Camera::~Camera()
@@ -155,7 +157,17 @@ csVector3 Camera::GetRotation()
 
 void Camera::UpdateCameraFloor()
 {
-	CurrentFloor = sbs->GetFloorNumber(MainCamera->GetTransform().GetOrigin().y);
+
+	int newlastfloor;
+
+	if (lastfloorset == true)
+		newlastfloor = sbs->GetFloorNumber(GetPosition().y, lastfloor, true);
+	else
+		newlastfloor = sbs->GetFloorNumber(GetPosition().y);
+
+	lastfloor = newlastfloor;
+	lastfloorset = true;
+	CurrentFloor = lastfloor;
 }
 
 bool Camera::Move(csVector3 vector, float speed)
@@ -218,21 +230,24 @@ void Camera::CheckElevator()
 	bool test = false;
 	for (int i = 1; i <= sbs->Elevators(); i++)
 	{
-		if (sbs->GetElevator(i)->IsInElevator(GetPosition()) == true)
+		Elevator *elevator = sbs->GetElevator(i);
+		if (elevator->IsInElevator(GetPosition()) == true)
 		{
 			test = true;
 			if (sbs->InElevator == false || sbs->ElevatorNumber != i)
 			{
-				sbs->GetElevator(i)->EnableObjects(true);
-				sbs->GetElevator(i)->UpdateFloorIndicators();
+				elevator->EnableObjects(true);
+				elevator->UpdateFloorIndicators();
 			}
 			sbs->InElevator = true;
 			sbs->ElevatorNumber = i;
 			sbs->ElevatorSync = true;
+			elevator = 0;
 			return;
 		}
 		else if (sbs->InElevator == true && sbs->ElevatorNumber == i)
-			sbs->GetElevator(i)->EnableObjects(false); //turn off objects if user is not in the checked elevator
+			elevator->EnableObjects(false); //turn off objects if user is not in the checked elevator
+		elevator = 0;
 	}
 	//user is not in an elevator if all elevators returned false
 	if (test == false)
@@ -248,42 +263,43 @@ void Camera::CheckShaft()
 
 	for (int i = 1; i <= sbs->Shafts(); i++)
 	{
-		if (sbs->GetShaft(i)->IsInShaft(GetPosition()) == true)
+		Shaft *shaft = sbs->GetShaft(i);
+		if (shaft->IsInShaft(GetPosition()) == true)
 		{
-			if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == false)
+			if (shaft->InsideShaft == false && sbs->InElevator == false)
 			{
 				//user is in the shaft
-				sbs->GetShaft(i)->InsideShaft = true;
+				shaft->InsideShaft = true;
 
 				//turn on entire shaft
-				sbs->GetShaft(i)->EnableWholeShaft(true, true);
+				shaft->EnableWholeShaft(true, true);
 			}
-			else if (sbs->GetShaft(i)->InsideShaft == true && sbs->InElevator == true)
+			else if (shaft->InsideShaft == true && sbs->InElevator == true)
 			{
 				//user has moved from the shaft to an elevator
-				sbs->GetShaft(i)->InsideShaft = false;
+				shaft->InsideShaft = false;
 
 				//turn off entire shaft if ShowFullShafts is false
-				if (sbs->ShowFullShafts == false && sbs->GetShaft(i)->ShowFullShaft == false)
-					sbs->GetShaft(i)->EnableWholeShaft(false, true);
+				if (sbs->ShowFullShafts == false && shaft->ShowFullShaft == false)
+					shaft->EnableWholeShaft(false, true);
 				else
-					sbs->GetShaft(i)->EnableWholeShaft(true, true);
+					shaft->EnableWholeShaft(true, true);
 			}
-			else if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == true && sbs->ShowFullShafts == false && sbs->GetShaft(i)->ShowFullShaft == false)
+			else if (shaft->InsideShaft == false && sbs->InElevator == true && sbs->ShowFullShafts == false && shaft->ShowFullShaft == false)
 			{
 				//if user is in an elevator, show a range of the shaft at a time (while it's moving)
-				sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftDisplayRange, true, false);
+				shaft->EnableRange(CurrentFloor, sbs->ShaftDisplayRange, true, false);
 				sbs->GetElevator(sbs->ElevatorNumber)->ShaftDoorsEnabledRange(CurrentFloor, sbs->ShaftDisplayRange);
 			}
 
-			if (sbs->GetShaft(i)->InsideShaft == false && sbs->InElevator == true && sbs->GetElevator(sbs->ElevatorNumber)->IsMoving == true)
+			if (shaft->InsideShaft == false && sbs->InElevator == true && sbs->GetElevator(sbs->ElevatorNumber)->IsMoving == true)
 			{
 				//if specified, show floors or outside if user is in a moving elevator
 				sbs->EnableFloorRange(CurrentFloor, sbs->FloorDisplayRange, true, true, i);
 
-				if (sbs->GetShaft(i)->ShowOutside == true)
+				if (shaft->ShowOutside == true)
 				{
-					if (sbs->GetShaft(i)->ShowOutsideList.Find(CurrentFloor) != -1)
+					if (shaft->ShowOutsideList.Find(CurrentFloor) != -1)
 					{
 						sbs->EnableSkybox(true);
 						sbs->EnableBuildings(true);
@@ -300,23 +316,24 @@ void Camera::CheckShaft()
 				}
 			}
 		}
-		else if (sbs->GetShaft(i)->InsideShaft == true)
+		else if (shaft->InsideShaft == true)
 		{
 			//user has moved out of the shaft
-			sbs->GetShaft(i)->InsideShaft = false;
+			shaft->InsideShaft = false;
 
 			//turn off shaft
-			if (sbs->GetShaft(i)->ShowFullShaft == false)
-				sbs->GetShaft(i)->EnableWholeShaft(false, true);
+			if (shaft->ShowFullShaft == false)
+				shaft->EnableWholeShaft(false, true);
 		}
-		else if (sbs->GetShaft(i)->InsideShaft == false)
+		else if (shaft->InsideShaft == false)
 		{
 			//show specified shaft range if outside the shaft
-			if (sbs->GetShaft(i)->ShowFullShaft == false)
-				sbs->GetShaft(i)->EnableRange(CurrentFloor, sbs->ShaftOutsideDisplayRange, true, true);
+			if (shaft->ShowFullShaft == false)
+				shaft->EnableRange(CurrentFloor, sbs->ShaftOutsideDisplayRange, true, true);
 			else
-				sbs->GetShaft(i)->EnableWholeShaft(true, true);
+				shaft->EnableWholeShaft(true, true);
 		}
+		shaft = 0;
 	}
 }
 
@@ -326,20 +343,21 @@ void Camera::CheckStairwell()
 
 	for (int i = 1; i <= sbs->StairsNum(); i++)
 	{
-		if (sbs->GetStairs(i)->IsInStairwell(GetPosition()) == true)
+		Stairs *stairs = sbs->GetStairs(i);
+		if (stairs->IsInStairwell(GetPosition()) == true)
 		{
-			if (sbs->GetStairs(i)->InsideStairwell == false)
+			if (stairs->InsideStairwell == false)
 			{
-				sbs->GetStairs(i)->InsideStairwell = true;
+				stairs->InsideStairwell = true;
 
 				//turn on entire stairwell if ShowFullStairs is true
 				if (sbs->ShowFullStairs == true)
-					sbs->GetStairs(i)->EnableWholeStairwell(true);
+					stairs->EnableWholeStairwell(true);
 			}
-			if (sbs->GetStairs(i)->InsideStairwell == true)
+			if (stairs->InsideStairwell == true)
 			{
 				//show specified stairwell range while in the stairwell
-				sbs->GetStairs(i)->EnableRange(CurrentFloor, sbs->StairsDisplayRange);
+				stairs->EnableRange(CurrentFloor, sbs->StairsDisplayRange);
 
 				//if user walked to a different floor, enable new floor and disable previous
 				if (CurrentFloor != FloorTemp)
@@ -351,19 +369,20 @@ void Camera::CheckStairwell()
 				}
 			}
 		}
-		else if (sbs->GetStairs(i)->InsideStairwell == true)
+		else if (stairs->InsideStairwell == true)
 		{
-			sbs->GetStairs(i)->InsideStairwell = false;
+			stairs->InsideStairwell = false;
 
 			//turn off stairwell if ShowFullStairs is true
 			if (sbs->ShowFullStairs == true)
-				sbs->GetStairs(i)->EnableWholeStairwell(false);
+				stairs->EnableWholeStairwell(false);
 		}
-		else if (sbs->GetStairs(i)->InsideStairwell == false)
+		else if (stairs->InsideStairwell == false)
 		{
 			//show specified stairwell range if outside the stairwell
-			sbs->GetStairs(i)->EnableRange(CurrentFloor, sbs->StairsOutsideDisplayRange);
+			stairs->EnableRange(CurrentFloor, sbs->StairsOutsideDisplayRange);
 		}
+		stairs = 0;
 	}
 	FloorTemp = CurrentFloor;
 }

@@ -92,6 +92,8 @@ public:
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
 	void GetMenuInput();
 	void RenderMenu();
+	void StartSound();
+	void StopSound();
 
 private:
 	csEventID FocusGained;
@@ -112,6 +114,9 @@ private:
 	wxPanel* canvas;
 	csRef<iWxWindow> wxwin;
 
+	//sound data
+	csRef<iSndSysStream> sndstream;
+	csRef<iSndSysSource> sndsource;
 };
 
 class MainScreen : public wxFrame

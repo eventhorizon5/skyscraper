@@ -107,6 +107,8 @@ private:
 	int FloorTemp; //previous floor check value
 	float Gravity;
 	bool GravityStatus;
+	int lastfloor;
+	bool lastfloorset;
 
 	//collision
 	csColliderActor collider_actor;

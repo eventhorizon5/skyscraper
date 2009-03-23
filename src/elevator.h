@@ -207,6 +207,8 @@ private:
 	//elevator misc internals
 	bool ElevatorIsRunning;
 	int oldfloor;
+	int lastfloor;
+	bool lastfloorset;
 };
 
 #endif

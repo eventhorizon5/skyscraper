@@ -97,6 +97,7 @@ bool Skyscraper::OnInit(void)
 	//draw background
 	//DrawBackground();
 	//StartupRunning = true;
+	//StartSound();
 	//return true;
 
 	BuildingFile = "";
@@ -644,4 +645,50 @@ void Skyscraper::RenderMenu()
 {
 	//render function for main menu
 	//g2d->Clear(black);
+}
+
+void Skyscraper::StartSound()
+{
+	//load and start background music
+
+	//load new sound
+	csRef<iDataBuffer> sndbuffer = vfs->ReadFile("/root/data/intro.mp3");
+	if (!sndbuffer)
+	{
+		ReportError("Can't load file intro.mp3");
+		return;
+	}
+
+	csRef<iSndSysData> snddata = sndloader->LoadSound(sndbuffer);
+	if (!snddata)
+	{
+		ReportError("Can't load sound intro.mp3");
+		return;
+	}
+
+	sndstream = sndrenderer->CreateStream(snddata, CS_SND3D_ABSOLUTE);
+	if (!sndstream)
+	{
+		ReportError("Can't create stream for intro.mp3");
+		return;
+	}
+
+	sndsource = sndrenderer->CreateSource(sndstream);
+	if (!sndsource)
+	{
+		ReportError("Can't create source for intro.mp3");
+		return;
+	}
+	
+	sndstream->SetLoopState(true);
+	sndsource->SetVolume(1.0f);
+	sndstream->Unpause();
+}
+
+void Skyscraper::StopSound()
+{
+	//stop and unload sound
+	sndstream->Pause();
+	sndsource = 0;
+	sndstream = 0;
 }

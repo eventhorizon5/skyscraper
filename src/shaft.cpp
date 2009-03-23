@@ -186,10 +186,11 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 		{
 			for (size_t i = 0; i < elevators.GetSize(); i++)
 			{
-				for(size_t j = 0; j < sbs->GetElevator(elevators[i])->ServicedFloors.GetSize(); j++)
+				Elevator *elevator = sbs->GetElevator(elevators[i]);
+				for(size_t j = 0; j < elevator->ServicedFloors.GetSize(); j++)
 				{
-					if (sbs->GetElevator(elevators[i])->ServicedFloors[j] == floor)
-						sbs->GetElevator(elevators[i])->ShaftDoorsEnabled(sbs->GetElevator(elevators[i])->ServicedFloors[j], value);
+					if (elevator->ServicedFloors[j] == floor)
+						elevator->ShaftDoorsEnabled(elevator->ServicedFloors[j], value);
 				}
 			}
 		}
@@ -236,8 +237,9 @@ void Shaft::CutFloors(bool relative, csVector2 start, csVector2 end, float start
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
+		Floor *floorptr = sbs->GetFloor(i);
 		voffset1 = 0;
-		voffset2 = sbs->GetFloor(i)->FullHeight() + 1;
+		voffset2 = floorptr->FullHeight() + 1;
 
 		if (i == startfloor)
 			voffset1 = startvoffset;
@@ -245,9 +247,10 @@ void Shaft::CutFloors(bool relative, csVector2 start, csVector2 end, float start
 			voffset2 = endvoffset;
 
 		if (relative == true)
-			sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+			floorptr->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
 		else
-			sbs->GetFloor(i)->Cut(csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, false);
+			floorptr->Cut(csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, false);
+		floorptr = 0;
 	}
 }
 

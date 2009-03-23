@@ -43,6 +43,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	cutend = 0;
 	InsideStairwell = false;
 	IsEnabled = true;
+	lastfloor = 0;
+	lastfloorset = false;
 
 	csString buffer, buffer2, buffer3;
 
@@ -282,13 +284,23 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 	float top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 
 	//determine floor
-	int floor = sbs->GetFloorNumber(position.y);
+	int floor;
+
+	if (lastfloorset == true)
+		floor = sbs->GetFloorNumber(position.y, lastfloor, true);
+	else
+		floor = sbs->GetFloorNumber(position.y);
+
+	lastfloor = floor;
+	lastfloorset = true;
+
+	Floor *floorptr = sbs->GetFloor(floor);
 
 	if (position.y > bottom && position.y < top)
 	{
 		//check both the current floor and floor below
 		csVector3 endposition;
-		endposition.Set(position.x, position.y - sbs->GetFloor(floor)->FullHeight(), position.z);
+		endposition.Set(position.x, position.y - floorptr->FullHeight(), position.z);
 		if (floor > startfloor)
 			hit = StairArray[(floor - 1) - startfloor]->HitBeam(position, endposition).hit;
 		if (floor >= startfloor && floor <= endfloor)
@@ -298,6 +310,7 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 				hit = true;
 		}
 	}
+	floorptr = 0;
 	return hit;
 }
 
@@ -305,6 +318,7 @@ void Stairs::AddDoor(int floor, const char *texture, float thickness, int direct
 {
 	//add a door
 
+	Floor *floorptr = sbs->GetFloor(floor);
 	float x1, z1, x2, z2;
 	//set up coordinates
 	if (direction < 5)
@@ -326,12 +340,12 @@ void Stairs::AddDoor(int floor, const char *texture, float thickness, int direct
 	if (direction < 5)
 	{
 		CutWall(1, floor, csVector3(x1 - 0.5, voffset, z1), csVector3(x2 + 0.5, voffset + height, z2), 1, "Stairs");
-		sbs->GetFloor(floor)->Cut(csVector3(origin.x + x1 - 0.5, sbs->GetFloor(floor)->InterfloorHeight + voffset, origin.z + z1), csVector3(origin.x + x2 + 0.5, sbs->GetFloor(floor)->InterfloorHeight + voffset + height, origin.z + z2), true, false, true, 2, "Stairs");
+		floorptr->Cut(csVector3(origin.x + x1 - 0.5, floorptr->InterfloorHeight + voffset, origin.z + z1), csVector3(origin.x + x2 + 0.5, floorptr->InterfloorHeight + voffset + height, origin.z + z2), true, false, true, 2, "Stairs");
 	}
 	else
 	{
 		CutWall(1, floor, csVector3(x1, voffset, z1 - 0.5), csVector3(x2, voffset + height, z2 + 0.5), 1, "Stairs");
-		sbs->GetFloor(floor)->Cut(csVector3(origin.x + x1, sbs->GetFloor(floor)->InterfloorHeight + voffset, origin.z + z1 - 0.5), csVector3(origin.x + x2, sbs->GetFloor(floor)->InterfloorHeight + voffset + height, origin.z + z2 + 0.5), true, false, true, 2, "Stairs");
+		floorptr->Cut(csVector3(origin.x + x1, floorptr->InterfloorHeight + voffset, origin.z + z1 - 0.5), csVector3(origin.x + x2, floorptr->InterfloorHeight + voffset + height, origin.z + z2 + 0.5), true, false, true, 2, "Stairs");
 	}
 
 	//create doorway walls
@@ -341,7 +355,8 @@ void Stairs::AddDoor(int floor, const char *texture, float thickness, int direct
 	DoorArray[DoorArray.GetSize() - 1].floornumber = floor;
 	csString stairsnum = _itoa(StairsNum, intbuffer, 10);
 	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
-	DoorArray[DoorArray.GetSize() - 1].object = new Door("Stairwell " + stairsnum + ":Door " + num, texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
+	DoorArray[DoorArray.GetSize() - 1].object = new Door("Stairwell " + stairsnum + ":Door " + num, texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->InterfloorHeight + voffset, tw, th);
+	floorptr = 0;
 }
 
 void Stairs::CutFloors(bool relative, csVector2 start, csVector2 end, float startvoffset, float endvoffset)
@@ -356,6 +371,7 @@ void Stairs::CutFloors(bool relative, csVector2 start, csVector2 end, float star
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
+		Floor *floorptr = sbs->GetFloor(i);
 		voffset1 = 0;
 		voffset2 = sbs->GetFloor(i)->FullHeight() + 1;
 
@@ -365,9 +381,10 @@ void Stairs::CutFloors(bool relative, csVector2 start, csVector2 end, float star
 			voffset2 = endvoffset;
 
 		if (relative == true)
-			sbs->GetFloor(i)->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+			floorptr->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
 		else
-			sbs->GetFloor(i)->Cut(csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, false);
+			floorptr->Cut(csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, false);
+		floorptr = 0;
 	}
 }
 

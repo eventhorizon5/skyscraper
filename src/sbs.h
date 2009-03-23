@@ -152,7 +152,7 @@ public:
 	void EnableLandscape(bool value);
 	void EnableExternal(bool value);
 	void EnableSkybox(bool value);
-	int GetFloorNumber(float altitude);
+	int GetFloorNumber(float altitude, int lastfloor = 0, bool checklastfloor = false);
 	float GetDistance(float x1, float x2, float z1, float z2);
 	void DumpVertices(csRef<iThingFactoryState> mesh);
 	void ListAltitudes();

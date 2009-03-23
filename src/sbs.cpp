@@ -1415,7 +1415,7 @@ int SBS::CreateSky(const char *filenamebase)
 	return firstidx;
 }
 
-int SBS::GetFloorNumber(float altitude)
+int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
 {
 	//Returns floor number located at a specified altitude
 
@@ -1423,6 +1423,38 @@ int SBS::GetFloorNumber(float altitude)
 	if (altitude < GetFloor(-Basements)->Altitude)
 		return -Basements;
 
+	//if checklastfloor is specified, compare altitude with lastfloor
+	if (checklastfloor == true)
+	{
+		int lastfloor_altitude = GetFloor(lastfloor)->Altitude;
+		int lowerfloor_altitude = GetFloor(lastfloor - 1)->Altitude;
+		int upperfloor_altitude = GetFloor(lastfloor + 1)->Altitude;
+
+		if (upperfloor_altitude > altitude && lastfloor_altitude <= altitude)
+			return lastfloor;
+		else
+		{
+			//if altitude is below lastfloor, search downwards; otherwise search upwards
+			if (altitude < lastfloor_altitude)
+			{
+				for (int i = lastfloor - 1; i >= -Basements; i--)
+				{
+					if (GetFloor(i + 1)->Altitude > altitude && GetFloor(i)->Altitude <= altitude)
+						return i;
+				}
+			}
+			else if (altitude >= upperfloor_altitude)
+			{
+				for (int i = lastfloor + 1; i < Floors; i++)
+				{
+					if (GetFloor(i - 1)->Altitude <= altitude && GetFloor(i)->Altitude > altitude)
+						return i - 1;
+				}
+			}
+		}
+	}
+
+	//otherwise do a slow linear search through floors
 	for (int i = -Basements + 1; i < Floors; i++)
 	{
 		//check to see if altitude is within a floor (between the current floor's base and
@@ -1636,8 +1668,12 @@ Floor *SBS::GetFloor(int number)
 {
 	//return pointer to floor object
 
+	if (number < -Basements || number > Floors - 1)
+		return 0;
+
 	if (FloorArray.GetSize() > 0)
 	{
+		//quick prediction
 		if (FloorArray[Basements + number].number == number)
 		{
 			if (FloorArray[Basements + number].object)
@@ -1657,8 +1693,12 @@ Elevator *SBS::GetElevator(int number)
 {
 	//return pointer to elevator object
 
+	if (number < 1 || number > Elevators())
+		return 0;
+
 	if (ElevatorArray.GetSize() > number - 1)
 	{
+		//quick prediction
 		if (ElevatorArray[number - 1].number == number)
 		{
 			if (ElevatorArray[number - 1].object)
@@ -1678,8 +1718,12 @@ Shaft *SBS::GetShaft(int number)
 {
 	//return pointer to shaft object
 
+	if (number < 1 || number > Shafts())
+		return 0;
+
 	if (ShaftArray.GetSize() > number - 1)
 	{
+		//quick prediction
 		if (ShaftArray[number - 1].number == number)
 		{
 			if (ShaftArray[number - 1].object)
@@ -1699,8 +1743,12 @@ Stairs *SBS::GetStairs(int number)
 {
 	//return pointer to stairs object
 
+	if (number < 1 || number > StairsNum())
+		return 0;
+
 	if (StairsArray.GetSize() > number - 1)
 	{
+		//quick prediction
 		if (StairsArray[number - 1].number == number)
 		{
 			if (StairsArray[number - 1].object)

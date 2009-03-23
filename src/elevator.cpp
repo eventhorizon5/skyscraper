@@ -94,6 +94,8 @@ Elevator::Elevator(int number)
 	ElevatorIsRunning = false;
 	oldfloor = 0;
 	IsMoving = false;
+	lastfloor = 0;
+	lastfloorset = false;
 	OpenSound = "elevatoropen.wav";
 	CloseSound = "elevatorclose.wav";
 	StartSound = "elevstart.wav";
@@ -381,7 +383,16 @@ int Elevator::GetFloor()
 {
 	//Determine floor that the elevator is on
 
-	return sbs->GetFloorNumber(GetPosition().y);
+	int newlastfloor;
+
+	if (lastfloorset == true)
+		newlastfloor = sbs->GetFloorNumber(GetPosition().y, lastfloor, true);
+	else
+		newlastfloor = sbs->GetFloorNumber(GetPosition().y);
+
+	lastfloor = newlastfloor;
+	lastfloorset = true;
+	return lastfloor;
 }
 
 void Elevator::MonitorLoop()
@@ -1548,23 +1559,25 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 	//create doors
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
 	{
-		base = sbs->GetFloor(ServicedFloors[i])->InterfloorHeight; //relative to floor
-		base2 = sbs->GetFloor(ServicedFloors[i])->Altitude + base; //absolute
+		Floor *floor = sbs->GetFloor(ServicedFloors[i]);
+		Shaft *shaft = sbs->GetShaft(AssignedShaft);
+		base = floor->InterfloorHeight; //relative to floor
+		base2 = floor->Altitude + base; //absolute
 
 		//cut shaft and floor walls
 		if (DoorDirection == false)
 		{
-			sbs->GetShaft(AssignedShaft)->CutWall(false, ServicedFloors[i], csVector3(Origin.x + x1 - 2, base, Origin.z + z1), csVector3(Origin.x + x1 + 2, base + DoorHeight, Origin.z + z4), 1, "Shaft");
-			sbs->GetFloor(ServicedFloors[i])->Cut(csVector3(Origin.x + x1 - 2, base, Origin.z + z1), csVector3(Origin.x + x1 + 2, base + DoorHeight, Origin.z + z4), true, false, true, 2, "Shaft");
+			shaft->CutWall(false, ServicedFloors[i], csVector3(Origin.x + x1 - 2, base, Origin.z + z1), csVector3(Origin.x + x1 + 2, base + DoorHeight, Origin.z + z4), 1, "Shaft");
+			floor->Cut(csVector3(Origin.x + x1 - 2, base, Origin.z + z1), csVector3(Origin.x + x1 + 2, base + DoorHeight, Origin.z + z4), true, false, true, 2, "Shaft");
 		}
 		else
 		{
-			sbs->GetShaft(AssignedShaft)->CutWall(false, ServicedFloors[i], csVector3(Origin.x + x1, base, Origin.z + z1 - 2), csVector3(Origin.x + x4, base + DoorHeight, Origin.z + z1 + 2), 1, "Shaft");
-			sbs->GetFloor(ServicedFloors[i])->Cut(csVector3(Origin.x + x1, base, Origin.z + z1 - 2), csVector3(Origin.x + x4, base + DoorHeight, Origin.z + z1 + 2), true, false, true, 2, "Shaft");
+			shaft->CutWall(false, ServicedFloors[i], csVector3(Origin.x + x1, base, Origin.z + z1 - 2), csVector3(Origin.x + x4, base + DoorHeight, Origin.z + z1 + 2), 1, "Shaft");
+			floor->Cut(csVector3(Origin.x + x1, base, Origin.z + z1 - 2), csVector3(Origin.x + x4, base + DoorHeight, Origin.z + z1 + 2), true, false, true, 2, "Shaft");
 		}
 
 		//create doorway walls
-		sbs->AddDoorwayWalls(sbs->GetFloor(ServicedFloors[i])->Level_state, "ConnectionWall", 0, 0);
+		sbs->AddDoorwayWalls(floor->Level_state, "ConnectionWall", 0, 0);
 
 		//create meshes
 		buffer3 = Number;
@@ -1605,10 +1618,10 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, thickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base2, base2, tw, th);
 
 		//create connection pieces
-		float xoffset = Origin.x - sbs->GetShaft(AssignedShaft)->origin.x;
-		float zoffset = Origin.z - sbs->GetShaft(AssignedShaft)->origin.z;
-		sbs->GetShaft(AssignedShaft)->AddWall(ServicedFloors[i], "ShaftDoorF1", "Connection", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base - 1.001, base - 1.001, 0, 0);
-		sbs->GetShaft(AssignedShaft)->AddWall(ServicedFloors[i], "ShaftDoorF2", "Connection", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base + DoorHeight + 0.001, base + DoorHeight + 0.001, 0, 0);
+		float xoffset = Origin.x - shaft->origin.x;
+		float zoffset = Origin.z - shaft->origin.z;
+		shaft->AddWall(ServicedFloors[i], "ShaftDoorF1", "Connection", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base - 1.001, base - 1.001, 0, 0);
+		shaft->AddWall(ServicedFloors[i], "ShaftDoorF2", "Connection", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base + DoorHeight + 0.001, base + DoorHeight + 0.001, 0, 0);
 
 		//make doors invisible on start
 		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
@@ -1618,6 +1631,9 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		ShaftDoorR[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
 		ShaftDoorR[i]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		ShaftDoorR[i]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+
+		floor = 0;
+		shaft = 0;
 	}
 	sbs->ResetWalls();
 	sbs->ResetExtents();
