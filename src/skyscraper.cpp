@@ -98,6 +98,7 @@ bool Skyscraper::OnInit(void)
 	//DrawBackground();
 	//StartupRunning = true;
 	//StartSound();
+	//return true;
 
 	if (SelectBuilding() == true)
 		Start();
@@ -558,17 +559,16 @@ void Skyscraper::DrawBackground()
 {
 	//draw menu background
 	csRef<iFile> imagefile = vfs->Open("/root/data/menu.png", VFS_FILE_READ);
+	int w2, h2;
 	if (imagefile.IsValid())
 	{
 		csRef<iDataBuffer> filedata = imagefile->GetAllData();
 		image = imageio->Load(filedata, CS_IMGFMT_TRUECOLOR | CS_IMGFMT_ALPHA);
+		w2 = image->GetWidth();
+		h2 = image->GetHeight();
 	}
 	int w = g2d->GetWidth();
 	int h = g2d->GetHeight();
-	int w2 = image->GetWidth();
-	int h2 = image->GetHeight();
-	const int bx = (w - w2) / 2;
-	const int by = h / 2;
 	if (!g3d->BeginDraw(CSDRAW_2DGRAPHICS))
 		return;
 	g2d->Clear(0);
