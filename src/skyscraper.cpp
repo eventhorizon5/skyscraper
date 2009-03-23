@@ -98,73 +98,11 @@ bool Skyscraper::OnInit(void)
 	//DrawBackground();
 	//StartupRunning = true;
 	//StartSound();
-	//return true;
 
-	BuildingFile = "";
-	srand (time (0));
-
-	//set building file
-	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings"), _(""), _("Building files (*.bld)|*.bld"), wxOPEN);
-	int result = Selector->ShowModal();
-	if (result == wxID_CANCEL)
-	{
-		//delete dialog
-		delete Selector;
-		Selector = 0;
-		//quit
+	if (SelectBuilding() == true)
+		Start();
+	else
 		return false;
-	}
-
-	wxSleep(1);
-
-	//Create new simulator object
-	Simcore = new SBS();
-
-	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-	BuildingFile = Selector->GetFilename().mb_str().data();
-	#else
-	BuildingFile = Selector->GetFilename();
-	#endif
-
-	//initialize SBS
-	Simcore->Initialize(iSCF::SCF, engine, loader, vc, view, vfs, collision_sys, rep, sndrenderer, sndloader, material, area, root_dir.GetData(), dir_char.GetData());
-
-	//load building data file
-	Simcore->Report("\nLoading building data from " + BuildingFile + "...\n");
-
-	//Pause for 1 second
-	csSleep(1000);
-
-	BuildingFile.Insert(0, "/root/buildings/");
-	LoadBuilding(BuildingFile.GetData());
-	//if (LoadBuilding(BuildingFile.GetData()) != 0)
-
-	//delete dialog
-	delete Selector;
-	Selector = 0;
-
-	//the sky needs to be created before Prepare() is called
-	Simcore->CreateSky(Simcore->SkyName);
-
-	engine->Prepare();
-
-	//start simulation
-	Simcore->Start();
-
-	//load dialogs
-	dpanel = new DebugPanel(NULL, -1);
-	dpanel->Show(true);
-	dpanel->SetPosition(wxPoint(10, 10));
-	window->Raise();
-
-	//show main window
-	window->ShowWindow();
-
-	//run simulation
-	Simcore->Report("Running simulation...");
-	Simcore->IsRunning = true;
-	IsRunning = true;
-	StartupRunning = false;
 
 	return true;
 }
@@ -175,6 +113,10 @@ int Skyscraper::OnExit()
 
 	//delete frame printer object
 	printer.Invalidate();
+
+	//cleanup sound
+	if (sndsource)
+		StopSound();
 
 	//delete wx canvas
 	delete canvas;
@@ -652,31 +594,31 @@ void Skyscraper::StartSound()
 	//load and start background music
 
 	//load new sound
-	csRef<iDataBuffer> sndbuffer = vfs->ReadFile("/root/data/intro.mp3");
+	csRef<iDataBuffer> sndbuffer = vfs->ReadFile("/root/data/intro.wav");
 	if (!sndbuffer)
 	{
-		ReportError("Can't load file intro.mp3");
+		ReportError("Can't load file intro.wav");
 		return;
 	}
 
 	csRef<iSndSysData> snddata = sndloader->LoadSound(sndbuffer);
 	if (!snddata)
 	{
-		ReportError("Can't load sound intro.mp3");
+		ReportError("Can't load sound intro.wav");
 		return;
 	}
 
-	sndstream = sndrenderer->CreateStream(snddata, CS_SND3D_ABSOLUTE);
+	sndstream = sndrenderer->CreateStream(snddata, CS_SND3D_DISABLE);
 	if (!sndstream)
 	{
-		ReportError("Can't create stream for intro.mp3");
+		ReportError("Can't create stream for intro.wav");
 		return;
 	}
 
 	sndsource = sndrenderer->CreateSource(sndstream);
 	if (!sndsource)
 	{
-		ReportError("Can't create source for intro.mp3");
+		ReportError("Can't create source for intro.wav");
 		return;
 	}
 	
@@ -691,4 +633,81 @@ void Skyscraper::StopSound()
 	sndstream->Pause();
 	sndsource = 0;
 	sndstream = 0;
+}
+
+bool Skyscraper::SelectBuilding()
+{
+	//choose a building from a script file
+	BuildingFile = "";
+	srand (time (0));
+
+	//set building file
+	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings"), _(""), _("Building files (*.bld)|*.bld"), wxOPEN);
+	int result = Selector->ShowModal();
+	if (result == wxID_CANCEL)
+	{
+		//delete dialog
+		delete Selector;
+		Selector = 0;
+		//quit
+		return false;
+	}
+
+	wxSleep(1);
+
+	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+	BuildingFile = Selector->GetFilename().mb_str().data();
+	#else
+	BuildingFile = Selector->GetFilename();
+	#endif
+
+	//delete dialog
+	delete Selector;
+	Selector = 0;
+
+	return true;
+}
+
+void Skyscraper::Start()
+{
+	//start simulator
+
+	//Create new simulator object
+	Simcore = new SBS();
+
+	//initialize SBS
+	Simcore->Initialize(iSCF::SCF, engine, loader, vc, view, vfs, collision_sys, rep, sndrenderer, sndloader, material, area, root_dir.GetData(), dir_char.GetData());
+
+	//load building data file
+	Simcore->Report("\nLoading building data from " + BuildingFile + "...\n");
+
+	//Pause for 1 second
+	csSleep(1000);
+
+	BuildingFile.Insert(0, "/root/buildings/");
+	LoadBuilding(BuildingFile.GetData());
+	//if (LoadBuilding(BuildingFile.GetData()) != 0)
+
+	//the sky needs to be created before Prepare() is called
+	Simcore->CreateSky(Simcore->SkyName);
+
+	engine->Prepare();
+
+	//start simulation
+	Simcore->Start();
+
+	//load dialogs
+	dpanel = new DebugPanel(NULL, -1);
+	dpanel->Show(true);
+	dpanel->SetPosition(wxPoint(10, 10));
+	window->Raise();
+
+	//show main window
+	window->ShowWindow();
+
+	//run simulation
+	Simcore->Report("Running simulation...");
+	Simcore->IsRunning = true;
+	IsRunning = true;
+	StartupRunning = false;
 }

@@ -94,6 +94,8 @@ public:
 	void RenderMenu();
 	void StartSound();
 	void StopSound();
+	bool SelectBuilding();
+	void Start();
 
 private:
 	csEventID FocusGained;
