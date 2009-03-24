@@ -91,7 +91,6 @@ public:
 	bool HandleEvent(iEvent& Event);
 	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
 	void GetMenuInput();
-	void RenderMenu();
 	void StartSound();
 	void StopSound();
 	bool SelectBuilding();
@@ -119,6 +118,25 @@ private:
 	//sound data
 	csRef<iSndSysStream> sndstream;
 	csRef<iSndSysSource> sndsource;
+
+	//button locations
+	struct buttondata
+	{
+		int x;
+		int y;
+		int size_x;
+		int size_y;
+		csString filename;
+		csString filename_selected;
+		csString filename_pressed;
+		int offset_x;
+		int offset_y;
+		bool drawn_selected, drawn_pressed;
+	};
+	buttondata button1, button2, button3, button4, button5;
+
+	void DrawImage(const char *filename, buttondata *button, int x, int y, bool center, const char *filename_selected = 0, const char *filename_pressed = 0);
+	void Click(int index);
 };
 
 class MainScreen : public wxFrame

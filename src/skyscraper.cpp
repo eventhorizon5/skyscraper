@@ -94,18 +94,18 @@ bool Skyscraper::OnInit(void)
 		return false;
 	}
 
+#ifdef CS_PLATFORM_WIN32
 	//draw background
-	//DrawBackground();
-	//StartupRunning = true;
-	//StartSound();
-	//return true;
-
+	DrawBackground();
+	StartupRunning = true;
+	StartSound();
+	return true;
+#else
 	if (SelectBuilding() == true)
 		Start();
 	else
 		return false;
-
-	return true;
+#endif
 }
 
 int Skyscraper::OnExit()
@@ -245,7 +245,6 @@ void Skyscraper::SetupFrame()
 	if (IsRunning == false)
 	{
 		GetMenuInput();
-		RenderMenu();
 		return;
 	}
 
@@ -558,35 +557,146 @@ void Skyscraper::PushFrame()
 void Skyscraper::DrawBackground()
 {
 	//draw menu background
-	csRef<iFile> imagefile = vfs->Open("/root/data/menu.png", VFS_FILE_READ);
-	int w2, h2;
-	if (imagefile.IsValid())
-	{
-		csRef<iDataBuffer> filedata = imagefile->GetAllData();
-		image = imageio->Load(filedata, CS_IMGFMT_TRUECOLOR | CS_IMGFMT_ALPHA);
-		w2 = image->GetWidth();
-		h2 = image->GetHeight();
-	}
+
 	int w = g2d->GetWidth();
 	int h = g2d->GetHeight();
 	if (!g3d->BeginDraw(CSDRAW_2DGRAPHICS))
 		return;
 	g2d->Clear(0);
 	g2d->SetClipRect(0, 0, w, h);
+
+	DrawImage("/root/data/menu.png", 0, 0, 0, false);
+
+	DrawImage("/root/data/button_triton.png", &button1, 0, -20, true, "/root/data/button_triton_selected.png", "/root/data/button_triton_pressed.png");
+	DrawImage("/root/data/button_searstower.png", &button2, 0, 30, true, "/root/data/button_searstower_selected.png", "/root/data/button_searstower_pressed.png");
+	DrawImage("/root/data/button_glasstower.png", &button3, 0, 80, true, "/root/data/button_glasstower_selected.png", "/root/data/button_glasstower_pressed.png");
+	DrawImage("/root/data/button_simple.png", &button4, 0, 130, true, "/root/data/button_simple_selected.png", "/root/data/button_simple_pressed.png");
+	DrawImage("/root/data/button_other.png", &button5, 0, 180, true, "/root/data/button_other_selected.png", "/root/data/button_other_pressed.png");
+}
+
+void Skyscraper::DrawImage(const char *filename, buttondata *button, int x, int y, bool center, const char *filename_selected, const char *filename_pressed)
+{
+	int w2, h2;
+	int w = g2d->GetWidth();
+	int h = g2d->GetHeight();
+	csRef<iFile> imagefile = vfs->Open(filename, VFS_FILE_READ);
+	if (imagefile.IsValid())
+	{
+		csRef<iDataBuffer> filedata = imagefile->GetAllData();
+		image = imageio->Load(filedata, CS_IMGFMT_TRUECOLOR | CS_IMGFMT_ALPHA);
+		w2 = image->GetWidth();
+		h2 = image->GetHeight();
+		if (button)
+		{
+			if (filename_selected)
+			{
+				button->filename = filename;
+				button->filename_selected = filename_selected;
+				button->drawn_selected = false;
+				button->drawn_pressed = false;
+			}
+			if (filename_pressed)
+				button->filename_pressed = filename_pressed;
+			button->offset_x = x;
+			button->offset_y = y;
+			if (center == true)
+			{
+				button->x = (w / 2) - (w2 / 2) + x;
+				button->y = (h / 2) - (h2 / 2) + y;
+			}
+			else
+			{
+				button->x = x;
+				button->y = y;
+			}
+			button->size_x = w2;
+			button->size_y = h2;
+		}
+		if (center == true)
+		{
+			x += (w / 2) - (w2 / 2);
+			y += (h / 2) - (h2 / 2);
+		}
+	}
 	if (image.IsValid())
-		g2d->Blit(0, 0, w2, h2, (unsigned char*)image->GetImageData());
+		g2d->Blit(x, y, w2, h2, (unsigned char*)image->GetImageData());
+	image = 0;
+	imagefile = 0;
 }
 
 void Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
 
+	//get mouse coordinates
+	int mouse_x = mouse->GetLastX();
+	int mouse_y = mouse->GetLastY();
+
+	for (int i = 1; i <= 5; i++)
+	{
+		buttondata *button;
+		if (i == 1)
+			button = &button1;
+		if (i == 2)
+			button = &button2;
+		if (i == 3)
+			button = &button3;
+		if (i == 4)
+			button = &button4;
+		if (i == 5)
+			button = &button5;
+
+		if (mouse_x > button->x && mouse_x < button->x + button->size_x && mouse_y > button->y && mouse_y < button->y + button->size_y)
+		{
+			if (button->drawn_selected == false && mouse->GetLastButton(0) == false)
+			{
+				if (button->drawn_pressed == true)
+				{
+					//user clicked on button
+					Click(i);
+				}
+				DrawImage(button->filename_selected, button, button->offset_x, button->offset_y, true);
+				button->drawn_selected = true;
+			}
+			if (button->drawn_pressed == false && mouse->GetLastButton(0) == true)
+			{
+				DrawImage(button->filename_pressed, button, button->offset_x, button->offset_y, true);
+				button->drawn_pressed = true;
+				button->drawn_selected = false;
+			}
+		}
+		else if (button->drawn_selected == true || button->drawn_pressed == true)
+		{
+			DrawImage(button->filename, button, button->offset_x, button->offset_y, true);
+			button->drawn_selected = false;
+			button->drawn_pressed = false;
+		}
+	}
+	
 }
 
-void Skyscraper::RenderMenu()
+void Skyscraper::Click(int index)
 {
-	//render function for main menu
-	//g2d->Clear(black);
+	//user clicked a button
+	
+	if (index == 5)
+	{
+		//show file selection dialog
+		if (SelectBuilding() == true)
+			Start();
+		return;
+	}
+
+	if (index == 1)
+		BuildingFile = "Triton Center.bld";
+	if (index == 2)
+		BuildingFile = "Sears Tower.bld";
+	if (index == 3)
+		BuildingFile = "Glass Tower.bld";
+	if (index == 4)
+		BuildingFile = "Simple.bld";
+	if (index > 0)
+		Start();
 }
 
 void Skyscraper::StartSound()
@@ -671,6 +781,9 @@ bool Skyscraper::SelectBuilding()
 void Skyscraper::Start()
 {
 	//start simulator
+
+	//clear screen
+	g2d->Clear(0);
 
 	//Create new simulator object
 	Simcore = new SBS();
