@@ -710,31 +710,31 @@ void Skyscraper::StartSound()
 	//load and start background music
 
 	//load new sound
-	csRef<iDataBuffer> sndbuffer = vfs->ReadFile("/root/data/intro.wav");
+	csRef<iDataBuffer> sndbuffer = vfs->ReadFile("/root/data/intro.ogg");
 	if (!sndbuffer)
 	{
-		ReportError("Can't load file intro.wav");
+		ReportError("Can't load file intro.ogg");
 		return;
 	}
 
 	csRef<iSndSysData> snddata = sndloader->LoadSound(sndbuffer);
 	if (!snddata)
 	{
-		ReportError("Can't load sound intro.wav");
+		ReportError("Can't load sound intro.ogg");
 		return;
 	}
 
 	sndstream = sndrenderer->CreateStream(snddata, CS_SND3D_DISABLE);
 	if (!sndstream)
 	{
-		ReportError("Can't create stream for intro.wav");
+		ReportError("Can't create stream for intro.ogg");
 		return;
 	}
 
 	sndsource = sndrenderer->CreateSource(sndstream);
 	if (!sndsource)
 	{
-		ReportError("Can't create source for intro.wav");
+		ReportError("Can't create source for intro.ogg");
 		return;
 	}
 	
