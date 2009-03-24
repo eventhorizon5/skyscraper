@@ -820,6 +820,7 @@ void Skyscraper::Start()
 
 	//run simulation
 	Simcore->Report("Running simulation...");
+	StopSound();
 	Simcore->IsRunning = true;
 	IsRunning = true;
 	StartupRunning = false;
