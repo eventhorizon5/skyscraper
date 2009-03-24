@@ -2148,7 +2148,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndFloors>
 
 #Zone 1 Express
-<Elevator 7>
+<Elevator 1>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2160,7 +2160,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator -11.849, 71.513, 0
 <EndElevator>
 
-<Elevator 8>
+<Elevator 2>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2172,7 +2172,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator -11.849, 61.837, 0
 <EndElevator>
 
-<Elevator 9>
+<Elevator 3>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2184,7 +2184,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator -11.849, 52.236, 0
 <EndElevator>
 
-<Elevator 10>
+<Elevator 4>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2196,7 +2196,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator -11.849, 42.484, 0
 <EndElevator>
 
-<Elevators 7 to 10>
+<Elevators 1 to 4>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -2253,7 +2253,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
 <EndElevators>
 
-<Elevator 11>
+<Elevator 5>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2265,7 +2265,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator 11.849, 71.513, 0
 <EndElevator>
 
-<Elevator 12>
+<Elevator 6>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2277,7 +2277,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator 11.849, 61.837, 0
 <EndElevator>
 
-<Elevator 13>
+<Elevator 7>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2289,7 +2289,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator 11.849, 52.236, 0
 <EndElevator>
 
-<Elevator 14>
+<Elevator 8>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2301,7 +2301,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator 11.849, 42.484, 0
 <EndElevator>
 
-<Elevators 11 to 14>
+<Elevators 5 to 8>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -2360,7 +2360,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevators>
 
 #Zone 2 Express
-<Elevator 1>
+<Elevator 9>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2372,7 +2372,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator -11.849, -52.965, 0
 <EndElevator>
 
-<Elevator 2>
+<Elevator 10>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2384,7 +2384,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator -11.849, -61.7, 0
 <EndElevator>
 
-<Elevator 3>
+<Elevator 11>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2396,7 +2396,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator -11.849, -70.435, 0
 <EndElevator>
 
-<Elevators 1 to 3>
+<Elevators 9 to 11>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -2453,7 +2453,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
 <EndElevators>
 
-<Elevator 4>
+<Elevator 12>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2465,7 +2465,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator 11.849, -52.965, 0
 <EndElevator>
 
-<Elevator 5>
+<Elevator 13>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2477,7 +2477,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator 11.849, -61.7, 0
 <EndElevator>
 
-<Elevator 6>
+<Elevator 14>
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2489,7 +2489,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator 11.849, -70.435, 0
 <EndElevator>
 
-<Elevators 4 to 6>
+<Elevators 12 to 14>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4903,32 +4903,32 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
 #Zone 1 Express
 <Floors 0 to 1>
-    CallButtonElevators = 7, 8, 9, 10, 11, 12, 13, 14
+    CallButtonElevators = 1, 2, 3, 4, 5, 6, 7, 8
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, 56.772, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, 56.772, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 33 to 34>
-    CallButtonElevators = 7, 8, 9, 10, 11, 12, 13, 14
+    CallButtonElevators = 1, 2, 3, 4, 5, 6, 7, 8
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, 56.772, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, 56.772, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Zone 2 Express
 <Floors 0 to 1>
-    CallButtonElevators = 1, 2, 3, 4, 5, 6
+    CallButtonElevators = 9, 10, 11, 12, 13, 14
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, -61.7 - 4.75, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, -61.7 + 4.75, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 33 to 34>
-    CallButtonElevators = 1, 2, 3, 4, 5, 6
+    CallButtonElevators = 9, 10, 11, 12, 13, 14
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, -61.7 - 4.75, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, -61.7 + 4.75, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 66 to 67>
-    CallButtonElevators = 1, 2, 3, 4, 5, 6
+    CallButtonElevators = 9, 10, 11, 12, 13, 14
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, -61.7 - 4.75, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, -61.7 + 4.75, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
