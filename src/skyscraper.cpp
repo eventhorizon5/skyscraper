@@ -74,6 +74,7 @@ bool Skyscraper::OnInit(void)
 	canvas_height = 0;
 	IsRunning = false;
 	StartupRunning = false;
+	Starting = false;
 
 	//Create main window
 	window = new MainScreen();
@@ -628,6 +629,10 @@ void Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
 
+	//exit if simulator is starting
+	if (Starting == true)
+		return;
+
 	//get mouse coordinates
 	int mouse_x = mouse->GetLastX();
 	int mouse_y = mouse->GetLastY();
@@ -784,6 +789,10 @@ void Skyscraper::Start()
 
 	//clear screen
 	g2d->Clear(0);
+	g2d->FinishDraw();
+	g2d->Print(0);
+
+	Starting = true;
 
 	//Create new simulator object
 	Simcore = new SBS();

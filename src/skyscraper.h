@@ -63,6 +63,7 @@ public:
 	bool InputOnly; //skip sim processing and only run input and rendering code
 	bool IsRunning;
 	bool StartupRunning;
+	bool Starting;
 
 	csTicks elapsed_time, current_time;
 
