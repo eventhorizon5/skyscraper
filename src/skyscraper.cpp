@@ -659,6 +659,7 @@ void Skyscraper::GetMenuInput()
 				{
 					//user clicked on button
 					Click(i);
+					return;
 				}
 				DrawImage(button->filename_selected, button, button->offset_x, button->offset_y, true);
 				button->drawn_selected = true;
