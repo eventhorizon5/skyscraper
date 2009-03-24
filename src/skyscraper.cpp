@@ -106,6 +106,7 @@ bool Skyscraper::OnInit(void)
 		Start();
 	else
 		return false;
+	return true;
 #endif
 }
 
@@ -746,7 +747,8 @@ void Skyscraper::StartSound()
 void Skyscraper::StopSound()
 {
 	//stop and unload sound
-	sndstream->Pause();
+	if (sndstream)
+		sndstream->Pause();
 	sndsource = 0;
 	sndstream = 0;
 }
@@ -833,5 +835,6 @@ void Skyscraper::Start()
 	StopSound();
 	Simcore->IsRunning = true;
 	IsRunning = true;
+	Starting = false;
 	StartupRunning = false;
 }
