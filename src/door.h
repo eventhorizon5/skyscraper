@@ -35,6 +35,8 @@ public:
 	bool OpenState;
 	csVector3 origin; //door origin
 	bool IsMoving; //is door moving?
+	bool OpenDoor; //open or close door?
+	bool Clockwise; //if door should rotate clockwise
 
 	Door(const char *name, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	~Door();
@@ -47,6 +49,9 @@ public:
 private:
 	csRef<iMeshWrapper> DoorMesh; //door mesh
 	csRef<iThingFactoryState> DoorMesh_state;
+	csRef<iMovable> DoorMesh_movable;
+
+	float rotation;
 
 	char intbuffer[65];
 	char buffer[20];

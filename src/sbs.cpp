@@ -125,6 +125,7 @@ SBS::SBS()
 	ReverseAxisValue = false;
 	TextureOverride = false;
 	ProcessElevators = true;
+	callbackdoor = 0;
 }
 
 SBS::~SBS()
@@ -283,9 +284,14 @@ void SBS::MainLoop()
 			if (AutoStairs == true)
 				camera->CheckStairwell();
 
-			//open/close doors
+			//open/close doors by using door callback
 			if (callbackdoor)
-				callbackdoor->MoveDoor();
+			{
+				if (callbackdoor->IsMoving == true)
+					callbackdoor->MoveDoor();
+				else
+					UnregisterDoorCallback(callbackdoor);
+			}
 
 			//check if the user is outside
 

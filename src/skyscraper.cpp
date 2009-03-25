@@ -679,13 +679,13 @@ void Skyscraper::GetMenuInput()
 			button->drawn_pressed = false;
 		}
 	}
-	
+
 }
 
 void Skyscraper::Click(int index)
 {
 	//user clicked a button
-	
+
 	if (index == 5)
 	{
 		//show file selection dialog
@@ -738,7 +738,7 @@ void Skyscraper::StartSound()
 		ReportError("Can't create source for intro.ogg");
 		return;
 	}
-	
+
 	sndstream->SetLoopState(true);
 	sndsource->SetVolume(1.0f);
 	sndstream->Unpause();
