@@ -49,6 +49,7 @@ Door::Door(const char *name, const char *texture, float thickness, int direction
 	Name = name;
 	Direction = direction;
 	OpenState = false;
+	IsMoving = false;
 	float x1, z1, x2, z2;
 	origin = csVector3(CenterX, altitude, CenterZ);
 
@@ -95,16 +96,20 @@ Door::~Door()
 void Door::Open()
 {
 	sbs->Report("Opening door " + Name);
+	if (!sbs->RegisterDoorCallback(this))
+		return;
 }
 
 void Door::Close()
 {
 	sbs->Report("Closing door " + Name);
+	if (!sbs->UnregisterDoorCallback(this))
+		return;
 }
 
 bool Door::IsOpen()
 {
-	return false;
+	return OpenState;
 }
 
 void Door::Enabled(bool value)
@@ -121,4 +126,9 @@ void Door::Enabled(bool value)
 		DoorMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
 		DoorMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
 	}
+}
+
+void Door::MoveDoor()
+{
+
 }

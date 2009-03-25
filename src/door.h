@@ -34,6 +34,7 @@ public:
 	int Direction;
 	bool OpenState;
 	csVector3 origin; //door origin
+	bool IsMoving; //is door moving?
 
 	Door(const char *name, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	~Door();
@@ -41,6 +42,7 @@ public:
 	void Close();
 	bool IsOpen();
 	void Enabled(bool value);
+	void MoveDoor();
 
 private:
 	csRef<iMeshWrapper> DoorMesh; //door mesh

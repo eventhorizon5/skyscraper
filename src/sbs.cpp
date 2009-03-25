@@ -283,6 +283,10 @@ void SBS::MainLoop()
 			if (AutoStairs == true)
 				camera->CheckStairwell();
 
+			//open/close doors
+			if (callbackdoor)
+				callbackdoor->MoveDoor();
+
 			//check if the user is outside
 
 		}
@@ -2524,5 +2528,35 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 					GetFloor(i)->EnableGroup(value);
 			}
 		}
+	}
+}
+
+bool SBS::RegisterDoorCallback(Door *door)
+{
+	//register a door object for callbacks (used for door movement)
+	if (!callbackdoor)
+	{
+		callbackdoor = door;
+		return true;
+	}
+	else
+	{
+		Report("Door in use; cannot register callback");
+		return false;
+	}
+}
+
+bool SBS::UnregisterDoorCallback(Door *door)
+{
+	//unregister existing door callback
+	if (callbackdoor->IsMoving == false && door == callbackdoor)
+	{
+		callbackdoor = 0;
+		return true;
+	}
+	else
+	{
+		Report("Door in use; cannot unregister callback");
+		return false;
 	}
 }
