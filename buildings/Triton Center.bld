@@ -40,7 +40,7 @@
     Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 0.5, 0.5
-    Load data/Metalbare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
+    Load data/MetalBare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
     Load data/metal080.jpg, ServiceElevPanelMain, 0.5, 0.5
     Load data/diamond18h.jpg, OfficeElevWall, 0.333, 0.333
     Load data/diamond18b.jpg, ExpressElevWall, 0.333, 0.333
@@ -50,6 +50,10 @@
     Load data/marbl3.jpg, Wall1, 0.269, 0.25
     Load data/stucco4c.jpg, Stucco4, 0.25, 0.25
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/grndroad1mid.jpg, ParkingFloor, 0.25, 0.25
+    Load data/stucco4c.jpg, ParkingCeiling, 0.25, 0.25
+    Load data/brick1.jpg, ParkingWalls, 0.269, 0.25
+    Load data/stucco4b.jpg, LowerLevelWalls, 0.25, 0.25
     Load data/intext.jpg, InterExt, 0.269, 0.25
     Load data/intext.jpg, InterInt, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
@@ -225,12 +229,12 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Brick, 0.5, -105, -100, 105, 100, 0, 0, 0, 0, False
+    AddFloor Floor, ParkingFloor, 0.5, -105, -100, 105, 100, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Brick, 0.5, -105, -100, 105, 100, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, ParkingCeiling, 0.5, -105, -100, 105, 100, %height%, %height%, 0, 0, False
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -257,17 +261,27 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     #Level Walls
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Front, Brick, 0.5, -105, -100, 105, -100, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Left, Brick, 0.5, -105, -100, -105, 100, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front, ParkingWalls, 0.5, -105, -100, 105, -100, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, ParkingWalls, 0.5, -105, -100, -105, 100, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Right, Brick, 0.5, 105, -100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Back, Brick, 0.5, -105, 100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right, ParkingWalls, 0.5, 105, -100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, ParkingWalls, 0.5, -105, 100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
     
     #cut for atrium
     if[%floor% = -3] Cut -37, -1, -50, 37, %interfloorheight% + 1, 4, false, true
     if[%floor% = -7] Cut -37, %interfloorheight% + 1, -50, 37, %fullheight% + 1, 4, false, true
     if[%floor% > -7 & %floor% < -3] Cut -37, -1, -50, 37, %fullheight% + 1, 4, false, true
+    
+    #atrium interfloor covers
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% > -7] AddWall AFront, ParkingCeiling, 0.5, -37, -50, 37, -50, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    if[%floor% > -7] AddWall ALeft, ParkingCeiling, 0.5, -37, -50, -37, 4, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% > -7] AddWall ARight, ParkingCeiling, 0.5, 37, -50, 37, 50, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    if[%floor% > -7] AddWall ABack, ParkingCeiling, 0.5, -37, 4, 37, 4, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     
 <EndFloors>
 
@@ -1681,6 +1695,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
 <Floors -1 to 38>
     Set 5 = Wall1
     if[%floor% = 38] Set 5 = Stucco4
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 1
     FloorOrientation = top
@@ -1736,6 +1751,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
 
 <Floors -1 to 16>
     Set 5 = Wall1
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 3
     FloorOrientation = top
@@ -1784,6 +1800,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
 
 <Floors -1 to 28>
     Set 5 = Wall1
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 4
     FloorOrientation = top
@@ -1838,6 +1855,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     Set 5 = Wall1
     if[%floor% = 38] Set 5 = Stucco4
     if[%floor% = 39] Set 5 = Stucco4
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 7
     FloorOrientation = top
@@ -1890,7 +1908,8 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
 
 #Lobby/parking shafts
 <Floors -8 to 2>
-    Set 5 = Wall1
+    if[%floor% > -1] Set 5 = Wall1
+    if[%floor% < 0] Set 5 = LowerLevelWalls
 
     #shaft 9
     FloorOrientation = top
@@ -1949,6 +1968,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 38] Set 5 = Stucco4
     if[%floor% = 39] Set 5 = Stucco4
     if[%floor% = 79] Set 5 = Stucco4
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 11
     FloorOrientation = top
@@ -2012,6 +2032,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 38] Set 5 = Stucco4
     if[%floor% = 39] Set 5 = Stucco4
     if[%floor% = 79] Set 5 = Stucco4
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 13
     FloorOrientation = top
@@ -2044,6 +2065,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
 
 <Floors -8 to 141>
     Set 5 = Wall1
+    if[%floor% < 0] Set 5 = LowerLevelWalls
     if[%floor% = 38] Set 5 = Stucco4
     if[%floor% = 39] Set 5 = Stucco4
     if[%floor% = 79] Set 5 = Stucco4
@@ -2145,6 +2167,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #Upper express shaft
     #shaft 15
@@ -2521,6 +2544,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 39] Set 5 = Stucco4
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = 119] Set 5 = Stucco4
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 29
     FloorOrientation = top
@@ -2558,6 +2582,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 30
     FloorOrientation = top
@@ -2592,6 +2617,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 31
     FloorOrientation = top
@@ -2651,6 +2677,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
+    if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 33
     FloorOrientation = top
