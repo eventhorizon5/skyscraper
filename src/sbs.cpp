@@ -2545,6 +2545,8 @@ bool SBS::RegisterDoorCallback(Door *door)
 		callbackdoor = door;
 		return true;
 	}
+	else if (callbackdoor == door && callbackdoor->IsMoving == true)
+		callbackdoor->OpenDoor = !callbackdoor->OpenDoor;
 	else
 	{
 		Report("Door in use; cannot register callback");

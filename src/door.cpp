@@ -125,7 +125,8 @@ void Door::Open()
 	sbs->Report("Opening door " + Name);
 	if (!sbs->RegisterDoorCallback(this))
 		return;
-	OpenDoor = true;
+	if (IsMoving == false)
+		OpenDoor = true;
 	IsMoving = true;
 }
 
@@ -134,7 +135,8 @@ void Door::Close()
 	sbs->Report("Closing door " + Name);
 	if (!sbs->RegisterDoorCallback(this))
 		return;
-	OpenDoor = false;
+	if (IsMoving == false)
+		OpenDoor = false;
 	IsMoving = true;
 }
 
@@ -165,16 +167,16 @@ void Door::MoveDoor()
 	if (Clockwise == true)
 	{
 		if (OpenDoor == true)
-			rotation -= 1 * sbs->delta;
+			rotation += 75 * sbs->delta;
 		else
-			rotation += 1 * sbs->delta;
+			rotation -= 75 * sbs->delta;
 	}
 	else
 	{
 		if (OpenDoor == true)
-			rotation += 1 * sbs->delta;
+			rotation -= 75 * sbs->delta;
 		else
-			rotation -= 1 * sbs->delta;
+			rotation += 75 * sbs->delta;
 	}
 
 	//if opened fully, set state to opened
