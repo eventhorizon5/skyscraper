@@ -2017,7 +2017,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     #shaft 12
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    if[(%floor% > 16 & %floor% < 39)] AddWall Shaft12FrontE, %5%, 0.33, -4.75 + -19 - 0.33, -9.87 + 23.375, 4.75 + -19 + 0.33, -9.87 + 23.375, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 16 & %floor% < 39] AddWall Shaft12FrontE, %5%, 0.33, -4.75 + -19 - 0.33, -9.87 + 23.375, 4.75 + -19 + 0.33, -9.87 + 23.375, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 62] AddWall Shaft12FrontE, %5%, 0.33, -4.75 + -19 - 0.33, -9.87 + 23.375, 4.75 + -19 + 0.33, -9.87 + 23.375, %3%, %3%, %4%, %4%, 0, 0, False
     if[(%floor% > 16 & %floor% < 38) | %floor% > 79] AddWall Shaft12LeftE, %5%, 0.33, -4.75 + -19, -9.87 + 23.375 - 0.33, -4.75 + -19, 9.87 + 23.375, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < 17] AddWall Shaft12LeftE, %5%, 0.33, -4.75 + -19, -9.87 + 23.375, -4.75 + -19, 9.87 + 23.375, %3%, %3%, %4%, %4%, 0, 0, False
@@ -2121,13 +2121,13 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     #shaft 14
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    if[(%floor% > 62 & %floor% < 79) | %floor% > 134] AddWall Shaft14FrontE, %5%, 0.33, -4.92 + -9.417 - 0.33, -16.75 + 30.71, 4.92 + -9.417 + 0.33, -16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% < -1 | (%floor% > 62 & %floor% < 79) | %floor% > 134] AddWall Shaft14FrontE, %5%, 0.33, -4.92 + -9.417 - 0.33, -16.75 + 30.71, 4.92 + -9.417 + 0.33, -16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 78 & %floor% < 135] AddWall Shaft14FrontE, %5%, 0.33, 4.92 + -9.417 - 1.173, -16.75 + 30.71, 4.92 + -9.417 + 0.33, -16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < 39] AddWall Shaft14FrontE, %5%, 0.33, 4.92 + -9.417 - 0.836, -16.75 + 30.71, 4.92 + -9.417 + 0.33, -16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 38 & %floor% < 63] AddWall Shaft14FrontE, %5%, 0.33, 4.92 + -9.417 - 1.353, -16.75 + 30.71, 4.92 + -9.417 + 0.33, -16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
-    if[%floor% > 119] AddWall Shaft14LeftE, %5%, 0.33, -4.92 + -9.417, -16.75 + 30.71 - 0.33, -4.92 + -9.417, 16.75 + 30.71 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 119 | %floor% < -1] AddWall Shaft14LeftE, %5%, 0.33, -4.92 + -9.417, -16.75 + 30.71 - 0.33, -4.92 + -9.417, 16.75 + 30.71 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < 120] AddWall Shaft14LeftE, %5%, 0.33, -4.92 + -9.417, 11.5 + 30.71 - 0.33, -4.92 + -9.417, 16.75 + 30.71 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
-    if[%floor% > 102 & %floor% < 120] AddWall Shaft12LeftE, %5%, 0.33, -4.92 + -9.417, -9.87 + 23.375, -4.92 + -9.417, 9.87 + 23.375, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 102 & %floor% < 120] AddWall Shaft14LeftE, %5%, 0.33, -4.92 + -9.417, -9.87 + 23.375, -4.92 + -9.417, 9.87 + 23.375, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddWall Shaft14BackE, %5%, 0.33, -4.92 + -9.417 - 0.33, 16.75 + 30.71, 4.92 + -9.417 + 0.167, 16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
@@ -2141,13 +2141,16 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[(%floor% > 79 & %floor% < 99) | %floor% > 119] AddWall Shaft16FrontE, %5%, 0.33, -5.04 + 9.375 - 0.33, -5.08 + 18.54, 5.04 + 9.375 + 0.33, -5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 98 & %floor% < 120] AddWall Shaft16FrontE, %5%, 0.33, -5.04 + 9.375 - 0.33, -5.08 + 18.54, -5.04 + 9.375 + 1.335, -5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 38 & %floor% < 80] AddWall Shaft16FrontE, %5%, 0.33, -5.04 + 9.375 - 0.33, -5.08 + 18.54, -5.04 + 9.375 + 1.515, -5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
-    if[%floor% < 39] AddWall Shaft16FrontE, %5%, 0.33, -5.04 + 9.375 - 0.33, -5.08 + 18.54, -5.04 + 9.375 + 0.998, -5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > -2 & %floor% < 39] AddWall Shaft16FrontE, %5%, 0.33, -5.04 + 9.375 - 0.33, -5.08 + 18.54, -5.04 + 9.375 + 0.998, -5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% < -1] AddWall Shaft16FrontE, %5%, 0.33, -5.04 + 9.375 - 0.33, -5.08 + 18.54, 5.04 + 9.375 + 0.33, -5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
     AddWall Shaft16LeftE, %5%, 0.33, -5.04 + 9.375, -5.08 + 18.54 - 0.33, -5.04 + 9.375, 5.08 + 18.54 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    if[%floor% < 83] AddWall Shaft16RightE, %5%, 0.33, 5.04 + 9.375, 5.08 + 18.54 - 0.33 - 1.12, 5.04 + 9.375, 5.08 + 18.54 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% < -1] AddWall Shaft16RightE, %5%, 0.33, 5.04 + 9.375, -5.08 + 18.54 - 0.33, 5.04 + 9.375, 5.08 + 18.54 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > -2 & %floor% < 83] AddWall Shaft16RightE, %5%, 0.33, 5.04 + 9.375, 5.08 + 18.54 - 0.33 - 1.12, 5.04 + 9.375, 5.08 + 18.54 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 82] AddWall Shaft16RightE, %5%, 0.33, 5.04 + 9.375, -5.08 + 18.54 - 0.33, 5.04 + 9.375, 5.08 + 18.54 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft16BackE, %5%, 0.33, 5.04 + 9.375 - 0.582, 5.08 + 18.54, 5.04 + 9.375 + 0.33, 5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > -2] AddWall Shaft16BackE, %5%, 0.33, 5.04 + 9.375 - 0.582, 5.08 + 18.54, 5.04 + 9.375 + 0.33, 5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% < -1] AddWall Shaft16BackE, %5%, 0.33, -5.04 + 9.375 - 0.33, 5.08 + 18.54, 5.04 + 9.375 + 0.33, 5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
 
     #Core utility shaft
     #shaft 17
@@ -2156,6 +2159,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     AddWall Shaft17FrontE, %5%, 0.33, -4.33 - 0.33, -4.75 + 42.71, 4.33 + 0.33, -4.75 + 42.71, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
+    if[%floor% < -1] AddWall Shaft17RightE, %5%, 0.33, 4.33, -4.75 + 42.71 - 0.33, 4.33, 4.75 + 42.71 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < 79] AddWall Shaft17BackE, %5%, 0.33, -4.33, 4.75 + 42.71, 4.33, 4.75 + 42.71, %3%, %3%, %4%, %4%, 0, 0, False
 
 <EndFloors>
@@ -5948,6 +5952,7 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% = 38] AddStairsFloor 1, StairsCeiling, Ceiling1, 0.5, -4.5, -9.708, 4.5, 9.708, 12, 12, 0, 0
 
     Set 5 = Wall1
+    if[%floor% < 0] Set 5 = LowerLevelWalls
     if[%floor% = 38] Set 5 = Stucco4
     if[%floor% = 39] Set 5 = Stucco4
     DrawWalls = true, false, false, false, false, false
@@ -5957,6 +5962,7 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% > 16] AddWall StairsFrontE, %5%, 0.33, -4.5 + -46.67 - 0.33, -9.708 + -3.708, 4.5 + -46.67 + 0.33, -9.708 + -3.708, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
+    if[%floor% < -1] AddWall StairsBackE, %5%, 0.33, -4.5 + -46.67 - 0.33, 9.708 + -3.708, 4.5 + -46.67 + 0.33, 9.708 + -3.708, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% < -1 | %floor% > 16] AddWall StairsRightE, %5%, 0.33, 4.5 + -46.67, -9.708 + -3.708 - 0.33, 4.5 + -46.67, 9.708 + -3.708, %height%, %height%, 0, 0, 0, 0, False
 
     #doors
@@ -6085,10 +6091,12 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
 
 
     Set 5 = Wall1
+    if[%floor% < 0] Set 5 = LowerLevelWalls
     if[%floor% = 38] Set 5 = Stucco4
     if[%floor% = 39] Set 5 = Stucco4
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
+    if[%floor% < -1] AddWall StairsFrontE, %5%, 0.33, -4.5 + 46.67 - 0.33, -9.708 + 3.708, 4.5 + 46.67 + 0.33, 9.708 + 3.708, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% < -1 | %floor% > 28] AddWall StairsLeftE, %5%, 0.33, -4.5 + 46.67, -9.708 + 3.708, -4.5 + 46.67, 9.708 + 3.708 + 0.33 + 0.084, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
