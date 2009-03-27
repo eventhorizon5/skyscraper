@@ -2108,9 +2108,11 @@ bool Skyscraper::IfProc(const char *expression)
 	} while (1 == 1);
 	//find number of operators and recurse if multiple found
 	int operators;
+	int operators2;
 	do
 	{
 		operators = 0;
+		operators2 = 0;
 		start = 0;
 		end = 0;
 		check = false;
@@ -2123,6 +2125,15 @@ bool Skyscraper::IfProc(const char *expression)
 			if (tmpcalc.GetAt(i) == '&' || tmpcalc.GetAt(i) == '|')
 			{
 				check = true;
+				operators2++;
+				if (operators == 1 && operators2 == 2)
+				{
+					//handle 2 and/if operators
+					end = i;
+					start = 0;
+					operators = 2;
+					break;
+				}
 				if (operators == 1)
 				{
 					operators = 2;
