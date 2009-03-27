@@ -52,7 +52,7 @@
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
     Load data/grndroad1mid.jpg, ParkingFloor, 0.25, 0.25
     Load data/stucco4c.jpg, ParkingCeiling, 0.25, 0.25
-    Load data/brick1.jpg, ParkingWalls, 0.269, 0.25
+    Load data/stucco4e.jpg, ParkingWalls, 0.269, 0.25
     Load data/stucco4b.jpg, LowerLevelWalls, 0.25, 0.25
     Load data/intext.jpg, InterExt, 0.269, 0.25
     Load data/intext.jpg, InterInt, 0.269, 0.25
@@ -276,12 +276,12 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     #atrium interfloor covers
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    if[%floor% > -7] AddWall AFront, ParkingCeiling, 0.5, -37, -50, 37, -50, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
-    if[%floor% > -7] AddWall ALeft, ParkingCeiling, 0.5, -37, -50, -37, 4, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    if[%floor% > -7] AddWall AFront, ParkingWalls, 0.5, -37, -50, 37, -50, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    if[%floor% > -7] AddWall ALeft, ParkingWalls, 0.5, -37, -50, -37, 4, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    if[%floor% > -7] AddWall ARight, ParkingCeiling, 0.5, 37, -50, 37, 50, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
-    if[%floor% > -7] AddWall ABack, ParkingCeiling, 0.5, -37, 4, 37, 4, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    if[%floor% > -7] AddWall ARight, ParkingWalls, 0.5, 37, -50, 37, 50, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    if[%floor% > -7] AddWall ABack, ParkingWalls, 0.5, -37, 4, 37, 4, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     
 <EndFloors>
 
