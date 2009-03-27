@@ -2164,16 +2164,16 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 8, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 9, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button34, 2, 3, 34, 1, 1
-    AddFloorButton 1, Button33, 2, 3, 33, 1, 1
+    AddFloorButton 1, Button33, 3, 3, 33, 1, 1
     AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, 4, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 7, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 7, 4, alarm, 1, 1
+    AddFloorButton 1, ButtonCC, 5, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
@@ -2270,16 +2270,16 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 8, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 9, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button34, 2, 3, 34, 1, 1
-    AddFloorButton 1, Button33, 2, 3, 33, 1, 1
+    AddFloorButton 1, Button33, 3, 3, 33, 1, 1
     AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, 4, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 7, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 7, 4, alarm, 1, 1
+    AddFloorButton 1, ButtonCC, 5, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.7, 0.5, 6.5
@@ -2364,16 +2364,18 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 8, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button67, 2, 3, 67, 1, 1
-    AddFloorButton 1, Button66, 2, 3, 66, 1, 1
+    CreatePanel ElevPanel, 9, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button67, 2, 4, 67, 1, 1
+    AddFloorButton 1, Button66, 2, 2, 66, 1, 1
+    AddFloorButton 1, Button34, 3, 4, 34, 1, 1
+    AddFloorButton 1, Button33, 3, 2, 33, 1, 1
     AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, 4, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 7, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 7, 4, alarm, 1, 1
+    AddFloorButton 1, ButtonCC, 5, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
@@ -2458,16 +2460,18 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 8, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button67, 2, 3, 67, 1, 1
-    AddFloorButton 1, Button66, 2, 3, 66, 1, 1
+    CreatePanel ElevPanel, 9, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button67, 2, 4, 67, 1, 1
+    AddFloorButton 1, Button66, 2, 2, 66, 1, 1
+    AddFloorButton 1, Button34, 3, 4, 34, 1, 1
+    AddFloorButton 1, Button33, 3, 2, 33, 1, 1
     AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, 4, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 7, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 7, 4, alarm, 1, 1
+    AddFloorButton 1, ButtonCC, 5, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.7, 0.5, 6.5
@@ -4839,7 +4843,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CallButtonElevators = 1, 2, 3, 4, 5, 6, 7, 8
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, 56.772, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, 56.772, 4, left, 0.5, 1, true, 0, 0
-<EndFloor>
+<EndFloors>
 
 #Zone 2 Express
 <Floors 0 to 1>
@@ -4852,13 +4856,13 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CallButtonElevators = 9, 10, 11, 12, 13, 14
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, -61.7 - 4.75, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, -61.7 + 4.75, 4, left, 0.5, 1, true, 0, 0
-<EndFloor>
+<EndFloors>
 
 <Floors 66 to 67>
     CallButtonElevators = 9, 10, 11, 12, 13, 14
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, -61.7 - 4.75, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, -61.7 + 4.75, 4, left, 0.5, 1, true, 0, 0
-<EndFloor>
+<EndFloors>
 
 #Zone 1 locals
 <Floor 2>
@@ -4946,16 +4950,16 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 #Zone 3 locals
 <Floor 66>
     CallButtonElevators = 61, 62, 63, 64
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 40.797 + 4.236 + 0.33 + 0.1, -13.25 + 4.548, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 61.377 - 4.236 - 0.33 - 0.1, -13.25 - 4.548, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 40.797 + 4.236 + 0.33 + 0.1, -13.25, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 61.377 - 4.236 - 0.33 - 0.1, -13.25, 4, left, 0.5, 1, true, 0, 0
     CallButtonElevators = 65, 66, 67, 68
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 40.797 + 4.236 + 0.33 + 0.1, 4.194 + 4.548, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 61.377 - 4.236 - 0.33 - 0.1, 4.194 - 4.548, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 40.797 + 4.236 + 0.33 + 0.1, 4.194, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 61.377 - 4.236 - 0.33 - 0.1, 4.194, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 67>
     CallButtonElevators = 69, 70, 71, 72    
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.064 + 4.236 + 0.33 + 0.1, -6.608 + 4.548, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.064 + 4.236 + 0.33 + 0.1, -6.608, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 32.39 - 4.236 - 0.33 - 0.1, -6.608 - 4.548, 4, left, 0.5, 1, true, 0, 0
     CallButtonElevators = 73, 74, 75, 76, 77
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -32.154 + 4.236 + 0.33 + 0.1, -4.71 + 4.548, 4, right, 0.5, 1, true, 0, 0
@@ -4964,20 +4968,20 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
 <Floors 68 to 74>
     CallButtonElevators = 61, 62, 63, 64
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 40.797 + 4.236 + 0.33 + 0.1, -13.25 + 4.548, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 61.377 - 4.236 - 0.33 - 0.1, -13.25 - 4.548, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 40.797 + 4.236 + 0.33 + 0.1, -13.25, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 61.377 - 4.236 - 0.33 - 0.1, -13.25, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floors 75 to 81>
     CallButtonElevators = 65, 66, 67, 68
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 40.797 + 4.236 + 0.33 + 0.1, 4.194 + 4.548, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 61.377 - 4.236 - 0.33 - 0.1, 4.194 - 4.548, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 40.797 + 4.236 + 0.33 + 0.1, 4.194, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 61.377 - 4.236 - 0.33 - 0.1, 4.194, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floors 82 to 87>
     CallButtonElevators = 69, 70, 71, 72    
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.064 + 4.236 + 0.33 + 0.1, -6.608 + 4.548, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 32.39 - 4.236 - 0.33 - 0.1, -6.608 - 4.548, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.064 + 4.236 + 0.33 + 0.1, -6.608, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 32.39 - 4.236 - 0.33 - 0.1, -6.608, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floors 90 to 102>
