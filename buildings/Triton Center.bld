@@ -612,7 +612,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     AddWall Front, Stucco4, 0.5, -46.67 - 4.5 - 10 - 0.5, -3.708 - 9.708 + 0.33, -46.67 - 4.5 - 0.33, -3.708 - 9.708 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     AddWall Back, Stucco4, 0.5, -46.67 - 4.5 - 10 - 0.5, 37.367 + 4.167, -19 + 4.75 - 0.33, 37.367 + 4.167, %height%, %height%, 0, 0, 0, 0, False
-    AddDoor Door, 0.2, 5, -46.67 - 4.5 - 5, -3.708 - 9.708, 3.5, 8, 0, 1, 1
+    AddDoor StairsDoor, 0.2, 5, -46.67 - 4.5 - 5, -3.708 - 9.708, 3.5, 8, 0, 1, 1
 
     #South transfer
     WallOrientation = right
@@ -621,7 +621,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     WallOrientation = left
     AddWall Back, Stucco4, 0.5, 24.08 + 9.75 + 0.33, 3.708 + 9.708 - 0.33, 46.67 - 4.5 - 0.33, 3.708 + 9.708 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Right, Stucco4, 0.5, 46.67 - 4.5 - 0.33, -33.708 + 4 - 0.5, 46.67 - 4.5 - 0.33, -9.792 - 3.792 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddDoor Door, 0.2, 5, 38, 3.708 + 9.708 - 0.33 + 0.25, 3.5, 8, 0, 1, 1
+    AddDoor StairsDoor, 0.2, 5, 38, 3.708 + 9.708 - 0.33 + 0.25, 3.5, 8, 0, 1, 1
 <EndFloor>
 
 # Zone 1 Column Frame
@@ -799,7 +799,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     AddWall Left, Stucco4, 0.5, -29.083 + 5.333 - 10, 23.537 + 9.708 + 0.33, -29.083 + 5.333 - 10, 51.66 + 4.5 - 0.33 + 0.5, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     AddWall Back, Stucco4, 0.5, -29.083 + 5.333 - 10 - 0.5, 51.66 + 4.5 - 0.33, 4.7515 - 9.0815 - 0.33, 51.66 + 4.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddDoor Door, 0.2, 8, -29.083 + 5.333 - 5, 51.66 + 4.5, 3.5, 8, 0, 1, 1
+    AddDoor StairsDoor, 0.2, 8, -29.083 + 5.333 - 5, 51.66 + 4.5, 3.5, 8, 0, 1, 1
 
     #Southwest transfer
     WallOrientation = right
@@ -809,7 +809,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     AddWall Back, Stucco4, 0.5, 5.67 + 0.33, -13.5 + 8.5 - 0.33, 5.67 + 0.33 + 10 + 0.5, -13.5 + 8.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Back2, Stucco4, 0.5, 5.67 + 0.33 + 10, -33.708 + 9.708 - 0.33, 26.42 - 4.5 - 0.33, -33.708 + 9.708 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Right, Stucco4, 0.5, 5.67 + 0.33 + 10, -33.708 + 9.708 - 0.33, 5.67 + 0.33 + 10, -13.5 + 8.5 - 0.33 + 0.5, %height%, %height%, 0, 0, 0, 0, False
-    AddDoor Door, 0.2, 6, 5.67 + 0.33 + 5, -33.708 + 9.708 - 0.33 - 10 - 0.25, 3.5, 8, 0, 1, 1
+    AddDoor StairsDoor, 0.2, 6, 5.67 + 0.33 + 5, -33.708 + 9.708 - 0.33 - 10 - 0.25, 3.5, 8, 0, 1, 1
 
 <EndFloor>
 
@@ -5868,7 +5868,7 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = right
     AddStairsWall 1, LandingMiddleCover, Brick, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 16, 0, 0
+    AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 4, 4.5, 9.708, %1% * 16, %1% * 16, 1, 1
     DrawWalls = true, false, false, false, false, false
@@ -6032,7 +6032,7 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = right
     AddStairsWall 2, LandingMiddleCover, Brick, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 2, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 16, 0, 0
+    AddStairs 2, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -4, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
@@ -6220,7 +6220,7 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
     WallOrientation = left
     AddStairsWall 3, LandingMiddleCover, Brick, 0.1, -5.333, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 3, StairsUpper, Stairs, front, 2.501, 0, 5.003, %1%, 8 / 7, 8, %1% * 16, 0, 0
+    AddStairs 3, StairsUpper, Stairs, front, 2.501, 0, 5.003, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 3, LandingUpper, Brick, 0.5, -5.333, -9.708, 5.333, -4, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
@@ -6321,7 +6321,7 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = left
     AddStairsWall 4, LandingMiddleCover, Brick, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 4, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 16, 0, 0
+    AddStairs 4, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 4, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -4, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
