@@ -583,13 +583,10 @@ void editelevator::OnInit()
 	if (Simcore->Elevators() > 0)
 	{
 		//set elevator range slider
-		//s_ElevNum->SetRange(1, Simcore->Elevators());
 		sNumber->SetScrollbar(0, 1, Simcore->Elevators(), 1);
 
 		//set floor range slider
-		//s_ElevFloor->SetRange(-Simcore->Basements, Simcore->TotalFloors);
 		sFloor->SetScrollbar(Simcore->Basements, 1, Simcore->TotalFloors() + 1, 1);
-		//sFloor->SetScrollbar(0, 1, Simcore->Floors + 1, 1);
 	}
 	else
 		sNumber->Enable(false);
