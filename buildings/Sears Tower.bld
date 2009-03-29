@@ -2079,7 +2079,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2091,7 +2091,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2103,7 +2103,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2115,7 +2115,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2184,7 +2184,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2196,7 +2196,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2208,7 +2208,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2220,7 +2220,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2291,7 +2291,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2303,7 +2303,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2315,7 +2315,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2386,7 +2386,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2398,7 +2398,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2410,7 +2410,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2483,7 +2483,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
@@ -2495,7 +2495,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
@@ -2507,7 +2507,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
@@ -2581,7 +2581,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
@@ -2593,7 +2593,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
@@ -2605,7 +2605,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
@@ -2680,7 +2680,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
@@ -2692,7 +2692,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
@@ -2704,7 +2704,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
@@ -2779,7 +2779,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
@@ -2791,7 +2791,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
@@ -2803,7 +2803,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
@@ -2879,7 +2879,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
@@ -2891,7 +2891,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
@@ -2903,7 +2903,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
@@ -2977,7 +2977,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
@@ -2989,7 +2989,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
@@ -3001,7 +3001,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
@@ -3076,7 +3076,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
@@ -3088,7 +3088,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
@@ -3100,7 +3100,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
@@ -3173,7 +3173,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
@@ -3185,7 +3185,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
@@ -3259,7 +3259,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
@@ -3271,7 +3271,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
@@ -3283,7 +3283,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
@@ -3358,7 +3358,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
@@ -3370,7 +3370,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
@@ -3382,7 +3382,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
@@ -3458,7 +3458,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
@@ -3470,7 +3470,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
@@ -3482,7 +3482,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
@@ -3557,7 +3557,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
@@ -3569,7 +3569,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
@@ -3581,7 +3581,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
@@ -3657,7 +3657,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
@@ -3669,7 +3669,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
@@ -3681,7 +3681,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
@@ -3757,7 +3757,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
@@ -3769,7 +3769,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
@@ -3781,7 +3781,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
@@ -3858,7 +3858,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
@@ -3870,7 +3870,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
@@ -3882,7 +3882,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
@@ -3955,7 +3955,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
@@ -3967,7 +3967,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
@@ -4041,7 +4041,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 68 - 74
@@ -4053,7 +4053,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 68 - 74
@@ -4127,7 +4127,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 68 - 74
@@ -4139,7 +4139,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 68 - 74
@@ -4214,7 +4214,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 75 - 81
@@ -4226,7 +4226,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 75 - 81
@@ -4300,7 +4300,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 75 - 81
@@ -4312,7 +4312,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 75 - 81
@@ -4387,7 +4387,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 82 - 87
@@ -4399,7 +4399,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 82 - 87
@@ -4472,7 +4472,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 82 - 87
@@ -4484,7 +4484,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 82 - 87
@@ -4558,7 +4558,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 90 - 102
@@ -4570,7 +4570,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 90 - 102
@@ -4582,7 +4582,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 90 - 102
@@ -4662,7 +4662,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 90 - 102
@@ -4674,7 +4674,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 90 - 102
@@ -4755,7 +4755,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -2, 99, 103
@@ -4767,7 +4767,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -2, 99, 103
