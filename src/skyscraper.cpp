@@ -413,9 +413,8 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	//initialize event queue
 	equeue = csQueryRegistry<iEventQueue> (object_reg);
 
-	// First disable the lighting cache. Our app is simple enough
-	// not to need this.
-	engine->SetLightingCacheMode (0);
+	//disable the lighting cache
+	engine->SetLightingCacheMode(0);
 	engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
 
 	//create 3D environments
@@ -816,6 +815,7 @@ void Skyscraper::Start()
 	//the sky needs to be created before Prepare() is called
 	Simcore->CreateSky(Simcore->SkyName);
 
+	//have CS process textures, bounding boxes and lighting
 	engine->Prepare();
 
 	//start simulation
