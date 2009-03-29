@@ -50,8 +50,8 @@ files.
 
 3. Release Notes
 
-This release is a complete rewrite of the original 1.0 version, and is part of an
-ongoing effort towards a 2.0 stable release.
+This release is the third development relase of the 2.0 series (which is a complete rewrite of
+the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
 
 This software requires both the Crystal Space graphics engine library (1.2 or later) which
 can be found at http://www.crystalspace3d.org, and the wxWidgets library (version 2.6.3 or
@@ -107,17 +107,23 @@ in the skyscraper/msvc directory.
 
 5. Usage
 
-Currently the application doesn't have a title/menu screen as 1.0 did, but will eventually.
-To use Skyscraper, run the program, and a building selection box will appear.  Choose the
-building script to load, and in a few moments you will be walking around in that building.
+To use Skyscraper, run the program, and a main menu screen will appear with a button for each
+available building (and one button for loading user buildings).  On Linux this main screen won't
+appear, and will only show a file selection dialog (same as pressing the "Other building..." button
+in the Windows version).
+Choose the building to load, and in a few moments you will be walking around in that building.
 The only buildings that are completely simulated in this release are "Simple" and "Triton Center".
 While in one of these buildings, you can click on objects such as elevator call buttons, etc
-to perform actions.  The door code hasn't been finished yet, and so doors (except for elevator
-doors) are currently non-existent.  Sound support will exist in the next release.
+to perform actions.  The recommended building to try out is the Triton Center, since it is the most
+complete one of the bunch.  The "Simple" building is a minimalistic demo to basically show how to make
+your own buildings in the application's scripting language.
 
 Keys currently used in the simulator:
 
-Arrow keys - movement
+W or Up Arrow - move forwards
+S or Down Arrow - move backwards
+A or Left Arrow - move left
+D or Right Arrow - move right
 PgUp - Look upwards
 PgDown - Look downwards
 Space - Jump

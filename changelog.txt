@@ -1,6 +1,6 @@
 Version 1.3 (2.0 Alpha 3)
 -------------------------
--work on doors
+-added door framework
 -fixed a range bug that caused ranges to fail if the first value was negative
 -added basement levels to Triton Center
 -added ShaftShowFloors, ShaftShowOutside, and ShowFullShaft commands
@@ -8,12 +8,20 @@ Version 1.3 (2.0 Alpha 3)
 -fixed up sign generator script
 -new floor signs (floors 151 to 300, and floors CC and PL for the Sears Tower)
 -fixed sound code
+-new elevator sounds
 -added script parameters for specifying elevator sounds
 -fixed door sound location and movement
 -moved main Crystal Space code out of SBS core into frontend
 -fixed an infinite loop condition when processing multiple and/or operators
--more Sears Tower work
+-more Sears Tower work; currently have all express and local elevators in place
 -added TextureFlip command
+-elevator editor's floor scrollbar now supports negative floors
+-fixed a bug where the elevator doors would immediately close (and the current floor would turn off) if going to next floor in queue
+-increased elevator door speeds to match new sounds
+-added basement levels to the Triton Center
+-new intro screen (doesn't work yet on Linux)
+-major performance improvements
+-added keys w, a, s and d for movement
 
 Version 1.2 (2.0 Alpha 2) - Jan 10, 2009
 -------------------------
