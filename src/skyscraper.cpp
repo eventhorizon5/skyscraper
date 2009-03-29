@@ -413,9 +413,8 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	//initialize event queue
 	equeue = csQueryRegistry<iEventQueue> (object_reg);
 
-	// First disable the lighting cache. Our app is simple enough
-	// not to need this.
-	engine->SetLightingCacheMode (0);
+	//disable the lighting cache
+	engine->SetLightingCacheMode(0);
 	engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
 
 	//create 3D environments
@@ -433,6 +432,10 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 
 void Skyscraper::GetInput()
 {
+	//quit if main window isn't selected
+	if (window->IsActive() == false)
+		return;
+
 	// First get elapsed time from the virtual clock.
 	elapsed_time = vc->GetElapsedTicks ();
 	current_time = vc->GetCurrentTicks ();
@@ -474,28 +477,28 @@ void Skyscraper::GetInput()
 	if (wxGetKeyState(WXK_ALT))
 	{
 		//strafe movement
-		if (wxGetKeyState(WXK_RIGHT))
+		if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
 			Simcore->camera->Strafe(1);
-		if (wxGetKeyState(WXK_LEFT))
+		if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
 			Simcore->camera->Strafe(-1);
-		if (wxGetKeyState(WXK_UP))
+		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'w'))
 			Simcore->camera->Float(1);
-		if (wxGetKeyState(WXK_DOWN))
+		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'s'))
 			Simcore->camera->Float(-1);
 	}
 	else
 	{
-		if (wxGetKeyState(WXK_RIGHT))
+		if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
 			Simcore->camera->Turn(1);
-		if (wxGetKeyState(WXK_LEFT))
+		if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
 			Simcore->camera->Turn(-1);
-		if (wxGetKeyState(WXK_PRIOR)) //page up
+		if (wxGetKeyState(WXK_PAGEUP))
 			Simcore->camera->Look(1);
-		if (wxGetKeyState(WXK_NEXT)) //page down
+		if (wxGetKeyState(WXK_PAGEDOWN))
 			Simcore->camera->Look(-1);
-		if (wxGetKeyState(WXK_UP))
+		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'w'))
 			Simcore->camera->Step(1);
-		if (wxGetKeyState(WXK_DOWN))
+		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'s'))
 			Simcore->camera->Step(-1);
 		if (wxGetKeyState(WXK_SPACE))
 			Simcore->camera->Jump();
@@ -629,6 +632,10 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, int x, int 
 void Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
+
+	//quit if main window isn't selected
+	if (window->IsActive() == false)
+		return;
 
 	//exit if simulator is starting
 	if (Starting == true)
@@ -816,6 +823,7 @@ void Skyscraper::Start()
 	//the sky needs to be created before Prepare() is called
 	Simcore->CreateSky(Simcore->SkyName);
 
+	//have CS process textures, bounding boxes and lighting
 	engine->Prepare();
 
 	//start simulation

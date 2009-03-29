@@ -126,6 +126,15 @@ SBS::SBS()
 	TextureOverride = false;
 	ProcessElevators = true;
 	callbackdoor = 0;
+	FlipTexture = false;
+	mainnegflip = 0;
+	mainposflip = 0;
+	sidenegflip = 0;
+	sideposflip = 0;
+	topflip = 0;
+	bottomflip = 0;
+	widthscale.SetSize(6);
+	heightscale.SetSize(6);
 }
 
 SBS::~SBS()
@@ -606,25 +615,34 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	}
 
 	//set texture
-	if (TextureOverride == false)
+	if (TextureOverride == false && FlipTexture == false)
 		SetTexture(dest, index, texture, true, tw, th);
 	else
 	{
+		ProcessTextureFlip(tw, th);
 		int endindex = index + GetDrawWallsCount();
-		for (int i = index; i < endindex; i++)
+		if (FlipTexture == false)
 		{
-			if (i - index == 0)
-				SetTexture(dest, i, mainnegtex.GetData(), false, tw, th);
-			if (i - index == 1)
-				SetTexture(dest, i, mainpostex.GetData(), false, tw, th);
-			if (i - index == 2)
-				SetTexture(dest, i, sidenegtex.GetData(), false, tw, th);
-			if (i - index == 3)
-				SetTexture(dest, i, sidepostex.GetData(), false, tw, th);
-			if (i - index == 4)
-				SetTexture(dest, i, toptex.GetData(), false, tw, th);
-			if (i - index == 5)
-				SetTexture(dest, i, bottomtex.GetData(), false, tw, th);
+			for (int i = index; i < endindex; i++)
+			{
+				if (i - index == 0)
+					SetTexture(dest, i, mainnegtex.GetData(), false, widthscale[0], heightscale[0]);
+				if (i - index == 1)
+					SetTexture(dest, i, mainpostex.GetData(), false, widthscale[1], heightscale[1]);
+				if (i - index == 2)
+					SetTexture(dest, i, sidenegtex.GetData(), false, widthscale[2], heightscale[2]);
+				if (i - index == 3)
+					SetTexture(dest, i, sidepostex.GetData(), false, widthscale[3], heightscale[3]);
+				if (i - index == 4)
+					SetTexture(dest, i, toptex.GetData(), false, widthscale[4], heightscale[4]);
+				if (i - index == 5)
+					SetTexture(dest, i, bottomtex.GetData(), false, widthscale[5], heightscale[5]);
+			}
+		}
+		else
+		{
+			for (int i = index; i < endindex; i++)
+				SetTexture(dest, i, texture, false, widthscale[i - index], heightscale[i - index]);
 		}
 	}
 
@@ -783,25 +801,34 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 		index = tmpindex;
 
 	//set texture
-	if (TextureOverride == false)
+	if (TextureOverride == false && FlipTexture == false)
 		SetTexture(dest, index, texture, true, tw, th);
 	else
 	{
+		ProcessTextureFlip(tw, th);
 		int endindex = index + GetDrawWallsCount();
-		for (int i = index; i < endindex; i++)
+		if (FlipTexture == false)
 		{
-			if (i - index == 0)
-				SetTexture(dest, i, mainnegtex.GetData(), false, tw, th);
-			if (i - index == 1)
-				SetTexture(dest, i, mainpostex.GetData(), false, tw, th);
-			if (i - index == 2)
-				SetTexture(dest, i, sidenegtex.GetData(), false, tw, th);
-			if (i - index == 3)
-				SetTexture(dest, i, sidepostex.GetData(), false, tw, th);
-			if (i - index == 4)
-				SetTexture(dest, i, toptex.GetData(), false, tw, th);
-			if (i - index == 5)
-				SetTexture(dest, i, bottomtex.GetData(), false, tw, th);
+			for (int i = index; i < endindex; i++)
+			{
+				if (i - index == 0)
+					SetTexture(dest, i, mainnegtex.GetData(), false, widthscale[0], heightscale[0]);
+				if (i - index == 1)
+					SetTexture(dest, i, mainpostex.GetData(), false, widthscale[1], heightscale[1]);
+				if (i - index == 2)
+					SetTexture(dest, i, sidenegtex.GetData(), false, widthscale[2], heightscale[2]);
+				if (i - index == 3)
+					SetTexture(dest, i, sidepostex.GetData(), false, widthscale[3], heightscale[3]);
+				if (i - index == 4)
+					SetTexture(dest, i, toptex.GetData(), false, widthscale[4], heightscale[4]);
+				if (i - index == 5)
+					SetTexture(dest, i, bottomtex.GetData(), false, widthscale[5], heightscale[5]);
+			}
+		}
+		else
+		{
+			for (int i = index; i < endindex; i++)
+				SetTexture(dest, i, texture, false, widthscale[i - index], heightscale[i - index]);
 		}
 	}
 
@@ -2323,6 +2350,24 @@ void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const cha
 	TextureOverride = true;
 }
 
+void SBS::SetTextureFlip(int mainneg, int mainpos, int sideneg, int sidepos, int top, int bottom)
+{
+	//flip a texture on a specified side either horizontally or vertically (or both)
+	//parameters are:
+	//0 = no flipping
+	//1 = flip horizontally
+	//2 = flip vertically
+	//3 = flip both
+
+	mainnegflip = mainneg;
+	mainposflip = mainpos;
+	sidenegflip = sideneg;
+	sideposflip = sidepos;
+	topflip = top;
+	bottomflip = bottom;
+	FlipTexture = true;
+}
+
 int SBS::AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
 {
 	//meshname can either be:
@@ -2566,5 +2611,41 @@ bool SBS::UnregisterDoorCallback(Door *door)
 	{
 		Report("Door in use; cannot unregister callback");
 		return false;
+	}
+}
+
+void SBS::ProcessTextureFlip(float tw, float th)
+{
+	//process texture flip info
+	for (int i = 0; i <= 5; i++)
+	{
+		widthscale[i] = tw;
+		heightscale[i] = th;
+	}
+	
+	//texture flipping
+	if (FlipTexture == true)
+	{
+		int *info;
+		for (int i = 0; i <= 5; i++)
+		{
+			if (i == 0)
+				info = &mainnegflip;
+			if (i == 1)
+				info = &mainposflip;
+			if (i == 2)
+				info = &sidenegflip;
+			if (i == 3)
+				info = &sideposflip;
+			if (i == 4)
+				info = &topflip;
+			if (i == 5)
+				info = &bottomflip;
+
+			if (*info == 1 || *info == 3)
+				widthscale[i] = -tw;
+			if (*info == 2 || *info == 3)
+				heightscale[i] = -th;
+		}
 	}
 }

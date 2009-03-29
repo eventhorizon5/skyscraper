@@ -410,12 +410,12 @@ void Elevator::MonitorLoop()
 	}
 
 	//play idle sound if in elevator, or if doors open
-	if (((sbs->InElevator == true && sbs->ElevatorNumber == Number) || DoorsOpen == true) && idlesound->IsPlaying() == false)
+	if (((sbs->InElevator == true && sbs->ElevatorNumber == Number) || DoorsOpen == true || OpenDoor != 0) && idlesound->IsPlaying() == false)
 	{
 		idlesound->Loop(true);
 		idlesound->Play();
 	}
-	else if (((sbs->InElevator == false || sbs->ElevatorNumber != Number) && DoorsOpen == false) && idlesound->IsPlaying() == true)
+	else if (((sbs->InElevator == false || sbs->ElevatorNumber != Number) && DoorsOpen == false && OpenDoor == 0) && idlesound->IsPlaying() == true)
 		idlesound->Stop();
 
 	//call queue processor
@@ -432,7 +432,7 @@ void Elevator::MonitorLoop()
 		MoveDoors(false, true);
 
 	//elevator movement
-	if (MoveElevator == true)
+	if (MoveElevator == true && DoorsOpen == false)
 		MoveElevatorToFloor();
 
 }
@@ -1020,10 +1020,6 @@ void Elevator::MoveElevatorToFloor()
 			ElevatorIsRunning = false;
 			return;
 		}
-
-		//close doors if open
-		if (DoorsOpen == true)
-			CloseDoors();
 
 		//Determine direction
 		if (GotoFloor < ElevatorFloor)

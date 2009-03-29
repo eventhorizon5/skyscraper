@@ -2079,7 +2079,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2091,7 +2091,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2103,7 +2103,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2115,7 +2115,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2184,7 +2184,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2196,7 +2196,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2208,7 +2208,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2220,7 +2220,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
@@ -2291,7 +2291,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2303,7 +2303,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2315,7 +2315,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2386,7 +2386,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2398,7 +2398,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2410,7 +2410,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
@@ -2483,36 +2483,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 5
-    CreateElevator -31.07, 23.283, 2
+    CreateElevator -31.214, 23.283, 2
 <EndElevator>
 
 <Elevator 16>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 5
-    CreateElevator -31.07, 14.212, 2
+    CreateElevator -31.214, 14.212, 2
 <EndElevator>
 
 <Elevator 17>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 5
-    CreateElevator -31.07, 5.131, 2
+    CreateElevator -31.214, 5.131, 2
 <EndElevator>
 
 <Elevators 15 to 17>
@@ -2581,36 +2581,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 6
-    CreateElevator -13.834, 23.283, 2
+    CreateElevator -13.682, 23.283, 2
 <EndElevator>
 
 <Elevator 19>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 6
-    CreateElevator -13.834, 14.212, 2
+    CreateElevator -13.682, 14.212, 2
 <EndElevator>
 
 <Elevator 20>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 4 - 10
     AssignedShaft = 6
-    CreateElevator -13.834, 5.131, 2
+    CreateElevator -13.682, 5.131, 2
 <EndElevator>
 
 <Elevators 18 to 20>
@@ -2680,36 +2680,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 7
-    CreateElevator 13.824, 23.283, 2
+    CreateElevator 13.68, 23.283, 2
 <EndElevator>
 
 <Elevator 22>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 7
-    CreateElevator 13.824, 14.212, 2
+    CreateElevator 13.68, 14.212, 2
 <EndElevator>
 
 <Elevator 23>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 7
-    CreateElevator 13.824, 5.131, 2
+    CreateElevator 13.68, 5.131, 2
 <EndElevator>
 
 <Elevators 21 to 23>
@@ -2779,36 +2779,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 8
-    CreateElevator 31.64, 23.283, 2
+    CreateElevator 31.782, 23.283, 2
 <EndElevator>
 
 <Elevator 25>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 8
-    CreateElevator 31.64, 14.212, 2
+    CreateElevator 31.782, 14.212, 2
 <EndElevator>
 
 <Elevator 26>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 10 - 17
     AssignedShaft = 8
-    CreateElevator 31.64, 5.131, 2
+    CreateElevator 31.782, 5.131, 2
 <EndElevator>
 
 <Elevators 24 to 26>
@@ -2879,36 +2879,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 9
-    CreateElevator 13.824, -4.883, 2
+    CreateElevator 13.68, -4.883, 2
 <EndElevator>
 
 <Elevator 28>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 9
-    CreateElevator 13.824, -13.954, 2
+    CreateElevator 13.68, -13.954, 2
 <EndElevator>
 
 <Elevator 29>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 9
-    CreateElevator 13.824, -23.026, 2
+    CreateElevator 13.68, -23.026, 2
 <EndElevator>
 
 <Elevators 27 to 29>
@@ -2977,36 +2977,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 10
-    CreateElevator 31.64, -4.883, 2
+    CreateElevator 31.782, -4.883, 2
 <EndElevator>
 
 <Elevator 31>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 10
-    CreateElevator 31.64, -13.954, 2
+    CreateElevator 31.782, -13.954, 2
 <EndElevator>
 
 <Elevator 32>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 17 - 23
     AssignedShaft = 10
-    CreateElevator 31.64, -23.026, 2
+    CreateElevator 31.782, -23.026, 2
 <EndElevator>
 
 <Elevators 30 to 32>
@@ -3076,36 +3076,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
     AssignedShaft = 11
-    CreateElevator -31.07, -4.883, 2
+    CreateElevator -31.214, -4.883, 2
 <EndElevator>
 
 <Elevator 34>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
     AssignedShaft = 11
-    CreateElevator -31.07, -13.954, 2
+    CreateElevator -31.214, -13.954, 2
 <EndElevator>
 
 <Elevator 35>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
     AssignedShaft = 11
-    CreateElevator -31.07, -23.026, 2
+    CreateElevator -31.214, -23.026, 2
 <EndElevator>
 
 <Elevators 33 to 35>
@@ -3173,24 +3173,24 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
     AssignedShaft = 12
-    CreateElevator -13.834, -4.883, 2
+    CreateElevator -13.682, -4.883, 2
 <EndElevator>
 
 <Elevator 37>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 2, 23 - 28
     AssignedShaft = 13
-    CreateElevator -13.834, -23.026, 2
+    CreateElevator -13.682, -23.026, 2
 <EndElevator>
 
 <Elevators 36 to 37>
@@ -3259,36 +3259,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 14
-    CreateElevator -31.07, 23.283, 33
+    CreateElevator -31.214, 23.283, 33
 <EndElevator>
 
 <Elevator 39>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 14
-    CreateElevator -31.07, 14.212, 33
+    CreateElevator -31.214, 14.212, 33
 <EndElevator>
 
 <Elevator 40>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 14
-    CreateElevator -31.07, 5.131, 33
+    CreateElevator -31.214, 5.131, 33
 <EndElevator>
 
 <Elevators 38 to 40>
@@ -3358,36 +3358,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 15
-    CreateElevator -13.834, 23.283, 33
+    CreateElevator -13.682, 23.283, 33
 <EndElevator>
 
 <Elevator 42>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 15
-    CreateElevator -13.834, 14.212, 33
+    CreateElevator -13.682, 14.212, 33
 <EndElevator>
 
 <Elevator 43>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 35 - 42
     AssignedShaft = 15
-    CreateElevator -13.834, 5.131, 33
+    CreateElevator -13.682, 5.131, 33
 <EndElevator>
 
 <Elevators 41 to 43>
@@ -3458,36 +3458,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 16
-    CreateElevator 13.824, 23.283, 33
+    CreateElevator 13.68, 23.283, 33
 <EndElevator>
 
 <Elevator 45>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 16
-    CreateElevator 13.824, 14.212, 33
+    CreateElevator 13.68, 14.212, 33
 <EndElevator>
 
 <Elevator 46>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 16
-    CreateElevator 13.824, 5.131, 33
+    CreateElevator 13.68, 5.131, 33
 <EndElevator>
 
 <Elevators 44 to 46>
@@ -3557,36 +3557,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 17
-    CreateElevator 31.64, 23.283, 33
+    CreateElevator 31.782, 23.283, 33
 <EndElevator>
 
 <Elevator 48>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 17
-    CreateElevator 31.64, 14.212, 33
+    CreateElevator 31.782, 14.212, 33
 <EndElevator>
 
 <Elevator 49>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 33, 42 - 49
     AssignedShaft = 17
-    CreateElevator 31.64, 5.131, 33
+    CreateElevator 31.782, 5.131, 33
 <EndElevator>
 
 <Elevators 47 to 49>
@@ -3657,36 +3657,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 18
-    CreateElevator 13.824, -4.883, 34
+    CreateElevator 13.68, -4.883, 34
 <EndElevator>
 
 <Elevator 51>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 18
-    CreateElevator 13.824, -13.954, 34
+    CreateElevator 13.68, -13.954, 34
 <EndElevator>
 
 <Elevator 52>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 18
-    CreateElevator 13.824, -23.026, 34
+    CreateElevator 13.68, -23.026, 34
 <EndElevator>
 
 <Elevators 50 to 52>
@@ -3757,36 +3757,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 19
-    CreateElevator 31.64, -4.883, 34
+    CreateElevator 31.782, -4.883, 34
 <EndElevator>
 
 <Elevator 54>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 19
-    CreateElevator 31.64, -13.954, 34
+    CreateElevator 31.782, -13.954, 34
 <EndElevator>
 
 <Elevator 55>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 49 - 57
     AssignedShaft = 19
-    CreateElevator 31.64, -23.026, 34
+    CreateElevator 31.782, -23.026, 34
 <EndElevator>
 
 <Elevators 53 to 55>
@@ -3858,36 +3858,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
     AssignedShaft = 20
-    CreateElevator -31.07, -4.883, 34
+    CreateElevator -31.214, -4.883, 34
 <EndElevator>
 
 <Elevator 57>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
     AssignedShaft = 20
-    CreateElevator -31.07, -13.954, 34
+    CreateElevator -31.214, -13.954, 34
 <EndElevator>
 
 <Elevator 58>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
     AssignedShaft = 20
-    CreateElevator -31.07, -23.026, 34
+    CreateElevator -31.214, -23.026, 34
 <EndElevator>
 
 <Elevators 56 to 58>
@@ -3955,24 +3955,24 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
     AssignedShaft = 21
-    CreateElevator -13.834, -4.883, 34
+    CreateElevator -13.682, -4.883, 34
 <EndElevator>
 
 <Elevator 60>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 34, 58 - 63
     AssignedShaft = 22
-    CreateElevator -13.834, -23.026, 34
+    CreateElevator -13.682, -23.026, 34
 <EndElevator>
 
 <Elevators 59 to 60>
@@ -4041,24 +4041,24 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 68 - 74
     AssignedShaft = 23
-    CreateElevator 41.396, -17.466, 66
+    CreateElevator 41.252, -17.466, 66
 <EndElevator>
 
 <Elevator 62>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 68 - 74
     AssignedShaft = 23
-    CreateElevator 41.396, -9.034, 66
+    CreateElevator 41.252, -9.034, 66
 <EndElevator>
 
 <Elevators 61 to 62>
@@ -4127,24 +4127,24 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 68 - 74
     AssignedShaft = 24
-    CreateElevator 60.778, -17.466, 66
+    CreateElevator 60.922, -17.466, 66
 <EndElevator>
 
 <Elevator 64>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 68 - 74
     AssignedShaft = 24
-    CreateElevator 60.778, -9.034, 66
+    CreateElevator 60.922, -9.034, 66
 <EndElevator>
 
 <Elevators 63 to 64>
@@ -4214,24 +4214,24 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 75 - 81
     AssignedShaft = 25
-    CreateElevator 41.396, -0.022, 66
+    CreateElevator 41.252, -0.022, 66
 <EndElevator>
 
 <Elevator 66>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 75 - 81
     AssignedShaft = 25
-    CreateElevator 41.396, 8.41, 66
+    CreateElevator 41.252, 8.41, 66
 <EndElevator>
 
 <Elevators 65 to 66>
@@ -4300,24 +4300,24 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 75 - 81
     AssignedShaft = 26
-    CreateElevator 60.778, -0.022, 66
+    CreateElevator 60.922, -0.022, 66
 <EndElevator>
 
 <Elevator 68>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 66, 75 - 81
     AssignedShaft = 26
-    CreateElevator 60.778, 8.41, 66
+    CreateElevator 60.922, 8.41, 66
 <EndElevator>
 
 <Elevators 67 to 68>
@@ -4387,24 +4387,24 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 82 - 87
     AssignedShaft = 27
-    CreateElevator 13.824, -2.048, 67
+    CreateElevator 13.519, -2.048, 67
 <EndElevator>
 
 <Elevator 70>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 82 - 87
     AssignedShaft = 27
-    CreateElevator 13.824, -11.167, 67
+    CreateElevator 13.519, -11.167, 67
 <EndElevator>
 
 <Elevators 69 to 70>
@@ -4472,24 +4472,24 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 82 - 87
     AssignedShaft = 28
-    CreateElevator 31.64, -2.048, 67
+    CreateElevator 31.935, -2.048, 67
 <EndElevator>
 
 <Elevator 72>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 82 - 87
     AssignedShaft = 28
-    CreateElevator 31.64, -11.167, 67
+    CreateElevator 31.935, -11.167, 67
 <EndElevator>
 
 <Elevators 71 to 72>
@@ -4558,36 +4558,36 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 90 - 102
     AssignedShaft = 29
-    CreateElevator -31.07, 4, 67
+    CreateElevator -31.471, 4, 67
 <EndElevator>
 
 <Elevator 74>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 90 - 102
     AssignedShaft = 29
-    CreateElevator -31.07, -5, 67
+    CreateElevator -31.471, -5, 67
 <EndElevator>
 
 <Elevator 75>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 90 - 102
     AssignedShaft = 29
-    CreateElevator -31.07, -13.3, 67
+    CreateElevator -31.471, -13.3, 67
 <EndElevator>
 
 <Elevators 73 to 75>
@@ -4662,24 +4662,24 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 90 - 102
     AssignedShaft = 30
-    CreateElevator -13.183, 4, 67
+    CreateElevator -13.829, 4, 67
 <EndElevator>
 
 <Elevator 77>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 67, 90 - 102
     AssignedShaft = 30
-    CreateElevator -13.183, -5, 67
+    CreateElevator -13.829, -5, 67
 <EndElevator>
 
 <Elevators 76 to 77>
@@ -4755,7 +4755,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -2, 99, 103
@@ -4767,7 +4767,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -2, 99, 103
@@ -4960,10 +4960,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <Floor 67>
     CallButtonElevators = 69, 70, 71, 72    
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.064 + 4.236 + 0.33 + 0.1, -6.608, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 32.39 - 4.236 - 0.33 - 0.1, -6.608 - 4.548, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 32.39 - 4.236 - 0.33 - 0.1, -6.608, 4, left, 0.5, 1, true, 0, 0
     CallButtonElevators = 73, 74, 75, 76, 77
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -32.154 + 4.236 + 0.33 + 0.1, -4.71 + 4.548, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.146 - 4.236 - 0.33 - 0.1, -4.71 - 4.548, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -32.154 + 4.464 + 0.33 + 0.1, -4.71 + 4.548, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.146 - 4.464 - 0.33 - 0.1, -4.71 - 4.548, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 68 to 74>
@@ -4986,22 +4986,22 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
 <Floors 90 to 102>
     CallButtonElevators = 73, 74, 75, 76, 77
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -32.154 + 4.236 + 0.33 + 0.1, -4.71 + 4.548, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.146 - 4.236 - 0.33 - 0.1, -4.71 - 4.548, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -32.154 + 4.464 + 0.33 + 0.1, -4.71 + 4.548, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.146 - 4.464 - 0.33 - 0.1, -4.71 - 4.548, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Skydeck express
 <Floor -2>
     CallButtonElevators = 78, 79
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -42.08 - 4.236 - 0.33 - 0.1, -7.39, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -42.08 - 5.312 - 0.33 - 0.1, -7.39, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 99>
     CallButtonElevators = 78, 79
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -42.08 - 4.236 - 0.33 - 0.1, -7.39, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -42.08 - 5.312 - 0.33 - 0.1, -7.39, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 103>
     CallButtonElevators = 78, 79
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -42.08 - 4.236 - 0.33 - 0.1, -7.39, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -42.08 - 5.312 - 0.33 - 0.1, -7.39, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>

@@ -612,7 +612,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     AddWall Front, Stucco4, 0.5, -46.67 - 4.5 - 10 - 0.5, -3.708 - 9.708 + 0.33, -46.67 - 4.5 - 0.33, -3.708 - 9.708 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     AddWall Back, Stucco4, 0.5, -46.67 - 4.5 - 10 - 0.5, 37.367 + 4.167, -19 + 4.75 - 0.33, 37.367 + 4.167, %height%, %height%, 0, 0, 0, 0, False
-    AddDoor Door, 0.2, 5, -46.67 - 4.5 - 5, -3.708 - 9.708, 3.5, 8, 0, 1, 1
+    AddDoor StairsDoor, 0.2, 5, -46.67 - 4.5 - 5, -3.708 - 9.708, 3.5, 8, 0, 1, 1
 
     #South transfer
     WallOrientation = right
@@ -621,7 +621,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     WallOrientation = left
     AddWall Back, Stucco4, 0.5, 24.08 + 9.75 + 0.33, 3.708 + 9.708 - 0.33, 46.67 - 4.5 - 0.33, 3.708 + 9.708 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Right, Stucco4, 0.5, 46.67 - 4.5 - 0.33, -33.708 + 4 - 0.5, 46.67 - 4.5 - 0.33, -9.792 - 3.792 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddDoor Door, 0.2, 5, 38, 3.708 + 9.708 - 0.33 + 0.25, 3.5, 8, 0, 1, 1
+    AddDoor StairsDoor, 0.2, 5, 38, 3.708 + 9.708 - 0.33 + 0.25, 3.5, 8, 0, 1, 1
 <EndFloor>
 
 # Zone 1 Column Frame
@@ -799,7 +799,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     AddWall Left, Stucco4, 0.5, -29.083 + 5.333 - 10, 23.537 + 9.708 + 0.33, -29.083 + 5.333 - 10, 51.66 + 4.5 - 0.33 + 0.5, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     AddWall Back, Stucco4, 0.5, -29.083 + 5.333 - 10 - 0.5, 51.66 + 4.5 - 0.33, 4.7515 - 9.0815 - 0.33, 51.66 + 4.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddDoor Door, 0.2, 8, -29.083 + 5.333 - 5, 51.66 + 4.5, 3.5, 8, 0, 1, 1
+    AddDoor StairsDoor, 0.2, 8, -29.083 + 5.333 - 5, 51.66 + 4.5, 3.5, 8, 0, 1, 1
 
     #Southwest transfer
     WallOrientation = right
@@ -809,7 +809,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     AddWall Back, Stucco4, 0.5, 5.67 + 0.33, -13.5 + 8.5 - 0.33, 5.67 + 0.33 + 10 + 0.5, -13.5 + 8.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Back2, Stucco4, 0.5, 5.67 + 0.33 + 10, -33.708 + 9.708 - 0.33, 26.42 - 4.5 - 0.33, -33.708 + 9.708 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Right, Stucco4, 0.5, 5.67 + 0.33 + 10, -33.708 + 9.708 - 0.33, 5.67 + 0.33 + 10, -13.5 + 8.5 - 0.33 + 0.5, %height%, %height%, 0, 0, 0, 0, False
-    AddDoor Door, 0.2, 6, 5.67 + 0.33 + 5, -33.708 + 9.708 - 0.33 - 10 - 0.25, 3.5, 8, 0, 1, 1
+    AddDoor StairsDoor, 0.2, 6, 5.67 + 0.33 + 5, -33.708 + 9.708 - 0.33 - 10 - 0.25, 3.5, 8, 0, 1, 1
 
 <EndFloor>
 
@@ -1570,20 +1570,26 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
 #Service Area Wall
 <Floors -1 to 141>
     Set 5 = Wall1
-    SetWallOrientation = Left
+    WallOrientation = Left
     DrawWalls = true, true, false, false, false, false
     if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall ServiceWall, %5%, 0.5, -4.33, 14.29, 4, 14.29, %height%, %height%, 0, 0, 0, 0, False
-    SetWallOrientation = Center
+    WallOrientation = Center
     if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddDoor StairsDoor, 0.2, 6, 0, 14.29 + 0.25, 3.5, 8, 0, 1, 1
+    #door fillers, since SBS can't yet automatically make fillers for the same mesh
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall FillerWallLeft, ConnectionWall, 0, -1.75, 14.29, -1.75, 14.29 + 0.5, 8, 8, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall FillerWallRight, ConnectionWall, 0, 1.75, 14.29, 1.75, 14.29 + 0.5, 8, 8, 0, 0, 0, 0, False
+    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddFloor FillerWallTop, ConnectionWall, 0, -1.75, 14.29, 1.75, 14.29 + 0.5, 8, 8, 0, 0, False
 <EndFloors>
 
 #Residential divider wall
 <Floors -1 to 16>
-    SetWallOrientation = Left
+    WallOrientation = Left
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     if[%floor% ! 1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    SetWallOrientation = Right
+    WallOrientation = Right
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     if[%floor% ! 1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
@@ -2745,7 +2751,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 27 - 37
@@ -2757,7 +2763,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 27 - 37
@@ -2769,7 +2775,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 27 - 37
@@ -2847,7 +2853,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 27 - 37
@@ -2859,7 +2865,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 27 - 37
@@ -2871,7 +2877,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 27 - 37
@@ -2951,7 +2957,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 15 - 26
@@ -2963,7 +2969,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 15 - 26
@@ -2975,7 +2981,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 15 - 26
@@ -3053,7 +3059,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 15 - 26
@@ -3065,7 +3071,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 15 - 26
@@ -3077,7 +3083,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 15 - 26
@@ -3158,7 +3164,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 2 - 14
@@ -3170,7 +3176,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 2 - 14
@@ -3182,7 +3188,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 2 - 14
@@ -3261,7 +3267,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 2 - 14
@@ -3273,7 +3279,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 2 - 14
@@ -3285,7 +3291,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 2 - 14
@@ -3367,7 +3373,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 40
@@ -3379,7 +3385,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 40
@@ -3391,7 +3397,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 40
@@ -3458,7 +3464,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 40
@@ -3470,7 +3476,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 40
@@ -3482,7 +3488,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 40
@@ -3552,7 +3558,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -7 - 1
@@ -3564,7 +3570,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -7 - 1
@@ -3638,7 +3644,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -7 - 1
@@ -3650,7 +3656,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -7 - 1
@@ -3727,7 +3733,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 100
@@ -3739,7 +3745,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 100
@@ -3806,7 +3812,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 100
@@ -3818,7 +3824,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 100
@@ -3888,7 +3894,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 134 - 136
@@ -3900,7 +3906,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 134 - 136
@@ -3971,7 +3977,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 80
@@ -3983,7 +3989,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 80
@@ -4053,7 +4059,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 137
@@ -4121,7 +4127,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40 - 50
@@ -4133,7 +4139,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40 - 50
@@ -4145,7 +4151,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40 - 50
@@ -4157,7 +4163,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40 - 50
@@ -4236,7 +4242,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 61 - 70
@@ -4248,7 +4254,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 61 - 70
@@ -4260,7 +4266,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 61 - 70
@@ -4272,7 +4278,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 61 - 70
@@ -4351,7 +4357,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 51 - 60
@@ -4363,7 +4369,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 51 - 60
@@ -4375,7 +4381,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 51 - 60
@@ -4387,7 +4393,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 51 - 60
@@ -4467,7 +4473,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 71 - 78
@@ -4479,7 +4485,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 71 - 78
@@ -4491,7 +4497,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 71 - 78
@@ -4503,7 +4509,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 40, 71 - 78
@@ -4581,7 +4587,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 80, 82 - 99
@@ -4593,7 +4599,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 80, 82 - 99
@@ -4679,7 +4685,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 80, 82 - 99
@@ -4691,7 +4697,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 80, 82 - 99
@@ -4778,7 +4784,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 16
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 80, 100, 120 - 129, 132
@@ -4858,7 +4864,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 100, 120 - 129
@@ -4889,7 +4895,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 100, 102 - 118
@@ -4901,7 +4907,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 100, 102 - 118
@@ -4988,7 +4994,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 100, 120 - 129
@@ -5000,7 +5006,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 100, 120 - 129
@@ -5012,7 +5018,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 100, 102 - 118
@@ -5024,7 +5030,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 100, 102 - 118
@@ -5133,7 +5139,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.2
     DecelJerk = 0.3
     ServicedFloors = 0, 79 - 141
@@ -5267,7 +5273,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -8 - 79
@@ -5428,7 +5434,7 @@ DrawWalls = true, true, false, false, false, false
     Speed = 15
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.2
+    OpenSpeed = 0.3
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -8 - 141
@@ -5854,20 +5860,40 @@ DrawWalls = true, true, false, false, false, false
 
 
 #North Stairwell A
-CreateStairwell 1, -46.67, -3.708, -7, 39
+CreateStairwell 1, -46.67, -3.708, -8, 39
 CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
+
+<Floor -8>
+    Set 1 = (%height% + Floor(-7).InterfloorHeight) / 24 #determine riser size
+    AddStairs 1, StairsLower, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
+    AddStairs 1, StairsMiddle, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 1, LandingMiddle, Brick, 0.5, -4.5, -9.708, 4.5, -4, %1% * 8, %1% * 8, 1, 1
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 1, LandingMiddleCover, Brick, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+
+    AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 4, 4.5, 9.708, %1% * 16, %1% * 16, 1, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = left
+    AddStairsWall 1, LandingUpperCover, Brick, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
+
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
 
 <Floors -7 to -1>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
     AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
     AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    if[%floor% = -7] AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
-    if[%floor% > -7] AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
     AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    if[%floor% > -7] AddStairsWall 1, LandingLowerCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 1, LandingLowerCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
     AddStairsWall 1, LandingUpperCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
@@ -5935,10 +5961,10 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
-<Floors -7 to 39>
+<Floors -8 to 39>
     Set 6 = 3
     if[%floor% = 1] Set 6 = 5
-    if[%floor% = 38 | %floor% = 39] Set 6 = 4
+    if[%floor% = 38 | %floor% = 39 | %floor% = -8] Set 6 = 4
     SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
@@ -5969,14 +5995,15 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% < -1] AddWall StairsRightE, %5%, 0.33, 4.5 + -46.67, -9.708 + -3.708 - 0.33, 4.5 + -46.67, 9.708 + -3.708 + 0.33, %height%, %height%, 0, 0, 0, 0, False
 
     #doors
+    if[%floor% = -8] AddStairsDoor 1, StairsDoor, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
     if[%floor% = 0 | %floor% = 1] AddStairsDoor 1, StairsDoor2, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
-    if[%floor% ! 0 & %floor% ! 1 & %floor% < 38] AddStairsDoor 1, StairsDoor, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
+    if[%floor% ! -8 & %floor% ! 0 & %floor% ! 1 & %floor% < 38] AddStairsDoor 1, StairsDoor, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
     if[%floor% = 38] AddStairsDoor 1, StairsDoor, 0.2, 2, -4.5, -7.208, 3.5, 8, 0, 1, 1
 
     #signs
     SetAutoSize = false, false
     DrawWalls = false, true, false, false, false, false
-    if[%floor% < 39] AddStairsWall 1, SignTop, FloorSign, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.25, 0.25, 5, 5, 1, 1
+    if[%floor% < 39 & %floor% ! -8] AddStairsWall 1, SignTop, FloorSign, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.25, 0.25, 5, 5, 1, 1
     if[%floor% < 39 & %floor% > 1] AddStairsWall 1, SignTop, Button%floor%, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 0] AddStairsWall 1, SignTop, ButtonL, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 1] AddStairsWall 1, SignTop, ButtonM, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
@@ -5987,6 +6014,9 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% = -5] AddStairsWall 1, SignTop, ButtonP3, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -6] AddStairsWall 1, SignTop, ButtonP4, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -7] AddStairsWall 1, SignTop, ButtonP5, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% = -8] AddStairsWall 1, SignTop, FloorSign, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.25, 0.25, 5, 5, 1, 1
+    if[%floor% = -8] AddStairsWall 1, SignTop, ButtonS, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
 
     SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
@@ -5994,20 +6024,40 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
 
 
 #South Stairwell A
-CreateStairwell 2, 46.67, 3.708, -7, 39
+CreateStairwell 2, 46.67, 3.708, -8, 39
 CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
+
+<Floor -8>
+    Set 1 = (%height% + Floor(-7).InterfloorHeight) / 24 #determine riser size
+    AddStairs 2, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
+    AddStairs 2, StairsMiddle, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 2, LandingMiddle, Brick, 0.5, -4.5, 4, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 2, LandingMiddleCover, Brick, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+
+    AddStairs 2, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
+    FloorOrientation = top
+    AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -4, %1% * 16, %1% * 16, 1, 1
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = left
+    AddStairsWall 2, LandingUpperCover, Brick, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
+
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
 
 <Floors -7 to -1>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
     AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
     AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    if[%floor% = -7] AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
-    if[%floor% > -7] AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
     AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    if[%floor% > -7] AddStairsWall 2, LandingLowerCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 2, LandingLowerCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
     AddStairsWall 2, LandingUpperCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
@@ -6075,10 +6125,10 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
-<Floors -7 to 39>
+<Floors -8 to 39>
     Set 6 = 3
     if[%floor% = 1] Set 6 = 5
-    if[%floor% = 38 | %floor% = 39] Set 6 = 4
+    if[%floor% = 38 | %floor% = 39 | %floor% = -8] Set 6 = 4
     SetAutoSize = true, false
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
@@ -6111,15 +6161,16 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% > 28] AddWall StairsBackE, %5%, 0.33, -4.5 + 46.67 - 0.33, 9.708 + 3.708 + 0.084, 4.5 + 46.67 + 0.33, 9.708 + 3.708 + 0.084, %height%, %height%, 0, 0, 0, 0, False
 
     #doors
+    if[%floor% = -8] AddStairsDoor 2, StairsDoor, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
     if[%floor% = 0] AddStairsDoor 2, StairsDoor2, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
-    if[%floor% ! 0 & %floor% ! 1 & %floor% < 38] AddStairsDoor 2, StairsDoor, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
+    if[%floor% ! -8 & %floor% ! 0 & %floor% ! 1 & %floor% < 38] AddStairsDoor 2, StairsDoor, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
     if[%floor% = 1] AddStairsDoor 2, StairsDoor, 0.2, 4, 4.5, 7.208, 3.5, 8, 0, 1, 1
     if[%floor% = 38] AddStairsDoor 2, StairsDoor, 0.2, 3, -4.5, 7.208, 3.5, 8, 0, 1, 1
 
     #signs
     SetAutoSize = false, false
     DrawWalls = true, false, false, false, false, false
-    if[%floor% < 39] AddStairsWall 2, SignTop, FloorSign, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.25, 0.25, 5, 5, 1, 1
+    if[%floor% < 39 & %floor% ! -8] AddStairsWall 2, SignTop, FloorSign, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.25, 0.25, 5, 5, 1, 1
     if[%floor% < 39 & %floor% > 1] AddStairsWall 2, SignTop, Button%floor%, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 0] AddStairsWall 2, SignTop, ButtonL, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 1] AddStairsWall 2, SignTop, ButtonM, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
@@ -6130,6 +6181,9 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% = -5] AddStairsWall 2, SignTop, ButtonP3, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -6] AddStairsWall 2, SignTop, ButtonP4, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -7] AddStairsWall 2, SignTop, ButtonP5, 0, 1.5, 9.708 - 0.335, 2.5, 9.708 - 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = -8] AddStairsWall 2, SignTop, FloorSign, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.25, 0.25, 5, 5, 1, 1
+    if[%floor% = -8] AddStairsWall 2, SignTop, ButtonS, 0, -2.5, -9.708 + 0.335, -1.5, -9.708 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
 
     SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
@@ -6172,7 +6226,7 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
     WallOrientation = left
     AddStairsWall 3, LandingMiddleCover, Brick, 0.1, -5.333, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 3, StairsUpper, Stairs, front, 2.501, 0, 5.003, %1%, 8 / 7, 8, %1% * 16, 0, 0
+    AddStairs 3, StairsUpper, Stairs, front, 2.501, 0, 5.003, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 3, LandingUpper, Brick, 0.5, -5.333, -9.708, 5.333, -4, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
@@ -6273,7 +6327,7 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = left
     AddStairsWall 4, LandingMiddleCover, Brick, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 4, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 16, 0, 0
+    AddStairs 4, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 4, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -4, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false

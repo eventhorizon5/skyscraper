@@ -373,6 +373,19 @@
     = <em>value</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">ShowFullShaft 1 
     = true</font></p>
+  <p align="left"><strong>w. TextureFlip</strong> - flips specified textures for 
+    the next command.. Currently only works with the different AddWall, AddFloor 
+    and AddInterFloor commands. The values available are 0 for no flipping, 1 
+    for horizontal flip, 2 for vertical flip, and 3 for both horizontal and vertical.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> TextureFlip <em>MainNegative, 
+    MainPositive, SideNegative, SidePositive, Top, Bottom</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">TextureFlip 1, 1, 
+    0, 0, 0, 0</font></p>
+  <p align="left">This command will allow you to flip textures on specific parts 
+    of a wall or floor created witha command such as AddWall. It will only work 
+    on the command immediately after this one. In the above example, the Main 
+    Positive and Main Negative sides of the object will have their textures flipped 
+    horizontally.</p>
   <p>&nbsp;</p>
   <p align="left"><strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 

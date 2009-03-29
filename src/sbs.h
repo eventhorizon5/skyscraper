@@ -115,6 +115,7 @@ public:
 	int StairsOutsideDisplayRange; //number of stairwell floors to display while outside of stairwell
 	int FloorDisplayRange; //number of floors to display while in elevator, if shaft's ShowFloors is true
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
+	bool FlipTexture; //if enabled, flips textures according to parameters set in SetTextureFlip()
 	csString SkyName; //base filename of sky texture pack
 	csString root_dir; //app directory
 	csString dir_char;
@@ -195,12 +196,14 @@ public:
 	void SetListenerRollOffFactor(float factor);
 	float GetListenerRollOffFactor();
 	void SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom);
+	void SetTextureFlip(int mainneg, int mainpos, int sideneg, int sidepos, int top, int bottom);
 	int AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
 	int AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
 	int AddGround(const char *name, const char *texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z);
 	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0);
 	bool RegisterDoorCallback(Door *door);
 	bool UnregisterDoorCallback(Door *door);
+	void ProcessTextureFlip(float tw, float th);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -277,6 +280,11 @@ private:
 
 	//override textures
 	csString mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
+
+	//texture flipping
+	int mainnegflip, mainposflip, sidenegflip, sideposflip, topflip, bottomflip;
+	csArray<int> widthscale;
+	csArray<int> heightscale;
 
 	//door object for callback
 	Door *callbackdoor;
