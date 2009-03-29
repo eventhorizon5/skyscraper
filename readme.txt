@@ -99,9 +99,14 @@ in the skyscraper/msvc directory.
 
 4.2 Microsoft Visual C++
 
- 1. Open the solution file skyscraper/msvc/skyscraper.sln.
- 2. Choose "Release" or "Debug" build mode.
- 3. Build the project.
+ 1. Set these system environment variables (usually from System Properties in Windows):
+    CRYSTAL=(path to CS)
+    ex: CRYSTAL=C:\CS
+    WXWIN=(path to wxWidgets)
+    wx: WXWIN=C:\wxWidgets-2.8.9
+ 2. Open the solution file skyscraper/msvc/skyscraper.sln.
+ 3. Choose "Release" or "Debug" build mode.
+ 4. Build the project.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
