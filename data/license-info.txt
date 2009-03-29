@@ -3,6 +3,7 @@ by their licensing terms.  All other objects have been created by me (Ryan Thory
 
 Third-party objects:
 
+textures:
 -bracing1 - cropped version of MetalBulkheads0013_M.jpg from cgtextures.com
 -brick1 - unknown
 -Carpet0002_S.jpg - from cgtextures.com
@@ -44,4 +45,12 @@ Third-party objects:
 -windows11e.jpg - modified version of windows11.jpg
 -windows11h.jpg - modified version of windows11.jpg
 -windows11h-inside.jpg - modified version of windows11.jpg
+
+sounds:
+-chime1.wav made by me
+-chime2.wav originally from service_elevator.mp3 from www.freesound.org
+-chime4.wav originally liftbell.mp3 from www.freesound.org
+-motor_start.wav, motor_running.wav, and motor_stop.wav originally elevatormotor1.mp3 from www.freesound.org
+-elevidle.wav, elevmove.wav, elevstart.wav and elevstop.wav originally from "service_elavator.mp3" from www.freesound.org
+-elevatoropen.wav and elevatorclose.wav originally from elevator.wav from www.freesound.org
 
