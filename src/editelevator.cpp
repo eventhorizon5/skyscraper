@@ -488,18 +488,18 @@ void editelevator::On_bCall_Click(wxCommandEvent& event)
 
 void editelevator::On_bEnqueueUp_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition(), 1);
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition() - Simcore->Basements, 1);
 }
 
 void editelevator::On_bGo_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GotoFloor = sFloor->GetThumbPosition();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GotoFloor = sFloor->GetThumbPosition() - Simcore->Basements;
 	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->MoveElevator = true;
 }
 
 void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition(), -1);
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition() - Simcore->Basements, -1);
 }
 
 void editelevator::On_bOpen_Click(wxCommandEvent& event)
@@ -588,8 +588,8 @@ void editelevator::OnInit()
 
 		//set floor range slider
 		//s_ElevFloor->SetRange(-Simcore->Basements, Simcore->TotalFloors);
-		//sFloor->SetScrollbar(0, 1, Simcore->TotalFloors + 1, 1);
-		sFloor->SetScrollbar(0, 1, Simcore->Floors + 1, 1);
+		sFloor->SetScrollbar(Simcore->Basements, 1, Simcore->TotalFloors() + 1, 1);
+		//sFloor->SetScrollbar(0, 1, Simcore->Floors + 1, 1);
 	}
 	else
 		sNumber->Enable(false);
@@ -608,7 +608,7 @@ void editelevator::Loop()
 		SetMainValues();
 	}
 	tElevator->SetLabel(wxT("Number " + wxVariant((long)sNumber->GetThumbPosition() + 1).GetString()));
-	tFloor->SetLabel(wxT("Floor " + wxVariant((long)sFloor->GetThumbPosition()).GetString()));
+	tFloor->SetLabel(wxT("Floor " + wxVariant(((long)sFloor->GetThumbPosition()) - Simcore->Basements).GetString()));
 	txtBrakes->SetValue(wxString::FromAscii(BoolToString(elevator->GetBrakeStatus())));
 	txtDestFloor->SetValue(wxVariant((long)elevator->GotoFloor).GetString());
 	txtDestination->SetValue(TruncateNumber(elevator->GetDestination(), 2));
