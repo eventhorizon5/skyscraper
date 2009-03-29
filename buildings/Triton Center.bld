@@ -1570,20 +1570,26 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
 #Service Area Wall
 <Floors -1 to 141>
     Set 5 = Wall1
-    SetWallOrientation = Left
+    WallOrientation = Left
     DrawWalls = true, true, false, false, false, false
     if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall ServiceWall, %5%, 0.5, -4.33, 14.29, 4, 14.29, %height%, %height%, 0, 0, 0, 0, False
-    SetWallOrientation = Center
+    WallOrientation = Center
     if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddDoor StairsDoor, 0.2, 6, 0, 14.29 + 0.25, 3.5, 8, 0, 1, 1
+    #door fillers, since SBS can't yet automatically make fillers for the same mesh
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall FillerWallLeft, ConnectionWall, 0, -1.75, 14.29, -1.75, 14.29 + 0.5, 8, 8, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall FillerWallRight, ConnectionWall, 0, 1.75, 14.29, 1.75, 14.29 + 0.5, 8, 8, 0, 0, 0, 0, False
+    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddFloor FillerWallTop, ConnectionWall, 0, -1.75, 14.29, 1.75, 14.29 + 0.5, 8, 8, 0, 0, False
 <EndFloors>
 
 #Residential divider wall
 <Floors -1 to 16>
-    SetWallOrientation = Left
+    WallOrientation = Left
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     if[%floor% ! 1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    SetWallOrientation = Right
+    WallOrientation = Right
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     if[%floor% ! 1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
