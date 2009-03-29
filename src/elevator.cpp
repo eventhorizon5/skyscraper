@@ -231,6 +231,12 @@ void Elevator::AddRoute(int floor, int direction)
 	{
 		if (UpQueue.GetSize() == 0 && QueuePositionDirection == 0)
 			PauseQueueSearch = false;
+		if (UpQueue.Find(floor) != csArrayItemNotFound)
+		{
+			//exit if entry already exits
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " already exists");			
+			return;
+		}
 		UpQueue.InsertSorted(floor);
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = 1;
@@ -240,6 +246,12 @@ void Elevator::AddRoute(int floor, int direction)
 	{
 		if (DownQueue.GetSize() == 0 && QueuePositionDirection == 0)
 			PauseQueueSearch = false;
+		if (DownQueue.Find(floor) != csArrayItemNotFound)
+		{
+			//exit if entry already exits
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " already exists");			
+			return;
+		}
 		DownQueue.InsertSorted(floor);
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = -1;
@@ -359,6 +371,11 @@ void Elevator::ProcessCallQueue()
 				DeleteRoute(UpQueue[i], 1);
 				return;
 			}
+			if (UpQueue[i] == GetFloor())
+			{
+				OpenDoors();
+				DeleteRoute(UpQueue[i], 1);
+			}
 		}
 	}
 	else if (QueuePositionDirection == -1)
@@ -374,6 +391,11 @@ void Elevator::ProcessCallQueue()
 				MoveElevator = true;
 				DeleteRoute(DownQueue[i], -1);
 				return;
+			}
+			if (DownQueue[i] == GetFloor())
+			{
+				OpenDoors();
+				DeleteRoute(DownQueue[i], -1);
 			}
 		}
 	}

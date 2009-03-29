@@ -180,7 +180,7 @@ void CallButton::Call(int direction)
 	int closest = sbs->GetElevator(Elevators[0])->GetFloor();
 	int closest_elev = 0;
 
-	for (size_t i = Elevators[0]; i < Elevators.GetSize(); i++)
+	for (size_t i = 0; i < Elevators.GetSize(); i++)
 	{
 		int current = sbs->GetElevator(Elevators[i])->GetFloor();
 
@@ -188,11 +188,11 @@ void CallButton::Call(int direction)
 		if (abs(current - floor) < closest)
 		{
 			//and if it's above the current floor and should be called down, or below the
-			//current floor and called up
-			if ((current > floor && direction == -1) || (current < floor && direction == 1))
+			//current floor and called up, or on the same floor
+			if ((current > floor && direction == -1) || (current < floor && direction == 1) || current == floor)
 			{
 				//and if it's either going the same direction as the call or not moving at all
-				if (sbs->GetElevator(Elevators[i])->Direction == direction || sbs->GetElevator(Elevators[i])->Direction == 0)
+				if ((sbs->GetElevator(Elevators[i])->Direction == direction || sbs->GetElevator(Elevators[i])->Direction == 0) && sbs->GetElevator(Elevators[i])->IsMoving == false && sbs->GetElevator(Elevators[i])->AreDoorsOpen() == false)
 				{
 					closest = current;
 					closest_elev = i;
