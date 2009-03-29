@@ -432,7 +432,7 @@ void Elevator::MonitorLoop()
 		MoveDoors(false, true);
 
 	//elevator movement
-	if (MoveElevator == true)
+	if (MoveElevator == true && DoorsOpen == false)
 		MoveElevatorToFloor();
 
 }
@@ -1020,10 +1020,6 @@ void Elevator::MoveElevatorToFloor()
 			ElevatorIsRunning = false;
 			return;
 		}
-
-		//close doors if open
-		if (DoorsOpen == true)
-			CloseDoors();
 
 		//Determine direction
 		if (GotoFloor < ElevatorFloor)
