@@ -1,4 +1,4 @@
-Skyscraper 2.0 Alpha 3
+Skyscraper 2.0 Alpha 4
 Copyright (C)2003-2009 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper

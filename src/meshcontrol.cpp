@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.3 Alpha - Mesh Control Form
+	Skyscraper 1.4 Alpha - Mesh Control Form
 	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
