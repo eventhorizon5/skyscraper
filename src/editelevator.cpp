@@ -677,13 +677,13 @@ void editelevator::On_bSetDecelJerk_Click(wxCommandEvent& event)
 void editelevator::On_bOpenShaftDoor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->OpenDoors(3, sFloor->GetThumbPosition());
+		elevator->OpenDoors(3, sFloor->GetThumbPosition() - Simcore->Basements);
 }
 
 void editelevator::On_bCloseShaftDoor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->CloseDoors(3, sFloor->GetThumbPosition());
+		elevator->CloseDoors(3, sFloor->GetThumbPosition() - Simcore->Basements);
 }
 
 
