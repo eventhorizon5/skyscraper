@@ -22,6 +22,7 @@ Version 1.3 (2.0 Alpha 3)
 -new intro screen (doesn't work yet on Linux)
 -major performance improvements
 -added keys w, a, s and d for movement
+-input is now only processed if main window is selected
 
 Version 1.2 (2.0 Alpha 2) - Jan 10, 2009
 -------------------------

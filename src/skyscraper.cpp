@@ -432,6 +432,10 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 
 void Skyscraper::GetInput()
 {
+	//quit if main window isn't selected
+	if (window->IsActive() == false)
+		return;
+
 	// First get elapsed time from the virtual clock.
 	elapsed_time = vc->GetElapsedTicks ();
 	current_time = vc->GetCurrentTicks ();
@@ -628,6 +632,10 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, int x, int 
 void Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
+
+	//quit if main window isn't selected
+	if (window->IsActive() == false)
+		return;
 
 	//exit if simulator is starting
 	if (Starting == true)
