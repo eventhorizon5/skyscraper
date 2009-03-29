@@ -13,6 +13,7 @@ Version 1.3 (2.0 Alpha 3)
 -moved main Crystal Space code out of SBS core into frontend
 -fixed an infinite loop condition when processing multiple and/or operators
 -more Sears Tower work
+-added TextureFlip command
 
 Version 1.2 (2.0 Alpha 2) - Jan 10, 2009
 -------------------------

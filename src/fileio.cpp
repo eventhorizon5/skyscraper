@@ -895,6 +895,17 @@ checkfloors:
 			goto Nextline;
 		}
 
+		//TextureFlip command
+		if (LineData.Slice(0, 11).CompareNoCase("textureflip") == true)
+		{
+			tempdata.SplitString(LineData.Slice(12).GetData(), ",");
+
+			Simcore->SetTextureFlip(atoi(tempdata[0]), atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+
+			tempdata.DeleteAll();
+			goto Nextline;
+		}
+
 		//Process globals
 		if (Section == 1)
 		{
@@ -1836,6 +1847,9 @@ recalc:
 
 		//reset texture override status
 		Simcore->TextureOverride = false;
+
+		//reset texture flip status
+		Simcore->FlipTexture = false;
 
 Nextline:
 		i++;
