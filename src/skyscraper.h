@@ -77,6 +77,7 @@ public:
 	int LoadDataFile(const char * filename);
 	csString Calc(const char *expression);
 	bool IfProc(const char *expression);
+	void ScriptError(const char *message, int linenumber, int section, int current, const char *linedata);
 
 	//File I/O
 	csString BuildingFile;

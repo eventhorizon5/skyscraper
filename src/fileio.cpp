@@ -108,11 +108,21 @@ int Skyscraper::LoadBuilding(const char * filename)
 		{
 			Section = 2;
 			temp3 = csString(LineData).Downcase().Find("to", 0);
-			RangeL = atoi(LineData.Slice(8, temp3 - 9).GetData());
-			RangeH = atoi(LineData.Slice(temp3 + 2).GetData());
+			csString tempstring = LineData.Slice(8, temp3 - 9);
+			if (IsNumeric(tempstring) == false)
+			{
+				ScriptError("Invalid range", i, Section, 0, LineData.GetData());
+				return 0;
+			}
+			RangeL = atoi(tempstring.GetData());
+			tempstring = LineData.Slice(temp3 + 2);
+			if (IsNumeric(tempstring) == false)
+			{
+				ScriptError("Invalid range", i, Section, 0, LineData.GetData());
+				return 0;
+			}
+			RangeH = atoi(tempstring.GetData());
 			Context = "Floor range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
-			//if (RangeL < -Basements !! RangeH > TotalFloors)
-				//Err.Raise 1004;
 			Current = RangeL;
 			RangeStart = i;
 			Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
@@ -2266,4 +2276,9 @@ bool Skyscraper::IfProc(const char *expression)
 		return true;
 	else
 		return false;
+}
+
+void Skyscraper::ScriptError(const char *message, int linenumber, int section, int current, const char *linedata)
+{
+
 }

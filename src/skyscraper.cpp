@@ -817,7 +817,12 @@ void Skyscraper::Start()
 	csSleep(1000);
 
 	BuildingFile.Insert(0, "/root/buildings/");
-	LoadBuilding(BuildingFile.GetData());
+	if (!LoadBuilding(BuildingFile.GetData()))
+	{
+		ReportError("Error loading building\n");
+		return;
+	}
+
 	//if (LoadBuilding(BuildingFile.GetData()) != 0)
 
 	//the sky needs to be created before Prepare() is called
