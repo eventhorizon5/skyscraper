@@ -73,11 +73,10 @@ public:
 	void DrawBackground();
 
 	//file loader functions
-	int LoadBuilding(const char * filename);
-	int LoadDataFile(const char * filename);
+	bool LoadBuilding(const char * filename);
+	bool LoadDataFile(const char * filename);
 	csString Calc(const char *expression);
 	bool IfProc(const char *expression);
-	void ScriptError(const char *message, int linenumber, int section, int current, const char *linedata);
 
 	//File I/O
 	csString BuildingFile;
@@ -139,6 +138,14 @@ private:
 
 	void DrawImage(const char *filename, buttondata *button, int x, int y, bool center, const char *filename_selected = 0, const char *filename_pressed = 0);
 	void Click(int index);
+
+	//script processor internal data
+	void ScriptError(const char *message);
+	int line; //line number
+	csString LineData; //line text
+	int Current; //current range iteration
+	int Section; //current section number
+	csString Context; //section context
 };
 
 class MainScreen : public wxFrame

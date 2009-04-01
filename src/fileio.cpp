@@ -38,16 +38,19 @@
 float AltitudeCheck;
 extern SBS *Simcore;
 
-int Skyscraper::LoadBuilding(const char * filename)
+bool Skyscraper::LoadBuilding(const char * filename)
 {
 	//building loader/script interpreter
 
 	//load building into buffer
-	if (LoadDataFile(filename) > 0)
-		return 1;
+	if (!LoadDataFile(filename))
+		return false;
 
-	long i = 0; //line number
-	csString LineData = "";  //line contents
+	line = 0; //line number
+	LineData = "";  //line contents
+	Current = 0;
+	Section = 0;
+	Context = "None";
 	int temp1 = 0;
 	csString temp2 = "";
 	int temp3 = 0;
@@ -57,22 +60,20 @@ int Skyscraper::LoadBuilding(const char * filename)
 	csString temp7 = "";
 	csStringArray tempdata;
 	csArray<int> callbutton_elevators;
-	int Current = 0;
 	int FloorCheck = 0;
 	int RangeL = 0;
 	int RangeH = 0;
 	long RangeStart = 0;
-	int Section = 0;
 	csRef<iThingFactoryState> tmpMesh;
-	csString Context = "None";
 	char intbuffer[65];
 	csString buffer;
 	int startpos = 0;
 	bool getfloordata = false;
+	csString checkstring;
 
-	while (i < BuildingData.GetSize() - 1)
+	while (line < BuildingData.GetSize() - 1)
 	{
-		LineData = BuildingData[i];
+		LineData = BuildingData[line];
 		LineData.Trim();
 
 		//skip blank lines
@@ -91,6 +92,11 @@ int Skyscraper::LoadBuilding(const char * filename)
 		//Section information
 		if (LineData.CompareNoCase("<globals>") == true)
 		{
+			if (Section > 0)
+			{
+				ScriptError("Already within a section");
+				return false;
+			}
 			Section = 1;
 			Context = "Globals";
 			Report("Processing globals...");
@@ -98,6 +104,11 @@ int Skyscraper::LoadBuilding(const char * filename)
 		}
 		if (LineData.CompareNoCase("<endglobals>") == true)
 		{
+			if (Section != 1)
+			{
+				ScriptError("Not in global section");
+				return false;
+			}
 			Simcore->InitMeshes();
 			Section = 0;
 			Context = "None";
@@ -106,42 +117,69 @@ int Skyscraper::LoadBuilding(const char * filename)
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<floors") == true)
 		{
+			if (Section > 0)
+			{
+				ScriptError("Already within a section");
+				return false;
+			}
 			Section = 2;
 			temp3 = csString(LineData).Downcase().Find("to", 0);
-			csString tempstring = LineData.Slice(8, temp3 - 9);
-			if (IsNumeric(tempstring) == false)
+			if (temp3 < 0)
 			{
-				ScriptError("Invalid range", i, Section, 0, LineData.GetData());
-				return 0;
+				ScriptError("Syntax error");
+				return false;
+
 			}
-			RangeL = atoi(tempstring.GetData());
-			tempstring = LineData.Slice(temp3 + 2);
-			if (IsNumeric(tempstring) == false)
+			//get low range marker
+			checkstring = LineData.Slice(8, temp3 - 9).Trim();
+			if (!IsNumeric(checkstring))
 			{
-				ScriptError("Invalid range", i, Section, 0, LineData.GetData());
-				return 0;
+				ScriptError("Invalid range");
+				return false;
 			}
-			RangeH = atoi(tempstring.GetData());
+			RangeL = atoi(checkstring.GetData());
+			//get high range marker
+			checkstring = LineData.Slice(temp3 + 2).Trim();
+			if (!IsNumeric(checkstring))
+			{
+				ScriptError("Invalid range");
+				return false;
+			}
+			RangeH = atoi(checkstring.GetData());
 			Context = "Floor range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
 			Current = RangeL;
-			RangeStart = i;
+			RangeStart = line;
 			Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<floor ") == true)
 		{
+			if (Section > 0)
+			{
+				ScriptError("Already within a section");
+				return false;
+			}
 			Section = 2;
 			Context = "Floor";
 			RangeL = 0;
 			RangeH = 0;
-			Current = atoi(LineData.Slice(7, LineData.Length() - 7).GetData());
-			//if (Current < -Basements !! Current > TotalFloors)
-				//Err.Raise 1005
+			checkstring = LineData.Slice(7, LineData.Length() - 7).Trim();
+			if (!IsNumeric(checkstring))
+			{
+				ScriptError("Invalid floor");
+				return false;
+			}
+			Current = atoi(checkstring.GetData());
 			Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endfloor>") == true)
 		{
+			if (Section != 2 || Context != "Floor")
+			{
+				ScriptError("Not in floor section");
+				return false;
+			}
 			Section = 0;
 			Context = "None";
 			Report("Finished floor");
@@ -149,28 +187,71 @@ int Skyscraper::LoadBuilding(const char * filename)
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<elevators") == true)
 		{
+			if (Section > 0)
+			{
+				ScriptError("Already within a section");
+				return false;
+			}
 			Section = 4;
 			temp3 = csString(LineData).Downcase().Find("to", 10);
-			RangeL = atoi(LineData.Slice(11, temp3 - 12).GetData());
-			RangeH = atoi(LineData.Slice(temp3 + 2).GetData());
+			if (temp3 < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
+			checkstring = LineData.Slice(11, temp3 - 12).Trim();
+			if (!IsNumeric(checkstring))
+			{
+				ScriptError("Invalid range");
+				return false;
+			}
+			RangeL = atoi(checkstring.GetData());
+			checkstring = LineData.Slice(temp3 + 2).Trim();
+			if (!IsNumeric(checkstring))
+			{
+				ScriptError("Invalid range");
+				return false;
+			}
+			RangeH = atoi(checkstring.GetData());
 			Context = "Elevator range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
 			Current = RangeL;
-			RangeStart = i;
+			RangeStart = line;
 			Report("Processing elevators " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<elevator ") == true)
 		{
+			if (Section > 0)
+			{
+				ScriptError("Already within a section");
+				return false;
+			}
 			Section = 4;
 			Context = "Elevator";
 			RangeL = 0;
 			RangeH = 0;
-			Current = atoi(LineData.Slice(10, LineData.Length() - 10).GetData());
+			checkstring = LineData.Slice(10, LineData.Length() - 10);
+			if (!IsNumeric(checkstring))
+			{
+				ScriptError("Invalid elevator");
+				return false;
+			}
+			Current = atoi(checkstring.GetData());
+			if (Current < 1 || Current > Simcore->Elevators() + 1)
+			{
+				ScriptError("Invalid elevator");
+				return false;
+			}
 			Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endelevator>") == true)
 		{
+			if (Section != 4 || Context != "Elevator")
+			{
+				ScriptError("Not in elevator section");
+				return false;
+			}
 			Section = 0;
 			Context = "None";
 			Report("Finished elevator");
@@ -178,6 +259,11 @@ int Skyscraper::LoadBuilding(const char * filename)
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<textures>") == true)
 		{
+			if (Section > 0)
+			{
+				ScriptError("Already within a section");
+				return false;
+			}
 			Section = 5;
 			Context = "Textures";
 			Report("Processing textures...");
@@ -185,6 +271,11 @@ int Skyscraper::LoadBuilding(const char * filename)
 		}
 		if (LineData.Slice(0, 13).CompareNoCase("<endtextures>") == true)
 		{
+			if (Section != 5)
+			{
+				ScriptError("Not in texture section");
+				return false;
+			}
 			Section = 0;
 			Context = "None";
 			Report("Finished textures");
@@ -235,10 +326,14 @@ breakpoint:
 				temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1).Trim();
 				if (IsNumeric(temp2.GetData()) == true)
 				{
-					//if (temp2 < 0 !! temp2 > UBound(Simcore->UserVariable))
-						//Err.Raise 1001
-					//replace all occurances of the variable with it's value
-					LineData.ReplaceAll("%" + temp2 + "%", UserVariable[atoi(temp2.GetData())]);
+					temp4 = atoi(temp2.GetData());
+					if (temp4 < 0 || temp4 > UserVariable.GetSize() - 1)
+					{
+						ScriptError("Invalid variable number");
+						return false;
+					}
+					//replace all occurrences of the variable with it's value
+					LineData.ReplaceAll("%" + temp2 + "%", UserVariable[temp4]);
 					startpos -= 1;
 				}
 			}
@@ -251,6 +346,11 @@ checkfloors:
 		{
 			temp1 = LineData.Find("(", temp5);
 			temp3 = LineData.Find(")", temp5);
+			if (temp3 < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
 			if (Section == 2 && getfloordata == false)
 			{
 				//process floor-specific variables if in a floor section
@@ -263,8 +363,11 @@ checkfloors:
 			LineData = LineData.Slice(0, temp1 + 1) + tempdata + LineData.Slice(temp3);
 
 			temp4 = atoi(tempdata.GetData());
-			//if (temp4 < -Basements !! temp4 > TotalFloors)
-				//Err.Raise 1005;
+			if (temp4 < -Simcore->Basements || temp4 > Simcore->Floors)
+			{
+				ScriptError("Invalid floor");
+				return false;
+			}
 
 			//fullheight parameter
 			buffer = temp4;
@@ -299,6 +402,14 @@ checkfloors:
 				buffer = Simcore->GetFloor(temp4)->InterfloorHeight;
 				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
 			}
+			//return error if no match
+			buffer = temp4;
+			temp1 = csString(LineData).Downcase().Find("floor(" + buffer.Trim() + ")", 0);
+			if (temp1 > 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
 			temp5 = csString(LineData).Downcase().Find("floor(", 0);
 		}
 
@@ -325,8 +436,11 @@ checkfloors:
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-			//if (tempdata.GetSize() < 13)
-				//Err.Raise 1003;
+			if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
 			//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
 
 			if (Section == 2)
@@ -364,8 +478,11 @@ checkfloors:
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-			//if (tempdata.GetSize() < 11)
-				//Err.Raise 1003;
+			if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
 			//if IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 			//create wall
@@ -385,8 +502,11 @@ checkfloors:
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-			//if (tempdata.GetSize() < 7)
-				//Err.Raise 1003;
+			if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
 			//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 			//create floor
@@ -406,6 +526,11 @@ checkfloors:
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
+			if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
 
 			//create tiled ground
 			Simcore->AddGround(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]));
@@ -423,6 +548,11 @@ checkfloors:
 			{
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
+			}
+			if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
 			}
 
 			buffer = tempdata[0];
@@ -445,8 +575,11 @@ checkfloors:
 			temp1 = LineData.Find("=", 0);
 			temp3 = atoi(LineData.Slice(4, temp1 - 5));
 			temp2 = LineData.Slice(temp1 + 1);
-			//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
-				//Err.Raise 1001
+			if (temp3 < 0 || temp3 > UserVariable.GetSize() - 1)
+			{
+				ScriptError("Invalid variable number");
+				return false;
+			}
 			UserVariable[temp3] = Calc(temp2);
 			//Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 		}
@@ -469,8 +602,11 @@ checkfloors:
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-			//if (tempdata.GetSize < 9)
-				//Err.Raise 1003;
+			if (tempdata.GetSize() < 15 || tempdata.GetSize() > 15)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
 			if (Section == 2)
 			{
 				buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[8]);
@@ -509,8 +645,11 @@ checkfloors:
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-			//if (tempdata.GetSize < 9)
-				//Err.Raise 1003
+			if (tempdata.GetSize() < 15 || tempdata.GetSize() > 15)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
 			if (Section == 2)
 			{
 				buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[8]);
@@ -621,6 +760,11 @@ checkfloors:
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
+			if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
 
 			Simcore->CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
 
@@ -635,6 +779,11 @@ checkfloors:
 			{
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
+			}
+			if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
 			}
 
 			Simcore->GetShaft(atoi(tempdata[0]))->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
@@ -655,9 +804,9 @@ checkfloors:
 
 			//copy string listing of floors into array
 			tempdata.SplitString(temp2.GetData(), ",");
-			for (int i = 0; i < tempdata.GetSize(); i++)
+			for (int line = 0; line < tempdata.GetSize(); line++)
 			{
-				csString tmpstring = tempdata[i];
+				csString tmpstring = tempdata[line];
 				tmpstring.Trim();
 				if (tmpstring.Find("-", 1) > 0)
 				{
@@ -675,7 +824,7 @@ checkfloors:
 						Simcore->GetShaft(shaftnum)->AddShowFloor(k);
 				}
 				else
-					Simcore->GetShaft(shaftnum)->AddShowFloor(atoi(tempdata[i]));
+					Simcore->GetShaft(shaftnum)->AddShowFloor(atoi(tempdata[line]));
 			}
 			tempdata.DeleteAll();
 		}
@@ -693,9 +842,9 @@ checkfloors:
 
 			//copy string listing of floors into array
 			tempdata.SplitString(temp2.GetData(), ",");
-			for (int i = 0; i < tempdata.GetSize(); i++)
+			for (int line = 0; line < tempdata.GetSize(); line++)
 			{
-				csString tmpstring = tempdata[i];
+				csString tmpstring = tempdata[line];
 				tmpstring.Trim();
 				if (tmpstring.Find("-", 1) > 0)
 				{
@@ -713,7 +862,7 @@ checkfloors:
 						Simcore->GetShaft(shaftnum)->AddShowOutside(k);
 				}
 				else
-					Simcore->GetShaft(shaftnum)->AddShowOutside(atoi(tempdata[i]));
+					Simcore->GetShaft(shaftnum)->AddShowOutside(atoi(tempdata[line]));
 			}
 			tempdata.DeleteAll();
 		}
@@ -740,6 +889,11 @@ checkfloors:
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
+			if (tempdata.GetSize() < 5 || tempdata.GetSize() > 5)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
 
 			if (!Simcore->GetStairs(atoi(tempdata[0])))
 				Simcore->CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]));
@@ -755,6 +909,11 @@ checkfloors:
 			{
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
+			}
+			if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
 			}
 
 			Simcore->GetStairs(atoi(tempdata[0]))->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
@@ -795,6 +954,11 @@ checkfloors:
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
+			if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
 
 			Simcore->DrawWalls(csString(tempdata[0]).CompareNoCase("true"),
 						csString(tempdata[1]).CompareNoCase("true"),
@@ -814,6 +978,11 @@ checkfloors:
 			{
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
+			}
+			if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
 			}
 
 			Simcore->ReverseExtents(csString(tempdata[0]).CompareNoCase("true"),
@@ -854,6 +1023,11 @@ checkfloors:
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
+			if (tempdata.GetSize() < 8 || tempdata.GetSize() > 8)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
 
 			buffer = tempdata[0];
 			buffer.Downcase();
@@ -886,6 +1060,11 @@ checkfloors:
 			{
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
+			}
+			if (tempdata.GetSize() < 2 || tempdata.GetSize() > 2)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
 			}
 
 			Simcore->SetAutoSize(csString(tempdata[0]).CompareNoCase("true"),
@@ -1029,9 +1208,9 @@ recalc:
 			{
 				//copy string listing of group floors into array
 				tempdata.SplitString(temp2.GetData(), ",");
-				for (int i = 0; i < tempdata.GetSize(); i++)
+				for (int line = 0; line < tempdata.GetSize(); line++)
 				{
-					csString tmpstring = tempdata[i];
+					csString tmpstring = tempdata[line];
 					tmpstring.Trim();
 					if (tmpstring.Find("-", 1) > 0)
 					{
@@ -1049,7 +1228,7 @@ recalc:
 							Simcore->GetFloor(Current)->AddGroupFloor(k);
 					}
 					else
-						Simcore->GetFloor(Current)->AddGroupFloor(atoi(tempdata[i]));
+						Simcore->GetFloor(Current)->AddGroupFloor(atoi(tempdata[line]));
 				}
 				tempdata.DeleteAll();
 			}
@@ -1083,10 +1262,10 @@ recalc:
 			//Exit command
 			if (LineData.Slice(0, 4).CompareNoCase("exit") == true)
 			{
-			if (RangeL != RangeH)
-				LineData = "<endfloors>";
-			else
-				LineData = "<endfloor>";
+				if (RangeL != RangeH)
+					LineData = "<endfloors>";
+				else
+					LineData = "<endfloor>";
 			}
 
 			if (LineData.Slice(0, 7).CompareNoCase("<break>") == true)
@@ -1104,8 +1283,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 8)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
@@ -1126,8 +1308,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 8)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
@@ -1148,8 +1333,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 8)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
@@ -1171,8 +1359,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 7)
-				//	Err.Raise 1003;
+				if (tempdata.GetSize() < 11 || tempdata.GetSize() > 11)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
@@ -1192,8 +1383,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 11)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
@@ -1214,8 +1408,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 11)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
@@ -1236,8 +1433,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 11)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
@@ -1259,8 +1459,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 10)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 13 || tempdata.GetSize() > 13)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
@@ -1277,8 +1480,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize < 9)
-					//Err.Raise 1003
+				if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				Simcore->GetFloor(Current)->ColumnWallBox(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"));
 				tempdata.DeleteAll();
 			}
@@ -1292,8 +1498,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize < 9)
-					//Err.Raise 1003
+				if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				Simcore->GetFloor(Current)->ColumnWallBox2(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"));
 				tempdata.DeleteAll();
 			}
@@ -1304,8 +1513,11 @@ recalc:
 				temp1 = LineData.Find("=", 0);
 				temp3 = atoi(LineData.Slice(4, temp1 - 5));
 				temp2 = LineData.Slice(temp1 + 1);
-				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
-					//Err.Raise 1001
+				if (temp3 < 0 || temp3 > UserVariable.GetSize() - 1)
+				{
+					ScriptError("Invalid variable number");
+					return false;
+				}
 				UserVariable[temp3] = Calc(temp2);
 				//Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
@@ -1321,8 +1533,8 @@ recalc:
 				callbutton_elevators.DeleteAll();
 				callbutton_elevators.SetSize(tempdata.GetSize());
 
-				for (int i = 0; i < tempdata.GetSize(); i++)
-					callbutton_elevators[i] = atoi(tempdata[i]);
+				for (int line = 0; line < tempdata.GetSize(); line++)
+					callbutton_elevators[line] = atoi(tempdata[line]);
 
 				tempdata.DeleteAll();
 			}
@@ -1332,8 +1544,8 @@ recalc:
 			{
 				if (callbutton_elevators.GetSize() == 0)
 				{
-					Report("Error: Trying to create call buttons, but no elevators specified");
-					goto Nextline;
+					ScriptError("No elevators specified");
+					return false;
 				}
 
 				tempdata.SplitString(LineData.Slice(18).GetData(), ",");
@@ -1343,6 +1555,11 @@ recalc:
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
 				}
 
 				//create call button
@@ -1361,6 +1578,11 @@ recalc:
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 13 || tempdata.GetSize() > 13)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
 				}
 
 				//create stairs
@@ -1381,6 +1603,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
+				if (tempdata.GetSize() < 10 || tempdata.GetSize() > 10)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 
 				//create door
 				Simcore->GetFloor(Current)->AddDoor(tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
@@ -1398,6 +1625,11 @@ recalc:
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 11 || tempdata.GetSize() > 11)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
 				}
 
 				//create door
@@ -1418,6 +1650,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
+				if (tempdata.GetSize() < 8 || tempdata.GetSize() > 8)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 
 				//perform cut on floor
 				Simcore->GetFloor(Current)->Cut(csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), csString(tempdata[6]).CompareNoCase("true"), csString(tempdata[7]).CompareNoCase("true"), false);
@@ -1432,7 +1669,7 @@ recalc:
 					if (Current < RangeH)
 					{
 						Current++;
-						i = RangeStart;  //loop back
+						line = RangeStart;  //loop back
 						goto Nextline;
 					}
 					else
@@ -1446,7 +1683,7 @@ recalc:
 					if (Current > RangeH)
 					{
 						Current--;
-						i = RangeStart; //loop back
+						line = RangeStart; //loop back
 						goto Nextline;
 					}
 					else
@@ -1504,9 +1741,9 @@ recalc:
 			{
 				//copy string listing of serviced floors into array
 				tempdata.SplitString(temp2.GetData(), ",");
-				for (int i = 0; i < tempdata.GetSize(); i++)
+				for (int line = 0; line < tempdata.GetSize(); line++)
 				{
-					csString tmpstring = tempdata[i];
+					csString tmpstring = tempdata[line];
 					tmpstring.Trim();
 					int searchpos = tmpstring.Find("-", 1);
 					if (searchpos > 0)
@@ -1518,7 +1755,7 @@ recalc:
 							Simcore->GetElevator(Current)->AddServicedFloor(k);
 					}
 					else
-						Simcore->GetElevator(Current)->AddServicedFloor(atoi(tempdata[i]));
+						Simcore->GetElevator(Current)->AddServicedFloor(atoi(tempdata[line]));
 				}
 				tempdata.DeleteAll();
 			}
@@ -1579,8 +1816,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 3)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Then Err.Raise 1000
 				Simcore->GetElevator(Current)->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atoi(tempdata[2]));
 				tempdata.DeleteAll();
@@ -1598,8 +1838,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 8)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 11 || tempdata.GetSize() > 11)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
 
 				//create floor
@@ -1620,8 +1863,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 11)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 13 || tempdata.GetSize() > 13)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				//create wall
@@ -1642,8 +1888,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 11)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				Simcore->GetElevator(Current)->AddDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), csString(tempdata[6]).CompareNoCase("true"), atof(tempdata[7]), atof(tempdata[8]));
@@ -1663,8 +1912,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				//if (tempdata.GetSize() < 11)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
 
 				Simcore->GetElevator(Current)->AddShaftDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
@@ -1684,6 +1936,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
+				if (tempdata.GetSize() < 13 || tempdata.GetSize() > 13)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 
 				Simcore->GetElevator(Current)->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 
@@ -1701,6 +1958,11 @@ recalc:
 				{
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
 				}
 
 				if (atoi(tempdata[0]) == 1)
@@ -1738,6 +2000,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
+				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 
 				if (atoi(tempdata[0]) == 1)
 				{
@@ -1774,6 +2041,11 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
+				if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 
 				Simcore->GetElevator(Current)->AddFloorIndicator(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
 
@@ -1787,8 +2059,11 @@ recalc:
 				temp1 = LineData.Find("=", 0);
 				temp3 = atoi(LineData.Slice(4, temp1 - 5));
 				temp2 = LineData.Slice(temp1 + 1);
-				//if (temp3 < 0 !! temp3 > UBound(Simcore->UserVariable))
-					//Err.Raise 1001
+				if (temp3 < 0 || temp3 > UserVariable.GetSize() - 1)
+				{
+					ScriptError("Invalid variable number");
+					return false;
+				}
 				UserVariable[temp3] = Calc(temp2);
 				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 			}
@@ -1799,7 +2074,7 @@ recalc:
 				if (Current < RangeH)
 				{
 					Current++;
-					i = RangeStart;  //loop back
+					line = RangeStart;  //loop back
 					goto Nextline;
 				}
 				else
@@ -1822,8 +2097,11 @@ recalc:
 					buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
 				}
-				//if (tempdata.GetSize() < 1)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				buffer = tempdata[0];
 				buffer.Insert(0, "/root/");
 				Simcore->LoadTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]));
@@ -1837,8 +2115,11 @@ recalc:
 					buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
 				}
-				//if (tempdata.GetSize() < 1)
-					//Err.Raise 1003;
+				if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
 				//If IsNumeric(tempdata(0)) = False Or IsNumeric(tempdata(1)) = False Then Err.Raise 1000
 				RangeL = atoi(tempdata[0]);
 				RangeH = atoi(tempdata[1]);
@@ -1862,13 +2143,13 @@ recalc:
 		Simcore->FlipTexture = false;
 
 Nextline:
-		i++;
+		line++;
 	}
 
-	return 0;
+	return true;
 }
 
-int Skyscraper::LoadDataFile(const char * filename)
+bool Skyscraper::LoadDataFile(const char * filename)
 {
 	//loads a building data file into the runtime buffer
 	bool streamnotfinished = true;
@@ -1876,14 +2157,14 @@ int Skyscraper::LoadDataFile(const char * filename)
 
 	//make sure file exists
 	if (Simcore->vfs->Exists(filename) == false)
-		return 1;
+		return false;
 
 	//load file
 	csRef<iFile> file (Simcore->vfs->Open(filename, VFS_FILE_READ));
 
 	//exit if an error occurred while loading
 	if (!file)
-		return 1;
+		return false;
 
 	csFileReadHelper file_r(file);
 
@@ -1903,7 +2184,7 @@ int Skyscraper::LoadDataFile(const char * filename)
 		BuildingData.Push(buffer);
 	}
 
-	return 0;
+	return true;
 }
 
 csString Skyscraper::Calc(const char *expression)
@@ -2278,7 +2559,11 @@ bool Skyscraper::IfProc(const char *expression)
 		return false;
 }
 
-void Skyscraper::ScriptError(const char *message, int linenumber, int section, int current, const char *linedata)
+void Skyscraper::ScriptError(const char *message)
 {
+	//Script error reporting function
+	char intbuffer[65];
+	csString error = "Script error on line " + csString(_itoa(line + 1, intbuffer, 10)) + ": " + csString(message) + "\nSection: " + csString(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
 
+	ReportError(error);
 }
