@@ -5728,25 +5728,25 @@ DrawWalls = true, true, false, false, false, false
     CallButtonElevators = 38, 39, 40, 41
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -23.85 - 7.5 - 0.75, -10.75 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -23.85 + 7.5 + 0.75, -10.75 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
-<EndFloor>
+<EndFloors>
 
 <Floors 61 to 70>
     CallButtonElevators = 42, 43, 44, 45
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 23.85 - 7.5 - 0.75, -10.75 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 23.85 + 7.5 + 0.75, -10.75 + 4.25 + 0.33 + 0.1, 4, back, 0.5, 1, true, 0, 0
-<EndFloor>
+<EndFloors>
 
 <Floors 51 to 60>
     CallButtonElevators = 46, 47, 48, 49
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -23.85 - 7.5 - 0.75, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -23.85 + 7.5 + 0.75, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
-<EndFloor>
+<EndFloors>
 
 <Floors 71 to 78>
     CallButtonElevators = 50, 51, 52, 53
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 23.85 - 7.5 - 0.75, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 23.85 + 7.5 + 0.75, 9.25 - 4.25 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
-<EndFloor>
+<EndFloors>
 
 #Residential Express
 <Floor 0>

@@ -4837,7 +4837,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CallButtonElevators = 1, 2, 3, 4, 5, 6, 7, 8
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, 56.772, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, 56.772, 4, left, 0.5, 1, true, 0, 0
-<EndFloor>
+<EndFloors>
 
 <Floors 33 to 34>
     CallButtonElevators = 1, 2, 3, 4, 5, 6, 7, 8
@@ -4850,7 +4850,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CallButtonElevators = 9, 10, 11, 12, 13, 14
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -12.6 + 5 + 0.33 + 0.1, -61.7 - 4.75, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 12.6 - 5 - 0.33 - 0.1, -61.7 + 4.75, 4, left, 0.5, 1, true, 0, 0
-<EndFloor>
+<EndFloors>
 
 <Floors 33 to 34>
     CallButtonElevators = 9, 10, 11, 12, 13, 14
