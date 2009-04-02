@@ -69,7 +69,6 @@ bool Skyscraper::LoadBuilding(const char * filename)
 	csString buffer;
 	int startpos = 0;
 	bool getfloordata = false;
-	csString checkstring;
 
 	while (line < BuildingData.GetSize() - 1)
 	{
@@ -130,22 +129,12 @@ bool Skyscraper::LoadBuilding(const char * filename)
 				return false;
 
 			}
-			//get low range marker
-			checkstring = LineData.Slice(8, temp3 - 9).Trim();
-			if (!IsNumeric(checkstring))
+			//get low and high range markers
+			if (!IsNumeric(LineData.Slice(8, temp3 - 9).Trim().GetData(), RangeL) || !IsNumeric(LineData.Slice(temp3 + 2, LineData.Length() - (temp3 + 2) - 1).Trim().GetData(), RangeH))
 			{
 				ScriptError("Invalid range");
 				return false;
 			}
-			RangeL = atoi(checkstring.GetData());
-			//get high range marker
-			checkstring = LineData.Slice(temp3 + 2).Trim();
-			if (!IsNumeric(checkstring))
-			{
-				ScriptError("Invalid range");
-				return false;
-			}
-			RangeH = atoi(checkstring.GetData());
 			Context = "Floor range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
 			Current = RangeL;
 			RangeStart = line;
@@ -163,13 +152,11 @@ bool Skyscraper::LoadBuilding(const char * filename)
 			Context = "Floor";
 			RangeL = 0;
 			RangeH = 0;
-			checkstring = LineData.Slice(7, LineData.Length() - 7).Trim();
-			if (!IsNumeric(checkstring))
+			if (!IsNumeric(LineData.Slice(7, LineData.Length() - 8).Trim(), Current))
 			{
 				ScriptError("Invalid floor");
 				return false;
 			}
-			Current = atoi(checkstring.GetData());
 			Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
@@ -199,20 +186,11 @@ bool Skyscraper::LoadBuilding(const char * filename)
 				ScriptError("Syntax error");
 				return false;
 			}
-			checkstring = LineData.Slice(11, temp3 - 12).Trim();
-			if (!IsNumeric(checkstring))
+			if (!IsNumeric(LineData.Slice(11, temp3 - 12).Trim().GetData(), RangeL) || !IsNumeric(LineData.Slice(temp3 + 2, LineData.Length() - (temp3 + 2) - 1).Trim().GetData(), RangeH))
 			{
 				ScriptError("Invalid range");
 				return false;
 			}
-			RangeL = atoi(checkstring.GetData());
-			checkstring = LineData.Slice(temp3 + 2).Trim();
-			if (!IsNumeric(checkstring))
-			{
-				ScriptError("Invalid range");
-				return false;
-			}
-			RangeH = atoi(checkstring.GetData());
 			Context = "Elevator range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
 			Current = RangeL;
 			RangeStart = line;
@@ -230,13 +208,11 @@ bool Skyscraper::LoadBuilding(const char * filename)
 			Context = "Elevator";
 			RangeL = 0;
 			RangeH = 0;
-			checkstring = LineData.Slice(10, LineData.Length() - 10);
-			if (!IsNumeric(checkstring))
+			if (!IsNumeric(LineData.Slice(10, LineData.Length() - 11).Trim().GetData(), Current))
 			{
 				ScriptError("Invalid elevator");
 				return false;
 			}
-			Current = atoi(checkstring.GetData());
 			if (Current < 1 || Current > Simcore->Elevators() + 1)
 			{
 				ScriptError("Invalid elevator");
@@ -362,7 +338,11 @@ checkfloors:
 			csString tempdata = Calc(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData());
 			LineData = LineData.Slice(0, temp1 + 1) + tempdata + LineData.Slice(temp3);
 
-			temp4 = atoi(tempdata.GetData());
+			if (!IsNumeric(tempdata.GetData(), temp4))
+			{
+				ScriptError("Invalid floor");
+				return false;
+			}
 			if (temp4 < -Simcore->Basements || temp4 > Simcore->Floors)
 			{
 				ScriptError("Invalid floor");
@@ -441,25 +421,38 @@ checkfloors:
 				ScriptError("Incorrect number of parameters");
 				return false;
 			}
-			//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Or IsNumeric(tempdata(11)) = False Or IsNumeric(tempdata(12)) = False Then Err.Raise 1000
 
+			//check numeric values
+			for (int i = 3; i <= 13; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
 			if (Section == 2)
 			{
 				 buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[4]);
-                                 tempdata.Put(4, buffer);
-                                 buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[7]);
-                                 tempdata.Put(7, buffer);
+				 tempdata.Put(4, buffer);
+				 buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[7]);
+				 tempdata.Put(7, buffer);
 			}
-			if (csString(tempdata[0]).CompareNoCase("floor") == true)
-				tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			buffer = tempdata[0];
 			buffer.Downcase();
-			if (buffer == "external")
+			if (buffer == "floor")
+				tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			else if (buffer == "external")
 				tmpMesh = Simcore->External_state;
-			if (buffer == "landscape")
+			else if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
-			if (buffer == "buildings")
+			else if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
+			else
+			{
+				ScriptError("Invalid object");
+				return false;
+			}
 
 			//create triangle wall
 			Simcore->AddTriangleWall(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
@@ -483,7 +476,15 @@ checkfloors:
 				ScriptError("Incorrect number of parameters");
 				return false;
 			}
-			//if IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Or IsNumeric(tempdata(10)) = False Then Err.Raise 1000
+			//check numeric values
+			for (int i = 3; i <= 13; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
 
 			//create wall
 			Simcore->AddWall(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
@@ -507,7 +508,15 @@ checkfloors:
 				ScriptError("Incorrect number of parameters");
 				return false;
 			}
-			//If IsNumeric(tempdata(1)) = False Or IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Then Err.Raise 1000
+			//check numeric values
+			for (int i = 3; i <= 11; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
 
 			//create floor
 			Simcore->AddFloor(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
@@ -530,6 +539,15 @@ checkfloors:
 			{
 				ScriptError("Incorrect number of parameters");
 				return false;
+			}
+			//check numeric values
+			for (int i = 2; i <= 8; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
 			}
 
 			//create tiled ground
@@ -554,15 +572,29 @@ checkfloors:
 				ScriptError("Incorrect number of parameters");
 				return false;
 			}
+			//check numeric values
+			for (int i = 1; i <= 6; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
 
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "external")
 				tmpMesh = Simcore->External_state;
-			if (buffer == "landscape")
+			else if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
-			if (buffer == "buildings")
+			else if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
+			else
+			{
+				ScriptError("Invalid object");
+				return false;
+			}
 
 			//perform cut
 			Simcore->Cut(tmpMesh, csVector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), csVector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), csString(tempdata[7]).CompareNoCase("true"), csString(tempdata[8]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
@@ -607,22 +639,38 @@ checkfloors:
 				ScriptError("Incorrect number of parameters");
 				return false;
 			}
+
+			//check numeric values
+			for (int i = 3; i <= 10; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
+
 			if (Section == 2)
 			{
 				buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[8]);
 				tempdata.Put(8, buffer);
 			}
-			if (csString(tempdata[0]).CompareNoCase("floor") == true)
-				tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			buffer = tempdata[0];
 			buffer.Downcase();
-			if (buffer == "external")
+			if (buffer == "floor")
+				tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			else if (buffer == "external")
 				tmpMesh = Simcore->External_state;
-			if (buffer == "landscape")
+			else if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
-			if (buffer == "buildings")
+			else if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
-			//if IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
+			else
+			{
+				ScriptError("Invalid object");
+				return false;
+			}
+
 			Simcore->CreateWallBox2(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
 			tempdata.DeleteAll();
 		}
@@ -650,22 +698,38 @@ checkfloors:
 				ScriptError("Incorrect number of parameters");
 				return false;
 			}
+
+			//check numeric values
+			for (int i = 3; i <= 10; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
+
 			if (Section == 2)
 			{
 				buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[8]);
 				tempdata.Put(8, buffer);
 			}
-			if (csString(tempdata[0]).CompareNoCase("floor") == true)
-				tmpMesh = Simcore->GetFloor(Current)->Level_state;
 			buffer = tempdata[0];
 			buffer.Downcase();
-			if (buffer == "external")
+			if (buffer == "floor")
+				tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			else if (buffer == "external")
 				tmpMesh = Simcore->External_state;
-			if (buffer == "landscape")
+			else if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
-			if (buffer == "buildings")
+			else if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
-			//If IsNumeric(tempdata(2)) = False Or IsNumeric(tempdata(3)) = False Or IsNumeric(tempdata(4)) = False Or IsNumeric(tempdata(5)) = False Or IsNumeric(tempdata(6)) = False Or IsNumeric(tempdata(7)) = False Or IsNumeric(tempdata(8)) = False Or IsNumeric(tempdata(9)) = False Then Err.Raise 1000
+			else
+			{
+				ScriptError("Invalid object");
+				return false;
+			}
+
 			Simcore->CreateWallBox(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
 			tempdata.DeleteAll();
 		}
@@ -689,16 +753,31 @@ checkfloors:
 				tempdata.Put(temp3, buffer);
 			}
 
+			//check numeric values
+			for (int i = 3; i < tempdata.GetSize() - 2; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
+
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "floor")
 				tmpMesh = Simcore->GetFloor(Current)->Level_state;
-			if (buffer == "external")
+			else if (buffer == "external")
 				tmpMesh = Simcore->External_state;
-			if (buffer == "landscape")
+			else if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
-			if (buffer == "buildings")
+			else if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
+			else
+			{
+				ScriptError("Invalid object");
+				return false;
+			}
 
 			csPoly3D varray;
 			int alength;
@@ -729,16 +808,31 @@ checkfloors:
 				tempdata.Put(temp3, buffer);
 			}
 
+			//check numeric values
+			for (int i = 3; i < tempdata.GetSize() - 2; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
+
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level_state;
-			if (buffer == "external")
+				tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			else if (buffer == "external")
 				tmpMesh = Simcore->External_state;
-			if (buffer == "landscape")
+			else if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
-			if (buffer == "buildings")
+			else if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
+			else
+			{
+				ScriptError("Invalid object");
+				return false;
+			}
 
 			csPoly3D varray;
 			int alength;
@@ -766,6 +860,16 @@ checkfloors:
 				return false;
 			}
 
+			//check numeric values
+			for (int i = 0; i <= 5; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
+
 			Simcore->CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
 
 			tempdata.DeleteAll();
@@ -786,6 +890,16 @@ checkfloors:
 				return false;
 			}
 
+			//check numeric values
+			for (int i = 0; i <= 6; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
+
 			Simcore->GetShaft(atoi(tempdata[0]))->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
 
 			tempdata.DeleteAll();
@@ -795,11 +909,27 @@ checkfloors:
 		if (LineData.Slice(0, 15).CompareNoCase("shaftshowfloors") == true)
 		{
 			//get shaft number
-			int shaftnum = atoi(LineData.Slice(15, LineData.Find("=") - 16));
+			int loc = LineData.Find("=");
+			if (loc < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
+			int shaftnum;
+			if (!IsNumeric(LineData.Slice(15, loc - 16), shaftnum))
+			{
+				ScriptError("Invalid shaft number");
+				return false;
+			}
+			if (shaftnum < 1 || shaftnum > Simcore->Shafts())
+			{
+				ScriptError("Invalid shaft number");
+				return false;
+			}
 			Simcore->GetShaft(shaftnum)->ShowFloors = true;
 
 			//get text after equal sign
-			temp2 = LineData.Slice(LineData.Find("=") + 1);
+			temp2 = LineData.Slice(loc + 1);
 			temp2.Trim();
 
 			//copy string listing of floors into array
@@ -810,9 +940,13 @@ checkfloors:
 				tmpstring.Trim();
 				if (tmpstring.Find("-", 1) > 0)
 				{
+					int start, end;
 					//found a range marker
-					int start = atoi(tmpstring.Slice(0, tmpstring.Find("-", 1)));
-					int end = atoi(tmpstring.Slice(tmpstring.Find("-", 1) + 1));
+					if (!IsNumeric(tmpstring.Slice(0, tmpstring.Find("-", 1)), start) || !IsNumeric(tmpstring.Slice(tmpstring.Find("-", 1) + 1), end))
+					{
+						ScriptError("Invalid value");
+						return false;
+					}
 					if (end < start)
 					{
 						int temp = start;
@@ -824,7 +958,15 @@ checkfloors:
 						Simcore->GetShaft(shaftnum)->AddShowFloor(k);
 				}
 				else
-					Simcore->GetShaft(shaftnum)->AddShowFloor(atoi(tempdata[line]));
+				{
+					int showfloor;
+					if (!IsNumeric(tempdata[line], showfloor))
+					{
+						ScriptError("Invalid value");
+						return false;
+					}
+					Simcore->GetShaft(shaftnum)->AddShowFloor(showfloor);
+				}
 			}
 			tempdata.DeleteAll();
 		}
@@ -833,11 +975,27 @@ checkfloors:
 		if (LineData.Slice(0, 16).CompareNoCase("shaftshowoutside") == true)
 		{
 			//get shaft number
-			int shaftnum = atoi(LineData.Slice(16, LineData.Find("=") - 17));
+			int loc = LineData.Find("=");
+			if (loc < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
+			int shaftnum;
+			if (!IsNumeric(LineData.Slice(16, loc - 17), shaftnum))
+			{
+				ScriptError("Invalid shaft number");
+				return false;
+			}
+			if (shaftnum < 1 || shaftnum > Simcore->Shafts())
+			{
+				ScriptError("Invalid shaft number");
+				return false;
+			}
 			Simcore->GetShaft(shaftnum)->ShowOutside = true;
 
 			//get text after equal sign
-			temp2 = LineData.Slice(LineData.Find("=") + 1);
+			temp2 = LineData.Slice(loc + 1);
 			temp2.Trim();
 
 			//copy string listing of floors into array
@@ -848,9 +1006,13 @@ checkfloors:
 				tmpstring.Trim();
 				if (tmpstring.Find("-", 1) > 0)
 				{
+					int start, end;
 					//found a range marker
-					int start = atoi(tmpstring.Slice(0, tmpstring.Find("-", 1)));
-					int end = atoi(tmpstring.Slice(tmpstring.Find("-", 1) + 1));
+					if (!IsNumeric(tmpstring.Slice(0, tmpstring.Find("-", 1)), start) || !IsNumeric(tmpstring.Slice(tmpstring.Find("-", 1) + 1), end))
+					{
+						ScriptError("Invalid value");
+						return false;
+					}
 					if (end < start)
 					{
 						int temp = start;
@@ -862,7 +1024,15 @@ checkfloors:
 						Simcore->GetShaft(shaftnum)->AddShowOutside(k);
 				}
 				else
-					Simcore->GetShaft(shaftnum)->AddShowOutside(atoi(tempdata[line]));
+				{
+					int showfloor;
+					if (!IsNumeric(tempdata[line], showfloor))
+					{
+						ScriptError("Invalid value");
+						return false;
+					}
+					Simcore->GetShaft(shaftnum)->AddShowOutside(showfloor);
+				}
 			}
 			tempdata.DeleteAll();
 		}
@@ -871,10 +1041,26 @@ checkfloors:
 		if (LineData.Slice(0, 13).CompareNoCase("showfullshaft") == true)
 		{
 			//get shaft number
-			int shaftnum = atoi(LineData.Slice(13, LineData.Find("=") - 14));
+			int loc = LineData.Find("=");
+			if (loc < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
+			int shaftnum;
+			if (!IsNumeric(LineData.Slice(13, loc - 14), shaftnum))
+			{
+				ScriptError("Invalid shaft number");
+				return false;
+			}
+			if (shaftnum < 1 || shaftnum > Simcore->Shafts())
+			{
+				ScriptError("Invalid shaft number");
+				return false;
+			}
 
 			//get text after equal sign
-			temp2 = LineData.Slice(LineData.Find("=") + 1);
+			temp2 = LineData.Slice(loc + 1);
 			temp2.Trim();
 
 			Simcore->GetShaft(shaftnum)->ShowFullShaft = csString(temp2).CompareNoCase("true");
@@ -895,8 +1081,23 @@ checkfloors:
 				return false;
 			}
 
+			//check numeric values
+			for (int i = 0; i <= 4; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
+
 			if (!Simcore->GetStairs(atoi(tempdata[0])))
 				Simcore->CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]));
+			else
+			{
+				ScriptError("Stairwell " + csString(tempdata[0]).Trim() + " already exists");
+				return false;
+			}
 
 			tempdata.DeleteAll();
 		}
@@ -916,7 +1117,24 @@ checkfloors:
 				return false;
 			}
 
-			Simcore->GetStairs(atoi(tempdata[0]))->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
+			//check numeric values
+			for (int i = 0; i <= 6; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
+
+			int stairwell = atoi(tempdata[0]);
+			if (!Simcore->GetStairs(stairwell))
+			{
+				ScriptError("Invalid stairwell");
+				return false;
+			}
+
+			Simcore->GetStairs(stairwell)->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
 
 			tempdata.DeleteAll();
 		}
@@ -928,7 +1146,11 @@ checkfloors:
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
 			temp2.Trim();
 
-			Simcore->SetWallOrientation(temp2.GetData());
+			if (!Simcore->SetWallOrientation(temp2.GetData()))
+			{
+				ScriptError("Invalid wall orientation");
+				return false;
+			}
 		}
 
 		//FloorOrientation command
@@ -938,14 +1160,24 @@ checkfloors:
 			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
 			temp2.Trim();
 
-			Simcore->SetFloorOrientation(temp2.GetData());
+			if (!Simcore->SetFloorOrientation(temp2.GetData()))
+			{
+				ScriptError("Invalid floor orientation");
+				return false;
+			}
 		}
 
 		//DrawWalls command
 		if (LineData.Slice(0, 9).CompareNoCase("drawwalls") == true)
 		{
 			//get text after equal sign
-			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			int loc = LineData.Find("=", 0);
+			if (loc < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
+			temp2 = LineData.Slice(loc + 1);
 			temp2.Trim();
 
 			tempdata.SplitString(temp2.GetData(), ",");
@@ -996,7 +1228,13 @@ checkfloors:
 		if (LineData.Slice(0, 11).CompareNoCase("reverseaxis") == true)
 		{
 			//get text after equal sign
-			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			int loc = LineData.Find("=", 0);
+			if (loc < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
+			temp2 = LineData.Slice(loc + 1);
 			temp2.Trim();
 
 			Simcore->ReverseAxis(temp2.CompareNoCase("true"));
@@ -1017,6 +1255,11 @@ checkfloors:
 
 			temp1 = LineData.Find("(", 0);
 			temp3 = LineData.Find(")", 0);
+			if (temp3 < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
 			tempdata.SplitString(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
@@ -1029,16 +1272,31 @@ checkfloors:
 				return false;
 			}
 
+			//check numeric values
+			for (int i = 2; i <= 7; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
+
 			buffer = tempdata[0];
 			buffer.Downcase();
 			if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level_state;
-			if (buffer == "external")
+				tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			else if (buffer == "external")
 				tmpMesh = Simcore->External_state;
-			if (buffer == "landscape")
+			else if (buffer == "landscape")
 				tmpMesh = Simcore->Landscape_state;
-			if (buffer == "buildings")
+			else if (buffer == "buildings")
 				tmpMesh = Simcore->Buildings_state;
+			else
+			{
+				ScriptError("Invalid object");
+				return false;
+			}
 
 			csVector3 isect = Simcore->GetPoint(tmpMesh, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 			tempdata.DeleteAll();
@@ -1052,7 +1310,13 @@ checkfloors:
 		if (LineData.Slice(0, 11).CompareNoCase("setautosize") == true)
 		{
 			//get text after equal sign
-			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			int loc = LineData.Find("=", 0);
+			if (loc < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
+			temp2 = LineData.Slice(loc + 1);
 			temp2.Trim();
 
 			tempdata.SplitString(temp2.GetData(), ",");
@@ -1078,6 +1342,12 @@ checkfloors:
 		{
 			tempdata.SplitString(LineData.Slice(16).GetData(), ",");
 
+			if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
+
 			Simcore->SetTextureOverride(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5]);
 
 			tempdata.DeleteAll();
@@ -1089,6 +1359,22 @@ checkfloors:
 		{
 			tempdata.SplitString(LineData.Slice(12).GetData(), ",");
 
+			if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
+
+			//check numeric values
+			for (int i = 0; i <= 5; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]).Trim());
+					return false;
+				}
+			}
+
 			Simcore->SetTextureFlip(atoi(tempdata[0]), atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
 
 			tempdata.DeleteAll();
@@ -1099,7 +1385,13 @@ checkfloors:
 		if (Section == 1)
 		{
 			//get text after equal sign
-			temp2 = LineData.Slice(LineData.Find("=", 0) + 1);
+			int loc = LineData.Find("=", 0);
+			if (loc < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
+			temp2 = LineData.Slice(loc + 1);
 			temp2.Trim();
 
 			//store variable values
@@ -1117,32 +1409,56 @@ checkfloors:
 				Simcore->SkyName = temp2;
 			if (LineData.Slice(0, 11).CompareNoCase("camerafloor") == true)
 			{
-				//if (IsNumeric(temp2) == false)
-					//Err.Raise 1000;
-				Simcore->camera->StartFloor = atoi(temp2.GetData());
+				int data;
+				if (!IsNumeric(temp2.GetData(), data))
+				{
+					ScriptError("Invalid floor");
+					return false;
+				}
+				Simcore->camera->StartFloor = data;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("horizscale") == true)
 			{
-				//if (IsNumeric(temp2) == false)
-					//Err.Raise 1000;
-				Simcore->HorizScale = atof(temp2.GetData());
+				float data;
+				if (!IsNumeric(temp2.GetData(), data))
+				{
+					ScriptError("Invalid scale");
+					return false;
+				}
+				Simcore->HorizScale = data;
 			}
 			if (LineData.Slice(0, 14).CompareNoCase("cameraposition") == true)
 			{
-				Simcore->camera->StartPositionX  = atof(temp2.Slice(0, temp2.Find(",", 0)).GetData());
-				Simcore->camera->StartPositionZ  = atof(temp2.Slice(temp2.Find(",", 0) + 1).GetData());
+				float x, z;
+				if (!IsNumeric(temp2.Slice(0, temp2.Find(",", 0)).GetData(), x) || !IsNumeric(temp2.Slice(temp2.Find(",", 0) + 1).GetData(), z))
+				{
+					ScriptError("Invalid position");
+					return false;
+				}
+				Simcore->camera->StartPositionX  = x;
+				Simcore->camera->StartPositionZ  = z;
 			}
 			if (LineData.Slice(0, 15).CompareNoCase("cameradirection") == true)
 			{
 				temp3 = temp2.Find(",", 0);
 				temp4 = temp2.Find(",", temp3 + 1);
-				Simcore->camera->SetStartDirection(csVector3(atof(temp2.Slice(0, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
+				float x, y, z;
+				if (!IsNumeric(temp2.Slice(0, temp3).GetData(), x) || !IsNumeric(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData(), y) || !IsNumeric(temp2.Slice(temp4 + 1).GetData(), z)){
+					ScriptError("Invalid direction");
+					return false;
+				}
+				Simcore->camera->SetStartDirection(csVector3(x, y, z));
 			}
 			if (LineData.Slice(0, 14).CompareNoCase("camerarotation") == true)
 			{
 				temp3 = temp2.Find(",", 0);
 				temp4 = temp2.Find(",", temp3 + 1);
-				Simcore->camera->SetStartRotation(csVector3(atof(temp2.Slice(1, temp3).GetData()), atof(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData()), atof(temp2.Slice(temp4 + 1).GetData())));
+				float x, y, z;
+				if (!IsNumeric(temp2.Slice(0, temp3).GetData(), x) || !IsNumeric(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).GetData(), y) || !IsNumeric(temp2.Slice(temp4 + 1).GetData(), z)){
+					ScriptError("Invalid direction");
+					return false;
+				}
+				Simcore->camera->SetStartRotation(csVector3(x, y, z));
 			}
 		}
 
@@ -1173,8 +1489,11 @@ recalc:
 			//parameters
 			if (LineData.Slice(0, 6).CompareNoCase("height") == true)
 			{
-				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				Simcore->GetFloor(Current)->Height = atof(temp2.GetData());
+				if (!IsNumeric(Calc(temp2.GetData()).GetData(), Simcore->GetFloor(Current)->Height))
+				{
+					ScriptError("Invalid value");
+					return false;
+				}
 				if (FloorCheck < 2)
 					FloorCheck = 1;
 				else
@@ -1182,8 +1501,11 @@ recalc:
 			}
 			if (LineData.Slice(0, 16).CompareNoCase("interfloorheight") == true)
 			{
-				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				Simcore->GetFloor(Current)->InterfloorHeight = atof(temp2.GetData());
+				if (!IsNumeric(Calc(temp2.GetData()).GetData(), Simcore->GetFloor(Current)->InterfloorHeight))
+				{
+					ScriptError("Invalid value");
+					return false;
+				}
 				if (FloorCheck == 0)
 					FloorCheck = 2;
 				else
@@ -1191,19 +1513,22 @@ recalc:
 			}
 			if (LineData.Slice(0, 8).CompareNoCase("altitude") == true)
 			{
-				//If IsNumeric(temp2) = False Then Err.Raise 1000
-				Simcore->GetFloor(Current)->Altitude = atof(temp2.GetData());
+				if (!IsNumeric(Calc(temp2.GetData()).GetData(), Simcore->GetFloor(Current)->Altitude))
+				{
+					ScriptError("Invalid value");
+					return false;
+				}
 			}
 			if (LineData.Slice(0, 2).CompareNoCase("id") == true)
 				Simcore->GetFloor(Current)->ID = Calc(temp2);
 			if (LineData.Slice(0, 4).CompareNoCase("name") == true)
-				Simcore->GetFloor(Current)->Name = temp2;
+				Simcore->GetFloor(Current)->Name = Calc(temp2);
 			if (LineData.Slice(0, 4).CompareNoCase("type") == true)
 				Simcore->GetFloor(Current)->FloorType = temp2;
 			if (LineData.Slice(0, 11).CompareNoCase("description") == true)
 				Simcore->GetFloor(Current)->Description = temp2;
 			if (LineData.Slice(0, 16).CompareNoCase("indicatortexture") == true)
-				Simcore->GetFloor(Current)->IndicatorTexture = temp2;
+				Simcore->GetFloor(Current)->IndicatorTexture = Calc(temp2);
 			if (LineData.Slice(0, 5).CompareNoCase("group") == true)
 			{
 				//copy string listing of group floors into array
@@ -1214,9 +1539,13 @@ recalc:
 					tmpstring.Trim();
 					if (tmpstring.Find("-", 1) > 0)
 					{
+						int start, end;
 						//found a range marker
-						int start = atoi(tmpstring.Slice(0, tmpstring.Find("-", 1)));
-						int end = atoi(tmpstring.Slice(tmpstring.Find("-", 1) + 1));
+						if (!IsNumeric(tmpstring.Slice(0, tmpstring.Find("-", 1)), start) || !IsNumeric(tmpstring.Slice(tmpstring.Find("-", 1) + 1), end))
+						{
+							ScriptError("Invalid value");
+							return false;
+						}
 						if (end < start)
 						{
 							int temp = start;
@@ -1228,7 +1557,15 @@ recalc:
 							Simcore->GetFloor(Current)->AddGroupFloor(k);
 					}
 					else
-						Simcore->GetFloor(Current)->AddGroupFloor(atoi(tempdata[line]));
+					{
+						int data;
+						if (!IsNumeric(tempdata[line], data))
+						{
+							ScriptError("Invalid value");
+							return false;
+						}
+						Simcore->GetFloor(Current)->AddGroupFloor(data);
+					}
 				}
 				tempdata.DeleteAll();
 			}

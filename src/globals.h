@@ -53,7 +53,9 @@
 #endif
 
 SBSIMPEXP bool IsEven(int Number);
-SBSIMPEXP bool IsNumeric(const char *expression);
+SBSIMPEXP bool IsNumeric(const char *string);
+SBSIMPEXP bool IsNumeric(const char *string, int &number);
+SBSIMPEXP bool IsNumeric(const char *string, float &number);
 SBSIMPEXP const char *BoolToString(bool item);
 SBSIMPEXP float RadiansToDegrees(float radians);
 SBSIMPEXP float DegreesToRadians(float degrees);

@@ -161,8 +161,8 @@ public:
 	void CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th);
 	iMaterialWrapper *ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture);
-	void NewElevator(int number);
-	void NewFloor(int number);
+	bool NewElevator(int number);
+	bool NewFloor(int number);
 	int Elevators();
 	int TotalFloors(); //all floors including basements
 	int Shafts();
@@ -171,9 +171,9 @@ public:
 	Elevator *GetElevator(int number);
 	Shaft *GetShaft(int number);
 	Stairs *GetStairs(int number);
-	void SetWallOrientation(const char *direction);
+	bool SetWallOrientation(const char *direction);
 	int GetWallOrientation();
-	void SetFloorOrientation(const char *direction);
+	bool SetFloorOrientation(const char *direction);
 	int GetFloorOrientation();
 	void DrawWalls(bool MainN, bool MainP, bool SideN, bool SideP, bool Top, bool Bottom);
 	void ResetWalls(bool ToDefaults = false);

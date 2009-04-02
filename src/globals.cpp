@@ -25,13 +25,16 @@
 
 #include <string>
 #include <ctype.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <limits.h>
 #include "globals.h"
 
 bool IsEven(int Number)
 {
 	//Determine if the passed number is even.
 	//If number divides evenly, return true
-	
+
 	float temp = Number;
 	if ((temp / 2) == int(temp / 2))
 		return true;
@@ -39,15 +42,73 @@ bool IsEven(int Number)
 		return false;
 }
 
-bool IsNumeric(const char *expression)
+bool IsNumeric(const char *string)
 {
 	//test to see if a string is numeric
 
-	for (size_t i = 0; i < strlen(expression) - 1; i++)
+	float a;
+	return IsNumeric(string, a);
+}
+
+bool IsNumeric(const char *string, int &number)
+{
+	//test to see if a string is numeric, and return number as integer
+
+	int base = 10;
+	char *endptr;
+	long val;
+
+	errno = 0;
+	val = strtol(string, &endptr, base);
+
+	//check for errors
+	if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN)) || (errno != 0 && val == 0))
 	{
-		if (isdigit(expression[i]) == false && expression[i] != '-' && expression[i] != '.')
-			return false;
+		//perror("strtol");
+		return false;
 	}
+
+	//no digits found
+	if (endptr == string)
+		return false;
+
+	//if extra characters were found after a number
+	if (*endptr != '\0')
+		return false;
+
+	//returned a number
+	number = (int)val;
+	return true;
+}
+
+bool IsNumeric(const char *string, float &number)
+{
+	//test to see if a string is numeric, and return number as float
+
+	char *endptr;
+	float val;
+
+	errno = 0;
+	val = strtof(string, &endptr);
+
+	//check for errors
+	//if ((errno == ERANGE && (val == FLOAT_MAX || val == FLOAT_MIN)) || (errno != 0 && val == 0))
+	if (errno == ERANGE || (errno != 0 && val == 0))
+	{
+		//perror("strtol");
+		return false;
+	}
+
+	//no digits found
+	if (endptr == string)
+		return false;
+
+	//if extra characters were found after a number
+	if (*endptr != '\0')
+		return false;
+
+	//returned a number
+	number = val;
 	return true;
 }
 

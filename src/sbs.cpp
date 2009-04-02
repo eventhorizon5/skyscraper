@@ -1653,23 +1653,24 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 	}
 }
 
-void SBS::NewElevator(int number)
+bool SBS::NewElevator(int number)
 {
 	//create a new elevator object
 	for (size_t i = 0; i < ElevatorArray.GetSize(); i++)
 		if (ElevatorArray[i].number == number)
-			return;
+			return false;
 	ElevatorArray.SetSize(ElevatorArray.GetSize() + 1);
 	ElevatorArray[ElevatorArray.GetSize() - 1].number = number;
 	ElevatorArray[ElevatorArray.GetSize() - 1].object = new Elevator(number);
+	return true;
 }
 
-void SBS::NewFloor(int number)
+bool SBS::NewFloor(int number)
 {
 	//create a new floor object
 	for (size_t i = 0; i < FloorArray.GetSize(); i++)
 		if (FloorArray[i].number == number)
-			return;
+			return false;
 	FloorArray.SetSize(FloorArray.GetSize() + 1);
 	FloorArray[FloorArray.GetSize() - 1].number = number;
 	FloorArray[FloorArray.GetSize() - 1].object = new Floor(number);
@@ -1678,6 +1679,7 @@ void SBS::NewFloor(int number)
 		Basements++;
 	else
 		Floors++;
+	return true;
 }
 
 int SBS::Elevators()
@@ -1804,7 +1806,7 @@ Stairs *SBS::GetStairs(int number)
 	return 0;
 }
 
-void SBS::SetWallOrientation(const char *direction)
+bool SBS::SetWallOrientation(const char *direction)
 {
 	//changes internal wall orientation parameter.
 	//direction can either be "left" (negative), "center" (0), or "right" (positive).
@@ -1817,10 +1819,13 @@ void SBS::SetWallOrientation(const char *direction)
 
 	if (temp == "left")
 		wall_orientation = 0;
-	if (temp == "center")
+	else if (temp == "center")
 		wall_orientation = 1;
-	if (temp == "right")
+	else if (temp == "right")
 		wall_orientation = 2;
+	else
+		return false;
+	return true;
 }
 
 int SBS::GetWallOrientation()
@@ -1828,7 +1833,7 @@ int SBS::GetWallOrientation()
 	return wall_orientation;
 }
 
-void SBS::SetFloorOrientation(const char *direction)
+bool SBS::SetFloorOrientation(const char *direction)
 {
 	//changes internal floor orientation parameter.
 	//direction can either be "bottom" (negative), "center" (0), or "top" (positive).
@@ -1841,10 +1846,13 @@ void SBS::SetFloorOrientation(const char *direction)
 
 	if (temp == "bottom")
 		floor_orientation = 0;
-	if (temp == "center")
+	else if (temp == "center")
 		floor_orientation = 1;
-	if (temp == "top")
+	else if (temp == "top")
 		floor_orientation = 2;
+	else
+		return false;
+	return true;
 }
 
 int SBS::GetFloorOrientation()
@@ -2622,7 +2630,7 @@ void SBS::ProcessTextureFlip(float tw, float th)
 		widthscale[i] = tw;
 		heightscale[i] = th;
 	}
-	
+
 	//texture flipping
 	if (FlipTexture == true)
 	{
