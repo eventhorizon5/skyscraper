@@ -89,7 +89,11 @@ bool IsNumeric(const char *string, float &number)
 	float val;
 
 	errno = 0;
+#ifdef _WIN32
+	val = (float)strtod(string, &endptr);
+#else
 	val = strtof(string, &endptr);
+#endif
 
 	//check for errors
 	//if ((errno == ERANGE && (val == FLOAT_MAX || val == FLOAT_MIN)) || (errno != 0 && val == 0))

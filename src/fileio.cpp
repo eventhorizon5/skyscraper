@@ -1541,7 +1541,7 @@ recalc:
 					{
 						int start, end;
 						//found a range marker
-						if (!IsNumeric(tmpstring.Slice(0, tmpstring.Find("-", 1)), start) || !IsNumeric(tmpstring.Slice(tmpstring.Find("-", 1) + 1), end))
+						if (!IsNumeric(tmpstring.Slice(0, tmpstring.Find("-", 1)).Trim(), start) || !IsNumeric(tmpstring.Slice(tmpstring.Find("-", 1) + 1).Trim(), end))
 						{
 							ScriptError("Invalid value");
 							return false;
