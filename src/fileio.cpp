@@ -3409,7 +3409,7 @@ void Skyscraper::ScriptError(const char *message)
 	ReportError(error);
 
 	//show error dialog
-	wxMessageDialog *dialog = new wxMessageDialog(wxwin->GetWindow(), error.GetData(), "Skyscraper", wxOK | wxICON_ERROR);
+	wxMessageDialog *dialog = new wxMessageDialog(wxwin->GetWindow(), wxString::FromAscii(error.GetData()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
 	dialog->ShowModal();
 
 	delete dialog;
