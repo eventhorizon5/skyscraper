@@ -3407,4 +3407,11 @@ void Skyscraper::ScriptError(const char *message)
 	csString error = "Script error on line " + csString(_itoa(line + 1, intbuffer, 10)) + ": " + csString(message) + "\nSection: " + csString(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
 
 	ReportError(error);
+
+	//show error dialog
+	wxMessageDialog *dialog = new wxMessageDialog(wxwin->GetWindow(), error.GetData(), "Skyscraper", wxOK | wxICON_ERROR);
+	dialog->ShowModal();
+
+	delete dialog;
+	dialog = 0;
 }
