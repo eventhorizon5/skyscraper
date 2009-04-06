@@ -477,7 +477,7 @@ void Elevator::OpenDoorsEmergency(int whichdoors, int floor)
 	}
 
 	//check if elevator doors are already open
-	if (DoorsOpen == true && whichdoors != 3)
+	if (DoorsOpen == true && whichdoors != 3 && OpenDoor == 0)
 		return;
 
 	//check if shaft doors are already open
@@ -515,7 +515,7 @@ void Elevator::CloseDoorsEmergency(int whichdoors, int floor)
 	}
 
 	//check if elevator doors are already closed
-	if (DoorsOpen == false && whichdoors != 3)
+	if (DoorsOpen == false && whichdoors != 3 && OpenDoor == 0)
 		return;
 
 	//check if shaft doors are already closed
@@ -544,12 +544,6 @@ void Elevator::OpenDoors(int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	if (OpenDoor != 0 && whichdoors != 3)
-	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
-		return;
-	}
-
 	//don't open doors if emergency stop is enabled
 	if (EmergencyStop == true && whichdoors != 3)
 	{
@@ -558,7 +552,7 @@ void Elevator::OpenDoors(int whichdoors, int floor)
 	}
 
 	//check if elevator doors are already open
-	if (DoorsOpen == true && whichdoors != 3)
+	if (DoorsOpen == true && whichdoors != 3 && OpenDoor == 0)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors already open; resetting timer");
 		//reset timer
@@ -593,14 +587,8 @@ void Elevator::CloseDoors(int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	if (OpenDoor != 0)
-	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
-		return;
-	}
-
 	//check if elevator doors are already closed
-	if (DoorsOpen == false && whichdoors != 3)
+	if (DoorsOpen == false && whichdoors != 3 && OpenDoor == 0)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors already closed");
 		return;
