@@ -203,6 +203,8 @@ private:
 	float temp_change;
 	bool accelerating;
 	float door_error;
+	bool previous_open;
+	bool door_changed;
 
 	//elevator misc internals
 	bool ElevatorIsRunning;

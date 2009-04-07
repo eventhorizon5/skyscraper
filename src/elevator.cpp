@@ -96,6 +96,8 @@ Elevator::Elevator(int number)
 	IsMoving = false;
 	lastfloor = 0;
 	lastfloorset = false;
+	previous_open = false;
+	door_changed = false;
 	OpenSound = "elevatoropen.wav";
 	CloseSound = "elevatorclose.wav";
 	StartSound = "elevstart.wav";
@@ -234,7 +236,7 @@ void Elevator::AddRoute(int floor, int direction)
 		if (UpQueue.Find(floor) != csArrayItemNotFound)
 		{
 			//exit if entry already exits
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " already exists");			
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " already exists");
 			return;
 		}
 		UpQueue.InsertSorted(floor);
@@ -249,7 +251,7 @@ void Elevator::AddRoute(int floor, int direction)
 		if (DownQueue.Find(floor) != csArrayItemNotFound)
 		{
 			//exit if entry already exits
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " already exists");			
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " already exists");
 			return;
 		}
 		DownQueue.InsertSorted(floor);
@@ -624,7 +626,12 @@ void Elevator::MoveDoors(bool open, bool emergency)
 
 	//ShaftDoorFloor is the floor the shaft doors are on - only has effect if whichdoors is 3
 
-	//todo: turn off autoclose timer
+	//get reference movable object
+	csRef<iMovable> tmpMovable;
+	if (WhichDoors < 3)
+		tmpMovable = ElevatorDoorL_movable;
+	else
+		tmpMovable = ShaftDoorL[index]->GetMovable();
 
 	if (DoorIsRunning == false)
 	{
@@ -667,13 +674,15 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		else
 			index = ServicedFloors.Find(GetFloor());
 	}
+	else if (previous_open != open && emergency == false)
+	{
+		//if a different direction was specified during movement
+		door_changed = true;
+		marker1 = tmpMovable->GetPosition().z + (DoorWidth / 8);
+	}
 
-	//get reference movable object
-	csRef<iMovable> tmpMovable;
-	if (WhichDoors < 3)
-		tmpMovable = ElevatorDoorL_movable;
-	else
-		tmpMovable = ShaftDoorL[index]->GetMovable();
+	//update call status (previous_open detects call changes during movement)
+	previous_open = open;
 
 	bool elevdoors = false, shaftdoors = false;
 	if (WhichDoors == 1)
