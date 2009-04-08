@@ -626,7 +626,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 
 	//ShaftDoorFloor is the floor the shaft doors are on - only has effect if whichdoors is 3
 
-	//get reference movable object
+	//get movable object reference
 	csRef<iMovable> tmpMovable;
 	if (WhichDoors < 3)
 		tmpMovable = ElevatorDoorL_movable;
@@ -638,6 +638,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		//initialization code
 
 		DoorIsRunning = true;
+		door_changed = false;
 
 		if (emergency == false)
 		{
@@ -674,11 +675,24 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		else
 			index = ServicedFloors.Find(GetFloor());
 	}
-	else if (previous_open != open && emergency == false)
+	else if (previous_open != open && emergency == false && door_changed == false)
 	{
 		//if a different direction was specified during movement
 		door_changed = true;
-		marker1 = tmpMovable->GetPosition().z + (DoorWidth / 8);
+		if (open == true)
+		{
+			if (DoorDirection == false)
+				marker1 = DoorOrigin.z - tmpMovable->GetPosition().z;
+			else
+				marker1 = DoorOrigin.x - tmpMovable->GetPosition().x;
+		}
+		else
+		{
+			if (DoorDirection == false)
+				marker2 = DoorOrigin.z - tmpMovable->GetPosition().z;
+			else
+				marker2 = DoorOrigin.x - tmpMovable->GetPosition().x;
+		}
 	}
 
 	//update call status (previous_open detects call changes during movement)
