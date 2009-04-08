@@ -205,6 +205,7 @@ private:
 	float door_error;
 	bool previous_open;
 	bool door_changed;
+	int door_section; //door movement section; used for both reversal tracking and debugging
 
 	//elevator misc internals
 	bool ElevatorIsRunning;

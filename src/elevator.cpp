@@ -98,6 +98,7 @@ Elevator::Elevator(int number)
 	lastfloorset = false;
 	previous_open = false;
 	door_changed = false;
+	door_section = 0;
 	OpenSound = "elevatoropen.wav";
 	CloseSound = "elevatorclose.wav";
 	StartSound = "elevstart.wav";
@@ -472,6 +473,9 @@ void Elevator::OpenDoorsEmergency(int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
+	if (door_changed == true)
+		return;
+
 	if (OpenDoor != 0)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
@@ -510,6 +514,9 @@ void Elevator::CloseDoorsEmergency(int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
+	if (door_changed == true)
+		return;
+
 	if (OpenDoor != 0)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
@@ -545,6 +552,9 @@ void Elevator::OpenDoors(int whichdoors, int floor)
 	//1 = both shaft and elevator doors
 	//2 = only elevator doors
 	//3 = only shaft doors
+
+	if (door_changed == true)
+		return;
 
 	//don't open doors if emergency stop is enabled
 	if (EmergencyStop == true && whichdoors != 3)
@@ -589,6 +599,9 @@ void Elevator::CloseDoors(int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
+	if (door_changed == true)
+		return;
+
 	//check if elevator doors are already closed
 	if (DoorsOpen == false && whichdoors != 3 && OpenDoor == 0)
 	{
@@ -626,6 +639,9 @@ void Elevator::MoveDoors(bool open, bool emergency)
 
 	//ShaftDoorFloor is the floor the shaft doors are on - only has effect if whichdoors is 3
 
+	//stop timer
+	timer->Stop();
+
 	//get movable object reference
 	csRef<iMovable> tmpMovable;
 	if (WhichDoors < 3)
@@ -633,12 +649,18 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	else
 		tmpMovable = ShaftDoorL[index]->GetMovable();
 
+	csVector3 tempposition = tmpMovable->GetPosition();
+
+	//debug - show current section as function is running
+	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
+
 	if (DoorIsRunning == false)
 	{
 		//initialization code
 
 		DoorIsRunning = true;
 		door_changed = false;
+		door_section = 0;
 
 		if (emergency == false)
 		{
@@ -679,19 +701,13 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	{
 		//if a different direction was specified during movement
 		door_changed = true;
+		//only change directions immediately if re-opening (closing, then opening)
 		if (open == true)
 		{
 			if (DoorDirection == false)
-				marker1 = DoorOrigin.z - tmpMovable->GetPosition().z;
+				marker1 = DoorOrigin.z - tempposition.z;
 			else
-				marker1 = DoorOrigin.x - tmpMovable->GetPosition().x;
-		}
-		else
-		{
-			if (DoorDirection == false)
-				marker2 = DoorOrigin.z - tmpMovable->GetPosition().z;
-			else
-				marker2 = DoorOrigin.x - tmpMovable->GetPosition().x;
+				marker1 = DoorOrigin.x - tempposition.x;
 		}
 	}
 
@@ -712,13 +728,35 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	//Speed up doors
 	if (DoorDirection == false)
 	{
-		if ((DoorOrigin.z - tmpMovable->GetPosition().z <= marker1 && open == true) || (DoorOrigin.z - tmpMovable->GetPosition().z > marker2 && open == false))
+		if ((DoorOrigin.z - tempposition.z <= marker1 && open == true) || (DoorOrigin.z - tempposition.z <= marker1 && open == false && door_changed == true && door_section < 2) || (DoorOrigin.z - tempposition.z > marker2 && open == false))
 		{
 			accelerating = true;
-			if (open == true)
-				ElevatorDoorSpeed += OpenChange;
+			if (door_changed == false)
+			{
+				//normal door acceleration
+				if (open == true)
+					ElevatorDoorSpeed += OpenChange;
+				else
+					ElevatorDoorSpeed -= OpenChange;
+			}
 			else
-				ElevatorDoorSpeed -= OpenChange;
+			{
+				//reverse movement if transitioning from open to close
+				if (open == false)
+				{
+					if (DoorOrigin.z - tempposition.z <= marker2)
+						ElevatorDoorSpeed += OpenChange;
+					else
+						ElevatorDoorSpeed -= OpenChange;
+				}
+				else
+				{
+					if (DoorOrigin.z - tempposition.z > marker2)
+						ElevatorDoorSpeed -= OpenChange;
+					else
+						ElevatorDoorSpeed += OpenChange;
+				}
+			}
 
 			if (elevdoors == true)
 			{
@@ -738,20 +776,43 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			}
 
 			//get stopping distance
-			stopping_distance = DoorOrigin.z - tmpMovable->GetPosition().z;
+			stopping_distance = DoorOrigin.z - tempposition.z;
 
+			door_section = 1;
 			return;
 		}
 	}
 	else
 	{
-		if ((DoorOrigin.x - tmpMovable->GetPosition().x <= marker1 && open == true) || (DoorOrigin.x - tmpMovable->GetPosition().x > marker2 && open == false))
+		if ((DoorOrigin.x - tempposition.x <= marker1 && open == true) || (DoorOrigin.x - tempposition.x <= marker1 && open == false && door_changed == true && door_section < 2) || (DoorOrigin.x - tempposition.x > marker2 && open == false))
 		{
 			accelerating = true;
-			if (open == true)
-				ElevatorDoorSpeed += OpenChange;
+			if (door_changed == false)
+			{
+				//normal door acceleration
+				if (open == true)
+					ElevatorDoorSpeed += OpenChange;
+				else
+					ElevatorDoorSpeed -= OpenChange;
+			}
 			else
-				ElevatorDoorSpeed -= OpenChange;
+			{
+				//reverse movement if transitioning from open to close
+				if (open == false)
+				{
+					if (DoorOrigin.x - tempposition.x <= marker2)
+						ElevatorDoorSpeed += OpenChange;
+					else
+						ElevatorDoorSpeed -= OpenChange;
+				}
+				else
+				{
+					if (DoorOrigin.x - tempposition.x > marker2)
+						ElevatorDoorSpeed -= OpenChange;
+					else
+						ElevatorDoorSpeed += OpenChange;
+				}
+			}
 
 			if (elevdoors == true)
 			{
@@ -772,16 +833,19 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			}
 
 			//get stopping distance
-			stopping_distance = DoorOrigin.x - tmpMovable->GetPosition().x;
+			stopping_distance = DoorOrigin.x - tempposition.x;
 
+			door_section = 1;
 			return;
 		}
 	}
+
+	door_section = 2;
 
 	//Normal door movement
 	if (DoorDirection == false)
 	{
-		if ((DoorOrigin.z - tmpMovable->GetPosition().z <= marker2 && open == true) || (DoorOrigin.z - tmpMovable->GetPosition().z > marker1 && open == false))
+		if ((DoorOrigin.z - tempposition.z <= marker2 && open == true) || (DoorOrigin.z - tempposition.z > marker1 && open == false))
 		{
 			if (elevdoors == true)
 			{
@@ -801,12 +865,13 @@ void Elevator::MoveDoors(bool open, bool emergency)
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 
+			door_section = 3;
 			return;
 		}
 	}
 	else
 	{
-		if ((DoorOrigin.x - tmpMovable->GetPosition().x <= marker2 && open == true) || (DoorOrigin.x - tmpMovable->GetPosition().x > marker1 && open == false))
+		if ((DoorOrigin.x - tempposition.x <= marker2 && open == true) || (DoorOrigin.x - tempposition.x > marker1 && open == false))
 		{
 			if (elevdoors == true)
 			{
@@ -826,6 +891,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 
+			door_section = 3;
 			return;
 		}
 	}
@@ -834,9 +900,9 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	{
 		accelerating = false;
 		if (DoorDirection == false)
-			temp_change = OpenChange * (stopping_distance / (tmpMovable->GetPosition().z - (DoorOrigin.z - (DoorWidth / 2))));
+			temp_change = OpenChange * (stopping_distance / (tempposition.z - (DoorOrigin.z - (DoorWidth / 2))));
 		else
-			temp_change = OpenChange * (stopping_distance / (tmpMovable->GetPosition().x - (DoorOrigin.x - (DoorWidth / 2))));
+			temp_change = OpenChange * (stopping_distance / (tempposition.x - (DoorOrigin.x - (DoorWidth / 2))));
 	}
 
 	//slow down doors
@@ -886,18 +952,22 @@ void Elevator::MoveDoors(bool open, bool emergency)
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
+		door_section = 4;
 		return;
 	}
 
 	//get error value
 	if (open == true && DoorDirection == false)
-		door_error = tmpMovable->GetPosition().z - (DoorOrigin.z - (DoorWidth / 2));
+		door_error = tempposition.z - (DoorOrigin.z - (DoorWidth / 2));
 	if (open == true && DoorDirection == true)
-		door_error = tmpMovable->GetPosition().x - (DoorOrigin.x - (DoorWidth / 2));
+		door_error = tempposition.x - (DoorOrigin.x - (DoorWidth / 2));
 	if (open == false && DoorDirection == false)
-		door_error = DoorOrigin.z - tmpMovable->GetPosition().z;
+		door_error = DoorOrigin.z - tempposition.z;
 	if (open == false && DoorDirection == true)
-		door_error = DoorOrigin.x - tmpMovable->GetPosition().x;
+		door_error = DoorOrigin.x - tempposition.x;
+
+	//report on what section preceded the finishing code (should be 4)
+	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
 
 	//place doors in positions (fixes any overrun errors)
 	if (open == true)
@@ -1007,6 +1077,8 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	ElevatorDoorSpeed = 0;
 	OpenDoor = 0;
 	WhichDoors = 0;
+	door_section = 0;
+	door_changed = false;
 
 	//turn on autoclose timer
 	if (emergency == false)
