@@ -352,7 +352,7 @@ void Elevator::ProcessCallQueue()
 	if (MoveElevator == true)
 		PauseQueueSearch = true;
 
-	//if elevator is stopped, pause queue
+	//if elevator is stopped, unpause queue
 	if (QueuePositionDirection != 0 && MoveElevator == false)
 		PauseQueueSearch = false;
 
