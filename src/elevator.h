@@ -205,6 +205,7 @@ private:
 	bool previous_open;
 	bool door_changed;
 	int door_section; //door movement section; used for both reversal tracking and debugging
+	bool quick_close; //used if user presses close button while doors are opening; results in a faster timer length
 
 	//elevator misc internals
 	bool ElevatorIsRunning;
