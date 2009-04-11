@@ -58,12 +58,12 @@
 				PrecompiledHeaderFile=".\Release/Skyscraper.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				ProgramDataBaseFileName="..\Skyscraper.pdb"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -84,6 +84,8 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\Release;&quot;$(CRYSTAL)\out\release8\libs&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="..\Skyscraper.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
