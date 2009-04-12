@@ -477,14 +477,14 @@ void Camera::ClickedObject()
 	}
 }
 
-const char *Camera::GetClickedMeshName()
+const char* Camera::GetClickedMeshName()
 {
 	//return name of last clicked mesh
 
 	return meshname.GetData();
 }
 
-const char *Camera::GetClickedPolyName()
+const char* Camera::GetClickedPolyName()
 {
 	//return name of last clicked polygon
 

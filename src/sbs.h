@@ -160,17 +160,18 @@ public:
 	void CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th);
-	iMaterialWrapper *ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture);
+	iMaterialWrapper* ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture);
+	iMaterialWrapper* GetTextureMaterial(const char *texture, const char *polygon_name = 0);
 	bool NewElevator(int number);
 	bool NewFloor(int number);
 	int Elevators();
 	int TotalFloors(); //all floors including basements
 	int Shafts();
 	int StairsNum();
-	Floor *GetFloor(int number);
-	Elevator *GetElevator(int number);
-	Shaft *GetShaft(int number);
-	Stairs *GetStairs(int number);
+	Floor* GetFloor(int number);
+	Elevator* GetElevator(int number);
+	Shaft* GetShaft(int number);
+	Stairs* GetStairs(int number);
 	bool SetWallOrientation(const char *direction);
 	int GetWallOrientation();
 	bool SetFloorOrientation(const char *direction);

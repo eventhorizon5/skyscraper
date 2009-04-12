@@ -73,8 +73,8 @@ public:
 	void DrawBackground();
 
 	//file loader functions
-	bool LoadBuilding(const char * filename);
-	bool LoadDataFile(const char * filename);
+	bool LoadBuilding(const char *filename);
+	bool LoadDataFile(const char *filename);
 	csString Calc(const char *expression);
 	bool IfProc(const char *expression);
 

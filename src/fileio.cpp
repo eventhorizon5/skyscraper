@@ -38,7 +38,7 @@
 float AltitudeCheck;
 extern SBS *Simcore;
 
-bool Skyscraper::LoadBuilding(const char * filename)
+bool Skyscraper::LoadBuilding(const char *filename)
 {
 	//building loader/script interpreter
 
@@ -2990,7 +2990,7 @@ Nextline:
 	return true;
 }
 
-bool Skyscraper::LoadDataFile(const char * filename)
+bool Skyscraper::LoadDataFile(const char *filename)
 {
 	//loads a building data file into the runtime buffer
 	bool streamnotfinished = true;

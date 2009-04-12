@@ -80,8 +80,8 @@ public:
 	void CheckShaft();
 	void CheckStairwell();
 	void ClickedObject();
-	const char *GetClickedMeshName();
-	const char *GetClickedPolyName();
+	const char* GetClickedMeshName();
+	const char* GetClickedPolyName();
 	void CreateColliders();
 	void Loop();
 	void Strafe(float speed);

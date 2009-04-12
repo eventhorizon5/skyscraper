@@ -368,9 +368,7 @@ void SBS::Initialize(iSCF* scf, iEngine* engineref, iLoader* loaderref, iVirtual
 
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult)
 {
-	// Load the texture from the standard library.  This is located in
-	// CS/data/standard.zip and mounted as /lib/std using the Virtual
-	// File System (VFS) plugin.
+	// Load a texture
 	if (!loader->LoadTexture (name, filename))
 	{
 		ReportError("Error loading texture");
@@ -1563,7 +1561,7 @@ void SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfl
 	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
 }
 
-iMaterialWrapper *SBS::ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture)
+iMaterialWrapper* SBS::ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture)
 {
 	//changes a texture
 
@@ -1718,7 +1716,7 @@ int SBS::StairsNum()
 	return StairsArray.GetSize();
 }
 
-Floor *SBS::GetFloor(int number)
+Floor* SBS::GetFloor(int number)
 {
 	//return pointer to floor object
 
@@ -1743,7 +1741,7 @@ Floor *SBS::GetFloor(int number)
 	return 0;
 }
 
-Elevator *SBS::GetElevator(int number)
+Elevator* SBS::GetElevator(int number)
 {
 	//return pointer to elevator object
 
@@ -1768,7 +1766,7 @@ Elevator *SBS::GetElevator(int number)
 	return 0;
 }
 
-Shaft *SBS::GetShaft(int number)
+Shaft* SBS::GetShaft(int number)
 {
 	//return pointer to shaft object
 
@@ -1793,7 +1791,7 @@ Shaft *SBS::GetShaft(int number)
 	return 0;
 }
 
-Stairs *SBS::GetStairs(int number)
+Stairs* SBS::GetStairs(int number)
 {
 	//return pointer to stairs object
 
@@ -2668,4 +2666,23 @@ void SBS::ProcessTextureFlip(float tw, float th)
 				heightscale[i] = -th;
 		}
 	}
+}
+
+iMaterialWrapper* SBS::GetTextureMaterial(const char *texture, const char *polygon_name)
+{
+	iMaterialWrapper *material = engine->GetMaterialList()->FindByName(texture);
+
+	if (!material)
+	{
+		//if material's not found, display a warning and use a default material
+		csString message;
+		if (polygon_name)
+			message = "Texture '" + csString(texture) + "' not found for polygon '" + csString(polygon_name) + "'; using default material";
+		else
+			message = "Texture '" + csString(texture) + "' not found; using default material";
+		ReportError(message);
+		//set to default material
+		material = engine->GetMaterialList()->FindByName("Default");
+	}
+	return material;
 }
