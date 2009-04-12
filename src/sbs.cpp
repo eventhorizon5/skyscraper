@@ -1567,16 +1567,28 @@ iMaterialWrapper *SBS::ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper>
 {
 	//changes a texture
 
+	//exit if mesh pointer's invalid
+	if (!mesh)
+		return 0;
+
 	csRef<iThingState> thingstate = scfQueryInterface<iThingState> (mesh->GetMeshObject());
 
 	//get new material
 	csRef<iMaterialWrapper> newmat = engine->GetMaterialList()->FindByName(texture);
 
-	//switch material
-	thingstate->ClearReplacedMaterials();
-	thingstate->ReplaceMaterial(oldmat, newmat);
+	//switch material if valid
+	if (newmat && thingstate)
+	{
+		thingstate->ClearReplacedMaterials();
+		thingstate->ReplaceMaterial(oldmat, newmat);
+		return newmat;
+	}
 
-	return newmat;
+	//otherwise report error
+	if (!newmat)
+		ReportError("ChangeTexture: Invalid texture");
+
+	return 0;
 }
 
 void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th)
