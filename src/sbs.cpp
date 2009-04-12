@@ -1586,7 +1586,7 @@ iMaterialWrapper *SBS::ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper>
 
 	//otherwise report error
 	if (!newmat)
-		ReportError("ChangeTexture: Invalid texture");
+		ReportError("ChangeTexture: Invalid texture '" + csString(texture) + "'");
 
 	return 0;
 }
