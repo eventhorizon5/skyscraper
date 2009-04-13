@@ -1,6 +1,6 @@
-diff -urN CS.orig/configure CS.new/configure
---- CS.orig/configure	2008-04-22 07:14:51.000000000 -0500
-+++ CS.new/configure	2009-04-13 13:35:38.000000000 -0500
+diff -urN CS.old/configure CS.new/configure
+--- CS.old/configure	2008-04-22 07:14:51.000000000 -0500
++++ CS.new/configure	2009-04-13 14:26:31.000000000 -0500
 @@ -67509,6 +67509,8 @@
  	[Ii][3-9]86*|[Xx]86*) cs_host_cpu=x86 ;;
  	powerpc*) cs_host_cpu=powerpc ;;
@@ -22,15 +22,15 @@ diff -urN CS.orig/configure CS.new/configure
 +"
 +fi
 +
-+])fi
-+])
++fi
++
 +
  
  
  #------------------------------------------------------------------------------
-diff -urN CS.orig/configure.ac CS.new/configure.ac
---- CS.orig/configure.ac	2008-04-22 07:20:30.000000000 -0500
-+++ CS.new/configure.ac	2009-04-13 13:34:00.000000000 -0500
+diff -urN CS.old/configure.ac CS.new/configure.ac
+--- CS.old/configure.ac	2008-04-22 07:20:30.000000000 -0500
++++ CS.new/configure.ac	2009-04-13 14:25:01.000000000 -0500
 @@ -1811,6 +1811,8 @@
  	[[Ii][3-9]86*|[Xx]86*]) cs_host_cpu=x86 ;;
  	powerpc*) cs_host_cpu=powerpc ;;
@@ -45,7 +45,7 @@ diff -urN CS.orig/configure.ac CS.new/configure.ac
    [CS_HEADER_PROPERTY([CS_HAVE_MMX])])
  
 +AS_IF([test $cs_host_cpu = sparc],
-+  [CS_EMIT_BUILD_PROPERTY([COMPILER.C++FLAGS], [-mcpu=v9], [append])]])
++  [CS_EMIT_BUILD_PROPERTY([COMPILER.C++FLAGS], [-mcpu=v9], [append])])
 +
  
  
