@@ -1101,17 +1101,13 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
 
 	float tw3 = tw2, th3 = th2;
-
-	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < textureinfo.GetSize(); i++)
+	float mw, mh;
+	if (GetTextureTiling(texname.GetData(), mw, mh))
 	{
-		if (textureinfo[i].name == texname)
-		{
-			//multiply the tiling parameters (tw and th) by
-			//the stored multipliers for that texture
-			tw3 = tw2 * textureinfo[i].widthmult;
-			th3 = th2 * textureinfo[i].heightmult;
-		}
+		//multiply the tiling parameters (tw and th) by
+		//the stored multipliers for that texture
+		tw3 = tw2 * mw;
+		th3 = tw2 * mh;
 	}
 
 	//reverse extents if specified
@@ -1224,17 +1220,13 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
 
 	float tw3 = tw2, th3 = th2;
-
-	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < textureinfo.GetSize(); i++)
+	float mw, mh;
+	if (GetTextureTiling(texname.GetData(), mw, mh))
 	{
-		if (textureinfo[i].name == texname)
-		{
-			//multiply the tiling parameters (tw and th) by
-			//the stored multipliers for that texture
-			tw3 = tw2 * textureinfo[i].widthmult;
-			th3 = th2 * textureinfo[i].heightmult;
-		}
+		//multiply the tiling parameters (tw and th) by
+		//the stored multipliers for that texture
+		tw3 = tw2 * mw;
+		th3 = tw2 * mh;
 	}
 
 	//reverse extents if specified
@@ -1619,17 +1611,13 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 
 	float tw2 = tw, th2 = th;
 
-	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < textureinfo.GetSize(); i++)
+	float mw, mh;
+	if (GetTextureTiling(texname.GetData(), mw, mh))
 	{
-		if (textureinfo[i].name == texname)
-		{
-			//multiply the tiling parameters (tw and th) by
-			//the stored multipliers for that texture
-			tw2 = tw * textureinfo[i].widthmult;
-			th2 = th * textureinfo[i].heightmult;
-			break;
-		}
+		//multiply the tiling parameters (tw and th) by
+		//the stored multipliers for that texture
+		tw2 = tw * mw;
+		th2 = tw * mh;
 	}
 
 	int endindex;
@@ -2694,4 +2682,19 @@ iMaterialWrapper* SBS::GetTextureMaterial(const char *texture, bool &result, con
 	else
 		result = true;
 	return material;
+}
+
+bool SBS::GetTextureTiling(const char *texture, float &tw, float &th)
+{
+	//get per-texture tiling values from the textureinfo array
+	for (int i = 0; i < textureinfo.GetSize(); i++)
+	{
+		if (textureinfo[i].name.GetData() == texture)
+		{
+			tw = textureinfo[i].widthmult;
+			th = textureinfo[i].heightmult;
+			return true;
+		}
+	}
+	return false;
 }

@@ -205,6 +205,7 @@ public:
 	bool RegisterDoorCallback(Door *door);
 	bool UnregisterDoorCallback(Door *door);
 	void ProcessTextureFlip(float tw, float th);
+	bool GetTextureTiling(const char *texture, float &tw, float &th);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
