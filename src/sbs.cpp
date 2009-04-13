@@ -1107,7 +1107,7 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
 		tw3 = tw2 * mw;
-		th3 = tw2 * mh;
+		th3 = th2 * mh;
 	}
 
 	//reverse extents if specified
@@ -1226,7 +1226,7 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
 		tw3 = tw2 * mw;
-		th3 = tw2 * mh;
+		th3 = th2 * mh;
 	}
 
 	//reverse extents if specified
@@ -1617,7 +1617,7 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
 		tw2 = tw * mw;
-		th2 = tw * mh;
+		th2 = th * mh;
 	}
 
 	int endindex;
@@ -2689,7 +2689,7 @@ bool SBS::GetTextureTiling(const char *texture, float &tw, float &th)
 	//get per-texture tiling values from the textureinfo array
 	for (int i = 0; i < textureinfo.GetSize(); i++)
 	{
-		if (textureinfo[i].name.GetData() == texture)
+		if (textureinfo[i].name == texture)
 		{
 			tw = textureinfo[i].widthmult;
 			th = textureinfo[i].heightmult;
