@@ -72,9 +72,9 @@ do
         number=$((++number))
 done
 
-#letter-based floors
+#letter-based floors/symbols
 number=1
-end=16
+end=18
 while (( number <= end ))
 do
 	if [ $number == 1 ]; then sym="L"; fi
@@ -93,6 +93,8 @@ do
 	if [ $number == 14 ]; then sym="B"; fi
 	if [ $number == 15 ]; then sym="PL"; fi
 	if [ $number == 16 ]; then sym="CC"; fi
+	if [ $number == 17 ]; then sym="EZ"; fi
+	if [ $number == 18 ]; then sym="EX"; fi
 	echo $sym
 	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$sym.jpg\" \"$sym\" $fontsize \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
 	number=$((++number))
