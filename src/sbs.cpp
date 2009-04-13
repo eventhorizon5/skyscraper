@@ -986,7 +986,8 @@ int SBS::CreateWallBox(csRef<iThingFactoryState> dest, const char *name, const c
 	}
 
 	//texture mapping
-	iMaterialWrapper* tm = engine->GetMaterialList()->FindByName(texture);
+	bool result;
+	iMaterialWrapper* tm = GetTextureMaterial(texture, result);
 	dest->SetPolygonMaterial(csPolygonRange(firstidx, firstidx + range + range2), tm);
 	dest->SetPolygonTextureMapping(csPolygonRange(firstidx, firstidx + range + range2), 3);
 
@@ -1091,23 +1092,15 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 	int firstidx = dest->AddPolygon(varray1.GetVertices(), num);
 	dest->AddPolygon(varray2.GetVertices(), num);
 
-	material = engine->GetMaterialList ()->FindByName (texture);
+	csString polyname = dest->GetPolygonName(firstidx);
+	csString texname = texture;
+	bool result;
+	material = GetTextureMaterial(texture, result, polyname.GetData());
+	if (!result)
+		texname = "Default";
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
 
-	csString texname = texture;
 	float tw3 = tw2, th3 = th2;
-
-	if (material == 0)
-	{
-		//if material's not found, display a warning and use a default material
-		csString Texture = texture;
-		csString polyname = dest->GetPolygonName(firstidx);
-		csString message = "Texture '" + Texture + "' not found for polygon '" + polyname + "'; using default material";
-		ReportError(message);
-		//set to default material
-		material = engine->GetMaterialList()->FindByName("Default");
-		texname = "Default";
-	}
 
 	//get per-texture tiling values from the textureinfo array
 	for (int i = 0; i < textureinfo.GetSize(); i++)
@@ -1222,8 +1215,27 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
 	dest->AddPolygon(varray1.GetVertices(), num);
 
-	material = engine->GetMaterialList ()->FindByName (texture);
+	csString polyname = dest->GetPolygonName(firstidx);
+	csString texname = texture;
+	bool result;
+	material = GetTextureMaterial(texture, result, polyname.GetData());
+	if (!result)
+		texname = "Default";
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+
+	float tw3 = tw2, th3 = th2;
+
+	//get per-texture tiling values from the textureinfo array
+	for (int i = 0; i < textureinfo.GetSize(); i++)
+	{
+		if (textureinfo[i].name == texname)
+		{
+			//multiply the tiling parameters (tw and th) by
+			//the stored multipliers for that texture
+			tw3 = tw2 * textureinfo[i].widthmult;
+			th3 = th2 * textureinfo[i].heightmult;
+		}
+	}
 
 	//reverse extents if specified
 	float tmpv;
@@ -1256,16 +1268,16 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 		v1,
 		csVector2 (0, 0),
 		v2,
-		csVector2 (tw2, 0),
+		csVector2 (tw3, 0),
 		v3,
-		csVector2 (tw2, th2));
+		csVector2 (tw3, th3));
 	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
 		v1,
-		csVector2 (tw2, 0),
+		csVector2 (tw3, 0),
 		v2,
 		csVector2 (0, 0),
 		v3,
-		csVector2 (0, th2));
+		csVector2 (0, th3));
 
 	//set polygon names
 	csString NewName;
@@ -1429,17 +1441,18 @@ int SBS::CreateSky(const char *filenamebase)
 
 	//create a skybox that extends 30 miles (30 * 5280 ft) in each direction
 	int firstidx = SkyBox_state->AddInsideBox(csVector3(-158400, -158400, -158400), csVector3(158400, 158400, 158400));
-	material = engine->GetMaterialList ()->FindByName ("SkyBack");
+	bool result;
+	material = GetTextureMaterial("SkyBack", result);
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
-	material = engine->GetMaterialList ()->FindByName ("SkyRight");
+	material = GetTextureMaterial("SkyRight", result);
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
-	material = engine->GetMaterialList ()->FindByName ("SkyFront");
+	material = GetTextureMaterial("SkyFront", result);
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 2, firstidx + 2), material);
-	material = engine->GetMaterialList ()->FindByName ("SkyLeft");
+	material = GetTextureMaterial("SkyLeft", result);
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 3, firstidx + 3), material);
-	material = engine->GetMaterialList ()->FindByName ("SkyBottom");
+	material = GetTextureMaterial("SkyBottom", result);
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 4, firstidx + 4), material);
-	material = engine->GetMaterialList ()->FindByName ("SkyTop");
+	material = GetTextureMaterial("SkyTop", result);
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 5, firstidx + 5), material);
 
 	SkyBox_state->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx + 5),
@@ -1593,8 +1606,11 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 {
 	//sets texture for a range of polygons
 
-	material = engine->GetMaterialList()->FindByName(texture);
 	csString texname = texture;
+	bool result;
+	material = GetTextureMaterial(texture, result, mesh->GetPolygonName(index));
+	if (!result)
+		texname = "Default";
 
 	if (tw == 0)
 		tw = 1;
@@ -1602,18 +1618,6 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		th = 1;
 
 	float tw2 = tw, th2 = th;
-
-	if (material == 0)
-	{
-		//if material's not found, display a warning and use a default material
-		csString Texture = texture;
-		csString polyname = mesh->GetPolygonName(index);
-		csString message = "Texture '" + Texture + "' not found for polygon '" + polyname + "'; using default material";
-		ReportError(message);
-		//set to default material
-		material = engine->GetMaterialList()->FindByName("Default");
-		texname = "Default";
-	}
 
 	//get per-texture tiling values from the textureinfo array
 	for (int i = 0; i < textureinfo.GetSize(); i++)
@@ -2668,8 +2672,10 @@ void SBS::ProcessTextureFlip(float tw, float th)
 	}
 }
 
-iMaterialWrapper* SBS::GetTextureMaterial(const char *texture, const char *polygon_name)
+iMaterialWrapper* SBS::GetTextureMaterial(const char *texture, bool &result, const char *polygon_name)
 {
+	//perform a lookup on a texture, and return as a material
+	//returns false in &result if texture load failed, and if default material was used instead
 	iMaterialWrapper *material = engine->GetMaterialList()->FindByName(texture);
 
 	if (!material)
@@ -2683,6 +2689,9 @@ iMaterialWrapper* SBS::GetTextureMaterial(const char *texture, const char *polyg
 		ReportError(message);
 		//set to default material
 		material = engine->GetMaterialList()->FindByName("Default");
+		result = false;
 	}
+	else
+		result = true;
 	return material;
 }
