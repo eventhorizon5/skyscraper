@@ -146,6 +146,7 @@ private:
 	int Current; //current range iteration
 	int Section; //current section number
 	csString Context; //section context
+	float remaining_delta;
 };
 
 class MainScreen : public wxFrame

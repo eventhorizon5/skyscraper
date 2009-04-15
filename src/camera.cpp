@@ -516,8 +516,7 @@ void Camera::Loop()
 	InterpolateMovement();
 
 	//general movement
-	float delta = sbs->vc->GetElapsedTicks() / 1000.0f;
-	collider_actor.Move(delta, speed, velocity, angle_velocity);
+	collider_actor.Move(sbs->delta, speed, velocity, angle_velocity);
 
 	//sync sound listener object to camera position
 	sbs->SetListenerLocation(GetPosition());

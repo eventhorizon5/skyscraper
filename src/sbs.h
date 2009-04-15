@@ -225,7 +225,6 @@ private:
 	//fps
 	int fps_frame_count;
 	int fps_tottime;
-	float remaining_delta;
 
 	//conversion buffers
 	char intbuffer[65];

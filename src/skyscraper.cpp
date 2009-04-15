@@ -75,6 +75,7 @@ bool Skyscraper::OnInit(void)
 	IsRunning = false;
 	StartupRunning = false;
 	Starting = false;
+	remaining_delta = 0;
 
 	//Create main window
 	window = new MainScreen();
@@ -271,14 +272,28 @@ void Skyscraper::SetupFrame()
 	Simcore->RenderOnly = RenderOnly;
 	Simcore->InputOnly = InputOnly;
 
-	//run SBS main loop
-	Simcore->MainLoop();
+	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
+	//depending on frame rate
+	float elapsed = remaining_delta + (vc->GetElapsedTicks() / 1000.0);
+	//limit the elapsed value to prevent major slowdowns during debugging
+	if (elapsed > 0.5)
+		elapsed = 0.5;
+	while (elapsed >= Simcore->delta)
+	{
 
-	if (RenderOnly == false)
-		GetInput();
+		//run SBS main loop
+		Simcore->MainLoop();
 
-	//process camera loop
-	Simcore->camera->Loop();
+		//get input
+		if (RenderOnly == false)
+			GetInput();
+
+		//process camera loop
+		Simcore->camera->Loop();
+
+		elapsed -= Simcore->delta;
+	}
+	remaining_delta = elapsed;
 
 	Render();
 }
