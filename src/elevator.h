@@ -74,6 +74,18 @@ public:
 	csString StopSound; //elevator stop/slowdown sound
 	csString IdleSound; //elevator idle sound
 	csString ChimeSound; //elevator chime sound
+	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
+	bool ACP; //Anti-Crime Protection mode enable/disable
+	float ACPFloor; //floor to stop at in ACP mode
+	bool UpPeak; //Up Peak mode
+	bool DownPeak; //Down Peak mode
+	bool IndependentService; //Independent Service (ISC) mode
+	bool InspectionService; //Inspection Service (INS) mode
+	int FireServicePhase1; //Fire service (EFS) phase 1 modes; 0 for off, 1 for on, and 2 for bypass
+	int FireServicePhase2; //Fire service (EFS) phase 2 modes; 0 for off, 1 for on, and 2 for hold
+	int RecallFloor; //Fire service recall floor
+	int RecallFloorAlternate; //Fire service alternate recall floor
+	bool MovePending; //for service and fire modes; a move request is pending (waiting for doors to be manually closed)
 
 	//functions
 	Elevator(int number);
@@ -122,6 +134,18 @@ public:
 	float GetJerkRate();
 	float GetJerkPosition();
 	void Chime(int floor);
+	void SetFloorSkipText(const char *id);
+	bool IsServicedFloor(int floor);
+	bool InServiceMode();
+	void Go(int floor);
+	void EnableACP(bool value);
+	void EnableUpPeak(bool value);
+	void EnableDownPeak(bool value);
+	void EnableIndependentService(bool value);
+	void EnableInspectionService(bool value);
+	void EnableFireService1(int value);
+	void EnableFireService2(int value);
+	void ResetDoorTimer();
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -164,6 +188,7 @@ private:
 	float JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
 	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	csRef<iMaterialWrapper> orig_indicator;
+	bool ResetQueues; //clear queues and open doors; usually for service mode
 
 	//functions
 	void MoveElevatorToFloor();
@@ -212,6 +237,7 @@ private:
 	int oldfloor;
 	int lastfloor;
 	bool lastfloorset;
+	csString FloorSkipText;
 };
 
 #endif

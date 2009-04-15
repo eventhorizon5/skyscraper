@@ -444,7 +444,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
-	
+
 	Connect(ID_bDumpFloors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDumpFloors_Click);
 	Connect(ID_bDumpQueues,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDumpQueues_Click);
 	Connect(ID_bCall,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bCall_Click);
@@ -493,8 +493,7 @@ void editelevator::On_bEnqueueUp_Click(wxCommandEvent& event)
 
 void editelevator::On_bGo_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GotoFloor = sFloor->GetThumbPosition() - Simcore->Basements;
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->MoveElevator = true;
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->Go(sFloor->GetThumbPosition() - Simcore->Basements);
 }
 
 void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)

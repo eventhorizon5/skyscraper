@@ -201,6 +201,10 @@ void ButtonPanel::Press(int index)
 	if (index == -1)
 		return;
 
+	//exit if in inspection mode
+	if (sbs->GetElevator(elevator)->InspectionService == true)
+		return;
+
 	csString name = ButtonPanel_state->GetPolygonName(index);
 	csString name2 = name;
 

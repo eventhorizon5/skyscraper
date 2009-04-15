@@ -106,6 +106,19 @@ Elevator::Elevator(int number)
 	StopSound = "elevstop.wav";
 	IdleSound = "elevidle.wav";
 	ChimeSound = "chime1.wav";
+	UseFloorSkipText = false;
+	ACP = false;
+	ACPFloor = 0;
+	UpPeak = false;
+	DownPeak = false;
+	IndependentService = false;
+	InspectionService = false;
+	FireServicePhase1 = 0;
+	FireServicePhase2 = 0;
+	RecallFloor = 0;
+	RecallFloorAlternate = 0;
+	ResetQueues = false;
+	MovePending = false;
 
 	//create object meshes
 	buffer = Number;
@@ -230,6 +243,13 @@ void Elevator::AddRoute(int floor, int direction)
 {
 	//Add call route to elevator routing table, in sorted order
 
+	//do not add routes if in any service mode
+	if (InServiceMode() == true)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cannot add route while in a service mode");
+		return;
+	}
+
 	if (direction == 1)
 	{
 		if (UpQueue.GetSize() == 0 && QueuePositionDirection == 0)
@@ -325,6 +345,17 @@ void Elevator::ProcessCallQueue()
 {
 	//Processes the elevator's call queue, and sends elevators to called floors
 
+	//if ResetQueues is set, clear both queues open doors, and pause queue
+	if (ResetQueues == true)
+	{
+		UpQueue.DeleteAll();
+		DownQueue.DeleteAll();
+		if (IsMoving == false)
+			OpenDoors();
+		PauseQueueSearch = true;
+		return;
+	}
+
 	//set queue search direction if queues aren't empty
 	if (QueuePositionDirection == 0)
 	{
@@ -368,15 +399,21 @@ void Elevator::ProcessCallQueue()
 			if (UpQueue[i] > GetFloor() || (UpQueue[i] < GetFloor() && UpQueue.GetSize() == 1))
 			{
 				PauseQueueSearch = true;
-				CloseDoors();
 				GotoFloor = UpQueue[i];
-				MoveElevator = true;
+				if (IndependentService == true || FireServicePhase2 == 1)
+					MovePending = true;
+				else
+				{
+					CloseDoors();
+					MoveElevator = true;
+				}
 				DeleteRoute(UpQueue[i], 1);
 				return;
 			}
 			if (UpQueue[i] == GetFloor())
 			{
-				OpenDoors();
+				if (IndependentService == false && FireServicePhase2 == 0)
+					OpenDoors();
 				DeleteRoute(UpQueue[i], 1);
 			}
 		}
@@ -389,15 +426,21 @@ void Elevator::ProcessCallQueue()
 			if (DownQueue[i] < GetFloor() || (DownQueue[i] > GetFloor() && DownQueue.GetSize() == 1))
 			{
 				PauseQueueSearch = true;
-				CloseDoors();
 				GotoFloor = DownQueue[i];
-				MoveElevator = true;
+				if (IndependentService == true || FireServicePhase2 == 1)
+					MovePending = true;
+				else
+				{
+					CloseDoors();
+					MoveElevator = true;
+				}
 				DeleteRoute(DownQueue[i], -1);
 				return;
 			}
 			if (DownQueue[i] == GetFloor())
 			{
-				OpenDoors();
+				if (IndependentService == false && FireServicePhase2 == 0)
+					OpenDoors();
 				DeleteRoute(DownQueue[i], -1);
 			}
 		}
@@ -568,8 +611,11 @@ void Elevator::OpenDoors(int whichdoors, int floor)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors already open; resetting timer");
 		//reset timer
-		timer->Stop();
-		timer->Start(DoorTimer, true);
+		if (InServiceMode() == false)
+		{
+			timer->Stop();
+			timer->Start(DoorTimer, true);
+		}
 		return;
 	}
 
@@ -750,7 +796,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		shaftdoors = true;
 
 	//Speed up doors
-	
+
 	//if door is opening and is left of marker 1
 	//or if door is closing and is to the right of marker 2
 	if ((tempposition - temporigin <= marker1 && open == true) || (tempposition - temporigin > marker2 && open == false))
@@ -1017,7 +1063,11 @@ void Elevator::MoveDoors(bool open, bool emergency)
 		if (open == true)
 			DoorsOpen = true;
 		else
+		{
 			DoorsOpen = false;
+			if (MovePending == true)
+				MoveElevator = true;
+		}
 	}
 	else
 	{
@@ -1035,7 +1085,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	door_changed = false;
 
 	//turn on autoclose timer
-	if (emergency == false)
+	if (emergency == false && InServiceMode() == false)
 	{
 		if (quick_close == false)
 			timer->Start(DoorTimer, true);
@@ -1077,8 +1127,8 @@ void Elevator::MoveElevatorToFloor()
 			return;
 		}
 
-		//if destination floor is not in the ServicedFloors array, reset and exit
-		if (ServicedFloors.Find(GotoFloor) == csArrayItemNotFound)
+		//if destination floor is not a serviced floor, reset and exit
+		if (IsServicedFloor(GotoFloor) == false)
 		{
 			sbs->Report("Destination floor not in ServicedFloors list");
 			MoveElevator = false;
@@ -1945,13 +1995,13 @@ void Elevator::DumpServicedFloors()
 
 void Elevator::AddServicedFloor(int number)
 {
-	if (ServicedFloors.Find(number) == csArrayItemNotFound)
+	if (IsServicedFloor(number) == false)
 		ServicedFloors.InsertSorted(number);
 }
 
 void Elevator::RemoveServicedFloor(int number)
 {
-	if (ServicedFloors.Find(number) != csArrayItemNotFound)
+	if (IsServicedFloor(number) == true)
 		ServicedFloors.Delete(number);
 }
 
@@ -1970,7 +2020,11 @@ void Elevator::UpdateFloorIndicators()
 {
 	//changes the number texture on the floor indicators to the elevator's current floor
 
-	csString texture = "Button" + sbs->GetFloor(GetFloor())->ID;
+	csString texture;
+	if (UseFloorSkipText == true && IsServicedFloor(GetFloor()) == false)
+		texture = "Button" + FloorSkipText;
+	else
+		texture = "Button" + sbs->GetFloor(GetFloor())->ID;
 
 	sbs->ChangeTexture(FloorIndicator, orig_indicator, texture.GetData());
 }
@@ -1990,7 +2044,7 @@ void Elevator::Timer::Notify()
 	//door autoclose timer
 
 	//close doors if open
-	if (elevator->AreDoorsOpen() == true)
+	if (elevator->AreDoorsOpen() == true && elevator->InServiceMode() == false)
 		elevator->CloseDoors();
 }
 
@@ -2001,4 +2055,216 @@ void Elevator::Chime(int floor)
 	chime->Loop(false);
 	chime->SetPositionY(sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + DoorHeight);
 	chime->Play();
+}
+
+void Elevator::SetFloorSkipText(const char *id)
+{
+	//sets the text shown in the floor indicator while skipping floors (an express zone)
+	UseFloorSkipText = true;
+	FloorSkipText = id;
+	FloorSkipText.Trim();
+}
+
+bool Elevator::IsServicedFloor(int floor)
+{
+	//returns true if floor is in serviced floor list, otherwise false
+	if (ServicedFloors.Find(floor) == csArrayItemNotFound)
+		return false;
+	else
+		return true;
+}
+
+bool Elevator::InServiceMode()
+{
+	//report if an elevator is in a service mode
+	if (IndependentService == true || InspectionService == true || FireServicePhase1 != 0 || FireServicePhase2 != 0)
+		return true;
+	else
+		return false;
+}
+
+void Elevator::Go(int floor)
+{
+	//go to specified floor, without using the queuing system
+	GotoFloor = floor;
+	MoveElevator = true;
+}
+
+void Elevator::EnableACP(bool value)
+{
+	//enable Anti-Crime Protection (ACP) mode
+
+	ACP = value;
+
+	if (value == true)
+	{
+		EnableUpPeak(false);
+		EnableDownPeak(false);
+		EnableIndependentService(false);
+		EnableInspectionService(false);
+		EnableFireService1(0);
+		EnableFireService2(0);
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": ACP mode enabled");
+	}
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": ACP mode disabled");
+
+}
+
+void Elevator::EnableUpPeak(bool value)
+{
+	//enable Up-Peak mode
+
+	UpPeak = value;
+
+	if (value == true)
+	{
+		EnableACP(false);
+		EnableDownPeak(false);
+		EnableIndependentService(false);
+		EnableInspectionService(false);
+		EnableFireService1(0);
+		EnableFireService2(0);
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Up Peak mode enabled");
+	}
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Up Peak mode disabled");
+}
+
+void Elevator::EnableDownPeak(bool value)
+{
+	//enable Down-Peak mode
+
+	DownPeak = value;
+
+	if (value == true)
+	{
+		EnableACP(false);
+		EnableUpPeak(false);
+		EnableIndependentService(false);
+		EnableInspectionService(false);
+		EnableFireService1(0);
+		EnableFireService2(0);
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Down Peak mode enabled");
+	}
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Down Peak mode disabled");
+}
+
+void Elevator::EnableIndependentService(bool value)
+{
+	//enable Independent Service (ISC) mode
+
+	IndependentService = value;
+
+	if (value == true)
+	{
+		EnableACP(false);
+		EnableUpPeak(false);
+		EnableDownPeak(false);
+		EnableInspectionService(false);
+		EnableFireService1(0);
+		EnableFireService2(0);
+		ResetQueues = true;
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Independent Service mode enabled");
+	}
+	else
+	{
+		ResetDoorTimer();
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Independent Service mode disabled");
+	}
+}
+
+void Elevator::EnableInspectionService(bool value)
+{
+	//enable Inspection Service (INS) mode
+
+	InspectionService = value;
+
+	if (value == true)
+	{
+		EnableACP(false);
+		EnableUpPeak(false);
+		EnableDownPeak(false);
+		EnableIndependentService(false);
+		EnableFireService1(0);
+		EnableFireService2(0);
+		ResetQueues = true;
+		StopElevator();
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Inspection Service mode enabled");
+	}
+	else
+	{
+		ResetDoorTimer();
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Inspection Service mode disabled");
+	}
+}
+
+void Elevator::EnableFireService1(int value)
+{
+	//enable Fire Service Phase 1 mode
+	//valid values are 0 (off), 1 (on) or 2 (bypass)
+
+	if (value >= 0 && value <= 2)
+		FireServicePhase1 = value;
+	else
+		return;
+
+	if (value > 0)
+	{
+		EnableACP(false);
+		EnableUpPeak(false);
+		EnableDownPeak(false);
+		EnableIndependentService(false);
+		EnableInspectionService(false);
+		EnableFireService2(0);
+		ResetQueues = true;
+		if (value == 1)
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 1 mode set to On");
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 1 mode set to Bypass");
+	}
+	else
+	{
+		ResetDoorTimer();
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 1 mode set to Off");
+	}
+}
+
+void Elevator::EnableFireService2(int value)
+{
+	//enable Fire Service Phase 2 mode
+	//valid values are 0 (off), 1 (on) or 2 (hold)
+
+	if (value >= 0 && value <= 2)
+		FireServicePhase2 = value;
+	else
+		return;
+
+	if (value > 0)
+	{
+		EnableACP(false);
+		EnableUpPeak(false);
+		EnableDownPeak(false);
+		EnableIndependentService(false);
+		EnableInspectionService(false);
+		EnableFireService1(0);
+		ResetQueues = true;
+		if (value == 1)
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 2 mode set to On");
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 2 mode set to Hold");
+	}
+	else
+	{
+		ResetDoorTimer();
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 2 mode set to Off");
+	}
+}
+
+void Elevator::ResetDoorTimer()
+{
+	//reset elevator door timer
+	timer->Stop();
+	timer->Start(DoorTimer, true);
 }

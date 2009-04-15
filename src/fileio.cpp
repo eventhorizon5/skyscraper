@@ -2503,6 +2503,15 @@ recalc:
 				}
 				Simcore->GetElevator(Current)->ChimeSound = temp2;
 			}
+			if (LineData.Slice(0, 13).CompareNoCase("floorskiptext") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->SetFloorSkipText(temp2);
+			}
 
 			//replace variables with actual values
 			buffer = Current;
