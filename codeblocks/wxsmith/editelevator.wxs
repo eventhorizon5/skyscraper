@@ -40,37 +40,160 @@
 								<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 							</object>
 							<object class="sizeritem">
-								<object class="wxBoxSizer" variable="BoxSizer7" member="yes">
+								<object class="wxFlexGridSizer" variable="FlexGridSizer4" member="no">
+									<cols>5</cols>
+									<hgap>5</hgap>
 									<object class="sizeritem">
-										<object class="wxButton" name="ID_bDumpFloors" variable="bDumpFloors" member="yes">
-											<label>Dump Floor List</label>
-											<handler function="On_bDumpFloors_Click" entry="EVT_BUTTON" />
+										<object class="wxBoxSizer" variable="BoxSizer5" member="no">
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bACPMode" variable="bACPMode" member="yes">
+													<label>ACP Mode</label>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bUpPeak" variable="bUpPeak" member="yes">
+													<label>Up Peak</label>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bDownPeak" variable="bDownPeak" member="yes">
+													<label>Down Peak</label>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bIndService" variable="bIndService" member="yes">
+													<label>Independent Service</label>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bInsService" variable="bInsService" member="yes">
+													<label>Inspection Service</label>
+												</object>
+												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
 										</object>
-										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>15</border>
+										<flag>wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxButton" name="ID_bDumpQueues" variable="bDumpQueues" member="yes">
-											<label>Dump Queues</label>
-											<handler function="On_bDumpQueues_Click" entry="EVT_BUTTON" />
+										<object class="wxStaticBoxSizer" variable="StaticBoxSizer10" member="no">
+											<label>Fire Phase 1</label>
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire1Off" variable="Fire1Off" member="yes">
+													<label>Off</label>
+													<selected>1</selected>
+													<minsize>65,-1</minsize>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire1On" variable="Fire1On" member="yes">
+													<label>On</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire1Bypass" variable="Fire1Bypass" member="yes">
+													<label>Bypass</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
 										</object>
-										<flag>wxLEFT|wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>15</border>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
 										<option>1</option>
 									</object>
-								</object>
-								<flag>wxTOP|wxEXPAND|wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL</flag>
-								<border>15</border>
-							</object>
-							<object class="spacer">
-								<flag>wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
-								<border>5</border>
-								<option>1</option>
-							</object>
-							<object class="sizeritem">
-								<object class="wxCheckBox" name="ID_CHECKBOX1" variable="chkVisible" member="yes">
-									<label>Visible</label>
+									<object class="sizeritem">
+										<object class="wxStaticBoxSizer" variable="StaticBoxSizer9" member="no">
+											<label>Fire Phase 2</label>
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire2Off" variable="Fire2Off" member="yes">
+													<label>Off</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire2On" variable="Fire2On" member="yes">
+													<label>On</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire2Hold" variable="RadioButton6" member="yes">
+													<label>Hold</label>
+													<minsize>65,-1</minsize>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxBoxSizer" variable="BoxSizer4" member="no">
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bDumpFloors" variable="bDumpFloors" member="yes">
+													<label>Dump Floor List</label>
+													<handler function="On_bDumpFloors_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>15</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bDumpQueues" variable="bDumpQueues" member="yes">
+													<label>Dump Queues</label>
+													<handler function="On_bDumpQueues_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>15</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_CHECKBOX1" variable="chkVisible" member="yes">
+													<label>Visible</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
