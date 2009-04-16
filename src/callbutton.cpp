@@ -205,6 +205,10 @@ void CallButton::Call(int direction)
 		}
 	}
 
+	//if selected elevator is in a service mode, exit
+	if (sbs->GetElevator(Elevators[closest_elev])->InServiceMode() == true)
+		return;
+
 	if (sbs->GetElevator(Elevators[closest_elev])->GetFloor() == floor)
 	{
 		//play chime sound

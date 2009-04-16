@@ -862,31 +862,46 @@ void editelevator::On_bChime_Click(wxCommandEvent& event)
 void editelevator::On_bACPMode_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
+	{
 		elevator->EnableACP(bACPMode->GetValue());
+		SetMainValues();
+	}
 }
 
 void editelevator::On_bUpPeak_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
+	{
 		elevator->EnableUpPeak(bUpPeak->GetValue());
+		SetMainValues();
+	}
 }
 
 void editelevator::On_bDownPeak_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
+	{
 		elevator->EnableDownPeak(bDownPeak->GetValue());
+		SetMainValues();
+	}
 }
 
 void editelevator::On_bIndService_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
+	{
 		elevator->EnableIndependentService(bIndService->GetValue());
+		SetMainValues();
+	}
 }
 
 void editelevator::On_bInsService_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
+	{
 		elevator->EnableInspectionService(bInsService->GetValue());
+		SetMainValues();
+	}
 }
 
 void editelevator::On_bRefresh_Click(wxCommandEvent& event)

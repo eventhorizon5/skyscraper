@@ -139,6 +139,7 @@ public:
 	bool IsServicedFloor(int floor);
 	bool InServiceMode();
 	void Go(int floor);
+	void GoPending(int floor);
 	void EnableACP(bool value);
 	void EnableUpPeak(bool value);
 	void EnableDownPeak(bool value);
