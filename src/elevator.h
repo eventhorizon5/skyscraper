@@ -81,8 +81,8 @@ public:
 	bool DownPeak; //Down Peak mode
 	bool IndependentService; //Independent Service (ISC) mode
 	bool InspectionService; //Inspection Service (INS) mode
-	int FireServicePhase1; //Fire service (EFS) phase 1 modes; 0 for off, 1 for on, and 2 for bypass
-	int FireServicePhase2; //Fire service (EFS) phase 2 modes; 0 for off, 1 for on, and 2 for hold
+	int FireServicePhase1; //Fire service (EFS) phase 1 modes: 0 for off, 1 for on, and 2 for bypass
+	int FireServicePhase2; //Fire service (EFS) phase 2 modes: 0 for off, 1 for on, and 2 for hold
 	int RecallFloor; //Fire service recall floor
 	int RecallFloorAlternate; //Fire service alternate recall floor
 	bool MovePending; //for service and fire modes; a move request is pending (waiting for doors to be manually closed)
@@ -135,6 +135,7 @@ public:
 	float GetJerkPosition();
 	void Chime(int floor);
 	void SetFloorSkipText(const char *id);
+	const char* GetFloorSkipText();
 	bool IsServicedFloor(int floor);
 	bool InServiceMode();
 	void Go(int floor);

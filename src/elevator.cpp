@@ -2065,6 +2065,12 @@ void Elevator::SetFloorSkipText(const char *id)
 	FloorSkipText.Trim();
 }
 
+const char* Elevator::GetFloorSkipText()
+{
+	//get the floor skip text
+	return FloorSkipText.GetData();
+}
+
 bool Elevator::IsServicedFloor(int floor)
 {
 	//returns true if floor is in serviced floor list, otherwise false
