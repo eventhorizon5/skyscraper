@@ -69,6 +69,7 @@ const long editelevator::ID_bClose = wxNewId();
 const long editelevator::ID_bCloseManual = wxNewId();
 const long editelevator::ID_bCloseShaftDoor = wxNewId();
 const long editelevator::ID_bAlarm = wxNewId();
+const long editelevator::ID_bStopDoors = wxNewId();
 const long editelevator::ID_STATICTEXT3 = wxNewId();
 const long editelevator::ID_txtNumber = wxNewId();
 const long editelevator::ID_STATICTEXT5 = wxNewId();
@@ -151,6 +152,8 @@ const long editelevator::ID_STATICTEXT28 = wxNewId();
 const long editelevator::ID_txtDoorSpeed = wxNewId();
 const long editelevator::ID_STATICTEXT2 = wxNewId();
 const long editelevator::ID_txtJerkRate = wxNewId();
+const long editelevator::ID_STATICTEXT49 = wxNewId();
+const long editelevator::ID_txtDoorStopped = wxNewId();
 const long editelevator::ID_STATICTEXT30 = wxNewId();
 const long editelevator::ID_txtDestFloor = wxNewId();
 const long editelevator::ID_STATICTEXT43 = wxNewId();
@@ -196,7 +199,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	wxFlexGridSizer* FlexGridSizer5;
 	wxStaticBoxSizer* StaticBoxSizer9;
 	wxStaticBoxSizer* StaticBoxSizer10;
-	
+
 	Create(parent, wxID_ANY, _("Elevator Editor"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
@@ -287,6 +290,8 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	BoxSizer9->Add(bCloseShaftDoor, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bAlarm = new wxButton(this, ID_bAlarm, _("Alarm"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAlarm"));
 	BoxSizer9->Add(bAlarm, 0, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 0);
+	bStopDoors = new wxButton(this, ID_bStopDoors, _("Stop Doors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStopDoors"));
+	BoxSizer9->Add(bStopDoors, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(BoxSizer9, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	BoxSizer2->Add(StaticBoxSizer1, 1, wxTOP|wxRIGHT|wxALIGN_RIGHT|wxALIGN_TOP, 5);
 	BoxSizer1->Add(BoxSizer2, 0, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 0);
@@ -486,6 +491,11 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	txtJerkRate = new wxTextCtrl(this, ID_txtJerkRate, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtJerkRate"));
 	FlexGridSizer6->Add(txtJerkRate, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer6->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	StaticText49 = new wxStaticText(this, ID_STATICTEXT49, _("DStopped:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT49"));
+	FlexGridSizer6->Add(StaticText49, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	txtDoorStopped = new wxTextCtrl(this, ID_txtDoorStopped, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtDoorStopped"));
+	FlexGridSizer6->Add(txtDoorStopped, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer7->Add(FlexGridSizer6, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	BoxSizer3->Add(StaticBoxSizer7, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	BoxSizer7 = new wxBoxSizer(wxVERTICAL);
@@ -566,7 +576,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
-	
+
 	Connect(ID_bACPMode,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bACPMode_Toggle);
 	Connect(ID_bUpPeak,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bUpPeak_Toggle);
 	Connect(ID_bDownPeak,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDownPeak_Toggle);
@@ -594,6 +604,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bCloseManual,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bCloseManual_Click);
 	Connect(ID_bCloseShaftDoor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bCloseShaftDoor_Click);
 	Connect(ID_bAlarm,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bAlarm_Click);
+	Connect(ID_bStopDoors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bStopDoors_Click);
 	Connect(ID_bSetName,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetName_Click);
 	Connect(ID_bSetDoorTimer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDoorTimer_Click);
 	Connect(ID_bSetSkipFloorText,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetSkipFloorText_Click);
@@ -779,6 +790,7 @@ void editelevator::Loop()
 	txtIsMoving->SetValue(wxString::FromAscii(BoolToString(elevator->IsMoving)));
 	txtMovePending->SetValue(wxString::FromAscii(BoolToString(elevator->MovePending)));
 	txtUseSkipFloor->SetValue(wxString::FromAscii(BoolToString(elevator->UseFloorSkipText)));
+	txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(elevator->DoorsStopped())));
 }
 
 void editelevator::SetMainValues()
@@ -967,4 +979,10 @@ void editelevator::On_Fire2Hold_Select(wxCommandEvent& event)
 {
 	if (elevator)
 		elevator->EnableFireService2(2);
+}
+
+void editelevator::On_bStopDoors_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->StopDoors();
 }

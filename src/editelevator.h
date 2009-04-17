@@ -77,6 +77,7 @@ class editelevator: public wxDialog
 		static const long ID_bCloseManual;
 		static const long ID_bCloseShaftDoor;
 		static const long ID_bAlarm;
+		static const long ID_bStopDoors;
 		static const long ID_STATICTEXT3;
 		static const long ID_txtNumber;
 		static const long ID_STATICTEXT5;
@@ -159,6 +160,8 @@ class editelevator: public wxDialog
 		static const long ID_txtDoorSpeed;
 		static const long ID_STATICTEXT2;
 		static const long ID_txtJerkRate;
+		static const long ID_STATICTEXT49;
+		static const long ID_txtDoorStopped;
 		static const long ID_STATICTEXT30;
 		static const long ID_txtDestFloor;
 		static const long ID_STATICTEXT43;
@@ -236,6 +239,7 @@ class editelevator: public wxDialog
 		void On_Fire2Off_Select(wxCommandEvent& event);
 		void On_Fire2On_Select(wxCommandEvent& event);
 		void On_Fire2Hold_Select(wxCommandEvent& event);
+		void On_bStopDoors_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -266,6 +270,8 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtNumber;
 		wxStaticText* StaticText29;
 		wxBoxSizer* BoxSizer10;
+		wxButton* bStopDoors;
+		wxTextCtrl* txtDoorStopped;
 		wxTextCtrl* txtQueueLastUp;
 		wxBoxSizer* BoxSizer8;
 		wxStaticText* StaticText37;
@@ -332,6 +338,7 @@ class editelevator: public wxDialog
 		wxButton* bEnqueueUp;
 		wxTextCtrl* txtDoorAcceleration;
 		wxRadioButton* Fire2Off;
+		wxStaticText* StaticText49;
 		wxTextCtrl* txtDoorDirection;
 		wxStaticBoxSizer* StaticBoxSizer8;
 		wxTextCtrl* txtUseSkipFloor;

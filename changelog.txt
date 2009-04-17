@@ -5,6 +5,8 @@ Version 1.4 (2.0 Alpha 4)
 -changed ground collision handling so that users can now stand on top of moving elevators (and other objects)
 -added support (and FloorSkipText parameter) for showing express zone indicators during floor skips
 -added ACP, Up Peak, Down Peak, Independent Service, Inspection Service, and Fire Service phases 1 and 2 modes to elevators (not all work yet)
+-remade manual/emergency door open/close methods
+-added door stop function for doors in manual/emergency mode
 
 Version 1.3 (2.0 Alpha 3)
 -------------------------

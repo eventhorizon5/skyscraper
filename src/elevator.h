@@ -103,8 +103,9 @@ public:
 	void MonitorLoop();
 	void CloseDoorsEmergency(int whichdoors = 1, int floor = 0);
 	const csVector3 GetPosition();
-	void OpenDoors(int whichdoors = 1, int floor = 0);
-	void CloseDoors(int whichdoors = 1, int floor = 0);
+	void OpenDoors(int whichdoors = 1, int floor = 0, bool emergency = false);
+	void CloseDoors(int whichdoors = 1, int floor = 0, bool emergency = false);
+	void StopDoors();
 	int AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	int AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
 	int AddFloorIndicator(const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
@@ -148,6 +149,7 @@ public:
 	void EnableFireService1(int value);
 	void EnableFireService2(int value);
 	void ResetDoorTimer();
+	bool DoorsStopped();
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -233,6 +235,7 @@ private:
 	bool door_changed;
 	int door_section; //door movement section; used for both reversal tracking and debugging
 	bool quick_close; //used if user presses close button while doors are opening; results in a faster timer length
+	bool doors_stopped;
 
 	//elevator misc internals
 	bool ElevatorIsRunning;

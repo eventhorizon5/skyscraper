@@ -229,11 +229,13 @@ void Skyscraper::Render()
 	// Tell 3D driver we're going to display 3D things.
 	if (Simcore->IsSkyboxEnabled == false)
 	{
+		//clear screen if the skybox is off. This will keep the background black - otherwise it'll streak.
 		if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN))
 			return;
 	}
 	else
 	{
+		//if the skybox is on, don't clear the screen, for improved performance
 		if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER))
 			return;
 	}

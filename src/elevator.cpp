@@ -119,6 +119,7 @@ Elevator::Elevator(int number)
 	RecallFloorAlternate = 0;
 	ResetQueues = false;
 	MovePending = false;
+	doors_stopped = false;
 
 	//create object meshes
 	buffer = Number;
@@ -516,34 +517,7 @@ void Elevator::OpenDoorsEmergency(int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	if (door_changed == true)
-		return;
-
-	if (OpenDoor != 0)
-	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
-		return;
-	}
-
-	//check if elevator doors are already open
-	if (DoorsOpen == true && whichdoors != 3 && OpenDoor == 0)
-		return;
-
-	//check if shaft doors are already open
-	if (whichdoors == 3)
-	{
-		if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == true && whichdoors == 3)
-			return;
-		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
-	}
-	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening doors");
-
-	OpenDoor = 2;
-	WhichDoors = whichdoors;
-	ShaftDoorFloor = floor;
-	MoveDoors(true, true);
+	OpenDoors(whichdoors, floor, true);
 }
 
 void Elevator::CloseDoorsEmergency(int whichdoors, int floor)
@@ -557,65 +531,44 @@ void Elevator::CloseDoorsEmergency(int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	if (door_changed == true)
-		return;
-
-	if (OpenDoor != 0)
-	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors in use");
-		return;
-	}
-
-	//check if elevator doors are already closed
-	if (DoorsOpen == false && whichdoors != 3 && OpenDoor == 0)
-		return;
-
-	//check if shaft doors are already closed
-	if (whichdoors == 3)
-	{
-		if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == false && whichdoors == 3)
-			return;
-		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
-	}
-	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing doors");
-
-	OpenDoor = -2;
-	WhichDoors = whichdoors;
-	ShaftDoorFloor = floor;
-	MoveDoors(false, true);
+	CloseDoors(whichdoors, floor, true);
 }
 
-void Elevator::OpenDoors(int whichdoors, int floor)
+void Elevator::OpenDoors(int whichdoors, int floor, bool emergency)
 {
 	//Opens elevator doors
+
+	//if emergency is true, then it simulates manually prying doors open,
+	//Slowly opens the elevator doors no matter where elevator is,
+	//and if lined up with shaft doors, then opens the shaft doors also
 
 	//WhichDoors is the doors to move:
 	//1 = both shaft and elevator doors
 	//2 = only elevator doors
 	//3 = only shaft doors
 
+	//exit if direction changed (if doors have already switched from close to open)
 	if (door_changed == true)
 		return;
 
 	//don't open doors if emergency stop is enabled
-	if (EmergencyStop == true && whichdoors != 3)
+	if (EmergencyStop == true && whichdoors != 3 && emergency == false)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cannot open doors; emergency stop enabled");
 		return;
 	}
 
 	//check if elevator doors are already open
-	if (DoorsOpen == true && whichdoors != 3 && OpenDoor == 0)
+	if (DoorsOpen == true && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
 	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors already open; resetting timer");
-		//reset timer
+		//reset timer if not in a service mode
 		if (InServiceMode() == false)
 		{
-			timer->Stop();
-			timer->Start(DoorTimer, true);
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors already open; resetting timer");
+			ResetDoorTimer();
 		}
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors already open");
 		return;
 	}
 
@@ -623,20 +576,31 @@ void Elevator::OpenDoors(int whichdoors, int floor)
 	if (whichdoors == 3)
 	{
 		if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == true)
+		{
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": shaft doors already open on floor " + csString(_itoa(floor, intbuffer, 10)));
 			return;
-		else
+		}
+		else if (emergency == false)
 			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
 	}
-	else
+	else if (emergency == false)
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening doors");
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually opening doors");
 
-	OpenDoor = 1;
+	if (emergency == false)
+		OpenDoor = 1;
+	else
+		OpenDoor = 2;
+
 	WhichDoors = whichdoors;
 	ShaftDoorFloor = floor;
-	MoveDoors(true, false);
+	MoveDoors(true, emergency);
 }
 
-void Elevator::CloseDoors(int whichdoors, int floor)
+void Elevator::CloseDoors(int whichdoors, int floor, bool emergency)
 {
 	//Closes elevator doors
 
@@ -645,8 +609,8 @@ void Elevator::CloseDoors(int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	//if called while doors are opening, set quick_close (causes door timer to be faster)
-	if (OpenDoor != 0)
+	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
+	if (OpenDoor != 0 && emergency == false)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": will close doors 1 second after staying open");
 		quick_close = true;
@@ -654,7 +618,7 @@ void Elevator::CloseDoors(int whichdoors, int floor)
 	}
 
 	//check if elevator doors are already closed
-	if (DoorsOpen == false && whichdoors != 3 && OpenDoor == 0)
+	if (DoorsOpen == false && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": doors already closed");
 		return;
@@ -664,17 +628,54 @@ void Elevator::CloseDoors(int whichdoors, int floor)
 	if (whichdoors == 3)
 	{
 		if (ShaftDoorsOpen[ServicedFloors.Find(floor)] == false && whichdoors == 3)
+		{
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": shaft doors already closed on floor " + csString(_itoa(floor, intbuffer, 10)));
 			return;
-		else
+		}
+		else if (emergency == false)
 			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing shaft doors on floor " + csString(_itoa(floor, intbuffer, 10)));
 	}
-	else
+	else if (emergency == false)
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": closing doors");
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": manually closing doors");
 
-	OpenDoor = -1;
+	if (emergency == false)
+		OpenDoor = -1;
+	else
+		OpenDoor = -2;
+
 	WhichDoors = whichdoors;
 	ShaftDoorFloor = floor;
-	MoveDoors(false, false);
+	MoveDoors(false, emergency);
+}
+
+void Elevator::StopDoors()
+{
+	//stops doors that are currently moving; can only be used for manual/emergency movements
+	//this basically just resets the door internals
+
+	if (OpenDoor == -2 || OpenDoor == 2)
+	{
+		if (WhichDoors == 3)
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": stopping shaft doors on floor " + csString(_itoa(ShaftDoorFloor, intbuffer, 10)));
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": stopping doors");
+
+		DoorIsRunning = false;
+		OpenDoor = 0;
+		ElevatorDoorSpeed = 0;
+		WhichDoors = 0;
+		door_section = 0;
+		door_changed = false;
+		doors_stopped = true;
+	}
+	else if (OpenDoor != 0)
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": can only stop doors in manual/emergency mode");
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cannot stop doors; no doors moving");
 }
 
 void Elevator::MoveDoors(bool open, bool emergency)
@@ -694,6 +695,8 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	//the right (positive side) door is used as a reference, with the leftmost side of it being the position.
 	//when opening, the door starts and the origin, accelerates to marker 1, moves at a constant
 	//rate to marker 2, and then decelerates after marker 2.
+	//this offset system is not used if emergency is true (in that case, it simply sets a speed value, and moves
+	//the doors until they reach the ends
 
 	//stop timer
 	timer->Stop();
@@ -720,7 +723,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	//debug - show current section as function is running
 	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
 
-	if (DoorIsRunning == false)
+	if (DoorIsRunning == false || (emergency == true && previous_open != open))
 	{
 		//initialization code
 
@@ -733,16 +736,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 			OpenChange = OpenSpeed / 50;
 			marker1 = DoorWidth / 8;
 			marker2 = (DoorWidth / 2) - (DoorWidth / 8);
-		}
-		else
-		{
-			OpenChange = 0.003f;
-			marker1 = DoorWidth / 16;
-			marker2 = (DoorWidth / 2) - (DoorWidth / 16);
-		}
-
-		if (emergency == false)
-		{
+			ElevatorDoorSpeed = 0;
 			if (open == true)
 			{
 				//play elevator opening sound
@@ -756,8 +750,16 @@ void Elevator::MoveDoors(bool open, bool emergency)
 				doorsound->Play();
 			}
 		}
+		else
+		{
+			marker1 = 0;
+			marker2 = DoorWidth / 2;
+			if (open == true)
+				ElevatorDoorSpeed = 0.2;
+			else
+				ElevatorDoorSpeed = -0.2;
+		}
 
-		ElevatorDoorSpeed = 0;
 		if (WhichDoors == 3)
 			index = ServicedFloors.Find(ShaftDoorFloor);
 		else
@@ -795,74 +797,76 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	if (WhichDoors == 3)
 		shaftdoors = true;
 
-	//Speed up doors
-
-	//if door is opening and is left of marker 1
-	//or if door is closing and is to the right of marker 2
-	if ((tempposition - temporigin <= marker1 && open == true) || (tempposition - temporigin > marker2 && open == false))
+	//Speed up doors (only if emergency is false)
+	if (emergency == false)
 	{
-		accelerating = true;
-		if (door_changed == false)
+		//if door is opening and is left of marker 1
+		//or if door is closing and is to the right of marker 2
+		if ((tempposition - temporigin <= marker1 && open == true) || (tempposition - temporigin > marker2 && open == false))
 		{
-			//normal door acceleration
-			if (open == true)
-				ElevatorDoorSpeed += OpenChange;
-			else
-				ElevatorDoorSpeed -= OpenChange;
-		}
-		else
-		{
-			//reverse movement if transitioning from close to open
-			//this will trigger if door is closing, and is told to open while left of relocated marker 1
-			if (tempposition - temporigin <= marker1)
-				ElevatorDoorSpeed += OpenChange;
-		}
-
-		if (elevdoors == true)
-		{
-			if (DoorDirection == false)
+			accelerating = true;
+			if (door_changed == false)
 			{
-				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
-				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
-				ElevatorDoorR_movable->UpdateMove();
+				//normal door acceleration
+				if (open == true)
+					ElevatorDoorSpeed += OpenChange;
+				else
+					ElevatorDoorSpeed -= OpenChange;
 			}
 			else
 			{
-				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
-				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
-				ElevatorDoorR_movable->UpdateMove();
+				//reverse movement if transitioning from close to open
+				//this will trigger if door is closing, and is told to open while left of relocated marker 1
+				if (tempposition - temporigin <= marker1)
+					ElevatorDoorSpeed += OpenChange;
 			}
-		}
 
-		if (shaftdoors == true)
-		{
-			if (DoorDirection == false)
+			if (elevdoors == true)
 			{
-				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
-				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
-				ShaftDoorR[index]->GetMovable()->UpdateMove();
+				if (DoorDirection == false)
+				{
+					//move elevator doors
+					ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
+					ElevatorDoorL_movable->UpdateMove();
+					ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
+					ElevatorDoorR_movable->UpdateMove();
+				}
+				else
+				{
+					//move elevator doors
+					ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ElevatorDoorL_movable->UpdateMove();
+					ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ElevatorDoorR_movable->UpdateMove();
+				}
 			}
-			else
+
+			if (shaftdoors == true)
 			{
-				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
-				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
-				ShaftDoorR[index]->GetMovable()->UpdateMove();
+				if (DoorDirection == false)
+				{
+					//move shaft doors
+					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
+					ShaftDoorL[index]->GetMovable()->UpdateMove();
+					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
+					ShaftDoorR[index]->GetMovable()->UpdateMove();
+				}
+				else
+				{
+					//move shaft doors
+					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ShaftDoorL[index]->GetMovable()->UpdateMove();
+					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ShaftDoorR[index]->GetMovable()->UpdateMove();
+				}
 			}
+
+			//get stopping distance
+			stopping_distance = tempposition - temporigin;
+
+			door_section = 1;
+			return;
 		}
-
-		//get stopping distance
-		stopping_distance = tempposition - temporigin;
-
-		door_section = 1;
-		return;
 	}
 
 	door_section = 2;
@@ -915,55 +919,58 @@ void Elevator::MoveDoors(bool open, bool emergency)
 
 	accelerating = false;
 
-	//slow down doors
-	if ((ElevatorDoorSpeed > 0 && open == true) || (ElevatorDoorSpeed < 0 && open == false))
+	//slow down doors (only if emergency is false)
+	if (emergency == false)
 	{
-		if (open == true)
-			ElevatorDoorSpeed -= OpenChange;
-		else
-			ElevatorDoorSpeed += OpenChange;
-		if (DoorDirection == false)
+		if ((ElevatorDoorSpeed > 0 && open == true) || (ElevatorDoorSpeed < 0 && open == false))
 		{
-			if (elevdoors == true)
+			if (open == true)
+				ElevatorDoorSpeed -= OpenChange;
+			else
+				ElevatorDoorSpeed += OpenChange;
+			if (DoorDirection == false)
 			{
-				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
-				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
-				ElevatorDoorR_movable->UpdateMove();
-			}
+				if (elevdoors == true)
+				{
+					//move elevator doors
+					ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
+					ElevatorDoorL_movable->UpdateMove();
+					ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
+					ElevatorDoorR_movable->UpdateMove();
+				}
 
-			if (shaftdoors == true)
-			{
-				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
-				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
-				ShaftDoorR[index]->GetMovable()->UpdateMove();
+				if (shaftdoors == true)
+				{
+					//move shaft doors
+					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
+					ShaftDoorL[index]->GetMovable()->UpdateMove();
+					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
+					ShaftDoorR[index]->GetMovable()->UpdateMove();
+				}
 			}
-		}
-		else
-		{
-			if (elevdoors == true)
+			else
 			{
-				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
-				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
-				ElevatorDoorR_movable->UpdateMove();
-			}
+				if (elevdoors == true)
+				{
+					//move elevator doors
+					ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ElevatorDoorL_movable->UpdateMove();
+					ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ElevatorDoorR_movable->UpdateMove();
+				}
 
-			if (shaftdoors == true)
-			{
-				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
-				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
-				ShaftDoorR[index]->GetMovable()->UpdateMove();
+				if (shaftdoors == true)
+				{
+					//move shaft doors
+					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ShaftDoorL[index]->GetMovable()->UpdateMove();
+					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ShaftDoorR[index]->GetMovable()->UpdateMove();
+				}
 			}
+			door_section = 4;
+			return;
 		}
-		door_section = 4;
-		return;
 	}
 
 	//report on what section preceded the finishing code (should be 4)
@@ -1087,6 +1094,7 @@ void Elevator::MoveDoors(bool open, bool emergency)
 	WhichDoors = 0;
 	door_section = 0;
 	door_changed = false;
+	doors_stopped = false;
 
 	//turn on autoclose timer
 	if (emergency == false && InServiceMode() == false)
@@ -2315,4 +2323,9 @@ void Elevator::ResetDoorTimer()
 	//reset elevator door timer
 	timer->Stop();
 	timer->Start(DoorTimer, true);
+}
+
+bool Elevator::DoorsStopped()
+{
+	return doors_stopped;
 }
