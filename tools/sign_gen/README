@@ -17,3 +17,5 @@ Font sizes used, and their number:
 3: sans condensed: 64, 46 for elevator buttons
 4: sans bold condensed: 64, 44 for elevator buttons
 
+So to generate all 4 sign zip files, you would do:
+./run.sh 1 && ./run.sh 2 && ./run.sh 3 && ./run.sh 4
