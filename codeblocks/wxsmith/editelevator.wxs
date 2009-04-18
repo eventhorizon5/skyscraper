@@ -368,7 +368,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
 											<label>Number:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtNumber" variable="txtNumber" member="yes">
@@ -385,7 +385,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
 											<label>Name:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtName" variable="txtName" member="yes">
@@ -406,7 +406,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
 											<label>Enabled:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtEnabled" variable="txtEnabled" member="yes">
@@ -423,7 +423,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText6" member="yes">
 											<label>Shaft:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtShaft" variable="txtShaft" member="yes">
@@ -440,7 +440,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT7" variable="StaticText7" member="yes">
 											<label>Height:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtHeight" variable="txtHeight" member="yes">
@@ -457,7 +457,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText8" member="yes">
 											<label>DWidth:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDoorWidth" variable="txtDoorWidth" member="yes">
@@ -474,7 +474,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
 											<label>DHeight:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDoorHeight" variable="txtDoorHeight" member="yes">
@@ -492,7 +492,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT10" variable="StaticText10" member="yes">
 											<label>DDirection:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDoorDirection" variable="txtDoorDirection" member="yes">
@@ -509,7 +509,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT11" variable="StaticText11" member="yes">
 											<label>DoorsOpen:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDoorsOpen" variable="txtDoorsOpen" member="yes">
@@ -526,7 +526,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT12" variable="StaticText12" member="yes">
 											<label>Brakes:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtBrakes" variable="txtBrakes" member="yes">
@@ -543,7 +543,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT13" variable="StaticText13" member="yes">
 											<label>EmergStop:</label>
 										</object>
-										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtStop" variable="txtStop" member="yes">
@@ -560,7 +560,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT42" variable="StaticText42" member="yes">
 											<label>DoorTimer:</label>
 										</object>
-										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -586,7 +586,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT32" variable="StaticText32" member="yes">
 											<label>UseFlrSkip:</label>
 										</object>
-										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -608,7 +608,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT44" variable="StaticText44" member="yes">
 											<label>FlrSkipTxt:</label>
 										</object>
-										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -650,7 +650,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT14" variable="StaticText14" member="yes">
 													<label>Floor:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtFloor" variable="txtFloor" member="yes">
@@ -664,7 +664,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT15" variable="StaticText15" member="yes">
 													<label>Pos:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtPosition" variable="txtPosition" member="yes">
@@ -678,7 +678,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT16" variable="StaticText16" member="yes">
 													<label>Origin:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtOrigin" variable="txtOrigin" member="yes">
@@ -692,7 +692,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT17" variable="StaticText17" member="yes">
 													<label>OriginFlr:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtOriginFloor" variable="txtOriginFloor" member="yes">
@@ -706,7 +706,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT18" variable="StaticText18" member="yes">
 													<label>EStart:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtElevStart" variable="txtElevStart" member="yes">
@@ -720,7 +720,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT19" variable="StaticText19" member="yes">
 													<label>DOrigin:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtDoorOrigin" variable="txtDoorOrigin" member="yes">
@@ -734,7 +734,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT20" variable="StaticText20" member="yes">
 													<label>SDOrigin:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtShaftDoorOrigin" variable="txtShaftDoorOrigin" member="yes">
@@ -743,6 +743,23 @@
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT50" variable="StaticText50" member="yes">
+													<label>OnFloor:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtOnFloor" variable="txtOnFloor" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
 											</object>
 										</object>
 										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -760,7 +777,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT38" variable="StaticText38" member="yes">
 													<label>Direction:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueDirection" variable="txtQueueDirection" member="yes">
@@ -774,7 +791,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT39" variable="StaticText39" member="yes">
 													<label>Pause:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueuePause" variable="txtQueuePause" member="yes">
@@ -788,7 +805,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT40" variable="StaticText40" member="yes">
 													<label>LastUp:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueLastUp" variable="txtQueueLastUp" member="yes">
@@ -802,7 +819,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT41" variable="StaticText41" member="yes">
 													<label>LastDwn:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueLastDown" variable="txtQueueLastDown" member="yes">
@@ -832,7 +849,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT21" variable="StaticText21" member="yes">
 											<label>Speed:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtSpeed" variable="txtSpeed" member="yes">
@@ -853,7 +870,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT22" variable="StaticText22" member="yes">
 											<label>Accel:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtAcceleration" variable="txtAcceleration" member="yes">
@@ -874,7 +891,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT23" variable="StaticText23" member="yes">
 											<label>Decel:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDeceleration" variable="txtDeceleration" member="yes">
@@ -895,7 +912,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT24" variable="StaticText24" member="yes">
 											<label>OpenSpd:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtOpenSpeed" variable="txtOpenSpeed" member="yes">
@@ -916,7 +933,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT25" variable="StaticText25" member="yes">
 											<label>DAccel:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDoorAcceleration" variable="txtDoorAcceleration" member="yes">
@@ -937,7 +954,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
 											<label>AccelJerk:</label>
 										</object>
-										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -963,7 +980,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT29" variable="StaticText29" member="yes">
 											<label>DecelJerk:</label>
 										</object>
-										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -989,7 +1006,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT26" variable="StaticText26" member="yes">
 											<label>Rate:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtRate" variable="txtRate" member="yes">
@@ -1004,9 +1021,9 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT27" variable="StaticText27" member="yes">
-											<label>Dir:</label>
+											<label>Direction:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDirection" variable="txtDirection" member="yes">
@@ -1023,7 +1040,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT28" variable="StaticText28" member="yes">
 											<label>DSpeed:</label>
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDoorSpeed" variable="txtDoorSpeed" member="yes">
@@ -1040,7 +1057,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
 											<label>JerkRate:</label>
 										</object>
-										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -1062,7 +1079,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT49" variable="StaticText49" member="yes">
 											<label>DStopped:</label>
 										</object>
-										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -1100,7 +1117,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT30" variable="StaticText30" member="yes">
 													<label>Floor:</label>
 												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtDestFloor" variable="txtDestFloor" member="yes">
@@ -1119,7 +1136,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT43" variable="StaticText43" member="yes">
 													<label>IsMoving:</label>
 												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -1141,7 +1158,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT31" variable="StaticText31" member="yes">
 													<label>Move:</label>
 												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtMoveElevator" variable="txtMoveElevator" member="yes">
@@ -1160,7 +1177,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT33" variable="StaticText33" member="yes">
 													<label>Distance:</label>
 												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtDistance" variable="txtDistance" member="yes">
@@ -1179,7 +1196,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT34" variable="StaticText34" member="yes">
 													<label>Dest:</label>
 												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtDestination" variable="txtDestination" member="yes">
@@ -1198,7 +1215,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT35" variable="StaticText35" member="yes">
 													<label>StopDist:</label>
 												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtStopDistance" variable="txtStopDistance" member="yes">
@@ -1217,7 +1234,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT36" variable="StaticText36" member="yes">
 													<label>TmpDecel:</label>
 												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtTempDecel" variable="txtTempDecel" member="yes">
@@ -1236,7 +1253,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT37" variable="StaticText37" member="yes">
 													<label>Error:</label>
 												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtErrorOffset" variable="txtErrorOffset" member="yes">

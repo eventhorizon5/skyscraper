@@ -76,7 +76,7 @@ public:
 	csString ChimeSound; //elevator chime sound
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
-	float ACPFloor; //floor to stop at in ACP mode
+	int ACPFloor; //floor to stop at in ACP mode
 	bool UpPeak; //Up Peak mode
 	bool DownPeak; //Down Peak mode
 	bool IndependentService; //Independent Service (ISC) mode
@@ -86,6 +86,7 @@ public:
 	int RecallFloor; //Fire service recall floor
 	int RecallFloorAlternate; //Fire service alternate recall floor
 	bool MovePending; //for service and fire modes; a move request is pending (waiting for doors to be manually closed)
+	bool OnFloor; //true if elevator is stopped on a floor, false if not
 
 	//functions
 	Elevator(int number);
@@ -103,8 +104,8 @@ public:
 	void MonitorLoop();
 	void CloseDoorsEmergency(int whichdoors = 1, int floor = 0);
 	const csVector3 GetPosition();
-	void OpenDoors(int whichdoors = 1, int floor = 0, bool emergency = false);
-	void CloseDoors(int whichdoors = 1, int floor = 0, bool emergency = false);
+	void OpenDoors(int whichdoors = 1, int floor = 0, bool manual = false);
+	void CloseDoors(int whichdoors = 1, int floor = 0, bool manual = false);
 	void StopDoors();
 	int AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	int AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
@@ -196,7 +197,7 @@ private:
 
 	//functions
 	void MoveElevatorToFloor();
-	void MoveDoors(bool open, bool emergency);
+	void MoveDoors(bool open, bool manual);
 
 	char intbuffer[65];
 	char buffer[20];

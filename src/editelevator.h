@@ -123,6 +123,8 @@ class editelevator: public wxDialog
 		static const long ID_txtDoorOrigin;
 		static const long ID_STATICTEXT20;
 		static const long ID_txtShaftDoorOrigin;
+		static const long ID_STATICTEXT50;
+		static const long ID_txtOnFloor;
 		static const long ID_STATICTEXT38;
 		static const long ID_txtQueueDirection;
 		static const long ID_STATICTEXT39;
@@ -313,6 +315,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText18;
 		wxTextCtrl* txtRate;
 		wxButton* bCloseManual;
+		wxStaticText* StaticText50;
 		wxTextCtrl* txtStopDistance;
 		wxStaticText* StaticText31;
 		wxButton* bSetDecelJerk;
@@ -328,6 +331,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtBrakes;
 		wxStaticBoxSizer* StaticBoxSizer7;
 		wxTextCtrl* txtPosition;
+		wxTextCtrl* txtOnFloor;
 		wxStaticText* StaticText44;
 		wxStaticText* StaticText21;
 		wxStaticText* StaticText39;
