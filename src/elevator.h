@@ -87,6 +87,7 @@ public:
 	int RecallFloorAlternate; //Fire service alternate recall floor
 	bool MovePending; //for service and fire modes; a move request is pending (waiting for doors to be manually closed)
 	bool OnFloor; //true if elevator is stopped on a floor, false if not
+	bool ManualGo; //go toggle for inspection service mode
 
 	//functions
 	Elevator(int number);
@@ -155,6 +156,12 @@ public:
 	bool SetAlternateRecallFloor(int floor);
 	bool SetACPFloor(int floor);
 	void GoToRecallFloor();
+	bool MoveUp();
+	bool MoveDown();
+	bool StopMove();
+	void SetGoButton(bool value);
+	int GetTopFloor();
+	int GetBottomFloor();
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

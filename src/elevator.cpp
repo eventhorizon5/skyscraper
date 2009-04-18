@@ -125,6 +125,7 @@ Elevator::Elevator(int number)
 	RecallAltSet = false;
 	ACPFloorSet = false;
 	RecallUnavailable = false;
+	ManualGo = false;
 
 	//create object meshes
 	buffer = Number;
@@ -256,11 +257,11 @@ bool Elevator::CreateElevator(float x, float z, int floor)
 
 	//set recall/ACP floors if not already set
 	if (RecallSet == false)
-		SetRecallFloor(ServicedFloors[0]);
+		SetRecallFloor(GetBottomFloor());
 	if (RecallAltSet == false)
-		SetAlternateRecallFloor(ServicedFloors[ServicedFloors.GetSize() - 1]);
+		SetAlternateRecallFloor(GetTopFloor());
 	if (ACPFloorSet == false)
-		SetACPFloor(ServicedFloors[0]);
+		SetACPFloor(GetBottomFloor());
 
 	//move objects to positions
 	Elevator_movable->SetPosition(Origin);
@@ -424,8 +425,6 @@ void Elevator::ProcessCallQueue()
 	{
 		UpQueue.DeleteAll();
 		DownQueue.DeleteAll();
-		if (IsMoving == false)
-			OpenDoors();
 		PauseQueueSearch = true;
 		ResetQueues = false;
 		return;
@@ -447,17 +446,17 @@ void Elevator::ProcessCallQueue()
 	//if both queues are empty
 	if (UpQueue.GetSize() == 0 && DownQueue.GetSize() == 0)
 	{
-		int TopFloor = ServicedFloors[ServicedFloors.GetSize()];
-		int BottomFloor = ServicedFloors[0];
+		int TopFloor = GetTopFloor();
+		int BottomFloor = GetBottomFloor();
 
 		//if UpPeak mode is active, send elevator to the top serviced floor if not already there
-		if (GetFloor() != TopFloor && UpPeak == true)
+		if (GetFloor() != TopFloor && UpPeak == true && IsMoving == false)
 		{
 			AddRoute(TopFloor, 1);
 			return;
 		}
 		//if DownPeak mode is active, send elevator to the bottom serviced floor if not already there
-		else if (GetFloor() != BottomFloor && DownPeak == true)
+		else if (GetFloor() != BottomFloor && DownPeak == true && IsMoving == false)
 		{
 			AddRoute(BottomFloor, -1);
 			return;
@@ -584,7 +583,7 @@ void Elevator::MonitorLoop()
 		MoveDoors(false, true);
 
 	//elevator movement
-	if (MoveElevator == true && DoorsOpen == false)
+	if (MoveElevator == true && (DoorsOpen == false || InspectionService == true))
 		MoveElevatorToFloor();
 
 }
@@ -1236,6 +1235,7 @@ void Elevator::MoveDoors(bool open, bool manual)
 void Elevator::MoveElevatorToFloor()
 {
 	//Main processing routine; sends elevator to floor specified in GotoFloor
+	//if InspectionService is enabled, this function ignores GotoFloor values, since the elevator is manually moved
 
 	//exit if doors are moving
 	if (OpenDoor != 0)
@@ -1254,7 +1254,7 @@ void Elevator::MoveElevatorToFloor()
 		oldfloor = ElevatorFloor;
 
 		//If elevator is already on specified floor, open doors and exit
-		if (ElevatorFloor == GotoFloor)
+		if (ElevatorFloor == GotoFloor && InspectionService == false)
 		{
 			sbs->Report("Elevator already on specified floor");
 			MoveElevator = false;
@@ -1266,7 +1266,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//if destination floor is not a serviced floor, reset and exit
-		if (IsServicedFloor(GotoFloor) == false)
+		if (IsServicedFloor(GotoFloor) == false && InspectionService == false)
 		{
 			sbs->Report("Destination floor not in ServicedFloors list");
 			MoveElevator = false;
@@ -1275,20 +1275,64 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//Determine direction
-		if (GotoFloor < ElevatorFloor)
+		if (InspectionService == false)
 		{
-			Direction = -1;
-			dir_string = "down";
+			if (GotoFloor < ElevatorFloor)
+			{
+				Direction = -1;
+				dir_string = "down";
+			}
+			if (GotoFloor > ElevatorFloor)
+			{
+				Direction = 1;
+				dir_string = "up";
+			}
 		}
-		if (GotoFloor > ElevatorFloor)
+		else
 		{
-			Direction = 1;
-			dir_string = "up";
+			if (Direction == -1)
+				dir_string = "down";
+			else if (Direction == 1)
+				dir_string = "up";
 		}
 
 		//Determine distance to destination floor
-		Destination = sbs->GetFloor(GotoFloor)->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight;
-		DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
+		if (InspectionService == false)
+		{
+			Destination = sbs->GetFloor(GotoFloor)->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight;
+			DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
+		}
+		else
+		{
+			//otherwise if inspection service is on, choose the altitude of the top/bottom floor
+			if (Direction == 1)
+			{
+				Destination = sbs->GetFloor(GetTopFloor())->Altitude + sbs->GetFloor(GetTopFloor())->InterfloorHeight;
+				if (ElevatorStart >= Destination)
+				{
+					//don't go above top floor
+					Destination = 0;
+					MoveElevator = false;
+					ElevatorIsRunning = false;
+					Direction = 0;
+					return;
+				}
+			}
+			else
+			{
+				Destination = sbs->GetFloor(GetBottomFloor())->Altitude + sbs->GetFloor(GetBottomFloor())->InterfloorHeight;
+				if (ElevatorStart <= Destination)
+				{
+					//don't go below bottom floor
+					Destination = 0;
+					MoveElevator = false;
+					ElevatorIsRunning = false;
+					Direction = 0;
+					return;
+				}
+			}
+			DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
+		}
 		CalculateStoppingDistance = true;
 
 		//If user is riding this elevator, then turn off objects
@@ -1330,13 +1374,17 @@ void Elevator::MoveElevatorToFloor()
 		mainsound->Play();
 
 		//notify about movement
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
+		if (InspectionService == false)
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string);
 		IsMoving = true;
 		OnFloor = false;
 	}
 
 	if (EmergencyStop == true && Brakes == false)
 	{
+		//emergency stop
 		CalculateStoppingDistance = false;
 		TempDeceleration = Deceleration;
 		if (Direction == 1)
@@ -1344,6 +1392,12 @@ void Elevator::MoveElevatorToFloor()
 		else
 			Direction = 1;
 		Brakes = true;
+		//stop sounds
+		mainsound->Stop();
+		//play stopping sound
+		mainsound->Load(StopSound.GetData());
+		mainsound->Loop(false);
+		mainsound->Play();
 	}
 
 	if (mainsound->IsPlaying() == false && Brakes == false)
@@ -1420,21 +1474,38 @@ void Elevator::MoveElevatorToFloor()
 			ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 	}
 
-	//change speeds
-	if ((Direction == 1) && (ElevatorRate > ElevatorSpeed))
+	//limit speed to ElevatorSpeed value
+	if (InspectionService == false)
 	{
-		ElevatorRate = ElevatorSpeed;
-		CalculateStoppingDistance = false;
+		if (Direction == 1 && ElevatorRate > ElevatorSpeed)
+		{
+			ElevatorRate = ElevatorSpeed;
+			CalculateStoppingDistance = false;
+		}
+		if (Direction == -1 && ElevatorRate < -ElevatorSpeed)
+		{
+			ElevatorRate = -ElevatorSpeed;
+			CalculateStoppingDistance = false;
+		}
 	}
-	if ((Direction == -1) && (ElevatorRate < -ElevatorSpeed))
+	else
 	{
-		ElevatorRate = -ElevatorSpeed;
-		CalculateStoppingDistance = false;
+		if (Direction == 1 && (ElevatorRate > ElevatorSpeed * 0.6))
+		{
+			ElevatorRate = ElevatorSpeed * 0.6;
+			CalculateStoppingDistance = false;
+		}
+		if (Direction == -1 && (ElevatorRate < -ElevatorSpeed * 0.6))
+		{
+			ElevatorRate = -ElevatorSpeed * 0.6;
+			CalculateStoppingDistance = false;
+		}
 	}
+
 	//prevent the rate from going beyond 0
-	if ((Direction == 1) && (Brakes == true) && (ElevatorRate > 0))
+	if (Direction == 1 && Brakes == true && ElevatorRate > 0)
 		ElevatorRate = 0;
-	if ((Direction == -1) && (Brakes == true) && (ElevatorRate < 0))
+	if (Direction == -1 && Brakes == true && ElevatorRate < 0)
 		ElevatorRate = 0;
 
 	//get distance needed to stop elevator
@@ -1457,7 +1528,7 @@ void Elevator::MoveElevatorToFloor()
 	//and then starting the deceleration process immediately.
 
 	//up movement
-	if ((Brakes == false) && (Direction == 1))
+	if (Brakes == false && Direction == 1)
 	{
 		//determine if next jump altitude is over deceleration marker
 		if (((GetPosition().y + (ElevatorRate * sbs->delta)) > (Destination - StoppingDistance)))
@@ -1468,7 +1539,10 @@ void Elevator::MoveElevatorToFloor()
 			//start deceleration
 			Direction = -1;
 			Brakes = true;
-			ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
+			if (InspectionService == false)
+				ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
+			else
+				ElevatorRate -= (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
 			//stop sounds
 			mainsound->Stop();
 			//play elevator stopping sound
@@ -1490,7 +1564,10 @@ void Elevator::MoveElevatorToFloor()
 			//start deceleration
 			Direction = 1;
 			Brakes = true;
-			ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
+			if (InspectionService == false)
+				ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
+			else
+				ElevatorRate += (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
 			//stop sounds
 			mainsound->Stop();
 			//play stopping sound
@@ -1562,7 +1639,7 @@ void Elevator::MoveElevatorToFloor()
 	IsMoving = false;
 	mainsound->Stop();
 
-	if (EmergencyStop == false)
+	if (EmergencyStop == false && InspectionService == false)
 	{
 		//update elevator's floor number
 		GetFloor();
@@ -2157,7 +2234,7 @@ void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, con
 	else if (!Panel2)
 		Panel2 = new ButtonPanel(Number, 2, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panels already exist");
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panels already exist");
 }
 
 void Elevator::UpdateFloorIndicators()
@@ -2368,6 +2445,8 @@ void Elevator::EnableIndependentService(bool value)
 		EnableFireService1(0);
 		EnableFireService2(0);
 		ResetQueues = true;
+		if (IsMoving == false)
+			OpenDoors();
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Independent Service mode enabled");
 	}
 	else
@@ -2385,8 +2464,6 @@ void Elevator::EnableInspectionService(bool value)
 	if (InspectionService == value)
 		return;
 
-	InspectionService = value;
-
 	if (value == true)
 	{
 		EnableACP(false);
@@ -2396,7 +2473,8 @@ void Elevator::EnableInspectionService(bool value)
 		EnableFireService1(0);
 		EnableFireService2(0);
 		ResetQueues = true;
-		StopElevator();
+		if (IsMoving == true)
+			StopElevator();
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Inspection Service mode enabled");
 	}
 	else
@@ -2404,6 +2482,8 @@ void Elevator::EnableInspectionService(bool value)
 		ResetDoorTimer();
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Inspection Service mode disabled");
 	}
+
+	InspectionService = value;
 }
 
 void Elevator::EnableFireService1(int value)
@@ -2544,4 +2624,90 @@ bool Elevator::SetACPFloor(int floor)
 	ACPFloor = floor;
 	ACPFloorSet = true;
 	return true;
+}
+
+bool Elevator::MoveUp()
+{
+	//moves elevator upwards if in Inspection Service mode
+	if (InspectionService == false)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Not in inspection service mode");
+		return false;
+	}
+
+	//make sure Go button is on
+	if (ManualGo == false)
+		return false;
+
+	if (IsMoving == true)
+		return false;
+
+	//set direction
+	Direction = 1;
+	MoveElevator = true;
+	return true;
+}
+
+bool Elevator::MoveDown()
+{
+	//moves elevator downwards if in Inspection Service mode
+	if (InspectionService == false)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Not in inspection service mode");
+		return false;
+	}
+
+	//make sure Go button is on
+	if (ManualGo == false)
+		return false;
+
+	if (IsMoving == true)
+		return false;
+
+	//set direction
+	Direction = -1;
+	MoveElevator = true;
+	return true;
+}
+
+bool Elevator::StopMove()
+{
+	//stops elevator movement if in Inspection Service mode
+	//this is almost identical to the StopElevator() function, except it reports differently. This is also to
+	//separate it from the regular Stop button
+
+	if (InspectionService == false)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Not in inspection service mode");
+		return false;
+	}
+
+	if (IsMoving == false)
+		return false;
+
+	EmergencyStop = true;
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Stopping elevator");
+	return true;
+}
+
+void Elevator::SetGoButton(bool value)
+{
+	//sets the value of the Go button (for Inspection Service mode)
+
+	if (ManualGo == true && value == false)
+		StopMove();
+
+	ManualGo = value;
+}
+
+int Elevator::GetTopFloor()
+{
+	//returns highest serviced floor
+	return ServicedFloors[ServicedFloors.GetSize() - 1];
+}
+
+int Elevator::GetBottomFloor()
+{
+	//returns lowest serviced floor
+	return ServicedFloors[0];
 }

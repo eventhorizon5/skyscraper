@@ -98,13 +98,12 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticBoxSizer" variable="StaticBoxSizer10" member="no">
-											<label>Fire Phase 1</label>
+											<label>Fire Ph 1</label>
 											<orient>wxVERTICAL</orient>
 											<object class="sizeritem">
 												<object class="wxRadioButton" name="ID_Fire1Off" variable="Fire1Off" member="yes">
 													<label>Off</label>
 													<selected>1</selected>
-													<minsize>65,-1</minsize>
 													<handler function="On_Fire1Off_Select" entry="EVT_RADIOBUTTON" />
 												</object>
 												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
@@ -130,13 +129,13 @@
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticBoxSizer" variable="StaticBoxSizer9" member="no">
-											<label>Fire Phase 2</label>
+											<label>Fire Ph 2</label>
 											<orient>wxVERTICAL</orient>
 											<object class="sizeritem">
 												<object class="wxRadioButton" name="ID_Fire2Off" variable="Fire2Off" member="yes">
@@ -159,7 +158,6 @@
 											<object class="sizeritem">
 												<object class="wxRadioButton" name="ID_Fire2Hold" variable="Fire2Hold" member="yes">
 													<label>Hold</label>
-													<minsize>65,-1</minsize>
 													<handler function="On_Fire2Hold_Select" entry="EVT_RADIOBUTTON" />
 												</object>
 												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
@@ -172,6 +170,45 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
+										<object class="wxStaticBoxSizer" variable="StaticBoxSizer6" member="no">
+											<label>Manual</label>
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bUp" variable="bUp" member="yes">
+													<label>Up</label>
+													<size>50,0</size>
+													<handler function="On_bUp_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bGoToggle" variable="bGoToggle" member="yes">
+													<label>Go</label>
+													<size>50,-1</size>
+													<handler function="On_bGoToggle_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bDown" variable="bDown" member="yes">
+													<label>Down</label>
+													<size>50,0</size>
+													<handler function="On_bDown_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
 										<object class="wxBoxSizer" variable="BoxSizer4" member="no">
 											<orient>wxVERTICAL</orient>
 											<object class="sizeritem">
@@ -179,7 +216,7 @@
 													<label>Refresh Values</label>
 													<handler function="On_bRefresh_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -188,8 +225,8 @@
 													<label>Dump Floor List</label>
 													<handler function="On_bDumpFloors_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-												<border>15</border>
+												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
@@ -197,8 +234,8 @@
 													<label>Dump Queues</label>
 													<handler function="On_bDumpQueues_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-												<border>15</border>
+												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
@@ -210,12 +247,12 @@
 												<option>1</option>
 											</object>
 										</object>
-										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 								</object>
-								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>

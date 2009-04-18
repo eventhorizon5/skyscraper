@@ -52,6 +52,9 @@ const long editelevator::ID_Fire1Bypass = wxNewId();
 const long editelevator::ID_Fire2Off = wxNewId();
 const long editelevator::ID_Fire2On = wxNewId();
 const long editelevator::ID_Fire2Hold = wxNewId();
+const long editelevator::ID_bUp = wxNewId();
+const long editelevator::ID_bGoToggle = wxNewId();
+const long editelevator::ID_bDown = wxNewId();
 const long editelevator::ID_bRefresh = wxNewId();
 const long editelevator::ID_bDumpFloors = wxNewId();
 const long editelevator::ID_bDumpQueues = wxNewId();
@@ -201,6 +204,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	wxFlexGridSizer* FlexGridSizer5;
 	wxStaticBoxSizer* StaticBoxSizer9;
 	wxStaticBoxSizer* StaticBoxSizer10;
+	wxStaticBoxSizer* StaticBoxSizer6;
 	
 	Create(parent, wxID_ANY, _("Elevator Editor"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
@@ -229,37 +233,43 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	bInsService = new wxToggleButton(this, ID_bInsService, _("Inspection Service"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bInsService"));
 	BoxSizer5->Add(bInsService, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(BoxSizer5, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticBoxSizer10 = new wxStaticBoxSizer(wxVERTICAL, this, _("Fire Phase 1"));
+	StaticBoxSizer10 = new wxStaticBoxSizer(wxVERTICAL, this, _("Fire Ph 1"));
 	Fire1Off = new wxRadioButton(this, ID_Fire1Off, _("Off"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_Fire1Off"));
 	Fire1Off->SetValue(true);
-	Fire1Off->SetMinSize(wxSize(65,-1));
 	StaticBoxSizer10->Add(Fire1Off, 1, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	Fire1On = new wxRadioButton(this, ID_Fire1On, _("On"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_Fire1On"));
 	StaticBoxSizer10->Add(Fire1On, 1, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	Fire1Bypass = new wxRadioButton(this, ID_Fire1Bypass, _("Bypass"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_Fire1Bypass"));
 	StaticBoxSizer10->Add(Fire1Bypass, 1, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer4->Add(StaticBoxSizer10, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticBoxSizer9 = new wxStaticBoxSizer(wxVERTICAL, this, _("Fire Phase 2"));
+	FlexGridSizer4->Add(StaticBoxSizer10, 1, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer9 = new wxStaticBoxSizer(wxVERTICAL, this, _("Fire Ph 2"));
 	Fire2Off = new wxRadioButton(this, ID_Fire2Off, _("Off"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_Fire2Off"));
 	StaticBoxSizer9->Add(Fire2Off, 1, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	Fire2On = new wxRadioButton(this, ID_Fire2On, _("On"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_Fire2On"));
 	StaticBoxSizer9->Add(Fire2On, 1, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	Fire2Hold = new wxRadioButton(this, ID_Fire2Hold, _("Hold"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_Fire2Hold"));
-	Fire2Hold->SetMinSize(wxSize(65,-1));
 	StaticBoxSizer9->Add(Fire2Hold, 1, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(StaticBoxSizer9, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer6 = new wxStaticBoxSizer(wxVERTICAL, this, _("Manual"));
+	bUp = new wxToggleButton(this, ID_bUp, _("Up"), wxDefaultPosition, wxSize(50,0), 0, wxDefaultValidator, _T("ID_bUp"));
+	StaticBoxSizer6->Add(bUp, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bGoToggle = new wxToggleButton(this, ID_bGoToggle, _("Go"), wxDefaultPosition, wxSize(50,-1), 0, wxDefaultValidator, _T("ID_bGoToggle"));
+	StaticBoxSizer6->Add(bGoToggle, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bDown = new wxToggleButton(this, ID_bDown, _("Down"), wxDefaultPosition, wxSize(50,0), 0, wxDefaultValidator, _T("ID_bDown"));
+	StaticBoxSizer6->Add(bDown, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer4->Add(StaticBoxSizer6, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer4 = new wxBoxSizer(wxVERTICAL);
 	bRefresh = new wxButton(this, ID_bRefresh, _("Refresh Values"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bRefresh"));
-	BoxSizer4->Add(bRefresh, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer4->Add(bRefresh, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bDumpFloors = new wxButton(this, ID_bDumpFloors, _("Dump Floor List"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDumpFloors"));
-	BoxSizer4->Add(bDumpFloors, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 15);
+	BoxSizer4->Add(bDumpFloors, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bDumpQueues = new wxButton(this, ID_bDumpQueues, _("Dump Queues"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDumpQueues"));
-	BoxSizer4->Add(bDumpQueues, 1, wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 15);
+	BoxSizer4->Add(bDumpQueues, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	chkVisible = new wxCheckBox(this, ID_CHECKBOX1, _("Visible"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
 	chkVisible->SetValue(false);
 	BoxSizer4->Add(chkVisible, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer4->Add(BoxSizer4, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer6->Add(FlexGridSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer4->Add(BoxSizer4, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer6->Add(FlexGridSizer4, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer6, 2, wxTOP|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 10);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Control"));
 	BoxSizer8 = new wxBoxSizer(wxVERTICAL);
@@ -594,6 +604,9 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_Fire2Off,wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&editelevator::On_Fire2Off_Select);
 	Connect(ID_Fire2On,wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&editelevator::On_Fire2On_Select);
 	Connect(ID_Fire2Hold,wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&editelevator::On_Fire2Hold_Select);
+	Connect(ID_bUp,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bUp_Toggle);
+	Connect(ID_bGoToggle,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bGoToggle_Toggle);
+	Connect(ID_bDown,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDown_Toggle);
 	Connect(ID_bRefresh,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bRefresh_Click);
 	Connect(ID_bDumpFloors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDumpFloors_Click);
 	Connect(ID_bDumpQueues,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDumpQueues_Click);
@@ -992,4 +1005,32 @@ void editelevator::On_bStopDoors_Click(wxCommandEvent& event)
 {
 	if (elevator)
 		elevator->StopDoors();
+}
+
+void editelevator::On_bUp_Toggle(wxCommandEvent& event)
+{
+	if (elevator)
+	{
+		if (bUp->GetValue() == true)
+			elevator->MoveUp();
+		else
+			elevator->StopMove();
+	}
+}
+
+void editelevator::On_bGoToggle_Toggle(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->SetGoButton(bGoToggle->GetValue());
+}
+
+void editelevator::On_bDown_Toggle(wxCommandEvent& event)
+{
+	if (elevator)
+	{
+		if (bDown->GetValue() == true)
+			elevator->MoveDown();
+		else
+			elevator->StopMove();
+	}
 }
