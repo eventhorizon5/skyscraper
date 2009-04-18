@@ -547,6 +547,13 @@ void Elevator::OpenDoors(int whichdoors, int floor, bool emergency)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
+	//exit if trying to open doors while stopped
+	if (emergency == false && doors_stopped == true)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cannot open doors; doors manually stopped");
+		return;
+	}
+
 	//exit if direction changed (if doors have already switched from close to open)
 	if (door_changed == true)
 		return;
@@ -608,6 +615,13 @@ void Elevator::CloseDoors(int whichdoors, int floor, bool emergency)
 	//1 = both shaft and elevator doors
 	//2 = only elevator doors
 	//3 = only shaft doors
+
+	//exit if trying to open doors while stopped
+	if (emergency == false && doors_stopped == true)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cannot close doors; doors manually stopped");
+		return;
+	}
 
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
 	if (OpenDoor != 0 && emergency == false)
