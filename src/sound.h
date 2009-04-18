@@ -60,7 +60,6 @@ public:
 private:
 
 	//sound data
-	csString filename;
 	csRef<iSndSysStream> sndstream;
 
 	//sound source

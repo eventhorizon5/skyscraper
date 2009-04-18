@@ -35,7 +35,6 @@
 #include "callbutton.h"
 #include "unix.h"
 
-float AltitudeCheck;
 extern SBS *Simcore;
 
 bool Skyscraper::LoadBuilding(const char *filename)
@@ -57,7 +56,6 @@ bool Skyscraper::LoadBuilding(const char *filename)
 	int temp4 = 0;
 	int temp5 = 0;
 	csString temp6 = "";
-	csString temp7 = "";
 	csStringArray tempdata;
 	csArray<int> callbutton_elevators;
 	int FloorCheck = 0;

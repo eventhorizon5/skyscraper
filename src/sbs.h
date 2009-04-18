@@ -74,7 +74,7 @@ public:
 	csRef<iMaterialWrapper> material;
 	csRef<iSector> area;
 
-	csTicks elapsed_time, current_time;
+	csTicks elapsed_time;
 	float delta;
 
 	//Building information
