@@ -37,7 +37,7 @@ public:
 	csString Name; //elevator name
 	int QueuePositionDirection; //queue processing direction
 	bool PauseQueueSearch; //pause queue processor
-	int LastQueueFloor[2]; //last route added to either queue
+	int LastQueueFloor[2]; //last route added to either queue; element 0 is the floor, and element 1 is the direction
 	float ElevatorSpeed; //maximum elevator speed
 	bool MoveElevator; //Tells elevator to start going to specified floor
 	int GotoFloor; //floor to move elevator to
@@ -91,7 +91,7 @@ public:
 	//functions
 	Elevator(int number);
 	~Elevator();
-	void CreateElevator(float x, float z, int floor);
+	bool CreateElevator(float x, float z, int floor);
 	void AddRoute(int floor, int direction);
 	void DeleteRoute(int floor, int direction);
 	void CancelLastRoute();
@@ -151,6 +151,10 @@ public:
 	void EnableFireService2(int value);
 	void ResetDoorTimer();
 	bool DoorsStopped();
+	bool SetRecallFloor(int floor);
+	bool SetAlternateRecallFloor(int floor);
+	bool SetACPFloor(int floor);
+	void GoToRecallFloor();
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -244,6 +248,10 @@ private:
 	int lastfloor;
 	bool lastfloorset;
 	csString FloorSkipText;
+	bool RecallSet;
+	bool RecallAltSet;
+	bool ACPFloorSet;
+	bool RecallUnavailable; //true if recall floor is unavailable (alarm has been triggered on that floor)
 };
 
 #endif

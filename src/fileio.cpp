@@ -2510,6 +2510,51 @@ recalc:
 				}
 				Simcore->GetElevator(Current)->SetFloorSkipText(temp2);
 			}
+			if (LineData.Slice(0, 11).CompareNoCase("recallfloor") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				int floortemp;
+				if (!IsNumeric(temp2.GetData(), floortemp))
+				{
+					ScriptError("Invalid value");
+					return false;
+				}
+				Simcore->GetElevator(Current)->SetRecallFloor(floortemp);
+			}
+			if (LineData.Slice(0, 20).CompareNoCase("alternaterecallfloor") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				int floortemp;
+				if (!IsNumeric(temp2.GetData(), floortemp))
+				{
+					ScriptError("Invalid value");
+					return false;
+				}
+				Simcore->GetElevator(Current)->SetAlternateRecallFloor(floortemp);
+			}
+			if (LineData.Slice(0, 8).CompareNoCase("acpfloor") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				int floortemp;
+				if (!IsNumeric(temp2.GetData(), floortemp))
+				{
+					ScriptError("Invalid value");
+					return false;
+				}
+				Simcore->GetElevator(Current)->SetACPFloor(floortemp);
+			}
 
 			//replace variables with actual values
 			buffer = Current;
@@ -2558,7 +2603,11 @@ recalc:
 					}
 				}
 
-				Simcore->GetElevator(Current)->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atoi(tempdata[2]));
+				if (!Simcore->GetElevator(Current)->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atoi(tempdata[2])))
+				{
+					ScriptError("An error occurred while creating the elevator.  See the console output for more information");
+					return false;
+				}
 				tempdata.DeleteAll();
 			}
 

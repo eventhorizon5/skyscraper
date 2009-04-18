@@ -201,8 +201,8 @@ void ButtonPanel::Press(int index)
 	if (index == -1)
 		return;
 
-	//exit if in inspection mode
-	if (sbs->GetElevator(elevator)->InspectionService == true)
+	//exit if in inspection mode or in fire service phase 1 mode
+	if (sbs->GetElevator(elevator)->InspectionService == true || sbs->GetElevator(elevator)->FireServicePhase1 == 1)
 		return;
 
 	csString name = ButtonPanel_state->GetPolygonName(index);

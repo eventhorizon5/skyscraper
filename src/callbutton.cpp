@@ -192,7 +192,7 @@ void CallButton::Call(int direction)
 			if ((current > floor && direction == -1) || (current < floor && direction == 1) || current == floor)
 			{
 				//and if it's either going the same direction as the call or not moving at all
-				if ((sbs->GetElevator(Elevators[i])->Direction == direction || sbs->GetElevator(Elevators[i])->Direction == 0) && sbs->GetElevator(Elevators[i])->IsMoving == false && sbs->GetElevator(Elevators[i])->AreDoorsOpen() == false)
+				if ((sbs->GetElevator(Elevators[i])->Direction == direction || sbs->GetElevator(Elevators[i])->Direction == 0) && sbs->GetElevator(Elevators[i])->IsMoving == false)
 				{
 					//and if it's not in any service mode
 					if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)

@@ -121,6 +121,10 @@ Elevator::Elevator(int number)
 	MovePending = false;
 	doors_stopped = false;
 	OnFloor = true;
+	RecallSet = false;
+	RecallAltSet = false;
+	ACPFloorSet = false;
+	RecallUnavailable = false;
 
 	//create object meshes
 	buffer = Number;
@@ -197,10 +201,51 @@ Elevator::~Elevator()
 	chime = 0;
 }
 
-void Elevator::CreateElevator(float x, float z, int floor)
+bool Elevator::CreateElevator(float x, float z, int floor)
 {
 	//Creates elevator at specified location and floor
 	//x and z are the center coordinates
+
+	//make sure required values are set
+	if (ElevatorSpeed <= 0)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Speed not set or invalid");
+		return false;
+	}
+	if (Acceleration <= 0)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Acceleration not set or invalid");
+		return false;
+	}
+	if (Deceleration <= 0)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Deceleration not set or invalid");
+		return false;
+	}
+	if (OpenSpeed <= 0)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": OpenSpeed not set or invalid");
+		return false;
+	}
+	if (AccelJerk <= 0)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid value for AccelJerk");
+		return false;
+	}
+	if (DecelJerk <= 0)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid value for DecelJerk");
+		return false;
+	}
+	if (AssignedShaft <= 0)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Not assigned to a shaft");
+		return false;
+	}
+
+	//add elevator's starting floor to serviced floor list - this also ensures that the list is populated to prevent errors
+	if (IsServicedFloor(floor) == false)
+		AddServicedFloor(floor);
 
 	//set data
 	Origin = csVector3(x, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, z);
@@ -208,6 +253,14 @@ void Elevator::CreateElevator(float x, float z, int floor)
 
 	//add elevator to associated shaft's list
 	sbs->GetShaft(AssignedShaft)->elevators.InsertSorted(Number);
+
+	//set recall/ACP floors if not already set
+	if (RecallSet == false)
+		SetRecallFloor(ServicedFloors[0]);
+	if (RecallAltSet == false)
+		SetAlternateRecallFloor(ServicedFloors[ServicedFloors.GetSize() - 1]);
+	if (ACPFloorSet == false)
+		SetACPFloor(ServicedFloors[0]);
 
 	//move objects to positions
 	Elevator_movable->SetPosition(Origin);
@@ -239,11 +292,13 @@ void Elevator::CreateElevator(float x, float z, int floor)
 	chime = new Sound();
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
+	return true;
 }
 
 void Elevator::AddRoute(int floor, int direction)
 {
 	//Add call route to elevator routing table, in sorted order
+	//directions are either 1 for up, or -1 for down
 
 	//if in independent service or fire service phase 2 (on) mode, go to floor in pending state
 	if (IndependentService == true || FireServicePhase2 == 1)
@@ -295,14 +350,25 @@ void Elevator::AddRoute(int floor, int direction)
 void Elevator::DeleteRoute(int floor, int direction)
 {
 	//Delete call route from elevator routing table
+	//directions are either 1 for up, or -1 for down
+
+	//if MovePending is on clear pending information (since normal routing is turned off) and quit
+	if (MovePending == true)
+	{
+		GotoFloor = 0;
+		MovePending = false;
+		return;
+	}
 
 	if (direction == 1)
 	{
+		//delete floor entry from up queue
 		UpQueue.Delete(floor);
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction up");
 	}
 	else
 	{
+		//delete floor entry from down queue
 		DownQueue.Delete(floor);
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction down");
 	}
@@ -312,20 +378,15 @@ void Elevator::CancelLastRoute()
 {
 	//cancels the last added route
 
-	if (LastQueueFloor[1] == 1)
-	{
-		DeleteRoute(LastQueueFloor[0], 1);
-		LastQueueFloor[0] = 0;
-		LastQueueFloor[1] = 0;
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cancelling last route");
-	}
-	else if (LastQueueFloor[1] == -1)
-	{
-		DeleteRoute(LastQueueFloor[0], -1);
-		LastQueueFloor[0] = 0;
-		LastQueueFloor[1] = 0;
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cancelling last route");
-	}
+	//LastQueueFloor holds the floor and direction of the last route; array element 0 is the floor and 1 is the direction
+
+	if (LastQueueFloor[1] != 1 || LastQueueFloor[1] != -1)
+		return;
+
+	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
+	LastQueueFloor[0] = 0;
+	LastQueueFloor[1] = 0;
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cancelling last route");
 }
 
 void Elevator::Alarm()
@@ -338,6 +399,10 @@ void Elevator::Alarm()
 void Elevator::StopElevator()
 {
 	//Tells elevator to stop moving, no matter where it is
+
+	//exit if in inspection mode
+	if (InspectionService == true)
+		return;
 
 	EmergencyStop = true;
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": emergency stop");
@@ -379,9 +444,26 @@ void Elevator::ProcessCallQueue()
 			QueuePositionDirection = -1;
 	}
 
-	//pause queue search if both queues are empty
+	//if both queues are empty
 	if (UpQueue.GetSize() == 0 && DownQueue.GetSize() == 0)
 	{
+		int TopFloor = ServicedFloors[ServicedFloors.GetSize()];
+		int BottomFloor = ServicedFloors[0];
+
+		//if UpPeak mode is active, send elevator to the top serviced floor if not already there
+		if (GetFloor() != TopFloor && UpPeak == true)
+		{
+			AddRoute(TopFloor, 1);
+			return;
+		}
+		//if DownPeak mode is active, send elevator to the bottom serviced floor if not already there
+		else if (GetFloor() != BottomFloor && DownPeak == true)
+		{
+			AddRoute(BottomFloor, -1);
+			return;
+		}
+
+		//otherwise pause queue search
 		QueuePositionDirection = 0;
 		PauseQueueSearch = true;
 		return;
@@ -631,6 +713,13 @@ void Elevator::CloseDoors(int whichdoors, int floor, bool manual)
 	if (manual == false && doors_stopped == true)
 	{
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cannot close doors; doors manually stopped");
+		return;
+	}
+
+	//do not close doors while in fire service mode 1 (in on position)
+	if (manual == false && FireServicePhase1 == 1)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cannot close doors while Fire Service Phase 1 is on");
 		return;
 	}
 
@@ -1170,7 +1259,9 @@ void Elevator::MoveElevatorToFloor()
 			sbs->Report("Elevator already on specified floor");
 			MoveElevator = false;
 			ElevatorIsRunning = false;
-			OpenDoors();
+			//do not automatically open doors if in fire service phase 2
+			if (FireServicePhase2 == 0)
+				OpenDoors();
 			return;
 		}
 
@@ -1500,8 +1591,9 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//open doors
-		OpenDoors();
-
+		//do not automatically open doors if in fire service phase 2
+		if (FireServicePhase2 == 0)
+			OpenDoors();
 	}
 	else
 	{
@@ -2144,6 +2236,11 @@ bool Elevator::InServiceMode()
 void Elevator::Go(int floor)
 {
 	//go to specified floor, without using the queuing system
+
+	//exit if in inspection mode
+	if (InspectionService == true)
+		return;
+
 	GotoFloor = floor;
 	MoveElevator = true;
 }
@@ -2152,9 +2249,31 @@ void Elevator::GoPending(int floor)
 {
 	//go to specified floor, without using the queuing system and turn on pending value
 	//(doors need to be manually closed to proceed)
+
+	//exit if in inspection mode
+	if (InspectionService == true)
+		return;
+
 	GotoFloor = floor;
 	MovePending = true;
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": pending move to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
+}
+
+void Elevator::GoToRecallFloor()
+{
+	//for fire service modes; tells the elevator to go to the recall floor (or the alternate recall floor
+	//if the other is not available)
+
+	if (RecallUnavailable == false)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Proceeding to recall floor");
+		Go(RecallFloor);
+	}
+	else
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Proceeding to alternate recall floor");
+		Go(RecallFloorAlternate);
+	}
 }
 
 void Elevator::EnableACP(bool value)
@@ -2311,7 +2430,10 @@ void Elevator::EnableFireService1(int value)
 		EnableFireService2(0);
 		ResetQueues = true;
 		if (value == 1)
+		{
 			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 1 mode set to On");
+			GoToRecallFloor();
+		}
 		else
 			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 1 mode set to Bypass");
 	}
@@ -2354,6 +2476,7 @@ void Elevator::EnableFireService2(int value)
 	{
 		ResetDoorTimer();
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 2 mode set to Off");
+		GoToRecallFloor();
 	}
 }
 
@@ -2367,4 +2490,58 @@ void Elevator::ResetDoorTimer()
 bool Elevator::DoorsStopped()
 {
 	return doors_stopped;
+}
+
+bool Elevator::SetRecallFloor(int floor)
+{
+	//set elevator's fire recall floor
+	if (ServicedFloors.GetSize() == 0)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": No serviced floors assigned");
+		return false;
+	}
+	if (IsServicedFloor(floor) == false)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid recall floor");
+		return false;
+	}
+	RecallFloor = floor;
+	RecallSet = true;
+	return true;
+}
+
+bool Elevator::SetAlternateRecallFloor(int floor)
+{
+	//set elevator's alternate fire recall floor
+	if (ServicedFloors.GetSize() == 0)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": No serviced floors assigned");
+		return false;
+	}
+	if (IsServicedFloor(floor) == false)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid alternate recall floor");
+		return false;
+	}
+	RecallFloorAlternate = floor;
+	RecallAltSet = true;
+	return true;
+}
+
+bool Elevator::SetACPFloor(int floor)
+{
+	//set elevator's ACP floor
+	if (ServicedFloors.GetSize() == 0)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": No serviced floors assigned");
+		return false;
+	}
+	if (IsServicedFloor(floor) == false)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid ACP floor");
+		return false;
+	}
+	ACPFloor = floor;
+	ACPFloorSet = true;
+	return true;
 }

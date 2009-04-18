@@ -937,19 +937,19 @@ void editelevator::On_bSetSkipFloorText_Click(wxCommandEvent& event)
 void editelevator::On_bSetACPFloor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->ACPFloor = atoi(txtACPFloor->GetValue().ToAscii());
+		elevator->SetACPFloor(atoi(txtACPFloor->GetValue().ToAscii()));
 }
 
 void editelevator::On_bSetRecallFloor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->RecallFloor = atoi(txtRecallFloor->GetValue().ToAscii());
+		elevator->SetRecallFloor(atoi(txtRecallFloor->GetValue().ToAscii()));
 }
 
 void editelevator::On_bSetRecallAlternate_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->RecallFloorAlternate = atoi(txtRecallAlternate->GetValue().ToAscii());
+		elevator->SetAlternateRecallFloor(atoi(txtRecallAlternate->GetValue().ToAscii()));
 }
 
 void editelevator::On_Fire1Off_Select(wxCommandEvent& event)
