@@ -717,13 +717,13 @@
     (vertical portion); <em>treadsize</em> specifies the length of each step tread/run 
     (horizontal portion); <em>num_stairs</em> specifies the total number of steps 
     to create (including the above landing platform, but not including the base 
-    platform). To calculate the length of the staircase, simply multiply <em>num_stairs</em> 
-    with <em>treadsize</em>. To determine the height of the staircase, multiply 
-    <em>num_stairs</em> with <em>risersize</em>, and add the <em>voffset</em> 
-    value. Note that the tread of the top step is not drawn (the top step is the 
-    landing platform); therefore for a staircase containing 10 steps, the total 
-    staircase width would be comprised of 9 treads. The height is simply <em>num_stairs</em> 
-    times <em>risersize</em>.</p>
+    platform). To calculate the length of the staircase, multiply <em>(num_stairs</em> 
+    - 1) with <em>treadsize</em>; in the above example, that would be 9 * 0.5. 
+    To determine the height of the staircase, multiply <em>num_stairs</em> with 
+    <em>risersize</em>. Note that the tread of the top step is not drawn (the 
+    top step is the landing platform); therefore for a staircase containing 10 
+    steps, the total staircase width would be comprised of 9 treads (which is 
+    why the length calculation used num_stairs minus 1).</p>
   <p align="left"><strong>15. AddDoor</strong> - adds a textured door in the specified 
     location, and performs a wall cut on that area (this must be called after 
     the associated wall is created)<br>
