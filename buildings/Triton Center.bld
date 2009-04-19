@@ -2075,7 +2075,9 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     AddShaftWall 13, Shaft13Front, Brick, 0.33, -9.75, -4.75, 9.75, -4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 13, Shaft13Left, Brick, 0.33, -9.75, -4.75, -9.75, 4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
+    if[%floor% > 38 & %floor% < 80] DrawWalls = false, true, false, false, false, false
     AddShaftWall 13, Shaft13Back, Brick, 0.33, -9.75, 4.75, 9.75, 4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
     AddShaftWall 13, Shaft13Right, Brick, 0.33, 9.75, -4.75, 9.75, 4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
 
     #external shaft walls
@@ -2331,7 +2333,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     AddShaftWall 20, Shaft20Front, Brick, 0.33, -18, -4.25, 18, -4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 20, Shaft20Left, Brick, 0.33, -18, -4.25, -18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
-    #AddShaftWall 20, Shaft20Back, Brick, 0.33, -18, 4.25, 18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 20, Shaft20Back, Brick, 0.33, -18, 4.25, 18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 20, Shaft20Right, Brick, 0.33, 18, -4.25, 18, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
 
     #external shaft walls
