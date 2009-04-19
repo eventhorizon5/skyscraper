@@ -75,6 +75,12 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 Stairs::~Stairs()
 {
 	//delete doors
+	for (int i = 0; i < DoorArray.GetSize(); i++)
+	{
+		if (DoorArray[i].object)
+			delete DoorArray[i].object;
+		DoorArray[i].object = 0;
+	}
 	DoorArray.DeleteAll();
 }
 
@@ -223,7 +229,7 @@ int Stairs::AddFloor(int floor, const char *name, const char *texture, float thi
 {
 	float tw2;
 	float th2;
-	
+
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
 	x2 = x2 * sbs->HorizScale;
@@ -362,9 +368,9 @@ void Stairs::AddDoor(int floor, const char *texture, float thickness, int direct
 void Stairs::CutFloors(bool relative, csVector2 start, csVector2 end, float startvoffset, float endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
-	
+
 	sbs->Report("Cutting for stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + "...");
-	
+
 	float voffset1, voffset2;
 	cutstart = start;
 	cutend = end;

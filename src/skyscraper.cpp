@@ -35,7 +35,7 @@
 #include "loader.h"
 
 CS_IMPLEMENT_APPLICATION
-IMPLEMENT_APP(Skyscraper)
+IMPLEMENT_APP_NO_MAIN(Skyscraper)
 
 BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_SHOW(MainScreen::OnShow)
@@ -51,7 +51,7 @@ DebugPanel *dpanel;
 MainScreen *window;
 iObjectRegistry* object_reg;
 
-#ifdef CS_PLATFORM_WIN32
+//#ifdef CS_PLATFORM_WIN32
 
 #ifndef SW_SHOWNORMAL
 	#define SW_SHOWNORMAL 1
@@ -59,10 +59,16 @@ iObjectRegistry* object_reg;
 
 int main (int argc, char* argv[])
 {
-	return WinMain(GetModuleHandle(0), 0, GetCommandLineA(), SW_SHOWNORMAL);
+	//return WinMain(GetModuleHandle(0), 0, GetCommandLineA(), SW_SHOWNORMAL);
+	wxEntry(argc, argv);
+
+	csInitializer::DestroyApplication (object_reg);
+	object_reg = 0;
+
+	return 0;
 }
 
-#endif
+//#endif
 
 bool Skyscraper::OnInit(void)
 {
@@ -123,7 +129,8 @@ int Skyscraper::OnExit()
 		StopSound();
 
 	//delete wx canvas
-	delete canvas;
+	if (canvas)
+		canvas->Destroy();
 	canvas = 0;
 
 	if(dpanel)
@@ -132,43 +139,15 @@ int Skyscraper::OnExit()
 			dpanel->timer->Stop();
 		dpanel->Destroy();
 	}
+	dpanel = 0;
+	window->Destroy();
+	window = 0;
 	delete Simcore;
 	Simcore = 0;
-	delete window;
-	window = 0;
 	skyscraper = 0;
 
 	//cleanup
 	csPrintf ("Cleaning up...\n");
-
-	//clear references
-	wxwin = 0;
-	area = 0;
-	engine = 0;
-	loader = 0;
-	g3d = 0;
-	g2d = 0;
-	kbd = 0;
-	vc = 0;
-	view = 0;
-	console = 0;
-	font = 0;
-	vfs = 0;
-	imageio = 0;
-	cmdline = 0;
-	strings = 0;
-	stdrep = 0;
-	equeue = 0;
-	plug = 0;
-	collision_sys = 0;
-	mouse = 0;
-	rep = 0;
-	sndrenderer = 0;
-	sndloader = 0;
-	material = 0;
-	image = 0;
-
-	csInitializer::DestroyApplication (object_reg);
 
 	return 0;
 }
@@ -176,7 +155,7 @@ int Skyscraper::OnExit()
 MainScreen::MainScreen() : wxFrame(0, -1, wxT("Skyscraper 1.4 Alpha"), wxDefaultPosition, wxSize(640, 480), wxDEFAULT_FRAME_STYLE)
 {
 	this->Center();
-	new wxPanel(this, -1, wxPoint(0, 0), wxSize(1, 1));
+	//new wxPanel(this, -1, wxPoint(0, 0), wxSize(1, 1));
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
 	//this->SetTitle(wxString::FromAscii(windowtitle));
 }

@@ -85,9 +85,21 @@ Floor::~Floor()
 	//Destructor
 
 	//delete call buttons
+	for (int i = 0; i < CallButtonArray.GetSize(); i++)
+	{
+		if (CallButtonArray[i])
+			delete CallButtonArray[i];
+		CallButtonArray[i] = 0;
+	}
 	CallButtonArray.DeleteAll();
 
 	//delete doors
+	for (int i = 0; i < DoorArray.GetSize(); i++)
+	{
+		if (DoorArray[i])
+			delete DoorArray[i];
+		DoorArray[i] = 0;
+	}
 	DoorArray.DeleteAll();
 }
 

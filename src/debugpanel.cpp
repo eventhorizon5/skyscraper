@@ -158,7 +158,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
-	
+
 	Connect(ID_chkCollisionDetection,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkCollisionDetection_Click);
 	Connect(ID_chkGravity,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkGravity_Click);
 	Connect(ID_chkFrameLimiter,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkFrameLimiter_Click);
@@ -177,10 +177,12 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 
 DebugPanel::~DebugPanel()
 {
-	delete timer;
+	//delete timer;
 	timer = 0;
 	mc->Destroy();
+	mc = 0;
 	ee->Destroy();
+	ee = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)

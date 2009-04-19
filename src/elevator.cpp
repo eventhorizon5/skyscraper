@@ -185,6 +185,12 @@ Elevator::Elevator(int number)
 Elevator::~Elevator()
 {
 	//Destructor
+	if (timer)
+	{
+		timer->Stop();
+		delete timer;
+	}
+	timer = 0;
 	if (Panel)
 		delete Panel;
 	Panel = 0;
