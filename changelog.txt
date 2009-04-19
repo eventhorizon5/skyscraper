@@ -10,6 +10,7 @@ Version 1.4 (2.0 Alpha 4)
 -elevator doors no longer open during an emergency stop (except for a manual open)
 -manual opens during an emergency stop will only open the elevator car doors
 -fixed a crash that involved trying to open shaft doors on a non-serviced floor
+-added shaft tops to the Triton Center and Simple elevator shafts
 
 Version 1.3 (2.0 Alpha 3)
 -------------------------
