@@ -86,6 +86,13 @@ Shaft::~Shaft()
 {
 	//destructor
 
+	//delete mesh array objects
+	for (int i = 0; i < ShaftArray_state.GetSize(); i++)
+		ShaftArray_state[i] = 0;
+	for (int i = 0; i < ShaftArray.GetSize(); i++)
+		ShaftArray[i] = 0;
+	ShaftArray_state.DeleteAll();
+	ShaftArray.DeleteAll();
 }
 
 int Shaft::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
@@ -128,7 +135,7 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 {
 	float tw2;
 	float th2;
-	
+
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
 	x2 = x2 * sbs->HorizScale;
@@ -228,9 +235,9 @@ bool Shaft::IsInShaft(const csVector3 &position)
 void Shaft::CutFloors(bool relative, csVector2 start, csVector2 end, float startvoffset, float endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
-	
+
 	sbs->Report("Cutting for shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + "...");
-	
+
 	float voffset1, voffset2;
 	cutstart = start;
 	cutend = end;

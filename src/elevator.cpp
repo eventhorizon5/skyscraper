@@ -184,6 +184,20 @@ Elevator::Elevator(int number)
 
 Elevator::~Elevator()
 {
+	//delete mesh array objects
+	for (int i = 0; i < ShaftDoorL_state.GetSize(); i++)
+		ShaftDoorL_state[i] = 0;
+	for (int i = 0; i < ShaftDoorL.GetSize(); i++)
+		ShaftDoorL[i] = 0;
+	for (int i = 0; i < ShaftDoorR_state.GetSize(); i++)
+		ShaftDoorR_state[i] = 0;
+	for (int i = 0; i < ShaftDoorR.GetSize(); i++)
+		ShaftDoorR[i] = 0;
+	ShaftDoorL_state.DeleteAll();
+	ShaftDoorL.DeleteAll();
+	ShaftDoorR_state.DeleteAll();
+	ShaftDoorR.DeleteAll();
+
 	//Destructor
 	if (timer)
 	{

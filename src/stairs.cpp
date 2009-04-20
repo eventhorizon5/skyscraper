@@ -82,6 +82,20 @@ Stairs::~Stairs()
 		DoorArray[i].object = 0;
 	}
 	DoorArray.DeleteAll();
+
+	//delete mesh array objects
+	for (int i = 0; i < StairArray_state.GetSize(); i++)
+		StairArray_state[i] = 0;
+	for (int i = 0; i < StairArray.GetSize(); i++)
+		StairArray[i] = 0;
+	for (int i = 0; i < StairDoorArray_state.GetSize(); i++)
+		StairDoorArray_state[i] = 0;
+	for (int i = 0; i < StairDoorArray.GetSize(); i++)
+		StairDoorArray[i] = 0;
+	StairArray_state.DeleteAll();
+	StairArray.DeleteAll();
+	StairDoorArray_state.DeleteAll();
+	StairDoorArray.DeleteAll();
 }
 
 int Stairs::AddStairs(int floor, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th)

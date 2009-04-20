@@ -155,30 +155,30 @@ SBS::~SBS()
 	FloorArray.DeleteAll();
 
 	//delete elevators
-	/*for (int i = 0; i < ElevatorArray.GetSize(); i++)
+	for (int i = 0; i < ElevatorArray.GetSize(); i++)
 	{
 		if (ElevatorArray[i].object)
 			delete ElevatorArray[i].object;
 		ElevatorArray[i].object = 0;
-	}*/
+	}
 	ElevatorArray.DeleteAll();
 
 	//delete shafts
-	/*for (int i = 0; i < ShaftArray.GetSize(); i++)
+	for (int i = 0; i < ShaftArray.GetSize(); i++)
 	{
 		if (ShaftArray[i].object)
 			delete ShaftArray[i].object;
 		ShaftArray[i].object = 0;
-	}*/
+	}
 	ShaftArray.DeleteAll();
 
 	//delete stairs
-	/*for (int i = 0; i < StairsArray.GetSize(); i++)
+	for (int i = 0; i < StairsArray.GetSize(); i++)
 	{
 		if (StairsArray[i].object)
 			delete StairsArray[i].object;
 		StairsArray[i].object = 0;
-	}*/
+	}
 	StairsArray.DeleteAll();
 
 	//clear self reference
