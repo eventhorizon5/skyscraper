@@ -522,7 +522,8 @@ void Elevator::ProcessCallQueue()
 			}
 			if (UpQueue[i] == GetFloor())
 			{
-				OpenDoors();
+				if (DownPeak == false || UpQueue[i] != GetTopFloor())
+					OpenDoors();
 				DeleteRoute(UpQueue[i], 1);
 			}
 		}
@@ -543,7 +544,8 @@ void Elevator::ProcessCallQueue()
 			}
 			if (DownQueue[i] == GetFloor())
 			{
-				OpenDoors();
+				if (UpPeak == false || DownQueue[i] != GetTopFloor())
+					OpenDoors();
 				DeleteRoute(DownQueue[i], -1);
 			}
 		}
@@ -1691,7 +1693,8 @@ void Elevator::MoveElevatorToFloor()
 
 		//open doors
 		//do not automatically open doors if in fire service phase 2
-		if (FireServicePhase2 == 0)
+		//or if in one of the peak modes and on the peak floor
+		if (FireServicePhase2 == 0 && (UpPeak == false || GotoFloor != GetBottomFloor()) && (DownPeak == false || GotoFloor != GetTopFloor()))
 			OpenDoors();
 	}
 	else
