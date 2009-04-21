@@ -469,14 +469,14 @@ void Elevator::ProcessCallQueue()
 		int TopFloor = GetTopFloor();
 		int BottomFloor = GetBottomFloor();
 
-		//if UpPeak mode is active, send elevator to the top serviced floor if not already there
-		if (GetFloor() != TopFloor && UpPeak == true && IsMoving == false)
+		//if DownPeak mode is active, send elevator to the top serviced floor if not already there
+		if (GetFloor() != TopFloor && DownPeak == true && IsMoving == false)
 		{
 			AddRoute(TopFloor, 1);
 			return;
 		}
-		//if DownPeak mode is active, send elevator to the bottom serviced floor if not already there
-		else if (GetFloor() != BottomFloor && DownPeak == true && IsMoving == false)
+		//if UpPeak mode is active, send elevator to the bottom serviced floor if not already there
+		else if (GetFloor() != BottomFloor && UpPeak == true && IsMoving == false)
 		{
 			AddRoute(BottomFloor, -1);
 			return;
