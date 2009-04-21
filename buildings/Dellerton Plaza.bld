@@ -3,6 +3,29 @@
 #Dellerton Plaza
 #Copyright: escalatorgeek881, 2009
 
+#Building Dimensions...
+#Height = 968.84 ft.
+#Height w/ Antennas = 1268.84 ft.
+#Area = 150 ft. by 141.12 ft.
+
+#Floors...
+#S = Service Basement
+#LL7 - LL2 = Underground Parking
+#LL1 = Concourse and Restricted Parking
+#L = Lobby and Restricted Parking
+#P1 - P9 = Tower Parking
+#CL = Conference Level
+#1 - 55 = Offices
+#C = Communications
+#PH = Mechanical
+#R = Roof
+
+#Elevators...
+#Brand = Otis
+#Type = Gearless Traction
+#Area = 3.75 ft. by 3.125 ft.
+#Up Peak Mode/Down Peak Mode = No
+
 <Globals>
     Name = Dellerton Plaza
     Designer = escalatorgeek881
