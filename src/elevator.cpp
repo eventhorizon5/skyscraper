@@ -2420,7 +2420,7 @@ void Elevator::EnableUpPeak(bool value)
 		EnableInspectionService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
-		if (IsMoving == false)
+		if (IsMoving == false && GetFloor() == GetBottomFloor())
 			OpenDoors();
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Up Peak mode enabled");
 	}
@@ -2446,7 +2446,7 @@ void Elevator::EnableDownPeak(bool value)
 		EnableInspectionService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
-		if (IsMoving == false)
+		if (IsMoving == false && GetFloor() == GetTopFloor())
 			OpenDoors();
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Down Peak mode enabled");
 	}

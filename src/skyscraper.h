@@ -64,6 +64,7 @@ public:
 	bool IsRunning;
 	bool StartupRunning;
 	bool Starting;
+	bool Pause; //pause simulator
 
 	csTicks elapsed_time, current_time;
 

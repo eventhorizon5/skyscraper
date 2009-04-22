@@ -82,6 +82,7 @@ bool Skyscraper::OnInit(void)
 	StartupRunning = false;
 	Starting = false;
 	remaining_delta = 0;
+	Pause = false;
 
 	//Create main window
 	window = new MainScreen();
@@ -155,7 +156,6 @@ int Skyscraper::OnExit()
 MainScreen::MainScreen() : wxFrame(0, -1, wxT("Skyscraper 1.4 Alpha"), wxDefaultPosition, wxSize(640, 480), wxDEFAULT_FRAME_STYLE)
 {
 	this->Center();
-	//new wxPanel(this, -1, wxPoint(0, 0), wxSize(1, 1));
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
 	//this->SetTitle(wxString::FromAscii(windowtitle));
 }
@@ -167,7 +167,16 @@ MainScreen::~MainScreen()
 
 void MainScreen::OnIconize(wxIconizeEvent& event)
 {
-	//csPrintf("got iconize %d\n", (int)event.Iconized());
+	//pause simulator while minimized
+	if (skyscraper->IsRunning == false)
+		return;
+
+	skyscraper->Pause = event.Iconized();
+
+	if (skyscraper->Pause == true)
+		skyscraper->Report("Pausing simulator...");
+	else
+		skyscraper->Report("Resuming simulator...");
 }
 
 void MainScreen::OnShow(wxShowEvent& event)
@@ -198,9 +207,10 @@ void MainScreen::ShowWindow()
 
 void MainScreen::OnIdle(wxIdleEvent& event)
 {
-	if (skyscraper->IsRunning == true || skyscraper->StartupRunning == true)
-		skyscraper->PushFrame();
-	event.RequestMore();
+	if ((skyscraper->IsRunning == true && skyscraper->Pause == false) || skyscraper->StartupRunning == true)
+		skyscraper->PushFrame(); //run simulator loop
+	if (skyscraper->Pause == false)
+		event.RequestMore(); //request more idles
 }
 
 void Skyscraper::Render()
