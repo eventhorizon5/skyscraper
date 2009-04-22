@@ -2265,7 +2265,7 @@ float SBS::MetersToFeet(float meters)
 float SBS::FeetToMeters(float feet)
 {
 	//converts feet to meters
-	return feet * 3.2808399f;
+	return feet / 3.2808399f;
 }
 
 int SBS::AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th)
