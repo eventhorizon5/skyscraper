@@ -1043,6 +1043,7 @@ void SBS::InitMeshes()
 	Buildings = engine->CreateSectorWallsMesh (area, "Buildings");
 	Buildings_state = scfQueryInterface<iThingFactoryState> (Buildings->GetMeshObject()->GetFactory());
 	Buildings->SetZBufMode(CS_ZBUF_USE);
+	Buildings->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 
 	External = engine->CreateSectorWallsMesh (area, "External");
 	External_state = scfQueryInterface<iThingFactoryState> (External->GetMeshObject()->GetFactory());
@@ -1053,6 +1054,7 @@ void SBS::InitMeshes()
 	Landscape = engine->CreateSectorWallsMesh (area, "Landscape");
 	Landscape_state = scfQueryInterface<iThingFactoryState> (Landscape->GetMeshObject()->GetFactory());
 	Landscape->SetZBufMode(CS_ZBUF_USE);
+	Landscape->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 }
 
 int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
@@ -1441,6 +1443,7 @@ int SBS::CreateSky(const char *filenamebase)
 	SkyBox = (engine->CreateSectorWallsMesh (area, "SkyBox"));
 	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox->GetMeshObject()->GetFactory());
 	SkyBox->SetZBufMode(CS_ZBUF_USE);
+	SkyBox->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 
 	//create a skybox that extends 30 miles (30 * 5280 ft) in each direction
 	int firstidx = SkyBox_state->AddInsideBox(csVector3(-158400, -158400, -158400), csVector3(158400, 158400, 158400));
