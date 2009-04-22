@@ -522,8 +522,7 @@ void Elevator::ProcessCallQueue()
 			}
 			if (UpQueue[i] == GetFloor())
 			{
-				if (DownPeak == false || UpQueue[i] != GetTopFloor())
-					OpenDoors();
+				OpenDoors();
 				DeleteRoute(UpQueue[i], 1);
 			}
 		}
@@ -544,8 +543,7 @@ void Elevator::ProcessCallQueue()
 			}
 			if (DownQueue[i] == GetFloor())
 			{
-				if (UpPeak == false || DownQueue[i] != GetTopFloor())
-					OpenDoors();
+				OpenDoors();
 				DeleteRoute(DownQueue[i], -1);
 			}
 		}
@@ -1242,7 +1240,9 @@ void Elevator::MoveDoors(bool open, bool manual)
 	doors_stopped = false;
 
 	//turn on autoclose timer
-	if (manual == false && InServiceMode() == false)
+	if (manual == false && InServiceMode() == false &&
+		(UpPeak == false || GetFloor() != GetBottomFloor()) &&
+		(DownPeak == false || GetFloor() != GetTopFloor()))
 	{
 		if (quick_close == false)
 			timer->Start(DoorTimer, true);
@@ -1693,8 +1693,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//open doors
 		//do not automatically open doors if in fire service phase 2
-		//or if in one of the peak modes and on the peak floor
-		if (FireServicePhase2 == 0 && (UpPeak == false || GotoFloor != GetBottomFloor()) && (DownPeak == false || GotoFloor != GetTopFloor()))
+		if (FireServicePhase2 == 0)
 			OpenDoors();
 	}
 	else
@@ -2421,6 +2420,8 @@ void Elevator::EnableUpPeak(bool value)
 		EnableInspectionService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
+		if (IsMoving == false)
+			OpenDoors();
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Up Peak mode enabled");
 	}
 	else
@@ -2445,6 +2446,8 @@ void Elevator::EnableDownPeak(bool value)
 		EnableInspectionService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
+		if (IsMoving == false)
+			OpenDoors();
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Down Peak mode enabled");
 	}
 	else
