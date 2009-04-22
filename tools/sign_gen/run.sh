@@ -29,7 +29,7 @@ echo Creating $filename
 echo
 
 #floor numbers
-number=1
+number=-9
 maxnumber=300
 
 while (( number <= maxnumber ))
@@ -74,7 +74,7 @@ done
 
 #letter-based floors/symbols
 number=1
-end=18
+end=41
 while (( number <= end ))
 do
 	if [ $number == 1 ]; then sym="L"; fi
@@ -95,6 +95,30 @@ do
 	if [ $number == 16 ]; then sym="CC"; fi
 	if [ $number == 17 ]; then sym="EZ"; fi
 	if [ $number == 18 ]; then sym="EX"; fi
+	if [ $number == 19 ]; then sym="T"; fi
+	if [ $number == 20 ]; then sym="TL"; fi
+	if [ $number == 21 ]; then sym="ML"; fi
+	if [ $number == 22 ]; then sym="G"; fi
+	if [ $number == 23 ]; then sym="LG"; fi
+	if [ $number == 24 ]; then sym="UL"; fi
+	if [ $number == 25 ]; then sym="U"; fi
+	if [ $number == 26 ]; then sym="VP"; fi
+	if [ $number == 27 ]; then sym="VL"; fi
+	if [ $number == 28 ]; then sym="BL"; fi
+	if [ $number == 29 ]; then sym="BR"; fi
+	if [ $number == 30 ]; then sym="SB"; fi
+	if [ $number == 31 ]; then sym="SG"; fi
+	if [ $number == 32 ]; then sym="AL"; fi
+	if [ $number == 33 ]; then sym="IL"; fi
+	if [ $number == 34 ]; then sym="EL"; fi
+	if [ $number == 35 ]; then sym="OD"; fi
+	if [ $number == 36 ]; then sym="SD"; fi
+	if [ $number == 37 ]; then sym="ST"; fi
+	if [ $number == 38 ]; then sym="WP"; fi
+	if [ $number == 39 ]; then sym="MZ"; fi
+	if [ $number == 40 ]; then sym="CM"; fi
+	if [ $number == 41 ]; then sym="MU"; fi
+
 	echo $sym
 	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$sym.jpg\" \"$sym\" $fontsize \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
 	number=$((++number))
