@@ -510,8 +510,7 @@ void Camera::Loop()
 	collider_actor.SetCD(EnableCollisions);
 
 	//set on ground status to false, to force checking of moving object intersections
-	//disabled due to the massive performance hit it causes
-	//collider_actor.SetOnGround(false);
+	collider_actor.SetOnGround(false);
 
 	//calculate acceleration
 	InterpolateMovement();
