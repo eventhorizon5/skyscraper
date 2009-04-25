@@ -50,8 +50,8 @@ public:
 	void EnableWholeStairwell(bool value);
 	bool IsInStairwell(const csVector3 &position);
 	void AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
-	void CutFloors(bool relative, csVector2 &start, csVector2 &end, float startvoffset, float endvoffset);
-	void CutWall(bool relative, int floor, csVector3 &start, csVector3 &end, int checkwallnumber = 0, const char *checkstring = "");
+	void CutFloors(bool relative, const csVector2 &start, const csVector2 &end, float startvoffset, float endvoffset);
+	void CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range);
 	void EnableDoor(int floor, bool value);
 	void OpenDoor(int number);

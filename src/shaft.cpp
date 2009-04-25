@@ -232,7 +232,7 @@ bool Shaft::IsInShaft(const csVector3 &position)
 	return false;
 }
 
-void Shaft::CutFloors(bool relative, csVector2 &start, csVector2 &end, float startvoffset, float endvoffset)
+void Shaft::CutFloors(bool relative, const csVector2 &start, const csVector2 &end, float startvoffset, float endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
@@ -261,7 +261,7 @@ void Shaft::CutFloors(bool relative, csVector2 &start, csVector2 &end, float sta
 	}
 }
 
-void Shaft::CutWall(bool relative, int floor, csVector3 &start, csVector3 &end, int checkwallnumber, const char *checkstring)
+void Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber, const char *checkstring)
 {
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's altitude

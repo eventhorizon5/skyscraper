@@ -264,7 +264,7 @@ void ButtonPanel::Press(int index)
 	}
 }
 
-void ButtonPanel::Move(csVector3 &position)
+void ButtonPanel::Move(const csVector3 &position)
 {
 	//relative movement
 	ButtonPanelMesh->GetMovable()->MovePosition(position);

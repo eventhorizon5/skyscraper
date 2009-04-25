@@ -49,7 +49,7 @@ public:
 	void AddControlButton(const char *texture, int row, int column, const char *type, float width, float height);
 	void DeleteButton(int row, int column);
 	void Press(int index);
-	void Move(csVector3 &position);
+	void Move(const csVector3 &position);
 	void SetToElevatorAltitude();
 	void Enabled(bool value);
 	int AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
