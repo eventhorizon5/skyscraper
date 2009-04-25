@@ -186,12 +186,12 @@ SBS::~SBS()
 	sbs = 0;
 }
 
-void SBS::Start()
+bool SBS::Start()
 {
 	//Post-init startup code goes here, before the runloop
 
 	//initialize mesh colliders
-	csColliderHelper::InitializeCollisionWrappers (collision_sys, engine);
+	csColliderHelper::InitializeCollisionWrappers(collision_sys, engine);
 
 	//initialize camera/actor
 	camera->CreateColliders();
@@ -202,7 +202,13 @@ void SBS::Start()
 	camera->SetToStartRotation();
 
 	//set sound listener object to initial position
-	SetListenerLocation(camera->GetPosition());
+	if (sndrenderer->GetListener())
+		SetListenerLocation(camera->GetPosition());
+	else
+	{
+		ReportError("Sound listener object not available");
+		return false;
+	}
 
 	//turn on main objects
 	EnableBuildings(true);
@@ -248,6 +254,7 @@ void SBS::Start()
 	GetFloor(camera->StartFloor)->Enabled(true);
 	GetFloor(camera->StartFloor)->EnableGroup(true);
 
+	return true;
 }
 
 float SBS::AutoSize(float n1, float n2, bool iswidth, float offset)

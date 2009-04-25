@@ -824,7 +824,11 @@ void Skyscraper::Start()
 	engine->Prepare();
 
 	//start simulation
-	Simcore->Start();
+	if (!Simcore->Start())
+	{
+		ReportError("Error starting simulator\n");
+		return;
+	}
 
 	//load dialogs
 	dpanel = new DebugPanel(NULL, -1);

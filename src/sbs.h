@@ -133,7 +133,7 @@ public:
 	void Initialize(iSCF* scf, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
 					iCollideSystem* collideref, iReporter* reporterref, iSndSysRenderer* sndrenderref, iSndSysLoader* sndloaderref,
 					iMaterialWrapper* matref, iSector* sectorref, const char* rootdirectory, const char* directory_char);
-	void Start();
+	bool Start();
 	int CreateSky(const char *filenamebase);
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
 	int AddWallMain(csRef<iThingFactoryState> dest, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
