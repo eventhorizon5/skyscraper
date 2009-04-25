@@ -134,6 +134,7 @@ SBS::SBS()
 	bottomflip = 0;
 	widthscale.SetSize(6);
 	heightscale.SetSize(6);
+	remaining_delta = 0;
 }
 
 SBS::~SBS()
@@ -285,41 +286,52 @@ void SBS::MainLoop()
 {
 	//Main simulator loop
 
-	if (RenderOnly == false && InputOnly == false)
+	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
+	//depending on frame rate
+	float elapsed = remaining_delta + (vc->GetElapsedTicks() / 1000.0);
+	//limit the elapsed value to prevent major slowdowns during debugging
+	if (elapsed > 0.5)
+		elapsed = 0.5;
+	while (elapsed >= delta)
 	{
-		//Determine floor that the camera is on
-		camera->UpdateCameraFloor();
-
-		//run elevator handlers
-		if (ProcessElevators == true)
+		if (RenderOnly == false && InputOnly == false)
 		{
-			for (int i = 1; i <= Elevators(); i++)
-				GetElevator(i)->MonitorLoop();
+			//Determine floor that the camera is on
+			camera->UpdateCameraFloor();
 
-			//check if the user is in an elevator
-			camera->CheckElevator();
+			//run elevator handlers
+			if (ProcessElevators == true)
+			{
+				for (int i = 1; i <= Elevators(); i++)
+					GetElevator(i)->MonitorLoop();
+
+				//check if the user is in an elevator
+				camera->CheckElevator();
+			}
+
+			//check if the user is in a shaft
+			if (AutoShafts == true)
+				camera->CheckShaft();
+
+			//check if the user is in a stairwell
+			if (AutoStairs == true)
+				camera->CheckStairwell();
+
+			//open/close doors by using door callback
+			if (callbackdoor)
+			{
+				if (callbackdoor->IsMoving == true)
+					callbackdoor->MoveDoor();
+				else
+					UnregisterDoorCallback(callbackdoor);
+			}
+
+			//check if the user is outside (no code yet)
+
 		}
-
-		//check if the user is in a shaft
-		if (AutoShafts == true)
-			camera->CheckShaft();
-
-		//check if the user is in a stairwell
-		if (AutoStairs == true)
-			camera->CheckStairwell();
-
-		//open/close doors by using door callback
-		if (callbackdoor)
-		{
-			if (callbackdoor->IsMoving == true)
-				callbackdoor->MoveDoor();
-			else
-				UnregisterDoorCallback(callbackdoor);
-		}
-
-		//check if the user is outside (no code yet)
-
+		elapsed -= delta;
 	}
+	remaining_delta = elapsed;
 }
 
 void SBS::CalculateFrameRate()

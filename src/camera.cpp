@@ -510,13 +510,15 @@ void Camera::Loop()
 	collider_actor.SetCD(EnableCollisions);
 
 	//set on ground status to false, to force checking of moving object intersections
-	collider_actor.SetOnGround(false);
+	//disabled due to the massive performance hit it causes
+	//collider_actor.SetOnGround(false);
 
 	//calculate acceleration
 	InterpolateMovement();
 
 	//general movement
-	collider_actor.Move(sbs->delta, speed, velocity, angle_velocity);
+	float delta = sbs->vc->GetElapsedTicks() / 1000.0f;
+	collider_actor.Move(delta, speed, velocity, angle_velocity);
 
 	//sync sound listener object to camera position
 	sbs->SetListenerLocation(GetPosition());
