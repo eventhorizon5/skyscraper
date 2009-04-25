@@ -1739,6 +1739,16 @@ Floor* SBS::GetFloor(int number)
 			else
 				return 0;
 		}
+		else if (number < 0)
+		{
+			if (FloorArray[-(number + 1)].number == number)
+			{
+				if (FloorArray[-(number + 1)].object)
+					return FloorArray[-(number + 1)].object;
+				else
+					return 0;
+			}
+		}
 	}
 
 	for (size_t i = 0; i < FloorArray.GetSize(); i++)
