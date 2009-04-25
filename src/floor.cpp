@@ -288,7 +288,7 @@ void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, con
 	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, DownButtonTexture, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 }
 
-void Floor::Cut(csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, const char *checkstring)
+void Floor::Cut(csVector3 &start, csVector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, const char *checkstring)
 {
 	//caller to SBS cut function
 	//Y values are relative to the floor's altitude

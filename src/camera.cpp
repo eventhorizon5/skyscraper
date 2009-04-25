@@ -79,16 +79,16 @@ Camera::~Camera()
 	//Destructor
 }
 
-void Camera::SetPosition(csVector3 vector)
+void Camera::SetPosition(csVector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
 	MainCamera->GetTransform().SetOrigin(vector);
 }
 
-void Camera::SetDirection(csVector3 vector)
+void Camera::SetDirection(csVector3 &vector)
 {
 	//sets the camera's direction to an absolute position
-	MainCamera->GetTransform().LookAt(vector, csVector3 (0, 1, 0));
+	MainCamera->GetTransform().LookAt(vector, csVector3(0, 1, 0));
 }
 
 void Camera::SetRotation(csVector3 vector)
@@ -170,14 +170,14 @@ void Camera::UpdateCameraFloor()
 	CurrentFloor = lastfloor;
 }
 
-bool Camera::Move(csVector3 vector, float speed)
+bool Camera::Move(csVector3 &vector, float speed)
 {
 	//moves the camera in a relative amount specified by a vector
 	MainCamera->Move(vector * speed, EnableCollisions);
 	return true;
 }
 
-void Camera::Rotate(csVector3 vector, float speed)
+void Camera::Rotate(csVector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount
 	csVector3 rot = GetRotation() * vector * speed;
@@ -185,7 +185,7 @@ void Camera::Rotate(csVector3 vector, float speed)
 	SetRotation(rot);
 }
 
-void Camera::SetStartDirection(csVector3 vector)
+void Camera::SetStartDirection(csVector3 &vector)
 {
 	StartDirection = vector;
 }
@@ -195,7 +195,7 @@ csVector3 Camera::GetStartDirection()
 	return StartDirection;
 }
 
-void Camera::SetStartRotation(csVector3 vector)
+void Camera::SetStartRotation(csVector3 &vector)
 {
 	StartRotation = vector;
 }

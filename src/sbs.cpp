@@ -1979,7 +1979,7 @@ int SBS::GetDrawWallsCount()
 	return sides;
 }
 
-csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end)
+csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 &start, csVector3 &end)
 {
 	//do a line intersection with a specified mesh, and return
 	//the intersection point
@@ -1994,7 +1994,7 @@ csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, cs
 	return isect;
 }
 
-void SBS::Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber, const char *checkstring)
+void SBS::Cut(csRef<iThingFactoryState> state, csVector3 &start, csVector3 &end, bool cutwalls, bool cutfloors, csVector3 &mesh_origin, csVector3 &object_origin, int checkwallnumber, const char *checkstring)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 	//mesh_origin is a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
@@ -2346,13 +2346,13 @@ bool SBS::GetReverseAxis()
 	return ReverseAxisValue;
 }
 
-void SBS::SetListenerLocation(csVector3 location)
+void SBS::SetListenerLocation(csVector3 &location)
 {
 	//set position of sound listener object
 	sndrenderer->GetListener()->SetPosition(location);
 }
 
-void SBS::SetListenerDirection(csVector3 front, csVector3 top)
+void SBS::SetListenerDirection(csVector3 &front, csVector3 &top)
 {
 	//set direction of sound listener object
 	sndrenderer->GetListener()->SetDirection(front, top);

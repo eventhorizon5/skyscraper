@@ -185,13 +185,13 @@ public:
 	void SetAutoSize(bool x, bool y);
 	csVector2 GetAutoSize();
 	int GetDrawWallsCount();
-	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 start, csVector3 end);
-	void Cut(csRef<iThingFactoryState> state, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
+	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, csVector3 &start, csVector3 &end);
+	void Cut(csRef<iThingFactoryState> state, csVector3 &start, csVector3 &end, bool cutwalls, bool cutfloors, csVector3 &mesh_origin, csVector3 &object_origin, int checkwallnumber = 0, const char *checkstring = "");
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(csRef<iThingFactoryState> mesh, const char *texture, float tw, float th);
-	void SetListenerLocation(csVector3 location);
-	void SetListenerDirection(csVector3 front, csVector3 top);
+	void SetListenerLocation(csVector3 &location);
+	void SetListenerDirection(csVector3 &front, csVector3 &top);
 	void SetListenerDistanceFactor(float factor);
 	float GetListenerDistanceFactor();
 	void SetListenerRollOffFactor(float factor);

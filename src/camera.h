@@ -60,18 +60,18 @@ public:
 	//functions
 	Camera();
 	~Camera();
-	void SetPosition(csVector3 vector);
-	void SetDirection(csVector3 vector);
+	void SetPosition(csVector3 &vector);
+	void SetDirection(csVector3 &vector);
 	void SetRotation(csVector3 vector);
 	csVector3 GetPosition();
 	void GetDirection(csVector3 &front, csVector3 &top);
 	csVector3 GetRotation();
 	void UpdateCameraFloor();
-	bool Move(csVector3 vector, float speed);
-	void Rotate(csVector3 vector, float speed);
-	void SetStartDirection(csVector3 vector);
+	bool Move(csVector3 &vector, float speed);
+	void Rotate(csVector3 &vector, float speed);
+	void SetStartDirection(csVector3 &vector);
 	csVector3 GetStartDirection();
-	void SetStartRotation(csVector3 vector);
+	void SetStartRotation(csVector3 &vector);
 	csVector3 GetStartRotation();
 	void SetToStartPosition();
 	void SetToStartDirection();
