@@ -929,7 +929,7 @@ void Elevator::MoveDoors(bool open, bool manual)
 		if (open == true)
 		{
 			//relocate marker 1 to the door's current position, in order to stop it
-			float offset = marker1 - tempposition;
+			float offset = marker1 - (tempposition - temporigin);
 			if (tempposition - temporigin >= marker1)
 				//place marker at door position
 				marker1 = tempposition - temporigin;
