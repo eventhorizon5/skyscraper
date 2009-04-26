@@ -12,6 +12,11 @@ Version 1.4 (2.0 Alpha 4)
 -added shaft tops to the Triton Center and Simple elevator shafts
 -lots of memory leak fixes
 -simulator now pauses when main window is minimized
+-Sears Tower skydeck elevator crash fixed
+-performance enhancements
+-call selection fix
+-half of express elevators in both the Triton Center and Sears Tower buildings
+are now stationed at the top
 
 Version 1.3 (2.0 Alpha 3)
 -------------------------
