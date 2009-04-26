@@ -55,7 +55,7 @@ public:
 	int AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
 	void Enabled(int floor, bool value, bool EnableShaftDoors);
 	bool IsShaft(csRef<iMeshWrapper> test);
-	void EnableWholeShaft(bool value, bool EnableShaftDoors);
+	void EnableWholeShaft(bool value, bool EnableShaftDoors, bool force = false);
 	bool IsInShaft(const csVector3 &position);
 	void CutFloors(bool relative, const csVector2 &start, const csVector2 &end, float startvoffset, float endvoffset);
 	void CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber = 0, const char *checkstring = "");
@@ -70,6 +70,7 @@ private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array
 	csRefArray<iThingFactoryState> ShaftArray_state; //shaft mesh array state
 	csArray<bool> EnableArray;
+	bool EnableCheck;
 
 	char intbuffer[65];
 	char buffer[20];

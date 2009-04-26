@@ -225,10 +225,15 @@ bool SBS::Start()
 	{
 		if (ShaftArray[i].object)
 		{
-			ShaftArray[i].object->EnableWholeShaft(false, true);
-			//enable extents
-			ShaftArray[i].object->Enabled(ShaftArray[i].object->startfloor, true, true);
-			ShaftArray[i].object->Enabled(ShaftArray[i].object->endfloor, true, true);
+			if (ShaftArray[i].object->ShowFullShaft == false)
+			{
+				ShaftArray[i].object->EnableWholeShaft(false, true);
+				//enable extents
+				ShaftArray[i].object->Enabled(ShaftArray[i].object->startfloor, true, true);
+				ShaftArray[i].object->Enabled(ShaftArray[i].object->endfloor, true, true);
+			}
+			else
+				ShaftArray[i].object->EnableWholeShaft(true, true, true);
 		}
 	}
 

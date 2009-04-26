@@ -2115,6 +2115,10 @@ void Elevator::ShaftDoorsEnabled(int floor, bool value)
 {
 	//turns shaft elevator doors on/off
 
+	//exit if shaft's ShowFullShaft is set
+	if (sbs->GetShaft(AssignedShaft)->ShowFullShaft == true && value == false)
+		return;
+
 	//leave top and bottom on
 	if ((floor == sbs->GetShaft(AssignedShaft)->startfloor || floor == sbs->GetShaft(AssignedShaft)->endfloor) && value == false)
 		return;
@@ -2154,6 +2158,10 @@ void Elevator::ShaftDoorsEnabledRange(int floor, int range)
 	//turn on a range of floors
 	//if range is 3, show shaft door on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show door on only the current floor (floor)
+
+	//exit if shaft's ShowFullShaft is set
+	if (sbs->GetShaft(AssignedShaft)->ShowFullShaft == true)
+		return;
 
 	//range must be greater than 0
 	if (range < 1)

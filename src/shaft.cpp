@@ -55,6 +55,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	ShowFloors = false;
 	ShowOutside = false;
 	ShowFullShaft = false;
+	EnableCheck = false;
 
 	csString buffer, buffer2, buffer3;
 
@@ -163,7 +164,7 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 
 void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 {
-	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor)
+	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor && EnableCheck == false)
 	{
 		//turns shaft on/off for a specific floor
 		if (value == true)
@@ -214,15 +215,25 @@ bool Shaft::IsShaft(csRef<iMeshWrapper> test)
 	return false;
 }
 
-void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors)
+void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 {
 	//turn on/off entire shaft
-	if ((value == false && IsEnabled == true) || (value == true && IsEnabled == false))
+	
+	if (force == true)
+		IsEnabled = false;
+	
+	if (((value == false && IsEnabled == true) || (value == true && IsEnabled == false)) && EnableCheck == false)
 	{
 		for (int i = startfloor; i <= endfloor; i++)
+		{
+			if (force == true)
+				EnableArray[i - startfloor] = false;
 			Enabled(i, value, EnableShaftDoors);
+		}
 	}
 	IsEnabled = value;
+	if (ShowFullShaft == true)
+		EnableCheck = true;
 }
 
 bool Shaft::IsInShaft(const csVector3 &position)
@@ -279,6 +290,10 @@ void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
 	//turn on/off a range of floors
 	//if range is 3, show shaft on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show only the current floor (floor)
+
+	//exit if ShowFullShaft is true
+	if (ShowFullShaft == true)
+		return;
 
 	//range must be greater than 0
 	if (range < 1)
