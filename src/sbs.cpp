@@ -1499,8 +1499,8 @@ int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
 	//if checklastfloor is specified, compare altitude with lastfloor
 	if (checklastfloor == true)
 	{
-		int lastfloor_altitude = GetFloor(lastfloor)->Altitude;
-		int upperfloor_altitude;
+		float lastfloor_altitude = GetFloor(lastfloor)->Altitude;
+		float upperfloor_altitude;
 		if (lastfloor < Floors - 1)
 			upperfloor_altitude = GetFloor(lastfloor + 1)->Altitude;
 		else

@@ -2189,7 +2189,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
     AssignedShaft = 2
-    CreateElevator 11.849, 71.513, 0
+    CreateElevator 11.849, 71.513, 33
 <EndElevator>
 
 <Elevator 6>
@@ -2201,7 +2201,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
     AssignedShaft = 2
-    CreateElevator 11.849, 61.837, 0
+    CreateElevator 11.849, 61.837, 33
 <EndElevator>
 
 <Elevator 7>
@@ -2213,7 +2213,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
     AssignedShaft = 2
-    CreateElevator 11.849, 52.236, 0
+    CreateElevator 11.849, 52.236, 33
 <EndElevator>
 
 <Elevator 8>
@@ -2225,7 +2225,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34
     AssignedShaft = 2
-    CreateElevator 11.849, 42.484, 0
+    CreateElevator 11.849, 42.484, 33
 <EndElevator>
 
 <Elevators 5 to 8>
@@ -2391,7 +2391,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
     AssignedShaft = 4
-    CreateElevator 11.849, -52.965, 0
+    CreateElevator 11.849, -52.965, 66
 <EndElevator>
 
 <Elevator 13>
@@ -2403,7 +2403,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
     AssignedShaft = 4
-    CreateElevator 11.849, -61.7, 0
+    CreateElevator 11.849, -61.7, 66
 <EndElevator>
 
 <Elevator 14>
@@ -2415,7 +2415,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0, 1, 33, 34, 66, 67
     AssignedShaft = 4
-    CreateElevator 11.849, -70.435, 0
+    CreateElevator 11.849, -70.435, 66
 <EndElevator>
 
 <Elevators 12 to 14>
@@ -4772,7 +4772,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -2, 99, 103
     AssignedShaft = 31
-    CreateElevator -42.471, -12.828, -2
+    CreateElevator -42.471, -12.828, 103
 <EndElevator>
 
 <Elevators 78 to 79>

@@ -907,6 +907,19 @@ void Elevator::MoveDoors(bool open, bool manual)
 			index = ServicedFloors.Find(ShaftDoorFloor);
 		else
 			index = ServicedFloors.Find(GetFloor());
+		if (index == -1)
+		{
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": No shaft doors on current floor");
+			if (WhichDoors == 3)
+			{
+				//reset and exit if only shaft doors selected for opening
+				OpenDoor = 0;
+				WhichDoors = 0;
+				return;
+			}
+			//only open elevator doors if no shaft doors available
+			WhichDoors = 2;
+		}
 	}
 	else if (previous_open != open && manual == false && door_changed == false)
 	{

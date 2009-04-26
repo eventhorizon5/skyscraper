@@ -177,7 +177,7 @@ void CallButton::Call(int direction)
 	//calls the closest elevator in the elevator array list to the current floor,
 	//and also depending on the direction it's travelling
 
-	int closest = sbs->GetElevator(Elevators[0])->GetFloor();
+	int closest = abs(sbs->GetElevator(Elevators[0])->GetFloor() - floor);
 	int closest_elev = 0;
 
 	for (size_t i = 0; i < Elevators.GetSize(); i++)
