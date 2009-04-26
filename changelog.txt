@@ -17,6 +17,7 @@ Version 1.4 (2.0 Alpha 4)
 -call selection fix
 -half of express elevators in both the Triton Center and Sears Tower buildings
 are now stationed at the top
+-fixed ShowFullShaft command
 
 Version 1.3 (2.0 Alpha 3)
 -------------------------
