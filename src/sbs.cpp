@@ -362,7 +362,7 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-void SBS::Initialize(iSCF* scf, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
+void SBS::Initialize(iSCF* scf, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
 					 iCollideSystem* collideref, iReporter* reporterref, iSndSysRenderer* sndrenderref, iSndSysLoader* sndloaderref,
 					 iMaterialWrapper* matref, iSector* sectorref, const char* rootdirectory, const char* directory_char)
 {
@@ -371,6 +371,8 @@ void SBS::Initialize(iSCF* scf, iEngine* engineref, iLoader* loaderref, iVirtual
 	iSCF::SCF = scf;
 #endif
 	engine = engineref;
+	g3d = g3dref;
+	g2d = g2dref;
 	loader = loaderref;
 	vc = vcref;
 	view = viewref;
@@ -404,7 +406,7 @@ void SBS::Initialize(iSCF* scf, iEngine* engineref, iLoader* loaderref, iVirtual
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult)
 {
 	// Load a texture
-	if (!loader->LoadTexture (name, filename))
+	if (!loader->LoadTexture(name, filename))
 	{
 		ReportError("Error loading texture");
 		return false;
@@ -414,6 +416,28 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
 	textureinfo.Push(info);
+	return true;
+}
+
+bool SBS::AddTextToTexture(const char *texturename, const char *fontname, const char *text, uint x1, uint y1, uint x2, uint y2, uint h_align, uint v_align)
+{
+	//adds text to the named texture, in the given box coordinates and alignment
+
+	csRef<iTextureWrapper> tex = engine->GetTextureList()->FindByName(texturename);
+	if (!tex)
+		return false;
+
+	//get the raw texture data
+	csRef<iImage> image = tex->GetImageFile();
+	csRef<iDataBuffer> data = image->GetRawData();
+
+	//create a render buffer
+	csRef<iGraphics2D> buffer = g2d->CreateOffscreenCanvas(data->GetData(), image->GetWidth(), image->GetHeight(), image->GetDepth(), 0);
+
+	csRef<iFont> font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
+	csPen pen(g2d, g3d);
+	pen.SetTexture(tex->GetTextureHandle());
+	pen.WriteBoxed(font, x1, y1, x2, y2, h_align, v_align, (char*)text);
 	return true;
 }
 

@@ -63,6 +63,8 @@ public:
 
 	//CS engine objects
 	csRef<iEngine> engine;
+	csRef<iGraphics3D> g3d;
+	csRef<iGraphics2D> g2d;
 	csRef<iLoader> loader;
 	csRef<iVirtualClock> vc;
 	csRef<iView> view;
@@ -130,7 +132,7 @@ public:
 	bool ReportError (const char* msg, ...);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
 	float AutoSize(float n1, float n2, bool iswidth, float offset);
-	void Initialize(iSCF* scf, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
+	void Initialize(iSCF* scf, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
 					iCollideSystem* collideref, iReporter* reporterref, iSndSysRenderer* sndrenderref, iSndSysLoader* sndloaderref,
 					iMaterialWrapper* matref, iSector* sectorref, const char* rootdirectory, const char* directory_char);
 	bool Start();
@@ -206,6 +208,7 @@ public:
 	bool UnregisterDoorCallback(Door *door);
 	void ProcessTextureFlip(float tw, float th);
 	bool GetTextureTiling(const char *texture, float &tw, float &th);
+	bool AddTextToTexture(const char *texturename, const char *fontname, const char *text, uint x1, uint y1, uint x2, uint y2, uint h_align, uint v_align);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
