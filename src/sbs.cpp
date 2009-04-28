@@ -427,9 +427,11 @@ bool SBS::AddTextToTexture(const char *texturename, const char *fontname, const 
 	if (!tex)
 		return false;
 
-	//get the raw texture data
+	//get the texture image
 	csRef<iImage> image = tex->GetImageFile();
-	csRef<iDataBuffer> data = image->GetRawData();
+
+	//create a new buffer the same size as the image, for storing the new texture
+	csRef<iDataBuffer> data = CS::DataBuffer(image->GetRawData()->GetSize());
 
 	//create a render buffer
 	csRef<iGraphics2D> buffer = g2d->CreateOffscreenCanvas(data->GetData(), image->GetWidth(), image->GetHeight(), image->GetDepth(), 0);
