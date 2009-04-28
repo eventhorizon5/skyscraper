@@ -144,9 +144,9 @@ done
 
 #create zip archive
 echo Creating zip file...
-zip -9 $filename *.jpg
+zip -9 $filename ./*.jpg
 
 #clean up
-rm *.jpg
+rm ./*.jpg
 echo done - $filename created
 
