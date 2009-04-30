@@ -2921,6 +2921,42 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//AddDirectionalIndicators command
+			if (LineData.Slice(0, 24).CompareNoCase("adddirectionalindicators") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(25).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+				//check numeric values
+				for (int i = 5; i <= 13; i++)
+				{
+					if (i == 8)
+						i = 9;
+					if (i == 11)
+						i = 12;
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+
+				Simcore->GetElevator(Current)->AddDirectionalIndicators(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), atof(tempdata[12]), atof(tempdata[13]));
+
+				tempdata.DeleteAll();
+			}
+
 
 			//Set command
 			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)

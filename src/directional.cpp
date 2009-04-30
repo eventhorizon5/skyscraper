@@ -41,6 +41,8 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 	UpTextureLit = uptexture_lit;
 	DownTextureUnlit = downtexture;
 	DownTextureLit = downtexture_lit;
+	UpStatus = false;
+	DownStatus = false;
 
 	//create object mesh
 	csString buffer, buffer2, buffer3;
@@ -151,6 +153,9 @@ DirectionalIndicator::~DirectionalIndicator()
 void DirectionalIndicator::Enabled(bool value)
 {
 	//turns panel on/off
+	if (value == IsEnabled)
+		return;
+
 	sbs->EnableMesh(DirectionalMesh, value);
 	IsEnabled = value;
 }
@@ -158,19 +163,27 @@ void DirectionalIndicator::Enabled(bool value)
 void DirectionalIndicator::UpLight(bool value)
 {
 	//turn on the 'up' directional light
+	if (value == UpStatus)
+		return;
+
 	bool result;
 	if (value == true)
 		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(UpTextureUnlit, result), UpTextureLit);
 	else
 		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(UpTextureLit, result), UpTextureUnlit);
+	UpStatus = value;
 }
 
 void DirectionalIndicator::DownLight(bool value)
 {
 	//turn on the 'down' directional light
+	if (value == DownStatus)
+		return;
+
 	bool result;
 	if (value == true)
 		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(DownTextureUnlit, result), DownTextureLit);
 	else
 		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(DownTextureLit, result), DownTextureUnlit);
+	DownStatus = value;
 }

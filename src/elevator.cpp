@@ -198,6 +198,14 @@ Elevator::~Elevator()
 	ShaftDoorR_state.DeleteAll();
 	ShaftDoorR.DeleteAll();
 
+	//delete directional indicators
+	for (int i = 0; i < IndicatorArray.GetSize(); i++)
+	{
+		if (IndicatorArray[i])
+			delete IndicatorArray[i];
+	}
+	IndicatorArray.DeleteAll();
+
 	//Destructor
 	if (timer)
 	{
@@ -301,6 +309,9 @@ bool Elevator::CreateElevator(float x, float z, int floor)
 	ShaftDoorL_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorR_state.SetSize(ServicedFloors.GetSize());
 	ShaftDoorsOpen.SetSize(ServicedFloors.GetSize());
+
+	//resize directional indicator array
+	IndicatorArray.SetSize(ServicedFloors.GetSize());
 
 	//create sound object
 	mainsound = new Sound();
@@ -789,6 +800,17 @@ void Elevator::CloseDoors(int whichdoors, int floor, bool manual)
 	//if both doors are selected but elevator is not on a floor, only close elevator doors
 	if (whichdoors == 1 && OnFloor == false)
 		whichdoors = 2;
+
+	//turn off directional indicators
+	if (whichdoors == 1)
+	{
+		int index = ServicedFloors.Find(GetFloor());
+		if (IndicatorArray[index])
+		{
+			IndicatorArray[index]->DownLight(false);
+			IndicatorArray[index]->UpLight(false);
+		}
+	}
 
 	WhichDoors = whichdoors;
 	ShaftDoorFloor = floor;
@@ -1627,9 +1649,19 @@ void Elevator::MoveElevatorToFloor()
 	//finish move
 	if (EmergencyStop == false)
 	{
-		//play chime sound
+		//play chime sound and show directional indicator
 		if (InServiceMode() == false)
+		{
+			int index = ServicedFloors.Find(GetFloor());
+			if (IndicatorArray[index])
+			{
+				if (Direction == -1)
+					IndicatorArray[index]->DownLight(true);
+				else
+					IndicatorArray[index]->UpLight(true);
+			}
 			Chime(GotoFloor);
+		}
 
 		//store error offset value
 		if (Direction == -1)
@@ -2689,4 +2721,25 @@ int Elevator::GetBottomFloor()
 {
 	//returns lowest serviced floor
 	return ServicedFloors[0];
+}
+
+void Elevator::AddDirectionalIndicators(const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+{
+	//create an array of directional indicators
+
+	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
+	{
+		IndicatorArray[i] = new DirectionalIndicator(Number, ServicedFloors[i], BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+		IndicatorArray[i]->Enabled(false);
+	}
+}
+
+void Elevator::EnableDirectionalIndicator(int floor, bool value)
+{
+	//enable/disable the specified directional indicator
+
+	int index = ServicedFloors.Find(floor);
+
+	if (IndicatorArray[index])
+		IndicatorArray[index]->Enabled(true);
 }

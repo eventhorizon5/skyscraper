@@ -28,6 +28,7 @@
 
 #include "buttonpanel.h"
 #include "sound.h"
+#include "directional.h"
 
 class SBSIMPEXP Elevator
 {
@@ -162,6 +163,8 @@ public:
 	void SetGoButton(bool value);
 	int GetTopFloor();
 	int GetBottomFloor();
+	void AddDirectionalIndicators(const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	void EnableDirectionalIndicator(int floor, bool value);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -248,6 +251,9 @@ private:
 	int door_section; //door movement section; used for both reversal tracking and debugging
 	bool quick_close; //used if user presses close button while doors are opening; results in a faster timer length
 	bool doors_stopped;
+
+	//directional indicators
+	csArray<DirectionalIndicator*> IndicatorArray;
 
 	//elevator misc internals
 	bool ElevatorIsRunning;

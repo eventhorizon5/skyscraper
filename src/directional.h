@@ -38,6 +38,8 @@ public:
 	csString UpTextureLit; //lit up texture
 	csString DownTextureUnlit; //unlit down texture
 	csString DownTextureLit; //lit down texture
+	bool UpStatus; //status of up light
+	bool DownStatus; //status of down light
 
 	//functions
 	DirectionalIndicator(int elevator, int floor, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
