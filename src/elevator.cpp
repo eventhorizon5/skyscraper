@@ -1652,14 +1652,10 @@ void Elevator::MoveElevatorToFloor()
 		//play chime sound and show directional indicator
 		if (InServiceMode() == false)
 		{
-			int index = ServicedFloors.Find(GetFloor());
-			if (IndicatorArray[index])
-			{
-				if (Direction == -1)
-					IndicatorArray[index]->DownLight(true);
-				else
-					IndicatorArray[index]->UpLight(true);
-			}
+			if (Direction == -1)
+				SetDirectionalIndicator(GetFloor(), false, true);
+			else
+				SetDirectionalIndicator(GetFloor(), true, false);
 			Chime(GotoFloor);
 		}
 
@@ -2729,7 +2725,7 @@ void Elevator::AddDirectionalIndicators(const char *BackTexture, const char *upt
 
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
 	{
-		IndicatorArray[i] = new DirectionalIndicator(Number, ServicedFloors[i], BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+		IndicatorArray[i] = new DirectionalIndicator(Number, ServicedFloors[i], BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, Origin.x + CenterX, Origin.z + CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 		IndicatorArray[i]->Enabled(false);
 	}
 }
@@ -2740,6 +2736,25 @@ void Elevator::EnableDirectionalIndicator(int floor, bool value)
 
 	int index = ServicedFloors.Find(floor);
 
+	if (index == -1)
+		return;
+
 	if (IndicatorArray[index])
 		IndicatorArray[index]->Enabled(true);
+}
+
+void Elevator::SetDirectionalIndicator(int floor, bool UpLight, bool DownLight)
+{
+	//set light status of directional indicator
+
+	int index = ServicedFloors.Find(floor);
+
+	if (index == -1)
+		return;
+
+	if (IndicatorArray[index])
+	{
+		IndicatorArray[index]->DownLight(DownLight);
+		IndicatorArray[index]->UpLight(UpLight);
+	}
 }

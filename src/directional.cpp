@@ -37,6 +37,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 	IsEnabled = true;
 	Elevator = elevator;
 	Floor = floor;
+	Direction = direction;
 	UpTextureUnlit = uptexture;
 	UpTextureLit = uptexture_lit;
 	DownTextureUnlit = downtexture;

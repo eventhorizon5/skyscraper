@@ -165,6 +165,7 @@ public:
 	int GetBottomFloor();
 	void AddDirectionalIndicators(const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	void EnableDirectionalIndicator(int floor, bool value);
+	void SetDirectionalIndicator(int floor, bool UpLight, bool DownLight);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

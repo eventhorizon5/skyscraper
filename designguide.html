@@ -948,6 +948,39 @@
     position (relative to the elevator) specified by CenterX and CenterZ. Direction 
     is the direction the indicator faces, and can be either &quot;left&quot;, 
     &quot;right&quot;, &quot;front&quot; or &quot;back&quot;.</p>
+  <p align="left"><strong>10. AddDirectionalIndicators</strong> - creates the 
+    elevator's directional indicator/lanterns (similar to the CreateCallButtons 
+    command) <br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicators<em> 
+    BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, DownTexture, DownTextureLit, 
+    CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, 
+    th<br>
+    </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
+    AddDirectionalIndicators Metal, UpLight, UpLightOn, DownLight, DownLightOn, 
+    -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
+  <p align="left">This command will create directional indicators on all floors 
+    the elevator serves. It'll also automatically create the up and down lights 
+    depending on the floor.</p>
+  <p align="left"><em>BackTexture</em> is the texture of the wall plate behind 
+    the lights</p>
+  <p align="left"><em>UpTexture</em> and <em>DownTexture</em> are the textures 
+    used for the lights themselves, and the &quot;Lit&quot; texures are the ones 
+    to show when the light is on</p>
+  <p align="left"><em>CenterX</em> and <em>CenterZ</em> are the central location 
+    of the indicators</p>
+  <p align="left"><em>voffset</em> is the altitude offset that the object is above 
+    each floor</p>
+  <p align="left"><em>direction </em>determines the direction the indicators face:<br>
+    'front' means they face towards the front of the building<br>
+    'back' means they face towards the back of the building<br>
+    'left' means they face left<br>
+    'right' means they face right</p>
+  <p align="left"><em>BackWidth</em> and <em>BackHeight</em> are the width and 
+    height of the wall plate</p>
+  <p align="left"><em>ShowBack</em> determines if the wall plate should be shown, 
+    and is either true or false</p>
+  <p align="left"><em>tw</em> and <em>th</em> are the texture scaling for the 
+    wall plate.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 
