@@ -193,6 +193,184 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Release-CS14|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="0"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="&quot;$(CRYSTAL)\include&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;CS_BUILD_SHARED_LIBS"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="false"
+				TreatWChar_tAsBuiltInType="false"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile=".\Release/SBS.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName="..\SBS.pdb"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="libcrystalspace.lib libcrystalspace_opengl.lib libcrystalspace_windows.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib"
+				OutputFile="../SBS.dll"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;$(CRYSTAL)\out\release8\libs&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="..\SBS.pdb"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				ImportLibrary="./Release/SBS.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				OutputFile=".\Release/SBS.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug-CS14|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(CRYSTAL)\include&quot;;&quot;$(WXWIN)\lib\vc_dll\mswd&quot;;&quot;$(WXWIN)\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SBS_DLL;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;CS_SUPPORTS_MMX;CS_BUILD_SHARED_LIBS"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				EnableFunctionLevelLinking="true"
+				TreatWChar_tAsBuiltInType="false"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile=".\Debug/SBS.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="libcrystalspace_d.lib libcrystalspace_opengl_d.lib libcrystalspace_windows_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib"
+				OutputFile="../SBS.dll"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(CRYSTAL)\out\debug8\libs&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile=".\Debug/SBS.pdb"
+				SubSystem="2"
+				ImportLibrary="./Debug/SBS.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				OutputFile=".\Debug/SBS.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -212,6 +390,10 @@
 			</File>
 			<File
 				RelativePath="..\src\camera.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\directional.cpp"
 				>
 			</File>
 			<File
@@ -266,6 +448,10 @@
 			</File>
 			<File
 				RelativePath="..\src\camera.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\directional.h"
 				>
 			</File>
 			<File
