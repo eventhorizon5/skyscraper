@@ -263,20 +263,8 @@ void Stairs::Enabled(int floor, bool value)
 
 	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor)
 	{
-		if (value == true)
-		{
-			StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-			StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-			StairArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-			EnableArray[floor - startfloor] = true;
-		}
-		else
-		{
-			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-			StairArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-			EnableArray[floor - startfloor] = false;
-		}
+		sbs->EnableMesh(StairArray[floor - startfloor], value);
+		EnableArray[floor - startfloor] = value;
 
 		//enable/disable door
 		EnableDoor(floor, value);

@@ -85,8 +85,8 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	}
 
 	//create buttons
-	int bottomfloor = sbs->GetElevator(Elevators[0])->ServicedFloors[0];
-	int topfloor = sbs->GetElevator(Elevators[0])->ServicedFloors[sbs->GetElevator(Elevators[0])->ServicedFloors.GetSize() - 1];
+	int bottomfloor = sbs->GetElevator(Elevators[0])->GetBottomFloor();
+	int topfloor = sbs->GetElevator(Elevators[0])->GetTopFloor();
 
 	if (Direction == "front" || Direction == "back")
 	{
@@ -156,20 +156,8 @@ CallButton::~CallButton()
 void CallButton::Enabled(bool value)
 {
 	//turns panel on/off
-	if (value == true)
-	{
-		CallButtonMesh->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		CallButtonMesh->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		CallButtonMesh->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-		IsEnabled = true;
-	}
-	else
-	{
-		CallButtonMesh->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		CallButtonMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		CallButtonMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-		IsEnabled = false;
-	}
+	sbs->EnableMesh(CallButtonMesh, value);
+	IsEnabled = value;
 }
 
 void CallButton::Call(int direction)

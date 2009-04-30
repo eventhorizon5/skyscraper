@@ -281,18 +281,8 @@ void ButtonPanel::SetToElevatorAltitude()
 void ButtonPanel::Enabled(bool value)
 {
 	//enable or disable button panel
-	if (value == true)
-	{
-		ButtonPanelMesh->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ButtonPanelMesh->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ButtonPanelMesh->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		ButtonPanelMesh->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ButtonPanelMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ButtonPanelMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-	}
+
+	sbs->EnableMesh(ButtonPanelMesh, value);
 }
 
 int ButtonPanel::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)

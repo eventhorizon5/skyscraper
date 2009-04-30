@@ -1365,72 +1365,28 @@ int SBS::AddTriangleWall(csRef<iThingFactoryState> dest, const char *name, const
 void SBS::EnableBuildings(bool value)
 {
 	//turns buildings on/off
-	if (value == true)
-	{
-		Buildings->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		Buildings->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		Buildings->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		Buildings->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		Buildings->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		Buildings->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-	}
+	EnableMesh(Buildings, value);
 	IsBuildingsEnabled = value;
 }
 
 void SBS::EnableLandscape(bool value)
 {
 	//turns landscape on/off
-	if (value == true)
-	{
-		Landscape->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		Landscape->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		Landscape->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		Landscape->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		Landscape->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		Landscape->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-	}
+	EnableMesh(Landscape, value);
 	IsLandscapeEnabled = value;
 }
 
 void SBS::EnableExternal(bool value)
 {
 	//turns external on/off
-	if (value == true)
-	{
-		External->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		External->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		External->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		External->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		External->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		External->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-	}
+	EnableMesh(External, value);
 	IsExternalEnabled = value;
 }
 
 void SBS::EnableSkybox(bool value)
 {
 	//turns skybox on/off
-	if (value == true)
-	{
-		SkyBox->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		SkyBox->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		SkyBox->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		SkyBox->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		SkyBox->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		SkyBox->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-	}
+	EnableMesh(SkyBox, value);
 	IsSkyboxEnabled = value;
 }
 
@@ -2771,4 +2727,21 @@ bool SBS::GetTextureTiling(const char *texture, float &tw, float &th)
 		}
 	}
 	return false;
+}
+
+void SBS::EnableMesh(csRef<iMeshWrapper> mesh, bool value)
+{
+	//enables or disables a mesh
+	if (value == true)
+	{
+		mesh->GetFlags().Reset(CS_ENTITY_INVISIBLEMESH);
+		mesh->GetFlags().Reset(CS_ENTITY_NOSHADOWS);
+		mesh->GetFlags().Reset(CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		mesh->GetFlags().Set(CS_ENTITY_INVISIBLEMESH);
+		mesh->GetFlags().Set(CS_ENTITY_NOSHADOWS);
+		mesh->GetFlags().Set(CS_ENTITY_NOHITBEAM);
+	}
 }

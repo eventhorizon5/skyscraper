@@ -237,30 +237,10 @@ void Floor::DeleteInterfloorWall(int index)
 void Floor::Enabled(bool value)
 {
 	//turns floor on/off
-	if (value == true)
-	{
-		Level->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		Level->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		Level->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
 
-		Interfloor->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		Interfloor->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		Interfloor->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-
-		IsEnabled = true;
-	}
-	else
-	{
-		Level->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		Level->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		Level->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
-		Interfloor->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		Interfloor->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		Interfloor->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
-		IsEnabled = false;
-	}
+	sbs->EnableMesh(Level, value);
+	sbs->EnableMesh(Interfloor, value);
+	IsEnabled = value;
 
 	EnableColumnFrame(value);
 
@@ -383,18 +363,7 @@ float Floor::CalculateAltitude()
 void Floor::EnableColumnFrame(bool value)
 {
 	//enable/disable columnframe mesh
-	if (value == true)
-	{
-		ColumnFrame->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ColumnFrame->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ColumnFrame->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		ColumnFrame->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ColumnFrame->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ColumnFrame->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-	}
+	sbs->EnableMesh(ColumnFrame, value);
 	IsColumnFrameEnabled = value;
 }
 

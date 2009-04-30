@@ -1991,13 +1991,8 @@ int Elevator::AddShaftDoors(const char *texture, float thickness, float CenterX,
 		shaft->AddWall(ServicedFloors[i], "ShaftDoorF2", "Connection", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base + DoorHeight + 0.001, base + DoorHeight + 0.001, 0, 0);
 
 		//make doors invisible on start
-		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ShaftDoorL[i]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
-		ShaftDoorR[i]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ShaftDoorR[i]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ShaftDoorR[i]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+		sbs->EnableMesh(ShaftDoorL[i], false);
+		sbs->EnableMesh(ShaftDoorR[i], false);
 
 		floor = 0;
 		shaft = 0;
@@ -2042,73 +2037,24 @@ void Elevator::DumpQueues()
 void Elevator::Enabled(bool value)
 {
 	//shows/hides elevator
-	if (value == true)
-	{
-		ElevatorMesh->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ElevatorMesh->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ElevatorMesh->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
 
-		ElevatorDoorL->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ElevatorDoorL->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ElevatorDoorL->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-
-		ElevatorDoorR->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ElevatorDoorR->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ElevatorDoorR->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-
-		IsEnabled = true;
-	}
-	else
-	{
-		ElevatorMesh->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ElevatorMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ElevatorMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
-		ElevatorDoorL->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ElevatorDoorL->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ElevatorDoorL->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
-		ElevatorDoorR->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ElevatorDoorR->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ElevatorDoorR->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
-		IsEnabled = false;
-	}
+	sbs->EnableMesh(ElevatorMesh, value);
+	sbs->EnableMesh(ElevatorDoorL, value);
+	sbs->EnableMesh(ElevatorDoorR, value);
+	IsEnabled = value;
 }
 
 void Elevator::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicator, button panel and plaque
-	if (value == true)
-	{
-		FloorIndicator->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		FloorIndicator->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		FloorIndicator->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
 
-		Plaque->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		Plaque->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		Plaque->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+	sbs->EnableMesh(FloorIndicator, value);
+	sbs->EnableMesh(Plaque, value);
 
-		if (Panel)
-			Panel->Enabled(true);
-		if (Panel2)
-			Panel2->Enabled(true);
-	}
-	else
-	{
-		FloorIndicator->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		FloorIndicator->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		FloorIndicator->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
-		Plaque->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		Plaque->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		Plaque->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
-		if (Panel)
-			Panel->Enabled(false);
-		if (Panel2)
-			Panel2->Enabled(false);
-	}
+	if (Panel)
+		Panel->Enabled(value);
+	if (Panel2)
+		Panel2->Enabled(value);
 }
 
 void Elevator::ShaftDoorsEnabled(int floor, bool value)
@@ -2131,26 +2077,8 @@ void Elevator::ShaftDoorsEnabled(int floor, bool value)
 	if (ShaftDoorL[index] == 0)
 		return;
 
-	if (value == true)
-	{
-		ShaftDoorL[index]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ShaftDoorL[index]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ShaftDoorL[index]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-
-		ShaftDoorR[index]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		ShaftDoorR[index]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		ShaftDoorR[index]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		ShaftDoorL[index]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ShaftDoorL[index]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ShaftDoorL[index]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-
-		ShaftDoorR[index]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		ShaftDoorR[index]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		ShaftDoorR[index]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-	}
+	sbs->EnableMesh(ShaftDoorL[index], value);
+	sbs->EnableMesh(ShaftDoorR[index], value);
 }
 
 void Elevator::ShaftDoorsEnabledRange(int floor, int range)

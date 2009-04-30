@@ -209,6 +209,7 @@ public:
 	void ProcessTextureFlip(float tw, float th);
 	bool GetTextureTiling(const char *texture, float &tw, float &th);
 	bool AddTextToTexture(const char *texturename, const char *fontname, const char *text, uint x1, uint y1, uint x2, uint y2, uint h_align, uint v_align);
+	void EnableMesh(csRef<iMeshWrapper> mesh, bool value);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

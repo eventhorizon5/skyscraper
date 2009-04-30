@@ -169,9 +169,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 		//turns shaft on/off for a specific floor
 		if (value == true)
 		{
-			ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-			ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-			ShaftArray[floor - startfloor]->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
+			sbs->EnableMesh(ShaftArray[floor - startfloor], value);
 			EnableArray[floor - startfloor] = true;
 		}
 		else
@@ -179,9 +177,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 			//leave bottom and top on
 			if (floor != startfloor && floor != endfloor)
 			{
-				ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-				ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-				ShaftArray[floor - startfloor]->GetFlags().Set (CS_ENTITY_NOHITBEAM);
+				sbs->EnableMesh(ShaftArray[floor - startfloor], value);
 				EnableArray[floor - startfloor] = false;
 			}
 			else

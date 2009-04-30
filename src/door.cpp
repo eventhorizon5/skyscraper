@@ -151,18 +151,7 @@ bool Door::IsOpen()
 
 void Door::Enabled(bool value)
 {
-	if (value == true)
-	{
-		DoorMesh->GetFlags().Reset (CS_ENTITY_INVISIBLEMESH);
-		DoorMesh->GetFlags().Reset (CS_ENTITY_NOSHADOWS);
-		DoorMesh->GetFlags().Reset (CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		DoorMesh->GetFlags().Set (CS_ENTITY_INVISIBLEMESH);
-		DoorMesh->GetFlags().Set (CS_ENTITY_NOSHADOWS);
-		DoorMesh->GetFlags().Set (CS_ENTITY_NOHITBEAM);
-	}
+	sbs->EnableMesh(DoorMesh, value);
 }
 
 void Door::MoveDoor()
