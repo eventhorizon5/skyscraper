@@ -126,6 +126,7 @@ Elevator::Elevator(int number)
 	ACPFloorSet = false;
 	RecallUnavailable = false;
 	ManualGo = false;
+	directionalupdate = false;
 
 	//create object meshes
 	buffer = Number;
@@ -580,6 +581,19 @@ int Elevator::GetFloor()
 void Elevator::MonitorLoop()
 {
 	//Monitors elevator and starts actions if needed
+
+	if (directionalupdate == true)
+	{
+		//change directional indicator
+		if (InServiceMode() == false)
+		{
+			if (QueuePositionDirection == -1)
+				SetDirectionalIndicator(GetFloor(), false, true);
+			else
+				SetDirectionalIndicator(GetFloor(), true, false);
+		}
+		directionalupdate = false;
+	}
 
 	//make sure height value is set
 	if (Height == 0)
@@ -1649,15 +1663,9 @@ void Elevator::MoveElevatorToFloor()
 	//finish move
 	if (EmergencyStop == false)
 	{
-		//play chime sound and show directional indicator
+		//play chime sound
 		if (InServiceMode() == false)
-		{
-			if (QueuePositionDirection == -1)
-				SetDirectionalIndicator(GetFloor(), false, true);
-			else
-				SetDirectionalIndicator(GetFloor(), true, false);
 			Chime(GotoFloor);
-		}
 
 		//store error offset value
 		if (Direction == -1)
@@ -1733,6 +1741,9 @@ void Elevator::MoveElevatorToFloor()
 				sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
 			}
 		}
+
+		//queue the directional indicators for update
+		directionalupdate = true;
 
 		//open doors
 		//do not automatically open doors if in fire service phase 2
@@ -2724,10 +2735,7 @@ void Elevator::AddDirectionalIndicators(const char *BackTexture, const char *upt
 	//create an array of directional indicators
 
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
-	{
 		IndicatorArray[i] = new DirectionalIndicator(Number, ServicedFloors[i], BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, Origin.x + CenterX, Origin.z + CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-		IndicatorArray[i]->Enabled(false);
-	}
 }
 
 void Elevator::EnableDirectionalIndicator(int floor, bool value)
@@ -2757,4 +2765,11 @@ void Elevator::SetDirectionalIndicator(int floor, bool UpLight, bool DownLight)
 		IndicatorArray[index]->DownLight(DownLight);
 		IndicatorArray[index]->UpLight(UpLight);
 	}
+}
+
+void Elevator::DisableDirectionalIndicators()
+{
+	//turn off all directional indicators
+	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
+		IndicatorArray[i]->Enabled(false);
 }

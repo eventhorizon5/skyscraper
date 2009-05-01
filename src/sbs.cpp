@@ -244,7 +244,7 @@ bool SBS::Start()
 			StairsArray[i].object->EnableWholeStairwell(false);
 	}
 
-	//turn on shaft elevator doors
+	//turn on shaft elevator doors and turn off directional indicators
 	for (int i = 0; i < Elevators(); i++)
 	{
 		if (ElevatorArray[i].object)
@@ -252,6 +252,9 @@ bool SBS::Start()
 			ElevatorArray[i].object->ShaftDoorsEnabled(camera->StartFloor, true);
 			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->startfloor, true);
 			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->endfloor, true);
+			ElevatorArray[i].object->DisableDirectionalIndicators();
+			//turn on directional indicator for camera floor
+			ElevatorArray[i].object->EnableDirectionalIndicator(camera->StartFloor, true);
 		}
 	}
 

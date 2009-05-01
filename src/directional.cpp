@@ -167,6 +167,10 @@ void DirectionalIndicator::UpLight(bool value)
 	if (value == UpStatus)
 		return;
 
+	//exit if indicator is disabled
+	if (IsEnabled == false)
+		return;
+
 	bool result;
 	if (value == true)
 		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(UpTextureUnlit, result), UpTextureLit);
@@ -179,6 +183,10 @@ void DirectionalIndicator::DownLight(bool value)
 {
 	//turn on the 'down' directional light
 	if (value == DownStatus)
+		return;
+
+	//exit if indicator is disabled
+	if (IsEnabled == false)
 		return;
 
 	bool result;
