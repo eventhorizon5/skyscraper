@@ -1652,7 +1652,7 @@ void Elevator::MoveElevatorToFloor()
 		//play chime sound and show directional indicator
 		if (InServiceMode() == false)
 		{
-			if (Direction == -1)
+			if (QueuePositionDirection == -1)
 				SetDirectionalIndicator(GetFloor(), false, true);
 			else
 				SetDirectionalIndicator(GetFloor(), true, false);
@@ -2740,7 +2740,7 @@ void Elevator::EnableDirectionalIndicator(int floor, bool value)
 		return;
 
 	if (IndicatorArray[index])
-		IndicatorArray[index]->Enabled(true);
+		IndicatorArray[index]->Enabled(value);
 }
 
 void Elevator::SetDirectionalIndicator(int floor, bool UpLight, bool DownLight)
