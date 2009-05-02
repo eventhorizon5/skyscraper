@@ -2771,5 +2771,8 @@ void Elevator::DisableDirectionalIndicators()
 {
 	//turn off all directional indicators
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
-		IndicatorArray[i]->Enabled(false);
+	{
+		if (IndicatorArray[i])
+			IndicatorArray[i]->Enabled(false);
+	}
 }
