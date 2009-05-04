@@ -244,17 +244,21 @@ bool SBS::Start()
 			StairsArray[i].object->EnableWholeStairwell(false);
 	}
 
-	//turn on shaft elevator doors and turn off directional indicators
+	//init elevators
 	for (int i = 0; i < Elevators(); i++)
 	{
 		if (ElevatorArray[i].object)
 		{
+			//turn on shaft doors
 			ElevatorArray[i].object->ShaftDoorsEnabled(camera->StartFloor, true);
 			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->startfloor, true);
 			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->endfloor, true);
+			//turn of directional indicators
 			ElevatorArray[i].object->DisableDirectionalIndicators();
 			//turn on directional indicator for camera floor
 			ElevatorArray[i].object->EnableDirectionalIndicator(camera->StartFloor, true);
+			//disable objects
+			ElevatorArray[i].object->EnableObjects(false);
 		}
 	}
 
@@ -1601,6 +1605,10 @@ iMaterialWrapper* SBS::ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper>
 
 	//get new material
 	csRef<iMaterialWrapper> newmat = engine->GetMaterialList()->FindByName(texture);
+
+	//exit if old and new materials are the same
+	if (oldmat == newmat)
+		return 0;
 
 	//switch material if valid
 	if (newmat && thingstate)

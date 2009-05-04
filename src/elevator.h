@@ -256,7 +256,6 @@ private:
 
 	//directional indicators
 	csArray<DirectionalIndicator*> IndicatorArray;
-	bool directionalupdate; //update directional indicator textures on the next loop iteration
 
 	//elevator misc internals
 	bool ElevatorIsRunning;

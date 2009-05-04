@@ -126,7 +126,6 @@ Elevator::Elevator(int number)
 	ACPFloorSet = false;
 	RecallUnavailable = false;
 	ManualGo = false;
-	directionalupdate = false;
 
 	//create object meshes
 	buffer = Number;
@@ -581,19 +580,6 @@ int Elevator::GetFloor()
 void Elevator::MonitorLoop()
 {
 	//Monitors elevator and starts actions if needed
-
-	if (directionalupdate == true)
-	{
-		//change directional indicator
-		if (InServiceMode() == false)
-		{
-			if (QueuePositionDirection == -1)
-				SetDirectionalIndicator(GetFloor(), false, true);
-			else
-				SetDirectionalIndicator(GetFloor(), true, false);
-		}
-		directionalupdate = false;
-	}
 
 	//make sure height value is set
 	if (Height == 0)
@@ -1742,8 +1728,14 @@ void Elevator::MoveElevatorToFloor()
 			}
 		}
 
-		//queue the directional indicators for update
-		directionalupdate = true;
+		//change directional indicator
+		if (InServiceMode() == false)
+		{
+			if (QueuePositionDirection == -1)
+				SetDirectionalIndicator(GetFloor(), false, true);
+			else
+				SetDirectionalIndicator(GetFloor(), true, false);
+		}
 
 		//open doors
 		//do not automatically open doors if in fire service phase 2
