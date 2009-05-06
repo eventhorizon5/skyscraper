@@ -53,4 +53,7 @@ sounds:
 -motor_start.wav, motor_running.wav, and motor_stop.wav originally elevatormotor1.mp3 from www.freesound.org
 -elevidle.wav, elevmove.wav, elevstart.wav and elevstop.wav originally from "service_elavator.mp3" from www.freesound.org
 -elevatoropen.wav and elevatorclose.wav originally from elevator.wav from www.freesound.org
+-fire_alarm.wav - originally "Fire alarm.wav" by fonogeno on www.freesound.org
+-bell1.wav and bell1-stop.wav originally from "Electric_school_bell.wav" by John_Sauter on www.freesound.org
+-bell2.wav and bell2-stop.wav originall from "bell_school_ringing.wav" by vtkproductions.com at www.freesound.org
 
