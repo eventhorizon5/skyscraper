@@ -75,6 +75,8 @@ public:
 	csString StopSound; //elevator stop/slowdown sound
 	csString IdleSound; //elevator idle sound
 	csString ChimeSound; //elevator chime sound
+	csString AlarmSound; //alarm sound (loop)
+	csString AlarmSoundStop; //alarm stopping sound
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
 	int ACPFloor; //floor to stop at in ACP mode
@@ -89,6 +91,7 @@ public:
 	bool MovePending; //for service and fire modes; a move request is pending (waiting for doors to be manually closed)
 	bool OnFloor; //true if elevator is stopped on a floor, false if not
 	bool ManualGo; //go toggle for inspection service mode
+	bool AlarmActive; //true if alarm is active
 
 	//functions
 	Elevator(int number);
@@ -238,6 +241,7 @@ private:
 	Sound *idlesound;
 	Sound *doorsound;
 	Sound *chime;
+	Sound *alarm;
 
 	//door internals
 	bool DoorIsRunning;

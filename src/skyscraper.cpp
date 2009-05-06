@@ -447,12 +447,16 @@ void Skyscraper::GetInput()
 	if (mouse->GetLastButton(0) == true && MouseDown == false)
 	{
 		MouseDown = true;
+		Simcore->camera->MouseDown = MouseDown;
 		Simcore->camera->ClickedObject();
 	}
 
 	//reset mouse state
 	if (mouse->GetLastButton(0) == false)
+	{
 		MouseDown = false;
+		Simcore->camera->MouseDown = MouseDown;
+	}
 
 	//if (wxGetKeyState(WXK_ESCAPE))
 

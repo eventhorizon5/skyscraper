@@ -56,6 +56,7 @@ public:
 	csVector3 angle_velocity;
 	float speed; //movement speed base
 	bool EnableCollisions; //enable collision detection
+	bool MouseDown; //mouse status
 
 	//functions
 	Camera();

@@ -2501,6 +2501,24 @@ recalc:
 				}
 				Simcore->GetElevator(Current)->ChimeSound = temp2;
 			}
+			if (LineData.Slice(0, 10).CompareNoCase("alarmsound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->AlarmSound = temp2;
+			}
+			if (LineData.Slice(0, 14).CompareNoCase("alarmsoundstop") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->AlarmSoundStop = temp2;
+			}
 			if (LineData.Slice(0, 13).CompareNoCase("floorskiptext") == true)
 			{
 				if (temp2check < 0)

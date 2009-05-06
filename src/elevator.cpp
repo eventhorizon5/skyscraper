@@ -106,6 +106,8 @@ Elevator::Elevator(int number)
 	StopSound = "elevstop.wav";
 	IdleSound = "elevidle.wav";
 	ChimeSound = "chime1.wav";
+	AlarmSound = "bell1.wav";
+	AlarmSoundStop = "bell1-stop.wav";
 	UseFloorSkipText = false;
 	ACP = false;
 	ACPFloor = 0;
@@ -126,6 +128,7 @@ Elevator::Elevator(int number)
 	ACPFloorSet = false;
 	RecallUnavailable = false;
 	ManualGo = false;
+	AlarmActive = false;
 
 	//create object meshes
 	buffer = Number;
@@ -228,6 +231,9 @@ Elevator::~Elevator()
 	if (chime)
 		delete chime;
 	chime = 0;
+	if (alarm)
+		delete alarm;
+	alarm = 0;
 }
 
 bool Elevator::CreateElevator(float x, float z, int floor)
@@ -322,6 +328,8 @@ bool Elevator::CreateElevator(float x, float z, int floor)
 	doorsound = new Sound();
 	doorsound->SetPosition(Origin);
 	chime = new Sound();
+	alarm = new Sound();
+	alarm->SetPosition(Origin);
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 	return true;
@@ -425,7 +433,25 @@ void Elevator::Alarm()
 {
 	//elevator alarm code
 
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": alarm on");
+	if (AlarmActive == false)
+	{
+		//ring alarm
+		AlarmActive = true;
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": alarm on");
+		alarm->Load(AlarmSound.GetData());
+		alarm->Loop(true);
+		alarm->Play();
+	}
+	if (AlarmActive == true && sbs->camera->MouseDown == false)
+	{
+		//stop alarm
+		AlarmActive = false;
+		alarm->Stop();
+		alarm->Load(AlarmSoundStop.GetData());
+		alarm->Loop(false);
+		alarm->Play();
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": alarm off");
+	}
 }
 
 void Elevator::StopElevator()
@@ -599,6 +625,10 @@ void Elevator::MonitorLoop()
 	}
 	else if (((sbs->InElevator == false || sbs->ElevatorNumber != Number) && DoorsOpen == false && OpenDoor == 0) && idlesound->IsPlaying() == true)
 		idlesound->Stop();
+
+	//process alarm
+	if (AlarmActive == true)
+		Alarm();
 
 	//call queue processor
 	ProcessCallQueue();
@@ -1487,6 +1517,7 @@ void Elevator::MoveElevatorToFloor()
 	mainsound->SetPosition(GetPosition());
 	idlesound->SetPosition(GetPosition());
 	doorsound->SetPosition(csVector3(DoorOrigin.x, GetPosition().y + (DoorHeight / 2), DoorOrigin.z));
+	alarm->SetPosition(GetPosition());
 
 	//motion calculation
 	if (Brakes == false)
@@ -1682,6 +1713,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//move sounds
 		mainsound->SetPosition(GetPosition());
+		alarm->SetPosition(GetPosition());
 
 		//the elevator is now stopped on a valid floor; set OnFloor to true
 		OnFloor = true;

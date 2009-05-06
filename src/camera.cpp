@@ -72,6 +72,7 @@ Camera::Camera()
 	SetGravity(sbs->MetersToFeet(9.806)); // 9.806 m/s/s
 	lastfloor = 0;
 	lastfloorset = false;
+	MouseDown = false;
 }
 
 Camera::~Camera()
