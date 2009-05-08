@@ -135,6 +135,7 @@ SBS::SBS()
 	widthscale.SetSize(6);
 	heightscale.SetSize(6);
 	remaining_delta = 0;
+	startup_check = false;
 }
 
 SBS::~SBS()
@@ -254,11 +255,11 @@ bool SBS::Start()
 			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->startfloor, true);
 			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->endfloor, true);
 			//turn of directional indicators
-			ElevatorArray[i].object->DisableDirectionalIndicators();
+			//ElevatorArray[i].object->DisableDirectionalIndicators();
 			//turn on directional indicator for camera floor
-			ElevatorArray[i].object->EnableDirectionalIndicator(camera->StartFloor, true);
+			//ElevatorArray[i].object->EnableDirectionalIndicator(camera->StartFloor, true);
 			//disable objects
-			ElevatorArray[i].object->EnableObjects(false);
+			//ElevatorArray[i].object->EnableObjects(false);
 		}
 	}
 
@@ -308,6 +309,13 @@ void SBS::MainLoop()
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
 	float elapsed = remaining_delta + (vc->GetElapsedTicks() / 1000.0);
+	running_time = vc->GetCurrentTicks() / 1000.0;
+
+	if (running_time > 1.0 && startup_check == true)
+	{
+		startup_check = false;
+	}
+
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
 		elapsed = 0.5;
