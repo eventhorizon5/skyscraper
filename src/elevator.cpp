@@ -2285,7 +2285,7 @@ void Elevator::UpdateFloorIndicators()
 	else
 		texture = "Button" + sbs->GetFloor(GetFloor())->ID;
 
-	sbs->ChangeTexture(FloorIndicator, orig_indicator, texture.GetData());
+	sbs->ChangeTexture(FloorIndicator, orig_indicator, texture.GetData(), false);
 }
 
 float Elevator::GetJerkRate()

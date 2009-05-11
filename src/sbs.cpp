@@ -1601,9 +1601,10 @@ void SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfl
 	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
 }
 
-iMaterialWrapper* SBS::ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture)
+iMaterialWrapper* SBS::ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture, bool matcheck)
 {
 	//changes a texture
+	//if matcheck is true, exit if old and new materials are the same
 
 	//exit if mesh pointer's invalid
 	if (!mesh)
@@ -1615,7 +1616,7 @@ iMaterialWrapper* SBS::ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper>
 	csRef<iMaterialWrapper> newmat = engine->GetMaterialList()->FindByName(texture);
 
 	//exit if old and new materials are the same
-	if (oldmat == newmat)
+	if (matcheck == true && oldmat == newmat)
 		return 0;
 
 	//switch material if valid
