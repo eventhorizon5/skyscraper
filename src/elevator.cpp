@@ -1880,9 +1880,6 @@ int Elevator::AddFloorIndicator(const char *direction, float CenterX, float Cent
 	if (index != -1 && !orig_indicator)
 		orig_indicator = FloorIndicator_state->GetPolygonMaterial(index);
 
-	//run mesh prepare to prevent problems with changing textures later
-        csRef<iThingState> thingstate = scfQueryInterface<iThingState> (FloorIndicator->GetMeshObject());
-        thingstate->Prepare();
 	return index;
 }
 

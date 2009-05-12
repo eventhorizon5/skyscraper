@@ -295,6 +295,4 @@ private:
 
 	//door object for callback
 	Door *callbackdoor;
-
-	bool startup_check;
 };

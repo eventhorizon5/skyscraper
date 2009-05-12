@@ -144,10 +144,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 		sbs->ResetWalls();
 	}
 	sbs->ResetExtents();
-
-	//run mesh prepare to prevent problems with changing textures later
-	csRef<iThingState> thingstate = scfQueryInterface<iThingState> (DirectionalMesh->GetMeshObject());
-	thingstate->Prepare();
 }
 
 DirectionalIndicator::~DirectionalIndicator()
