@@ -47,10 +47,25 @@ public:
 	void Enabled(bool value);
 	void UpLight(bool value);
 	void DownLight(bool value);
+	void SetLights(int up, int down);
 
 private:
 	csRef<iMeshWrapper> DirectionalMesh; //indicator mesh object
 	csRef<iThingFactoryState> Directional_state;
+
+	class Callback : public csObject, public iMeshDrawCallback
+	{
+	public:
+		Callback(DirectionalIndicator *indicator);
+		virtual ~Callback();
+		virtual bool BeforeDrawing(iMeshWrapper *spr, iRenderView *rview);
+		DirectionalIndicator *Indicator;
+		bool Drawn; //true if mesh was drawn
+		int up, down;
+		bool RemoveCallback;
+	};
+
+	csRef<Callback> callback; //callback object
 };
 
 #endif

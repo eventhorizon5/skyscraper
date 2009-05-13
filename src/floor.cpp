@@ -253,8 +253,8 @@ void Floor::Enabled(bool value)
 		DoorArray[i]->Enabled(value);
 
 	//turn on/off elevator directional indicators
-	//for (int i = 1; i <= sbs->Elevators(); i++)
-		//sbs->GetElevator(i)->EnableDirectionalIndicator(Number, value);
+	for (int i = 1; i <= sbs->Elevators(); i++)
+		sbs->GetElevator(i)->EnableDirectionalIndicator(Number, value);
 }
 
 float Floor::FullHeight()

@@ -56,6 +56,8 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 	DirectionalMesh->SetZBufMode(CS_ZBUF_USE);
 	DirectionalMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
 	DirectionalMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	callback = new Callback(this);
+	DirectionalMesh->SetDrawCallback(callback);
 
 	sbs->ReverseExtents(false, false, false);
 
@@ -148,7 +150,9 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 
 DirectionalIndicator::~DirectionalIndicator()
 {
-
+	//if (callback)
+		//DirectionalMesh->RemoveDrawCallback(callback);
+	callback = 0;
 }
 
 void DirectionalIndicator::Enabled(bool value)
@@ -171,11 +175,20 @@ void DirectionalIndicator::UpLight(bool value)
 	if (IsEnabled == false)
 		return;
 
-	bool result;
-	if (value == true)
-		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(UpTextureUnlit, result), UpTextureLit);
+	if (callback->Drawn == true)
+	{
+		if (value == true)
+			SetLights(1, 0);
+		else
+			SetLights(2, 0);
+	}
 	else
-		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(UpTextureLit, result), UpTextureUnlit);
+	{
+		if (value == true)
+			callback->up = 1;
+		else
+			callback->up = 2;
+	}
 	UpStatus = value;
 }
 
@@ -189,10 +202,63 @@ void DirectionalIndicator::DownLight(bool value)
 	if (IsEnabled == false)
 		return;
 
-	bool result;
-	if (value == true)
-		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(DownTextureUnlit, result), DownTextureLit);
+	if (callback->Drawn == true)
+	{
+		if (value == true)
+			SetLights(0, 1);
+		else
+			SetLights(0, 2);
+	}
 	else
-		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(DownTextureLit, result), DownTextureUnlit);
+	{
+		if (value == true)
+			callback->down = 1;
+		else
+			callback->down = 2;
+	}
 	DownStatus = value;
+}
+
+void DirectionalIndicator::SetLights(int up, int down)
+{
+	bool result;
+	if (up == 1)
+		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(UpTextureUnlit, result), UpTextureLit);
+	if (up == 2)
+		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(UpTextureLit, result), UpTextureUnlit);
+	if (down == 1)
+		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(DownTextureUnlit, result), DownTextureLit);
+	if (down == 2)
+		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(DownTextureLit, result), DownTextureUnlit);
+
+	//remove callback if specified
+	if (callback)
+	{
+		if (callback->RemoveCallback == true)
+			DirectionalMesh->RemoveDrawCallback(callback);
+	}
+}
+
+DirectionalIndicator::Callback::Callback(DirectionalIndicator *indicator)
+{
+	//callback constructor
+	Indicator = indicator;
+	Drawn = false;
+	RemoveCallback = false;
+}
+
+DirectionalIndicator::Callback::~Callback()
+{
+	Indicator = 0;
+}
+
+bool DirectionalIndicator::Callback::BeforeDrawing(iMeshWrapper *spr, iRenderView *rview)
+{
+	if (Drawn == false)
+	{
+		Drawn = true;
+		RemoveCallback = true;
+		Indicator->SetLights(up, down);
+	}
+	return true;
 }
