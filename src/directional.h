@@ -26,6 +26,8 @@
 #ifndef _SBS_DIRECTIONAL_H
 #define _SBS_DIRECTIONAL_H
 
+struct Callback;
+
 class SBSIMPEXP DirectionalIndicator
 {
 public:
@@ -53,19 +55,19 @@ private:
 	csRef<iMeshWrapper> DirectionalMesh; //indicator mesh object
 	csRef<iThingFactoryState> Directional_state;
 
-	class Callback : public csObject, public iMeshDrawCallback
-	{
-	public:
-		Callback(DirectionalIndicator *indicator);
-		virtual ~Callback();
-		virtual bool BeforeDrawing(iMeshWrapper *spr, iRenderView *rview);
-		DirectionalIndicator *Indicator;
-		bool Drawn; //true if mesh was drawn
-		int up, down;
-		bool RemoveCallback;
-	};
-
 	csRef<Callback> callback; //callback object
+};
+
+struct Callback : public iMeshDrawCallback
+{
+	SCF_DECLARE_IBASE;
+	Callback(DirectionalIndicator *indicator);
+	~Callback();
+	virtual bool BeforeDrawing(iMeshWrapper *spr, iRenderView *rview);
+	DirectionalIndicator *Indicator;
+	bool Drawn; //true if mesh was drawn
+	int up, down;
+	bool RemoveCallback;
 };
 
 #endif

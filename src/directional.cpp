@@ -30,6 +30,10 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
+SCF_IMPLEMENT_IBASE (Callback)
+  SCF_IMPLEMENTS_INTERFACE (iMeshDrawCallback)
+SCF_IMPLEMENT_IBASE_END
+
 DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator
@@ -58,6 +62,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 	DirectionalMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 	callback = new Callback(this);
 	DirectionalMesh->SetDrawCallback(callback);
+	callback->DecRef();
 
 	sbs->ReverseExtents(false, false, false);
 
@@ -150,8 +155,8 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 
 DirectionalIndicator::~DirectionalIndicator()
 {
-	//if (callback)
-		//DirectionalMesh->RemoveDrawCallback(callback);
+	if (callback)
+		DirectionalMesh->RemoveDrawCallback(callback);
 	callback = 0;
 }
 
@@ -239,20 +244,21 @@ void DirectionalIndicator::SetLights(int up, int down)
 	}
 }
 
-DirectionalIndicator::Callback::Callback(DirectionalIndicator *indicator)
+Callback::Callback(DirectionalIndicator *indicator)
 {
 	//callback constructor
+	SCF_CONSTRUCT_IBASE (NULL);
 	Indicator = indicator;
 	Drawn = false;
 	RemoveCallback = false;
 }
 
-DirectionalIndicator::Callback::~Callback()
+Callback::~Callback()
 {
 	Indicator = 0;
 }
 
-bool DirectionalIndicator::Callback::BeforeDrawing(iMeshWrapper *spr, iRenderView *rview)
+bool Callback::BeforeDrawing(iMeshWrapper *spr, iRenderView *rview)
 {
 	if (Drawn == false)
 	{
