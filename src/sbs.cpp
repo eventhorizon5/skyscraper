@@ -255,11 +255,10 @@ bool SBS::Start()
 			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->startfloor, true);
 			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->endfloor, true);
 			//turn off directional indicators
-			ElevatorArray[i].object->EnableDirectionalIndicators(false);
+			ElevatorArray[i].object->EnableDirectionalIndicators(true);
 			//turn on indicators for current floor
-			ElevatorArray[i].object->EnableDirectionalIndicator(camera->StartFloor, true);
+			//ElevatorArray[i].object->EnableDirectionalIndicator(camera->StartFloor, true);
 			//disable objects
-			//ElevatorArray[i].object->EnableObjects(false, false);
 			ElevatorArray[i].object->EnableObjects(false);
 		}
 	}

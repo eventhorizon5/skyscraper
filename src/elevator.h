@@ -121,7 +121,7 @@ public:
 	void CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
 	void DumpQueues();
 	void Enabled(bool value);
-	void EnableObjects(bool value, bool indicator = true);
+	void EnableObjects(bool value);
 	void ShaftDoorsEnabled(int floor, bool value);
 	void ShaftDoorsEnabledRange(int floor, int range);
 	bool IsElevator(csRef<iMeshWrapper> test);

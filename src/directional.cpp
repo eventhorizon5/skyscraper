@@ -164,6 +164,10 @@ void DirectionalIndicator::Enabled(bool value)
 	if (value == IsEnabled)
 		return;
 
+	//for now, do not turn off indicators
+	if (value == false)
+		return;
+
 	sbs->EnableMesh(DirectionalMeshBack, value);
 	sbs->EnableMesh(DirectionalMeshLights, value);
 	IsEnabled = value;

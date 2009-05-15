@@ -2107,13 +2107,12 @@ void Elevator::Enabled(bool value)
 	IsEnabled = value;
 }
 
-void Elevator::EnableObjects(bool value, bool indicator)
+void Elevator::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicator, button panel and plaque
 	//if indicator is false, do not change status of indicator
 
-	if (indicator == true)
-		sbs->EnableMesh(FloorIndicator, value);
+	sbs->EnableMesh(FloorIndicator, true);
 	sbs->EnableMesh(Plaque, value);
 
 	if (Panel)
