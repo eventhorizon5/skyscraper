@@ -94,12 +94,12 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 		if (Direction == "front")
 		{
 			sbs->DrawWalls(true, false, false, false, false, false);
-			offset = -0.01f;
+			offset = -0.02f;
 		}
 		else
 		{
 			sbs->DrawWalls(false, true, false, false, false, false);
-			offset = 0.01f;
+			offset = 0.02f;
 		}
 		if (floornum > bottomfloor && floornum < topfloor)
 		{
@@ -122,13 +122,13 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 		if (Direction == "left")
 		{
 			sbs->DrawWalls(true, false, false, false, false, false);
-			offset = -0.01f;
+			offset = -0.02f;
 		}
 		else
 		{
 			//right
 			sbs->DrawWalls(false, true, false, false, false, false);
-			offset = 0.01f;
+			offset = 0.02f;
 		}
 		if (floornum > bottomfloor && floornum < topfloor)
 		{

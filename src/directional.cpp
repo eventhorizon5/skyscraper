@@ -91,12 +91,12 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 		if (Direction == "front")
 		{
 			sbs->DrawWalls(true, false, false, false, false, false);
-			offset = -0.01f;
+			offset = -0.02f;
 		}
 		else
 		{
 			sbs->DrawWalls(false, true, false, false, false, false);
-			offset = 0.01f;
+			offset = 0.02f;
 		}
 		if (floor > bottomfloor && floor < topfloor)
 		{
@@ -119,13 +119,13 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 		if (Direction == "left")
 		{
 			sbs->DrawWalls(true, false, false, false, false, false);
-			offset = -0.01f;
+			offset = -0.02f;
 		}
 		else
 		{
 			//right
 			sbs->DrawWalls(false, true, false, false, false, false);
-			offset = 0.01f;
+			offset = 0.02f;
 		}
 		if (floor > bottomfloor && floor < topfloor)
 		{
