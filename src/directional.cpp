@@ -30,10 +30,6 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-SCF_IMPLEMENT_IBASE (Callback)
-  SCF_IMPLEMENTS_INTERFACE (iMeshDrawCallback)
-SCF_IMPLEMENT_IBASE_END
-
 DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator
@@ -48,9 +44,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 	DownTextureLit = downtexture_lit;
 	UpStatus = false;
 	DownStatus = false;
-	Drawn = false;
-	Up = 0;
-	Down = 0;
 
 	//create object mesh
 	csString buffer, buffer2, buffer3;
@@ -63,10 +56,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 	DirectionalMesh->SetZBufMode(CS_ZBUF_USE);
 	DirectionalMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
 	DirectionalMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
-	callback = new Callback(this);
-	DirectionalMesh->SetDrawCallback(callback);
-	callback->DecRef();
-
 	sbs->ReverseExtents(false, false, false);
 
 	//create panel
@@ -158,9 +147,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 
 DirectionalIndicator::~DirectionalIndicator()
 {
-	if (DirectionalMesh->GetDrawCallbackCount() > 0)
-		DirectionalMesh->RemoveDrawCallback(callback);
-	callback = 0;
+
 }
 
 void DirectionalIndicator::Enabled(bool value)
@@ -183,22 +170,11 @@ void DirectionalIndicator::UpLight(bool value)
 	if (IsEnabled == false)
 		return;
 
-	if (Drawn == true)
-	{
-		//set light status if indicator has been drawn
-		if (value == true)
-			SetLights(1, 0);
-		else
-			SetLights(2, 0);
-	}
+	//set light status
+	if (value == true)
+		SetLights(1, 0);
 	else
-	{
-		//if indicator hasn't been drawn, queue the light change
-		if (value == true)
-			Up = 1;
-		else
-			Up = 2;
-	}
+		SetLights(2, 0);
 	UpStatus = value;
 }
 
@@ -212,22 +188,11 @@ void DirectionalIndicator::DownLight(bool value)
 	if (IsEnabled == false)
 		return;
 
-	if (Drawn == true)
-	{
-		//set light status if indicator has been drawn
-		if (value == true)
-			SetLights(0, 1);
-		else
-			SetLights(0, 2);
-	}
+	//set light status
+	if (value == true)
+		SetLights(0, 1);
 	else
-	{
-		//if indicator hasn't been drawn, queue the light change
-		if (value == true)
-			Down = 1;
-		else
-			Down = 2;
-	}
+		SetLights(0, 2);
 	DownStatus = value;
 }
 
@@ -245,28 +210,4 @@ void DirectionalIndicator::SetLights(int up, int down)
 		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(DownTextureUnlit, result), DownTextureLit);
 	if (down == 2)
 		sbs->ChangeTexture(DirectionalMesh, sbs->GetTextureMaterial(DownTextureLit, result), DownTextureUnlit);
-}
-
-Callback::Callback(DirectionalIndicator *indicator)
-{
-	//callback constructor
-	SCF_CONSTRUCT_IBASE (NULL);
-	Indicator = indicator;
-}
-
-Callback::~Callback()
-{
-	Indicator = 0;
-}
-
-bool Callback::BeforeDrawing(iMeshWrapper *spr, iRenderView *rview)
-{
-	//pre-draw callback
-	//this sets the indicators right before a mesh is drawn, which fixes a problem
-	//that occurs when textures are changed while the mesh is disabled
-	Indicator->Drawn = true;
-	Indicator->SetLights(Indicator->Up, Indicator->Down);
-	spr->RemoveDrawCallback(this);
-	Indicator = 0;
-	return true;
 }

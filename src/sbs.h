@@ -101,6 +101,7 @@ public:
 	bool FrameLimiter; //frame limiter toggle
 	int FrameRate; //max frame rate
 	float running_time; //time (in seconds) the simulator has been running
+	float start_time; //time (in seconds) that the simulator mainloop started
 	float HorizScale; //horizontal X/Z scaling multiplier (in feet). Normally is 1
 	bool IsBuildingsEnabled; //contains status of buildings object
 	bool IsExternalEnabled; //contains status of external object
@@ -295,4 +296,6 @@ private:
 
 	//door object for callback
 	Door *callbackdoor;
+
+	bool startup_check;
 };

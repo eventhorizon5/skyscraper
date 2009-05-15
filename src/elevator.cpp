@@ -2107,11 +2107,13 @@ void Elevator::Enabled(bool value)
 	IsEnabled = value;
 }
 
-void Elevator::EnableObjects(bool value)
+void Elevator::EnableObjects(bool value, bool indicator)
 {
 	//enable or disable interior objects, such as floor indicator, button panel and plaque
+	//if indicator is false, do not change status of indicator
 
-	sbs->EnableMesh(FloorIndicator, value);
+	if (indicator == true)
+		sbs->EnableMesh(FloorIndicator, value);
 	sbs->EnableMesh(Plaque, value);
 
 	if (Panel)
@@ -2791,12 +2793,12 @@ void Elevator::SetDirectionalIndicator(int floor, bool UpLight, bool DownLight)
 	}
 }
 
-void Elevator::DisableDirectionalIndicators()
+void Elevator::EnableDirectionalIndicators(bool value)
 {
-	//turn off all directional indicators
+	//turn on/off all directional indicators
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
 	{
 		if (IndicatorArray[i])
-			IndicatorArray[i]->Enabled(false);
+			IndicatorArray[i]->Enabled(value);
 	}
 }

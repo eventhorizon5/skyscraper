@@ -26,8 +26,6 @@
 #ifndef _SBS_DIRECTIONAL_H
 #define _SBS_DIRECTIONAL_H
 
-struct Callback;
-
 class SBSIMPEXP DirectionalIndicator
 {
 public:
@@ -42,8 +40,6 @@ public:
 	csString DownTextureLit; //lit down texture
 	bool UpStatus; //status of up light
 	bool DownStatus; //status of down light
-	bool Drawn; //true if callback was drawn
-	int Up, Down; //up/down queue values for callback
 
 	//functions
 	DirectionalIndicator(int elevator, int floor, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
@@ -56,16 +52,6 @@ public:
 private:
 	csRef<iMeshWrapper> DirectionalMesh; //indicator mesh object
 	csRef<iThingFactoryState> Directional_state;
-	csRef<Callback> callback; //callback object
-};
-
-struct Callback : public iMeshDrawCallback
-{
-	SCF_DECLARE_IBASE;
-	Callback(DirectionalIndicator *indicator);
-	~Callback();
-	virtual bool BeforeDrawing(iMeshWrapper *spr, iRenderView *rview);
-	DirectionalIndicator *Indicator;
 };
 
 #endif

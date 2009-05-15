@@ -121,7 +121,7 @@ public:
 	void CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
 	void DumpQueues();
 	void Enabled(bool value);
-	void EnableObjects(bool value);
+	void EnableObjects(bool value, bool indicator = true);
 	void ShaftDoorsEnabled(int floor, bool value);
 	void ShaftDoorsEnabledRange(int floor, int range);
 	bool IsElevator(csRef<iMeshWrapper> test);
@@ -169,7 +169,7 @@ public:
 	void AddDirectionalIndicators(const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	void EnableDirectionalIndicator(int floor, bool value);
 	void SetDirectionalIndicator(int floor, bool UpLight, bool DownLight);
-	void DisableDirectionalIndicators();
+	void EnableDirectionalIndicators(bool value);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
