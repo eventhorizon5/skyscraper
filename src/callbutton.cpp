@@ -44,10 +44,17 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	csString buffer, buffer2, buffer3;
 	buffer2 = floornum;
 	buffer3 = number;
+	buffer = "Call Panel " + buffer2 + ":" + buffer3;
+	buffer.Trim();
+	CallButtonBackMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	buffer = "Call Button " + buffer2 + ":" + buffer3;
 	buffer.Trim();
 	CallButtonMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
+	CallButton_back_state = scfQueryInterface<iThingFactoryState> (CallButtonBackMesh->GetMeshObject()->GetFactory());
 	CallButton_state = scfQueryInterface<iThingFactoryState> (CallButtonMesh->GetMeshObject()->GetFactory());
+	CallButtonBackMesh->SetZBufMode(CS_ZBUF_USE);
+	CallButtonBackMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	CallButtonBackMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 	CallButtonMesh->SetZBufMode(CS_ZBUF_USE);
 	CallButtonMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
 	CallButtonMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
@@ -70,7 +77,7 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 				sbs->DrawWalls(true, false, false, false, false, false);
 			else
 				sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddWallMain(CallButton_state, "Panel", BackTexture, 0, CenterX - (BackWidth / 2), CenterZ, CenterX + (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
+			sbs->AddWallMain(CallButton_back_state, "Panel", BackTexture, 0, CenterX - (BackWidth / 2), CenterZ, CenterX + (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
 			sbs->ResetWalls();
 		}
 		if (Direction == "left" || Direction == "right")
@@ -79,7 +86,7 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 				sbs->DrawWalls(true, false, false, false, false, false);
 			else
 				sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddWallMain(CallButton_state, "Panel", BackTexture, 0, CenterX, CenterZ + (BackWidth / 2), CenterX, CenterZ - (BackWidth / 2), BackHeight, BackHeight, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
+			sbs->AddWallMain(CallButton_back_state, "Panel", BackTexture, 0, CenterX, CenterZ + (BackWidth / 2), CenterX, CenterZ - (BackWidth / 2), BackHeight, BackHeight, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset, tw, th);
 			sbs->ResetWalls();
 		}
 	}
@@ -94,12 +101,12 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 		if (Direction == "front")
 		{
 			sbs->DrawWalls(true, false, false, false, false, false);
-			offset = -0.02f;
+			offset = -0.01f;
 		}
 		else
 		{
 			sbs->DrawWalls(false, true, false, false, false, false);
-			offset = 0.02f;
+			offset = 0.01f;
 		}
 		if (floornum > bottomfloor && floornum < topfloor)
 		{
@@ -122,13 +129,13 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 		if (Direction == "left")
 		{
 			sbs->DrawWalls(true, false, false, false, false, false);
-			offset = -0.02f;
+			offset = -0.01f;
 		}
 		else
 		{
 			//right
 			sbs->DrawWalls(false, true, false, false, false, false);
-			offset = 0.02f;
+			offset = 0.01f;
 		}
 		if (floornum > bottomfloor && floornum < topfloor)
 		{
@@ -156,6 +163,7 @@ CallButton::~CallButton()
 void CallButton::Enabled(bool value)
 {
 	//turns panel on/off
+	sbs->EnableMesh(CallButtonBackMesh, value);
 	sbs->EnableMesh(CallButtonMesh, value);
 	IsEnabled = value;
 }

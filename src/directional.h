@@ -50,8 +50,10 @@ public:
 	void SetLights(int up, int down);
 
 private:
-	csRef<iMeshWrapper> DirectionalMesh; //indicator mesh object
-	csRef<iThingFactoryState> Directional_state;
+	csRef<iMeshWrapper> DirectionalMeshBack; //indicator mesh back object
+	csRef<iMeshWrapper> DirectionalMeshLights; //indicator mesh up/down object
+	csRef<iThingFactoryState> Directional_back_state;
+	csRef<iThingFactoryState> Directional_lights_state;
 };
 
 #endif
