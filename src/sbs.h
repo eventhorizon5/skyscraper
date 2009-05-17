@@ -212,7 +212,7 @@ public:
 	bool GetTextureTiling(const char *texture, float &tw, float &th);
 	bool AddTextToTexture(const char *texturename, const char *fontname, const char *text, uint x1, uint y1, uint x2, uint y2, uint h_align, uint v_align);
 	void EnableMesh(csRef<iMeshWrapper> mesh, bool value);
-	iMeshWrapper* AddGenWall(const char *name, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
+	iMeshWrapper* AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

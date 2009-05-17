@@ -2763,17 +2763,24 @@ void SBS::EnableMesh(csRef<iMeshWrapper> mesh, bool value)
 	}
 }
 
-iMeshWrapper* SBS::AddGenWall(const char *name, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
+iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
 {
 	//add a simple wall in a general mesh (currently only used for objects that change textures)
-	CS::Geometry::TesselatedQuad wall (csVector3(x2, altitude, z1), csVector3(x1, altitude, z1), csVector3(x2, height, z2));
+	CS::Geometry::TesselatedQuad wall (csVector3(x2, altitude, z1), csVector3(x1, altitude, z1), csVector3(x2, altitude + height, z2));
+	//csDirtyAccessArray<csVector3> vertices;
+	//csDirtyAccessArray<csVector2> texels;
+	//csDirtyAccessArray<csVector3> normals;
+	//csDirtyAccessArray<csTriangle> triangles;
+	//CS::Geometry::Primitives::GenerateQuad(csVector3(x2, altitude, z1), csVector3(x1, altitude, z1), csVector3(x1, altitude + height, z2), csVector3(x2, altitude + height, z2), vertices, texels, normals, triangles);
+	CS::Geometry::DensityTextureMapper mapper(1);
+	wall.SetMapper(&mapper);
+	wall.Append(mesh->GetFactory());
 
-	csString factname = csString(name) + " factory";
-	csRef<iMeshWrapper> mesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(engine, area, name, factname, &wall);
-	iMaterialWrapper* mat = engine->GetMaterialList()->FindByName(texture);
-	mesh->GetMeshObject()->SetMaterialWrapper(mat);
-	mesh->SetZBufMode(CS_ZBUF_USE);
-	mesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	mesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	//set texture
+	csRef<iMaterialWrapper> mat = engine->GetMaterialList()->FindByName(texture);
+	if (mat)
+		mesh->GetMeshObject()->SetMaterialWrapper(mat);
+	else
+		ReportError("Invalid texture");
 	return mesh;
 }
