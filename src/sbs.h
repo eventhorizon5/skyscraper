@@ -164,7 +164,7 @@ public:
 	void CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th);
-	iMaterialWrapper* ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture, bool matcheck = true);
+	iMaterialWrapper* ChangeTexture(iMeshWrapper *mesh, const char *texture, bool matcheck = true);
 	iMaterialWrapper* GetTextureMaterial(const char *texture, bool &result, const char *polygon_name = 0);
 	bool NewElevator(int number);
 	bool NewFloor(int number);
@@ -212,6 +212,7 @@ public:
 	bool GetTextureTiling(const char *texture, float &tw, float &th);
 	bool AddTextToTexture(const char *texturename, const char *fontname, const char *text, uint x1, uint y1, uint x2, uint y2, uint h_align, uint v_align);
 	void EnableMesh(csRef<iMeshWrapper> mesh, bool value);
+	iMeshWrapper* AddGenWall(const char *name, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

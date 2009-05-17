@@ -255,9 +255,9 @@ bool SBS::Start()
 			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->startfloor, true);
 			ElevatorArray[i].object->ShaftDoorsEnabled(GetShaft(ElevatorArray[i].object->AssignedShaft)->endfloor, true);
 			//turn off directional indicators
-			ElevatorArray[i].object->EnableDirectionalIndicators(true);
+			ElevatorArray[i].object->EnableDirectionalIndicators(false);
 			//turn on indicators for current floor
-			//ElevatorArray[i].object->EnableDirectionalIndicator(camera->StartFloor, true);
+			ElevatorArray[i].object->EnableDirectionalIndicator(camera->StartFloor, true);
 			//disable objects
 			ElevatorArray[i].object->EnableObjects(false);
 		}
@@ -1600,34 +1600,32 @@ void SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfl
 	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
 }
 
-iMaterialWrapper* SBS::ChangeTexture(iMeshWrapper *mesh, csRef<iMaterialWrapper> oldmat, const char *texture, bool matcheck)
+iMaterialWrapper* SBS::ChangeTexture(iMeshWrapper *mesh, const char *texture, bool matcheck)
 {
-	//changes a texture
-	//if matcheck is true, exit if old and new materials are the same
+	//changes a texture - works with genmeshes only
+	//if matcheck is true, exit if old and new textures are the same
 
 	//exit if mesh pointer's invalid
 	if (!mesh)
 		return 0;
 
-	csRef<iThingState> thingstate = scfQueryInterface<iThingState> (mesh->GetMeshObject());
-
 	//get new material
 	csRef<iMaterialWrapper> newmat = engine->GetMaterialList()->FindByName(texture);
 
 	//exit if old and new materials are the same
-	if (matcheck == true && oldmat == newmat)
-		return 0;
-
-	//switch material if valid
-	if (newmat && thingstate)
+	if (matcheck == true)
 	{
-		thingstate->ClearReplacedMaterials();
-		thingstate->ReplaceMaterial(oldmat, newmat);
-		return newmat;
+		if (mesh->GetMeshObject()->GetMaterialWrapper() == newmat)
+			return 0;
 	}
 
-	//otherwise report error
-	if (!newmat)
+	//set material if valid
+	if (newmat)
+	{
+		mesh->GetMeshObject()->SetMaterialWrapper(newmat);
+		return newmat;
+	}
+	else //otherwise report error
 		ReportError("ChangeTexture: Invalid texture '" + csString(texture) + "'");
 
 	return 0;
@@ -2763,4 +2761,19 @@ void SBS::EnableMesh(csRef<iMeshWrapper> mesh, bool value)
 		mesh->GetFlags().Set(CS_ENTITY_NOSHADOWS);
 		mesh->GetFlags().Set(CS_ENTITY_NOHITBEAM);
 	}
+}
+
+iMeshWrapper* SBS::AddGenWall(const char *name, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
+{
+	//add a simple wall in a general mesh (currently only used for objects that change textures)
+	CS::Geometry::TesselatedQuad wall (csVector3(x2, altitude, z1), csVector3(x1, altitude, z1), csVector3(x2, height, z2));
+
+	csString factname = csString(name) + " factory";
+	csRef<iMeshWrapper> mesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(engine, area, name, factname, &wall);
+	iMaterialWrapper* mat = engine->GetMaterialList()->FindByName(texture);
+	mesh->GetMeshObject()->SetMaterialWrapper(mat);
+	mesh->SetZBufMode(CS_ZBUF_USE);
+	mesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	mesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	return mesh;
 }

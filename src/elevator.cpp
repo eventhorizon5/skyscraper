@@ -142,16 +142,6 @@ Elevator::Elevator(int number)
 	ElevatorMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	buffer = Number;
-	buffer.Insert(0, "FloorIndicator ");
-	buffer.Trim();
-	FloorIndicator = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	FloorIndicator_state = scfQueryInterface<iThingFactoryState> (FloorIndicator->GetMeshObject()->GetFactory());
-	FloorIndicator_movable = FloorIndicator->GetMovable();
-	FloorIndicator->SetZBufMode(CS_ZBUF_USE);
-	FloorIndicator->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	FloorIndicator->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
-
-	buffer = Number;
 	buffer.Insert(0, "ElevatorDoorL ");
 	buffer.Trim();
 	ElevatorDoorL = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
@@ -300,8 +290,6 @@ bool Elevator::CreateElevator(float x, float z, int floor)
 	//move objects to positions
 	Elevator_movable->SetPosition(Origin);
 	Elevator_movable->UpdateMove();
-	FloorIndicator_movable->SetPosition(Origin);
-	FloorIndicator_movable->UpdateMove();
 	Plaque_movable->SetPosition(Origin);
 	Plaque_movable->UpdateMove();
 	ElevatorDoorL_movable->SetPosition(Origin);
@@ -1504,8 +1492,11 @@ void Elevator::MoveElevatorToFloor()
 	ElevatorDoorL_movable->UpdateMove();
 	ElevatorDoorR_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	ElevatorDoorR_movable->UpdateMove();
-	FloorIndicator_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
-	FloorIndicator_movable->UpdateMove();
+	if (FloorIndicator)
+	{
+		FloorIndicator_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
+		FloorIndicator_movable->UpdateMove();
+	}
 	Plaque_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	Plaque_movable->UpdateMove();
 	if (Panel)
@@ -1702,8 +1693,11 @@ void Elevator::MoveElevatorToFloor()
 		ElevatorDoorL_movable->UpdateMove();
 		ElevatorDoorR_movable->SetPosition(csVector3(ElevatorDoorR_movable->GetPosition().x, Destination, ElevatorDoorR_movable->GetPosition().z));
 		ElevatorDoorR_movable->UpdateMove();
-		FloorIndicator_movable->SetPosition(csVector3(FloorIndicator_movable->GetPosition().x, Destination, FloorIndicator_movable->GetPosition().z));
-		FloorIndicator_movable->UpdateMove();
+		if (FloorIndicator)
+		{
+			FloorIndicator_movable->SetPosition(csVector3(FloorIndicator_movable->GetPosition().x, Destination, FloorIndicator_movable->GetPosition().z));
+			FloorIndicator_movable->UpdateMove();
+		}
 		Plaque_movable->SetPosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
 		Plaque_movable->UpdateMove();
 		if (Panel)
@@ -1845,42 +1839,35 @@ int Elevator::AddFloor(const char *name, const char *texture, float thickness, f
 	return sbs->AddFloorMain(Elevator_state, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw2, th2);
 }
 
-int Elevator::AddFloorIndicator(const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+void Elevator::AddFloorIndicator(const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
-	int index = -1;
 	csString texture = "Button" + sbs->GetFloor(OriginFloor)->ID;
 	csString tmpdirection = direction;
 	tmpdirection.Downcase();
 
-	sbs->ReverseExtents(false, false, false);
+	csString buffer;
+	buffer = Number;
+	buffer.Insert(0, "FloorIndicator ");
+	buffer.Trim();
+
 	if (tmpdirection == "front")
-	{
-		sbs->DrawWalls(true, false, false, false, false, false);
-		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), 0, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, height, voffset, voffset, 1, 1);
-	}
+		FloorIndicator = sbs->AddGenWall(buffer, texture, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, voffset, 1, 1);
 	if (tmpdirection == "back")
-	{
-		sbs->DrawWalls(false, true, false, false, false, false);
-		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), 0, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, height, voffset, voffset, 1, 1);
-	}
+		FloorIndicator = sbs->AddGenWall(buffer, texture, CenterX + (width / 2), CenterZ, CenterX - (width / 2), CenterZ, height, voffset, 1, 1);
 	if (tmpdirection == "left")
-	{
-		sbs->DrawWalls(true, false, false, false, false, false);
-		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), 0, CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, height, voffset, voffset, 1, 1);
-	}
+		FloorIndicator = sbs->AddGenWall(buffer, texture, CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, voffset, 1, 1);
 	if (tmpdirection == "right")
-	{
-		sbs->DrawWalls(false, true, false, false, false, false);
-		index = sbs->AddWallMain(FloorIndicator_state, "Floor Indicator", texture.GetData(), 0, CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, height, voffset, voffset, 1, 1);
-	}
-	sbs->ResetWalls();
-	sbs->ResetExtents();
+		FloorIndicator = sbs->AddGenWall(buffer, texture, CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, voffset, 1, 1);
 
-	if (index != -1 && !orig_indicator)
-		orig_indicator = FloorIndicator_state->GetPolygonMaterial(index);
+	FloorIndicator_movable = FloorIndicator->GetMovable();
+	FloorIndicator->SetZBufMode(CS_ZBUF_USE);
+	FloorIndicator->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	FloorIndicator->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
-	return index;
+	//set position
+	FloorIndicator_movable->SetPosition(Origin);
+	FloorIndicator_movable->UpdateMove();
 }
 
 int Elevator::AddDoors(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
@@ -2112,7 +2099,8 @@ void Elevator::EnableObjects(bool value)
 	//enable or disable interior objects, such as floor indicator, button panel and plaque
 	//if indicator is false, do not change status of indicator
 
-	sbs->EnableMesh(FloorIndicator, true);
+	if (FloorIndicator)
+		sbs->EnableMesh(FloorIndicator, value);
 	sbs->EnableMesh(Plaque, value);
 
 	if (Panel)
@@ -2286,7 +2274,7 @@ void Elevator::UpdateFloorIndicators()
 	else
 		texture = "Button" + sbs->GetFloor(GetFloor())->ID;
 
-	sbs->ChangeTexture(FloorIndicator, orig_indicator, texture.GetData(), false);
+	sbs->ChangeTexture(FloorIndicator, texture.GetData());
 }
 
 float Elevator::GetJerkRate()

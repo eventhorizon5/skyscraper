@@ -51,9 +51,9 @@ public:
 
 private:
 	csRef<iMeshWrapper> DirectionalMeshBack; //indicator mesh back object
-	csRef<iMeshWrapper> DirectionalMeshLights; //indicator mesh up/down object
+	csRef<iMeshWrapper> DirectionalMeshUp; //indicator mesh up object
+	csRef<iMeshWrapper> DirectionalMeshDown; //indicator mesh down object
 	csRef<iThingFactoryState> Directional_back_state;
-	csRef<iThingFactoryState> Directional_lights_state;
 };
 
 #endif

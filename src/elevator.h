@@ -114,7 +114,7 @@ public:
 	void StopDoors();
 	int AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	int AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
-	int AddFloorIndicator(const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
+	void AddFloorIndicator(const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	int AddDoors(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
 	int AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
 	int AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
@@ -176,7 +176,6 @@ private:
 		csRef<iThingFactoryState> Elevator_state;
 		csRef<iMovable> Elevator_movable;
 	csRef<iMeshWrapper> FloorIndicator; //floor indicator object
-		csRef<iThingFactoryState> FloorIndicator_state;
 		csRef<iMovable> FloorIndicator_movable;
 	csRef<iMeshWrapper> ElevatorDoorL; //left inside door
 		csRef<iThingFactoryState> ElevatorDoorL_state;
@@ -211,7 +210,6 @@ private:
 	csRefArray<iThingFactoryState> ShaftDoorR_state; //shaft door array state
 	float JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
 	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
-	csRef<iMaterialWrapper> orig_indicator;
 	bool ResetQueues; //clear queues and open doors; usually for service mode
 
 	//functions
