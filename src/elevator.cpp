@@ -1048,7 +1048,7 @@ void Elevator::MoveDoors(bool open, bool manual)
 				}
 			}
 
-			if (shaftdoors == true)
+			if (shaftdoors == true && ShaftDoorL[index])
 			{
 				if (DoorDirection == false)
 				{
@@ -1101,7 +1101,7 @@ void Elevator::MoveDoors(bool open, bool manual)
 			}
 		}
 
-		if (shaftdoors == true)
+		if (shaftdoors == true && ShaftDoorL[index])
 		{
 			if (DoorDirection == false)
 			{
@@ -1146,7 +1146,7 @@ void Elevator::MoveDoors(bool open, bool manual)
 					ElevatorDoorR_movable->UpdateMove();
 				}
 
-				if (shaftdoors == true)
+				if (shaftdoors == true && ShaftDoorL[index])
 				{
 					//move shaft doors
 					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
@@ -1166,7 +1166,7 @@ void Elevator::MoveDoors(bool open, bool manual)
 					ElevatorDoorR_movable->UpdateMove();
 				}
 
-				if (shaftdoors == true)
+				if (shaftdoors == true && ShaftDoorL[index])
 				{
 					//move shaft doors
 					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
@@ -1197,7 +1197,7 @@ void Elevator::MoveDoors(bool open, bool manual)
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
-			if (shaftdoors == true)
+			if (shaftdoors == true && ShaftDoorL[index])
 			{
 				//move shaft doors
 				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z - (DoorWidth / 2)));
@@ -1217,7 +1217,7 @@ void Elevator::MoveDoors(bool open, bool manual)
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
-			if (shaftdoors == true)
+			if (shaftdoors == true && ShaftDoorL[index])
 			{
 				//move shaft doors
 				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x - (DoorWidth / 2), 0, Origin.z));
@@ -1240,7 +1240,7 @@ void Elevator::MoveDoors(bool open, bool manual)
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
-			if (shaftdoors == true)
+			if (shaftdoors == true && ShaftDoorL[index])
 			{
 				//move shaft doors
 				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z));
@@ -1260,7 +1260,7 @@ void Elevator::MoveDoors(bool open, bool manual)
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
-			if (shaftdoors == true)
+			if (shaftdoors == true && ShaftDoorL[index])
 			{
 				//move shaft doors
 				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(Origin.x, 0, Origin.z));
