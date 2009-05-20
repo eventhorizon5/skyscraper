@@ -2767,8 +2767,31 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 {
 	//add a simple wall in a general mesh (currently only used for objects that change textures)
 
+	//get texture
+	csString texname = texture;
+	bool result;
+	material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
+	if (!result)
+		texname = "Default";
+
+	if (tw == 0)
+		tw = 1;
+	if (th == 0)
+		th = 1;
+
+	float tw2 = tw, th2 = th;
+
+	float mw, mh;
+	if (GetTextureTiling(texname.GetData(), mw, mh))
+	{
+		//multiply the tiling parameters (tw and th) by
+		//the stored multipliers for that texture
+		tw2 = tw * mw;
+		th2 = th * mh;
+	}
+
 	//create texture mapping table
-	csVector2 table[] = {csVector2(tw, th), csVector2(0, th), csVector2(tw, 0), csVector2(0, 0)};
+	csVector2 table[] = {csVector2(tw2, th2), csVector2(0, th2), csVector2(tw2, 0), csVector2(0, 0)};
 
 	//create a quad, map the texture, and append to the mesh
 	CS::Geometry::TesselatedQuad wall (csVector3(x2, altitude, z1), csVector3(x1, altitude, z1), csVector3(x2, altitude + height, z2));
@@ -2780,10 +2803,7 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 	mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
 
 	//set texture
-	csRef<iMaterialWrapper> mat = engine->GetMaterialList()->FindByName(texture);
-	if (mat)
-		mesh->GetMeshObject()->SetMaterialWrapper(mat);
-	else
-		ReportError("Invalid texture");
+	mesh->GetMeshObject()->SetMaterialWrapper(material);
+
 	return mesh;
 }
