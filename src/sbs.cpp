@@ -2776,6 +2776,9 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 	wall.SetMapper(&mapper);
 	wall.Append(mesh->GetFactory());
 
+	//set lighting factor
+	mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
+
 	//set texture
 	csRef<iMaterialWrapper> mat = engine->GetMaterialList()->FindByName(texture);
 	if (mat)
