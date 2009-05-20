@@ -2766,13 +2766,13 @@ void SBS::EnableMesh(csRef<iMeshWrapper> mesh, bool value)
 iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
 {
 	//add a simple wall in a general mesh (currently only used for objects that change textures)
+
+	//create texture mapping table
+	csVector2 table[] = {csVector2(tw, th), csVector2(0, th), csVector2(tw, 0), csVector2(0, 0)};
+
+	//create a quad, map the texture, and append to the mesh
 	CS::Geometry::TesselatedQuad wall (csVector3(x2, altitude, z1), csVector3(x1, altitude, z1), csVector3(x2, altitude + height, z2));
-	//csDirtyAccessArray<csVector3> vertices;
-	//csDirtyAccessArray<csVector2> texels;
-	//csDirtyAccessArray<csVector3> normals;
-	//csDirtyAccessArray<csTriangle> triangles;
-	//CS::Geometry::Primitives::GenerateQuad(csVector3(x2, altitude, z1), csVector3(x1, altitude, z1), csVector3(x1, altitude + height, z2), csVector3(x2, altitude + height, z2), vertices, texels, normals, triangles);
-	CS::Geometry::DensityTextureMapper mapper(1);
+	CS::Geometry::TableTextureMapper mapper(table);
 	wall.SetMapper(&mapper);
 	wall.Append(mesh->GetFactory());
 
