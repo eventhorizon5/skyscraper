@@ -2794,7 +2794,7 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 	csVector2 table[] = {csVector2(tw2, th2), csVector2(0, th2), csVector2(tw2, 0), csVector2(0, 0)};
 
 	//create a quad, map the texture, and append to the mesh
-	CS::Geometry::TesselatedQuad wall (csVector3(x2, altitude, z1), csVector3(x1, altitude, z1), csVector3(x2, altitude + height, z2));
+	CS::Geometry::TesselatedQuad wall (csVector3(x2, altitude, z2), csVector3(x1, altitude, z1), csVector3(x2, altitude + height, z2));
 	CS::Geometry::TableTextureMapper mapper(table);
 	wall.SetMapper(&mapper);
 	wall.Append(mesh->GetFactory());
