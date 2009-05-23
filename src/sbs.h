@@ -23,6 +23,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef _SBS_H
+#define _SBS_H
+
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"
@@ -298,3 +301,5 @@ private:
 	//door object for callback
 	Door *callbackdoor;
 };
+
+#endif

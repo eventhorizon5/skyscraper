@@ -29,6 +29,7 @@
 #include "buttonpanel.h"
 #include "sound.h"
 #include "directional.h"
+#include "elevatordoor.h"
 
 class SBSIMPEXP Elevator
 {
@@ -36,6 +37,7 @@ public:
 
 	int Number; //elevator number
 	csString Name; //elevator name
+	int NumDoors; //number of elevator doors
 	int QueuePositionDirection; //queue processing direction
 	bool PauseQueueSearch; //pause queue processor
 	int LastQueueFloor[2]; //last route added to either queue; element 0 is the floor, and element 1 is the direction
@@ -46,35 +48,24 @@ public:
 	float Deceleration; //deceleration value; may be removed
 	float AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
 	float DecelJerk;
-	float OpenSpeed; //elevator opening/closing speed
 	int OriginFloor; //elevator starting floor
 	csVector3 Origin; //3D elevator origin vector
-	bool DoorDirection; //if direction is false, doors are on the left/right side
-	float DoorAcceleration; //door acceleration
 	float TempDeceleration; //temporary deceleration value, used in overrun correction
 	float ErrorOffset;
 	float DistanceToTravel; //distance in Y to travel
 	float ElevatorRate;
-	float DoorWidth; //elevator door width
-	float DoorHeight; //elevator door height
-	csVector3 DoorOrigin; //elevator door origin
-	csVector3 ShaftDoorOrigin; //shaft door origin
-	csArray<int> ServicedFloors; //list of floors this elevator services
+	int ServicedFloors; //list of floors this elevator services
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
 	float Height; //elevator height
 	ButtonPanel *Panel; //elevator button panel object
 	ButtonPanel *Panel2; //elevator button panel object
-	int DoorTimer; //door autoclose timer value, in milliseconds
 	bool IsMoving; //is elevator moving?
-	csString OpenSound; //door open sound
-	csString CloseSound; //door close sound
 	csString StartSound; //elevator start/speedup sound
 	csString MoveSound; //elevator move sound
 	csString StopSound; //elevator stop/slowdown sound
 	csString IdleSound; //elevator idle sound
-	csString ChimeSound; //elevator chime sound
 	csString AlarmSound; //alarm sound (loop)
 	csString AlarmSoundStop; //alarm stopping sound
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
@@ -103,36 +94,25 @@ public:
 	void Alarm();
 	void StopElevator();
 	void OpenHatch();
-	void OpenDoorsEmergency(int whichdoors = 1, int floor = 0);
 	void ProcessCallQueue();
 	int GetFloor();
 	void MonitorLoop();
-	void CloseDoorsEmergency(int whichdoors = 1, int floor = 0);
 	const csVector3 GetPosition();
-	void OpenDoors(int whichdoors = 1, int floor = 0, bool manual = false);
-	void CloseDoors(int whichdoors = 1, int floor = 0, bool manual = false);
-	void StopDoors();
 	int AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	int AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
 	void AddFloorIndicator(const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
-	int AddDoors(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
-	int AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
 	int AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th);
 	void CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
 	void DumpQueues();
 	void Enabled(bool value);
 	void EnableObjects(bool value);
-	void ShaftDoorsEnabled(int floor, bool value);
-	void ShaftDoorsEnabledRange(int floor, int range);
 	bool IsElevator(csRef<iMeshWrapper> test);
 	bool IsInElevator(const csVector3 &position);
 	csHitBeamResult HitBeam(const csVector3 &start, const csVector3 &end);
 	float GetElevatorStart();
-	bool AreDoorsOpen();
 	float GetDestination();
 	float GetStoppingDistance();
 	bool GetBrakeStatus();
-	float GetCurrentDoorSpeed();
 	bool GetEmergencyStopStatus();
 	void DumpServicedFloors();
 	void AddServicedFloor(int number);
@@ -140,7 +120,6 @@ public:
 	void UpdateFloorIndicators();
 	float GetJerkRate();
 	float GetJerkPosition();
-	void Chime(int floor);
 	void SetFloorSkipText(const char *id);
 	const char* GetFloorSkipText();
 	bool IsServicedFloor(int floor);
@@ -154,8 +133,6 @@ public:
 	void EnableInspectionService(bool value);
 	void EnableFireService1(int value);
 	void EnableFireService2(int value);
-	void ResetDoorTimer();
-	bool DoorsStopped();
 	bool SetRecallFloor(int floor);
 	bool SetAlternateRecallFloor(int floor);
 	bool SetACPFloor(int floor);
@@ -170,6 +147,22 @@ public:
 	void EnableDirectionalIndicator(int floor, bool value);
 	void SetDirectionalIndicator(int floor, bool UpLight, bool DownLight);
 	void EnableDirectionalIndicators(bool value);
+	ElevatorDoor* GetDoor(int number);
+	void OpenDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0);
+	void CloseDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0);
+	void OpenDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false);
+	void CloseDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false);
+	void StopDoors(int number = 0);
+	void ShaftDoorsEnabled(int number, int floor, bool value);
+	void ShaftDoorsEnabledRange(int number, int floor, int range);
+	bool AreDoorsOpen(int number = 0);
+	float GetCurrentDoorSpeed(int number = 0);
+	void ResetDoorTimer(int number = 0);
+	bool DoorsStopped(int number = 0);
+	int AddDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
+	int AddShaftDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
+	void Chime(int number, int floor);
+	void MoveDoors(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -177,12 +170,6 @@ private:
 		csRef<iMovable> Elevator_movable;
 	csRef<iMeshWrapper> FloorIndicator; //floor indicator object
 		csRef<iMovable> FloorIndicator_movable;
-	csRef<iMeshWrapper> ElevatorDoorL; //left inside door
-		csRef<iThingFactoryState> ElevatorDoorL_state;
-		csRef<iMovable> ElevatorDoorL_movable;
-	csRef<iMeshWrapper> ElevatorDoorR; //right inside door
-		csRef<iThingFactoryState> ElevatorDoorR_state;
-		csRef<iMovable> ElevatorDoorR_movable;
 	csRef<iMeshWrapper> Plaque; //plaque object
 		csRef<iThingFactoryState> Plaque_state;
 		csRef<iMovable> Plaque_movable;
@@ -192,73 +179,34 @@ private:
 	csArray<int> DownQueue; //down call queue
 	float ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
-	bool DoorsOpen; //elevator door state
-	csArray<bool> ShaftDoorsOpen; //shaft door state
-	int OpenDoor; //1=open doors, -1=close doors
 	float Destination; //elevator destination Y value
 	float StoppingDistance; //distance needed to stop the elevator
 	bool CalculateStoppingDistance;
 	bool Brakes; //internal brake status
-	float ElevatorDoorSpeed;
-	bool ElevWait;
 	bool EmergencyStop; //internal stop status
-	int WhichDoors;
-	int ShaftDoorFloor;
-	csRefArray<iMeshWrapper> ShaftDoorL; //shaft door array
-	csRefArray<iThingFactoryState> ShaftDoorL_state; //shaft door array state
-	csRefArray<iMeshWrapper> ShaftDoorR; //shaft door array
-	csRefArray<iThingFactoryState> ShaftDoorR_state; //shaft door array state
 	float JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
 	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	bool ResetQueues; //clear queues and open doors; usually for service mode
 
 	//functions
 	void MoveElevatorToFloor();
-	void MoveDoors(bool open, bool manual);
+	bool CheckDoorsOpen();
+	bool CheckOpenDoor();
 
 	char intbuffer[65];
 	char buffer[20];
 
-	//door autoclose timer
-	class Timer : public wxTimer
-	{
-	public:
-		Elevator *elevator;
-		Timer(Elevator *parent)
-		{
-			elevator = parent;
-		};
-		virtual void Notify();
-	};
-
-	//timer object
-	Timer *timer;
-
 	//sound objects
 	Sound *mainsound;
 	Sound *idlesound;
-	Sound *doorsound;
-	Sound *chime;
 	Sound *alarm;
-
-	//door internals
-	bool DoorIsRunning;
-	float OpenChange;
-	float marker1;
-	float marker2;
-	int index;
-	float stopping_distance;
-	float temp_change;
-	bool accelerating;
-	bool previous_open;
-	bool door_changed;
-	int door_section; //door movement section; used for both reversal tracking and debugging
-	bool quick_close; //used if user presses close button while doors are opening; results in a faster timer length
-	bool doors_stopped;
 
 	//directional indicators
 	csArray<DirectionalIndicator*> IndicatorArray;
 
+	//doors and shaft doors
+	csArray<ElevatorDoor*> DoorArray;
+	
 	//elevator misc internals
 	bool ElevatorIsRunning;
 	int oldfloor;

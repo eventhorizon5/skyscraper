@@ -213,7 +213,7 @@ void CallButton::Call(int direction)
 		else
 			sbs->GetElevator(Elevators[closest_elev])->SetDirectionalIndicator(floor, true, false);
 		//play chime sound
-		sbs->GetElevator(Elevators[closest_elev])->Chime(floor);
+		sbs->GetElevator(Elevators[closest_elev])->Chime(0, floor);
 		//open elevator if it's on the same floor
 		sbs->GetElevator(Elevators[closest_elev])->OpenDoors();
 	}

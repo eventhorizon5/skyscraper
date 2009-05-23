@@ -30,8 +30,8 @@ class SBSIMPEXP DirectionalIndicator
 {
 public:
 
-	int Elevator; //elevator this indicator is assigned to
-	int Floor; //floor the indicator is on
+	int elevator_num; //elevator this indicator is assigned to
+	int floor_num; //floor the indicator is on
 	csString Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'
 	bool IsEnabled; //true if indicator is currently enabled
 	csString UpTextureUnlit; //unlit up texture

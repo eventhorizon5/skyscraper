@@ -320,7 +320,7 @@
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
 			/>
@@ -405,6 +405,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\elevatordoor.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\floor.cpp"
 				>
 			</File>
@@ -460,6 +464,10 @@
 			</File>
 			<File
 				RelativePath="..\src\elevator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\elevatordoor.h"
 				>
 			</File>
 			<File
