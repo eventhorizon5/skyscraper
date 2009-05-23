@@ -194,7 +194,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 				for(size_t j = 0; j < elevator->ServicedFloors.GetSize(); j++)
 				{
 					if (elevator->ServicedFloors[j] == floor)
-						elevator->ShaftDoorsEnabled(elevator->ServicedFloors[j], value);
+						elevator->ShaftDoorsEnabled(0, elevator->ServicedFloors[j], value);
 				}
 			}
 		}

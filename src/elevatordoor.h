@@ -28,6 +28,8 @@
 
 #include "sound.h"
 
+class Elevator;
+
 class SBSIMPEXP ElevatorDoor
 {
 public:
@@ -45,6 +47,7 @@ public:
 	csString CloseSound; //door close sound
 	csString ChimeSound; //elevator chime sound
 	int OpenDoor; //1=open doors, -1=close doors
+	bool IsEnabled;
 
 	ElevatorDoor(int number, Elevator* elevator);
 	~ElevatorDoor();
@@ -64,6 +67,8 @@ public:
 	void Chime(int floor);
 	void Loop();
 	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
+	void Enabled(bool value);
+	bool GetDoorsOpen();
 
 private:
 	csRef<iMeshWrapper> ElevatorDoorL; //left inside door

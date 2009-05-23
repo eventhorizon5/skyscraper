@@ -290,7 +290,7 @@ void Camera::CheckShaft()
 			{
 				//if user is in an elevator, show a range of the shaft at a time (while it's moving)
 				shaft->EnableRange(CurrentFloor, sbs->ShaftDisplayRange, true, false);
-				sbs->GetElevator(sbs->ElevatorNumber)->ShaftDoorsEnabledRange(CurrentFloor, sbs->ShaftDisplayRange);
+				sbs->GetElevator(sbs->ElevatorNumber)->ShaftDoorsEnabledRange(0, CurrentFloor, sbs->ShaftDisplayRange);
 			}
 
 			if (shaft->InsideShaft == false && sbs->InElevator == true && sbs->GetElevator(sbs->ElevatorNumber)->IsMoving == true)

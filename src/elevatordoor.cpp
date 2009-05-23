@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-ElevatorDoor::ElevatorDoor(Elevator* elevator)
+ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 {
 	//create a new elevator door
 	Number = number;
@@ -59,9 +59,10 @@ ElevatorDoor::ElevatorDoor(Elevator* elevator)
 	CloseSound = "elevatorclose.wav";
 	ChimeSound = "chime1.wav";
 	doors_stopped = false;
+	IsEnabled = true;
 
 	//create object meshes
-	buffer = Number;
+	csString buffer = Number;
 	buffer.Insert(0, "ElevatorDoorL ");
 	buffer.Trim();
 	ElevatorDoorL = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
@@ -1136,4 +1137,16 @@ void Move(const csVector3 position, bool relative_x, bool relative_y, bool relat
 		pos.z = ElevatorDoorR_movable->GetPosition().z;
 	ElevatorDoorR_movable->MovePosition(pos);
 	ElevatorDoorR_movable->UpdateMove();
+}
+
+void ElevatorDoor::Enabled(bool value)
+{
+	sbs->EnableMesh(ElevatorDoorL, value);
+	sbs->EnableMesh(ElevatorDoorR, value);
+	IsEnabled = value;
+}
+
+bool ElevatorDoor::GetDoorsOpen()
+{
+	return DoorsOpen;
 }

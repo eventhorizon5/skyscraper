@@ -928,7 +928,7 @@ void Elevator::MoveElevatorToFloor()
 	{
 		//play chime sound
 		if (InServiceMode() == false)
-			Chime(GotoFloor);
+			Chime(0, GotoFloor);
 
 		//store error offset value
 		if (Direction == -1)
@@ -1138,8 +1138,7 @@ void Elevator::Enabled(bool value)
 	//shows/hides elevator
 
 	sbs->EnableMesh(ElevatorMesh, value);
-	sbs->EnableMesh(ElevatorDoorL, value);
-	sbs->EnableMesh(ElevatorDoorR, value);
+	EnableDoors(value);
 	IsEnabled = value;
 }
 
@@ -1745,7 +1744,7 @@ ElevatorDoor* Elevator::GetDoor(int number)
 	
 	if (number > 0 && number <= DoorArray.GetSize())
 	{
-		if (DoorArray[number - 1]
+		if (DoorArray[number - 1])
 			return DoorArray[number - 1];
 	}
 	return 0;
@@ -2038,7 +2037,7 @@ bool Elevator::CheckDoorsOpen()
 	//check each door's DoorsOpen value and return true if any are true
 	for (int i = 1; i <= NumDoors; i++)
 	{
-		if (GetDoor(i)->DoorsOpen == true)
+		if (GetDoor(i)->GetDoorsOpen() == true)
 			return true;
 	}
 	return false;
@@ -2050,7 +2049,7 @@ bool Elevator::CheckOpenDoor()
 	//false if all are zero
 	for (int i = 1; i <= NumDoors; i++)
 	{
-		if (GetDoor(i)->OpenDoor != 0)
+		if (GetDoor(i)->GetDoorsOpen() != 0)
 			return true;
 	}
 	return false;
@@ -2060,5 +2059,12 @@ void Elevator::MoveDoors(const csVector3 position, bool relative_x, bool relativ
 {
 	//move all doors
 	for (int i = 1; i <= NumDoors; i++)
-		GetDoor(i)->Move(position);
+		GetDoor(i)->Move(position, relative_x, relative_y, relative_z);
+}
+
+void Elevator::EnableDoors(bool value)
+{
+	//move all doors
+	for (int i = 1; i <= NumDoors; i++)
+		GetDoor(i)->Enabled(value);
 }

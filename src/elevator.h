@@ -54,7 +54,7 @@ public:
 	float ErrorOffset;
 	float DistanceToTravel; //distance in Y to travel
 	float ElevatorRate;
-	int ServicedFloors; //list of floors this elevator services
+	csArray<int> ServicedFloors; //list of floors this elevator services
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
@@ -163,6 +163,7 @@ public:
 	int AddShaftDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
 	void Chime(int number, int floor);
 	void MoveDoors(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
+	void EnableDoors(bool value);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

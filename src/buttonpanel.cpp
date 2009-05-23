@@ -233,7 +233,7 @@ void ButtonPanel::Press(int index)
 			if (sbs->GetElevator(elevator)->Direction == 0)
 			{
 				//stopped - play chime and open doors
-				sbs->GetElevator(elevator)->Chime(floor);
+				sbs->GetElevator(elevator)->Chime(0, floor);
 				sbs->GetElevator(elevator)->OpenDoors();
 			}
 			else if (sbs->GetElevator(elevator)->Direction == -1)
