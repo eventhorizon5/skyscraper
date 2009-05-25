@@ -33,8 +33,9 @@
 
 class SBSIMPEXP Elevator
 {
-public:
+	friend class ElevatorDoor;
 
+public:
 	int Number; //elevator number
 	csString Name; //elevator name
 	int NumDoors; //number of elevator doors
@@ -162,8 +163,10 @@ public:
 	int AddDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
 	int AddShaftDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
 	void Chime(int number, int floor);
-	void MoveDoors(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
+	void MoveDoors(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
+	void MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void EnableDoors(bool value);
+	DirectionalIndicator* GetIndicator(int floor);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

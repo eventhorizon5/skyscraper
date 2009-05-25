@@ -749,7 +749,7 @@ void Elevator::MoveElevatorToFloor()
 	Elevator_movable->UpdateMove();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
-	MoveDoors(csVector3(0, ElevatorRate * sbs->delta, 0), true, false, true);
+	MoveDoors(0, csVector3(0, ElevatorRate * sbs->delta, 0), true, false, true);
 	FloorIndicator_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	FloorIndicator_movable->UpdateMove();
 	Plaque_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
@@ -762,7 +762,7 @@ void Elevator::MoveElevatorToFloor()
 	//move sounds
 	mainsound->SetPosition(GetPosition());
 	idlesound->SetPosition(GetPosition());
-	doorsound->SetPosition(csVector3(DoorOrigin.x, GetPosition().y + (DoorHeight / 2), DoorOrigin.z));
+	MoveDoorSound(0, csVector3(0, GetPosition().y + (DoorHeight / 2), 0), true, false, true);
 	alarm->SetPosition(GetPosition());
 
 	//motion calculation
@@ -944,7 +944,7 @@ void Elevator::MoveElevatorToFloor()
 		Elevator_movable->UpdateMove();
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
-		MoveDoors(csVector3(0, Destination, 0), true, false, true);
+		MoveDoors(0, csVector3(0, Destination, 0), true, false, true);
 		FloorIndicator_movable->SetPosition(csVector3(FloorIndicator_movable->GetPosition().x, Destination, FloorIndicator_movable->GetPosition().z));
 		FloorIndicator_movable->UpdateMove();
 		Plaque_movable->SetPosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
@@ -2055,11 +2055,16 @@ bool Elevator::CheckOpenDoor()
 	return false;
 }
 
-void Elevator::MoveDoors(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
+void Elevator::MoveDoors(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move all doors
-	for (int i = 1; i <= NumDoors; i++)
-		GetDoor(i)->Move(position, relative_x, relative_y, relative_z);
+	if (number == 0)
+	{
+		for (int i = 1; i <= NumDoors; i++)
+			GetDoor(i)->Move(position, relative_x, relative_y, relative_z);
+	}
+	else
+			GetDoor(number)->Move(position, relative_x, relative_y, relative_z);
 }
 
 void Elevator::EnableDoors(bool value)
@@ -2067,4 +2072,26 @@ void Elevator::EnableDoors(bool value)
 	//move all doors
 	for (int i = 1; i <= NumDoors; i++)
 		GetDoor(i)->Enabled(value);
+}
+
+DirectionalIndicator* Elevator::GetIndicator(int floor)
+{
+	//get a directional indicator for a floor
+	int index = ServicedFloors.Find(floor);
+	if (IndicatorArray[index])
+		return IndicatorArray[index];
+	else
+		return 0;
+}
+
+void Elevator::MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
+{
+	//move all doors
+	if (number == 0)
+	{
+		for (int i = 1; i <= NumDoors; i++)
+			GetDoor(i)->MoveSound(position, relative_x, relative_y, relative_z);
+	}
+	else
+			GetDoor(number)->MoveSound(position, relative_x, relative_y, relative_z);
 }

@@ -67,6 +67,7 @@ public:
 	void Chime(int floor);
 	void Loop();
 	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
+	void MoveSound(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void Enabled(bool value);
 	bool GetDoorsOpen();
 
@@ -80,7 +81,7 @@ private:
 
 	//Internal door simulation data
 	bool DoorsOpen; //elevator door state
-	bool ShaftDoorsOpen; //shaft door state
+	csArray<bool> ShaftDoorsOpen; //shaft door state
 	float ElevatorDoorSpeed;
 	int WhichDoors;
 	int ShaftDoorFloor;
@@ -98,10 +99,12 @@ private:
 	class Timer : public wxTimer
 	{
 	public:
+		ElevatorDoor *door;
 		Elevator *elevator;
-		Timer(Elevator *parent)
+		Timer(ElevatorDoor *parent, Elevator *elev)
 		{
-			elevator = parent;
+			door = parent;
+			elevator = elev;
 		};
 		virtual void Notify();
 	};
