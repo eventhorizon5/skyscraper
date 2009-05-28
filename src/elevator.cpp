@@ -146,10 +146,13 @@ Elevator::~Elevator()
 	IndicatorArray.DeleteAll();
 
 	//delete doors
-	for (int i = 0; i < DoorArray.GetSize(); i++)
+	if (DoorArray.GetSize() > 0)
 	{
-		if (DoorArray[i])
-			delete DoorArray[i];
+		for (int i = 0; i < DoorArray.GetSize(); i++)
+		{
+			if (DoorArray[i])
+				delete DoorArray[i];
+		}
 	}
 
 	//Destructor
@@ -188,9 +191,9 @@ bool Elevator::CreateElevator(float x, float z, int floor)
 		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Deceleration not set or invalid");
 		return false;
 	}
-	if (NumDoors <= 0)
+	if (NumDoors < 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Doors not set or invalid");
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Number of doors invalid");
 		return false;
 	}
 	if (AccelJerk <= 0)
@@ -229,9 +232,12 @@ bool Elevator::CreateElevator(float x, float z, int floor)
 		SetACPFloor(GetBottomFloor());
 
 	//create door objects
-	DoorArray.SetSize(NumDoors);
-	for (int i = 0; i < NumDoors; i++)
-		DoorArray[i] = new ElevatorDoor(i, this);
+	if (NumDoors > 0)
+	{
+		DoorArray.SetSize(NumDoors);
+		for (int i = 0; i < NumDoors; i++)
+			DoorArray[i] = new ElevatorDoor(i, this);
+	}
 
 	//move objects to positions
 	Elevator_movable->SetPosition(Origin);
@@ -2035,10 +2041,14 @@ bool Elevator::DoorsStopped(int number)
 bool Elevator::CheckDoorsOpen()
 {
 	//check each door's DoorsOpen value and return true if any are true
+	
 	for (int i = 1; i <= NumDoors; i++)
 	{
-		if (GetDoor(i)->GetDoorsOpen() == true)
-			return true;
+		if (GetDoor(i))
+		{
+			if (GetDoor(i)->GetDoorsOpen() == true)
+				return true;
+		}
 	}
 	return false;
 }
@@ -2047,10 +2057,14 @@ bool Elevator::CheckOpenDoor()
 {
 	//check each door's OpenDoor value and return true if any are not zero, or
 	//false if all are zero
+
 	for (int i = 1; i <= NumDoors; i++)
 	{
-		if (GetDoor(i)->GetDoorsOpen() != 0)
-			return true;
+		if (GetDoor(i))
+		{
+			if (GetDoor(i)->GetDoorsOpen() != 0)
+				return true;
+		}
 	}
 	return false;
 }
@@ -2058,20 +2072,31 @@ bool Elevator::CheckOpenDoor()
 void Elevator::MoveDoors(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move all doors
+
 	if (number == 0)
 	{
 		for (int i = 1; i <= NumDoors; i++)
-			GetDoor(i)->Move(position, relative_x, relative_y, relative_z);
+		{
+			if (GetDoor(i))
+				GetDoor(i)->Move(position, relative_x, relative_y, relative_z);
+		}
 	}
 	else
+	{
+		if (GetDoor(number))
 			GetDoor(number)->Move(position, relative_x, relative_y, relative_z);
+	}
 }
 
 void Elevator::EnableDoors(bool value)
 {
 	//move all doors
+
 	for (int i = 1; i <= NumDoors; i++)
-		GetDoor(i)->Enabled(value);
+	{
+		if (GetDoor(i))
+			GetDoor(i)->Enabled(value);
+	}
 }
 
 DirectionalIndicator* Elevator::GetIndicator(int floor)
@@ -2087,11 +2112,18 @@ DirectionalIndicator* Elevator::GetIndicator(int floor)
 void Elevator::MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move all doors
+
 	if (number == 0)
 	{
 		for (int i = 1; i <= NumDoors; i++)
-			GetDoor(i)->MoveSound(position, relative_x, relative_y, relative_z);
+		{
+			if (GetDoor(i))
+				GetDoor(i)->MoveSound(position, relative_x, relative_y, relative_z);
+		}
 	}
 	else
+	{
+		if (GetDoor(number))
 			GetDoor(number)->MoveSound(position, relative_x, relative_y, relative_z);
+	}
 }
