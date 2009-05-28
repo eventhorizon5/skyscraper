@@ -3941,8 +3941,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -4050,8 +4050,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4126,8 +4126,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4195,8 +4195,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4265,8 +4265,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4334,8 +4334,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4449,8 +4449,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4564,8 +4564,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4680,8 +4680,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4795,8 +4795,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -4913,8 +4913,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -5042,8 +5042,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -5156,8 +5156,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -5259,8 +5259,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -5345,8 +5345,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -5445,8 +5445,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -5554,8 +5554,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -5664,8 +5664,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -5765,8 +5765,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -5883,8 +5883,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -5977,8 +5977,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = right
-    AddDoors ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -6089,8 +6089,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
 
     #doors
     WallOrientation = left
-    AddDoors ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #left panel
@@ -6297,8 +6297,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -6409,8 +6409,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -6537,8 +6537,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #panel
@@ -6650,8 +6650,8 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
