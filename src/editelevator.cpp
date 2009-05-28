@@ -726,14 +726,14 @@ void editelevator::On_bSetDeceleration_Click(wxCommandEvent& event)
 
 void editelevator::On_bSetOpenSpeed_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->OpenSpeed = atof(txtOpenSpeed->GetValue().ToAscii());
+	//if (elevator)
+		//elevator->OpenSpeed = atof(txtOpenSpeed->GetValue().ToAscii());
 }
 
 void editelevator::On_bSetDoorAccel_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->DoorAcceleration = atof(txtDoorAcceleration->GetValue().ToAscii());
+	//if (elevator)
+		//elevator->DoorAcceleration = atof(txtDoorAcceleration->GetValue().ToAscii());
 }
 
 void editelevator::On_bDumpFloors_Click(wxCommandEvent& event)
@@ -779,12 +779,12 @@ void editelevator::Loop()
 	txtDestination->SetValue(TruncateNumber(elevator->GetDestination(), 2));
 	txtDirection->SetValue(wxVariant((long)elevator->Direction).GetString());
 	txtDistance->SetValue(TruncateNumber(elevator->DistanceToTravel, 2));
-	txtDoorDirection->SetValue(wxString::FromAscii(BoolToString(elevator->DoorDirection)));
-	txtDoorHeight->SetValue(TruncateNumber(elevator->DoorHeight, 2));
-	txtDoorOrigin->SetValue(TruncateNumber(elevator->DoorOrigin.x, 2) + wxT(", ") + TruncateNumber(elevator->DoorOrigin.y, 2) + wxT(", ") + TruncateNumber(elevator->DoorOrigin.z, 2));
+	//txtDoorDirection->SetValue(wxString::FromAscii(BoolToString(elevator->DoorDirection)));
+	//txtDoorHeight->SetValue(TruncateNumber(elevator->DoorHeight, 2));
+	//txtDoorOrigin->SetValue(TruncateNumber(elevator->DoorOrigin.x, 2) + wxT(", ") + TruncateNumber(elevator->DoorOrigin.y, 2) + wxT(", ") + TruncateNumber(elevator->DoorOrigin.z, 2));
 	txtDoorsOpen->SetValue(wxString::FromAscii(BoolToString(elevator->AreDoorsOpen())));
 	txtDoorSpeed->SetValue(TruncateNumber(elevator->GetCurrentDoorSpeed(), 2));
-	txtDoorWidth->SetValue(TruncateNumber(elevator->DoorWidth, 2));
+	//txtDoorWidth->SetValue(TruncateNumber(elevator->DoorWidth, 2));
 	txtElevStart->SetValue(TruncateNumber(elevator->GetElevatorStart(), 2));
 	txtEnabled->SetValue(wxString::FromAscii(BoolToString(elevator->IsEnabled)));
 	txtErrorOffset->SetValue(TruncateNumber(elevator->ErrorOffset, 2));
@@ -801,7 +801,7 @@ void editelevator::Loop()
 	txtQueuePause->SetValue(wxString::FromAscii(BoolToString(elevator->PauseQueueSearch)));
 	txtRate->SetValue(TruncateNumber(elevator->ElevatorRate, 2));
 	txtShaft->SetValue(wxVariant((long)elevator->AssignedShaft).GetString());
-	txtShaftDoorOrigin->SetValue(TruncateNumber(elevator->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(elevator->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(elevator->ShaftDoorOrigin.z, 2));
+	//txtShaftDoorOrigin->SetValue(TruncateNumber(elevator->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(elevator->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(elevator->ShaftDoorOrigin.z, 2));
 	txtStop->SetValue(wxString::FromAscii(BoolToString(elevator->GetEmergencyStopStatus())));
 	txtStopDistance->SetValue(TruncateNumber(elevator->GetStoppingDistance(), 2));
 	txtTempDecel->SetValue(TruncateNumber(elevator->TempDeceleration, 2));
@@ -817,12 +817,12 @@ void editelevator::SetMainValues()
 {
 	//set changable values
 	txtName->SetValue(wxString::FromAscii(elevator->Name.GetData()));
-	txtDoorTimer->SetValue(wxVariant((int)elevator->DoorTimer).GetString());
+	//txtDoorTimer->SetValue(wxVariant((int)elevator->DoorTimer).GetString());
 	txtSpeed->SetValue(TruncateNumber(elevator->ElevatorSpeed, 4));
 	txtAcceleration->SetValue(TruncateNumber(elevator->Acceleration, 4));
 	txtDeceleration->SetValue(TruncateNumber(elevator->Deceleration, 4));
-	txtOpenSpeed->SetValue(TruncateNumber(elevator->OpenSpeed, 4));
-	txtDoorAcceleration->SetValue(TruncateNumber(elevator->DoorAcceleration, 4));
+	//txtOpenSpeed->SetValue(TruncateNumber(elevator->OpenSpeed, 4));
+	//txtDoorAcceleration->SetValue(TruncateNumber(elevator->DoorAcceleration, 4));
 	txtAccelJerk->SetValue(TruncateNumber(elevator->AccelJerk, 4));
 	txtDecelJerk->SetValue(TruncateNumber(elevator->DecelJerk, 4));
 	chkVisible->SetValue(elevator->IsEnabled);
@@ -881,14 +881,14 @@ void editelevator::On_bCloseShaftDoor_Click(wxCommandEvent& event)
 
 void editelevator::On_bSetDoorTimer_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->DoorTimer = atoi(txtDoorTimer->GetValue().ToAscii());
+	//if (elevator)
+		//elevator->DoorTimer = atoi(txtDoorTimer->GetValue().ToAscii());
 }
 
 void editelevator::On_bChime_Click(wxCommandEvent& event)
 {
-	if (elevator)
-		elevator->Chime(sFloor->GetThumbPosition() - Simcore->Basements);
+	//if (elevator)
+		//elevator->Chime(sFloor->GetThumbPosition() - Simcore->Basements);
 }
 
 void editelevator::On_bACPMode_Toggle(wxCommandEvent& event)

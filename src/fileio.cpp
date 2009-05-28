@@ -2335,7 +2335,20 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->OpenSpeed))
+				/*if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->OpenSpeed))
+				{
+					ScriptError("Invalid value");
+					return false;
+				}*/
+			}
+			if (LineData.Slice(0, 5).CompareNoCase("doors") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->NumDoors))
 				{
 					ScriptError("Invalid value");
 					return false;
@@ -2432,11 +2445,11 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->DoorTimer))
+				/*if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->DoorTimer))
 				{
 					ScriptError("Invalid value");
 					return false;
-				}
+				}*/
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("opensound") == true)
 			{
@@ -2445,7 +2458,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->OpenSound = temp2;
+				//Simcore->GetElevator(Current)->OpenSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("closesound") == true)
 			{
@@ -2454,7 +2467,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->CloseSound = temp2;
+				//Simcore->GetElevator(Current)->CloseSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("startsound") == true)
 			{
@@ -2499,7 +2512,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->ChimeSound = temp2;
+				//Simcore->GetElevator(Current)->ChimeSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("alarmsound") == true)
 			{
@@ -2707,16 +2720,18 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
+				if (tempdata.GetSize() < 10 || tempdata.GetSize() > 10)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
 				//check numeric values
-				for (int i = 1; i <= 8; i++)
+				for (int i = 0; i <= 9; i++)
 				{
-					if (i == 6)
-						i = 7;
+					if (i == 1)
+						i = 2;
+					if (i == 7)
+						i = 8;
 					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 					{
 						ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -2724,7 +2739,7 @@ recalc:
 					}
 				}
 
-				Simcore->GetElevator(Current)->AddDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), csString(tempdata[6]).CompareNoCase("true"), atof(tempdata[7]), atof(tempdata[8]));
+				Simcore->GetElevator(Current)->AddDoors(atoi(tempdata[0]), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
 
 				tempdata.DeleteAll();
 			}
@@ -2741,14 +2756,16 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
 				//check numeric values
-				for (int i = 1; i <= 5; i++)
+				for (int i = 0; i <= 6; i++)
 				{
+					if (i == 1)
+						i = 2;
 					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 					{
 						ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -2756,7 +2773,7 @@ recalc:
 					}
 				}
 
-				Simcore->GetElevator(Current)->AddShaftDoors(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
+				Simcore->GetElevator(Current)->AddShaftDoors(atoi(tempdata[0]), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
 
 				tempdata.DeleteAll();
 			}

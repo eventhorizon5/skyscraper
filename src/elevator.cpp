@@ -762,7 +762,7 @@ void Elevator::MoveElevatorToFloor()
 	//move sounds
 	mainsound->SetPosition(GetPosition());
 	idlesound->SetPosition(GetPosition());
-	MoveDoorSound(0, csVector3(0, GetPosition().y + (DoorHeight / 2), 0), true, false, true);
+	MoveDoorSound(0, csVector3(0, GetPosition().y, 0), true, false, true);
 	alarm->SetPosition(GetPosition());
 
 	//motion calculation

@@ -1161,7 +1161,7 @@ void ElevatorDoor::MoveSound(const csVector3 position, bool relative_x, bool rel
 	else
 		pos.x = doorsound->GetPosition().x + position.x;
 	if (relative_y == false)
-		pos.y = position.y;
+		pos.y = position.y + (DoorHeight / 2);
 	else
 		pos.y = doorsound->GetPosition().y + position.y;
 	if (relative_z == false)
