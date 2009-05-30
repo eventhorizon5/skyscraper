@@ -177,7 +177,8 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.2
     ServicedFloors = 0 - 9
     AssignedShaft = 1
-    CreateElevator 0, 5.706, 0
+    Doors = 2
+    CreateElevator false, 0, 5.706, 0
 
     #floor
     FloorOrientation = top
@@ -194,8 +195,6 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
     TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, ElevWall, 0.2, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 0, 0 #back wall
-    TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right, ElevWall, 0.2, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 0, 0 #right wall
     
     #left wall
@@ -210,6 +209,12 @@ DrawWalls = true, true, false, false, false, false
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 0, 0 #right panel
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel 2, ElevPanelMain, 0.2, -3.5, 3, -1.75, 3, 8, 8, 0, 0, 0, 0 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3, 3.5, 3, 8, 8, 0, 0, 0, 0 #right panel
     
     #doors
     WallOrientation = right
@@ -217,6 +222,8 @@ DrawWalls = true, true, false, false, false, false
     AddDoors 1, ElevDoors, 0.2, 0, -3.01, 3.5, 8, true, 0, 0 #doors
     AddShaftDoors 1, ElevDoors, 0.2, 0, -3.301, 0, 0 #shaft doors
     WallOrientation = left
+    AddDoors 2, ElevDoors, 0.2, 0, 3.01, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 2, ElevDoors, 0.2, 0, 3.301, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #directional indicator
@@ -244,73 +251,6 @@ DrawWalls = true, true, false, false, false, false
     AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
    
 <EndElevator>
-
-#stairs 1
-CreateStairwell 1, 10, 15, 0, 9
-CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
-
-#Stairs tutorial
-<Floors 0 to 9>
-    #More info on stairs specifics at http://en.wikipedia.org/wiki/Stairwell
-    #maximum riser height allowed in real-world settings is 8.25 inches (0.6875 feet)
-    #minimum tread length allowed in real-world settings is 9 inches (0.75 feet)
-    
-    #first get the height of each riser.  More info on stairs specifics at http://en.wikipedia.org/wiki/Stairwell
-    #this takes the total height of a single staircase level (which is the height of the floor plus the above floor's interfloor height.
-    #then divide that value by the total number of stairs you're going to be using.  Make sure that the value it comes up with is not
-    #over the riser height limit (you can have it over the limit in Skyscraper, but it won't be realistic)
-    #So, in this example, I'm using 20 total stairs, which is 10 on each side.
-    
-    Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
-    
-    #now add the stairs themselves.  The parameters are explained in the design guide, but basically the lower stairs in this example
-    #start on the left (bottom) and end on the right (top), and so they face left.  The upper stairs are the opposite, so they face right.
-    #the important part of this is the tread size.  In this, it's specified as "10 / 9", since there's 10 total steps in each,
-    #but like the design guide says, the top tread is not counted, since the top tread is the landing (specified later), and the staircase.
-    #to calculate the height and length of the staircase (according to the design guide): the height is the number of stairs times the riser size
-    #(which would be 10 * %1%).  The length is the number of stairs minus one, times the tread size - in this example it would be 9 * (10 / 9) which
-    #is 10.
-    
-    if[%floor% < 9] AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, %1%, 10 / 9, 10, 0, 0, 0
-    if[%floor% < 9] AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, %1%, 10 / 9, 10, %1% * 10, 0, 0
-    FloorOrientation = top
-    
-    #For the landings, you need to know where the stairs start and end (the positions).  Since these stairs are located/centered at X position 0, you
-    #can find the left and right sides by taking the staircase length and dividing by 2.  In this example the stairs have a width of 10, and so it reaches
-    #5 feet in each direction (-5 to 5).  So the lower landing would reach from the left side of the staircase (-8.5) to the left side of the stairs (-5),
-    #and the upper landing would be the opposite (go from the stairs top, 5, to the right side of the staircase, 8.5).
-    
-    if[%floor% > 0] AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, -5, 3.5, 0, 0, 1, 1
-    if[%floor% = 0] AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, 8.5, 3.5, 0, 0, 1, 1
-    if[%floor% < 9] AddStairsFloor 1, LandingUpper, Brick, 0.5, 5, -3.5, 8.5, 3.5, %1% * 10, %1% * 10, 1, 1
-
-    #the landing covers simply cover the portion of the landing that isn't covered up by the stairs.  You can see this cover if you're underneath a staircase,
-    #and it's the small wall piece just below it (fills in the gap between the lower floor's ceiling, and the landing above it).  In this example, the
-    #lower landing would need a cover going from Z values -3.5 to 0 (center), since the stairs in that section go from 0 to 3.5.  The upper landing is
-    #the opposite (0 to 3.5).
-    
-    DrawWalls = false, true, false, false, false, false
-    WallOrientation = right
-    AddStairsWall 1, LandingLowerCover, Brick, 0.1, -5, -3.5, -5, 0, 0.5, 0.5, -0.5, -0.5, 0, 1
-    DrawWalls = true, false, false, false, false, false
-    WallOrientation = left
-    if[%floor% < 9] AddStairsWall 1, LandingUpperCover, Brick, 0.1, 5, 0, 5, 3.5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
-    DrawWalls = true, true, false, false, false, false
-    
-    #the stairs walls are simply the walls inside the stairwell
-    
-    SetAutoSize = true, false
-    WallOrientation = right
-    AddStairsWall 1, LeftWall, StairsWall, 0.3, -8.5, -3.5 - 0.3, -8.5, 3.5 + 0.3, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
-    AddStairsWall 1, FrontWall, StairsWall, 0.3, -8.5 - 0.3, -3.5, 8.5 + 0.3, -3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
-    WallOrientation = left
-    AddStairsWall 1, BackWall, StairsWall, 0.3, -8.5 - 0.3, 3.5, 8.5 + 0.3, 3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
-    AddStairsWall 1, RightWall, StairsWall, 0.3, 8.5, -3.5 - 0.3, 8.5, 3.5 + 0.3, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
-    SetAutoSize = true, true
-    
-    AddStairsDoor 1, StairsDoor, 0.2, 1, -8.5, 0, 3.5, 8, 0, 1, 1
-    
-<EndFloors>
 
 <Floors 0 to 9>
     CallButtonElevators = 1

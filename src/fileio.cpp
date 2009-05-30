@@ -2619,13 +2619,13 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+				if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
 				//check numeric values
-				for (int i = 0; i <= 2; i++)
+				for (int i = 1; i <= 3; i++)
 				{
 					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 					{
@@ -2634,7 +2634,7 @@ recalc:
 					}
 				}
 
-				if (!Simcore->GetElevator(Current)->CreateElevator(atof(tempdata[0]), atof(tempdata[1]), atoi(tempdata[2])))
+				if (!Simcore->GetElevator(Current)->CreateElevator(csString(tempdata[0]).CompareNoCase("true"), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3])))
 				{
 					ScriptError("An error occurred while creating the elevator.  See the console output for more information");
 					return false;

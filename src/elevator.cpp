@@ -170,10 +170,12 @@ Elevator::~Elevator()
 	alarm = 0;
 }
 
-bool Elevator::CreateElevator(float x, float z, int floor)
+bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 {
 	//Creates elevator at specified location and floor
 	//x and z are the center coordinates
+	//if relative is true, then x and z coordinates are relative
+	//to the assigned shaft's center
 
 	//make sure required values are set
 	if (ElevatorSpeed <= 0)
@@ -217,7 +219,17 @@ bool Elevator::CreateElevator(float x, float z, int floor)
 		AddServicedFloor(floor);
 
 	//set data
-	Origin = csVector3(x, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight, z);
+	Origin.y = sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight;
+	if (relative == false)
+	{
+		Origin.x = x;
+		Origin.z = z;
+	}
+	else
+	{
+		Origin.x = sbs->GetShaft(AssignedShaft)->origin.x + x;
+		Origin.z = sbs->GetShaft(AssignedShaft)->origin.z + z;
+	}
 	OriginFloor = floor;
 
 	//add elevator to associated shaft's list

@@ -3867,7 +3867,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 1
-    CreateElevator -49, 74.282, -1
+    CreateElevator false, -49, 74.282, -1
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, -4.25 - 0.33 - 0.01 + 0.298, 9, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -3882,7 +3882,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 1
-    CreateElevator -40.5, 74.282, 291
+    CreateElevator false, -40.5, 74.282, 291
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, -4.25 - 0.33 - 0.01 + 0.298, 9, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -3897,7 +3897,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 1
-    CreateElevator -32, 74.282, 177
+    CreateElevator false, -32, 74.282, 177
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, -4.25 - 0.33 - 0.01 + 0.298, 9, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -3978,7 +3978,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 12
-    CreateElevator -49, 51.038, 300
+    CreateElevator false, -49, 51.038, 300
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -3993,7 +3993,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 12
-    CreateElevator -40.5, 51.038, -3
+    CreateElevator false, -40.5, 51.038, -3
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4008,7 +4008,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 12
-    CreateElevator -32, 51.038, 177
+    CreateElevator false, -32, 51.038, 177
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4085,7 +4085,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -2, 44
     FloorSkipText = EX
     AssignedShaft = 2
-    CreateElevator -13.282, -13.83, -2
+    CreateElevator false, -13.282, -13.83, -2
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4154,7 +4154,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -2, 44
     FloorSkipText = EX
     AssignedShaft = 3
-    CreateElevator 13.282, -13.83, 44
+    CreateElevator false, 13.282, -13.83, 44
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4224,7 +4224,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -2, 176
     FloorSkipText = EX
     AssignedShaft = 4
-    CreateElevator -13.282, 13.83, -2
+    CreateElevator false, -13.282, 13.83, -2
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4293,7 +4293,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -2, 176
     FloorSkipText = EX
     AssignedShaft = 5
-    CreateElevator 13.282, 13.83, 176
+    CreateElevator false, 13.282, 13.83, 176
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, -3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4363,7 +4363,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 6
-    CreateElevator -13.282, -50.49, 45
+    CreateElevator false, -13.282, -50.49, 45
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4378,7 +4378,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 6
-    CreateElevator -13.282, -41.49, 55
+    CreateElevator false, -13.282, -41.49, 55
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4393,7 +4393,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 6
-    CreateElevator -13.282, -32.49, 0
+    CreateElevator false, -13.282, -32.49, 0
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4408,7 +4408,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 6
-    CreateElevator -13.282, -23.49, 55
+    CreateElevator false, -13.282, -23.49, 55
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4478,7 +4478,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 7
-    CreateElevator 13.282, -50.49, 55
+    CreateElevator false, 13.282, -50.49, 55
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4493,7 +4493,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 7
-    CreateElevator 13.282, -41.49, 0
+    CreateElevator false, 13.282, -41.49, 0
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4508,7 +4508,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 7
-    CreateElevator 13.282, -32.49, 45
+    CreateElevator false, 13.282, -32.49, 45
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4523,7 +4523,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 7
-    CreateElevator 13.282, -23.49, 45
+    CreateElevator false, 13.282, -23.49, 45
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4594,7 +4594,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 8
-    CreateElevator -13.282, 50.49, 119
+    CreateElevator false, -13.282, 50.49, 119
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4609,7 +4609,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 8
-    CreateElevator -13.282, 41.49, 0
+    CreateElevator false, -13.282, 41.49, 0
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4624,7 +4624,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 8
-    CreateElevator -13.282, 32.49, 119
+    CreateElevator false, -13.282, 32.49, 119
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4639,7 +4639,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 8
-    CreateElevator -13.282, 23.49, 117
+    CreateElevator false, -13.282, 23.49, 117
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4709,7 +4709,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 9
-    CreateElevator 13.282, 50.49, 0
+    CreateElevator false, 13.282, 50.49, 0
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4724,7 +4724,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 9
-    CreateElevator 13.282, 41.49, 117
+    CreateElevator false, 13.282, 41.49, 117
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4739,7 +4739,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 9
-    CreateElevator 13.282, 32.49, 0
+    CreateElevator false, 13.282, 32.49, 0
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4754,7 +4754,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 9
-    CreateElevator 13.282, 23.49, 119
+    CreateElevator false, 13.282, 23.49, 119
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4826,7 +4826,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 11
-    CreateElevator -49.99, 13.532, 0
+    CreateElevator false, -49.99, 13.532, 0
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4841,7 +4841,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 11
-    CreateElevator -40.99, 13.532, -3
+    CreateElevator false, -40.99, 13.532, -3
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4856,7 +4856,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 11
-    CreateElevator -31.99, 13.532, 1
+    CreateElevator false, -31.99, 13.532, 1
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4871,7 +4871,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 11
-    CreateElevator -22.99, 13.532, -8
+    CreateElevator false, -22.99, 13.532, -8
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4955,7 +4955,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 10
-    CreateElevator -49.99, -13.532, 0
+    CreateElevator false, -49.99, -13.532, 0
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4970,7 +4970,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 10
-    CreateElevator -40.99, -13.532, -3
+    CreateElevator false, -40.99, -13.532, -3
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -4985,7 +4985,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 10
-    CreateElevator -31.99, -13.532, 1
+    CreateElevator false, -31.99, -13.532, 1
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5000,7 +5000,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 10
-    CreateElevator -22.99, -13.532, -8
+    CreateElevator false, -22.99, -13.532, -8
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5084,7 +5084,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -3 - 0
     FloorSkipText = EX
     AssignedShaft = 13
-    CreateElevator 40.99, 51.080, -3
+    CreateElevator false, 40.99, 51.080, -3
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5099,7 +5099,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -3 - 0
     FloorSkipText = EX
     AssignedShaft = 13
-    CreateElevator 31.99, 51.080, 0
+    CreateElevator false, 31.99, 51.080, 0
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5114,7 +5114,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -3 - 0
     FloorSkipText = EX
     AssignedShaft = 13
-    CreateElevator 22.99, 51.080, -2
+    CreateElevator false, 22.99, 51.080, -2
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5187,7 +5187,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -1, 199
     FloorSkipText = EX
     AssignedShaft = 15
-    CreateElevator 49.99, 13.532, -1
+    CreateElevator false, 49.99, 13.532, -1
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5202,7 +5202,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -1, 199
     FloorSkipText = EX
     AssignedShaft = 15
-    CreateElevator 40.99, 13.532, 199
+    CreateElevator false, 40.99, 13.532, 199
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5217,7 +5217,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -1, 199
     FloorSkipText = EX
     AssignedShaft = 15
-    CreateElevator 31.99, 13.532, -1
+    CreateElevator false, 31.99, 13.532, -1
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5289,7 +5289,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -2, 200
     FloorSkipText = EX
     AssignedShaft = 16
-    CreateElevator 13.978, -4.5, -2
+    CreateElevator false, 13.978, -4.5, -2
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5304,7 +5304,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -2, 200
     FloorSkipText = EX
     AssignedShaft = 16
-    CreateElevator 13.978, 4.5, 200
+    CreateElevator false, 13.978, 4.5, 200
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5374,7 +5374,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -30 - -22, -3
     FloorSkipText = EX
     AssignedShaft = 19
-    CreateElevator 23.038, -50.49, -3
+    CreateElevator false, 23.038, -50.49, -3
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5389,7 +5389,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -30 - -22, -3
     FloorSkipText = EX
     AssignedShaft = 19
-    CreateElevator 23.038, -41.49, -28
+    CreateElevator false, 23.038, -41.49, -28
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5404,7 +5404,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -30 - -22, -3
     FloorSkipText = EX
     AssignedShaft = 19
-    CreateElevator 23.038, -32.49, -23
+    CreateElevator false, 23.038, -32.49, -23
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5482,7 +5482,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -21 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 20
-    CreateElevator 31.985, -23.288, -16
+    CreateElevator false, 31.985, -23.288, -16
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5497,7 +5497,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -21 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 20
-    CreateElevator 40.985, -23.288, -3
+    CreateElevator false, 40.985, -23.288, -3
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5512,7 +5512,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -21 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 20
-    CreateElevator 49.985, -23.288, -21
+    CreateElevator false, 49.985, -23.288, -21
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5592,7 +5592,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -30 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 18
-    CreateElevator -32.15, 23.288, -16
+    CreateElevator false, -32.15, 23.288, -16
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5607,7 +5607,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -30 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 18
-    CreateElevator -41.15, 23.288, -3
+    CreateElevator false, -41.15, 23.288, -3
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5622,7 +5622,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -30 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 18
-    CreateElevator -50.15, 23.288, -21
+    CreateElevator false, -50.15, 23.288, -21
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5709,7 +5709,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -30 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 17
-    CreateElevator -23.038, 41.49, -3
+    CreateElevator false, -23.038, 41.49, -3
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, -3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5724,7 +5724,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -30 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 17
-    CreateElevator -23.038, 32.49, -23
+    CreateElevator false, -23.038, 32.49, -23
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, 3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5811,7 +5811,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 33 - 41, 44
     FloorSkipText = EX
     AssignedShaft = 23
-    CreateElevator -32.15, 23.288, 37
+    CreateElevator false, -32.15, 23.288, 37
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5826,7 +5826,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 33 - 41, 44
     FloorSkipText = EX
     AssignedShaft = 23
-    CreateElevator -41.15, 23.288, 39
+    CreateElevator false, -41.15, 23.288, 39
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5841,7 +5841,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 33 - 41, 44
     FloorSkipText = EX
     AssignedShaft = 23
-    CreateElevator -50.15, 23.288, 44
+    CreateElevator false, -50.15, 23.288, 44
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5921,7 +5921,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 33 - 41, 44
     FloorSkipText = EX
     AssignedShaft = 22
-    CreateElevator -23.038, 41.49, 36
+    CreateElevator false, -23.038, 41.49, 36
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, -3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -5936,7 +5936,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 33 - 41, 44
     FloorSkipText = EX
     AssignedShaft = 22
-    CreateElevator -23.038, 32.49, 1
+    CreateElevator false, -23.038, 32.49, 1
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, 3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6015,7 +6015,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -1 - 0, 2 - 42
     FloorSkipText = IL
     AssignedShaft = 29
-    CreateElevator 23.038, 23.49, 0
+    CreateElevator false, 23.038, 23.49, 0
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6030,7 +6030,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -1 - 0, 2 - 42
     FloorSkipText = IL
     AssignedShaft = 29
-    CreateElevator 23.038, 32.49, 27
+    CreateElevator false, 23.038, 32.49, 27
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6045,7 +6045,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = -1 - 0, 2 - 42
     FloorSkipText = IL
     AssignedShaft = 29
-    CreateElevator 23.038, 41.49, 42
+    CreateElevator false, 23.038, 41.49, 42
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6210,7 +6210,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 26
-    CreateElevator -22.99, -50.442, 1
+    CreateElevator false, -22.99, -50.442, 1
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6225,7 +6225,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 26
-    CreateElevator -31.99, -50.442, 31
+    CreateElevator false, -31.99, -50.442, 31
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6240,7 +6240,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 26
-    CreateElevator -40.99, -50.442, 22
+    CreateElevator false, -40.99, -50.442, 22
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6255,7 +6255,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 26
-    CreateElevator -49.99, -50.442, 25
+    CreateElevator false, -49.99, -50.442, 25
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6337,7 +6337,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 25
-    CreateElevator -32.15, -23.288, 32
+    CreateElevator false, -32.15, -23.288, 32
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6352,7 +6352,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 25
-    CreateElevator -41.15, -23.288, 21
+    CreateElevator false, -41.15, -23.288, 21
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6367,7 +6367,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 25
-    CreateElevator -50.15, -23.288, 28
+    CreateElevator false, -50.15, -23.288, 28
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6450,7 +6450,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 28
-    CreateElevator 22.99, -50.442, 0
+    CreateElevator false, 22.99, -50.442, 0
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6465,7 +6465,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 28
-    CreateElevator 31.99, -50.442, 9
+    CreateElevator false, 31.99, -50.442, 9
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6480,7 +6480,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 28
-    CreateElevator 40.99, -50.442, 20
+    CreateElevator false, 40.99, -50.442, 20
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6495,7 +6495,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 28
-    CreateElevator 49.99, -50.442, 15
+    CreateElevator false, 49.99, -50.442, 15
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6578,7 +6578,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 27
-    CreateElevator 32.15, -23.288, 17
+    CreateElevator false, 32.15, -23.288, 17
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6593,7 +6593,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 27
-    CreateElevator 41.15, -23.288, 13
+    CreateElevator false, 41.15, -23.288, 13
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
@@ -6608,7 +6608,7 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 27
-    CreateElevator 50.15, -23.288, 8
+    CreateElevator false, 50.15, -23.288, 8
 
     AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>

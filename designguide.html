@@ -861,13 +861,14 @@
   <p align="left"><strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
     the specified location<br>
-    Syntax: <font size="2" face="Courier New, Courier, mono">CreateElevator <em>x</em>, 
-    <em>y</em>, <em>floor</em><em><br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">CreateElevator <em>relative, 
+    x</em>, <em>z</em>, <em>floor</em><em><br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
-    </em>CreateElevator 0, 10, 0</font></p>
-  <p align="left"><em>X</em> and <em>Y</em> are the coordinates to place the center 
-    of the elevator at, and <em>Floor</em> is the floor to place the elevator 
-    on.</p>
+    </em>CreateElevator false, 0, 10, 0</font></p>
+  <p align="left"><em>Relative </em>determines if the coordinates are relative 
+    to the shaft center, or if they're absolute, <em>X</em> and <em>Z </em>are 
+    the coordinates to place the center of the elevator at, and <em>Floor</em> 
+    is the floor to place the elevator on.</p>
   <p align="left"><strong>2. AddFloor</strong> - adds a textured floor with the 
     specified dimensions for the elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor <em>name, 

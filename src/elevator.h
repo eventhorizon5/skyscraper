@@ -88,7 +88,7 @@ public:
 	//functions
 	Elevator(int number);
 	~Elevator();
-	bool CreateElevator(float x, float z, int floor);
+	bool CreateElevator(bool relative, float x, float z, int floor);
 	void AddRoute(int floor, int direction);
 	void DeleteRoute(int floor, int direction);
 	void CancelLastRoute();

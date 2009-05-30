@@ -1324,7 +1324,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0 - 9
     AssignedShaft = 13
-    CreateElevator -43.68, 136.242, 0
+    CreateElevator false, -43.68, 136.242, 0
 <EndElevator>
 
 <Elevator 2>
@@ -1336,7 +1336,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0 - 9
     AssignedShaft = 13
-    CreateElevator -34.68, 136.242, 9
+    CreateElevator false, -34.68, 136.242, 9
 <EndElevator>
 
 <Elevators 1 to 2>
@@ -1416,7 +1416,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 2
-    CreateElevator -9, -95.922, 0
+    CreateElevator false, -9, -95.922, 0
 <EndElevator>
 
 <Elevator 4>
@@ -1428,7 +1428,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 2
-    CreateElevator 0, -95.922, 20
+    CreateElevator false, 0, -95.922, 20
 <EndElevator>
 
 <Elevator 5>
@@ -1440,7 +1440,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 2
-    CreateElevator 9, -95.922, 13
+    CreateElevator false, 9, -95.922, 13
 <EndElevator>
 
 <Elevators 3 to 5>
@@ -1523,7 +1523,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 3
-    CreateElevator -9, -65.358, 18
+    CreateElevator false, -9, -65.358, 18
 <EndElevator>
 
 <Elevator 7>
@@ -1535,7 +1535,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 3
-    CreateElevator 0, -65.358, 11
+    CreateElevator false, 0, -65.358, 11
 <EndElevator>
 
 <Elevator 8>
@@ -1547,7 +1547,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 3
-    CreateElevator 9, -65.358, 22
+    CreateElevator false, 9, -65.358, 22
 <EndElevator>
 
 <Elevators 6 to 8>
@@ -1631,7 +1631,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 4
-    CreateElevator -9, -55.602, 32
+    CreateElevator false, -9, -55.602, 32
 <EndElevator>
 
 <Elevator 10>
@@ -1643,7 +1643,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 4
-    CreateElevator 0, -55.602, 24
+    CreateElevator false, 0, -55.602, 24
 <EndElevator>
 
 <Elevator 11>
@@ -1655,7 +1655,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 4
-    CreateElevator 9, -55.602, 27
+    CreateElevator false, 9, -55.602, 27
 <EndElevator>
 
 <Elevators 9 to 11>
@@ -1738,7 +1738,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 5
-    CreateElevator -9, -25.038, 31
+    CreateElevator false, -9, -25.038, 31
 <EndElevator>
 
 <Elevator 13>
@@ -1750,7 +1750,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 5
-    CreateElevator 0, -25.038, 0
+    CreateElevator false, 0, -25.038, 0
 <EndElevator>
 
 <Elevator 14>
@@ -1762,7 +1762,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 5
-    CreateElevator 9, -25.038, 25
+    CreateElevator false, 9, -25.038, 25
 <EndElevator>
 
 <Elevators 12 to 14>
@@ -1846,7 +1846,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 6
-    CreateElevator -9, -15.282, 43
+    CreateElevator false, -9, -15.282, 43
 <EndElevator>
 
 <Elevator 16>
@@ -1858,7 +1858,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 6
-    CreateElevator 0, -15.282, 36
+    CreateElevator false, 0, -15.282, 36
 <EndElevator>
 
 <Elevator 17>
@@ -1870,7 +1870,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 6
-    CreateElevator 9, -15.282, 40
+    CreateElevator false, 9, -15.282, 40
 <EndElevator>
 
 <Elevators 15 to 17>
@@ -1952,7 +1952,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 7
-    CreateElevator -9, 15.282, 0
+    CreateElevator false, -9, 15.282, 0
 <EndElevator>
 
 <Elevator 19>
@@ -1964,7 +1964,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 7
-    CreateElevator 0, 15.282, 35
+    CreateElevator false, 0, 15.282, 35
 <EndElevator>
 
 <Elevator 20>
@@ -1976,7 +1976,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 7
-    CreateElevator 9, 15.282, -1
+    CreateElevator false, 9, 15.282, -1
 <EndElevator>
 
 <Elevators 18 to 20>
@@ -2059,7 +2059,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 8
-    CreateElevator -9, 25.038, 56
+    CreateElevator false, -9, 25.038, 56
 <EndElevator>
 
 <Elevator 22>
@@ -2071,7 +2071,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 8
-    CreateElevator 0, 25.038, 0
+    CreateElevator false, 0, 25.038, 0
 <EndElevator>
 
 <Elevator 23>
@@ -2083,7 +2083,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 8
-    CreateElevator 9, 25.038, 48
+    CreateElevator false, 9, 25.038, 48
 <EndElevator>
 
 <Elevators 21 to 23>
@@ -2165,7 +2165,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 9
-    CreateElevator -9, 55.602, 53
+    CreateElevator false, -9, 55.602, 53
 <EndElevator>
 
 <Elevator 25>
@@ -2177,7 +2177,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 9
-    CreateElevator 0, 55.602, 52
+    CreateElevator false, 0, 55.602, 52
 <EndElevator>
 
 <Elevator 26>
@@ -2189,7 +2189,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 9
-    CreateElevator 9, 55.602, 47
+    CreateElevator false, 9, 55.602, 47
 <EndElevator>
 
 <Elevators 24 to 26>
@@ -2271,7 +2271,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 10
-    CreateElevator -9, 65.358, 64
+    CreateElevator false, -9, 65.358, 64
 <EndElevator>
 
 <Elevator 28>
@@ -2283,7 +2283,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 10
-    CreateElevator 0, 65.358, 57
+    CreateElevator false, 0, 65.358, 57
 <EndElevator>
 
 <Elevator 29>
@@ -2295,7 +2295,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 10
-    CreateElevator 9, 65.358, 61
+    CreateElevator false, 9, 65.358, 61
 <EndElevator>
 
 <Elevators 27 to 29>
@@ -2375,7 +2375,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 11
-    CreateElevator -9, 95.922, 65
+    CreateElevator false, -9, 95.922, 65
 <EndElevator>
 
 <Elevator 31>
@@ -2387,7 +2387,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 11
-    CreateElevator 0, 95.922, 57
+    CreateElevator false, 0, 95.922, 57
 <EndElevator>
 
 <Elevator 32>
@@ -2399,7 +2399,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 11
-    CreateElevator 9, 95.922, 0
+    CreateElevator false, 9, 95.922, 0
 <EndElevator>
 
 <Elevators 30 to 32>
@@ -2480,7 +2480,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -8, -7, -6, -5, -4, -3, -2, -1, 0 - 67
     AssignedShaft = 12
-    CreateElevator -9, 105.678, -6
+    CreateElevator false, -9, 105.678, -6
 <EndElevator>
 
 <Elevator 34>
@@ -2492,7 +2492,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -8, -7, -6, -5, -4, -3, -2, -1, 0 - 67
     AssignedShaft = 12
-    CreateElevator 0, 105.678, 0
+    CreateElevator false, 0, 105.678, 0
 <EndElevator>
 
 <Elevator 35>
@@ -2504,7 +2504,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -8, -7, -6, -5, -4, -3, -2, -1, 0 - 67
     AssignedShaft = 12
-    CreateElevator 9, 105.678, 34
+    CreateElevator false, 9, 105.678, 34
 <EndElevator>
 
 <Elevators 33 to 35>
@@ -2649,7 +2649,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -7, -6, -5, -4, -3, -2, -1, 0 - 9
     AssignedShaft = 14
-    CreateElevator -43.68, -136.242, -6
+    CreateElevator false, -43.68, -136.242, -6
 <EndElevator>
 
 <Elevator 37>
@@ -2661,7 +2661,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -7, -6, -5, -4, -3, -2, -1, 0 - 9
     AssignedShaft = 14
-    CreateElevator -34.68, -136.242, 3
+    CreateElevator false, -34.68, -136.242, 3
 <EndElevator>
 
 <Elevators 36 to 37>
@@ -2748,7 +2748,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -7, -6, -5, -4, -3, -2, -1, 0, 10
     AssignedShaft = 1
-    CreateElevator -9, -105.678, -4
+    CreateElevator false, -9, -105.678, -4
 <EndElevator>
 
 <Elevator 39>
@@ -2760,7 +2760,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -7, -6, -5, -4, -3, -2, -1, 0, 10
     AssignedShaft = 1
-    CreateElevator 0, -105.678, -7
+    CreateElevator false, 0, -105.678, -7
 <EndElevator>
 
 <Elevator 40>
@@ -2772,7 +2772,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -7, -6, -5, -4, -3, -2, -1, 0, 10
     AssignedShaft = 1
-    CreateElevator 9, -105.678, 10
+    CreateElevator false, 9, -105.678, 10
 <EndElevator>
 
 <Elevators 38 to 40>
