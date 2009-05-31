@@ -767,7 +767,7 @@ void Elevator::MoveElevatorToFloor()
 	Elevator_movable->UpdateMove();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
-	MoveDoors(0, csVector3(0, ElevatorRate * sbs->delta, 0), true, false, true);
+	MoveDoors(0, csVector3(0, ElevatorRate * sbs->delta, 0), true, true, true);
 	FloorIndicator_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	FloorIndicator_movable->UpdateMove();
 	Plaque_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
@@ -1709,12 +1709,23 @@ int Elevator::GetBottomFloor()
 	return ServicedFloors[0];
 }
 
-void Elevator::AddDirectionalIndicators(const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+void Elevator::AddDirectionalIndicators(bool relative, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create an array of directional indicators
 
+	float x, z;
+	if (relative == true)
+	{
+		x = Origin.x + CenterX;
+		z = Origin.z + CenterZ;
+	}
+	else
+	{
+		x = CenterX;
+		z = CenterZ;
+	}
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
-		IndicatorArray[i] = new DirectionalIndicator(Number, ServicedFloors[i], BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, Origin.x + CenterX, Origin.z + CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+		IndicatorArray[i] = new DirectionalIndicator(Number, ServicedFloors[i], BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 }
 
 void Elevator::EnableDirectionalIndicator(int floor, bool value)

@@ -67,6 +67,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 	csString buffer;
 	int startpos = 0;
 	bool getfloordata = false;
+	bool elevatorcreated = false;
 
 	while (line < BuildingData.GetSize() - 1)
 	{
@@ -229,6 +230,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 			Section = 0;
 			Context = "None";
 			Report("Finished elevator");
+			elevatorcreated = false;
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<textures>") == true)
@@ -2335,11 +2337,26 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				/*if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->OpenSpeed))
+				if (elevatorcreated == false)
+				{
+					ScriptError("Elevator not created yet");
+					return false;
+				}
+				if (!IsNumeric(LineData.Slice(9, LineData.Find("=", 0) - 9).Trim(), temp3))
+				{
+					ScriptError("No door specified");
+					return false;
+				}
+				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				{
+					ScriptError("Invalid door number");
+					return false;
+				}
+				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->GetDoor(temp3)->OpenSpeed))
 				{
 					ScriptError("Invalid value");
 					return false;
-				}*/
+				}
 			}
 			if (LineData.Slice(0, 5).CompareNoCase("doors") == true)
 			{
@@ -2445,11 +2462,26 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				/*if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->DoorTimer))
+				if (elevatorcreated == false)
+				{
+					ScriptError("Elevator not created yet");
+					return false;
+				}
+				if (!IsNumeric(LineData.Slice(9, LineData.Find("=", 0) - 9).Trim(), temp3))
+				{
+					ScriptError("No door specified");
+					return false;
+				}
+				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				{
+					ScriptError("Invalid door number");
+					return false;
+				}
+				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->GetDoor(temp3)->DoorTimer))
 				{
 					ScriptError("Invalid value");
 					return false;
-				}*/
+				}
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("opensound") == true)
 			{
@@ -2458,7 +2490,22 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				//Simcore->GetElevator(Current)->OpenSound = temp2;
+				if (elevatorcreated == false)
+				{
+					ScriptError("Elevator not created yet");
+					return false;
+				}
+				if (!IsNumeric(LineData.Slice(9, LineData.Find("=", 0) - 9).Trim(), temp3))
+				{
+					ScriptError("No door specified");
+					return false;
+				}
+				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				{
+					ScriptError("Invalid door number");
+					return false;
+				}
+				Simcore->GetElevator(Current)->GetDoor(temp3)->OpenSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("closesound") == true)
 			{
@@ -2467,7 +2514,22 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				//Simcore->GetElevator(Current)->CloseSound = temp2;
+				if (elevatorcreated == false)
+				{
+					ScriptError("Elevator not created yet");
+					return false;
+				}
+				if (!IsNumeric(LineData.Slice(10, LineData.Find("=", 0) - 10).Trim(), temp3))
+				{
+					ScriptError("No door specified");
+					return false;
+				}
+				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				{
+					ScriptError("Invalid door number");
+					return false;
+				}
+				Simcore->GetElevator(Current)->GetDoor(temp3)->CloseSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("startsound") == true)
 			{
@@ -2512,7 +2574,22 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				//Simcore->GetElevator(Current)->ChimeSound = temp2;
+				if (elevatorcreated == false)
+				{
+					ScriptError("Elevator not created yet");
+					return false;
+				}
+				if (!IsNumeric(LineData.Slice(10, LineData.Find("=", 0) - 10).Trim(), temp3))
+				{
+					ScriptError("No door specified");
+					return false;
+				}
+				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				{
+					ScriptError("Invalid door number");
+					return false;
+				}
+				Simcore->GetElevator(Current)->GetDoor(temp3)->ChimeSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("alarmsound") == true)
 			{
@@ -2639,6 +2716,7 @@ recalc:
 					ScriptError("An error occurred while creating the elevator.  See the console output for more information");
 					return false;
 				}
+				elevatorcreated = true;
 				tempdata.DeleteAll();
 			}
 
@@ -2968,18 +3046,18 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+				if (tempdata.GetSize() < 15 || tempdata.GetSize() > 15)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
 				//check numeric values
-				for (int i = 5; i <= 13; i++)
+				for (int i = 6; i <= 14; i++)
 				{
-					if (i == 8)
-						i = 9;
-					if (i == 11)
-						i = 12;
+					if (i == 9)
+						i = 10;
+					if (i == 12)
+						i = 13;
 					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 					{
 						ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -2987,7 +3065,7 @@ recalc:
 					}
 				}
 
-				Simcore->GetElevator(Current)->AddDirectionalIndicators(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), atof(tempdata[12]), atof(tempdata[13]));
+				Simcore->GetElevator(Current)->AddDirectionalIndicators(csString(tempdata[0]).CompareNoCase("true"), tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), tempdata[9], atof(tempdata[10]), atof(tempdata[11]), csString(tempdata[12]).CompareNoCase("true"), atof(tempdata[13]), atof(tempdata[14]));
 
 				tempdata.DeleteAll();
 			}
@@ -3020,6 +3098,7 @@ recalc:
 			//handle elevator range
 			if (RangeL != RangeH && LineData.Slice(0, 14).CompareNoCase("<endelevators>") == true)
 			{
+				elevatorcreated = false;
 				if (Current < RangeH)
 				{
 					Current++;

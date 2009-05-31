@@ -793,8 +793,10 @@
     elevator, in feet per second<br>
     Example: <font size="2" face="Courier New, Courier, mono">Deceleration = 0.0075</font></p>
   <p align="left"><strong>4. OpenSpeed</strong> - open/close speed of the elevator 
-    doors<br>
-    Example: <font size="2" face="Courier New, Courier, mono">OpenSpeed = 0.2</font></p>
+    doors. This must be specified after the CreateElevator command.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">OpenSpeed <em>doornumber</em> 
+    = <em>value</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">OpenSpeed 1 = 0.2</font></p>
   <p align="left"><strong>5. ServicedFloors</strong> - a comma-separated list 
     of floors this elevator services. Ranges can also be specified by putting 
     a &quot;-&quot; between the numbers<br>
@@ -806,14 +808,23 @@
     1</font></p>
   <p align="left"><strong>7. DoorTimer</strong> - the length of time (in milliseconds) 
     that the elevator doors should stay open before automatically closing. The 
-    default is 5000, or 5 seconds.<br>
-    Example: <font size="2" face="Courier New, Courier, mono">DoorTimer = 10000</font></p>
+    default is 5000, or 5 seconds. This must be specified after the CreateElevator 
+    command.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">DoorTimer <em>doornumber</em> 
+    = <em>value</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">DoorTimer 1 = 10000</font></p>
   <p align="left"><strong>8. OpenSound</strong> - the sound file to play when 
-    the elevator doors open. Default is <em>elevatoropen.wav</em>.<br>
-    Example: <font size="2" face="Courier New, Courier, mono">OpenSound = open.wav</font></p>
+    the elevator doors open. Default is <em>elevatoropen.wav</em>. This must be 
+    specified after the CreateElevator command.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">OpenSound <em>doornumber</em> 
+    = <em>filename</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">OpenSound 1 = open.wav</font></p>
   <p align="left"><strong>9. CloseSound</strong> - the sound file to play when 
-    the elevator doors close. Default is <em>elevatorclose.wav</em>.<br>
-    Example: <font size="2" face="Courier New, Courier, mono">CloseSound = close.wav</font></p>
+    the elevator doors close. Default is <em>elevatorclose.wav</em>. This must 
+    be specified after the CreateElevator command.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">CloseSound <em>doornumber</em> 
+    = <em>filename</em></font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">CloseSound 1 = close.wav</font></p>
   <p align="left"><strong>10. StartSound</strong> - the sound file to play when 
     the elevator starts moving/speeds up. Default is <em>elevstart.wav</em>.<br>
     Example: <font size="2" face="Courier New, Courier, mono">StartSound = start.wav</font></p>
@@ -828,7 +839,10 @@
     the elevator is idle. Default is <em>elevidle.wav</em>.<br>
     Example: <font size="2" face="Courier New, Courier, mono">IdleSound = idle.wav</font></p>
   <p align="left"><strong>14. ChimeSound</strong> - the sound file to play when 
-    the elevator arrives at a floor. Default is <em>chime1.wav</em>.<br>
+    the elevator arrives at a floor. Default is <em>chime1.wav</em>. This must 
+    be specified after the CreateElevator command.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">ChimeSound <em>doornumber</em> 
+    = <em>filename</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">ChimeSound = chime.wav</font></p>
   <p align="left"><strong>15. AlarmSound</strong> - the sound file to play when 
     the elevator alarm button is pressed. Default is <em>bell1.wav</em>.<br>
@@ -857,6 +871,9 @@
     will stop at while in ACP (Anti-Crime Protection) mode. Default is the lowest 
     serviced floor. <br>
     Example: <font size="2" face="Courier New, Courier, mono">ACPFloor = 5</font></p>
+  <p align="left"><strong>21. Doors</strong> - sets the number of doors the elevator 
+    will have. The default is 1. Set to 0 in order to have a doorless elevator.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">Doors = 2</font></p>
   <p align="left"></p>
   <p align="left"><strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
@@ -886,17 +903,21 @@
   <p align="left">The elevator's AddWall command is similar to the other AddWall 
     commands.</p>
   <p align="left"><strong>4. AddDoors</strong> - creates elevator doors<br>
-    Syntax: <font size="2" face="Courier New, Courier, mono">AddDoors <em>texturename</em>, 
-    <em>thickness, CenterX, CenterZ, width, height, direction, tw, th</em></font></p>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddDoors <em>number, 
+    texturename</em>, <em>thickness, CenterX, CenterZ, width, height, direction, 
+    tw, th</em></font></p>
   <p align="left">The AddDoors command creates working elevator doors at the central 
     location specified by <em>CenterX</em> and <em>CenterZ</em>, with <em>width</em> 
     and <em>height</em> specifiying the width and height of each door, and <em>Direction</em> 
     specifying the direction that the doors face (currently there are only 2: 
     <em>false</em> if the doors are on the left or right sides, and <em>true</em> 
-    if the doors are on the front or back sides)</p>
+    if the doors are on the front or back sides). <em>Number</em> specifies the 
+    number of the door to create (related to the <em>Doors</em> command) - if 
+    the elevator only has one door, or if the Doors command was not used, specify 
+    1 here.</p>
   <p align="left"><strong>5. AddShaftDoors</strong> - creates shaft elevator doors<br>
-    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoors <em>texturename</em>, 
-    <em>thickness, CenterX, CenterZ, tw, th</em></font></p>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoors <em>number, 
+    texturename</em>, <em>thickness, CenterX, CenterZ, tw, th</em></font></p>
   <p align="left">The AddShaftDoors command creates working shaft elevator doors 
     at the central location specified by <em>CenterX</em> and <em>CenterZ</em>. 
     Other parameters such as width, height, and direction are taken from the AddDoors 
@@ -904,7 +925,10 @@
     should be moved slightly away from the elevator doors (to separate them both). 
     Also, this command creates doors at all the floors specified in the ServicedFloors 
     value, and cuts any shaft walls that are within the door area (and so this 
-    must be called after the shaft walls are created).</p>
+    must be called after the shaft walls are created). <em>Number</em> specifies 
+    the number of the door to create (related to the <em>Doors</em> command) - 
+    if the elevator only has one door, or if the Doors command was not used, specify 
+    1 here.</p>
   <p align="left"><strong>6. CreatePanel</strong> - creates a button panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreatePanel <em>texturename</em>, 
     <em>rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, 
@@ -960,15 +984,17 @@
     elevator's directional indicator/lanterns (similar to the CreateCallButtons 
     command) <br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicators<em> 
-    BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, DownTexture, DownTextureLit, 
-    CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, 
-    th<br>
+    Relative, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, DownTexture, 
+    DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, 
+    ShowBack, tw, th<br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
-    AddDirectionalIndicators Metal, UpLight, UpLightOn, DownLight, DownLightOn, 
+    AddDirectionalIndicators true, Metal, UpLight, UpLightOn, DownLight, DownLightOn, 
     -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
   <p align="left">This command will create directional indicators on all floors 
     the elevator serves. It'll also automatically create the up and down lights 
     depending on the floor.</p>
+  <p align="left"><em>Relative</em> determines if the X and Z coordinates are 
+    relative to the elevator's origin (center) or not.</p>
   <p align="left"><em>BackTexture</em> is the texture of the wall plate behind 
     the lights</p>
   <p align="left"><em>UpTexture</em> and <em>DownTexture</em> are the textures 

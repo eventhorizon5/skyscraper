@@ -1149,7 +1149,7 @@ void ElevatorDoor::Move(const csVector3 position, bool relative_x, bool relative
 		pos.z = position.z;
 	else
 		pos.z = ElevatorDoorL_movable->GetPosition().z + position.z;
-	ElevatorDoorL_movable->MovePosition(pos);
+	ElevatorDoorL_movable->SetPosition(pos);
 	ElevatorDoorL_movable->UpdateMove();
 
 	if (relative_x == false)
@@ -1164,7 +1164,7 @@ void ElevatorDoor::Move(const csVector3 position, bool relative_x, bool relative
 		pos.z = position.z;
 	else
 		pos.z = ElevatorDoorR_movable->GetPosition().z + position.z;
-	ElevatorDoorR_movable->MovePosition(pos);
+	ElevatorDoorR_movable->SetPosition(pos);
 	ElevatorDoorR_movable->UpdateMove();
 }
 

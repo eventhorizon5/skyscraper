@@ -3861,45 +3861,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 1
     CreateElevator false, -49, 74.282, -1
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, -4.25 - 0.33 - 0.01 + 0.298, 9, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, -4.25 - 0.33 - 0.01 + 0.298, 9, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 2>
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 1
     CreateElevator false, -40.5, 74.282, 291
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, -4.25 - 0.33 - 0.01 + 0.298, 9, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, -4.25 - 0.33 - 0.01 + 0.298, 9, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 3>
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 1
     CreateElevator false, -32, 74.282, 177
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, -4.25 - 0.33 - 0.01 + 0.298, 9, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, -4.25 - 0.33 - 0.01 + 0.298, 9, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 1 to 3>
@@ -3972,45 +3972,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 12
     CreateElevator false, -49, 51.038, 300
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 5>
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 12
     CreateElevator false, -40.5, 51.038, -3
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 6>
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -3 - -1, 177, 215, 291, 294, 300
     FloorSkipText = EX
     AssignedShaft = 12
     CreateElevator false, -32, 51.038, 177
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 4 to 6>
@@ -4079,15 +4079,15 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 18
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -2, 44
     FloorSkipText = EX
     AssignedShaft = 2
     CreateElevator false, -13.282, -13.83, -2
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 7>
@@ -4148,15 +4148,15 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 18
     Acceleration = 0.3
     Deceleration = 0.3
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -2, 44
     FloorSkipText = EX
     AssignedShaft = 3
     CreateElevator false, 13.282, -13.83, 44
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 3, 6, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 8>
@@ -4218,15 +4218,15 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -2, 176
     FloorSkipText = EX
     AssignedShaft = 4
     CreateElevator false, -13.282, 13.83, -2
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 9>
@@ -4287,15 +4287,15 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -2, 176
     FloorSkipText = EX
     AssignedShaft = 5
     CreateElevator false, 13.282, 13.83, 176
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, -3, 6, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, -3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 10>
@@ -4357,60 +4357,60 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 6
     CreateElevator false, -13.282, -50.49, 45
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 12>
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 6
     CreateElevator false, -13.282, -41.49, 55
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 13>
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 6
     CreateElevator false, -13.282, -32.49, 0
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 14>
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 6
     CreateElevator false, -13.282, -23.49, 55
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 11 to 14>
@@ -4472,60 +4472,60 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 7
     CreateElevator false, 13.282, -50.49, 55
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 16>
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 7
     CreateElevator false, 13.282, -41.49, 0
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 17>
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 7
     CreateElevator false, 13.282, -32.49, 45
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 18>
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 45, 55
     FloorSkipText = EX
     AssignedShaft = 7
     CreateElevator false, 13.282, -23.49, 45
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 15 to 18>
@@ -4588,60 +4588,60 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 27
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 8
     CreateElevator false, -13.282, 50.49, 119
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 20>
     Speed = 27
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 8
     CreateElevator false, -13.282, 41.49, 0
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 21>
     Speed = 27
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 8
     CreateElevator false, -13.282, 32.49, 119
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 22>
     Speed = 27
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 8
     CreateElevator false, -13.282, 23.49, 117
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 0, 9, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 19 to 22>
@@ -4703,60 +4703,60 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 27
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 9
     CreateElevator false, 13.282, 50.49, 0
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 24>
     Speed = 27
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 9
     CreateElevator false, 13.282, 41.49, 117
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 25>
     Speed = 27
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 9
     CreateElevator false, 13.282, 32.49, 0
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 26>
     Speed = 27
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0, 117, 119
     FloorSkipText = EX
     AssignedShaft = 9
     CreateElevator false, 13.282, 23.49, 119
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.01 + 0.298, 0, 9, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 23 to 26>
@@ -4820,60 +4820,60 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 9
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 11
     CreateElevator false, -49.99, 13.532, 0
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 28>
     Speed = 9
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 11
     CreateElevator false, -40.99, 13.532, -3
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 29>
     Speed = 9
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 11
     CreateElevator false, -31.99, 13.532, 1
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 30>
     Speed = 9
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 11
     CreateElevator false, -22.99, 13.532, -8
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 27 to 30>
@@ -4949,60 +4949,60 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 9
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 10
     CreateElevator false, -49.99, -13.532, 0
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 32>
     Speed = 9
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 10
     CreateElevator false, -40.99, -13.532, -3
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 33>
     Speed = 9
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 10
     CreateElevator false, -31.99, -13.532, 1
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 34>
     Speed = 9
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -12 - 2
     FloorSkipText = EX
     AssignedShaft = 10
     CreateElevator false, -22.99, -13.532, -8
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 31 to 34>
@@ -5078,45 +5078,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 5
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -3 - 0
     FloorSkipText = EX
     AssignedShaft = 13
     CreateElevator false, 40.99, 51.080, -3
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 36>
     Speed = 5
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -3 - 0
     FloorSkipText = EX
     AssignedShaft = 13
     CreateElevator false, 31.99, 51.080, 0
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 37>
     Speed = 5
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = -3 - 0
     FloorSkipText = EX
     AssignedShaft = 13
     CreateElevator false, 22.99, 51.080, -2
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.25 + 0.33 + 0.01 - 0.298, 9, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 35 to 37>
@@ -5181,45 +5181,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -1, 199
     FloorSkipText = EX
     AssignedShaft = 15
     CreateElevator false, 49.99, 13.532, -1
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 39>
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -1, 199
     FloorSkipText = EX
     AssignedShaft = 15
     CreateElevator false, 40.99, 13.532, 199
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 40>
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -1, 199
     FloorSkipText = EX
     AssignedShaft = 15
     CreateElevator false, 31.99, 13.532, -1
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 38 to 40>
@@ -5283,30 +5283,30 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -2, 200
     FloorSkipText = EX
     AssignedShaft = 16
     CreateElevator false, 13.978, -4.5, -2
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 42>
     Speed = 35
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -2, 200
     FloorSkipText = EX
     AssignedShaft = 16
     CreateElevator false, 13.978, 4.5, 200
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 41 to 42>
@@ -5368,45 +5368,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -30 - -22, -3
     FloorSkipText = EX
     AssignedShaft = 19
     CreateElevator false, 23.038, -50.49, -3
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 44>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -30 - -22, -3
     FloorSkipText = EX
     AssignedShaft = 19
     CreateElevator false, 23.038, -41.49, -28
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 45>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -30 - -22, -3
     FloorSkipText = EX
     AssignedShaft = 19
     CreateElevator false, 23.038, -32.49, -23
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 42 to 45>
@@ -5476,45 +5476,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 10
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -21 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 20
     CreateElevator false, 31.985, -23.288, -16
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 47>
     Speed = 10
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -21 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 20
     CreateElevator false, 40.985, -23.288, -3
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 48>
     Speed = 10
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -21 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 20
     CreateElevator false, 49.985, -23.288, -21
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 46 to 48>
@@ -5586,45 +5586,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -30 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 18
     CreateElevator false, -32.15, 23.288, -16
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 50>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -30 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 18
     CreateElevator false, -41.15, 23.288, -3
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 51>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -30 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 18
     CreateElevator false, -50.15, 23.288, -21
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 49 to 51>
@@ -5703,30 +5703,30 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -30 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 17
     CreateElevator false, -23.038, 41.49, -3
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, -3, 6, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, -3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 53>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -30 - -13, -3
     FloorSkipText = EX
     AssignedShaft = 17
     CreateElevator false, -23.038, 32.49, -23
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, 3, 6, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, 3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 52 to 53>
@@ -5805,45 +5805,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 18
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 33 - 41, 44
     FloorSkipText = EX
     AssignedShaft = 23
     CreateElevator false, -32.15, 23.288, 37
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 55>
     Speed = 18
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 33 - 41, 44
     FloorSkipText = EX
     AssignedShaft = 23
     CreateElevator false, -41.15, 23.288, 39
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 56>
     Speed = 18
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 33 - 41, 44
     FloorSkipText = EX
     AssignedShaft = 23
     CreateElevator false, -50.15, 23.288, 44
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 54 to 56>
@@ -5915,30 +5915,30 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 18
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 33 - 41, 44
     FloorSkipText = EX
     AssignedShaft = 22
     CreateElevator false, -23.038, 41.49, 36
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, -3, 6, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, -3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 58>
     Speed = 18
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 33 - 41, 44
     FloorSkipText = EX
     AssignedShaft = 22
     CreateElevator false, -23.038, 32.49, 1
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, 3, 6, left, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -4.25 - 0.33 - 0.165 - 0.01 + 0.298, 3, 6, left, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 57 to 58>
@@ -6009,45 +6009,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 15
     Acceleration = 0.1
     Deceleration = 0.1
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -1 - 0, 2 - 42
     FloorSkipText = IL
     AssignedShaft = 29
     CreateElevator false, 23.038, 23.49, 0
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 60>
     Speed = 15
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -1 - 0, 2 - 42
     FloorSkipText = IL
     AssignedShaft = 29
     CreateElevator false, 23.038, 32.49, 27
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, 3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 61>
     Speed = 15
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -1 - 0, 2 - 42
     FloorSkipText = IL
     AssignedShaft = 29
     CreateElevator false, 23.038, 41.49, 42
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.25 + 0.33 + 0.01 - 0.298, -3, 6, right, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 59 to 61>
@@ -6204,60 +6204,60 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 14
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 26
     CreateElevator false, -22.99, -50.442, 1
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 63>
     Speed = 14
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 26
     CreateElevator false, -31.99, -50.442, 31
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 64>
     Speed = 14
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 26
     CreateElevator false, -40.99, -50.442, 22
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 65>
     Speed = 14
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 26
     CreateElevator false, -49.99, -50.442, 25
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 62 to 65>
@@ -6331,45 +6331,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 14
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 25
     CreateElevator false, -32.15, -23.288, 32
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 67>
     Speed = 14
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 25
     CreateElevator false, -41.15, -23.288, 21
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 68>
     Speed = 14
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 1, 21 - 32
     FloorSkipText = EX
     AssignedShaft = 25
     CreateElevator false, -50.15, -23.288, 28
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 66 to 68>
@@ -6444,60 +6444,60 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 10
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 28
     CreateElevator false, 22.99, -50.442, 0
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 70>
     Speed = 10
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 28
     CreateElevator false, 31.99, -50.442, 9
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 71>
     Speed = 10
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 28
     CreateElevator false, 40.99, -50.442, 20
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 72>
     Speed = 10
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 28
     CreateElevator false, 49.99, -50.442, 15
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, 4.25 + 0.33 + 0.01 - 0.298, 6, back, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 69 to 72>
@@ -6572,45 +6572,45 @@ ShaftCut 29, -4.25 + 0.33, -13.5, 4.25 - 0.33, 13.5, 0, 5
     Speed = 10
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 27
     CreateElevator false, 32.15, -23.288, 17
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 74>
     Speed = 10
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 27
     CreateElevator false, 41.15, -23.288, 13
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevator 75>
     Speed = 10
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.4
     AccelJerk = 0.3
     DecelJerk = 0.3
     ServicedFloors = 0, 8 - 20
     FloorSkipText = 8
     AssignedShaft = 27
     CreateElevator false, 50.15, -23.288, 8
+    OpenSpeed 1 = 0.4
 
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.25 - 0.33 - 0.01 + 0.298, 6, front, 0.5, 1, true, 0, 0
 <EndElevator>
 
 <Elevators 73 to 75>

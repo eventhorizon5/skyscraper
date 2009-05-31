@@ -144,7 +144,7 @@ public:
 	void SetGoButton(bool value);
 	int GetTopFloor();
 	int GetBottomFloor();
-	void AddDirectionalIndicators(const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	void AddDirectionalIndicators(bool relative, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	void EnableDirectionalIndicator(int floor, bool value);
 	void SetDirectionalIndicator(int floor, bool UpLight, bool DownLight);
 	void EnableDirectionalIndicators(bool value);

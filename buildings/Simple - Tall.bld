@@ -173,7 +173,6 @@ DrawWalls = true, true, false, false, false, false
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
-    OpenSpeed = 0.3
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 0 - 99
@@ -225,7 +224,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #directional indicator
-    AddDirectionalIndicators ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 6, front, 0.5, 1, true, 0, 0
     
     #right panel
     CreatePanel ElevPanel, 14, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
