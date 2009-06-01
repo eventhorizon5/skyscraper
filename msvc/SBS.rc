@@ -46,7 +46,7 @@ BEGIN
         BEGIN
             VALUE "Comments", "http://www.skyscrapersim.com\0"
             VALUE "CompanyName", "TLI Networks\0"
-            VALUE "FileDescription", "Scalable Building Simulator Core\0"
+            VALUE "FileDescription", "Scalable Building Simulator\0"
             VALUE "FileVersion", "0, 4, 0, 0\0"
             VALUE "InternalName", "SBS\0"
             VALUE "LegalCopyright", "©2005-2009 Ryan Thoryk, released under the GPL\0"
