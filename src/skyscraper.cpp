@@ -393,7 +393,7 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	canvas_width = canvas->GetSize().GetWidth();
 	canvas_height = canvas->GetSize().GetHeight();
 
-	font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
+	//font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
 
 	// Open the main system. This will open all the previously loaded plug-ins.
 	if (!csInitializer::OpenApplication (object_reg))
