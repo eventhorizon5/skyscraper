@@ -2085,7 +2085,7 @@ bool Elevator::CheckOpenDoor()
 	{
 		if (GetDoor(i))
 		{
-			if (GetDoor(i)->GetDoorsOpen() != 0)
+			if (GetDoor(i)->OpenDoor != 0)
 				return true;
 		}
 	}
