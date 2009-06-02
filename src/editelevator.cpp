@@ -782,8 +782,8 @@ void editelevator::Loop()
 	//txtDoorDirection->SetValue(wxString::FromAscii(BoolToString(elevator->DoorDirection)));
 	//txtDoorHeight->SetValue(TruncateNumber(elevator->DoorHeight, 2));
 	//txtDoorOrigin->SetValue(TruncateNumber(elevator->DoorOrigin.x, 2) + wxT(", ") + TruncateNumber(elevator->DoorOrigin.y, 2) + wxT(", ") + TruncateNumber(elevator->DoorOrigin.z, 2));
-	txtDoorsOpen->SetValue(wxString::FromAscii(BoolToString(elevator->AreDoorsOpen())));
-	txtDoorSpeed->SetValue(TruncateNumber(elevator->GetCurrentDoorSpeed(), 2));
+	//txtDoorsOpen->SetValue(wxString::FromAscii(BoolToString(elevator->AreDoorsOpen())));
+	//txtDoorSpeed->SetValue(TruncateNumber(elevator->GetCurrentDoorSpeed(), 2));
 	//txtDoorWidth->SetValue(TruncateNumber(elevator->DoorWidth, 2));
 	txtElevStart->SetValue(TruncateNumber(elevator->GetElevatorStart(), 2));
 	txtEnabled->SetValue(wxString::FromAscii(BoolToString(elevator->IsEnabled)));
@@ -809,7 +809,7 @@ void editelevator::Loop()
 	txtIsMoving->SetValue(wxString::FromAscii(BoolToString(elevator->IsMoving)));
 	txtMovePending->SetValue(wxString::FromAscii(BoolToString(elevator->MovePending)));
 	txtUseSkipFloor->SetValue(wxString::FromAscii(BoolToString(elevator->UseFloorSkipText)));
-	txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(elevator->DoorsStopped())));
+	//txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(elevator->DoorsStopped())));
 	txtOnFloor->SetValue(wxString::FromAscii(BoolToString(elevator->OnFloor)));
 }
 
