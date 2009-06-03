@@ -2212,6 +2212,53 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//AddDirectionalIndicator command
+			if (LineData.Slice(0, 23).CompareNoCase("adddirectionalindicator") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(24).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 17 || tempdata.GetSize() > 17)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+				//check numeric values
+				for (int i = 0; i <= 16; i++)
+				{
+					if (i == 1)
+						i = 8;
+					if (i == 11)
+						i = 12;
+					if (i == 14)
+						i = 15;
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+
+				if (!Simcore->GetElevator(atoi(tempdata[0])))
+				{
+					ScriptError("Invalid elevator");
+					return false;
+				}
+				if (!Simcore->GetElevator(atoi(tempdata[0]))->AddDirectionalIndicator(Current, csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), csString(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16])))
+				{
+					ScriptError("Current floor not served by specified elevator");
+					return false;
+				}
+
+				tempdata.DeleteAll();
+			}
+
 			//Cut command
 			if (LineData.Slice(0, 3).CompareNoCase("cut") == true)
 			{
@@ -3046,18 +3093,18 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 15 || tempdata.GetSize() > 15)
+				if (tempdata.GetSize() < 16 || tempdata.GetSize() > 16)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
 				//check numeric values
-				for (int i = 6; i <= 14; i++)
+				for (int i = 7; i <= 15; i++)
 				{
-					if (i == 9)
-						i = 10;
-					if (i == 12)
-						i = 13;
+					if (i == 10)
+						i = 11;
+					if (i == 13)
+						i = 14;
 					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 					{
 						ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -3065,7 +3112,7 @@ recalc:
 					}
 				}
 
-				Simcore->GetElevator(Current)->AddDirectionalIndicators(csString(tempdata[0]).CompareNoCase("true"), tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), tempdata[9], atof(tempdata[10]), atof(tempdata[11]), csString(tempdata[12]).CompareNoCase("true"), atof(tempdata[13]), atof(tempdata[14]));
+				Simcore->GetElevator(Current)->AddDirectionalIndicators(csString(tempdata[0]).CompareNoCase("true"), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], tempdata[4], tempdata[5], tempdata[6], atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), tempdata[10], atof(tempdata[11]), atof(tempdata[12]), csString(tempdata[13]).CompareNoCase("true"), atof(tempdata[14]), atof(tempdata[15]));
 
 				tempdata.DeleteAll();
 			}

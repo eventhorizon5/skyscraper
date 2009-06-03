@@ -752,7 +752,44 @@
   <p align="left">Number specifies the stairwell number. Direction specifies the 
     direction the door faces and also the direction it opens. For values of this, 
     look at the AddDoor command above.</p>
-  <p align="left"><strong>17. Cut</strong> - performs a manual box cut on an area 
+  <p align="left"><strong>17. AddDirectionalIndicator</strong> - creates a single
+    elevator directional indicator/lantern on the current floor (similar to the CreateCallButtons
+    command) <br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicator<em> 
+    Elevator, Relative, Single, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, DownTexture, 
+    DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, 
+    ShowBack, tw, th<br>
+    </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
+    AddDirectionalIndicator 1, true, false, Metal, UpLight, UpLightOn, DownLight, DownLightOn, 
+    -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
+  <p align="left">This command will create a directional indicator on the current floor
+    (only if the elevator serves it). It'll also automatically create the up and down lights
+    depending on the floor.</p>
+  <p align="left"><em>Elevator</em> specifies the elevator to create the indicators for.</p>
+  <p align="left"><em>Relative</em> determines if the X and Z coordinates are
+      relative to the elevator's origin (center) or not.</p>
+  <p align="left"><em>Single</em> determines if a single indicator light should be created instead of two.  If this is true, the unlit texture is specified in <em>UpLight</em>, and the <em>DownLight</em> value is ignored.</p>
+  <p align="left"><em>BackTexture</em> is the texture of the wall plate behind
+    the lights</p>
+  <p align="left"><em>UpTexture</em> and <em>DownTexture</em> are the textures
+    used for the lights themselves, and the &quot;Lit&quot; texures are the ones
+    to show when the light is on.  <em>DownTexture</em> is ignored if <em>Single</em> is true.</p>
+  <p align="left"><em>CenterX</em> and <em>CenterZ</em> are the central location
+    of the indicators</p>
+  <p align="left"><em>voffset</em> is the altitude offset that the object is above
+    each floor</p>
+  <p align="left"><em>direction </em>determines the direction the indicators face:<br>
+    'front' means they face towards the front of the building<br>
+    'back' means they face towards the back of the building<br>
+    'left' means they face left<br>
+    'right' means they face right</p>
+  <p align="left"><em>BackWidth</em> and <em>BackHeight</em> are the width and
+    height of the wall plate</p>
+  <p align="left"><em>ShowBack</em> determines if the wall plate should be shown,
+    and is either true or false</p>
+  <p align="left"><em>tw</em> and <em>th</em> are the texture scaling for the
+    wall plate.</p>
+  <p align="left"><strong>18. Cut</strong> - performs a manual box cut on an area 
     within the current floor<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Cut x1, y1, z1, x2, 
     y2, z2, cutwalls, cutfloors<br>
@@ -984,22 +1021,23 @@
     elevator's directional indicator/lanterns (similar to the CreateCallButtons 
     command) <br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicators<em> 
-    Relative, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, DownTexture, 
+    Relative, Single, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, DownTexture, 
     DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, 
     ShowBack, tw, th<br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
-    AddDirectionalIndicators true, Metal, UpLight, UpLightOn, DownLight, DownLightOn, 
+    AddDirectionalIndicators true, false, Metal, UpLight, UpLightOn, DownLight, DownLightOn, 
     -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
   <p align="left">This command will create directional indicators on all floors 
     the elevator serves. It'll also automatically create the up and down lights 
-    depending on the floor.</p>
-  <p align="left"><em>Relative</em> determines if the X and Z coordinates are 
-    relative to the elevator's origin (center) or not.</p>
+    depending on the floor. To create indicators on a per-floor basis, use the AddDirectionalIndicator command in the Floor section.</p>
+  <p align="left"><em>Relative</em> determines if the X and Z coordinates are
+      relative to the elevator's origin (center) or not.</p>
+  <p align="left"><em>Single</em> determines if a single indicator light should be created instead of two.  If this is true, the unlit texture is specified in <em>UpLight</em>, and the <em>DownLight</em> value is ignored.</p>
   <p align="left"><em>BackTexture</em> is the texture of the wall plate behind 
     the lights</p>
   <p align="left"><em>UpTexture</em> and <em>DownTexture</em> are the textures 
     used for the lights themselves, and the &quot;Lit&quot; texures are the ones 
-    to show when the light is on</p>
+    to show when the light is on.  <em>DownTexture</em> is ignored if <em>Single</em> is true.</p>
   <p align="left"><em>CenterX</em> and <em>CenterZ</em> are the central location 
     of the indicators</p>
   <p align="left"><em>voffset</em> is the altitude offset that the object is above 

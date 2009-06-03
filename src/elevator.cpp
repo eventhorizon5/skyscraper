@@ -1709,9 +1709,9 @@ int Elevator::GetBottomFloor()
 	return ServicedFloors[0];
 }
 
-void Elevator::AddDirectionalIndicators(bool relative, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+void Elevator::AddDirectionalIndicators(bool relative, bool single, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
-	//create an array of directional indicators
+	//create all directional indicators
 
 	float x, z;
 	if (relative == true)
@@ -1725,7 +1725,31 @@ void Elevator::AddDirectionalIndicators(bool relative, const char *BackTexture, 
 		z = CenterZ;
 	}
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
-		IndicatorArray[i] = new DirectionalIndicator(Number, ServicedFloors[i], BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+		IndicatorArray[i] = new DirectionalIndicator(Number, ServicedFloors[i], single, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+}
+
+bool Elevator::AddDirectionalIndicator(int floor, bool relative, bool single, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+{
+	//create a directional indicator on a single floor
+
+	float x, z;
+	if (relative == true)
+	{
+		x = Origin.x + CenterX;
+		z = Origin.z + CenterZ;
+	}
+	else
+	{
+		x = CenterX;
+		z = CenterZ;
+	}
+
+	int index = ServicedFloors.Find(floor);
+	if (index != -1)
+		IndicatorArray[index] = new DirectionalIndicator(Number, floor, single, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	else
+		return false;
+	return true;
 }
 
 void Elevator::EnableDirectionalIndicator(int floor, bool value)
@@ -1770,7 +1794,7 @@ void Elevator::EnableDirectionalIndicators(bool value)
 ElevatorDoor* Elevator::GetDoor(int number)
 {
 	//get elevator door object
-	
+
 	if (number > 0 && number <= DoorArray.GetSize())
 	{
 		if (DoorArray[number - 1])
@@ -2064,7 +2088,7 @@ bool Elevator::DoorsStopped(int number)
 bool Elevator::CheckDoorsOpen()
 {
 	//check each door's DoorsOpen value and return true if any are true
-	
+
 	for (int i = 1; i <= NumDoors; i++)
 	{
 		if (GetDoor(i))

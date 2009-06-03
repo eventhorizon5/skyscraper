@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator
 
@@ -44,6 +44,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 	DownTextureLit = downtexture_lit;
 	UpStatus = false;
 	DownStatus = false;
+	Single = single;
 
 	//create object mesh
 	csString buffer, buffer2, buffer3;
@@ -57,21 +58,34 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 	DirectionalMeshBack->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
 	DirectionalMeshBack->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
-	buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Up";
-	DirectionalMeshUp = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
-	DirectionalMeshUp->SetZBufMode(CS_ZBUF_USE);
-	DirectionalMeshUp->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	DirectionalMeshUp->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
-	csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTextureUnlit);
-	DirectionalMeshUp->GetMeshObject()->SetMaterialWrapper(mat);
+	if (Single == false)
+	{
+		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Up";
+		DirectionalMeshUp = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
+		DirectionalMeshUp->SetZBufMode(CS_ZBUF_USE);
+		DirectionalMeshUp->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+		DirectionalMeshUp->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+		csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTextureUnlit);
+		DirectionalMeshUp->GetMeshObject()->SetMaterialWrapper(mat);
 
-	buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Down";
-	DirectionalMeshDown = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
-	DirectionalMeshDown->SetZBufMode(CS_ZBUF_USE);
-	DirectionalMeshDown->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	DirectionalMeshDown->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
-	mat = sbs->engine->GetMaterialList()->FindByName(DownTextureUnlit);
-	DirectionalMeshDown->GetMeshObject()->SetMaterialWrapper(mat);
+		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Down";
+		DirectionalMeshDown = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
+		DirectionalMeshDown->SetZBufMode(CS_ZBUF_USE);
+		DirectionalMeshDown->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+		DirectionalMeshDown->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+		mat = sbs->engine->GetMaterialList()->FindByName(DownTextureUnlit);
+		DirectionalMeshDown->GetMeshObject()->SetMaterialWrapper(mat);
+	}
+	else
+	{
+		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Arrow";
+		DirectionalMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
+		DirectionalMesh->SetZBufMode(CS_ZBUF_USE);
+		DirectionalMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+		DirectionalMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+		csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTextureUnlit);
+		DirectionalMesh->GetMeshObject()->SetMaterialWrapper(mat);
+	}
 
 	sbs->ReverseExtents(false, false, false);
 
@@ -120,18 +134,23 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 			x2 = CenterX - (BackWidth / 4);
 			x1 = CenterX + (BackWidth / 4);
 		}
-		if (floor > bottomfloor && floor < topfloor)
+		if (Single == false)
 		{
-			sbs->AddGenWall(DirectionalMeshUp, UpTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + ((BackHeight / 7) * 4), 1, 1);
-			sbs->AddGenWall(DirectionalMeshDown, DownTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight / 7), 1, 1);
+			if (floor > bottomfloor && floor < topfloor)
+			{
+				sbs->AddGenWall(DirectionalMeshUp, UpTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + ((BackHeight / 7) * 4), 1, 1);
+				sbs->AddGenWall(DirectionalMeshDown, DownTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight / 7), 1, 1);
+			}
+			else
+			{
+				if (floor < topfloor)
+					sbs->AddGenWall(DirectionalMeshUp, UpTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+				if (floor > bottomfloor)
+					sbs->AddGenWall(DirectionalMeshDown, DownTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+			}
 		}
 		else
-		{
-			if (floor < topfloor)
-				sbs->AddGenWall(DirectionalMeshUp, UpTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
-			if (floor > bottomfloor)
-				sbs->AddGenWall(DirectionalMeshDown, DownTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
-		}
+			sbs->AddGenWall(DirectionalMesh, UpTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
 
 		sbs->ResetWalls();
 	}
@@ -154,18 +173,23 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, const char *
 			z1 = CenterZ - (BackWidth / 4);
 			z2 = CenterZ + (BackWidth / 4);
 		}
-		if (floor > bottomfloor && floor < topfloor)
+		if (Single == false)
 		{
-			sbs->AddGenWall(DirectionalMeshUp, UpTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + ((BackHeight / 7) * 4), 1, 1);
-			sbs->AddGenWall(DirectionalMeshDown, DownTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight / 7), 1, 1);
+			if (floor > bottomfloor && floor < topfloor)
+			{
+				sbs->AddGenWall(DirectionalMeshUp, UpTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + ((BackHeight / 7) * 4), 1, 1);
+				sbs->AddGenWall(DirectionalMeshDown, DownTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight / 7), 1, 1);
+			}
+			else
+			{
+				if (floor < topfloor)
+					sbs->AddGenWall(DirectionalMeshUp, UpTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+				if (floor > bottomfloor)
+					sbs->AddGenWall(DirectionalMeshDown, DownTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+			}
 		}
 		else
-		{
-			if (floor < topfloor)
-				sbs->AddGenWall(DirectionalMeshUp, UpTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
-			if (floor > bottomfloor)
-				sbs->AddGenWall(DirectionalMeshDown, DownTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
-		}
+			sbs->AddGenWall(DirectionalMesh, UpTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
 
 		sbs->ResetWalls();
 	}
@@ -188,6 +212,8 @@ void DirectionalIndicator::Enabled(bool value)
 		sbs->EnableMesh(DirectionalMeshUp, value);
 	if (DirectionalMeshDown)
 		sbs->EnableMesh(DirectionalMeshDown, value);
+	if (DirectionalMesh)
+		sbs->EnableMesh(DirectionalMesh, value);
 
 	IsEnabled = value;
 }
@@ -235,12 +261,27 @@ void DirectionalIndicator::SetLights(int up, int down)
 	//set status of directional lights
 	//values are 0 for no change, 1 for on, and 2 for off
 
-	if (up == 1 && DirectionalMeshUp)
-		sbs->ChangeTexture(DirectionalMeshUp, UpTextureLit);
-	if (up == 2 && DirectionalMeshUp)
-		sbs->ChangeTexture(DirectionalMeshUp, UpTextureUnlit);
-	if (down == 1 && DirectionalMeshDown)
-		sbs->ChangeTexture(DirectionalMeshDown, DownTextureLit);
-	if (down == 2 && DirectionalMeshDown)
-		sbs->ChangeTexture(DirectionalMeshDown, DownTextureUnlit);
+	if (Single == false)
+	{
+		if (up == 1 && DirectionalMeshUp)
+			sbs->ChangeTexture(DirectionalMeshUp, UpTextureLit);
+		if (up == 2 && DirectionalMeshUp)
+			sbs->ChangeTexture(DirectionalMeshUp, UpTextureUnlit);
+		if (down == 1 && DirectionalMeshDown)
+			sbs->ChangeTexture(DirectionalMeshDown, DownTextureLit);
+		if (down == 2 && DirectionalMeshDown)
+			sbs->ChangeTexture(DirectionalMeshDown, DownTextureUnlit);
+	}
+	else
+	{
+		if (DirectionalMesh)
+		{
+			if (up == 1)
+				sbs->ChangeTexture(DirectionalMesh, UpTextureLit);
+			if (down == 1)
+				sbs->ChangeTexture(DirectionalMesh, DownTextureLit);
+			if (up == 2 || down == 2)
+				sbs->ChangeTexture(DirectionalMesh, UpTextureUnlit);
+		}
+	}
 }

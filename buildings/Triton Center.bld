@@ -2882,6 +2882,9 @@ DrawWalls = true, true, false, false, false, false
     AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
 
+    #directional indicator
+    AddDirectionalIndicators true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 6, front, 0.5, 1, true, 0, 0
+
     #panel
     CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button35, 2, 2, 35, 1, 1
