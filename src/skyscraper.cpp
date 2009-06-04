@@ -51,15 +51,12 @@ DebugPanel *dpanel;
 MainScreen *window;
 iObjectRegistry* object_reg;
 
-//#ifdef CS_PLATFORM_WIN32
-
 #ifndef SW_SHOWNORMAL
 	#define SW_SHOWNORMAL 1
 #endif
 
 int main (int argc, char* argv[])
 {
-	//return WinMain(GetModuleHandle(0), 0, GetCommandLineA(), SW_SHOWNORMAL);
 	wxEntry(argc, argv);
 
 	csInitializer::DestroyApplication (object_reg);
@@ -67,8 +64,6 @@ int main (int argc, char* argv[])
 
 	return 0;
 }
-
-//#endif
 
 bool Skyscraper::OnInit(void)
 {
