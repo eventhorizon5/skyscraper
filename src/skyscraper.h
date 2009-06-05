@@ -45,7 +45,7 @@ public:
 	csRef<iStringSet> strings;
 	csRef<iStandardReporterListener> stdrep;
 	csRef<iEventQueue> equeue;
-	csRef<iBase> plug;
+	csRef<iBugPlug> bugplug;
 	csRef<iCollideSystem> collision_sys;
 	csRef<iMouseDriver> mouse;
 	csRef<iReporter> rep;

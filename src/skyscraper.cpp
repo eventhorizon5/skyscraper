@@ -298,10 +298,10 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 
 	if (!csInitializer::RequestPlugins(object_reg,
 		CS_REQUEST_VFS,
+		CS_REQUEST_FONTSERVER,
 		CS_REQUEST_PLUGIN("crystalspace.graphics2d.wxgl", iGraphics2D),
 		CS_REQUEST_OPENGL3D,
 		CS_REQUEST_ENGINE,
-		CS_REQUEST_FONTSERVER,
 		CS_REQUEST_IMAGELOADER,
 		CS_REQUEST_LEVELLOADER,
 		CS_REQUEST_CONSOLEOUT,
@@ -355,11 +355,15 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	if (!sndrenderer) return ReportError("Failed to locate sound renderer");
 	sndloader = csQueryRegistry<iSndSysLoader> (object_reg);
 	if (!sndloader) return ReportError("Failed to locate sound loader");
-	plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
+	csRef<iBase> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	if (plug) plug->IncRef ();
 	rep = csQueryRegistry<iReporter> (object_reg);
 	if (!rep) return ReportError("Failed to locate reporter driver");
+	
+	//load bugplug reference
+	bugplug = csQueryPluginClass<iBugPlug> (plugin_mgr, "crystalspace.utilities.bugplug");
+	bugplug->ExecCommand("fps"); //turn off FPS display
 
 	stdrep = csQueryRegistry<iStandardReporterListener> (object_reg);
 	if (!stdrep) return ReportError ("Failed to locate stdrep plugin!");
@@ -388,7 +392,7 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	canvas_width = canvas->GetSize().GetWidth();
 	canvas_height = canvas->GetSize().GetHeight();
 
-	//font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
+	font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
 
 	// Open the main system. This will open all the previously loaded plug-ins.
 	if (!csInitializer::OpenApplication (object_reg))
