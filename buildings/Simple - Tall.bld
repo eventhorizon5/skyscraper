@@ -35,10 +35,9 @@
     Load data/callbutton.png, ButtonDown, 1, -1
     Load data/marbl3.jpg, Wall1, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
-    Load data/darrow_unlit.png, ArrowUp, 1, 1
-    Load data/darrow_unlit.png, ArrowDown, 1, -1
-    Load data/darrow_lit.png, ArrowUp_Lit, 1, 1
-    Load data/darrow_lit.png, ArrowDown_Lit, 1, -1
+    Load data/darrow_single.jpg, Arrow, 1, 1
+    Load data/darrow_single_up.jpg, ArrowUp, 1, 1
+    Load data/darrow_single_down.jpg, ArrowDown, 1, -1
 
     Load signs/sans/Open.jpg, ButtonOpen, 1, 1
     Load signs/sans/Close.jpg, ButtonClose, 1, 1
@@ -224,7 +223,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
 
     #directional indicator
-    AddDirectionalIndicators true, false, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, true, ElevExtPanels, Arrow, ArrowUp, Arrow, ArrowDown, -3, -4.162, 6, front, 0.5, 1, true, 0, 0
     
     #right panel
     CreatePanel ElevPanel, 14, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
