@@ -40,10 +40,11 @@ public:
 	csString DownTextureLit; //lit down texture
 	bool UpStatus; //status of up light
 	bool DownStatus; //status of down light
-	bool Single;
+	bool Single; //is this a single-light indicator?
+	bool Vertical; //true if the lights are vertically separated or false if horizontally separated
 
 	//functions
-	DirectionalIndicator(int elevator, int floor, bool single, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	DirectionalIndicator(int elevator, int floor, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~DirectionalIndicator();
 	void Enabled(bool value);
 	void UpLight(bool value);
