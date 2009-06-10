@@ -47,7 +47,8 @@ public:
 	csString CloseSound; //door close sound
 	csString ChimeSound; //elevator chime sound
 	int OpenDoor; //1=open doors, -1=close doors
-	bool IsEnabled;
+	bool IsEnabled; //are doors enabled?
+	float ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command)
 
 	ElevatorDoor(int number, Elevator* elevator);
 	~ElevatorDoor();
@@ -63,13 +64,16 @@ public:
 	void ResetDoorTimer();
 	bool DoorsStopped();
 	int AddDoors(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
-	int AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
+	bool AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
+	bool AddShaftDoor(int floor, const char *texture, float tw, float th);
 	void Chime(int floor);
 	void Loop();
 	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void MoveSound(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void Enabled(bool value);
 	bool GetDoorsOpen();
+	void SetShaftDoors(float thickness, float CenterX, float CenterZ);
+	bool CheckShaftDoors();
 
 private:
 	csRef<iMeshWrapper> ElevatorDoorL; //left inside door

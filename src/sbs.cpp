@@ -2807,3 +2807,21 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 
 	return mesh;
 }
+
+bool SBS::CheckShaftDoors()
+{
+	//run CheckShaftDoors() on each elevator
+
+	bool status = true;
+	for (int i = 1; i < Elevators(); i++)
+	{
+		Elevator *elevator = 0;
+		elevator = GetElevator(i);
+		if (elevator)
+		{
+			if (elevator->CheckShaftDoors() == false)
+				status = false;
+		}
+	}
+	return status;
+}

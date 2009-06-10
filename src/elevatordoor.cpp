@@ -60,6 +60,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	ChimeSound = "chime1.wav";
 	doors_stopped = false;
 	IsEnabled = true;
+	ShaftDoorThickness = 0;
 
 	//create object meshes
 	csString buffer;
@@ -184,7 +185,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		doornumber = " ";
 		doornumber = doornumber + _itoa(Number, intbuffer, 10);
 	}
-	
+
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
@@ -270,7 +271,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		doornumber = " ";
 		doornumber = doornumber + _itoa(Number, intbuffer, 10);
 	}
-	
+
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
@@ -360,7 +361,7 @@ void ElevatorDoor::StopDoors()
 		doornumber = " ";
 		doornumber = doornumber + _itoa(Number, intbuffer, 10);
 	}
-	
+
 	if (OpenDoor == -2 || OpenDoor == 2)
 	{
 		if (WhichDoors == 3)
@@ -408,7 +409,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		doornumber = " ";
 		doornumber = doornumber + _itoa(Number, intbuffer, 10);
 	}
-	
+
 	//stop timer
 	timer->Stop();
 
@@ -893,10 +894,34 @@ int ElevatorDoor::AddDoors(const char *texture, float thickness, float CenterX, 
 	return firstidx;
 }
 
-int ElevatorDoor::AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th)
+bool ElevatorDoor::AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
-	//uses some parameters (width, height, direction) from AddDoors function
+	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
+
+	//set door parameters
+	ShaftDoorOrigin = csVector3(elev->Origin.x + CenterX, 0, elev->Origin.z + CenterZ);
+	ShaftDoorThickness = thickness;
+
+	//create doors
+	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
+	{
+		AddShaftDoor(elev->ServicedFloors[i], texture, tw, th);
+	}
+
+	return true;
+}
+
+bool ElevatorDoor::AddShaftDoor(int floor, const char *texture, float tw, float th)
+{
+	//adds a single elevator shaft door, with position and thickness parameters first specified
+	//by the SetShaftDoors command.
+	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
+
+	//exit if floor is not serviced by the elevator
+	if (!elev->IsServicedFloor(floor))
+		return false;
+
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
 	float base, base2;
@@ -906,31 +931,28 @@ int ElevatorDoor::AddShaftDoors(const char *texture, float thickness, float Cent
 	if (th == 0)
 		th = 1;
 
-	//set door parameters
-	ShaftDoorOrigin = csVector3(elev->Origin.x + CenterX, 0, elev->Origin.z + CenterZ);
-
 	//set up coordinates
 	if (DoorDirection == false)
 	{
-		x1 = CenterX;
-		x2 = CenterX;
-		x3 = CenterX;
-		x4 = CenterX;
-		z1 = CenterZ - (DoorWidth / 2);
-		z2 = CenterZ;
-		z3 = CenterZ;
-		z4 = CenterZ + (DoorWidth / 2);
+		x1 = ShaftDoorOrigin.x;
+		x2 = ShaftDoorOrigin.x;
+		x3 = ShaftDoorOrigin.x;
+		x4 = ShaftDoorOrigin.x;
+		z1 = ShaftDoorOrigin.z - (DoorWidth / 2);
+		z2 = ShaftDoorOrigin.z;
+		z3 = ShaftDoorOrigin.z;
+		z4 = ShaftDoorOrigin.z + (DoorWidth / 2);
 	}
 	else
 	{
-		x1 = CenterX - (DoorWidth / 2);
-		x2 = CenterX;
-		x3 = CenterX;
-		x4 = CenterX + (DoorWidth / 2);
-		z1 = CenterZ;
-		z2 = CenterZ;
-		z3 = CenterZ;
-		z4 = CenterZ;
+		x1 = ShaftDoorOrigin.x - (DoorWidth / 2);
+		x2 = ShaftDoorOrigin.x;
+		x3 = ShaftDoorOrigin.x;
+		x4 = ShaftDoorOrigin.x + (DoorWidth / 2);
+		z1 = ShaftDoorOrigin.z;
+		z2 = ShaftDoorOrigin.z;
+		z3 = ShaftDoorOrigin.z;
+		z4 = ShaftDoorOrigin.z;
 	}
 
 	csString buffer, buffer2, buffer3, buffer4;
@@ -939,86 +961,95 @@ int ElevatorDoor::AddShaftDoors(const char *texture, float thickness, float Cent
 	sbs->ReverseExtents(false, false, false);
 
 	//create doors
-	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
+	Floor *floorobj = sbs->GetFloor(floor);
+	Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
+	base = floorobj->InterfloorHeight; //relative to floor
+	base2 = floorobj->Altitude + base; //absolute
+
+	//cut shaft and floor walls
+	if (DoorDirection == false)
 	{
-		Floor *floor = sbs->GetFloor(elev->ServicedFloors[i]);
-		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-		base = floor->InterfloorHeight; //relative to floor
-		base2 = floor->Altitude + base; //absolute
-
-		//cut shaft and floor walls
-		if (DoorDirection == false)
-		{
-			shaft->CutWall(false, elev->ServicedFloors[i], csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), 1, "Shaft");
-			floor->Cut(csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), true, false, true, 2, "Shaft");
-		}
-		else
-		{
-			shaft->CutWall(false, elev->ServicedFloors[i], csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), 1, "Shaft");
-			floor->Cut(csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
-		}
-
-		//create doorway walls
-		sbs->AddDoorwayWalls(floor->Level_state, "ConnectionWall", 0, 0);
-
-		//create meshes
-		buffer3 = elev->Number;
-		buffer4 = i;
-		buffer = "Elevator " + buffer3 + ": Shaft Door " + buffer4 + "L";
-		buffer2 = "Elevator " + buffer3 + ": Shaft Door " + buffer4 + "R";
-		buffer.Trim();
-		buffer2.Trim();
-		csRef<iMeshWrapper> tmpmesh;
-		csRef<iThingFactoryState> tmpstate;
-
-		//door L
-		tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-		ShaftDoorL[i] = tmpmesh;
-		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorL[i]->GetMeshObject()->GetFactory());
-		ShaftDoorL_state[i] = tmpstate;
-		ShaftDoorL[i]->SetZBufMode(CS_ZBUF_USE);
-		ShaftDoorL[i]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-		ShaftDoorL[i]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
-
-		//door R
-		tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer2.GetData());
-		ShaftDoorR[i] = tmpmesh;
-		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorR[i]->GetMeshObject()->GetFactory());
-		ShaftDoorR_state[i] = tmpstate;
-		ShaftDoorR[i]->SetZBufMode(CS_ZBUF_USE);
-		ShaftDoorR[i]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-		ShaftDoorR[i]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
-
-		//reposition meshes
-		ShaftDoorL[i]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));
-		ShaftDoorL[i]->GetMovable()->UpdateMove();
-		ShaftDoorR[i]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));
-		ShaftDoorR[i]->GetMovable()->UpdateMove();
-
-		//create doors
-		sbs->AddWallMain(ShaftDoorL_state[i], "Door", texture, thickness, x1, z1, x2, z2, DoorHeight, DoorHeight, base2, base2, tw, th);
-		sbs->AddWallMain(ShaftDoorR_state[i], "Door", texture, thickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base2, base2, tw, th);
-
-		//create connection pieces
-		float xoffset = elev->Origin.x - shaft->origin.x;
-		float zoffset = elev->Origin.z - shaft->origin.z;
-		shaft->AddWall(elev->ServicedFloors[i], "ShaftDoorF1", "Connection", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base - 1.001, base - 1.001, 0, 0);
-		shaft->AddWall(elev->ServicedFloors[i], "ShaftDoorF2", "Connection", thickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base + DoorHeight + 0.001, base + DoorHeight + 0.001, 0, 0);
-
-		//make doors invisible on start
-		sbs->EnableMesh(ShaftDoorL[i], false);
-		sbs->EnableMesh(ShaftDoorR[i], false);
-
-		floor = 0;
-		shaft = 0;
+		shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), 1, "Shaft");
+		floorobj->Cut(csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), true, false, true, 2, "Shaft");
 	}
+	else
+	{
+		shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), 1, "Shaft");
+		floorobj->Cut(csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
+	}
+
+	//create doorway walls
+	sbs->AddDoorwayWalls(floorobj->Level_state, "ConnectionWall", 0, 0);
+
+	//create meshes
+	buffer3 = elev->Number;
+	buffer4 = floor;
+	buffer = "Elevator " + buffer3 + ": Shaft Door " + buffer4 + "L";
+	buffer2 = "Elevator " + buffer3 + ": Shaft Door " + buffer4 + "R";
+	buffer.Trim();
+	buffer2.Trim();
+	csRef<iMeshWrapper> tmpmesh;
+	csRef<iThingFactoryState> tmpstate;
+	int index = elev->ServicedFloors.Find(floor);
+
+	//door L
+	tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
+	ShaftDoorL[index] = tmpmesh;
+	tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorL[index]->GetMeshObject()->GetFactory());
+	ShaftDoorL_state[index] = tmpstate;
+	ShaftDoorL[index]->SetZBufMode(CS_ZBUF_USE);
+	ShaftDoorL[index]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	ShaftDoorL[index]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+
+	//door R
+	tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer2.GetData());
+	ShaftDoorR[index] = tmpmesh;
+	tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorR[index]->GetMeshObject()->GetFactory());
+	ShaftDoorR_state[index] = tmpstate;
+	ShaftDoorR[index]->SetZBufMode(CS_ZBUF_USE);
+	ShaftDoorR[index]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
+	ShaftDoorR[index]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+
+	//reposition meshes
+	ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));
+	ShaftDoorL[index]->GetMovable()->UpdateMove();
+	ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));
+	ShaftDoorR[index]->GetMovable()->UpdateMove();
+
+	//create doors
+	sbs->AddWallMain(ShaftDoorL_state[index], "Door", texture, ShaftDoorThickness, x1, z1, x2, z2, DoorHeight, DoorHeight, base2, base2, tw, th);
+	sbs->AddWallMain(ShaftDoorR_state[index], "Door", texture, ShaftDoorThickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base2, base2, tw, th);
+
+	//create connection pieces
+	float xoffset = elev->Origin.x - shaft->origin.x;
+	float zoffset = elev->Origin.z - shaft->origin.z;
+	shaft->AddWall(floor, "ShaftDoorF1", "Connection", ShaftDoorThickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base - 1.001, base - 1.001, 0, 0);
+	shaft->AddWall(floor, "ShaftDoorF2", "Connection", ShaftDoorThickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base + DoorHeight + 0.001, base + DoorHeight + 0.001, 0, 0);
+
+	//make doors invisible on start
+	sbs->EnableMesh(ShaftDoorL[index], false);
+	sbs->EnableMesh(ShaftDoorR[index], false);
+
+	floorobj = 0;
+	shaft = 0;
+
 	sbs->ResetWalls();
 	sbs->ResetExtents();
 
 	//relocate chime sound object
 	chime->SetPosition(csVector3(ShaftDoorOrigin.x, ShaftDoorOrigin.y + DoorHeight, ShaftDoorOrigin.z));
 
-	return 0;
+	return true;
+}
+
+void ElevatorDoor::SetShaftDoors(float thickness, float CenterX, float CenterZ)
+{
+	//pre-set shaft door parameters for the AddShaftDoor command.
+	//not needed if using the AddShaftDoors command
+	//the Center values are relative offsets from the associated elevator's center
+
+	ShaftDoorThickness = thickness;
+	ShaftDoorOrigin = csVector3(elev->Origin.x + CenterX, 0, elev->Origin.z + CenterZ);
 }
 
 void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
@@ -1197,4 +1228,20 @@ void ElevatorDoor::MoveSound(const csVector3 position, bool relative_x, bool rel
 	else
 		pos.z = DoorOrigin.z + position.z;
 	doorsound->SetPosition(pos);
+}
+
+bool ElevatorDoor::CheckShaftDoors()
+{
+	//check all shaft doors and return an error if any haven't been created
+
+	bool status = true;
+	for (size_t i = 0; i < ShaftDoorL.GetSize(); i++)
+	{
+		if (!ShaftDoorL[i])
+		{
+			status = false;
+			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors for floor" + csString(_itoa(elev->ServicedFloors[i], intbuffer, 10)) + " haven't been created");
+		}
+	}
+	return status;
 }

@@ -2259,6 +2259,49 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//AddShaftDoor command
+			if (LineData.Slice(0, 12).CompareNoCase("addshaftdoor") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(13).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 5 || tempdata.GetSize() > 5)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+				//check numeric values
+				for (int i = 0; i <= 4; i++)
+				{
+					if (i == 2)
+						i = 3;
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+
+				if (!Simcore->GetElevator(atoi(tempdata[0])))
+				{
+					ScriptError("Invalid elevator");
+					return false;
+				}
+				if (!Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], atof(tempdata[3]), atof(tempdata[4])))
+				{
+					ScriptError("Current floor not served by specified elevator");
+					return false;
+				}
+
+				tempdata.DeleteAll();
+			}
+
 			//Cut command
 			if (LineData.Slice(0, 3).CompareNoCase("cut") == true)
 			{
@@ -2869,6 +2912,38 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//SetShaftDoors command
+			if (LineData.Slice(0, 13).CompareNoCase("setshaftdoors") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(14).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+				//check numeric values
+				for (int i = 0; i <= 3; i++)
+				{
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+
+				Simcore->GetElevator(Current)->SetShaftDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]));
+
+				tempdata.DeleteAll();
+			}
+
 			//AddShaftDoors command
 			if (LineData.Slice(0, 13).CompareNoCase("addshaftdoors") == true)
 			{
@@ -3263,6 +3338,9 @@ recalc:
 Nextline:
 		line++;
 	}
+
+	//post-process checks
+	Simcore->CheckShaftDoors();
 
 	return true;
 }

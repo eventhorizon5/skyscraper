@@ -1942,6 +1942,19 @@ int Elevator::AddShaftDoors(int number, const char *texture, float thickness, fl
 	return 0;
 }
 
+bool Elevator::AddShaftDoor(int floor, int number, const char *texture, float tw, float th)
+{
+	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
+	//by the SetShaftDoors command.
+
+	int index = ServicedFloors.Find(floor);
+	if (index != -1 && GetDoor(number))
+		return GetDoor(number)->AddShaftDoor(floor, texture, tw, th);
+	else
+		return false;
+	return true;
+}
+
 void Elevator::ShaftDoorsEnabled(int number, int floor, bool value)
 {
 	//turns shaft elevator doors on/off
@@ -2172,5 +2185,38 @@ void Elevator::MoveDoorSound(int number, const csVector3 position, bool relative
 	{
 		if (GetDoor(number))
 			GetDoor(number)->MoveSound(position, relative_x, relative_y, relative_z);
+	}
+}
+
+bool Elevator::CheckShaftDoors()
+{
+	//checks all shaft doors and reports an error if any haven't been created
+
+	bool status = true;
+	for (int i = 1; i <= NumDoors; i++)
+	{
+		if (GetDoor(i))
+		{
+			if (GetDoor(i)->CheckShaftDoors() == false)
+				status = false;
+		}
+	}
+	return status;
+}
+
+bool Elevator::SetShaftDoors(int number, float thickness, float CenterX, float CenterZ)
+{
+	if (number == 0)
+	{
+		for (int i = 1; i <= NumDoors; i++)
+		{
+			if (GetDoor(i))
+				GetDoor(i)->SetShaftDoors(thickness, CenterX, CenterZ);
+		}
+	}
+	else
+	{
+		if (GetDoor(number))
+			GetDoor(number)->SetShaftDoors(thickness, CenterX, CenterZ);
 	}
 }

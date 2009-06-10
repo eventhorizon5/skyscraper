@@ -163,11 +163,14 @@ public:
 	bool DoorsStopped(int number = 0);
 	int AddDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
 	int AddShaftDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
+	bool AddShaftDoor(int floor, int number, const char *texture, float tw, float th);
 	void Chime(int number, int floor);
 	void MoveDoors(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void EnableDoors(bool value);
 	DirectionalIndicator* GetIndicator(int floor);
+	bool CheckShaftDoors();
+	bool SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
