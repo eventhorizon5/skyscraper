@@ -2204,7 +2204,7 @@ bool Elevator::CheckShaftDoors()
 	return status;
 }
 
-bool Elevator::SetShaftDoors(int number, float thickness, float CenterX, float CenterZ)
+void Elevator::SetShaftDoors(int number, float thickness, float CenterX, float CenterZ)
 {
 	if (number == 0)
 	{

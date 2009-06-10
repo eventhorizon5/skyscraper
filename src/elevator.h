@@ -170,7 +170,7 @@ public:
 	void EnableDoors(bool value);
 	DirectionalIndicator* GetIndicator(int floor);
 	bool CheckShaftDoors();
-	bool SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
+	void SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

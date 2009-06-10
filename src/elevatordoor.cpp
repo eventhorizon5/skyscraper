@@ -934,25 +934,25 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *texture, float tw, float 
 	//set up coordinates
 	if (DoorDirection == false)
 	{
-		x1 = ShaftDoorOrigin.x;
-		x2 = ShaftDoorOrigin.x;
-		x3 = ShaftDoorOrigin.x;
-		x4 = ShaftDoorOrigin.x;
-		z1 = ShaftDoorOrigin.z - (DoorWidth / 2);
-		z2 = ShaftDoorOrigin.z;
-		z3 = ShaftDoorOrigin.z;
-		z4 = ShaftDoorOrigin.z + (DoorWidth / 2);
+		x1 = ShaftDoorOrigin.x - elev->Origin.x;
+		x2 = ShaftDoorOrigin.x - elev->Origin.x;
+		x3 = ShaftDoorOrigin.x - elev->Origin.x;
+		x4 = ShaftDoorOrigin.x - elev->Origin.x;
+		z1 = ShaftDoorOrigin.z - elev->Origin.z - (DoorWidth / 2);
+		z2 = ShaftDoorOrigin.z - elev->Origin.z;
+		z3 = ShaftDoorOrigin.z - elev->Origin.z;
+		z4 = ShaftDoorOrigin.z - elev->Origin.z + (DoorWidth / 2);
 	}
 	else
 	{
-		x1 = ShaftDoorOrigin.x - (DoorWidth / 2);
-		x2 = ShaftDoorOrigin.x;
-		x3 = ShaftDoorOrigin.x;
-		x4 = ShaftDoorOrigin.x + (DoorWidth / 2);
-		z1 = ShaftDoorOrigin.z;
-		z2 = ShaftDoorOrigin.z;
-		z3 = ShaftDoorOrigin.z;
-		z4 = ShaftDoorOrigin.z;
+		x1 = ShaftDoorOrigin.x - elev->Origin.x - (DoorWidth / 2);
+		x2 = ShaftDoorOrigin.x - elev->Origin.x;
+		x3 = ShaftDoorOrigin.x - elev->Origin.x;
+		x4 = ShaftDoorOrigin.x - elev->Origin.x + (DoorWidth / 2);
+		z1 = ShaftDoorOrigin.z - elev->Origin.z;
+		z2 = ShaftDoorOrigin.z - elev->Origin.z;
+		z3 = ShaftDoorOrigin.z - elev->Origin.z;
+		z4 = ShaftDoorOrigin.z - elev->Origin.z;
 	}
 
 	csString buffer, buffer2, buffer3, buffer4;
