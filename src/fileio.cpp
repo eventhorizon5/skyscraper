@@ -2250,11 +2250,7 @@ recalc:
 					ScriptError("Invalid elevator");
 					return false;
 				}
-				if (!Simcore->GetElevator(atoi(tempdata[0]))->AddDirectionalIndicator(Current, csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), csString(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17])))
-				{
-					ScriptError("Current floor not served by specified elevator");
-					return false;
-				}
+				Simcore->GetElevator(atoi(tempdata[0]))->AddDirectionalIndicator(Current, csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), csString(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17]));
 
 				tempdata.DeleteAll();
 			}
@@ -2293,11 +2289,7 @@ recalc:
 					ScriptError("Invalid elevator");
 					return false;
 				}
-				if (!Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], atof(tempdata[3]), atof(tempdata[4])))
-				{
-					ScriptError("Current floor not served by specified elevator");
-					return false;
-				}
+				Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], atof(tempdata[3]), atof(tempdata[4]));
 
 				tempdata.DeleteAll();
 			}
