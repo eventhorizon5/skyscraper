@@ -2188,22 +2188,6 @@ void Elevator::MoveDoorSound(int number, const csVector3 position, bool relative
 	}
 }
 
-bool Elevator::CheckShaftDoors()
-{
-	//checks all shaft doors and reports an error if any haven't been created
-
-	bool status = true;
-	for (int i = 1; i <= NumDoors; i++)
-	{
-		if (GetDoor(i))
-		{
-			if (GetDoor(i)->CheckShaftDoors() == false)
-				status = false;
-		}
-	}
-	return status;
-}
-
 void Elevator::SetShaftDoors(int number, float thickness, float CenterX, float CenterZ)
 {
 	if (number == 0)

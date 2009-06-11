@@ -790,7 +790,26 @@
     and is either true or false</p>
   <p align="left"><em>tw</em> and <em>th</em> are the texture scaling for the
     wall plate.</p>
-  <p align="left"><strong>18. Cut</strong> - performs a manual box cut on an area 
+  <p align="left"><strong>18. AddShaftDoor</strong> - creates shaft elevator doors 
+    on the current floor only<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoor<em> 
+    elevator, number, texturename</em>, <em>tw, th</em></font></p>
+  <p align="left">The AddShaftDoor command creates working shaft elevator doors 
+    on the current floor only - the other command, <em>AddShaftDoors</em> (in 
+    the <em>elevator</em> section) creates all shaft doors in a single command. 
+    This command is useful for specifying different textures for shaft doors depending 
+    on the floor, and also for only creating shaft doors on one side if an elevator 
+    serves a specific floor. The <em>SetShaftDoors</em> command in the elevator 
+    section must be used before using this command. Parameters such as width, 
+    height, and direction are taken from the <em>AddDoors</em> command (so the 
+    regular elevator doors need to be created first). These doors should be moved 
+    slightly away from the elevator doors (to separate them both). Also, this 
+    command cuts any shaft walls that are within the door area (and so this must 
+    be called after the shaft walls are created). <em>Number</em> specifies the 
+    number of the door to create (related to the <em>Doors</em> command) - if 
+    the elevator only has one door, or if the <em>Doors</em> command was not used, 
+    specify 1 here.</p>
+  <p align="left"><strong>19. Cut</strong> - performs a manual box cut on an area 
     within the current floor<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Cut x1, y1, z1, x2, 
     y2, z2, cutwalls, cutfloors<br>
@@ -1055,6 +1074,14 @@
     and is either true or false</p>
   <p align="left"><em>tw</em> and <em>th</em> are the texture scaling for the 
     wall plate.</p>
+  <p align="left"><strong>11. SetShaftDoors</strong> - sets positioning and thickness 
+    of shaft doors which will be created with the <em>AddShaftDoor</em> command<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">SetShaftDoors<em> 
+    number</em>, <em>thickness, CenterX, CenterZ</em></font> </p>
+  <p align="left">This command must be used before calling <em>AddShaftDoor</em>. 
+    This specifies the thickness and X/Z positioning for the shaft doors that 
+    will be created. <em>Number</em> specifies the door number this is associated 
+    with (use 1 if only one door).</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 

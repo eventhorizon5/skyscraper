@@ -169,7 +169,6 @@ public:
 	void MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void EnableDoors(bool value);
 	DirectionalIndicator* GetIndicator(int floor);
-	bool CheckShaftDoors();
 	void SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
 
 private:

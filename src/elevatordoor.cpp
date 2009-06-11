@@ -472,22 +472,22 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				ElevatorDoorSpeed = -0.2;
 		}
 
+		int checkfloor;
 		if (WhichDoors == 3)
-			index = elev->ServicedFloors.Find(ShaftDoorFloor);
+			checkfloor = ShaftDoorFloor;
 		else
-			index = elev->ServicedFloors.Find(elev->GetFloor());
-		if (index == -1)
+			checkfloor = elev->GetFloor();
+		index = elev->ServicedFloors.Find(checkfloor);
+		if (ShaftDoorsExist(checkfloor) == false)
 		{
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": No shaft doors" + doornumber + " on current floor");
-			if (WhichDoors == 3)
+			if (WhichDoors != 2)
 			{
-				//reset and exit if only shaft doors selected for opening
+				//reset and exit if shaft doors selected for opening
 				OpenDoor = 0;
 				WhichDoors = 0;
+				DoorIsRunning = false;
 				return;
 			}
-			//only open elevator doors if no shaft doors available
-			WhichDoors = 2;
 		}
 	}
 	else if (previous_open != open && manual == false && door_changed == false)
@@ -1069,7 +1069,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 		return;
 
 	//exit if the specified floor has no shaft doors
-	if (ShaftDoorL[index] == 0)
+	if (!ShaftDoorL[index])
 		return;
 
 	sbs->EnableMesh(ShaftDoorL[index], value);
@@ -1230,18 +1230,12 @@ void ElevatorDoor::MoveSound(const csVector3 position, bool relative_x, bool rel
 	doorsound->SetPosition(pos);
 }
 
-bool ElevatorDoor::CheckShaftDoors()
+bool ElevatorDoor::ShaftDoorsExist(int floor)
 {
-	//check all shaft doors and return an error if any haven't been created
-
-	bool status = true;
-	for (size_t i = 0; i < ShaftDoorL.GetSize(); i++)
-	{
-		if (!ShaftDoorL[i])
-		{
-			status = false;
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors for floor" + csString(_itoa(elev->ServicedFloors[i], intbuffer, 10)) + " haven't been created");
-		}
-	}
-	return status;
+	//return true if shaft doors have been created for this door on the specified floor
+	
+	int index = elev->ServicedFloors.Find(floor);
+	if (index != -1 && ShaftDoorL[index])
+		return true;
+	return false;
 }

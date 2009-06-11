@@ -3339,9 +3339,6 @@ Nextline:
 		line++;
 	}
 
-	//post-process checks
-	Simcore->CheckShaftDoors();
-
 	return true;
 }
 
