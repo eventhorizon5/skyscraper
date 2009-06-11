@@ -30,7 +30,7 @@ echo
 
 #floor numbers
 number=-9
-maxnumber=300
+maxnumber=500
 
 while (( number <= maxnumber ))
 do
