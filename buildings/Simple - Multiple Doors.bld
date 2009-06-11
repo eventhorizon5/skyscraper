@@ -223,7 +223,6 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     AddDoors 2, ElevDoors, 0.2, 0, 3.01, 3.5, 8, true, 0, 0 #doors
     SetShaftDoors 2, 0.2, 0, 3.301
-    #AddShaftDoors 2, ElevDoors, 0.2, 0, 3.301, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #directional indicator
