@@ -3168,50 +3168,26 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				bool defaults = false;
-				if (tempdata.GetSize() == 14)
-					defaults = true; //this is for backwards compatibility
-				if ((tempdata.GetSize() < 17 || tempdata.GetSize() > 17) && defaults == false)
+				if (tempdata.GetSize() < 17 || tempdata.GetSize() > 17)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
 				//check numeric values
-				if (defaults == false)
+				for (int i = 8; i <= 16; i++)
 				{
-					for (int i = 8; i <= 16; i++)
+					if (i == 11)
+						i = 12;
+					if (i == 14)
+						i = 15;
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 					{
-						if (i == 11)
-							i = 12;
-						if (i == 14)
-							i = 15;
-						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-						{
-							ScriptError("Invalid value: " + csString(tempdata[i]));
-							return false;
-						}
-					}
-				}
-				else
-				{
-					for (int i = 5; i <= 13; i++)
-					{
-						if (i == 8)
-							i = 9;
-						if (i == 11)
-							i = 12;
-						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-						{
-							ScriptError("Invalid value: " + csString(tempdata[i]));
-							return false;
-						}
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
 					}
 				}
 
-				if (defaults == false)
-					Simcore->GetElevator(Current)->AddDirectionalIndicators(csString(tempdata[0]).CompareNoCase("true"), csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), csString(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16]));
-				else
-					Simcore->GetElevator(Current)->AddDirectionalIndicators(true, false, true, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), atof(tempdata[12]), atof(tempdata[13]));
+				Simcore->GetElevator(Current)->AddDirectionalIndicators(csString(tempdata[0]).CompareNoCase("true"), csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), csString(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16]));
 
 				tempdata.DeleteAll();
 			}
