@@ -2204,3 +2204,42 @@ void Elevator::SetShaftDoors(int number, float thickness, float CenterX, float C
 			GetDoor(number)->SetShaftDoors(thickness, CenterX, CenterZ);
 	}
 }
+
+void Elevator::AddFloorSigns(bool relative, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+{
+	//adds floor signs at the specified position and direction for each serviced floor
+
+	float x, z;
+	if (relative == true)
+	{
+		x = Origin.x + CenterX;
+		z = Origin.z + CenterZ;
+	}
+	else
+	{
+		x = CenterX;
+		z = CenterZ;
+	}
+
+	csVector2 autosize = sbs->GetAutoSize();
+	sbs->SetAutoSize(false, false);
+
+	for (int i = 0; i < ServicedFloors.GetSize(); i++)
+	{
+		csString texture = "Button" + sbs->GetFloor(ServicedFloors[i])->ID;
+		csString tmpdirection = direction;
+		tmpdirection.Downcase();
+
+		if (tmpdirection == "front" || tmpdirection == "left")
+			sbs->DrawWalls(true, false, false, false, false, false);
+		else
+			sbs->DrawWalls(false, true, false, false, false, false);
+
+		if (tmpdirection == "front" || tmpdirection == "back")
+			sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, voffset, voffset, 1, 1, false);
+		else
+			sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, voffset, voffset, 1, 1, false);
+		sbs->ResetWalls();
+	}
+	sbs->SetAutoSize(autosize.x, autosize.y);
+}

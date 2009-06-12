@@ -3184,6 +3184,38 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//AddFloorSigns command
+			if (LineData.Slice(0, 13).CompareNoCase("addfloorsigns") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(14).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+				//check numeric values
+				for (int i = 2; i <= 6; i++)
+				{
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+
+				Simcore->GetElevator(Current)->AddFloorSigns(csString(tempdata[0]).CompareNoCase("true"), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+
+				tempdata.DeleteAll();
+			}
+
 
 			//Set command
 			if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
