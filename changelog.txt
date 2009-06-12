@@ -21,6 +21,8 @@ are now stationed at the top
 -added support for elevator directional indicators
 -added alarm sounds
 -added support for multiple elevator doors
+-added support for specifying shaft doors on a per-floor basis
+-added AddFloorSigns command that creates floor signs on all floors served by an elevator
 
 Version 1.3 (2.0 Alpha 3)
 -------------------------
