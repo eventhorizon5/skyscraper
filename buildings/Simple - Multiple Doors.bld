@@ -25,6 +25,7 @@
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/text16.jpg, ElevDoors, 1, 1
+    Load data/metaldoor.jpg, ElevDoors2, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
     Load data/marb148.jpg, ElevPanel, 1, 1
     Load data/diamond18j.jpg, ElevWall, 1, 1
@@ -257,5 +258,5 @@ DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
 <Floors 4 to 9>
-    AddShaftDoor 1, 2, ElevDoors, 0, 0
+    AddShaftDoor 1, 2, ElevDoors2, 0, 0
 <EndFloors>
