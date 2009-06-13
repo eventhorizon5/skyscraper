@@ -386,6 +386,14 @@
     on the command immediately after this one. In the above example, the Main 
     Positive and Main Negative sides of the object will have their textures flipped 
     horizontally.</p>
+  <p align="left"><strong>x. Cut</strong> - performs a manual box cut on an object<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">Cut <em>destobject</em>, 
+    x1, y1, z1, x2, y2, z2, cutwalls, cutfloors<br>
+    </font>Example: <font size="2" face="Courier New, Courier, mono">Cut external, 
+    -5, -5, -5, 5, 5, 5, false, true</font></p>
+  <p align="left">The x, y and z values specify the start and end coordinates 
+    of the box cut. If cutwalls is true, the function will cut walls; if cutfloors 
+    is true, it'll cut floors.</p>
   <p>&nbsp;</p>
   <p align="left"><strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
