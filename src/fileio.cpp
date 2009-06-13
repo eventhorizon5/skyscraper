@@ -340,12 +340,12 @@ checkfloors:
 
 			if (!IsNumeric(tempdata.GetData(), temp4))
 			{
-				ScriptError("Invalid floor");
+				ScriptError("Invalid floor " + tempdata);
 				return false;
 			}
-			if (temp4 < -Simcore->Basements || temp4 > Simcore->Floors)
+			if (temp4 < -Simcore->Basements || temp4 > Simcore->Floors - 1)
 			{
-				ScriptError("Invalid floor");
+				ScriptError("Invalid floor " + tempdata);
 				return false;
 			}
 
