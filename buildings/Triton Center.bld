@@ -543,7 +543,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Type = Service
     Description = Zone 1 mechanical
     Height = 15
-    InterfloorHeight = 1
+    InterfloorHeight = 2.24
 
     #Floor
     FloorOrientation = top
@@ -740,7 +740,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Name = Mechanical
     Type = Service
     Description = Zone 2 mechanical
-    Height = 15
+    Height = 18
     InterfloorHeight = 2.24
 
     #Floor
@@ -840,7 +840,9 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     if[%floor% = 100] Height = 10 #skylobby height
     if[%floor% = 101] Height = 10 #service floor height
     if[%floor% > 101] Height = 9 #condo height
-    InterfloorHeight = 1.5
+    InterfloorHeight = 2.24
+    if[%floor% > 81 & %floor% < 100] InterfloorHeight = 1.5
+    if[%floor% > 101] InterfloorHeight = 1.5
 
     #Floor
     FloorOrientation = top
@@ -1288,7 +1290,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Name = Observatory
     Type = Observatory
     Description = Skydeck
-    Height = 10
+    Height = 12
     InterfloorHeight = 2.24
 
     #Floor
@@ -1363,7 +1365,8 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Type = Communications
     Description = Communications level %floor%
     Height = 12
-    InterfloorHeight = 3
+    if[%floor% = 140] Height = 15
+    InterfloorHeight = 2.24
 
     #Floor
     FloorOrientation = top
@@ -1481,7 +1484,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Type = Roof
     Description = Roof and communications antennae
     Height = 12
-    InterfloorHeight = 0
+    InterfloorHeight = 2.24
 
     #Roof Base
     FloorOrientation = top
@@ -5233,7 +5236,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.3
     AccelJerk = 0.2
     DecelJerk = 0.3
-    ServicedFloors = 0, 79 - 141
+    ServicedFloors = 0, 79 - 140
     AssignedShaft = 14
     CreateElevator false, -8.953, 18.542, 0
 
@@ -5282,7 +5285,6 @@ DrawWalls = true, true, false, false, false, false
 
     #right panel
     CreatePanel ElevPanel, 13, 6, left, 3.625 - 0.2 - 0.001, -1.75 - 1.1875 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button141, 2, 5, 141, 1, 1
     AddFloorButton 1, Button140, 2, 4, 140, 1, 1
     AddFloorButton 1, Button139, 2, 3, 139, 1, 1
     AddFloorButton 1, Button138, 2, 2, 138, 1, 1
@@ -5534,7 +5536,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = -8 - 141
+    ServicedFloors = -8 - 140
     AssignedShaft = 14
     CreateElevator false, -9.245, 30.375, 0
 
@@ -5583,7 +5585,6 @@ DrawWalls = true, true, false, false, false, false
 
     #right panel
     CreatePanel ElevPanel, 17, 8, left, 3.917 - 0.2 - 0.001, -2.25 - 1.9375 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button141, 2, 7, 141, 1, 1
     AddFloorButton 1, Button140, 2, 6, 140, 1, 1
     AddFloorButton 1, Button139, 2, 5, 139, 1, 1
     AddFloorButton 1, Button138, 2, 4, 138, 1, 1
@@ -5896,7 +5897,7 @@ DrawWalls = true, true, false, false, false, false
     AddDirectionalIndicators 65, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.5, 3.426 + 0.2 + 0.66 + 0.02, 6.5, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
-<Floors -8 to 141>
+<Floors -8 to 140>
     AddDirectionalIndicators 66, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.926 + 0.2 + 0.66 + 0.02, 2.5, 6.5, right, 0.5, 1, true, 0, 0
     AddDirectionalIndicators 67, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.926 - 0.2 - 0.66 - 0.02, -2.5, 6.5, left, 0.5, 1, true, 0, 0
     AddDirectionalIndicators 68, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 4.218 + 0.2 + 0.66 + 0.02, 3, 6.5, right, 0.5, 1, true, 0, 0
@@ -6104,7 +6105,7 @@ DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 #Service Elevators
-<Floors -8 to 141>
+<Floors -8 to 140>
     CallButtonElevators = 66
     if[%floor% = 0 | %floor% > 78] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.02, 18.542 + 2.5, 4, right, 0.5, 1, true, 0, 0
     CallButtonElevators = 67
