@@ -24,7 +24,7 @@
     Description = A fictitious Chicago-based 142-story skyscraper located on the northeast corner of Dearborn & Washington.
     Version = 3
     HorizScale = 1
-    CameraFloor = 0
+    CameraFloor = 141
     CameraPosition = 0, -41.6
     CameraRotation = 0, 0, 0
 <EndGlobals>
@@ -1440,7 +1440,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Description = Zone 3 topside mechanical lower
     Height = 10
     InterfloorHeight = 4
-    Group = 142
+    Group = 142, 143
 <EndFloor>
 
 #topside mechanical upper
@@ -1451,7 +1451,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Description = Zone 3 topside mechanical upper
     Height = 15
     InterfloorHeight = 2.24
-    Group = 141
+    Group = 141, 143
 <EndFloor>
 
 <Floor 141>
@@ -1487,6 +1487,26 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     AddWall ExtVents Back, VentsExt, 0.5, 39, 70, -39, 70, %fullheight% + Floor(142).FullHeight, %fullheight% + Floor(142).FullHeight, 0, 0, 3, 1, True
     SetAutoSize = true, true
 
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall ILeft, Brick, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IFront, Brick, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IBack, Brick, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IRight, Brick, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
@@ -1501,8 +1521,43 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     DrawWalls = true, false, false, false, false, false
     AddFloor Ceiling, Brick, 0.5, -39, -70, 39, 70, %height%, %height%, 0, 0, False
 
+    #cover over interfloor gap
+    WallOrientation = left
+    AddWall Filler, Brick, 0.2, -39, 5, 39, 5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -39, 5, 39, 70, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -39, 5, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall ILeft, Brick, 0.5, -39, 70, -39, 5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IFront, Brick, 0.5, -39, 5, 39, 5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IBack, Brick, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IRight, Brick, 0.5, 39, 5, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
+
+#floor signs
+<Floors 141 to 142>
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    SetAutoSize = false, false
+    AddWall SignTop, FloorSign, 0, 9.375 - 0.5, 18.54 - 5.08 - 0.33 - 0.01, 9.375 + 0.5, 18.54 - 5.08 - 0.33 - 0.01, 0.25, 0.25, 5, 5, 1, 1, False
+    AddWall FloorSign, Button%floor%, 0, 9.375 - 0.5, 18.54 - 5.08 - 0.33 - 0.01, 9.375 + 0.5, 18.54 - 5.08 - 0.33 - 0.01, 0.75, 0.75, 4.25, 4.25, 1, 1, False
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
 
 # Roof with Mechanical Penthouse
 <Floor 143>
@@ -1512,20 +1567,21 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Description = Roof and communications antennae
     Height = 12
     InterfloorHeight = 2.24
-
+    Group = 141, 142
+    
     #Roof Base
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Roof, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0, True
+    AddFloor Roof, Brick, 0.5, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     #Antennae
     CreateWallBox2 External, Left Antenna, Concrete, 0, -40, 4, 4, 300, 0, 0, 25, false, true, true, false
     CreateWallBox2 External, Right Antenna, Concrete, 0, 40, 4, 4, 300, 0, 0, 25, false, true, true, false
 
     #Penthouse Floor
-    #FloorOrientation = top
-    #DrawWalls = false, true, false, false, false, false
-    #AddFloor PFloor, Brick, 0.5, -20, -40, 20, 40, 0, 0, 0, 0, False
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor PFloor, Brick, 0.5, -20, -40, 20, 40, 0, 0, 0, 0, False
 
     #Penthouse Ceiling
     FloorOrientation = bottom
@@ -1559,9 +1615,52 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     DrawWalls = false, true, false, false, false, false
     AddFloor PRoof, Brick, 0.5, -20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, True
 
+    #Interfloor External
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall IFront, InterExt, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall ILeft, InterExt, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall IRight, InterExt, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IBack, InterExt, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall ILeft, Brick, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IFront, Brick, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IBack, Brick, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IRight, Brick, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+
+    #doors
+    AddDoor StairsDoor, 0.2, 1, -20, 0, 3.5, 8, 0, 1, 1
+    AddDoor StairsDoor, 0.2, 3, 20, 0, 3.5, 8, 0, 1, 1
+    
     DrawWalls = true, true, false, false, false, false
 
 <EndFloor>
+
+#cut roof area for penthouse floor
+Cut external, -20, Floor(143).Altitude - 5, -40, 20, Floor(143).Altitude + 5, 40, false, true
+
+#roof walls cut for doors
+Cut external, -21, Floor(143).Altitude + Floor(143).InterfloorHeight, -1.75, -19, Floor(143).Altitude + Floor(143).InterfloorHeight + 8, 1.75, true, false
+Cut external, 19, Floor(143).Altitude + Floor(143).InterfloorHeight, -1.75, 21, Floor(143).Altitude + Floor(143).InterfloorHeight + 8, 1.75, true, false
+
 
 # Zone 3B Column Frame
 <Floors 120 to 142>
@@ -1595,7 +1694,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     DrawWalls = true, true, false, false, false, false
     if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall ServiceWall, %5%, 0.5, -4.33, 14.29, 4, 14.29, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = Center
-    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddDoor StairsDoor, 0.2, 6, 0, 14.29 + 0.25, 3.5, 8, 0, 1, 1
+    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddDoor StairsDoor, 0.2, 5, 0, 14.29 + 0.25, 3.5, 8, 0, 1, 1
     #door fillers, since SBS can't yet automatically make fillers for the same mesh
     DrawWalls = false, true, false, false, false, false
     if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall FillerWallLeft, ConnectionWall, 0, -1.75, 14.29, -1.75, 14.29 + 0.5, 8, 8, 0, 0, 0, 0, False
@@ -6779,6 +6878,7 @@ CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
+
 #East Stairwell
 CreateStairwell 6, 4.7515, 51.66, 79, 141
 CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
@@ -6898,4 +6998,36 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
+
+
+#Upper Stairs (141-Roof)
+CreateStairwell 7, 0, -5, 141, 143
+CutStairwell 7, -9.4 - 3, -15, -9.4 + 3, -2.5, 5, 5
+
+<Floor 141>
+    #shorter stairs going from 141 to 142
+    Set 1 = (%height% + Floor(142).InterfloorHeight) / 16 #determine riser size
+    AddStairs 7, Stairs, Stairs, front, 9.4, -0.01, 6, %1%, 20 / 15, 16, 0, 0, 0
+<EndFloor>
+
+<Floor 142>
+    #longer stairs going from 142 to the roof
+    Set 1 = (%height% + Floor(143).InterfloorHeight) / 20 #determine riser size
+    AddStairs 7, Stairs, Stairs, back, -9.4, -2.5 + 0.01, 6, %1%, 25 / 19, 20, 0, 0, 0
+<EndFloor>
+
+#interfloor filler walls for roof
+<Floor 143>
+    SetAutoSize = true, true
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 7, Left, Brick, 0, -9.4 - 3, -15, -9.4 - 3, -2.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 7, Front, Brick, 0, -9.4 - 3, -15, -9.4 + 3, -15, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 7, Right, Brick, 0, -9.4 + 3, -15, -9.4 + 3, -2.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 7, Back, Brick, 0, -9.4 - 3, -2.5, -9.4 + 3, -2.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0   
+
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
 

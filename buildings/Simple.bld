@@ -264,11 +264,11 @@ CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
     
     #now add the stairs themselves.  The parameters are explained in the design guide, but basically the lower stairs in this example
     #start on the left (bottom) and end on the right (top), and so they face left.  The upper stairs are the opposite, so they face right.
-    #the important part of this is the tread size.  In this, it's specified as "10 / 9", since there's 10 total steps in each,
-    #but like the design guide says, the top tread is not counted, since the top tread is the landing (specified later), and the staircase.
-    #to calculate the height and length of the staircase (according to the design guide): the height is the number of stairs times the riser size
-    #(which would be 10 * %1%).  The length is the number of stairs minus one, times the tread size - in this example it would be 9 * (10 / 9) which
-    #is 10.
+    #the important part of this is the tread size.  In this, it's specified as "10 / 9", since I'm wanting the stairs to be a total of 10 feet long,
+    #and there's 9 steps created (even though there's 10 stairs total - but like the design guide says, the top tread is not counted, since the top
+    #tread is the landing (specified later).  To calculate the height and length of the staircase (according to the design guide):
+    #the height is the number of stairs times the riser size (which would be 10 * %1%).
+    #The length is the number of stairs minus one, times the tread size - in this example it would be 9 * (10 / 9) which is 10.
     
     if[%floor% < 9] AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, %1%, 10 / 9, 10, 0, 0, 0
     if[%floor% < 9] AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, %1%, 10 / 9, 10, %1% * 10, 0, 0
