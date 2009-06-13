@@ -89,9 +89,9 @@ Door::Door(const char *name, const char *texture, float thickness, int direction
 	}
 
 	if (Direction == 1 || Direction == 3 || Direction == 5 || Direction == 7)
-		Clockwise = true;
-	else
 		Clockwise = false;
+	else
+		Clockwise = true;
 
 	//Create mesh
 	DoorMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, Name.GetData());
