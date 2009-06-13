@@ -6379,9 +6379,9 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% < -1] AddWall StairsRightE, %5%, 0.33, 4.5 + -46.67, -9.708 + -3.708 - 0.33, 4.5 + -46.67, 9.708 + -3.708 + 0.33, %height%, %height%, 0, 0, 0, 0, False
 
     #doors
-    if[%floor% = -8] AddStairsDoor 1, StairsDoor, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
-    if[%floor% = 0 | %floor% = 1] AddStairsDoor 1, StairsDoor2, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
-    if[%floor% ! -8 & %floor% ! 0 & %floor% ! 1 & %floor% < 38] AddStairsDoor 1, StairsDoor, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
+    if[%floor% = -8] AddStairsDoor 1, StairsDoor, 0.2, 6, -2, 9.708, 3.5, 8, 0, 1, 1
+    if[%floor% = 0 | %floor% = 1] AddStairsDoor 1, StairsDoor2, 0.2, 8, 2, -9.708, 3.5, 8, 0, 1, 1
+    if[%floor% ! -8 & %floor% ! 0 & %floor% ! 1 & %floor% < 38] AddStairsDoor 1, StairsDoor, 0.2, 8, 2, -9.708, 3.5, 8, 0, 1, 1
     if[%floor% = 38] AddStairsDoor 1, StairsDoor, 0.2, 2, -4.5, -7.208, 3.5, 8, 0, 1, 1
 
     #signs
@@ -6545,10 +6545,10 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% > 28] AddWall StairsBackE, %5%, 0.33, -4.5 + 46.67 - 0.33, 9.708 + 3.708 + 0.084, 4.5 + 46.67 + 0.33, 9.708 + 3.708 + 0.084, %height%, %height%, 0, 0, 0, 0, False
 
     #doors
-    if[%floor% = -8] AddStairsDoor 2, StairsDoor, 0.2, 6, 2, -9.708, 3.5, 8, 0, 1, 1
-    if[%floor% = 0] AddStairsDoor 2, StairsDoor2, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
-    if[%floor% ! -8 & %floor% ! 0 & %floor% ! 1 & %floor% < 38] AddStairsDoor 2, StairsDoor, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
-    if[%floor% = 1] AddStairsDoor 2, StairsDoor, 0.2, 4, 4.5, 7.208, 3.5, 8, 0, 1, 1
+    if[%floor% = -8] AddStairsDoor 2, StairsDoor, 0.2, 8, 2, -9.708, 3.5, 8, 0, 1, 1
+    if[%floor% = 0] AddStairsDoor 2, StairsDoor2, 0.2, 6, -2, 9.708, 3.5, 8, 0, 1, 1
+    if[%floor% ! -8 & %floor% ! 0 & %floor% ! 1 & %floor% < 38] AddStairsDoor 2, StairsDoor, 0.2, 6, -2, 9.708, 3.5, 8, 0, 1, 1
+    if[%floor% = 1] AddStairsDoor 2, StairsDoor, 0.2, 2, 4.5, 7.208, 3.5, 8, 0, 1, 1
     if[%floor% = 38] AddStairsDoor 2, StairsDoor, 0.2, 3, -4.5, 7.208, 3.5, 8, 0, 1, 1
 
     #signs
@@ -6662,7 +6662,7 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
     AddWall StairsBackE, %5%, 0.33, -5.333 + -29.083, 9.708 + 23.537, 5.333 + -29.083, 9.708 + 23.537, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
 
     #doors
-    if[%floor% ! 39] AddStairsDoor 3, StairsDoor, 0.2, 5, 2.42, 9.708, 3.5, 8, 0, 1, 1
+    if[%floor% ! 39] AddStairsDoor 3, StairsDoor, 0.2, 6, 2.42, 9.708, 3.5, 8, 0, 1, 1
 
     #signs
     SetAutoSize = false, false
@@ -6768,9 +6768,9 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% < 43] AddWall StairsBackE, %5%, 0.33, -4.5 + 26.42, 9.708 + -33.708, 4.5 + 26.42 + 0.33, 9.708 + -33.708, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
 
     #doors
-    if[%floor% > 39 & %floor% < 79] AddStairsDoor 4, StairsDoor, 0.2, 8, -2, 9.708, 3.5, 8, 0, 1, 1
+    if[%floor% > 39 & %floor% < 79] AddStairsDoor 4, StairsDoor, 0.2, 6, -2, 9.708, 3.5, 8, 0, 1, 1
     if[%floor% = 38] AddStairsDoor 4, StairsDoor, 0.2, 4, 4.5, 7.208, 3.5, 8, 0, 1, 1
-    if[%floor% = 39] AddStairsDoor 4, StairsDoor, 0.2, 4, 4.5, -7.208, 3.5, 8, 0, 1, 1
+    if[%floor% = 39] AddStairsDoor 4, StairsDoor, 0.2, 2, 4.5, -7.208, 3.5, 8, 0, 1, 1
     if[%floor% = 79] AddStairsDoor 4, StairsDoor, 0.2, 2, -4.5, 7.208, 3.5, 8, 0, 1, 1
 
     #signs
@@ -6863,7 +6863,7 @@ CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
 
     #doors
     if[%floor% = 79] AddStairsDoor 5, StairsDoor, 0.2, 4, 5.67, 6, 3.5, 8, 0, 1, 1
-    if[%floor% > 79] AddStairsDoor 5, StairsDoor, 0.2, 6, 2, -8.5, 3.5, 8, 0, 1, 1
+    if[%floor% > 79] AddStairsDoor 5, StairsDoor, 0.2, 8, 2, -8.5, 3.5, 8, 0, 1, 1
 
     #signs
     SetAutoSize = false, false
@@ -6983,8 +6983,8 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     if[%floor% = 119 | %floor% = 120 | %floor% > 135] AddWall StairsBackE, %5%, 0.33, -17 + 4.7515 - 0.33, 4.5 + 51.66, 9.0815 + 4.7515 + 0.33, 4.5 + 51.66, %height%, %height%, 0, 0, 0, 0, False
 
     #doors
-    if[%floor% = 79] AddStairsDoor 6, StairsDoor, 0.2, 2, -9.0815, 2, 3.5, 8, 0, 1, 1
-    if[%floor% > 79] AddStairsDoor 6, StairsDoor, 0.2, 4, 9.0815, -2, 3.5, 8, 0, 1, 1
+    if[%floor% = 79] AddStairsDoor 6, StairsDoor, 0.2, 1, -9.0815, 2, 3.5, 8, 0, 1, 1
+    if[%floor% > 79] AddStairsDoor 6, StairsDoor, 0.2, 3, 9.0815, -2, 3.5, 8, 0, 1, 1
 
     #signs
     SetAutoSize = false, false
