@@ -86,6 +86,7 @@ private:
 	//Internal door simulation data
 	bool DoorsOpen; //elevator door state
 	csArray<bool> ShaftDoorsOpen; //shaft door state
+	csArray<bool> ShaftDoorsState; //shaft door enabled state
 	float ElevatorDoorSpeed;
 	int WhichDoors;
 	int ShaftDoorFloor;

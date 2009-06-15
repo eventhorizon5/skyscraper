@@ -99,6 +99,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	ShaftDoorL_state.SetSize(elev->ServicedFloors.GetSize());
 	ShaftDoorR_state.SetSize(elev->ServicedFloors.GetSize());
 	ShaftDoorsOpen.SetSize(elev->ServicedFloors.GetSize());
+	ShaftDoorsState.SetSize(elev->ServicedFloors.GetSize());
 
 	//create sound object
 	doorsound = new Sound();
@@ -1065,7 +1066,12 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 		return;
 
 	size_t index = elev->ServicedFloors.Find(floor);
+	//exit if elevator doesn't service the requested floor
 	if (index == csArrayItemNotFound)
+		return;
+
+	//exit if value is the same as the current state
+	if (ShaftDoorsState[index] == value)
 		return;
 
 	//exit if the specified floor has no shaft doors
@@ -1074,6 +1080,9 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 
 	sbs->EnableMesh(ShaftDoorL[index], value);
 	sbs->EnableMesh(ShaftDoorR[index], value);
+
+	//set enabled state
+	ShaftDoorsState[index] = value;
 }
 
 void ElevatorDoor::ShaftDoorsEnabledRange(int floor, int range)
