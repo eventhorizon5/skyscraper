@@ -1025,9 +1025,19 @@ void Elevator::MoveElevatorToFloor()
 		if (InServiceMode() == false)
 		{
 			if (QueuePositionDirection == -1)
-				SetDirectionalIndicator(GetFloor(), false, true);
+			{
+				if (GetFloor() != GetBottomFloor())
+					SetDirectionalIndicator(GetFloor(), false, true);
+				else
+					SetDirectionalIndicator(GetFloor(), true, false);
+			}
 			else
-				SetDirectionalIndicator(GetFloor(), true, false);
+			{
+				if (GetFloor() != GetTopFloor())
+					SetDirectionalIndicator(GetFloor(), true, false);
+				else
+					SetDirectionalIndicator(GetFloor(), false, true);
+			}
 		}
 
 		//open doors
