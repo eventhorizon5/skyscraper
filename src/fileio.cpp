@@ -68,6 +68,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 	int startpos = 0;
 	bool getfloordata = false;
 	bool elevatorcreated = false;
+	bool setshaftdoors = false;
 
 	while (line < BuildingData.GetSize() - 1)
 	{
@@ -2258,6 +2259,13 @@ recalc:
 			//AddShaftDoor command
 			if (LineData.Slice(0, 12).CompareNoCase("addshaftdoor") == true)
 			{
+				//exit if the SetShaftDoors command was never used
+				if (setshaftdoors == false)
+				{
+					ScriptError("SetShaftDoors must be used before AddShaftDoor");
+					return false;
+				}
+
 				//get data
 				tempdata.SplitString(LineData.Slice(13).GetData(), ",");
 
@@ -2932,6 +2940,7 @@ recalc:
 				}
 
 				Simcore->GetElevator(Current)->SetShaftDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]));
+				setshaftdoors = true;
 
 				tempdata.DeleteAll();
 			}
