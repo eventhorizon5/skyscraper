@@ -79,6 +79,37 @@
     Load data/darrow_unlit_gray.jpg, ArrowDown, 1, -1
     Load data/darrow_lit_gray.jpg, ArrowUp_Lit, 1, 1
     Load data/darrow_lit_gray.jpg, ArrowDown_Lit, 1, -1
+    
+    #signs
+    Load data/triton_signs/2-14.png, Sign2-14, 1, 1
+    Load data/triton_signs/15-26.png, Sign15-26, 1, 1
+    Load data/triton_signs/27-37.png, Sign27-37, 1, 1
+    Load data/triton_signs/41-50.png, Sign41-50, 1, 1
+    Load data/triton_signs/41-60.png, Sign41-60, 1, 1
+    Load data/triton_signs/61-70.png, Sign61-70, 1, 1
+    Load data/triton_signs/61-78.png, Sign61-78, 1, 1
+    Load data/triton_signs/71-78.png, Sign71-78, 1, 1
+    Load data/triton_signs/102-118.png, Sign102-118, 1, 1
+    Load data/triton_signs/120-129.png, Sign120-129, 1, 1
+    Load data/triton_signs/134-136.png, Sign134-136, 1, 1
+    Load data/triton_signs/hotel.png, SignHotel, 1, 1
+    Load data/triton_signs/lobby.png, SignLobby, 1, 1
+    Load data/triton_signs/mez.png, SignMez, 1, 1
+    Load data/triton_signs/office.png, SignOffice, 1, 1
+    Load data/triton_signs/offices2-14.png, SignOffices2-14, 1, 1
+    Load data/triton_signs/offices15-26.png, SignOffices15-26, 1, 1
+    Load data/triton_signs/offices27-37.png, SignOffices27-37, 1, 1
+    Load data/triton_signs/offices40-78.png, SignOffices40-78, 1, 1
+    Load data/triton_signs/offices41-50.png, SignOffices41-50, 1, 1
+    Load data/triton_signs/offices41-73.png, SignOffices41-73, 1, 1
+    Load data/triton_signs/offices51-60.png, SignOffices51-60, 1, 1
+    Load data/triton_signs/offices61-70.png, SignOffices61-70, 1, 1
+    Load data/triton_signs/offices71-78.png, SignOffices71-78, 1, 1
+    Load data/triton_signs/pool.png, SignPool, 1, 1
+    Load data/triton_signs/res.png, SignRes, 1, 1
+    Load data/triton_signs/service1.png, SignService1, 1, 1
+    Load data/triton_signs/service2.png, SignService2, 1, 1
+    Load data/triton_signs/Skydeck.png, SignSkydeck, 1, 1
 
     #floor indicator/button pictures
     Load signs/sans/L.jpg, ButtonL, 1, 1
@@ -6241,6 +6272,36 @@ DrawWalls = true, true, false, false, false, false
     CallButtonElevators = 68
     CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.02, 30.375 + 3, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
+
+
+#Elevator signs
+<Floor 0>
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    SetAutoSize = false, false
+    AddWall Shaft1Sign, SignOffices27-37, 0, -1, -13.5 - 0.33 - 0.01, 1, -13.5 - 0.33 - 0.01, 1.2, 1.2, 8.8, 8.8, 0, 0, False
+    AddWall Shaft3Sign, SignOffices2-14, 0, -27.67 - 1, -13.5 - 0.33 - 0.01, -27.67 + 1, -13.5 - 0.33 - 0.01, 1.2, 1.2, 8.8, 8.8, 0, 0, False
+    AddWall Shaft5Sign, SignOffices15-26, 0, 27.67 - 1, -13.5 - 0.33 - 0.01, 27.67 + 1, -13.5 - 0.33 - 0.01, 1.2, 1.2, 8.8, 8.8, 0, 0, False
+
+    #AddWall Shaft7Sign, SignOffices40-78, 0, -12.583 + 4.75 + 0.33, -38.75, -12.583 + 4.75 + 0.33 + 2, -38.75, 1.2, 1.2, 9, 9, 0, 0, False
+    #AddWall Shaft8Sign, SignOffices40-78, 0, 12.583 - 4.75 - 0.33 - 2, -38.75, 12.583 - 4.75 - 0.33, -38.75, 1.2, 1.2, 9, 9, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft7Sign, SignOffices40-78, 0, -12.583 + 3.25 - 1, -38.75 - 14.75 - 0.33 - 0.01, -12.583 + 3.25 + 1, -38.75 - 14.75 - 0.33 - 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
+    AddWall Shaft8Sign, SignOffices40-78, 0, 12.583 - 3.25 - 1, -38.75 - 14.75 - 0.33 - 0.01, 12.583 - 3.25 + 1, -38.75 - 14.75 - 0.33 - 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft7Sign2, SignOffices40-78, 0, -12.583 + 3.25 - 1, -38.75 + 14.75 + 0.33 + 0.01, -12.583 + 3.25 + 1, -38.75 + 14.75 + 0.33 + 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
+    AddWall Shaft8Sign2, SignOffices40-78, 0, 12.583 - 3.25 - 1, -38.75 + 14.75 + 0.33 + 0.01, 12.583 - 3.25 + 1, -38.75 + 14.75 + 0.33 + 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
+    AddWall Shaft11Sign, SignRes, 0, -39.166 + 3.25 - 1, 23.375 + 9.87 + 0.33 + 0.01, -39.166 + 3.25 + 1, 23.375 + 9.87 + 0.33 + 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
+    #AddWall Shaft13Sign, SignHotel, 0, 24.08 - 0.5, 18.08 + 4.75 + 0.33 + 0.01, 24.08 + 0.5, 18.08 + 4.75 + 0.33 + 0.01, 0.6, 0.6, 5.5, 5.5, 0, 0, False
+    AddWall Shaft13Sign, SignHotel, 0, 24.08 - 0.75, 18.08 + 4.75 + 0.33 + 0.01, 24.08 + 0.75, 18.08 + 4.75 + 0.33 + 0.01, 0.9, 0.9, 6.5, 6.5, 0, 0, False
+    AddWall Shaft15Sign, Sign134-136, 0, 9.083 + 4.75 + 0.33 + 0.01, 33.33 - 0.75, 9.083 + 4.75 + 0.33 + 0.01, 33.33 + 0.75, 0.9, 0.9, 6.5, 6.5, 0, 0, False
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
+
+<Floor 80>
+    AddWall Shaft13Sign, SignLobby, 0, 24.08 - 0.75, 18.08 + 4.75 + 0.33 + 0.01, 24.08 + 0.75, 18.08 + 4.75 + 0.33 + 0.01, 0.9, 0.9, 6.5, 6.5, 0, 0, False
+<EndFloor>
 
 
 #North Stairwell A
