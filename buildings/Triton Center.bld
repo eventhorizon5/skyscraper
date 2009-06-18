@@ -86,6 +86,7 @@
     Load data/triton_signs/27-37.png, Sign27-37, 1, 1
     Load data/triton_signs/41-50.png, Sign41-50, 1, 1
     Load data/triton_signs/41-60.png, Sign41-60, 1, 1
+    Load data/triton_signs/51-60.png, Sign51-60, 1, 1
     Load data/triton_signs/61-70.png, Sign61-70, 1, 1
     Load data/triton_signs/61-78.png, Sign61-78, 1, 1
     Load data/triton_signs/71-78.png, Sign71-78, 1, 1
@@ -109,7 +110,7 @@
     Load data/triton_signs/res.png, SignRes, 1, 1
     Load data/triton_signs/service1.png, SignService1, 1, 1
     Load data/triton_signs/service2.png, SignService2, 1, 1
-    Load data/triton_signs/Skydeck.png, SignSkydeck, 1, 1
+    Load data/triton_signs/skydeck.png, SignSkydeck, 1, 1
 
     #floor indicator/button pictures
     Load signs/sans/L.jpg, ButtonL, 1, 1
@@ -5034,7 +5035,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 80, 100, 120 - 129, 132
+    ServicedFloors = 80, 100, 132
     AssignedShaft = 24
     CreateElevator false, -10.167, 8.956, 80
 
@@ -5084,25 +5085,15 @@ DrawWalls = true, true, false, false, false, false
     AddFloorSigns true, right, -3.5 / 2 + 0.01, -3.426 - 0.2 - 0.33, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 10, 5, back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 8, 5, back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button132, 2, 3, 132, 1, 1
-    AddFloorButton 1, Button129, 3, 4, 129, 1, 1
-    AddFloorButton 1, Button128, 3, 3, 128, 1, 1
-    AddFloorButton 1, Button127, 3, 2, 127, 1, 1
-    AddFloorButton 1, Button126, 4, 4, 126, 1, 1
-    AddFloorButton 1, Button125, 4, 3, 125, 1, 1
-    AddFloorButton 1, Button124, 4, 2, 124, 1, 1
-    AddFloorButton 1, Button123, 5, 4, 123, 1, 1
-    AddFloorButton 1, Button122, 5, 3, 122, 1, 1
-    AddFloorButton 1, Button121, 5, 2, 121, 1, 1
-    AddFloorButton 1, Button120, 6, 4, 120, 1, 1
-    AddFloorButton 1, Button100, 6, 3, 100, 1, 1
-    AddFloorButton 1, Button80, 6, 2, 80, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddFloorButton 1, Button100, 3, 3, 100, 1, 1
+    AddFloorButton 1, Button80, 4, 3, 80, 1, 1
+    AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 7, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 7, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
@@ -6242,11 +6233,6 @@ DrawWalls = true, true, false, false, false, false
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -10.167 + 2.5, 9.25 - 4.25 - 0.33 - 0.02, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
-<Floors 120 to 129>
-    CallButtonElevators = 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -10.167 + 2.5, 9.25 - 4.25 - 0.33 - 0.02, 4, front, 0.5, 1, true, 0, 0
-<EndFloors>
-
 <Floor 132>
     CallButtonElevators = 58
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -10.167 + 2.5, 9.25 - 4.25 - 0.33 - 0.02, 4, front, 0.5, 1, true, 0, 0
@@ -6275,10 +6261,11 @@ DrawWalls = true, true, false, false, false, false
 
 
 #Elevator signs
+WallOrientation = center
+SetAutoSize = false, false
+
 <Floor 0>
-    WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    SetAutoSize = false, false
     AddWall Shaft1Sign, SignOffices27-37, 0, -1, -13.5 - 0.33 - 0.01, 1, -13.5 - 0.33 - 0.01, 1.2, 1.2, 8.8, 8.8, 0, 0, False
     AddWall Shaft3Sign, SignOffices2-14, 0, -27.67 - 1, -13.5 - 0.33 - 0.01, -27.67 + 1, -13.5 - 0.33 - 0.01, 1.2, 1.2, 8.8, 8.8, 0, 0, False
     AddWall Shaft5Sign, SignOffices15-26, 0, 27.67 - 1, -13.5 - 0.33 - 0.01, 27.67 + 1, -13.5 - 0.33 - 0.01, 1.2, 1.2, 8.8, 8.8, 0, 0, False
@@ -6288,21 +6275,75 @@ DrawWalls = true, true, false, false, false, false
     DrawWalls = true, false, false, false, false, false
     AddWall Shaft7Sign, SignOffices40-78, 0, -12.583 + 3.25 - 1, -38.75 - 14.75 - 0.33 - 0.01, -12.583 + 3.25 + 1, -38.75 - 14.75 - 0.33 - 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
     AddWall Shaft8Sign, SignOffices40-78, 0, 12.583 - 3.25 - 1, -38.75 - 14.75 - 0.33 - 0.01, 12.583 - 3.25 + 1, -38.75 - 14.75 - 0.33 - 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
+    AddWall LowerSign1, SignMez, 0, -46.95 - 4.25 - 0.33 - 0.01, -33 - 1, -46.95 - 4.25 - 0.33 - 0.01, -33.33 + 1, 1, 1, 6, 6, 0, 0, False
+    AddWall ServiceSign1, SignService1, 0, 9.375 - 5.04 - 0.33 - 0.01, 18.542 - 2.5 - 0.5, 9.375 - 5.04 - 0.33 - 0.01, 18.542 - 2.5 + 0.5, 0.6, 0.6, 5.5, 5.5, 0, 0, False
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft7Sign2, SignOffices40-78, 0, -12.583 + 3.25 - 1, -38.75 + 14.75 + 0.33 + 0.01, -12.583 + 3.25 + 1, -38.75 + 14.75 + 0.33 + 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
     AddWall Shaft8Sign2, SignOffices40-78, 0, 12.583 - 3.25 - 1, -38.75 + 14.75 + 0.33 + 0.01, 12.583 - 3.25 + 1, -38.75 + 14.75 + 0.33 + 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
-    AddWall Shaft11Sign, SignRes, 0, -39.166 + 3.25 - 1, 23.375 + 9.87 + 0.33 + 0.01, -39.166 + 3.25 + 1, 23.375 + 9.87 + 0.33 + 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
-    #AddWall Shaft13Sign, SignHotel, 0, 24.08 - 0.5, 18.08 + 4.75 + 0.33 + 0.01, 24.08 + 0.5, 18.08 + 4.75 + 0.33 + 0.01, 0.6, 0.6, 5.5, 5.5, 0, 0, False
-    AddWall Shaft13Sign, SignHotel, 0, 24.08 - 0.75, 18.08 + 4.75 + 0.33 + 0.01, 24.08 + 0.75, 18.08 + 4.75 + 0.33 + 0.01, 0.9, 0.9, 6, 6, 0, 0, False
-    AddWall Shaft15Sign, Sign134-136, 0, 9.083 + 4.75 + 0.33 + 0.01, 33.33 - 0.75, 9.083 + 4.75 + 0.33 + 0.01, 33.33 + 0.75, 0.9, 0.9, 6, 6, 0, 0, False
-    SetAutoSize = true, true
-    DrawWalls = true, true, false, false, false, false
+    AddWall ResidentialSign, SignRes, 0, -39.166 + 3.25 - 1, 23.375 + 9.87 + 0.33 + 0.01, -39.166 + 3.25 + 1, 23.375 + 9.87 + 0.33 + 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
+    AddWall HotelSign, SignHotel, 0, 24.08 - 0.75, 18.08 + 4.75 + 0.33 + 0.01, 24.08 + 0.75, 18.08 + 4.75 + 0.33 + 0.01, 0.9, 0.9, 6, 6, 0, 0, False
+    AddWall UpperSign, Sign134-136, 0, 9.083 + 4.75 + 0.33 + 0.01, 33.33 - 0.75, 9.083 + 4.75 + 0.33 + 0.01, 33.33 + 0.75, 0.9, 0.9, 6, 6, 0, 0, False
+    AddWall SkydeckSign, SignSkydeck, 0, -11.75 - 0.5, 30.71 + 16.75 + 0.33 + 0.01, -11.75 + 0.5, 30.71 + 16.75 + 0.33 + 0.01, 0.6, 0.6, 5.5, 5.5, 0, 0, False
+    AddWall LowerSign2, SignMez, 0, 46.95 + 4.25 + 0.33 + 0.01, -33 - 1, 46.95 + 4.25 + 0.33 + 0.01, -33.33 + 1, 1.2, 1.2, 5.5, 5.5, 0, 0, False
+    AddWall ServiceSign2, SignService2, 0, -9.417 + 4.92 + 0.33 + 0.01, 18.542 + 2.5 - 0.5, -9.417 + 4.92 + 0.33 + 0.01, 18.542 + 2.5 + 0.5, 0.6, 0.6, 5.5, 5.5, 0, 0, False
+<EndFloor>
+
+<Floor 40>
+    AddWall LobbySign1, SignLobby, 0, -12.583 + 3.25 - 1, -38.75 + 14.75 + 0.33 + 0.01, -12.583 + 3.25 + 1, -38.75 + 14.75 + 0.33 + 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
+    AddWall LobbySign2, SignLobby, 0, 12.583 - 3.25 - 1, -38.75 + 14.75 + 0.33 + 0.01, 12.583 - 3.25 + 1, -38.75 + 14.75 + 0.33 + 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
+<EndFloor>
+
+<Floor 79>
+    AddWall ServiceSign2, SignService2, 0, -9.417 + 4.92 + 0.33 + 0.01, 18.542 + 2.5 - 0.5, -9.417 + 4.92 + 0.33 + 0.01, 18.542 + 2.5 + 0.5, 0.6, 0.6, 5.5, 5.5, 0, 0, False
 <EndFloor>
 
 <Floor 80>
-    AddWall Shaft13Sign, SignLobby, 0, 24.08 - 0.75, 18.08 + 4.75 + 0.33 + 0.01, 24.08 + 0.75, 18.08 + 4.75 + 0.33 + 0.01, 0.9, 0.9, 6, 6, 0, 0, False
+    AddWall LobbySign, SignLobby, 0, 24.08 - 0.75, 18.08 + 4.75 + 0.33 + 0.01, 24.08 + 0.75, 18.08 + 4.75 + 0.33 + 0.01, 0.9, 0.9, 6, 6, 0, 0, False
 <EndFloor>
 
+<Floors 134 to 136>
+    AddWall LobbySign, SignLobby, 0, 9.083 + 4.75 + 0.33 + 0.01, 33.33 - 0.5, 9.083 + 4.75 + 0.33 + 0.01, 33.33 + 0.5, 0.6, 0.6, 5.5, 5.5, 0, 0, False
+<EndFloors>
+
+<Floor 137>
+    AddWall LobbySign, SignLobby, 0, -11.75 - 0.5, 30.71 + 16.75 + 0.33 + 0.01, -11.75 + 0.5, 30.71 + 16.75 + 0.33 + 0.01, 0.6, 0.6, 5.5, 5.5, 0, 0, False
+<EndFloor>
+
+DrawWalls = true, false, false, false, false, false
+<Floor 40>
+    AddWall LeftSign, Sign41-60, 0, -23.85 + 18 - 1.5 - 1, -10.75 - 4.25 - 0.33 - 0.01, -23.85 + 18 - 1.5 + 1, -10.75 - 4.25 - 0.33 - 0.01, 0.68, 0.68, 6.5, 6.5, 0, 0, False
+    AddWall RightSign, Sign61-78, 0, 23.85 - 18 + 1.5 - 1, -10.75 - 4.25 - 0.33 - 0.01, 23.85 - 18 + 1.5 + 1, -10.75 - 4.25 - 0.33 - 0.01, 0.68, 0.68, 6.5, 6.5, 0, 0, False
+<EndFloor>
+
+<Floor 79>
+    AddWall ServiceSign1, SignService1, 0, 9.375 - 5.04 - 0.33 - 0.01, 18.542 - 2.5 - 0.5, 9.375 - 5.04 - 0.33 - 0.01, 18.542 - 2.5 + 0.5, 0.6, 0.6, 5.5, 5.5, 0, 0, False
+<EndFloor>
+
+<Floor 80>
+    AddWall PoolSign, SignPool, 0, -10.167 + 2.5 - 0.5, 9.25 - 4.25 - 0.33 - 0.01, -10.167 + 2.5 + 0.5, 9.25 - 4.25 - 0.33 - 0.01, 0.6, 0.6, 5.5, 5.5, 0, 0, False
+<EndFloor>
+
+<Floor 100>
+    AddWall LobbySign, SignLobby, 0, -39.166 + 3.25 - 1, 23.375 - 9.87 - 0.33 - 0.01, -39.166 + 3.25 + 1, 23.375 - 9.87 - 0.33 - 0.01, 1.2, 1.2, 6.5, 6.5, 0, 0, False
+    AddWall PoolSign, SignPool, 0, -10.167 + 2.5 - 0.5, 9.25 - 4.25 - 0.33 - 0.01, -10.167 + 2.5 + 0.5, 9.25 - 4.25 - 0.33 - 0.01, 0.6, 0.6, 5.5, 5.5, 0, 0, False
+<EndFloor>
+
+DrawWalls = true, true, false, false, false, false
+<Floor 40>
+    AddWall Bank1Sign, Sign41-50, 0, -23.85, -10.75 + 4.25 + 0.33, -23.85, -10.75 + 4.25 + 0.33 + 2, 0.68, 0.68, 9.32, 9.32, 0, 0, False
+    AddWall Bank2Sign, Sign51-60, 0, -23.85, 9.25 - 4.25 - 0.33 - 2, -23.85, 9.25 - 4.25 - 0.33, 0.68, 0.68, 9.32, 9.32, 0, 0, False
+    AddWall Bank3Sign, Sign61-70, 0, 23.85, -10.75 + 4.25 + 0.33, 23.85, -10.75 + 4.25 + 0.33 + 2, 0.68, 0.68, 9.32, 9.32, 0, 0, False
+    AddWall Bank4Sign, Sign71-78, 0, 23.85, 9.25 - 4.25 - 0.33 - 2, 23.85, 9.25 - 4.25 - 0.33, 0.68, 0.68, 9.32, 9.32, 0, 0, False
+<EndFloor>
+
+<Floor 100>
+    AddWall Sign1, Sign120-129, 0, -14.67, -1, -14.67, 1, 0.68, 0.68, 9.32, 9.32, 0, 0, False
+    AddWall Sign2, Sign102-118, 0, 14.67, -1, 14.67, 1, 0.68, 0.68, 9.32, 9.32, 0, 0, False
+<EndFloor>
+
+SetAutoSize = true, true
+
+    
 
 #North Stairwell A
 CreateStairwell 1, -46.67, -3.708, -8, 39
