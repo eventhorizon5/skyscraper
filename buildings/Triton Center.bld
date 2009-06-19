@@ -1594,9 +1594,9 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
 # Roof with Mechanical Penthouse
 <Floor 143>
     ID = R
-    Name = Rooftop Heliport
+    Name = Roof
     Type = Roof
-    Description = Roof and communications antennae
+    Description = Roof and mechanical penthouse
     Height = 12
     InterfloorHeight = 2.24
     Group = 141, 142
@@ -1623,24 +1623,24 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     #Penthouse internal walls
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Left, Brick, 0.5, -20, 40, -20, -40, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Front, Brick, 0.5, -20, -40, 20, -40, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Left, Brick, 0.5, -20, 40, -20, -40, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Front, Brick, 0.5, -20, -40, 20, -40, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Back, Brick, 0.5, 20, 40, -20, 40, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Right, Brick, 0.5, 20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back, Brick, 0.5, 20, 40, -20, 40, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right, Brick, 0.5, 20, -40, 20, 40, %height%, %height%, 0, 0, 0, 0, False
 
     #Penthouse external walls
-    SetAutoSize = true, false
+    #SetAutoSize = true, false
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall ExtLeft, Brick, 0.5, -20, 40, -20, -40, %fullheight%, %fullheight%, 0, 0, 0, 4, True
-    AddWall ExtFront, Brick, 0.5, -20, -40, 20, -40, %fullheight%, %fullheight%, 0, 0, 0, 4, True
+    AddWall ExtLeft, Brick, 0.5, -20, 40, -20, -40, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall ExtFront, Brick, 0.5, -20, -40, 20, -40, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall ExtBack, Brick, 0.5, 20, 40, -20, 40, %fullheight%, %fullheight%, 0, 0, 0, 4, True
-    AddWall ExtRight, Brick, 0.5, 20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, 0, 4, True
-    SetAutoSize = true, true
+    AddWall ExtBack, Brick, 0.5, 20, 40, -20, 40, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall ExtRight, Brick, 0.5, 20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #SetAutoSize = true, true
 
     #Penthouse roof
     FloorOrientation = top
@@ -1682,6 +1682,16 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     AddDoor StairsDoor, 0.2, 1, -20, 0, 3.5, 8, 0, 1, 1
     AddDoor StairsDoor, 0.2, 3, 20, 0, 3.5, 8, 0, 1, 1
     
+    #door fillers
+    DrawWalls = false, true, false, false, false, false
+    AddWall FillerWallLeft1, ConnectionWall, 0, -20 - 0.5, -1.75, -20 + 0.5, -1.75, 8, 8, 0, 0, 0, 0, False
+    AddWall FillerWallLeft2, ConnectionWall, 0, 20 - 0.5, -1.75, 20 + 0.5, -1.75, 8, 8, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall FillerWallRight1, ConnectionWall, 0, -20 - 0.5, 1.75, -20 + 0.5, 1.75, 8, 8, 0, 0, 0, 0, False
+    AddWall FillerWallRight2, ConnectionWall, 0, 20 - 0.5, 1.75, 20 + 0.5, 1.75, 8, 8, 0, 0, 0, 0, False
+    AddFloor FillerWallTop1, ConnectionWall, 0, -20 - 0.5, -1.75, -20 + 0.5, 1.75, 8, 8, 0, 0, False
+    AddFloor FillerWallTop2, ConnectionWall, 0, 20 - 0.5, -1.75, 20 + 0.5, 1.75, 8, 8, 0, 0, False
+
     DrawWalls = true, true, false, false, false, false
 
 <EndFloor>
@@ -1740,11 +1750,13 @@ Cut external, 19, Floor(143).Altitude + Floor(143).InterfloorHeight, -1.75, 21, 
     WallOrientation = Left
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
-    if[%floor% ! 1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 1 & %floor% ! -1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = -1] AddWall LowerLevelWalls, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = Right
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
-    if[%floor% ! 1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 1 & %floor% ! -1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = -1] AddWall LowerLevelWalls, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
 
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
@@ -4303,7 +4315,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.1
     AccelJerk = 0.2
     DecelJerk = 0.2
-    ServicedFloors = 0, 137
+    ServicedFloors = -1, 137
     AssignedShaft = 14
     CreateElevator false, -9.166, 42.879, 0
 
@@ -4354,7 +4366,7 @@ DrawWalls = true, true, false, false, false, false
     #panel
     CreatePanel ElevPanel, 8, 5, front, 1.75 + 1.083 - 0.1, 3.75 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button137, 2, 3, 137, 1, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
+    AddFloorButton 1, ButtonLL1, 4, 3, -1, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -5944,8 +5956,6 @@ DrawWalls = true, true, false, false, false, false
 
     AddDirectionalIndicators 35, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.051 + 0.2 + 0.66 + 0.02, 8.2, back, 0.5, 0.5, true, 0, 0
     AddDirectionalIndicators 36, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.051 + 0.2 + 0.66 + 0.02, 8.2, back, 0.5, 0.5, true, 0, 0
-
-    AddDirectionalIndicators 37, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.051 + 0.2 + 0.66 + 0.02, 8.2, back, 0.5, 0.5, true, 0, 0
 <EndFloor>
 
 <Floors -7 to 1>
@@ -5953,6 +5963,8 @@ DrawWalls = true, true, false, false, false, false
     AddDirectionalIndicators 26, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.426 + 0.2 + 0.66 + 0.02, -2.5, 6.5, right, 0.5, 1, true, 0, 0
     AddDirectionalIndicators 27, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, 2.5, 6.5, left, 0.5, 1, true, 0, 0
     AddDirectionalIndicators 28, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.426 - 0.2 - 0.66 - 0.02, -2.5, 6.5, left, 0.5, 1, true, 0, 0
+
+    AddDirectionalIndicators 37, true, true, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.051 + 0.2 + 0.66 + 0.02, 8.2, back, 0.5, 0.5, true, 0, 0
 <EndFloors>
 
 <Floors 1 to 136>
@@ -6239,7 +6251,7 @@ DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 #Skydeck Express
-<Floor 0>
+<Floor -1>
     CallButtonElevators = 37
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -11.75, 30.71 + 16.75 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
@@ -6297,9 +6309,12 @@ SetAutoSize = false, false
     AddWall ResidentialSign, SignRes, 0, -39.166 + 3.25 - 1, 23.375 + 9.87 + 0.33 + 0.01, -39.166 + 3.25 + 1, 23.375 + 9.87 + 0.33 + 0.01, 1.2, 1.2, 5.5, 5.5, 0, 0, False
     AddWall HotelSign, SignHotel, 0, 24.08 - 0.75, 18.08 + 4.75 + 0.33 + 0.01, 24.08 + 0.75, 18.08 + 4.75 + 0.33 + 0.01, 0.9, 0.9, 5.5, 5.5, 0, 0, False
     AddWall UpperSign, Sign134-136, 0, 9.083 + 4.75 + 0.33 + 0.01, 33.33 - 0.75, 9.083 + 4.75 + 0.33 + 0.01, 33.33 + 0.75, 0.9, 0.9, 5.5, 5.5, 0, 0, False
-    AddWall SkydeckSign, SignSkydeck, 0, -11.75 - 0.5, 30.71 + 16.75 + 0.33 + 0.01, -11.75 + 0.5, 30.71 + 16.75 + 0.33 + 0.01, 0.6, 0.6, 5.5, 5.5, 0, 0, False
     AddWall LowerSign2, SignMez, 0, 46.95 + 4.25 + 0.33 + 0.01, -33.25 - 0.75, 46.95 + 4.25 + 0.33 + 0.01, -33.25 + 0.75, 1, 1, 5.5, 5.5, 0, 0, False
     AddWall ServiceSign2, SignService2, 0, -9.417 + 4.92 + 0.33 + 0.01, 18.542 + 2.5 - 0.5, -9.417 + 4.92 + 0.33 + 0.01, 18.542 + 2.5 + 0.5, 0.6, 0.6, 5.25, 5.25, 0, 0, False
+<EndFloor>
+
+<Floor -1>
+    AddWall SkydeckSign, SignSkydeck, 0, -11.75 - 0.5, 30.71 + 16.75 + 0.33 + 0.01, -11.75 + 0.5, 30.71 + 16.75 + 0.33 + 0.01, 0.6, 0.6, 5.5, 5.5, 0, 0, False
 <EndFloor>
 
 <Floor 40>

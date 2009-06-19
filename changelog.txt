@@ -23,6 +23,13 @@ are now stationed at the top
 -added support for multiple elevator doors
 -added support for specifying shaft doors on a per-floor basis
 -added AddFloorSigns command that creates floor signs on all floors served by an elevator
+-numerous Triton Center fixes
+-split Triton Center topside mechanical into 2 floors, added stairs to the roof, and did roof/penthouse work
+-moved Triton Center's skydeck entrance to LL1
+-Triton Center's pool express elevator now only serves lobbies instead of upper residential floors in addition to lobbies
+-fontserver fix
+-added wireframe mode and screenshot keys
+-and lots more
 
 Version 1.3 (2.0 Alpha 3)
 -------------------------
