@@ -428,10 +428,27 @@ void Skyscraper::GetInput()
 		return;
 
 	static bool wireframe;
+	static bool wait, waitcheck;
+	static csTicks old_time;
 
 	// First get elapsed time from the virtual clock.
 	elapsed_time = vc->GetElapsedTicks ();
 	current_time = vc->GetCurrentTicks ();
+
+	//speed limit certain keys
+	if (wait == true)
+	{
+		if (waitcheck == false)
+		{
+			old_time = current_time;
+			waitcheck = true;
+		}
+		if (current_time > old_time + 200)
+		{
+			waitcheck = false;
+			wait = false;
+		}
+	}
 
 	// Now rotate the camera according to keyboard state
 	//float speed = elapsed_time / 1000.0f;
@@ -461,8 +478,11 @@ void Skyscraper::GetInput()
 
 	//if (wxGetKeyState(WXK_ESCAPE))
 
-	if (wxGetKeyState(WXK_F2))
+	if (wxGetKeyState(WXK_F2) && wait == false)
+	{
 		Report(wxVariant(Simcore->FPS).GetString().ToAscii());
+		wait = true;
+	}
 
 	Simcore->camera->speed = 1;
 
@@ -505,7 +525,7 @@ void Skyscraper::GetInput()
 			Simcore->camera->SetToStartDirection();
 			Simcore->camera->SetToStartRotation();
 		}
-		if (wxGetKeyState(WXK_F4))
+		if (wxGetKeyState(WXK_F4) && wait == false)
 		{
 			//enable/disable wireframe mode
 			if (wireframe == false)
@@ -521,9 +541,13 @@ void Skyscraper::GetInput()
 				Simcore->EnableSkybox(true);
 				wireframe = false;
 			}
+			wait = true;
 		}
-		if (wxGetKeyState(WXK_F11))
+		if (wxGetKeyState(WXK_F11) && wait == false)
+		{
 			bugplug->ExecCommand("scrshot");
+			wait = true;
+		}
 
 		//values from old version
 		if (wxGetKeyState(WXK_HOME))
