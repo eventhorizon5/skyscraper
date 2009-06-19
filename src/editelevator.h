@@ -63,6 +63,8 @@ class editelevator: public wxDialog
 		static const long ID_bUp;
 		static const long ID_bGoToggle;
 		static const long ID_bDown;
+		static const long ID_tDoor;
+		static const long ID_sDoor;
 		static const long ID_bRefresh;
 		static const long ID_bDumpFloors;
 		static const long ID_bDumpQueues;
@@ -294,6 +296,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtStop;
 		wxStaticBoxSizer* StaticBoxSizer2;
 		wxTextCtrl* txtQueueLastDown;
+		wxStaticText* tDoor;
 		wxCheckBox* chkVisible;
 		wxTextCtrl* txtElevStart;
 		wxStaticText* StaticText19;
@@ -378,6 +381,7 @@ class editelevator: public wxDialog
 		wxRadioButton* Fire1Bypass;
 		wxTextCtrl* txtUseSkipFloor;
 		wxBoxSizer* BoxSizer8;
+		wxScrollBar* sDoor;
 		wxTextCtrl* txtDirection;
 		wxStaticText* tElevator;
 		wxTextCtrl* txtPosition;
