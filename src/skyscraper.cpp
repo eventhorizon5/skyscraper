@@ -427,6 +427,8 @@ void Skyscraper::GetInput()
 	if (window->IsActive() == false)
 		return;
 
+	static bool wireframe;
+
 	// First get elapsed time from the virtual clock.
 	elapsed_time = vc->GetElapsedTicks ();
 	current_time = vc->GetCurrentTicks ();
@@ -503,6 +505,25 @@ void Skyscraper::GetInput()
 			Simcore->camera->SetToStartDirection();
 			Simcore->camera->SetToStartRotation();
 		}
+		if (wxGetKeyState(WXK_F4))
+		{
+			//enable/disable wireframe mode
+			if (wireframe == false)
+			{
+				bugplug->ExecCommand("edges");
+				bugplug->ExecCommand("clear");
+				Simcore->EnableSkybox(false);
+				wireframe = true;
+			}
+			else
+			{
+				bugplug->ExecCommand("edges");
+				Simcore->EnableSkybox(true);
+				wireframe = false;
+			}
+		}
+		if (wxGetKeyState(WXK_F11))
+			bugplug->ExecCommand("scrshot");
 
 		//values from old version
 		if (wxGetKeyState(WXK_HOME))
