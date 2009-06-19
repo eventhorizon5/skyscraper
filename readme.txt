@@ -53,12 +53,11 @@ files.
 This release is the third development relase of the 2.0 series (which is a complete rewrite of
 the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
 
-This software requires both the Crystal Space graphics engine library (1.2 or later) which
+This software requires both the Crystal Space graphics engine library (version 1.4) which
 can be found at http://www.crystalspace3d.org, and the wxWidgets library (version 2.6.3 or
 later) which can be found at http://www.wxwidgets.org.  The Windows packages comes bundled
-with a custom-patched Crystal Space 1.2.1 and wxWidgets 2.8.9 runtimes.  The custom patch for
-Crystal Space is included and is called cs12-poly3d.patch - it applies to Crystal Space 1.2.1.  It does
-not work correctly with version 1.4.  The patch fixes a skybox related issue.
+with a custom-patched Crystal Space 1.4 (SVN snapshot) and wxWidgets 2.8.9 runtimes.  The custom patch for
+Crystal Space is included and is called cs12-poly3d.patch, which fixes a skybox issue.
 
 See the changelog for new features, fixes, and other changes in this release.
 
@@ -136,9 +135,70 @@ Home - Float upwards (or jump if collision detection is on)
 End - Float downwards (or crouch if collision detection is on)
 F2 - print FPS on console
 F3 - Reset camera rotation to default
+F4 - Enable/disable wireframe mode
+F11 - Take screenshot
 Shift - Run (hold down with other keys)
 Control - Walk slowly (hold down with other keys)
 Alt - Strafe (hold down with other keys)
+
+--- Debug options ---
+Other functions are available via a Crystal Space plugin called BugPlug.
+To type a debug command: type ctrl-d and then press the bugplug key (so for wireframe mode, you'd press ctrl-d, the screen will prompt you for a command, and then you'd type "e".)
+To select an object/mesh: type ctrl-s and then click on an object
+
+Show wireframe mode (the second command is needed due to a quirk with the wxGL plugin - also make sure you turn off the sky when doing this):
+ctrl-d e
+ctrl-d c
+
+Disable wireframe mode:
+ctrl-d e
+
+change gamma:
+ctrl-d g
+
+show camera info:
+ctrl-d shift-c
+
+dump info on all CS engine objects:
+ctrl-d d
+
+dump all 3D info to an xml file (saves to world0.xml):
+ctrl-d f10
+
+change FOV:
+ctrl-d f
+
+change FOV angle:
+ctrl-d shift-f
+
+move meshes:
+first select an object using ctrl-s
+then,
+ctrl-d shift-up = move up (+y)
+ctrl-d shift-down = move down (-y)
+ctrl-d shift-left = left (-x)
+ctrl-d shift-right = right (+x)
+ctrl-d shift-pgup = forward (+z)
+ctrl-d shift-pgdn = backward (-z)
+
+screenshots:
+ctrl-d f11 = normal
+ctrl-d shift-f11 = large
+
+show/hide FPS display:
+ctrl-d ctrl-alt-p
+
+hide selected mesh:
+ctrl-d h
+
+unhide selected mesh:
+ctrl-d shift-h
+
+select mesh(es) by name:
+ctrl-d ctrl-alt-m
+
+list loaded CS plugins:
+ctrl-d ctrl-alt-l
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
