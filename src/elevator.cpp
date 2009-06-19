@@ -42,6 +42,7 @@ Elevator::Elevator(int number)
 	//init variables
 	Name = "";
 	QueuePositionDirection = 0;
+	LastQueueDirection = 0;
 	LastQueueFloor[0] = 0;
 	LastQueueFloor[1] = 0;
 	PauseQueueSearch = true;
@@ -435,9 +436,15 @@ void Elevator::ProcessCallQueue()
 	if (QueuePositionDirection == 0)
 	{
 		if (UpQueue.GetSize() != 0)
+		{
 			QueuePositionDirection = 1;
+			LastQueueDirection = 1;
+		}
 		if (DownQueue.GetSize() != 0)
+		{
 			QueuePositionDirection = -1;
+			LastQueueDirection = -1;
+		}
 	}
 
 	//if both queues are empty
@@ -1024,20 +1031,14 @@ void Elevator::MoveElevatorToFloor()
 		//change directional indicator
 		if (InServiceMode() == false)
 		{
-			if (QueuePositionDirection == -1)
-			{
-				if (GetFloor() != GetBottomFloor())
-					SetDirectionalIndicator(GetFloor(), false, true);
-				else
-					SetDirectionalIndicator(GetFloor(), true, false);
-			}
-			else
-			{
-				if (GetFloor() != GetTopFloor())
-					SetDirectionalIndicator(GetFloor(), true, false);
-				else
-					SetDirectionalIndicator(GetFloor(), false, true);
-			}
+			if (GetFloor() == GetTopFloor())
+				SetDirectionalIndicator(GetFloor(), false, true); //turn on down light if on top floor
+			else if (GetFloor() == GetBottomFloor())
+				SetDirectionalIndicator(GetFloor(), true, false); //turn on up light if on bottom floor
+			else if (QueuePositionDirection == 1 || LastQueueDirection == 1)
+				SetDirectionalIndicator(GetFloor(), true, false); //turn on up light if queue direction is or was up
+			else if (QueuePositionDirection == -1 || LastQueueDirection == -1)
+				SetDirectionalIndicator(GetFloor(), false, true); //turn on down light if queue direction is or was down
 		}
 
 		//open doors

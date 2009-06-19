@@ -40,6 +40,7 @@ public:
 	csString Name; //elevator name
 	int NumDoors; //number of elevator doors
 	int QueuePositionDirection; //queue processing direction
+	int LastQueueDirection; //last queue processing direction
 	bool PauseQueueSearch; //pause queue processor
 	int LastQueueFloor[2]; //last route added to either queue; element 0 is the floor, and element 1 is the direction
 	float ElevatorSpeed; //maximum elevator speed
