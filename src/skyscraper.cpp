@@ -147,7 +147,7 @@ int Skyscraper::OnExit()
 	return 0;
 }
 
-MainScreen::MainScreen() : wxFrame(0, -1, wxT("Skyscraper 2.0 Alpha 4"), wxDefaultPosition, wxSize(640, 480), wxDEFAULT_FRAME_STYLE)
+MainScreen::MainScreen() : wxFrame(0, -1, wxT("Skyscraper 2.0 Alpha 4.1"), wxDefaultPosition, wxSize(640, 480), wxDEFAULT_FRAME_STYLE)
 {
 	this->Center();
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
