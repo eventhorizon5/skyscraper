@@ -24,7 +24,7 @@
     Description = A fictitious Chicago-based 142-story skyscraper located on the northeast corner of Dearborn & Washington.
     Version = 3
     HorizScale = 1
-    CameraFloor = 0
+    CameraFloor = 118
     CameraPosition = 0, -41.6
     CameraRotation = 0, 0, 0
 <EndGlobals>
@@ -7087,7 +7087,7 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
     if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddStairsWall 6, StairsLeft, StairsWall, 0.33, -9.0815, -4.5, -9.0815, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
-    if[%floor% = 119 | %floor% = 138] AddStairsWall 6, StairsLeft2, StairsWall, 0.33, -9.0815, -4.5, -9.0815, 4.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
+    if[%floor% = 119 | %floor% = 138] AddStairsWall 6, StairsLeft2, StairsWall, 0.33, -9.0815, -4.5, -9.0815, 4.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0.6
     if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddStairsWall 6, StairsLeft, StairsWall, 0.33, -17, -4.5, -17, 4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
     if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddStairsWall 6, StairsFront, StairsWall, 0.33, -9.0815, -4.5, 9.0815, -4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
     if[%floor% = 119 | %floor% = 120 | %floor% > 137] AddStairsWall 6, StairsFront, StairsWall, 0.33, -17, -4.5, 9.0815, -4.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, %6%
