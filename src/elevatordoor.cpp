@@ -223,7 +223,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	if (whichdoors == 3)
 	{
 		//first make sure the shaft doors are valid
-		if (elev->ServicedFloors.Find(floor) == csArrayItemNotFound)
+		if (ShaftDoorsExist(floor) == false)
 		{
 			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": invalid shaft doors");
 			return;
@@ -250,6 +250,10 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 
 	//if both doors are selected but elevator is not on a floor, only open elevator doors
 	if (whichdoors == 1 && elev->OnFloor == false)
+		whichdoors = 2;
+
+	//only open elevator doors if shaft doors don't exist
+	if (whichdoors == 1 && ShaftDoorsExist(floor) == false)
 		whichdoors = 2;
 
 	WhichDoors = whichdoors;
@@ -306,7 +310,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	if (whichdoors == 3)
 	{
 		//first make sure the shaft doors are valid
-		if (elev->ServicedFloors.Find(floor) == csArrayItemNotFound)
+		if (ShaftDoorsExist(floor) == false)
 		{
 			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": invalid shaft doors");
 			return;
@@ -333,6 +337,10 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 
 	//if both doors are selected but elevator is not on a floor, only close elevator doors
 	if (whichdoors == 1 && elev->OnFloor == false)
+		whichdoors = 2;
+
+	//only open elevator doors if shaft doors don't exist
+	if (whichdoors == 1 && ShaftDoorsExist(floor) == false)
 		whichdoors = 2;
 
 	//turn off directional indicators

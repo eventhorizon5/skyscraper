@@ -216,7 +216,7 @@
 													<label>Door</label>
 													<style>wxALIGN_CENTRE</style>
 												</object>
-												<flag>wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+												<flag>wxEXPAND|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>

@@ -263,7 +263,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer4->Add(StaticBoxSizer6, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer8 = new wxFlexGridSizer(0, 1, 0, 0);
 	tDoor = new wxStaticText(this, ID_tDoor, _("Door"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_tDoor"));
-	FlexGridSizer8->Add(tDoor, 1, wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
+	FlexGridSizer8->Add(tDoor, 1, wxEXPAND|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	sDoor = new wxScrollBar(this, ID_sDoor, wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL, wxDefaultValidator, _T("ID_sDoor"));
 	sDoor->SetScrollbar(0, 0, 0, 0);
 	FlexGridSizer8->Add(sDoor, 1, wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -680,22 +680,22 @@ void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)
 
 void editelevator::On_bOpen_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->OpenDoors();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->OpenDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bClose_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->CloseDoors();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->CloseDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bOpenManual_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->OpenDoorsEmergency();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->OpenDoorsEmergency(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bCloseManual_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->CloseDoorsEmergency();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->CloseDoorsEmergency(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bStop_Click(wxCommandEvent& event)
@@ -765,7 +765,7 @@ void editelevator::OnInit()
 		sFloor->SetScrollbar(Simcore->Basements, 1, Simcore->TotalFloors() + 1, 1);
 
 		//set door range slider
-		sDoor->SetScrollbar(0, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->NumDoors, 1);
+		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->NumDoors + 1, 1);
 	}
 	else
 		sNumber->Enable(false);
@@ -778,7 +778,7 @@ void editelevator::Loop()
 	int elev_num;
 	int door_num;
 	elev_num = sNumber->GetThumbPosition() + 1;
-	door_num = sDoor->GetThumbPosition() + 1;
+	door_num = sDoor->GetThumbPosition();
 	elevator = Simcore->GetElevator(elev_num);
 	door = elevator->GetDoor(door_num);
 
@@ -796,18 +796,23 @@ void editelevator::Loop()
 	}
 	tElevator->SetLabel(wxT("Number " + wxVariant((long)sNumber->GetThumbPosition() + 1).GetString()));
 	tFloor->SetLabel(wxT("Floor " + wxVariant(((long)sFloor->GetThumbPosition()) - Simcore->Basements).GetString()));
-	tDoor->SetLabel(wxT("Door " + wxVariant((long)sDoor->GetThumbPosition() + 1).GetString()));
+	tDoor->SetLabel(wxT("Door " + wxVariant((long)sDoor->GetThumbPosition()).GetString() + " (0 = all)"));
 	txtBrakes->SetValue(wxString::FromAscii(BoolToString(elevator->GetBrakeStatus())));
 	txtDestFloor->SetValue(wxVariant((long)elevator->GotoFloor).GetString());
 	txtDestination->SetValue(TruncateNumber(elevator->GetDestination(), 2));
 	txtDirection->SetValue(wxVariant((long)elevator->Direction).GetString());
 	txtDistance->SetValue(TruncateNumber(elevator->DistanceToTravel, 2));
-	txtDoorDirection->SetValue(wxString::FromAscii(BoolToString(door->DoorDirection)));
-	txtDoorHeight->SetValue(TruncateNumber(door->DoorHeight, 2));
-	txtDoorOrigin->SetValue(TruncateNumber(door->DoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->DoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->DoorOrigin.z, 2));
-	txtDoorsOpen->SetValue(wxString::FromAscii(BoolToString(door->AreDoorsOpen())));
-	txtDoorSpeed->SetValue(TruncateNumber(door->GetCurrentDoorSpeed(), 2));
-	txtDoorWidth->SetValue(TruncateNumber(door->DoorWidth, 2));
+	if (door)
+	{
+		txtDoorDirection->SetValue(wxString::FromAscii(BoolToString(door->DoorDirection)));
+		txtDoorHeight->SetValue(TruncateNumber(door->DoorHeight, 2));
+		txtDoorOrigin->SetValue(TruncateNumber(door->DoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->DoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->DoorOrigin.z, 2));
+		txtDoorsOpen->SetValue(wxString::FromAscii(BoolToString(door->AreDoorsOpen())));
+		txtDoorSpeed->SetValue(TruncateNumber(door->GetCurrentDoorSpeed(), 2));
+		txtDoorWidth->SetValue(TruncateNumber(door->DoorWidth, 2));
+		txtShaftDoorOrigin->SetValue(TruncateNumber(door->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.z, 2));
+		txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(door->DoorsStopped())));
+	}
 	txtElevStart->SetValue(TruncateNumber(elevator->GetElevatorStart(), 2));
 	txtEnabled->SetValue(wxString::FromAscii(BoolToString(elevator->IsEnabled)));
 	txtErrorOffset->SetValue(TruncateNumber(elevator->ErrorOffset, 2));
@@ -824,7 +829,6 @@ void editelevator::Loop()
 	txtQueuePause->SetValue(wxString::FromAscii(BoolToString(elevator->PauseQueueSearch)));
 	txtRate->SetValue(TruncateNumber(elevator->ElevatorRate, 2));
 	txtShaft->SetValue(wxVariant((long)elevator->AssignedShaft).GetString());
-	txtShaftDoorOrigin->SetValue(TruncateNumber(door->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.z, 2));
 	txtStop->SetValue(wxString::FromAscii(BoolToString(elevator->GetEmergencyStopStatus())));
 	txtStopDistance->SetValue(TruncateNumber(elevator->GetStoppingDistance(), 2));
 	txtTempDecel->SetValue(TruncateNumber(elevator->TempDeceleration, 2));
@@ -832,7 +836,6 @@ void editelevator::Loop()
 	txtIsMoving->SetValue(wxString::FromAscii(BoolToString(elevator->IsMoving)));
 	txtMovePending->SetValue(wxString::FromAscii(BoolToString(elevator->MovePending)));
 	txtUseSkipFloor->SetValue(wxString::FromAscii(BoolToString(elevator->UseFloorSkipText)));
-	txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(door->DoorsStopped())));
 	txtOnFloor->SetValue(wxString::FromAscii(BoolToString(elevator->OnFloor)));
 }
 
@@ -840,12 +843,15 @@ void editelevator::SetMainValues()
 {
 	//set changable values
 	txtName->SetValue(wxString::FromAscii(elevator->Name.GetData()));
-	txtDoorTimer->SetValue(wxVariant((int)door->DoorTimer).GetString());
+	if (door)
+	{
+		txtDoorTimer->SetValue(wxVariant((int)door->DoorTimer).GetString());
+		txtOpenSpeed->SetValue(TruncateNumber(door->OpenSpeed, 4));
+		txtDoorAcceleration->SetValue(TruncateNumber(door->DoorAcceleration, 4));
+	}
 	txtSpeed->SetValue(TruncateNumber(elevator->ElevatorSpeed, 4));
 	txtAcceleration->SetValue(TruncateNumber(elevator->Acceleration, 4));
 	txtDeceleration->SetValue(TruncateNumber(elevator->Deceleration, 4));
-	txtOpenSpeed->SetValue(TruncateNumber(door->OpenSpeed, 4));
-	txtDoorAcceleration->SetValue(TruncateNumber(door->DoorAcceleration, 4));
 	txtAccelJerk->SetValue(TruncateNumber(elevator->AccelJerk, 4));
 	txtDecelJerk->SetValue(TruncateNumber(elevator->DecelJerk, 4));
 	chkVisible->SetValue(elevator->IsEnabled);
@@ -893,13 +899,13 @@ void editelevator::On_bSetDecelJerk_Click(wxCommandEvent& event)
 void editelevator::On_bOpenShaftDoor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->OpenDoors(3, sFloor->GetThumbPosition() - Simcore->Basements);
+		elevator->OpenDoors(sDoor->GetThumbPosition(), 3, sFloor->GetThumbPosition() - Simcore->Basements);
 }
 
 void editelevator::On_bCloseShaftDoor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->CloseDoors(3, sFloor->GetThumbPosition() - Simcore->Basements);
+		elevator->CloseDoors(sDoor->GetThumbPosition(), 3, sFloor->GetThumbPosition() - Simcore->Basements);
 }
 
 void editelevator::On_bSetDoorTimer_Click(wxCommandEvent& event)
@@ -1027,7 +1033,7 @@ void editelevator::On_Fire2Hold_Select(wxCommandEvent& event)
 void editelevator::On_bStopDoors_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->StopDoors();
+		elevator->StopDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bUp_Toggle(wxCommandEvent& event)
