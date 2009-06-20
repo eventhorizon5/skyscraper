@@ -1732,6 +1732,7 @@ Cut external, 19, Floor(143).Altitude + Floor(143).InterfloorHeight, -1.75, 21, 
 #Service Area Wall
 <Floors -1 to 142>
     Set 5 = Wall1
+    if[%floor% = -1] Set 5 = LowerLevelWalls
     WallOrientation = Left
     DrawWalls = true, true, false, false, false, false
     if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall ServiceWall, %5%, 0.5, -4.33, 14.29, 4, 14.29, %height%, %height%, 0, 0, 0, 0, False
@@ -1751,12 +1752,12 @@ Cut external, 19, Floor(143).Altitude + Floor(143).InterfloorHeight, -1.75, 21, 
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     if[%floor% ! 1 & %floor% ! -1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% = -1] AddWall LowerLevelWalls, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = -1] AddWall DividerWallBack, LowerLevelWalls, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = Right
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     if[%floor% ! 1 & %floor% ! -1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% = -1] AddWall LowerLevelWalls, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = -1] AddWall DividerWallFront, LowerLevelWalls, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
 
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
