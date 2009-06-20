@@ -1,3 +1,8 @@
+Version 1.4.1 (2.0 Alpha 4.1)
+-------------------------
+-Linux build fix
+-fixed a shaft door regression
+
 Version 1.4 (2.0 Alpha 4)
 -------------------------
 -added syntax checking and error notification to the script processor

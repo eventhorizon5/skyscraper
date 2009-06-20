@@ -9,7 +9,7 @@ AC_PREREQ([2.54])
 #----------------------------------------------------------------------------
 AC_INIT(
     [skyscraper],
-    [1.4],
+    [1.4.1],
     [ryan@tliquest.net])
 CS_PACKAGEINFO(
     [Skyscraper],
