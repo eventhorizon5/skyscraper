@@ -253,7 +253,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		whichdoors = 2;
 
 	//only open elevator doors if shaft doors don't exist
-	if (whichdoors == 1 && ShaftDoorsExist(floor) == false)
+	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false)
 		whichdoors = 2;
 
 	WhichDoors = whichdoors;
@@ -340,7 +340,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		whichdoors = 2;
 
 	//only open elevator doors if shaft doors don't exist
-	if (whichdoors == 1 && ShaftDoorsExist(floor) == false)
+	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false)
 		whichdoors = 2;
 
 	//turn off directional indicators
