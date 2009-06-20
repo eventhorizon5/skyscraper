@@ -31,8 +31,8 @@
     Load data/windows11h_inside.png, ElevPanelMain, 0.2, 1
     Load data/windows11h_inside.png, ElevCeiling, 2, 2
     Load data/windows11h_inside.png, ElevFloor, 2, 2
-    Load data/callbutton.png, ButtonUp, 1, 1
-    Load data/callbutton.png, ButtonDown, 1, -1
+    Load data/callbutton_gray.jpg, ButtonUp, 1, 1
+    Load data/callbutton_gray.jpg, ButtonDown, 1, -1
     Load data/marbl3.jpg, Wall1, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
     Load data/darrow_single.jpg, Arrow, 1, 1
