@@ -360,7 +360,7 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	if (plug) plug->IncRef ();
 	rep = csQueryRegistry<iReporter> (object_reg);
 	if (!rep) return ReportError("Failed to locate reporter driver");
-	
+
 	//load bugplug reference
 	bugplug = csQueryPluginClass<iBugPlug> (plugin_mgr, "crystalspace.utilities.bugplug");
 	bugplug->ExecCommand("fps"); //turn off FPS display
@@ -466,7 +466,7 @@ void Skyscraper::GetInput()
 	{
 		MouseDown = true;
 		Simcore->camera->MouseDown = MouseDown;
-		Simcore->camera->ClickedObject();
+		Simcore->camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL));
 	}
 
 	//reset mouse state

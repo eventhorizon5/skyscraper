@@ -80,7 +80,7 @@ public:
 	void CheckElevator();
 	void CheckShaft();
 	void CheckStairwell();
-	void ClickedObject();
+	void ClickedObject(bool shift, bool ctrl);
 	const char* GetClickedMeshName();
 	const char* GetClickedPolyName();
 	void CreateColliders();

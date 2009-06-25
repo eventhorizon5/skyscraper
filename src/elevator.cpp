@@ -2027,6 +2027,17 @@ bool Elevator::AreDoorsOpen(int number)
 	return false;
 }
 
+bool Elevator::AreShaftDoorsOpen(int number, int floor)
+{
+	//returns the internal shaft door state
+
+	if (GetDoor(number))
+		return GetDoor(number)->AreShaftDoorsOpen(floor);
+	else
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(number, intbuffer, 10)));
+	return false;
+}
+
 float Elevator::GetCurrentDoorSpeed(int number)
 {
 	//returns the internal door speed value

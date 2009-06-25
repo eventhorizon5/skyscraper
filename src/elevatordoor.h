@@ -60,6 +60,7 @@ public:
 	void ShaftDoorsEnabled(int floor, bool value);
 	void ShaftDoorsEnabledRange(int floor, int range);
 	bool AreDoorsOpen();
+	bool AreShaftDoorsOpen(int floor);
 	float GetCurrentDoorSpeed();
 	void ResetDoorTimer();
 	bool DoorsStopped();

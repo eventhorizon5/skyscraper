@@ -159,6 +159,7 @@ public:
 	void ShaftDoorsEnabled(int number, int floor, bool value);
 	void ShaftDoorsEnabledRange(int number, int floor, int range);
 	bool AreDoorsOpen(int number = 0);
+	bool AreShaftDoorsOpen(int number, int floor);
 	float GetCurrentDoorSpeed(int number = 0);
 	void ResetDoorTimer(int number = 0);
 	bool DoorsStopped(int number = 0);

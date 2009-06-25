@@ -384,7 +384,7 @@ void Camera::CheckStairwell()
 	FloorTemp = CurrentFloor;
 }
 
-void Camera::ClickedObject()
+void Camera::ClickedObject(bool shift, bool ctrl)
 {
 	//some code and comments from the CrystalSpace manual
 	//this returns the mesh that the user clicks on
@@ -448,6 +448,21 @@ void Camera::ClickedObject()
 			sbs->GetElevator(elevator)->Panel->Press(result.polygon_idx);
 		else
 			sbs->GetElevator(elevator)->Panel2->Press(result.polygon_idx);
+	}
+
+	//check shaft doors
+	if (meshname.Find("Shaft Door") != -1 && shift == true)
+	{
+		//user clicked on a shaft door
+		int elevator = atoi(meshname.Slice(9, meshname.Find(":") - 9));
+		int index = meshname.Find("Shaft Door");
+		int index2 = meshname.Find(":", index);
+		int number = atoi(meshname.Slice(index + 10, index2 - (index + 10)));
+		int floor = atoi(meshname.Slice(index2 + 1, meshname.Length() - index2 - 2));
+		if (sbs->GetElevator(elevator)->AreShaftDoorsOpen(number, floor) == false)
+			sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 3, floor);
+		else
+			sbs->GetElevator(elevator)->CloseDoorsEmergency(number, 3, floor);
 	}
 
 	//check doors

@@ -228,7 +228,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": invalid shaft doors");
 			return;
 		}
-		if (ShaftDoorsOpen[elev->ServicedFloors.Find(floor)] == true)
+		if (AreShaftDoorsOpen(floor) == true)
 		{
 			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + " already open on floor " + csString(_itoa(floor, intbuffer, 10)));
 			return;
@@ -315,7 +315,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": invalid shaft doors");
 			return;
 		}
-		if (ShaftDoorsOpen[elev->ServicedFloors.Find(floor)] == false && whichdoors == 3)
+		if (AreShaftDoorsOpen(floor) == false && whichdoors == 3)
 		{
 			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + "already closed on floor " + csString(_itoa(floor, intbuffer, 10)));
 			return;
@@ -964,7 +964,7 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *texture, float tw, float 
 		z4 = ShaftDoorOrigin.z - elev->Origin.z;
 	}
 
-	csString buffer, buffer2, buffer3, buffer4;
+	csString buffer, buffer2, buffer3, buffer4, buffer5;
 
 	sbs->DrawWalls(true, true, true, true, true, true);
 	sbs->ReverseExtents(false, false, false);
@@ -993,8 +993,9 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *texture, float tw, float 
 	//create meshes
 	buffer3 = elev->Number;
 	buffer4 = floor;
-	buffer = "Elevator " + buffer3 + ": Shaft Door " + buffer4 + "L";
-	buffer2 = "Elevator " + buffer3 + ": Shaft Door " + buffer4 + "R";
+	buffer5 = Number;
+	buffer = "Elevator " + buffer3 + ": Shaft Door " + buffer5 + ":" + buffer4 + "L";
+	buffer2 = "Elevator " + buffer3 + ": Shaft Door " + buffer5 + ":" + buffer4 + "R";
 	buffer.Trim();
 	buffer2.Trim();
 	csRef<iMeshWrapper> tmpmesh;
@@ -1132,6 +1133,14 @@ bool ElevatorDoor::AreDoorsOpen()
 	return DoorsOpen;
 }
 
+bool ElevatorDoor::AreShaftDoorsOpen(int floor)
+{
+	//returns the internal door state
+	if (ShaftDoorsExist(floor))
+		return ShaftDoorsOpen[elev->ServicedFloors.Find(floor)];
+	return false;
+}
+
 float ElevatorDoor::GetCurrentDoorSpeed()
 {
 	//returns the internal door speed value
@@ -1250,7 +1259,7 @@ void ElevatorDoor::MoveSound(const csVector3 position, bool relative_x, bool rel
 bool ElevatorDoor::ShaftDoorsExist(int floor)
 {
 	//return true if shaft doors have been created for this door on the specified floor
-	
+
 	int index = elev->ServicedFloors.Find(floor);
 	if (index != -1 && ShaftDoorL[index])
 		return true;
