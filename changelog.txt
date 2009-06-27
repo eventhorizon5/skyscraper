@@ -1,6 +1,6 @@
 Version 1.5 (2.0 Alpha 5)
 -------------------------
--clicking on shaft doors while holding down shift now causes them to manually open/close
+-clicking on shaft doors and elevator doors while holding down shift now causes them to manually open/close
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------
