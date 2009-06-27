@@ -136,6 +136,7 @@ SBS::SBS()
 	heightscale.SetSize(6);
 	remaining_delta = 0;
 	start_time = 0;
+	InShaft = false;
 }
 
 SBS::~SBS()

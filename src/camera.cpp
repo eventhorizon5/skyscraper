@@ -271,6 +271,7 @@ void Camera::CheckShaft()
 			{
 				//user is in the shaft
 				shaft->InsideShaft = true;
+				sbs->InShaft = true;
 
 				//turn on entire shaft
 				shaft->EnableWholeShaft(true, true);
@@ -279,6 +280,7 @@ void Camera::CheckShaft()
 			{
 				//user has moved from the shaft to an elevator
 				shaft->InsideShaft = false;
+				sbs->InShaft = false;
 
 				//turn off entire shaft if ShowFullShafts is false
 				if (sbs->ShowFullShafts == false)
@@ -321,6 +323,7 @@ void Camera::CheckShaft()
 		{
 			//user has moved out of the shaft
 			shaft->InsideShaft = false;
+			sbs->InShaft = false;
 
 			//turn off shaft
 			shaft->EnableWholeShaft(false, true);
@@ -463,6 +466,18 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 			sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 3, floor);
 		else
 			sbs->GetElevator(elevator)->CloseDoorsEmergency(number, 3, floor);
+	}
+
+	//check elevator doors
+	if (meshname.Find("ElevatorDoor") != -1 && shift == true)
+	{
+		//user clicked on an elevator door
+		int elevator = atoi(meshname.Slice(13, meshname.Find(":") - 13));
+		int number = atoi(meshname.Slice(meshname.Find(":") + 1, meshname.Length() - meshname.Find(":") - 1));
+		if (sbs->GetElevator(elevator)->AreDoorsOpen(number) == false)
+			sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 2);
+		else
+			sbs->GetElevator(elevator)->CloseDoorsEmergency(number, 2);
 	}
 
 	//check doors

@@ -99,6 +99,7 @@ public:
 	bool IsFalling; //make user fall
 	bool InStairwell; //true if user is in a stairwell
 	bool InElevator; //true if user is in an elevator
+	bool InShaft; //true if user is in a shaft
 	int ElevatorNumber; //number of currently selected elevator
 	bool ElevatorSync; //true if user should move with elevator
 	bool FrameLimiter; //frame limiter toggle

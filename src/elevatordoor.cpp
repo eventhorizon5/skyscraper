@@ -63,9 +63,12 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	ShaftDoorThickness = 0;
 
 	//create object meshes
-	csString buffer;
-	buffer = Number;
-	buffer.Insert(0, "ElevatorDoorL ");
+	csString elevnumber, doornumber, buffer;
+	elevnumber = elev->Number;
+	elevnumber.Trim();
+	doornumber = Number;
+	doornumber.Trim();
+	buffer = "ElevatorDoorL " + elevnumber + ":" + doornumber;
 	buffer.Trim();
 	ElevatorDoorL = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	ElevatorDoorL_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorL->GetMeshObject()->GetFactory());
@@ -74,8 +77,11 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	ElevatorDoorL->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
 	ElevatorDoorL->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
-	buffer = Number;
-	buffer.Insert(0, "ElevatorDoorR ");
+	elevnumber = elev->Number;
+	elevnumber.Trim();
+	doornumber = Number;
+	doornumber.Trim();
+	buffer = "ElevatorDoorR " + elevnumber + ":" + doornumber;
 	buffer.Trim();
 	ElevatorDoorR = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	ElevatorDoorR_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorR->GetMeshObject()->GetFactory());
@@ -222,6 +228,10 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//check if shaft doors are already open
 	if (whichdoors == 3)
 	{
+		//exit if other doors are running (this doesn't yet support multiple shaft door movements)
+		if (DoorIsRunning == true)
+			return;
+
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
@@ -309,6 +319,10 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//check if shaft doors are already closed
 	if (whichdoors == 3)
 	{
+		//exit if other doors are running (this doesn't yet support multiple shaft door movements)
+		if (DoorIsRunning == true)
+			return;
+
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
@@ -496,6 +510,20 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				WhichDoors = 0;
 				DoorIsRunning = false;
 				return;
+			}
+		}
+		
+		if (WhichDoors == 3)
+		{
+			//turn on related floor before opening shaft doors
+			if (sbs->InShaft == true || sbs->InElevator == true)
+			{
+				sbs->GetFloor(ShaftDoorFloor)->Enabled(true);
+				sbs->GetFloor(ShaftDoorFloor)->EnableGroup(true);
+				sbs->EnableSkybox(true);
+				sbs->EnableBuildings(true);
+				sbs->EnableLandscape(true);
+				sbs->EnableExternal(true);
 			}
 		}
 	}
@@ -820,6 +848,13 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			ShaftDoorsOpen[elev->ServicedFloors.Find(ShaftDoorFloor)] = true;
 		else
 			ShaftDoorsOpen[elev->ServicedFloors.Find(ShaftDoorFloor)] = false;
+
+		//turn off related floor
+		if (open == false && (sbs->InShaft == true || sbs->InElevator == true))
+		{
+			sbs->GetFloor(ShaftDoorFloor)->Enabled(false);
+			sbs->GetFloor(ShaftDoorFloor)->EnableGroup(false);
+		}
 	}
 
 	//reset values
