@@ -74,8 +74,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	ElevatorDoorL_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorL->GetMeshObject()->GetFactory());
 	ElevatorDoorL_movable = ElevatorDoorL->GetMovable();
 	ElevatorDoorL->SetZBufMode(CS_ZBUF_USE);
-	ElevatorDoorL->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	ElevatorDoorL->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	ElevatorDoorL->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	//ElevatorDoorL->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	elevnumber = elev->Number;
 	elevnumber.Trim();
@@ -87,8 +87,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	ElevatorDoorR_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorR->GetMeshObject()->GetFactory());
 	ElevatorDoorR_movable = ElevatorDoorR->GetMovable();
 	ElevatorDoorR->SetZBufMode(CS_ZBUF_USE);
-	ElevatorDoorR->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	ElevatorDoorR->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	ElevatorDoorR->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	//ElevatorDoorR->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	//create timer
 	timer = new Timer(this, elev);
@@ -1043,8 +1043,8 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *texture, float tw, float 
 	tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorL[index]->GetMeshObject()->GetFactory());
 	ShaftDoorL_state[index] = tmpstate;
 	ShaftDoorL[index]->SetZBufMode(CS_ZBUF_USE);
-	ShaftDoorL[index]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	ShaftDoorL[index]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	ShaftDoorL[index]->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	//ShaftDoorL[index]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	//door R
 	tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer2.GetData());
@@ -1052,8 +1052,8 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *texture, float tw, float 
 	tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorR[index]->GetMeshObject()->GetFactory());
 	ShaftDoorR_state[index] = tmpstate;
 	ShaftDoorR[index]->SetZBufMode(CS_ZBUF_USE);
-	ShaftDoorR[index]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	ShaftDoorR[index]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	ShaftDoorR[index]->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	//ShaftDoorR[index]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	//reposition meshes
 	ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));

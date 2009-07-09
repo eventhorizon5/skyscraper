@@ -77,8 +77,8 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 		tmpstate = scfQueryInterface<iThingFactoryState> (ShaftArray[i - startfloor]->GetMeshObject()->GetFactory());
 		ShaftArray_state[i - startfloor] = tmpstate;
 		ShaftArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
-		ShaftArray[i - startfloor]->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-		ShaftArray[i - startfloor]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+		ShaftArray[i - startfloor]->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+		//ShaftArray[i - startfloor]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 		EnableArray[i - startfloor] = true;
 	}
 }

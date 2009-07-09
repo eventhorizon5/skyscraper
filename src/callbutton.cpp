@@ -53,11 +53,11 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	CallButton_back_state = scfQueryInterface<iThingFactoryState> (CallButtonBackMesh->GetMeshObject()->GetFactory());
 	CallButton_state = scfQueryInterface<iThingFactoryState> (CallButtonMesh->GetMeshObject()->GetFactory());
 	CallButtonBackMesh->SetZBufMode(CS_ZBUF_USE);
-	CallButtonBackMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	CallButtonBackMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	CallButtonBackMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	//CallButtonBackMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 	CallButtonMesh->SetZBufMode(CS_ZBUF_USE);
-	CallButtonMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	CallButtonMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	CallButtonMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	//CallButtonMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	//set variables
 	floor = floornum;

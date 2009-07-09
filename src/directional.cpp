@@ -56,24 +56,24 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 	DirectionalMeshBack = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	Directional_back_state = scfQueryInterface<iThingFactoryState> (DirectionalMeshBack->GetMeshObject()->GetFactory());
 	DirectionalMeshBack->SetZBufMode(CS_ZBUF_USE);
-	DirectionalMeshBack->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-	DirectionalMeshBack->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+	DirectionalMeshBack->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	//DirectionalMeshBack->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	if (Single == false)
 	{
 		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Up";
 		DirectionalMeshUp = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 		DirectionalMeshUp->SetZBufMode(CS_ZBUF_USE);
-		DirectionalMeshUp->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-		DirectionalMeshUp->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+		DirectionalMeshUp->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+		//DirectionalMeshUp->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 		csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTextureUnlit);
 		DirectionalMeshUp->GetMeshObject()->SetMaterialWrapper(mat);
 
 		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Down";
 		DirectionalMeshDown = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 		DirectionalMeshDown->SetZBufMode(CS_ZBUF_USE);
-		DirectionalMeshDown->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-		DirectionalMeshDown->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
+		DirectionalMeshDown->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+		//DirectionalMeshDown->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 		mat = sbs->engine->GetMaterialList()->FindByName(DownTextureUnlit);
 		DirectionalMeshDown->GetMeshObject()->SetMaterialWrapper(mat);
 	}
