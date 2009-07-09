@@ -15,7 +15,7 @@
 <Textures>
     Load data/brick1.jpg, Brick, 0.269, 0.25
     Load data/windows11h.jpg, MainWindows, 0.05, 1
-    Load data/windows11h_inside.png, MainWindowsInt, 0.05, 1
+    Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     Load data/text13.jpg, Stairs, 0.269, 0.26
     Load data/cinderblocks.jpg, Concrete, 0.25, 0.25

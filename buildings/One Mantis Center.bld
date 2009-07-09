@@ -33,9 +33,9 @@
     Load data/brick1.jpg, Brick, 0.269, 0.25
     Load data/lobbyfront.jpg, LobbyFront, 0.02, 1
     Load data/windows11h.jpg, MainWindows, 0.05, 1
-    Load data/windows11h_inside.png, MainWindowsInt, 0.05, 1
+    Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
     Load data/windows11h.jpg, GlassElevExt, 0.125, 1
-    Load data/windows11h_inside.png, GlassElevInt, 0.125, 1
+    Load data/windows11h_inside.gif, GlassElevInt, 0.125, 1
     Load data/Carpet0002_S.jpg, Carpet1, 0.2, 0.2
     Load data/Carpet0034_S.jpg, Carpet2, 0.2, 0.2
     Load data/symb5.jpg, Wood3, 0.269, 0.25
@@ -89,12 +89,12 @@
     Load data/floorsignresidential.jpg, FloorSignResidential, 1, 1
     Load data/floorsignroof.jpg, FloorSignRoof, 1, 1
     Load data/floorsignskylobby.jpg, FloorSignSkylobby, 1, 1
-    Load data/callbutton.png, ButtonUp, 1, 1
-    Load data/callbutton.png, ButtonDown, 1, -1
-    Load data/darrow_unlit.png, ArrowUp, 1, 1
-    Load data/darrow_unlit.png, ArrowDown, 1, -1
-    Load data/darrow_lit.png, ArrowUp_Lit, 1, 1
-    Load data/darrow_lit.png, ArrowDown_Lit, 1, -1
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
+    Load data/darrow_unlit.gif, ArrowUp, 1, 1
+    Load data/darrow_unlit.gif, ArrowDown, 1, -1
+    Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
+    Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
 
     floor indicator/button pictures
     Load signs/sans/L.jpg, ButtonL, 1, 1

@@ -42,8 +42,8 @@
     Load data/vents1.jpg, VentsInt, 1, 1
     Load data/vents1c.jpg, VentsExt, 1, 1
     Load data/marbl3.jpg, Wall1, 0.269, 0.25
-    Load data/callbutton.png, ButtonUp, 1, 1
-    Load data/callbutton.png, ButtonDown, 1, -1
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
     Load data/floorsign.jpg, FloorSign, 1, 1
     Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
@@ -60,10 +60,10 @@
     Load data/diamond18j.jpg, ElevPanelMain, 1, 1
     Load data/stucco4c.jpg, Stucco4, 0.25, 0.25
     Load data/downtown.jpg, Downtown, 1, 1
-    Load data/darrow_unlit.png, ArrowUp, 1, 1
-    Load data/darrow_unlit.png, ArrowDown, 1, -1
-    Load data/darrow_lit.png, ArrowUp_Lit, 1, 1
-    Load data/darrow_lit.png, ArrowDown_Lit, 1, -1
+    Load data/darrow_unlit.gif, ArrowUp, 1, 1
+    Load data/darrow_unlit.gif, ArrowDown, 1, -1
+    Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
+    Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
 
     #floor indicator/button pictures
     Load signs/sans/PL.jpg, ButtonPL, 1, 1

@@ -43,7 +43,7 @@
     Load data/marb148.jpg, Wall1, 0.269, 0.25
     Load data/lobbyfront.jpg, LobbyFront, 0.022, 1
     Load data/windows11h.jpg, MainWindows, 0.05, 1
-    Load data/windows11h_inside.png, MainWindowsInt, 0.05, 1
+    Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     Load data/symb5.jpg, Wood3, 0.269, 0.25
     Load data/marb047.jpg, Marble4, 0.269, 0.25
@@ -79,8 +79,8 @@
     Load data/bracing1.jpg, VentsInt, 1, 1
     Load data/vents1.jpg, VentsExt, 1, 1
     #Load data/plaque.jpg, Plaque, 1, 1
-    Load data/callbutton.png, ButtonUp, 1, 1
-    Load data/callbutton.png, ButtonDown, 1, -1
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
     Load data/floorsign.jpg, FloorSign, 1, 1
     Load data/floorsignballroom.jpg, FloorSignBallroom, 1, 1
     Load data/floorsignbalcony.jpg, FloorSignBalcony, 1, 1
@@ -97,10 +97,10 @@
     Load data/floorsignskylobby.jpg, FloorSignSkylobby, 1, 1
     Load data/serviceelevdoors.jpg, ServiceElevDoors, 1, 1
     Load data/tritoncenter.jpg, TritonCenterSign, 1, 1
-    Load data/darrow_unlit.png, ArrowUp, 1, 1
-    Load data/darrow_unlit.png, ArrowDown, 1, -1
-    Load data/darrow_lit.png, ArrowUp_Lit, 1, 1
-    Load data/darrow_lit.png, ArrowDown_Lit, 1, -1
+    Load data/darrow_unlit.gif, ArrowUp, 1, 1
+    Load data/darrow_unlit.gif, ArrowDown, 1, -1
+    Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
+    Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
 
     floor indicator/button pictures
     Load signs/sans/L.jpg, ButtonL, 1, 1
