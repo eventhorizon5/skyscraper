@@ -32,14 +32,14 @@
     Load data/diamond18j.jpg, ElevPanelMain, 1, 1
     Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
-    Load data/callbutton_gray.jpg, ButtonUp, 1, 1
-    Load data/callbutton_gray.jpg, ButtonDown, 1, -1
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
     Load data/marbl3.jpg, Wall1, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
-    Load data/darrow_unlit_gray.jpg, ArrowUp, 1, 1
-    Load data/darrow_unlit_gray.jpg, ArrowDown, 1, -1
-    Load data/darrow_lit_gray.jpg, ArrowUp_Lit, 1, 1
-    Load data/darrow_lit_gray.jpg, ArrowDown_Lit, 1, -1
+    Load data/darrow_unlit.gif, ArrowUp, 1, 1
+    Load data/darrow_unlit.gif, ArrowDown, 1, -1
+    Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
+    Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
 
     Load signs/sans/Open.jpg, ButtonOpen, 1, 1
     Load signs/sans/Close.jpg, ButtonClose, 1, 1

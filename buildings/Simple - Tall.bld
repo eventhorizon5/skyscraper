@@ -31,8 +31,8 @@
     Load data/windows11h_inside.gif, ElevPanelMain, 0.2, 1
     Load data/windows11h_inside.gif, ElevCeiling, 2, 2
     Load data/windows11h_inside.gif, ElevFloor, 2, 2
-    Load data/callbutton_gray.jpg, ButtonUp, 1, 1
-    Load data/callbutton_gray.jpg, ButtonDown, 1, -1
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
     Load data/marbl3.jpg, Wall1, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
     Load data/darrow_single.jpg, Arrow, 1, 1
@@ -195,14 +195,11 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = right
     SetAutoSize = true, false
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Back, ElevWall, 0.2, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 0, 0 #back wall
-    TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right, ElevWall, 0.2, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 0, 0 #right wall
     
     #left wall
     WallOrientation = left
-    TextureOverride ElevExt, ElevWall, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left, ElevWall, 0.2, -3.5, -3, -3.5, 3, 8, 8, 0, 0, 0, 0 #left wall
 
     #panels
