@@ -4318,7 +4318,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.2
     ServicedFloors = -1, 137
     AssignedShaft = 14
-    CreateElevator false, -9.166, 42.879, 0
+    CreateElevator false, -9.166, 42.879, -1
 
     #floor
     FloorOrientation = top
