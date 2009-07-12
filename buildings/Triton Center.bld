@@ -79,7 +79,7 @@
     Load data/darrow_unlit.gif, ArrowDown, 1, -1
     Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
     Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
-    
+
     #signs
     Load data/triton_signs/2-14.png, Sign2-14, 1, 1
     Load data/triton_signs/15-26.png, Sign15-26, 1, 1
@@ -248,7 +248,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
 
 <Floors -3 to -8>
     Group = -7 - -3
-    
+
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
@@ -290,12 +290,12 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     DrawWalls = true, false, false, false, false, false
     AddWall Right, ParkingWalls, 0.5, 105, -100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
     AddWall Back, ParkingWalls, 0.5, -105, 100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
-    
+
     #cut for atrium
     if[%floor% = -3] Cut -37, -1, -50, 37, %interfloorheight% + 1, 4, false, true
     if[%floor% = -7] Cut -37, %interfloorheight% + 1, -50, 37, %fullheight% + 1, 4, false, true
     if[%floor% > -7 & %floor% < -3] Cut -37, -1, -50, 37, %fullheight% + 1, 4, false, true
-    
+
     #atrium interfloor covers
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
@@ -305,7 +305,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     DrawWalls = true, false, false, false, false, false
     if[%floor% > -7] AddWall ARight, ParkingWalls, 0.5, 37, -50, 37, 50, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     if[%floor% > -7] AddWall ABack, ParkingWalls, 0.5, -37, 4, 37, 4, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
-    
+
 <EndFloors>
 
 #Lobby
@@ -1600,7 +1600,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     Height = 12
     InterfloorHeight = 2.24
     Group = 141, 142
-    
+
     #Roof Base
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
@@ -1681,7 +1681,7 @@ Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
     #doors
     AddDoor StairsDoor, 0.2, 1, -20, 0, 3.5, 8, 0, 1, 1
     AddDoor StairsDoor, 0.2, 3, 20, 0, 3.5, 8, 0, 1, 1
-    
+
     #door fillers
     DrawWalls = false, true, false, false, false, false
     AddWall FillerWallLeft1, ConnectionWall, 0, -20 - 0.5, -1.75, -20 + 0.5, -1.75, 8, 8, 0, 0, 0, 0, False
@@ -3055,11 +3055,11 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
-    
+
     #floor signs
     AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
-    
+
     #panel
     CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button35, 2, 2, 35, 1, 1
@@ -3867,13 +3867,13 @@ DrawWalls = true, true, false, false, false, false
     CreatePanel ElevPanel, 12, 5, left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, ButtonM, 2, 4, 1, 1, 1
     AddFloorButton 1, ButtonL, 2, 2, 0, 1, 1
-    AddFloorButton 1, ButtonLL1, 3, 3, -1, 1, 1 
-    AddFloorButton 1, ButtonLL2, 4, 3, -2, 1, 1 
-    AddFloorButton 1, ButtonP1, 5, 3, -3, 1, 1 
-    AddFloorButton 1, ButtonP2, 6, 3, -4, 1, 1 
-    AddFloorButton 1, ButtonP3, 7, 3, -5, 1, 1 
-    AddFloorButton 1, ButtonP4, 8, 3, -6, 1, 1 
-    AddFloorButton 1, ButtonP5, 9, 3, -7, 1, 1 
+    AddFloorButton 1, ButtonLL1, 3, 3, -1, 1, 1
+    AddFloorButton 1, ButtonLL2, 4, 3, -2, 1, 1
+    AddFloorButton 1, ButtonP1, 5, 3, -3, 1, 1
+    AddFloorButton 1, ButtonP2, 6, 3, -4, 1, 1
+    AddFloorButton 1, ButtonP3, 7, 3, -5, 1, 1
+    AddFloorButton 1, ButtonP4, 8, 3, -6, 1, 1
+    AddFloorButton 1, ButtonP5, 9, 3, -7, 1, 1
     AddControlButton 1, ButtonOpen, 10, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 10, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 11, 2, cancel, 1, 1
@@ -3956,13 +3956,13 @@ DrawWalls = true, true, false, false, false, false
     CreatePanel ElevPanel, 12, 5, right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, ButtonM, 2, 4, 1, 1, 1
     AddFloorButton 1, ButtonL, 2, 2, 0, 1, 1
-    AddFloorButton 1, ButtonLL1, 3, 3, -1, 1, 1 
-    AddFloorButton 1, ButtonLL2, 4, 3, -2, 1, 1 
-    AddFloorButton 1, ButtonP1, 5, 3, -3, 1, 1 
-    AddFloorButton 1, ButtonP2, 6, 3, -4, 1, 1 
-    AddFloorButton 1, ButtonP3, 7, 3, -5, 1, 1 
-    AddFloorButton 1, ButtonP4, 8, 3, -6, 1, 1 
-    AddFloorButton 1, ButtonP5, 9, 3, -7, 1, 1 
+    AddFloorButton 1, ButtonLL1, 3, 3, -1, 1, 1
+    AddFloorButton 1, ButtonLL2, 4, 3, -2, 1, 1
+    AddFloorButton 1, ButtonP1, 5, 3, -3, 1, 1
+    AddFloorButton 1, ButtonP2, 6, 3, -4, 1, 1
+    AddFloorButton 1, ButtonP3, 7, 3, -5, 1, 1
+    AddFloorButton 1, ButtonP4, 8, 3, -6, 1, 1
+    AddFloorButton 1, ButtonP5, 9, 3, -7, 1, 1
     AddControlButton 1, ButtonOpen, 10, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 10, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 11, 2, cancel, 1, 1
@@ -6288,7 +6288,7 @@ SetAutoSize = false, false
     AddWall Shaft3Sign, SignOffices15-26, 0, 27.67 - 1, -13.5 - 0.33 - 2, 27.67 + 1, -13.5 - 0.33 - 2, 1.2, 1.2, 8.8, 8.8, 0, 0, False
     AddWall Shaft3Sign2, SignOffices15-26, 0, 27.67 - 1, -13.5 - 0.33 - 2, 27.67 - 1, -13.5 - 0.33, 1.2, 1.2, 8.8, 8.8, 0, 0, False
     AddFloor Shaft3SignBottom, ElevExtPanels2, 0, 27.67 - 1, -13.5 - 0.33 - 2, 27.67 + 1, -13.5 - 0.33, 8.8, 8.8, 0, 0, false
-    
+
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft1Sign3, SignOffices27-37, 0, -1, -13.5 - 0.33, 1, -13.5 - 0.33, 1.2, 1.2, 8.8, 8.8, 0, 0, False
     AddWall Shaft1Sign4, SignOffices27-37, 0, 1, -13.5 - 0.33 - 2, 1, -13.5 - 0.33, 1.2, 1.2, 8.8, 8.8, 0, 0, False
@@ -6373,7 +6373,7 @@ DrawWalls = true, true, false, false, false, false
 
 SetAutoSize = true, true
 
-    
+
 
 #North Stairwell A
 CreateStairwell 1, -46.67, -3.708, -8, 39
@@ -7158,8 +7158,66 @@ CutStairwell 7, -9.4 - 3, -15, -9.4 + 3, -2.5, 5, 5
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
     AddStairsWall 7, Right, Brick, 0, -9.4 + 3, -15, -9.4 + 3, -2.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 7, Back, Brick, 0, -9.4 - 3, -2.5, -9.4 + 3, -2.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0   
+    AddStairsWall 7, Back, Brick, 0, -9.4 - 3, -2.5, -9.4 + 3, -2.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
+
+#other buildings
+
+#Sears Tower
+
+#CC to 49
+SetAutoSize = true, false
+WallOrientation = left
+AddWall Buildings, Front, MainWindows, 0, 1720 + -112.5, -1840 + -112.5, 1720 + 112.5, -1840 + -112.5, 668, 668, 0, 0, 0, 50
+AddWall Buildings, Left, MainWindows, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
+WallOrientation = right
+AddWall Buildings, Back, MainWindows, 0, 1720 + -112.5, -1840 + 112.5, 1720 + 112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
+AddWall Buildings, Right, MainWindows, 0, 1720 + 112.5, -1840 + -112.5, 1720 + 112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
+
+#50 to to 65
+WallOrientation = left
+#front
+AddWall Buildings, Front1, MainWindows, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -112.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Front2, MainWindows, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -112.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Front3, MainWindows, 0, 1720 + -112.5, -1840 + 37.5, 1720 + -37.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
+#left
+AddWall Buildings, Left1, MainWindows, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -37.5, -1840 + -112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Left2, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Left3, MainWindows, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
+#back
+AddWall Buildings, Back1, MainWindows, 0, 1720 + 37.5, -1840 + -37.5, 1720 + 112.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Back2, MainWindows, 0, 1720 + 112.5, -1840 + -37.5, 1720 + 112.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Back3, MainWindows, 0, 1720 + 112.5, -1840 + 37.5, 1720 + 112.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+#right
+AddWall Buildings, Right1, MainWindows, 0, 1720 + -37.5, -1840 + 37.5, 1720 + -37.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Right2, MainWindows, 0, 1720 + -37.5, -1840 + 112.5, 1720 + 37.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Right3, MainWindows, 0, 1720 + 37.5, -1840 + 112.5, 1720 + 112.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+
+#66 to 89
+WallOrientation = left
+#front
+AddWall Buildings, Front1, MainWindows, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Front2, MainWindows, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Front3, MainWindows, 0, 1720 + -112.5, -1840 + 37.5, 1720 + -37.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
+#back
+AddWall Buildings, Back1, MainWindows, 0, 1720 + 37.5, -1840 + -37.5, 1720 + 112.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Back2, MainWindows, 0, 1720 + 112.5, -1840 + -37.5, 1720 + 112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Back3, MainWindows, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
+#left
+AddWall Buildings, Left1, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Left2, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Left3, MainWindows, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+#right
+AddWall Buildings, Right1, MainWindows, 0, 1720 + -37.5, -1840 + 37.5, 1720 + -37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Right2, MainWindows, 0, 1720 + -37.5, -1840 + 112.5, 1720 + 37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Right3, MainWindows, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
+
+#90 to 108
+WallOrientation = left
+AddWall Buildings, Front, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
+AddWall Buildings, Left, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 280, 280, 1174, 1174, 0, 19
+AddWall Buildings, Back, MainWindows, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
+AddWall Buildings, Right, MainWindows, 0, 1720 + -37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
