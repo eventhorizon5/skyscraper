@@ -1,0 +1,222 @@
+# $Id$
+	
+#MyBuilding
+
+<Globals>
+    Name = My Building
+    Designer = Me
+    HorizScale = 1
+    CameraFloor = 0
+    CameraPosition = 0, -60
+    CameraRotation = 0, 0, 0
+    Sky = noon
+<EndGlobals>
+
+<Textures>
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/windows11h.jpg, MainWindows, 0.05, 1
+    Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
+    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
+    Load data/cinderblocks.jpg, StairsWall, 0.25, 1
+    Load data/cutston.jpg, InterExt, 0.269, 0.25
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/metal1.jpg, ElevExt, 0.25, 0.25
+    Load data/text16.jpg, ElevDoors, 1, 1
+    Load data/panel-back2.jpg, ElevExtPanels, 1, 1
+    Load data/marb148.jpg, ElevPanel, 1, 1
+    Load data/diamond18j.jpg, ElevWall, 1, 1
+    Load data/diamond18j.jpg, ElevPanelMain, 1, 1
+    Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
+    Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
+    Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/servicedoor2.jpg, StairsDoor, 1, 1
+    Load data/darrow_unlit.gif, ArrowUp, 1, 1
+    Load data/darrow_unlit.gif, ArrowDown, 1, -1
+    Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
+    Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
+
+    Load signs/sans/Open.jpg, ButtonOpen, 1, 1
+    Load signs/sans/Close.jpg, ButtonClose, 1, 1
+    Load signs/sans/Stop.jpg, ButtonStop, 1, 1
+    Load signs/sans/Alarm.jpg, ButtonAlarm, 1, 1
+    Load signs/sans/CallCancel.jpg, ButtonCancel, 1, 1
+    LoadRange 1, 10, signs/sans/%number%.jpg, Button%number%, 1, 1
+<EndTextures>
+
+# Ground
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
+
+<Floor 0>
+    ID = 1
+    Name = Floor %floor%
+    Type = Office
+    Height = 10
+    InterfloorHeight = 2.24
+    Altitude = -2.24
+<EndFloor>
+
+<Floors 0 to 9>
+    ID = %floor% + 1
+    Name = Floor (%floor% + 1)
+    Type = Office
+    Height = 10
+    InterfloorHeight = 2.24
+    
+    #Floor
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Carpet1, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, False
+
+    #Ceiling
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, 0, 0, False
+
+    #External windows
+    SetAutoSize = true, false
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right, MainWindows, 0, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Back, MainWindows, 0, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Right, InterExt, 0, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Back, InterExt, 0, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
+
+    #Internal windows
+    SetAutoSize = true, false
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -10, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, MainWindowsInt, 0, 20, -20, 20, 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWindowsInt, 0, 20, 20, -20, 20, %height%, %height%, 0, 0, 0, 0, False
+    SetAutoSize = true, true
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -20, -20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, Brick, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, Brick, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
+
+<Floor 10>
+    ID = R
+    Name = Roof
+    Type = Roof
+    Height = 10
+    InterfloorHeight = 2.24
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Roof, Brick, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, True #roof
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
+
+#Shaft 1
+AddShaft 1, 2, 0, 6, 0, 9
+ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
+ShaftShowFloors 1 = 0 - 9
+ShaftShowOutside 1 = 0 - 9
+ShowFullShaft 1 = true
+
+
+<EndFloors>
+
+#reset drawwalls
+DrawWalls = true, true, false, false, false, false
+
+<Elevator 1>
+    #standard elevator; 7 feet wide, 6 feet deep
+    Speed = 6
+    Acceleration = 0.75
+    Deceleration = 0.75
+    AccelJerk = 0.75
+    DecelJerk = 0.75
+    ServicedFloors = 0 - 9
+    AssignedShaft = 1
+    CreateElevator false, 0, 5.706, 0
+
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor, 0.2, -3.5, -3, 3.5, 3, 0, 0, 0, 0
+    
+
+    
+
+
+    #panels
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 0, 0 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 0, 0 #right panel
+    
+    #doors
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    AddDoors 1, MainWindowsInt, 0.2, 0, -3.01, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, MainWindowsInt, 0.2, 0, -3.301, 0, 0 #shaft doors
+    WallOrientation = left
+    SetAutoSize = true, true
+
+    #directional indicator
+    AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 6, front, 0.5, 1, true, 0, 0
+    
+    #panel
+    CreatePanel ElevPanel, 15, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button10, 2, 3, 9, 1, 1
+    AddFloorButton 1, Button9, 3, 3, 8, 1, 1
+    AddFloorButton 1, Button8, 4, 3, 7, 1, 1
+    AddFloorButton 1, Button7, 5, 3, 6, 1, 1
+    AddFloorButton 1, Button6, 6, 3, 5, 1, 1
+    AddFloorButton 1, Button5, 7, 3, 4, 1, 1
+    AddFloorButton 1, Button4, 8, 3, 3, 1, 1
+    AddFloorButton 1, Button3, 9, 3, 2, 1, 1
+    AddFloorButton 1, Button2, 10, 3, 1, 1, 1
+    AddFloorButton 1, Button1, 11, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 13, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 13, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 14, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 14, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 14, 4, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
+   
+<EndElevator>
+
+
+    
+<EndFloors>
+
+<Floors 0 to 9>
+    CallButtonElevators = 1
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 3, 6 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+<EndFloors>

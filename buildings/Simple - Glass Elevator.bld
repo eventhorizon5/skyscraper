@@ -1,0 +1,567 @@
+#Simple building - High-Rise version with an atrium and a glass elevator.
+#Modified and (c) by Conbot
+<Globals>
+    Name = My Building
+    Designer = Me
+    HorizScale = 1
+    CameraFloor = 0
+    CameraPosition = 0, -60
+    CameraRotation = 0, 0, 0
+    Sky = noon
+<EndGlobals>
+
+<Textures>
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/windows11h.jpg, MainWindows, 0.05, 1
+    Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
+    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
+    Load data/cinderblocks.jpg, StairsWall, 0.25, 1
+    Load data/cutston.jpg, InterExt, 0.269, 0.25
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/metal1.jpg, ElevExt, 0.25, 0.25
+    Load data/windows11h_inside.gif, ElevDoors, 0.1, 1
+    Load data/panel-back2.jpg, ElevExtPanels, 1, 1
+    Load data/marb148.jpg, Marble44, 0.269, 0.25
+    Load data/gray.jpg, ElevPanel, 1, 1
+    Load data/windows11h_inside.gif, ElevWall, 0.269, 0.25
+    Load data/gray.jpg, ElevPanelMain, 0.2, 1
+    Load data/windows11h_inside.gif, ElevCeiling, 2, 2
+    Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
+    Load data/windows11h_inside.gif, MainWindowsSP, 0.269, 0.25
+    Load data/Carpet0013_S.jpg, ElevFloor, 0.2, 0.2
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
+    Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/servicedoor3.jpg, StairsDoor, 1, 1
+    Load data/darrow_single.jpg, Arrow, 1, 1
+    Load data/darrow_single_otis_upgreen.jpg, ArrowUp, 1, 1
+    Load data/darrow_single_otis_downred.jpg, ArrowDown, 1, -1
+    Load data/marb047.jpg, Marble4, 0.269, 0.25
+    Load data/floorsign.jpg, FloorSign, 1, 1
+
+    Load signs/sans/Open.jpg, ButtonOpen, 1, 1
+    Load signs/sans/L.jpg, ButtonL, 1, 1
+    Load signs/sans/Close.jpg, ButtonClose, 1, 1
+    Load signs/sans/Stop.jpg, ButtonStop, 1, 1
+    Load signs/sans/Alarm.jpg, ButtonAlarm, 1, 1
+    Load signs/sans/CallCancel.jpg, ButtonCancel, 1, 1
+    LoadRange 1, 20, signs/sans/%number%.jpg, Button%number%, 1, 1
+    Load signs/sans/L.jpg, ButtonL, 1, 1
+    Load signs/sans/EZ.jpg, ButtonEZ, 1, 1
+<EndTextures>
+
+# Ground
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
+
+<Floor 0>
+    ID = L
+    Name = Lobby
+    Type = Lobby
+    Height = 10
+    InterfloorHeight = 2.24
+    Altitude = -2.24
+    Group = 1 - 19
+
+    #Floor
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Marble4, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, False
+
+    #Ceiling
+    #DrawWalls = true, false, false, false, false, false
+    #AddFloor Ceiling, Marble4, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, 0, 0, False
+
+    #External windows
+    SetAutoSize = true, false
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right, MainWindows, 0, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Back, MainWindows, 0, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Right, InterExt, 0, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Back, InterExt, 0, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
+
+    #Internal windows
+    SetAutoSize = true, false
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -10, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, MainWindowsInt, 0, 20, -20, 20, 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWindowsInt, 0, 20, 20, -20, 20, %height%, %height%, 0, 0, 0, 0, False
+    SetAutoSize = true, true
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -20, -20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, Brick, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, Brick, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    
+    DrawWalls = true, true, false, false, false, false
+
+<EndFloor>
+
+<Floors 1 to 9>
+    ID = %floor%
+    Name = Floor (%floor% - 1)
+    Type = Office
+    Height = 10
+    InterfloorHeight = 2.24
+    Group = 0 - 19
+    
+    #Floor
+    #DrawWalls = false, true, false, false, false, false
+    #AddFloor Floor, Carpet1, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, False
+
+    #Ceiling
+    #DrawWalls = true, false, false, false, false, false
+    #AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, 0, 0, False
+
+    #External windows
+    SetAutoSize = true, false
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right, MainWindows, 0, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Back, MainWindows, 0, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Right, InterExt, 0, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Back, InterExt, 0, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
+
+    #Internal windows
+    SetAutoSize = true, false
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -10, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, MainWindowsInt, 0, 20, -20, 20, 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWindowsInt, 0, 20, 20, -20, 20, %height%, %height%, 0, 0, 0, 0, False
+    SetAutoSize = true, true
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, false, false, false, false, false
+    #AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = false, false, false, false, false, false
+    #AddInterfloorFloor ITop, Brick, 0.5, -20, -20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, MainWindowsInt, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, MainWindowsInt, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, MainWindowsInt, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, MainWindowsInt, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
+
+<Floor 9>
+    #Ceiling
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, 0, 0, False
+<EndFloor>
+
+<Floors 10 to 18>
+    ID = %floor% + 1
+    Name = Floor (%floor% + 1)
+    Type = Office
+    Height = 10
+    InterfloorHeight = 2.24
+    Group = 0 - 19
+    
+    #Floor
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Carpet1, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, False
+
+    #Ceiling
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, 0, 0, False
+
+    #External windows
+    SetAutoSize = true, false
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right, MainWindows, 0, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Back, MainWindows, 0, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Right, InterExt, 0, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Back, InterExt, 0, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
+
+    #Internal windows
+    SetAutoSize = true, false
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -10, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, MainWindowsInt, 0, 20, -20, 20, 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWindowsInt, 0, 20, 20, -20, 20, %height%, %height%, 0, 0, 0, 0, False
+    SetAutoSize = true, true
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -20, -20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, Brick, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, Brick, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
+
+<Floor 19>
+    ID = %floor% + 1
+    Name = Floor (%floor% + 1)
+    Type = Office
+    Height = 20
+    InterfloorHeight = 2.24
+    Group = 0 - 19
+    
+    #Floor
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Marble4, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, False
+
+    #Ceiling
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Marble4, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, 0, 0, False
+
+    #External windows
+    SetAutoSize = true, false
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% ! 0] AddWall Front, MainWindows, 0, -20, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = 0] AddWall Front, MainWindows, 0, -15, -20, 20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Left, MainWindows, 0, -20, 20, -20, -20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Front, InterExt, 0, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Left, InterExt, 0, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right, MainWindows, 0, 20, -20, 20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Back, MainWindows, 0, 20, 20, -20, 20, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% ! 0] AddWall Right, InterExt, 0, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% ! 0] AddWall Back, InterExt, 0, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
+
+    #Internal windows
+    SetAutoSize = true, false
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 0] AddWall Front, MainWindowsInt, 0, -10, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% ! 0] AddWall Front, MainWindowsInt, 0, -20, -20, 20, -20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWindowsInt, 0, -20, 20, -20, -20, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, MainWindowsInt, 0, 20, -20, 20, 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, MainWindowsInt, 0, 20, 20, -20, 20, %height%, %height%, 0, 0, 0, 0, False
+    SetAutoSize = true, true
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.5, -20, -20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, Brick, 0.5, -20, -20, 20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -20, 20, -20, -20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, Brick, 0.5, 20, -20, 20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, 20, 20, -20, 20, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
+
+<Floor 20>
+    ID = R
+    Name = Roof
+    Type = Roof
+    Height = 10
+    InterfloorHeight = 2.24
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Roof, Brick, 0.5, -20, -20, 20, 20, 0, 0, 0, 0, True #roof
+    DrawWalls = true, true, false, false, false, false
+<EndFloor>
+
+#Shaft 1
+AddShaft 1, 2, 0, 6, 0, 19
+ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
+ShowFullShaft 1 = true
+ShaftShowFloors 1 = 0 - 19
+ShaftShowOutside 1 = 0 - 19
+
+<Floors 0 to 19>
+	FloorOrientation = top
+	DrawWalls = true, false, false, false, false, false
+	if[%floor% = 19] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4, -4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0
+	DrawWalls = true, true, false, false, false, false
+	WallOrientation = left
+	AddShaftWall 1, Shaft1Left, MainWindowsSP, 0.33, -4, -4.125, -4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Front, MainWindowsSP, 0.33, -4, -4.125, 4, -4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+	WallOrientation = right
+	AddShaftWall 1, Shaft1Right, MainWindowsSP, 0.33, 4, -4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Back, MainWindowsSP, 0.33, -4, 4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+	
+	WallOrientation = right
+	DrawWalls = true, false, false, false, false, false
+	AddWall Shaft1FrontE, MainWindowsSP, 0.33, -4 - 0.33, -4.125 + 6, 4 + 0.33, -4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+	WallOrientation = left
+	DrawWalls = false, true, false, false, false, false
+        AddWall Shaft1LeftE, MainWindowsSP, 0.33, -4, -4.125 + 6 - 0.33, -4, 4.125 + 6 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1RightE, MainWindowsSP, 0.33, 4, -4.125 + 6 - 0.33, 4, 4.125 + 6 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1BackE, MainWindowsSP, 0.33, -4 - 0.33, 4.125 + 6, 4 + 0.33, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+#reset drawwalls
+DrawWalls = true, true, false, false, false, false
+
+<Elevator 1>
+    #standard elevator; 7 feet wide, 6 feet deep
+    Speed = 20
+    Acceleration = 0.25
+    Deceleration = 0.25
+    AccelJerk = 0.35
+    DecelJerk = 0.35
+    ServicedFloors = 0, 10 - 19
+    FloorSkipText = EZ
+    AssignedShaft = 1
+    CreateElevator false, 0, 5.706, 0
+    OpenSpeed 1 = 0.75
+
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    SetAutoSize = false, false
+    AddFloor Floor, ElevFloor, 0.2, -3.5, -3, 3.5, 3, 0, 0, 0, 0
+    
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    SetAutoSize = false, false
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.5, -3, 3.5, 3, 8, 8, 0, 0 #ceiling
+    
+    #back and right walls
+    WallOrientation = right
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
+    AddWall Back, ElevWall, 0.2, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 0, 0 #back wall
+    AddWall Right, ElevWall, 0.2, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 0, 0 #right wall
+    
+    #left wall
+    WallOrientation = left
+    TextureOverride ElevExt, ElevWall, ElevExt, ElevExt, ElevExt, ElevEx
+    AddWall Left, ElevWall, 0.2, -3.5, -3, -3.5, 3, 8, 8, 0, 0, 0, 0 #left wall
+
+    #panels
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 0, 0 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 0, 0 #right panel
+    SetAutoSize = true, false
+    
+    #doors
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    AddDoors 1, ElevDoors, 0.2, 0, -3.01, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.301, 0, 0 #shaft doors
+    WallOrientation = left
+    SetAutoSize = true, true
+
+    AddFloorSigns true, left, 3.5 / 2 - 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns true, right,-3.5 / 2 + 0.01,  -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
+
+    #directional indicator
+    AddDirectionalIndicators true, true, true, ElevExtPanels, Arrow, ArrowUp, Arrow, ArrowDown, -3, -4.162, 6, front, 0.5, 0.5, true, 0, 0
+    
+    #right panel
+    CreatePanel ElevPanel, 14, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button20, 3, 3, 19, 1, 1
+    AddFloorButton 1, Button19, 4, 4, 18, 1, 1
+    AddFloorButton 1, Button18, 4, 3, 17, 1, 1
+    AddFloorButton 1, Button17, 4, 2, 16, 1, 1
+    AddFloorButton 1, Button16, 5, 4, 15, 1, 1
+    AddFloorButton 1, Button15, 5, 3, 14, 1, 1
+    AddFloorButton 1, Button14, 5, 2, 13, 1, 1
+    AddFloorButton 1, Button13, 6, 4, 12, 1, 1
+    AddFloorButton 1, Button12, 6, 3, 11, 1, 1
+    AddFloorButton 1, Button11, 6, 2, 10, 1, 1
+    AddFloorButton 1, ButtonL, 7, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 10, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 10, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 11, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 11, 4, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 10, 3, alarm, 1, 1
+    AddControlButton 1, ButtonOpen, 1, 1, open, 1, 1
+    AddControlButton 1, ButtonClose, 1, 2, close, 1, 1
+
+    #left panel
+    CreatePanel ElevPanel, 14, 5, back, 1.75 + 0.875 - 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 2, Button20, 3, 3, 19, 1, 1
+    AddFloorButton 2, Button19, 4, 4, 18, 1, 1
+    AddFloorButton 2, Button18, 4, 3, 17, 1, 1
+    AddFloorButton 2, Button17, 4, 2, 16, 1, 1
+    AddFloorButton 2, Button16, 5, 4, 15, 1, 1
+    AddFloorButton 2, Button15, 5, 3, 14, 1, 1
+    AddFloorButton 2, Button14, 5, 2, 13, 1, 1
+    AddFloorButton 2, Button13, 6, 4, 12, 1, 1
+    AddFloorButton 2, Button12, 6, 3, 11, 1, 1
+    AddFloorButton 2, Button11, 6, 2, 10, 1, 1
+    AddFloorButton 2, ButtonL, 7, 3, 0, 1, 1
+    AddControlButton 2, ButtonOpen, 10, 2, open, 1, 1
+    AddControlButton 2, ButtonClose, 10, 4, close, 1, 1
+    AddControlButton 2, ButtonCancel, 11, 2, cancel, 1, 1
+    AddControlButton 2, ButtonStop, 11, 4, stop, 1, 1
+    AddControlButton 2, ButtonAlarm, 10, 3, alarm, 1, 1
+    AddControlButton 2, ButtonOpen, 1, 4, open, 1, 1
+    AddControlButton 2, ButtonClose, 1, 5, close, 1, 1
+
+
+
+    #Floor Indicator
+    AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
+    AddFloorIndicator back, 1.75 + 0.875 - 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
+   
+<EndElevator>
+
+#stairs 1
+CreateStairwell 1, 10, 15, 0, 19
+CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
+
+#Stairs tutorial
+<Floors 0 to 19>
+    #More info on stairs specifics at http://en.wikipedia.org/wiki/Stairwell
+    #maximum riser height allowed in real-world settings is 8.25 inches (0.6875 feet)
+    #minimum tread length allowed in real-world settings is 9 inches (0.75 feet)
+    
+    #first get the height of each riser.  More info on stairs specifics at http://en.wikipedia.org/wiki/Stairwell
+    #this takes the total height of a single staircase level (which is the height of the floor plus the above floor's interfloor height.
+    #then divide that value by the total number of stairs you're going to be using.  Make sure that the value it comes up with is not
+    #over the riser height limit (you can have it over the limit in Skyscraper, but it won't be realistic)
+    #So, in this example, I'm using 20 total stairs, which is 10 on each side.
+    
+    Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
+    
+    #now add the stairs themselves.  The parameters are explained in the design guide, but basically the lower stairs in this example
+    #start on the left (bottom) and end on the right (top), and so they face left.  The upper stairs are the opposite, so they face right.
+    #the important part of this is the tread size.  In this, it's specified as "10 / 9", since there's 10 total steps in each,
+    #but like the design guide says, the top tread is not counted, since the top tread is the landing (specified later), and the staircase.
+    #to calculate the height and length of the staircase (according to the design guide): the height is the number of stairs times the riser size
+    #(which would be 10 * %1%).  The length is the number of stairs minus one, times the tread size - in this example it would be 9 * (10 / 9) which
+    #is 10.
+    
+    if[%floor% < 19] AddStairs 1, StairsLower, Stairs, left, 0, -1.75, 3.5, %1%, 10 / 9, 10, 0, 0, 0
+    if[%floor% < 19] AddStairs 1, StairsUpper, Stairs, right, 0, 1.75, 3.5, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    FloorOrientation = top
+    
+    #For the landings, you need to know where the stairs start and end (the positions).  Since these stairs are located/centered at X position 0, you
+    #can find the left and right sides by taking the staircase length and dividing by 2.  In this example the stairs have a width of 10, and so it reaches
+    #5 feet in each direction (-5 to 5).  So the lower landing would reach from the left side of the staircase (-8.5) to the left side of the stairs (-5),
+    #and the upper landing would be the opposite (go from the stairs top, 5, to the right side of the staircase, 8.5).
+    
+    if[%floor% > 0] AddStairsFloor 1, LandingLower, Marble4, 0.5, -8.5, -3.5, -5, 3.5, 0, 0, 1, 1
+    if[%floor% = 0] AddStairsFloor 1, LandingLower, Marble4, 0.5, -8.5, -3.5, 8.5, 3.5, 0, 0, 1, 1
+    if[%floor% < 19] AddStairsFloor 1, LandingUpper, Marble4, 0.5, 5, -3.5, 8.5, 3.5, %1% * 10, %1% * 10, 1, 1
+
+    #the landing covers simply cover the portion of the landing that isn't covered up by the stairs.  You can see this cover if you're underneath a staircase,
+    #and it's the small wall piece just below it (fills in the gap between the lower floor's ceiling, and the landing above it).  In this example, the
+    #lower landing would need a cover going from Z values -3.5 to 0 (center), since the stairs in that section go from 0 to 3.5.  The upper landing is
+    #the opposite (0 to 3.5).
+    
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 1, LandingLowerCover, Marble4, 0.1, -5, -3.5, -5, 0, 0.5, 0.5, -0.5, -0.5, 0, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = left
+    if[%floor% < 19] AddStairsWall 1, LandingUpperCover, Marble4, 0.1, 5, 0, 5, 3.5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    DrawWalls = true, true, false, false, false, false
+    
+    #the stairs walls are simply the walls inside the stairwell
+    
+    SetAutoSize = true, false
+    WallOrientation = right
+    AddStairsWall 1, LeftWall, MainWindowsInt, 0.3, -8.5, -3.5 - 0.3, -8.5, 3.5 + 0.3, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    AddStairsWall 1, FrontWall, MainWindowsInt, 0.3, -8.5 - 0.3, -3.5, 8.5 + 0.3, -3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    WallOrientation = left
+    AddStairsWall 1, BackWall, MainWindowsInt, 0.3, -8.5 - 0.3, 3.5, 8.5 + 0.3, 3.5, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    AddStairsWall 1, RightWall, MainWindowsInt, 0.3, 8.5, -3.5 - 0.3, 8.5, 3.5 + 0.3, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 3
+    SetAutoSize = true, true
+    
+    if[%floor% = 0] AddStairsDoor 1, StairsDoor, 0.2, 1, -8.5, 0, 3.5, 8, 0, 1, 1
+    if[%floor% > 9] AddStairsDoor 1, StairsDoor, 0.2, 1, -8.5, 0, 3.5, 8, 0, 1, 1
+
+    SetAutoSize = false, false
+    DrawWalls = false, true, false, false, false, false
+
+
+    #Stairwell Signage
+    if[%floor% = 0] AddStairsWall 1, SignTop, ButtonL, 0, -8.5 + 0.05, -3, -8.5 + 0.05, -2, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% ! 0 & %floor% < 10] AddStairsWall 1, SignTop, Button(%floor% + 1), 0, -8.5 + 0.05, -0.5, -8.5 + 0.05, 0.5, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% > 9] AddStairsWall 1, SignTop, Button(%floor% + 1), 0, -8.5 + 0.05, 2, -8.5 + 0.05, 3, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% > 9] AddStairsWall 1, SignTop, Button(%floor% + 1), 0, -8.5 + 0.05, -3, -8.5 + 0.05, -2, 0.75, 0.75, 4.25, 4.25, 1, 1
+
+<EndFloors>
+
+<Floor 0>
+    CallButtonElevators = 1
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 3, 6 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+<EndFloor>
+<Floors 10 to 19>
+    CallButtonElevators = 1
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 3, 6 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+<EndFloors>
