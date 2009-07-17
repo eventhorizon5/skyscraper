@@ -57,7 +57,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	quick_close = false;
 	OpenSound = "elevatoropen.wav";
 	CloseSound = "elevatorclose.wav";
-	ChimeSound = "chime1.wav";
+	UpChimeSound = "chime1.wav";
+	DownChimeSound = "chime1.wav";
 	doors_stopped = false;
 	IsEnabled = true;
 	ShaftDoorThickness = 0;
@@ -880,7 +881,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	DoorIsRunning = false;
 }
 
-int ElevatorDoor::AddDoors(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+int ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator origin)
 	//if direction is false, doors are on the left/right side; otherwise front/back
@@ -926,8 +927,8 @@ int ElevatorDoor::AddDoors(const char *texture, float thickness, float CenterX, 
 	//create doors
 	sbs->DrawWalls(true, true, true, true, true, true);
 	sbs->ReverseExtents(false, false, false);
-	int firstidx = sbs->AddWallMain(ElevatorDoorL_state, "Door", texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
-	sbs->AddWallMain(ElevatorDoorR_state, "Door", texture, thickness, x3, z3, x4, z4, height, height, 0, 0, tw, th);
+	int firstidx = sbs->AddWallMain(ElevatorDoorL_state, "Door", lefttexture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
+	sbs->AddWallMain(ElevatorDoorR_state, "Door", righttexture, thickness, x3, z3, x4, z4, height, height, 0, 0, tw, th);
 	//create connection pieces
 	sbs->AddWallMain(elev->Elevator_state, "DoorF1", "Connection", thickness, x1, z1, x4, z4, 1, 1, -1.001, -1.001, 0, 0);
 	sbs->AddWallMain(elev->Elevator_state, "DoorF2", "Connection", thickness, x1, z1, x4, z4, 1, 1, height + 0.001, height + 0.001, 0, 0);
@@ -938,7 +939,7 @@ int ElevatorDoor::AddDoors(const char *texture, float thickness, float CenterX, 
 	return firstidx;
 }
 
-bool ElevatorDoor::AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th)
+bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
@@ -950,13 +951,13 @@ bool ElevatorDoor::AddShaftDoors(const char *texture, float thickness, float Cen
 	//create doors
 	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
 	{
-		AddShaftDoor(elev->ServicedFloors[i], texture, tw, th);
+		AddShaftDoor(elev->ServicedFloors[i], lefttexture, righttexture, tw, th);
 	}
 
 	return true;
 }
 
-bool ElevatorDoor::AddShaftDoor(int floor, const char *texture, float tw, float th)
+bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th)
 {
 	//adds a single elevator shaft door, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1062,8 +1063,8 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *texture, float tw, float 
 	ShaftDoorR[index]->GetMovable()->UpdateMove();
 
 	//create doors
-	sbs->AddWallMain(ShaftDoorL_state[index], "Door", texture, ShaftDoorThickness, x1, z1, x2, z2, DoorHeight, DoorHeight, base2, base2, tw, th);
-	sbs->AddWallMain(ShaftDoorR_state[index], "Door", texture, ShaftDoorThickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base2, base2, tw, th);
+	sbs->AddWallMain(ShaftDoorL_state[index], "Door", lefttexture, ShaftDoorThickness, x1, z1, x2, z2, DoorHeight, DoorHeight, base2, base2, tw, th);
+	sbs->AddWallMain(ShaftDoorR_state[index], "Door", righttexture, ShaftDoorThickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base2, base2, tw, th);
 
 	//create connection pieces
 	float xoffset = elev->Origin.x - shaft->origin.x;
@@ -1191,10 +1192,13 @@ void ElevatorDoor::Timer::Notify()
 		door->CloseDoors();
 }
 
-void ElevatorDoor::Chime(int floor)
+void ElevatorDoor::Chime(int floor, bool direction)
 {
 	//play chime sound on specified floor
-	chime->Load(ChimeSound);
+	if (direction == false)
+		chime->Load(DownChimeSound);
+	else
+		chime->Load(UpChimeSound);
 	chime->Loop(false);
 	chime->SetPositionY(sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + DoorHeight);
 	chime->Play();

@@ -45,7 +45,8 @@ public:
 	int DoorTimer; //door autoclose timer value, in milliseconds
 	csString OpenSound; //door open sound
 	csString CloseSound; //door close sound
-	csString ChimeSound; //elevator chime sound
+	csString UpChimeSound; //elevator up chime sound
+	csString DownChimeSound; //elevator down chime sound
 	int OpenDoor; //1=open doors, -1=close doors
 	bool IsEnabled; //are doors enabled?
 	float ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command)
@@ -64,10 +65,10 @@ public:
 	float GetCurrentDoorSpeed();
 	void ResetDoorTimer();
 	bool DoorsStopped();
-	int AddDoors(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
-	bool AddShaftDoors(const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
-	bool AddShaftDoor(int floor, const char *texture, float tw, float th);
-	void Chime(int floor);
+	int AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
+	bool AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th);
+	bool AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th);
+	void Chime(int floor, bool direction);
 	void Loop();
 	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void MoveSound(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);

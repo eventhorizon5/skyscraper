@@ -217,7 +217,6 @@ void ButtonPanel::Press(int index)
 	{
 		int floor = atoi(name.GetData());
 		int elev_floor = sbs->GetElevator(elevator)->GetFloor();
-		//int elev_dir = sbs->GetElevator(elevator)->Direction;
 
 		//elevator is above floor
 		if (elev_floor > floor)
@@ -233,7 +232,10 @@ void ButtonPanel::Press(int index)
 			if (sbs->GetElevator(elevator)->Direction == 0)
 			{
 				//stopped - play chime and open doors
-				sbs->GetElevator(elevator)->Chime(0, floor);
+				if (sbs->GetElevator(elevator)->QueuePositionDirection == -1 || sbs->GetElevator(elevator)->LastQueueDirection == -1)
+					sbs->GetElevator(elevator)->Chime(0, floor, false);
+				else if (sbs->GetElevator(elevator)->QueuePositionDirection == 1 || sbs->GetElevator(elevator)->LastQueueDirection == 1)
+					sbs->GetElevator(elevator)->Chime(0, floor, true);
 				sbs->GetElevator(elevator)->OpenDoors();
 			}
 			else if (sbs->GetElevator(elevator)->Direction == -1)

@@ -971,7 +971,12 @@ void Elevator::MoveElevatorToFloor()
 	{
 		//play chime sound
 		if (InServiceMode() == false)
-			Chime(0, GotoFloor);
+		{
+			if (Direction == -1)
+				Chime(0, GotoFloor, false);
+			else
+				Chime(0, GotoFloor, true);
+		}
 
 		//store error offset value
 		if (Direction == -1)
@@ -1952,38 +1957,38 @@ void Elevator::StopDoors(int number)
 	}
 }
 
-int Elevator::AddDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+int Elevator::AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator origin)
 	//if direction is false, doors are on the left/right side; otherwise front/back
 
 	if (GetDoor(number))
-		return GetDoor(number)->AddDoors(texture, thickness, CenterX, CenterZ, width, height, direction, tw, th);
+		return GetDoor(number)->AddDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, width, height, direction, tw, th);
 	else
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return 0;
 }
 
-int Elevator::AddShaftDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th)
+int Elevator::AddShaftDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoors function
 
 	if (GetDoor(number))
-		return GetDoor(number)->AddShaftDoors(texture, thickness, CenterX, CenterZ, tw, th);
+		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, tw, th);
 	else
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return 0;
 }
 
-bool Elevator::AddShaftDoor(int floor, int number, const char *texture, float tw, float th)
+bool Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
 	int index = ServicedFloors.Find(floor);
 	if (index != -1 && GetDoor(number))
-		return GetDoor(number)->AddShaftDoor(floor, texture, tw, th);
+		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, tw, th);
 	else
 		return false;
 	return true;
@@ -2072,7 +2077,7 @@ float Elevator::GetCurrentDoorSpeed(int number)
 	return 0;
 }
 
-void Elevator::Chime(int number, int floor)
+void Elevator::Chime(int number, int floor, bool direction)
 {
 	//play chime sound on specified floor
 
@@ -2090,7 +2095,7 @@ void Elevator::Chime(int number, int floor)
 	for (int i = start; i <= end; i++)
 	{
 		if (GetDoor(i))
-			GetDoor(i)->Chime(floor);
+			GetDoor(i)->Chime(floor, direction);
 		else
 			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}

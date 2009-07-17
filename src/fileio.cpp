@@ -2275,20 +2275,41 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 5 || tempdata.GetSize() > 5)
+				if (tempdata.GetSize() < 5 || tempdata.GetSize() > 6)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
+
+				bool compat = false;
+				if (tempdata.GetSize() == 5)
+					compat = true; //1.4 compatibility mode
+
 				//check numeric values
-				for (int i = 0; i <= 4; i++)
+				if (compat == false)
 				{
-					if (i == 2)
-						i = 3;
-					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					for (int i = 0; i <= 5; i++)
 					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
-						return false;
+						if (i == 2)
+							i = 4;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
+					}
+				}
+				else
+				{
+					for (int i = 0; i <= 4; i++)
+					{
+						if (i == 2)
+							i = 3;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
 					}
 				}
 
@@ -2297,7 +2318,10 @@ recalc:
 					ScriptError("Invalid elevator");
 					return false;
 				}
-				Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], atof(tempdata[3]), atof(tempdata[4]));
+				if (compat == false)
+					Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]));
+				else
+					Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4]));
 
 				tempdata.DeleteAll();
 			}
@@ -2713,7 +2737,56 @@ recalc:
 					ScriptError("Invalid door number");
 					return false;
 				}
-				Simcore->GetElevator(Current)->GetDoor(temp3)->ChimeSound = temp2;
+				Simcore->GetElevator(Current)->GetDoor(temp3)->UpChimeSound = temp2;
+				Simcore->GetElevator(Current)->GetDoor(temp3)->DownChimeSound = temp2;
+			}
+			if (LineData.Slice(0, 12).CompareNoCase("upchimesound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				if (elevatorcreated == false)
+				{
+					ScriptError("Elevator not created yet");
+					return false;
+				}
+				if (!IsNumeric(LineData.Slice(12, LineData.Find("=", 0) - 12).Trim(), temp3))
+				{
+					ScriptError("No door specified");
+					return false;
+				}
+				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				{
+					ScriptError("Invalid door number");
+					return false;
+				}
+				Simcore->GetElevator(Current)->GetDoor(temp3)->UpChimeSound = temp2;
+			}
+			if (LineData.Slice(0, 14).CompareNoCase("downchimesound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				if (elevatorcreated == false)
+				{
+					ScriptError("Elevator not created yet");
+					return false;
+				}
+				if (!IsNumeric(LineData.Slice(14, LineData.Find("=", 0) - 14).Trim(), temp3))
+				{
+					ScriptError("No door specified");
+					return false;
+				}
+				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				{
+					ScriptError("Invalid door number");
+					return false;
+				}
+				Simcore->GetElevator(Current)->GetDoor(temp3)->DownChimeSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("alarmsound") == true)
 			{
@@ -2931,26 +3004,52 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 10 || tempdata.GetSize() > 10)
+				if (tempdata.GetSize() < 10 || tempdata.GetSize() > 11)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
+
+				bool compat = false;
+				if (tempdata.GetSize() == 10)
+					compat = true; //1.4 compatibility mode
+
 				//check numeric values
-				for (int i = 0; i <= 9; i++)
+				if (compat == false)
 				{
-					if (i == 1)
-						i = 2;
-					if (i == 7)
-						i = 8;
-					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					for (int i = 0; i <= 10; i++)
 					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
-						return false;
+						if (i == 1)
+							i = 3;
+						if (i == 8)
+							i = 9;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
+					}
+				}
+				else
+				{
+					for (int i = 0; i <= 10; i++)
+					{
+						if (i == 1)
+							i = 2;
+						if (i == 7)
+							i = 8;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
 					}
 				}
 
-				Simcore->GetElevator(Current)->AddDoors(atoi(tempdata[0]), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
+				if (compat == false)
+					Simcore->GetElevator(Current)->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), csString(tempdata[8]).CompareNoCase("true"), atof(tempdata[9]), atof(tempdata[10]));
+				else
+					Simcore->GetElevator(Current)->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
 
 				tempdata.DeleteAll();
 			}
@@ -3000,24 +3099,48 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 8)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
+
+				bool compat = false;
+				if (tempdata.GetSize() == 7)
+					compat = true; //1.4 compatibility mode
+
 				//check numeric values
-				for (int i = 0; i <= 6; i++)
+				if (compat == false)
 				{
-					if (i == 1)
-						i = 2;
-					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					for (int i = 0; i <= 7; i++)
 					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
-						return false;
+						if (i == 1)
+							i = 3;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
+					}
+				}
+				else
+				{
+					for (int i = 0; i <= 6; i++)
+					{
+						if (i == 1)
+							i = 2;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
 					}
 				}
 
-				Simcore->GetElevator(Current)->AddShaftDoors(atoi(tempdata[0]), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+				if (compat == false)
+					Simcore->GetElevator(Current)->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+				else
+					Simcore->GetElevator(Current)->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
 
 				tempdata.DeleteAll();
 			}

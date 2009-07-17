@@ -165,10 +165,10 @@ public:
 	float GetCurrentDoorSpeed(int number = 0);
 	void ResetDoorTimer(int number = 0);
 	bool DoorsStopped(int number = 0);
-	int AddDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
-	int AddShaftDoors(int number, const char *texture, float thickness, float CenterX, float CenterZ, float tw, float th);
-	bool AddShaftDoor(int floor, int number, const char *texture, float tw, float th);
-	void Chime(int number, int floor);
+	int AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
+	int AddShaftDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th);
+	bool AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th);
+	void Chime(int number, int floor, bool direction);
 	void MoveDoors(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void EnableDoors(bool value);

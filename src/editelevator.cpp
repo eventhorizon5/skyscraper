@@ -917,7 +917,7 @@ void editelevator::On_bSetDoorTimer_Click(wxCommandEvent& event)
 void editelevator::On_bChime_Click(wxCommandEvent& event)
 {
 	if (door)
-		door->Chime(sFloor->GetThumbPosition() - Simcore->Basements);
+		door->Chime(sFloor->GetThumbPosition() - Simcore->Basements, true);
 }
 
 void editelevator::On_bACPMode_Toggle(wxCommandEvent& event)
