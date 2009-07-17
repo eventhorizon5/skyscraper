@@ -168,6 +168,9 @@ Elevator::~Elevator()
 	if (alarm)
 		delete alarm;
 	alarm = 0;
+	if (floorbeep)
+		delete floorbeep;
+	floorbeep = 0;
 }
 
 bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
@@ -268,6 +271,8 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	idlesound->Load(IdleSound.GetData());
 	alarm = new Sound();
 	alarm->SetPosition(Origin);
+	floorbeep = new Sound();
+	floorbeep->SetPosition(Origin);
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 	return true;
@@ -789,6 +794,7 @@ void Elevator::MoveElevatorToFloor()
 	idlesound->SetPosition(GetPosition());
 	MoveDoorSound(0, csVector3(0, GetPosition().y, 0), true, false, true);
 	alarm->SetPosition(GetPosition());
+	floorbeep->SetPosition(GetPosition());
 
 	//motion calculation
 	if (Brakes == false)
@@ -938,9 +944,21 @@ void Elevator::MoveElevatorToFloor()
 		}
 	}
 
-	//update floor indicators
-	if (GetFloor() != oldfloor && sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-		UpdateFloorIndicators();
+	if (GetFloor() != oldfloor)
+	{
+		//play floor beep sound if not empty
+		if (BeepSound != "")
+		{
+			floorbeep->Stop();
+			floorbeep->Load(BeepSound);
+			floorbeep->Loop(false);
+			floorbeep->Play();
+		}
+		
+		//update floor indicators
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+			UpdateFloorIndicators();
+	}
 
 	oldfloor = GetFloor();
 

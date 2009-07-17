@@ -71,6 +71,7 @@ public:
 	csString IdleSound; //elevator idle sound
 	csString AlarmSound; //alarm sound (loop)
 	csString AlarmSoundStop; //alarm stopping sound
+	csString BeepSound; //floor beep sound (played when changing floors)
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
 	int ACPFloor; //floor to stop at in ACP mode
@@ -209,6 +210,7 @@ private:
 	Sound *mainsound;
 	Sound *idlesound;
 	Sound *alarm;
+	Sound *floorbeep;
 
 	//directional indicators
 	csArray<DirectionalIndicator*> IndicatorArray;

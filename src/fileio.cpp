@@ -2733,6 +2733,15 @@ recalc:
 				}
 				Simcore->GetElevator(Current)->AlarmSoundStop = temp2;
 			}
+			if (LineData.Slice(0, 9).CompareNoCase("beepsound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->BeepSound = temp2;
+			}
 			if (LineData.Slice(0, 13).CompareNoCase("floorskiptext") == true)
 			{
 				if (temp2check < 0)
