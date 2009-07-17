@@ -3,6 +3,9 @@ Version 1.5 (2.0 Alpha 5)
 -clicking on shaft doors and elevator doors while holding down shift now causes them to manually open/close
 -manually opening shaft doors causes the related floor to turn on if user is
 in a shaft or an elevator
+-added new buildings
+-added support for multiple floor indicators per elevator
+-floors can now have floor indicators
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------
