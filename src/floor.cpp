@@ -102,6 +102,14 @@ Floor::~Floor()
 		DoorArray[i] = 0;
 	}
 	DoorArray.DeleteAll();
+
+	//delete floor indicators
+	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			delete FloorIndicatorArray[i];
+	}
+	FloorIndicatorArray.DeleteAll();
 }
 
 void Floor::SetCameraFloor()
