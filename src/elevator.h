@@ -216,8 +216,8 @@ private:
 	//doors and shaft doors
 	csArray<ElevatorDoor*> DoorArray;
 
-	//floor indicator
-	FloorIndicator* indicator;
+	//floor indicators
+	csArray<FloorIndicator*> FloorIndicatorArray;
 
 	//elevator misc internals
 	bool ElevatorIsRunning;

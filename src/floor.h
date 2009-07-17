@@ -28,6 +28,7 @@
 
 #include "callbutton.h"
 #include "door.h"
+#include "floorindicator.h"
 
 class SBSIMPEXP Floor
 {
@@ -55,6 +56,7 @@ public:
 	bool IsColumnFrameEnabled; //is columnframe enabled?
 	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
 	csArray<Door*> DoorArray; //pointer array to door objects
+	csArray<FloorIndicator*> FloorIndicatorArray; //pointer array to floor indicator objects
 	csArray<int> Group; //floor group
 
 	//functions
@@ -81,6 +83,7 @@ public:
 	void EnableColumnFrame(bool value);
 	int ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 	int ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
+	void AddFloorIndicator(int elevator, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
 
 private:
 	char intbuffer[65];

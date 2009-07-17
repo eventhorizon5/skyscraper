@@ -147,6 +147,14 @@ Elevator::~Elevator()
 		}
 	}
 
+	//delete floor indicators
+	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			delete FloorIndicatorArray[i];
+	}
+	FloorIndicatorArray.DeleteAll();
+
 	//Destructor
 	if (Panel)
 		delete Panel;
@@ -764,8 +772,11 @@ void Elevator::MoveElevatorToFloor()
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
 	MoveDoors(0, csVector3(0, ElevatorRate * sbs->delta, 0), true, true, true);
-	if (indicator)
-		indicator->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
+	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
+	}
 	Plaque_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	Plaque_movable->UpdateMove();
 	if (Panel)
@@ -959,8 +970,11 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
 		MoveDoors(0, csVector3(0, Destination, 0), true, false, true);
-		if (indicator)
-			indicator->SetPosition(csVector3(indicator->GetPosition().x, Destination, indicator->GetPosition().z));
+		for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+		{
+			if (FloorIndicatorArray[i])
+				FloorIndicatorArray[i]->SetPosition(csVector3(FloorIndicatorArray[i]->GetPosition().x, Destination, FloorIndicatorArray[i]->GetPosition().z));
+		}
 		Plaque_movable->SetPosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
 		Plaque_movable->UpdateMove();
 		if (Panel)
@@ -1110,8 +1124,10 @@ void Elevator::AddFloorIndicator(const char *direction, float CenterX, float Cen
 {
 	//Creates a floor indicator at the specified location
 
-	indicator = new FloorIndicator(Number, direction, CenterX, CenterZ, width, height, voffset);
-	indicator->SetPosition(Origin);
+	int size = FloorIndicatorArray.GetSize();
+	FloorIndicatorArray.SetSize(size + 1);
+	FloorIndicatorArray[size - 1] = new FloorIndicator(Number, direction, CenterX, CenterZ, width, height, voffset);
+	FloorIndicatorArray[size - 1]->SetPosition(Origin);
 }
 
 int Elevator::AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
@@ -1153,11 +1169,13 @@ void Elevator::Enabled(bool value)
 
 void Elevator::EnableObjects(bool value)
 {
-	//enable or disable interior objects, such as floor indicator, button panel and plaque
-	//if indicator is false, do not change status of indicator
+	//enable or disable interior objects, such as floor indicators, button panel and plaque
 
-	if (indicator)
-		indicator->Enabled(value);
+	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->Enabled(value);
+	}
 
 	sbs->EnableMesh(Plaque, value);
 
@@ -1264,8 +1282,11 @@ void Elevator::UpdateFloorIndicators()
 		value = sbs->GetFloor(GetFloor())->ID;
 	value.Trim();
 
-	if (indicator)
-		indicator->Update(value);
+	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->Update(value);
+	}
 }
 
 float Elevator::GetJerkRate()

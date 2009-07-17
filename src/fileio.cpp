@@ -2302,6 +2302,40 @@ recalc:
 				tempdata.DeleteAll();
 			}
 
+			//AddFloorIndicator command
+			if (LineData.Slice(0, 17).CompareNoCase("addfloorindicator") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(18).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+				//check numeric values
+				for (int i = 0; i <= 6; i++)
+				{
+					if (i == 1)
+						i = 2;
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+
+				Simcore->GetFloor(Current)->AddFloorIndicator(atoi(tempdata[0]), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+
+				tempdata.DeleteAll();
+			}
+
 			//Cut command
 			if (LineData.Slice(0, 3).CompareNoCase("cut") == true)
 			{

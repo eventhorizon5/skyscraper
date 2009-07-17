@@ -256,6 +256,13 @@ void Floor::Enabled(bool value)
 	//turn on/off elevator directional indicators
 	for (int i = 1; i <= sbs->Elevators(); i++)
 		sbs->GetElevator(i)->EnableDirectionalIndicator(Number, value);
+
+	//floor indicators
+	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->Enabled(value);
+	}
 }
 
 float Floor::FullHeight()
@@ -408,4 +415,13 @@ int Floor::ColumnWallBox2(const char *name, const char *texture, float CenterX, 
 	z2 = CenterZ + (LengthZ / 2);
 
 	return ColumnWallBox(name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom);
+}
+
+void Floor::AddFloorIndicator(int elevator, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+{
+	//Creates a floor indicator at the specified location
+
+	int size = FloorIndicatorArray.GetSize();
+	FloorIndicatorArray.SetSize(size + 1);
+	FloorIndicatorArray[size - 1] = new FloorIndicator(elevator, direction, CenterX, CenterZ, width, height, Altitude + voffset);
 }
