@@ -353,6 +353,9 @@ void SBS::MainLoop()
 					UnregisterDoorCallback(callbackdoor);
 			}
 
+			//process misc operations on current floor
+			GetFloor(camera->CurrentFloor)->Loop();
+
 			//check if the user is outside (no code yet)
 
 		}

@@ -1126,8 +1126,8 @@ void Elevator::AddFloorIndicator(const char *direction, float CenterX, float Cen
 
 	int size = FloorIndicatorArray.GetSize();
 	FloorIndicatorArray.SetSize(size + 1);
-	FloorIndicatorArray[size - 1] = new FloorIndicator(Number, direction, CenterX, CenterZ, width, height, voffset);
-	FloorIndicatorArray[size - 1]->SetPosition(Origin);
+	FloorIndicatorArray[size] = new FloorIndicator(Number, direction, CenterX, CenterZ, width, height, voffset);
+	FloorIndicatorArray[size]->SetPosition(Origin);
 }
 
 int Elevator::AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)

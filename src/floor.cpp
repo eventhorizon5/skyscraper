@@ -431,5 +431,32 @@ void Floor::AddFloorIndicator(int elevator, const char *direction, float CenterX
 
 	int size = FloorIndicatorArray.GetSize();
 	FloorIndicatorArray.SetSize(size + 1);
-	FloorIndicatorArray[size - 1] = new FloorIndicator(elevator, direction, CenterX, CenterZ, width, height, Altitude + voffset);
+	FloorIndicatorArray[size] = new FloorIndicator(elevator, direction, CenterX, CenterZ, width, height, Altitude + voffset);
+}
+
+void Floor::UpdateFloorIndicators()
+{
+	//changes the number texture on the floor indicators to the elevator's current floor
+
+	csString value;
+	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	{
+		if (FloorIndicatorArray[i])
+		{
+			Elevator *elevator = sbs->GetElevator(FloorIndicatorArray[i]->Elevator);
+			if (elevator->UseFloorSkipText == true && elevator->IsServicedFloor(elevator->GetFloor()) == false)
+				value = elevator->GetFloorSkipText();
+			else
+				value = sbs->GetFloor(elevator->GetFloor())->ID;
+			value.Trim();
+			FloorIndicatorArray[i]->Update(value);
+		}
+	}
+}
+
+void Floor::Loop()
+{
+	//floor object main loop; runs if camera is currently on this floor
+
+	UpdateFloorIndicators();
 }

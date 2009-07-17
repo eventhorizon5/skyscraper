@@ -1658,7 +1658,7 @@ recalc:
 				goto breakpoint;
 
 			//AddFloor command
-			if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true)
+			if (LineData.Slice(0, 9).CompareNoCase("addfloor ") == true)
 			{
 				//get data
 				tempdata.SplitString(LineData.Slice(9).GetData(), ",");
