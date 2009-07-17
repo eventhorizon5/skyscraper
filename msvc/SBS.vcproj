@@ -235,6 +235,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\floorindicator.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\globals.cpp"
 				>
 			</File>
@@ -294,6 +298,10 @@
 			</File>
 			<File
 				RelativePath="..\src\floor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\floorindicator.h"
 				>
 			</File>
 			<File

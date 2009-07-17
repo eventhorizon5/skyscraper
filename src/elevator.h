@@ -30,6 +30,7 @@
 #include "sound.h"
 #include "directional.h"
 #include "elevatordoor.h"
+#include "floorindicator.h"
 
 class SBSIMPEXP Elevator
 {
@@ -178,8 +179,6 @@ private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
 		csRef<iThingFactoryState> Elevator_state;
 		csRef<iMovable> Elevator_movable;
-	csRef<iMeshWrapper> FloorIndicator; //floor indicator object
-		csRef<iMovable> FloorIndicator_movable;
 	csRef<iMeshWrapper> Plaque; //plaque object
 		csRef<iThingFactoryState> Plaque_state;
 		csRef<iMovable> Plaque_movable;
@@ -216,6 +215,9 @@ private:
 
 	//doors and shaft doors
 	csArray<ElevatorDoor*> DoorArray;
+
+	//floor indicator
+	FloorIndicator* indicator;
 
 	//elevator misc internals
 	bool ElevatorIsRunning;
