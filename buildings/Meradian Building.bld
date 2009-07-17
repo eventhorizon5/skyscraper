@@ -33,14 +33,14 @@
     Load data/diamond18j.jpg, ElevPanelMain, 1, 1
     Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
-    Load data/Nathan's TK Signa 4.png, ButtonUp, 1, 1
-    Load data/Nathan's TK Signa 4.png, ButtonDown, 1, -1
+    Load data/Nathan's ThyssenKrupp Up.png, ButtonUp, 1, 1
+    Load data/Nathan's ThyssenKrupp Up.png, ButtonDown, 1, -1
     Load data/marbl3.jpg, Wall1, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
-    Load data/darrow_unlit.gif, ArrowUp, 1, 1
-    Load data/darrow_unlit.gif, ArrowDown, 1, -1
-    Load data/Nathan's TK Up.png, ArrowUp_Lit, 1, 1
-    Load data/Nathan's TK Up.png, ArrowDown_Lit, 1, -1
+    Load data/Nathan's ThyssenKrupp Unlit.png, ArrowUp, 1, 1
+    Load data/Nathan's ThyssenKrupp Unlit.png, ArrowDown, 1, -1
+    Load data/Nathan's ThyssenKrupp Hall Lantern.png, ArrowUp_Lit, 1, 1
+    Load data/Nathan's ThyssenKrupp Hall Lantern.png, ArrowDown_Lit, 1, -1
 
     Load signs/sans/Open.jpg, ButtonOpen, 1, 1
     Load signs/sans/Close.jpg, ButtonClose, 1, 1
