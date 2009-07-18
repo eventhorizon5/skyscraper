@@ -972,10 +972,14 @@ void Elevator::MoveElevatorToFloor()
 		//play chime sound
 		if (InServiceMode() == false)
 		{
-			if (Direction == -1)
-				Chime(0, GotoFloor, false);
-			else
-				Chime(0, GotoFloor, true);
+			if (GetFloor() == GetTopFloor())
+				Chime(0, GotoFloor, false); //chime down if on top floor
+			else if (GetFloor() == GetBottomFloor())
+				Chime(0, GotoFloor, true); //chime up if on bottom floor
+			else if (QueuePositionDirection == 1 || LastQueueDirection == 1)
+				Chime(0, GotoFloor, true); //chime up if queue direction is or was up
+			else if (QueuePositionDirection == -1 || LastQueueDirection == -1)
+				Chime(0, GotoFloor, false); //chime down if queue direction is or was down
 		}
 
 		//store error offset value
