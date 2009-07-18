@@ -134,7 +134,7 @@
 
 # Ground
 AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
-Cut Landscape, -75, -1, -70, 75, 1, 70, false, true
+Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
 
 # Basements
 <Floor -1>
@@ -7221,3 +7221,32 @@ AddWall Buildings, Front, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -
 AddWall Buildings, Left, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 280, 280, 1174, 1174, 0, 19
 AddWall Buildings, Back, MainWindows, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
 AddWall Buildings, Right, MainWindows, 0, 1720 + -37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
+
+SetAutoSize = true, true
+
+
+#External stuff
+
+#Plaza
+AddFloor Landscape, Dearborn Plaza, ParkingCeiling, 0, -300, -100.5, 105.5, -70, 0, 0, 0, 0
+AddFloor Landscape, Washington Plaza, ParkingCeiling, 0, 75, -70, 105.5, 70, 0, 0, 0, 0
+AddFloor Landscape, North Plaza, ParkingCeiling, 0, -300, -70, -75, 70, 0, 0, 0, 0
+AddFloor Landscape, State Plaza, ParkingCeiling, 0, -300, 70, 105.5, 223.5, 0, 0, 0, 0
+AddFloor Landscape, South Block Filler, ParkingCeiling, 0, 203.5, -100.5, 400, 223.5, 0, 0, 0, 0
+
+#Sidewalk
+AddFloor Landscape, Dearborn Sidewalk East, ParkingFloor, 0, -300, -124.5, 129.5, -100.6, 0, 0, 0, 0
+AddFloor Landscape, Dearborn Sidewalk West, ParkingFloor, 0, -300, -198.5, 129.5, -174.5, 0, 0, 0, 0
+AddFloor Landscape, Dearborn Sidewalk East 2, ParkingFloor, 0, 179.5, -124.5, 400, -100.6, 0, 0, 0, 0
+AddFloor Landscape, Dearborn Sidewalk West 2, ParkingFloor, 0, 179.5, -198.5, 400, -174.5, 0, 0, 0, 0
+AddFloor Landscape, Washington Sidewalk North, ParkingFloor, 0, 105.5, -100.5, 129.5, 223.5, 0, 0, 0, 0
+AddFloor Landscape, Washington Sidewalk South, ParkingFloor, 0, 179.5, -100.5, 203.5, 223.5, 0, 0, 0, 0
+AddFloor Landscape, State Sidewalk West, ParkingFloor, 0, -300, 223.5, 129.5, 247.5, 0, 0, 0, 0
+AddFloor Landscape, State Sidewalk East, ParkingFloor, 0, -300, 297.5, 129.5, 321.5, 0, 0, 0, 0
+AddFloor Landscape, State Sidewalk West 2, ParkingFloor, 0, 179.5, 223.5, 400, 247.5, 0, 0, 0, 0
+AddFloor Landscape, State Sidewalk East 2, ParkingFloor, 0, 179.5, 297.5, 400, 321.5, 0, 0, 0, 0
+
+#Streets
+AddFloor Landscape, Dearborn, ParkingWalls, 0, -300, -174.5, 400, -124.5, 0, 0, 0, 0
+AddFloor Landscape, Washington, ParkingWalls, 0, 129.5, -124.5, 179.5, 247.5, 0, 0, 0, 0
+AddFloor Landscape, State, ParkingWalls, 0, -300, 247.5, 400, 297.5, 0, 0, 0, 0
