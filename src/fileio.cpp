@@ -2338,16 +2338,16 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+				if (tempdata.GetSize() < 8 || tempdata.GetSize() > 8)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
 				//check numeric values
-				for (int i = 0; i <= 6; i++)
+				for (int i = 0; i <= 7; i++)
 				{
 					if (i == 1)
-						i = 2;
+						i = 3;
 					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 					{
 						ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -2355,7 +2355,7 @@ recalc:
 					}
 				}
 
-				Simcore->GetFloor(Current)->AddFloorIndicator(atoi(tempdata[0]), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+				Simcore->GetFloor(Current)->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
 
 				tempdata.DeleteAll();
 			}

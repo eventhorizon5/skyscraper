@@ -820,14 +820,16 @@
   <p align="left"><strong>19. AddFloorIndicator</strong> - creates a floor indicator 
     associated with a specific elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em> 
-    elevator, direction</em>, <em>CenterX, CenterZ, width, height, voffset</em></font> 
+    elevator, relative, direction</em>, <em>CenterX, CenterZ, width, height, voffset</em></font> 
   </p>
   <p align="left">The AddFloorIndicator command creates a floor indicator at the 
     position specified by <em>CenterX</em> and <em>CenterZ</em>, associated with 
     the elevator specified by <em>elevator</em>. <em>Direction</em> is the direction 
     the indicator faces, and can be either &quot;left&quot;, &quot;right&quot;, 
-    &quot;front&quot; or &quot;back&quot;. This command can be given multiple 
-    times to create multiple indicators.</p>
+    &quot;front&quot; or &quot;back&quot;. <em>Relative</em> determines if the 
+    <em>CenterX</em> and <em>CenterZ</em> values are relative of the elevator's 
+    center or not. This command can be given multiple times to create multiple 
+    indicators.</p>
   <p align="left"><strong>20. Cut</strong> - performs a manual box cut on an area 
     within the current floor<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Cut x1, y1, z1, x2, 
