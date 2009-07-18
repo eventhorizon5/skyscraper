@@ -7235,9 +7235,9 @@ AddFloor Landscape, State Plaza, ParkingCeiling, 0, -300, 70, 105.5, 223.5, 0, 0
 AddFloor Landscape, South Block Filler, ParkingCeiling, 0, 203.5, -100.5, 400, 223.5, 0, 0, 0, 0
 
 #Sidewalk
-AddFloor Landscape, Dearborn Sidewalk East, ParkingFloor, 0, -300, -124.5, 129.5, -100.6, 0, 0, 0, 0
+AddFloor Landscape, Dearborn Sidewalk East, ParkingFloor, 0, -300, -124.5, 129.5, -100.5, 0, 0, 0, 0
 AddFloor Landscape, Dearborn Sidewalk West, ParkingFloor, 0, -300, -198.5, 129.5, -174.5, 0, 0, 0, 0
-AddFloor Landscape, Dearborn Sidewalk East 2, ParkingFloor, 0, 179.5, -124.5, 400, -100.6, 0, 0, 0, 0
+AddFloor Landscape, Dearborn Sidewalk East 2, ParkingFloor, 0, 179.5, -124.5, 400, -100.5, 0, 0, 0, 0
 AddFloor Landscape, Dearborn Sidewalk West 2, ParkingFloor, 0, 179.5, -198.5, 400, -174.5, 0, 0, 0, 0
 AddFloor Landscape, Washington Sidewalk North, ParkingFloor, 0, 105.5, -100.5, 129.5, 223.5, 0, 0, 0, 0
 AddFloor Landscape, Washington Sidewalk South, ParkingFloor, 0, 179.5, -100.5, 203.5, 223.5, 0, 0, 0, 0
