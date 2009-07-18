@@ -67,7 +67,6 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 		StairArray_state[i - startfloor] = tmpstate;
 		StairArray[i - startfloor]->SetZBufMode(CS_ZBUF_USE);
 		StairArray[i - startfloor]->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-		//StairArray[i - startfloor]->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 		EnableArray[i - startfloor] = true;
 	}
 }

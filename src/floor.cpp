@@ -46,7 +46,6 @@ Floor::Floor(int number)
 	Level_state = scfQueryInterface<iThingFactoryState> (Level->GetMeshObject()->GetFactory());
 	Level->SetZBufMode(CS_ZBUF_USE);
 	Level->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	//Level->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	//Create interfloor mesh
 	buffer = Number;
@@ -56,7 +55,6 @@ Floor::Floor(int number)
 	Interfloor_state = scfQueryInterface<iThingFactoryState> (Interfloor->GetMeshObject()->GetFactory());
 	Interfloor->SetZBufMode(CS_ZBUF_USE);
 	Interfloor->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	//Interfloor->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	//Create columnframe mesh
 	buffer = Number;
@@ -433,12 +431,12 @@ bool Floor::AddFloorIndicator(int elevator, bool relative, const char *direction
 	FloorIndicatorArray.SetSize(size + 1);
 
 	if (relative == false)
-		FloorIndicatorArray[size] = new FloorIndicator(elevator, direction, CenterX, CenterZ, width, height, Altitude + voffset);
+		FloorIndicatorArray[size] = new FloorIndicator(elevator, direction, CenterX, CenterZ, width, height, Altitude + InterfloorHeight + voffset);
 	else
 	{
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
-			FloorIndicatorArray[size] = new FloorIndicator(elevator, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, Altitude + voffset);
+			FloorIndicatorArray[size] = new FloorIndicator(elevator, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, Altitude + + InterfloorHeight + voffset);
 		else
 			return false;
 	}

@@ -57,7 +57,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 	Directional_back_state = scfQueryInterface<iThingFactoryState> (DirectionalMeshBack->GetMeshObject()->GetFactory());
 	DirectionalMeshBack->SetZBufMode(CS_ZBUF_USE);
 	DirectionalMeshBack->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	//DirectionalMeshBack->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	if (Single == false)
 	{
@@ -65,7 +64,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 		DirectionalMeshUp = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 		DirectionalMeshUp->SetZBufMode(CS_ZBUF_USE);
 		DirectionalMeshUp->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-		//DirectionalMeshUp->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 		csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTextureUnlit);
 		DirectionalMeshUp->GetMeshObject()->SetMaterialWrapper(mat);
 
@@ -73,7 +71,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 		DirectionalMeshDown = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 		DirectionalMeshDown->SetZBufMode(CS_ZBUF_USE);
 		DirectionalMeshDown->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-		//DirectionalMeshDown->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 		mat = sbs->engine->GetMaterialList()->FindByName(DownTextureUnlit);
 		DirectionalMeshDown->GetMeshObject()->SetMaterialWrapper(mat);
 	}

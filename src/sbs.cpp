@@ -1117,7 +1117,6 @@ void SBS::InitMeshes()
 	External_state = scfQueryInterface<iThingFactoryState> (External->GetMeshObject()->GetFactory());
 	External->SetZBufMode(CS_ZBUF_USE);
 	External->SetRenderPriority(engine->GetObjectRenderPriority());
-	//External->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	Landscape = engine->CreateSectorWallsMesh (area, "Landscape");
 	Landscape_state = scfQueryInterface<iThingFactoryState> (Landscape->GetMeshObject()->GetFactory());

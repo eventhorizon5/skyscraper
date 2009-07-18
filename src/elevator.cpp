@@ -114,7 +114,6 @@ Elevator::Elevator(int number)
 	Elevator_movable = ElevatorMesh->GetMovable();
 	ElevatorMesh->SetZBufMode(CS_ZBUF_USE);
 	ElevatorMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	//ElevatorMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	buffer = Number;
 	buffer.Insert(0, "Plaque ");
@@ -124,7 +123,6 @@ Elevator::Elevator(int number)
 	Plaque_movable = Plaque->GetMovable();
 	Plaque->SetZBufMode(CS_ZBUF_USE);
 	Plaque->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	//Plaque->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 }
 
 Elevator::~Elevator()
