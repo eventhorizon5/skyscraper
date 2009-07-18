@@ -6273,6 +6273,52 @@ DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
 
+#Floor indicators
+<Floors -8 to 141>
+    #elevator 66
+    if[%floor% = 0 | %floor% > 78] AddFloorIndicator 66, true, right, 3.926 + 0.2 + 0.66 + 0.02, 0, 0.5, 0.4, 8.2
+    
+    #elevator 67
+    if[%floor% < 79] AddFloorIndicator 67, true, left, -3.926 - 0.2 - 0.66 - 0.02, 0, 0.5, 0.4, 8.2
+    
+    #elevator 68
+    AddFloorIndicator 68, true, right, 4.218 + 0.2 + 0.66 + 0.02, 0, 0.5, 0.4, 8.2
+<EndFloors>
+
+<Floor 0>
+    SetAutoSize = false, false
+    
+    #zone 1 locals 2-14
+    AddWall Panel, ElevExtPanels, 0, -27.67 - 0.5, 13.5 - 0.25 - 0.01, -27.67 + 0.5, 13.5 - 0.25 - 0.01, 2, 2, 4, 4, 0, 0, False
+    AddFloorIndicator 13, false, front, -27.67 - 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5.5 - 0.175
+    AddFloorIndicator 14, false, front, -27.67 - 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5 - 0.175
+    AddFloorIndicator 15, false, front, -27.67 - 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 4.5 - 0.175
+    AddFloorIndicator 16, false, front, -27.67 + 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5.5 - 0.175
+    AddFloorIndicator 17, false, front, -27.67 + 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5 - 0.175
+    AddFloorIndicator 18, false, front, -27.67 + 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 4.5 - 0.175
+    
+    #zone 1 locals 15-26
+    AddWall Panel, ElevExtPanels, 0, 27.67 - 0.5, 18.08 - 4.75 - 0.33 - 0.01, 27.67 + 0.5, 18.08 - 4.75 - 0.33 - 0.01, 2, 2, 4, 4, 0, 0, False
+    AddFloorIndicator 7, false, front, 27.67 - 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5.5 - 0.175
+    AddFloorIndicator 8, false, front, 27.67 - 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.175
+    AddFloorIndicator 9, false, front, 27.67 - 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 4.5 - 0.175
+    AddFloorIndicator 10, false, front, 27.67 + 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5.5 - 0.175
+    AddFloorIndicator 11, false, front, 27.67 + 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.175
+    AddFloorIndicator 12, false, front, 27.67 + 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 4.5 - 0.175
+    
+    #zone 1 locals 27-37
+    AddWall Panel, ElevExtPanels, 0, -3 - 0.5, 14.29 - 0.01, -3 + 0.5, 14.29 - 0.01, 2, 2, 4, 4, 0, 0, False
+    AddFloorIndicator 1, false, front, -3 - 0.25, 14.29 - 0.02, 0.35, 0.3, 5.5 - 0.175
+    AddFloorIndicator 2, false, front, -3 - 0.25, 14.29 - 0.02, 0.35, 0.3, 5 - 0.175
+    AddFloorIndicator 3, false, front, -3 - 0.25, 14.29 - 0.02, 0.35, 0.3, 4.5 - 0.175
+    AddFloorIndicator 4, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 5.5 - 0.175
+    AddFloorIndicator 5, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 5 - 0.175
+    AddFloorIndicator 6, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 4.5 - 0.175
+    
+    SetAutoSize = true, true
+<EndFloor>
+
+
 #Elevator signs
 WallOrientation = center
 SetAutoSize = false, false
