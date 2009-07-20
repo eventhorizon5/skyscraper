@@ -74,7 +74,7 @@ done
 
 #letter-based floors/symbols
 number=1
-end=44
+end=45
 while (( number <= end ))
 do
 	if [ $number == 1 ]; then sym="L"; fi
@@ -121,6 +121,7 @@ do
 	if [ $number == 42 ]; then sym="PM"; fi
 	if [ $number == 43 ]; then sym="A"; fi
 	if [ $number == 44 ]; then sym="BR"; fi
+	if [ $number == 45 ]; then sym="SL"; fi
 
 	echo $sym
 	nice -n 12 gimp -c -d -i -b "(script-fu-makesign \"$sym.jpg\" \"$sym\" $fontsize \"$font\" '(0 0 0) '(255 255 255) 128 128)" -b '(gimp-quit 0)'
