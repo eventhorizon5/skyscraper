@@ -24,7 +24,8 @@
     Load data/downtown.jpg, Downtown, 1, 1
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
-    Load data/text16.jpg, ElevDoors, 1, 1
+    Load data/door1.jpg, ElevDoors, 1, 1
+    Load data/door1.jpg, ElevDoors2, -1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
     Load data/marb148.jpg, ElevPanel, 1, 1
     Load data/diamond18j.jpg, ElevWall, 1, 1
@@ -213,8 +214,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, -3.01, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.301, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 0, -3.01, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 0, -3.301, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
