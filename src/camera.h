@@ -58,6 +58,7 @@ public:
 	bool EnableCollisions; //enable collision detection
 	bool MouseDown; //mouse status
 	bool ReportCollisions; //if true, print collisions on console
+	csString LastHitMesh; //name of last hit mesh
 
 	//functions
 	Camera();

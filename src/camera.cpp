@@ -564,6 +564,7 @@ void Camera::Loop()
 			{
 				//get mesh name
 				csString mesh = iterator.Next()->QueryObject()->GetName();
+				LastHitMesh = mesh;
 
 				//report name of mesh
 				if (ReportCollisions == true)
