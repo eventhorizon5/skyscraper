@@ -76,6 +76,7 @@ public:
 	bool GetDoorsOpen();
 	void SetShaftDoors(float thickness, float CenterX, float CenterZ);
 	bool ShaftDoorsExist(int floor);
+	int GetWhichDoors();
 
 private:
 	csRef<iMeshWrapper> ElevatorDoorL; //left inside door

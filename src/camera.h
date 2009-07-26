@@ -57,6 +57,7 @@ public:
 	float speed; //movement speed base
 	bool EnableCollisions; //enable collision detection
 	bool MouseDown; //mouse status
+	bool ReportCollisions; //if true, print collisions on console
 
 	//functions
 	Camera();

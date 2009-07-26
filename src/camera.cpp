@@ -73,6 +73,7 @@ Camera::Camera()
 	lastfloor = 0;
 	lastfloorset = false;
 	MouseDown = false;
+	ReportCollisions = false;
 }
 
 Camera::~Camera()
@@ -549,6 +550,58 @@ void Camera::Loop()
 	//general movement
 	float delta = sbs->vc->GetElapsedTicks() / 1000.0f;
 	collider_actor.Move(delta, speed, velocity, angle_velocity);
+
+	//get list of hit meshes and put them into the 'hitlist' array
+	if (EnableCollisions == true)
+	{
+		if (collider_actor.CheckHitMeshes())
+		{
+			//get mesh list iterator from the actor object
+			csSet<csPtrKey<iMeshWrapper>>::GlobalIterator iterator = collider_actor.GetHitMeshes().GetIterator();
+
+			//get names of each hit mesh and check if any where shaft doors or elevator doors
+			while (iterator.HasNext())
+			{
+				//get mesh name
+				csString mesh = iterator.Next()->QueryObject()->GetName();
+
+				//report name of mesh
+				if (ReportCollisions == true)
+					sbs->Report(mesh);
+
+				//check shaft doors
+				if (mesh.Find("Shaft Door") != -1)
+				{
+					//user hit a shaft door
+					int elevator = atoi(mesh.Slice(9, mesh.Find(":") - 9));
+					int index = mesh.Find("Shaft Door");
+					int index2 = mesh.Find(":", index);
+					int number = atoi(mesh.Slice(index + 10, index2 - (index + 10)));
+					int floor = atoi(mesh.Slice(index2 + 1, mesh.Length() - index2 - 2));
+					Elevator *tmpelevator = sbs->GetElevator(elevator);
+					int whichdoors = tmpelevator->GetDoor(number)->GetWhichDoors();
+					if (tmpelevator->GetDoor(number)->OpenDoor == -1 && whichdoors == 1)
+						sbs->GetElevator(elevator)->OpenDoors(number, 1);
+					tmpelevator = 0;
+				}
+
+				//check elevator doors
+				if (mesh.Find("ElevatorDoor") != -1)
+				{
+					//user hit an elevator door
+					int elevator = atoi(mesh.Slice(13, mesh.Find(":") - 13));
+					int number = atoi(mesh.Slice(mesh.Find(":") + 1, mesh.Length() - mesh.Find(":") - 1));
+					Elevator *tmpelevator = sbs->GetElevator(elevator);
+					int whichdoors = tmpelevator->GetDoor(number)->GetWhichDoors();
+					if (tmpelevator->GetDoor(number)->OpenDoor == -1 && whichdoors == 1)
+						sbs->GetElevator(elevator)->OpenDoors(number, 1);
+					tmpelevator = 0;
+				}
+			}
+		}
+		else
+			collider_actor.EnableHitMeshes(true); //tell collider to report on hit meshes if currently off
+	}
 
 	//sync sound listener object to camera position
 	sbs->SetListenerLocation(GetPosition());

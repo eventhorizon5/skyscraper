@@ -1272,6 +1272,12 @@ bool ElevatorDoor::GetDoorsOpen()
 	return DoorsOpen;
 }
 
+int ElevatorDoor::GetWhichDoors()
+{
+	//return value of WhichDoors
+	return WhichDoors;
+}
+
 void ElevatorDoor::MoveSound(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move sound
