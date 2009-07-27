@@ -56,6 +56,7 @@ class DebugPanel: public wxFrame
 		static const long ID_STATICTEXT3;
 		static const long ID_STATICTEXT4;
 		static const long ID_STATICTEXT5;
+		static const long ID_STATICTEXT9;
 		static const long ID_STATICTEXT6;
 		static const long ID_t_camerafloor;
 		static const long ID_t_camerap;
@@ -63,6 +64,7 @@ class DebugPanel: public wxFrame
 		static const long ID_t_elevnumber;
 		static const long ID_t_elevfloor;
 		static const long ID_t_object;
+		static const long ID_t_collision;
 		static const long ID_STATICTEXT7;
 		static const long ID_STATICTEXT11;
 		static const long ID_chkCollisionDetection;
@@ -74,7 +76,7 @@ class DebugPanel: public wxFrame
 		static const long ID_chkFrameSync;
 		static const long ID_bListAltitudes;
 		static const long ID_bMeshControl;
-		static const long ID_bInitRealtime;
+		static const long ID_bCameraControl;
 		static const long ID_bEditElevator;
 		//*)
 		class Timer : public wxTimer
@@ -95,10 +97,10 @@ class DebugPanel: public wxFrame
 		void On_chkFrameSync_Click(wxCommandEvent& event);
 		void On_bListAltitudes_Click(wxCommandEvent& event);
 		void On_bMeshControl_Click(wxCommandEvent& event);
-		void On_bInitRealtime_Click(wxCommandEvent& event);
 		void On_bEditElevator_Click(wxCommandEvent& event);
 		void On_chkGravity_Click(wxCommandEvent& event);
 		void On_chkAutoStairs_Click(wxCommandEvent& event);
+		void On_bCameraControl_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -116,8 +118,10 @@ class DebugPanel: public wxFrame
 		wxStaticText* StaticText6;
 		wxButton* bEditElevator;
 		wxButton* bMeshControl;
+		wxStaticText* StaticText8;
 		wxStaticText* StaticText11;
 		wxStaticText* t_framerate;
+		wxButton* bCameraControl;
 		wxStaticText* StaticText1;
 		wxBoxSizer* BoxSizer2;
 		wxStaticText* StaticText3;
@@ -127,10 +131,10 @@ class DebugPanel: public wxFrame
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText7;
 		wxCheckBox* chkFrameSync;
-		wxButton* bInitRealtime;
 		wxBoxSizer* BoxSizer1;
 		wxStaticText* t_camerap;
 		wxStaticText* t_camerafloor;
+		wxStaticText* t_collision;
 		wxBoxSizer* BoxSizer3;
 		wxCheckBox* chkAutoStairs;
 		wxCheckBox* chkAutoShafts;

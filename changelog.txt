@@ -9,6 +9,8 @@ in a shaft or an elevator
 -added support for elevator floor beeps
 -added support for separate up/down chimes
 -added support for per-door textures on elevator/shaft doors
+-added elevator door collision sensors
+-added last collision indicator to control panel
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------

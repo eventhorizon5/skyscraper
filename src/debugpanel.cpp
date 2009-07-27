@@ -48,6 +48,7 @@ const long DebugPanel::ID_STATICTEXT8 = wxNewId();
 const long DebugPanel::ID_STATICTEXT3 = wxNewId();
 const long DebugPanel::ID_STATICTEXT4 = wxNewId();
 const long DebugPanel::ID_STATICTEXT5 = wxNewId();
+const long DebugPanel::ID_STATICTEXT9 = wxNewId();
 const long DebugPanel::ID_STATICTEXT6 = wxNewId();
 const long DebugPanel::ID_t_camerafloor = wxNewId();
 const long DebugPanel::ID_t_camerap = wxNewId();
@@ -55,6 +56,7 @@ const long DebugPanel::ID_t_rotation = wxNewId();
 const long DebugPanel::ID_t_elevnumber = wxNewId();
 const long DebugPanel::ID_t_elevfloor = wxNewId();
 const long DebugPanel::ID_t_object = wxNewId();
+const long DebugPanel::ID_t_collision = wxNewId();
 const long DebugPanel::ID_STATICTEXT7 = wxNewId();
 const long DebugPanel::ID_STATICTEXT11 = wxNewId();
 const long DebugPanel::ID_chkCollisionDetection = wxNewId();
@@ -66,7 +68,7 @@ const long DebugPanel::ID_chkAutoStairs = wxNewId();
 const long DebugPanel::ID_chkFrameSync = wxNewId();
 const long DebugPanel::ID_bListAltitudes = wxNewId();
 const long DebugPanel::ID_bMeshControl = wxNewId();
-const long DebugPanel::ID_bInitRealtime = wxNewId();
+const long DebugPanel::ID_bCameraControl = wxNewId();
 const long DebugPanel::ID_bEditElevator = wxNewId();
 //*)
 
@@ -96,6 +98,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer6->Add(StaticText4, 0, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("Selected Object:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
 	BoxSizer6->Add(StaticText5, 0, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText8 = new wxStaticText(this, ID_STATICTEXT9, _("Last Collision:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
+	BoxSizer6->Add(StaticText8, 1, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("Framerate:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
 	BoxSizer6->Add(StaticText6, 1, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer4->Add(BoxSizer6, 0, wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
@@ -112,6 +116,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer7->Add(t_elevfloor, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t_object = new wxStaticText(this, ID_t_object, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_object"));
 	BoxSizer7->Add(t_object, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	t_collision = new wxStaticText(this, ID_t_collision, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_collision"));
+	BoxSizer7->Add(t_collision, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t_framerate = new wxStaticText(this, ID_STATICTEXT7, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_STATICTEXT7"));
 	BoxSizer7->Add(t_framerate, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer4->Add(BoxSizer7, 0, wxALIGN_RIGHT|wxALIGN_TOP, 5);
@@ -149,10 +155,10 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer3->Add(bListAltitudes, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bMeshControl = new wxButton(this, ID_bMeshControl, _("Realtime Mesh Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMeshControl"));
 	BoxSizer3->Add(bMeshControl, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bInitRealtime = new wxButton(this, ID_bInitRealtime, _("Init Realtime"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bInitRealtime"));
-	bInitRealtime->Disable();
-	BoxSizer3->Add(bInitRealtime, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bEditElevator = new wxButton(this, ID_bEditElevator, _("Edit Elevator"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEditElevator"));
+	bCameraControl = new wxButton(this, ID_bCameraControl, _("Camera Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCameraControl"));
+	bCameraControl->Disable();
+	BoxSizer3->Add(bCameraControl, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bEditElevator = new wxButton(this, ID_bEditElevator, _("Elevator Editor"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEditElevator"));
 	BoxSizer3->Add(bEditElevator, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(BoxSizer3, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	SetSizer(BoxSizer1);
@@ -168,7 +174,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkFrameSync,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkFrameSync_Click);
 	Connect(ID_bListAltitudes,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bListAltitudes_Click);
 	Connect(ID_bMeshControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
-	Connect(ID_bInitRealtime,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bInitRealtime_Click);
+	Connect(ID_bCameraControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bCameraControl_Click);
 	Connect(ID_bEditElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEditElevator_Click);
 	//*)
 	dp = this;
@@ -220,11 +226,6 @@ void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
 	mc->Show();
 }
 
-void DebugPanel::On_bInitRealtime_Click(wxCommandEvent& event)
-{
-
-}
-
 void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 {
 	ee->Show();
@@ -254,6 +255,7 @@ void DebugPanel::Timer::Notify()
 	dp->t_camerafloor->SetLabel(wxVariant((long)Simcore->camera->CurrentFloor).GetString());
 	dp->t_object->SetLabel(wxString::FromAscii(Simcore->camera->GetClickedMeshName()));
 	dp->t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
+	dp->t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh));
 
 	if (Simcore->Elevators() > 0)
 	{
@@ -305,4 +307,9 @@ void DebugPanel::On_chkGravity_Click(wxCommandEvent& event)
 void DebugPanel::On_chkAutoStairs_Click(wxCommandEvent& event)
 {
 	Simcore->AutoStairs = chkAutoStairs->GetValue();
+}
+
+void DebugPanel::On_bCameraControl_Click(wxCommandEvent& event)
+{
+
 }
