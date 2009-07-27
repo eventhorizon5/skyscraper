@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a set of call buttons
 
@@ -39,6 +39,12 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	Elevators.SetSize(elevators.GetSize());
 	for (size_t i = 0; i < elevators.GetSize(); i++)
 		Elevators[i] = elevators[i];
+
+	//save texture names
+	UpTexture = UpButtonTexture;
+	UpLitTexture = UpButtonTexture_Lit;
+	DownTexture = DownButtonTexture;
+	DownLitTexture = DownButtonTexture_Lit;
 
 	//create object mesh
 	csString buffer, buffer2, buffer3;

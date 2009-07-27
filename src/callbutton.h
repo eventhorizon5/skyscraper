@@ -37,7 +37,7 @@ public:
 	bool IsEnabled;
 
 	//functions
-	CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *DownButtonTexture, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~CallButton();
 	void Enabled(bool value);
 	void Call(int direction); //-1 is down, 1 is up
@@ -48,6 +48,9 @@ private:
 	csRef<iMeshWrapper> CallButtonMesh; //call button mesh object
 	csRef<iThingFactoryState> CallButton_back_state;
 	csRef<iThingFactoryState> CallButton_state;
+
+	csString UpTexture, UpLitTexture;
+	csString DownTexture, DownLitTexture;
 };
 
 #endif

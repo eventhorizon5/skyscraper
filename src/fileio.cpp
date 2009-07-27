@@ -2079,25 +2079,51 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
+				bool compatibility = false;
+				if (tempdata.GetSize() == 12)
+					compatibility = true;
+
+				if (compatibility == true)
 				{
-					ScriptError("Incorrect number of parameters");
-					return false;
-				}
-				//check numeric values
-				for (int i = 3; i <= 11; i++)
-				{
-					if (i == 6 || i == 9) //skip non-numeric parameters
-						i++;
-					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					//check numeric values
+					for (int i = 3; i <= 11; i++)
 					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
+						if (i == 6 || i == 9) //skip non-numeric parameters
+							i++;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
+					}
+				}
+				else
+				{
+					if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+					{
+						ScriptError("Incorrect number of parameters");
 						return false;
+					}
+
+					//check numeric values
+					for (int i = 5; i <= 13; i++)
+					{
+						if (i == 8 || i == 11) //skip non-numeric parameters
+							i++;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
 					}
 				}
 
 				//create call button
-				Simcore->GetFloor(Current)->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), csString(tempdata[9]).CompareNoCase("true"), atof(tempdata[10]), atof(tempdata[11]));
+				if (compatibility == true)
+					Simcore->GetFloor(Current)->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), csString(tempdata[9]).CompareNoCase("true"), atof(tempdata[10]), atof(tempdata[11]));
+				else
+					Simcore->GetFloor(Current)->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), atof(tempdata[12]), atof(tempdata[13]));
+
 				tempdata.DeleteAll();
 			}
 
