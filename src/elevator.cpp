@@ -945,14 +945,14 @@ void Elevator::MoveElevatorToFloor()
 	if (GetFloor() != oldfloor)
 	{
 		//play floor beep sound if not empty
-		if (BeepSound != "")
+		if (BeepSound != "" && IsServicedFloor(GetFloor()) == true)
 		{
 			floorbeep->Stop();
 			floorbeep->Load(BeepSound);
 			floorbeep->Loop(false);
 			floorbeep->Play();
 		}
-		
+
 		//update floor indicators
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			UpdateFloorIndicators();
