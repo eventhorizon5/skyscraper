@@ -557,7 +557,7 @@ void Camera::Loop()
 		if (collider_actor.CheckHitMeshes())
 		{
 			//get mesh list iterator from the actor object
-			csSet<csPtrKey<iMeshWrapper>>::GlobalIterator iterator = collider_actor.GetHitMeshes().GetIterator();
+			csSet<csPtrKey<iMeshWrapper> >::GlobalIterator iterator = collider_actor.GetHitMeshes().GetIterator();
 
 			//get names of each hit mesh and check if any where shaft doors or elevator doors
 			while (iterator.HasNext())
