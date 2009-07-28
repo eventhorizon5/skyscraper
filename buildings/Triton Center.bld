@@ -6267,11 +6267,11 @@ DrawWalls = true, true, false, false, false, false
 #Service Elevators
 <Floors -8 to 141>
     CallButtonElevators = 66
-    if[%floor% = 0 | %floor% > 78] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.01, 18.542 + 2.5, 4, right, 0.5, 1, true, 0, 0
+    if[%floor% = 0 | %floor% > 78] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -9.417 + 4.92 + 0.33 + 0.01, 18.542 + 2.5, 4, right, 0.5, 1, true, 0, 0
     CallButtonElevators = 67
-    if[%floor% < 80] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, 9.375 - 5.08 - 0.33 - 0.01, 18.542 - 2.5, 4, left, 0.5, 1, true, 0, 0
+    if[%floor% < 80] CreateCallButtons ElevExtPanels2, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 9.375 - 5.08 - 0.33 - 0.01, 18.542 - 2.5, 4, left, 0.5, 1, true, 0, 0
     CallButtonElevators = 68
-    CreateCallButtons ElevExtPanels2, ButtonUp, ButtonDown, -9.417 + 4.92 + 0.33 + 0.01, 30.375 + 3, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels2, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -9.417 + 4.92 + 0.33 + 0.01, 30.375 + 3, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
 
 
