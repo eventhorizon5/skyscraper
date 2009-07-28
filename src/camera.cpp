@@ -434,10 +434,17 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 	if (meshname.Find("Call Button") != -1)
 	{
 		//user clicked on a call button
-		int floor = atoi(meshname.Slice(12, meshname.Find(":") - 12));
-		int number = atoi(meshname.Slice(meshname.Find(":") + 1));
+		int index = meshname.Find(":");
+		int index2 = meshname.Find(":", index + 1);
+		int floor = atoi(meshname.Slice(12, index - 12));
+		int number = atoi(meshname.Slice(index + 1, index2 - index - 1));
+		csString direction = meshname.Slice(index2 + 1);
+		direction.Trim();
 		//press button
-		sbs->GetFloor(floor)->CallButtonArray[number]->Press(result.polygon_idx);
+		if (direction == "Up")
+			sbs->GetFloor(floor)->CallButtonArray[number]->Call(true);
+		else
+			sbs->GetFloor(floor)->CallButtonArray[number]->Call(false);
 	}
 
 	//check elevator buttons

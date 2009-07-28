@@ -1056,17 +1056,41 @@ void Elevator::MoveElevatorToFloor()
 			}
 		}
 
-		//change directional indicator
+		//get call buttons associated with this elevator
+		csArray<int> buttons = sbs->GetFloor(GetFloor())->GetCallButtons(Number);
+
+		//change directional indicator and disable call button light
 		if (InServiceMode() == false)
 		{
+			bool LightDirection = false; //true for up, false for down
+			
 			if (GetFloor() == GetTopFloor())
-				SetDirectionalIndicator(GetFloor(), false, true); //turn on down light if on top floor
+				LightDirection = false; //turn on down light if on top floor
 			else if (GetFloor() == GetBottomFloor())
-				SetDirectionalIndicator(GetFloor(), true, false); //turn on up light if on bottom floor
+				LightDirection = true; //turn on up light if on bottom floor
 			else if (QueuePositionDirection == 1 || LastQueueDirection == 1)
-				SetDirectionalIndicator(GetFloor(), true, false); //turn on up light if queue direction is or was up
+				LightDirection = true; //turn on up light if queue direction is or was up
 			else if (QueuePositionDirection == -1 || LastQueueDirection == -1)
-				SetDirectionalIndicator(GetFloor(), false, true); //turn on down light if queue direction is or was down
+				LightDirection = false; //turn on down light if queue direction is or was down
+			
+			//change indicator
+			if (LightDirection == false)
+				SetDirectionalIndicator(GetFloor(), false, true);
+			else
+				SetDirectionalIndicator(GetFloor(), true, false);
+
+			//disable call button light
+			for (int i = 0; i < buttons.GetSize(); i++)
+			{
+				CallButton *button = sbs->GetFloor(GetFloor())->CallButtonArray[i];
+				if (button)
+				{
+					if (LightDirection == true)
+						button->UpLight(false);
+					else
+						button->DownLight(false);
+				}
+			}
 		}
 
 		//open doors

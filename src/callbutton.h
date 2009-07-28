@@ -35,22 +35,27 @@ public:
 	int Number; //call button index number (on the specified floor)
 	csString Direction; //direction the buttons face; either 'front', 'back', 'left', or 'right'
 	bool IsEnabled;
+	bool UpStatus; //status of up light
+	bool DownStatus; //status of down light
 
 	//functions
 	CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~CallButton();
 	void Enabled(bool value);
-	void Call(int direction); //-1 is down, 1 is up
-	void Press(int index);
+	void Call(bool direction); //true is up, false is down
+	void UpLight(bool value);
+	void DownLight(bool value);
+	void SetLights(int up, int down);
+	bool ServicesElevator(int elevator);
 
 private:
 	csRef<iMeshWrapper> CallButtonBackMesh; //call button mesh object
-	csRef<iMeshWrapper> CallButtonMesh; //call button mesh object
+	csRef<iMeshWrapper> CallButtonMeshUp; //call button mesh object
+	csRef<iMeshWrapper> CallButtonMeshDown; //call button mesh object
 	csRef<iThingFactoryState> CallButton_back_state;
-	csRef<iThingFactoryState> CallButton_state;
 
-	csString UpTexture, UpLitTexture;
-	csString DownTexture, DownLitTexture;
+	csString UpTexture, UpTextureLit;
+	csString DownTexture, DownTextureLit;
 };
 
 #endif

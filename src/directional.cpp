@@ -120,14 +120,12 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 		float offset;
 		if (Direction == "front")
 		{
-			sbs->DrawWalls(true, false, false, false, false, false);
 			offset = -0.01f;
 			x1 = CenterX - (BackWidth / 4);
 			x2 = CenterX + (BackWidth / 4);
 		}
 		else
 		{
-			sbs->DrawWalls(false, true, false, false, false, false);
 			offset = 0.01f;
 			x2 = CenterX - (BackWidth / 4);
 			x1 = CenterX + (BackWidth / 4);
@@ -183,8 +181,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 		}
 		else
 			sbs->AddGenWall(DirectionalMesh, UpTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 6) * 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight / 6), 1, 1);
-
-		sbs->ResetWalls();
 	}
 	else
 	{
@@ -192,7 +188,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 		float offset;
 		if (Direction == "left")
 		{
-			sbs->DrawWalls(true, false, false, false, false, false);
 			offset = -0.01f;
 			z2 = CenterZ - (BackWidth / 4);
 			z1 = CenterZ + (BackWidth / 4);
@@ -200,7 +195,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 		else
 		{
 			//right
-			sbs->DrawWalls(false, true, false, false, false, false);
 			offset = 0.01f;
 			z1 = CenterZ - (BackWidth / 4);
 			z2 = CenterZ + (BackWidth / 4);
@@ -256,8 +250,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 		}
 		else
 			sbs->AddGenWall(DirectionalMesh, UpTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 6) * 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight / 6), 1, 1);
-
-		sbs->ResetWalls();
 	}
 	sbs->ResetExtents();
 }

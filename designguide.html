@@ -683,15 +683,17 @@
   <p align="left"> <strong>13. CreateCallButtons</strong> - creates a call button 
     set<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateCallButtons<em> 
-    BackTexture</em>, <em>UpButtonTexture</em>, <em>DownButtonTexture, CenterX, 
-    CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th<br>
+    BackTexture</em>, <em>UpButtonTexture</em>, <em>UpButtonTexture_Lit, DownButtonTexture, 
+    DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, 
+    ShowBack, tw, th<br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
-    </em>Create Marble, CallButtonsTex, CallButtonsTex, -10, 0, 4, right, 0.5, 
-    1, true, 1, 1</font></p>
+    </em>Create Marble, CallButtonsUp, CallButtonsUpLit, CallButtonsDown, CallButtonsDownLit, 
+    -10, 0, 4, right, 0.5, 1, true, 1, 1</font></p>
   <p align="left"><em>BackTexture</em> is the texture of the wall plate behind 
     the buttons</p>
   <p align="left"><em>UpButtonTexture</em> and <em>DownButtonTexture</em> are 
-    the textures used for the buttons themselves</p>
+    the textures used for the buttons themselves (unlit). <em>UpButtonTexture_Lit</em> 
+    and <em>DownButtonTexture_Lit</em> specify the lit button textures.</p>
   <p align="left"><em>CenterX</em> and <em>CenterZ</em> are the central location 
     of the call button set object</p>
   <p align="left"><em>voffset</em> is the altitude offset that the object is above 

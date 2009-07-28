@@ -86,6 +86,7 @@ public:
 	bool AddFloorIndicator(int elevator, bool relative, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	void UpdateFloorIndicators();
 	void Loop();
+	csArray<int> GetCallButtons(int elevator);
 
 private:
 	char intbuffer[65];
