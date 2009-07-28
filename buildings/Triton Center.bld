@@ -6289,6 +6289,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Floor 0>
     SetAutoSize = false, false
+    DrawWalls = true, false, false, false, false, false
     
     #zone 1 locals 2-14
     AddWall Panel, ElevExtPanels, 0, -27.67 - 0.5, 13.5 - 0.25 - 0.01, -27.67 + 0.5, 13.5 - 0.25 - 0.01, 2, 2, 4, 4, 0, 0, False
