@@ -482,10 +482,11 @@ void Elevator::ProcessCallQueue()
 	if (MoveElevator == true)
 		PauseQueueSearch = true;
 
-	//if elevator is stopped, unpause queue
-	if (QueuePositionDirection != 0 && MoveElevator == false)
+	//if elevator is stopped and doors are closed, unpause queue
+	if (QueuePositionDirection != 0 && MoveElevator == false && AreDoorsOpen() == false && CheckOpenDoor() == false)
 		PauseQueueSearch = false;
 
+	//exit if queue is paused
 	if (PauseQueueSearch == true)
 		return;
 
@@ -495,6 +496,7 @@ void Elevator::ProcessCallQueue()
 		//search through up queue
 		for (size_t i = 0; i < UpQueue.GetSize(); i++)
 		{
+			//if the queued floor number is a different floor, dispatch the elevator to that floor
 			if (UpQueue[i] > GetFloor() || (UpQueue[i] < GetFloor() && UpQueue.GetSize() == 1))
 			{
 				PauseQueueSearch = true;
@@ -504,10 +506,13 @@ void Elevator::ProcessCallQueue()
 				DeleteRoute(UpQueue[i], 1);
 				return;
 			}
+			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
 			if (UpQueue[i] == GetFloor())
 			{
 				OpenDoors();
 				DeleteRoute(UpQueue[i], 1);
+				//turn off up call buttons if on
+				SetCallButtons(GetFloor(), true, false);
 			}
 		}
 	}
@@ -516,6 +521,7 @@ void Elevator::ProcessCallQueue()
 		//search through down queue
 		for (size_t i = 0; i < DownQueue.GetSize(); i++)
 		{
+			//if the queued floor number is a different floor, dispatch the elevator to that floor
 			if (DownQueue[i] < GetFloor() || (DownQueue[i] > GetFloor() && DownQueue.GetSize() == 1))
 			{
 				PauseQueueSearch = true;
@@ -525,10 +531,13 @@ void Elevator::ProcessCallQueue()
 				DeleteRoute(DownQueue[i], -1);
 				return;
 			}
+			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
 			if (DownQueue[i] == GetFloor())
 			{
 				OpenDoors();
 				DeleteRoute(DownQueue[i], -1);
+				//turn off down call buttons if on
+				SetCallButtons(GetFloor(), false, false);
 			}
 		}
 	}
@@ -565,12 +574,12 @@ void Elevator::MonitorLoop()
 	}
 
 	//play idle sound if in elevator, or if doors open
-	if (((sbs->InElevator == true && sbs->ElevatorNumber == Number) || CheckDoorsOpen() == true || CheckOpenDoor() == true) && idlesound->IsPlaying() == false)
+	if (((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true) && idlesound->IsPlaying() == false)
 	{
 		idlesound->Loop(true);
 		idlesound->Play();
 	}
-	else if (((sbs->InElevator == false || sbs->ElevatorNumber != Number) && CheckDoorsOpen() == false && CheckOpenDoor() == false) && idlesound->IsPlaying() == true)
+	else if (((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false) && idlesound->IsPlaying() == true)
 		idlesound->Stop();
 
 	//process alarm
@@ -588,7 +597,7 @@ void Elevator::MonitorLoop()
 	}
 
 	//elevator movement
-	if (MoveElevator == true && (CheckDoorsOpen() == false || InspectionService == true))
+	if (MoveElevator == true && (AreDoorsOpen() == false || InspectionService == true))
 		MoveElevatorToFloor();
 
 }
@@ -1056,9 +1065,6 @@ void Elevator::MoveElevatorToFloor()
 			}
 		}
 
-		//get call buttons associated with this elevator
-		csArray<int> buttons = sbs->GetFloor(GetFloor())->GetCallButtons(Number);
-
 		//change directional indicator and disable call button light
 		if (InServiceMode() == false)
 		{
@@ -1074,23 +1080,10 @@ void Elevator::MoveElevatorToFloor()
 				LightDirection = false; //turn on down light if queue direction is or was down
 			
 			//change indicator
-			if (LightDirection == false)
-				SetDirectionalIndicator(GetFloor(), false, true);
-			else
-				SetDirectionalIndicator(GetFloor(), true, false);
+			SetDirectionalIndicator(GetFloor(), LightDirection, false);
 
-			//disable call button light
-			for (int i = 0; i < buttons.GetSize(); i++)
-			{
-				CallButton *button = sbs->GetFloor(GetFloor())->CallButtonArray[i];
-				if (button)
-				{
-					if (LightDirection == true)
-						button->UpLight(false);
-					else
-						button->DownLight(false);
-				}
-			}
+			//disable call button lights
+			SetCallButtons(GetFloor(), LightDirection, false);
 		}
 
 		//open doors
@@ -2074,10 +2067,27 @@ bool Elevator::AreDoorsOpen(int number)
 {
 	//returns the internal door state
 
-	if (GetDoor(number))
-		return GetDoor(number)->AreDoorsOpen();
+	int start, end;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(number, intbuffer, 10)));
+	{
+		start = number;
+		end = number;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		if (GetDoor(i))
+		{
+			if (GetDoor(i)->AreDoorsOpen() == true)
+				return true;
+		}
+		else
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
+	}
 	return false;
 }
 
@@ -2170,21 +2180,6 @@ bool Elevator::DoorsStopped(int number)
 			return GetDoor(i)->DoorsStopped();
 		else
 			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
-	}
-	return false;
-}
-
-bool Elevator::CheckDoorsOpen()
-{
-	//check each door's DoorsOpen value and return true if any are true
-
-	for (int i = 1; i <= NumDoors; i++)
-	{
-		if (GetDoor(i))
-		{
-			if (GetDoor(i)->GetDoorsOpen() == true)
-				return true;
-		}
 	}
 	return false;
 }
@@ -2318,4 +2313,26 @@ void Elevator::AddFloorSigns(bool relative, const char *direction, float CenterX
 		sbs->ResetWalls();
 	}
 	sbs->SetAutoSize(autosize.x, autosize.y);
+}
+
+void Elevator::SetCallButtons(int floor, bool direction, bool value)
+{
+	//sets light status of all associated call buttons on the specified floor
+	//for direction, true is up and false is down
+
+	//get call buttons associated with this elevator
+	csArray<int> buttons = sbs->GetFloor(GetFloor())->GetCallButtons(Number);
+
+	for (int i = 0; i < buttons.GetSize(); i++)
+	{
+		CallButton *button = sbs->GetFloor(floor)->CallButtonArray[i];
+		if (button)
+		{
+			if (direction == true)
+				button->UpLight(value);
+			else
+				button->DownLight(value);
+		}
+	}
+
 }
