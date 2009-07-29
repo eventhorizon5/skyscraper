@@ -297,8 +297,8 @@ void Elevator::AddRoute(int floor, int direction)
 
 	if (direction == 1)
 	{
-		if (UpQueue.GetSize() == 0 && QueuePositionDirection == 0)
-			PauseQueueSearch = false;
+		//if (UpQueue.GetSize() == 0 && QueuePositionDirection == 0)
+			//PauseQueueSearch = false;
 		if (UpQueue.Find(floor) != csArrayItemNotFound)
 		{
 			//exit if entry already exits
@@ -312,8 +312,8 @@ void Elevator::AddRoute(int floor, int direction)
 	}
 	else
 	{
-		if (DownQueue.GetSize() == 0 && QueuePositionDirection == 0)
-			PauseQueueSearch = false;
+		//if (DownQueue.GetSize() == 0 && QueuePositionDirection == 0)
+			//PauseQueueSearch = false;
 		if (DownQueue.Find(floor) != csArrayItemNotFound)
 		{
 			//exit if entry already exits
@@ -433,7 +433,7 @@ void Elevator::ProcessCallQueue()
 		return;
 
 	//set queue search direction if queues aren't empty
-	if (QueuePositionDirection == 0)
+	if (QueuePositionDirection == 0 && PauseQueueSearch == false)
 	{
 		if (UpQueue.GetSize() != 0)
 		{
@@ -483,7 +483,7 @@ void Elevator::ProcessCallQueue()
 		PauseQueueSearch = true;
 
 	//if elevator is stopped and doors are closed, unpause queue
-	if (QueuePositionDirection != 0 && MoveElevator == false && AreDoorsOpen() == false && CheckOpenDoor() == false)
+	if (QueuePositionDirection == 0 && MoveElevator == false && AreDoorsOpen() == false && CheckOpenDoor() == false)
 		PauseQueueSearch = false;
 
 	//exit if queue is paused
@@ -1080,7 +1080,10 @@ void Elevator::MoveElevatorToFloor()
 				LightDirection = false; //turn on down light if queue direction is or was down
 			
 			//change indicator
-			SetDirectionalIndicator(GetFloor(), LightDirection, false);
+			if (LightDirection == true)
+				SetDirectionalIndicator(GetFloor(), true, false);
+			else
+				SetDirectionalIndicator(GetFloor(), false, true);
 
 			//disable call button lights
 			SetCallButtons(GetFloor(), LightDirection, false);
