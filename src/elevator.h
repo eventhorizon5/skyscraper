@@ -177,6 +177,7 @@ public:
 	void AddFloorSigns(bool relative, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	void SetCallButtons(int floor, bool direction, bool value);
 	bool IsIdle();
+	void QueueReset();
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

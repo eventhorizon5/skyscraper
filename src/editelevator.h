@@ -76,6 +76,7 @@ class editelevator: public wxDialog
 		static const long ID_bOpenShaftDoor;
 		static const long ID_bStop;
 		static const long ID_bChime;
+		static const long ID_bUpIndicator;
 		static const long ID_bEnqueueUp;
 		static const long ID_bEnqueueDown;
 		static const long ID_bClose;
@@ -83,6 +84,7 @@ class editelevator: public wxDialog
 		static const long ID_bCloseShaftDoor;
 		static const long ID_bAlarm;
 		static const long ID_bStopDoors;
+		static const long ID_bDownIndicator;
 		static const long ID_STATICTEXT3;
 		static const long ID_txtNumber;
 		static const long ID_STATICTEXT5;
@@ -114,6 +116,8 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT44;
 		static const long ID_txtSkipFloorText;
 		static const long ID_bSetSkipFloorText;
+		static const long ID_STATICTEXT52;
+		static const long ID_txtAlarm;
 		static const long ID_STATICTEXT14;
 		static const long ID_txtFloor;
 		static const long ID_STATICTEXT15;
@@ -138,6 +142,9 @@ class editelevator: public wxDialog
 		static const long ID_txtQueueLastUp;
 		static const long ID_STATICTEXT41;
 		static const long ID_txtQueueLastDown;
+		static const long ID_STATICTEXT51;
+		static const long ID_txtQueueLastDirection;
+		static const long ID_bResetQueues;
 		static const long ID_STATICTEXT21;
 		static const long ID_txtSpeed;
 		static const long ID_bSetSpeed;
@@ -169,6 +176,8 @@ class editelevator: public wxDialog
 		static const long ID_txtJerkRate;
 		static const long ID_STATICTEXT49;
 		static const long ID_txtDoorStopped;
+		static const long ID_STATICTEXT53;
+		static const long ID_txtIsIdle;
 		static const long ID_STATICTEXT30;
 		static const long ID_txtDestFloor;
 		static const long ID_STATICTEXT43;
@@ -250,6 +259,9 @@ class editelevator: public wxDialog
 		void On_bUp_Toggle(wxCommandEvent& event);
 		void On_bGoToggle_Toggle(wxCommandEvent& event);
 		void On_bDown_Toggle(wxCommandEvent& event);
+		void On_bUpIndicator_Click(wxCommandEvent& event);
+		void On_bDownIndicator_Click(wxCommandEvent& event);
+		void On_bResetQueues_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -264,6 +276,7 @@ class editelevator: public wxDialog
 		wxButton* bCall;
 		wxStaticText* StaticText32;
 		wxStaticText* StaticText36;
+		wxButton* bUpIndicator;
 		wxTextCtrl* txtDoorOrigin;
 		wxTextCtrl* txtDoorHeight;
 		wxStaticText* StaticText40;
@@ -294,14 +307,16 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText25;
 		wxStaticText* StaticText6;
 		wxTextCtrl* txtStop;
+		wxStaticText* StaticText52;
 		wxStaticBoxSizer* StaticBoxSizer2;
 		wxTextCtrl* txtQueueLastDown;
 		wxStaticText* tDoor;
 		wxCheckBox* chkVisible;
 		wxTextCtrl* txtElevStart;
-		wxStaticText* StaticText19;
 		wxTextCtrl* txtRecallAlternate;
+		wxStaticText* StaticText19;
 		wxStaticBoxSizer* StaticBoxSizer3;
+		wxTextCtrl* txtIsIdle;
 		wxToggleButton* bUp;
 		wxButton* bOpenManual;
 		wxStaticText* StaticText39;
@@ -356,9 +371,12 @@ class editelevator: public wxDialog
 		wxStaticBoxSizer* StaticBoxSizer7;
 		wxTextCtrl* txtJerkRate;
 		wxStaticText* StaticText18;
+		wxTextCtrl* txtAlarm;
 		wxStaticText* StaticText37;
 		wxStaticText* StaticText13;
 		wxBoxSizer* BoxSizer10;
+		wxStaticText* StaticText51;
+		wxStaticText* StaticText53;
 		wxStaticText* StaticText20;
 		wxStaticText* StaticText31;
 		wxTextCtrl* txtMoveElevator;
@@ -368,6 +386,7 @@ class editelevator: public wxDialog
 		wxButton* bSetACPFloor;
 		wxToggleButton* bIndService;
 		wxButton* bClose;
+		wxButton* bDownIndicator;
 		wxTextCtrl* txtOrigin;
 		wxButton* bSetDoorTimer;
 		wxTextCtrl* txtSkipFloorText;
@@ -384,6 +403,7 @@ class editelevator: public wxDialog
 		wxScrollBar* sDoor;
 		wxTextCtrl* txtDirection;
 		wxStaticText* tElevator;
+		wxButton* bResetQueues;
 		wxTextCtrl* txtPosition;
 		wxRadioButton* Fire2On;
 		wxStaticText* StaticText15;
@@ -405,6 +425,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText2;
 		wxTextCtrl* txtQueueLastUp;
+		wxTextCtrl* txtQueueLastDirection;
 		wxTextCtrl* txtDestFloor;
 		wxStaticText* StaticText38;
 		wxStaticText* StaticText17;

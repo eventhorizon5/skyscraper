@@ -2360,3 +2360,10 @@ bool Elevator::IsIdle()
 	else
 		return false;
 }
+
+void Elevator::QueueReset()
+{
+	//reset queues
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Resetting queues");
+	ResetQueues = true;
+}

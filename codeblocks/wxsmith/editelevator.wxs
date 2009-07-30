@@ -275,7 +275,7 @@
 							</object>
 						</object>
 						<flag>wxTOP|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
-						<border>10</border>
+						<border>5</border>
 						<option>2</option>
 					</object>
 					<object class="sizeritem">
@@ -290,28 +290,28 @@
 											<focused>1</focused>
 											<handler function="On_bCall_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bGo" variable="bGo" member="yes">
 											<label>Go</label>
 											<handler function="On_bGo_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bOpen" variable="bOpen" member="yes">
 											<label>Open</label>
 											<handler function="On_bOpen_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bOpenManual" variable="bOpenManual" member="yes">
 											<label>Open Manual</label>
 											<handler function="On_bOpenManual_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bOpenShaftDoor" variable="bOpenShaftDoor" member="yes">
@@ -338,6 +338,15 @@
 										<border>5</border>
 										<option>1</option>
 									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bUpIndicator" variable="bUpIndicator" member="yes">
+											<label>Set Up Indicator</label>
+											<handler function="On_bUpIndicator_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<option>1</option>
@@ -350,28 +359,28 @@
 											<label>Enqueue Up</label>
 											<handler function="On_bEnqueueUp_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bEnqueueDown" variable="bEnqueueDown" member="yes">
 											<label>Enqueue Down</label>
 											<handler function="On_bEnqueueDown_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bClose" variable="bClose" member="yes">
 											<label>Close</label>
 											<handler function="On_bClose_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bCloseManual" variable="bCloseManual" member="yes">
 											<label>Close Manual</label>
 											<handler function="On_bCloseManual_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bCloseShaftDoor" variable="bCloseShaftDoor" member="yes">
@@ -387,7 +396,7 @@
 											<label>Alarm</label>
 											<handler function="On_bAlarm_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bStopDoors" variable="bStopDoors" member="yes">
@@ -398,17 +407,26 @@
 										<border>5</border>
 										<option>1</option>
 									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bDownIndicator" variable="bDownIndicator" member="yes">
+											<label>Set Down Indicator</label>
+											<handler function="On_bDownIndicator_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxTOP|wxRIGHT|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+						<flag>wxRIGHT|wxALIGN_RIGHT|wxALIGN_TOP</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+				<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 			</object>
 			<object class="sizeritem">
 				<object class="wxBoxSizer" variable="BoxSizer3" member="yes">
@@ -684,11 +702,32 @@
 										<border>5</border>
 										<option>1</option>
 									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT52" variable="StaticText52" member="yes">
+											<label>Alarm On:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtAlarm" variable="txtAlarm" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 							</object>
 						</object>
-						<flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+						<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
 						<border>5</border>
 					</object>
 					<object class="sizeritem">
@@ -883,6 +922,37 @@
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 												<border>5</border>
 											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT51" variable="StaticText51" member="yes">
+													<label>Last:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtQueueLastDirection" variable="txtQueueLastDirection" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bResetQueues" variable="bResetQueues" member="yes">
+													<label>Reset</label>
+													<handler function="On_bResetQueues_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
 										</object>
 										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
@@ -890,7 +960,7 @@
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 							</object>
 						</object>
-						<flag>wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<flag>wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 						<border>5</border>
 					</object>
 					<object class="sizeritem">
@@ -1151,11 +1221,33 @@
 										<border>5</border>
 										<option>1</option>
 									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT53" variable="StaticText53" member="yes">
+											<label>IsIdle:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtIsIdle" variable="txtIsIdle" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 							</object>
 						</object>
-						<flag>wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<flag>wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 						<border>5</border>
 					</object>
 					<object class="sizeritem">
@@ -1447,7 +1539,7 @@
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+						<flag>wxBOTTOM|wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
