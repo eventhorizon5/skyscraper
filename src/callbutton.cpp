@@ -195,9 +195,17 @@ void CallButton::Call(bool direction)
 	//calls the closest elevator in the elevator array list to the current floor,
 	//and also depending on the direction it's travelling
 
-	int closest = abs(sbs->GetElevator(Elevators[0])->GetFloor() - floor);
+	//exit if call has already been made
+	if (direction == true && UpStatus == true)
+		return;
+	if (direction == false && DownStatus == true)
+		return;
+
+	//initialize values
+	int closest = 0;
 	int closest_elev = 0;
-	int tmpdirection;
+	int tmpdirection = 0;
+	bool check = false;
 
 	//light up button
 	if (direction == true)
@@ -211,62 +219,76 @@ void CallButton::Call(bool direction)
 		tmpdirection = -1;
 	}
 
+	//check each elevator associated with this call button to find the closest available one
 	for (size_t i = 0; i < Elevators.GetSize(); i++)
 	{
-		int current = sbs->GetElevator(Elevators[i])->GetFloor();
+		Elevator *elevator = sbs->GetElevator(Elevators[i]);
+		int current = elevator->GetFloor();
 
-		//if elevator is closer than the previously checked one
-		if (abs(current - floor) < closest)
+		//if elevator is closer than the previously checked one or we're starting the checks
+		if (abs(current - floor) < closest || check == false)
 		{
 			//and if it's above the current floor and should be called down, or below the
-			//current floor and called up, or on the same floor
-			if ((current > floor && direction == false) || (current < floor && direction == true) || current == floor)
+			//current floor and called up, or on the same floor, or idle
+			if ((current > floor && direction == false) || (current < floor && direction == true) || current == floor || elevator->IsIdle())
 			{
-				//and if it's either going the same direction as the call or not moving at all
-				if ((sbs->GetElevator(Elevators[i])->Direction == tmpdirection || sbs->GetElevator(Elevators[i])->Direction == 0) && sbs->GetElevator(Elevators[i])->IsMoving == false)
+				//and if it's either going the same direction as the call or idle
+				if ((elevator->QueuePositionDirection == tmpdirection || elevator->LastQueueDirection == tmpdirection) || elevator->IsIdle())
 				{
 					//and if it's not in any service mode
 					if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
 					{
 						closest = current;
 						closest_elev = i;
+						check = true;
 					}
 				}
 			}
 		}
 	}
 
+	if (check == false)
+	{
+		//no elevator found
+		csString num = _itoa(Number, intbuffer, 10);
+		csString floornum = _itoa(floor, intbuffer, 10);
+		sbs->Report("Call Button " + floornum + ":" + num + " - No elevator found");
+		return;
+	}
+
+	Elevator* elevator = sbs->GetElevator(Elevators[closest_elev]);
+
 	//if selected elevator is in a service mode, exit
-	if (sbs->GetElevator(Elevators[closest_elev])->InServiceMode() == true)
+	if (elevator->InServiceMode() == true)
 		return;
 
-	//if closest elevator is already on the called floor
-	if (sbs->GetElevator(Elevators[closest_elev])->GetFloor() == floor)
+	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
+	if (elevator->GetFloor() == floor && elevator->LastQueueDirection == tmpdirection && elevator->IsIdle() == false)
 	{
 		if (direction == false)
 		{
 			//turn off button light
 			DownLight(false);
 			//turn on directional indicator
-			sbs->GetElevator(Elevators[closest_elev])->SetDirectionalIndicator(floor, false, true);
+			elevator->SetDirectionalIndicator(floor, false, true);
 			//play chime sound
-			sbs->GetElevator(Elevators[closest_elev])->Chime(0, floor, false);
+			elevator->Chime(0, floor, false);
 		}
 		else
 		{
 			//turn off button light
 			UpLight(false);
 			//turn on directional indicator
-			sbs->GetElevator(Elevators[closest_elev])->SetDirectionalIndicator(floor, true, false);
+			elevator->SetDirectionalIndicator(floor, true, false);
 			//play chime sound
-			sbs->GetElevator(Elevators[closest_elev])->Chime(0, floor, true);
+			elevator->Chime(0, floor, true);
 		}
 		//open elevator if it's on the same floor
-		sbs->GetElevator(Elevators[closest_elev])->OpenDoors();
+		elevator->OpenDoors();
 	}
 	else
 		//otherwise add a route entry to this floor
-		sbs->GetElevator(Elevators[closest_elev])->AddRoute(floor, direction);
+		elevator->AddRoute(floor, direction);
 }
 
 void CallButton::UpLight(bool value)

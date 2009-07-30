@@ -56,6 +56,9 @@ private:
 
 	csString UpTexture, UpTextureLit;
 	csString DownTexture, DownTextureLit;
+
+	char intbuffer[65];
+	char buffer[20];
 };
 
 #endif
