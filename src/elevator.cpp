@@ -104,6 +104,7 @@ Elevator::Elevator(int number)
 	AlarmActive = false;
 	NumDoors = 1;
 	MovePending = false;
+	Created = false;
 
 	//create object meshes
 	buffer = Number;
@@ -271,6 +272,8 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	alarm->SetPosition(Origin);
 	floorbeep = new Sound();
 	floorbeep->SetPosition(Origin);
+
+	Created = true;
 
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 	return true;

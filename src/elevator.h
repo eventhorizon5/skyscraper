@@ -40,6 +40,7 @@ public:
 	int Number; //elevator number
 	csString Name; //elevator name
 	int NumDoors; //number of elevator doors
+	bool Created; //has elevator been created with the CreateElevator function?
 	int QueuePositionDirection; //queue processing direction
 	int LastQueueDirection; //last queue processing direction
 	bool PauseQueueSearch; //pause queue processor

@@ -13,6 +13,7 @@ in a shaft or an elevator
 -added last collision indicator to control panel
 -added support for call button lighting
 -major fixes to the elevator queue and call processing
+-fixes to some elevator parameters, where they would error out if used in a different block than the CreateElevator command
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------

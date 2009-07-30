@@ -67,7 +67,6 @@ bool Skyscraper::LoadBuilding(const char *filename)
 	csString buffer;
 	int startpos = 0;
 	bool getfloordata = false;
-	bool elevatorcreated = false;
 	bool setshaftdoors = false;
 
 	while (line < BuildingData.GetSize() - 1)
@@ -231,7 +230,6 @@ bool Skyscraper::LoadBuilding(const char *filename)
 			Section = 0;
 			Context = "None";
 			Report("Finished elevator");
-			elevatorcreated = false;
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<textures>") == true)
@@ -2511,7 +2509,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (elevatorcreated == false)
+				if (Simcore->GetElevator(Current)->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2636,7 +2634,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (elevatorcreated == false)
+				if (Simcore->GetElevator(Current)->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2664,7 +2662,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (elevatorcreated == false)
+				if (Simcore->GetElevator(Current)->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2688,7 +2686,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (elevatorcreated == false)
+				if (Simcore->GetElevator(Current)->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2748,7 +2746,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (elevatorcreated == false)
+				if (Simcore->GetElevator(Current)->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2773,7 +2771,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (elevatorcreated == false)
+				if (Simcore->GetElevator(Current)->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2797,7 +2795,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (elevatorcreated == false)
+				if (Simcore->GetElevator(Current)->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2948,7 +2946,6 @@ recalc:
 					ScriptError("An error occurred while creating the elevator.  See the console output for more information");
 					return false;
 				}
-				elevatorcreated = true;
 				tempdata.DeleteAll();
 			}
 
@@ -3445,7 +3442,6 @@ recalc:
 			//handle elevator range
 			if (RangeL != RangeH && LineData.Slice(0, 14).CompareNoCase("<endelevators>") == true)
 			{
-				elevatorcreated = false;
 				if (Current < RangeH)
 				{
 					Current++;
