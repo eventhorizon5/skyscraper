@@ -2343,7 +2343,7 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 
 	for (int i = 0; i < buttons.GetSize(); i++)
 	{
-		CallButton *button = sbs->GetFloor(floor)->CallButtonArray[i];
+		CallButton *button = sbs->GetFloor(floor)->CallButtonArray[buttons[i]];
 		if (button)
 		{
 			if (direction == true)
