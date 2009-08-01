@@ -6278,13 +6278,15 @@ DrawWalls = true, true, false, false, false, false
 #Floor indicators
 <Floors -8 to 141>
     #elevator 66
-    if[%floor% = 0 | %floor% > 78] AddFloorIndicator 66, true, right, 3.926 + 0.2 + 0.66 + 0.02, 0, 0.5, 0.4, 8.2
+    if[%floor% = 0 | (%floor% > 78 & %floor% < 82) | %floor% > 99] AddFloorIndicator 66, true, right, 3.926 + 0.2 + 0.66 + 0.02, 0, 0.5, 0.4, 8.2
+    if[%floor% > 81 & %floor% < 100] AddFloorIndicator 66, true, right, 3.926 + 0.2 + 0.66 + 0.02, 0, 0.5, 0.4, 8
     
     #elevator 67
     if[%floor% < 80] AddFloorIndicator 67, true, left, -3.926 - 0.2 - 0.66 - 0.02, 0, 0.5, 0.4, 8.2
     
     #elevator 68
-    AddFloorIndicator 68, true, right, 4.218 + 0.2 + 0.66 + 0.02, 0, 0.5, 0.4, 8.2
+    if[%floor% < 82 | %floor% > 99] AddFloorIndicator 68, true, right, 4.218 + 0.2 + 0.66 + 0.02, 0, 0.5, 0.4, 8.2
+    if[%floor% > 81 & %floor% < 100] AddFloorIndicator 68, true, right, 4.218 + 0.2 + 0.66 + 0.02, 0, 0.5, 0.4, 8
 <EndFloors>
 
 <Floor 0>
