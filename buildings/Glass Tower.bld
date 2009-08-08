@@ -505,11 +505,11 @@ ShowFullShaft 2 = true
     if[%floor% = 137] AddShaftFloor 2, Shaft1Top, Brick, 0.5, -4, -4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
-    #AddShaftWall 2, Shaft2Left, Brick, 0.33, -4, -4.125, -4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
-    #AddShaftWall 2, Shaft2Front, Brick, 0.33, -4, -4.125, 4, -4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 2, Shaft2Left, Brick, 0.33, -4, -4.125, -4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 2, Shaft2Front, Brick, 0.33, -4, -4.125, 4, -4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
-    #AddShaftWall 2, Shaft2Right, Brick, 0.33, 4, -4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
-    #AddShaftWall 2, Shaft2Back, Brick, 0.33, -4, 4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 2, Shaft2Right, Brick, 0.33, 4, -4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 2, Shaft2Back, Brick, 0.33, -4, 4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
 
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
