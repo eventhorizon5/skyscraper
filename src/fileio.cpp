@@ -861,6 +861,18 @@ checkfloors:
 				}
 			}
 
+			if (atoi(tempdata[4]) < -Simcore->Basements)
+			{
+				ScriptError("Invalid starting floor");
+				return false;
+			}
+			if (atoi(tempdata[5]) > Simcore->Floors - 1)
+			{
+				ScriptError("Invalid ending floor");
+				return false;
+			}
+
+
 			Simcore->CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
 
 			tempdata.DeleteAll();

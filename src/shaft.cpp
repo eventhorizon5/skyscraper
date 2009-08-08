@@ -45,6 +45,13 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	ShaftNumber = number;
 	startfloor = _startfloor;
 	endfloor = _endfloor;
+
+	//make sure start and ending floors are within a valid range
+	if (startfloor < -sbs->Basements)
+		return;
+	if (endfloor > sbs->Floors - 1)
+		return;
+
 	origin = csVector3(CenterX, sbs->GetFloor(_startfloor)->Altitude, CenterZ);
 	InsideShaft = false;
 	IsEnabled = true;
