@@ -14,6 +14,9 @@ in a shaft or an elevator
 -added support for call button lighting
 -major fixes to the elevator queue and call processing
 -fixes to some elevator parameters, where they would error out if used in a different block than the CreateElevator command
+-sound support is now optional and will switch off automatically if not available
+-some new script checks for valid floor ranges
+-added basic glass elevators to the Glass Tower
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------
