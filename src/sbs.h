@@ -127,6 +127,7 @@ public:
 	csString SkyName; //base filename of sky texture pack
 	csString root_dir; //app directory
 	csString dir_char;
+	bool DisableSound; //disable sound system if true
 
 	//mouse coordinates
 	int mouse_x, mouse_y;

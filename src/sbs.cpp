@@ -137,6 +137,7 @@ SBS::SBS()
 	remaining_delta = 0;
 	start_time = 0;
 	InShaft = false;
+	DisableSound = false;
 }
 
 SBS::~SBS()
@@ -204,12 +205,15 @@ bool SBS::Start()
 	camera->SetToStartRotation();
 
 	//set sound listener object to initial position
-	if (sndrenderer->GetListener())
-		SetListenerLocation(camera->GetPosition());
-	else
+	if (DisableSound == false)
 	{
-		ReportError("Sound listener object not available");
-		return false;
+		if (sndrenderer->GetListener())
+			SetListenerLocation(camera->GetPosition());
+		else
+		{
+			ReportError("Sound listener object not available. Sound support disabled");
+			DisableSound = true;
+		}
 	}
 
 	//turn on main objects
@@ -399,6 +403,11 @@ void SBS::Initialize(iSCF* scf, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngin
 	rep = reporterref;
 	sndrenderer = sndrenderref;
 	sndloader = sndloaderref;
+	
+	//disable sound if renderer or loader are not available
+	if (!sndrenderer || !sndloader)
+		DisableSound = true;
+
 	material = matref;
 	area = sectorref;
 	root_dir = rootdirectory;
@@ -2363,33 +2372,43 @@ bool SBS::GetReverseAxis()
 void SBS::SetListenerLocation(const csVector3 &location)
 {
 	//set position of sound listener object
-	sndrenderer->GetListener()->SetPosition(location);
+	if (DisableSound == false)
+		sndrenderer->GetListener()->SetPosition(location);
 }
 
 void SBS::SetListenerDirection(const csVector3 &front, const csVector3 &top)
 {
 	//set direction of sound listener object
-	sndrenderer->GetListener()->SetDirection(front, top);
+	if (DisableSound == false)
+		sndrenderer->GetListener()->SetDirection(front, top);
 }
 
 void SBS::SetListenerDistanceFactor(float factor)
 {
-	sndrenderer->GetListener()->SetDistanceFactor(factor);
+	if (DisableSound == false)
+		sndrenderer->GetListener()->SetDistanceFactor(factor);
 }
 
 float SBS::GetListenerDistanceFactor()
 {
-	return sndrenderer->GetListener()->GetDistanceFactor();
+	if (DisableSound == false)
+		return sndrenderer->GetListener()->GetDistanceFactor();
+	else
+		return 0;
 }
 
 void SBS::SetListenerRollOffFactor(float factor)
 {
-	sndrenderer->GetListener()->SetRollOffFactor(factor);
+	if (DisableSound == false)
+		sndrenderer->GetListener()->SetRollOffFactor(factor);
 }
 
 float SBS::GetListenerRollOffFactor()
 {
-	return sndrenderer->GetListener()->GetRollOffFactor();
+	if (DisableSound == false)
+		return sndrenderer->GetListener()->GetRollOffFactor();
+	else
+		return 0;
 }
 
 void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom)

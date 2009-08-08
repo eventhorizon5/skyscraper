@@ -69,7 +69,10 @@ void Sound::SetPositionY(float position)
 csVector3 Sound::GetPosition()
 {
 	//get position of sound object
-	return sndsource3d->GetPosition();
+	if (sndsource3d)
+		return sndsource3d->GetPosition();
+	else
+		return csVector3(0, 0, 0);
 }
 
 void Sound::SetVolume(float value)
@@ -83,7 +86,10 @@ void Sound::SetVolume(float value)
 float Sound::GetVolume()
 {
 	//returns volume
-	return sndsource3d->GetVolume();
+	if (sndsource3d)
+		return sndsource3d->GetVolume();
+	else
+		return 0;
 }
 
 void Sound::SetMinimumDistance(float distance)
@@ -95,7 +101,10 @@ void Sound::SetMinimumDistance(float distance)
 
 float Sound::GetMinimumDistance()
 {
-	return sndsource3d->GetMinimumDistance();
+	if (sndsource3d)
+		return sndsource3d->GetMinimumDistance();
+	else
+		return 0;
 }
 
 void Sound::SetMaximumDistance(float distance)
@@ -108,7 +117,10 @@ void Sound::SetMaximumDistance(float distance)
 
 float Sound::GetMaximumDistance()
 {
-	return sndsource3d->GetMaximumDistance();
+	if (sndsource3d)
+		return sndsource3d->GetMaximumDistance();
+	else
+		return 0;
 }
 
 void Sound::SetDirection(csVector3 direction)
@@ -120,7 +132,10 @@ void Sound::SetDirection(csVector3 direction)
 
 csVector3 Sound::GetDirection()
 {
-	return sndsource3d->GetDirection();
+	if (sndsource3d)
+		return sndsource3d->GetDirection();
+	else
+		return 0;
 }
 
 void Sound::SetDirectionalRadiation(float rad)
@@ -138,7 +153,10 @@ void Sound::SetDirectionalRadiation(float rad)
 
 float Sound::GetDirectionalRadiation()
 {
-	return sndsource3d->GetDirectionalRadiation();
+	if (sndsource3d)
+		return sndsource3d->GetDirectionalRadiation();
+	else
+		return 0;
 }
 
 void Sound::Loop(bool value)
@@ -155,8 +173,13 @@ void Sound::Loop(bool value)
 
 bool Sound::GetLoopState()
 {
-	if (sndstream->GetLoopState() == CS_SNDSYS_STREAM_LOOP)
-		return true;
+	if (sndstream)
+	{
+		if (sndstream->GetLoopState() == CS_SNDSYS_STREAM_LOOP)
+			return true;
+		else
+			return false;
+	}
 	else
 		return false;
 }
@@ -197,7 +220,10 @@ void Sound::SetSpeed(int percent)
 
 int Sound::GetSpeed()
 {
-	return sndstream->GetPlayRatePercent();
+	if (sndstream)
+		return sndstream->GetPlayRatePercent();
+	else
+		return 0;
 }
 
 void Sound::Stop()
@@ -209,7 +235,8 @@ void Sound::Stop()
 void Sound::Play()
 {
 	Reset();
-	sndstream->Unpause();
+	if (sndstream)
+		sndstream->Unpause();
 }
 
 void Sound::Reset()
@@ -224,6 +251,10 @@ void Sound::Load(const char *filename)
 	sndsource3d = 0;
 	sndsource = 0;
 	sndstream = 0;
+
+	//exit if sound is disabled
+	if (sbs->DisableSound == true)
+		return;
 
 	//load new sound
 	csString full_filename = "/root/data/";

@@ -77,6 +77,7 @@ bool Skyscraper::OnInit(void)
 	StartupRunning = false;
 	Starting = false;
 	Pause = false;
+	DisableSound = false;
 
 	//Create main window
 	window = new MainScreen();
@@ -352,9 +353,17 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
 	if (!collision_sys) return ReportError("Failed to locate collision detection driver");
 	sndrenderer = csQueryRegistry<iSndSysRenderer> (object_reg);
-	if (!sndrenderer) return ReportError("Failed to locate sound renderer");
+	if (!sndrenderer)
+	{
+		ReportError("Failed to locate sound renderer");
+		DisableSound = true;
+	}
 	sndloader = csQueryRegistry<iSndSysLoader> (object_reg);
-	if (!sndloader) return ReportError("Failed to locate sound loader");
+	if (!sndloader)
+	{
+		ReportError("Failed to locate sound loader");
+		DisableSound = true;
+	}
 	csRef<iBase> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	if (plug) plug->IncRef ();
@@ -756,6 +765,9 @@ void Skyscraper::Click(int index)
 void Skyscraper::StartSound()
 {
 	//load and start background music
+
+	if (DisableSound == true)
+		return;
 
 	//load new sound
 	csRef<iDataBuffer> sndbuffer = vfs->ReadFile("/root/data/intro.ogg");

@@ -65,6 +65,7 @@ public:
 	bool StartupRunning;
 	bool Starting;
 	bool Pause; //pause simulator
+	bool DisableSound;
 
 	csTicks elapsed_time, current_time;
 
