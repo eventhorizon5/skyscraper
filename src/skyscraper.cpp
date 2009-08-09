@@ -364,15 +364,17 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 		ReportError("Failed to locate sound loader");
 		DisableSound = true;
 	}
+#ifndef CS_PLATFORM_MACOSX //bugplug crashes on OSX
 	csRef<iBase> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	if (plug) plug->IncRef ();
-	rep = csQueryRegistry<iReporter> (object_reg);
-	if (!rep) return ReportError("Failed to locate reporter driver");
 
 	//load bugplug reference
-	bugplug = csQueryPluginClass<iBugPlug> (plugin_mgr, "crystalspace.utilities.bugplug");
-	bugplug->ExecCommand("fps"); //turn off FPS display
+        bugplug = csQueryPluginClass<iBugPlug> (plugin_mgr, "crystalspace.utilities.bugplug");
+        bugplug->ExecCommand("fps"); //turn off FPS display
+#endif
+	rep = csQueryRegistry<iReporter> (object_reg);
+	if (!rep) return ReportError("Failed to locate reporter driver");
 
 	stdrep = csQueryRegistry<iStandardReporterListener> (object_reg);
 	if (!stdrep) return ReportError ("Failed to locate stdrep plugin!");
@@ -534,6 +536,8 @@ void Skyscraper::GetInput()
 			Simcore->camera->SetToStartDirection();
 			Simcore->camera->SetToStartRotation();
 		}
+
+#ifndef CS_PLATFORM_MACOSX
 		if (wxGetKeyState(WXK_F4) && wait == false)
 		{
 			//enable/disable wireframe mode
@@ -557,6 +561,7 @@ void Skyscraper::GetInput()
 			bugplug->ExecCommand("scrshot");
 			wait = true;
 		}
+#endif
 
 		//values from old version
 		if (wxGetKeyState(WXK_HOME))
