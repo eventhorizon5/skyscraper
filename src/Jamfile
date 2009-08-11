@@ -4,7 +4,3 @@ Description skyscraper : "Skyscraper" ;
 Application skyscraper :
   [ Wildcard *.h *.hpp *.hxx *.H *.c *.cc *.cpp *.cxx *.C *.m *.mm *.M ] ;
 ExternalLibs skyscraper : WX CRYSTAL ;
-if $(CEL.DESIRED) = yes && $(CEL.AVAILABLE) = yes
-{
-  ExternalLibs skyscraper : CEL ;
-}
