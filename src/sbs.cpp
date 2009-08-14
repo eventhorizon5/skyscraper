@@ -124,7 +124,6 @@ SBS::SBS()
 	ReverseAxisValue = false;
 	TextureOverride = false;
 	ProcessElevators = true;
-	callbackdoor = 0;
 	FlipTexture = false;
 	mainnegflip = 0;
 	mainposflip = 0;
@@ -148,6 +147,10 @@ SBS::~SBS()
 	if (camera)
 		delete camera;
 	camera = 0;
+
+	//delete callbacks
+	doorcallbacks.DeleteAll();
+	buttoncallbacks.DeleteAll();
 
 	//delete floors
 	for (int i = 0; i < FloorArray.GetSize(); i++)
@@ -349,13 +352,10 @@ void SBS::MainLoop()
 				camera->CheckStairwell();
 
 			//open/close doors by using door callback
-			if (callbackdoor)
-			{
-				if (callbackdoor->IsMoving == true)
-					callbackdoor->MoveDoor();
-				else
-					UnregisterDoorCallback(callbackdoor);
-			}
+			ProcessDoors();
+
+			//process call button callbacks
+			ProcessCallButtons();
 
 			//process misc operations on current floor
 			GetFloor(camera->CurrentFloor)->Loop();
@@ -2664,33 +2664,73 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 bool SBS::RegisterDoorCallback(Door *door)
 {
 	//register a door object for callbacks (used for door movement)
-	if (!callbackdoor)
+
+	int index = doorcallbacks.Find(door);
+
+	if (index == csArrayItemNotFound)
 	{
-		callbackdoor = door;
-		return true;
+		//if door isn't already in the array, add it
+		doorcallbacks.Push(door);
 	}
-	else if (callbackdoor == door && callbackdoor->IsMoving == true)
-		callbackdoor->OpenDoor = !callbackdoor->OpenDoor;
 	else
 	{
-		Report("Door in use; cannot register callback");
-		return false;
+		//otherwise change door's direction
+		if (doorcallbacks[index])
+			doorcallbacks[index]->OpenDoor = !doorcallbacks[index]->OpenDoor;
 	}
+	return true;
 }
 
 bool SBS::UnregisterDoorCallback(Door *door)
 {
-	//unregister existing door callback
-	if (callbackdoor->IsMoving == false && door == callbackdoor)
+	int index = doorcallbacks.Find(door);
+
+	if (index != csArrayItemNotFound && doorcallbacks[index])
 	{
-		callbackdoor = 0;
-		return true;
+		//unregister existing door callback
+		if (doorcallbacks[index]->IsMoving == false)
+		{
+			doorcallbacks.Delete(door);
+			return true;
+		}
+		else
+		{
+			Report("Door in use; cannot unregister callback");
+			return false;
+		}
 	}
 	else
-	{
-		Report("Door in use; cannot unregister callback");
 		return false;
+}
+
+bool SBS::RegisterCallButtonCallback(CallButton *button)
+{
+	//register a door object for callbacks (used for door movement)
+
+	int index = buttoncallbacks.Find(button);
+
+	if (index == csArrayItemNotFound)
+	{
+		//if call button isn't already in the array, add it
+		buttoncallbacks.Push(button);
 	}
+	else
+		return false;
+	return true;
+}
+
+bool SBS::UnregisterCallButtonCallback(CallButton *button)
+{
+	int index = buttoncallbacks.Find(button);
+
+	if (index != csArrayItemNotFound && buttoncallbacks[index])
+	{
+		//unregister existing call button callback
+		buttoncallbacks.Delete(button);
+	}
+	else
+		return false;
+	return true;
 }
 
 void SBS::ProcessTextureFlip(float tw, float th)
@@ -2828,4 +2868,54 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 	mesh->GetMeshObject()->SetMaterialWrapper(material);
 
 	return mesh;
+}
+
+void SBS::ProcessCallButtons()
+{
+	//process all registered call buttons
+
+	//the up and down sections need to be processed separately due to the removal of callbacks
+	//during the run of each
+
+	for (int i = 0; i < buttoncallbacks.GetSize(); i++)
+	{
+		//process up calls
+		if (buttoncallbacks[i])
+			buttoncallbacks[i]->Loop(true);
+	}
+
+	for (int i = 0; i < buttoncallbacks.GetSize(); i++)
+	{
+		//process down calls
+		if (buttoncallbacks[i])
+			buttoncallbacks[i]->Loop(false);
+	}
+}
+
+void SBS::ProcessDoors()
+{
+	//process all registered doors
+	for (int i = 0; i < doorcallbacks.GetSize(); i++)
+	{
+		if (doorcallbacks[i])
+		{
+			if (doorcallbacks[i]->IsMoving == true)
+				doorcallbacks[i]->MoveDoor();
+			else
+				UnregisterDoorCallback(doorcallbacks[i]);
+		}
+	}
+}
+
+int SBS::GetDoorCallbackCount()
+{
+	//return the number of registered door callbacks
+	return doorcallbacks.GetSize();
+}
+
+int SBS::GetCallButtonCallbackCount()
+{
+	//return the number of registered call button callbacks
+	return buttoncallbacks.GetSize();
+
 }

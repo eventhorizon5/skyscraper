@@ -17,6 +17,8 @@ in a shaft or an elevator
 -sound support is now optional and will switch off automatically if not available
 -some new script checks for valid floor ranges
 -added basic glass elevators to the Glass Tower
+-simultaneous door movements are now supported
+-call button monitor added, to realistically wait for an available elevator during a call
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------

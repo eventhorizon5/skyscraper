@@ -32,6 +32,7 @@
 #include "camera.h"
 #include "stairs.h"
 #include "sound.h"
+#include "callbutton.h"
 
 //global functions
 
@@ -213,11 +214,17 @@ public:
 	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0);
 	bool RegisterDoorCallback(Door *door);
 	bool UnregisterDoorCallback(Door *door);
+	bool RegisterCallButtonCallback(CallButton *button);
+	bool UnregisterCallButtonCallback(CallButton *button);
 	void ProcessTextureFlip(float tw, float th);
 	bool GetTextureTiling(const char *texture, float &tw, float &th);
 	bool AddTextToTexture(const char *texturename, const char *fontname, const char *text, uint x1, uint y1, uint x2, uint y2, uint h_align, uint v_align);
 	void EnableMesh(csRef<iMeshWrapper> mesh, bool value);
 	iMeshWrapper* AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
+	void ProcessDoors();
+	void ProcessCallButtons();
+	int GetDoorCallbackCount();
+	int GetCallButtonCallbackCount();
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -300,8 +307,11 @@ private:
 	csArray<int> widthscale;
 	csArray<int> heightscale;
 
-	//door object for callback
-	Door *callbackdoor;
+	//door object array for callback
+	csArray<Door*> doorcallbacks;
+
+	//call button object array for callback
+	csArray<CallButton*> buttoncallbacks;
 };
 
 #endif
