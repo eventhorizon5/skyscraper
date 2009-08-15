@@ -438,13 +438,26 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 		int index2 = meshname.Find(":", index + 1);
 		int floor = atoi(meshname.Slice(12, index - 12));
 		int number = atoi(meshname.Slice(index + 1, index2 - index - 1));
+		CallButton *buttonref = sbs->GetFloor(floor)->CallButtonArray[number];
 		csString direction = meshname.Slice(index2 + 1);
 		direction.Trim();
-		//press button
-		if (direction == "Up")
-			sbs->GetFloor(floor)->CallButtonArray[number]->Call(true);
+
+		if (shift == false)
+		{
+			//press button
+			if (direction == "Up")
+				buttonref->Call(true);
+			else
+				buttonref->Call(false);
+		}
 		else
-			sbs->GetFloor(floor)->CallButtonArray[number]->Call(false);
+		{
+			//if shift is held, change button status instead
+			if (direction == "Up")
+				buttonref->UpLight(!buttonref->UpStatus);
+			else
+				buttonref->DownLight(!buttonref->DownStatus);
+		}
 	}
 
 	//check elevator buttons

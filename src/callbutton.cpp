@@ -49,6 +49,8 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 
 	UpStatus = false;
 	DownStatus = false;
+	ProcessedUp = false;
+	ProcessedDown = false;
 
 	//create object mesh
 	csString buffer, buffer2, buffer3;
@@ -204,9 +206,15 @@ void CallButton::Call(bool direction)
 
 	//set light and direction value
 	if (direction == true)
+	{
 		UpLight(true);
+		ProcessedUp = false;
+	}
 	else
+	{
 		DownLight(true);
+		ProcessedDown = false;
+	}
 
 	//register callback for this button
 	sbs->RegisterCallButtonCallback(this);
@@ -282,9 +290,10 @@ void CallButton::Loop(bool direction)
 	//direction is the call direction to process
 
 	//first exit if no call button is not processing a call for the current direction
-	if (UpStatus == false && direction == true)
+	//or if a call has already been processed
+	if ((UpStatus == false && direction == true) || (ProcessedUp == true && direction == true))
 		return;
-	if (DownStatus == false && direction == false)
+	if ((DownStatus == false && direction == false) || (ProcessedDown == true && direction == false))
 		return;
 
 	//initialize values
@@ -331,6 +340,12 @@ void CallButton::Loop(bool direction)
 		//exit if no elevator found
 		return;
 	}
+
+	//change processed state
+	if (direction == true)
+		ProcessedUp = true;
+	else
+		ProcessedDown = true;
 
 	Elevator* elevator = sbs->GetElevator(Elevators[closest_elev]);
 
