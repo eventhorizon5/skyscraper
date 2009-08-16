@@ -545,7 +545,7 @@ void Elevator::ProcessCallQueue()
 				//set directional indicator
 				SetDirectionalIndicator(GetFloor(), false, true);
 				//play chime
-				Chime(0, GetFloor(), true);
+				Chime(0, GetFloor(), false);
 			}
 		}
 	}
