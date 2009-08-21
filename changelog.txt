@@ -20,6 +20,8 @@ in a shaft or an elevator
 -simultaneous door movements are now supported
 -call button monitor added, to realistically wait for an available elevator during a call
 -call button light status can now be changed by shift-clicking the button
+-elevator panel buttons now support position offsets
+-fixed manual sizing parameters of the panel buttons
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------

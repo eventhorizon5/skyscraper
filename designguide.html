@@ -1049,7 +1049,9 @@
   <p align="left"><strong>7. AddFloorButton</strong> - creates a floor button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorButton <em>panel_number, 
-    texturename</em>, <em>row, column, floor, width, height</em></font></p>
+    texturename</em>, <em>row, column, floor, width, height[, hoffset, voffset]</em></font><br>
+    Example 1: <font size="2" face="Courier New, Courier, mono">AddFloorButton 1, Button5, 7, 3, 4, 1, 1</font><br>
+    Example 2: <font size="2" face="Courier New, Courier, mono">AddFloorButton 1, Button5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p> 
   <p align="left">The AddFloorButton command creates a floor button on the button 
     panel created with CreatePanel. Panel_number specifies the number of the panel 
     to add the button to; the number can be either 1 or 2. <em>Row</em> and <em>Column</em> 
@@ -1060,17 +1062,20 @@
     of 1 is used for both values. If only one of the values is 0, then the exact 
     size other is used; for example, if <em>width</em> is 0 and <em>height</em> 
     is 1 (or any other number), then the width will end up being the same size 
-    as the height.</p>
+    as the height. <em>Hoffset</em> and <em>Voffset</em> are optional parameters,
+    and are used to position the button outside the normal grid, and are in grid units
+    (buttonwidth and buttonheight parameters of the CreatePanel function).
+    In the second example, the button is positioned 0.1 grid units to the right, and 0.1
+    grid units down.</p>
   <p align="left"><strong>8. AddControlButton</strong> - creates a control button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddControlButton 
-    <em>panel_number, texturename</em>, <em>row, column, type, width, height</em></font></p>
+    <em>panel_number, texturename</em>, <em>row, column, type, width, height[, hoffset, voffset]</em></font></p>
   <p align="left">The AddControlButton command creates a command button on the 
     panel created with CreatePanel. <em>Row</em> and <em>Column</em> are the same 
     as the AddFloorButton command, and <em>Type</em> can be either &quot;open&quot;, 
     &quot;close&quot;, &quot;cancel&quot;, &quot;stop&quot; or &quot;alarm&quot;. 
-    See the above command for a description of the <em>Width</em> and <em>Height</em> 
-    values.</p>
+    See the above command (AddFloorButton) for a description of the other parameters.</p> 
   <p align="left"><strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em> 
     direction</em>, <em>CenterX, CenterZ, width, height, voffset</em></font> </p>

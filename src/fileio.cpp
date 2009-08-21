@@ -3226,21 +3226,43 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 9)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
-				//check numeric values
-				for (int i = 0; i <= 6; i++)
+
+				float hoffset = 0, voffset = 0;
+
+				if (tempdata.GetSize() == 7)
 				{
-					if (i == 1)
-						i = 2;
-					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					//check numeric values
+					for (int i = 0; i <= 6; i++)
 					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
-						return false;
+						if (i == 1)
+							i = 2;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
 					}
+				}
+				else
+				{
+					//check numeric values
+					for (int i = 0; i <= 8; i++)
+					{
+						if (i == 1)
+							i = 2;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
+					}
+					hoffset = atof(tempdata[7]);
+					voffset = atof(tempdata[8]);
 				}
 
 				if (atoi(tempdata[0]) == 1)
@@ -3250,7 +3272,7 @@ recalc:
 						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
-					Simcore->GetElevator(Current)->Panel->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+					Simcore->GetElevator(Current)->Panel->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 				}
 				else if (atoi(tempdata[0]) == 2)
 				{
@@ -3259,7 +3281,7 @@ recalc:
 						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
-					Simcore->GetElevator(Current)->Panel2->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+					Simcore->GetElevator(Current)->Panel2->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 				}
 				else
 				{
@@ -3282,21 +3304,43 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 9)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
-				//check numeric values
-				for (int i = 1; i <= 6; i++)
+
+				float hoffset = 0, voffset = 0;
+
+				if (tempdata.GetSize() == 7)
 				{
-					if (i == 1 || i == 4)
-						i++;
-					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					//check numeric values
+					for (int i = 1; i <= 6; i++)
 					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
-						return false;
+						if (i == 1 || i == 4)
+							i++;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
 					}
+				}
+				else
+				{
+					//check numeric values
+					for (int i = 1; i <= 8; i++)
+					{
+						if (i == 1 || i == 4)
+							i++;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
+					}
+					hoffset = atof(tempdata[7]);
+					voffset = atof(tempdata[8]);
 				}
 
 				if (atoi(tempdata[0]) == 1)
@@ -3306,7 +3350,7 @@ recalc:
 						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
-					Simcore->GetElevator(Current)->Panel->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]));
+					Simcore->GetElevator(Current)->Panel->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 				}
 				else if (atoi(tempdata[0]) == 2)
 				{
@@ -3315,7 +3359,7 @@ recalc:
 						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
-					Simcore->GetElevator(Current)->Panel2->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]));
+					Simcore->GetElevator(Current)->Panel2->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 				}
 				else
 				{
