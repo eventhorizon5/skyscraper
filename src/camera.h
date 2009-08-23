@@ -93,6 +93,7 @@ public:
 	void Jump();
 	void Look(float speed);
 	void Turn(float speed);
+	void Spin(float speed);
 	void InterpolateMovement();
 	void SetGravity(float gravity);
 	float GetGravity();

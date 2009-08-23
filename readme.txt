@@ -139,7 +139,9 @@ F4 - Enable/disable wireframe mode
 F11 - Take screenshot
 Shift - Run (hold down with other keys)
 Control - Walk slowly (hold down with other keys)
-Alt - Strafe (hold down with other keys)
+Alt + arrow keys - Strafe
+Alt + PgUp - Spin right
+Alt + PgDown - Spin left
 
 --- Debug options ---
 Other functions are available via a Crystal Space plugin called BugPlug.

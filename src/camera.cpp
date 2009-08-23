@@ -659,12 +659,20 @@ void Camera::Jump()
 
 void Camera::Look(float speed)
 {
+	//look up/down by rotating camera on X axis
 	desired_angle_velocity.x = 150.0f * speed * cfg_rotate_maxspeed;
 }
 
 void Camera::Turn(float speed)
 {
+	//turn camera by rotating on Y axis
 	desired_angle_velocity.y = 100.0f * speed * cfg_rotate_maxspeed * cfg_walk_maxspeed_multreal;
+}
+
+void Camera::Spin(float speed)
+{
+	//spin camera by rotating on Z axis
+	desired_angle_velocity.z = 150.0f * speed * cfg_rotate_maxspeed;
 }
 
 void Camera::InterpolateMovement()
