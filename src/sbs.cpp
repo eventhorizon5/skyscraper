@@ -414,10 +414,10 @@ void SBS::Initialize(iSCF* scf, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngin
 	dir_char = directory_char;
 
 	//mount sign texture packs
-	vfs->Mount("/root/signs/sans", root_dir + "data" + dir_char + "signs-sans.zip");
-	vfs->Mount("/root/signs/sans_bold", root_dir + "data" + dir_char + "signs-sans_bold.zip");
-	vfs->Mount("/root/signs/sans_cond", root_dir + "data" + dir_char + "signs-sans_cond.zip");
-	vfs->Mount("/root/signs/sans_cond_bold", root_dir + "data" + dir_char + "signs-sans_cond_bold.zip");
+	Mount("signs-sans.zip", "/root/signs/sans");
+	Mount("signs-sans_bold.zip", "/root/signs/sans_bold");
+	Mount("signs-sans_cond.zip", "/root/signs/sans_cond");
+	Mount("signs-sans_cond_bold.zip", "/root/signs/sans_cond_bold");
 
 	//load default textures
 	csPrintf("Loading default textures...");
@@ -2918,4 +2918,16 @@ int SBS::GetCallButtonCallbackCount()
 	//return the number of registered call button callbacks
 	return buttoncallbacks.GetSize();
 
+}
+
+bool SBS::Mount(const char *filename, const char *path)
+{
+	//mounts a zip file into the virtual filesystem
+
+	csString file = filename;
+	csString Path = path;
+
+	Report("Mounting " + file + " as path " + Path);
+
+	return vfs->Mount(path, root_dir + "data" + dir_char + file);
 }

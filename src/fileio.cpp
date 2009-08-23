@@ -1384,6 +1384,32 @@ checkfloors:
 			goto Nextline;
 		}
 
+		if (LineData.Slice(0, 5).CompareNoCase("mount") == true)
+		{
+			tempdata.SplitString(LineData.Slice(6).GetData(), ",");
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = tempdata[temp3];
+				tempdata.Put(temp3, buffer.Trim());
+			}
+			if (tempdata.GetSize() < 2 || tempdata.GetSize() > 2)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
+
+			buffer = tempdata[1];
+			buffer.Insert(0, "/root/");
+			if (!Simcore->Mount(tempdata[0], buffer))
+			{
+					ScriptError("Error mounting file");
+					return false;
+			}
+
+			tempdata.DeleteAll();
+			goto Nextline;
+		}
+
 		//Process globals
 		if (Section == 1)
 		{

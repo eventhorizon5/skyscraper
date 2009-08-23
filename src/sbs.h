@@ -225,6 +225,7 @@ public:
 	void ProcessCallButtons();
 	int GetDoorCallbackCount();
 	int GetCallButtonCallbackCount();
+	bool Mount(const char *filename, const char *path);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

@@ -22,6 +22,7 @@ in a shaft or an elevator
 -call button light status can now be changed by shift-clicking the button
 -elevator panel buttons now support position offsets
 -fixed manual sizing parameters of the panel buttons
+-added support for mounting zipfiles into virtual directories
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------
