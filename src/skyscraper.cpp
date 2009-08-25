@@ -78,6 +78,7 @@ bool Skyscraper::OnInit(void)
 	Starting = false;
 	Pause = false;
 	DisableSound = false;
+	DrewButtons = false;
 
 	//Create main window
 	window = new MainScreen();
@@ -98,19 +99,11 @@ bool Skyscraper::OnInit(void)
 		return false;
 	}
 
-#ifdef CS_PLATFORM_WIN32
 	//draw background
 	DrawBackground();
 	StartupRunning = true;
 	StartSound();
 	return true;
-#else
-	if (SelectBuilding() == true)
-		Start();
-	else
-		return false;
-	return true;
-#endif
 }
 
 int Skyscraper::OnExit()
@@ -210,18 +203,21 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 
 void Skyscraper::Render()
 {
-	// Tell 3D driver we're going to display 3D things.
-	if (Simcore->IsSkyboxEnabled == false)
+	if (skyscraper->StartupRunning == false)
 	{
-		//clear screen if the skybox is off. This will keep the background black - otherwise it'll streak.
-		if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN))
-			return;
-	}
-	else
-	{
-		//if the skybox is on, don't clear the screen, for improved performance
-		if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER))
-			return;
+		// Tell 3D driver we're going to display 3D things.
+		if (Simcore->IsSkyboxEnabled == false)
+		{
+			//clear screen if the skybox is off. This will keep the background black - otherwise it'll streak.
+			if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN))
+				return;
+		}
+		else
+		{
+			//if the skybox is on, don't clear the screen, for improved performance
+			if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER))
+				return;
+		}
 	}
 
 	// Tell the camera to render into the frame buffer.
@@ -233,7 +229,9 @@ void Skyscraper::SetupFrame()
 	//Main simulator loop
 	if (IsRunning == false)
 	{
+		DrawBackground();
 		GetMenuInput();
+		Render();
 		return;
 	}
 
@@ -624,13 +622,17 @@ void Skyscraper::DrawBackground()
 	g2d->Clear(0);
 	g2d->SetClipRect(0, 0, w, h);
 
-	DrawImage("/root/data/menu.png", 0, 0, 0, false);
+	DrawImage("/root/data/menu.png", 0, 0, 1, false);
 
-	DrawImage("/root/data/button_triton.png", &button1, 0, -20, true, "/root/data/button_triton_selected.png", "/root/data/button_triton_pressed.png");
-	DrawImage("/root/data/button_searstower.png", &button2, 0, 30, true, "/root/data/button_searstower_selected.png", "/root/data/button_searstower_pressed.png");
-	DrawImage("/root/data/button_glasstower.png", &button3, 0, 80, true, "/root/data/button_glasstower_selected.png", "/root/data/button_glasstower_pressed.png");
-	DrawImage("/root/data/button_simple.png", &button4, 0, 130, true, "/root/data/button_simple_selected.png", "/root/data/button_simple_pressed.png");
-	DrawImage("/root/data/button_other.png", &button5, 0, 180, true, "/root/data/button_other_selected.png", "/root/data/button_other_pressed.png");
+	if (DrewButtons == false)
+	{
+		DrawImage("/root/data/button_triton.png", &button1, 0, -20, true, "/root/data/button_triton_selected.png", "/root/data/button_triton_pressed.png");
+		DrawImage("/root/data/button_searstower.png", &button2, 0, 30, true, "/root/data/button_searstower_selected.png", "/root/data/button_searstower_pressed.png");
+		DrawImage("/root/data/button_glasstower.png", &button3, 0, 80, true, "/root/data/button_glasstower_selected.png", "/root/data/button_glasstower_pressed.png");
+		DrawImage("/root/data/button_simple.png", &button4, 0, 130, true, "/root/data/button_simple_selected.png", "/root/data/button_simple_pressed.png");
+		DrawImage("/root/data/button_other.png", &button5, 0, 180, true, "/root/data/button_other_selected.png", "/root/data/button_other_pressed.png");
+		DrewButtons = true;
+	}
 }
 
 void Skyscraper::DrawImage(const char *filename, buttondata *button, int x, int y, bool center, const char *filename_selected, const char *filename_pressed)
@@ -638,15 +640,42 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, int x, int 
 	int w2, h2;
 	int w = g2d->GetWidth();
 	int h = g2d->GetHeight();
-	csRef<iFile> imagefile = vfs->Open(filename, VFS_FILE_READ);
-	if (imagefile.IsValid())
+
+	image = 0;
+
+	//preload stored image data
+	if (button)
 	{
-		csRef<iDataBuffer> filedata = imagefile->GetAllData();
-		image = imageio->Load(filedata, CS_IMGFMT_TRUECOLOR | CS_IMGFMT_ALPHA);
+		if (button->filename == filename && button->button_image.IsValid())
+			image = button->button_image;
+		if (button->filename_selected == filename && button->selected_image.IsValid())
+			image = button->selected_image;
+		if (button->filename_pressed == filename && button->pressed_image.IsValid())
+			image = button->pressed_image;
+	}
+	else if (background_image.IsValid())
+		image = background_image;
+
+	//load image data from file, if not already preloaded
+	if (!image)
+	{
+		csRef<iFile> imagefile = vfs->Open(filename, VFS_FILE_READ);
+		if (imagefile.IsValid())
+		{
+			csRef<iDataBuffer> filedata = imagefile->GetAllData();
+			image = imageio->Load(filedata, CS_IMGFMT_TRUECOLOR | CS_IMGFMT_ALPHA);
+		}
+		imagefile = 0;
+	}
+
+	//set values and draw button
+	if (image.IsValid())
+	{
 		w2 = image->GetWidth();
 		h2 = image->GetHeight();
 		if (button)
 		{
+			//store general button data
 			if (filename_selected)
 			{
 				button->filename = filename;
@@ -670,17 +699,28 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, int x, int 
 			}
 			button->size_x = w2;
 			button->size_y = h2;
+
+			//then store image data if not done yet
+			if (button->filename == filename && !button->button_image)
+				button->button_image = image;
+			if (button->filename_selected == filename && !button->selected_image)
+				button->selected_image = image;
+			if (button->filename_pressed == filename && !button->pressed_image)
+				button->pressed_image = image;
 		}
+		else
+			background_image = image;
+
 		if (center == true)
 		{
 			x += (w / 2) - (w2 / 2);
 			y += (h / 2) - (h2 / 2);
 		}
-	}
-	if (image.IsValid())
+
+		//draw image data
 		g2d->Blit(x, y, w2, h2, (unsigned char*)image->GetImageData());
+	}
 	image = 0;
-	imagefile = 0;
 }
 
 void Skyscraper::GetMenuInput()
@@ -713,6 +753,15 @@ void Skyscraper::GetMenuInput()
 		if (i == 5)
 			button = &button5;
 
+		//draw buttons
+		if (button->drawn_pressed == true)
+			DrawImage(button->filename_pressed, button, button->offset_x, button->offset_y, true);
+		else if (button->drawn_selected == true)
+			DrawImage(button->filename_selected, button, button->offset_x, button->offset_y, true);
+		else
+			DrawImage(button->filename, button, button->offset_x, button->offset_y, true);
+
+		//change button status based on mouse position and button press status
 		if (mouse_x > button->x && mouse_x < button->x + button->size_x && mouse_y > button->y && mouse_y < button->y + button->size_y)
 		{
 			if (button->drawn_selected == false && mouse->GetLastButton(0) == false)
@@ -723,19 +772,16 @@ void Skyscraper::GetMenuInput()
 					Click(i);
 					return;
 				}
-				DrawImage(button->filename_selected, button, button->offset_x, button->offset_y, true);
 				button->drawn_selected = true;
 			}
 			if (button->drawn_pressed == false && mouse->GetLastButton(0) == true)
 			{
-				DrawImage(button->filename_pressed, button, button->offset_x, button->offset_y, true);
 				button->drawn_pressed = true;
 				button->drawn_selected = false;
 			}
 		}
 		else if (button->drawn_selected == true || button->drawn_pressed == true)
 		{
-			DrawImage(button->filename, button, button->offset_x, button->offset_y, true);
 			button->drawn_selected = false;
 			button->drawn_pressed = false;
 		}

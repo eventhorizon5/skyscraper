@@ -130,13 +130,18 @@ private:
 		int size_x;
 		int size_y;
 		csString filename;
+		csRef<iImage> button_image;
 		csString filename_selected;
+		csRef<iImage> selected_image;
 		csString filename_pressed;
+		csRef<iImage> pressed_image;
 		int offset_x;
 		int offset_y;
 		bool drawn_selected, drawn_pressed;
 	};
 	buttondata button1, button2, button3, button4, button5;
+
+	csRef<iImage> background_image; //background image
 
 	void DrawImage(const char *filename, buttondata *button, int x, int y, bool center, const char *filename_selected = 0, const char *filename_pressed = 0);
 	void Click(int index);
@@ -148,6 +153,8 @@ private:
 	int Current; //current range iteration
 	int Section; //current section number
 	csString Context; //section context
+
+	bool DrewButtons;
 };
 
 class MainScreen : public wxFrame

@@ -3567,6 +3567,7 @@ recalc:
 				buffer = tempdata[0];
 				buffer.Insert(0, "/root/");
 				Simcore->LoadTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]));
+				//Simcore->AddTextToTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), "a", "test,", 1, 1, 100, 100, true, true);
 				tempdata.DeleteAll();
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("loadrange") == true)

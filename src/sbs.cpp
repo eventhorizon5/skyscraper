@@ -446,28 +446,38 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	return true;
 }
 
-bool SBS::AddTextToTexture(const char *texturename, const char *fontname, const char *text, uint x1, uint y1, uint x2, uint y2, uint h_align, uint v_align)
+bool SBS::AddTextToTexture(const char *filename, const char *name, float widthmult, float heightmult, const char *fontname, const char *text, uint x1, uint y1, uint x2, uint y2, uint h_align, uint v_align)
 {
 	//adds text to the named texture, in the given box coordinates and alignment
 
-	csRef<iTextureWrapper> tex = engine->GetTextureList()->FindByName(texturename);
+	//first load the texture
+	LoadTexture(filename, name, widthmult, heightmult);
+
+	//then get it's texture wrapper handle
+	csRef<iTextureWrapper> tex = engine->GetTextureList()->FindByName(name);
 	if (!tex)
 		return false;
 
-	//get the texture image
-	csRef<iImage> image = tex->GetImageFile();
-
-	//create a new buffer the same size as the image, for storing the new texture
-	//csRef<iDataBuffer> data = CS::DataBuffer(image->GetRawData()->GetSize());
-
-	//create a render buffer
-	//csRef<iGraphics2D> buffer = g2d->CreateOffscreenCanvas(data->GetData(), image->GetWidth(), image->GetHeight(), image->GetDepth(), 0);
-
+	//load font
 	csRef<iFont> font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
-	csPen pen(g2d, g3d);
-	pen.SetTexture(tex->GetTextureHandle());
-	pen.WriteBoxed(font, x1, y1, x2, y2, h_align, v_align, (char*)text);
-	return true;
+	//csRef<iFont> font = g2d->GetFontServer()->LoadFont(fontname);
+	if (font)
+	{
+		//write text
+
+		//csPen pen(g2d, g3d);
+		//pen.SetTexture(tex->GetTextureHandle());
+		//pen.SetColor(255, 255, 255, 255);
+		//pen.DrawRect(x1, y1, x2, y2);
+		//pen.WriteBoxed(font, x1, y1, x2, y2, h_align, v_align, (char*)text);
+
+		g3d->SetRenderTarget(tex->GetTextureHandle());
+		if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
+		g2d->DrawLine(x1, y1, x2, y2, g2d->FindRGB(255, 255, 255));
+		g3d->FinishDraw();
+		return true;
+	}
+	return false;
 }
 
 void SBS::AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b)
