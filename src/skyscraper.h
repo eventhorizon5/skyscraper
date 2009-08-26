@@ -66,6 +66,7 @@ public:
 	bool Starting;
 	bool Pause; //pause simulator
 	bool DisableSound;
+	bool Freelook; //change camera rotation with mouse
 
 	csTicks elapsed_time, current_time;
 

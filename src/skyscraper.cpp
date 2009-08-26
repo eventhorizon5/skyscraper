@@ -79,6 +79,7 @@ bool Skyscraper::OnInit(void)
 	Pause = false;
 	DisableSound = false;
 	DrewButtons = false;
+	Freelook = false;
 
 	//Create main window
 	window = new MainScreen();
@@ -437,6 +438,7 @@ void Skyscraper::GetInput()
 	static bool wireframe;
 	static bool wait, waitcheck;
 	static csTicks old_time;
+	static int old_mouse_x, old_mouse_y;
 
 	// First get elapsed time from the virtual clock.
 	elapsed_time = vc->GetElapsedTicks ();
@@ -464,9 +466,22 @@ void Skyscraper::GetInput()
 	Simcore->camera->desired_velocity.Set(0, 0, 0);
 	Simcore->camera->desired_angle_velocity.Set(0, 0, 0);
 
+	//get old mouse coordinates
+	old_mouse_x = Simcore->mouse_x;
+	old_mouse_y = Simcore->mouse_y;
+
 	//get mouse pointer coordinates
 	Simcore->mouse_x = mouse->GetLastX();
 	Simcore->mouse_y = mouse->GetLastY();
+
+	//if mouse coordinates changed, and we're in freelook mode, rotate camera
+	if (Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
+	{
+		float speed = 150.0f;
+		canvas->WarpPointer(g2d->GetWidth() / 2, g2d->GetHeight() / 2);
+		Simcore->camera->Look(speed * (-((float)(Simcore->mouse_y - (g2d->GetHeight() / 2))) / (g2d->GetHeight() * 2)));
+		Simcore->camera->Turn(speed * (-((g2d->GetWidth() / 2) - (float)Simcore->mouse_x) / (g2d->GetWidth() * 2)));
+	}
 
 	//check if the user clicked on an object, and process it
 	if (mouse->GetLastButton(0) == true && MouseDown == false)
@@ -516,10 +531,20 @@ void Skyscraper::GetInput()
 	}
 	else
 	{
-		if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
-			Simcore->camera->Turn(1);
-		if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
-			Simcore->camera->Turn(-1);
+		if (Freelook == false)
+		{
+			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
+				Simcore->camera->Turn(1);
+			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
+				Simcore->camera->Turn(-1);
+		}
+		else
+		{
+			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
+				Simcore->camera->Strafe(1);
+			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
+				Simcore->camera->Strafe(-1);
+		}
 		if (wxGetKeyState(WXK_PAGEUP))
 			Simcore->camera->Look(1);
 		if (wxGetKeyState(WXK_PAGEDOWN))
@@ -558,6 +583,16 @@ void Skyscraper::GetInput()
 		if (wxGetKeyState(WXK_F11) && wait == false)
 		{
 			bugplug->ExecCommand("scrshot");
+			wait = true;
+		}
+		if (wxGetKeyState(WXK_F5) && wait == false)
+		{
+			//enable/disable freelook mode
+			Freelook = !Freelook;
+			if (Freelook == true)
+				canvas->SetCursor(wxCURSOR_BLANK);
+			else
+				canvas->SetCursor(wxNullCursor);
 			wait = true;
 		}
 

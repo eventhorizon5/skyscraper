@@ -464,17 +464,11 @@ bool SBS::AddTextToTexture(const char *filename, const char *name, float widthmu
 	if (font)
 	{
 		//write text
-
-		//csPen pen(g2d, g3d);
-		//pen.SetTexture(tex->GetTextureHandle());
-		//pen.SetColor(255, 255, 255, 255);
-		//pen.DrawRect(x1, y1, x2, y2);
-		//pen.WriteBoxed(font, x1, y1, x2, y2, h_align, v_align, (char*)text);
-
 		g3d->SetRenderTarget(tex->GetTextureHandle());
 		if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
 		g2d->DrawLine(x1, y1, x2, y2, g2d->FindRGB(255, 255, 255));
 		g3d->FinishDraw();
+		//g3d->UnsetRenderTargets();
 		return true;
 	}
 	return false;
