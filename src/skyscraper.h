@@ -66,8 +66,6 @@ public:
 	bool Starting;
 	bool Pause; //pause simulator
 	bool DisableSound;
-	bool Freelook; //change camera rotation with mouse
-	float Freelook_speed; //speed of freelook
 
 	csTicks elapsed_time, current_time;
 

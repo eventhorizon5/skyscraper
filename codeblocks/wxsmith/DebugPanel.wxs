@@ -262,7 +262,6 @@
 					<object class="sizeritem">
 						<object class="wxButton" name="ID_bCameraControl" variable="bCameraControl" member="yes">
 							<label>Camera Control</label>
-							<enabled>0</enabled>
 							<handler function="On_bCameraControl_Click" entry="EVT_BUTTON" />
 						</object>
 						<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>

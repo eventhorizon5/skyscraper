@@ -29,6 +29,7 @@
 #include "debugpanel.h"
 #include "meshcontrol.h"
 #include "editelevator.h"
+#include "cameracontrol.h"
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -40,6 +41,7 @@ extern SBS *Simcore; //external pointer to the SBS engine
 DebugPanel *dp; //self pointer
 MeshControl *mc;
 editelevator *ee;
+CameraControl *cc;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
@@ -156,7 +158,6 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	bMeshControl = new wxButton(this, ID_bMeshControl, _("Realtime Mesh Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMeshControl"));
 	BoxSizer3->Add(bMeshControl, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bCameraControl = new wxButton(this, ID_bCameraControl, _("Camera Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCameraControl"));
-	bCameraControl->Disable();
 	BoxSizer3->Add(bCameraControl, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bEditElevator = new wxButton(this, ID_bEditElevator, _("Elevator Editor"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEditElevator"));
 	BoxSizer3->Add(bEditElevator, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -189,6 +190,8 @@ DebugPanel::~DebugPanel()
 	mc = 0;
 	ee->Destroy();
 	ee = 0;
+	cc->Destroy();
+	cc = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
@@ -243,6 +246,7 @@ void DebugPanel::OnInit()
 
 	mc = new MeshControl(dp, -1);
 	ee = new editelevator(dp, -1);
+	cc = new CameraControl(dp, -1);
 
 	timer = new Timer();
 	timer->Start(40);
@@ -278,6 +282,9 @@ void DebugPanel::Timer::Notify()
 		mc->chkBuildings->SetValue(Simcore->IsBuildingsEnabled);
 		mc->chkExternal->SetValue(Simcore->IsExternalEnabled);
 	}
+
+	if (cc->IsShown() == true)
+		cc->Loop();
 }
 
 wxString TruncateNumber(double value, int decimals)
@@ -311,5 +318,5 @@ void DebugPanel::On_chkAutoStairs_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bCameraControl_Click(wxCommandEvent& event)
 {
-
+	cc->Show();
 }

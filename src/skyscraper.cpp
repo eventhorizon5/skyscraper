@@ -79,8 +79,6 @@ bool Skyscraper::OnInit(void)
 	Pause = false;
 	DisableSound = false;
 	DrewButtons = false;
-	Freelook = false;
-	Freelook_speed = 200.0f;
 
 	//Create main window
 	window = new MainScreen();
@@ -476,10 +474,10 @@ void Skyscraper::GetInput()
 	Simcore->mouse_y = mouse->GetLastY();
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
-	if (Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
+	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
 		canvas->WarpPointer(g2d->GetWidth() / 2, g2d->GetHeight() / 2);
-		csVector3 rotational (Freelook_speed * (-((float)(Simcore->mouse_y - (g2d->GetHeight() / 2))) / (g2d->GetHeight() * 2)), Freelook_speed * (-((g2d->GetWidth() / 2) - (float)Simcore->mouse_x) / (g2d->GetWidth() * 2)), 0);
+		csVector3 rotational (Simcore->camera->Freelook_speed * (-((float)(Simcore->mouse_y - (g2d->GetHeight() / 2))) / (g2d->GetHeight() * 2)), Simcore->camera->Freelook_speed * (-((g2d->GetWidth() / 2) - (float)Simcore->mouse_x) / (g2d->GetWidth() * 2)), 0);
 		Simcore->camera->Rotate(rotational, 1);
 	}
 
@@ -531,7 +529,7 @@ void Skyscraper::GetInput()
 	}
 	else
 	{
-		if (Freelook == false)
+		if (Simcore->camera->Freelook == false)
 		{
 			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
 				Simcore->camera->Turn(1);
@@ -588,8 +586,8 @@ void Skyscraper::GetInput()
 		if (wxGetKeyState(WXK_F5) && wait == false)
 		{
 			//enable/disable freelook mode
-			Freelook = !Freelook;
-			if (Freelook == true)
+			Simcore->camera->Freelook = !Simcore->camera->Freelook;
+			if (Simcore->camera->Freelook == true)
 				canvas->SetCursor(wxCURSOR_BLANK);
 			else
 				canvas->SetCursor(wxNullCursor);

@@ -39,7 +39,6 @@ Camera::Camera()
 
 	//init variables
 	CurrentFloor = 0;
-	OriginalPosition = 0;
 	StartFloor = 0;
 	StartPositionX = 0;
 	StartPositionZ = 0;
@@ -74,6 +73,8 @@ Camera::Camera()
 	lastfloorset = false;
 	MouseDown = false;
 	ReportCollisions = false;
+	Freelook = false;
+	Freelook_speed = 200.0f;
 }
 
 Camera::~Camera()
@@ -175,7 +176,7 @@ void Camera::UpdateCameraFloor()
 bool Camera::Move(const csVector3 &vector, float speed)
 {
 	//moves the camera in a relative amount specified by a vector
-	MainCamera->Move(vector * speed, EnableCollisions);
+	SetPosition(csVector3(GetPosition().x + (vector.x * speed), GetPosition().y + (vector.y * speed), GetPosition().z + (vector.z * speed)));
 	return true;
 }
 

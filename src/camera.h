@@ -30,7 +30,6 @@ class SBSIMPEXP Camera
 {
 public:
 	int CurrentFloor; //floor camera's on
-	float OriginalPosition;
 	int StartFloor; //Starting floor
 	float StartPositionX; //starting position on X axis
 	float StartPositionZ; //starting position on Z axis
@@ -59,6 +58,8 @@ public:
 	bool MouseDown; //mouse status
 	bool ReportCollisions; //if true, print collisions on console
 	csString LastHitMesh; //name of last hit mesh
+	bool Freelook; //freelook (mouselook) is enabled/disabled
+	float Freelook_speed; //freelook speed
 
 	//functions
 	Camera();
