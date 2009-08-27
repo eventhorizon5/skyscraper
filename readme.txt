@@ -136,6 +136,7 @@ End - Float downwards (or crouch if collision detection is on)
 F2 - print FPS on console
 F3 - Reset camera rotation to default
 F4 - Enable/disable wireframe mode
+F5 - Freelook (mouse look) mode
 F11 - Take screenshot
 Shift - Run (hold down with other keys)
 Control - Walk slowly (hold down with other keys)
