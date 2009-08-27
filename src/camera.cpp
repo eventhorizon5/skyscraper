@@ -182,7 +182,7 @@ bool Camera::Move(const csVector3 &vector, float speed)
 void Camera::Rotate(const csVector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount
-	csVector3 rot = GetRotation() * vector * speed;
+	csVector3 rot = GetRotation() + (vector * speed);
 
 	SetRotation(rot);
 }

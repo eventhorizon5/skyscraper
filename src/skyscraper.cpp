@@ -80,6 +80,7 @@ bool Skyscraper::OnInit(void)
 	DisableSound = false;
 	DrewButtons = false;
 	Freelook = false;
+	Freelook_speed = 200.0f;
 
 	//Create main window
 	window = new MainScreen();
@@ -477,10 +478,9 @@ void Skyscraper::GetInput()
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
 	if (Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
-		float speed = 150.0f;
 		canvas->WarpPointer(g2d->GetWidth() / 2, g2d->GetHeight() / 2);
-		Simcore->camera->Look(speed * (-((float)(Simcore->mouse_y - (g2d->GetHeight() / 2))) / (g2d->GetHeight() * 2)));
-		Simcore->camera->Turn(speed * (-((g2d->GetWidth() / 2) - (float)Simcore->mouse_x) / (g2d->GetWidth() * 2)));
+		csVector3 rotational (Freelook_speed * (-((float)(Simcore->mouse_y - (g2d->GetHeight() / 2))) / (g2d->GetHeight() * 2)), Freelook_speed * (-((g2d->GetWidth() / 2) - (float)Simcore->mouse_x) / (g2d->GetWidth() * 2)), 0);
+		Simcore->camera->Rotate(rotational, 1);
 	}
 
 	//check if the user clicked on an object, and process it
