@@ -368,6 +368,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_bRotationY,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bRotationY_Click);
 	Connect(ID_bRotationZ,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bRotationZ_Click);
 	//*)
+	OnInit();
 }
 
 CameraControl::~CameraControl()
@@ -376,7 +377,7 @@ CameraControl::~CameraControl()
 }
 
 
-void CameraControl::OnInit(wxInitDialogEvent& event)
+void CameraControl::OnInit()
 {
 	txtGravity->SetValue(TruncateNumber(Simcore->camera->GetGravity(), 4));
 	txtFreelookSpeed->SetValue(wxVariant((long)Simcore->camera->Freelook_speed).GetString());

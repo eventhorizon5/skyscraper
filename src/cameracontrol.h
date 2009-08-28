@@ -152,6 +152,7 @@ class CameraControl: public wxDialog
 		void On_bRotationY_Click(wxCommandEvent& event);
 		void On_bRotationZ_Click(wxCommandEvent& event);
 		//*)
+		void OnInit();
 
 		//(*Declarations(CameraControl)
 		wxStaticText* StaticText10;
