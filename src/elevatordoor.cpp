@@ -57,8 +57,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	quick_close = false;
 	OpenSound = "elevatoropen.wav";
 	CloseSound = "elevatorclose.wav";
-	UpChimeSound = "chime1.wav";
-	DownChimeSound = "chime1.wav";
+	UpChimeSound = "chime1-up.wav";
+	DownChimeSound = "chime1-down.wav";
 	doors_stopped = false;
 	IsEnabled = true;
 	ShaftDoorThickness = 0;

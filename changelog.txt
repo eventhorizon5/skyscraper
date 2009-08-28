@@ -27,6 +27,7 @@ in a shaft or an elevator
 -startup screen now works on Linux and Mac
 -added mouse look (freelook) mode, activated by F5
 -new Camera Control window
+-split chimes sounds into up and down versions
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------
