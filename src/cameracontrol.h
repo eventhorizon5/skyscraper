@@ -29,6 +29,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/checkbox.h>
 #include <wx/statline.h>
 #include <wx/radiobut.h>
 #include <wx/button.h>
@@ -89,11 +90,15 @@ class CameraControl: public wxDialog
 		static const long ID_STATICTEXT2;
 		static const long ID_lblPosition;
 		static const long ID_lblRotation;
+		static const long ID_STATICLINE2;
 		static const long ID_rPosition;
 		static const long ID_rRotation;
+		static const long ID_STATICTEXT28;
+		static const long ID_txtMoveSpeed;
 		static const long ID_bZPlus;
 		static const long ID_bYPlus;
 		static const long ID_bXNeg;
+		static const long ID_chkHold;
 		static const long ID_bXPlus;
 		static const long ID_bZNeg;
 		static const long ID_bYNeg;
@@ -151,6 +156,7 @@ class CameraControl: public wxDialog
 		void On_bRotationX_Click(wxCommandEvent& event);
 		void On_bRotationY_Click(wxCommandEvent& event);
 		void On_bRotationZ_Click(wxCommandEvent& event);
+		void On_chkHold_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -159,6 +165,7 @@ class CameraControl: public wxDialog
 		wxTextCtrl* txtRotationZ;
 		wxStaticText* StaticText22;
 		wxStaticText* StaticText9;
+		wxStaticText* StaticText20;
 		wxTextCtrl* txtStartFloor;
 		wxButton* bYNeg;
 		wxTextCtrl* txtAngle;
@@ -198,6 +205,7 @@ class CameraControl: public wxDialog
 		wxButton* bRotationX;
 		wxButton* bZPlus;
 		wxStaticText* StaticText21;
+		wxStaticLine* StaticLine2;
 		wxStaticText* StaticText23;
 		wxTextCtrl* txtStartPosition;
 		wxStaticText* StaticText24;
@@ -217,7 +225,9 @@ class CameraControl: public wxDialog
 		wxButton* bRotationZ;
 		wxStaticText* StaticText15;
 		wxStaticText* StaticText12;
+		wxTextCtrl* txtMoveSpeed;
 		wxTextCtrl* txtRotationX;
+		wxCheckBox* chkHold;
 		wxStaticText* StaticText25;
 		wxButton* bZNeg;
 		wxButton* bStartPosition;
@@ -234,6 +244,7 @@ class CameraControl: public wxDialog
 		wxTextCtrl* txtMouseDown;
 		wxTextCtrl* txtSpeed;
 		//*)
+		csVector3 hold_vector;
 
 	private:
 

@@ -29,13 +29,13 @@
 #include "debugpanel.h"
 #include "meshcontrol.h"
 #include "editelevator.h"
-#include "cameracontrol.h"
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
 #include "unix.h"
+#include "cameracontrol.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
 DebugPanel *dp; //self pointer

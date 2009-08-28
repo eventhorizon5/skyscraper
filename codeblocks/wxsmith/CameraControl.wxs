@@ -384,12 +384,12 @@
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<flag>wxBOTTOM|wxLEFT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxTOP|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+				<flag>wxTOP|wxALIGN_LEFT|wxALIGN_TOP</flag>
 				<border>5</border>
 				<option>1</option>
 			</object>
@@ -403,29 +403,30 @@
 								<object class="wxFlexGridSizer" variable="FlexGridSizer5" member="no">
 									<cols>1</cols>
 									<object class="sizeritem">
-										<object class="wxFlexGridSizer" variable="FlexGridSizer10" member="no">
+										<object class="wxGridSizer" variable="GridSizer1" member="no">
 											<cols>2</cols>
-											<growablecols>0,1,2</growablecols>
 											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
 													<label>Position:</label>
+													<style>wxALIGN_CENTRE</style>
 												</object>
-												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
 													<label>Rotation:</label>
+													<style>wxALIGN_CENTRE</style>
 												</object>
-												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_lblPosition" variable="lblPosition" member="yes">
-													<label></label>
-													<style>wxALIGN_CENTRE</style>
+													<label>0, 0, 0</label>
+													<style>wxST_NO_AUTORESIZE|wxALIGN_CENTRE</style>
 												</object>
 												<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -433,8 +434,8 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_lblRotation" variable="lblRotation" member="yes">
-													<label></label>
-													<style>wxALIGN_CENTRE</style>
+													<label>0, 0, 0</label>
+													<style>wxST_NO_AUTORESIZE|wxALIGN_CENTRE</style>
 												</object>
 												<flag>wxALL|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -446,11 +447,20 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
+										<object class="wxStaticLine" name="ID_STATICLINE2" variable="StaticLine2" member="yes">
+											<size>10,-1</size>
+										</object>
+										<flag>wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
 										<object class="wxFlexGridSizer" variable="FlexGridSizer11" member="no">
-											<cols>3</cols>
+											<cols>2</cols>
 											<object class="sizeritem">
 												<object class="wxRadioButton" name="ID_rPosition" variable="rPosition" member="yes">
 													<label>Position</label>
+													<selected>1</selected>
 													<handler function="On_rPosition_Select" entry="EVT_RADIOBUTTON" />
 												</object>
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -461,6 +471,30 @@
 												<object class="wxRadioButton" name="ID_rRotation" variable="rRotation" member="yes">
 													<label>Rotation</label>
 													<handler function="On_rRotation_Select" entry="EVT_RADIOBUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxFlexGridSizer" variable="FlexGridSizer14" member="no">
+											<cols>2</cols>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT28" variable="StaticText20" member="yes">
+													<label>Speed</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtMoveSpeed" variable="txtMoveSpeed" member="yes">
+													<value>1.0</value>
 												</object>
 												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
@@ -493,7 +527,7 @@
 													<label>Y+</label>
 													<handler function="On_bYPlus_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_BOTTOM</flag>
+												<flag>wxBOTTOM|wxLEFT|wxALIGN_LEFT|wxALIGN_BOTTOM</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -506,8 +540,12 @@
 												<border>5</border>
 												<option>1</option>
 											</object>
-											<object class="spacer">
-												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_chkHold" variable="chkHold" member="yes">
+													<label>Hold</label>
+													<handler function="On_chkHold_Click" entry="EVT_CHECKBOX" />
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -539,7 +577,7 @@
 													<label>Y-</label>
 													<handler function="On_bYNeg_Click" entry="EVT_BUTTON" />
 												</object>
-												<flag>wxTOP|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<flag>wxTOP|wxLEFT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -806,7 +844,7 @@
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<flag>wxALIGN_RIGHT|wxALIGN_TOP</flag>
 				<border>5</border>
 				<option>1</option>
 			</object>

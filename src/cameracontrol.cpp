@@ -27,12 +27,12 @@
 #include <wx/string.h>
 //*)
 #include "debugpanel.h"
-#include "cameracontrol.h"
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
 #include "skyscraper.h"
 #include "unix.h"
+#include "cameracontrol.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
 
@@ -83,11 +83,15 @@ const long CameraControl::ID_STATICTEXT1 = wxNewId();
 const long CameraControl::ID_STATICTEXT2 = wxNewId();
 const long CameraControl::ID_lblPosition = wxNewId();
 const long CameraControl::ID_lblRotation = wxNewId();
+const long CameraControl::ID_STATICLINE2 = wxNewId();
 const long CameraControl::ID_rPosition = wxNewId();
 const long CameraControl::ID_rRotation = wxNewId();
+const long CameraControl::ID_STATICTEXT28 = wxNewId();
+const long CameraControl::ID_txtMoveSpeed = wxNewId();
 const long CameraControl::ID_bZPlus = wxNewId();
 const long CameraControl::ID_bYPlus = wxNewId();
 const long CameraControl::ID_bXNeg = wxNewId();
+const long CameraControl::ID_chkHold = wxNewId();
 const long CameraControl::ID_bXPlus = wxNewId();
 const long CameraControl::ID_bZNeg = wxNewId();
 const long CameraControl::ID_bYNeg = wxNewId();
@@ -128,14 +132,15 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	wxStaticBoxSizer* StaticBoxSizer2;
 	wxFlexGridSizer* FlexGridSizer4;
 	wxStaticBoxSizer* StaticBoxSizer4;
-	wxFlexGridSizer* FlexGridSizer10;
 	wxFlexGridSizer* FlexGridSizer3;
 	wxFlexGridSizer* FlexGridSizer5;
 	wxFlexGridSizer* FlexGridSizer9;
 	wxFlexGridSizer* FlexGridSizer2;
 	wxFlexGridSizer* FlexGridSizer7;
 	wxStaticBoxSizer* StaticBoxSizer3;
+	wxGridSizer* GridSizer1;
 	wxFlexGridSizer* FlexGridSizer8;
+	wxFlexGridSizer* FlexGridSizer14;
 	wxFlexGridSizer* FlexGridSizer13;
 	wxFlexGridSizer* FlexGridSizer12;
 	wxFlexGridSizer* FlexGridSizer6;
@@ -237,46 +242,54 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	bFreelookSpeed = new wxButton(this, ID_bFreelookSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bFreelookSpeed"));
 	FlexGridSizer3->Add(bFreelookSpeed, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer3->Add(FlexGridSizer3, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer8->Add(StaticBoxSizer3, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	FlexGridSizer1->Add(FlexGridSizer8, 1, wxTOP|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
+	FlexGridSizer8->Add(StaticBoxSizer3, 1, wxBOTTOM|wxLEFT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer1->Add(FlexGridSizer8, 1, wxTOP|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer9 = new wxFlexGridSizer(0, 1, 0, 0);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Control"));
 	FlexGridSizer5 = new wxFlexGridSizer(0, 1, 0, 0);
-	FlexGridSizer10 = new wxFlexGridSizer(0, 2, 0, 0);
-	FlexGridSizer10->AddGrowableCol(0);
-	FlexGridSizer10->AddGrowableCol(1);
-	FlexGridSizer10->AddGrowableCol(2);
-	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
-	FlexGridSizer10->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Rotation:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
-	FlexGridSizer10->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	lblPosition = new wxStaticText(this, ID_lblPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_lblPosition"));
-	FlexGridSizer10->Add(lblPosition, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	lblRotation = new wxStaticText(this, ID_lblRotation, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_lblRotation"));
-	FlexGridSizer10->Add(lblRotation, 1, wxALL|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer5->Add(FlexGridSizer10, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer11 = new wxFlexGridSizer(0, 3, 0, 0);
+	GridSizer1 = new wxGridSizer(0, 2, 0, 0);
+	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Position:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT1"));
+	GridSizer1->Add(StaticText1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Rotation:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT2"));
+	GridSizer1->Add(StaticText2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	lblPosition = new wxStaticText(this, ID_lblPosition, _("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblPosition"));
+	GridSizer1->Add(lblPosition, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	lblRotation = new wxStaticText(this, ID_lblRotation, _("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblRotation"));
+	GridSizer1->Add(lblRotation, 1, wxALL|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer5->Add(GridSizer1, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticLine2 = new wxStaticLine(this, ID_STATICLINE2, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
+	FlexGridSizer5->Add(StaticLine2, 1, wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer11 = new wxFlexGridSizer(0, 2, 0, 0);
 	rPosition = new wxRadioButton(this, ID_rPosition, _("Position"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_rPosition"));
+	rPosition->SetValue(true);
 	FlexGridSizer11->Add(rPosition, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	rRotation = new wxRadioButton(this, ID_rRotation, _("Rotation"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_rRotation"));
 	FlexGridSizer11->Add(rRotation, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer5->Add(FlexGridSizer11, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer14 = new wxFlexGridSizer(0, 2, 0, 0);
+	StaticText20 = new wxStaticText(this, ID_STATICTEXT28, _("Speed"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT28"));
+	FlexGridSizer14->Add(StaticText20, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	txtMoveSpeed = new wxTextCtrl(this, ID_txtMoveSpeed, _("1.0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtMoveSpeed"));
+	FlexGridSizer14->Add(txtMoveSpeed, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer5->Add(FlexGridSizer14, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer12 = new wxFlexGridSizer(0, 3, 0, 0);
 	FlexGridSizer12->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bZPlus = new wxButton(this, ID_bZPlus, _("Z+"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bZPlus"));
 	FlexGridSizer12->Add(bZPlus, 1, wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL, 5);
 	bYPlus = new wxButton(this, ID_bYPlus, _("Y+"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bYPlus"));
-	FlexGridSizer12->Add(bYPlus, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_BOTTOM, 5);
+	FlexGridSizer12->Add(bYPlus, 1, wxBOTTOM|wxLEFT|wxALIGN_LEFT|wxALIGN_BOTTOM, 5);
 	bXNeg = new wxButton(this, ID_bXNeg, _("X-"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bXNeg"));
 	FlexGridSizer12->Add(bXNeg, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer12->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkHold = new wxCheckBox(this, ID_chkHold, _("Hold"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkHold"));
+	chkHold->SetValue(false);
+	FlexGridSizer12->Add(chkHold, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bXPlus = new wxButton(this, ID_bXPlus, _("X+"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bXPlus"));
 	FlexGridSizer12->Add(bXPlus, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer12->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bZNeg = new wxButton(this, ID_bZNeg, _("Z-"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bZNeg"));
 	FlexGridSizer12->Add(bZNeg, 1, wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	bYNeg = new wxButton(this, ID_bYNeg, _("Y-"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bYNeg"));
-	FlexGridSizer12->Add(bYNeg, 1, wxTOP|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer12->Add(bYNeg, 1, wxTOP|wxLEFT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer5->Add(FlexGridSizer12, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer13 = new wxFlexGridSizer(0, 3, 0, 0);
 	bStartPosition = new wxButton(this, ID_bStartPosition, _("StartPosition"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStartPosition"));
@@ -338,7 +351,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer6->Add(FlexGridSizer7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer4->Add(FlexGridSizer6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer9->Add(StaticBoxSizer4, 1, wxTOP|wxBOTTOM|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
-	FlexGridSizer1->Add(FlexGridSizer9, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer1->Add(FlexGridSizer9, 1, wxALIGN_RIGHT|wxALIGN_TOP, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
@@ -355,6 +368,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_bZPlus,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bZPlus_Click);
 	Connect(ID_bYPlus,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bYPlus_Click);
 	Connect(ID_bXNeg,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bXNeg_Click);
+	Connect(ID_chkHold,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&CameraControl::On_chkHold_Click);
 	Connect(ID_bXPlus,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bXPlus_Click);
 	Connect(ID_bZNeg,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bZNeg_Click);
 	Connect(ID_bYNeg,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bYNeg_Click);
@@ -381,6 +395,7 @@ void CameraControl::OnInit()
 {
 	txtGravity->SetValue(TruncateNumber(Simcore->camera->GetGravity(), 4));
 	txtFreelookSpeed->SetValue(wxVariant((long)Simcore->camera->Freelook_speed).GetString());
+	hold_vector = csVector3(0, 0, 0);
 }
 
 void CameraControl::Loop()
@@ -405,6 +420,10 @@ void CameraControl::Loop()
 	txtFreelook->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->Freelook)));
 	lblPosition->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	lblRotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
+
+	//move if hold vector is not zero
+	if (hold_vector != csVector3(0, 0, 0))
+		Simcore->camera->Move(hold_vector, 1);
 }
 
 void CameraControl::On_rPosition_Select(wxCommandEvent& event)
@@ -419,50 +438,86 @@ void CameraControl::On_rRotation_Select(wxCommandEvent& event)
 
 void CameraControl::On_bZPlus_Click(wxCommandEvent& event)
 {
+	if (chkHold->GetValue() == true)
+	{
+		hold_vector += csVector3(0, 0, atof(txtMoveSpeed->GetValue().ToAscii()));
+		return;
+	}
+
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(csVector3(0, 0, 1), 1);
+		Simcore->camera->Move(csVector3(0, 0, 1), atof(txtMoveSpeed->GetValue().ToAscii()));
 	else
-		Simcore->camera->Rotate(csVector3(0, 0, 1), 1);
+		Simcore->camera->Rotate(csVector3(0, 0, 1), atof(txtMoveSpeed->GetValue().ToAscii()));
 }
 
 void CameraControl::On_bYPlus_Click(wxCommandEvent& event)
 {
+	if (chkHold->GetValue() == true)
+	{
+		hold_vector += csVector3(0, atof(txtMoveSpeed->GetValue().ToAscii()), 0);
+		return;
+	}
+
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(csVector3(0, 1, 0), 1);
+		Simcore->camera->Move(csVector3(0, 1, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 	else
-		Simcore->camera->Rotate(csVector3(0, 1, 0), 1);
+		Simcore->camera->Rotate(csVector3(0, 1, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 }
 
 void CameraControl::On_bXNeg_Click(wxCommandEvent& event)
 {
+	if (chkHold->GetValue() == true)
+	{
+		hold_vector -= csVector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
+		return;
+	}
+
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(csVector3(-1, 0, 0), 1);
+		Simcore->camera->Move(csVector3(-1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 	else
-		Simcore->camera->Rotate(csVector3(-1, 0, 0), 1);
+		Simcore->camera->Rotate(csVector3(-1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 }
 
 void CameraControl::On_bXPlus_Click(wxCommandEvent& event)
 {
+	if (chkHold->GetValue() == true)
+	{
+		hold_vector += csVector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
+		return;
+	}
+
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(csVector3(1, 0, 0), 1);
+		Simcore->camera->Move(csVector3(1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 	else
-		Simcore->camera->Rotate(csVector3(1, 0, 0), 1);
+		Simcore->camera->Rotate(csVector3(1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 }
 
 void CameraControl::On_bZNeg_Click(wxCommandEvent& event)
 {
+	if (chkHold->GetValue() == true)
+	{
+		hold_vector -= csVector3(0, 0, atof(txtMoveSpeed->GetValue().ToAscii()));
+		return;
+	}
+
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(csVector3(0, 0, -1), 1);
+		Simcore->camera->Move(csVector3(0, 0, -1), atof(txtMoveSpeed->GetValue().ToAscii()));
 	else
-		Simcore->camera->Rotate(csVector3(0, 0, -1), 1);
+		Simcore->camera->Rotate(csVector3(0, 0, -1), atof(txtMoveSpeed->GetValue().ToAscii()));
 }
 
 void CameraControl::On_bYNeg_Click(wxCommandEvent& event)
 {
+	if (chkHold->GetValue() == true)
+	{
+		hold_vector -= csVector3(0, atof(txtMoveSpeed->GetValue().ToAscii()), 0);
+		return;
+	}
+
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(csVector3(0, -1, 0), 1);
+		Simcore->camera->Move(csVector3(0, -1, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 	else
-		Simcore->camera->Rotate(csVector3(0, -1, 0), 1);
+		Simcore->camera->Rotate(csVector3(0, -1, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 }
 
 void CameraControl::On_bStartPosition_Click(wxCommandEvent& event)
@@ -538,4 +593,10 @@ void CameraControl::On_bRotationY_Click(wxCommandEvent& event)
 void CameraControl::On_bRotationZ_Click(wxCommandEvent& event)
 {
 	Simcore->camera->SetRotation(csVector3(Simcore->camera->GetRotation().x, Simcore->camera->GetRotation().y, atof(txtRotationZ->GetValue().ToAscii())));
+}
+
+void CameraControl::On_chkHold_Click(wxCommandEvent& event)
+{
+	if (chkHold->GetValue() == false)
+		hold_vector = csVector3(0, 0, 0);
 }

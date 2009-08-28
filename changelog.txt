@@ -26,6 +26,7 @@ in a shaft or an elevator
 -added the ability to spin the camera (Z-axis rotation)
 -startup screen now works on Linux and Mac
 -added mouse look (freelook) mode, activated by F5
+-new Camera Control window
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------
