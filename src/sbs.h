@@ -79,6 +79,7 @@ public:
 	csRef<iSndSysLoader> sndloader;
 	csRef<iMaterialWrapper> material;
 	csRef<iSector> area;
+	csRef<iObjectRegistry> object_reg;
 
 	csTicks elapsed_time;
 	float delta;
@@ -140,7 +141,7 @@ public:
 	bool ReportError (const char* msg, ...);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
 	float AutoSize(float n1, float n2, bool iswidth, float offset);
-	void Initialize(iSCF* scf, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
+	void Initialize(iSCF* scf, iObjectRegistry* objreg, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
 					iCollideSystem* collideref, iReporter* reporterref, iSndSysRenderer* sndrenderref, iSndSysLoader* sndloaderref,
 					iMaterialWrapper* matref, iSector* sectorref, const char* rootdirectory, const char* directory_char);
 	bool Start();

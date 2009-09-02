@@ -384,7 +384,7 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-void SBS::Initialize(iSCF* scf, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
+void SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
 					 iCollideSystem* collideref, iReporter* reporterref, iSndSysRenderer* sndrenderref, iSndSysLoader* sndloaderref,
 					 iMaterialWrapper* matref, iSector* sectorref, const char* rootdirectory, const char* directory_char)
 {
@@ -393,6 +393,7 @@ void SBS::Initialize(iSCF* scf, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngin
 	iSCF::SCF = scf;
 #endif
 	engine = engineref;
+	object_reg = objreg;
 	g3d = g3dref;
 	g2d = g2dref;
 	loader = loaderref;
@@ -450,13 +451,27 @@ bool SBS::AddTextToTexture(const char *filename, const char *name, float widthmu
 {
 	//adds text to the named texture, in the given box coordinates and alignment
 
-	//first load the texture
-	LoadTexture(filename, name, widthmult, heightmult);
+	//load image file
+	csRef<iImage> image = loader->LoadImage(filename, g3d->GetTextureManager()->GetTextureFormat());
+	//create empty texture
+	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(image->GetWidth(), image->GetHeight(), csimg2D, "rgb8", CS_TEXTURE_3D);
+	//create a texture wrapper for the new texture
+	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
+	//set texture name
+	tex->QueryObject()->SetName(name);
 
-	//then get it's texture wrapper handle
-	csRef<iTextureWrapper> tex = engine->GetTextureList()->FindByName(name);
 	if (!tex)
 		return false;
+	
+	//create material
+	csRef<iMaterial> material (engine->CreateBaseMaterial(tex));
+	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
+	
+	TextureInfo info;
+	info.name = name;
+	info.widthmult = widthmult;
+	info.heightmult = heightmult;
+	textureinfo.Push(info);
 
 	//load font
 	csRef<iFont> font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
@@ -464,14 +479,28 @@ bool SBS::AddTextToTexture(const char *filename, const char *name, float widthmu
 	if (font)
 	{
 		//write text
-		g3d->SetRenderTarget(tex->GetTextureHandle());
+		iTextureHandle *handle = tex->GetTextureHandle();
+		if (!handle)
+		{
+			ReportError("AddTextToTexture: No texture handle available");
+			return false;
+		}
+		//set graphics rendering to the texture image
+		g3d->SetRenderTarget(handle, true);
+		if (!g3d->ValidateRenderTargets())
+			return false;
 		if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
-		g2d->DrawLine(x1, y1, x2, y2, g2d->FindRGB(255, 255, 255));
+		//clear back buffer
+		g2d->Clear(0);
+		//draw image onto buffer
+		g2d->Blit(0, 0, image->GetWidth(), image->GetHeight(), (unsigned char*) image->GetImageData());
+		//draw a line for testing
+		g2d->DrawLine(1, 1, image->GetWidth(), image->GetHeight(), g2d->FindRGB(250, 255, 255));
+		//finish with buffer
 		g3d->FinishDraw();
-		//g3d->UnsetRenderTargets();
 		return true;
 	}
-	return false;
+	return true;
 }
 
 void SBS::AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b)

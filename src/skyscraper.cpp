@@ -944,7 +944,7 @@ void Skyscraper::Start()
 	Simcore = new SBS();
 
 	//initialize SBS
-	Simcore->Initialize(iSCF::SCF, g3d, g2d, engine, loader, vc, view, vfs, collision_sys, rep, sndrenderer, sndloader, material, area, root_dir.GetData(), dir_char.GetData());
+	Simcore->Initialize(iSCF::SCF, object_reg, g3d, g2d, engine, loader, vc, view, vfs, collision_sys, rep, sndrenderer, sndloader, material, area, root_dir.GetData(), dir_char.GetData());
 
 	//load building data file
 	Simcore->Report("\nLoading building data from " + BuildingFile + "...\n");
