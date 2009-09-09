@@ -54,7 +54,7 @@ public:
 	void Reset();
 	void SetSpeed(int percent);
 	int GetSpeed();
-	void Load(const char *filename);
+	void Load(const char *filename, bool force = false);
 	bool IsPlaying();
 
 private:
@@ -75,6 +75,7 @@ private:
 	float DirectionalRadiation;
 	bool SoundLoop;
 	int Speed;
+	csString Filename;
 
 };
 

@@ -13,7 +13,8 @@
 <EndGlobals>
 
 <Textures>
-    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/brick1.jpg, BrickOrig, 0.269, 0.25
+    AddText BrickOrig, Brick, nimbus_sans.pfb, 64, 135, 0, 0, 128, 128, center, center, 255, 255, 255
     Load data/windows11h.jpg, MainWindows, 0.05, 1
     Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2

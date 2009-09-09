@@ -219,7 +219,7 @@ public:
 	bool UnregisterCallButtonCallback(CallButton *button);
 	void ProcessTextureFlip(float tw, float th);
 	bool GetTextureTiling(const char *texture, float &tw, float &th);
-	bool AddTextToTexture(const char *filename, const char *name, float widthmult, float heightmult, const char *fontname, const char *text, uint x1, uint y1, uint x2, uint y2, uint h_align, uint v_align);
+	bool AddTextToTexture(const char *origname, const char *name, const char *font_filename, float font_size, const char *text, int x1, int y1, int x2, int y2, const char *h_align, const char *v_align, int ColorR, int ColorG, int ColorB);
 	void EnableMesh(csRef<iMeshWrapper> mesh, bool value);
 	iMeshWrapper* AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
 	void ProcessDoors();

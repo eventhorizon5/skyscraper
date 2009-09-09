@@ -245,8 +245,12 @@ void Sound::Reset()
 		sndstream->ResetPosition();
 }
 
-void Sound::Load(const char *filename)
+void Sound::Load(const char *filename, bool force)
 {
+	//exit if filename is the same
+	if (filename == Filename && force == false)
+		return;
+
 	//clear old object references
 	sndsource3d = 0;
 	sndsource = 0;
@@ -257,6 +261,7 @@ void Sound::Load(const char *filename)
 		return;
 
 	//load new sound
+	Filename = filename;
 	csString full_filename = "/root/data/";
 	full_filename.Append(filename);
 	csRef<iDataBuffer> sndbuffer = sbs->vfs->ReadFile(full_filename.GetData());

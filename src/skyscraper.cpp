@@ -298,6 +298,7 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	if (!csInitializer::RequestPlugins(object_reg,
 		CS_REQUEST_VFS,
 		CS_REQUEST_FONTSERVER,
+		//CS_REQUEST_PLUGIN("crystalspace.font.server.freetype2", iFontServer),
 		CS_REQUEST_PLUGIN("crystalspace.graphics2d.wxgl", iGraphics2D),
 		CS_REQUEST_OPENGL3D,
 		CS_REQUEST_ENGINE,

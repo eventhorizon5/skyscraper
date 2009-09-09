@@ -447,59 +447,111 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	return true;
 }
 
-bool SBS::AddTextToTexture(const char *filename, const char *name, float widthmult, float heightmult, const char *fontname, const char *text, uint x1, uint y1, uint x2, uint y2, uint h_align, uint v_align)
+bool SBS::AddTextToTexture(const char *origname, const char *name, const char *font_filename, float font_size, const char *text, int x1, int y1, int x2, int y2, const char *h_align, const char *v_align, int ColorR, int ColorG, int ColorB)
 {
 	//adds text to the named texture, in the given box coordinates and alignment
 
-	//load image file
-	csRef<iImage> image = loader->LoadImage(filename, g3d->GetTextureManager()->GetTextureFormat());
-	//create empty texture
-	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(image->GetWidth(), image->GetHeight(), csimg2D, "rgb8", CS_TEXTURE_3D);
+	//h_align is either "left", "right" or "center" - default is center
+	//v_align is either "top", "bottom", or "center" - default is center
+
+	//load font
+	csRef<iFont> font = g2d->GetFontServer()->LoadFont(font_filename, font_size);
+	if (!font)
+	{
+		ReportError("AddTextToTexture: Invalid font");
+		return false;
+	}
+
+	//get original texture
+	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->FindByName(origname);
+	if (!wrapper)
+	{
+		ReportError("AddTextToTexture: Invalid original texture");
+		return false;
+	}
+
+	//get texture tiling info
+	float widthmult, heightmult;
+	GetTextureTiling(origname, widthmult, heightmult);
+
+	//get height and width of texture
+	int width, height;
+	wrapper->GetTextureHandle()->GetOriginalDimensions(width, height);
+
+	//create new empty texture
+	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "rgb8", CS_TEXTURE_3D);
+	if (!th)
+	{
+		ReportError("AddTextToTexture: Error creating texture");
+		th = 0;
+		return false;
+	}
+
 	//create a texture wrapper for the new texture
 	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
+	if (!tex)
+	{
+		ReportError("AddTextToTexture: Error creating texture wrapper");
+		th = 0;
+		return false;
+	}
+	
 	//set texture name
 	tex->QueryObject()->SetName(name);
 
-	if (!tex)
-		return false;
-	
 	//create material
 	csRef<iMaterial> material (engine->CreateBaseMaterial(tex));
 	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
 	
+	//add texture multipliers for new texture
 	TextureInfo info;
 	info.name = name;
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
 	textureinfo.Push(info);
 
-	//load font
-	csRef<iFont> font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
-	//csRef<iFont> font = g2d->GetFontServer()->LoadFont(fontname);
-	if (font)
+	iTextureHandle *handle = tex->GetTextureHandle();
+	if (!handle)
 	{
-		//write text
-		iTextureHandle *handle = tex->GetTextureHandle();
-		if (!handle)
-		{
-			ReportError("AddTextToTexture: No texture handle available");
-			return false;
-		}
-		//set graphics rendering to the texture image
-		g3d->SetRenderTarget(handle, true);
-		if (!g3d->ValidateRenderTargets())
-			return false;
-		if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
-		//clear back buffer
-		g2d->Clear(0);
-		//draw image onto buffer
-		g2d->Blit(0, 0, image->GetWidth(), image->GetHeight(), (unsigned char*) image->GetImageData());
-		//draw a line for testing
-		g2d->DrawLine(1, 1, image->GetWidth(), image->GetHeight(), g2d->FindRGB(250, 255, 255));
-		//finish with buffer
-		g3d->FinishDraw();
-		return true;
+		ReportError("AddTextToTexture: No texture handle available");
+		return false;
 	}
+
+	//set graphics rendering to the texture image
+	g3d->SetRenderTarget(handle);
+	if (!g3d->ValidateRenderTargets())
+		return false;
+	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
+
+	//draw original image onto backbuffer
+	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, 0, 0, width, height);
+
+	//get texture size info
+	int x, y, w, h;
+	font->GetDimensions(text, w, h);
+
+	//horizontal alignment
+	if (h_align == "left")
+		x = x1;
+	else if (h_align == "right")
+		x = x2 - w;
+	else //center
+		x = x1 + ((x2 - x1) >> 1) - (w >> 1);
+
+	//vertical alignment
+	if (v_align == "top")
+		y = y1;
+	else if (v_align == "bottom")
+		y = y2 - h;
+	else //center
+		y = y1 + ((y2 - y1) >> 1) - (h >> 1);
+
+	//write text
+	g2d->Write(font, x, y, g2d->FindRGB(ColorR, ColorG, ColorB), -1, text);
+
+	//finish with buffer
+	g3d->FinishDraw();
+
 	return true;
 }
 

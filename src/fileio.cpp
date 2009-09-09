@@ -3566,10 +3566,7 @@ recalc:
 				}
 				buffer = tempdata[0];
 				buffer.Insert(0, "/root/");
-				//if (buffer != "/root/data/brick1.jpg")
-					Simcore->LoadTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]));
-				//else
-					//Simcore->AddTextToTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), "a", "test,", 1, 1, 100, 100, true, true);
+				Simcore->LoadTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]));
 				tempdata.DeleteAll();
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("loadrange") == true)
@@ -3607,6 +3604,38 @@ recalc:
 					temp6.ReplaceAll("%number%", buffer.Trim());
 					Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]));
 				}
+				tempdata.DeleteAll();
+			}
+			if (LineData.Slice(0, 7).CompareNoCase("addtext") == true)
+			{
+				tempdata.SplitString(LineData.Slice(8).GetData(), ",");
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = tempdata[temp3];
+					tempdata.Put(temp3, buffer.Trim());
+				}
+				if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+				//check numeric values
+				for (int i = 3; i <= 13; i++)
+				{
+					if (i == 4)
+						i = 5;
+					if (i == 9)
+						i = 11;
+
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+				buffer = tempdata[2];
+				buffer.Insert(0, "/root/fonts/");
+				Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]));
 				tempdata.DeleteAll();
 			}
 		}
