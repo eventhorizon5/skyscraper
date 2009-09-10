@@ -1,6 +1,6 @@
-diff -urN orig/csplugincommon/opengl/glfontcache.cpp new/csplugincommon/opengl/glfontcache.cpp
---- orig/csplugincommon/opengl/glfontcache.cpp	2009-09-09 13:39:03.078217495 -0500
-+++ new/csplugincommon/opengl/glfontcache.cpp	2009-09-09 12:10:29.905291000 -0500
+diff -urN orig/libs/csplugincommon/opengl/glfontcache.cpp new/libs/csplugincommon/opengl/glfontcache.cpp
+--- orig/libs/csplugincommon/opengl/glfontcache.cpp	2009-09-09 13:39:03.078217495 -0500
++++ new/libs/csplugincommon/opengl/glfontcache.cpp	2009-09-09 12:10:29.905291000 -0500
 @@ -651,7 +651,7 @@
    KnownFont* knownFont = GetCachedFont (font);
    if (knownFont == 0) knownFont = CacheFont (font);
