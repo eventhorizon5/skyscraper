@@ -501,7 +501,30 @@
     you specify a texture width (tw) of 2 during an <em>AddFloor</em> command 
     later, the tiling value will be 4 (2 times 2), and the texture will be repeated 
     4 times horizontally.</p>
-  <p align="left">&nbsp;</p>
+  <p align="left"><strong>3. AddText</strong> - draws text onto a texture - this 
+    only creates a new texture during runtime (in memory), and all changes are 
+    lost when the application shuts down<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddText texture_name, 
+    name, font_filename, font_size, text, x1, y1, x2, y2, h_align, v_align, ColorR, 
+    ColorG, ColorB</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddText Black, 100, 
+    nimbus_sans.ttf, 64, 100, -1, -1, -1, -1, center, center, 255, 255, 255</font></p>
+  <p align="left">With this command, texture_name is the name of the previously 
+    loaded texture to draw text onto (loaded with either Load or LoadRange). Name 
+    is the name to call this new texture. Font_filename is the filename of the 
+    font to use - fonts are in Skyscraper's data/fonts directory. X1, y1, x2, 
+    and y2 are coordinate values mainly used to position the text in a boxed area. 
+    If any value is -1, the dimension of the texture will be used (so in this 
+    example, the loaded texture has a size of 128x128 pixels, and so the values 
+    are 0, 0, 128, 128). This will place the text in the center of the texture 
+    image, but to position it elsewhere, specify the pixel box to place it in. 
+    H_align and v_align determine the alignment of the text - for h_align, it 
+    can either be &quot;left&quot;, &quot;right&quot; or &quot;center&quot;, and 
+    for v_align either &quot;top&quot;, &quot;bottom&quot; or &quot;center&quot;. 
+    ColorR, ColorG and ColorB determine the color of the text, and the values 
+    range from 0 to 255. If all values are 255, the text is white, and if all 
+    values are 0, then it's black.</p>
+  <p align="left"><strong></strong></p>
   <p align="left"><strong><font size="+1">5. The <em>Floor</em> Sections</font></strong></p>
   <p align="left">There are 2 <em>Floor</em> sections available - <em>Floor</em> 
     and <em>Floors</em>. <em>Floor</em> specifies a single floor, while <em>Floors</em> 
