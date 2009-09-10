@@ -454,6 +454,9 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//h_align is either "left", "right" or "center" - default is center
 	//v_align is either "top", "bottom", or "center" - default is center
 
+	//if either x1 or y1 are -1, the value of 0 is used.
+	//If either x2 or y2 are -1, the width or height of the texture is used.
+
 	//load font
 	csRef<iFont> font = g2d->GetFontServer()->LoadFont(font_filename, font_size);
 	if (!font)
@@ -477,6 +480,16 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//get height and width of texture
 	int width, height;
 	wrapper->GetTextureHandle()->GetOriginalDimensions(width, height);
+
+	//set default values if specified
+	if (x1 == -1)
+		x1 = 0;
+	if (y1 == -1)
+		y1 = 0;
+	if (x2 == -1)
+		x2 = width;
+	if (y2 == -1)
+		y2 = height;
 
 	//create new empty texture
 	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "rgb8", CS_TEXTURE_3D);

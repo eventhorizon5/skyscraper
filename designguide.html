@@ -507,8 +507,8 @@
     Syntax: <font size="2" face="Courier New, Courier, mono">AddText texture_name, 
     name, font_filename, font_size, text, x1, y1, x2, y2, h_align, v_align, ColorR, 
     ColorG, ColorB</font><br>
-    Example: <font size="2" face="Courier New, Courier, mono">AddText Black, 100, 
-    nimbus_sans.ttf, 64, 100, -1, -1, -1, -1, center, center, 255, 255, 255</font></p>
+    Example: <font size="2" face="Courier New, Courier, mono">AddText Black, Button100, 
+    nimbus_sans.ttf, 47, 100, -1, -1, -1, -1, center, center, 255, 255, 255</font></p>
   <p align="left">With this command, texture_name is the name of the previously 
     loaded texture to draw text onto (loaded with either Load or LoadRange). Name 
     is the name to call this new texture. Font_filename is the filename of the 
@@ -524,7 +524,16 @@
     ColorR, ColorG and ColorB determine the color of the text, and the values 
     range from 0 to 255. If all values are 255, the text is white, and if all 
     values are 0, then it's black.</p>
-  <p align="left"><strong></strong></p>
+  <p align="left"><strong>4. AddTextRange</strong> - similar to LoadRange, but 
+    draws text onto a texture<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddText startnumber, 
+    endnumber, texture_name, name, font_filename, font_size, text, x1, y1, x2, 
+    y2, h_align, v_align, ColorR, ColorG, ColorB</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddText 1, 100, 
+    Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, 
+    center, 255, 255, 255</font></p>
+  <p align="left"></p>
+  <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">5. The <em>Floor</em> Sections</font></strong></p>
   <p align="left">There are 2 <em>Floor</em> sections available - <em>Floor</em> 
     and <em>Floors</em>. <em>Floor</em> specifies a single floor, while <em>Floors</em> 
