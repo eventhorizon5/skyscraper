@@ -3634,7 +3634,7 @@ recalc:
 					}
 				}
 				buffer = tempdata[2];
-				buffer.Insert(0, "/root/fonts/");
+				buffer.Insert(0, "/root/data/fonts/");
 				Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]));
 				tempdata.DeleteAll();
 			}
