@@ -248,7 +248,8 @@ void Sound::Reset()
 void Sound::Load(const char *filename, bool force)
 {
 	//exit if filename is the same
-	if (filename == Filename && force == false)
+	csString filename_new = filename;
+	if (filename_new == Filename && force == false)
 		return;
 
 	//clear old object references
