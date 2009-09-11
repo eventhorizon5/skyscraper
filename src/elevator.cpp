@@ -1180,13 +1180,13 @@ int Elevator::AddFloor(const char *name, const char *texture, float thickness, f
 	return sbs->AddFloorMain(Elevator_state, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw2, th2);
 }
 
-void Elevator::AddFloorIndicator(const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+void Elevator::AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
 
 	int size = FloorIndicatorArray.GetSize();
 	FloorIndicatorArray.SetSize(size + 1);
-	FloorIndicatorArray[size] = new FloorIndicator(Number, direction, CenterX, CenterZ, width, height, voffset);
+	FloorIndicatorArray[size] = new FloorIndicator(Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
 	FloorIndicatorArray[size]->SetPosition(Origin);
 }
 
@@ -2294,7 +2294,7 @@ void Elevator::SetShaftDoors(int number, float thickness, float CenterX, float C
 	}
 }
 
-void Elevator::AddFloorSigns(bool relative, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+void Elevator::AddFloorSigns(bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//adds floor signs at the specified position and direction for each serviced floor
 
@@ -2315,7 +2315,7 @@ void Elevator::AddFloorSigns(bool relative, const char *direction, float CenterX
 
 	for (int i = 0; i < ServicedFloors.GetSize(); i++)
 	{
-		csString texture = "Button" + sbs->GetFloor(ServicedFloors[i])->ID;
+		csString texture = texture_prefix + sbs->GetFloor(ServicedFloors[i])->ID;
 		csString tmpdirection = direction;
 		tmpdirection.Downcase();
 

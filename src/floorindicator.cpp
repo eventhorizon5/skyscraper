@@ -30,10 +30,11 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-FloorIndicator::FloorIndicator(int elevator, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude)
+FloorIndicator::FloorIndicator(int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude)
 {
 	//creates a new floor indicator at the specified position
 	Elevator = elevator;
+	Prefix = texture_prefix;
 
 	csString buffer;
 	buffer = elevator;
@@ -90,7 +91,7 @@ void FloorIndicator::Update(const char *value)
 
 	csString texture;
 	texture = value;
-	texture.Insert(0, "Button");
+	texture.Insert(0, Prefix);
 
 	sbs->ChangeTexture(FloorIndicatorMesh, texture.GetData());
 }

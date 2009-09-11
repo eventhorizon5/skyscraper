@@ -423,7 +423,7 @@ int Floor::ColumnWallBox2(const char *name, const char *texture, float CenterX, 
 	return ColumnWallBox(name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom);
 }
 
-bool Floor::AddFloorIndicator(int elevator, bool relative, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+bool Floor::AddFloorIndicator(int elevator, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
 
@@ -431,12 +431,12 @@ bool Floor::AddFloorIndicator(int elevator, bool relative, const char *direction
 	FloorIndicatorArray.SetSize(size + 1);
 
 	if (relative == false)
-		FloorIndicatorArray[size] = new FloorIndicator(elevator, direction, CenterX, CenterZ, width, height, Altitude + InterfloorHeight + voffset);
+		FloorIndicatorArray[size] = new FloorIndicator(elevator, texture_prefix, direction, CenterX, CenterZ, width, height, Altitude + InterfloorHeight + voffset);
 	else
 	{
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
-			FloorIndicatorArray[size] = new FloorIndicator(elevator, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, Altitude + + InterfloorHeight + voffset);
+			FloorIndicatorArray[size] = new FloorIndicator(elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, Altitude + + InterfloorHeight + voffset);
 		else
 			return false;
 	}

@@ -32,9 +32,10 @@ public:
 
 	int Elevator; //elevator this indicator is assigned to
 	bool IsEnabled;
+	csString Prefix; //texture name prefix
 
 	//functions
-	FloorIndicator(int elevator, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude);
+	FloorIndicator(int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude);
 	~FloorIndicator();
 	void Enabled(bool value);
 	csVector3 GetPosition();

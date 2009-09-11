@@ -2400,24 +2400,48 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 8 || tempdata.GetSize() > 8)
+				if (tempdata.GetSize() < 8 || tempdata.GetSize() > 9)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
+
+				bool compat = false;
+				if (tempdata.GetSize() == 8)
+					compat = true; //1.4 compatibility mode
+
 				//check numeric values
-				for (int i = 0; i <= 7; i++)
+				if (compat == false)
 				{
-					if (i == 1)
-						i = 3;
-					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					for (int i = 0; i <= 8; i++)
 					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
-						return false;
+						if (i == 1)
+							i = 4;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
+					}
+				}
+				else
+				{
+					for (int i = 0; i <= 7; i++)
+					{
+						if (i == 1)
+							i = 3;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
 					}
 				}
 
-				Simcore->GetFloor(Current)->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+				if (compat == false)
+					Simcore->GetFloor(Current)->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+				else
+					Simcore->GetFloor(Current)->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), "Button", tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
 
 				tempdata.DeleteAll();
 			}
@@ -3408,22 +3432,44 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+				if (tempdata.GetSize() < 6 || tempdata.GetSize() > 7)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
+
+				bool compat = false;
+				if (tempdata.GetSize() == 6)
+					compat = true; //1.4 compatibility mode
+
 				//check numeric values
-				for (int i = 1; i <= 5; i++)
+				if (compat == false)
 				{
-					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					for (int i = 2; i <= 6; i++)
 					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
-						return false;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
+					}
+				}
+				else
+				{
+					for (int i = 1; i <= 5; i++)
+					{
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
 					}
 				}
 
-				Simcore->GetElevator(Current)->AddFloorIndicator(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
+				if (compat == false)
+					Simcore->GetElevator(Current)->AddFloorIndicator(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+				else
+					Simcore->GetElevator(Current)->AddFloorIndicator("Button", tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
 
 				tempdata.DeleteAll();
 			}
@@ -3476,22 +3522,44 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 8)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
+
+				bool compat = false;
+				if (tempdata.GetSize() == 7)
+					compat = true; //1.4 compatibility mode
+
 				//check numeric values
-				for (int i = 2; i <= 6; i++)
+				if (compat == false)
 				{
-					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					for (int i = 3; i <= 7; i++)
 					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
-						return false;
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
+					}
+				}
+				else
+				{
+					for (int i = 2; i <= 6; i++)
+					{
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
 					}
 				}
 
-				Simcore->GetElevator(Current)->AddFloorSigns(csString(tempdata[0]).CompareNoCase("true"), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+				if (compat == false)
+					Simcore->GetElevator(Current)->AddFloorSigns(csString(tempdata[0]).CompareNoCase("true"), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+				else
+					Simcore->GetElevator(Current)->AddFloorSigns(csString(tempdata[0]).CompareNoCase("true"), "Button", tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
 
 				tempdata.DeleteAll();
 			}

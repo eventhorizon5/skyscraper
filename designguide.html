@@ -863,7 +863,7 @@
   <p align="left"><strong>19. AddFloorIndicator</strong> - creates a floor indicator 
     associated with a specific elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em> 
-    elevator, relative, direction</em>, <em>CenterX, CenterZ, width, height, voffset</em></font> 
+    elevator, relative, texture_prefix, direction, CenterX, CenterZ, width, height, voffset</em></font> 
   </p>
   <p align="left">The AddFloorIndicator command creates a floor indicator at the 
     position specified by <em>CenterX</em> and <em>CenterZ</em>, associated with 
@@ -872,7 +872,9 @@
     &quot;front&quot; or &quot;back&quot;. <em>Relative</em> determines if the 
     <em>CenterX</em> and <em>CenterZ</em> values are relative of the elevator's 
     center or not. This command can be given multiple times to create multiple 
-    indicators.</p>
+    indicators.  Texture_prefix is the base name of the texture to load when displaying
+    a floor ID; for example if the indicator is on floor 3, and you specify a prefix
+    of "Button", it'll load the "Button3" texture.</p>
   <p align="left"><strong>20. Cut</strong> - performs a manual box cut on an area 
     within the current floor<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Cut x1, y1, z1, x2, 
@@ -1119,12 +1121,15 @@
     See the above command (AddFloorButton) for a description of the other parameters.</p> 
   <p align="left"><strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em> 
-    direction</em>, <em>CenterX, CenterZ, width, height, voffset</em></font> </p>
+    texture_prefix, direction, CenterX, CenterZ, width, height, voffset</em></font> </p>
   <p align="left">The AddFloorIndicator command creates a floor indicator at the 
     position (relative to the elevator) specified by <em>CenterX</em> and <em>CenterZ</em>. 
     <em>Direction</em> is the direction the indicator faces, and can be either 
     &quot;left&quot;, &quot;right&quot;, &quot;front&quot; or &quot;back&quot;. 
-    This command can be given multiple times to create multiple indicators.</p>
+    This command can be given multiple times to create multiple indicators.
+    Texture_prefix is the base name of the texture to load when displaying
+    a floor ID; for example if the elevator is on floor 3, and you specify a prefix
+    of "Button", it'll load the "Button3" texture.</p>
   <p align="left"><strong>10. AddDirectionalIndicators</strong> - creates the 
     elevator's directional indicator/lanterns (similar to the CreateCallButtons 
     command) <br>
@@ -1173,12 +1178,14 @@
   <p align="left"><strong>12. AddFloorSigns</strong> - creates floor signs on 
     all floors serviced by the elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorSigns<em> 
-    relative, direction</em>, <em>CenterX, CenterZ, width, height, voffset</em></font> 
+    relative, texture_prefix, direction, CenterX, CenterZ, width, height, voffset</em></font> 
   </p>
   <p align="left">The AddFloorSigns command creates floor signs (similar to floor 
     indicators) on all the floors serviced by the current elevator. Direction 
     is the direction the signs face, and can be either &quot;left&quot;, &quot;right&quot;, 
-    &quot;front&quot; or &quot;back&quot;.</p>
+    &quot;front&quot; or &quot;back&quot;.  Texture_prefix is the base name of the texture
+    to load when displaying a floor ID; for example if the sign is on floor 3, and you
+    specify a prefix of "Button", it'll load the "Button3" texture.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 
