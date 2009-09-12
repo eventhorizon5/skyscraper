@@ -102,66 +102,54 @@
     Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
     Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
 
-    #floor indicator/button pictures
-    Load data/black.jpg, Black, 1, 1
-    AddText Black, ButtonL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonB1, nimbus_sans.ttf, 47, B1, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonB2, nimbus_sans.ttf, 47, B2, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonB3, nimbus_sans.ttf, 47, B3, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonB4, nimbus_sans.ttf, 47, B4, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonB5, nimbus_sans.ttf, 47, B5, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonB6, nimbus_sans.ttf, 47, B6, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonB7, nimbus_sans.ttf, 47, B7, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonB8, nimbus_sans.ttf, 47, B8, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonB9, nimbus_sans.ttf, 47, B9, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonM, nimbus_sans.ttf, 47, M, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonML, nimbus_sans.ttf, 47, ML, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonR, nimbus_sans.ttf, 47, R, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonP, nimbus_sans.ttf, 47, P, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonPM, nimbus_sans.ttf, 47, PM, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonP1, nimbus_sans.ttf, 47, P1, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonP2, nimbus_sans.ttf, 47, P2, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonP3, nimbus_sans.ttf, 47, P3, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonP4, nimbus_sans.ttf, 47, P4, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonP5, nimbus_sans.ttf, 47, P5, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonP6, nimbus_sans.ttf, 47, P6, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonP7, nimbus_sans.ttf, 47, P7, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonP8, nimbus_sans.ttf, 47, P8, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonP9, nimbus_sans.ttf, 47, P9, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonB, nimbus_sans.ttf, 47, B, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonBR, nimbus_sans.ttf, 47, BR, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonCC, nimbus_sans.ttf, 47, CC, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonCL, nimbus_sans.ttf, 47, CL, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonGL, nimbus_sans.ttf, 47, GL, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonPL, nimbus_sans.ttf, 47, PL, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonIL, nimbus_sans.ttf, 47, IL, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonEL, nimbus_sans.ttf, 47, EL, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonH, nimbus_sans.ttf, 47, H, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonLL, nimbus_sans.ttf, 47, LL, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonLL1, nimbus_sans.ttf, 47, LL1, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonLL2, nimbus_sans.ttf, 47, LL2, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonLL3, nimbus_sans.ttf, 47, LL3, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonLL4, nimbus_sans.ttf, 47, LL4, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonLL5, nimbus_sans.ttf, 47, LL5, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonLL6, nimbus_sans.ttf, 47, LL6, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonLL7, nimbus_sans.ttf, 47, LL7, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonLL8, nimbus_sans.ttf, 47, LL8, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonLL9, nimbus_sans.ttf, 47, LL9, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonPH, nimbus_sans.ttf, 47, PH, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonPR, nimbus_sans.ttf, 47, PR, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonS, nimbus_sans.ttf, 47, S, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonSB, nimbus_sans.ttf, 47, SB, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonX, nimbus_sans.ttf, 47, X, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonEX, nimbus_sans.ttf, 47, EX, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonEZ, nimbus_sans.ttf, 47, EZ, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonAlarm, nimbus_sans.ttf, 28, Alarm, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
-    AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
-    AddTextRange 1, 150, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    floor indicator/button pictures
+    Load signs/sans/L.jpg, ButtonL, 1, 1
+    Load signs/sans/B1.jpg, ButtonB1, 1, 1
+    Load signs/sans/B2.jpg, ButtonB2, 1, 1
+    Load signs/sans/B3.jpg, ButtonB3, 1, 1
+    Load signs/sans/B4.jpg, ButtonB4, 1, 1
+    Load signs/sans/B5.jpg, ButtonB5, 1, 1
+    Load signs/sans/B6.jpg, ButtonB6, 1, 1
+    Load signs/sans/B7.jpg, ButtonB7, 1, 1
+    Load signs/sans/B8.jpg, ButtonB8, 1, 1
+    Load signs/sans/B9.jpg, ButtonB9, 1, 1
+    Load signs/sans/M.jpg, ButtonM, 1, 1
+    Load signs/sans/R.jpg, ButtonR, 1, 1
+    Load signs/sans/P.jpg, ButtonP, 1, 1
+    Load signs/sans/P1.jpg, ButtonP1, 1, 1
+    Load signs/sans/P2.jpg, ButtonP2, 1, 1
+    Load signs/sans/P3.jpg, ButtonP3, 1, 1
+    Load signs/sans/P4.jpg, ButtonP4, 1, 1
+    Load signs/sans/P5.jpg, ButtonP5, 1, 1
+    Load signs/sans/P6.jpg, ButtonP6, 1, 1
+    Load signs/sans/P7.jpg, ButtonP7, 1, 1
+    Load signs/sans/P8.jpg, ButtonP8, 1, 1
+    Load signs/sans/P9.jpg, ButtonP9, 1, 1
+    Load signs/sans/B.jpg, ButtonB, 1, 1
+    Load signs/sans/C.jpg, ButtonC, 1, 1
+    Load signs/sans/CL.jpg, ButtonCL, 1, 1
+    Load signs/sans/GL.jpg, ButtonGL, 1, 1
+    Load signs/sans/H.jpg, ButtonH, 1, 1
+    Load signs/sans/LL.jpg, ButtonLL, 1, 1
+    Load signs/sans/LL1.jpg, ButtonLL1, 1, 1
+    Load signs/sans/LL2.jpg, ButtonLL2, 1, 1
+    Load signs/sans/LL3.jpg, ButtonLL3, 1, 1
+    Load signs/sans/LL4.jpg, ButtonLL4, 1, 1
+    Load signs/sans/LL5.jpg, ButtonLL5, 1, 1
+    Load signs/sans/LL6.jpg, ButtonLL6, 1, 1
+    Load signs/sans/LL7.jpg, ButtonLL7, 1, 1
+    Load signs/sans/LL8.jpg, ButtonLL8, 1, 1
+    Load signs/sans/LL9.jpg, ButtonLL9, 1, 1
+    Load signs/sans/PH.jpg, ButtonPH, 1, 1
+    Load signs/sans/PR.jpg, ButtonPR, 1, 1
+    Load signs/sans/S.jpg, ButtonS, 1, 1
+    Load signs/sans/X.jpg, ButtonX, 1, 1
+    Load signs/sans/Open.jpg, ButtonOpen, 1, 1
+    Load signs/sans/Close.jpg, ButtonClose, 1, 1
+    Load signs/sans/Stop.jpg, ButtonStop, 1, 1
+    Load signs/sans/Alarm.jpg, ButtonAlarm, 1, 1
+    Load signs/sans/CallCancel.jpg, ButtonCancel, 1, 1
+    LoadRange 1, 150, signs/sans/%number%.jpg, Button%number%, 1, 1
 <EndTextures>
 
 # Ground

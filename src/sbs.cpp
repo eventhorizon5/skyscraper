@@ -414,6 +414,12 @@ void SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iGraphics3D* g3dref, iG
 	root_dir = rootdirectory;
 	dir_char = directory_char;
 
+	//mount sign texture packs
+	Mount("signs-sans.zip", "/root/signs/sans");
+	Mount("signs-sans_bold.zip", "/root/signs/sans_bold");
+	Mount("signs-sans_cond.zip", "/root/signs/sans_cond");
+	Mount("signs-sans_cond_bold.zip", "/root/signs/sans_cond_bold");
+
 	//load default textures
 	csPrintf("Loading default textures...");
 	LoadTexture("/root/data/brick1.jpg", "Default", 1, 1);
