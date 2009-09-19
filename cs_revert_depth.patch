@@ -1,7 +1,19 @@
-Index: plugins/video/render3d/opengl/gl_r2t_framebuf.cpp
-===================================================================
---- plugins/video/render3d/opengl/gl_r2t_framebuf.cpp	(revision 29602)
-+++ plugins/video/render3d/opengl/gl_r2t_framebuf.cpp	(revision 29600)
+diff -urN CS.old/libs/csplugincommon/opengl/assumedstate.cpp CS/libs/csplugincommon/opengl/assumedstate.cpp
+--- CS.old/libs/csplugincommon/opengl/assumedstate.cpp	2008-05-12 14:23:57.000000000 -0500
++++ CS/libs/csplugincommon/opengl/assumedstate.cpp	2009-09-19 16:31:07.225541224 -0500
+@@ -28,8 +28,7 @@
+       void SetAssumedState (csGLStateCache* statecache,
+ 			    csGLExtensionManager* ext)
+       {
+-	glClearDepth (1.0);
+-	glDepthRange (1.0, 0.0);
++	glClearDepth (0.0);
+ 	statecache->SetPixelUnpackAlignment (1);
+         // The texture format stuff generally assumes little endian
+ #ifndef CS_LITTLE_ENDIAN
+diff -urN CS.old/plugins/video/render3d/opengl/gl_r2t_framebuf.cpp CS/plugins/video/render3d/opengl/gl_r2t_framebuf.cpp
+--- CS.old/plugins/video/render3d/opengl/gl_r2t_framebuf.cpp	2008-05-12 14:23:57.000000000 -0500
++++ CS/plugins/video/render3d/opengl/gl_r2t_framebuf.cpp	2009-09-19 16:31:35.399244106 -0500
 @@ -184,7 +184,7 @@
      glTexParameteri (textarget, GL_TEXTURE_MIN_FILTER, oldMinFilt);
    }
@@ -20,10 +32,9 @@ Index: plugins/video/render3d/opengl/gl_r2t_framebuf.cpp
  
    if (rt_onscreen)
    {
-Index: plugins/video/render3d/opengl/gl_render3d.cpp
-===================================================================
---- plugins/video/render3d/opengl/gl_render3d.cpp	(revision 29602)
-+++ plugins/video/render3d/opengl/gl_render3d.cpp	(revision 29600)
+diff -urN CS.old/plugins/video/render3d/opengl/gl_render3d.cpp CS/plugins/video/render3d/opengl/gl_render3d.cpp
+--- CS.old/plugins/video/render3d/opengl/gl_render3d.cpp	2009-08-27 09:31:08.000000000 -0500
++++ CS/plugins/video/render3d/opengl/gl_render3d.cpp	2009-09-19 16:32:37.774430340 -0500
 @@ -248,13 +248,13 @@
        break;
      case CS_ZBUF_INVERT:
@@ -49,25 +60,7 @@ Index: plugins/video/render3d/opengl/gl_render3d.cpp
  
    statecache->SetStencilMask (stencil_shadow_mask);
  
-@@ -1296,7 +1296,7 @@
-   else
-     delayClearFlags = clearMask;
- 
--    statecache->SetCullFace (GL_FRONT);
-+  statecache->SetCullFace (GL_FRONT);
- 
-   /* Note: this function relies on the canvas and/or the R2T backend to setup
-    * matrices etc. So be careful when changing stuff. */
-@@ -1309,7 +1309,7 @@
-     needProjectionUpdate = true;
-     glColor4f (1.0f, 1.0f, 1.0f, 1.0f);
- 
--  //    object2camera.Identity ();
-+//    object2camera.Identity ();
-     //@@@ TODO FIX
-     return true;
-   }
-@@ -2062,7 +2062,7 @@
+@@ -2069,7 +2069,7 @@
        // @@@ Jorrit: to avoid flickering I had to increase the
        // values below and multiply them with 3.
        //glPolygonOffset (-0.1f, -4.0f); 
@@ -76,7 +69,7 @@ Index: plugins/video/render3d/opengl/gl_render3d.cpp
        statecache->Enable_GL_POLYGON_OFFSET_FILL ();
        break;
      case CS_SHADOW_VOLUME_PASS1:
-@@ -2836,11 +2836,11 @@
+@@ -2843,11 +2843,11 @@
  	  
      cp = clipportal_stack[ffpnz];
      //map all Z-values to 0.0
@@ -90,10 +83,9 @@ Index: plugins/video/render3d/opengl/gl_render3d.cpp
      
      // finish of debug coloring
      //glColorMask (false, false, false, false);
-Index: plugins/video/render3d/opengl/gl_render3d.h
-===================================================================
---- plugins/video/render3d/opengl/gl_render3d.h	(revision 29602)
-+++ plugins/video/render3d/opengl/gl_render3d.h	(revision 29600)
+diff -urN CS.old/plugins/video/render3d/opengl/gl_render3d.h CS/plugins/video/render3d/opengl/gl_render3d.h
+--- CS.old/plugins/video/render3d/opengl/gl_render3d.h	2008-05-12 14:23:57.000000000 -0500
++++ CS/plugins/video/render3d/opengl/gl_render3d.h	2009-09-19 16:33:00.595145798 -0500
 @@ -365,7 +365,7 @@
    // @@@ Jorrit: to avoid flickering I had to increase the
    // values below and multiply them with 3.
@@ -103,17 +95,3 @@ Index: plugins/video/render3d/opengl/gl_render3d.h
    statecache->Enable_GL_POLYGON_OFFSET_FILL (); }
  
    // Disables offsetting of Z values
-Index: libs/csplugincommon/opengl/assumedstate.cpp
-===================================================================
---- libs/csplugincommon/opengl/assumedstate.cpp	(revision 29602)
-+++ libs/csplugincommon/opengl/assumedstate.cpp	(revision 29600)
-@@ -28,8 +28,7 @@
-       void SetAssumedState (csGLStateCache* statecache,
- 			    csGLExtensionManager* ext)
-       {
--	glClearDepth (1.0);
--	glDepthRange (1.0, 0.0);
-+	glClearDepth (0.0);
- 	statecache->SetPixelUnpackAlignment (1);
-         // The texture format stuff generally assumes little endian
- #ifndef CS_LITTLE_ENDIAN
