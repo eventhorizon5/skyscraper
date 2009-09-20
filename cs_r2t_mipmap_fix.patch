@@ -1,0 +1,12 @@
+diff -urN CS.old/plugins/video/render3d/opengl/gl_r2t_framebuf.cpp CS/plugins/video/render3d/opengl/gl_r2t_framebuf.cpp
+--- CS.old/plugins/video/render3d/opengl/gl_r2t_framebuf.cpp	2008-05-12 14:23:57.000000000 -0500
++++ CS/plugins/video/render3d/opengl/gl_r2t_framebuf.cpp	2009-09-20 00:16:40.237541037 -0500
+@@ -437,7 +437,7 @@
+       else
+ 	glCopyTexImage2D (textarget, 0, internalFormat, 0, 0, txt_w, txt_h, 0);
+     }
+-    tex_mm->RegenerateMipmaps();
++    tex_mm->PrepareInt();
+   }
+ }
+ 
