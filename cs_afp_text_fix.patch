@@ -1,0 +1,14 @@
+diff -urN CS.old/libs/csplugincommon/opengl/glfontcache.cpp CS/libs/csplugincommon/opengl/glfontcache.cpp
+--- CS.old/libs/csplugincommon/opengl/glfontcache.cpp	2009-08-24 15:20:24.000000000 -0500
++++ CS/libs/csplugincommon/opengl/glfontcache.cpp	2009-09-21 22:24:18.594473131 -0500
+@@ -138,8 +138,8 @@
+   {
+     static const char textAFP[] = 
+       "!!ARBfp1.0\n"
+-      "PARAM bgColor = program.local[0];\n"
+-      "ATTRIB fgColor = fragment.color.primary;\n"
++      "PARAM fgColor = program.local[0];\n"
++      "ATTRIB bgColor = fragment.color.primary;\n"
+       "TEMP texel;\n"
+       "TEX texel, fragment.texcoord[0], texture[0], 2D;\n"
+       "LRP result.color, texel.aaaa, fgColor, bgColor;\n"
