@@ -516,7 +516,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	iTextureHandle *handle = tex->GetTextureHandle();
 	if (!handle)
 	{
-		ReportError("AddTextureOverlay: No texture handle available");
+		ReportError("LoadTextureCropped: No texture handle available");
 		return false;
 	}
 
@@ -686,7 +686,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 
 	//get height and width of overlay texture
 	int tex_width2, tex_height2;
-	wrapper->GetTextureHandle()->GetOriginalDimensions(tex_width2, tex_height2);
+	wrapper2->GetTextureHandle()->GetOriginalDimensions(tex_width2, tex_height2);
 
 	//set default values if specified
 	if (x == -1)
@@ -747,7 +747,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, tex_width, tex_height, 0, 0, tex_width, tex_height);
 
 	//draw overlay image onto backbuffer
-	g3d->DrawPixmap(wrapper->GetTextureHandle(), x, y, width, height, 0, 0, tex_width2, tex_height2);
+	g3d->DrawPixmap(wrapper2->GetTextureHandle(), x, y, width, height, 0, 0, tex_width2, tex_height2);
 
 	//finish with buffer
 	g3d->FinishDraw();
