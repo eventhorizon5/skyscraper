@@ -513,17 +513,17 @@
     loaded texture to draw text onto (loaded with either Load or LoadRange). Name 
     is the name to call this new texture. Font_filename is the filename of the 
     font to use - fonts are in Skyscraper's data/fonts directory. X1, y1, x2, 
-    and y2 are coordinate values mainly used to position the text in a boxed area. 
-    If any value is -1, the dimension of the texture will be used (so in this 
-    example, the loaded texture has a size of 128x128 pixels, and so the values 
-    are 0, 0, 128, 128). This will place the text in the center of the texture 
-    image, but to position it elsewhere, specify the pixel box to place it in. 
-    H_align and v_align determine the alignment of the text - for h_align, it 
-    can either be &quot;left&quot;, &quot;right&quot; or &quot;center&quot;, and 
-    for v_align either &quot;top&quot;, &quot;bottom&quot; or &quot;center&quot;. 
-    ColorR, ColorG and ColorB determine the color of the text, and the values 
-    range from 0 to 255. If all values are 255, the text is white, and if all 
-    values are 0, then it's black.</p>
+    and y2 are coordinate values mainly used to position the text in a boxed area, 
+    with the position of 0, 0 (x 0, y 0) being on the top left.. If any value 
+    is -1, the dimension of the texture will be used (so in this example, the 
+    loaded texture has a size of 128x128 pixels, and so the values are 0, 0, 128, 
+    128). This will place the text in the center of the texture image, but to 
+    position it elsewhere, specify the pixel box to place it in. H_align and v_align 
+    determine the alignment of the text - for h_align, it can either be &quot;left&quot;, 
+    &quot;right&quot; or &quot;center&quot;, and for v_align either &quot;top&quot;, 
+    &quot;bottom&quot; or &quot;center&quot;. ColorR, ColorG and ColorB determine 
+    the color of the text, and the values range from 0 to 255. If all values are 
+    255, the text is white, and if all values are 0, then it's black.</p>
   <p align="left"><strong>4. AddTextRange</strong> - similar to LoadRange, but 
     draws text onto a texture<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddText startnumber, 
@@ -532,8 +532,34 @@
     Example: <font size="2" face="Courier New, Courier, mono">AddText 1, 100, 
     Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, 
     center, 255, 255, 255</font></p>
+  <p align="left"><strong>5. LoadCropped</strong> - loads a cropped image.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">LoadCropped filename, 
+    name, x, y, width, height, tile_x, tile_y</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">LoadCropped data\brick1.jpg, 
+    Brick2, 10, 10, 20, 20, 1, 1</font></p>
+  <p align="left">This command is similar to the Load command, but loads only 
+    a portion of an image. In the above example, the command loads the file data\brick1.jpg 
+    as &quot;Brick2&quot;, but only loads the portion of the image starting at 
+    pixel 10, 10, with a width of 20 pixels and a heigth of 20 pixels. Pixel 0, 
+    0 is on the top left of the image.</p>
+  <p align="left"><strong>6. AddOverlay</strong> - draws an image on top of another 
+    image<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddOverlay texture_name, 
+    overlay_texture_name, name, x, y, width, height, tile_x, tile_y</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">AddOverlay Brick1, 
+    Brick2, NewBrick, 25, 25, 50, 50, 1, 1</font></p>
+  <p align="left">This command allows multiple textures to be combined into a 
+    single texture, by drawing one on top of the other. <em>Texture_name</em> 
+    specifies the original source texture name to use (all textures must be loaded 
+    beforehand), <em>overlay_texture_name</em> specifies the texture to draw on 
+    top of the source texture, and <em>name</em> specifies the name of the new 
+    texture. X and Y determine the position to place the top-left of the new image 
+    at (since position 0, 0 is the top left of the image), and width and height 
+    determine the size in pixels of the overlay texture. In the above example, 
+    the &quot;Brick2&quot; texture is drawn on top of the &quot;Brick1&quot; texture, 
+    starting at pixel position 25, 25, with a width of 50 and a height of 50. 
+    The resulting texture is called &quot;NewBrick&quot;.</p>
   <p align="left"></p>
-  <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">5. The <em>Floor</em> Sections</font></strong></p>
   <p align="left">There are 2 <em>Floor</em> sections available - <em>Floor</em> 
     and <em>Floors</em>. <em>Floor</em> specifies a single floor, while <em>Floors</em> 

@@ -452,7 +452,11 @@ bool SBS::UnloadTexture(const char *name)
 	//unloads a texture
 
 	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->FindByName(name);
-	engine->GetTextureList()->Remove(wrapper);
+	if (!wrapper)
+		return false;
+	if (!engine->GetTextureList()->Remove(wrapper))
+		return false;
+	return true;
 }
 
 bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult)
