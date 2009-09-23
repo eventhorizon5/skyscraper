@@ -447,6 +447,97 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	return true;
 }
 
+bool SBS::UnloadTexture(const char *name)
+{
+	//unloads a texture
+
+	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->FindByName(name);
+	engine->GetTextureList()->Remove(wrapper);
+}
+
+bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult)
+{
+	//loads only a portion of the specified texture
+
+	//load original texture
+	csRef<iTextureWrapper> wrapper = loader->LoadTexture("croptemp", filename);
+	if (!wrapper)
+	{
+		ReportError("LoadTextureCropped: Error loading texture");
+		return false;
+	}
+
+	//get height and width of original texture
+	int tex_width, tex_height;
+	wrapper->GetTextureHandle()->GetOriginalDimensions(tex_width, tex_height);
+
+	//set default values if specified
+	if (x == -1)
+		x = 0;
+	if (y == -1)
+		y = 0;
+	if (width < 1)
+		width = tex_width;
+	if (height < 1)
+		height = tex_height;
+
+	//create new empty texture
+	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "rgb8", CS_TEXTURE_3D);
+	if (!th)
+	{
+		ReportError("LoadTextureCropped: Error creating texture");
+		th = 0;
+		return false;
+	}
+
+	//create a texture wrapper for the new texture
+	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
+	if (!tex)
+	{
+		ReportError("LoadTextureCropped: Error creating texture wrapper");
+		th = 0;
+		return false;
+	}
+
+	//set texture name
+	tex->QueryObject()->SetName(name);
+
+	//create material
+	csRef<iMaterial> material (engine->CreateBaseMaterial(tex));
+	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
+
+	//add texture multipliers for new texture
+	TextureInfo info;
+	info.name = name;
+	info.widthmult = widthmult;
+	info.heightmult = heightmult;
+	textureinfo.Push(info);
+
+	iTextureHandle *handle = tex->GetTextureHandle();
+	if (!handle)
+	{
+		ReportError("AddTextureOverlay: No texture handle available");
+		return false;
+	}
+
+	//set graphics rendering to the texture image
+	g3d->SetRenderTarget(handle);
+	if (!g3d->ValidateRenderTargets())
+		return false;
+	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
+
+	//draw image onto backbuffer
+	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, x, y, width, height);
+
+	//finish with buffer
+	g3d->FinishDraw();
+
+	//unload temporary texture
+	UnloadTexture("croptemp");
+
+	return true;
+}
+
 bool SBS::AddTextToTexture(const char *origname, const char *name, const char *font_filename, float font_size, const char *text, int x1, int y1, int x2, int y2, const char *h_align, const char *v_align, int ColorR, int ColorG, int ColorB)
 {
 	//adds text to the named texture, in the given box coordinates and alignment
@@ -561,6 +652,102 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	//write text
 	g2d->Write(font, x, y, g2d->FindRGB(ColorR, ColorG, ColorB), -1, text);
+
+	//finish with buffer
+	g3d->FinishDraw();
+
+	return true;
+}
+
+bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_texture, const char *name, int x, int y, int width, int height, float widthmult, float heightmult)
+{
+	//draws the specified texture on top of another texture
+	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
+
+	//get original texture
+	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->FindByName(orig_texture);
+	if (!wrapper)
+	{
+		ReportError("AddTextureOverlay: Invalid original texture");
+		return false;
+	}
+
+	//get overlay texture
+	csRef<iTextureWrapper> wrapper2 = engine->GetTextureList()->FindByName(overlay_texture);
+	if (!wrapper2)
+	{
+		ReportError("AddTextureOverlay: Invalid overlay texture");
+		return false;
+	}
+
+	//get height and width of original texture
+	int tex_width, tex_height;
+	wrapper->GetTextureHandle()->GetOriginalDimensions(tex_width, tex_height);
+
+	//get height and width of overlay texture
+	int tex_width2, tex_height2;
+	wrapper->GetTextureHandle()->GetOriginalDimensions(tex_width2, tex_height2);
+
+	//set default values if specified
+	if (x == -1)
+		x = 0;
+	if (y == -1)
+		y = 0;
+	if (width < 1)
+		width = tex_width;
+	if (height < 1)
+		height = tex_height;
+
+	//create new empty texture
+	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(tex_width, tex_height, csimg2D, "rgb8", CS_TEXTURE_3D);
+	if (!th)
+	{
+		ReportError("AddTextureOverlay: Error creating texture");
+		th = 0;
+		return false;
+	}
+
+	//create a texture wrapper for the new texture
+	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
+	if (!tex)
+	{
+		ReportError("AddTextureOverlay: Error creating texture wrapper");
+		th = 0;
+		return false;
+	}
+
+	//set texture name
+	tex->QueryObject()->SetName(name);
+
+	//create material
+	csRef<iMaterial> material (engine->CreateBaseMaterial(tex));
+	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
+
+	//add texture multipliers for new texture
+	TextureInfo info;
+	info.name = name;
+	info.widthmult = widthmult;
+	info.heightmult = heightmult;
+	textureinfo.Push(info);
+
+	iTextureHandle *handle = tex->GetTextureHandle();
+	if (!handle)
+	{
+		ReportError("AddTextureOverlay: No texture handle available");
+		return false;
+	}
+
+	//set graphics rendering to the texture image
+	g3d->SetRenderTarget(handle);
+	if (!g3d->ValidateRenderTargets())
+		return false;
+	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
+
+	//draw original image onto backbuffer
+	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, tex_width, tex_height, 0, 0, tex_width, tex_height);
+
+	//draw overlay image onto backbuffer
+	g3d->DrawPixmap(wrapper->GetTextureHandle(), x, y, width, height, 0, 0, tex_width2, tex_height2);
 
 	//finish with buffer
 	g3d->FinishDraw();

@@ -3758,6 +3758,58 @@ recalc:
 				}
 				tempdata.DeleteAll();
 			}
+			if (LineData.Slice(0, 11).CompareNoCase("loadcropped") == true)
+			{
+				tempdata.SplitString(LineData.Slice(12).GetData(), ",");
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = tempdata[temp3];
+					tempdata.Put(temp3, buffer.Trim());
+				}
+				if (tempdata.GetSize() < 8 || tempdata.GetSize() > 8)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+				//check numeric values
+				for (int i = 2; i <= 7; i++)
+				{
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+				buffer = tempdata[0];
+				buffer.Insert(0, "/root/");
+				Simcore->LoadTextureCropped(buffer, tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+				tempdata.DeleteAll();
+			}
+			if (LineData.Slice(0, 10).CompareNoCase("addoverlay") == true)
+			{
+				tempdata.SplitString(LineData.Slice(11).GetData(), ",");
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = tempdata[temp3];
+					tempdata.Put(temp3, buffer.Trim());
+				}
+				if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+				//check numeric values
+				for (int i = 3; i <= 8; i++)
+				{
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+				Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+				tempdata.DeleteAll();
+			}
 		}
 
 		//reset texture override status

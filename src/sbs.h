@@ -140,6 +140,8 @@ public:
 	void Report (const char* msg, ...);
 	bool ReportError (const char* msg, ...);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult);
+	bool UnloadTexture(const char *name);
+	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult);
 	float AutoSize(float n1, float n2, bool iswidth, float offset);
 	void Initialize(iSCF* scf, iObjectRegistry* objreg, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
 					iCollideSystem* collideref, iReporter* reporterref, iSndSysRenderer* sndrenderref, iSndSysLoader* sndloaderref,
@@ -220,6 +222,7 @@ public:
 	void ProcessTextureFlip(float tw, float th);
 	bool GetTextureTiling(const char *texture, float &tw, float &th);
 	bool AddTextToTexture(const char *origname, const char *name, const char *font_filename, float font_size, const char *text, int x1, int y1, int x2, int y2, const char *h_align, const char *v_align, int ColorR, int ColorG, int ColorB);
+	bool AddTextureOverlay(const char *orig_texture, const char *overlay_texture, const char *name, int x, int y, int width, int height, float widthmult, float heightmult);
 	void EnableMesh(csRef<iMeshWrapper> mesh, bool value);
 	iMeshWrapper* AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
 	void ProcessDoors();
