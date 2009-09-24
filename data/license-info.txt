@@ -56,4 +56,5 @@ sounds:
 -fire_alarm.wav - originally "Fire alarm.wav" by fonogeno on www.freesound.org
 -bell1.wav and bell1-stop.wav originally from "Electric_school_bell.wav" by John_Sauter on www.freesound.org
 -bell2.wav and bell2-stop.wav originall from "bell_school_ringing.wav" by vtkproductions.com at www.freesound.org
+-mechchime8.wav, mechchime9.wav and mechchime10.wav by escalatorgeek881
 
