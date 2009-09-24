@@ -64,7 +64,8 @@ private:
 
 	//sound source
 	csRef<iSndSysSource> sndsource;
-	csRef<iSndSysSourceSoftware3D> sndsource3d;
+	csRef<iSndSysSource3D> sndsource3d;
+	csRef<iSndSysSource3DDirectionalSimple> directional;
 
 	// sound parameters
 	csVector3 Position;

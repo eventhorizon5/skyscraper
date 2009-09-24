@@ -50,22 +50,12 @@ SBS::SBS()
 	//Pause for 2 seconds
 	csSleep(2000);
 
-	//Set default horizontal scaling value
-	HorizScale = 1;
-
-	//Set default starting elevator
-	ElevatorNumber = 1;
-
-	//Set default frame rate
-	FrameRate = 30;
-
 	//initialize other variables
 	BuildingName = "";
 	BuildingDesigner = "";
 	BuildingLocation = "";
 	BuildingDescription = "";
 	BuildingVersion = "";
-	SkyName = "noon";
 	IsRunning = false;
 	Floors = 0;
 	Basements = 0;
@@ -108,13 +98,6 @@ SBS::SBS()
 	RevYold = false;
 	RevZold = false;
 	delta = 0.01f;
-	ShowFullShafts = false;
-	ShowFullStairs = false;
-	ShaftDisplayRange = 3;
-	StairsDisplayRange = 5;
-	ShaftOutsideDisplayRange = 3;
-	StairsOutsideDisplayRange = 3;
-	FloorDisplayRange = 3;
 	wall1a = false;
 	wall1b = false;
 	wall2a = false;
@@ -384,35 +367,83 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-void SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
-					 iCollideSystem* collideref, iReporter* reporterref, iSndSysRenderer* sndrenderref, iSndSysLoader* sndloaderref,
-					 iMaterialWrapper* matref, iSector* sectorref, const char* rootdirectory, const char* directory_char)
+bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, iSector* sector, const char* rootdirectory, const char* directory_char)
 {
 	//initialize CS references
 #ifdef _WIN32
 	iSCF::SCF = scf;
 #endif
-	engine = engineref;
 	object_reg = objreg;
-	g3d = g3dref;
-	g2d = g2dref;
-	loader = loaderref;
-	vc = vcref;
-	view = viewref;
-	vfs = vfsref;
-	collision_sys = collideref;
-	rep = reporterref;
-	sndrenderer = sndrenderref;
-	sndloader = sndloaderref;
-	
+	engine = csQueryRegistry<iEngine> (object_reg);
+	if (!engine)
+		return ReportError("No engine plugin found");
+	g3d = csQueryRegistry<iGraphics3D> (object_reg);
+	if (!g3d)
+		return ReportError("No 3D renderer plugin found");
+	g2d = csQueryRegistry<iGraphics2D> (object_reg);
+	if (!g2d)
+		return ReportError("No 2D plugin found");
+	loader = csQueryRegistry<iLoader> (object_reg);
+	if (!loader)
+		return ReportError("No loader plugin found");
+	vc = csQueryRegistry<iVirtualClock> (object_reg);
+	if (!vc)
+		return ReportError("No virtual clock plugin found");
+	vfs = csQueryRegistry<iVFS> (object_reg);
+	if (!vfs)
+		return ReportError("No VFS plugin found");
+	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
+	if (!collision_sys)
+		return ReportError("No collision plugin found");
+	rep = csQueryRegistry<iReporter> (object_reg);
+	if (!rep)
+		return ReportError("No reporter plugin found");
+	sndrenderer = csQueryRegistry<iSndSysRenderer> (object_reg);
+	if (!sndrenderer)
+		return ReportError("No sound renderer plugin found");
+	sndloader = csQueryRegistry<iSndSysLoader> (object_reg);
+	if (!sndloader)
+		return ReportError("No sound loader plugin found");
+	confman = csQueryRegistry<iConfigManager> (object_reg);
+	if (!confman)
+		return ReportError("No configuration manager plugin found");
+	this->view = view;
+	if (!this->view)
+		return ReportError("No iView object available");
+
 	//disable sound if renderer or loader are not available
 	if (!sndrenderer || !sndloader)
 		DisableSound = true;
 
-	material = matref;
-	area = sectorref;
+	area = sector;
+	if (!area)
+		return ReportError("No iSector object available");
+
 	root_dir = rootdirectory;
 	dir_char = directory_char;
+
+	//load SBS configuration file
+	//confman->AddDomain("/root/data/config/sbs.cfg", vfs, confman->ConfigPriorityApplication);
+
+	//load default values from config file
+	HorizScale = confman->GetFloat("Skyscraper.SBS.HorizScale", 1); //Set default horizontal scaling value
+	ElevatorNumber = confman->GetInt("Skyscraper.SBS.ElevatorNumber", 1); //Set default starting elevator
+	FrameRate = confman->GetInt("Skyscraper.SBS.FrameRate", 30); //Set default frame rate
+	SkyName = confman->GetStr("Skyscraper.SBS.SkyName", "noon");
+	RenderOnly = confman->GetBool("Skyscraper.SBS.RenderOnly", false);
+	InputOnly = confman->GetBool("Skyscraper.SBS.InputOnly", false);
+	AutoShafts = confman->GetBool("Skyscraper.SBS.AutoShafts", true);
+	AutoStairs = confman->GetBool("Skyscraper.SBS.AutoStairs", true);
+	delta = confman->GetFloat("Skyscraper.SBS.Delta", 0.01);
+	ShowFullShafts = confman->GetBool("Skyscraper.SBS.ShowFullShafts", false);
+	ShowFullStairs = confman->GetBool("Skyscraper.SBS.ShowFullStairs", false);
+	ShaftDisplayRange = confman->GetInt("Skyscraper.SBS.ShaftDisplayRange", 3);
+	StairsDisplayRange = confman->GetInt("Skyscraper.SBS.StairsDisplayRange", 5);
+	ShaftOutsideDisplayRange = confman->GetInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
+	StairsOutsideDisplayRange = confman->GetInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
+	FloorDisplayRange = confman->GetInt("Skyscraper.SBS.FloorDisplayRange", 3);
+	ProcessElevators = confman->GetBool("Skyscraper.SBS.ProcessElevators", true);
+	DisableSound = confman->GetBool("Skyscraper.SBS.DisableSound", false);
 
 	//mount sign texture packs
 	Mount("signs-sans.zip", "/root/signs/sans");
@@ -1473,7 +1504,7 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 	csString polyname = dest->GetPolygonName(firstidx);
 	csString texname = texture;
 	bool result;
-	material = GetTextureMaterial(texture, result, polyname.GetData());
+	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, polyname.GetData());
 	if (!result)
 		texname = "Default";
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
@@ -1592,7 +1623,7 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 	csString polyname = dest->GetPolygonName(firstidx);
 	csString texname = texture;
 	bool result;
-	material = GetTextureMaterial(texture, result, polyname.GetData());
+	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, polyname.GetData());
 	if (!result)
 		texname = "Default";
 	dest->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
@@ -1769,7 +1800,7 @@ int SBS::CreateSky(const char *filenamebase)
 	//create a skybox that extends 30 miles (30 * 5280 ft) in each direction
 	int firstidx = SkyBox_state->AddInsideBox(csVector3(-158400, -158400, -158400), csVector3(158400, 158400, 158400));
 	bool result;
-	material = GetTextureMaterial("SkyBack", result);
+	csRef<iMaterialWrapper> material = GetTextureMaterial("SkyBack", result);
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
 	material = GetTextureMaterial("SkyRight", result);
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
@@ -1938,7 +1969,7 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 
 	csString texname = texture;
 	bool result;
-	material = GetTextureMaterial(texture, result, mesh->GetPolygonName(index));
+	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, mesh->GetPolygonName(index));
 	if (!result)
 		texname = "Default";
 
@@ -3121,7 +3152,7 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 	//get texture
 	csString texname = texture;
 	bool result;
-	material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
+	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
 	if (!result)
 		texname = "Default";
 

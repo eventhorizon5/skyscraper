@@ -295,8 +295,27 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	object_reg = csInitializer::CreateEnvironment(argc, argv);
 	if (!object_reg) return false;
 
+	//first initialize VFS
+	vfs = csInitializer::SetupVFS(object_reg);
+	if (!vfs)
+		return ReportError("Error loading the VFS plugin");
+	
+	//mount app's directory in VFS
+        #ifndef CS_PLATFORM_WIN32
+                dir_char = "/";
+        #else
+                dir_char = "\\";
+        #endif
+        root_dir = csInstallationPathsHelper::GetAppDir(argv[0]) + dir_char;
+        vfs->Mount("/root/", root_dir);
+
+	//load options from config file
+	//if (!csInitializer::SetupConfigManager(object_reg, "/root/data/config/skyscraper.cfg", "Skyscraper.Frontend"))
+    if (!csInitializer::SetupConfigManager(object_reg, "/root/skyscraper.ini", "Skyscraper.Frontend"))
+		return ReportError("Error reading config file skyscraper.ini");
+
 	if (!csInitializer::RequestPlugins(object_reg,
-		CS_REQUEST_VFS,
+		//CS_REQUEST_VFS,
 		CS_REQUEST_FONTSERVER,
 		//CS_REQUEST_PLUGIN("crystalspace.font.server.freetype2", iFontServer),
 		CS_REQUEST_PLUGIN("crystalspace.graphics2d.wxgl", iGraphics2D),
@@ -343,10 +362,12 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	if (!g3d) return ReportError ("Failed to locate 3D renderer");
 	imageio = csQueryRegistry<iImageIO> (object_reg);
 	if (!imageio) return ReportError ("Failed to locate image loader");
-	vfs = csQueryRegistry<iVFS> (object_reg);
-	if (!vfs) return ReportError ("Failed to locate VFS");
+	//vfs = csQueryRegistry<iVFS> (object_reg);
+	//if (!vfs) return ReportError ("Failed to locate VFS");
 	console = csQueryRegistry<iConsoleOutput> (object_reg);
 	if (!console) return ReportError ("Failed to locate console output driver");
+	confman = csQueryRegistry<iConfigManager> (object_reg);
+	if (!confman) return ReportError ("Failed to locate configuration manager");
 	mouse = csQueryRegistry<iMouseDriver> (object_reg);
 	if (!mouse) return ReportError("Failed to locate mouse driver");
 	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
@@ -381,15 +402,6 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_WARNING, true, false, false, false, true, false);
 	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_NOTIFY, true, false, false, false, true, false);
 	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_DEBUG, true, false, false, false, true, false);
-
-	//mount app's directory in VFS
-	#ifndef CS_PLATFORM_WIN32
-		dir_char = "/";
-	#else
-		dir_char = "\\";
-	#endif
-	root_dir = csInstallationPathsHelper::GetAppDir(argv[0]) + dir_char;
-	vfs->Mount("/root/", root_dir);
 
 	g2d = g3d->GetDriver2D();
 	g2d->AllowResize(true); //allow canvas resizing
@@ -945,7 +957,7 @@ void Skyscraper::Start()
 	Simcore = new SBS();
 
 	//initialize SBS
-	Simcore->Initialize(iSCF::SCF, object_reg, g3d, g2d, engine, loader, vc, view, vfs, collision_sys, rep, sndrenderer, sndloader, material, area, root_dir.GetData(), dir_char.GetData());
+	Simcore->Initialize(iSCF::SCF, object_reg, view, area, root_dir.GetData(), dir_char.GetData());
 
 	//load building data file
 	Simcore->Report("\nLoading building data from " + BuildingFile + "...\n");

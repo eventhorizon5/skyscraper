@@ -49,32 +49,32 @@ Camera::Camera()
 	desired_velocity.Set(0, 0, 0);
 	angle_velocity.Set(0, 0, 0);
 	desired_angle_velocity.Set(0, 0, 0);
-	cfg_jumpspeed = 0.08f;
-	cfg_walk_accelerate = 0.040f;
-	cfg_walk_maxspeed = 0.1f;
-	cfg_walk_maxspeed_mult = 10.0f;
-	cfg_walk_maxspeed_multreal = 1.0f;
-	cfg_walk_brake = 0.040f;
-	cfg_rotate_accelerate = 0.005f;
-	cfg_rotate_maxspeed = 0.015f;
-	cfg_rotate_brake = 0.015f;
-	cfg_look_accelerate = 0.028f;
-	cfg_body_height = 2.7f;
-	cfg_body_width = 1.64f;
-	cfg_body_depth = 1.64f;
-	cfg_legs_height = 2.3f;
-	cfg_legs_width = 1.312f;
-	cfg_legs_depth = 1.312f;
+	cfg_jumpspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.JumpSpeed", 0.08);
+	cfg_walk_accelerate = sbs->confman->GetFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040);
+	cfg_walk_maxspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1);
+	cfg_walk_maxspeed_mult = sbs->confman->GetFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_Mult", 10.0);
+	cfg_walk_maxspeed_multreal = sbs->confman->GetFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_MultReal", 1.0);
+	cfg_walk_brake = sbs->confman->GetFloat("Skyscraper.SBS.Camera.WalkBrake", 0.040);
+	cfg_rotate_accelerate = sbs->confman->GetFloat("Skyscraper.SBS.Camera.RotateAccelerate", 0.005);
+	cfg_rotate_maxspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.RotateMaxSpeed", 0.015);
+	cfg_rotate_brake = sbs->confman->GetFloat("Skyscraper.SBS.Camera.RotateBrake", 0.015);
+	cfg_look_accelerate = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LookAccelerate", 0.028);
+	cfg_body_height = sbs->confman->GetFloat("Skyscraper.SBS.Camera.BodyHeight", 2.7);
+	cfg_body_width = sbs->confman->GetFloat("Skyscraper.SBS.Camera.BodyWidth", 1.64);
+	cfg_body_depth = sbs->confman->GetFloat("Skyscraper.SBS.Camera.BodyDepth", 1.64);
+	cfg_legs_height = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LegsHeight", 2.3);
+	cfg_legs_width = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LegsWidth", 1.312);
+	cfg_legs_depth = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LegsDepth", 1.312);
 	speed = 1;
-	EnableCollisions = true;
-	GravityStatus = true;
-	SetGravity(sbs->MetersToFeet(9.806)); // 9.806 m/s/s
+	EnableCollisions = sbs->confman->GetBool("Skyscraper.SBS.Camera.EnableCollisions", true);
+	GravityStatus = sbs->confman->GetBool("Skyscraper.SBS.Camera.GravityStatus", true);
+	SetGravity(sbs->confman->GetFloat("Skyscraper.SBS.Camera.Gravity", 32.1719)); // 9.806 m/s/s
 	lastfloor = 0;
 	lastfloorset = false;
 	MouseDown = false;
-	ReportCollisions = false;
-	Freelook = false;
-	Freelook_speed = 200.0f;
+	ReportCollisions = sbs->confman->GetBool("Skyscraper.SBS.Camera.ReportCollisions", false);
+	Freelook = sbs->confman->GetBool("Skyscraper.SBS.Camera.Freelook", false);
+	Freelook_speed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
 }
 
 Camera::~Camera()

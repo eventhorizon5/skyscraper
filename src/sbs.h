@@ -77,9 +77,9 @@ public:
 	csRef<iReporter> rep;
 	csRef<iSndSysRenderer> sndrenderer;
 	csRef<iSndSysLoader> sndloader;
-	csRef<iMaterialWrapper> material;
 	csRef<iSector> area;
 	csRef<iObjectRegistry> object_reg;
+	csRef<iConfigManager> confman;
 
 	csTicks elapsed_time;
 	float delta;
@@ -143,9 +143,7 @@ public:
 	bool UnloadTexture(const char *name);
 	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult);
 	float AutoSize(float n1, float n2, bool iswidth, float offset);
-	void Initialize(iSCF* scf, iObjectRegistry* objreg, iGraphics3D* g3dref, iGraphics2D* g2dref, iEngine* engineref, iLoader* loaderref, iVirtualClock* vcref, iView* viewref, iVFS* vfsref,
-					iCollideSystem* collideref, iReporter* reporterref, iSndSysRenderer* sndrenderref, iSndSysLoader* sndloaderref,
-					iMaterialWrapper* matref, iSector* sectorref, const char* rootdirectory, const char* directory_char);
+	bool Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, iSector* sector, const char* rootdirectory, const char* directory_char);
 	bool Start();
 	int CreateSky(const char *filenamebase);
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);

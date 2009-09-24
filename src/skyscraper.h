@@ -51,12 +51,12 @@ public:
 	csRef<iReporter> rep;
 	csRef<FramePrinter> printer;
 	csRef<iImage> image;
+	csRef<iConfigManager> confman;
 
 	//sound system
 	csRef<iSndSysRenderer> sndrenderer;
 	csRef<iSndSysLoader> sndloader;
 
-	csRef<iMaterialWrapper> material;
 	csRef<iSector> area;
 
 	bool RenderOnly; //skip sim processing and only render graphics

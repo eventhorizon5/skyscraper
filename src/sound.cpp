@@ -35,13 +35,13 @@ Sound::Sound()
 {
 	//first set default values
 	Position = csVector3(0);
-	Volume = 1.0;
-	MaxDistance = -1.0;
-	MinDistance = 1.0;
+	Volume = sbs->confman->GetFloat("Skyscraper.SBS.Sound.Volume", 1.0);
+	MaxDistance = sbs->confman->GetFloat("Skyscraper.SBS.Sound.MaxDistance", -1.0);
+	MinDistance = sbs->confman->GetFloat("Skyscraper.SBS.Sound.MinDistance", 1.0);
 	Direction = 0;
 	DirectionalRadiation = 0;
-	SoundLoop = false;
-	Speed = 100;
+	SoundLoop = sbs->confman->GetBool("Skyscraper.SBS.Sound.Loop", false);
+	Speed = sbs->confman->GetInt("Skyscraper.SBS.Sound.Speed", 100);
 }
 
 Sound::~Sound()
@@ -79,15 +79,15 @@ void Sound::SetVolume(float value)
 {
 	//set volume of sound
 	Volume = value;
-	if (sndsource3d)
-		sndsource3d->SetVolume(Volume);
+	if (sndsource)
+		sndsource->SetVolume(Volume);
 }
 
 float Sound::GetVolume()
 {
 	//returns volume
-	if (sndsource3d)
-		return sndsource3d->GetVolume();
+	if (sndsource)
+		return sndsource->GetVolume();
 	else
 		return 0;
 }
@@ -126,14 +126,14 @@ float Sound::GetMaximumDistance()
 void Sound::SetDirection(csVector3 direction)
 {
 	Direction = direction;
-	if (sndsource3d)
-		sndsource3d->SetDirection(Direction);
+	if (directional)
+		directional->SetDirection(Direction);
 }
 
 csVector3 Sound::GetDirection()
 {
-	if (sndsource3d)
-		return sndsource3d->GetDirection();
+	if (directional)
+		return directional->GetDirection();
 	else
 		return 0;
 }
@@ -147,14 +147,14 @@ void Sound::SetDirectionalRadiation(float rad)
 	//Set this value to 0.0f for an omni-directional sound.
 
 	DirectionalRadiation = rad;
-	if (sndsource3d)
-		sndsource3d->SetDirectionalRadiation(DirectionalRadiation);
+	if (directional)
+		directional->SetDirectionalRadiation(DirectionalRadiation);
 }
 
 float Sound::GetDirectionalRadiation()
 {
-	if (sndsource3d)
-		return sndsource3d->GetDirectionalRadiation();
+	if (directional)
+		return directional->GetDirectionalRadiation();
 	else
 		return 0;
 }
@@ -253,6 +253,7 @@ void Sound::Load(const char *filename, bool force)
 		return;
 
 	//clear old object references
+	directional = 0;
 	sndsource3d = 0;
 	sndsource = 0;
 	sndstream = 0;
@@ -292,7 +293,13 @@ void Sound::Load(const char *filename, bool force)
 		sbs->ReportError("Can't create source for '%s'", filename);
 		return;
 	}
-	sndsource3d = scfQueryInterface<iSndSysSourceSoftware3D> (sndsource);
+	sndsource3d = scfQueryInterface<iSndSysSource3D> (sndsource);
+	if (!sndsource3d)
+	{
+		sbs->ReportError("Can't create 3D source for '%s'", filename);
+		return;
+	}
+	directional = scfQueryInterface<iSndSysSource3DDirectionalSimple> (sndsource);
 
 	//load previously stored values into new sound objects
 	SetPosition(Position);
