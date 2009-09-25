@@ -98,6 +98,7 @@ public:
 	void StopSound();
 	bool SelectBuilding();
 	void Start();
+	void AllowResize(bool value);
 
 private:
 	csEventID FocusGained;

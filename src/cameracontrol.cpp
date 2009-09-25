@@ -61,6 +61,8 @@ const long CameraControl::ID_STATICTEXT12 = wxNewId();
 const long CameraControl::ID_txtStartFloor = wxNewId();
 const long CameraControl::ID_STATICTEXT13 = wxNewId();
 const long CameraControl::ID_txtStartPosition = wxNewId();
+const long CameraControl::ID_STATICTEXT29 = wxNewId();
+const long CameraControl::ID_txtFOV = wxNewId();
 const long CameraControl::ID_STATICTEXT14 = wxNewId();
 const long CameraControl::ID_txtGravity = wxNewId();
 const long CameraControl::ID_bGravity = wxNewId();
@@ -119,6 +121,11 @@ const long CameraControl::ID_bRotationY = wxNewId();
 const long CameraControl::ID_STATICTEXT26 = wxNewId();
 const long CameraControl::ID_txtRotationZ = wxNewId();
 const long CameraControl::ID_bRotationZ = wxNewId();
+const long CameraControl::ID_STATICLINE3 = wxNewId();
+const long CameraControl::ID_STATICTEXT30 = wxNewId();
+const long CameraControl::ID_txtSetFOV = wxNewId();
+const long CameraControl::ID_bSetFOV = wxNewId();
+const long CameraControl::ID_bResetFOV = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(CameraControl,wxDialog)
@@ -132,6 +139,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	wxStaticBoxSizer* StaticBoxSizer2;
 	wxFlexGridSizer* FlexGridSizer4;
 	wxStaticBoxSizer* StaticBoxSizer4;
+	wxFlexGridSizer* FlexGridSizer10;
 	wxFlexGridSizer* FlexGridSizer3;
 	wxFlexGridSizer* FlexGridSizer5;
 	wxFlexGridSizer* FlexGridSizer9;
@@ -201,6 +209,10 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer2->Add(StaticText13, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtStartPosition = new wxTextCtrl(this, ID_txtStartPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtStartPosition"));
 	FlexGridSizer2->Add(txtStartPosition, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText29 = new wxStaticText(this, ID_STATICTEXT29, _("FOV Angle:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT29"));
+	FlexGridSizer2->Add(StaticText29, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	txtFOV = new wxTextCtrl(this, ID_txtFOV, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtFOV"));
+	FlexGridSizer2->Add(txtFOV, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(FlexGridSizer2, 1, wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer8->Add(StaticBoxSizer1, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Parameters"));
@@ -303,7 +315,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer9->Add(StaticBoxSizer2, 1, wxTOP|wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	StaticBoxSizer4 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Set Camera"));
 	FlexGridSizer6 = new wxFlexGridSizer(0, 1, 0, 0);
-	StaticText16 = new wxStaticText(this, ID_STATICTEXT16, _("Set Position"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT16"));
+	StaticText16 = new wxStaticText(this, ID_STATICTEXT16, _("Position"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT16"));
 	FlexGridSizer6->Add(StaticText16, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText22 = new wxStaticText(this, ID_STATICTEXT21, _("X:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT21"));
@@ -327,7 +339,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer6->Add(FlexGridSizer4, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticLine1 = new wxStaticLine(this, ID_STATICLINE1, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE1"));
 	FlexGridSizer6->Add(StaticLine1, 1, wxTOP|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText28 = new wxStaticText(this, ID_STATICTEXT27, _("Set Rotation"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT27"));
+	StaticText28 = new wxStaticText(this, ID_STATICTEXT27, _("Rotation"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT27"));
 	FlexGridSizer6->Add(StaticText28, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer7 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText25 = new wxStaticText(this, ID_STATICTEXT24, _("X:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT24"));
@@ -348,8 +360,20 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer7->Add(txtRotationZ, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bRotationZ = new wxButton(this, ID_bRotationZ, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bRotationZ"));
 	FlexGridSizer7->Add(bRotationZ, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer6->Add(FlexGridSizer7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticBoxSizer4->Add(FlexGridSizer6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6->Add(FlexGridSizer7, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticLine3 = new wxStaticLine(this, ID_STATICLINE3, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE3"));
+	FlexGridSizer6->Add(StaticLine3, 1, wxTOP|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer10 = new wxFlexGridSizer(0, 4, 0, 0);
+	StaticText30 = new wxStaticText(this, ID_STATICTEXT30, _("FOV:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT30"));
+	FlexGridSizer10->Add(StaticText30, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	txtSetFOV = new wxTextCtrl(this, ID_txtSetFOV, _("0"), wxDefaultPosition, wxSize(50,-1), 0, wxDefaultValidator, _T("ID_txtSetFOV"));
+	FlexGridSizer10->Add(txtSetFOV, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetFOV = new wxButton(this, ID_bSetFOV, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetFOV"));
+	FlexGridSizer10->Add(bSetFOV, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bResetFOV = new wxButton(this, ID_bResetFOV, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bResetFOV"));
+	FlexGridSizer10->Add(bResetFOV, 1, wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6->Add(FlexGridSizer10, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer4->Add(FlexGridSizer6, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer9->Add(StaticBoxSizer4, 1, wxTOP|wxBOTTOM|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	FlexGridSizer1->Add(FlexGridSizer9, 1, wxALIGN_RIGHT|wxALIGN_TOP, 5);
 	SetSizer(FlexGridSizer1);
@@ -381,6 +405,8 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_bRotationX,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bRotationX_Click);
 	Connect(ID_bRotationY,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bRotationY_Click);
 	Connect(ID_bRotationZ,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bRotationZ_Click);
+	Connect(ID_bSetFOV,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bSetFOV_Click);
+	Connect(ID_bResetFOV,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bResetFOV_Click);
 	//*)
 	OnInit();
 }
@@ -420,6 +446,7 @@ void CameraControl::Loop()
 	txtFreelook->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->Freelook)));
 	lblPosition->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	lblRotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
+	txtFOV->SetValue(TruncateNumber(Simcore->camera->GetFOVAngle(), 4));
 
 	//move if hold vector is not zero
 	if (hold_vector != csVector3(0, 0, 0))
@@ -599,4 +626,14 @@ void CameraControl::On_chkHold_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == false)
 		hold_vector = csVector3(0, 0, 0);
+}
+
+void CameraControl::On_bSetFOV_Click(wxCommandEvent& event)
+{
+	Simcore->camera->SetFOVAngle(atof(txtSetFOV->GetValue().ToAscii()));
+}
+
+void CameraControl::On_bResetFOV_Click(wxCommandEvent& event)
+{
+	Simcore->camera->SetToDefaultFOV();
 }

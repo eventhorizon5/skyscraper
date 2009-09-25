@@ -100,6 +100,9 @@ public:
 	float GetGravity();
 	void EnableGravity(bool value);
 	bool GetGravityStatus();
+	void SetFOVAngle(float angle);
+	float GetFOVAngle();
+	void SetToDefaultFOV();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera
@@ -114,6 +117,7 @@ private:
 	bool GravityStatus;
 	int lastfloor;
 	bool lastfloorset;
+	float FOV; //default FOV angle
 
 	//collision
 	csColliderActor collider_actor;

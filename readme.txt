@@ -134,7 +134,7 @@ Space - Jump
 Home - Float upwards (or jump if collision detection is on)
 End - Float downwards (or crouch if collision detection is on)
 F2 - print FPS on console
-F3 - Reset camera rotation to default
+F3 - Reset camera rotation and zoom to default
 F4 - Enable/disable wireframe mode
 F5 - Freelook (mouse look) mode
 F11 - Take screenshot
@@ -143,6 +143,8 @@ Control - Walk slowly (hold down with other keys)
 Alt + arrow keys - Strafe
 Alt + PgUp - Spin right
 Alt + PgDown - Spin left
+Plus - Zoom in (decrease FOV angle)
+Minus - Zoom out (increase FOV angle)
 
 --- Debug options ---
 Other functions are available via a Crystal Space plugin called BugPlug.

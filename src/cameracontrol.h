@@ -68,6 +68,8 @@ class CameraControl: public wxDialog
 		static const long ID_txtStartFloor;
 		static const long ID_STATICTEXT13;
 		static const long ID_txtStartPosition;
+		static const long ID_STATICTEXT29;
+		static const long ID_txtFOV;
 		static const long ID_STATICTEXT14;
 		static const long ID_txtGravity;
 		static const long ID_bGravity;
@@ -126,6 +128,11 @@ class CameraControl: public wxDialog
 		static const long ID_STATICTEXT26;
 		static const long ID_txtRotationZ;
 		static const long ID_bRotationZ;
+		static const long ID_STATICLINE3;
+		static const long ID_STATICTEXT30;
+		static const long ID_txtSetFOV;
+		static const long ID_bSetFOV;
+		static const long ID_bResetFOV;
 		//*)
 		void Loop();
 
@@ -157,6 +164,8 @@ class CameraControl: public wxDialog
 		void On_bRotationY_Click(wxCommandEvent& event);
 		void On_bRotationZ_Click(wxCommandEvent& event);
 		void On_chkHold_Click(wxCommandEvent& event);
+		void On_bSetFOV_Click(wxCommandEvent& event);
+		void On_bResetFOV_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -167,19 +176,23 @@ class CameraControl: public wxDialog
 		wxStaticText* StaticText9;
 		wxStaticText* StaticText20;
 		wxTextCtrl* txtStartFloor;
+		wxButton* bResetFOV;
 		wxButton* bYNeg;
 		wxTextCtrl* txtAngle;
+		wxStaticText* StaticText29;
 		wxTextCtrl* txtFreelookSpeed;
 		wxStaticText* StaticText13;
 		wxStaticText* StaticText2;
 		wxTextCtrl* txtGravityEnabled;
 		wxTextCtrl* txtDesiredVel;
 		wxTextCtrl* txtGravity;
+		wxStaticText* StaticText30;
 		wxStaticText* StaticText14;
 		wxTextCtrl* txtReportCollisions;
 		wxRadioButton* rRotation;
 		wxButton* bXPlus;
 		wxStaticText* StaticText26;
+		wxTextCtrl* txtFOV;
 		wxStaticText* StaticText6;
 		wxTextCtrl* txtCollisions;
 		wxButton* bReportCollisions;
@@ -212,12 +225,14 @@ class CameraControl: public wxDialog
 		wxButton* bRotationY;
 		wxTextCtrl* txtPositionY;
 		wxStaticText* lblPosition;
+		wxButton* bSetFOV;
 		wxButton* bCollisions;
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText7;
 		wxTextCtrl* txtPositionZ;
 		wxStaticText* lblGravityEnabled;
 		wxButton* bFreelookSpeed;
+		wxStaticLine* StaticLine3;
 		wxStaticLine* StaticLine1;
 		wxButton* bPositionZ;
 		wxButton* bGravity;
@@ -228,6 +243,7 @@ class CameraControl: public wxDialog
 		wxTextCtrl* txtMoveSpeed;
 		wxTextCtrl* txtRotationX;
 		wxCheckBox* chkHold;
+		wxTextCtrl* txtSetFOV;
 		wxStaticText* StaticText25;
 		wxButton* bZNeg;
 		wxButton* bStartPosition;

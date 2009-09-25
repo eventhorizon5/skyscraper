@@ -82,6 +82,7 @@ bool Skyscraper::OnInit(void)
 
 	//Create main window
 	window = new MainScreen();
+	//AllowResize(false);
 	window->ShowWindow();
 
 	//start and initialize CS
@@ -253,6 +254,9 @@ void Skyscraper::SetupFrame()
 		view->ClearView();
 	}
 
+	RenderOnly = confman->GetBool("Skyscraper.Frontend.RenderOnly", false);
+	InputOnly = confman->GetBool("Skyscraper.Frontend.InputOnly", false);
+
 	Simcore->RenderOnly = RenderOnly;
 	Simcore->InputOnly = InputOnly;
 
@@ -315,7 +319,6 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 		return ReportError("Error reading config file skyscraper.ini");
 
 	if (!csInitializer::RequestPlugins(object_reg,
-		//CS_REQUEST_VFS,
 		CS_REQUEST_FONTSERVER,
 		//CS_REQUEST_PLUGIN("crystalspace.font.server.freetype2", iFontServer),
 		CS_REQUEST_PLUGIN("crystalspace.graphics2d.wxgl", iGraphics2D),
@@ -362,8 +365,6 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	if (!g3d) return ReportError ("Failed to locate 3D renderer");
 	imageio = csQueryRegistry<iImageIO> (object_reg);
 	if (!imageio) return ReportError ("Failed to locate image loader");
-	//vfs = csQueryRegistry<iVFS> (object_reg);
-	//if (!vfs) return ReportError ("Failed to locate VFS");
 	console = csQueryRegistry<iConsoleOutput> (object_reg);
 	if (!console) return ReportError ("Failed to locate console output driver");
 	confman = csQueryRegistry<iConfigManager> (object_reg);
@@ -386,14 +387,15 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	}
 	csRef<iBase> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
-	if (plug) plug->IncRef ();
+	plug->IncRef ();
 
 	//load bugplug reference
-        bugplug = csQueryPluginClass<iBugPlug> (plugin_mgr, "crystalspace.utilities.bugplug");
-        bugplug->ExecCommand("fps"); //turn off FPS display
+	bugplug = csQueryPluginClass<iBugPlug> (plugin_mgr, "crystalspace.utilities.bugplug");
+	if (confman->GetBool("Skyscraper.Frontend.DisplayFPS", false) == false)
+		bugplug->ExecCommand("fps"); //turn off FPS display
+	
 	rep = csQueryRegistry<iReporter> (object_reg);
 	if (!rep) return ReportError("Failed to locate reporter driver");
-
 	stdrep = csQueryRegistry<iStandardReporterListener> (object_reg);
 	if (!stdrep) return ReportError ("Failed to locate stdrep plugin!");
 	stdrep->SetDebugFile ("/tmp/skyscraper_report.txt");
@@ -404,7 +406,6 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_DEBUG, true, false, false, false, true, false);
 
 	g2d = g3d->GetDriver2D();
-	g2d->AllowResize(true); //allow canvas resizing
 	wxwin = scfQueryInterface<iWxWindow> (g2d);
 	if(!wxwin) return ReportError("Canvas is no iWxWindow plugin!");
 	wxwin->SetParent(RenderObject);
@@ -571,6 +572,7 @@ void Skyscraper::GetInput()
 			//reset view
 			Simcore->camera->SetToStartDirection();
 			Simcore->camera->SetToStartRotation();
+			Simcore->camera->SetToDefaultFOV();
 		}
 
 		if (wxGetKeyState(WXK_F4) && wait == false)
@@ -605,6 +607,18 @@ void Skyscraper::GetInput()
 			else
 				canvas->SetCursor(wxNullCursor);
 			wait = true;
+		}
+		if (wxGetKeyState(WXK_NUMPAD_SUBTRACT))
+		{
+			//increase FOV angle
+			float angle = Simcore->camera->GetFOVAngle() + 0.1;
+			Simcore->camera->SetFOVAngle(angle);
+		}
+		if (wxGetKeyState(WXK_NUMPAD_ADD))
+		{
+			//decrease FOV angle
+			float angle = Simcore->camera->GetFOVAngle() - 0.1;
+			Simcore->camera->SetFOVAngle(angle);
 		}
 
 		//values from old version
@@ -996,6 +1010,9 @@ void Skyscraper::Start()
 	//show main window
 	window->ShowWindow();
 
+	//turn on window resizing, if specified
+	//AllowResize(confman->GetBool("Skyscraper.Frontend.AllowResize", true));
+
 	//run simulation
 	Simcore->Report("Running simulation...");
 	StopSound();
@@ -1003,4 +1020,15 @@ void Skyscraper::Start()
 	IsRunning = true;
 	Starting = false;
 	StartupRunning = false;
+}
+
+void Skyscraper::AllowResize(bool value)
+{
+	//changes the window style to either allow or disallow resizing
+	
+	if (value)
+		window->SetWindowStyleFlag(wxDEFAULT_FRAME_STYLE | wxMAXIMIZE);
+	else
+		window->SetWindowStyleFlag(wxDEFAULT_FRAME_STYLE & ~wxMAXIMIZE);
+	window->Refresh();
 }

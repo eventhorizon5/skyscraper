@@ -430,8 +430,6 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, iSector* s
 	ElevatorNumber = confman->GetInt("Skyscraper.SBS.ElevatorNumber", 1); //Set default starting elevator
 	FrameRate = confman->GetInt("Skyscraper.SBS.FrameRate", 30); //Set default frame rate
 	SkyName = confman->GetStr("Skyscraper.SBS.SkyName", "noon");
-	RenderOnly = confman->GetBool("Skyscraper.SBS.RenderOnly", false);
-	InputOnly = confman->GetBool("Skyscraper.SBS.InputOnly", false);
 	AutoShafts = confman->GetBool("Skyscraper.SBS.AutoShafts", true);
 	AutoStairs = confman->GetBool("Skyscraper.SBS.AutoStairs", true);
 	delta = confman->GetFloat("Skyscraper.SBS.Delta", 0.01);

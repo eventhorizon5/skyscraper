@@ -75,6 +75,7 @@ Camera::Camera()
 	ReportCollisions = sbs->confman->GetBool("Skyscraper.SBS.Camera.ReportCollisions", false);
 	Freelook = sbs->confman->GetBool("Skyscraper.SBS.Camera.Freelook", false);
 	Freelook_speed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
+	FOV = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
 }
 
 Camera::~Camera()
@@ -738,4 +739,21 @@ void Camera::EnableGravity(bool value)
 bool Camera::GetGravityStatus()
 {
 	return GravityStatus;
+}
+
+void Camera::SetFOVAngle(float angle)
+{
+	//set camera FOV angle
+	MainCamera->SetFOVAngle(angle, sbs->g2d->GetWidth());
+}
+
+float Camera::GetFOVAngle()
+{
+	return MainCamera->GetFOVAngle();
+}
+
+void Camera::SetToDefaultFOV()
+{
+	//set to default FOV angle value
+	SetFOVAngle(FOV);
 }
