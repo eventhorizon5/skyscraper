@@ -81,7 +81,7 @@ bool Skyscraper::OnInit(void)
 	DrewButtons = false;
 
 	//Create main window
-	window = new MainScreen(640, 480, "Skyscraper 1.5 Alpha");
+	window = new MainScreen(640, 480);
 	//AllowResize(false);
 	window->ShowWindow();
 
@@ -153,7 +153,7 @@ int Skyscraper::OnExit()
 	return 0;
 }
 
-MainScreen::MainScreen(int width, int height, const char *title) : wxFrame(0, -1, wxT(title), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
+MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT("Skyscraper 1.5 Alpha"), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
 {
 	this->Center();
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());

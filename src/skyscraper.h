@@ -162,7 +162,7 @@ private:
 class MainScreen : public wxFrame
 {
 public:
-	MainScreen(int width, int height, const char *title);
+	MainScreen(int width, int height);
 	~MainScreen();
 	void OnIconize(wxIconizeEvent& event);
 	void OnShow(wxShowEvent& event);
