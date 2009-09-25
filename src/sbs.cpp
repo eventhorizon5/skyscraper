@@ -432,7 +432,6 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, iSector* s
 	SkyName = confman->GetStr("Skyscraper.SBS.SkyName", "noon");
 	AutoShafts = confman->GetBool("Skyscraper.SBS.AutoShafts", true);
 	AutoStairs = confman->GetBool("Skyscraper.SBS.AutoStairs", true);
-	delta = confman->GetFloat("Skyscraper.SBS.Delta", 0.01);
 	ShowFullShafts = confman->GetBool("Skyscraper.SBS.ShowFullShafts", false);
 	ShowFullStairs = confman->GetBool("Skyscraper.SBS.ShowFullStairs", false);
 	ShaftDisplayRange = confman->GetInt("Skyscraper.SBS.ShaftDisplayRange", 3);

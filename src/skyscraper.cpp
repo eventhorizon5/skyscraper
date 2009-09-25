@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.4 Alpha - Simulation Frontend
+	Skyscraper 1.5 Alpha - Simulation Frontend
 	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -81,7 +81,7 @@ bool Skyscraper::OnInit(void)
 	DrewButtons = false;
 
 	//Create main window
-	window = new MainScreen();
+	window = new MainScreen(640, 480, "Skyscraper 1.5 Alpha");
 	//AllowResize(false);
 	window->ShowWindow();
 
@@ -100,10 +100,21 @@ bool Skyscraper::OnInit(void)
 		return false;
 	}
 
-	//draw background
-	DrawBackground();
-	StartupRunning = true;
-	StartSound();
+	if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
+	{
+		//draw background
+		DrawBackground();
+		StartupRunning = true;
+		StartSound();
+	}
+	else
+	{
+		if (SelectBuilding() == true)
+			Start();
+		else
+			return false;
+	}
+
 	return true;
 }
 
@@ -142,7 +153,7 @@ int Skyscraper::OnExit()
 	return 0;
 }
 
-MainScreen::MainScreen() : wxFrame(0, -1, wxT("Skyscraper 1.5 Alpha"), wxDefaultPosition, wxSize(640, 480), wxDEFAULT_FRAME_STYLE)
+MainScreen::MainScreen(int width, int height, const char *title) : wxFrame(0, -1, wxT(title), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
 {
 	this->Center();
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
@@ -880,6 +891,12 @@ void Skyscraper::StartSound()
 	if (DisableSound == true)
 		return;
 
+	if (confman->GetBool("Skyscraper.Frontend.IntroMusic", true) == false)
+	{
+		DisableSound = true;
+		return;
+	}
+
 	//load new sound
 	csRef<iDataBuffer> sndbuffer = vfs->ReadFile("/root/data/intro.ogg");
 	if (!sndbuffer)
@@ -964,6 +981,11 @@ void Skyscraper::Start()
 	g2d->Clear(0);
 	g2d->FinishDraw();
 	g2d->Print(0);
+
+	//resize main window
+	window->SetBackgroundColour(*wxBLACK);
+	window->SetSize(confman->GetInt("Skyscraper.Frontend.ScreenWidth", 640), confman->GetInt("Skyscraper.Frontend.ScreenHeight", 480));
+	window->Center();
 
 	Starting = true;
 

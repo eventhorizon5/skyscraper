@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.4 Alpha - Simulation Frontend
+	Skyscraper 1.5 Alpha - Simulation Frontend
 	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -66,6 +66,7 @@ public:
 	bool Starting;
 	bool Pause; //pause simulator
 	bool DisableSound;
+	bool IntroMusic;
 
 	csTicks elapsed_time, current_time;
 
@@ -161,7 +162,7 @@ private:
 class MainScreen : public wxFrame
 {
 public:
-	MainScreen();
+	MainScreen(int width, int height, const char *title);
 	~MainScreen();
 	void OnIconize(wxIconizeEvent& event);
 	void OnShow(wxShowEvent& event);
