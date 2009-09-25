@@ -228,6 +228,7 @@ public:
 	int GetDoorCallbackCount();
 	int GetCallButtonCallbackCount();
 	bool Mount(const char *filename, const char *path);
+	void FreeTextureImages();
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

@@ -251,6 +251,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 				ScriptError("Not in texture section");
 				return false;
 			}
+			Simcore->FreeTextureImages();
 			Section = 0;
 			Context = "None";
 			Report("Finished textures");

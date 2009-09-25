@@ -462,7 +462,7 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, iSector* s
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult)
 {
 	// Load a texture
-	if (!loader->LoadTexture(name, filename))
+	if (!loader->LoadTexture(name, filename, CS_TEXTURE_3D, 0, true, true, false))
 		return ReportError("Error loading texture");
 
 	TextureInfo info;
@@ -507,7 +507,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	if (height < 1)
 		height = image->GetHeight();
 
-	if (x > width || y > height)
+	if (x > image->GetWidth() || y > image->GetHeight())
 		return ReportError("LoadTextureCropped: invalid coordinates");
 	if (x + width > image->GetWidth() || y + height > image->GetHeight())
 		return ReportError("LoadTextureCropped: invalid size");
@@ -529,6 +529,8 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	//create material
 	csRef<iMaterial> material (engine->CreateBaseMaterial(wrapper));
 	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
+
+	wrapper->SetImageFile(cropped_image);
 
 	//add texture multipliers for new texture
 	TextureInfo info;
@@ -670,68 +672,18 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
 
 	//get original texture
-	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->FindByName(orig_texture);
-	if (!wrapper)
+	csRef<iImage> image1 = engine->GetTextureList()->FindByName(orig_texture)->GetImageFile();
+	if (!image1)
 	{
 		ReportError("AddTextureOverlay: Invalid original texture");
 		return false;
 	}
 
 	//get overlay texture
-	csRef<iTextureWrapper> wrapper2 = engine->GetTextureList()->FindByName(overlay_texture);
-	if (!wrapper2)
+	csRef<iImage> image2 = engine->GetTextureList()->FindByName(overlay_texture)->GetImageFile();
+	if (!image2)
 	{
 		ReportError("AddTextureOverlay: Invalid overlay texture");
-		return false;
-	}
-
-	//get height and width of original texture
-	int tex_width, tex_height;
-	wrapper->GetTextureHandle()->GetOriginalDimensions(tex_width, tex_height);
-
-	//get height and width of overlay texture
-	int tex_width2, tex_height2;
-	wrapper2->GetTextureHandle()->GetOriginalDimensions(tex_width2, tex_height2);
-
-	//create new empty texture
-	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(tex_width, tex_height, csimg2D, "rgb8", CS_TEXTURE_3D);
-	if (!th)
-	{
-		ReportError("AddTextureOverlay: Error creating texture");
-		th = 0;
-		return false;
-	}
-
-	//get new texture dimensions, if it was resized
-	th->GetOriginalDimensions(tex_width, tex_height);
-
-	//create a texture wrapper for the new texture
-	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
-	if (!tex)
-	{
-		ReportError("AddTextureOverlay: Error creating texture wrapper");
-		th = 0;
-		return false;
-	}
-
-	//set texture name
-	tex->QueryObject()->SetName(name);
-
-	//create material
-	csRef<iMaterial> material (engine->CreateBaseMaterial(tex));
-	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
-
-	//add texture multipliers for new texture
-	TextureInfo info;
-	info.name = name;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	textureinfo.Push(info);
-
-	iTextureHandle *handle = tex->GetTextureHandle();
-	if (!handle)
-	{
-		ReportError("AddTextureOverlay: No texture handle available");
 		return false;
 	}
 
@@ -741,24 +693,42 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	if (y == -1)
 		y = 0;
 	if (width < 1)
-		width = tex_width;
+		width = image2->GetWidth();
 	if (height < 1)
-		height = tex_height;
+		height = image2->GetHeight();
 
-	//set graphics rendering to the texture image
-	g3d->SetRenderTarget(handle);
-	if (!g3d->ValidateRenderTargets())
-		return false;
-	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
+	if (x > image1->GetWidth() || y > image1->GetHeight())
+		return ReportError("AddTextureOverlay: invalid coordinates");
+	if (x + width > image1->GetWidth() || y + height > image1->GetHeight())
+		return ReportError("AddTextureOverlay: invalid size");
 
-	//draw original image onto backbuffer
-	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, tex_width, tex_height, 0, 0, tex_width, tex_height);
+	//copy overlay image onto source image
+	csRef<csImageMemory> imagemem;
+	imagemem.AttachNew(new csImageMemory(image1));
 
-	//draw overlay image onto backbuffer
-	g3d->DrawPixmap(wrapper2->GetTextureHandle(), x, y, width, height, 0, 0, tex_width2, tex_height2);
+	imagemem->CopyScale(image2, x, y, width, height);
 
-	//finish with buffer
-	g3d->FinishDraw();
+	//register new texture
+	csRef<iTextureHandle> handle = g3d->GetTextureManager()->RegisterTexture(imagemem, CS_TEXTURE_3D);
+	if (!handle)
+		return ReportError("AddTextureOverlay: Error registering texture");
+
+	//create texture wrapper
+	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->NewTexture(handle);
+	wrapper->QueryObject()->SetName(name);
+
+	//create material
+	csRef<iMaterial> material (engine->CreateBaseMaterial(wrapper));
+	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
+
+	wrapper->SetImageFile(imagemem);
+
+	//add texture multipliers for new texture
+	TextureInfo info;
+	info.name = name;
+	info.widthmult = widthmult;
+	info.heightmult = heightmult;
+	textureinfo.Push(info);
 
 	return true;
 }
@@ -3223,4 +3193,12 @@ bool SBS::Mount(const char *filename, const char *path)
 	Report("Mounting " + file + " as path " + Path);
 
 	return vfs->Mount(path, root_dir + "data" + dir_char + file);
+}
+
+void SBS::FreeTextureImages()
+{
+	//unload images in all texture wrappers
+
+	for (int i = 0; i < engine->GetTextureList()->GetCount(); i++)
+		engine->GetTextureList()->Get(i)->SetImageFile(0);
 }
