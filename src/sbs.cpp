@@ -503,16 +503,6 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	int tex_width, tex_height;
 	wrapper->GetTextureHandle()->GetOriginalDimensions(tex_width, tex_height);
 
-	//set default values if specified
-	if (x == -1)
-		x = 0;
-	if (y == -1)
-		y = 0;
-	if (width < 1)
-		width = tex_width;
-	if (height < 1)
-		height = tex_height;
-
 	//create new empty texture
 	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "rgb8", CS_TEXTURE_3D);
 	if (!th)
@@ -521,6 +511,9 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		th = 0;
 		return false;
 	}
+
+	//get new texture dimensions, if it was resized
+	th->GetOriginalDimensions(width, height);
 
 	//create a texture wrapper for the new texture
 	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
@@ -552,6 +545,16 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		return false;
 	}
 
+	//set default values if specified
+	if (x == -1)
+		x = 0;
+	if (y == -1)
+		y = 0;
+	if (width < 1)
+		width = tex_width;
+	if (height < 1)
+		height = tex_height;
+
 	//set graphics rendering to the texture image
 	g3d->SetRenderTarget(handle);
 	if (!g3d->ValidateRenderTargets())
@@ -559,7 +562,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
 
 	//draw image onto backbuffer
-	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, x, y, width, height);
+	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, x, y, width - x, height - y);
 
 	//finish with buffer
 	g3d->FinishDraw();
@@ -604,16 +607,6 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	int width, height;
 	wrapper->GetTextureHandle()->GetOriginalDimensions(width, height);
 
-	//set default values if specified
-	if (x1 == -1)
-		x1 = 0;
-	if (y1 == -1)
-		y1 = 0;
-	if (x2 == -1)
-		x2 = width;
-	if (y2 == -1)
-		y2 = height;
-
 	//create new empty texture
 	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "rgb8", CS_TEXTURE_3D);
 	if (!th)
@@ -622,6 +615,9 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		th = 0;
 		return false;
 	}
+
+	//get new texture dimensions, if it was resized
+	th->GetOriginalDimensions(width, height);
 
 	//create a texture wrapper for the new texture
 	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
@@ -645,6 +641,16 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
 	textureinfo.Push(info);
+
+	//set default values if specified
+	if (x1 == -1)
+		x1 = 0;
+	if (y1 == -1)
+		y1 = 0;
+	if (x2 == -1)
+		x2 = width;
+	if (y2 == -1)
+		y2 = height;
 
 	iTextureHandle *handle = tex->GetTextureHandle();
 	if (!handle)
@@ -720,16 +726,6 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	int tex_width2, tex_height2;
 	wrapper2->GetTextureHandle()->GetOriginalDimensions(tex_width2, tex_height2);
 
-	//set default values if specified
-	if (x == -1)
-		x = 0;
-	if (y == -1)
-		y = 0;
-	if (width < 1)
-		width = tex_width;
-	if (height < 1)
-		height = tex_height;
-
 	//create new empty texture
 	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(tex_width, tex_height, csimg2D, "rgb8", CS_TEXTURE_3D);
 	if (!th)
@@ -738,6 +734,9 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		th = 0;
 		return false;
 	}
+
+	//get new texture dimensions, if it was resized
+	th->GetOriginalDimensions(tex_width, tex_height);
 
 	//create a texture wrapper for the new texture
 	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
@@ -768,6 +767,16 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		ReportError("AddTextureOverlay: No texture handle available");
 		return false;
 	}
+
+	//set default values if specified
+	if (x == -1)
+		x = 0;
+	if (y == -1)
+		y = 0;
+	if (width < 1)
+		width = tex_width;
+	if (height < 1)
+		height = tex_height;
 
 	//set graphics rendering to the texture image
 	g3d->SetRenderTarget(handle);
