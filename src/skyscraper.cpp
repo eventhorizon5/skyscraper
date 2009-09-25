@@ -100,6 +100,15 @@ bool Skyscraper::OnInit(void)
 		return false;
 	}
 
+	//autoload a building file if specified
+	BuildingFile = confman->GetStr("Skyscraper.Frontend.AutoLoad");
+	if (BuildingFile != "")
+	{
+		Start();
+		return true;
+	}
+
+	//show menu
 	if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
 	{
 		//draw background
@@ -109,6 +118,7 @@ bool Skyscraper::OnInit(void)
 	}
 	else
 	{
+		//or show building selection window if ShowMenu is false
 		if (SelectBuilding() == true)
 			Start();
 		else

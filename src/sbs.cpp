@@ -463,10 +463,8 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 {
 	// Load a texture
 	if (!loader->LoadTexture(name, filename))
-	{
-		ReportError("Error loading texture");
-		return false;
-	}
+		return ReportError("Error loading texture");
+
 	TextureInfo info;
 	info.name = name;
 	info.widthmult = widthmult;
@@ -491,44 +489,45 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 {
 	//loads only a portion of the specified texture
 
-	//load original texture
-	csRef<iTextureWrapper> wrapper = loader->LoadTexture("croptemp", filename);
-	if (!wrapper)
-	{
-		ReportError("LoadTextureCropped: Error loading texture");
-		return false;
-	}
+	iTextureManager *tm = g3d->GetTextureManager();
 
-	//get height and width of original texture
-	int tex_width, tex_height;
-	wrapper->GetTextureHandle()->GetOriginalDimensions(tex_width, tex_height);
+	//load image
+	csRef<iImage> image = loader->LoadImage(filename, tm->GetTextureFormat());
 
-	//create new empty texture
-	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "rgb8", CS_TEXTURE_3D);
-	if (!th)
-	{
-		ReportError("LoadTextureCropped: Error creating texture");
-		th = 0;
-		return false;
-	}
+	if (!image)
+		return ReportError("LoadTextureCropped: Error loading image");
 
-	//get new texture dimensions, if it was resized
-	th->GetOriginalDimensions(width, height);
+	//set default values if specified
+	if (x == -1)
+		x = 0;
+	if (y == -1)
+		y = 0;
+	if (width < 1)
+		width = image->GetWidth();
+	if (height < 1)
+		height = image->GetHeight();
 
-	//create a texture wrapper for the new texture
-	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
-	if (!tex)
-	{
-		ReportError("LoadTextureCropped: Error creating texture wrapper");
-		th = 0;
-		return false;
-	}
+	if (x > width || y > height)
+		return ReportError("LoadTextureCropped: invalid coordinates");
+	if (x + width > image->GetWidth() || y + height > image->GetHeight())
+		return ReportError("LoadTextureCropped: invalid size");
 
-	//set texture name
-	tex->QueryObject()->SetName(name);
+	//crop image
+	csRef<iImage> cropped_image = csImageManipulate::Crop(image, x, y, width, height);
+	if (!cropped_image)
+		return ReportError("LoadTextureCropped: Error cropping image");
+
+	//register texture
+	csRef<iTextureHandle> handle = tm->RegisterTexture(cropped_image, CS_TEXTURE_3D);
+	if (!handle)
+		return ReportError("LoadTextureCropped: Error registering texture");
+
+	//create texture wrapper
+	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->NewTexture(handle);
+	wrapper->QueryObject()->SetName(name);
 
 	//create material
-	csRef<iMaterial> material (engine->CreateBaseMaterial(tex));
+	csRef<iMaterial> material (engine->CreateBaseMaterial(wrapper));
 	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
 
 	//add texture multipliers for new texture
@@ -537,38 +536,6 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
 	textureinfo.Push(info);
-
-	iTextureHandle *handle = tex->GetTextureHandle();
-	if (!handle)
-	{
-		ReportError("LoadTextureCropped: No texture handle available");
-		return false;
-	}
-
-	//set default values if specified
-	if (x == -1)
-		x = 0;
-	if (y == -1)
-		y = 0;
-	if (width < 1)
-		width = tex_width;
-	if (height < 1)
-		height = tex_height;
-
-	//set graphics rendering to the texture image
-	g3d->SetRenderTarget(handle);
-	if (!g3d->ValidateRenderTargets())
-		return false;
-	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
-
-	//draw image onto backbuffer
-	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, x, y, width - x, height - y);
-
-	//finish with buffer
-	g3d->FinishDraw();
-
-	//unload temporary texture
-	UnloadTexture("croptemp");
 
 	return true;
 }
