@@ -95,10 +95,7 @@ bool Skyscraper::OnInit(void)
 	#else
 	if (!Initialize(argc, argv, window->panel))
 	#endif
-	{
-		ReportError("Error initializing Crystal Space");
-		return false;
-	}
+		return ReportError("Error initializing Crystal Space");
 
 	//autoload a building file if specified
 	BuildingFile = confman->GetStr("Skyscraper.Frontend.AutoLoad");
@@ -629,6 +626,13 @@ void Skyscraper::GetInput()
 				canvas->SetCursor(wxNullCursor);
 			wait = true;
 		}
+		if (wxGetKeyState(WXK_F10) && wait == false)
+		{
+			//enable/disable fullscreen mode
+			FullScreen = !FullScreen;
+			window->ShowFullScreen(FullScreen);
+			wait = true;
+		}
 		if (wxGetKeyState(WXK_NUMPAD_SUBTRACT))
 		{
 			//increase FOV angle
@@ -997,6 +1001,13 @@ void Skyscraper::Start()
 	window->SetSize(confman->GetInt("Skyscraper.Frontend.ScreenWidth", 640), confman->GetInt("Skyscraper.Frontend.ScreenHeight", 480));
 	window->Center();
 
+	//switch to fullscreen mode if specified
+	if (confman->GetBool("Skyscraper.Frontend.FullScreen", false) == true)
+	{
+		FullScreen = true;
+		window->ShowFullScreen(FullScreen);
+	}
+
 	Starting = true;
 
 	//Create new simulator object
@@ -1018,8 +1029,6 @@ void Skyscraper::Start()
 		return;
 	}
 
-	//if (LoadBuilding(BuildingFile.GetData()) != 0)
-
 	//the sky needs to be created before Prepare() is called
 	Simcore->CreateSky(Simcore->SkyName);
 
@@ -1033,10 +1042,14 @@ void Skyscraper::Start()
 		return;
 	}
 
-	//load dialogs
-	dpanel = new DebugPanel(NULL, -1);
-	dpanel->Show(true);
-	dpanel->SetPosition(wxPoint(10, 10));
+	//load control panel
+	if (confman->GetBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
+	{
+		dpanel = new DebugPanel(NULL, -1);
+		dpanel->Show(true);
+		dpanel->SetPosition(wxPoint(10, 10));
+	}
+
 	window->Raise();
 
 	//show main window

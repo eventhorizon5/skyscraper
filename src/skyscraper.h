@@ -67,6 +67,7 @@ public:
 	bool Pause; //pause simulator
 	bool DisableSound;
 	bool IntroMusic;
+	bool FullScreen;
 
 	csTicks elapsed_time, current_time;
 
