@@ -71,10 +71,12 @@ SBS::SBS()
 	fps_frame_count = 0;
 	fps_tottime = 0;
 	FPS = 0;
+	FrameRate = 30;
 	FrameLimiter = false;
 	AutoShafts = true;
 	AutoStairs = true;
 	ElevatorSync = false;
+	ElevatorNumber = 1;
 	mouse_x = 0;
 	mouse_y = 0;
 	wall_orientation = 1;
@@ -427,8 +429,6 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, iSector* s
 
 	//load default values from config file
 	HorizScale = confman->GetFloat("Skyscraper.SBS.HorizScale", 1); //Set default horizontal scaling value
-	ElevatorNumber = confman->GetInt("Skyscraper.SBS.ElevatorNumber", 1); //Set default starting elevator
-	FrameRate = confman->GetInt("Skyscraper.SBS.FrameRate", 30); //Set default frame rate
 	SkyName = confman->GetStr("Skyscraper.SBS.SkyName", "noon");
 	AutoShafts = confman->GetBool("Skyscraper.SBS.AutoShafts", true);
 	AutoStairs = confman->GetBool("Skyscraper.SBS.AutoStairs", true);
