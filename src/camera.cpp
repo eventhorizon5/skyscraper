@@ -556,6 +556,7 @@ void Camera::CreateColliders()
 	csVector3 shift (0, -(cfg_legs_height + cfg_body_height), 0);
 	collider_actor.InitializeColliders (MainCamera, legs, body, shift);
 	collider_actor.SetCamera(MainCamera, true);
+	EnableGravity(GravityStatus);
 }
 
 void Camera::Loop()
