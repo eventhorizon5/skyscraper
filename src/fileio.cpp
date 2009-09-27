@@ -360,6 +360,17 @@ checkfloors:
 				buffer = Simcore->GetFloor(temp4)->FullHeight();
 				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
 			}
+			//height parameter
+			buffer = temp4;
+			temp6 = "floor(" + buffer.Trim() + ").height";
+			buffer = LineData;
+			buffer.Downcase();
+			temp1 = buffer.Find(temp6.GetData(), 0);
+			if (temp1 > 0)
+			{
+				buffer = Simcore->GetFloor(temp4)->Height;
+				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
+			}
 			//altitude parameter
 			buffer = temp4;
 			temp6 = "floor(" + buffer.Trim() + ").altitude";
