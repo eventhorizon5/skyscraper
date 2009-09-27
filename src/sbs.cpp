@@ -751,10 +751,10 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 		//z axis
 		axis = 2;
 
-	//convert to clockwise coordinates (x-axis wall test)
-	if (x1 > x2 && axis == 1)
+	//convert to clockwise coordinates if on x-axis, or counterclockwise if on z-axis
+	if ((x1 > x2 && axis == 1) || (z1 < z2 && axis == 2))
 	{
-		//wall's along the x axis and coordinates are counterclockwise; reverse coordinates (to make clockwise)
+		//reverse coordinates
 		float temp = x1;
 		x1 = x2;
 		x2 = temp;
@@ -767,28 +767,6 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 		temp = height_in1;
 		height_in1 = height_in2;
 		height_in2 = temp;
-	}
-
-	//make sure coordinates are counterclockwise if wall is on z axis
-	if (axis == 2)
-	{
-		//only perform if coordinates are clockwise; otherwise ignore
-		if (z1 < z2)
-		{
-			//wall's along the z axis; reverse coordinates (to make counterclockwise)
-			float temp = x1;
-			x1 = x2;
-			x2 = temp;
-			temp = z1;
-			z1 = z2;
-			z2 = temp;
-			temp = altitude1;
-			altitude1 = altitude2;
-			altitude2 = temp;
-			temp = height_in1;
-			height_in1 = height_in2;
-			height_in2 = temp;
-		}
 	}
 
 	//Adds a wall with the specified dimensions
@@ -896,7 +874,10 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 
 	if (DrawSideN == true)
 	{
-		tmpindex = dest->AddQuad(v5, v1, v4, v8); //left wall
+		if (axis == 1)
+			tmpindex = dest->AddQuad(v5, v1, v4, v8); //left wall
+		else
+			tmpindex = dest->AddQuad(v2, v6, v7, v3); //left wall
 		NewName = name;
 		NewName.Append(":left");
 		dest->SetPolygonName(csPolygonRange(tmpindex, tmpindex), NewName);
@@ -906,7 +887,10 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 
 	if (DrawSideP == true)
 	{
-		tmpindex = dest->AddQuad(v2, v6, v7, v3); //right wall
+		if (axis == 1)
+			tmpindex = dest->AddQuad(v2, v6, v7, v3); //right wall
+		else
+			tmpindex = dest->AddQuad(v5, v1, v4, v8); //right wall
 		NewName = name;
 		NewName.Append(":right");
 		dest->SetPolygonName(csPolygonRange(tmpindex, tmpindex), NewName);
