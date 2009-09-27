@@ -76,6 +76,7 @@ Camera::Camera()
 	Freelook = sbs->confman->GetBool("Skyscraper.SBS.Camera.Freelook", false);
 	Freelook_speed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
 	FOV = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
+	ResetOnGround = sbs->confman->GetBool("Skyscraper.SBS.Camera.ResetOnGround", false);
 }
 
 Camera::~Camera()
@@ -563,8 +564,9 @@ void Camera::Loop()
 	collider_actor.SetCD(EnableCollisions);
 
 	//set on ground status to false, to force checking of moving object intersections
-	//disabled due to the massive performance hit it causes
-	//collider_actor.SetOnGround(false);
+	//disabled by default due to the massive performance hit it causes
+	if (ResetOnGround == true)
+		collider_actor.SetOnGround(false);
 
 	//calculate acceleration
 	InterpolateMovement();

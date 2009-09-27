@@ -118,6 +118,7 @@ private:
 	int lastfloor;
 	bool lastfloorset;
 	float FOV; //default FOV angle
+	bool ResetOnGround;
 
 	//collision
 	csColliderActor collider_actor;
