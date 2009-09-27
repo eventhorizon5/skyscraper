@@ -36,6 +36,8 @@ in a shaft or an elevator
 -added support for zooming in and out (FOV angles)
 -added support for starting up without the control panel
 -added fullscreen support, activated by F10
+-fixed an issue where walls along the Z axis would have the side negative and
+positives switched
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------
