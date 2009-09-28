@@ -293,8 +293,12 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
     AddWall Right, ParkingWalls, 0.5, 105, -100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Back, ParkingWalls, 0.5, -105, 100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
-
+    if[%floor% = -8] AddWall Back, ParkingWalls, 0.5, -105, 100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = -7] AddWall Back, ParkingWalls, 0.5, -105, 100, -76.5, 100, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = -7] AddWall Back, ParkingWalls, 0.5, -45.5 - 0.5, 100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% > -7] AddWall Back, ParkingWalls, 0.5, -105, 100, -76.5, 100, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% > -7] AddWall Back, ParkingWalls, 0.5, -16, 100, 105, 100, %height%, %height%, 0, 0, 0, 0, False
+    
     #cut for atrium
     if[%floor% = -3] Cut -37, -1, -50, 37, %interfloorheight% + 1, 4, false, true
     if[%floor% = -7] Cut -37, %interfloorheight% + 1, -50, 37, %fullheight% + 1, 4, false, true
@@ -309,8 +313,9 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     DrawWalls = true, false, false, false, false, false
     if[%floor% > -7] AddWall ARight, ParkingWalls, 0.5, 37, -50, 37, 50, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     if[%floor% > -7] AddWall ABack, ParkingWalls, 0.5, -37, 4, 37, 4, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
-
+       
 <EndFloors>
+
 
 #Lobby
 <Floor 0>
@@ -465,6 +470,56 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
+
+#Parking ramps
+<Floors 0 to -7>
+    Set 1 = %height% + Floor(%floor% + 1).InterfloorHeight
+    
+    #ramps
+    FloorOrientation = top
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ParkingCeiling, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor
+    if[%floor% < -1] AddFloor Ramp1, ParkingFloor, 0.5, -76.5, 136, -45.5, 184, %interfloorheight%, (%1% / 2) + %interfloorheight%, 0, 0, True
+    TextureOverride ParkingCeiling, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor
+    if[%floor% = -1] AddFloor Ramp1, ParkingFloor, 0.5, -76.5, 106.5, -45.5, 184, %interfloorheight%, %fullheight% + Floor(0).InterfloorHeight, 0, 0, True
+    TextureOverride ParkingCeiling, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor
+    if[%floor% < -1] AddFloor Ramp2, ParkingFloor, 0.5, -45.5, 136, -16, 184, %1% + %interfloorheight%, (%1% / 2) + %interfloorheight%, 0, 0, True
+    TextureOverride ParkingCeiling, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor
+    if[%floor% > -7 & %floor% < -1] AddFloor Platform, ParkingFloor, 0.5, -76.5, 100, -16, 136, %interfloorheight%, %interfloorheight%, 0, 0, True
+    TextureOverride ParkingCeiling, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor
+    if[%floor% = -7] AddFloor Platform, ParkingFloor, 0.5, -76.5, 100, -45.5, 136, %interfloorheight%, %interfloorheight%, 0, 0, True
+    TextureOverride ParkingCeiling, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor
+    if[%floor% = -1] AddFloor Platform, ParkingFloor, 0.5, -76.5, 70.5, -16, 106.5, %interfloorheight%, %interfloorheight%, 0, 0, True
+    TextureOverride ParkingCeiling, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor
+    if[%floor% < -1] AddFloor MidPlatform, ParkingFloor, 0.5, -76.5, 184, -16, 220, (%1% / 2) + %interfloorheight%, (%1% / 2) + %interfloorheight%, 0, 0, True
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ParkingCeiling, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor
+    if[%floor% = -1] AddFloor PlatformB, ParkingFloor, 0.5, -45.5, 106.5, -16, 136, %interfloorheight%, %interfloorheight%, 0, 0, True
+    TextureOverride ParkingCeiling, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor, ParkingFloor
+    if[%floor% = 0] AddFloor Driveup, ParkingFloor, 0.5, -76.5, 184, -46, 223.5, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    #Ramp walls
+    WallOrientation = center
+    DrawWalls = true, true, true, true, false, false
+    if[%floor% > -7 & %floor% < -1] AddWall RampDivider, ParkingWalls, 1, -45.5, 136, -45.5, 184, %fullheight%, %fullheight%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    DrawWalls = true, true, true, true, false, true
+    if[%floor% = -1] AddWall RampDivider, ParkingWalls, 1, -45.5, 106.5, -45.5, 184, %fullheight%, %fullheight%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    DrawWalls = true, true, false, true, false, false
+    if[%floor% = -7] AddWall RampDivider, ParkingWalls, 1, -45.5, 100 - 0.5, -45.5, 184, %fullheight%, %fullheight%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% < -1] AddWall RampLeft, ParkingWalls, 0.5, -76.5, 100 - 0.5, -76.5, 220, %1%, %1%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = -1] AddWall RampLeft, ParkingWalls, 0.5, -76.5, 70.5, -76.5, 220, %1%, %1%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% < -2] AddWall RampFront, ParkingWalls, 0.5, -76.5, 100, -16, 100, Floor(%floor% + 1).InterfloorHeight, Floor(%floor% + 1).InterfloorHeight, %fullheight%, %fullheight%, 0, 0, True
+    if[%floor% = -2] AddWall RampFront, ParkingWalls, 0.5, -76.5, 101, -16, 101, %1%, %1%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = -1] AddWall RampFront, ParkingWalls, 0.5, -76.5, 70.5, -16, 70.5, %1%, %1%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% < -1] AddWall RampRight, ParkingWalls, 0.5, -16, 100 - 0.5, -16, 220, %1%, %1%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% = -1] AddWall RampRight, ParkingWalls, 0.5, -16, 70.5, -16, 220, %1%, %1%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    if[%floor% < 0] AddWall RampBack, ParkingWalls, 0.5, -76.5, 220, -16, 220, %1%, %1%, %interfloorheight%, %interfloorheight%, 0, 0, True
+<EndFloors>
+
 
 #zone 1 skeleton
 <Floors 2 to 37>
@@ -2332,7 +2387,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     DrawWalls = true, false, false, false, false, false
     if[%floor% < -1 | (%floor% > 62 & %floor% < 79) | %floor% > 134] AddWall Shaft14FrontE, %5%, 0.33, -4.92 + -9.417 - 0.33, -16.75 + 30.71, 4.92 + -9.417 + 0.33, -16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 78 & %floor% < 135] AddWall Shaft14FrontE, %5%, 0.33, 4.92 + -9.417 - 1.173, -16.75 + 30.71, 4.92 + -9.417 + 0.33, -16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
-    if[%floor% < 39] AddWall Shaft14FrontE, %5%, 0.33, 4.92 + -9.417 - 0.836, -16.75 + 30.71, 4.92 + -9.417 + 0.33, -16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > -2 & %floor% < 39] AddWall Shaft14FrontE, %5%, 0.33, 4.92 + -9.417 - 0.836, -16.75 + 30.71, 4.92 + -9.417 + 0.33, -16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 38 & %floor% < 63] AddWall Shaft14FrontE, %5%, 0.33, 4.92 + -9.417 - 1.353, -16.75 + 30.71, 4.92 + -9.417 + 0.33, -16.75 + 30.71, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > 119 | %floor% < -1] AddWall Shaft14LeftE, %5%, 0.33, -4.92 + -9.417, -16.75 + 30.71 - 0.33, -4.92 + -9.417, 16.75 + 30.71 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < 120] AddWall Shaft14LeftE, %5%, 0.33, -4.92 + -9.417, 11.5 + 30.71 - 0.33, -4.92 + -9.417, 16.75 + 30.71 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
@@ -7281,11 +7336,12 @@ SetAutoSize = true, true
 #External stuff
 
 #Plaza
-AddFloor Landscape, Dearborn Plaza, ParkingCeiling, 0, -300, -100.5, 105.5, -70, 0, 0, 0, 0
-AddFloor Landscape, Washington Plaza, ParkingCeiling, 0, 75, -70, 105.5, 70, 0, 0, 0, 0
-AddFloor Landscape, North Plaza, ParkingCeiling, 0, -300, -70, -75, 70, 0, 0, 0, 0
-AddFloor Landscape, State Plaza, ParkingCeiling, 0, -300, 70, 105.5, 223.5, 0, 0, 0, 0
-AddFloor Landscape, South Block Filler, ParkingCeiling, 0, 203.5, -100.5, 400, 223.5, 0, 0, 0, 0
+FloorOrientation = top
+AddFloor Landscape, Dearborn Plaza, ParkingCeiling, 0.5, -300, -100.5, 105.5, -70, 0, 0, 0, 0
+AddFloor Landscape, Washington Plaza, ParkingCeiling, 0.5, 75, -70, 105.5, 70, 0, 0, 0, 0
+AddFloor Landscape, North Plaza, ParkingCeiling, 0.5, -300, -70, -75, 70, 0, 0, 0, 0
+AddFloor Landscape, State Plaza, ParkingCeiling, 0.5, -300, 70, 105.5, 223.5, 0, 0, 0, 0
+AddFloor Landscape, South Block Filler, ParkingCeiling, 0.5, 203.5, -100.5, 400, 223.5, 0, 0, 0, 0
 
 #Sidewalk
 AddFloor Landscape, Dearborn Sidewalk East, ParkingFloor, 0, -300, -124.5, 129.5, -100.5, 0, 0, 0, 0
@@ -7303,3 +7359,7 @@ AddFloor Landscape, State Sidewalk East 2, ParkingFloor, 0, 179.5, 297.5, 400, 3
 AddFloor Landscape, Dearborn, ParkingWalls, 0, -300, -174.5, 400, -124.5, 0, 0, 0, 0
 AddFloor Landscape, Washington, ParkingWalls, 0, 129.5, -124.5, 179.5, 247.5, 0, 0, 0, 0
 AddFloor Landscape, State, ParkingWalls, 0, -300, 247.5, 400, 297.5, 0, 0, 0, 0
+
+#Plaza cut for ramp
+Cut Landscape, -76.5, -1, 106.5, -46, 1, 223.5, false, true
+AddWall Landscape, Filler, ParkingCeiling, 0, -76.5, 106.5, -46, 106.5, 0.5, 0.5, -0.5, -0.5, 0, 0
