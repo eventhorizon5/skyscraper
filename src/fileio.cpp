@@ -495,7 +495,7 @@ checkfloors:
 		}
 
 		//AddFloor
-		if (LineData.Slice(0, 8).CompareNoCase("addfloor") == true && Section != 2 && Section != 4)
+		if (LineData.Slice(0, 9).CompareNoCase("addfloor ") == true && Section != 2 && Section != 4)
 		{
 			//get data
 			tempdata.SplitString(LineData.Slice(9).GetData(), ",");

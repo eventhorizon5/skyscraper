@@ -3247,6 +3247,8 @@ void SBS::CheckAutoAreas()
 				GetFloor(floor + 1)->Enabled(false);
 				GetFloor(floor + 1)->EnableGroup(false);
 			}
+			GetFloor(floor)->Enabled(true);
+			GetFloor(floor)->EnableGroup(true);
 		}
 	}
 }
