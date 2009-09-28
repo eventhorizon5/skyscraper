@@ -105,6 +105,8 @@ Elevator::Elevator(int number)
 	NumDoors = 1;
 	MovePending = false;
 	Created = false;
+	lastcheckresult = false;
+	checkfirstrun = true;
 
 	//create object meshes
 	buffer = Number;
@@ -1261,11 +1263,27 @@ csHitBeamResult Elevator::HitBeam(const csVector3 &start, const csVector3 &end)
 
 bool Elevator::IsInElevator(const csVector3 &position)
 {
+	//if last position is the same as new, return previous result
+	if (position == lastposition && checkfirstrun == false)
+		return lastcheckresult;
+
+	checkfirstrun = false;
+
 	if (position.y > GetPosition().y && position.y < GetPosition().y + Height)
 	{
 		csHitBeamResult result = ElevatorMesh->HitBeam(position, csVector3(position.x, position.y - Height, position.z));
+
+		//cache values
+		lastcheckresult = result.hit;
+		lastposition = position;
+
 		return result.hit;
 	}
+
+	//cache values
+	lastcheckresult = false;
+	lastposition = position;
+
 	return false;
 }
 

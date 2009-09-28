@@ -63,6 +63,8 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	ShowOutside = false;
 	ShowFullShaft = false;
 	EnableCheck = false;
+	lastcheckresult = false;
+	checkfirstrun = true;
 
 	csString buffer, buffer2, buffer3;
 
@@ -240,8 +242,27 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 
 bool Shaft::IsInShaft(const csVector3 &position)
 {
+	//if last position is the same as new, return previous result
+	if (position == lastposition && checkfirstrun == false)
+		return lastcheckresult;
+
+	checkfirstrun = false;
+
 	if (position.y > bottom && position.y < top)
-		return ShaftArray[0]->HitBeam(position, csVector3(position.x, position.y - (top - bottom), position.z)).hit;
+	{
+		csHitBeamResult result = ShaftArray[0]->HitBeam(position, csVector3(position.x, position.y - (top - bottom), position.z));
+
+		//cache values
+		lastcheckresult = result.hit;
+		lastposition = position;
+		
+		return result.hit;
+	}
+	
+	//cache values
+	lastcheckresult = false;
+	lastposition = position;
+
 	return false;
 }
 

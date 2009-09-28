@@ -79,6 +79,11 @@ private:
 
 	int lastfloor;
 	bool lastfloorset;
+
+	//cache objects for IsInStairwell()
+	csVector3 lastposition;
+	bool lastcheckresult;
+	bool checkfirstrun;
 };
 
 #endif

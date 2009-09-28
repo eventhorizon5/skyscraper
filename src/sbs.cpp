@@ -345,6 +345,9 @@ void SBS::MainLoop()
 			//process misc operations on current floor
 			GetFloor(camera->CurrentFloor)->Loop();
 
+			//process auto areas
+			CheckAutoAreas();
+
 			//check if the user is outside (no code yet)
 
 		}
@@ -3185,4 +3188,65 @@ void SBS::FreeTextureImages()
 
 	for (int i = 0; i < engine->GetTextureList()->GetCount(); i++)
 		engine->GetTextureList()->Get(i)->SetImageFile(0);
+}
+
+void SBS::AddFloorAutoArea(csVector3 start, csVector3 end)
+{
+	//adds an auto area that enables/disables floors
+
+	AutoArea newarea;
+	newarea.box = csBox3(start, end);
+	newarea.inside = false;
+	newarea.camerafloor = 0;
+	FloorAutoArea.Push(newarea);
+}
+
+void SBS::CheckAutoAreas()
+{
+	//check all automatic areas
+	
+	csVector3 position = camera->GetPosition();
+	int floor = camera->CurrentFloor;
+
+	for (int i = 0; i < FloorAutoArea.GetSize(); i++)
+	{
+		//reset inside value if floor changed
+		if (FloorAutoArea[i].camerafloor != floor)
+			FloorAutoArea[i].inside = false;
+
+		if (FloorAutoArea[i].box.In(position) == true && FloorAutoArea[i].inside == false)
+		{
+			//user moved into box; enable floors
+			FloorAutoArea[i].inside = true;
+			FloorAutoArea[i].camerafloor = floor;
+			if (floor > -Basements)
+			{
+				GetFloor(floor - 1)->Enabled(true);
+				GetFloor(floor - 1)->EnableGroup(true);
+			}
+			GetFloor(floor)->Enabled(true);
+			GetFloor(floor)->EnableGroup(true);
+			if (floor < Floors - 1)
+			{
+				GetFloor(floor + 1)->Enabled(true);
+				GetFloor(floor + 1)->EnableGroup(true);
+			}
+		}
+		if (FloorAutoArea[i].box.In(position) == false && FloorAutoArea[i].inside == false)
+		{
+			//user moved out of box; disable floors except current
+			FloorAutoArea[i].inside = false;
+			FloorAutoArea[i].camerafloor = 0;
+			if (floor > -Basements)
+			{
+				GetFloor(floor - 1)->Enabled(false);
+				GetFloor(floor - 1)->EnableGroup(false);
+			}
+			if (floor < Floors - 1)
+			{
+				GetFloor(floor + 1)->Enabled(false);
+				GetFloor(floor + 1)->EnableGroup(false);
+			}
+		}
+	}
 }

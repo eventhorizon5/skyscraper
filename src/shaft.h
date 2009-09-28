@@ -72,6 +72,11 @@ private:
 	csArray<bool> EnableArray;
 	bool EnableCheck;
 
+	//cache objects for IsInShaft()
+	csVector3 lastposition;
+	bool lastcheckresult;
+	bool checkfirstrun;
+
 	char intbuffer[65];
 	char buffer[20];
 };

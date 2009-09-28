@@ -7363,3 +7363,6 @@ AddFloor Landscape, State, ParkingWalls, 0, -300, 247.5, 400, 297.5, 0, 0, 0, 0
 #Plaza cut for ramp
 Cut Landscape, -76.5, -1, 106.5, -46, 1, 223.5, false, true
 AddWall Landscape, Filler, ParkingCeiling, 0, -76.5, 106.5, -46, 106.5, 0.5, 0.5, -0.5, -0.5, 0, 0
+
+#auto area for ramps
+AddFloorAutoArea -76.5, Floor(-7).Altitude, 100, -16, 0, 220

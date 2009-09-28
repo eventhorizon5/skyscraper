@@ -45,6 +45,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	IsEnabled = true;
 	lastfloor = 0;
 	lastfloorset = false;
+	lastcheckresult = false;
+	checkfirstrun = true;
 
 	csString buffer, buffer2, buffer3;
 
@@ -285,6 +287,10 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 {
 	//determine if user is in the stairwell
 
+	//if last position is the same as new, return previous result
+	if (position == lastposition && checkfirstrun == false)
+		return lastcheckresult;
+
 	bool hit = false;
 	bool hittmp = false;
 	float bottom = sbs->GetFloor(startfloor)->Altitude + sbs->GetFloor(startfloor)->InterfloorHeight;
@@ -318,6 +324,12 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 		}
 	}
 	floorptr = 0;
+
+	//cache values
+	checkfirstrun = false;
+	lastcheckresult = hit;
+	lastposition = position;
+
 	return hit;
 }
 

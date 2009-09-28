@@ -1396,6 +1396,7 @@ checkfloors:
 			goto Nextline;
 		}
 
+		//mount command
 		if (LineData.Slice(0, 5).CompareNoCase("mount") == true)
 		{
 			tempdata.SplitString(LineData.Slice(6).GetData(), ",");
@@ -1420,6 +1421,38 @@ checkfloors:
 
 			tempdata.DeleteAll();
 			goto Nextline;
+		}
+
+		//addfloorautoarea command
+		if (LineData.Slice(0, 16).CompareNoCase("addfloorautoarea") == true)
+		{
+			//get data
+			tempdata.SplitString(LineData.Slice(17).GetData(), ",");
+
+			//calculate inline math
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				tempdata.Put(temp3, buffer.Trim());
+			}
+			if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+			{
+				ScriptError("Incorrect number of parameters");
+				return false;
+			}
+			//check numeric values
+			for (int i = 0; i <= 5; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return false;
+				}
+			}
+
+			//create floor auto area
+			Simcore->AddFloorAutoArea(csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])));
+			tempdata.DeleteAll();
 		}
 
 		//Process globals

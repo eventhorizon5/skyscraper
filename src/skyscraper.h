@@ -99,7 +99,7 @@ public:
 	void StartSound();
 	void StopSound();
 	bool SelectBuilding();
-	void Start();
+	bool Start();
 	void AllowResize(bool value);
 
 private:

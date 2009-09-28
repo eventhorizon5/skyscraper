@@ -100,10 +100,7 @@ bool Skyscraper::OnInit(void)
 	//autoload a building file if specified
 	BuildingFile = confman->GetStr("Skyscraper.Frontend.AutoLoad");
 	if (BuildingFile != "")
-	{
-		Start();
-		return true;
-	}
+		return Start();
 
 	//show menu
 	if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
@@ -117,7 +114,7 @@ bool Skyscraper::OnInit(void)
 	{
 		//or show building selection window if ShowMenu is false
 		if (SelectBuilding() == true)
-			Start();
+			return Start();
 		else
 			return false;
 	}
@@ -987,7 +984,7 @@ bool Skyscraper::SelectBuilding()
 	return true;
 }
 
-void Skyscraper::Start()
+bool Skyscraper::Start()
 {
 	//start simulator
 
@@ -1024,10 +1021,7 @@ void Skyscraper::Start()
 
 	BuildingFile.Insert(0, "/root/buildings/");
 	if (!LoadBuilding(BuildingFile.GetData()))
-	{
-		ReportError("Error loading building\n");
-		return;
-	}
+		return ReportError("Error loading building\n");
 
 	//the sky needs to be created before Prepare() is called
 	Simcore->CreateSky(Simcore->SkyName);
@@ -1037,10 +1031,7 @@ void Skyscraper::Start()
 
 	//start simulation
 	if (!Simcore->Start())
-	{
-		ReportError("Error starting simulator\n");
-		return;
-	}
+		return ReportError("Error starting simulator\n");
 
 	//load control panel
 	if (confman->GetBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
@@ -1065,6 +1056,7 @@ void Skyscraper::Start()
 	IsRunning = true;
 	Starting = false;
 	StartupRunning = false;
+	return true;
 }
 
 void Skyscraper::AllowResize(bool value)

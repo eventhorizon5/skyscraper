@@ -234,6 +234,11 @@ private:
 	bool RecallAltSet;
 	bool ACPFloorSet;
 	bool RecallUnavailable; //true if recall floor is unavailable (alarm has been triggered on that floor)
+
+	//cache objects for IsInElevator()
+	csVector3 lastposition;
+	bool lastcheckresult;
+	bool checkfirstrun;
 };
 
 #endif

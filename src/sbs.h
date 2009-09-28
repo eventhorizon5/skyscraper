@@ -229,6 +229,7 @@ public:
 	int GetCallButtonCallbackCount();
 	bool Mount(const char *filename, const char *path);
 	void FreeTextureImages();
+	void AddFloorAutoArea(csVector3 start, csVector3 end);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -288,6 +289,7 @@ private:
 
 	//private functions
 	void PrintBanner();
+	void CheckAutoAreas();
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
@@ -316,6 +318,17 @@ private:
 
 	//call button object array for callback
 	csArray<CallButton*> buttoncallbacks;
+
+	//auto area structure
+	struct AutoArea
+	{
+		csBox3 box;
+		bool inside;
+		int camerafloor;
+	};
+
+	//floor auto area array
+	csArray<AutoArea> FloorAutoArea;
 };
 
 #endif
