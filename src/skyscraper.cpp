@@ -259,14 +259,7 @@ void Skyscraper::SetupFrame()
 		canvas_height = canvas->GetSize().GetHeight();
 
 		//resize viewport
-		view->SetAutoResize(false);
-		float oldfov = view->GetCamera()->GetFOVAngle();
 		wxwin->GetWindow()->SetSize(canvas->GetSize());
-		view->GetCamera()->SetFOVAngle(oldfov, canvas_width);
-		view->GetCamera()->SetPerspectiveCenter(canvas_width / 2, canvas_height / 2);
-		view->SetRectangle(0, 0, canvas_width, canvas_height);
-		g3d->SetDimensions(canvas_width, canvas_height);
-		view->ClearView();
 	}
 
 	RenderOnly = confman->GetBool("Skyscraper.Frontend.RenderOnly", false);
@@ -809,10 +802,6 @@ void Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
 
-	//quit if main window isn't selected
-	if (window->IsActive() == false)
-		return;
-
 	//exit if simulator is starting
 	if (Starting == true)
 		return;
@@ -843,30 +832,34 @@ void Skyscraper::GetMenuInput()
 		else
 			DrawImage(button->filename, button, button->offset_x, button->offset_y, true);
 
-		//change button status based on mouse position and button press status
-		if (mouse_x > button->x && mouse_x < button->x + button->size_x && mouse_y > button->y && mouse_y < button->y + button->size_y)
-		{
-			if (button->drawn_selected == false && mouse->GetLastButton(0) == false)
-			{
-				if (button->drawn_pressed == true)
-				{
-					//user clicked on button
-					Click(i);
-					return;
-				}
-				button->drawn_selected = true;
-			}
-			if (button->drawn_pressed == false && mouse->GetLastButton(0) == true)
-			{
-				button->drawn_pressed = true;
-				button->drawn_selected = false;
-			}
-		}
-		else if (button->drawn_selected == true || button->drawn_pressed == true)
-		{
-			button->drawn_selected = false;
-			button->drawn_pressed = false;
-		}
+	    //only process buttons if main window is selected
+        if (window->IsActive() != false)
+        {
+        	//change button status based on mouse position and button press status
+        	if (mouse_x > button->x && mouse_x < button->x + button->size_x && mouse_y > button->y && mouse_y < button->y + button->size_y)
+        	{
+        		if (button->drawn_selected == false && mouse->GetLastButton(0) == false)
+        		{
+        			if (button->drawn_pressed == true)
+        			{
+        				//user clicked on button
+        				Click(i);
+        				return;
+        			}
+        			button->drawn_selected = true;
+        		}
+        		if (button->drawn_pressed == false && mouse->GetLastButton(0) == true)
+        		{
+        			button->drawn_pressed = true;
+        			button->drawn_selected = false;
+        		}
+        	}
+        	else if (button->drawn_selected == true || button->drawn_pressed == true)
+        	{
+        		button->drawn_selected = false;
+        		button->drawn_pressed = false;
+        	}
+        }
 	}
 
 }
