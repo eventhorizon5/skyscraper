@@ -3232,7 +3232,7 @@ void SBS::CheckAutoAreas()
 				GetFloor(floor + 1)->EnableGroup(true);
 			}
 		}
-		if (FloorAutoArea[i].box.In(position) == false && FloorAutoArea[i].inside == false)
+		if (FloorAutoArea[i].box.In(position) == false && FloorAutoArea[i].inside == true)
 		{
 			//user moved out of box; disable floors except current
 			FloorAutoArea[i].inside = false;
