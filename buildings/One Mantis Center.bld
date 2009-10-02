@@ -1280,10 +1280,10 @@ ShaftCut 12, -4.5 + 0.33, -18, 4.5 - 0.33, 18, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride OfficeElevWall2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, OfficeElevWall2, 0.2, 3.125, -3.75, 3.125, -1.75, 9, 9, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride OfficeElevWall2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, OfficeElevWall2, 0.2, 3.125, 1.75, 3.125, 3.75, 9, 9, 0, 0, 0, 0
 
@@ -1401,10 +1401,10 @@ ShaftCut 12, -4.5 + 0.33, -18, 4.5 - 0.33, 18, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, OfficeElevWall2, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, OfficeElevWall2, 0.2, -3.125, -3.75, -3.125, -1.75, 9, 9, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, OfficeElevWall2, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, OfficeElevWall2, 0.2, -3.125, 1.75, -3.125, 3.75, 9, 9, 0, 0, 0, 0
 
@@ -2013,10 +2013,10 @@ ShaftCut 12, -4.5 + 0.33, -18, 4.5 - 0.33, 18, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride OfficeElevWall2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, OfficeElevWall2, 0.2, 3.125, -3.75, 3.125, -1.75, 9, 9, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride OfficeElevWall2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, OfficeElevWall2, 0.2, 3.125, 1.75, 3.125, 3.75, 9, 9, 0, 0, 0, 0
 
@@ -2133,10 +2133,10 @@ ShaftCut 12, -4.5 + 0.33, -18, 4.5 - 0.33, 18, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, OfficeElevWall2, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, OfficeElevWall2, 0.2, -3.125, -3.75, -3.125, -1.75, 9, 9, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, OfficeElevWall2, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, OfficeElevWall2, 0.2, -3.125, 1.75, -3.125, 3.75, 9, 9, 0, 0, 0, 0
 

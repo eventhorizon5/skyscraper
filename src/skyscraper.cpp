@@ -79,6 +79,7 @@ bool Skyscraper::OnInit(void)
 	Pause = false;
 	DisableSound = false;
 	DrewButtons = false;
+	FullScreen = false;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -621,6 +622,8 @@ void Skyscraper::GetInput()
 			//enable/disable fullscreen mode
 			FullScreen = !FullScreen;
 			window->ShowFullScreen(FullScreen);
+			window->ToggleWindowStyle(wxSTAY_ON_TOP);
+			window->Refresh();
 			wait = true;
 		}
 		if (wxGetKeyState(WXK_NUMPAD_SUBTRACT))
