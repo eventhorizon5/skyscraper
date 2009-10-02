@@ -2152,10 +2152,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.418, -3.56, 3.418, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.418, 1.75, 3.418, 3.56, 8, 8, 0, 0, 0, 0
 
@@ -2253,10 +2253,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.418, -3.56, -3.418, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.418, 1.75, -3.418, 3.56, 8, 8, 0, 0, 0, 0
 
@@ -2345,10 +2345,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.418, -3.56, 3.418, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.418, 1.75, 3.418, 3.56, 8, 8, 0, 0, 0, 0
 
@@ -2437,10 +2437,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.418, -3.56, -3.418, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.418, 1.75, -3.418, 3.56, 8, 8, 0, 0, 0, 0
 
@@ -2531,10 +2531,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -2626,10 +2626,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -2722,10 +2722,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -2818,10 +2818,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -2915,10 +2915,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3010,10 +3010,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3026,7 +3026,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 4, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-	 AddFloorButton 1, Button23, 2, 3, 23, 1, 1
+    AddFloorButton 1, Button23, 2, 3, 23, 1, 1
     AddFloorButton 1, Button22, 2, 2, 22, 1, 1
     AddFloorButton 1, Button21, 3, 3, 21, 1, 1
     AddFloorButton 1, Button20, 3, 2, 20, 1, 1
@@ -3106,10 +3106,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3189,10 +3189,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3284,10 +3284,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3380,10 +3380,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3477,10 +3477,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3573,10 +3573,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3670,10 +3670,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3767,10 +3767,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3865,10 +3865,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -3948,10 +3948,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -4032,10 +4032,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -4116,10 +4116,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -4201,10 +4201,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -4285,10 +4285,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -4370,10 +4370,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -4453,10 +4453,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -4548,10 +4548,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -4638,10 +4638,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -2.95, -3.45, -2.95, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -2.95, 1.75, -2.95, 3.45, 8, 8, 0, 0, 0, 0
 
@@ -4729,10 +4729,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panels
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -4.09, -3.94, -4.09, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -4.09, 1.75, -4.09, 3.94, 8, 8, 0, 0, 0, 0
 

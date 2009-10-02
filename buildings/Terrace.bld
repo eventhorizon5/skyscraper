@@ -3133,10 +3133,10 @@ ShaftCut 5, -4.25 + 0.33, -13.33, 4.25 - 0.33, 13.33, 0, 5
     #panels
     SetAutoSize = false, false
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
     SetAutoSize = true, true
@@ -3255,20 +3255,20 @@ ShaftCut 5, -4.25 + 0.33, -13.33, 4.25 - 0.33, 13.33, 0, 5
     #front panels
     SetAutoSize = false, false
     WallOrientation = right
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, 3.125, -3.75, 3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #rear panels
     SetAutoSize = false, false
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride  ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel2, ElevPanelMain, 0.2, -3.721, -3.75, -3.721, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride  ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Left Panel2, ElevPanelMain, 0.2, -3.721, 1.75, -3.721, 3.75, 8, 8, 0, 0, 0, 0
     SetAutoSize = true, true
@@ -3710,10 +3710,10 @@ ShaftCut 6, -4.25 + 0.33, -9, 4.25 - 0.33, 9, 0, 5
     #panels
     SetAutoSize = false, false
     WallOrientation = left
-    DrawWalls = true, true, true, false, false, false
+    DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Left Panel, ElevPanelMain, 0.2, -3.125, -3.75, -3.125, -1.75, 8, 8, 0, 0, 0, 0
-    DrawWalls = true, true, false, true, false, false
+    DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
     SetAutoSize = true, true
