@@ -33,7 +33,7 @@
     Description = A 55-story office building.
     Version = 1
     HorizScale = 1
-    CameraFloor = 0
+    CameraFloor = 65
     CameraPosition = 140, 0
     CameraRotation = 0, 270, 0
 <EndGlobals>
@@ -817,10 +817,10 @@ Cut Landscape, -150, -1, -141.12, 150, 1, 141.12, false, true
 <Floors 1 to 9>
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddFloor Floor, Marble4, 0.5, 14.58, 105.38, -14.58, 141.12, 0, 0, 0, 0, False
+    AddFloor Floor, Marble4, 0.5, -14.58, 105.38, 14.58, 141.12, 0, 0, 0, 0, False
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddFloor Ceiling, Ceiling1, 0.5, 14.58, 109.96, -14.58, 141.12, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, Ceiling1, 0.5, -14.58, 109.96, 14.58, 141.12, %height%, %height%, 0, 0, False
 <EndFloors>
 
 #Service Basement
@@ -843,29 +843,49 @@ Cut Landscape, -150, -1, -141.12, 150, 1, 141.12, false, true
 <EndFloor>
 
 #Office Hallways
+
+    ColumnWallBox2 ColumnR1, ColumnTex, 150 - 1.6, (141.12 / 9) * 2.25, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR2, ColumnTex, 150 - 1.6, (141.12 / 9) * 4.5, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR3, ColumnTex, 150 - 1.6, (141.12 / 9) * 6.75, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR4, ColumnTex, 150 - 1.6, 141.12 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR5, ColumnTex, 150 - 1.6, (-141.12 / 9) * 2.25, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR6, ColumnTex, 150 - 1.6, (-141.12 / 9) * 4.5, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR7, ColumnTex, 150 - 1.6, (-141.12 / 9) * 6.75, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR8, ColumnTex, 150 - 1.6, -141.12 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR9, ColumnTex, 150 - 1.6, (141.12 / 9) * 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+
 <Floors 11 to 65>
     WallOrientation = left
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wall1, 0.33, 29.58, 96.12, 29.58, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, 105 - 0.33, 96.12, 105 - 0.33, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, 105, 96.12 - 0.33, 29.58, 96.12 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, 105, -96.12, 29.58, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, 120 - 0.33, 111.12, 120 - 0.33, -111.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, 150, 111.12 - 0.33, 14.58, 111.12 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, 150, -111.12, 14.58, -111.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, 24.58, 121.12 - 0.33, 14.58, 121.12 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, 24.58 - 0.33, 111.12, 24.58 - 0.33, 121.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back1, Wall1, 0.33, 29.58, 96.12, 29.58, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back2, Wall1, 0.33, 105 - 0.33, 96.12, 105 - 0.33, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back3, Wall1, 0.33, 105, 96.12 - 0.33, 29.58, 96.12 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back4, Wall1, 0.33, 105, -96.12, 29.58, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back5, Wall1, 0.33, 120 - 0.33, 111.12, 120 - 0.33, -111.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back6, Wall1, 0.33, 150, 111.12 - 0.33, 14.58, 111.12 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back7, Wall1, 0.33, 150, -111.12, 14.58, -111.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back8, Wall1, 0.33, 24.58, 121.12 - 0.33, 14.58, 121.12 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back9, Wall1, 0.33, 24.58 - 0.33, 111.12, 24.58 - 0.33, 121.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
     WallOrientation = Center
     AddDoor StairsDoor, 0.33, 5, 19.58, 111.12, 3.5, 8, 0, 1, 1
     WallOrientation = left
     DrawWalls = true, true, false, false, false, false
-    AddWall Back, Wall1, 0.33, -29.58 - 0.33, 96.12, -29.58 - 0.33, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, -105, 96.12, -105, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, -105, 96.12 - 0.33, -29.58, 96.12 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, -105, -96.12, -29.58, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, -120 - 0.33, 111.12, -120 - 0.33, -111.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, -150, 111.12 - 0.33, -14.58, 111.12 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, Wall1, 0.33, -150, -111.12, -14.58, -111.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back10, Wall1, 0.33, -29.58 - 0.33, 96.12, -29.58 - 0.33, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back11, Wall1, 0.33, -105, 96.12, -105, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back12, Wall1, 0.33, -105, 96.12 - 0.33, -29.58, 96.12 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back13, Wall1, 0.33, -105, -96.12, -29.58, -96.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back14, Wall1, 0.33, -120 - 0.33, 111.12, -120 - 0.33, -111.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back15, Wall1, 0.33, -150, 111.12 - 0.33, -14.58, 111.12 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back16, Wall1, 0.33, -150, -111.12, -14.58, -111.12, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back17, Wall1, 0.33, 150, (141.12 / 9) * 4.5, 120 - 0.33, (141.12 / 9) * 4.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back18, Wall1, 0.33, 150, (141.12 / 9) * 2.25, 120 - 0.33, (141.12 / 9) * 2.25, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back19, Wall1, 0.33, 150, (-141.12 / 9) * 4.5, 120 - 0.33, (-141.12 / 9) * 4.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back20, Wall1, 0.33, 150, (-141.12 / 9) * 2.25, 120 - 0.33, (-141.12 / 9) * 2.25, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back21, Wall1, 0.33, 150, (-141.12 / 9) * 0, 120 - 0.33, (-141.12 / 9) * 0, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back22, Wall1, 0.33, 150, (141.12 / 9) * 1.125, 120 - 0.33, (141.12 / 9) * 1.125, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back23, Wall1, 0.33, 150, (141.12 / 9) * 3.375, 120 - 0.33, (141.12 / 9) * 3.375, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back24, Wall1, 0.33, 150, (-141.12 / 9) * 3.375, 120 - 0.33, (-141.12 / 9) * 3.375, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back25, Wall1, 0.33, 150, (-141.12 / 9) * 1.125, 120 - 0.33, (-141.12 / 9) * 1.125, %fullheight%, %fullheight%, 0, 0, 0, 0, False
 <EndFloors>
 
 #Communications Hallways
@@ -1335,8 +1355,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0 - 9
     AssignedShaft = 13
+    FloorSkipText = EZ
     CreateElevator false, -43.68, 136.242, 0
-    OpenSpeed 1 = 0.2
+    OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 2>
@@ -1347,8 +1369,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = 0 - 9
     AssignedShaft = 13
+    FloorSkipText = EZ
     CreateElevator false, -34.68, 136.242, 9
-    OpenSpeed 1 = 0.2
+    OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 1 to 2>
@@ -1427,8 +1451,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 2
+    FloorSkipText = EZ
     CreateElevator false, -9, -95.922, 0
-    OpenSpeed 1 = 0.2
+    OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 4>
@@ -1439,8 +1465,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 2
+    FloorSkipText = EZ
     CreateElevator false, 0, -95.922, 20
-    OpenSpeed 1 = 0.2
+    OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 5>
@@ -1451,8 +1479,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 2
+    FloorSkipText = EZ
     CreateElevator false, 9, -95.922, 13
-    OpenSpeed 1 = 0.2
+    OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 3 to 5>
@@ -1534,8 +1564,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 3
+    FloorSkipText = EZ
     CreateElevator false, -9, -65.358, 18
-    OpenSpeed 1 = 0.2
+    OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 7>
@@ -1546,8 +1578,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 3
+    FloorSkipText = EZ
     CreateElevator false, 0, -65.358, 11
-    OpenSpeed 1 = 0.2
+    OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 8>
@@ -1558,8 +1592,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -1, 0, 11 - 22
     AssignedShaft = 3
+    FloorSkipText = EZ
     CreateElevator false, 9, -65.358, 22
-    OpenSpeed 1 = 0.2
+    OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 6 to 8>
@@ -1642,8 +1678,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 4
+    FloorSkipText = EZ
     CreateElevator false, -9, -55.602, 32
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 10>
@@ -1654,8 +1692,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 4
+    FloorSkipText = EZ
     CreateElevator false, 0, -55.602, 24
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 11>
@@ -1666,8 +1706,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 4
+    FloorSkipText = EZ
     CreateElevator false, 9, -55.602, 27
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 9 to 11>
@@ -1749,8 +1791,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 5
+    FloorSkipText = EZ
     CreateElevator false, -9, -25.038, 31
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 13>
@@ -1761,8 +1805,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 5
+    FloorSkipText = EZ
     CreateElevator false, 0, -25.038, 0
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 14>
@@ -1773,8 +1819,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 23 - 34
     AssignedShaft = 5
+    FloorSkipText = EZ
     CreateElevator false, 9, -25.038, 25
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 12 to 14>
@@ -1857,8 +1905,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 6
+    FloorSkipText = EZ
     CreateElevator false, -9, -15.282, 43
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 16>
@@ -1869,8 +1919,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 6
+    FloorSkipText = EZ
     CreateElevator false, 0, -15.282, 36
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 17>
@@ -1881,8 +1933,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 6
+    FloorSkipText = EZ
     CreateElevator false, 9, -15.282, 40
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 15 to 17>
@@ -1963,8 +2017,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 7
+    FloorSkipText = EZ
     CreateElevator false, -9, 15.282, 0
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 19>
@@ -1975,8 +2031,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 7
+    FloorSkipText = EZ
     CreateElevator false, 0, 15.282, 35
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 20>
@@ -1987,8 +2045,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 35 - 45
     AssignedShaft = 7
+    FloorSkipText = EZ
     CreateElevator false, 9, 15.282, -1
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 18 to 20>
@@ -2070,8 +2130,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 8
+    FloorSkipText = EZ
     CreateElevator false, -9, 25.038, 56
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 22>
@@ -2082,8 +2144,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 8
+    FloorSkipText = EZ
     CreateElevator false, 0, 25.038, 0
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 23>
@@ -2094,8 +2158,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 8
+    FloorSkipText = EZ
     CreateElevator false, 9, 25.038, 48
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 21 to 23>
@@ -2178,6 +2244,7 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     AssignedShaft = 9
     CreateElevator false, -9, 55.602, 53
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 25>
@@ -2188,8 +2255,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 9
+    FloorSkipText = EZ
     CreateElevator false, 0, 55.602, 52
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 26>
@@ -2200,8 +2269,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 46 - 56
     AssignedShaft = 9
+    FloorSkipText = EZ
     CreateElevator false, 9, 55.602, 47
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 24 to 26>
@@ -2282,8 +2353,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 10
+    FloorSkipText = EZ
     CreateElevator false, -9, 65.358, 64
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 28>
@@ -2294,8 +2367,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 10
+    FloorSkipText = EZ
     CreateElevator false, 0, 65.358, 57
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 29>
@@ -2306,8 +2381,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 10
+    FloorSkipText = EZ
     CreateElevator false, 9, 65.358, 61
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 27 to 29>
@@ -2386,8 +2463,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 11
+    FloorSkipText = EZ
     CreateElevator false, -9, 95.922, 65
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 31>
@@ -2398,8 +2477,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 11
+    FloorSkipText = EZ
     CreateElevator false, 0, 95.922, 57
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 32>
@@ -2410,8 +2491,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -1, 0, 57 - 65
     AssignedShaft = 11
+    FloorSkipText = EZ
     CreateElevator false, 9, 95.922, 0
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 30 to 32>
@@ -2491,8 +2574,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -8, -7, -6, -5, -4, -3, -2, -1, 0 - 67
     AssignedShaft = 12
+    FloorSkipText = EZ
     CreateElevator false, -9, 105.678, -6
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 34>
@@ -2503,8 +2588,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -8, -7, -6, -5, -4, -3, -2, -1, 0 - 67
     AssignedShaft = 12
+    FloorSkipText = EZ
     CreateElevator false, 0, 105.678, 0
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 35>
@@ -2515,8 +2602,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -8, -7, -6, -5, -4, -3, -2, -1, 0 - 67
     AssignedShaft = 12
+    FloorSkipText = EZ
     CreateElevator false, 9, 105.678, 34
     OpenSpeed 1 = 0.1
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 33 to 35>
@@ -2660,8 +2749,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -7, -6, -5, -4, -3, -2, -1, 0 - 9
     AssignedShaft = 14
+    FloorSkipText = EZ
     CreateElevator false, -43.68, -136.242, -6
     OpenSpeed 1 = 0.2
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 37>
@@ -2672,8 +2763,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -7, -6, -5, -4, -3, -2, -1, 0 - 9
     AssignedShaft = 14
+    FloorSkipText = EZ
     CreateElevator false, -34.68, -136.242, 3
     OpenSpeed 1 = 0.2
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 36 to 37>
@@ -2759,8 +2852,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -7, -6, -5, -4, -3, -2, -1, 0, 10
     AssignedShaft = 1
+    FloorSkipText = EZ
     CreateElevator false, -9, -105.678, -4
     OpenSpeed 1 = 0.2
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 39>
@@ -2771,8 +2866,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -7, -6, -5, -4, -3, -2, -1, 0, 10
     AssignedShaft = 1
+    FloorSkipText = EZ
     CreateElevator false, 0, -105.678, -7
     OpenSpeed 1 = 0.2
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevator 40>
@@ -2783,8 +2880,10 @@ ShaftCut 14, -9, -4.25 + 0.33, 9, 4.25 - 0.33, 0, 5
     DecelJerk = 0.3
     ServicedFloors = -7, -6, -5, -4, -3, -2, -1, 0, 10
     AssignedShaft = 1
+    FloorSkipText = EZ
     CreateElevator false, 9, -105.678, 10
     OpenSpeed 1 = 0.2
+    BeepSound = beep1.wav
 <EndElevator>
 
 <Elevators 38 to 40>
