@@ -71,7 +71,9 @@
     Load data/downtown.jpg, Downtown, 1, 1
     Load data/bracing1.jpg, VentsInt, 1, 1
     Load data/vents1.jpg, VentsExt, 1, 1
-    Load data/text12.jpg, HotelWalls, 0.269, 0.25
+    Load data/stucco22b.jpg, HotelWalls, 0.269, 0.25
+    Load data/Carpet0012_S.jpg, HotelFloor, 0.5, 0.5
+    Load data/stucco2f.jpg, HotelCeiling, 0.269, 0.25
     #Load data/plaque.jpg, Plaque, 1, 1
     Load data/callbutton.gif, ButtonUp, 1, 1
     Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
@@ -936,16 +938,21 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     if[%floor% > 81 & %floor% < 100] InterfloorHeight = 1.5
     if[%floor% > 101] InterfloorHeight = 1.5
 
+    Set 1 = Carpet1
+    Set 2 = Wood3
+    if[%floor% > 81 & %floor% < 100] Set 1 = HotelFloor
+    if[%floor% > 81 & %floor% < 100] Set 2 = HotelCeiling
+    
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Carpet1, 0.5, -51, -70, 51, 70, 0, 0, 0, 0, False
+    AddFloor Floor, %1%, 0.5, -51, -70, 51, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Wood3, 0.5, -51, -70, 51, 70, %height%, %height%, 0, 0, False
-
+    AddFloor Ceiling, %2%, 0.5, -51, -70, 51, 70, %height%, %height%, 0, 0, False
+    
     #Internal Windows
     SetAutoSize = true, false
     WallOrientation = left
@@ -1027,42 +1034,63 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     Description = Hotel level %floor%
 
     #Room perimeter walls
-    WallOrientation = left
+    
+    WallOrientation = right
     DrawWalls = true, true, false, false, false, false
     #Wall in back of rooms 1 and 3
-    AddWall Wall1, HotelWalls, 0.5, -51, 4.25 - 36.25, -9 - 14.67 - 0.33, 4.25 - 36.25, %height%, %height%, 0, 0, 0, 0, False
-    #In back of room 2
-    WallOrientation = right
-    AddWall Wall2, HotelWalls, 0.5, -51, -4.25 - 17.75, -9 - 14.67 - 0.33, -4.25 - 17.75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, HotelWalls, 0.5, -51, 4.25 - 36.25 + 0.33, -9 - 14.67 - 0.33, 4.25 - 36.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    #In front of room 2
+    WallOrientation = left
+    AddWall Wall2, HotelWalls, 0.5, -51, -4.25 - 17.75 - 0.33, -9 - 14.67 - 0.33, -4.25 - 17.75 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     #In back of rooms 4-6
-    WallOrientation = left
-    AddWall Wall3, HotelWalls, 0.5, 9 - 14.67 + 0.33, 4.25 - 36.25, 51, 4.25 - 36.25, %height%, %height%, 0, 0, 0, 0, False
-    #In front of room 7
-    AddWall Wall3, HotelWalls, 0.5, 16.5 - 0.5, -4.25 - 17.75, 51, -4.25 - 17.75, %height%, %height%, 0, 0, 0, 0, False
-    #In back of room 10
     WallOrientation = right
-    AddWall Wall3, HotelWalls, 0.5, 16.5 - 0.5, 2.5, 51, 2.5, %height%, %height%, 0, 0, 0, 0, False
-    #Left of rooms 7 and 10
+    AddWall Wall3, HotelWalls, 0.5, 9 - 14.67 + 0.33, 4.25 - 36.25 + 0.33, 51, 4.25 - 36.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    #In front of room 7
+    AddWall Wall4, HotelWalls, 0.5, 16.5, -4.25 - 17.75 - 0.33, 51, -4.25 - 17.75 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    #In back of room 10
     WallOrientation = left
-    AddWall Wall3, HotelWalls, 0.5, 16.5, -4.25 - 17.75 - 0.5, 16.5, 2.5 + 0.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall5, HotelWalls, 0.5, 16.5, 2.5, 51, 2.5, %height%, %height%, 0, 0, 0, 0, False
+    #Left of rooms 7 and 10
+    AddWall Wall6, HotelWalls, 0.5, 16.5, -4.25 - 17.75 - 0.5 - 0.33, 16.5, 2.5 + 0.5, %height%, %height%, 0, 0, 0, 0, False
     #Left of rooms 11 and 12
-    AddWall Wall3, HotelWalls, 0.5, 24.5, 27 - 0.5, 24.5, 70, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall7, HotelWalls, 0.5, 24.5, 34, 24.5, 70, %height%, %height%, 0, 0, 0, 0, False
     #Front of room 11
-    AddWall Wall3, HotelWalls, 0.5, 24.5 - 0.5, 27, 51, 27, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8, HotelWalls, 0.5, 24.5, 34, 51, 34, %height%, %height%, 0, 0, 0, 0, False
     #Right of room 13
     WallOrientation = right
-    AddWall Wall3, HotelWalls, 0.5, -4.75 - 19, 56.5, -4.75 - 19, 70, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, HotelWalls, 0.5, -4.75 - 19, 56.5, -4.75 - 19, 70, %height%, %height%, 0, 0, 0, 0, False
     #Front-right of room 18
-    AddWall Wall3, HotelWalls, 0.5, -4.75 - 19, 8.5 + -13.5, -4.75 - 19, -4.25 + 9.25 + 0.5, %height%, %height%, 0, 0, 0, 0, False
-    #Wall in back of room 2
-    AddWall Wall3, HotelWalls, 0.5, -51, 8.5 + -13.5, -5.67 - 0.33, 8.5 + -13.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall10, HotelWalls, 0.5, -4.75 - 19, 8.5 + -13.5, -4.75 - 19, -4.25 + 9.25 + 0.5, %height%, %height%, 0, 0, 0, 0, False
+    #Back of room 2
+    AddWall Wall11, HotelWalls, 0.5, -51, 8.5 + -13.5 + 0.33, -5.67 - 0.33, 8.5 + -13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     #Back-right of room 8
-    AddWall Wall3, HotelWalls, 0.5, -30.5, -4.25 + 9.25 + 0.5, -30.5, -9.87 + 23.375, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12, HotelWalls, 0.5, -30.5, -4.25 + 9.25 + 0.5, -30.5, -9.87 + 23.375, %height%, %height%, 0, 0, 0, 0, False
     #Mid wall of room 8
-    AddWall Wall3, HotelWalls, 0.5, -39, -4.25 + 9.25 + 0.5, -4.75 - 19, -4.25 + 9.25 + 0.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall13, HotelWalls, 0.5, -39, -4.25 + 9.25 + 0.5, -4.75 - 19, -4.25 + 9.25 + 0.5, %height%, %height%, 0, 0, 0, 0, False
     #Front of room 9
-    AddWall Wall3, HotelWalls, 0.5, 4.75 + -39.166 + 0.33, -9.87 + 23.375, -4.75 + -19 - 0.33, -9.87 + 23.375, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, HotelWalls, 0.5, 4.75 + -39.166 + 0.33, -9.87 + 23.375 + 0.165, -4.75 + -19 - 0.33, -9.87 + 23.375 + 0.165, %height%, %height%, 0, 0, 0, 0, False
+    #Right of room 2
+    AddWall Wall15, HotelWalls, 0.5, -14.5, 4.25 - 17.75, -14.5, 8.5 + -13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
 
+    #Room divider walls
+    
+    #between 1 and 3
+    AddWall Wall1, HotelWalls, 0.5, -29.7, -70, -29.7, 4.25 - 36.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    #between 3 and 4
+    AddWall Wall1, HotelWalls, 0.5, -9.5, -70, -9.5, -4.25 - 36.25, %height%, %height%, 0, 0, 0, 0, False
+    #between 4 and 5
+    AddWall Wall1, HotelWalls, 0.5, 10.5, -70, 10.5, 4.25 - 36.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    #between 5 and 6
+    AddWall Wall1, HotelWalls, 0.5, 30.5, -70, 30.5, 4.25 - 36.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    #between 7 and 10
+    AddWall Wall1, HotelWalls, 0.5, 16.5, -10, 51, -10, %height%, %height%, 0, 0, 0, 0, False
+    #between 11 and 12
+    AddWall Wall1, HotelWalls, 0.5, 24.5, 51.5, 51, 51.5, %height%, %height%, 0, 0, 0, 0, False
+    #between 9 and 13
+    AddWall Wall1, HotelWalls, 0.5, -51, 48.5, -4.75 - 19, 48.5, %height%, %height%, 0, 0, 0, 0, False
+    #between 8 and 9
+    AddWall Wall1, HotelWalls, 0.5, -51, 22.5, -4.75 + -39.166, 22.5, %height%, %height%, 0, 0, 0, 0, False
+    
 <EndFloor>
 
 <Floors 83 to 98>
@@ -1846,6 +1874,7 @@ Cut external, 19, Floor(143).Altitude + Floor(143).InterfloorHeight, -1.75, 21, 
 <Floors -1 to 142>
     Set 5 = Wall1
     if[%floor% = -1] Set 5 = LowerLevelWalls
+    if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
     WallOrientation = Left
     DrawWalls = true, true, false, false, false, false
     if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall ServiceWall, %5%, 0.5, -4.33, 14.29, 4, 14.29, %height%, %height%, 0, 0, 0, 0, False
@@ -2273,6 +2302,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 39] Set 5 = Stucco4
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
+    if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
 
     #shaft 11
     FloorOrientation = top
@@ -2341,6 +2371,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 39] Set 5 = Stucco4
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
+    if[%floor% = 82] Set 5 = HotelWalls
 
     #shaft 13
     FloorOrientation = top
@@ -2383,6 +2414,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
+    if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
 
     #Service/skydeck shaft
     #shaft 14
@@ -2491,6 +2523,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
+    if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
 
     #Upper express shaft
     #shaft 15
@@ -2670,6 +2703,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
 <Floors 79 to 101>
     Set 5 = Wall1
     if[%floor% = 79] Set 5 = Stucco4
+    if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
 
     #shaft 22
     FloorOrientation = top
@@ -2731,6 +2765,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     Set 5 = Wall1
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = 119] Set 5 = Stucco4
+    if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
 
     #shaft 24
     FloorOrientation = top
@@ -2768,6 +2803,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
 <Floors 99 to 131>
     Set 5 = Wall1
     if[%floor% = 119] Set 5 = Stucco4
+    if[%floor% = 99] Set 5 = HotelWalls
 
     #shaft 25
     FloorOrientation = top
@@ -2829,6 +2865,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
 <Floors 99 to 119>
     Set 5 = Wall1
     if[%floor% = 119] Set 5 = Stucco4
+    if[%floor% = 99] Set 5 = HotelWalls
 
     #shaft 27
     FloorOrientation = top
@@ -2892,6 +2929,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
+    if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
 
     #shaft 29
     FloorOrientation = top
@@ -2932,6 +2970,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
+    if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
 
     #shaft 30
     FloorOrientation = top
@@ -7142,6 +7181,7 @@ CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
 
     Set 5 = Wall1
     if[%floor% = 79 | %floor% = 119] Set 5 = Stucco4
+    if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
     if[%floor% < 99] AddWall StairsLeftE, %5%, 0.33, -5.67 + 0, -13.5, -5.67 + 0, 8.5 + -13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
@@ -7266,6 +7306,7 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
 
     Set 5 = Wall1
     if[%floor% = 79 | %floor% = 119 | %floor% > 137] Set 5 = Stucco4
+    if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
     if[%floor% ! 119 & %floor% ! 120 & %floor% < 138] AddWall StairsLeftE, %5%, 0.33, -9.0815 + 4.7515, -4.5 + 51.66, -9.0815 + 4.7515, 4.5 + 51.66 + 0.33, %height%, %height%, 0, 0, 0, 0, False
