@@ -295,17 +295,25 @@ void Shaft::CutFloors(bool relative, const csVector2 &start, const csVector2 &en
 	}
 }
 
-void Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber, const char *checkstring)
+bool Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber, const char *checkstring)
 {
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's altitude
 
 	float base = sbs->GetFloor(floor)->Altitude;
 
+	//exit with an error if floor is less than startfloor or greater than enfloor
+	if (floor < startfloor || floor > endfloor)
+	{
+		sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		return false;
+	}
+
 	if (relative == true)
 		sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
 	else
 		sbs->Cut(ShaftArray_state[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
+	return true;
 }
 
 void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)

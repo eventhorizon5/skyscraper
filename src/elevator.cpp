@@ -217,6 +217,11 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Not assigned to a shaft");
 		return false;
 	}
+	if (floor < sbs->GetShaft(AssignedShaft)->startfloor || floor > sbs->GetShaft(AssignedShaft)->endfloor)
+	{
+		sbs->ReportError("Elevator " +  csString(_itoa(Number, intbuffer, 10)) + ": Invalid starting floor");
+		return false;
+	}
 
 	//add elevator's starting floor to serviced floor list - this also ensures that the list is populated to prevent errors
 	if (IsServicedFloor(floor) == false)

@@ -949,7 +949,8 @@ bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttextu
 	//create doors
 	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
 	{
-		AddShaftDoor(elev->ServicedFloors[i], lefttexture, righttexture, tw, th);
+		if (!AddShaftDoor(elev->ServicedFloors[i], lefttexture, righttexture, tw, th))
+			return false;
 	}
 
 	return true;
@@ -1012,12 +1013,14 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *
 	//cut shaft and floor walls
 	if (DoorDirection == false)
 	{
-		shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), 1, "Shaft");
+		if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), 1, "Shaft"))
+			return false;
 		floorobj->Cut(csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), true, false, true, 2, "Shaft");
 	}
 	else
 	{
-		shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), 1, "Shaft");
+		if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), 1, "Shaft"))
+			return false;
 		floorobj->Cut(csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
 	}
 

@@ -150,7 +150,7 @@ private:
 	void Click(int index);
 
 	//script processor internal data
-	void ScriptError(const char *message);
+	bool ScriptError(const char *message);
 	int line; //line number
 	csString LineData; //line text
 	int Current; //current range iteration
