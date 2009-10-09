@@ -112,16 +112,16 @@ in the skyscraper/msvc directory.
 5. Usage
 
 To use Skyscraper, run the program, and a main menu screen will appear with a button for each
-available building (and one button for loading user buildings).  On Linux this main screen won't
-appear, and will only show a file selection dialog (same as pressing the "Other building..." button
-in the Windows version).
+available building (and one button for loading user buildings).
 Choose the building to load, and in a few moments you will be walking around in that building.
 The only buildings that are completely simulated in this release are "Simple" and "Triton Center".
 While in one of these buildings, you can click on objects such as elevator call buttons, etc
 to perform actions.  The recommended building to try out is the Triton Center, since it is the most
-complete one of the bunch.  The "Simple" building is a minimalistic demo to basically show how to make
-your own buildings in the application's scripting language.
+complete official building.  The "Simple" building is a minimalistic demo to basically show how to make
+your own buildings in the application's scripting language.  Other user-created buildings are included,
+and can be loaded by choosing the "Other Building" button on the main screen.
 
+------------------------------------
 Keys currently used in the simulator:
 
 W or Up Arrow - move forwards
@@ -146,6 +146,10 @@ Alt + PgUp - Spin right
 Alt + PgDown - Spin left
 Plus - Zoom in (decrease FOV angle)
 Minus - Zoom out (increase FOV angle)
+
+--- Mouse actions ---
+-elevator shaft doors can be manually opened and closed by holding down the Shift key and clicking on them
+-hallway call buttons can be lit and unlit also by holding down Shift and clicking on them (this does not call an elevator, but just changes the light status)
 
 --- Debug options ---
 Other functions are available via a Crystal Space plugin called BugPlug.
@@ -211,7 +215,7 @@ ctrl-d ctrl-alt-l
 
 6. Contact
 
-Bug-Reports, suggestions, and requests should be send to
-ryan at tliquest dot net
-
+Bug-Reports, suggestions, and requests should be posted to
+the Skyscraper forum at http://forum.skyscrapersim.com
+I can be contacted directly at ryan at tliquest dot net
 

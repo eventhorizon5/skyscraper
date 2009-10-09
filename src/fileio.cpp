@@ -3266,12 +3266,15 @@ recalc:
 						}
 					}
 				}
-
+				
+				bool result;
 				if (compat == false)
-					Simcore->GetElevator(Current)->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+					result = Simcore->GetElevator(Current)->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
 				else
-					Simcore->GetElevator(Current)->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+					result = Simcore->GetElevator(Current)->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
 
+				if (result == false)
+					return ScriptError("Error creating shaft doors");
 				tempdata.DeleteAll();
 			}
 
@@ -4082,7 +4085,7 @@ bool Skyscraper::IfProc(const char *expression)
 	//first check for bad and/or character sets
 	if (int(tmpcalc.Find("&&")) >= 0 || int(tmpcalc.Find("||")) >= 0 || int(tmpcalc.Find("==")) >= 0 || int(tmpcalc.Find("!=")) >= 0)
 	{
-		ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+		ScriptError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
 		return false;
 	}
 
@@ -4125,7 +4128,7 @@ bool Skyscraper::IfProc(const char *expression)
 			}
 			else
 			{
-				ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+				ScriptError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
 				return false;
 			}
 		}
@@ -4176,7 +4179,7 @@ bool Skyscraper::IfProc(const char *expression)
 		//return error if multiple standard operators are found, but no and/or operator (ex. if[5 = 5 = 5])
 		if (operators > 1 && check == false)
 		{
-			ReportError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
+			ScriptError("Syntax error in IF operation: '" + tmpcalc + "' (might be nested)");
 			return false;
 		}
 		if (operators > 1)
@@ -4280,7 +4283,7 @@ bool Skyscraper::IfProc(const char *expression)
 		return false;
 }
 
-void Skyscraper::ScriptError(const char *message)
+bool Skyscraper::ScriptError(const char *message)
 {
 	//Script error reporting function
 	char intbuffer[65];
@@ -4294,4 +4297,5 @@ void Skyscraper::ScriptError(const char *message)
 
 	delete dialog;
 	dialog = 0;
+	return false;
 }

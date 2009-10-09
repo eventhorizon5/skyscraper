@@ -39,6 +39,8 @@ in a shaft or an elevator
 -fixed an issue where walls along the Z axis would have the side negative and
 positives switched
 -height element can now be chosen from the script's object parameters
+-added parking ramps to the Triton Center
+-added AddFloorAutoArea command, which enables and disables floors within a specified area
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------
