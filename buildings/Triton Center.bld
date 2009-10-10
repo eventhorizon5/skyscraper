@@ -24,7 +24,7 @@
     Description = A fictitious Chicago-based 142-story skyscraper located on the northeast corner of Dearborn & Washington.
     Version = 3
     HorizScale = 1
-    CameraFloor = 82
+    CameraFloor = 0
     CameraPosition = 0, -41.6
     CameraRotation = 0, 0, 0
 <EndGlobals>
@@ -1049,19 +1049,20 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     WallOrientation = left
     AddWall Wall4, HotelWalls, 0.5, 16.5, -4.25 - 17.75, 51, -4.25 - 17.75, %height%, %height%, 0, 0, 0, 0, False
     #Left of rooms 7 and 10
-    AddWall Wall6, HotelWalls, 0.5, 16.5, -4.25 - 17.75, 16.5, 2.5, %height%, %height%, 0, 0, 0, 0, False
-    #In back of room 10 (82 only)
+    AddWall Wall5, HotelWalls, 0.5, 16.5, -4.25 - 17.75, 16.5, 2.5, %height%, %height%, 0, 0, 0, 0, False
+    #In back of room 10
     WallOrientation = right
-    if[%floor% = 82] AddWall Wall5, HotelWalls, 0.5, 16.5, 2.5, 51, 2.5, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = 82] AddWall Wall6, HotelWalls, 0.5, 16.5, 2.5, 51, 2.5, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% > 82] AddWall Wall6, HotelWalls, 0.5, 16.5, 2.5, 24.5 + 0.5, 2.5, %height%, %height%, 0, 0, 0, 0, False
     #Left of rooms 11 and 12 (82 only)
     WallOrientation = left
     if[%floor% = 82] AddWall Wall7, HotelWalls, 0.5, 24.5, 34, 24.5, 70, %height%, %height%, 0, 0, 0, 0, False
     #Front of room 11 (82 only)
     if[%floor% = 82] AddWall Wall8, HotelWalls, 0.5, 24.5, 34, 51, 34, %height%, %height%, 0, 0, 0, 0, False
     #Right of room 13 (82), or 14 (83-98)
-    WallOrientation = right
-    AddWall Wall9, HotelWalls, 0.5, -4.75 - 19, 56.5, -4.75 - 19, 70, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, HotelWalls, 0.5, -4.75 - 19 - 0.33, 56.5, -4.75 - 19 - 0.33, 70, %height%, %height%, 0, 0, 0, 0, False
     #Front-right of room 8
+    WallOrientation = right
     AddWall Wall10, HotelWalls, 0.5, -4.75 - 19, 8.5 + -13.5, -4.75 - 19, -4.25 + 9.25 + 0.5, %height%, %height%, 0, 0, 0, 0, False
     #Back of room 2
     AddWall Wall11, HotelWalls, 0.5, -51, 8.5 + -13.5 + 0.33, -5.67 - 0.33, 8.5 + -13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
@@ -1070,14 +1071,12 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     #Mid wall of room 8
     AddWall Wall13, HotelWalls, 0.5, -39, -4.25 + 9.25 + 0.5, -4.75 - 19, -4.25 + 9.25 + 0.5, %height%, %height%, 0, 0, 0, 0, False
     #Front of room 9
-    WallOrientation = left
-    AddWall Wall14, HotelWalls, 0.5, 4.75 + -39.166 + 0.33, -9.87 + 23.375, -4.75 + -19 - 0.33, -9.87 + 23.375, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, HotelWalls, 0.5, 4.75 + -39.166 + 0.33, -9.87 + 23.375 + 0.17, -4.75 + -19 - 0.33, -9.87 + 23.375 + 0.17, %height%, %height%, 0, 0, 0, 0, False
     #Right of room 2
-    WallOrientation = right
     AddWall Wall15, HotelWalls, 0.5, -14.5, 4.25 - 17.75, -14.5, 8.5 + -13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     #left of rooms 10-13 (83-98)
-    if[%floor% > 82] AddWall Wall7, HotelWalls, 0.5, 24.5, 2.5, 24.5, 70, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% > 82] AddWall Wall16, HotelWalls, 0.5, 24.5, 2.5 - 0.5, 24.5, 70, %height%, %height%, 0, 0, 0, 0, False
     
     #Room divider walls
     
@@ -1124,26 +1123,32 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     AddWall Wall3, HotelWalls, 0.5, 9 - 14.67 + 0.33, 4.25 - 36.25 + 0.33, 51, 4.25 - 36.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     #Left of room 4
     WallOrientation = left
-    AddWall Wall7, HotelWalls, 0.5, 34.5, 4.25 - 36.25 + 0.33, 34.5, 32.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, HotelWalls, 0.5, 34.5, 4.25 - 36.25 + 0.33, 34.5, 32.5 + 0.5, %height%, %height%, 0, 0, 0, 0, False
     #Left of room 6
-    AddWall Wall7, HotelWalls, 0.5, 24.5, 32.5, 24.5, 70, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall5, HotelWalls, 0.5, 24.5, 32.5, 24.5, 70, %height%, %height%, 0, 0, 0, 0, False
     #Front of room 6
-    AddWall Wall7, HotelWalls, 0.5, 24.5, 32.5, 34.5, 32.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall6, HotelWalls, 0.5, 24.5, 32.5, 34.5 + 0.5, 32.5, %height%, %height%, 0, 0, 0, 0, False
     #Back-right of room 5
     WallOrientation = right
-    AddWall Wall14, HotelWalls, 0.5, 4.75 + -39.166 + 0.33, -9.87 + 23.375 + 0.165, -4.75 + -19 - 0.33, -9.87 + 23.375 + 0.165, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, HotelWalls, 0.5, 4.75 + -39.166 + 0.33, -9.87 + 23.375 + 0.17, -4.75 + -19 - 0.33, -9.87 + 23.375 + 0.17, %height%, %height%, 0, 0, 0, 0, False
     #Back-left of room 5
-    AddWall Wall14, HotelWalls, 0.5, -51, -9.87 + 23.375 + 0.165, -4.75 + -39.166, -9.87 + 23.375 + 0.165, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8, HotelWalls, 0.5, -51, -9.87 + 23.375 + 0.17, -4.75 + -39.166 - 0.33, -9.87 + 23.375 + 0.17, %height%, %height%, 0, 0, 0, 0, False
     #Right of room 5
-    AddWall Wall14, HotelWalls, 0.5, -14.67 + 9, -9.25 + 4.25, -14.67 + 9, 9.25 - 4.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, HotelWalls, 0.5, -14.67 + 9 + 0.33, -9.25 + 4.25, -14.67 + 9 + 0.33, 9.25 - 4.25, %height%, %height%, 0, 0, 0, 0, False
+    #Right of room 7
+    WallOrientation = left
+    AddWall Wall10, HotelWalls, 0.5, -4.75 - 19 - 0.33, 56.5, -4.75 - 19 - 0.33, 70, %height%, %height%, 0, 0, 0, 0, False
 <EndFloor>
 
 #Utility room in place of shaft
 <Floors 82 to 98>
-    WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall UtilityFront, HotelWalls, 0.33, -4.75 + 9.083, -4.75 + 18.08, 4.75 + 9.083 + 0.33, -4.75 + 18.08, %height%, %height%, 0, 0, 0, 0, False
-    AddWall UtilityRight, HotelWalls, 0.33, -9.75 + 24.08, -4.75 + 18.08, -9.75 + 24.08, 4.75 + 18.08, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall UtilityFront, HotelWalls, 0.5, 4, 14.29, 9.083 + 4.75, 14.29, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = right
+    if[%floor% > 82] AddWall UtilityRight, HotelWalls, 0.5, 9.083 + 4.75, 14.29, 9.083 + 4.75, 33.33 - 9.833, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% = 82] AddWall UtilityRight, HotelWalls, 0.5, 9.083 + 4.75, 18.08 - 4.75 - 0.33, 9.083 + 4.75, 33.33 - 9.833, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 # Main residential skylobby
@@ -2042,7 +2047,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
 
 #Hotel service shaft
 AddShaft 35, 2, -14.04, 51.66, 79, 101
-ShaftCut 35, -9.71, -4.5, 9.71, 4.5, 0, 5
+ShaftCut 35, -9.71, -4.5, 9.71, 4.5 - 0.33, 0, 5
 
 #Service shaft 3
 AddShaft 36, 2, 9.375, 18.54, 99, 142
@@ -2444,7 +2449,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     #shaft 13
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    if[(%floor% > 28 & %floor% < 40) | %floor% > 79] AddWall Shaft13FrontE, %5%, 0.33, -9.75 + 24.08 - 0.33, -4.75 + 18.08, 9.75 + 24.08 + 0.33, -4.75 + 18.08, %3%, %3%, %4%, %4%, 0, 0, False
+    if[((%floor% > 28 & %floor% < 40) | %floor% > 79) & %floor% ! 82] AddWall Shaft13FrontE, %5%, 0.33, -9.75 + 24.08 - 0.33, -4.75 + 18.08, 9.75 + 24.08 + 0.33, -4.75 + 18.08, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% = 82] AddWall Shaft13FrontE, %5%, 0.33, 9.083 + 4.75 - 0.5, -4.75 + 18.08, 9.75 + 24.08 + 0.33, -4.75 + 18.08, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < 29] AddWall Shaft13FrontE, %5%, 0.33, -5 + 27.67, -4.75 + 18.08, 5 + 27.67, -4.75 + 18.08, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
@@ -2539,7 +2545,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% > 38 & %floor% < 80] AddWall Shaft16FrontE, %5%, 0.33, -5.04 + 9.375 - 0.33, -5.08 + 18.54, -5.04 + 9.375 + 1.515, -5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > -2 & %floor% < 39] AddWall Shaft16FrontE, %5%, 0.33, -5.04 + 9.375 - 0.33, -5.08 + 18.54, -5.04 + 9.375 + 0.998, -5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < -1] AddWall Shaft16FrontE, %5%, 0.33, -5.04 + 9.375 - 0.33, -5.08 + 18.54, 5.04 + 9.375 + 0.33, -5.08 + 18.54, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft16LeftE, %5%, 0.33, -5.04 + 9.375, -5.08 + 18.54 - 0.33, -5.04 + 9.375, 5.08 + 18.54 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% < 82] AddWall Shaft16LeftE, %5%, 0.33, -5.04 + 9.375, -5.08 + 18.54 - 0.33, -5.04 + 9.375, 5.08 + 18.54 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 81 & %floor% < 99] AddWall Shaft16LeftE, %5%, 0.33, -5.04 + 9.375, 14.29, -5.04 + 9.375, 5.08 + 18.54 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     if[%floor% < -1] AddWall Shaft16RightE, %5%, 0.33, 5.04 + 9.375, -5.08 + 18.54 - 0.33, 5.04 + 9.375, 5.08 + 18.54 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
@@ -3186,13 +3193,13 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% = 79] AddShaftFloor 35, Shaft35Base, Brick, 0.5, -9.71, -4.5, 9.71, 4.5, 10, 10, 0, 0
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 101] AddShaftFloor 35, Shaft35Top, Brick, 0.5, -9.71, -4.5, 9.71, 4.5, %fullheight%, %fullheight%, 0, 0
-    DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddShaftWall 35, Shaft35Front, Brick, 0.33, -9.71, -4.5, 9.71, -4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
+    DrawWalls = false, true, false, false, false, false
+    AddShaftWall 35, Shaft35Front, Brick, 0.33, 0.297, -4.5, 9.71, -4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
+    AddShaftWall 35, Shaft35Front, Brick, 0.33, -9.71, -4.5, 0.297, -4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 35, Shaft35Left, Brick, 0.33, -9.71, -4.5, -9.71, 4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
-    DrawWalls = true, true, false, false, false, false
     AddShaftWall 35, Shaft35Back, Brick, 0.33, -9.71, 4.5, 9.71, 4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     DrawWalls = true, false, false, false, false, false
     AddShaftWall 35, Shaft35Right, Brick, 0.33, 9.71, -4.5, 9.71, 4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -3206,10 +3213,11 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     #shaft 35
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft35LeftE, %5%, 0.33, -9.71 + -14.04 - 0.33, -4.5 + 51.66, -9.71 + -14.04 + 0.33, 4.5 + 51.66, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft35LeftE, %5%, 0.33, -9.71 + -14.04, -4.5 + 51.66 - 0.33, -9.71 + -14.04, 4.5 + 51.66 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft35FrontE, %5%, 0.33, -9.71 + -14.04 - 0.33, -4.5 + 51.66, -9.417 - 4.92, -4.5 + 51.66, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft35BackE, %5%, 0.33, -9.71 + -14.04 - 0.33, 4.5 + 51.66, 9.71 + -14.04 + 0.33, 4.5 + 51.66, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft35BackE, %5%, 0.33, -9.71 + -14.04 - 0.33, 4.5 + 51.66, 9.71 + -14.04, 4.5 + 51.66, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #Residential service (Service Shaft 3)
@@ -3217,6 +3225,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     Set 5 = Wall1
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
+    if[%floor% = 99] Set 5 = HotelWalls
 
     #shaft 36
     FloorOrientation = top
@@ -6197,7 +6206,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 80 - 99
     AssignedShaft = 35
-    CreateElevator false, -18.956, 55.33 - 3.75, 80
+    CreateElevator false, -18.956, 55.83 - 4.251, 80
 <EndElevator>
 
 <Elevator 70>
@@ -6208,7 +6217,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 80 - 99
     AssignedShaft = 35
-    CreateElevator false, -9.124, 55.33 - 3.75, 81
+    CreateElevator false, -9.124, 55.83 - 4.251, 81
 <EndElevator>
 
 <Elevators 69 to 70>
@@ -6518,8 +6527,8 @@ DrawWalls = true, true, false, false, false, false
     AddDirectionalIndicators 56, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 2.5, 3.426 + 0.2 + 0.66 + 0.02, 6.5, back, 0.5, 1, true, 0, 0
     AddDirectionalIndicators 57, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.5, 3.426 + 0.2 + 0.66 + 0.02, 6.5, back, 0.5, 1, true, 0, 0
 
-    AddDirectionalIndicators 69, true, true, true, ElevExtPanels, ArrowDown, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.051 + 0.2 + 0.66 + 0.02, 8.2, back, 0.5, 0.5, true, 0, 0
-    AddDirectionalIndicators 70, true, true, true, ElevExtPanels, ArrowDown, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.051 + 0.2 + 0.66 + 0.02, 8.2, back, 0.5, 0.5, true, 0, 0
+    AddDirectionalIndicators 69, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.5, 4.051 + 0.2 + 0.66 + 0.02, 6.5, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators 70, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 2.5, 4.051 + 0.2 + 0.66 + 0.02, 6.5, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floors 80 to 132>
@@ -6779,8 +6788,8 @@ DrawWalls = true, true, false, false, false, false
 
 <Floors 80 to 99>
     #elevators 69 and 70
-    AddFloorIndicator 69, true, back, 0, 4.051 + 0.2 + 0.66 + 0.02, 0.5, 0.4, 8.2
-    AddFloorIndicator 70, true, back, 0, 4.051 + 0.2 + 0.66 + 0.02, 0.5, 0.4, 8.2
+    AddFloorIndicator 69, true, back, 0, 4.051 + 0.2 + 0.66 + 0.02, 0.5, 0.4, 8
+    AddFloorIndicator 70, true, back, 0, 4.051 + 0.2 + 0.66 + 0.02, 0.5, 0.4, 8
 <EndFloors>
 
 <Floors 100 to 130>
