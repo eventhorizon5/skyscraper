@@ -1035,9 +1035,9 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
 
     #Room perimeter walls
     
-    WallOrientation = right
     DrawWalls = true, true, false, false, false, false
     #Wall in back of rooms 1 and 3
+    WallOrientation = right
     AddWall Wall1, HotelWalls, 0.5, -51, 4.25 - 36.25 + 0.33, -9 - 14.67 - 0.33, 4.25 - 36.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     #In front of room 2
     WallOrientation = left
@@ -1047,9 +1047,9 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     AddWall Wall3, HotelWalls, 0.5, 9 - 14.67 + 0.33, 4.25 - 36.25 + 0.33, 51, 4.25 - 36.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     #In front of room 7
     WallOrientation = left
-    AddWall Wall4, HotelWalls, 0.5, 16.5, -4.25 - 17.75, 51, -4.25 - 17.75, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, HotelWalls, 0.5, 16.5, -4.25 - 17.75 - 0.33, 51, -4.25 - 17.75 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     #Left of rooms 7 and 10
-    AddWall Wall5, HotelWalls, 0.5, 16.5, -4.25 - 17.75, 16.5, 2.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall5, HotelWalls, 0.5, 16.5, -4.25 - 17.75 - 0.33, 16.5, 2.5, %height%, %height%, 0, 0, 0, 0, False
     #In back of room 10
     WallOrientation = right
     if[%floor% = 82] AddWall Wall6, HotelWalls, 0.5, 16.5, 2.5, 51, 2.5, %height%, %height%, 0, 0, 0, 0, False
@@ -1101,6 +1101,40 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     if[%floor% > 82] AddWall DivWall9, HotelWalls, 0.5, 24.5, 15, 51, 15, %height%, %height%, 0, 0, 0, 0, False
     #between 11 and 12 (83-98)
     if[%floor% > 82] AddWall DivWall10, HotelWalls, 0.5, 24.5, 34, 51, 34, %height%, %height%, 0, 0, 0, 0, False
+    
+    #Doors
+    
+    WallOrientation = center
+    #Room 1
+    AddDoor StairsDoor, 0.2, 5, -41, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    #Room 3
+    AddDoor StairsDoor, 0.2, 8, -26.7, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    #Room 4
+    AddDoor StairsDoor, 0.2, 5, 7.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    #Room 5
+    AddDoor StairsDoor, 0.2, 8, 14, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    #Room 6
+    AddDoor StairsDoor, 0.2, 8, 43, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    #Room 2
+    AddDoor StairsDoor, 0.2, 6, -28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, 1, 1
+    #Room 7
+    AddDoor StairsDoor, 0.2, 7, 28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, 1, 1
+    #Room 8
+    AddDoor StairsDoor, 0.2, 4, -4.75 - 19 - 0.25, 3.5, 3, 7, 0, 1, 1
+    #Room 9
+    AddDoor StairsDoor, 0.2, 6, -26.3, -9.87 + 23.375 + 0.17 - 0.25, 3, 7, 0, 1, 1
+    #Room 10
+    if[%floor% = 82] AddDoor StairsDoor, 0.2, 8, 28, 2.5 - 0.25, 3, 7, 0, 1, 1
+    if[%floor% > 82] AddDoor StairsDoor, 0.2, 3, 24.5 + 0.25, 12.5, 3, 7, 0, 1, 1
+    #Room 11(83-98)
+    if[%floor% > 82] AddDoor StairsDoor, 0.2, 3, 24.5 + 0.25, 18, 3, 7, 0, 1, 1
+    #Room 11(82)/12(83-98)
+    AddDoor StairsDoor, 0.2, 2, 24.5 + 0.25, 40.5, 3, 7, 0, 1, 1
+    #Room 12(82)/13(83-98)
+    AddDoor StairsDoor, 0.2, 3, 24.5 + 0.25, 62.5, 3, 7, 0, 1, 1
+    #Room 13(82)/14(83-98)
+    AddDoor StairsDoor, 0.2, 1, -4.75 - 19 - 0.33 + 0.25, 63, 3, 7, 0, 1, 1
+
 <EndFloors>
 
 <Floor 99>
@@ -1138,6 +1172,22 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     #Right of room 7
     WallOrientation = left
     AddWall Wall10, HotelWalls, 0.5, -4.75 - 19 - 0.33, 56.5, -4.75 - 19 - 0.33, 70, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = center
+    #Room 1
+    AddDoor StairsDoor, 0.2, 5, -34.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    #Room 2
+    AddDoor StairsDoor, 0.2, 5, 1.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    #Room 3
+    AddDoor StairsDoor, 0.2, 5, 27.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    #Room 4
+    AddDoor StairsDoor, 0.2, 2, 34.5 + 0.25, 0, 3, 7, 0, 1, 1
+    #Room 5
+    AddDoor StairsDoor, 0.2, 4, -14.67 + 9 + 0.33 - 0.25, 0, 3, 7, 0, 1, 1
+    #Room 6
+    AddDoor StairsDoor, 0.2, 2, 24.5 + 0.25, 34.5, 3, 7, 0, 1, 1
+    #Room 7
+    AddDoor StairsDoor, 0.2, 4, -4.75 - 19 - 0.33 + 0.25, 61.5, 3, 7, 0, 1, 1
 <EndFloor>
 
 #Utility room in place of shaft
@@ -1145,10 +1195,14 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     AddWall UtilityFront, HotelWalls, 0.5, 4, 14.29, 9.083 + 4.75, 14.29, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = false, true, false, false, false, false
+    AddWall UtilityLeft, HotelWalls, 0.5, 4, 14.29, 4, 33.33 - 9.833, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
     if[%floor% > 82] AddWall UtilityRight, HotelWalls, 0.5, 9.083 + 4.75, 14.29, 9.083 + 4.75, 33.33 - 9.833, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 82] AddWall UtilityRight, HotelWalls, 0.5, 9.083 + 4.75, 18.08 - 4.75 - 0.33, 9.083 + 4.75, 33.33 - 9.833, %height%, %height%, 0, 0, 0, 0, False
+    AddDoor StairsDoor, 0.2, 7, 7.5, 14.29 + 0.25, 3, 7, 0, 1, 1
 <EndFloors>
 
 # Main residential skylobby
@@ -2047,7 +2101,7 @@ ShaftCut 34, -4.5, -3.792, 4.5, 3.792, 0, 5
 
 #Hotel service shaft
 AddShaft 35, 2, -14.04, 51.66, 79, 101
-ShaftCut 35, -9.71, -4.5, 9.71, 4.5 - 0.33, 0, 5
+ShaftCut 35, -9.71, -4.5, 9.71, 4.5 - 0.33, 8, 5
 
 #Service shaft 3
 AddShaft 36, 2, 9.375, 18.54, 99, 142
@@ -3186,29 +3240,31 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     Set 5 = Wall1
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
+    Set 3 = 0
+    if[%floor% = 79] Set 3 = 8.5 + %interfloorheight%
 
     #shaft 35
     FloorOrientation = top
-    DrawWalls = false, true, false, false, false, false
-    if[%floor% = 79] AddShaftFloor 35, Shaft35Base, Brick, 0.5, -9.71, -4.5, 9.71, 4.5, 10, 10, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    if[%floor% = 79] AddShaftFloor 35, Shaft35Base, Brick, 0.5, -9.71, -4.5, 9.71, 4.5, %3%, %3%, 0, 0
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 101] AddShaftFloor 35, Shaft35Top, Brick, 0.5, -9.71, -4.5, 9.71, 4.5, %fullheight%, %fullheight%, 0, 0
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddShaftWall 35, Shaft35Front, Brick, 0.33, 0.297, -4.5, 9.71, -4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 35, Shaft35Front, Brick, 0.33, 0.297, -4.5, 9.71, -4.5, %fullheight% - %3%, %fullheight% - %3%, %3%, %3%, 0, 0
     DrawWalls = true, true, false, false, false, false
-    AddShaftWall 35, Shaft35Front, Brick, 0.33, -9.71, -4.5, 0.297, -4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
-    AddShaftWall 35, Shaft35Left, Brick, 0.33, -9.71, -4.5, -9.71, 4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 35, Shaft35Front, Brick, 0.33, -9.71, -4.5, 0.297, -4.5, %fullheight% - %3%, %fullheight% - %3%, %3%, %3%, 0, 0
+    AddShaftWall 35, Shaft35Left, Brick, 0.33, -9.71, -4.5, -9.71, 4.5, %fullheight% - %3%, %fullheight% - %3%, %3%, %3%, 0, 0
     WallOrientation = right
-    AddShaftWall 35, Shaft35Back, Brick, 0.33, -9.71, 4.5, 9.71, 4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
+    if[%floor% > 79] AddShaftWall 35, Shaft35Back, Brick, 0.33, -9.71, 4.5, 9.71, 4.5, %fullheight% - %3%, %fullheight% - %3%, %3%, %3%, 0, 0
     DrawWalls = true, false, false, false, false, false
-    AddShaftWall 35, Shaft35Right, Brick, 0.33, 9.71, -4.5, 9.71, 4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
+    if[%floor% > 79] AddShaftWall 35, Shaft35Right, Brick, 0.33, 9.71, -4.5, 9.71, 4.5, %fullheight% - %3%, %fullheight% - %3%, %3%, %3%, 0, 0
 
     #external shaft walls
     Set 3 = %height%
     Set 4 = 0
-    if[%floor% = 1] Set 3 = %fullheight%
-    if[%floor% = 1] Set 4 = -%interfloorheight%
+    if[%floor% = 79] Set 3 = %height% - 8.5
+    if[%floor% = 79] Set 4 = 8.5
 
     #shaft 35
     WallOrientation = right
@@ -3217,7 +3273,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     AddWall Shaft35FrontE, %5%, 0.33, -9.71 + -14.04 - 0.33, -4.5 + 51.66, -9.417 - 4.92, -4.5 + 51.66, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft35BackE, %5%, 0.33, -9.71 + -14.04 - 0.33, 4.5 + 51.66, 9.71 + -14.04, 4.5 + 51.66, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 79] AddWall Shaft35BackE, %5%, 0.33, -9.71 + -14.04 - 0.33, 4.5 + 51.66, 9.71 + -14.04, 4.5 + 51.66, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #Residential service (Service Shaft 3)
