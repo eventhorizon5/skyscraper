@@ -24,7 +24,7 @@
     Description = A fictitious Chicago-based 142-story skyscraper located on the northeast corner of Dearborn & Washington.
     Version = 3
     HorizScale = 1
-    CameraFloor = 0
+    CameraFloor = 79
     CameraPosition = 0, -41.6
     CameraRotation = 0, 0, 0
 <EndGlobals>
@@ -697,7 +697,9 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     AddWall Front, Stucco4, 0.5, -46.67 - 4.5 - 10 - 0.5, -3.708 - 9.708 + 0.33, -46.67 - 4.5 - 0.33, -3.708 - 9.708 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     AddWall Back, Stucco4, 0.5, -46.67 - 4.5 - 10 - 0.5, 37.367 + 4.167, -19 + 4.75 - 0.33, 37.367 + 4.167, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = center
     AddDoor StairsDoor, 0.2, 5, -46.67 - 4.5 - 5, -3.708 - 9.708, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -46.67 - 4.5 - 5, -3.708 - 9.708, 3.5, 8, 0, true, 0, 0
 
     #South transfer
     WallOrientation = right
@@ -706,7 +708,10 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     WallOrientation = left
     AddWall Back, Stucco4, 0.5, 24.08 + 9.75 + 0.33, 3.708 + 9.708 - 0.33, 46.67 - 4.5 - 0.33, 3.708 + 9.708 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Right, Stucco4, 0.5, 46.67 - 4.5 - 0.33, -33.708 + 4 - 0.5, 46.67 - 4.5 - 0.33, -9.792 - 3.792 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddDoor StairsDoor, 0.2, 5, 38, 3.708 + 9.708 - 0.33 + 0.25, 3.5, 8, 0, 1, 1
+    WallOrientation = center
+    AddDoor StairsDoor, 0.2, 7, 38, 3.708 + 9.708 - 0.33 + 0.25, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 38, 3.708 + 9.708 - 0.33 + 0.25, 3.5, 8, 0, true, 0, 0
+    WallOrientation = left
 <EndFloor>
 
 # Zone 1 Column Frame
@@ -884,7 +889,9 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     AddWall Left, Stucco4, 0.5, -29.083 + 5.333 - 10, 23.537 + 9.708 + 0.33, -29.083 + 5.333 - 10, 51.66 + 4.5 - 0.33 + 0.5, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     AddWall Back, Stucco4, 0.5, -29.083 + 5.333 - 10 - 0.5, 51.66 + 4.5 - 0.33, 4.7515 - 9.0815 - 0.33, 51.66 + 4.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = center
     AddDoor StairsDoor, 0.2, 8, -29.083 + 5.333 - 5, 51.66 + 4.5, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -29.083 + 5.333 - 5, 51.66 + 4.5, 3.5, 8, 0, true, 0, 0
 
     #Southwest transfer
     WallOrientation = right
@@ -894,7 +901,10 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     AddWall Back, Stucco4, 0.5, 5.67 + 0.33, -13.5 + 8.5 - 0.33, 5.67 + 0.33 + 10 + 0.5, -13.5 + 8.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Back2, Stucco4, 0.5, 5.67 + 0.33 + 10, -33.708 + 9.708 - 0.33, 26.42 - 4.5 - 0.33, -33.708 + 9.708 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Right, Stucco4, 0.5, 5.67 + 0.33 + 10, -33.708 + 9.708 - 0.33, 5.67 + 0.33 + 10, -13.5 + 8.5 - 0.33 + 0.5, %height%, %height%, 0, 0, 0, 0, False
-    AddDoor StairsDoor, 0.2, 6, 5.67 + 0.33 + 5, -33.708 + 9.708 - 0.33 - 10 - 0.25, 3.5, 8, 0, 1, 1
+    WallOrientation = center
+    AddDoor StairsDoor, 0.2, 5, 5.67 + 0.33 + 5, -33.708 + 9.708 - 0.33 - 10 - 0.25, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 5.67 + 0.33 + 5, -33.708 + 9.708 - 0.33 - 10 - 0.25, 3.5, 8, 0, true, 0, 0
+    WallOrientation = left
 
 <EndFloor>
 
@@ -1107,33 +1117,48 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     WallOrientation = center
     #Room 1
     AddDoor StairsDoor, 0.2, 5, -41, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -41, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 3
     AddDoor StairsDoor, 0.2, 8, -26.7, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -26.7, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 4
     AddDoor StairsDoor, 0.2, 5, 7.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 7.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 5
     AddDoor StairsDoor, 0.2, 8, 14, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 14, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 6
     AddDoor StairsDoor, 0.2, 8, 43, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 43, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 2
     AddDoor StairsDoor, 0.2, 6, -28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, true, 0, 0
     #Room 7
     AddDoor StairsDoor, 0.2, 7, 28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, true, 0, 0
     #Room 8
     AddDoor StairsDoor, 0.2, 4, -4.75 - 19 - 0.25, 3.5, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -4.75 - 19 - 0.25, 3.5, 3, 7, 0, false, 0, 0
     #Room 9
     AddDoor StairsDoor, 0.2, 6, -26.3, -9.87 + 23.375 + 0.17 - 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -26.3, -9.87 + 23.375 + 0.17 - 0.25, 3, 7, 0, true, 0, 0
     #Room 10
     if[%floor% = 82] AddDoor StairsDoor, 0.2, 8, 28, 2.5 - 0.25, 3, 7, 0, 1, 1
+    if[%floor% = 82] AddFillerWalls ConnectionWall, 0.5, 28, 2.5 - 0.25, 3, 7, 0, true, 0, 0
     if[%floor% > 82] AddDoor StairsDoor, 0.2, 3, 24.5 + 0.25, 12.5, 3, 7, 0, 1, 1
+    if[%floor% > 82] AddFillerWalls ConnectionWall, 0.5, 24.5 + 0.25, 12.5, 3, 7, 0, false, 0, 0
     #Room 11(83-98)
     if[%floor% > 82] AddDoor StairsDoor, 0.2, 3, 24.5 + 0.25, 18, 3, 7, 0, 1, 1
+    if[%floor% > 82] AddFillerWalls ConnectionWall, 0.5, 24.5 + 0.25, 18, 3, 7, 0, false, 0, 0
     #Room 11(82)/12(83-98)
     AddDoor StairsDoor, 0.2, 2, 24.5 + 0.25, 40.5, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 24.5 + 0.25, 40.5, 3, 7, 0, false, 0, 0
     #Room 12(82)/13(83-98)
     AddDoor StairsDoor, 0.2, 3, 24.5 + 0.25, 62.5, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 24.5 + 0.25, 62.5, 3, 7, 0, false, 0, 0
     #Room 13(82)/14(83-98)
     AddDoor StairsDoor, 0.2, 1, -4.75 - 19 - 0.33 + 0.25, 63, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -4.75 - 19 - 0.33 + 0.25, 63, 3, 7, 0, false, 0, 0
 
 <EndFloors>
 
@@ -1176,18 +1201,25 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     WallOrientation = center
     #Room 1
     AddDoor StairsDoor, 0.2, 5, -34.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -34.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 2
     AddDoor StairsDoor, 0.2, 5, 1.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 1.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 3
     AddDoor StairsDoor, 0.2, 5, 27.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 27.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 4
     AddDoor StairsDoor, 0.2, 2, 34.5 + 0.25, 0, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 34.5 + 0.25, 0, 3, 7, 0, false, 0, 0
     #Room 5
     AddDoor StairsDoor, 0.2, 4, -14.67 + 9 + 0.33 - 0.25, 0, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -14.67 + 9 + 0.33 - 0.25, 0, 3, 7, 0, false, 0, 0
     #Room 6
     AddDoor StairsDoor, 0.2, 2, 24.5 + 0.25, 34.5, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 24.5 + 0.25, 34.5, 3, 7, 0, false, 0, 0
     #Room 7
     AddDoor StairsDoor, 0.2, 4, -4.75 - 19 - 0.33 + 0.25, 61.5, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, -4.75 - 19 - 0.33 + 0.25, 61.5, 3, 7, 0, false, 0, 0
 <EndFloor>
 
 #Utility room in place of shaft
@@ -1202,7 +1234,9 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     if[%floor% > 82] AddWall UtilityRight, HotelWalls, 0.5, 9.083 + 4.75, 14.29, 9.083 + 4.75, 33.33 - 9.833, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 82] AddWall UtilityRight, HotelWalls, 0.5, 9.083 + 4.75, 18.08 - 4.75 - 0.33, 9.083 + 4.75, 33.33 - 9.833, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = center
     AddDoor StairsDoor, 0.2, 7, 7.5, 14.29 + 0.25, 3, 7, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.5, 7.5, 14.29 + 0.25, 3, 7, 0, true, 0, 0
 <EndFloors>
 
 # Main residential skylobby
@@ -1916,18 +1950,11 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     AddInterfloorWall IRight, Brick, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 
     #doors
+    WallOrientation = center
     AddDoor StairsDoor, 0.2, 1, -20, 0, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 1, -20, 0, 3.5, 8, 0, false, 0, 0
     AddDoor StairsDoor, 0.2, 3, 20, 0, 3.5, 8, 0, 1, 1
-
-    #door fillers
-    DrawWalls = false, true, false, false, false, false
-    AddWall FillerWallLeft1, ConnectionWall, 0, -20 - 0.5, -1.75, -20 + 0.5, -1.75, 8, 8, 0, 0, 0, 0, False
-    AddWall FillerWallLeft2, ConnectionWall, 0, 20 - 0.5, -1.75, 20 + 0.5, -1.75, 8, 8, 0, 0, 0, 0, False
-    DrawWalls = true, false, false, false, false, false
-    AddWall FillerWallRight1, ConnectionWall, 0, -20 - 0.5, 1.75, -20 + 0.5, 1.75, 8, 8, 0, 0, 0, 0, False
-    AddWall FillerWallRight2, ConnectionWall, 0, 20 - 0.5, 1.75, 20 + 0.5, 1.75, 8, 8, 0, 0, 0, 0, False
-    AddFloor FillerWallTop1, ConnectionWall, 0, -20 - 0.5, -1.75, -20 + 0.5, 1.75, 8, 8, 0, 0, False
-    AddFloor FillerWallTop2, ConnectionWall, 0, 20 - 0.5, -1.75, 20 + 0.5, 1.75, 8, 8, 0, 0, False
+    AddFillerWalls ConnectionWall, 1, 20, 0, 3.5, 8, 0, false, 0, 0
 
     DrawWalls = true, true, false, false, false, false
 
@@ -1977,11 +2004,7 @@ Cut external, 19, Floor(143).Altitude + Floor(143).InterfloorHeight, -1.75, 21, 
     WallOrientation = Center
     if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddDoor StairsDoor, 0.2, 5, 0, 14.29 + 0.25, 3.5, 8, 0, 1, 1
     #door fillers, since SBS can't yet automatically make fillers for the same mesh
-    DrawWalls = false, true, false, false, false, false
-    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall FillerWallLeft, ConnectionWall, 0, -1.75, 14.29, -1.75, 14.29 + 0.5, 8, 8, 0, 0, 0, 0, False
-    DrawWalls = true, false, false, false, false, false
-    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall FillerWallRight, ConnectionWall, 0, 1.75, 14.29, 1.75, 14.29 + 0.5, 8, 8, 0, 0, 0, 0, False
-    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddFloor FillerWallTop, ConnectionWall, 0, -1.75, 14.29, 1.75, 14.29 + 0.5, 8, 8, 0, 0, False
+    if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddFillerWalls ConnectionWall, 0.5, 0, 14.29 + 0.25, 3.5, 8, 0, true, 0, 0
 <EndFloors>
 
 #Residential divider wall

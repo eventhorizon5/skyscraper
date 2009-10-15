@@ -87,6 +87,7 @@ public:
 	void UpdateFloorIndicators();
 	void Loop();
 	csArray<int> GetCallButtons(int elevator);
+	void AddFillerWalls(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th);
 
 private:
 	char intbuffer[65];

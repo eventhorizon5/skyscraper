@@ -483,3 +483,62 @@ csArray<int> Floor::GetCallButtons(int elevator)
 	}
 	return buttons;
 }
+
+void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th)
+{
+	//convenience function for adding filler walls around doors
+	//direction is either "false" for a door that faces left/right, or "true" for one that faces front/back
+
+	float x1, x2, z1, z2, depth1, depth2;
+
+	if (sbs->GetWallOrientation() == 0)
+	{
+		depth1 = 0;
+		depth2 = thickness;
+	}
+	if (sbs->GetWallOrientation() == 1)
+	{
+		depth1 = thickness / 2;
+		depth2 = thickness / 2;
+	}
+	if (sbs->GetWallOrientation() == 2)
+	{
+		depth1 = thickness;
+		depth2 = 0;
+	}
+
+	if (direction == false)
+	{
+		//door faces left/right
+		x1 = CenterX - depth1;
+		x2 = CenterX + depth1;
+		z1 = CenterZ - (width / 2);
+		z2 = CenterZ + (width / 2);
+	}
+	else
+	{
+		//door faces front/back
+		x1 = CenterX - (width / 2);
+		x2 = CenterX + (width / 2);
+		z1 = CenterZ - depth1;
+		z2 = CenterZ + depth1;
+	}
+
+	sbs->DrawWalls(false, true, false, false, false, false);
+	if (direction == false)
+		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, false);
+	else
+		AddWall("FillerWallLeft", texture, 0, x1, z1, x1, z2, height, height, voffset, voffset, tw, th, false);
+	sbs->ResetWalls();
+	sbs->DrawWalls(true, false, false, false, false, false);
+	if (direction == false)
+	{
+		AddWall("FillerWallRight", texture, 0, x1, z2, x2, z2, height, height, voffset, voffset, tw, th, false);
+	}
+	else
+	{
+		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+	}
+	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, tw, th, false);
+	sbs->ResetWalls();
+}
