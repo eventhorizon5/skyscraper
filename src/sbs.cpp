@@ -921,35 +921,6 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
-	//reverse vector portions if specified
-	if (RevX == true)
-	{
-		float tmpx1, tmpx2;
-		tmpx1 = v1.x;
-		tmpx2 = v2.x;
-		v1.x = tmpx2;
-		v2.x = tmpx1;
-		v3.x = tmpx1;
-		v4.x = tmpx2;
-	}
-	if (RevY == true)
-	{
-		v1.y = altitude1;
-		v2.y = altitude2;
-		v3.y = altitude2 + height_in2;
-		v4.y = altitude1 + height_in1;
-	}
-	if (RevZ == true)
-	{
-		float tmpz1, tmpz2;
-		tmpz1 = v1.z;
-		tmpz2 = v2.z;
-		v1.z = tmpz2;
-		v2.z = tmpz1;
-		v3.z = tmpz1;
-		v4.z = tmpz2;
-	}
-
 	//set texture
 	if (TextureOverride == false && FlipTexture == false)
 		SetTexture(dest, index, texture, true, tw, th);
@@ -957,7 +928,7 @@ int SBS::AddWallMain(csRef<iThingFactoryState> dest, const char *name, const cha
 	{
 		ProcessTextureFlip(tw, th);
 		int endindex = index + GetDrawWallsCount();
-		if (FlipTexture == false)
+		if (TextureOverride == true)
 		{
 			for (int i = index; i < endindex; i++)
 			{
@@ -1030,9 +1001,9 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	else
 	{
 		v1.Set(x1, altitude1, z1); //bottom left
-		v2.Set(x1, altitude1, z2); //bottom right
+		v2.Set(x1, altitude1, z2); //top left
 		v3.Set(x2, altitude2, z2); //top right
-		v4.Set(x2, altitude2, z1); //top left
+		v4.Set(x2, altitude2, z1); //bottom right
 	}
 
 	csVector3 v5 = v1;
@@ -1143,7 +1114,7 @@ int SBS::AddFloorMain(csRef<iThingFactoryState> dest, const char *name, const ch
 	{
 		ProcessTextureFlip(tw, th);
 		int endindex = index + GetDrawWallsCount();
-		if (FlipTexture == false)
+		if (TextureOverride == true)
 		{
 			for (int i = index; i < endindex; i++)
 			{
@@ -1932,11 +1903,11 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 			mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
 			//texture mapping is set from first 3 coordinates
 			mesh->SetPolygonTextureMapping (csPolygonRange(i, i),
-				mesh->GetPolygonVertex(i, 0),
-				csVector2 (0, 0),
 				mesh->GetPolygonVertex(i, 1),
-				csVector2 (tw2, 0),
+				csVector2 (0, 0),
 				mesh->GetPolygonVertex(i, 2),
+				csVector2 (tw2, 0),
+				mesh->GetPolygonVertex(i, 0),
 				csVector2 (tw2, th2));
 		}
 	}
@@ -2995,25 +2966,26 @@ void SBS::ProcessTextureFlip(float tw, float th)
 	//texture flipping
 	if (FlipTexture == true)
 	{
-		int *info;
+		int info;
 		for (int i = 0; i <= 5; i++)
 		{
+			info = 0;
 			if (i == 0)
-				info = &mainnegflip;
+				info = mainnegflip;
 			if (i == 1)
-				info = &mainposflip;
+				info = mainposflip;
 			if (i == 2)
-				info = &sidenegflip;
+				info = sidenegflip;
 			if (i == 3)
-				info = &sideposflip;
+				info = sideposflip;
 			if (i == 4)
-				info = &topflip;
+				info = topflip;
 			if (i == 5)
-				info = &bottomflip;
+				info = bottomflip;
 
-			if (*info == 1 || *info == 3)
+			if (info == 1 || info == 3)
 				widthscale[i] = -tw;
-			if (*info == 2 || *info == 3)
+			if (info == 2 || info == 3)
 				heightscale[i] = -th;
 		}
 	}

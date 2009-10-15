@@ -310,8 +310,8 @@ private:
 
 	//texture flipping
 	int mainnegflip, mainposflip, sidenegflip, sideposflip, topflip, bottomflip;
-	csArray<int> widthscale;
-	csArray<int> heightscale;
+	csArray<float> widthscale;
+	csArray<float> heightscale;
 
 	//door object array for callback
 	csArray<Door*> doorcallbacks;
