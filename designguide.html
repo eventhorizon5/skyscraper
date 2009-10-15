@@ -252,22 +252,48 @@
     the left to the right), and that it has the same z values. With that, MainNegative 
     would be the front wall, MainPositive the back, SideNegative the left, SidePositive 
     the right, etc.</p>
-  <p align="left"><strong>m. ReverseExtents</strong> - reverses texture mapping 
-    per axis<br>
-    Syntax:<font size="2" face="Courier New, Courier, mono"> ReverseExtents = 
-    <em>x, y, z</em></font><br>
-    Example: <font size="2" face="Courier New, Courier, mono">ReverseExtents = 
-    true, false, false</font></p>
-  <p align="left"><em>X, y, </em>and<em> z </em> are either <em>true</em> or <em>false</em>, 
-    and determine if the texture mapping data should be reversed, per axis. If 
-    the texture looks strange in the simulator, mess around with the <em>x</em> 
-    and <em>z</em> values (<em>y</em> flips the texture upside down).</p>
-  <p align="left"><strong>n. ReverseAxis</strong> - reverses the axis that the 
-    difference in altitude/voffset for walls and floors corresponds to. If this 
-    is set to false (default), then it corresponds to the Z axis; otherwise use 
-    the X axis.<br>
+  <p align="left"><strong>m. SetTextureMapping</strong> - manually sets UV texture 
+    mapping for all polygons generated after this command; ResetTextureMapping 
+    restores the values to the defaults or previous<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> SetTextureMapping 
+    vertex1, u1, v1, vertex2, u2, v2, vertex3, u3, v3</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">SetTextureMapping 
+    0, 0, 0, 1, 1, 0, 2, 1, 1</font></p>
+  <p align="left">The example shown above is the default value used by the simulator. 
+    This command maps the texture coordinates to the specified 3 vertex indices 
+    - normally a side of a wall will have 4 vertices (0 to 3), and by default 
+    the first three are used (top left, top right and bottom right respectively), 
+    with the UV coordinates representing the size percentage of the texture (with 
+    1 being 100%, 0.5 being 50%, etc; normally this would relate to absolute texture 
+    coordinates) - so in the example, texture coordinate 0,0 (top left) is mapped 
+    at the first vertex (top left); texture coordinate 1,0 (really &quot;width, 
+    0&quot;) being mapped at the second vertex (top right), and texture coordinate 
+    1,1 (really &quot;width, height&quot;) being mapped to the bottom right. For 
+    a standard wall, the valid vertex values are from 0 to 3. If a wall or floor 
+    is created with AddCustomWall/AddCustomFloor, and if it has for example 7 
+    vertex points, the valid values for this command would then be 0 to 6 (but 
+    only 3 vertices can be used for mapping purposes). Textures can also be cropped 
+    with this command - for example, to map only a central square of a texture, 
+    you'd use:<br>
+    <font size="2" face="Courier New, Courier, mono">SetTextureMapping 0, 0.25, 
+    0.25, 1, 0.75, 0.25, 2, 0.75, 0.75</font></p>
+  <p align="left"><strong>n. ResetTextureMapping</strong> - resets the texture 
+    mapping parameters to either the default or previous values<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> ResetTextureMapping 
+    default</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">ResetTextureMapping 
+    true </font></p>
+  <p align="left">If <em>default</em> is true, the texture mapping values are 
+    reset to the default, which is shown above in the SetTextureMapping's example. 
+    If <em>default</em> is false, the previous values will be loaded and used.</p>
+  <p align="left"><strong>o. ReverseAxis</strong> - reverses the axis that the 
+    difference in altitude/voffset for floors corresponds to. In the AddFloor 
+    command, there are parameters for specifying two different altitudes. By default, 
+    if the altitudes are different, the floor will angle upward/downward along 
+    the Z axis (front/back), but if this is set to true, the floor will angle 
+    along the X axis (left/right).<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ReverseAxis = value</font></p>
-  <p align="left"> <strong>o. ShaftCut</strong> - used in conjunction with a shaft 
+  <p align="left"> <strong>p. ShaftCut</strong> - used in conjunction with a shaft 
     object - performs a vertical box cut on all floor objects (floors, ceilings, 
     interfloor, etc) in the specified range.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ShaftCut number, 
@@ -283,7 +309,7 @@
     cuts a box for shaft 1, with a width from -4 to 4, and a length from -3.5 
     to 3.5, starting at the starting floor's altitude, and ending at 5 feet above 
     the ending floor's altitude.</p>
-  <p align="left"><strong>p. CutStairwell</strong> - used in conjunction with 
+  <p align="left"><strong>q. CutStairwell</strong> - used in conjunction with 
     a stairwell object - performs a vertical box cut on all floor objects (floors, 
     ceilings, interfloor, etc) in the specified range. For the parameters, see 
     the ShaftCut command.<strong><br>
@@ -291,7 +317,7 @@
     number, startx, startz, endx, endz, start_voffset, end_voffset</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">CutStairwell 1, 
     -4, -3.5, 4, 3.5, 0, 5</font></p>
-  <p align="left"><strong>q. Isect</strong> - the Isect function calculates the 
+  <p align="left"><strong>r. Isect</strong> - the Isect function calculates the 
     position that a line intersects with a certain object, such as a floor. This 
     is mainly used with angled walls that span multiple floors, to find the edge 
     location of the wall at each level without doing any manual calculations. 
@@ -306,7 +332,7 @@
     <em>endy</em> and <em>endz</em> make up the ending position. The first intersection 
     of the named object is the return value, in &quot;X, Y, Z&quot; format (for 
     example, &quot;10, 1, 3&quot;).</p>
-  <p align="left"><strong>r. SetAutoSize</strong> - enables or disables texture 
+  <p align="left"><strong>s. SetAutoSize</strong> - enables or disables texture 
     autosizing<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> SetAutoSize = <em>AutoWidth, 
     AutoHeight </em></font><br>
@@ -325,7 +351,7 @@
     stored &quot;th&quot; value is 1, then the texture will be tiled twice vertically. 
     If either are true, the specified value will me multiplied by the related 
     stored texture value and then autoadjusted.</p>
-  <p align="left"><strong>s. TextureOverride</strong> - overrides textures for 
+  <p align="left"><strong>t. TextureOverride</strong> - overrides textures for 
     the next command. Currently only works with the different AddWall, AddFloor 
     and AddInterFloor commands.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> TextureOverride <em>MainNegativeTex, 
@@ -337,7 +363,7 @@
     after this one. In the above example, the Main Positive side of the object 
     will have the texture &quot;ElevFloor&quot;, but all other sides will use 
     &quot;Metal1&quot;.</p>
-  <p align="left"><strong>t. ShaftShowFloors</strong> - allows a range of floors 
+  <p align="left"><strong>u. ShaftShowFloors</strong> - allows a range of floors 
     to be shown either while inside the specified shaft or while inside an elevator 
     in the shaft - primarily for glass elevators.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ShaftShowFloors <em>ShaftNumber</em> 
@@ -349,7 +375,7 @@
     2nd floor will be visible/enabled while they're in the elevator (since it 
     was in the range specified with this command), but when they reach the 11th 
     floor, that floor will be invisible/disabled.</p>
-  <p align="left"><strong>u. ShaftShowOutside</strong> - allows objects outside 
+  <p align="left"><strong>v. ShaftShowOutside</strong> - allows objects outside 
     the building (sky, landscape, etc) to be enabled while the user is both inside 
     the specified shaft and on one of the specified floors - primarily for glass 
     elevators.<br>
@@ -367,13 +393,13 @@
     lower (atrium) section would be specified using <em>ShaftShowFloors</em> (such 
     as 1-10), while the upper (outdoor) floors would be specified using <em>ShaftShowOutside</em> 
     (such as 11-20).</p>
-  <p align="left"><strong>v. ShowFullShaft</strong> - determines if an entire 
+  <p align="left"><strong>w. ShowFullShaft</strong> - determines if an entire 
     shaft should always be shown, such as a glass elevator track.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ShowFullShaft <em>ShaftNumber</em> 
     = <em>value</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">ShowFullShaft 1 
     = true</font></p>
-  <p align="left"><strong>w. TextureFlip</strong> - flips specified textures for 
+  <p align="left"><strong>x. TextureFlip</strong> - flips specified textures for 
     the next command.. Currently only works with the different AddWall, AddFloor 
     and AddInterFloor commands. The values available are 0 for no flipping, 1 
     for horizontal flip, 2 for vertical flip, and 3 for both horizontal and vertical.<br>
@@ -382,11 +408,11 @@
     Example: <font size="2" face="Courier New, Courier, mono">TextureFlip 1, 1, 
     0, 0, 0, 0</font></p>
   <p align="left">This command will allow you to flip textures on specific parts 
-    of a wall or floor created witha command such as AddWall. It will only work 
+    of a wall or floor created with a command such as AddWall. It will only work 
     on the command immediately after this one. In the above example, the Main 
     Positive and Main Negative sides of the object will have their textures flipped 
     horizontally.</p>
-  <p align="left"><strong>x. Cut</strong> - performs a manual box cut on an object<br>
+  <p align="left"><strong>y. Cut</strong> - performs a manual box cut on an object<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Cut <em>destobject</em>, 
     x1, y1, z1, x2, y2, z2, cutwalls, cutfloors<br>
     </font>Example: <font size="2" face="Courier New, Courier, mono">Cut external, 
@@ -394,7 +420,7 @@
   <p align="left">The x, y and z values specify the start and end coordinates 
     of the box cut. If cutwalls is true, the function will cut walls; if cutfloors 
     is true, it'll cut floors.</p>
-  <p align="left"><strong>y. Mount</strong> - mounts a zip file in the data directory 
+  <p align="left"><strong>z. Mount</strong> - mounts a zip file in the data directory 
     into a virtual path.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Mount <em>filename</em>, 
     <em>path</em></font><br>
@@ -403,7 +429,7 @@
   <p align="left">In this example, the file myfile.zip located in Skyscraper's 
     data directory will be mounted as &quot;mydirectory&quot;, and so a file such 
     as test.jpg inside that zip file will appear as &quot;mydirectory/test.jpg&quot;.</p>
-  <p align="left"><strong>z. AddFloorAutoArea</strong> - defines an area that 
+  <p align="left"><strong>aa. AddFloorAutoArea</strong> - defines an area that 
     will automatically enable and disable floors when the user moves within it, 
     similar to a stairwell<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorAutoArea 

@@ -93,12 +93,6 @@ SBS::SBS()
 	DrawSidePOld = false;
 	DrawTopOld = false;
 	DrawBottomOld = false;
-	RevX = false;
-	RevY = false;
-	RevZ = false;
-	RevXold = false;
-	RevYold = false;
-	RevZold = false;
 	delta = 0.01f;
 	wall1a = false;
 	wall1b = false;
@@ -122,6 +116,18 @@ SBS::SBS()
 	start_time = 0;
 	InShaft = false;
 	DisableSound = false;
+	MapIndex.SetSize(3);
+	MapUV.SetSize(3);
+	OldMapIndex.SetSize(3);
+	OldMapUV.SetSize(3);
+	for (int i = 0; i <= 2; i++)
+	{
+		MapIndex[i] = 0;
+		OldMapIndex[i] = 0;
+		MapUV[i] = 0;
+		OldMapUV[i] = 0;
+	}
+	ResetTextureMapping(true); //set default texture map values
 }
 
 SBS::~SBS()
@@ -1420,47 +1426,17 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 		th3 = th2 * mh;
 	}
 
-	//reverse extents if specified
-	float tmpv;
-	if (RevX == true)
+	//UV texture mapping
+	for (int i = firstidx; i <= firstidx + 1; i++)
 	{
-		tmpv = x.x;
-		x.x = x.y;
-		x.y = tmpv;
+		dest->SetPolygonTextureMapping (csPolygonRange(i, i),
+			dest->GetPolygonVertex(i, MapIndex[0]),
+			csVector2(MapUV[0].x * tw3, MapUV[0].y * th3),
+			dest->GetPolygonVertex(i, MapIndex[1]),
+			csVector2(MapUV[1].x * tw3, MapUV[1].y * th3),
+			dest->GetPolygonVertex(i, MapIndex[2]),
+			csVector2(MapUV[2].x * tw3, MapUV[2].y * th3));
 	}
-	if (RevY == true)
-	{
-		tmpv = y.x;
-		y.x = y.y;
-		y.y = tmpv;
-	}
-	if (RevZ == true)
-	{
-		tmpv = z.x;
-		z.x = z.y;
-		z.y = tmpv;
-	}
-
-	//texture mapping is set from 3 manual vectors (origin, width extent,
-	//height extent) in a square layout
-	csVector3 v1 (x.x, y.y, z.x); //top left
-	csVector3 v2 (x.y, y.y, z.y); //top right
-	csVector3 v3 (x.y, y.x, z.y); //bottom right
-
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
-		v1,
-		csVector2 (0, 0),
-		v2,
-		csVector2 (tw3, 0),
-		v3,
-		csVector2 (tw3, th3));
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
-		v1,
-		csVector2 (tw3, 0),
-		v2,
-		csVector2 (0, 0),
-		v3,
-		csVector2 (0, th3));
 
 	//set polygon names
 	csString NewName;
@@ -1539,47 +1515,17 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 		th3 = th2 * mh;
 	}
 
-	//reverse extents if specified
-	float tmpv;
-	if (RevX == true)
+	//UV texture mapping
+	for (int i = firstidx; i <= firstidx + 1; i++)
 	{
-		tmpv = x.x;
-		x.x = x.y;
-		x.y = tmpv;
+		dest->SetPolygonTextureMapping (csPolygonRange(i, i),
+			dest->GetPolygonVertex(i, MapIndex[0]),
+			csVector2(MapUV[0].x * tw3, MapUV[0].y * th3),
+			dest->GetPolygonVertex(i, MapIndex[1]),
+			csVector2(MapUV[1].x * tw3, MapUV[1].y * th3),
+			dest->GetPolygonVertex(i, MapIndex[2]),
+			csVector2(MapUV[2].x * tw3, MapUV[2].y * th3));
 	}
-	if (RevY == true)
-	{
-		tmpv = y.x;
-		y.x = y.y;
-		y.y = tmpv;
-	}
-	if (RevZ == true)
-	{
-		tmpv = z.x;
-		z.x = z.y;
-		z.y = tmpv;
-	}
-
-	//texture mapping is set from 3 manual vectors (origin, width extent,
-	//height extent) in a square layout
-	csVector3 v1 (x.x, y.y, z.x); //top left
-	csVector3 v2 (x.y, y.y, z.y); //top right
-	csVector3 v3 (x.y, y.x, z.y); //bottom right
-
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx),
-		v1,
-		csVector2 (0, 0),
-		v2,
-		csVector2 (tw3, 0),
-		v3,
-		csVector2 (tw3, th3));
-	dest->SetPolygonTextureMapping (csPolygonRange(firstidx + 1, firstidx + 1),
-		v1,
-		csVector2 (tw3, 0),
-		v2,
-		csVector2 (0, 0),
-		v3,
-		csVector2 (0, th3));
 
 	//set polygon names
 	csString NewName;
@@ -1901,27 +1847,27 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		for (int i = index; i <= endindex; i++)
 		{
 			mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
-			//texture mapping is set from first 3 coordinates
+			//set UV texture mapping
 			mesh->SetPolygonTextureMapping (csPolygonRange(i, i),
-				mesh->GetPolygonVertex(i, 1),
-				csVector2 (0, 0),
-				mesh->GetPolygonVertex(i, 2),
-				csVector2 (tw2, 0),
-				mesh->GetPolygonVertex(i, 0),
-				csVector2 (tw2, th2));
+				mesh->GetPolygonVertex(i, MapIndex[0]),
+				csVector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
+				mesh->GetPolygonVertex(i, MapIndex[1]),
+				csVector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
+				mesh->GetPolygonVertex(i, MapIndex[2]),
+				csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2));
 		}
 	}
 	else
 	{
 			mesh->SetPolygonMaterial(csPolygonRange(index, index), material);
-			//texture mapping is set from first 3 coordinates
+			//set UV texture mapping
 			mesh->SetPolygonTextureMapping (csPolygonRange(index, index),
-				mesh->GetPolygonVertex(index, 0),
-				csVector2 (0, 0),
-				mesh->GetPolygonVertex(index, 1),
-				csVector2 (tw2, 0),
-				mesh->GetPolygonVertex(index, 2),
-				csVector2 (tw2, th2));
+				mesh->GetPolygonVertex(index, MapIndex[0]),
+				csVector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
+				mesh->GetPolygonVertex(index, MapIndex[1]),
+				csVector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
+				mesh->GetPolygonVertex(index, MapIndex[2]),
+				csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2));
 	}
 }
 
@@ -2175,30 +2121,32 @@ void SBS::ResetWalls(bool ToDefaults)
 		DrawWalls(DrawMainNOld, DrawMainPOld, DrawSideNOld, DrawSidePOld, DrawTopOld, DrawBottomOld);
 }
 
-void SBS::ReverseExtents(bool X, bool Y, bool Z)
+void SBS::SetTextureMapping(int vertindex1, csVector2 uv1, int vertindex2, csVector2 uv2, int vertindex3, csVector2 uv3)
 {
-	//Reverses texture mapping per axis
+	//Manually sets UV texture mapping.  Use ResetTextureMapping to return to default values
+	//backup old values
+	for (int i = 0; i <= 2; i++)
+	{
+		OldMapIndex[i] = MapIndex[i];
+		OldMapUV[i] = MapUV[i];
+	}
 
-	//first backup old parameters
-	RevXold = RevX;
-	RevYold = RevY;
-	RevZold = RevZ;
-
-	//now set new parameters
-	RevX = X;
-	RevY = Y;
-	RevZ = Z;
+	//set new values
+	MapIndex[0] = vertindex1;
+	MapIndex[1] = vertindex2;
+	MapIndex[2] = vertindex3;
+	MapUV[0] = uv1;
+	MapUV[1] = uv2;
+	MapUV[2] = uv3;
 }
 
-void SBS::ResetExtents(bool ToDefaults)
+void SBS::ResetTextureMapping(bool todefaults)
 {
-	//if ToDefaults is true, this resets the extents data to the defaults.
-	//if ToDefaults is false, this reverts the extents data to the previous settings.
-
-	if (ToDefaults == true)
-		ReverseExtents(false, false, false);
+	//Resets UV texture mapping to defaults or previous values
+	if (todefaults == true)
+		SetTextureMapping(0, csVector2(0, 0), 1, csVector2(1, 0), 2, csVector2(1, 1));
 	else
-		ReverseExtents(RevXold, RevYold, RevZold);
+		SetTextureMapping(OldMapIndex[0], OldMapUV[0], OldMapIndex[1], OldMapUV[1], OldMapIndex[2], OldMapUV[2]);
 }
 
 int SBS::GetDrawWallsCount()

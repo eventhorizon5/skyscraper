@@ -1200,10 +1200,10 @@ void Elevator::AddFloorIndicator(const char *texture_prefix, const char *directi
 int Elevator::AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
 {
 	sbs->DrawWalls(true, false, false, false, false, false);
-	sbs->ReverseExtents(false, false, false);
+	sbs->ResetTextureMapping(true);
 	return sbs->AddWallMain(Plaque_state, "Plaque", texture, 0, x1, z1, x2, z2, height, height, voffset, voffset, tw, th);
 	sbs->ResetWalls();
-	sbs->ResetExtents();
+	sbs->ResetTextureMapping();
 }
 
 const csVector3 Elevator::GetPosition()

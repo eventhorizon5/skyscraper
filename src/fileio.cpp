@@ -71,6 +71,9 @@ bool Skyscraper::LoadBuilding(const char *filename)
 
 	while (line < BuildingData.GetSize() - 1)
 	{
+		if (Simcore->GetFloor(0) == 0)
+			LineData.Trim();
+
 		LineData = BuildingData[line];
 		LineData.Trim();
 
@@ -1217,26 +1220,51 @@ checkfloors:
 			tempdata.DeleteAll();
 		}
 
-		//ReverseExtents command
-		if (LineData.Slice(0, 14).CompareNoCase("reverseextents") == true)
+		//SetTextureMapping command
+		if (LineData.Slice(0, 17).CompareNoCase("settexturemapping") == true)
 		{
-			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+			tempdata.SplitString(LineData.Slice(18).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-			if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+			if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
 			{
 				ScriptError("Incorrect number of parameters");
 				return false;
 			}
 
-			Simcore->ReverseExtents(csString(tempdata[0]).CompareNoCase("true"),
-						csString(tempdata[1]).CompareNoCase("true"),
-						csString(tempdata[2]).CompareNoCase("true"));
+			//check numeric values
+			for (int i = 0; i <= 8; i++)
+			{
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return false;
+				}
+			}
 
+			Simcore->SetTextureMapping(atoi(tempdata[0]), csVector2(atof(tempdata[1]), atof(tempdata[2])),
+										atoi(tempdata[3]), csVector2(atof(tempdata[4]), atof(tempdata[5])),
+										atoi(tempdata[6]), csVector2(atof(tempdata[7]), atof(tempdata[8])));
 			tempdata.DeleteAll();
+		}
+
+		//ResetTextureMapping command
+		if (LineData.Slice(0, 19).CompareNoCase("resettexturemapping") == true)
+		{
+			//get text after equal sign
+			int loc = LineData.Find("=", 0);
+			if (loc < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
+			temp2 = LineData.Slice(loc + 1);
+			temp2.Trim();
+
+			Simcore->ResetTextureMapping(temp2.CompareNoCase("true"));
 		}
 
 		//ReverseAxis command

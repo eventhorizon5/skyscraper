@@ -112,7 +112,7 @@ int Stairs::AddStairs(int floor, const char *name, const char *texture, const ch
 	buffer3 = name;
 	buffer3.Trim();
 
-	sbs->ReverseExtents(false, false, false);
+	sbs->ResetTextureMapping(true);
 	if (Direction == "right" || Direction == "back")
 		sbs->SetWallOrientation("right");
 	if (Direction == "left" || Direction == "front")
@@ -199,7 +199,7 @@ int Stairs::AddStairs(int floor, const char *name, const char *texture, const ch
 			index = tmpindex;
 	}
 	sbs->ResetWalls(true);
-	sbs->ResetExtents();
+	sbs->ResetTextureMapping();
 
 	return index;
 }

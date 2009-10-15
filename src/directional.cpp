@@ -85,7 +85,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 		DirectionalMesh->GetMeshObject()->SetMaterialWrapper(mat);
 	}
 
-	sbs->ReverseExtents(false, false, false);
+	sbs->ResetTextureMapping(true);
 
 	//create panel
 	if (ShowBack == true)
@@ -251,7 +251,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 		else
 			sbs->AddGenWall(DirectionalMesh, UpTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 6) * 4, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + voffset + (BackHeight / 6), 1, 1);
 	}
-	sbs->ResetExtents();
+	sbs->ResetTextureMapping();
 }
 
 DirectionalIndicator::~DirectionalIndicator()

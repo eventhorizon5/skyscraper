@@ -41,6 +41,10 @@ positives switched
 -height element can now be chosen from the script's object parameters
 -added parking ramps to the Triton Center
 -added AddFloorAutoArea command, which enables and disables floors within a specified area
+-fixed texture flipping
+-removed ReverseExtents command (was broken since early 2007)
+-added SetTextureMapping and ResetTextureMapping commands (replaces
+ReverseExtents) to allow manual setting of UV texture coordinate data
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------
