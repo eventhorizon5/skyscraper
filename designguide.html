@@ -277,6 +277,10 @@
     you'd use:<br>
     <font size="2" face="Courier New, Courier, mono">SetTextureMapping 0, 0.25, 
     0.25, 1, 0.75, 0.25, 2, 0.75, 0.75</font></p>
+  <p align="left">The following diagram shows the mapping described above. Texture 
+    location 0,0 is mapped to wall vertex 0, location 1,0 is mapped to vertex 
+    1, etc:</p>
+  <p align="left"><img src="guide/texture_mapping.jpg" width="300" height="300"></p>
   <p align="left"><strong>n. ResetTextureMapping</strong> - resets the texture 
     mapping parameters to either the default or previous values<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ResetTextureMapping 
@@ -944,6 +948,19 @@
     of the box cut. The Y values are relative to the current floor's altitude.. 
     If cutwalls is true, the function will cut walls; if cutfloors is true, it'll 
     cut floors.</p>
+  <p align="left"><strong>21. AddFillerWalls</strong> - helper function to add 
+    fillers around a door's cut location. When a door is created, the wall in 
+    it's location is cut to provide space; after the cut, the sides are open (if 
+    the wall has thickness) - this creates a covering wall on each side and a 
+    floor above the door frame to fill the area.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddFillerWalls texture, 
+    thickness, CenterX, CenterZ, width, height, voffset, direction, tw, th<br>
+    </font>Example: <font size="2" face="Courier New, Courier, mono">AddFillerWalls 
+    ConnectionWall, 0.5, -10, 0, 3.5, 8, 0, true, 0, 0</font></p>
+  <p align="left">The parameters in this function are similar to the related door's 
+    parameters. Direction is either true if the door faces the front/back (width 
+    is along the X axis), or false if the door faces left/right (width is along 
+    the Z axis).</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">6</font><font size="+1">. The <em>Elevator</em> 
     Section</font></strong></p>
