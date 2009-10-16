@@ -84,7 +84,7 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	Direction.Downcase();
 	Direction.Trim();
 
-	sbs->ReverseExtents(false, false, false);
+	sbs->ResetTextureMapping(true);
 
 	//create panel
 	if (ShowBack == true)
@@ -176,7 +176,7 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 
 		sbs->ResetWalls();
 	}
-	sbs->ResetExtents();
+	sbs->ResetTextureMapping();
 }
 
 CallButton::~CallButton()

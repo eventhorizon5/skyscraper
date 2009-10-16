@@ -71,7 +71,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	SetToElevatorAltitude();
 
 	//create panel back
-	sbs->ReverseExtents(false, false, false);
+	sbs->ResetTextureMapping(true);
 	if (Direction == "front")
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
@@ -93,7 +93,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 		AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th);
 	}
 	sbs->ResetWalls();
-	sbs->ResetExtents();
+	sbs->ResetTextureMapping();
 	Enabled(false); //disable mesh at startup
 }
 
@@ -147,7 +147,7 @@ void ButtonPanel::AddButton(const char *name, const char *texture, int row, int 
 	//vertical position is the top of the panel, minus the total spacing above it,
 	//minus the total button spaces above (and including) it, minus half of the extra height
 	ypos = (Origin.y + Height) - (SpacingY * row) - (ButtonHeight * row) - ((bheight - 1) / 2);
-	sbs->ReverseExtents(false, false, false);
+	sbs->ResetTextureMapping(true);
 	if (Direction == "front" || Direction == "back")
 	{
 		if (Direction == "front")
@@ -188,7 +188,7 @@ void ButtonPanel::AddButton(const char *name, const char *texture, int row, int 
 		}
 	}
 	sbs->ResetWalls();
-	sbs->ResetExtents();
+	sbs->ResetTextureMapping();
 }
 
 void ButtonPanel::DeleteButton(int row, int column)

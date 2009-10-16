@@ -104,14 +104,14 @@ Door::Door(const char *name, const char *texture, float thickness, int direction
 
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);
-	sbs->ReverseExtents(false, false, false);
+	sbs->ResetTextureMapping(true);
 	if (Direction == 1 || Direction == 2 || Direction == 5 || Direction == 6)
 		sbs->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
 	if (Direction == 3 || Direction == 4 || Direction == 7 || Direction == 8)
 		sbs->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 	sbs->AddWallMain(DoorMesh_state, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
 	sbs->ResetWalls();
-	sbs->ResetExtents();
+	sbs->ResetTextureMapping();
 
 	//disable on creation
 	Enabled(false);

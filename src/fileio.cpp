@@ -71,6 +71,9 @@ bool Skyscraper::LoadBuilding(const char *filename)
 
 	while (line < BuildingData.GetSize() - 1)
 	{
+		if (Simcore->GetFloor(0) == 0)
+			LineData.Trim();
+
 		LineData = BuildingData[line];
 		LineData.Trim();
 
@@ -1217,26 +1220,51 @@ checkfloors:
 			tempdata.DeleteAll();
 		}
 
-		//ReverseExtents command
-		if (LineData.Slice(0, 14).CompareNoCase("reverseextents") == true)
+		//SetTextureMapping command
+		if (LineData.Slice(0, 17).CompareNoCase("settexturemapping") == true)
 		{
-			tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+			tempdata.SplitString(LineData.Slice(18).GetData(), ",");
 			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 			{
 				buffer = Calc(tempdata[temp3]);
 				tempdata.Put(temp3, buffer);
 			}
-			if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+			if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
 			{
 				ScriptError("Incorrect number of parameters");
 				return false;
 			}
 
-			Simcore->ReverseExtents(csString(tempdata[0]).CompareNoCase("true"),
-						csString(tempdata[1]).CompareNoCase("true"),
-						csString(tempdata[2]).CompareNoCase("true"));
+			//check numeric values
+			for (int i = 0; i <= 8; i++)
+			{
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return false;
+				}
+			}
 
+			Simcore->SetTextureMapping(atoi(tempdata[0]), csVector2(atof(tempdata[1]), atof(tempdata[2])),
+										atoi(tempdata[3]), csVector2(atof(tempdata[4]), atof(tempdata[5])),
+										atoi(tempdata[6]), csVector2(atof(tempdata[7]), atof(tempdata[8])));
 			tempdata.DeleteAll();
+		}
+
+		//ResetTextureMapping command
+		if (LineData.Slice(0, 19).CompareNoCase("resettexturemapping") == true)
+		{
+			//get text after equal sign
+			int loc = LineData.Find("=", 0);
+			if (loc < 0)
+			{
+				ScriptError("Syntax error");
+				return false;
+			}
+			temp2 = LineData.Slice(loc + 1);
+			temp2.Trim();
+
+			Simcore->ResetTextureMapping(temp2.CompareNoCase("true"));
 		}
 
 		//ReverseAxis command
@@ -1396,7 +1424,7 @@ checkfloors:
 			goto Nextline;
 		}
 
-		//mount command
+		//Mount command
 		if (LineData.Slice(0, 5).CompareNoCase("mount") == true)
 		{
 			tempdata.SplitString(LineData.Slice(6).GetData(), ",");
@@ -1423,7 +1451,7 @@ checkfloors:
 			goto Nextline;
 		}
 
-		//addfloorautoarea command
+		//AddFloorAutoArea command
 		if (LineData.Slice(0, 16).CompareNoCase("addfloorautoarea") == true)
 		{
 			//get data
@@ -2487,6 +2515,41 @@ recalc:
 					Simcore->GetFloor(Current)->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
 				else
 					Simcore->GetFloor(Current)->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), "Button", tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+
+				tempdata.DeleteAll();
+			}
+
+			//AddFillerWalls command
+			if (LineData.Slice(0, 14).CompareNoCase("addfillerwalls") == true)
+			{
+				//get data
+				tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+
+				//calculate inline math
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 10 || tempdata.GetSize() > 10)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+
+				//check numeric values
+				for (int i = 1; i <= 9; i++)
+				{
+					if (i == 7)
+						i = 8;
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+
+				Simcore->GetFloor(Current)->AddFillerWalls(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
 
 				tempdata.DeleteAll();
 			}

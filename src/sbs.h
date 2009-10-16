@@ -189,8 +189,8 @@ public:
 	int GetFloorOrientation();
 	void DrawWalls(bool MainN, bool MainP, bool SideN, bool SideP, bool Top, bool Bottom);
 	void ResetWalls(bool ToDefaults = false);
-	void ReverseExtents(bool X, bool Y, bool Z);
-	void ResetExtents(bool ToDefaults = false);
+	void SetTextureMapping(int vertindex1, csVector2 uv1, int vertindex2, csVector2 uv2, int vertindex3, csVector2 uv3);
+	void ResetTextureMapping(bool todefaults = false);
 	void ReverseAxis(bool value);
 	bool GetReverseAxis();
 	void SetAutoSize(bool x, bool y);
@@ -277,8 +277,10 @@ private:
 	bool DrawBottomOld; //or front, if floor
 
 	//texture mapping
-	bool RevX, RevY, RevZ;
-	bool RevXold, RevYold, RevZold;
+	csArray<int> MapIndex;
+	csArray<int> OldMapIndex;
+	csArray<csVector2> MapUV;
+	csArray<csVector2> OldMapUV;
 	bool AutoX, AutoY; //autosizing
 
 	//object arrays
@@ -310,8 +312,8 @@ private:
 
 	//texture flipping
 	int mainnegflip, mainposflip, sidenegflip, sideposflip, topflip, bottomflip;
-	csArray<int> widthscale;
-	csArray<int> heightscale;
+	csArray<float> widthscale;
+	csArray<float> heightscale;
 
 	//door object array for callback
 	csArray<Door*> doorcallbacks;
