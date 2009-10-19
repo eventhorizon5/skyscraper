@@ -90,6 +90,8 @@
     Load data/floorsignskylobby.jpg, FloorSignSkylobby, 1, 1
     Load data/callbutton.gif, ButtonUp, 1, 1
     Load data/callbutton.gif, ButtonDown, 1, -1
+    Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
+    Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
     Load data/darrow_unlit.gif, ArrowUp, 1, 1
     Load data/darrow_unlit.gif, ArrowDown, 1, -1
     Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
@@ -10068,376 +10070,376 @@ ShaftCut 47, -13.5, -4.25 + 0.33, 13.5, 4.25 - 0.33, 0, 5
 #Express Elevators
 <Floors -3 to -1>
     CallButtonElevators = 1, 2, 3, 4, 5, 6
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor 177>
     CallButtonElevators = 1, 2, 3, 4, 5, 6
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 215>
     CallButtonElevators = 1, 2, 3, 4, 5, 6
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 291>
     CallButtonElevators = 1, 2, 3, 4, 5, 6
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 294>
     CallButtonElevators = 1, 2, 3, 4, 5, 6
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 300>
     CallButtonElevators = 1, 2, 3, 4, 5, 6
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 74.58 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -45, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Executive Office Elevators to 44
 <Floor -2>
     CallButtonElevators = 7, 8
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.58 + 4.25 + 0.33 + 0.01, -10.83, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.58 + 4.25 + 0.33 + 0.01, -10.83, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 44>
     CallButtonElevators = 7, 8
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.58 + 4.25 + 0.33 + 0.01, -10.83, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.58 + 4.25 + 0.33 + 0.01, -10.83, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Executive Office Elevators to 176
 <Floor -2>
     CallButtonElevators = 9, 10
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.58 + 4.25 + 0.33 + 0.01, 10.83, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.58 + 4.25 + 0.33 + 0.01, 10.83, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 176>
     CallButtonElevators = 9, 10
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.58 + 4.25 + 0.33 + 0.01, 10.83, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.58 + 4.25 + 0.33 + 0.01, 10.83, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Office Express Elevators to 45 and 55
 <Floor 0>
     CallButtonElevators = 11, 12, 13, 14, 15, 16, 17, 18
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.58 - 4.25 - 0.33 - 0.01, -36.99, 4, left, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.58 + 4.25 + 0.33 + 0.01, -36.99, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 13.58 - 4.25 - 0.33 - 0.01, -36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.58 + 4.25 + 0.33 + 0.01, -36.99, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 45>
     CallButtonElevators = 11, 12, 13, 14, 15, 16, 17, 18
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.58 - 4.25 - 0.33 - 0.01, -36.99, 4, left, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.58 + 4.25 + 0.33 + 0.01, -36.99, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 13.58 - 4.25 - 0.33 - 0.01, -36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.58 + 4.25 + 0.33 + 0.01, -36.99, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 55>
     CallButtonElevators = 11, 12, 13, 14, 15, 16, 17, 18
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.58 - 4.25 - 0.33 - 0.01, -36.99, 4, left, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.58 + 4.25 + 0.33 + 0.01, -36.99, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 13.58 - 4.25 - 0.33 - 0.01, -36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.58 + 4.25 + 0.33 + 0.01, -36.99, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Office Express Elevators to 117 and 119
 <Floor 0>
     CallButtonElevators = 19, 20, 21, 22, 23, 24, 25, 26
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.58 - 4.25 - 0.33 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.58 + 4.25 + 0.33 + 0.01, 36.99, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 13.58 - 4.25 - 0.33 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.58 + 4.25 + 0.33 + 0.01, 36.99, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 117>
     CallButtonElevators = 19, 20, 21, 22, 23, 24, 25, 26
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.58 - 4.25 - 0.33 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.58 + 4.25 + 0.33 + 0.01, 36.99, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 13.58 - 4.25 - 0.33 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.58 + 4.25 + 0.33 + 0.01, 36.99, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 119>
     CallButtonElevators = 19, 20, 21, 22, 23, 24, 25, 26
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.58 - 4.25 - 0.33 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -13.58 + 4.25 + 0.33 + 0.01, 36.99, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 13.58 - 4.25 - 0.33 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.58 + 4.25 + 0.33 + 0.01, 36.99, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Office Lobby and Parking Elevators
 <Floors -12 to 2>
     CallButtonElevators = 27, 28, 29, 30, 31, 32, 33, 34, 76, 77
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -54.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -54.49, -13.83 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -54.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -54.49, -13.83 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floors -12 to 2>
     CallButtonElevators = 27, 28, 29, 30, 31, 32, 33, 34, 76, 77
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -27.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -27.49, -13.83 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -27.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -27.49, -13.83 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Lobby Elevators
 <Floors -3 to 0>
     CallButtonElevators = 35, 36, 37
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 36.49, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 36.49, 50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Apartment Express
 <Floor -1>
     CallButtonElevators = 38, 39, 40
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 45.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 45.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 199>
     CallButtonElevators = 38, 39, 40
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 45.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 45.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Condominium Express
 <Floor -2>
     CallButtonElevators = 41, 42
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.68 + 4.25 + 0.33 + 0.01, 0, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 13.68 + 4.25 + 0.33 + 0.01, 0, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 200>
     CallButtonElevators = 41, 42
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 13.68 - 4.25 - 0.33 - 0.01, 0, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 13.68 - 4.25 - 0.33 - 0.01, 0, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Blue Parking Elevators
 <Floor -3>
     CallButtonElevators = 43, 44, 45
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 22.74 + 4.25 + 0.33 + 0.01, -36.99, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 22.74 + 4.25 + 0.33 + 0.01, -36.99, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors -30 to -22>
     CallButtonElevators = 43, 44, 45
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 22.74 + 4.25 + 0.33 + 0.01, -36.99, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 22.74 + 4.25 + 0.33 + 0.01, -36.99, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Purple Parking Elevators
 <Floor -3>
     CallButtonElevators = 46, 47, 48
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 36.485, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 36.485, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors -21 to -13>
     CallButtonElevators = 46, 47, 48
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 36.485, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 36.485, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Parking Elevators to Observation Deck
 <Floor -3>
     CallButtonElevators = 49, 50, 51, 52, 53
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.65, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.65, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors -30 to -13>
     CallButtonElevators = 49, 50, 51, 52, 53
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.65, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.65, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor -3>
     CallButtonElevators = 49, 50, 51, 52, 53
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -22.74 - 4.25 - 0.33 - 0.165 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -22.74 - 4.25 - 0.33 - 0.165 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors -30 to -13>
     CallButtonElevators = 49, 50, 51, 52, 53
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -22.74 - 4.25 - 0.33 - 0.165 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -22.74 - 4.25 - 0.33 - 0.165 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Office z1 Upper
 <Floor 1>
     CallButtonElevators = 54, 55, 56, 57, 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -22.74 - 4.25 - 0.33 - 0.165 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -22.74 - 4.25 - 0.33 - 0.165 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 33 to 41>
     CallButtonElevators = 54, 55, 56, 57, 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -22.74 - 4.25 - 0.33 - 0.165 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -22.74 - 4.25 - 0.33 - 0.165 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor 44>
     CallButtonElevators = 54, 55, 56, 57, 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -22.74 - 4.25 - 0.33 - 0.165 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -22.74 - 4.25 - 0.33 - 0.165 - 0.01, 36.99, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 1>
     CallButtonElevators = 54, 55, 56, 57, 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.65, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.65, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 33 to 41>
     CallButtonElevators = 54, 55, 56, 57, 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.65, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.65, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor 44>
     CallButtonElevators = 54, 55, 56, 57, 58
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.65, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.65, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Lower Service Elevator
 <Floors -1 to 0>
     CallButtonElevators = 59, 60, 61
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 22.74 + 4.25 + 0.33 + 0.01, 36.99, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 22.74 + 4.25 + 0.33 + 0.01, 36.99, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floors 2 to 42>
     CallButtonElevators = 59, 60, 61
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 22.74 + 4.25 + 0.33 + 0.01, 36.99, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 22.74 + 4.25 + 0.33 + 0.01, 36.99, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Office Z1 Middle (ML, 21-32)
 <Floor 1>
     CallButtonElevators = 62, 63, 64, 65, 66, 67, 68
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.49, -50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.49, -50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 21 to 32>
     CallButtonElevators = 62, 63, 64, 65, 66, 67, 68
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.49, -50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.49, -50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor 1>
     CallButtonElevators = 62, 63, 64, 65, 66, 67, 68
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.49, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.49, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 21 to 32>
     CallButtonElevators = 62, 63, 64, 65, 66, 67, 68
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.49, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.49, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Office Z1 Lower (GL, 8-20)
 <Floor 0>
     CallButtonElevators = 69, 70, 71, 72, 73, 74, 75
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 36.49, -50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 36.49, -50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 8 to 20>
     CallButtonElevators = 69, 70, 71, 72, 73, 74, 75
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 36.49, -50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 36.49, -50.74 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor 0>
     CallButtonElevators = 69, 70, 71, 72, 73, 74, 75
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 36.49, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 36.49, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 8 to 20>
     CallButtonElevators = 69, 70, 71, 72, 73, 74, 75
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 36.49, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 36.49, -22.99 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Middle Service Elevators
 <Floor 0>
     CallButtonElevators = 78, 79
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 22.84 + 4.25 + 0.33 + 0.01, 0, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 22.84 + 4.25 + 0.33 + 0.01, 0, 4, right, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 42 to 177>
     CallButtonElevators = 78, 79
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 22.84 + 4.25 + 0.33 + 0.01, 0, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 22.84 + 4.25 + 0.33 + 0.01, 0, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Lower Hotel 1
 <Floor 177>
     CallButtonElevators = 80, 81, 82, 83
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 27.49, -14.08 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 27.49, -14.08 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 240 to 256>
     CallButtonElevators = 80, 81, 82, 83
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 27.49, -14.08 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 27.49, -14.08 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor 177>
     CallButtonElevators = 80, 81, 82, 83
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 27.49, -35.24 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 27.49, -35.24 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 240 to 256>
     CallButtonElevators = 80, 81, 82, 83
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 27.49, -35.24 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 27.49, -35.24 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Lower Hotel 2
 <Floor 177>
     CallButtonElevators = 84, 85, 86, 87
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 27.49, -44.40 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 27.49, -44.40 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 257 to 270>
     CallButtonElevators = 84, 85, 86, 87
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 27.49, -44.40 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 27.49, -44.40 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor 177>
     CallButtonElevators = 84, 85, 86, 87
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 27.49, -64.56 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 27.49, -64.56 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 257 to 270>
     CallButtonElevators = 84, 85, 86, 87
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 27.49, -64.56 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 27.49, -64.56 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Upper Hotel
 <Floor 177>
     CallButtonElevators = 88, 89, 90, 91, 92
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 215>
     CallButtonElevators = 88, 89, 90, 91, 92
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 273 to 288>
     CallButtonElevators = 88, 89, 90, 91, 92
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor 291>
     CallButtonElevators = 88, 89, 90, 91, 92
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 294>
     CallButtonElevators = 88, 89, 90, 91, 92
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 300>
     CallButtonElevators = 88, 89, 90, 91, 92
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 45.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 18.66, 22.99 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Office Z2 Lower (45, 46-54, 56)
 <Floors 45 to 54>
     CallButtonElevators = 93, 94, 95, 96
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floor 56>
     CallButtonElevators = 93, 94, 95, 96
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.49, 13.83 - 4.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 #Office Z2 Mid-Upper (45, 80-99)
 <Floor 45>
     CallButtonElevators = 97, 98, 99, 100
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.49, -13.83 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.49, -13.83 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 80 to 99>
     CallButtonElevators = 97, 98, 99, 100
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, -36.49, -13.83 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -36.49, -13.83 + 4.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>

@@ -34,6 +34,8 @@
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/callbutton.gif, ButtonUp, 1, 1
     Load data/callbutton.gif, ButtonDown, 1, -1
+    Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
+    Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
     Load data/marbl3.jpg, Wall1, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
     Load data/darrow_unlit.gif, ArrowUp, 1, 1
@@ -256,7 +258,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Floors 0 to 9>
     CallButtonElevators = 1
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonDown, 3, 6 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 3, 6 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
 <Floors 4 to 9>
