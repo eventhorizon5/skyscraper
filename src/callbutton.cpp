@@ -326,7 +326,7 @@ void CallButton::Loop(bool direction)
 					//and if it's not in any service mode
 					if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
 					{
-						closest = current;
+						closest = abs(current - floor);
 						closest_elev = i;
 						check = true;
 					}
