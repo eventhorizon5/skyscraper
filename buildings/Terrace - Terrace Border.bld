@@ -34,7 +34,7 @@
     Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 0.5, 0.5
-    Load data/Metalbare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
+    Load data/MetalBare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
     Load data/metal080.jpg, ServiceElevPanelMain, 0.5, 0.5
     Load data/diamond18h.jpg, OfficeElevWall, 0.333, 0.333
     Load data/diamond18b.jpg, ExpressElevWall, 0.333, 0.333
