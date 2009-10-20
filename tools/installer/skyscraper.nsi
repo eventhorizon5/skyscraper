@@ -32,6 +32,8 @@ VIProductVersion 1.5.0.0
 !define MUI_ABORTWARNING
 !define MUI_ICON "${LOCAL_FILES}\skyscraper.ico"
 !define MUI_UNICON "${LOCAL_FILES}\skyscraper.ico"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "${LOCAL_FILES}\tools\installer\install.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${LOCAL_FILES}\tools\installer\install.bmp"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
