@@ -35,6 +35,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
+#include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/frame.h>
 //*)
@@ -78,6 +79,8 @@ class DebugPanel: public wxFrame
 		static const long ID_bMeshControl;
 		static const long ID_bCameraControl;
 		static const long ID_bEditElevator;
+		static const long ID_bControlReference;
+		static const long ID_PANEL1;
 		//*)
 		class Timer : public wxTimer
 		{
@@ -101,6 +104,7 @@ class DebugPanel: public wxFrame
 		void On_chkGravity_Click(wxCommandEvent& event);
 		void On_chkAutoStairs_Click(wxCommandEvent& event);
 		void On_bCameraControl_Click(wxCommandEvent& event);
+		void On_bControlReference_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -121,12 +125,14 @@ class DebugPanel: public wxFrame
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText11;
 		wxStaticText* t_framerate;
+		wxPanel* Panel1;
 		wxButton* bCameraControl;
 		wxStaticText* StaticText1;
 		wxBoxSizer* BoxSizer2;
 		wxStaticText* StaticText3;
 		wxCheckBox* chkCollisionDetection;
 		wxStaticText* t_elevnumber;
+		wxButton* bControlReference;
 		wxStaticText* t_object;
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText7;

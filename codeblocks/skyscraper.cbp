@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
@@ -119,6 +119,8 @@
 		<Unit filename="..\src\floor.h" />
 		<Unit filename="..\src\globals.cpp" />
 		<Unit filename="..\src\globals.h" />
+		<Unit filename="..\src\keydialog.cpp" />
+		<Unit filename="..\src\keydialog.h" />
 		<Unit filename="..\src\loader.cpp" />
 		<Unit filename="..\src\loader.h" />
 		<Unit filename="..\src\meshcontrol.cpp" />
@@ -143,8 +145,11 @@
 					<wxDialog wxs="wxsmith/CameraControl.wxs" src="..\src\cameracontrol.cpp" hdr="..\src\cameracontrol.h" name="CameraControl" language="CPP" />
 					<wxDialog wxs="wxsmith/editelevator.wxs" src="..\src\editelevator.cpp" hdr="..\src\editelevator.h" name="editelevator" language="CPP" />
 					<wxDialog wxs="wxsmith/MeshControl.wxs" src="..\src\meshcontrol.cpp" hdr="..\src\meshcontrol.h" name="MeshControl" language="CPP" />
+					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="..\src\keydialog.cpp" hdr="..\src\keydialog.h" name="KeyDialog" language="CPP" />
 				</resources>
 			</wxsmith>
+			<envvars />
+			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
