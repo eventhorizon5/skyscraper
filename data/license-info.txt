@@ -6,6 +6,7 @@ Third-party objects:
 textures:
 -bracing1 - cropped version of MetalBulkheads0013_M.jpg from cgtextures.com
 -brick1 - unknown
+-brick102.jpg, brick040+.jpg and brick021.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
 -Carpet0002_S.jpg - from cgtextures.com
 -Carpet0006_S.jpg - from cgtextures.com
 -Carpet0012_S.jpg - from cgtextures.com
@@ -14,10 +15,15 @@ textures:
 -Carpet0021b_S.jpg - from cgtextures.com
 -Carpet0021c_S.jpg - from cgtextures.com
 -Carpet0034_S.jpg - from cgtextures.com
+-checker*.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
 -cinderblocks.jpg - modified version of cinder-block-texture.jpg from photoshoptextures.com
 -cutston.jpg - unknown
--diamond18.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-diamond*.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
 -diamond18b.jpg to diamond18j.jpg - my own modifications of diamond18.jpg
+-door068.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-floor*.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-herringbone*.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-hungary*.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
 -intext.jpg - unknown
 -lobbyfront.jpg - unknown
 -marb047.jpg - unknown
@@ -27,6 +33,7 @@ textures:
 -metal1-sm.jpg - modified version of metal1.jpg
 -metal080.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
 -MetalBare0085_3_S.jpg - from cgtextures.com
+-metal034.jpg and metal072.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
 -miscdoor8.jpg - unknown
 -searstower.jpg - modified version of windows11.jpg
 -servicedoor2.jpg and servicedoor3.jpg - unknown
