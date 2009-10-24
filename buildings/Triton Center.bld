@@ -58,7 +58,8 @@
     Load data/intext.jpg, InterInt, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/text16.jpg, ElevDoors, 1, 1
-    #Load data/marb148.jpg, ElevExtPanels, 1, 1
+    Load data/door1.jpg, ServiceElevDoors, 1, 1
+    Load data/door1.jpg, ServiceElevDoors2, -1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels2, 1, 1
     Load data/marb148.jpg, ElevPanel, 1, 1
@@ -68,6 +69,7 @@
     Load data/text13.jpg, Stairs, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
     Load data/miscdoor8.jpg, StairsDoor2, 1, 1
+    Load data/miscdoor9b.jpg, HotelDoor, 1, 1
     Load data/downtown.jpg, Downtown, 1, 1
     Load data/bracing1.jpg, VentsInt, 1, 1
     Load data/vents1.jpg, VentsExt, 1, 1
@@ -130,6 +132,7 @@
     AddText Black, ButtonP4, nimbus_sans.ttf, 47, P4, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonP5, nimbus_sans.ttf, 47, P5, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonS, nimbus_sans.ttf, 47, S, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonEZ, nimbus_sans.ttf, 47, EZ, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -1116,48 +1119,48 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     
     WallOrientation = center
     #Room 1
-    AddDoor StairsDoor, 0.2, 5, -41, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 5, -41, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, -41, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 3
-    AddDoor StairsDoor, 0.2, 8, -26.7, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 8, -26.7, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, -26.7, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 4
-    AddDoor StairsDoor, 0.2, 5, 7.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 5, 7.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, 7.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 5
-    AddDoor StairsDoor, 0.2, 8, 14, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 8, 14, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, 14, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 6
-    AddDoor StairsDoor, 0.2, 8, 43, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 8, 43, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, 43, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 2
-    AddDoor StairsDoor, 0.2, 6, -28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 6, -28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, -28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, true, 0, 0
     #Room 7
-    AddDoor StairsDoor, 0.2, 7, 28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 7, 28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, 28, -4.25 - 17.75 - 0.33 + 0.25, 3, 7, 0, true, 0, 0
     #Room 8
-    AddDoor StairsDoor, 0.2, 4, -4.75 - 19 - 0.25, 3.5, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 4, -4.75 - 19 - 0.25, 3.5, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, -4.75 - 19 - 0.25, 3.5, 3, 7, 0, false, 0, 0
     #Room 9
-    AddDoor StairsDoor, 0.2, 6, -26.3, -9.87 + 23.375 + 0.17 - 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 6, -26.3, -9.87 + 23.375 + 0.17 - 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, -26.3, -9.87 + 23.375 + 0.17 - 0.25, 3, 7, 0, true, 0, 0
     #Room 10
-    if[%floor% = 82] AddDoor StairsDoor, 0.2, 8, 28, 2.5 - 0.25, 3, 7, 0, 1, 1
+    if[%floor% = 82] AddDoor HotelDoor, 0.2, 8, 28, 2.5 - 0.25, 3, 7, 0, 1, 1
     if[%floor% = 82] AddFillerWalls ConnectionWall, 0.5, 28, 2.5 - 0.25, 3, 7, 0, true, 0, 0
-    if[%floor% > 82] AddDoor StairsDoor, 0.2, 3, 24.5 + 0.25, 12.5, 3, 7, 0, 1, 1
+    if[%floor% > 82] AddDoor HotelDoor, 0.2, 3, 24.5 + 0.25, 12.5, 3, 7, 0, 1, 1
     if[%floor% > 82] AddFillerWalls ConnectionWall, 0.5, 24.5 + 0.25, 12.5, 3, 7, 0, false, 0, 0
     #Room 11(83-98)
-    if[%floor% > 82] AddDoor StairsDoor, 0.2, 3, 24.5 + 0.25, 18, 3, 7, 0, 1, 1
+    if[%floor% > 82] AddDoor HotelDoor, 0.2, 3, 24.5 + 0.25, 18, 3, 7, 0, 1, 1
     if[%floor% > 82] AddFillerWalls ConnectionWall, 0.5, 24.5 + 0.25, 18, 3, 7, 0, false, 0, 0
     #Room 11(82)/12(83-98)
-    AddDoor StairsDoor, 0.2, 2, 24.5 + 0.25, 40.5, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 2, 24.5 + 0.25, 40.5, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, 24.5 + 0.25, 40.5, 3, 7, 0, false, 0, 0
     #Room 12(82)/13(83-98)
-    AddDoor StairsDoor, 0.2, 3, 24.5 + 0.25, 62.5, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 3, 24.5 + 0.25, 62.5, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, 24.5 + 0.25, 62.5, 3, 7, 0, false, 0, 0
     #Room 13(82)/14(83-98)
-    AddDoor StairsDoor, 0.2, 1, -4.75 - 19 - 0.33 + 0.25, 63, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 1, -4.75 - 19 - 0.33 + 0.25, 63, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, -4.75 - 19 - 0.33 + 0.25, 63, 3, 7, 0, false, 0, 0
 
 <EndFloors>
@@ -1200,25 +1203,25 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
 
     WallOrientation = center
     #Room 1
-    AddDoor StairsDoor, 0.2, 5, -34.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 5, -34.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, -34.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 2
-    AddDoor StairsDoor, 0.2, 5, 1.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 5, 1.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, 1.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 3
-    AddDoor StairsDoor, 0.2, 5, 27.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 5, 27.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, 27.5, 4.25 - 36.25 + 0.33 - 0.25, 3, 7, 0, true, 0, 0
     #Room 4
-    AddDoor StairsDoor, 0.2, 2, 34.5 + 0.25, 0, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 2, 34.5 + 0.25, 0, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, 34.5 + 0.25, 0, 3, 7, 0, false, 0, 0
     #Room 5
-    AddDoor StairsDoor, 0.2, 4, -14.67 + 9 + 0.33 - 0.25, 0, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 4, -14.67 + 9 + 0.33 - 0.25, 0, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, -14.67 + 9 + 0.33 - 0.25, 0, 3, 7, 0, false, 0, 0
     #Room 6
-    AddDoor StairsDoor, 0.2, 2, 24.5 + 0.25, 34.5, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 2, 24.5 + 0.25, 34.5, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, 24.5 + 0.25, 34.5, 3, 7, 0, false, 0, 0
     #Room 7
-    AddDoor StairsDoor, 0.2, 4, -4.75 - 19 - 0.33 + 0.25, 61.5, 3, 7, 0, 1, 1
+    AddDoor HotelDoor, 0.2, 4, -4.75 - 19 - 0.33 + 0.25, 61.5, 3, 7, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.5, -4.75 - 19 - 0.33 + 0.25, 61.5, 3, 7, 0, false, 0, 0
 <EndFloor>
 
@@ -3376,6 +3379,8 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevators 1 to 3>
+    FloorSkipText = EZ
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3479,6 +3484,8 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevators 4 to 6>
+    FloorSkipText = EZ
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3584,6 +3591,8 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevators 7 to 9>
+    FloorSkipText = EZ
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3687,6 +3696,8 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevators 10 to 12>
+    FloorSkipText = EZ
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3793,6 +3804,8 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevators 13 to 15>
+    FloorSkipText = EZ
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3897,6 +3910,8 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevators 16 to 18>
+    FloorSkipText = EZ
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4901,6 +4916,8 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevators 42 to 45>
+    FloorSkipText = EZ
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -5016,6 +5033,8 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevators 46 to 49>
+    FloorSkipText = EZ
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -5132,6 +5151,8 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevators 50 to 53>
+    FloorSkipText = EZ
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -5410,6 +5431,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 80, 100, 132
     AssignedShaft = 24
+    FloorSkipText = EZ
     CreateElevator false, -10.167, 8.956, 80
 
     #floor
@@ -5483,6 +5505,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 100, 120 - 129
     AssignedShaft = 25
+    FloorSkipText = EZ
     CreateElevator false, -19.25, 8.956, 100
 
     #panel
@@ -5700,6 +5723,8 @@ DrawWalls = true, true, false, false, false, false
 <EndElevators>
 
 <Elevators 62 to 65>
+    FloorSkipText = EZ
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -5796,8 +5821,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.626, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 3.926, 0, 0, 0 #shaft doors
+    AddDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, 3.626, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ServiceElevDoors, ServiceElevDoors2, 0.2, 3.926, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -5933,8 +5958,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors 1, ElevDoors, 0.2, -3.626, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, -3.926, 0, 0, 0 #shaft doors
+    AddDoors 1, ServiceElevDoors, ServiceElevDoors2, 0.2, -3.626, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, -3.926, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -6097,8 +6122,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.918, 0, 4.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 4.218, 0, 0, 0 #shaft doors
+    AddDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, 3.918, 0, 4.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ServiceElevDoors, ServiceElevDoors2, 0.2, 4.218, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -6336,8 +6361,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, 3.751, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, 4.051, 0, 0 #shaft doors
+    AddDoors 1, ServiceElevDoors, ServiceElevDoors2, 0.2, 0, 3.751, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, 0, 4.051, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -6423,8 +6448,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors 1, ElevDoors, 0.2, -3.626, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, -3.926, 0, 0, 0 #shaft doors
+    AddDoors 1, ServiceElevDoors, ServiceElevDoors2, 0.2, -3.626, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, -3.926, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
