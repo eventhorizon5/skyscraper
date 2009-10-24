@@ -46,6 +46,7 @@ positives switched
 -added SetTextureMapping and ResetTextureMapping commands (replaces ReverseExtents) to allow manual setting of UV texture coordinate data
 -added AddFillerWalls command which is a convenience function used in creating doors
 -added hotel rooms to the Triton Center
+-added control reference (for keyboard commands, etc) to the control panel
 
 Version 1.4.1 (2.0 Alpha 4.1)
 -------------------------
