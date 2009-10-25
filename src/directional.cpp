@@ -80,7 +80,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 		DirectionalMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 		DirectionalMesh->SetZBufMode(CS_ZBUF_USE);
 		DirectionalMesh->SetRenderPriority(sbs->engine->GetAlphaRenderPriority());
-		DirectionalMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 		csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTextureUnlit);
 		DirectionalMesh->GetMeshObject()->SetMaterialWrapper(mat);
 	}

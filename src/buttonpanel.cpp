@@ -65,7 +65,6 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	ButtonPanel_state = scfQueryInterface<iThingFactoryState> (ButtonPanelMesh->GetMeshObject()->GetFactory());
 	ButtonPanelMesh->SetZBufMode(CS_ZBUF_USE);
 	ButtonPanelMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	ButtonPanelMesh->GetMeshObject()->SetMixMode(CS_FX_ALPHA);
 
 	//move
 	SetToElevatorAltitude();
