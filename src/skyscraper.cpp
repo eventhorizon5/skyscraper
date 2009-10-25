@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.5 Alpha - Simulation Frontend
+	Skyscraper 1.6 Alpha - Simulation Frontend
 	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -158,7 +158,7 @@ int Skyscraper::OnExit()
 	return 0;
 }
 
-MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT("Skyscraper 1.5 Alpha"), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
+MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT("Skyscraper 1.6 Alpha"), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
 {
 	this->Center();
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
