@@ -30,6 +30,7 @@ class SBSIMPEXP Camera
 {
 public:
 	int CurrentFloor; //floor camera's on
+	csString CurrentFloorID; //indicator ID of camera's current floor
 	int StartFloor; //Starting floor
 	float StartPositionX; //starting position on X axis
 	float StartPositionZ; //starting position on Z axis

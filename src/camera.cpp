@@ -173,6 +173,7 @@ void Camera::UpdateCameraFloor()
 	lastfloor = newlastfloor;
 	lastfloorset = true;
 	CurrentFloor = lastfloor;
+	CurrentFloorID = sbs->GetFloor(CurrentFloor)->ID;
 }
 
 bool Camera::Move(const csVector3 &vector, float speed)
