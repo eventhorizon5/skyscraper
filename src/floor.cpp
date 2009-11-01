@@ -130,9 +130,13 @@ int Floor::AddFloor(const char *name, const char *texture, float thickness, floa
 	z1 = z1 * sbs->HorizScale;
 	z2 = z2 * sbs->HorizScale;
 
+	//get texture force value
+	bool force_enable, force_mode;
+	sbs->GetTextureForce(texture, force_enable, force_mode);
+
 	//Call texture autosizing formulas
-	tw2 = sbs->AutoSize(x1, x2, true, tw);
-	th2 = sbs->AutoSize(z1, z2, false, th);
+	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
+	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	if (isexternal == false)
 		return sbs->AddFloorMain(Level_state, name, texture, thickness, x1, z1, x2, z2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
@@ -157,9 +161,13 @@ int Floor::AddInterfloorFloor(const char *name, const char *texture, float thick
 	z1 = z1 * sbs->HorizScale;
 	z2 = z2 * sbs->HorizScale;
 
+	//get texture force value
+	bool force_enable, force_mode;
+	sbs->GetTextureForce(texture, force_enable, force_mode);
+
 	//Texture autosizing formulas
-	tw2 = sbs->AutoSize(x1, x2, true, tw);
-	th2 = sbs->AutoSize(z1, z2, false, th);
+	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
+	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	return sbs->AddFloorMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
@@ -183,11 +191,15 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 	z1 = z1 * sbs->HorizScale;
 	z2 = z2 * sbs->HorizScale;
 
+	//get texture force value
+	bool force_enable, force_mode;
+	sbs->GetTextureForce(texture, force_enable, force_mode);
+
 	//Call texture autosizing formulas
 	if (z1 == z2)
-		tw2 = sbs->AutoSize(x1, x2, true, tw);
+		tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	if (x1 == x2)
-		tw2 = sbs->AutoSize(z1, z2, true, tw);
+		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
 	if ((z1 != z2) && (x1 != x2))
 	{
 		//calculate diagonals
@@ -199,9 +211,9 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 			tempw2 = z1 - z2;
 		else
 			tempw2 = z2 - z1;
-		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
 	}
-	th2 = sbs->AutoSize(0, height_in1, false, th);
+	th2 = sbs->AutoSize(0, height_in1, false, th, force_enable, force_mode);
 
 	if (isexternal == false)
 		return sbs->AddWallMain(Level_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
@@ -226,12 +238,16 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, float thickn
 	z1 = z1 * sbs->HorizScale;
 	z2 = z2 * sbs->HorizScale;
 
+	//get texture force value
+	bool force_enable, force_mode;
+	sbs->GetTextureForce(texture, force_enable, force_mode);
+
 	//Texture autosizing formulas
 	if (z1 == z2)
-		tw2 = sbs->AutoSize(x1, x2, true, tw);
+		tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	if (x1 == x2)
-		tw2 = sbs->AutoSize(z1, z2, true, tw);
-	th2 = sbs->AutoSize(0, height_in1, false, th);
+		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
+	th2 = sbs->AutoSize(0, height_in1, false, th, force_enable, force_mode);
 
 	return sbs->AddWallMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
@@ -397,12 +413,16 @@ int Floor::ColumnWallBox(const char *name, const char *texture, float x1, float 
 	z1 = z1 * sbs->HorizScale;
 	z2 = z2 * sbs->HorizScale;
 
+	//get texture force value
+	bool force_enable, force_mode;
+	sbs->GetTextureForce(texture, force_enable, force_mode);
+
 	//Texture autosizing formulas
 	if (z1 == z2)
-		tw2 = sbs->AutoSize(x1, x2, true, tw);
+		tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	if (x1 == x2)
-		tw2 = sbs->AutoSize(z1, z2, true, tw);
-	th2 = sbs->AutoSize(0, height_in, false, th);
+		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
+	th2 = sbs->AutoSize(0, height_in, false, th, force_enable, force_mode);
 
 	return sbs->CreateWallBox(ColumnFrame_state, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom);
 }

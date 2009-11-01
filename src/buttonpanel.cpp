@@ -302,11 +302,15 @@ int ButtonPanel::AddWall(const char *name, const char *texture, float thickness,
 	z1 = z1 * sbs->HorizScale;
 	z2 = z2 * sbs->HorizScale;
 
+	//get texture force value
+	bool force_enable, force_mode;
+	sbs->GetTextureForce(texture, force_enable, force_mode);
+
 	//Call texture autosizing formulas
 	if (z1 == z2)
-		tw2 = sbs->AutoSize(x1, x2, true, tw);
+		tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	if (x1 == x2)
-		tw2 = sbs->AutoSize(z1, z2, true, tw);
+		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
 	if ((z1 != z2) && (x1 != x2))
 	{
 		//calculate diagonals
@@ -318,9 +322,9 @@ int ButtonPanel::AddWall(const char *name, const char *texture, float thickness,
 			tempw2 = z1 - z2;
 		else
 			tempw2 = z2 - z1;
-		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
 	}
-	th2 = sbs->AutoSize(0, height1, false, th);
+	th2 = sbs->AutoSize(0, height1, false, th, force_enable, force_mode);
 
 	return sbs->AddWallMain(ButtonPanel_state, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw2, th2);
 }

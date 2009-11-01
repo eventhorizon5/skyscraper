@@ -269,7 +269,7 @@ bool SBS::Start()
 	return true;
 }
 
-float SBS::AutoSize(float n1, float n2, bool iswidth, float offset)
+float SBS::AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode)
 {
 	//Texture autosizing formulas
 
@@ -278,14 +278,14 @@ float SBS::AutoSize(float n1, float n2, bool iswidth, float offset)
 
 	if (iswidth == true)
 	{
-		if (AutoX == true)
+		if ((AutoX == true && enable_force == false) || (enable_force == true && force_mode == true))
 			return fabs(n1 - n2) * offset;
 		else
 			return offset;
 	}
 	else
 	{
-		if (AutoY == true)
+		if ((AutoY == true && enable_force == false) || (enable_force == true && force_mode == true))
 			return fabs(n1 - n2) * offset;
 		else
 			return offset;
@@ -468,7 +468,7 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, iSector* s
 	camera = new Camera();
 }
 
-bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult)
+bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	// Load a texture
 	if (!loader->LoadTexture(name, filename, CS_TEXTURE_3D, 0, true, true, false))
@@ -478,6 +478,8 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	info.name = name;
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
+	info.enable_force = enable_force;
+	info.force_mode = force_mode;
 	textureinfo.Push(info);
 	return true;
 }
@@ -494,7 +496,7 @@ bool SBS::UnloadTexture(const char *name)
 	return true;
 }
 
-bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult)
+bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//loads only a portion of the specified texture
 
@@ -546,12 +548,14 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	info.name = name;
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
+	info.enable_force = enable_force;
+	info.force_mode = force_mode;
 	textureinfo.Push(info);
 
 	return true;
 }
 
-bool SBS::AddTextToTexture(const char *origname, const char *name, const char *font_filename, float font_size, const char *text, int x1, int y1, int x2, int y2, const char *h_align, const char *v_align, int ColorR, int ColorG, int ColorB)
+bool SBS::AddTextToTexture(const char *origname, const char *name, const char *font_filename, float font_size, const char *text, int x1, int y1, int x2, int y2, const char *h_align, const char *v_align, int ColorR, int ColorG, int ColorB, bool enable_force, bool force_mode)
 {
 	//adds text to the named texture, in the given box coordinates and alignment
 
@@ -618,6 +622,8 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	info.name = name;
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
+	info.enable_force = enable_force;
+	info.force_mode = force_mode;
 	textureinfo.Push(info);
 
 	//set default values if specified
@@ -643,8 +649,15 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		return false;
 	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
 
+	//set background as transparent
+	g2d->Clear(g2d->FindRGB(255, 255, 255, 0));
+
+	iTextureManager *tm = g3d->GetTextureManager();
+	csRef<iImage> image = loader->LoadImage("/root/data/callbutton.gif", tm->GetTextureFormat());
+	g2d->Blit(0, 0, image->GetWidth(), image->GetHeight(), (unsigned char*)image->GetImageData());
+
 	//draw original image onto backbuffer
-	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, 0, 0, width, height);
+	//g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, 0, 0, width, height);
 
 	//get texture size info
 	int x, y, w, h;
@@ -675,7 +688,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	return true;
 }
 
-bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_texture, const char *name, int x, int y, int width, int height, float widthmult, float heightmult)
+bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_texture, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//draws the specified texture on top of another texture
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
@@ -737,6 +750,8 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	info.name = name;
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
+	info.enable_force = enable_force;
+	info.force_mode = force_mode;
 	textureinfo.Push(info);
 
 	return true;
@@ -1390,19 +1405,22 @@ int SBS::AddCustomWall(csRef<iThingFactoryState> dest, const char *name, const c
 	y = GetExtents(varray1, 2);
 	z = GetExtents(varray1, 3);
 
+	bool force_enable, force_mode;
+	GetTextureForce(texture, force_enable, force_mode);
+
 	//Call texture autosizing formulas
 	if (z.x == z.y)
-		tw2 = AutoSize(x.x, x.y, true, tw);
+		tw2 = AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
 	if (x.x == x.y)
-		tw2 = AutoSize(z.x, z.y, true, tw);
+		tw2 = AutoSize(z.x, z.y, true, tw, force_enable, force_mode);
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
 		tempw1 = fabs(x.y - x.x);
 		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
 	}
-	th2 = AutoSize(0, fabs(y.y - y.x), false, th);
+	th2 = AutoSize(0, fabs(y.y - y.x), false, th, force_enable, force_mode);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray1.GetVertices(), num);
@@ -1479,19 +1497,22 @@ int SBS::AddCustomFloor(csRef<iThingFactoryState> dest, const char *name, const 
 	y = GetExtents(varray, 2);
 	z = GetExtents(varray, 3);
 
+	bool force_enable, force_mode;
+	GetTextureForce(texture, force_enable, force_mode);
+
 	//Call texture autosizing formulas
 	if (z.x == z.y)
-		tw2 = AutoSize(x.x, x.y, true, tw);
+		tw2 = AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
 	if (x.x == x.y)
-		tw2 = AutoSize(z.x, z.y, true, tw);
+		tw2 = AutoSize(z.x, z.y, true, tw, force_enable, force_mode);
 	if ((z.x != z.y) && (x.x != x.y))
 	{
 		//calculate diagonals
 		tempw1 = fabs(x.y - x.x);
 		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
 	}
-	th2 = AutoSize(0, fabs(y.y - y.x), false, th);
+	th2 = AutoSize(0, fabs(y.y - y.x), false, th, force_enable, force_mode);
 
 	//create 2 polygons (front and back) from the vertex array
 	int firstidx = dest->AddPolygon(varray.GetVertices(), num);
@@ -2635,11 +2656,14 @@ int SBS::AddWall(const char *meshname, const char *name, const char *texture, fl
 	z1 = z1 * HorizScale;
 	z2 = z2 * HorizScale;
 
+	bool force_enable, force_mode;
+	GetTextureForce(texture, force_enable, force_mode);
+
 	//Call texture autosizing formulas
 	if (z1 == z2)
-		tw2 = AutoSize(x1, x2, true, tw);
+		tw2 = AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	if (x1 == x2)
-		tw2 = AutoSize(z1, z2, true, tw);
+		tw2 = AutoSize(z1, z2, true, tw, force_enable, force_mode);
 	if ((z1 != z2) && (x1 != x2))
 	{
 		//calculate diagonals
@@ -2651,9 +2675,9 @@ int SBS::AddWall(const char *meshname, const char *name, const char *texture, fl
 			tempw2 = z1 - z2;
 		else
 			tempw2 = z2 - z1;
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw);
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
 	}
-	th2 = AutoSize(0, height_in1, false, th);
+	th2 = AutoSize(0, height_in1, false, th, force_enable, force_mode);
 
 	csRef<iThingFactoryState> tmpstate;
 	if (mesh.CompareNoCase("external") == true)
@@ -2683,9 +2707,12 @@ int SBS::AddFloor(const char *meshname, const char *name, const char *texture, f
 	z1 = z1 * HorizScale;
 	z2 = z2 * HorizScale;
 
+	bool force_enable, force_mode;
+	GetTextureForce(texture, force_enable, force_mode);
+
 	//Call texture autosizing formulas
-	tw2 = AutoSize(x1, x2, true, tw);
-	th2 = AutoSize(z1, z2, false, th);
+	tw2 = AutoSize(x1, x2, true, tw, force_enable, force_mode);
+	th2 = AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	csRef<iThingFactoryState> tmpstate;
 	if (mesh.CompareNoCase("external") == true)
@@ -2972,6 +2999,21 @@ bool SBS::GetTextureTiling(const char *texture, float &tw, float &th)
 		{
 			tw = textureinfo[i].widthmult;
 			th = textureinfo[i].heightmult;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool SBS::GetTextureForce(const char *texture, bool &enable_force, bool &force_mode)
+{
+	//get per-texture tiling values from the textureinfo array
+	for (int i = 0; i < textureinfo.GetSize(); i++)
+	{
+		if (textureinfo[i].name == texture)
+		{
+			enable_force = textureinfo[i].enable_force;
+			force_mode = textureinfo[i].force_mode;
 			return true;
 		}
 	}

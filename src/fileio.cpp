@@ -3729,7 +3729,7 @@ recalc:
 					buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
 				}
-				if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
+				if (tempdata.GetSize() < 4 || tempdata.GetSize() > 5)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
@@ -3745,7 +3745,10 @@ recalc:
 				}
 				buffer = tempdata[0];
 				buffer.Insert(0, "/root/");
-				Simcore->LoadTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]));
+				if (tempdata.GetSize() == 4)
+					Simcore->LoadTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]));
+				else
+					Simcore->LoadTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]), true, csString(tempdata[4]).CompareNoCase("true"));
 				tempdata.DeleteAll();
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("loadrange") == true)
@@ -3756,7 +3759,7 @@ recalc:
 					buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
 				}
-				if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
+				if (tempdata.GetSize() < 6 || tempdata.GetSize() > 7)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
@@ -3781,7 +3784,10 @@ recalc:
 					temp2.ReplaceAll("%number%", buffer.Trim());
 					temp6 = tempdata[3];
 					temp6.ReplaceAll("%number%", buffer.Trim());
-					Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]));
+					if (tempdata.GetSize() == 6)
+						Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]));
+					else
+						Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]), true, csString(tempdata[6]).CompareNoCase("true"));
 				}
 				tempdata.DeleteAll();
 			}
@@ -3793,7 +3799,7 @@ recalc:
 					buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
 				}
-				if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
+				if (tempdata.GetSize() < 14 || tempdata.GetSize() > 15)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
@@ -3814,7 +3820,10 @@ recalc:
 				}
 				buffer = tempdata[2];
 				buffer.Insert(0, "/root/data/fonts/");
-				Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]));
+				if (tempdata.GetSize() == 14)
+					Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]));
+				else
+					Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]), true, csString(tempdata[14]).CompareNoCase("true"));
 				tempdata.DeleteAll();
 			}
 			if (LineData.Slice(0, 12).CompareNoCase("addtextrange") == true)
@@ -3825,7 +3834,7 @@ recalc:
 					buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
 				}
-				if (tempdata.GetSize() < 16 || tempdata.GetSize() > 16)
+				if (tempdata.GetSize() < 16 || tempdata.GetSize() > 17)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
@@ -3865,7 +3874,10 @@ recalc:
 	
 					buffer = tempdata[4];
 					buffer.Insert(0, "/root/data/fonts/");
-					Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, atof(tempdata[5]), tempdata[6], atoi(tempdata[7]), atoi(tempdata[8]), atoi(tempdata[9]), atoi(tempdata[10]), tempdata[11], tempdata[12], atoi(tempdata[13]), atoi(tempdata[14]), atoi(tempdata[15]));
+					if (tempdata.GetSize() == 16)
+						Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, atof(tempdata[5]), tempdata[6], atoi(tempdata[7]), atoi(tempdata[8]), atoi(tempdata[9]), atoi(tempdata[10]), tempdata[11], tempdata[12], atoi(tempdata[13]), atoi(tempdata[14]), atoi(tempdata[15]));
+					else
+						Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, atof(tempdata[5]), tempdata[6], atoi(tempdata[7]), atoi(tempdata[8]), atoi(tempdata[9]), atoi(tempdata[10]), tempdata[11], tempdata[12], atoi(tempdata[13]), atoi(tempdata[14]), atoi(tempdata[15]), true, csString(tempdata[16]).CompareNoCase("true"));
 				}
 				tempdata.DeleteAll();
 			}
@@ -3877,7 +3889,7 @@ recalc:
 					buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
 				}
-				if (tempdata.GetSize() < 8 || tempdata.GetSize() > 8)
+				if (tempdata.GetSize() < 8 || tempdata.GetSize() > 9)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
@@ -3893,7 +3905,10 @@ recalc:
 				}
 				buffer = tempdata[0];
 				buffer.Insert(0, "/root/");
-				Simcore->LoadTextureCropped(buffer, tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+				if (tempdata.GetSize() == 8)
+					Simcore->LoadTextureCropped(buffer, tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+				else
+					Simcore->LoadTextureCropped(buffer, tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), csString(tempdata[8]).CompareNoCase("true"));
 				tempdata.DeleteAll();
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("addoverlay") == true)
@@ -3904,7 +3919,7 @@ recalc:
 					buffer = tempdata[temp3];
 					tempdata.Put(temp3, buffer.Trim());
 				}
-				if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
+				if (tempdata.GetSize() < 9 || tempdata.GetSize() > 10)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
@@ -3918,7 +3933,10 @@ recalc:
 						return false;
 					}
 				}
-				Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+				if (tempdata.GetSize() == 9)
+					Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+				else
+					Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), true, csString(tempdata[9]).CompareNoCase("true"));
 				tempdata.DeleteAll();
 			}
 		}
