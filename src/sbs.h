@@ -305,7 +305,7 @@ private:
 		float widthmult;
 		float heightmult;
 		bool enable_force; //enable forcing of tile or stretch mode?
-		bool force_mode; //false for stretch mode, true for autotile
+		bool force_mode; //false to disable autosizing, true to enable autosizing
 	};
 
 	csArray<TextureInfo> textureinfo;

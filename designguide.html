@@ -521,15 +521,22 @@
     <font size="2" face="Courier New, Courier, mono">&lt;EndTextures&gt;</font></p>
   <p align="left"><strong>1. Load</strong> - loads a texture<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Load <em>filename</em>, 
-    <em>name</em>, <em>tile_x</em>, 
-    <em>tile_y</em></font><br>
+    <em>name</em>, <em>tile_x</em>, <em>tile_y[, force</em></font>]<br>
     Example: <font size="2" face="Courier New, Courier, mono">Load data\brick1.jpg, 
     Brick, 1, 1</font></p>
-  <p align="left"><strong>2. LoadRange</strong> - loads a numeric range of textures, 
-    and the current number is available in the <em>number</em> variable (<font size="2" face="Courier New, Courier, mono">%number%</font>)<br>
+  <p align="left">This example will load the file brick.jpg and name it Brick. 
+    The values <em>tile_x</em> and <em>tile_y</em> are per-texture multipliers. 
+    For example, if you set <em>tile_x</em> to 2, and you specify a texture width 
+    (tw) of 2 during an <em>AddFloor</em> command later, the tiling value will 
+    be 4 (2 times 2), and the texture will be repeated 4 times horizontally. The 
+    <em>force</em> value is optional, and if set to false, autosizing will always 
+    be disabled for this texture; if set to true, autosizing will always be enabled.</p>
+  <p align="left"><strong></strong><strong>2. LoadRange</strong> - loads a numeric 
+    range of textures, and the current number is available in the <em>number</em> 
+    variable (<font size="2" face="Courier New, Courier, mono">%number%</font>)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">LoadRange <em>startnumber</em>, 
-    <em>endnumber</em>, <em>filename</em>, <em>name</em>, 
-    <em>tile_x</em>, <em>tile_y</em></font><br>
+    <em>endnumber</em>, <em>filename</em>, <em>name</em>, <em>tile_x</em>, <em>tile_y[, 
+    force] </em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">LoadRange 2, 138, 
     data\floorindicators\%number%.jpg, Button%number%, 1, 1</font></p>
   <p align="left">This example will load the file 2.jpg and name it Button2, 3.jpg 
@@ -537,13 +544,15 @@
     per-texture multipliers. For example, if you set <em>tile_x</em> to 2, and 
     you specify a texture width (tw) of 2 during an <em>AddFloor</em> command 
     later, the tiling value will be 4 (2 times 2), and the texture will be repeated 
-    4 times horizontally.</p>
+    4 times horizontally. The <em>force</em> value is optional, and if set to 
+    false, autosizing will always be disabled for this texture; if set to true, 
+    autosizing will always be enabled.</p>
   <p align="left"><strong>3. AddText</strong> - draws text onto a texture - this 
     only creates a new texture during runtime (in memory), and all changes are 
     lost when the application shuts down<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddText texture_name, 
     name, font_filename, font_size, text, x1, y1, x2, y2, h_align, v_align, ColorR, 
-    ColorG, ColorB</font><br>
+    ColorG, ColorB[, force</font>]<br>
     Example: <font size="2" face="Courier New, Courier, mono">AddText Black, Button100, 
     nimbus_sans.ttf, 47, 100, -1, -1, -1, -1, center, center, 255, 255, 255</font></p>
   <p align="left">With this command, texture_name is the name of the previously 
@@ -560,29 +569,33 @@
     &quot;right&quot; or &quot;center&quot;, and for v_align either &quot;top&quot;, 
     &quot;bottom&quot; or &quot;center&quot;. ColorR, ColorG and ColorB determine 
     the color of the text, and the values range from 0 to 255. If all values are 
-    255, the text is white, and if all values are 0, then it's black.</p>
+    255, the text is white, and if all values are 0, then it's black. The <em>force</em> 
+    value is optional, and if set to false, autosizing will always be disabled 
+    for this texture; if set to true, autosizing will always be enabled.</p>
   <p align="left"><strong>4. AddTextRange</strong> - similar to LoadRange, but 
     draws text onto a texture<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddText startnumber, 
     endnumber, texture_name, name, font_filename, font_size, text, x1, y1, x2, 
-    y2, h_align, v_align, ColorR, ColorG, ColorB</font><br>
+    y2, h_align, v_align, ColorR, ColorG, ColorB[, force</font>]<br>
     Example: <font size="2" face="Courier New, Courier, mono">AddText 1, 100, 
     Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, 
     center, 255, 255, 255</font></p>
   <p align="left"><strong>5. LoadCropped</strong> - loads a cropped image.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">LoadCropped filename, 
-    name, x, y, width, height, tile_x, tile_y</font><br>
+    name, x, y, width, height, tile_x, tile_y[, force</font>]<br>
     Example: <font size="2" face="Courier New, Courier, mono">LoadCropped data\brick1.jpg, 
     Brick2, 10, 10, 20, 20, 1, 1</font></p>
   <p align="left">This command is similar to the Load command, but loads only 
     a portion of an image. In the above example, the command loads the file data\brick1.jpg 
     as &quot;Brick2&quot;, but only loads the portion of the image starting at 
     pixel 10, 10, with a width of 20 pixels and a heigth of 20 pixels. Pixel 0, 
-    0 is on the top left of the image.</p>
+    0 is on the top left of the image. The <em>force</em> value is optional, and 
+    if set to false, autosizing will always be disabled for this texture; if set 
+    to true, autosizing will always be enabled.</p>
   <p align="left"><strong>6. AddOverlay</strong> - draws an image on top of another 
     image<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddOverlay texture_name, 
-    overlay_texture_name, name, x, y, width, height, tile_x, tile_y</font><br>
+    overlay_texture_name, name, x, y, width, height, tile_x, tile_y[, force]</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddOverlay Brick1, 
     Brick2, NewBrick, 25, 25, 50, 50, 1, 1</font></p>
   <p align="left">This command allows multiple textures to be combined into a 
@@ -595,7 +608,9 @@
     determine the size in pixels of the overlay texture. In the above example, 
     the &quot;Brick2&quot; texture is drawn on top of the &quot;Brick1&quot; texture, 
     starting at pixel position 25, 25, with a width of 50 and a height of 50. 
-    The resulting texture is called &quot;NewBrick&quot;.</p>
+    The resulting texture is called &quot;NewBrick&quot;. The <em>force</em> value 
+    is optional, and if set to false, autosizing will always be disabled for this 
+    texture; if set to true, autosizing will always be enabled.</p>
   <p align="left"></p>
   <p align="left"><strong><font size="+1">5. The <em>Floor</em> Sections</font></strong></p>
   <p align="left">There are 2 <em>Floor</em> sections available - <em>Floor</em> 
