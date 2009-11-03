@@ -137,6 +137,7 @@ F2 - print FPS on console
 F3 - Reset camera rotation and zoom to default
 F4 - Enable/disable wireframe mode
 F5 - Freelook (mouse look) mode
+F6 - Full camera reset (respawn)
 F10 - Fullscreen mode
 F11 - Take screenshot
 Shift - Run (hold down with other keys)

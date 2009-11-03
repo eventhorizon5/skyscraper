@@ -583,6 +583,19 @@ void Skyscraper::GetInput()
 			Simcore->camera->SetToStartRotation();
 			Simcore->camera->SetToDefaultFOV();
 		}
+		if (wxGetKeyState(WXK_F6))
+		{
+			//reset camera position and state
+			Simcore->GetFloor(Simcore->camera->CurrentFloor)->Enabled(false);
+			Simcore->GetFloor(Simcore->camera->CurrentFloor)->EnableGroup(false);
+			Simcore->camera->EnableGravity(true);
+			Simcore->camera->EnableCollisions = true;
+			Simcore->camera->SetToStartPosition();
+			Simcore->camera->SetToStartRotation();
+			Simcore->camera->SetToDefaultFOV();
+			Simcore->GetFloor(Simcore->camera->StartFloor)->Enabled(true);
+			Simcore->GetFloor(Simcore->camera->StartFloor)->EnableGroup(true);
+		}
 
 		if (wxGetKeyState(WXK_F4) && wait == false)
 		{

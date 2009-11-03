@@ -53,6 +53,7 @@ textures:
 -windows11h.jpg - modified version of windows11.jpg
 -windows11h-inside.jpg - modified version of windows11.jpg
 -stucco22.jpg, wall5.jpg, stucco30.jpg, stucco2f.jpg, metal10.jpg and cem_tr.jpg from telias.free.fr
+-doverindicator*.gif by TampaBayElevator
 
 sounds:
 -chime1.wav made by me
