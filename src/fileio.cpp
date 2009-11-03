@@ -3007,7 +3007,16 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->BeepSound = temp2;
+				Simcore->GetElevator(Current)->SetBeepSound(temp2);
+			}
+			if (LineData.Slice(0, 10).CompareNoCase("floorsound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->SetFloorSound(temp2);
 			}
 			if (LineData.Slice(0, 13).CompareNoCase("floorskiptext") == true)
 			{

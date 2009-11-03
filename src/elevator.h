@@ -73,6 +73,7 @@ public:
 	csString AlarmSound; //alarm sound (loop)
 	csString AlarmSoundStop; //alarm stopping sound
 	csString BeepSound; //floor beep sound (played when changing floors)
+	csString FloorSound; //prefix of sounds played when reaching a certain floor; usually used for voices
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
 	int ACPFloor; //floor to stop at in ACP mode
@@ -88,6 +89,8 @@ public:
 	bool OnFloor; //true if elevator is stopped on a floor, false if not
 	bool ManualGo; //go toggle for inspection service mode
 	bool AlarmActive; //true if alarm is active
+	bool UseFloorBeeps; //true if floor beeps should be used
+	bool UseFloorSounds; //true if floor sounds should be used
 
 	//functions
 	Elevator(int number);
@@ -179,6 +182,8 @@ public:
 	void SetCallButtons(int floor, bool direction, bool value);
 	bool IsIdle();
 	void QueueReset();
+	void SetBeepSound(const char *filename);
+	void SetFloorSound(const char *prefix);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -214,6 +219,7 @@ private:
 	Sound *idlesound;
 	Sound *alarm;
 	Sound *floorbeep;
+	Sound *floorsound;
 
 	//directional indicators
 	csArray<DirectionalIndicator*> IndicatorArray;

@@ -107,6 +107,8 @@ Elevator::Elevator(int number)
 	Created = false;
 	lastcheckresult = false;
 	checkfirstrun = true;
+	UseFloorBeeps = false;
+	UseFloorSounds = false;
 
 	//create object meshes
 	buffer = Number;
@@ -172,6 +174,9 @@ Elevator::~Elevator()
 	if (floorbeep)
 		delete floorbeep;
 	floorbeep = 0;
+	if (floorsound)
+		delete floorsound;
+	floorsound = 0;
 }
 
 bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
@@ -279,6 +284,8 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	alarm->SetPosition(Origin);
 	floorbeep = new Sound();
 	floorbeep->SetPosition(Origin);
+	floorsound = new Sound();
+	floorsound->SetPosition(Origin);
 
 	Created = true;
 
@@ -817,6 +824,7 @@ void Elevator::MoveElevatorToFloor()
 	MoveDoorSound(0, csVector3(0, GetPosition().y, 0), true, false, true);
 	alarm->SetPosition(GetPosition());
 	floorbeep->SetPosition(GetPosition());
+	floorsound->SetPosition(GetPosition());
 
 	//motion calculation
 	if (Brakes == false)
@@ -969,7 +977,7 @@ void Elevator::MoveElevatorToFloor()
 	if (GetFloor() != oldfloor)
 	{
 		//play floor beep sound if not empty
-		if (BeepSound != "" && IsServicedFloor(GetFloor()) == true)
+		if (BeepSound != "" && IsServicedFloor(GetFloor()) == true && UseFloorBeeps == true)
 		{
 			floorbeep->Stop();
 			floorbeep->Load(BeepSound);
@@ -1114,7 +1122,21 @@ void Elevator::MoveElevatorToFloor()
 		//open doors
 		//do not automatically open doors if in fire service phase 2
 		if (FireServicePhase2 == 0)
+		{
 			OpenDoors();
+
+			//play floor sound if not empty
+			if (FloorSound != "" && UseFloorSounds == true)
+			{
+				csString newsound = FloorSound;
+				//change the asterisk into the current floor number
+				newsound.ReplaceAll("*", csString(_itoa(GotoFloor, intbuffer, 10)).Trim());
+				floorsound->Stop();
+				floorsound->Load(newsound);
+				floorsound->Loop(false);
+				floorsound->Play();
+			}
+		}
 	}
 	else
 	{
@@ -2400,4 +2422,20 @@ void Elevator::QueueReset()
 	//reset queues
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Resetting queues");
 	ResetQueues = true;
+}
+
+void Elevator::SetBeepSound(const char *filename)
+{
+	//set sound used for floor beeps
+	BeepSound = filename;
+	BeepSound.Trim();
+	UseFloorBeeps = true;
+}
+
+void Elevator::SetFloorSound(const char *prefix)
+{
+	//set prefix of floor sound
+	FloorSound = prefix;
+	FloorSound.Trim();
+	UseFloorSounds = true;
 }

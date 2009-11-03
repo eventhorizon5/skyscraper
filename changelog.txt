@@ -2,6 +2,7 @@ Version 1.6 (2.0 Alpha 6)
 -------------------------
 -added current floor ID to the control panel's main and camera control windows
 -added support for forcing autosizing on or off on a per-texture basis
+-added support for floor arrival sounds
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------
