@@ -650,14 +650,14 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
 
 	//set background as transparent
-	g2d->Clear(g2d->FindRGB(255, 255, 255, 0));
+	//g2d->Clear(g2d->FindRGB(255, 255, 255, 0));
 
-	iTextureManager *tm = g3d->GetTextureManager();
+	/*iTextureManager *tm = g3d->GetTextureManager();
 	csRef<iImage> image = loader->LoadImage("/root/data/callbutton.gif", tm->GetTextureFormat());
-	g2d->Blit(0, 0, image->GetWidth(), image->GetHeight(), (unsigned char*)image->GetImageData());
+	g2d->Blit(0, 0, image->GetWidth(), image->GetHeight(), (unsigned char*)image->GetImageData());*/
 
 	//draw original image onto backbuffer
-	//g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, 0, 0, width, height);
+	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, 0, 0, width, height);
 
 	//get texture size info
 	int x, y, w, h;
