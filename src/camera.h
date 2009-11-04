@@ -50,6 +50,16 @@ public:
 	float cfg_legs_height; //legs height
 	float cfg_legs_width; //legs width
 	float cfg_legs_depth; //legs depth
+	float cfg_lookspeed; //base look speed
+	float cfg_turnspeed; //base turn speed
+	float cfg_spinspeed; //base spin speed
+	float cfg_floatspeed; //base float speed
+	float cfg_stepspeed; //base step speed
+	float cfg_strafespeed; //base strafe speed
+	float cfg_speed; //camera speed multiplier
+	float cfg_speedfast; //camera fast speed multiplier
+	float cfg_speedslow; //camera slow speed multiplier
+	float cfg_zoomspeed; //camera zoom speed
 	csVector3 desired_velocity;
 	csVector3 velocity;
 	csVector3 desired_angle_velocity;

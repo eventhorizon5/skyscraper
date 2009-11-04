@@ -65,6 +65,16 @@ Camera::Camera()
 	cfg_legs_height = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LegsHeight", 2.3);
 	cfg_legs_width = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LegsWidth", 1.312);
 	cfg_legs_depth = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LegsDepth", 1.312);
+	cfg_lookspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LookSpeed", 150.0);
+	cfg_turnspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.TurnSpeed", 100.0);
+	cfg_spinspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.SpinSpeed", 150.0);
+	cfg_floatspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FloatSpeed", 140.0);
+	cfg_stepspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.StepSpeed", 140.0);
+	cfg_strafespeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.StrafeSpeed", 140.0);
+	cfg_speed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.Speed", 1.0);
+	cfg_speedfast = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FastSpeed", 2.0);
+	cfg_speedslow = sbs->confman->GetFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5);
+	cfg_zoomspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2);
 	speed = 1;
 	EnableCollisions = sbs->confman->GetBool("Skyscraper.SBS.Camera.EnableCollisions", true);
 	GravityStatus = sbs->confman->GetBool("Skyscraper.SBS.Camera.GravityStatus", true);
@@ -642,43 +652,43 @@ void Camera::Loop()
 void Camera::Strafe(float speed)
 {
 	speed *= cfg_walk_maxspeed_multreal;
-	desired_velocity.x = 140.0f * speed * cfg_walk_maxspeed	* cfg_walk_maxspeed_multreal;
+	desired_velocity.x = cfg_strafespeed * speed * cfg_walk_maxspeed	* cfg_walk_maxspeed_multreal;
 }
 
 void Camera::Step(float speed)
 {
 	speed *= cfg_walk_maxspeed_multreal;
-	desired_velocity.z = 140.0f * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
+	desired_velocity.z = cfg_stepspeed * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
 }
 
 void Camera::Float(float speed)
 {
 	speed *= cfg_walk_maxspeed_multreal;
-	desired_velocity.y = 140.0f * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
+	desired_velocity.y = cfg_floatspeed * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
 }
 
 void Camera::Jump()
 {
-	velocity.y = 110.0f * cfg_jumpspeed;
+	velocity.y = cfg_jumpspeed;
 	desired_velocity.y = 0.0f;
 }
 
 void Camera::Look(float speed)
 {
 	//look up/down by rotating camera on X axis
-	desired_angle_velocity.x = 150.0f * speed * cfg_rotate_maxspeed;
+	desired_angle_velocity.x = cfg_lookspeed * speed * cfg_rotate_maxspeed;
 }
 
 void Camera::Turn(float speed)
 {
 	//turn camera by rotating on Y axis
-	desired_angle_velocity.y = 100.0f * speed * cfg_rotate_maxspeed * cfg_walk_maxspeed_multreal;
+	desired_angle_velocity.y = cfg_turnspeed * speed * cfg_rotate_maxspeed * cfg_walk_maxspeed_multreal;
 }
 
 void Camera::Spin(float speed)
 {
 	//spin camera by rotating on Z axis
-	desired_angle_velocity.z = 150.0f * speed * cfg_rotate_maxspeed;
+	desired_angle_velocity.z = cfg_spinspeed * speed * cfg_rotate_maxspeed;
 }
 
 void Camera::InterpolateMovement()
