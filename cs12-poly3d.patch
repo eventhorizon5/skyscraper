@@ -6,7 +6,7 @@ diff -urN a/include/csgeom/poly3d.h b/include/csgeom/poly3d.h
  {
    size_t orig_idx;
 -  int x, y, z;
-+  float x, y, z;
++  long long x, y, z;
    size_t new_idx;
    bool used;
  };
@@ -20,9 +20,9 @@ diff -urN a/libs/csgeom/poly3d.cpp b/libs/csgeom/poly3d.cpp
 -    vt[i].x = (int)ceil (vertices[i].x * 1000000);
 -    vt[i].y = (int)ceil (vertices[i].y * 1000000);
 -    vt[i].z = (int)ceil (vertices[i].z * 1000000);
-+    vt[i].x = (float)ceil (vertices[i].x * 1000000.0);
-+    vt[i].y = (float)ceil (vertices[i].y * 1000000.0);
-+    vt[i].z = (float)ceil (vertices[i].z * 1000000.0);
++    vt[i].x = (long long)ceil (vertices[i].x * 1000000.0);
++    vt[i].y = (long long)ceil (vertices[i].y * 1000000.0);
++    vt[i].z = (long long)ceil (vertices[i].z * 1000000.0);
    }
  
    // First sort so that all (nearly) equal vertices are together.
