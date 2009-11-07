@@ -4,6 +4,7 @@ Version 1.6 (2.0 Alpha 6)
 -added support for forcing autosizing on or off on a per-texture basis
 -added support for floor arrival sounds
 -added more camera speed config parameters
+-added full camera reset (respawn) triggered by F6
 -added elevator motor sound object
 
 Version 1.5 (2.0 Alpha 5)
