@@ -77,10 +77,13 @@ Elevator::Elevator(int number)
 	IsMoving = false;
 	lastfloor = 0;
 	lastfloorset = false;
-	StartSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.StartSound", "elevstart.wav");
-	MoveSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MoveSound", "elevmove.wav");
-	StopSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.StopSound", "elevstop.wav");
+	StartSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.StartSound", "");
+	MoveSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MoveSound", "");
+	StopSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.StopSound", "");
 	IdleSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.IdleSound", "elevidle.wav");
+	MotorStartSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MotorStartSound", "motor_start.wav");
+	MotorRunSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MotorRunSound", "motor_running.wav");
+	MotorStopSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MotorStopSound", "motor_stop.wav");
 	AlarmSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.AlarmSound", "bell1.wav");
 	AlarmSoundStop = sbs->confman->GetStr("Skyscraper.SBS.Elevator.AlarmSoundStop", "bell1-stop.wav");
 	UseFloorSkipText = false;
@@ -177,6 +180,9 @@ Elevator::~Elevator()
 	if (floorsound)
 		delete floorsound;
 	floorsound = 0;
+	if (motorsound)
+		delete motorsound;
+	motorsound = 0;
 }
 
 bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
@@ -280,6 +286,10 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	idlesound = new Sound();
 	idlesound->SetPosition(Origin);
 	idlesound->Load(IdleSound.GetData());
+	motorsound = new Sound();
+	motorsound->SetPosition(Origin);
+	//move motor to top of shaft
+	motorsound->SetPositionY(sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->Altitude + sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->InterfloorHeight);
 	alarm = new Sound();
 	alarm->SetPosition(Origin);
 	floorbeep = new Sound();
@@ -759,11 +769,15 @@ void Elevator::MoveElevatorToFloor()
 			}
 		}
 
-		//Play starting sound
+		//Play starting sounds
 		mainsound->Stop();
 		mainsound->Load(StartSound.GetData());
 		mainsound->Loop(false);
 		mainsound->Play();
+		motorsound->Stop();
+		motorsound->Load(MotorStartSound.GetData());
+		motorsound->Loop(false);
+		motorsound->Play();
 
 		//notify about movement
 		if (InspectionService == false)
@@ -786,10 +800,14 @@ void Elevator::MoveElevatorToFloor()
 		Brakes = true;
 		//stop sounds
 		mainsound->Stop();
-		//play stopping sound
+		motorsound->Stop();
+		//play stopping sounds
 		mainsound->Load(StopSound.GetData());
 		mainsound->Loop(false);
 		mainsound->Play();
+		motorsound->Load(MotorStopSound.GetData());
+		motorsound->Loop(false);
+		motorsound->Play();
 	}
 
 	if (mainsound->IsPlaying() == false && Brakes == false)
@@ -798,6 +816,14 @@ void Elevator::MoveElevatorToFloor()
 		mainsound->Load(MoveSound.GetData());
 		mainsound->Loop(true);
 		mainsound->Play();
+	}
+
+	if (motorsound->IsPlaying() == false && Brakes == false)
+	{
+		//Motor sound
+		motorsound->Load(MotorRunSound.GetData());
+		motorsound->Loop(true);
+		motorsound->Play();
 	}
 
 	//move elevator objects and camera
@@ -942,10 +968,14 @@ void Elevator::MoveElevatorToFloor()
 				ElevatorRate -= (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
 			//stop sounds
 			mainsound->Stop();
-			//play elevator stopping sound
+			motorsound->Stop();
+			//play elevator stopping sounds
 			mainsound->Load(StopSound.GetData());
 			mainsound->Loop(false);
 			mainsound->Play();
+			motorsound->Load(MotorStopSound.GetData());
+			motorsound->Loop(false);
+			motorsound->Play();
 		}
 	}
 
@@ -967,10 +997,14 @@ void Elevator::MoveElevatorToFloor()
 				ElevatorRate += (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
 			//stop sounds
 			mainsound->Stop();
-			//play stopping sound
+			motorsound->Stop();
+			//play stopping sounds
 			mainsound->Load(StopSound.GetData());
 			mainsound->Loop(false);
 			mainsound->Play();
+			motorsound->Load(MotorStopSound.GetData());
+			motorsound->Loop(false);
+			motorsound->Play();
 		}
 	}
 
@@ -1059,6 +1093,7 @@ void Elevator::MoveElevatorToFloor()
 	MoveElevator = false;
 	IsMoving = false;
 	mainsound->Stop();
+	motorsound->Stop();
 
 	if (EmergencyStop == false && InspectionService == false)
 	{

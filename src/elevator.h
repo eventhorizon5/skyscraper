@@ -70,6 +70,9 @@ public:
 	csString MoveSound; //elevator move sound
 	csString StopSound; //elevator stop/slowdown sound
 	csString IdleSound; //elevator idle sound
+	csString MotorStartSound; //motor start/speedup sound
+	csString MotorRunSound; //motor move sound
+	csString MotorStopSound; //motor stop/slowdown sound
 	csString AlarmSound; //alarm sound (loop)
 	csString AlarmSoundStop; //alarm stopping sound
 	csString BeepSound; //floor beep sound (played when changing floors)
@@ -217,6 +220,7 @@ private:
 	//sound objects
 	Sound *mainsound;
 	Sound *idlesound;
+	Sound *motorsound;
 	Sound *alarm;
 	Sound *floorbeep;
 	Sound *floorsound;

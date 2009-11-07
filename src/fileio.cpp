@@ -2909,6 +2909,33 @@ recalc:
 				}
 				Simcore->GetElevator(Current)->IdleSound = temp2;
 			}
+			if (LineData.Slice(0, 15).CompareNoCase("motorstartsound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->MotorStartSound = temp2;
+			}
+			if (LineData.Slice(0, 14).CompareNoCase("motorrunsound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->MotorRunSound = temp2;
+			}
+			if (LineData.Slice(0, 14).CompareNoCase("motorstopsound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->MotorStopSound = temp2;
+			}
 			if (LineData.Slice(0, 10).CompareNoCase("chimesound") == true)
 			{
 				if (temp2check < 0)
