@@ -132,11 +132,14 @@
     Load data/servicedoor2.jpg, ServiceDoor2, 1, 1
     Load data/servicedoor3.jpg, ServiceDoor3, 1, 1
     Load data/downtown.jpg, Downtown, 1, 1
-    Load data/vents1.jpg, VentsInt, 1, 1
+    Load data/bracing1.jpg, VentsInt, 1, 1
     Load data/vents1.jpg, VentsExt, 1, 1
 
     #Elevators and Stairwells
     Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
+    Load data/otis4_weaveceiling_3x3_symmetrical.jpg, ElevCeiling2_3x3, 1, 1
+    Load data/otis4_weaveceiling_2x3.jpg, ElevCeiling2_2x3, 1, 1
+    Load data/otis4_weaveceiling_3x2.jpg, ElevCeiling2_3x2, 1, 1
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 0.5, 0.5
     Load data/MetalBare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
@@ -151,10 +154,16 @@
     Load data/door2.jpg, ElevDoorsL2, 1, 1
     Load data/door2.jpg, ElevDoorsR2, -1, 1
     Load data/text16.jpg, ElevDoors2, 1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors3L, -1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors3R, 1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors3L2, 1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors3R2, -1, 1
+    Load data/otis4_weaveback.jpg, ElevWall1A, 1, 1
+    Load data/otis4_weavebackdouble.jpg, ElevWall1B, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels2, 1, 1
-    Load data/metal1.jpg, ElevPanel, 1, 1
-    Load data/elevpanelsilver.jpg, ElevPanelMain, 1, 1
+    Load data/otis4_buttonpanel.jpg, ElevPanel, 1, 1
+    Load data/otis4_weaveelevpanel.jpg, ElevPanelMain, 1, 1
     Load data/cinderblocks.jpg, StairsWall, 0.25, 1
     Load data/text13.jpg, Stairs, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
@@ -1420,7 +1429,7 @@ ShaftCut 20, -5.25 + 0.33, -10.67, 5.25 - 0.33, 10.67, 0, 5
 <EndFloors>
 
 #Core Utility Shaft 2
-AddShaft 21, 1, -0.08, 48.475, -2, 165
+AddShaft 21, 1, -0.08, 48.475, -10, 165
 ShaftCut 21, -5.5, -5.255, 5.5, 5.255, 0, 5
 
 <Floors -2 to 165>
@@ -1538,8 +1547,14 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 2 - 6
     FloorSkipText = L
     AssignedShaft = 13
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, 13.5, 5
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
 
 <EndElevator>
 
@@ -1553,8 +1568,14 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 2 - 6
     FloorSkipText = L
     AssignedShaft = 13
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, 4.5, 0
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
 
 <EndElevator>
 
@@ -1568,9 +1589,14 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 2 - 6
     FloorSkipText = L
     AssignedShaft = 13
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, -4.5, 3
     BeepSound = beep1.wav
-
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
 <EndElevator>
 
 <Elevator 4>
@@ -1583,8 +1609,14 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 2 - 6
     FloorSkipText = L
     AssignedShaft = 13
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, -13.5, 2
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
 
 <EndElevator>
 
@@ -1596,25 +1628,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 1, 1
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, Marble1B, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 1, 1
 
     #front and left walls
     WallOrientation = left
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left, Marble5, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 1, 1
+    TextureOverride ElevExt, ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall1A, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 1, 1
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -1622,21 +1654,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL, ElevDoorsR, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L, ElevDoors3R, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 3.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 8, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 8, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, Button6, 2, 4, 6, 1, 1
     AddFloorButton 1, Button5, 2, 2, 5, 1, 1
     AddFloorButton 1, Button4, 3, 4, 4, 1, 1
@@ -1651,6 +1681,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
     #Floor Indicator
     AddFloorIndicator left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Elevator 5>
@@ -1663,8 +1694,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 2 - 6
     FloorSkipText = L
     AssignedShaft = 12
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, 13.5, 5
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1678,8 +1716,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 2 - 6
     FloorSkipText = L
     AssignedShaft = 12
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, 4.5, 4
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1693,8 +1738,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 2 - 6
     FloorSkipText = L
     AssignedShaft = 12
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, -4.5, 0
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1708,8 +1760,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 2 - 6
     FloorSkipText = L
     AssignedShaft = 12
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, -13.5, 3
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1721,25 +1780,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 1, 1
 
     #front wall
     WallOrientation = left
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #back and right walls
     WallOrientation = right
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right, Marble5, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall1B, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall1A, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -1747,21 +1806,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L2, ElevDoors3R2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -3.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 8, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 8, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, Button6, 2, 4, 6, 1, 1
     AddFloorButton 1, Button5, 2, 2, 5, 1, 1
     AddFloorButton 1, Button4, 3, 4, 4, 1, 1
@@ -1776,6 +1833,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
     #Floor Indicator
     AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Floor 0>
@@ -1801,8 +1859,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 7 - 19
     FloorSkipText = EZ
     AssignedShaft = 10
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, 13.5, 14
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1816,8 +1881,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 7 - 19
     FloorSkipText = EZ
     AssignedShaft = 10
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, 4.5, 7
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1831,8 +1903,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 7 - 19
     FloorSkipText = EZ
     AssignedShaft = 10
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, -4.5, 8
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1846,8 +1925,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 7 - 19
     FloorSkipText = EZ
     AssignedShaft = 10
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, -13.5, 15
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1859,25 +1945,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 1, 1
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, Marble1B, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 1, 1
 
     #front and left walls
     WallOrientation = left
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left, Marble5, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 1, 1
+    TextureOverride ElevExt, ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall1A, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 1, 1
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -1885,21 +1971,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL, ElevDoorsR, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L, ElevDoors3R, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 3.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, Button19, 2, 3, 19, 1, 1
     AddFloorButton 1, Button18, 2, 2, 18, 1, 1
     AddFloorButton 1, Button17, 3, 4, 17, 1, 1
@@ -1922,6 +2006,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
     #Floor Indicator
     AddFloorIndicator left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Elevator 13>
@@ -1934,8 +2019,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 7 - 19
     FloorSkipText = EZ
     AssignedShaft = 11
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, 13.5, 7
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1949,8 +2041,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 7 - 19
     FloorSkipText = EZ
     AssignedShaft = 11
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, 4.5, 0
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1964,8 +2063,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 7 - 19
     FloorSkipText = EZ
     AssignedShaft = 11
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, -4.5, 9
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1979,8 +2085,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 7 - 19
     FloorSkipText = EZ
     AssignedShaft = 11
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, -13.5, 16
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -1992,25 +2105,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 1, 1
 
     #front wall
     WallOrientation = left
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #back and right walls
     WallOrientation = right
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right, Marble5, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall1B, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall1A, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -2018,21 +2131,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L2, ElevDoors3R2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -3.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, Button19, 2, 3, 19, 1, 1
     AddFloorButton 1, Button18, 2, 2, 18, 1, 1
     AddFloorButton 1, Button17, 3, 4, 17, 1, 1
@@ -2055,18 +2166,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
     #Floor Indicator
     AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Floor 0>
     CallButtonElevators = 9, 10, 11, 12, 13, 14, 15, 16
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 56.82 + 4.25 + 0.33 + 0.01, -29.66, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 77.84 - 4.25 - 0.33 - 0.01, -29.66, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 77.48 - 4.25 - 0.33 - 0.01, -29.66, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 7 to 19>
     CallButtonElevators = 9, 10, 11, 12, 13, 14, 15, 16
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 56.82 + 4.25 + 0.33 + 0.01, -29.66, 4, right, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 77.84 - 4.25 - 0.33 - 0.01, -29.66, 4, left, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 77.48 - 4.25 - 0.33 - 0.01, -29.66, 4, left, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Office Zone 1 Mid-Rise Elevators (20 - 31)
@@ -2080,8 +2192,14 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 20 - 31
     FloorSkipText = EZ
     AssignedShaft = 6
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, 13.5, 22
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
 
 <EndElevator>
 
@@ -2095,8 +2213,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 20 - 31
     FloorSkipText = EZ
     AssignedShaft = 6
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, 4.5, 25
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2110,8 +2235,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 20 - 31
     FloorSkipText = EZ
     AssignedShaft = 6
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, -4.5, 30
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2125,8 +2257,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 20 - 31
     FloorSkipText = EZ
     AssignedShaft = 6
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, -13.5, 23
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2138,25 +2277,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 1, 1
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, Marble1B, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 1, 1
 
     #front and left walls
     WallOrientation = left
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left, Marble5, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 1, 1
+    TextureOverride ElevExt, ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall1A, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 1, 1
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -2164,21 +2303,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL, ElevDoorsR, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L, ElevDoors3R, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 3.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, Button31, 2, 3, 31, 1, 1
     AddFloorButton 1, Button30, 3, 4, 30, 1, 1
     AddFloorButton 1, Button29, 3, 3, 29, 1, 1
@@ -2200,6 +2337,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
     #Floor Indicator
     AddFloorIndicator left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Elevator 21>
@@ -2212,8 +2350,14 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 20 - 31
     FloorSkipText = EZ
     AssignedShaft = 7
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, 13.5, 0
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
 
 <EndElevator>
 
@@ -2227,8 +2371,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 20 - 31
     FloorSkipText = EZ
     AssignedShaft = 7
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, 4.5, 25
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2242,8 +2393,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 20 - 31
     FloorSkipText = EZ
     AssignedShaft = 7
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, -4.5, 28
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2257,8 +2415,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 20 - 31
     FloorSkipText = EZ
     AssignedShaft = 7
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, -13.5, 27
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2270,25 +2435,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 1, 1
 
     #front wall
     WallOrientation = left
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #back and right walls
     WallOrientation = right
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right, Marble5, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall1B, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall1A, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -2296,21 +2461,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L2, ElevDoors3R2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -3.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, Button31, 2, 3, 31, 1, 1
     AddFloorButton 1, Button30, 3, 4, 30, 1, 1
     AddFloorButton 1, Button29, 3, 3, 29, 1, 1
@@ -2332,6 +2495,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
     #Floor Indicator
     AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Floor 0>
@@ -2357,8 +2521,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 32 - 41
     FloorSkipText = EZ
     AssignedShaft = 9
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, 13.5, 41
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2372,8 +2543,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 32 - 41
     FloorSkipText = EZ
     AssignedShaft = 9
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, 4.5, 33
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2387,8 +2565,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 32 - 41
     FloorSkipText = EZ
     AssignedShaft = 9
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, -4.5, 38
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2402,8 +2587,14 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 32 - 41
     FloorSkipText = EZ
     AssignedShaft = 9
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, -13.5, 32
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
 
 <EndElevator>
 
@@ -2415,25 +2606,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 1, 1
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, Marble1B, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 1, 1
 
     #front and left walls
     WallOrientation = left
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left, Marble5, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 1, 1
+    TextureOverride ElevExt, ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall1A, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 1, 1
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -2441,21 +2632,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL, ElevDoorsR, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L, ElevDoors3R, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 3.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 9, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 9, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, Button41, 2, 3, 41, 1, 1
     AddFloorButton 1, Button40, 2, 2, 40, 1, 1
     AddFloorButton 1, Button39, 3, 4, 39, 1, 1
@@ -2475,6 +2664,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
     #Floor Indicator
     AddFloorIndicator left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Elevator 29>
@@ -2487,8 +2677,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 32 - 41
     FloorSkipText = EZ
     AssignedShaft = 8
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, 13.5, 36
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2502,8 +2699,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 32 - 41
     FloorSkipText = EZ
     AssignedShaft = 8
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, 4.5, 39
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2517,8 +2721,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 32 - 41
     FloorSkipText = EZ
     AssignedShaft = 8
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, -4.5, 35
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2532,8 +2743,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 32 - 41
     FloorSkipText = EZ
     AssignedShaft = 8
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, -13.5, 0
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2545,25 +2763,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 1, 1
 
     #front wall
     WallOrientation = left
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #back and right walls
     WallOrientation = right
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right, Marble5, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall1B, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall1A, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -2571,21 +2789,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L2, ElevDoors3R2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -3.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 9, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 9, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, Button41, 2, 3, 41, 1, 1
     AddFloorButton 1, Button40, 2, 2, 40, 1, 1
     AddFloorButton 1, Button39, 3, 4, 39, 1, 1
@@ -2605,6 +2821,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
     #Floor Indicator
     AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Floor 0>
@@ -2630,8 +2847,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 44
     FloorSkipText = EZ
     AssignedShaft = 4
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, 9, 0
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2645,8 +2869,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 44
     FloorSkipText = EZ
     AssignedShaft = 4
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, -9, 0
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2658,25 +2889,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -5.125, -5.75, 5.125, 5.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -5.125, -5.75, 5.125, 5.75, 9, 9, 0, 0
+    TextureOverride ElevCeiling2_3x3, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x3, 0.2, -5.125, -5.75, 5.125, 5.75, 9, 9, 1, 1
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -5.125, 5.75, 5.125, 5.75, 9, 9, 0, 0, 0, 0
+    TextureOverride ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, Marble1A, 0.2, -5.125, 5.75, 5.125, 5.75, 9, 9, 0, 0, 1, 1
 
     #front and left walls
     WallOrientation = left
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -5.125, -5.75, 5.125, -5.75, 9, 9, 0, 0, 0, 0
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left, Marble5, 0.2, -5.125, -5.75, -5.125, 5.75, 9, 9, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1A, 0.2, -5.125, -5.75, 5.125, -5.75, 9, 9, 0, 0, 1, 1
+    TextureOverride ElevExt, ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall1A, 0.2, -5.125, -5.75, -5.125, 5.75, 9, 9, 0, 0, 1, 1
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -2684,34 +2915,32 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 5.125, 2.75, 5.125, 5.75, 9, 9, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL, ElevDoorsR, 0.2, 5.126, 0, 5.5, 9, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L, ElevDoors3R, 0.2, 5.126, 0, 5.5, 9, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 5.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, 5.426 + 0.2 + 0.33, 5.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, 5.426 + 0.2 + 0.33, -5.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panels
-    CreatePanel ElevPanel, 8, 7, left, 5.125 - 0.2 - 0.01, -3.25 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 8, 7, left, 5.125 - 0.2 - 0.01, -3.25 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, Button44, 2, 4, 44, 1, 1
     AddFloorButton 1, ButtonL, 4, 4, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 6, 3, open, 1, 1
-    AddControlButton 1, ButtonClose, 6, 5, close, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 6, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 3, cancel, 1, 1
     AddControlButton 1, ButtonStop, 7, 4, stop, 1, 1
     AddControlButton 1, ButtonAlarm, 7, 5, alarm, 1, 1
 
-    CreatePanel ElevPanel, 8, 7, left, 5.125 - 0.2 - 0.01, 3.25 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 8, 7, left, 5.125 - 0.2 - 0.01, 3.25 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 2, Button44, 2, 4, 44, 1, 1
     AddFloorButton 2, ButtonL, 4, 4, 0, 1, 1
-    AddControlButton 2, ButtonOpen, 6, 3, open, 1, 1
-    AddControlButton 2, ButtonClose, 6, 5, close, 1, 1
+    AddControlButton 2, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 2, ButtonClose, 7, 6, close, 1, 1
     AddControlButton 2, ButtonCancel, 7, 3, cancel, 1, 1
     AddControlButton 2, ButtonStop, 7, 4, stop, 1, 1
     AddControlButton 2, ButtonAlarm, 7, 5, alarm, 1, 1
@@ -2719,6 +2948,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     #Floor Indicators
     AddFloorIndicator left, 5.125 - 0.2 - 0.01, -3.25 - 1 + 0.1, 0.7, 0.5, 6.5
     AddFloorIndicator left, 5.125 - 0.2 - 0.01, 3.25 + 1 - 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Elevator 35>
@@ -2731,8 +2961,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 44
     FloorSkipText = EZ
     AssignedShaft = 5
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, 9, 44
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2746,8 +2983,14 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = 0, 44
     FloorSkipText = EZ
     AssignedShaft = 5
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, -9, 44
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
 
 <EndElevator>
 
@@ -2759,60 +3002,58 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -5.125, -5.75, 5.125, 5.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -5.125, -5.75, 5.125, 5.75, 9, 9, 0, 0
+    TextureOverride ElevCeiling2_3x3, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x3, 0.2, -5.125, -5.75, 5.125, 5.75, 9, 9, 1, 1
 
-    #front wall (in global perspective)
+    #front wall
     WallOrientation = left
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -5.125, -5.75, 5.125, -5.75, 9, 9, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -5.125, -5.75, 5.125, -5.75, 9, 9, 0, 0, 0, 0
 
     #back and right walls
     WallOrientation = right
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -5.125, 5.75, 5.125, 5.75, 9, 9, 0, 0, 0, 0
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right, Marble5, 0.2, 5.125, -5.75, 5.125, 5.75, 9, 9, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall1B, 0.2, -5.125, 5.75, 5.125, 5.75, 9, 9, 0, 0, 0, 0
+    TextureOverride ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall1A, 0.2, 5.125, -5.75, 5.125, 5.75, 9, 9, 0, 0, 0, 0
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
-    AddWall Right Panel, ElevPanelMain, 0.2, -5.125, -5.75, -5.125, -2.75, 9, 9, 0, 0, 0, 0
+    AddWall Left Panel, ElevPanelMain, 0.2, -5.125, -5.75, -5.125, -2.75, 9, 9, 0, 0, 0, 0
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
-    AddWall Left Panel, ElevPanelMain, 0.2, -5.125, 2.75, -5.125, 5.75, 9, 9, 0, 0, 0, 0
-    SetAutoSize = true, true
+    AddWall Right Panel, ElevPanelMain, 0.2, -5.125, 2.75, -5.125, 5.75, 9, 9, 0, 0, 0, 0
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, -5.126, 0, 5.5, 9, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L2, ElevDoors3R2, 0.2, -5.126, 0, 5.5, 9, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -5.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, -5.426 - 0.2 - 0.33, 5.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, -5.426 - 0.2 - 0.33, -5.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panels
-    CreatePanel ElevPanel, 8, 7, right, -5.125 + 0.2 + 0.01, -3.25 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 8, 7, right, -5.125 + 0.2 + 0.01, -3.25 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, Button44, 2, 4, 44, 1, 1
     AddFloorButton 1, ButtonL, 4, 4, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 6, 3, open, 1, 1
-    AddControlButton 1, ButtonClose, 6, 5, close, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 6, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 3, cancel, 1, 1
     AddControlButton 1, ButtonStop, 7, 4, stop, 1, 1
     AddControlButton 1, ButtonAlarm, 7, 5, alarm, 1, 1
 
-    CreatePanel ElevPanel, 8, 7, right, -5.125 + 0.2 + 0.01, 3.25 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 8, 7, right, -5.125 + 0.2 + 0.01, 3.25 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 2, Button44, 2, 4, 44, 1, 1
     AddFloorButton 2, ButtonL, 4, 4, 0, 1, 1
-    AddControlButton 2, ButtonOpen, 6, 3, open, 1, 1
-    AddControlButton 2, ButtonClose, 6, 5, close, 1, 1
+    AddControlButton 2, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 2, ButtonClose, 7, 6, close, 1, 1
     AddControlButton 2, ButtonCancel, 7, 3, cancel, 1, 1
     AddControlButton 2, ButtonStop, 7, 4, stop, 1, 1
     AddControlButton 2, ButtonAlarm, 7, 5, alarm, 1, 1
@@ -2820,6 +3061,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     #Floor Indicators
     AddFloorIndicator right, -5.125 + 0.2 + 0.01, -3.25 - 1 + 0.1, 0.7, 0.5, 6.5
     AddFloorIndicator right, -5.125 + 0.2 + 0.01, 3.25 + 1 - 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Floor 0>
@@ -2845,8 +3087,14 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = -8 - 0
     FloorSkipText = EZ
     AssignedShaft = 15
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, 4.5, -7
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
 
 <EndElevator>
 
@@ -2860,8 +3108,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = -8 - 0
     FloorSkipText = EZ
     AssignedShaft = 15
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, -0.298, -4.5, 0
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2873,25 +3128,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 1, 1
 
     #front wall
     WallOrientation = left
     DrawWalls = true, true, false, false, false, false
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
 
     #back and right walls
     WallOrientation = right
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Right, Marble5, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall1B, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall1A, 0.2, 3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = left
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -2899,21 +3154,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, -3.125, 1.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L2, ElevDoors3R2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -3.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, ButtonL, 2, 3, 0, 1, 1
     AddFloorButton 1, ButtonIC, 3, 4, -1, 1, 1
     AddFloorButton 1, ButtonP1, 3, 2, -2, 1, 1
@@ -2931,6 +3184,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
     #Floor Indicator
     AddFloorIndicator right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Floors -8 to 0>
@@ -2949,8 +3203,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = -8 - 0
     FloorSkipText = EZ
     AssignedShaft = 14
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, -4.5, 0
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2964,8 +3225,15 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     ServicedFloors = -8 - 0
     FloorSkipText = EZ
     AssignedShaft = 14
+    IdleSound = otis4_elevidle.wav
     CreateElevator true, 0.298, 4.5, -3
     BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
 
 <EndElevator>
 
@@ -2977,25 +3245,25 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddFloor Floor, Marble1, 0.2, -3.125, -3.75, 3.125, 3.75, 0, 0, 0, 0
 
     #ceiling
+    SetAutoSize = false, false
     FloorOrientation = bottom
-    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 0, 0
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -3.125, -3.75, 3.125, 3.75, 8, 8, 1, 1
 
     #back wall (in global perspective)
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    TextureOverride Marble5, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Back, Marble5, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, Marble1B, 0.2, -3.125, 3.75, 3.125, 3.75, 8, 8, 0, 0, 1, 1
 
     #front and left walls
     WallOrientation = left
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Front, Marble5, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 0, 0
-    TextureOverride ElevExt, Marble5, ElevExt, ElevExt, ElevExt, ElevExt
-    AddWall Left, Marble5, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -3.125, -3.75, 3.125, -3.75, 8, 8, 0, 0, 1, 1
+    TextureOverride ElevExt, ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall1A, 0.2, -3.125, -3.75, -3.125, 3.75, 8, 8, 0, 0, 1, 1
 
     #panels
-    SetAutoSize = false, false
     WallOrientation = right
     DrawWalls = true, true, false, true, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
@@ -3003,21 +3271,19 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DrawWalls = true, true, true, false, false, false
     TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 3.125, 1.75, 3.125, 3.75, 8, 8, 0, 0, 0, 0
-    SetAutoSize = true, true
 
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoorsL, ElevDoorsR, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ElevDoors3L, ElevDoors3R, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 3.426, 0, 0, 0 #shaft doors
-    SetAutoSize = true, true
 
     #floor signs
     AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
     AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, ButtonL, 2, 3, 0, 1, 1
     AddFloorButton 1, ButtonIC, 3, 4, -1, 1, 1
     AddFloorButton 1, ButtonP1, 3, 2, -2, 1, 1
@@ -3035,11 +3301,245 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
     #Floor Indicator
     AddFloorIndicator left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
 <EndElevators>
 
 <Floors -8 to 0>
     CallButtonElevators = 39, 40
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 53.65 + 4.25 + 0.33 + 0.01, 10.5, 4, right, 0.5, 1, true, 0, 0
+<EndFloors>
+
+#Hotel Express Elevators
+<Elevator 41>
+    Doors = 1
+    Speed = 24
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 90
+    FloorSkipText = EZ
+    AssignedShaft = 3
+    IdleSound = otis4_elevidle.wav
+    CreateElevator true, 5, -0.298, 90
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
+
+<EndElevator>
+
+<Elevator 42>
+    Doors = 1
+    Speed = 24
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 90
+    FloorSkipText = EZ
+    AssignedShaft = 3
+    IdleSound = otis4_elevidle.wav
+    CreateElevator true, -5, -0.298, 0
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
+
+<EndElevator>
+
+<Elevators 41 to 42>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, Marble1, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, Marble1, 0.2, -4.25, -4.125, 4.25, 4.125, 0, 0, 0, 0
+
+    #ceiling
+    SetAutoSize = false, false
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling2_2x3, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_2x3, 0.2, -4.25, -4.125, 4.25, 4.125, 8, 8, 0, 0 #ceiling
+
+    #back and right walls
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall1A, 0, -4.25, 4.125, 4.25, 4.125, 8, 8, 0, 0, 1, 1 #front wall
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall1B, 0.2, 4.25, -4.125, 4.25, 4.125, 8, 8, 0, 0, 0, 0 #right wall
+
+    #left wall
+    WallOrientation = left
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall1B, 0.2, -4.25, -4.125, -4.25, 4.125, 8, 8, 0, 0, 0, 0 #left wall
+
+    #panels
+    WallOrientation = left
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -4.25, -4.125, -2, -4.125, 8, 8, 0, 0, 0, 0 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 2, -4.125, 4.25, -4.125, 8, 8, 0, 0, 0, 0 #right panel
+
+    #doors
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    AddDoors 1, ElevDoors3L, ElevDoors3R, 0.2, 0, -4.126, 4, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 0, -4.426, 0, 0 #shaft doors
+    WallOrientation = left
+
+    #floor signs
+    AddFloorSigns true, left, 4 / 2 - 0.01, -4.426 - 0.2 - 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns true, right, -4 / 2 + 0.01, -4.426 - 0.2 - 0.33, 0.5, 0.42, 5.5
+
+    #panel
+    CreatePanel ElevPanel, 8, 5, back, -2 - 1.125 + 0.1, -4.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
+    AddFloorButton 1, Button90, 2, 3, 90, 1, 1
+    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 7, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 7, 4, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator back, -2 - 1.125 + 0.1, -4.125 + 0.2 + 0.001, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
+<EndElevators>
+
+<Floor 0>
+    CallButtonElevators = 41, 42
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 28.74, 5.75 - 5.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+<EndFloor>
+
+<Floor 90>
+    CallButtonElevators = 41, 42
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 28.74, 5.75 - 5.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
+<EndFloor>
+
+#East Upper Express Elevators
+<Elevator 43>
+    Doors = 1
+    Speed = 30
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0, 157 - 159
+    FloorSkipText = EZ
+    AssignedShaft = 20
+    IdleSound = otis4_elevidle.wav
+    CreateElevator true, 0.298, -5, 0
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
+
+<EndElevator>
+
+<Elevator 44>
+    Doors = 1
+    Speed = 30
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0, 157 - 159
+    FloorSkipText = EZ
+    AssignedShaft = 20
+    IdleSound = otis4_elevidle.wav
+    CreateElevator true, 0.298, 5, 158
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
+
+<EndElevator>
+
+<Elevators 43 to 44>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, Marble1, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, Marble1, 0.2, -4.125, -4.75, 4.125, 4.75, 0, 0, 0, 0
+
+    #ceiling
+    SetAutoSize = false, false
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -4.125, -4.75, 4.125, 4.75, 8, 8, 1, 1
+
+    #back wall (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, Marble1B, 0.2, -4.125, 4.75, 4.125, 4.75, 8, 8, 0, 0, 1, 1
+
+    #front and left walls
+    WallOrientation = left
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -4.125, -4.75, 4.125, -4.75, 8, 8, 0, 0, 1, 1
+    TextureOverride ElevExt, ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall1A, 0.2, -4.125, -4.75, -4.125, 4.75, 8, 8, 0, 0, 1, 1
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, 4.125, -4.75, 4.125, -2.25, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 4.125, 2.25, 4.125, 4.75, 8, 8, 0, 0, 0, 0
+
+    #doors
+    WallOrientation = left
+    DrawWalls = true, true, true, true, true, true
+    AddDoors 1, ElevDoors3L, ElevDoors3R, 0.2, 4.126, 0, 4.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 4.426, 0, 0, 0 #shaft doors
+
+    #floor signs
+    AddFloorSigns true, front, 4.426 + 0.2 + 0.33, 4.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns true, back, 4.426 + 0.2 + 0.33, -4.5 / 2 + 0.01, 0.5, 0.42, 5.5
+
+    #panel
+    CreatePanel ElevPanel, 9, 5, left, 4.125 - 0.2 - 0.01, -2.25 - 1.25 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
+    AddFloorButton 1, Button159, 2, 3, 159, 1, 1
+    AddFloorButton 1, Button158, 3, 3, 158, 1, 1
+    AddFloorButton 1, Button157, 4, 3, 157, 1, 1
+    AddFloorButton 1, ButtonL, 5, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator left, 4.125 - 0.2 - 0.01, -2.25 - 1.25 + 0.1, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
+<EndElevators>
+
+<Floor 0>
+    CallButtonElevators = 43, 44
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 43.99 + 5.25 + 0.33 + 0.01, 43.33, 4, right, 0.5, 1, true, 0, 0
+<EndFloor>
+
+<Floors 157 to 159>
+    CallButtonElevators = 43, 44
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 43.99 + 5.25 + 0.33 + 0.01, 43.33, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Stairwells
