@@ -154,10 +154,10 @@
     Load data/door2.jpg, ElevDoorsL2, 1, 1
     Load data/door2.jpg, ElevDoorsR2, -1, 1
     Load data/text16.jpg, ElevDoors2, 1, 1
-    Load data/otis4_aluminumdoor.jpg, ElevDoors3L, -1, 1
-    Load data/otis4_aluminumdoor.jpg, ElevDoors3R, 1, 1
-    Load data/otis4_aluminumdoor.jpg, ElevDoors3L2, 1, 1
-    Load data/otis4_aluminumdoor.jpg, ElevDoors3R2, -1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors3L2, -1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors3R2, 1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors3L, 1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors3R, -1, 1
     Load data/otis4_weaveback.jpg, ElevWall1A, 1, 1
     Load data/otis4_weavebackdouble.jpg, ElevWall1B, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
@@ -662,6 +662,175 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall30, %4%, 0.33, -22.66 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
 <EndFloor>
 
+<Floors 3 to 8>
+    WallOrientation = center
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall1, %4%, 0.66, 5.25, -11.33, 77.48 + 4.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, %4%, 0.66, -77.48 - 4.25 - 0.33, -11.33, -5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
+    AddWall Wall1, %4%, 0.66, -5.25, -11.33, 5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall1, %4%, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall2, %4%, 0.33, -56.82 - 4.25 - 0.33, -29.66 - 18 - 0.33, -56.82 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall3, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -27 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall5, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall6, %4%, 0.33, 77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall7, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8, %4%, 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.33, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall24, %4%, 0.33, 77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall25, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall26, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall27, %4%, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall28, %4%, 0.33, -56.82 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall29, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall31, %4%, 0.33, -11.83 - 6.25 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall Wall10, %4%, 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall11, %4%, 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18 - 0.33, 56.82 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12, %4%, 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall13, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall15, %4%, 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall20, %4%, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall23, %4%, 0.33, -57.83 - 5.25 - 0.33, 33.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall30, %4%, 0.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+<Floors 9 to 21>
+    WallOrientation = center
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall1, %4%, 0.66, 5.25, -11.33, 77.48 + 4.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, %4%, 0.66, -57.83 - 5.25 - 0.33, -11.33, -5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
+    AddWall Wall1, %4%, 0.66, -5.25, -11.33, 5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall2, %4%, 0.33, -47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall3, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -27 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall5, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall6, %4%, 0.33, 77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall7, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8, %4%, 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.66, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall24, %4%, 0.33, 77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall25, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall26, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall28, %4%, 0.33, -47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall29, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall31, %4%, 0.33, -11.83 - 6.25 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall Wall10, %4%, 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall11, %4%, 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18 - 0.33, 56.82 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12, %4%, 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall13, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall20, %4%, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall23, %4%, 0.33, -57.83 - 5.25 - 0.33, 33.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall30, %4%, 0.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+<Floors 22 to 33>
+    WallOrientation = center
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall1, %4%, 0.66, 5.25, -11.33, 47.66 + 4.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, %4%, 0.66, -57.83 - 5.25 - 0.33, -11.33, -5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
+    AddWall Wall1, %4%, 0.66, -5.25, -11.33, 5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall2, %4%, 0.33, -47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall3, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -27 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall5, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall7, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8, %4%, 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.66, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall25, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall26, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall28, %4%, 0.33, -47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall29, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall31, %4%, 0.33, -11.83 - 6.25 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall Wall11, %4%, 0.33, 47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, 47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12, %4%, 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall13, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall20, %4%, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall23, %4%, 0.33, -57.83 - 5.25 - 0.33, 33.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall30, %4%, 0.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+<Floors 34 to 41>
+    WallOrientation = center
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall1, %4%, 0.66, 5.25, -11.33, 15.83 + 6.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, %4%, 0.66, -57.83 - 5.25 - 0.33, -11.33, -5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
+    AddWall Wall1, %4%, 0.66, -5.25, -11.33, 5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall2, %4%, 0.33, -47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall3, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -27 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Wall5, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall7, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8, %4%, 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.66, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Wall25, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall26, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall28, %4%, 0.33, -47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall29, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall31, %4%, 0.33, -11.83 - 6.25 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    #AddWall Wall11, %4%, 0.33, 47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, 47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12, %4%, 0.33, 15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, 15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall13, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall20, %4%, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall23, %4%, 0.33, -57.83 - 5.25 - 0.33, 33.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall30, %4%, 0.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
 <Floors 42 to 43>
     ID = %floor%
     Name = Zone 1 Mechanical
@@ -677,16 +846,26 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     Set 4 = Stucco4e #Wall Texture
     Set 5 = Brick1 #Ceiling Texture
 
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -%1%, -%2%, %1%, %2%, 0, 0, 0, 0, False
+
+    #Ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, %5%, 1.5, -%1%, -%2%, %1%, %2%, %height%, %height%, 0, 0, False
+
     #Internal Vents
     SetAutoSize = false, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall FrontVentsInt, VentsInt, 0, -%1%, -%2%, %1%, -%2%, %fullheight% * 2, %fullheight% * 2, -%interfloorheight%, -%interfloorheight%, 5, 1, False
-    AddWall LeftVentsInt, VentsInt, 0, -%1%, -%2%, -%1%, %2%, %fullheight% * 2, %fullheight% * 2, -%interfloorheight%, -%interfloorheight%, 5, 1, False
+    AddWall FrontVentsInt, VentsInt, 0, -%1%, -%2%, %1%, -%2%, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall LeftVentsInt, VentsInt, 0, -%1%, -%2%, -%1%, %2%, %fullheight%, %fullheight%, 0, 0, 5, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall RightVentsInt, VentsInt, 0, %1%, -%2%, %1%, %2%, %fullheight% * 2, %fullheight% * 2, -%interfloorheight%, -%interfloorheight%, 5, 1, False
-    AddWall BackVentsInt, VentsInt, 0, -%1%, %2%, %1%, %2%, %fullheight% * 2, %fullheight% * 2, -%interfloorheight%, -%interfloorheight%, 5, 1, False
+    AddWall RightVentsInt, VentsInt, 0, %1%, -%2%, %1%, %2%, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall BackVentsInt, VentsInt, 0, -%1%, %2%, %1%, %2%, %fullheight%, %fullheight%, 0, 0, 5, 1, False
 
     #External Vents
     WallOrientation = left
@@ -698,6 +877,52 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall RightVents, VentsExt, 0, %1%, -%2%, %1%, %2%, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
     AddWall BackVents, VentsExt, 0, -%1%, %2%, %1%, %2%, %fullheight% * 2, %fullheight% * 2, 0, 0, 5, 1, True
     SetAutoSize = true, true
+
+    #Interior Walls
+    WallOrientation = center
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall1, %4%, 0.66, 5.25, -11.33, 15.83 + 6.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, %4%, 0.66, -57.83 - 5.25 - 0.33, -11.33, -5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
+    AddWall Wall1, %4%, 0.66, -5.25, -11.33, 5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = center
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall1, %4%, 0.66, 5.25, -11.33, 15.83 + 6.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, %4%, 0.66, -57.83 - 5.25 - 0.33, -11.33, -5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
+    AddWall Wall1, %4%, 0.66, -5.25, -11.33, 5.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall2, %4%, 0.33, -47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall3, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -27 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Wall5, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall7, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8, %4%, 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.66, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Wall25, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall26, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall28, %4%, 0.33, -47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall29, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall31, %4%, 0.33, -11.83 - 6.25 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    #AddWall Wall11, %4%, 0.33, 47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, 47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12, %4%, 0.33, 15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, 15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall13, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall20, %4%, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall23, %4%, 0.33, -57.83 - 5.25 - 0.33, 33.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall30, %4%, 0.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
 <EndFloor>
 
 #Zone 2
@@ -3540,6 +3765,162 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 <Floors 157 to 159>
     CallButtonElevators = 43, 44
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 43.99 + 5.25 + 0.33 + 0.01, 43.33, 4, right, 0.5, 1, true, 0, 0
+<EndFloors>
+
+#West Upper Express Elevators
+<Elevator 45>
+    Doors = 2
+    Speed = 30
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0, 157 - 159
+    FloorSkipText = EZ
+    AssignedShaft = 22
+    IdleSound = otis4_elevidle.wav
+    CreateElevator true, 5, 0, 0
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    UpChimeSound 2 = otis4_Series1_chimeup.wav
+    DownChimeSound 2 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
+
+<EndElevator>
+
+<Elevator 46>
+    Doors = 2
+    Speed = 30
+    Acceleration = 0.1
+    Deceleration = 0.1
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0, 157 - 159
+    FloorSkipText = EZ
+    AssignedShaft = 22
+    IdleSound = otis4_elevidle.wav
+    CreateElevator true, -5, 0, 159
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    UpChimeSound 2 = otis4_Series1_chimeup.wav
+    DownChimeSound 2 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start.wav
+    MotorRunSound = motor_running.wav
+    MotorStopSound = motor_stop.wav
+
+
+<EndElevator>
+
+<Elevators 45 to 46>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, Marble1, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, Marble1, 0.2, -4.75, -4.423, 4.75, 4.423, 0, 0, 0, 0
+
+    #ceiling
+    SetAutosize = false, false
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling2_3x3, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x3, 0.2, -4.75, -4.423, 4.75, 4.423, 8, 8, 1, 1 #ceiling
+
+    #right wall
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall1A, 0.2, 4.75, -4.423, 4.75, 4.423, 8, 8, 0, 0, 1, 1 #right wall
+
+    #left wall
+    WallOrientation = left
+    TextureOverride ElevExt, ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall1A, 0.2, -4.75, -4.423, -4.75, 4.423, 8, 8, 0, 0, 1, 1 #left wall
+
+    #front panels
+    WallOrientation = right
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -4.75, 4.423, -2.25, 4.423, 8, 8, 0, 0, 1, 1 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 2.25, 4.423, 4.75, 4.423, 8, 8, 0, 0, 1, 1 #right panel
+
+    #rear panels
+    WallOrientation = left
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -4.75, -4.423, -2.25, -4.423, 8, 8, 0, 0, 1, 1 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 2.25, -4.423, 4.75, -4.423, 8, 8, 0, 0, 1, 1 #right panel
+
+    #doors
+    WallOrientation = left
+    DrawWalls = true, true, true, true, true, true
+    AddDoors 1, ElevDoors3L2, ElevDoors3R2, 0.2, 0, 4.424, 4.5, 8, true, 0, 0 #doors
+    SetShaftDoors 1, 0.2, 0, 4.724
+
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    AddDoors 2, ElevDoors3L, ElevDoors3R, 0.2, 0, -4.424, 4.5, 8, true, 0, 0 #doors
+    SetShaftDoors 2, 0.2, 0, -4.724
+
+    #floor signs
+    #AddFloorSigns true, left, 3.5 / 2 - 0.01, 4.724 + 0.2 + 0.33, 0.5, 0.42, 5.5
+    #AddFloorSigns true, right, -3.5 / 2 + 0.01, 4.724 + 0.2 + 0.33, 0.5, 0.42, 5.5
+
+    #front panel
+    CreatePanel ElevPanel, 9, 5, front, 2.25 + 1.25 - 0.1, 4.423 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
+    AddFloorButton 1, Button159, 2, 3, 159, 1, 1
+    AddFloorButton 1, Button158, 3, 3, 158, 1, 1
+    AddFloorButton 1, Button157, 4, 3, 157, 1, 1
+    AddFloorButton 1, ButtonL, 5, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+
+    #rear panel
+    CreatePanel ElevPanel, 9, 5, back, -2.25 - 1.25 + 0.1, -4.423 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
+    AddFloorButton 2, Button159, 2, 3, 159, 1, 1
+    AddFloorButton 2, Button158, 3, 3, 158, 1, 1
+    AddFloorButton 2, Button157, 4, 3, 157, 1, 1
+    AddFloorButton 2, ButtonL, 5, 3, 0, 1, 1
+    AddControlButton 2, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 2, ButtonClose, 7, 4, close, 1, 1
+    AddControlButton 2, ButtonCancel, 8, 2, cancel, 1, 1
+    AddControlButton 2, ButtonStop, 8, 3, stop, 1, 1
+    AddControlButton 2, ButtonAlarm, 8, 4, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator front, 2.25 + 1.25 - 0.1, 4.423 - 0.2 - 0.001, 0.7, 0.5, 6.5
+    AddFloorIndicator back, -2.25 - 1.25 + 0.1, -4.423 + 0.2 + 0.001, 0.7, 0.5, 6.5
+    SetAutosize = true, true
+<EndElevators>
+
+<Floor 0>
+    #Shaft Doors
+    WallOrientation = left
+    AddShaftDoor 45, 1, ElevDoorsL, ElevDoorsR, 0, 0
+    AddShaftDoor 46, 1, ElevDoorsL, ElevDoorsR, 0, 0
+
+    CallButtonElevators = 45, 46
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, -41.25, -5.75 + 5.25 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+<EndFloor>
+
+<Floors 157 to 159>
+    #Shaft Doors
+    WallOrientation = right
+    AddShaftDoor 45, 2, ElevDoorsL2, ElevDoorsR2, 0, 0
+    AddShaftDoor 46, 2, ElevDoorsL2, ElevDoorsR2, 0, 0
+
+    CallButtonElevators = 45, 46
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, -41.25, -5.75 - 5.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Stairwells
