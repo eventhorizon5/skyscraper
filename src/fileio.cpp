@@ -2918,7 +2918,7 @@ recalc:
 				}
 				Simcore->GetElevator(Current)->MotorStartSound = temp2;
 			}
-			if (LineData.Slice(0, 14).CompareNoCase("motorrunsound") == true)
+			if (LineData.Slice(0, 13).CompareNoCase("motorrunsound") == true)
 			{
 				if (temp2check < 0)
 				{
