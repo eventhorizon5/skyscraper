@@ -66,13 +66,14 @@ public:
 	ButtonPanel *Panel; //elevator button panel object
 	ButtonPanel *Panel2; //elevator button panel object
 	bool IsMoving; //is elevator moving?
-	csString StartSound; //elevator start/speedup sound
-	csString MoveSound; //elevator move sound
-	csString StopSound; //elevator stop/slowdown sound
-	csString IdleSound; //elevator idle sound
+	csString CarStartSound; //elevator start/speedup sound
+	csString CarMoveSound; //elevator move sound
+	csString CarStopSound; //elevator stop/slowdown sound
+	csString CarIdleSound; //elevator idle sound
 	csString MotorStartSound; //motor start/speedup sound
 	csString MotorRunSound; //motor move sound
 	csString MotorStopSound; //motor stop/slowdown sound
+	csString MotorIdleSound; //motor idle sound
 	csString AlarmSound; //alarm sound (loop)
 	csString AlarmSoundStop; //alarm stopping sound
 	csString BeepSound; //floor beep sound (played when changing floors)

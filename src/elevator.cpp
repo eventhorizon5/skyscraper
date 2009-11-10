@@ -77,13 +77,14 @@ Elevator::Elevator(int number)
 	IsMoving = false;
 	lastfloor = 0;
 	lastfloorset = false;
-	StartSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.StartSound", "");
-	MoveSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MoveSound", "");
-	StopSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.StopSound", "");
-	IdleSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.IdleSound", "elevidle.wav");
+	CarStartSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.CarStartSound", "");
+	CarMoveSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.CarMoveSound", "");
+	CarStopSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.CarStopSound", "");
+	CarIdleSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.CarIdleSound", "elevidle.wav");
 	MotorStartSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MotorStartSound", "motor_start.wav");
 	MotorRunSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MotorRunSound", "motor_running.wav");
 	MotorStopSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MotorStopSound", "motor_stop.wav");
+	MotorIdleSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MotorIdleSound", "");
 	AlarmSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.AlarmSound", "bell1.wav");
 	AlarmSoundStop = sbs->confman->GetStr("Skyscraper.SBS.Elevator.AlarmSoundStop", "bell1-stop.wav");
 	UseFloorSkipText = false;
@@ -285,7 +286,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	mainsound->SetPosition(Origin);
 	idlesound = new Sound();
 	idlesound->SetPosition(Origin);
-	idlesound->Load(IdleSound.GetData());
+	idlesound->Load(CarIdleSound.GetData());
 	motorsound = new Sound();
 	motorsound->SetPosition(Origin);
 	//move motor to top of shaft
@@ -771,7 +772,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//Play starting sounds
 		mainsound->Stop();
-		mainsound->Load(StartSound.GetData());
+		mainsound->Load(CarStartSound.GetData());
 		mainsound->Loop(false);
 		mainsound->Play();
 		motorsound->Stop();
@@ -802,7 +803,7 @@ void Elevator::MoveElevatorToFloor()
 		mainsound->Stop();
 		motorsound->Stop();
 		//play stopping sounds
-		mainsound->Load(StopSound.GetData());
+		mainsound->Load(CarStopSound.GetData());
 		mainsound->Loop(false);
 		mainsound->Play();
 		motorsound->Load(MotorStopSound.GetData());
@@ -813,7 +814,7 @@ void Elevator::MoveElevatorToFloor()
 	if (mainsound->IsPlaying() == false && Brakes == false)
 	{
 		//Movement sound
-		mainsound->Load(MoveSound.GetData());
+		mainsound->Load(CarMoveSound.GetData());
 		mainsound->Loop(true);
 		mainsound->Play();
 	}
@@ -970,7 +971,7 @@ void Elevator::MoveElevatorToFloor()
 			mainsound->Stop();
 			motorsound->Stop();
 			//play elevator stopping sounds
-			mainsound->Load(StopSound.GetData());
+			mainsound->Load(CarStopSound.GetData());
 			mainsound->Loop(false);
 			mainsound->Play();
 			motorsound->Load(MotorStopSound.GetData());
@@ -999,7 +1000,7 @@ void Elevator::MoveElevatorToFloor()
 			mainsound->Stop();
 			motorsound->Stop();
 			//play stopping sounds
-			mainsound->Load(StopSound.GetData());
+			mainsound->Load(CarStopSound.GetData());
 			mainsound->Loop(false);
 			mainsound->Play();
 			motorsound->Load(MotorStopSound.GetData());

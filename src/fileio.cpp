@@ -2875,39 +2875,99 @@ recalc:
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("startsound") == true)
 			{
+				//backwards compatibility
 				if (temp2check < 0)
 				{
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->StartSound = temp2;
+				Simcore->GetElevator(Current)->CarStartSound = temp2;
+				//turn off motor sounds
+				Simcore->GetElevator(Current)->MotorStartSound = "";
+				Simcore->GetElevator(Current)->MotorRunSound = "";
+				Simcore->GetElevator(Current)->MotorStopSound = "";
+				Simcore->GetElevator(Current)->MotorIdleSound = "";
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("movesound") == true)
 			{
+				//backwards compatibility
 				if (temp2check < 0)
 				{
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->MoveSound = temp2;
+				Simcore->GetElevator(Current)->CarMoveSound = temp2;
+				//turn off motor sounds
+				Simcore->GetElevator(Current)->MotorStartSound = "";
+				Simcore->GetElevator(Current)->MotorRunSound = "";
+				Simcore->GetElevator(Current)->MotorStopSound = "";
+				Simcore->GetElevator(Current)->MotorIdleSound = "";
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("stopsound") == true)
 			{
+				//backwards compatibility
 				if (temp2check < 0)
 				{
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->StopSound = temp2;
+				Simcore->GetElevator(Current)->CarStopSound = temp2;
+				//turn off motor sounds
+				Simcore->GetElevator(Current)->MotorStartSound = "";
+				Simcore->GetElevator(Current)->MotorRunSound = "";
+				Simcore->GetElevator(Current)->MotorStopSound = "";
+				Simcore->GetElevator(Current)->MotorIdleSound = "";
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("idlesound") == true)
+			{
+				//backwards compatibility
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->CarIdleSound = temp2;
+				//turn off motor sounds
+				Simcore->GetElevator(Current)->MotorStartSound = "";
+				Simcore->GetElevator(Current)->MotorRunSound = "";
+				Simcore->GetElevator(Current)->MotorStopSound = "";
+				Simcore->GetElevator(Current)->MotorIdleSound = "";
+			}
+			if (LineData.Slice(0, 13).CompareNoCase("carstartsound") == true)
 			{
 				if (temp2check < 0)
 				{
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->IdleSound = temp2;
+				Simcore->GetElevator(Current)->CarStartSound = temp2;
+			}
+			if (LineData.Slice(0, 12).CompareNoCase("carmovesound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->CarMoveSound = temp2;
+			}
+			if (LineData.Slice(0, 12).CompareNoCase("carstopsound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->CarStopSound = temp2;
+			}
+			if (LineData.Slice(0, 12).CompareNoCase("caridlesound") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				Simcore->GetElevator(Current)->CarIdleSound = temp2;
 			}
 			if (LineData.Slice(0, 15).CompareNoCase("motorstartsound") == true)
 			{
