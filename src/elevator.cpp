@@ -123,15 +123,6 @@ Elevator::Elevator(int number)
 	Elevator_movable = ElevatorMesh->GetMovable();
 	ElevatorMesh->SetZBufMode(CS_ZBUF_USE);
 	ElevatorMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-
-	buffer = Number;
-	buffer.Insert(0, "Plaque ");
-	buffer.Trim();
-	Plaque = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	Plaque_state = scfQueryInterface<iThingFactoryState> (Plaque->GetMeshObject()->GetFactory());
-	Plaque_movable = Plaque->GetMovable();
-	Plaque->SetZBufMode(CS_ZBUF_USE);
-	Plaque->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 }
 
 Elevator::~Elevator()
@@ -184,6 +175,10 @@ Elevator::~Elevator()
 	if (motorsound)
 		delete motorsound;
 	motorsound = 0;
+
+	Elevator_movable = 0;
+	Elevator_state = 0;
+	ElevatorMesh = 0;
 }
 
 bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
@@ -275,8 +270,6 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//move objects to positions
 	Elevator_movable->SetPosition(Origin);
 	Elevator_movable->UpdateMove();
-	Plaque_movable->SetPosition(Origin);
-	Plaque_movable->UpdateMove();
 
 	//resize directional indicator array
 	IndicatorArray.SetSize(ServicedFloors.GetSize());
@@ -838,8 +831,6 @@ void Elevator::MoveElevatorToFloor()
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	}
-	Plaque_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
-	Plaque_movable->UpdateMove();
 	if (Panel)
 		Panel->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
 	if (Panel2)
@@ -1067,8 +1058,6 @@ void Elevator::MoveElevatorToFloor()
 			if (FloorIndicatorArray[i])
 				FloorIndicatorArray[i]->SetPosition(csVector3(FloorIndicatorArray[i]->GetPosition().x, Destination, FloorIndicatorArray[i]->GetPosition().z));
 		}
-		Plaque_movable->SetPosition(csVector3(Plaque_movable->GetPosition().x, Destination, Plaque_movable->GetPosition().z));
-		Plaque_movable->UpdateMove();
 		if (Panel)
 			Panel->SetToElevatorAltitude();
 		if (Panel2)
@@ -1263,15 +1252,6 @@ void Elevator::AddFloorIndicator(const char *texture_prefix, const char *directi
 	FloorIndicatorArray[size]->SetPosition(Origin);
 }
 
-int Elevator::AddPlaque(const char *texture, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th)
-{
-	sbs->DrawWalls(true, false, false, false, false, false);
-	sbs->ResetTextureMapping(true);
-	return sbs->AddWallMain(Plaque_state, "Plaque", texture, 0, x1, z1, x2, z2, height, height, voffset, voffset, tw, th);
-	sbs->ResetWalls();
-	sbs->ResetTextureMapping();
-}
-
 const csVector3 Elevator::GetPosition()
 {
 	//returns the elevator's position
@@ -1302,15 +1282,13 @@ void Elevator::Enabled(bool value)
 
 void Elevator::EnableObjects(bool value)
 {
-	//enable or disable interior objects, such as floor indicators, button panel and plaque
+	//enable or disable interior objects, such as floor indicators and button panels
 
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Enabled(value);
 	}
-
-	sbs->EnableMesh(Plaque, value);
 
 	if (Panel)
 		Panel->Enabled(value);

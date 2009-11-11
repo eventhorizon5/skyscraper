@@ -255,7 +255,11 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 
 DirectionalIndicator::~DirectionalIndicator()
 {
-
+	Directional_back_state = 0;
+	DirectionalMeshBack = 0;
+	DirectionalMesh = 0;
+	DirectionalMeshUp = 0;
+	DirectionalMeshDown = 0;
 }
 
 void DirectionalIndicator::Enabled(bool value)

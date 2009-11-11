@@ -80,6 +80,7 @@ bool Skyscraper::OnInit(void)
 	DisableSound = false;
 	DrewButtons = false;
 	FullScreen = false;
+	bool Shutdown = false;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -127,6 +128,8 @@ int Skyscraper::OnExit()
 {
 	//clean up
 
+	UnloadSim();
+
 	//delete frame printer object
 	printer.Invalidate();
 
@@ -139,6 +142,19 @@ int Skyscraper::OnExit()
 		canvas->Destroy();
 	canvas = 0;
 
+	window->Destroy();
+	window = 0;
+	skyscraper = 0;
+
+	//cleanup
+	csPrintf ("Cleaning up...\n");
+
+	return 0;
+}
+
+void Skyscraper::UnloadSim()
+{
+	//delete control panel object
 	if(dpanel)
 	{
 		if(dpanel->timer)
@@ -146,16 +162,9 @@ int Skyscraper::OnExit()
 		dpanel->Destroy();
 	}
 	dpanel = 0;
-	window->Destroy();
-	window = 0;
+	//delete simulator object
 	delete Simcore;
 	Simcore = 0;
-	skyscraper = 0;
-
-	//cleanup
-	csPrintf ("Cleaning up...\n");
-
-	return 0;
 }
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT("Skyscraper 1.6 Alpha"), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
@@ -248,7 +257,6 @@ void Skyscraper::SetupFrame()
 	{
 		DrawBackground();
 		GetMenuInput();
-		Render();
 		return;
 	}
 
@@ -280,6 +288,33 @@ void Skyscraper::SetupFrame()
 	Simcore->camera->Loop();
 
 	Render();
+
+	//exit if shutdown request received
+	if (Shutdown == true)
+	{
+		Shutdown = false;
+		if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
+		{
+			//if showmenu is true, unload simulator and return to main menu
+			IsRunning = false;
+			Starting = false;
+			Pause = false;
+			UnloadSim();
+			DrawBackground();
+			StartSound();
+			StartupRunning = true;
+		}
+		else
+		{
+			//otherwise exit app
+			if(dpanel)
+			{
+				if(dpanel->timer)
+					dpanel->timer->Stop();
+			}
+			wxGetApp().Exit();
+		}
+	}
 }
 
 bool Skyscraper::HandleEvent(iEvent& Event)
@@ -519,7 +554,8 @@ void Skyscraper::GetInput()
 		Simcore->camera->MouseDown = MouseDown;
 	}
 
-	//if (wxGetKeyState(WXK_ESCAPE))
+	if (wxGetKeyState(WXK_ESCAPE))
+		Shutdown = true;
 
 	if (wxGetKeyState(WXK_F2) && wait == false)
 	{

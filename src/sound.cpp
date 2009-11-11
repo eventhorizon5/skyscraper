@@ -47,7 +47,10 @@ Sound::Sound()
 Sound::~Sound()
 {
 	//destructor
-
+	directional = 0;
+	sndsource3d = 0;
+	sndsource = 0;
+	sndstream = 0;
 }
 
 void Sound::SetPosition(csVector3 position)

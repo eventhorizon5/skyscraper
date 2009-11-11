@@ -2628,6 +2628,10 @@ recalc:
 			//create elevator if not created already
 			Simcore->NewElevator(Current);
 
+			//replace variables with actual values
+			buffer = Current;
+			LineData.ReplaceAll("%elevator%", buffer);
+
 			//get text after equal sign
 			int temp2check = LineData.Find("=", 0);
 			temp2 = LineData.Slice(temp2check + 1).Trim();

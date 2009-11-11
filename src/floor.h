@@ -33,7 +33,6 @@
 class SBSIMPEXP Floor
 {
 public:
-
 	csRef<iMeshWrapper> Level; //level mesh
 	csRef<iThingFactoryState> Level_state;
 

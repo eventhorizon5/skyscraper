@@ -181,7 +181,10 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 
 CallButton::~CallButton()
 {
-
+	CallButton_back_state = 0;
+	CallButtonMeshDown = 0;
+	CallButtonMeshUp = 0;
+	CallButtonBackMesh = 0;
 }
 
 void CallButton::Enabled(bool value)

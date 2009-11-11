@@ -68,6 +68,7 @@ public:
 	bool DisableSound;
 	bool IntroMusic;
 	bool FullScreen;
+	bool Shutdown;
 
 	csTicks elapsed_time, current_time;
 
@@ -148,6 +149,7 @@ private:
 
 	void DrawImage(const char *filename, buttondata *button, int x, int y, bool center, const char *filename_selected = 0, const char *filename_pressed = 0);
 	void Click(int index);
+	void UnloadSim();
 
 	//script processor internal data
 	bool ScriptError(const char *message);

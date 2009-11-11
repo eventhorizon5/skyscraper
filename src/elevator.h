@@ -193,9 +193,6 @@ private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
 		csRef<iThingFactoryState> Elevator_state;
 		csRef<iMovable> Elevator_movable;
-	csRef<iMeshWrapper> Plaque; //plaque object
-		csRef<iThingFactoryState> Plaque_state;
-		csRef<iMovable> Plaque_movable;
 
 	//Internal elevator simulation data
 	csArray<int> UpQueue; //up call queue

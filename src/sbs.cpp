@@ -179,6 +179,15 @@ SBS::~SBS()
 	}
 	StairsArray.DeleteAll();
 
+	SkyBox_state = 0;
+	SkyBox = 0;
+	Landscape_state = 0;
+	Landscape = 0;
+	External_state = 0;
+	External = 0;
+	Buildings_state = 0;
+	Buildings = 0;
+
 	//clear self reference
 	sbs = 0;
 }

@@ -98,7 +98,8 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 
 ButtonPanel::~ButtonPanel()
 {
-
+	ButtonPanel_state = 0;
+	ButtonPanelMesh = 0;
 }
 
 void ButtonPanel::AddFloorButton(const char *texture, int row, int column, int floor, float width, float height, float hoffset, float voffset)

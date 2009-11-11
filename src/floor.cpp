@@ -108,6 +108,13 @@ Floor::~Floor()
 			delete FloorIndicatorArray[i];
 	}
 	FloorIndicatorArray.DeleteAll();
+
+	ColumnFrame_state = 0;
+	ColumnFrame = 0;
+	Interfloor_state = 0;
+	Interfloor = 0;
+	Level_state = 0;
+	Level = 0;
 }
 
 void Floor::SetCameraFloor()

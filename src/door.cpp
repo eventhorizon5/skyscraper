@@ -120,7 +120,9 @@ Door::Door(const char *name, const char *texture, float thickness, int direction
 Door::~Door()
 {
 	//destructor
-
+	DoorMesh_movable = 0;
+	DoorMesh_state = 0;
+	DoorMesh = 0;
 }
 
 void Door::Open()

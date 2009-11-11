@@ -61,7 +61,8 @@ FloorIndicator::FloorIndicator(int elevator, const char *texture_prefix, const c
 
 FloorIndicator::~FloorIndicator()
 {
-
+	FloorIndicator_movable = 0;
+	FloorIndicatorMesh = 0;
 }
 
 void FloorIndicator::Enabled(bool value)

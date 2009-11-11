@@ -92,6 +92,7 @@ Camera::Camera()
 Camera::~Camera()
 {
 	//Destructor
+	MainCamera = 0;
 }
 
 void Camera::SetPosition(const csVector3 &vector)

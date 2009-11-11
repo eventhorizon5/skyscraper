@@ -142,6 +142,12 @@ ElevatorDoor::~ElevatorDoor()
 		delete chime;
 	chime = 0;
 
+	ElevatorDoorR_movable = 0;
+	ElevatorDoorR_state = 0;
+	ElevatorDoorR = 0;
+	ElevatorDoorL_movable = 0;
+	ElevatorDoorL_state = 0;
+	ElevatorDoorL = 0;
 }
 
 void ElevatorDoor::OpenDoorsEmergency(int whichdoors, int floor)
