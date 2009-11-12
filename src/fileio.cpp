@@ -2648,6 +2648,8 @@ recalc:
 			int temp2check = LineData.Find("=", 0);
 			temp2 = LineData.Slice(temp2check + 1).Trim();
 
+			Elevator *elev = Simcore->GetElevator(Current);
+
 			//parameters
 			if (LineData.Slice(0, 5).CompareNoCase("speed") == true)
 			{
@@ -2656,7 +2658,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->ElevatorSpeed))
+				if (!IsNumeric(temp2.GetData(), elev->ElevatorSpeed))
 				{
 					ScriptError("Invalid value");
 					return false;
@@ -2669,7 +2671,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->Acceleration))
+				if (!IsNumeric(temp2.GetData(), elev->Acceleration))
 				{
 					ScriptError("Invalid value");
 					return false;
@@ -2682,7 +2684,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->Deceleration))
+				if (!IsNumeric(temp2.GetData(), elev->Deceleration))
 				{
 					ScriptError("Invalid value");
 					return false;
@@ -2695,7 +2697,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (Simcore->GetElevator(Current)->Created == false)
+				if (elev->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2705,12 +2707,12 @@ recalc:
 					ScriptError("No door specified");
 					return false;
 				}
-				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				if (temp3 == 0 || temp3 > elev->NumDoors)
 				{
 					ScriptError("Invalid door number");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->GetDoor(temp3)->OpenSpeed))
+				if (!IsNumeric(temp2.GetData(), elev->GetDoor(temp3)->OpenSpeed))
 				{
 					ScriptError("Invalid value");
 					return false;
@@ -2723,7 +2725,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->NumDoors))
+				if (!IsNumeric(temp2.GetData(), elev->NumDoors))
 				{
 					ScriptError("Invalid value");
 					return false;
@@ -2736,7 +2738,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->AccelJerk))
+				if (!IsNumeric(temp2.GetData(), elev->AccelJerk))
 				{
 					ScriptError("Invalid value");
 					return false;
@@ -2749,7 +2751,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->DecelJerk))
+				if (!IsNumeric(temp2.GetData(), elev->DecelJerk))
 				{
 					ScriptError("Invalid value");
 					return false;
@@ -2785,7 +2787,7 @@ recalc:
 						}
 
 						for (int k = start; k <= end; k++)
-							Simcore->GetElevator(Current)->AddServicedFloor(k);
+							elev->AddServicedFloor(k);
 					}
 					else
 					{
@@ -2795,7 +2797,7 @@ recalc:
 							ScriptError("Invalid value");
 							return false;
 						}
-						Simcore->GetElevator(Current)->AddServicedFloor(data);
+						elev->AddServicedFloor(data);
 					}
 				}
 				tempdata.DeleteAll();
@@ -2807,7 +2809,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->AssignedShaft))
+				if (!IsNumeric(temp2.GetData(), elev->AssignedShaft))
 				{
 					ScriptError("Invalid value");
 					return false;
@@ -2820,7 +2822,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (Simcore->GetElevator(Current)->Created == false)
+				if (elev->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2830,12 +2832,12 @@ recalc:
 					ScriptError("No door specified");
 					return false;
 				}
-				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				if (temp3 == 0 || temp3 > elev->NumDoors)
 				{
 					ScriptError("Invalid door number");
 					return false;
 				}
-				if (!IsNumeric(temp2.GetData(), Simcore->GetElevator(Current)->GetDoor(temp3)->DoorTimer))
+				if (!IsNumeric(temp2.GetData(), elev->GetDoor(temp3)->DoorTimer))
 				{
 					ScriptError("Invalid value");
 					return false;
@@ -2848,7 +2850,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (Simcore->GetElevator(Current)->Created == false)
+				if (elev->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2858,12 +2860,12 @@ recalc:
 					ScriptError("No door specified");
 					return false;
 				}
-				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				if (temp3 == 0 || temp3 > elev->NumDoors)
 				{
 					ScriptError("Invalid door number");
 					return false;
 				}
-				Simcore->GetElevator(Current)->GetDoor(temp3)->OpenSound = temp2;
+				elev->GetDoor(temp3)->OpenSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("closesound") == true)
 			{
@@ -2872,7 +2874,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (Simcore->GetElevator(Current)->Created == false)
+				if (elev->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -2882,12 +2884,12 @@ recalc:
 					ScriptError("No door specified");
 					return false;
 				}
-				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				if (temp3 == 0 || temp3 > elev->NumDoors)
 				{
 					ScriptError("Invalid door number");
 					return false;
 				}
-				Simcore->GetElevator(Current)->GetDoor(temp3)->CloseSound = temp2;
+				elev->GetDoor(temp3)->CloseSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("startsound") == true)
 			{
@@ -2897,7 +2899,6 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Elevator *elev = Simcore->GetElevator(Current);
 				elev->CarStartSound = temp2;
 				//turn off motor sounds
 				elev->MotorStartSound = "";
@@ -2913,7 +2914,6 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Elevator *elev = Simcore->GetElevator(Current);
 				elev->CarMoveSound = temp2;
 				//turn off motor sounds
 				elev->MotorStartSound = "";
@@ -2929,7 +2929,6 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Elevator *elev = Simcore->GetElevator(Current);
 				elev->CarStopSound = temp2;
 				//turn off motor sounds
 				elev->MotorStartSound = "";
@@ -2945,7 +2944,6 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Elevator *elev = Simcore->GetElevator(Current);
 				elev->CarIdleSound = temp2;
 				//turn off motor sounds
 				elev->MotorStartSound = "";
@@ -2960,7 +2958,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->CarStartSound = temp2;
+				elev->CarStartSound = temp2;
 			}
 			if (LineData.Slice(0, 12).CompareNoCase("carmovesound") == true)
 			{
@@ -2969,7 +2967,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->CarMoveSound = temp2;
+				elev->CarMoveSound = temp2;
 			}
 			if (LineData.Slice(0, 12).CompareNoCase("carstopsound") == true)
 			{
@@ -2978,7 +2976,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->CarStopSound = temp2;
+				elev->CarStopSound = temp2;
 			}
 			if (LineData.Slice(0, 12).CompareNoCase("caridlesound") == true)
 			{
@@ -2987,7 +2985,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->CarIdleSound = temp2;
+				elev->CarIdleSound = temp2;
 			}
 			if (LineData.Slice(0, 15).CompareNoCase("motorstartsound") == true)
 			{
@@ -2996,7 +2994,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->MotorStartSound = temp2;
+				elev->MotorStartSound = temp2;
 			}
 			if (LineData.Slice(0, 13).CompareNoCase("motorrunsound") == true)
 			{
@@ -3005,7 +3003,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->MotorRunSound = temp2;
+				elev->MotorRunSound = temp2;
 			}
 			if (LineData.Slice(0, 14).CompareNoCase("motorstopsound") == true)
 			{
@@ -3014,7 +3012,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->MotorStopSound = temp2;
+				elev->MotorStopSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("chimesound") == true)
 			{
@@ -3023,7 +3021,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (Simcore->GetElevator(Current)->Created == false)
+				if (elev->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -3033,13 +3031,13 @@ recalc:
 					ScriptError("No door specified");
 					return false;
 				}
-				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				if (temp3 == 0 || temp3 > elev->NumDoors)
 				{
 					ScriptError("Invalid door number");
 					return false;
 				}
-				Simcore->GetElevator(Current)->GetDoor(temp3)->UpChimeSound = temp2;
-				Simcore->GetElevator(Current)->GetDoor(temp3)->DownChimeSound = temp2;
+				elev->GetDoor(temp3)->UpChimeSound = temp2;
+				elev->GetDoor(temp3)->DownChimeSound = temp2;
 			}
 			if (LineData.Slice(0, 12).CompareNoCase("upchimesound") == true)
 			{
@@ -3048,7 +3046,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (Simcore->GetElevator(Current)->Created == false)
+				if (elev->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -3058,12 +3056,12 @@ recalc:
 					ScriptError("No door specified");
 					return false;
 				}
-				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				if (temp3 == 0 || temp3 > elev->NumDoors)
 				{
 					ScriptError("Invalid door number");
 					return false;
 				}
-				Simcore->GetElevator(Current)->GetDoor(temp3)->UpChimeSound = temp2;
+				elev->GetDoor(temp3)->UpChimeSound = temp2;
 			}
 			if (LineData.Slice(0, 14).CompareNoCase("downchimesound") == true)
 			{
@@ -3072,7 +3070,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				if (Simcore->GetElevator(Current)->Created == false)
+				if (elev->Created == false)
 				{
 					ScriptError("Elevator not created yet");
 					return false;
@@ -3082,12 +3080,12 @@ recalc:
 					ScriptError("No door specified");
 					return false;
 				}
-				if (temp3 == 0 || temp3 > Simcore->GetElevator(Current)->NumDoors)
+				if (temp3 == 0 || temp3 > elev->NumDoors)
 				{
 					ScriptError("Invalid door number");
 					return false;
 				}
-				Simcore->GetElevator(Current)->GetDoor(temp3)->DownChimeSound = temp2;
+				elev->GetDoor(temp3)->DownChimeSound = temp2;
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("alarmsound") == true)
 			{
@@ -3096,7 +3094,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->AlarmSound = temp2;
+				elev->AlarmSound = temp2;
 			}
 			if (LineData.Slice(0, 14).CompareNoCase("alarmsoundstop") == true)
 			{
@@ -3105,7 +3103,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->AlarmSoundStop = temp2;
+				elev->AlarmSoundStop = temp2;
 			}
 			if (LineData.Slice(0, 9).CompareNoCase("beepsound") == true)
 			{
@@ -3114,7 +3112,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->SetBeepSound(temp2);
+				elev->SetBeepSound(temp2);
 			}
 			if (LineData.Slice(0, 10).CompareNoCase("floorsound") == true)
 			{
@@ -3123,7 +3121,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->SetFloorSound(temp2);
+				elev->SetFloorSound(temp2);
 			}
 			if (LineData.Slice(0, 13).CompareNoCase("floorskiptext") == true)
 			{
@@ -3132,7 +3130,7 @@ recalc:
 					ScriptError("Syntax error");
 					return false;
 				}
-				Simcore->GetElevator(Current)->SetFloorSkipText(temp2);
+				elev->SetFloorSkipText(temp2);
 			}
 			if (LineData.Slice(0, 11).CompareNoCase("recallfloor") == true)
 			{
@@ -3147,7 +3145,7 @@ recalc:
 					ScriptError("Invalid value");
 					return false;
 				}
-				Simcore->GetElevator(Current)->SetRecallFloor(floortemp);
+				elev->SetRecallFloor(floortemp);
 			}
 			if (LineData.Slice(0, 20).CompareNoCase("alternaterecallfloor") == true)
 			{
@@ -3162,7 +3160,7 @@ recalc:
 					ScriptError("Invalid value");
 					return false;
 				}
-				Simcore->GetElevator(Current)->SetAlternateRecallFloor(floortemp);
+				elev->SetAlternateRecallFloor(floortemp);
 			}
 			if (LineData.Slice(0, 8).CompareNoCase("acpfloor") == true)
 			{
@@ -3177,7 +3175,7 @@ recalc:
 					ScriptError("Invalid value");
 					return false;
 				}
-				Simcore->GetElevator(Current)->SetACPFloor(floortemp);
+				elev->SetACPFloor(floortemp);
 			}
 			if (LineData.Slice(0, 13).CompareNoCase("motorposition") == true)
 			{
@@ -3207,7 +3205,7 @@ recalc:
 					}
 				}
 
-				Simcore->GetElevator(Current)->MotorPosition = csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
+				elev->MotorPosition = csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
 				tempdata.DeleteAll();
 			}
 
@@ -3254,7 +3252,7 @@ recalc:
 					}
 				}
 
-				if (!Simcore->GetElevator(Current)->CreateElevator(csString(tempdata[0]).CompareNoCase("true"), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3])))
+				if (!elev->CreateElevator(csString(tempdata[0]).CompareNoCase("true"), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3])))
 				{
 					ScriptError("An error occurred while creating the elevator.  See the console output for more information");
 					return false;
@@ -3290,7 +3288,7 @@ recalc:
 				}
 
 				//create floor
-				Simcore->GetElevator(Current)->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+				elev->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 
 				tempdata.DeleteAll();
 			}
@@ -3323,7 +3321,7 @@ recalc:
 				}
 
 				//create wall
-				Simcore->GetElevator(Current)->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+				elev->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 
 				tempdata.DeleteAll();
 			}
@@ -3383,9 +3381,9 @@ recalc:
 				}
 
 				if (compat == false)
-					Simcore->GetElevator(Current)->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), csString(tempdata[8]).CompareNoCase("true"), atof(tempdata[9]), atof(tempdata[10]));
+					elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), csString(tempdata[8]).CompareNoCase("true"), atof(tempdata[9]), atof(tempdata[10]));
 				else
-					Simcore->GetElevator(Current)->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
+					elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
 
 				tempdata.DeleteAll();
 			}
@@ -3417,7 +3415,7 @@ recalc:
 					}
 				}
 
-				Simcore->GetElevator(Current)->SetShaftDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]));
+				elev->SetShaftDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]));
 				setshaftdoors = true;
 
 				tempdata.DeleteAll();
@@ -3475,9 +3473,9 @@ recalc:
 				
 				bool result;
 				if (compat == false)
-					result = Simcore->GetElevator(Current)->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+					result = elev->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
 				else
-					result = Simcore->GetElevator(Current)->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+					result = elev->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
 
 				if (result == false)
 					return ScriptError("Error creating shaft doors");
@@ -3513,7 +3511,7 @@ recalc:
 					}
 				}
 
-				Simcore->GetElevator(Current)->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+				elev->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 
 				tempdata.DeleteAll();
 			}
@@ -3571,21 +3569,21 @@ recalc:
 
 				if (atoi(tempdata[0]) == 1)
 				{
-					if (!Simcore->GetElevator(Current)->Panel)
+					if (!elev->Panel)
 					{
 						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
-					Simcore->GetElevator(Current)->Panel->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+					elev->Panel->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 				}
 				else if (atoi(tempdata[0]) == 2)
 				{
-					if (!Simcore->GetElevator(Current)->Panel2)
+					if (!elev->Panel2)
 					{
 						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
-					Simcore->GetElevator(Current)->Panel2->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+					elev->Panel2->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 				}
 				else
 				{
@@ -3649,21 +3647,21 @@ recalc:
 
 				if (atoi(tempdata[0]) == 1)
 				{
-					if (!Simcore->GetElevator(Current)->Panel)
+					if (!elev->Panel)
 					{
 						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
-					Simcore->GetElevator(Current)->Panel->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+					elev->Panel->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 				}
 				else if (atoi(tempdata[0]) == 2)
 				{
-					if (!Simcore->GetElevator(Current)->Panel2)
+					if (!elev->Panel2)
 					{
 						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
-					Simcore->GetElevator(Current)->Panel2->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+					elev->Panel2->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 				}
 				else
 				{
@@ -3721,9 +3719,9 @@ recalc:
 				}
 
 				if (compat == false)
-					Simcore->GetElevator(Current)->AddFloorIndicator(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+					elev->AddFloorIndicator(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
 				else
-					Simcore->GetElevator(Current)->AddFloorIndicator("Button", tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
+					elev->AddFloorIndicator("Button", tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
 
 				tempdata.DeleteAll();
 			}
@@ -3759,7 +3757,7 @@ recalc:
 					}
 				}
 
-				Simcore->GetElevator(Current)->AddDirectionalIndicators(csString(tempdata[0]).CompareNoCase("true"), csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), csString(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16]));
+				elev->AddDirectionalIndicators(csString(tempdata[0]).CompareNoCase("true"), csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), csString(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16]));
 
 				tempdata.DeleteAll();
 			}
@@ -3826,11 +3824,11 @@ recalc:
 				}
 
 				if (compat == 0)
-					Simcore->GetElevator(Current)->AddFloorSigns(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+					elev->AddFloorSigns(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
 				else if (compat == 1)
-					Simcore->GetElevator(Current)->AddFloorSigns(0, csString(tempdata[0]).CompareNoCase("true"), "Button", tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+					elev->AddFloorSigns(0, csString(tempdata[0]).CompareNoCase("true"), "Button", tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
 				else if (compat == 2)
-					Simcore->GetElevator(Current)->AddFloorSigns(0, csString(tempdata[0]).CompareNoCase("true"), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+					elev->AddFloorSigns(0, csString(tempdata[0]).CompareNoCase("true"), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
 
 				tempdata.DeleteAll();
 			}
