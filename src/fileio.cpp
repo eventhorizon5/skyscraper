@@ -3175,7 +3175,7 @@ recalc:
 				}
 				Simcore->GetElevator(Current)->SetACPFloor(floortemp);
 			}
-			if (LineData.Slice(0, 13).CompareNoCase("motorlocation") == true)
+			if (LineData.Slice(0, 13).CompareNoCase("motorposition") == true)
 			{
 				if (temp2check < 0)
 				{
@@ -3203,7 +3203,7 @@ recalc:
 					}
 				}
 
-				Simcore->GetElevator(Current)->MotorLocation = csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
+				Simcore->GetElevator(Current)->MotorPosition = csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
 				tempdata.DeleteAll();
 			}
 

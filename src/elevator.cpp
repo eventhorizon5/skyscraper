@@ -113,7 +113,7 @@ Elevator::Elevator(int number)
 	checkfirstrun = true;
 	UseFloorBeeps = false;
 	UseFloorSounds = false;
-	MotorLocation = csVector3(0, 0, 0);
+	MotorPosition = csVector3(0, 0, 0);
 
 	//create object meshes
 	buffer = Number;
@@ -284,11 +284,11 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	motorsound = new Sound();
 	motorsound->SetPosition(Origin);
 	//move motor to top of shaft if location not specified, or to location
-	if (MotorLocation != csVector3(0, 0, 0))
-		motorsound->SetPosition(csVector3(MotorLocation.x + Origin.x, MotorLocation.y, MotorLocation.z + Origin.z));
+	if (MotorPosition != csVector3(0, 0, 0))
+		motorsound->SetPosition(csVector3(MotorPosition.x + Origin.x, MotorPosition.y, MotorPosition.z + Origin.z));
 	else
 		motorsound->SetPositionY(sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->Altitude + sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->InterfloorHeight);
-	MotorLocation = csVector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
+	MotorPosition = csVector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
 	alarm = new Sound();
 	alarm->SetPosition(Origin);
 	floorbeep = new Sound();

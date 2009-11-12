@@ -95,7 +95,7 @@ public:
 	bool AlarmActive; //true if alarm is active
 	bool UseFloorBeeps; //true if floor beeps should be used
 	bool UseFloorSounds; //true if floor sounds should be used
-	csVector3 MotorLocation; //location of motor sound emitter
+	csVector3 MotorPosition; //position of motor sound emitter
 
 	//functions
 	Elevator(int number);
