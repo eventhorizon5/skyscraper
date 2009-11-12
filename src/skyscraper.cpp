@@ -207,7 +207,7 @@ void MainScreen::OnClose(wxCloseEvent& event)
 {
 	if (skyscraper->StartupRunning == false)
 	{
-		int result = wxMessageBox("Are you sure you want to exit?", "Skyscraper", wxYES_NO | wxCENTER);
+		int result = wxMessageBox(wxT("Are you sure you want to exit?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);
 		if (result == wxNO)
 			return;
 	}
@@ -562,7 +562,7 @@ void Skyscraper::GetInput()
 
 	if (wxGetKeyState(WXK_ESCAPE))
 	{
-		int result = wxMessageBox("Exit and return to the main menu?", "Skyscraper", wxYES_NO | wxCENTER);
+		int result = wxMessageBox(wxT("Exit and return to the main menu?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);
 		if (result == wxYES)
 			Shutdown = true;
 	}
