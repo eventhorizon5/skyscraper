@@ -6,6 +6,7 @@ Version 1.6 (2.0 Alpha 6)
 -added more camera speed config parameters
 -added full camera reset (respawn) triggered by F6
 -added elevator motor sound object
+-added support for exiting back to the main screen
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

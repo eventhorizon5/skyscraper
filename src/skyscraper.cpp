@@ -205,6 +205,13 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void MainScreen::OnClose(wxCloseEvent& event)
 {
+	if (skyscraper->StartupRunning == false)
+	{
+		int result = wxMessageBox("Are you sure you want to exit?", "Skyscraper", wxYES_NO | wxCENTER);
+		if (result == wxNO)
+			return;
+	}
+
 	if(dpanel)
 	{
 		if(dpanel->timer)
@@ -296,6 +303,7 @@ void Skyscraper::SetupFrame()
 		if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
 		{
 			//if showmenu is true, unload simulator and return to main menu
+			BuildingFile = "";
 			IsRunning = false;
 			Starting = false;
 			Pause = false;
@@ -303,6 +311,7 @@ void Skyscraper::SetupFrame()
 			DrawBackground();
 			StartSound();
 			StartupRunning = true;
+			mouse->Reset();
 		}
 		else
 		{
@@ -473,9 +482,6 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	engine->SetLightingCacheMode(0);
 	engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
 
-	//create 3D environments
-	area = engine->CreateSector("area");
-
 	//set up viewport
 	view = csPtr<iView>(new csView (engine, g3d));
 	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
@@ -555,7 +561,11 @@ void Skyscraper::GetInput()
 	}
 
 	if (wxGetKeyState(WXK_ESCAPE))
-		Shutdown = true;
+	{
+		int result = wxMessageBox("Exit and return to the main menu?", "Skyscraper", wxYES_NO | wxCENTER);
+		if (result == wxYES)
+			Shutdown = true;
+	}
 
 	if (wxGetKeyState(WXK_F2) && wait == false)
 	{
@@ -939,7 +949,7 @@ void Skyscraper::Click(int index)
 		BuildingFile = "Glass Tower.bld";
 	if (index == 4)
 		BuildingFile = "Simple.bld";
-	if (index > 0)
+	if (index > 0 && BuildingFile != "")
 		Start();
 }
 
@@ -1059,7 +1069,7 @@ bool Skyscraper::Start()
 	Simcore = new SBS();
 
 	//initialize SBS
-	Simcore->Initialize(iSCF::SCF, object_reg, view, area, root_dir.GetData(), dir_char.GetData());
+	Simcore->Initialize(iSCF::SCF, object_reg, view, root_dir.GetData(), dir_char.GetData());
 
 	//load building data file
 	Simcore->Report("\nLoading building data from " + BuildingFile + "...\n");

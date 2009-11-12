@@ -134,6 +134,8 @@ SBS::~SBS()
 {
 	//engine destructor
 
+	Report("Deleting SBS objects...");
+
 	//delete camera object
 	if (camera)
 		delete camera;
@@ -188,8 +190,14 @@ SBS::~SBS()
 	Buildings_state = 0;
 	Buildings = 0;
 
+	//remove all engine objects
+	Report("Deleting CS engine objects...");
+	engine->DeleteAll();
+
 	//clear self reference
 	sbs = 0;
+
+	Report("Exiting");
 }
 
 bool SBS::Start()
@@ -387,7 +395,7 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, iSector* sector, const char* rootdirectory, const char* directory_char)
+bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char* rootdirectory, const char* directory_char)
 {
 	//initialize CS references
 #ifdef _WIN32
@@ -435,7 +443,8 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, iSector* s
 	if (!sndrenderer || !sndloader)
 		DisableSound = true;
 
-	area = sector;
+	//create default sector
+	area = engine->CreateSector("area");
 	if (!area)
 		return ReportError("No iSector object available");
 

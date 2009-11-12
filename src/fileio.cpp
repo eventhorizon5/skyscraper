@@ -3164,10 +3164,6 @@ recalc:
 				Simcore->GetElevator(Current)->SetACPFloor(floortemp);
 			}
 
-			//replace variables with actual values
-			buffer = Current;
-			LineData.ReplaceAll("%elevator%", buffer);
-
 			//IF statement
 			if (LineData.Slice(0, 2).CompareNoCase("if") == true)
 			{
