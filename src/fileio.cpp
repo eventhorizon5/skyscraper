@@ -3175,6 +3175,37 @@ recalc:
 				}
 				Simcore->GetElevator(Current)->SetACPFloor(floortemp);
 			}
+			if (LineData.Slice(0, 13).CompareNoCase("motorlocation") == true)
+			{
+				if (temp2check < 0)
+				{
+					ScriptError("Syntax error");
+					return false;
+				}
+				tempdata.SplitString(temp2.GetData(), ",");
+				for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+				{
+					buffer = Calc(tempdata[temp3]);
+					tempdata.Put(temp3, buffer);
+				}
+				if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+				{
+					ScriptError("Incorrect number of parameters");
+					return false;
+				}
+				//check numeric values
+				for (int i = 0; i <= 2; i++)
+				{
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return false;
+					}
+				}
+
+				Simcore->GetElevator(Current)->MotorLocation = csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
+				tempdata.DeleteAll();
+			}
 
 			//IF statement
 			if (LineData.Slice(0, 2).CompareNoCase("if") == true)
