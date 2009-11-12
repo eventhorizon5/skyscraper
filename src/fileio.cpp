@@ -90,7 +90,9 @@ bool Skyscraper::LoadBuilding(const char *filename)
 		if (LineData == "")
 			goto Nextline;
 
+		//////////////////////
 		//Section information
+		//////////////////////
 		if (LineData.CompareNoCase("<globals>") == true)
 		{
 			if (Section > 0)
@@ -318,7 +320,9 @@ breakpoint:
 			}
 		} while (1 == 1);
 
+		//////////////////////////
 		//Floor object conversion
+		//////////////////////////
 checkfloors:
 		temp5 = csString(LineData).Downcase().Find("floor(", 0);
 		while (temp5 > -1)
@@ -399,7 +403,9 @@ checkfloors:
 			temp5 = csString(LineData).Downcase().Find("floor(", 0);
 		}
 
+		//////////////////
 		//Global commands
+		//////////////////
 
 		//AddTriangleWall command
 		if (LineData.Slice(0, 15).CompareNoCase("addtrianglewall") == true)
@@ -1483,7 +1489,9 @@ checkfloors:
 			tempdata.DeleteAll();
 		}
 
-		//Process globals
+		////////////////////
+		//Global parameters
+		////////////////////
 		if (Section == 1)
 		{
 			//get text after equal sign
@@ -1564,7 +1572,9 @@ checkfloors:
 			}
 		}
 
+		/////////////////
 		//Process floors
+		/////////////////
 		if (Section == 2)
 		{
 
@@ -2621,7 +2631,9 @@ recalc:
 			}
 		}
 
+		////////////////////
 		//Process elevators
+		////////////////////
 		if (Section == 4)
 		{
 
@@ -3729,21 +3741,25 @@ recalc:
 					buffer = Calc(tempdata[temp3]);
 					tempdata.Put(temp3, buffer);
 				}
-				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 8)
+				if (tempdata.GetSize() < 7 || tempdata.GetSize() > 9)
 				{
 					ScriptError("Incorrect number of parameters");
 					return false;
 				}
 
-				bool compat = false;
+				int compat = 0;
 				if (tempdata.GetSize() == 7)
-					compat = true; //1.4 compatibility mode
+					compat = 1; //1.4 compatibility mode
+				if (tempdata.GetSize() == 8)
+					compat = 2; //1.5 compatibility mode
 
 				//check numeric values
-				if (compat == false)
+				if (compat == 0)
 				{
-					for (int i = 3; i <= 7; i++)
+					for (int i = 0; i <= 8; i++)
 					{
+						if (i == 1)
+							i = 4;
 						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 						{
 							ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -3751,7 +3767,7 @@ recalc:
 						}
 					}
 				}
-				else
+				else if (compat == 1)
 				{
 					for (int i = 2; i <= 6; i++)
 					{
@@ -3762,11 +3778,24 @@ recalc:
 						}
 					}
 				}
+				else if (compat == 2)
+				{
+					for (int i = 3; i <= 7; i++)
+					{
+						if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+						{
+							ScriptError("Invalid value: " + csString(tempdata[i]));
+							return false;
+						}
+					}
+				}
 
-				if (compat == false)
-					Simcore->GetElevator(Current)->AddFloorSigns(csString(tempdata[0]).CompareNoCase("true"), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
-				else
-					Simcore->GetElevator(Current)->AddFloorSigns(csString(tempdata[0]).CompareNoCase("true"), "Button", tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+				if (compat == 0)
+					Simcore->GetElevator(Current)->AddFloorSigns(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+				else if (compat == 1)
+					Simcore->GetElevator(Current)->AddFloorSigns(0, csString(tempdata[0]).CompareNoCase("true"), "Button", tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+				else if (compat == 2)
+					Simcore->GetElevator(Current)->AddFloorSigns(0, csString(tempdata[0]).CompareNoCase("true"), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
 
 				tempdata.DeleteAll();
 			}
@@ -3814,7 +3843,9 @@ recalc:
 			}
 		}
 
+		///////////////////
 		//Process textures
+		///////////////////
 		if (Section == 5)
 		{
 			if (LineData.Slice(0, 5).CompareNoCase("load ") == true)

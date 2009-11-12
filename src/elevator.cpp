@@ -2361,9 +2361,10 @@ void Elevator::SetShaftDoors(int number, float thickness, float CenterX, float C
 	}
 }
 
-void Elevator::AddFloorSigns(bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+void Elevator::AddFloorSigns(int door_number, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
-	//adds floor signs at the specified position and direction for each serviced floor
+	//adds floor signs at the specified position and direction for each serviced floor,
+	//depending on if the given door number services the floor or not (unless door_number is 0)
 
 	float x, z;
 	if (relative == true)
@@ -2382,20 +2383,27 @@ void Elevator::AddFloorSigns(bool relative, const char *texture_prefix, const ch
 
 	for (int i = 0; i < ServicedFloors.GetSize(); i++)
 	{
-		csString texture = texture_prefix + sbs->GetFloor(ServicedFloors[i])->ID;
-		csString tmpdirection = direction;
-		tmpdirection.Downcase();
+		bool door_result = false;
+		if (door_number != 0)
+			door_result = GetDoor(door_number)->ShaftDoorsExist(ServicedFloors[i]);
 
-		if (tmpdirection == "front" || tmpdirection == "left")
-			sbs->DrawWalls(true, false, false, false, false, false);
-		else
-			sbs->DrawWalls(false, true, false, false, false, false);
+		if (door_number == 0 || door_result == true)
+		{
+			csString texture = texture_prefix + sbs->GetFloor(ServicedFloors[i])->ID;
+			csString tmpdirection = direction;
+			tmpdirection.Downcase();
 
-		if (tmpdirection == "front" || tmpdirection == "back")
-			sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, voffset, voffset, 1, 1, false);
-		else
-			sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, voffset, voffset, 1, 1, false);
-		sbs->ResetWalls();
+			if (tmpdirection == "front" || tmpdirection == "left")
+				sbs->DrawWalls(true, false, false, false, false, false);
+			else
+				sbs->DrawWalls(false, true, false, false, false, false);
+
+			if (tmpdirection == "front" || tmpdirection == "back")
+				sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, voffset, voffset, 1, 1, false);
+			else
+				sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, voffset, voffset, 1, 1, false);
+			sbs->ResetWalls();
+		}
 	}
 	sbs->SetAutoSize(autosize.x, autosize.y);
 }

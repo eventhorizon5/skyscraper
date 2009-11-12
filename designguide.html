@@ -1286,14 +1286,18 @@
   <p align="left"><strong>12. AddFloorSigns</strong> - creates floor signs on 
     all floors serviced by the elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorSigns<em> 
-    relative, texture_prefix, direction, CenterX, CenterZ, width, height, voffset</em></font> 
-  </p>
+    door_number, relative, texture_prefix, direction, CenterX, CenterZ, width, 
+    height, voffset</em></font> </p>
   <p align="left">The AddFloorSigns command creates floor signs (similar to floor 
     indicators) on all the floors serviced by the current elevator. Direction 
     is the direction the signs face, and can be either &quot;left&quot;, &quot;right&quot;, 
-    &quot;front&quot; or &quot;back&quot;.  Texture_prefix is the base name of the texture
-    to load when displaying a floor ID; for example if the sign is on floor 3, and you
-    specify a prefix of "Button", it'll load the "Button3" texture.</p>
+    &quot;front&quot; or &quot;back&quot;. Texture_prefix is the base name of 
+    the texture to load when displaying a floor ID; for example if the sign is 
+    on floor 3, and you specify a prefix of "Button", it'll load the "Button3" 
+    texture. Door_number specifies the door number to check against, meaning if 
+    shaft doors don't exist on a certain floor for the specified door, the sign 
+    won't be created on that floor. This can be bypassed by setting door_number 
+    to 0.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 
