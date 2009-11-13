@@ -26,7 +26,7 @@
 #include <wx/variant.h>
 #include "globals.h"
 #include <stdlib.h>
-#include "skyscraper.h"
+#include "fileio.h"
 #include "sbs.h"
 #include "camera.h"
 #include "floor.h"
@@ -37,7 +37,20 @@
 
 extern SBS *Simcore;
 
-bool Skyscraper::LoadBuilding(const char *filename)
+ScriptProcessor::ScriptProcessor(Skyscraper *parent)
+{
+	skyscraper = parent;
+
+	//set variable array size
+	UserVariable.SetSize(256);
+}
+
+ScriptProcessor::~ScriptProcessor()
+{
+
+}
+
+bool ScriptProcessor::LoadBuilding(const char *filename)
 {
 	//building loader/script interpreter
 
@@ -102,7 +115,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 			}
 			Section = 1;
 			Context = "Globals";
-			Report("Processing globals...");
+			skyscraper->Report("Processing globals...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endglobals>") == true)
@@ -115,7 +128,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 			Simcore->InitMeshes();
 			Section = 0;
 			Context = "None";
-			Report("Finished globals");
+			skyscraper->Report("Finished globals");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<floors") == true)
@@ -142,7 +155,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 			Context = "Floor range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
 			Current = RangeL;
 			RangeStart = line;
-			Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
+			skyscraper->Report("Processing floors " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<floor ") == true)
@@ -161,7 +174,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 				ScriptError("Invalid floor");
 				return false;
 			}
-			Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
+			skyscraper->Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endfloor>") == true)
@@ -173,7 +186,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 			}
 			Section = 0;
 			Context = "None";
-			Report("Finished floor");
+			skyscraper->Report("Finished floor");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<elevators") == true)
@@ -198,7 +211,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 			Context = "Elevator range " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10));
 			Current = RangeL;
 			RangeStart = line;
-			Report("Processing elevators " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
+			skyscraper->Report("Processing elevators " + csString(_itoa(RangeL, intbuffer, 10)) + " to " + csString(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<elevator ") == true)
@@ -222,7 +235,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 				ScriptError("Invalid elevator");
 				return false;
 			}
-			Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
+			skyscraper->Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endelevator>") == true)
@@ -234,7 +247,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 			}
 			Section = 0;
 			Context = "None";
-			Report("Finished elevator");
+			skyscraper->Report("Finished elevator");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 10).CompareNoCase("<textures>") == true)
@@ -246,7 +259,7 @@ bool Skyscraper::LoadBuilding(const char *filename)
 			}
 			Section = 5;
 			Context = "Textures";
-			Report("Processing textures...");
+			skyscraper->Report("Processing textures...");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 13).CompareNoCase("<endtextures>") == true)
@@ -259,21 +272,21 @@ bool Skyscraper::LoadBuilding(const char *filename)
 			Simcore->FreeTextureImages();
 			Section = 0;
 			Context = "None";
-			Report("Finished textures");
+			skyscraper->Report("Finished textures");
 			goto Nextline;
 		}
 		if (LineData.Slice(0, 5).CompareNoCase("<end>") == true)
 		{
 			Section = 0;
 			Context = "None";
-			Report("Exiting building script");
+			skyscraper->Report("Exiting building script");
 			break; //exit data file parser
 		}
 		if (LineData.Slice(0, 7).CompareNoCase("<break>") == true)
 		{
 			//breakpoint function for debugging scripts
 breakpoint:
-			Report("Script breakpoint reached");
+			skyscraper->Report("Script breakpoint reached");
 			goto Nextline;
 		}
 
@@ -625,7 +638,7 @@ checkfloors:
 				return false;
 			}
 			UserVariable[temp3] = Calc(temp2);
-			//Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
+			//skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 		}
 
 		//CreateWallBox2 command
@@ -2147,7 +2160,7 @@ recalc:
 					return false;
 				}
 				UserVariable[temp3] = Calc(temp2);
-				//Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
+				//skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 			}
 
 			//CallButtonElevators command
@@ -3571,7 +3584,7 @@ recalc:
 				{
 					if (!elev->Panel)
 					{
-						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
 					elev->Panel->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
@@ -3580,7 +3593,7 @@ recalc:
 				{
 					if (!elev->Panel2)
 					{
-						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
 					elev->Panel2->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
@@ -3649,7 +3662,7 @@ recalc:
 				{
 					if (!elev->Panel)
 					{
-						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
 					elev->Panel->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
@@ -3658,7 +3671,7 @@ recalc:
 				{
 					if (!elev->Panel2)
 					{
-						Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
+						skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 						goto Nextline;
 					}
 					elev->Panel2->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
@@ -3855,7 +3868,7 @@ recalc:
 					return false;
 				}
 				UserVariable[temp3] = Calc(temp2);
-				Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+				skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 			}
 
 			//handle elevator range
@@ -4114,7 +4127,7 @@ Nextline:
 	return true;
 }
 
-bool Skyscraper::LoadDataFile(const char *filename)
+bool ScriptProcessor::LoadDataFile(const char *filename)
 {
 	//loads a building data file into the runtime buffer
 	bool streamnotfinished = true;
@@ -4152,7 +4165,7 @@ bool Skyscraper::LoadDataFile(const char *filename)
 	return true;
 }
 
-csString Skyscraper::Calc(const char *expression)
+csString ScriptProcessor::Calc(const char *expression)
 {
 	//performs a calculation operation on a string
 	//for example, the string "1 + 1" would output to "2"
@@ -4204,7 +4217,7 @@ csString Skyscraper::Calc(const char *expression)
 			}
 			else
 			{
-				ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+				skyscraper->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 				return "false";
 			}
 		}
@@ -4234,7 +4247,7 @@ csString Skyscraper::Calc(const char *expression)
 		}
 		if (end >= tmpcalc.Length() - 1 && operators > 0)
 		{
-			ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+			skyscraper->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 			return "false";
 		}
 		if (operators > 1)
@@ -4309,7 +4322,7 @@ csString Skyscraper::Calc(const char *expression)
 	return tmpcalc.GetData();
 }
 
-bool Skyscraper::IfProc(const char *expression)
+bool ScriptProcessor::IfProc(const char *expression)
 {
 	//IF statement processor
 
@@ -4524,16 +4537,16 @@ bool Skyscraper::IfProc(const char *expression)
 		return false;
 }
 
-bool Skyscraper::ScriptError(const char *message)
+bool ScriptProcessor::ScriptError(const char *message)
 {
 	//Script error reporting function
 	char intbuffer[65];
 	csString error = "Script error on line " + csString(_itoa(line + 1, intbuffer, 10)) + ": " + csString(message) + "\nSection: " + csString(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
 
-	ReportError(error);
+	skyscraper->ReportError(error);
 
 	//show error dialog
-	wxMessageDialog *dialog = new wxMessageDialog(wxwin->GetWindow(), wxString::FromAscii(error.GetData()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+	wxMessageDialog *dialog = new wxMessageDialog(skyscraper->wxwin->GetWindow(), wxString::FromAscii(error.GetData()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
 	dialog->ShowModal();
 
 	delete dialog;

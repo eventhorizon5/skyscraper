@@ -22,6 +22,12 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef SKYSCRAPER_H
+#define SKYSCRAPER_H
+
+class Skyscraper;
+#include "fileio.h"
+
 int main (int argc, char* argv[]);
 static bool SkyscraperEventHandler(iEvent& Event);
 
@@ -52,6 +58,7 @@ public:
 	csRef<FramePrinter> printer;
 	csRef<iImage> image;
 	csRef<iConfigManager> confman;
+	csRef<iWxWindow> wxwin;
 
 	//sound system
 	csRef<iSndSysRenderer> sndrenderer;
@@ -75,16 +82,7 @@ public:
 	virtual int OnExit(void);
 	void DrawBackground();
 
-	//file loader functions
-	bool LoadBuilding(const char *filename);
-	bool LoadDataFile(const char *filename);
-	csString Calc(const char *expression);
-	bool IfProc(const char *expression);
-
-	//File I/O
 	csString BuildingFile;
-	csArray<csString> BuildingData;
-	csArray<csString> UserVariable;
 
 	//engine related stuff
 	void Render();
@@ -118,11 +116,13 @@ private:
 	//canvas data
 	int canvas_width, canvas_height;
 	wxPanel* canvas;
-	csRef<iWxWindow> wxwin;
 
 	//sound data
 	csRef<iSndSysStream> sndstream;
 	csRef<iSndSysSource> sndsource;
+
+	//script processor
+	ScriptProcessor* processor;
 
 	//button locations
 	struct buttondata
@@ -149,14 +149,6 @@ private:
 	void Click(int index);
 	void UnloadSim();
 
-	//script processor internal data
-	bool ScriptError(const char *message);
-	int line; //line number
-	csString LineData; //line text
-	int Current; //current range iteration
-	int Section; //current section number
-	csString Context; //section context
-
 	bool DrewButtons;
 };
 
@@ -178,3 +170,5 @@ public:
 };
 
 DECLARE_APP(Skyscraper)
+
+#endif

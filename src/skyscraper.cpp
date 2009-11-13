@@ -486,9 +486,6 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	view = csPtr<iView>(new csView (engine, g3d));
 	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
 
-	//clear user variables
-	UserVariable.SetSize(256);
-
 	return true;
 }
 
@@ -1069,7 +1066,7 @@ bool Skyscraper::Start()
 	Simcore = new SBS();
 
 	//initialize SBS
-	Simcore->Initialize(iSCF::SCF, object_reg, view, root_dir.GetData(), dir_char.GetData());
+	Simcore->Initialize(iSCF::SCF, object_reg, view, root_dir, dir_char);
 
 	//load building data file
 	Simcore->Report("\nLoading building data from " + BuildingFile + "...\n");
@@ -1078,8 +1075,15 @@ bool Skyscraper::Start()
 	csSleep(1000);
 
 	BuildingFile.Insert(0, "/root/buildings/");
-	if (!LoadBuilding(BuildingFile.GetData()))
+
+	//load script processor object and load building
+	processor = new ScriptProcessor(this);
+	if (!processor->LoadBuilding(BuildingFile))
 		return ReportError("Error loading building\n");
+
+	//unload script processor
+	delete processor;
+	processor = 0;
 
 	//the sky needs to be created before Prepare() is called
 	Simcore->CreateSky(Simcore->SkyName);
