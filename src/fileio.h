@@ -42,6 +42,24 @@ class ScriptProcessor
 	int Current; //current range iteration
 	int Section; //current section number
 	csString Context; //section context
+	int temp1;
+	csString temp2;
+	int temp3;
+	int temp4;
+	int temp5;
+	csString temp6;
+	csStringArray tempdata;
+	csArray<int> callbutton_elevators;
+	int FloorCheck;
+	int RangeL;
+	int RangeH;
+	long RangeStart;
+	csRef<iThingFactoryState> tmpMesh;
+	char intbuffer[65];
+	csString buffer;
+	int startpos;
+	bool getfloordata;
+	bool setshaftdoors;
 	csArray<csString> BuildingData;
 	csArray<csString> UserVariable;
 	Skyscraper* skyscraper;
@@ -49,6 +67,11 @@ class ScriptProcessor
 	bool ScriptError(const char *message);
 	csString Calc(const char *expression);
 	bool IfProc(const char *expression);
+	int ProcCommands();
+	int ProcGlobals();
+	int ProcFloors();
+	int ProcElevators();
+	int ProcTextures();
 };
 
 #endif
