@@ -275,6 +275,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\fileio.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\keydialog.h"
 				>
 			</File>
