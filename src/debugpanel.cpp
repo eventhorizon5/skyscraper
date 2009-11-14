@@ -312,6 +312,9 @@ void DebugPanel::Timer::Notify()
 
 	if (cc->IsShown() == true)
 		cc->Loop();
+
+	if (stats->IsShown() == true)
+		stats->Loop();
 }
 
 wxString TruncateNumber(double value, int decimals)

@@ -257,6 +257,10 @@
 				RelativePath="..\src\skyscraper.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\src\stats.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -292,6 +296,10 @@
 			</File>
 			<File
 				RelativePath="..\src\skyscraper.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\stats.h"
 				>
 			</File>
 		</Filter>
