@@ -133,6 +133,8 @@
 		<Unit filename="..\src\skyscraper.h" />
 		<Unit filename="..\src\stairs.cpp" />
 		<Unit filename="..\src\stairs.h" />
+		<Unit filename="..\src\stats.cpp" />
+		<Unit filename="..\src\stats.h" />
 		<Unit filename="..\src\unix.cpp" />
 		<Unit filename="..\src\unix.h" />
 		<Extensions>
@@ -146,6 +148,7 @@
 					<wxDialog wxs="wxsmith/editelevator.wxs" src="..\src\editelevator.cpp" hdr="..\src\editelevator.h" name="editelevator" language="CPP" />
 					<wxDialog wxs="wxsmith/MeshControl.wxs" src="..\src\meshcontrol.cpp" hdr="..\src\meshcontrol.h" name="MeshControl" language="CPP" />
 					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="..\src\keydialog.cpp" hdr="..\src\keydialog.h" name="KeyDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/Stats.wxs" src="..\src\stats.cpp" hdr="..\src\stats.h" name="Stats" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />

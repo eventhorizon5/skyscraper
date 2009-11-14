@@ -30,6 +30,7 @@
 #include "meshcontrol.h"
 #include "editelevator.h"
 #include "keydialog.h"
+#include "stats.h"
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -44,6 +45,7 @@ MeshControl *mc;
 editelevator *ee;
 CameraControl *cc;
 KeyDialog *kd;
+Stats *stats;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
@@ -75,6 +77,7 @@ const long DebugPanel::ID_bMeshControl = wxNewId();
 const long DebugPanel::ID_bCameraControl = wxNewId();
 const long DebugPanel::ID_bEditElevator = wxNewId();
 const long DebugPanel::ID_bControlReference = wxNewId();
+const long DebugPanel::ID_bStats = wxNewId();
 const long DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
@@ -162,15 +165,17 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer11->Add(BoxSizer2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
 	bListAltitudes = new wxButton(Panel1, ID_bListAltitudes, _("List Altitudes"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bListAltitudes"));
-	BoxSizer3->Add(bListAltitudes, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bMeshControl = new wxButton(Panel1, ID_bMeshControl, _("Realtime Mesh Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMeshControl"));
-	BoxSizer3->Add(bMeshControl, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer3->Add(bListAltitudes, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bMeshControl = new wxButton(Panel1, ID_bMeshControl, _("Realtime Object Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMeshControl"));
+	BoxSizer3->Add(bMeshControl, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bCameraControl = new wxButton(Panel1, ID_bCameraControl, _("Camera Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCameraControl"));
-	BoxSizer3->Add(bCameraControl, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer3->Add(bCameraControl, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bEditElevator = new wxButton(Panel1, ID_bEditElevator, _("Elevator Editor"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEditElevator"));
-	BoxSizer3->Add(bEditElevator, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer3->Add(bEditElevator, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bControlReference = new wxButton(Panel1, ID_bControlReference, _("Control Reference"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bControlReference"));
-	BoxSizer3->Add(bControlReference, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer3->Add(bControlReference, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bStats = new wxButton(Panel1, ID_bStats, _("Simulator Statistics"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStats"));
+	BoxSizer3->Add(bStats, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer3, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
 	BoxSizer11->Fit(Panel1);
@@ -192,6 +197,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bCameraControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bCameraControl_Click);
 	Connect(ID_bEditElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEditElevator_Click);
 	Connect(ID_bControlReference,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bControlReference_Click);
+	Connect(ID_bStats,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bStats_Click);
 	//*)
 	dp = this;
 	OnInit();
@@ -209,6 +215,8 @@ DebugPanel::~DebugPanel()
 	cc = 0;
 	kd->Destroy();
 	kd = 0;
+	stats->Destroy();
+	stats = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
@@ -265,6 +273,7 @@ void DebugPanel::OnInit()
 	ee = new editelevator(dp, -1);
 	cc = new CameraControl(dp, -1);
 	kd = new KeyDialog(dp, -1);
+	stats = new Stats(dp, -1);
 
 	timer = new Timer();
 	timer->Start(40);
@@ -343,4 +352,10 @@ void DebugPanel::On_bControlReference_Click(wxCommandEvent& event)
 {
 	kd->CenterOnScreen();
 	kd->Show();
+}
+
+void DebugPanel::On_bStats_Click(wxCommandEvent& event)
+{
+	stats->CenterOnScreen();
+	stats->Show();
 }

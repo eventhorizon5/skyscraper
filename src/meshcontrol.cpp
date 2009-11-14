@@ -67,7 +67,7 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	wxStaticBoxSizer* StaticBoxSizer1;
 	wxBoxSizer* BoxSizer3;
 	
-	Create(parent, wxID_ANY, _("Realtime Mesh Control"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
+	Create(parent, wxID_ANY, _("Realtime Object Control"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxVERTICAL, this, _("Global Objects"));

@@ -80,6 +80,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bCameraControl;
 		static const long ID_bEditElevator;
 		static const long ID_bControlReference;
+		static const long ID_bStats;
 		static const long ID_PANEL1;
 		//*)
 		class Timer : public wxTimer
@@ -105,6 +106,7 @@ class DebugPanel: public wxFrame
 		void On_chkAutoStairs_Click(wxCommandEvent& event);
 		void On_bCameraControl_Click(wxCommandEvent& event);
 		void On_bControlReference_Click(wxCommandEvent& event);
+		void On_bStats_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -115,6 +117,7 @@ class DebugPanel: public wxFrame
 		wxBoxSizer* BoxSizer5;
 		wxBoxSizer* BoxSizer7;
 		wxStaticText* t_elevfloor;
+		wxButton* bStats;
 		wxStaticText* StaticText2;
 		wxButton* bListAltitudes;
 		wxCheckBox* chkProcessElevators;
