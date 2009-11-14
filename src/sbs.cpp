@@ -3232,3 +3232,27 @@ void SBS::CheckAutoAreas()
 		}
 	}
 }
+
+int SBS::GetMeshCount()
+{
+	//return total number of mesh objects
+	return engine->GetMeshes()->GetCount();
+}
+
+int SBS::GetTextureCount()
+{
+	//return total number of textures
+	return engine->GetTextureList()->GetCount();
+}
+
+int SBS::GetMaterialCount()
+{
+	//return total number of materials
+	return engine->GetMaterialList()->GetCount();
+}
+
+int SBS::GetMeshFactoryCount()
+{
+	//return total number of mesh factories
+	return engine->GetMeshFactories()->GetCount();
+}

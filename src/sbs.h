@@ -231,6 +231,10 @@ public:
 	bool Mount(const char *filename, const char *path);
 	void FreeTextureImages();
 	void AddFloorAutoArea(csVector3 start, csVector3 end);
+	int GetMeshCount();
+	int GetTextureCount();
+	int GetMaterialCount();
+	int GetMeshFactoryCount();
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
