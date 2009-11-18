@@ -449,6 +449,31 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     DrawWalls = true, false, false, false, false, false
     AddWall Right, %4%, 0, %1%, -%2%, %1%, %2%, %height%, %height%, 0, 0, 0, 1, False
     AddWall Back, %4%, 0, -%1%, %2%, %1%, %2%, %height%, %height%, 0, 0, 0, 1, False
+
+    WallOrientation = left
+    Drawwalls = true, true, false, false, false, false
+    AddWall Wall1, %4%, 0.33, -24.33 - 5.92 - 0.33, -11.33, 11.83 + 6.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall3, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 53.64 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8, %4%, 0.33, -0.08 - 5.5 - 0.33, 27.08 + 5.25 + 0.66, -0.08 - 5.5 - 0.33, 48.745 + 5.225 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall10, %4%, 0.33, -22.66 - 4.25 - 0.33, 11.33, -22.66 - 4.25 - 0.33, 27.08 + 5.25 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12, %4%, 0.33, -24.33 - 5.92 - 0.33, -11.33, -24.33 - 5.92 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall Wall2, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, 53.64 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.64 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall5, %4%, 0.33, 22.08 + 16.33 + 0.33, 27.08 + 4.92 + 0.33, 53.64 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall6, %4%, 0.33, 22.08 + 16.33 + 0.33, 27.08 + 4.92 + 0.33, 22.08 + 16.33 + 0.33, 48.745 + 5.225 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall7, %4%, 0.33, -0.08 - 5.5 - 0.33, 48.745 + 5.225 + 0.33, 22.08 + 16.33 + 0.33, 48.745 + 5.225 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, %4%, 0.33, -22.66 - 4.25 - 0.33, 27.08 + 5.25 + 0.66, -0.08 - 5.5 - 0.33, 27.08 + 5.25 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall11, %4%, 0.33, -24.33 - 5.92 - 0.33, 11.33, -22.66 - 4.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+
+    #Core Doors
+    WallOrientation = center
+    AddDoor ServiceDoor1, 0.2, 5, 1.75, -11.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 8, -1.75, -11.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.66, 0, -11.33, 7, 8, 0, true, 0, 0
 <EndFloors>
 
 <Floor 0>
@@ -848,7 +873,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
 <EndFloors>
 
 #Core Walls
-<Floors -1 to 1>
+<Floors -9 to 1>
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
     AddWall Wall4, Concrete1, 0.33, -11.83 + 6.25, 11.33, -11.83 + 6.25, 32.405 - 10.665 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
@@ -865,6 +890,10 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall6, Concrete1, 0.33, 5.75 + 11.33 + 0.33, 32.405 - 10.665 - 0.33, 5.75 + 11.33 + 0.33, 48.745 - 5.225 - 0.33, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     AddWall Wall9, Concrete1, 0.33, 11.83 - 6.25 - 0.33, 11.33, 43.99 - 5.25 - 0.33, 11.33, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
 
+    #Doors
+    WallOrientation = center
+    AddDoor ServiceDoor1, 0.2, 3, -11.83 + 6.25 + 0.165, 16.37, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -11.83 + 6.25 + 0.165, 16.37, 3.5, 8, 0, false, 0, 0
 <EndFloors>
 
 <Floors 2 to 41>
@@ -921,12 +950,12 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     SetAutoSize = false, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall FrontVentsInt, VentsInt, 0, -%1%, -%2%, %1%, -%2%, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall LeftVentsInt, VentsInt, 0, -%1%, -%2%, -%1%, %2%, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall FrontVentsInt, VentsInt, 0, -%1%, -%2%, %1%, -%2%, %height%, %height%, 0, 0, 5, 1, False
+    AddWall LeftVentsInt, VentsInt, 0, -%1%, -%2%, -%1%, %2%, %height%, %height%, 0, 0, 5, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall RightVentsInt, VentsInt, 0, %1%, -%2%, %1%, %2%, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall BackVentsInt, VentsInt, 0, -%1%, %2%, %1%, %2%, %fullheight%, %fullheight%, 0, 0, 5, 1, False
+    AddWall RightVentsInt, VentsInt, 0, %1%, -%2%, %1%, %2%, %height%, %height%, 0, 0, 5, 1, False
+    AddWall BackVentsInt, VentsInt, 0, -%1%, %2%, %1%, %2%, %height%, %height%, 0, 0, 5, 1, False
 
     #External Vents
     WallOrientation = left
@@ -1577,6 +1606,8 @@ ShaftCut 15, -4.25 + 0.33, -10.5, 4.25 - 0.33, 10.5, 0, 5
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
     if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    if[%floor% = 2] AddShaftFloor %10%, Shaft%10%MachineryFloor, Brick1, 0.5, -%8% + 0.33, -%9% + 0.33, %8% - 0.33, %9% - 0.33, %interfloorheight%, %interfloorheight%, 0, 0
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 2] AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, %fullheight% - 0.1, %fullheight% - 0.1, 0, 0
@@ -1587,6 +1618,11 @@ ShaftCut 15, -4.25 + 0.33, -10.5, 4.25 - 0.33, 10.5, 0, 5
     WallOrientation = right
     AddShaftWall %10%, Shaft%10%Back, Brick1, 0.33, -%8%, %9%, %8%, %9%, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall %10%, Shaft%10%Right, Brick1, 0.33, %8%, -%9%, %8%, %9%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #Machinery Door
+    WallOrientation = center
+    if[%floor% = 2] AddDoor ServiceDoor1, 0.2, 3, -11.83 - 6.25 - 0.33, 16.37, 3.5, 8, 0, 1, 1
+    if[%floor% = 2] AddFillerWalls ConnectionWall, 0.66, -11.83 - 6.25 - 0.33, 16.37, 3.5, 8, 0, false, 0, 0
 <EndFloors>
 
 #Zone 1 Air Shaft
@@ -1853,9 +1889,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 <EndElevator>
 
@@ -1874,9 +1910,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 <EndElevator>
 
@@ -1895,9 +1931,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 <EndElevator>
 
 <Elevator 4>
@@ -1915,9 +1951,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 <EndElevator>
 
@@ -1963,8 +1999,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 3.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 8, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -2000,9 +2036,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2022,9 +2058,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2044,9 +2080,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2066,9 +2102,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2115,8 +2151,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -3.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 8, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -2165,9 +2201,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2187,9 +2223,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2209,9 +2245,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2231,9 +2267,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2280,8 +2316,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 3.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -2325,9 +2361,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2347,9 +2383,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2369,9 +2405,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2391,9 +2427,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2440,8 +2476,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -3.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -2498,9 +2534,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 <EndElevator>
 
@@ -2519,9 +2555,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2541,9 +2577,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2563,9 +2599,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2612,8 +2648,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 3.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -2656,10 +2692,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
-
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 <EndElevator>
 
 <Elevator 22>
@@ -2677,9 +2712,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2699,9 +2734,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2721,9 +2756,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2770,8 +2805,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -3.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -2827,9 +2862,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -2849,10 +2884,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
-
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 <EndElevator>
 
@@ -2871,10 +2905,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
-
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 <EndElevator>
 
@@ -2893,10 +2926,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
-
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 <EndElevator>
 
 <Elevators 25 to 28>
@@ -2941,8 +2973,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 3.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -2983,9 +3015,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3005,9 +3037,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3027,10 +3059,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
-
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 <EndElevator>
 
@@ -3049,9 +3080,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3098,8 +3129,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -3.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -3153,9 +3184,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3175,9 +3206,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3224,8 +3255,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 5.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, 5.426 + 0.2 + 0.33, 5.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, 5.426 + 0.2 + 0.33, -5.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, 5.426 + 0.2 + 0.33, 5.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, 5.426 + 0.2 + 0.33, -5.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panels
     CreatePanel ElevPanel, 8, 7, left, 5.125 - 0.2 - 0.01, -3.25 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -3267,9 +3298,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3289,9 +3320,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 <EndElevator>
 
@@ -3337,8 +3368,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -5.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, -5.426 - 0.2 - 0.33, 5.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, -5.426 - 0.2 - 0.33, -5.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, -5.426 - 0.2 - 0.33, 5.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, -5.426 - 0.2 - 0.33, -5.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panels
     CreatePanel ElevPanel, 8, 7, right, -5.125 + 0.2 + 0.01, -3.25 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -3393,10 +3424,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
-
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 <EndElevator>
 
 <Elevator 38>
@@ -3414,9 +3444,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3463,8 +3493,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL, ElevDoorsR, 0.2, -3.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, -3.426 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, -3.426 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -3509,9 +3539,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3531,10 +3561,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
-
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 <EndElevator>
 
@@ -3580,8 +3609,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 3.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, 3.426 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -3626,9 +3655,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3648,9 +3677,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3698,8 +3727,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     WallOrientation = left
 
     #floor signs
-    AddFloorSigns true, left, 4 / 2 - 0.01, -4.426 - 0.2 - 0.33, 0.5, 0.42, 5.5
-    AddFloorSigns true, right, -4 / 2 + 0.01, -4.426 - 0.2 - 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, left, 4 / 2 - 0.01, -4.426 - 0.2 - 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, right, -4 / 2 + 0.01, -4.426 - 0.2 - 0.33, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 8, 5, back, -2 - 1.125 + 0.1, -4.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -3742,9 +3771,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3764,9 +3793,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3813,8 +3842,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     AddShaftDoors 1, ElevDoorsL2, ElevDoorsR2, 0.2, 4.426, 0, 0, 0 #shaft doors
 
     #floor signs
-    AddFloorSigns true, front, 4.426 + 0.2 + 0.33, 4.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, 4.426 + 0.2 + 0.33, -4.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, 4.426 + 0.2 + 0.33, 4.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, 4.426 + 0.2 + 0.33, -4.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 4.125 - 0.2 - 0.01, -2.25 - 1.25 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -3861,9 +3890,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DownChimeSound 1 = otis4_Series1_chimedown.wav
     UpChimeSound 2 = otis4_Series1_chimeup.wav
     DownChimeSound 2 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -3885,10 +3914,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     DownChimeSound 1 = otis4_Series1_chimedown.wav
     UpChimeSound 2 = otis4_Series1_chimeup.wav
     DownChimeSound 2 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
-
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 <EndElevator>
 
@@ -3946,8 +3974,11 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     SetShaftDoors 2, 0.2, 0, -4.724
 
     #floor signs
-    #AddFloorSigns true, left, 3.5 / 2 - 0.01, 4.724 + 0.2 + 0.33, 0.5, 0.42, 5.5
-    #AddFloorSigns true, right, -3.5 / 2 + 0.01, 4.724 + 0.2 + 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns 1, true, Button, left, 3.5 / 2 - 0.01, 4.724 + 0.2 + 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns 1, true, Button, right, -3.5 / 2 + 0.01, 4.724 + 0.2 + 0.33, 0.5, 0.42, 5.5
+
+    AddFloorSigns 2, true, Button, left, 3.5 / 2 - 0.01, -4.724 - 0.2 - 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns 2, true, Button, right, -3.5 / 2 + 0.01, -4.724 - 0.2 - 0.33, 0.5, 0.42, 5.5
 
     #front panel
     CreatePanel ElevPanel, 9, 5, front, 2.25 + 1.25 - 0.1, 4.423 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -4015,9 +4046,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     #BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -4037,9 +4068,9 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     #BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
     DownChimeSound 1 = otis4_Series1_chimedown.wav
-    MotorStartSound = motor_start.wav
-    MotorRunSound = motor_running.wav
-    MotorStopSound = motor_stop.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
 
 
 <EndElevator>
@@ -4089,8 +4120,8 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
 
     #floor signs
-    AddFloorSigns true, front, -5.426 - 0.2 - 0.33, 4.5 / 2 - 0.01, 0.5, 0.42, 5.5
-    AddFloorSigns true, back, -5.426 - 0.2 - 0.33, -4.5 / 2 + 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, front, -5.426 - 0.2 - 0.33, 4.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, -5.426 - 0.2 - 0.33, -4.5 / 2 + 0.01, 0.5, 0.42, 5.5
 
     #panels
     SetAutoSize = false, false
@@ -4226,7 +4257,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 #Stairwells
 
 #Zone 1
-#East Stairwell A
+#East Stairwell
 CreateStairwell 1, 44.07, 10.5, -9, 42
 CutStairwell 1, -5.165, -10.165, 5, 10, 0, 5
 
@@ -4383,6 +4414,6 @@ CutStairwell 1, -5.165, -10.165, 5, 10, 0, 5
     AddStairsDoor 1, StairsDoor, 0.2, 7, -2.5, -10.165, 3.5, 8, 0, 1, 1
 <EndFloors>
 
-#West Stairwell A
+#West Stairwell
 CreateStairwell 2, -24.33, 0, -9, 42
 CutStairwell 2, -5.92, -11, 5.92, 11, 0, 5
