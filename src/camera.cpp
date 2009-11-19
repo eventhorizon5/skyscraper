@@ -443,7 +443,10 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 		polyname = "";
 
 	//show result
-	sbs->Report("Clicked on object - Mesh: " + meshname + ", Polygon: " + polyname);
+	if (state)
+		sbs->Report("Clicked on object - Mesh: " + meshname + ", Polygon: " + polyname);
+	else
+		sbs->Report("Clicked on object: " + meshname);
 
 	//check call buttons
 	if (meshname.Find("Call Button") != -1)
@@ -476,17 +479,20 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 	}
 
 	//check elevator buttons
-	if (meshname.Find("Button Panel") != -1)
+	if (meshname.Find("Button Panel") != -1 && meshname.Find("Control") != -1)
 	{
 		//user clicked on an elevator button
-		int elevator = atoi(meshname.Slice(13, meshname.Find(":") - 13));
-		int number = atoi(meshname.Slice(meshname.Find(":") + 1));
+		int index = meshname.Find(":");
+		int index2 = meshname.Find("Control");
+		int elevator = atoi(meshname.Slice(13, index - 13));
+		int panel_number = atoi(meshname.Slice(index + 1, meshname.Find(" ", index) - index - 1));
+		int control_number = atoi(meshname.Slice(index2 + 8));
 
 		//press button
-		if (number == 1)
-			sbs->GetElevator(elevator)->Panel->Press(result.polygon_idx);
+		if (panel_number == 1)
+			sbs->GetElevator(elevator)->Panel->Press(control_number);
 		else
-			sbs->GetElevator(elevator)->Panel2->Press(result.polygon_idx);
+			sbs->GetElevator(elevator)->Panel2->Press(control_number);
 	}
 
 	//check shaft doors

@@ -4070,16 +4070,18 @@ int ScriptProcessor::ProcElevators()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 9)
+		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 10)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
 		}
 
 		float hoffset = 0, voffset = 0;
+		bool compat = false;
 
 		if (tempdata.GetSize() == 7)
 		{
+			//1.4 compatibility mode
 			//check numeric values
 			for (int i = 0; i <= 6; i++)
 			{
@@ -4091,9 +4093,11 @@ int ScriptProcessor::ProcElevators()
 					return sError;
 				}
 			}
+			compat = true;
 		}
-		else
+		if (tempdata.GetSize() == 9)
 		{
+			//1.5 compatibility mode
 			//check numeric values
 			for (int i = 0; i <= 8; i++)
 			{
@@ -4107,6 +4111,23 @@ int ScriptProcessor::ProcElevators()
 			}
 			hoffset = atof(tempdata[7]);
 			voffset = atof(tempdata[8]);
+			compat = true;
+		}
+		if (tempdata.GetSize() == 10)
+		{
+			//check numeric values
+			for (int i = 0; i <= 9; i++)
+			{
+				if (i == 1)
+					i = 3;
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+			hoffset = atof(tempdata[8]);
+			voffset = atof(tempdata[9]);
 		}
 
 		if (atoi(tempdata[0]) == 1)
@@ -4116,7 +4137,10 @@ int ScriptProcessor::ProcElevators()
 				skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 				return sNextLine;
 			}
-			elev->Panel->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+			if (compat == false)
+				elev->Panel->AddFloorButton(tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
+			else
+				elev->Panel->AddFloorButton(tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 		}
 		else if (atoi(tempdata[0]) == 2)
 		{
@@ -4125,7 +4149,10 @@ int ScriptProcessor::ProcElevators()
 				skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 				return sNextLine;
 			}
-			elev->Panel2->AddFloorButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+			if (compat == false)
+				elev->Panel2->AddFloorButton(tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
+			else
+				elev->Panel2->AddFloorButton(tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 		}
 		else
 		{
@@ -4148,16 +4175,18 @@ int ScriptProcessor::ProcElevators()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 9)
+		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 10)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
 		}
 
 		float hoffset = 0, voffset = 0;
+		bool compat = false;
 
 		if (tempdata.GetSize() == 7)
 		{
+			//1.4 compatibility mode
 			//check numeric values
 			for (int i = 1; i <= 6; i++)
 			{
@@ -4169,9 +4198,11 @@ int ScriptProcessor::ProcElevators()
 					return sError;
 				}
 			}
+			compat = true;
 		}
-		else
+		if (tempdata.GetSize() == 9)
 		{
+			//1.5 compatibility mode
 			//check numeric values
 			for (int i = 1; i <= 8; i++)
 			{
@@ -4185,6 +4216,25 @@ int ScriptProcessor::ProcElevators()
 			}
 			hoffset = atof(tempdata[7]);
 			voffset = atof(tempdata[8]);
+			compat = true;
+		}
+		if (tempdata.GetSize() == 10)
+		{
+			//check numeric values
+			for (int i = 1; i <= 9; i++)
+			{
+				if (i == 1)
+					i = 3;
+				if (i == 4)
+					i++;
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+			hoffset = atof(tempdata[8]);
+			voffset = atof(tempdata[9]);
 		}
 
 		if (atoi(tempdata[0]) == 1)
@@ -4194,7 +4244,10 @@ int ScriptProcessor::ProcElevators()
 				skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 				return sNextLine;
 			}
-			elev->Panel->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+			if (compat == false)
+				elev->Panel->AddControlButton(tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
+			else
+				elev->Panel->AddControlButton(tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 		}
 		else if (atoi(tempdata[0]) == 2)
 		{
@@ -4203,7 +4256,10 @@ int ScriptProcessor::ProcElevators()
 				skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
 				return sNextLine;
 			}
-			elev->Panel2->AddControlButton(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+			if (compat == false)
+				elev->Panel2->AddControlButton(tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
+			else
+				elev->Panel2->AddControlButton(tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 		}
 		else
 		{

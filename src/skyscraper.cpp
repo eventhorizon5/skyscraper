@@ -81,6 +81,8 @@ bool Skyscraper::OnInit(void)
 	DrewButtons = false;
 	FullScreen = false;
 	bool Shutdown = false;
+	PositionOverride = false;
+	Reload = false;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -323,6 +325,20 @@ void Skyscraper::SetupFrame()
 			}
 			wxGetApp().Exit();
 		}
+	}
+
+	//reload building if requested
+	if (Reload == true)
+	{
+		PositionOverride = true;
+		override_position = Simcore->camera->GetPosition();
+		override_rotation = Simcore->camera->GetRotation();
+		IsRunning = false;
+		Starting = false;
+		Pause = false;
+		UnloadSim();
+		mouse->Reset();
+		Start();
 	}
 }
 
@@ -576,7 +592,16 @@ void Skyscraper::GetInput()
 	float speed_slow = Simcore->camera->cfg_speedslow;
 
 	if (wxGetKeyState(WXK_CONTROL))
+	{
+		if (wxGetKeyState((wxKeyCode)'r'))
+		{
+			Reload = true;
+			return;
+		}
+		if (wxGetKeyState((wxKeyCode)'d')) //exit if bugplug key is pressed
+			return;
 		Simcore->camera->speed = speed_slow;
+	}
 	else if (wxGetKeyState(WXK_SHIFT))
 		Simcore->camera->speed = speed_fast;
 
@@ -1074,7 +1099,8 @@ bool Skyscraper::Start()
 	//Pause for 1 second
 	csSleep(1000);
 
-	BuildingFile.Insert(0, "/root/buildings/");
+	if (Reload == false)
+		BuildingFile.Insert(0, "/root/buildings/");
 
 	//load script processor object and load building
 	processor = new ScriptProcessor(this);
@@ -1094,6 +1120,14 @@ bool Skyscraper::Start()
 	//start simulation
 	if (!Simcore->Start())
 		return ReportError("Error starting simulator\n");
+
+	//set to saved position if reloading building
+	if (PositionOverride == true)
+	{
+		PositionOverride = false;
+		Simcore->camera->SetPosition(override_position);
+		Simcore->camera->SetRotation(override_rotation);
+	}
 
 	//load control panel
 	if (confman->GetBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
@@ -1118,6 +1152,7 @@ bool Skyscraper::Start()
 	IsRunning = true;
 	Starting = false;
 	StartupRunning = false;
+	Reload = false;
 	return true;
 }
 

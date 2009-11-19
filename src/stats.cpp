@@ -213,7 +213,6 @@ void Stats::OnInit()
 	tFactories->SetValue(wxVariant(Simcore->GetMeshFactoryCount()).GetString());
 	tTextures->SetValue(wxVariant(Simcore->GetTextureCount()).GetString());
 	tMaterials->SetValue(wxVariant(Simcore->GetMaterialCount()).GetString());
-	tStartTime->SetValue(TruncateNumber(Simcore->start_time, 2));
 	tHorizScale->SetValue(TruncateNumber(Simcore->HorizScale, 2));
 
 	tName->SetValue(wxString::FromAscii(Simcore->BuildingName.GetData()));
@@ -234,4 +233,5 @@ void Stats::Loop()
 	tInElevator->SetValue(wxString::FromAscii(BoolToString(Simcore->InElevator)));
 	tInShaft->SetValue(wxString::FromAscii(BoolToString(Simcore->InShaft)));
 	tRunningTime->SetValue(TruncateNumber(Simcore->running_time, 2));
+	tStartTime->SetValue(TruncateNumber(Simcore->start_time, 2));
 }

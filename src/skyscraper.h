@@ -74,6 +74,10 @@ public:
 	bool IntroMusic;
 	bool FullScreen;
 	bool Shutdown;
+	bool Reload;
+	bool PositionOverride;
+	csVector3 override_position;
+	csVector3 override_rotation;
 
 	csTicks elapsed_time, current_time;
 

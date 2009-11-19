@@ -215,6 +215,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\control.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\directional.cpp"
 				>
 			</File>
@@ -278,6 +282,10 @@
 			</File>
 			<File
 				RelativePath="..\src\camera.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\control.h"
 				>
 			</File>
 			<File

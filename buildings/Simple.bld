@@ -44,6 +44,7 @@
     Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
 
     Load data/black.jpg, Black, 1, 1
+    Load data/yellow.jpg, Yellow, 1, 1
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -51,6 +52,7 @@
     AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
     AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
     AddTextRange 1, 10, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 10, Yellow, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 64, 64, 64
 <EndTextures>
 
 # Ground
@@ -228,21 +230,21 @@ DrawWalls = true, true, false, false, false, false
     
     #panel
     CreatePanel ElevPanel, 15, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button10, 2, 3, 9, 1, 1
-    AddFloorButton 1, Button9, 3, 3, 8, 1, 1
-    AddFloorButton 1, Button8, 4, 3, 7, 1, 1
-    AddFloorButton 1, Button7, 5, 3, 6, 1, 1
-    AddFloorButton 1, Button6, 6, 3, 5, 1, 1
-    AddFloorButton 1, Button5, 7, 3, 4, 1, 1
-    AddFloorButton 1, Button4, 8, 3, 3, 1, 1
-    AddFloorButton 1, Button3, 9, 3, 2, 1, 1
-    AddFloorButton 1, Button2, 10, 3, 1, 1, 1
-    AddFloorButton 1, Button1, 11, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 13, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 13, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 14, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 14, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 14, 4, alarm, 1, 1
+    AddFloorButton 1, Button10, ButtonLit10, 2, 3, 9, 1, 1
+    AddFloorButton 1, Button9, ButtonLit9, 3, 3, 8, 1, 1
+    AddFloorButton 1, Button8, ButtonLit8, 4, 3, 7, 1, 1
+    AddFloorButton 1, Button7, ButtonLit7, 5, 3, 6, 1, 1
+    AddFloorButton 1, Button6, ButtonLit6, 6, 3, 5, 1, 1
+    AddFloorButton 1, Button5, ButtonLit5, 7, 3, 4, 1, 1
+    AddFloorButton 1, Button4, ButtonLit4, 8, 3, 3, 1, 1
+    AddFloorButton 1, Button3, ButtonLit3, 9, 3, 2, 1, 1
+    AddFloorButton 1, Button2, ButtonLit2, 10, 3, 1, 1, 1
+    AddFloorButton 1, Button1, ButtonLit1, 11, 3, 0, 1, 1
+    AddControlButton 1, ButtonOpen, ButtonOpen, 13, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, ButtonClose, 13, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, ButtonCancel, 14, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, ButtonStop, 14, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, ButtonAlarm, 14, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5

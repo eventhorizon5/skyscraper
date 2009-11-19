@@ -9,6 +9,8 @@ Version 1.6 (2.0 Alpha 6)
 -added support for exiting back to the main screen
 -added support for per-door elevator floor signs
 -added new simulator/building statistics dialog
+-moved button code into separate control class
+-added support for elevator button lighting
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

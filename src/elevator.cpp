@@ -348,6 +348,11 @@ void Elevator::AddRoute(int floor, int direction)
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction down");
 	}
 
+	//turn on button lights
+	if (Panel)
+		Panel->ChangeLight(floor, true);
+	if (Panel2)
+		Panel2->ChangeLight(floor, true);
 }
 
 void Elevator::DeleteRoute(int floor, int direction)
@@ -375,6 +380,12 @@ void Elevator::DeleteRoute(int floor, int direction)
 		DownQueue.Delete(floor);
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction down");
 	}
+
+	//turn off button lights
+	if (Panel)
+		Panel->ChangeLight(floor, false);
+	if (Panel2)
+		Panel2->ChangeLight(floor, false);
 }
 
 void Elevator::CancelLastRoute()

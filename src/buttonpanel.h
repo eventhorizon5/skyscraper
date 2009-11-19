@@ -26,11 +26,14 @@
 #ifndef _SBS_BUTTON_H
 #define _SBS_BUTTON_H
 
+#include "control.h"
+
 class SBSIMPEXP ButtonPanel
 {
 public:
 
 	int elevator;
+	int Index; //index number of panel
 	csString Direction;
 	csVector3 Origin;
 	float Width;
@@ -45,20 +48,24 @@ public:
 	//functions
 	ButtonPanel(int _elevator, int index, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th);
 	~ButtonPanel();
-	void AddFloorButton(const char *texture, int row, int column, int floor, float width, float height, float hoffset = 0, float voffset = 0);
-	void AddControlButton(const char *texture, int row, int column, const char *type, float width, float height, float hoffset = 0, float voffset = 0);
+	void AddFloorButton(const char *texture, const char *texture_lit, int row, int column, int floor, float width, float height, float hoffset = 0, float voffset = 0);
+	void AddControlButton(const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset = 0, float voffset = 0);
 	void DeleteButton(int row, int column);
 	void Press(int index);
 	void Move(const csVector3 &position);
 	void SetToElevatorAltitude();
 	void Enabled(bool value);
 	int AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
+	Control* GetControl(int index);
+	void ChangeLight(int floor, bool value);
 
 private:
 	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
 	csRef<iThingFactoryState> ButtonPanel_state;
 
-	void AddButton(const char *name, const char *texture, int row, int column, float bwidth, float bheight, float hoffset, float voffset);
+	csArray<Control*> controls; //control objects
+
+	void AddButton(const char *name, const char *texture, const char *texture_lit, int row, int column, float bwidth, float bheight, float hoffset, float voffset);
 };
 
 #endif
