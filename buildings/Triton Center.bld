@@ -121,6 +121,7 @@
 
     #floor indicator/button pictures
     Load data/black.jpg, Black, 1, 1
+    Load data/black_lit.jpg, BlackLit, 1, 1
     AddText Black, ButtonL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonM, nimbus_sans.ttf, 47, M, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonR, nimbus_sans.ttf, 47, R, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -133,6 +134,17 @@
     AddText Black, ButtonP5, nimbus_sans.ttf, 47, P5, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonS, nimbus_sans.ttf, 47, S, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonEZ, nimbus_sans.ttf, 47, EZ, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitM, nimbus_sans.ttf, 47, M, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitR, nimbus_sans.ttf, 47, R, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitLL1, nimbus_sans.ttf, 47, LL1, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitLL2, nimbus_sans.ttf, 47, LL2, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitP1, nimbus_sans.ttf, 47, P1, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitP2, nimbus_sans.ttf, 47, P2, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitP3, nimbus_sans.ttf, 47, P3, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitP4, nimbus_sans.ttf, 47, P4, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitP5, nimbus_sans.ttf, 47, P5, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitS, nimbus_sans.ttf, 47, S, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -140,6 +152,7 @@
     AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
     AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
     AddTextRange 1, 143, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 2, 141, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
 
 # Ground
@@ -3427,18 +3440,18 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button35, 2, 2, 35, 1, 1
-    AddFloorButton 1, Button36, 2, 3, 36, 1, 1
-    AddFloorButton 1, Button37, 2, 4, 37, 1, 1
-    AddFloorButton 1, Button32, 3, 2, 32, 1, 1
-    AddFloorButton 1, Button33, 3, 3, 33, 1, 1
-    AddFloorButton 1, Button34, 3, 4, 34, 1, 1
-    AddFloorButton 1, Button29, 4, 2, 29, 1, 1
-    AddFloorButton 1, Button30, 4, 3, 30, 1, 1
-    AddFloorButton 1, Button31, 4, 4, 31, 1, 1
-    AddFloorButton 1, Button27, 5, 2, 27, 1, 1
-    AddFloorButton 1, Button28, 5, 4, 28, 1, 1
-    AddFloorButton 1, ButtonL, 6, 3, 0, 1, 1
+    AddFloorButton 1, Button35, ButtonLit35, 2, 2, 35, 1, 1
+    AddFloorButton 1, Button36, ButtonLit36, 2, 3, 36, 1, 1
+    AddFloorButton 1, Button37, ButtonLit37, 2, 4, 37, 1, 1
+    AddFloorButton 1, Button32, ButtonLit32, 3, 2, 32, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 3, 3, 33, 1, 1
+    AddFloorButton 1, Button34, ButtonLit34, 3, 4, 34, 1, 1
+    AddFloorButton 1, Button29, ButtonLit29, 4, 2, 29, 1, 1
+    AddFloorButton 1, Button30, ButtonLit30, 4, 3, 30, 1, 1
+    AddFloorButton 1, Button31, ButtonLit31, 4, 4, 31, 1, 1
+    AddFloorButton 1, Button27, ButtonLit27, 5, 2, 27, 1, 1
+    AddFloorButton 1, Button28, ButtonLit28, 5, 4, 28, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3532,18 +3545,18 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button35, 2, 2, 35, 1, 1
-    AddFloorButton 1, Button36, 2, 3, 36, 1, 1
-    AddFloorButton 1, Button37, 2, 4, 37, 1, 1
-    AddFloorButton 1, Button32, 3, 2, 32, 1, 1
-    AddFloorButton 1, Button33, 3, 3, 33, 1, 1
-    AddFloorButton 1, Button34, 3, 4, 34, 1, 1
-    AddFloorButton 1, Button29, 4, 2, 29, 1, 1
-    AddFloorButton 1, Button30, 4, 3, 30, 1, 1
-    AddFloorButton 1, Button31, 4, 4, 31, 1, 1
-    AddFloorButton 1, Button27, 5, 2, 27, 1, 1
-    AddFloorButton 1, Button28, 5, 4, 28, 1, 1
-    AddFloorButton 1, ButtonL, 6, 3, 0, 1, 1
+    AddFloorButton 1, Button35, ButtonLit35, 2, 2, 35, 1, 1
+    AddFloorButton 1, Button36, ButtonLit36, 2, 3, 36, 1, 1
+    AddFloorButton 1, Button37, ButtonLit37, 2, 4, 37, 1, 1
+    AddFloorButton 1, Button32, ButtonLit32, 3, 2, 32, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 3, 3, 33, 1, 1
+    AddFloorButton 1, Button34, ButtonLit34, 3, 4, 34, 1, 1
+    AddFloorButton 1, Button29, ButtonLit29, 4, 2, 29, 1, 1
+    AddFloorButton 1, Button30, ButtonLit30, 4, 3, 30, 1, 1
+    AddFloorButton 1, Button31, ButtonLit31, 4, 4, 31, 1, 1
+    AddFloorButton 1, Button27, ButtonLit27, 5, 2, 27, 1, 1
+    AddFloorButton 1, Button28, ButtonLit28, 5, 4, 28, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3638,19 +3651,19 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button24, 2, 2, 24, 1, 1
-    AddFloorButton 1, Button25, 2, 3, 25, 1, 1
-    AddFloorButton 1, Button26, 2, 4, 26, 1, 1
-    AddFloorButton 1, Button21, 3, 2, 21, 1, 1
-    AddFloorButton 1, Button22, 3, 3, 22, 1, 1
-    AddFloorButton 1, Button23, 3, 4, 23, 1, 1
-    AddFloorButton 1, Button18, 4, 2, 18, 1, 1
-    AddFloorButton 1, Button19, 4, 3, 19, 1, 1
-    AddFloorButton 1, Button20, 4, 4, 20, 1, 1
-    AddFloorButton 1, Button15, 5, 2, 15, 1, 1
-    AddFloorButton 1, Button16, 5, 3, 16, 1, 1
-    AddFloorButton 1, Button17, 5, 4, 17, 1, 1
-    AddFloorButton 1, ButtonL, 6, 3, 0, 1, 1
+    AddFloorButton 1, Button24, ButtonLit24, 2, 2, 24, 1, 1
+    AddFloorButton 1, Button25, ButtonLit25, 2, 3, 25, 1, 1
+    AddFloorButton 1, Button26, ButtonLit26, 2, 4, 26, 1, 1
+    AddFloorButton 1, Button21, ButtonLit21, 3, 2, 21, 1, 1
+    AddFloorButton 1, Button22, ButtonLit22, 3, 3, 22, 1, 1
+    AddFloorButton 1, Button23, ButtonLit23, 3, 4, 23, 1, 1
+    AddFloorButton 1, Button18, ButtonLit18, 4, 2, 18, 1, 1
+    AddFloorButton 1, Button19, ButtonLit19, 4, 3, 19, 1, 1
+    AddFloorButton 1, Button20, ButtonLit20, 4, 4, 20, 1, 1
+    AddFloorButton 1, Button15, ButtonLit15, 5, 2, 15, 1, 1
+    AddFloorButton 1, Button16, ButtonLit16, 5, 3, 16, 1, 1
+    AddFloorButton 1, Button17, ButtonLit17, 5, 4, 17, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3744,19 +3757,19 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button24, 2, 2, 24, 1, 1
-    AddFloorButton 1, Button25, 2, 3, 25, 1, 1
-    AddFloorButton 1, Button26, 2, 4, 26, 1, 1
-    AddFloorButton 1, Button21, 3, 2, 21, 1, 1
-    AddFloorButton 1, Button22, 3, 3, 22, 1, 1
-    AddFloorButton 1, Button23, 3, 4, 23, 1, 1
-    AddFloorButton 1, Button18, 4, 2, 18, 1, 1
-    AddFloorButton 1, Button19, 4, 3, 19, 1, 1
-    AddFloorButton 1, Button20, 4, 4, 20, 1, 1
-    AddFloorButton 1, Button15, 5, 2, 15, 1, 1
-    AddFloorButton 1, Button16, 5, 3, 16, 1, 1
-    AddFloorButton 1, Button17, 5, 4, 17, 1, 1
-    AddFloorButton 1, ButtonL, 6, 3, 0, 1, 1
+    AddFloorButton 1, Button24, ButtonLit24, 2, 2, 24, 1, 1
+    AddFloorButton 1, Button25, ButtonLit25, 2, 3, 25, 1, 1
+    AddFloorButton 1, Button26, ButtonLit26, 2, 4, 26, 1, 1
+    AddFloorButton 1, Button21, ButtonLit21, 3, 2, 21, 1, 1
+    AddFloorButton 1, Button22, ButtonLit22, 3, 3, 22, 1, 1
+    AddFloorButton 1, Button23, ButtonLit23, 3, 4, 23, 1, 1
+    AddFloorButton 1, Button18, ButtonLit18, 4, 2, 18, 1, 1
+    AddFloorButton 1, Button19, ButtonLit19, 4, 3, 19, 1, 1
+    AddFloorButton 1, Button20, ButtonLit20, 4, 4, 20, 1, 1
+    AddFloorButton 1, Button15, ButtonLit15, 5, 2, 15, 1, 1
+    AddFloorButton 1, Button16, ButtonLit16, 5, 3, 16, 1, 1
+    AddFloorButton 1, Button17, ButtonLit17, 5, 4, 17, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3851,20 +3864,20 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button12, 2, 2, 12, 1, 1
-    AddFloorButton 1, Button13, 2, 3, 13, 1, 1
-    AddFloorButton 1, Button14, 2, 4, 14, 1, 1
-    AddFloorButton 1, Button9, 3, 2, 9, 1, 1
-    AddFloorButton 1, Button10, 3, 3, 10, 1, 1
-    AddFloorButton 1, Button11, 3, 4, 11, 1, 1
-    AddFloorButton 1, Button6, 4, 2, 6, 1, 1
-    AddFloorButton 1, Button7, 4, 3, 7, 1, 1
-    AddFloorButton 1, Button8, 4, 4, 8, 1, 1
-    AddFloorButton 1, Button3, 5, 2, 3, 1, 1
-    AddFloorButton 1, Button4, 5, 3, 4, 1, 1
-    AddFloorButton 1, Button5, 5, 4, 5, 1, 1
-    AddFloorButton 1, ButtonL, 6, 2, 0, 1, 1
-    AddFloorButton 1, Button2, 6, 4, 2, 1, 1
+    AddFloorButton 1, Button12, ButtonLit12, 2, 2, 12, 1, 1
+    AddFloorButton 1, Button13, ButtonLit13, 2, 3, 13, 1, 1
+    AddFloorButton 1, Button14, ButtonLit14, 2, 4, 14, 1, 1
+    AddFloorButton 1, Button9, ButtonLit9, 3, 2, 9, 1, 1
+    AddFloorButton 1, Button10, ButtonLit10, 3, 3, 10, 1, 1
+    AddFloorButton 1, Button11, ButtonLit11, 3, 4, 11, 1, 1
+    AddFloorButton 1, Button6, ButtonLit6, 4, 2, 6, 1, 1
+    AddFloorButton 1, Button7, ButtonLit7, 4, 3, 7, 1, 1
+    AddFloorButton 1, Button8, ButtonLit8, 4, 4, 8, 1, 1
+    AddFloorButton 1, Button3, ButtonLit3, 5, 2, 3, 1, 1
+    AddFloorButton 1, Button4, ButtonLit4, 5, 3, 4, 1, 1
+    AddFloorButton 1, Button5, ButtonLit5, 5, 4, 5, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 2, 0, 1, 1
+    AddFloorButton 1, Button2, ButtonLit2, 6, 4, 2, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3958,20 +3971,20 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button12, 2, 2, 12, 1, 1
-    AddFloorButton 1, Button13, 2, 3, 13, 1, 1
-    AddFloorButton 1, Button14, 2, 4, 14, 1, 1
-    AddFloorButton 1, Button9, 3, 2, 9, 1, 1
-    AddFloorButton 1, Button10, 3, 3, 10, 1, 1
-    AddFloorButton 1, Button11, 3, 4, 11, 1, 1
-    AddFloorButton 1, Button6, 4, 2, 6, 1, 1
-    AddFloorButton 1, Button7, 4, 3, 7, 1, 1
-    AddFloorButton 1, Button8, 4, 4, 8, 1, 1
-    AddFloorButton 1, Button3, 5, 2, 3, 1, 1
-    AddFloorButton 1, Button4, 5, 3, 4, 1, 1
-    AddFloorButton 1, Button5, 5, 4, 5, 1, 1
-    AddFloorButton 1, ButtonL, 6, 2, 0, 1, 1
-    AddFloorButton 1, Button2, 6, 4, 2, 1, 1
+    AddFloorButton 1, Button12, ButtonLit12, 2, 2, 12, 1, 1
+    AddFloorButton 1, Button13, ButtonLit13, 2, 3, 13, 1, 1
+    AddFloorButton 1, Button14, ButtonLit14, 2, 4, 14, 1, 1
+    AddFloorButton 1, Button9, ButtonLit9, 3, 2, 9, 1, 1
+    AddFloorButton 1, Button10, ButtonLit10, 3, 3, 10, 1, 1
+    AddFloorButton 1, Button11, ButtonLit11, 3, 4, 11, 1, 1
+    AddFloorButton 1, Button6, ButtonLit6, 4, 2, 6, 1, 1
+    AddFloorButton 1, Button7, ButtonLit7, 4, 3, 7, 1, 1
+    AddFloorButton 1, Button8, ButtonLit8, 4, 4, 8, 1, 1
+    AddFloorButton 1, Button3, ButtonLit3, 5, 2, 3, 1, 1
+    AddFloorButton 1, Button4, ButtonLit4, 5, 3, 4, 1, 1
+    AddFloorButton 1, Button5, ButtonLit5, 5, 4, 5, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 2, 0, 1, 1
+    AddFloorButton 1, Button2, ButtonLit2, 6, 4, 2, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -4064,8 +4077,8 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 8, 5, left, 3.75 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button40, 2, 3, 40, 1, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
+    AddFloorButton 1, Button40, ButtonLit40, 2, 3, 40, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -4157,8 +4170,8 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 8, 5, right, -3.75 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button40, 2, 3, 40, 1, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
+    AddFloorButton 1, Button40, ButtonLit40, 2, 3, 40, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -4240,15 +4253,15 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 12, 5, left, 3.125 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, ButtonM, 2, 4, 1, 1, 1
-    AddFloorButton 1, ButtonL, 2, 2, 0, 1, 1
-    AddFloorButton 1, ButtonLL1, 3, 3, -1, 1, 1
-    AddFloorButton 1, ButtonLL2, 4, 3, -2, 1, 1
-    AddFloorButton 1, ButtonP1, 5, 3, -3, 1, 1
-    AddFloorButton 1, ButtonP2, 6, 3, -4, 1, 1
-    AddFloorButton 1, ButtonP3, 7, 3, -5, 1, 1
-    AddFloorButton 1, ButtonP4, 8, 3, -6, 1, 1
-    AddFloorButton 1, ButtonP5, 9, 3, -7, 1, 1
+    AddFloorButton 1, ButtonM, ButtonLitM, 2, 4, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 2, 2, 0, 1, 1
+    AddFloorButton 1, ButtonLL1, ButtonLitLL1, 3, 3, -1, 1, 1
+    AddFloorButton 1, ButtonLL2, ButtonLitLL2, 4, 3, -2, 1, 1
+    AddFloorButton 1, ButtonP1, ButtonLitP1, 5, 3, -3, 1, 1
+    AddFloorButton 1, ButtonP2, ButtonLitP2, 6, 3, -4, 1, 1
+    AddFloorButton 1, ButtonP3, ButtonLitP3, 7, 3, -5, 1, 1
+    AddFloorButton 1, ButtonP4, ButtonLitP4, 8, 3, -6, 1, 1
+    AddFloorButton 1, ButtonP5, ButtonLitP5, 9, 3, -7, 1, 1
     AddControlButton 1, ButtonOpen, 10, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 10, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 11, 2, cancel, 1, 1
@@ -4329,15 +4342,15 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 12, 5, right, -3.125 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, ButtonM, 2, 4, 1, 1, 1
-    AddFloorButton 1, ButtonL, 2, 2, 0, 1, 1
-    AddFloorButton 1, ButtonLL1, 3, 3, -1, 1, 1
-    AddFloorButton 1, ButtonLL2, 4, 3, -2, 1, 1
-    AddFloorButton 1, ButtonP1, 5, 3, -3, 1, 1
-    AddFloorButton 1, ButtonP2, 6, 3, -4, 1, 1
-    AddFloorButton 1, ButtonP3, 7, 3, -5, 1, 1
-    AddFloorButton 1, ButtonP4, 8, 3, -6, 1, 1
-    AddFloorButton 1, ButtonP5, 9, 3, -7, 1, 1
+    AddFloorButton 1, ButtonM, ButtonLitM, 2, 4, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 2, 2, 0, 1, 1
+    AddFloorButton 1, ButtonLL1, ButtonLitLL1, 3, 3, -1, 1, 1
+    AddFloorButton 1, ButtonLL2, ButtonLitLL2, 4, 3, -2, 1, 1
+    AddFloorButton 1, ButtonP1, ButtonLitP1, 5, 3, -3, 1, 1
+    AddFloorButton 1, ButtonP2, ButtonLitP2, 6, 3, -4, 1, 1
+    AddFloorButton 1, ButtonP3, ButtonLitP3, 7, 3, -5, 1, 1
+    AddFloorButton 1, ButtonP4, ButtonLitP4, 8, 3, -6, 1, 1
+    AddFloorButton 1, ButtonP5, ButtonLitP5, 9, 3, -7, 1, 1
     AddControlButton 1, ButtonOpen, 10, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 10, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 11, 2, cancel, 1, 1
@@ -4419,8 +4432,8 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 8, 5, left, 3.75 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button100, 2, 3, 100, 1, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 2, 3, 100, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -4501,8 +4514,8 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 8, 5, right, -3.75 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button100, 2, 3, 100, 1, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 2, 3, 100, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 4, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -4584,10 +4597,10 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 3.75 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button136, 2, 3, 136, 1, 1
-    AddFloorButton 1, Button135, 3, 3, 135, 1, 1
-    AddFloorButton 1, Button134, 4, 3, 134, 1, 1
-    AddFloorButton 1, ButtonL, 5, 3, 0, 1, 1
+    AddFloorButton 1, Button136, ButtonLit136, 2, 3, 136, 1, 1
+    AddFloorButton 1, Button135, ButtonLit135, 3, 3, 135, 1, 1
+    AddFloorButton 1, Button134, ButtonLit134, 4, 3, 134, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -4670,8 +4683,8 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 8, 5, front, 1.75 + 1.083 - 0.1, 3.75 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button80, 2, 3, 80, 0, 1
-    AddFloorButton 1, ButtonL, 4, 3, 0, 0, 1
+    AddFloorButton 1, Button80, ButtonLit80, 2, 3, 80, 0, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 4, 3, 0, 0, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 0, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 0, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 0, 1
@@ -4741,8 +4754,8 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 8, 5, front, 1.75 + 1.083 - 0.1, 3.75 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button137, 2, 3, 137, 1, 1
-    AddFloorButton 1, ButtonLL1, 4, 3, -1, 1, 1
+    AddFloorButton 1, Button137, ButtonLit137, 2, 3, 137, 1, 1
+    AddFloorButton 1, ButtonLL1, ButtonLitLL1, 4, 3, -1, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -4847,17 +4860,17 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 9, 5, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button48, 2, 2, 48, 1, 1
-    AddFloorButton 1, Button49, 2, 3, 49, 1, 1
-    AddFloorButton 1, Button50, 2, 4, 50, 1, 1
-    AddFloorButton 1, Button45, 3, 2, 45, 1, 1
-    AddFloorButton 1, Button46, 3, 3, 46, 1, 1
-    AddFloorButton 1, Button47, 3, 4, 47, 1, 1
-    AddFloorButton 1, Button42, 4, 2, 42, 1, 1
-    AddFloorButton 1, Button43, 4, 3, 43, 1, 1
-    AddFloorButton 1, Button44, 4, 4, 44, 1, 1
-    AddFloorButton 1, Button40, 5, 2, 40, 1, 1
-    AddFloorButton 1, Button41, 5, 4, 41, 1, 1
+    AddFloorButton 1, Button48, ButtonLit48, 2, 2, 48, 1, 1
+    AddFloorButton 1, Button49, ButtonLit49, 2, 3, 49, 1, 1
+    AddFloorButton 1, Button50, ButtonLit50, 2, 4, 50, 1, 1
+    AddFloorButton 1, Button45, ButtonLit45, 3, 2, 45, 1, 1
+    AddFloorButton 1, Button46, ButtonLit46, 3, 3, 46, 1, 1
+    AddFloorButton 1, Button47, ButtonLit47, 3, 4, 47, 1, 1
+    AddFloorButton 1, Button42, ButtonLit42, 4, 2, 42, 1, 1
+    AddFloorButton 1, Button43, ButtonLit43, 4, 3, 43, 1, 1
+    AddFloorButton 1, Button44, ButtonLit44, 4, 4, 44, 1, 1
+    AddFloorButton 1, Button40, ButtonLit40, 5, 2, 40, 1, 1
+    AddFloorButton 1, Button41, ButtonLit41, 5, 4, 41, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -4964,17 +4977,17 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 9, 5, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button68, 2, 2, 68, 1, 1
-    AddFloorButton 1, Button69, 2, 3, 69, 1, 1
-    AddFloorButton 1, Button70, 2, 4, 70, 1, 1
-    AddFloorButton 1, Button65, 3, 2, 65, 1, 1
-    AddFloorButton 1, Button66, 3, 3, 66, 1, 1
-    AddFloorButton 1, Button67, 3, 4, 67, 1, 1
-    AddFloorButton 1, Button62, 4, 2, 62, 1, 1
-    AddFloorButton 1, Button63, 4, 3, 63, 1, 1
-    AddFloorButton 1, Button64, 4, 4, 64, 1, 1
-    AddFloorButton 1, Button40, 5, 2, 40, 1, 1
-    AddFloorButton 1, Button61, 5, 4, 61, 1, 1
+    AddFloorButton 1, Button68, ButtonLit68, 2, 2, 68, 1, 1
+    AddFloorButton 1, Button69, ButtonLit69, 2, 3, 69, 1, 1
+    AddFloorButton 1, Button70, ButtonLit70, 2, 4, 70, 1, 1
+    AddFloorButton 1, Button65, ButtonLit65, 3, 2, 65, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 3, 3, 66, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 3, 4, 67, 1, 1
+    AddFloorButton 1, Button62, ButtonLit62, 4, 2, 62, 1, 1
+    AddFloorButton 1, Button63, ButtonLit63, 4, 3, 63, 1, 1
+    AddFloorButton 1, Button64, ButtonLit64, 4, 4, 64, 1, 1
+    AddFloorButton 1, Button40, ButtonLit40, 5, 2, 40, 1, 1
+    AddFloorButton 1, Button61, ButtonLit61, 5, 4, 61, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -5082,17 +5095,17 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 9, 5, back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button58, 2, 2, 58, 1, 1
-    AddFloorButton 1, Button59, 2, 3, 59, 1, 1
-    AddFloorButton 1, Button60, 2, 4, 60, 1, 1
-    AddFloorButton 1, Button55, 3, 2, 55, 1, 1
-    AddFloorButton 1, Button56, 3, 3, 56, 1, 1
-    AddFloorButton 1, Button57, 3, 4, 57, 1, 1
-    AddFloorButton 1, Button52, 4, 2, 52, 1, 1
-    AddFloorButton 1, Button53, 4, 3, 53, 1, 1
-    AddFloorButton 1, Button54, 4, 4, 54, 1, 1
-    AddFloorButton 1, Button40, 5, 2, 40, 1, 1
-    AddFloorButton 1, Button51, 5, 4, 51, 1, 1
+    AddFloorButton 1, Button58, ButtonLit58, 2, 2, 58, 1, 1
+    AddFloorButton 1, Button59, ButtonLit59, 2, 3, 59, 1, 1
+    AddFloorButton 1, Button60, ButtonLit60, 2, 4, 60, 1, 1
+    AddFloorButton 1, Button55, ButtonLit55, 3, 2, 55, 1, 1
+    AddFloorButton 1, Button56, ButtonLit56, 3, 3, 56, 1, 1
+    AddFloorButton 1, Button57, ButtonLit57, 3, 4, 57, 1, 1
+    AddFloorButton 1, Button52, ButtonLit52, 4, 2, 52, 1, 1
+    AddFloorButton 1, Button53, ButtonLit53, 4, 3, 53, 1, 1
+    AddFloorButton 1, Button54, ButtonLit54, 4, 4, 54, 1, 1
+    AddFloorButton 1, Button40, ButtonLit40, 5, 2, 40, 1, 1
+    AddFloorButton 1, Button51, ButtonLit51, 5, 4, 51, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -5200,15 +5213,15 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 8, 5, back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button76, 2, 2, 76, 1, 1
-    AddFloorButton 1, Button77, 2, 3, 77, 1, 1
-    AddFloorButton 1, Button78, 2, 4, 78, 1, 1
-    AddFloorButton 1, Button73, 3, 2, 73, 1, 1
-    AddFloorButton 1, Button74, 3, 3, 74, 1, 1
-    AddFloorButton 1, Button75, 3, 4, 75, 1, 1
-    AddFloorButton 1, Button40, 4, 2, 40, 1, 1
-    AddFloorButton 1, Button71, 4, 3, 71, 1, 1
-    AddFloorButton 1, Button72, 4, 4, 72, 1, 1
+    AddFloorButton 1, Button76, ButtonLit76, 2, 2, 76, 1, 1
+    AddFloorButton 1, Button77, ButtonLit77, 2, 3, 77, 1, 1
+    AddFloorButton 1, Button78, ButtonLit78, 2, 4, 78, 1, 1
+    AddFloorButton 1, Button73, ButtonLit73, 3, 2, 73, 1, 1
+    AddFloorButton 1, Button74, ButtonLit74, 3, 3, 74, 1, 1
+    AddFloorButton 1, Button75, ButtonLit75, 3, 4, 75, 1, 1
+    AddFloorButton 1, Button40, ButtonLit40, 4, 2, 40, 1, 1
+    AddFloorButton 1, Button71, ButtonLit71, 4, 3, 71, 1, 1
+    AddFloorButton 1, Button72, ButtonLit72, 4, 4, 72, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -5292,25 +5305,25 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 12, 5, back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button97, 2, 2, 97, 1, 1
-    AddFloorButton 1, Button98, 2, 3, 98, 1, 1
-    AddFloorButton 1, Button99, 2, 4, 99, 1, 1
-    AddFloorButton 1, Button94, 3, 2, 94, 1, 1
-    AddFloorButton 1, Button95, 3, 3, 95, 1, 1
-    AddFloorButton 1, Button96, 3, 4, 96, 1, 1
-    AddFloorButton 1, Button91, 4, 2, 91, 1, 1
-    AddFloorButton 1, Button92, 4, 3, 92, 1, 1
-    AddFloorButton 1, Button93, 4, 4, 93, 1, 1
-    AddFloorButton 1, Button88, 5, 2, 88, 1, 1
-    AddFloorButton 1, Button89, 5, 3, 89, 1, 1
-    AddFloorButton 1, Button90, 5, 4, 90, 1, 1
-    AddFloorButton 1, Button85, 6, 2, 85, 1, 1
-    AddFloorButton 1, Button86, 6, 3, 86, 1, 1
-    AddFloorButton 1, Button87, 6, 4, 87, 1, 1
-    AddFloorButton 1, Button82, 7, 2, 82, 1, 1
-    AddFloorButton 1, Button83, 7, 3, 83, 1, 1
-    AddFloorButton 1, Button84, 7, 4, 84, 1, 1
-    AddFloorButton 1, Button80, 8, 3, 80, 1, 1
+    AddFloorButton 1, Button97, ButtonLit97, 2, 2, 97, 1, 1
+    AddFloorButton 1, Button98, ButtonLit98, 2, 3, 98, 1, 1
+    AddFloorButton 1, Button99, ButtonLit99, 2, 4, 99, 1, 1
+    AddFloorButton 1, Button94, ButtonLit94, 3, 2, 94, 1, 1
+    AddFloorButton 1, Button95, ButtonLit95, 3, 3, 95, 1, 1
+    AddFloorButton 1, Button96, ButtonLit96, 3, 4, 96, 1, 1
+    AddFloorButton 1, Button91, ButtonLit91, 4, 2, 91, 1, 1
+    AddFloorButton 1, Button92, ButtonLit92, 4, 3, 92, 1, 1
+    AddFloorButton 1, Button93, ButtonLit93, 4, 4, 93, 1, 1
+    AddFloorButton 1, Button88, ButtonLit88, 5, 2, 88, 1, 1
+    AddFloorButton 1, Button89, ButtonLit89, 5, 3, 89, 1, 1
+    AddFloorButton 1, Button90, ButtonLit90, 5, 4, 90, 1, 1
+    AddFloorButton 1, Button85, ButtonLit85, 6, 2, 85, 1, 1
+    AddFloorButton 1, Button86, ButtonLit86, 6, 3, 86, 1, 1
+    AddFloorButton 1, Button87, ButtonLit87, 6, 4, 87, 1, 1
+    AddFloorButton 1, Button82, ButtonLit82, 7, 2, 82, 1, 1
+    AddFloorButton 1, Button83, ButtonLit83, 7, 3, 83, 1, 1
+    AddFloorButton 1, Button84, ButtonLit84, 7, 4, 84, 1, 1
+    AddFloorButton 1, Button80, ButtonLit80, 8, 3, 80, 1, 1
     AddControlButton 1, ButtonOpen, 10, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 10, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 11, 2, cancel, 1, 1
@@ -5391,25 +5404,25 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 12, 5, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button97, 2, 2, 97, 1, 1
-    AddFloorButton 1, Button98, 2, 3, 98, 1, 1
-    AddFloorButton 1, Button99, 2, 4, 99, 1, 1
-    AddFloorButton 1, Button94, 3, 2, 94, 1, 1
-    AddFloorButton 1, Button95, 3, 3, 95, 1, 1
-    AddFloorButton 1, Button96, 3, 4, 96, 1, 1
-    AddFloorButton 1, Button91, 4, 2, 91, 1, 1
-    AddFloorButton 1, Button92, 4, 3, 92, 1, 1
-    AddFloorButton 1, Button93, 4, 4, 93, 1, 1
-    AddFloorButton 1, Button88, 5, 2, 88, 1, 1
-    AddFloorButton 1, Button89, 5, 3, 89, 1, 1
-    AddFloorButton 1, Button90, 5, 4, 90, 1, 1
-    AddFloorButton 1, Button85, 6, 2, 85, 1, 1
-    AddFloorButton 1, Button86, 6, 3, 86, 1, 1
-    AddFloorButton 1, Button87, 6, 4, 87, 1, 1
-    AddFloorButton 1, Button82, 7, 2, 82, 1, 1
-    AddFloorButton 1, Button83, 7, 3, 83, 1, 1
-    AddFloorButton 1, Button84, 7, 4, 84, 1, 1
-    AddFloorButton 1, Button80, 8, 3, 80, 1, 1
+    AddFloorButton 1, Button97, ButtonLit97, 2, 2, 97, 1, 1
+    AddFloorButton 1, Button98, ButtonLit98, 2, 3, 98, 1, 1
+    AddFloorButton 1, Button99, ButtonLit99, 2, 4, 99, 1, 1
+    AddFloorButton 1, Button94, ButtonLit94, 3, 2, 94, 1, 1
+    AddFloorButton 1, Button95, ButtonLit95, 3, 3, 95, 1, 1
+    AddFloorButton 1, Button96, ButtonLit96, 3, 4, 96, 1, 1
+    AddFloorButton 1, Button91, ButtonLit91, 4, 2, 91, 1, 1
+    AddFloorButton 1, Button92, ButtonLit92, 4, 3, 92, 1, 1
+    AddFloorButton 1, Button93, ButtonLit93, 4, 4, 93, 1, 1
+    AddFloorButton 1, Button88, ButtonLit88, 5, 2, 88, 1, 1
+    AddFloorButton 1, Button89, ButtonLit89, 5, 3, 89, 1, 1
+    AddFloorButton 1, Button90, ButtonLit90, 5, 4, 90, 1, 1
+    AddFloorButton 1, Button85, ButtonLit85, 6, 2, 85, 1, 1
+    AddFloorButton 1, Button86, ButtonLit86, 6, 3, 86, 1, 1
+    AddFloorButton 1, Button87, ButtonLit87, 6, 4, 87, 1, 1
+    AddFloorButton 1, Button82, ButtonLit82, 7, 2, 82, 1, 1
+    AddFloorButton 1, Button83, ButtonLit83, 7, 3, 83, 1, 1
+    AddFloorButton 1, Button84, ButtonLit84, 7, 4, 84, 1, 1
+    AddFloorButton 1, Button80, ButtonLit80, 8, 3, 80, 1, 1
     AddControlButton 1, ButtonOpen, 10, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 10, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 11, 2, cancel, 1, 1
@@ -5481,9 +5494,9 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 8, 5, back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button132, 2, 3, 132, 1, 1
-    AddFloorButton 1, Button100, 3, 3, 100, 1, 1
-    AddFloorButton 1, Button80, 4, 3, 80, 1, 1
+    AddFloorButton 1, Button132, ButtonLit132, 2, 3, 132, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 3, 3, 100, 1, 1
+    AddFloorButton 1, Button80, ButtonLit80, 4, 3, 80, 1, 1
     AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
@@ -5510,17 +5523,17 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 9, 5, back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button127, 2, 2, 127, 1, 1
-    AddFloorButton 1, Button128, 2, 3, 128, 1, 1
-    AddFloorButton 1, Button129, 2, 4, 129, 1, 1
-    AddFloorButton 1, Button124, 3, 2, 124, 1, 1
-    AddFloorButton 1, Button125, 3, 3, 125, 1, 1
-    AddFloorButton 1, Button126, 3, 4, 126, 1, 1
-    AddFloorButton 1, Button121, 4, 2, 121, 1, 1
-    AddFloorButton 1, Button122, 4, 3, 122, 1, 1
-    AddFloorButton 1, Button123, 4, 4, 123, 1, 1
-    AddFloorButton 1, Button100, 5, 2, 100, 1, 1
-    AddFloorButton 1, Button120, 5, 4, 120, 1, 1
+    AddFloorButton 1, Button127, ButtonLit127, 2, 2, 127, 1, 1
+    AddFloorButton 1, Button128, ButtonLit128, 2, 3, 128, 1, 1
+    AddFloorButton 1, Button129, ButtonLit129, 2, 4, 129, 1, 1
+    AddFloorButton 1, Button124, ButtonLit124, 3, 2, 124, 1, 1
+    AddFloorButton 1, Button125, ButtonLit125, 3, 3, 125, 1, 1
+    AddFloorButton 1, Button126, ButtonLit126, 3, 4, 126, 1, 1
+    AddFloorButton 1, Button121, ButtonLit121, 4, 2, 121, 1, 1
+    AddFloorButton 1, Button122, ButtonLit122, 4, 3, 122, 1, 1
+    AddFloorButton 1, Button123, ButtonLit123, 4, 4, 123, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 5, 2, 100, 1, 1
+    AddFloorButton 1, Button120, ButtonLit120, 5, 4, 120, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -5553,24 +5566,24 @@ DrawWalls = true, true, false, false, false, false
 <Elevators 60 to 61>
     #panel
     CreatePanel ElevPanel, 11, 5, back, -1.75 - 1 + 0.1, -3.125 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button116, 2, 2, 116, 1, 1
-    AddFloorButton 1, Button117, 2, 3, 117, 1, 1
-    AddFloorButton 1, Button118, 2, 4, 118, 1, 1
-    AddFloorButton 1, Button113, 3, 2, 113, 1, 1
-    AddFloorButton 1, Button114, 3, 3, 114, 1, 1
-    AddFloorButton 1, Button115, 3, 4, 115, 1, 1
-    AddFloorButton 1, Button110, 4, 2, 110, 1, 1
-    AddFloorButton 1, Button111, 4, 3, 111, 1, 1
-    AddFloorButton 1, Button112, 4, 4, 112, 1, 1
-    AddFloorButton 1, Button107, 5, 2, 107, 1, 1
-    AddFloorButton 1, Button108, 5, 3, 108, 1, 1
-    AddFloorButton 1, Button109, 5, 4, 109, 1, 1
-    AddFloorButton 1, Button104, 6, 2, 104, 1, 1
-    AddFloorButton 1, Button105, 6, 3, 105, 1, 1
-    AddFloorButton 1, Button106, 6, 4, 106, 1, 1
-    AddFloorButton 1, Button100, 7, 2, 100, 1, 1
-    AddFloorButton 1, Button102, 7, 3, 102, 1, 1
-    AddFloorButton 1, Button103, 7, 4, 103, 1, 1
+    AddFloorButton 1, Button116, ButtonLit116, 2, 2, 116, 1, 1
+    AddFloorButton 1, Button117, ButtonLit117, 2, 3, 117, 1, 1
+    AddFloorButton 1, Button118, ButtonLit118, 2, 4, 118, 1, 1
+    AddFloorButton 1, Button113, ButtonLit113, 3, 2, 113, 1, 1
+    AddFloorButton 1, Button114, ButtonLit114, 3, 3, 114, 1, 1
+    AddFloorButton 1, Button115, ButtonLit115, 3, 4, 115, 1, 1
+    AddFloorButton 1, Button110, ButtonLit110, 4, 2, 110, 1, 1
+    AddFloorButton 1, Button111, ButtonLit111, 4, 3, 111, 1, 1
+    AddFloorButton 1, Button112, ButtonLit112, 4, 4, 112, 1, 1
+    AddFloorButton 1, Button107, ButtonLit107, 5, 2, 107, 1, 1
+    AddFloorButton 1, Button108, ButtonLit108, 5, 3, 108, 1, 1
+    AddFloorButton 1, Button109, ButtonLit109, 5, 4, 109, 1, 1
+    AddFloorButton 1, Button104, ButtonLit104, 6, 2, 104, 1, 1
+    AddFloorButton 1, Button105, ButtonLit105, 6, 3, 105, 1, 1
+    AddFloorButton 1, Button106, ButtonLit106, 6, 4, 106, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 7, 2, 100, 1, 1
+    AddFloorButton 1, Button102, ButtonLit102, 7, 3, 102, 1, 1
+    AddFloorButton 1, Button103, ButtonLit103, 7, 4, 103, 1, 1
     AddControlButton 1, ButtonOpen, 9, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 9, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 10, 2, cancel, 1, 1
@@ -5676,17 +5689,17 @@ DrawWalls = true, true, false, false, false, false
 <Elevators 62 to 63>
     #panel
     CreatePanel ElevPanel, 9, 5, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button127, 2, 2, 127, 1, 1
-    AddFloorButton 1, Button128, 2, 3, 128, 1, 1
-    AddFloorButton 1, Button129, 2, 4, 129, 1, 1
-    AddFloorButton 1, Button124, 3, 2, 124, 1, 1
-    AddFloorButton 1, Button125, 3, 3, 125, 1, 1
-    AddFloorButton 1, Button126, 3, 4, 126, 1, 1
-    AddFloorButton 1, Button121, 4, 2, 121, 1, 1
-    AddFloorButton 1, Button122, 4, 3, 122, 1, 1
-    AddFloorButton 1, Button123, 4, 4, 123, 1, 1
-    AddFloorButton 1, Button100, 5, 2, 100, 1, 1
-    AddFloorButton 1, Button120, 5, 4, 120, 1, 1
+    AddFloorButton 1, Button127, ButtonLit127, 2, 2, 127, 1, 1
+    AddFloorButton 1, Button128, ButtonLit128, 2, 3, 128, 1, 1
+    AddFloorButton 1, Button129, ButtonLit129, 2, 4, 129, 1, 1
+    AddFloorButton 1, Button124, ButtonLit124, 3, 2, 124, 1, 1
+    AddFloorButton 1, Button125, ButtonLit125, 3, 3, 125, 1, 1
+    AddFloorButton 1, Button126, ButtonLit126, 3, 4, 126, 1, 1
+    AddFloorButton 1, Button121, ButtonLit121, 4, 2, 121, 1, 1
+    AddFloorButton 1, Button122, ButtonLit122, 4, 3, 122, 1, 1
+    AddFloorButton 1, Button123, ButtonLit123, 4, 4, 123, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 5, 2, 100, 1, 1
+    AddFloorButton 1, Button120, ButtonLit120, 5, 4, 120, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -5697,24 +5710,24 @@ DrawWalls = true, true, false, false, false, false
 <Elevators 64 to 65>
     #panel
     CreatePanel ElevPanel, 11, 5, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button116, 2, 2, 116, 1, 1
-    AddFloorButton 1, Button117, 2, 3, 117, 1, 1
-    AddFloorButton 1, Button118, 2, 4, 118, 1, 1
-    AddFloorButton 1, Button113, 3, 2, 113, 1, 1
-    AddFloorButton 1, Button114, 3, 3, 114, 1, 1
-    AddFloorButton 1, Button115, 3, 4, 115, 1, 1
-    AddFloorButton 1, Button110, 4, 2, 110, 1, 1
-    AddFloorButton 1, Button111, 4, 3, 111, 1, 1
-    AddFloorButton 1, Button112, 4, 4, 112, 1, 1
-    AddFloorButton 1, Button107, 5, 2, 107, 1, 1
-    AddFloorButton 1, Button108, 5, 3, 108, 1, 1
-    AddFloorButton 1, Button109, 5, 4, 109, 1, 1
-    AddFloorButton 1, Button104, 6, 2, 104, 1, 1
-    AddFloorButton 1, Button105, 6, 3, 105, 1, 1
-    AddFloorButton 1, Button106, 6, 4, 106, 1, 1
-    AddFloorButton 1, Button100, 7, 2, 100, 1, 1
-    AddFloorButton 1, Button102, 7, 3, 102, 1, 1
-    AddFloorButton 1, Button103, 7, 4, 103, 1, 1
+    AddFloorButton 1, Button116, ButtonLit116, 2, 2, 116, 1, 1
+    AddFloorButton 1, Button117, ButtonLit117, 2, 3, 117, 1, 1
+    AddFloorButton 1, Button118, ButtonLit118, 2, 4, 118, 1, 1
+    AddFloorButton 1, Button113, ButtonLit113, 3, 2, 113, 1, 1
+    AddFloorButton 1, Button114, ButtonLit114, 3, 3, 114, 1, 1
+    AddFloorButton 1, Button115, ButtonLit115, 3, 4, 115, 1, 1
+    AddFloorButton 1, Button110, ButtonLit110, 4, 2, 110, 1, 1
+    AddFloorButton 1, Button111, ButtonLit111, 4, 3, 111, 1, 1
+    AddFloorButton 1, Button112, ButtonLit112, 4, 4, 112, 1, 1
+    AddFloorButton 1, Button107, ButtonLit107, 5, 2, 107, 1, 1
+    AddFloorButton 1, Button108, ButtonLit108, 5, 3, 108, 1, 1
+    AddFloorButton 1, Button109, ButtonLit109, 5, 4, 109, 1, 1
+    AddFloorButton 1, Button104, ButtonLit104, 6, 2, 104, 1, 1
+    AddFloorButton 1, Button105, ButtonLit105, 6, 3, 105, 1, 1
+    AddFloorButton 1, Button106, ButtonLit106, 6, 4, 106, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 7, 2, 100, 1, 1
+    AddFloorButton 1, Button102, ButtonLit102, 7, 3, 102, 1, 1
+    AddFloorButton 1, Button103, ButtonLit103, 7, 4, 103, 1, 1
     AddControlButton 1, ButtonOpen, 9, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 9, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 10, 2, cancel, 1, 1
@@ -5831,38 +5844,38 @@ DrawWalls = true, true, false, false, false, false
 
     #right panel
     CreatePanel ElevPanel, 13, 6, left, 3.625 - 0.2 - 0.001, -1.75 - 1.1875 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button141, 2, 5, 141, 1, 1
-    AddFloorButton 1, Button140, 2, 4, 140, 1, 1
-    AddFloorButton 1, Button139, 2, 3, 139, 1, 1
-    AddFloorButton 1, Button138, 2, 2, 138, 1, 1
-    AddFloorButton 1, Button137, 3, 5, 137, 1, 1
-    AddFloorButton 1, Button136, 3, 4, 136, 1, 1
-    AddFloorButton 1, Button135, 3, 3, 135, 1, 1
-    AddFloorButton 1, Button134, 3, 2, 134, 1, 1
-    AddFloorButton 1, Button133, 4, 5, 133, 1, 1
-    AddFloorButton 1, Button132, 4, 4, 132, 1, 1
-    AddFloorButton 1, Button131, 4, 3, 131, 1, 1
-    AddFloorButton 1, Button130, 4, 2, 130, 1, 1
-    AddFloorButton 1, Button129, 5, 5, 129, 1, 1
-    AddFloorButton 1, Button128, 5, 4, 128, 1, 1
-    AddFloorButton 1, Button127, 5, 3, 127, 1, 1
-    AddFloorButton 1, Button126, 5, 2, 126, 1, 1
-    AddFloorButton 1, Button125, 6, 5, 125, 1, 1
-    AddFloorButton 1, Button124, 6, 4, 124, 1, 1
-    AddFloorButton 1, Button123, 6, 3, 123, 1, 1
-    AddFloorButton 1, Button122, 6, 2, 122, 1, 1
-    AddFloorButton 1, Button121, 7, 5, 121, 1, 1
-    AddFloorButton 1, Button120, 7, 4, 120, 1, 1
-    AddFloorButton 1, Button119, 7, 3, 119, 1, 1
-    AddFloorButton 1, Button118, 7, 2, 118, 1, 1
-    AddFloorButton 1, Button117, 8, 5, 117, 1, 1
-    AddFloorButton 1, Button116, 8, 4, 116, 1, 1
-    AddFloorButton 1, Button115, 8, 3, 115, 1, 1
-    AddFloorButton 1, Button114, 8, 2, 114, 1, 1
-    AddFloorButton 1, Button113, 9, 5, 113, 1, 1
-    AddFloorButton 1, Button112, 9, 4, 112, 1, 1
-    AddFloorButton 1, Button111, 9, 3, 111, 1, 1
-    AddFloorButton 1, Button110, 9, 2, 110, 1, 1
+    AddFloorButton 1, Button141, ButtonLit141, 2, 5, 141, 1, 1
+    AddFloorButton 1, Button140, ButtonLit140, 2, 4, 140, 1, 1
+    AddFloorButton 1, Button139, ButtonLit139, 2, 3, 139, 1, 1
+    AddFloorButton 1, Button138, ButtonLit138, 2, 2, 138, 1, 1
+    AddFloorButton 1, Button137, ButtonLit137, 3, 5, 137, 1, 1
+    AddFloorButton 1, Button136, ButtonLit136, 3, 4, 136, 1, 1
+    AddFloorButton 1, Button135, ButtonLit135, 3, 3, 135, 1, 1
+    AddFloorButton 1, Button134, ButtonLit134, 3, 2, 134, 1, 1
+    AddFloorButton 1, Button133, ButtonLit133, 4, 5, 133, 1, 1
+    AddFloorButton 1, Button132, ButtonLit132, 4, 4, 132, 1, 1
+    AddFloorButton 1, Button131, ButtonLit131, 4, 3, 131, 1, 1
+    AddFloorButton 1, Button130, ButtonLit130, 4, 2, 130, 1, 1
+    AddFloorButton 1, Button129, ButtonLit129, 5, 5, 129, 1, 1
+    AddFloorButton 1, Button128, ButtonLit128, 5, 4, 128, 1, 1
+    AddFloorButton 1, Button127, ButtonLit127, 5, 3, 127, 1, 1
+    AddFloorButton 1, Button126, ButtonLit126, 5, 2, 126, 1, 1
+    AddFloorButton 1, Button125, ButtonLit125, 6, 5, 125, 1, 1
+    AddFloorButton 1, Button124, ButtonLit124, 6, 4, 124, 1, 1
+    AddFloorButton 1, Button123, ButtonLit123, 6, 3, 123, 1, 1
+    AddFloorButton 1, Button122, ButtonLit122, 6, 2, 122, 1, 1
+    AddFloorButton 1, Button121, ButtonLit121, 7, 5, 121, 1, 1
+    AddFloorButton 1, Button120, ButtonLit120, 7, 4, 120, 1, 1
+    AddFloorButton 1, Button119, ButtonLit119, 7, 3, 119, 1, 1
+    AddFloorButton 1, Button118, ButtonLit118, 7, 2, 118, 1, 1
+    AddFloorButton 1, Button117, ButtonLit117, 8, 5, 117, 1, 1
+    AddFloorButton 1, Button116, ButtonLit116, 8, 4, 116, 1, 1
+    AddFloorButton 1, Button115, ButtonLit115, 8, 3, 115, 1, 1
+    AddFloorButton 1, Button114, ButtonLit114, 8, 2, 114, 1, 1
+    AddFloorButton 1, Button113, ButtonLit113, 9, 5, 113, 1, 1
+    AddFloorButton 1, Button112, ButtonLit112, 9, 4, 112, 1, 1
+    AddFloorButton 1, Button111, ButtonLit111, 9, 3, 111, 1, 1
+    AddFloorButton 1, Button110, ButtonLit110, 9, 2, 110, 1, 1
     AddControlButton 1, ButtonOpen, 11, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 11, 5, close, 1, 1
     AddControlButton 1, ButtonCancel, 12, 3, cancel, 1, 1
@@ -5871,38 +5884,38 @@ DrawWalls = true, true, false, false, false, false
 
     #left panel
     CreatePanel ElevPanel, 13, 6, left, 3.625 - 0.2 - 0.001, 1.75 + 1.1875 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 2, Button109, 2, 5, 109, 1, 1
-    AddFloorButton 2, Button108, 2, 4, 108, 1, 1
-    AddFloorButton 2, Button107, 2, 3, 107, 1, 1
-    AddFloorButton 2, Button106, 2, 2, 106, 1, 1
-    AddFloorButton 2, Button105, 3, 5, 105, 1, 1
-    AddFloorButton 2, Button104, 3, 4, 104, 1, 1
-    AddFloorButton 2, Button103, 3, 3, 103, 1, 1
-    AddFloorButton 2, Button102, 3, 2, 102, 1, 1
-    AddFloorButton 2, Button101, 4, 5, 101, 1, 1
-    AddFloorButton 2, Button100, 4, 4, 100, 1, 1
-    AddFloorButton 2, Button99, 4, 3, 99, 1, 1
-    AddFloorButton 2, Button98, 4, 2, 98, 1, 1
-    AddFloorButton 2, Button97, 5, 5, 97, 1, 1
-    AddFloorButton 2, Button96, 5, 4, 96, 1, 1
-    AddFloorButton 2, Button95, 5, 3, 95, 1, 1
-    AddFloorButton 2, Button94, 5, 2, 94, 1, 1
-    AddFloorButton 2, Button93, 6, 5, 93, 1, 1
-    AddFloorButton 2, Button92, 6, 4, 92, 1, 1
-    AddFloorButton 2, Button91, 6, 3, 91, 1, 1
-    AddFloorButton 2, Button90, 6, 2, 90, 1, 1
-    AddFloorButton 2, Button89, 7, 5, 89, 1, 1
-    AddFloorButton 2, Button88, 7, 4, 88, 1, 1
-    AddFloorButton 2, Button87, 7, 3, 87, 1, 1
-    AddFloorButton 2, Button86, 7, 2, 86, 1, 1
-    AddFloorButton 2, Button85, 8, 5, 85, 1, 1
-    AddFloorButton 2, Button84, 8, 4, 84, 1, 1
-    AddFloorButton 2, Button83, 8, 3, 83, 1, 1
-    AddFloorButton 2, Button82, 8, 2, 82, 1, 1
-    AddFloorButton 2, Button81, 9, 5, 81, 1, 1
-    AddFloorButton 2, Button80, 9, 4, 80, 1, 1
-    AddFloorButton 2, Button79, 9, 3, 79, 1, 1
-    AddFloorButton 2, ButtonL, 9, 2, 0, 1, 1
+    AddFloorButton 2, Button109, ButtonLit109, 2, 5, 109, 1, 1
+    AddFloorButton 2, Button108, ButtonLit108, 2, 4, 108, 1, 1
+    AddFloorButton 2, Button107, ButtonLit107, 2, 3, 107, 1, 1
+    AddFloorButton 2, Button106, ButtonLit106, 2, 2, 106, 1, 1
+    AddFloorButton 2, Button105, ButtonLit105, 3, 5, 105, 1, 1
+    AddFloorButton 2, Button104, ButtonLit104, 3, 4, 104, 1, 1
+    AddFloorButton 2, Button103, ButtonLit103, 3, 3, 103, 1, 1
+    AddFloorButton 2, Button102, ButtonLit102, 3, 2, 102, 1, 1
+    AddFloorButton 2, Button101, ButtonLit101, 4, 5, 101, 1, 1
+    AddFloorButton 2, Button100, ButtonLit100, 4, 4, 100, 1, 1
+    AddFloorButton 2, Button99, ButtonLit99, 4, 3, 99, 1, 1
+    AddFloorButton 2, Button98, ButtonLit98, 4, 2, 98, 1, 1
+    AddFloorButton 2, Button97, ButtonLit97, 5, 5, 97, 1, 1
+    AddFloorButton 2, Button96, ButtonLit96, 5, 4, 96, 1, 1
+    AddFloorButton 2, Button95, ButtonLit95, 5, 3, 95, 1, 1
+    AddFloorButton 2, Button94, ButtonLit94, 5, 2, 94, 1, 1
+    AddFloorButton 2, Button93, ButtonLit93, 6, 5, 93, 1, 1
+    AddFloorButton 2, Button92, ButtonLit92, 6, 4, 92, 1, 1
+    AddFloorButton 2, Button91, ButtonLit91, 6, 3, 91, 1, 1
+    AddFloorButton 2, Button90, ButtonLit90, 6, 2, 90, 1, 1
+    AddFloorButton 2, Button89, ButtonLit89, 7, 5, 89, 1, 1
+    AddFloorButton 2, Button88, ButtonLit88, 7, 4, 88, 1, 1
+    AddFloorButton 2, Button87, ButtonLit87, 7, 3, 87, 1, 1
+    AddFloorButton 2, Button86, ButtonLit86, 7, 2, 86, 1, 1
+    AddFloorButton 2, Button85, ButtonLit85, 8, 5, 85, 1, 1
+    AddFloorButton 2, Button84, ButtonLit84, 8, 4, 84, 1, 1
+    AddFloorButton 2, Button83, ButtonLit83, 8, 3, 83, 1, 1
+    AddFloorButton 2, Button82, ButtonLit82, 8, 2, 82, 1, 1
+    AddFloorButton 2, Button81, ButtonLit81, 9, 5, 81, 1, 1
+    AddFloorButton 2, Button80, ButtonLit80, 9, 4, 80, 1, 1
+    AddFloorButton 2, Button79, ButtonLit79, 9, 3, 79, 1, 1
+    AddFloorButton 2, ButtonL, ButtonLitL, 9, 2, 0, 1, 1
     AddControlButton 2, ButtonClose, 11, 2, close, 1, 1
     AddControlButton 2, ButtonOpen, 11, 5, open, 1, 1
     AddControlButton 2, ButtonAlarm, 12, 2, alarm, 1, 1
@@ -5969,51 +5982,51 @@ DrawWalls = true, true, false, false, false, false
 
     #right panel
     CreatePanel ElevPanel, 13, 7, right, -3.625 + 0.2 + 0.001, 1.75 + 1.1875 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button79, 2, 6, 79, 1, 1
-    AddFloorButton 1, Button78, 2, 5, 78, 1, 1
-    AddFloorButton 1, Button77, 2, 4, 77, 1, 1
-    AddFloorButton 1, Button76, 2, 3, 76, 1, 1
-    AddFloorButton 1, Button75, 2, 2, 75, 1, 1
-    AddFloorButton 1, Button74, 3, 6, 74, 1, 1
-    AddFloorButton 1, Button73, 3, 5, 73, 1, 1
-    AddFloorButton 1, Button72, 3, 4, 72, 1, 1
-    AddFloorButton 1, Button71, 3, 3, 71, 1, 1
-    AddFloorButton 1, Button70, 3, 2, 70, 1, 1
-    AddFloorButton 1, Button69, 4, 6, 69, 1, 1
-    AddFloorButton 1, Button68, 4, 5, 68, 1, 1
-    AddFloorButton 1, Button67, 4, 4, 67, 1, 1
-    AddFloorButton 1, Button66, 4, 3, 66, 1, 1
-    AddFloorButton 1, Button65, 4, 2, 65, 1, 1
-    AddFloorButton 1, Button64, 5, 6, 64, 1, 1
-    AddFloorButton 1, Button63, 5, 5, 63, 1, 1
-    AddFloorButton 1, Button62, 5, 4, 62, 1, 1
-    AddFloorButton 1, Button61, 5, 3, 61, 1, 1
-    AddFloorButton 1, Button60, 5, 2, 60, 1, 1
-    AddFloorButton 1, Button59, 6, 6, 59, 1, 1
-    AddFloorButton 1, Button58, 6, 5, 58, 1, 1
-    AddFloorButton 1, Button57, 6, 4, 57, 1, 1
-    AddFloorButton 1, Button56, 6, 3, 56, 1, 1
-    AddFloorButton 1, Button55, 6, 2, 55, 1, 1
-    AddFloorButton 1, Button54, 7, 6, 54, 1, 1
-    AddFloorButton 1, Button53, 7, 5, 53, 1, 1
-    AddFloorButton 1, Button52, 7, 4, 52, 1, 1
-    AddFloorButton 1, Button51, 7, 3, 51, 1, 1
-    AddFloorButton 1, Button50, 7, 2, 50, 1, 1
-    AddFloorButton 1, Button49, 8, 6, 49, 1, 1
-    AddFloorButton 1, Button48, 8, 5, 48, 1, 1
-    AddFloorButton 1, Button47, 8, 4, 47, 1, 1
-    AddFloorButton 1, Button46, 8, 3, 46, 1, 1
-    AddFloorButton 1, Button45, 8, 2, 45, 1, 1
-    AddFloorButton 1, Button44, 9, 6, 44, 1, 1
-    AddFloorButton 1, Button43, 9, 5, 43, 1, 1
-    AddFloorButton 1, Button42, 9, 4, 42, 1, 1
-    AddFloorButton 1, Button41, 9, 3, 41, 1, 1
-    AddFloorButton 1, Button40, 9, 2, 40, 1, 1
-    AddFloorButton 1, Button39, 10, 6, 39, 1, 1
-    AddFloorButton 1, Button38, 10, 5, 38, 1, 1
-    AddFloorButton 1, Button37, 10, 4, 37, 1, 1
-    AddFloorButton 1, Button36, 10, 3, 36, 1, 1
-    AddFloorButton 1, Button35, 10, 2, 35, 1, 1
+    AddFloorButton 1, Button79, ButtonLit79, 2, 6, 79, 1, 1
+    AddFloorButton 1, Button78, ButtonLit78, 2, 5, 78, 1, 1
+    AddFloorButton 1, Button77, ButtonLit77, 2, 4, 77, 1, 1
+    AddFloorButton 1, Button76, ButtonLit76, 2, 3, 76, 1, 1
+    AddFloorButton 1, Button75, ButtonLit75, 2, 2, 75, 1, 1
+    AddFloorButton 1, Button74, ButtonLit74, 3, 6, 74, 1, 1
+    AddFloorButton 1, Button73, ButtonLit73, 3, 5, 73, 1, 1
+    AddFloorButton 1, Button72, ButtonLit72, 3, 4, 72, 1, 1
+    AddFloorButton 1, Button71, ButtonLit71, 3, 3, 71, 1, 1
+    AddFloorButton 1, Button70, ButtonLit70, 3, 2, 70, 1, 1
+    AddFloorButton 1, Button69, ButtonLit69, 4, 6, 69, 1, 1
+    AddFloorButton 1, Button68, ButtonLit68, 4, 5, 68, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 4, 4, 67, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 4, 3, 66, 1, 1
+    AddFloorButton 1, Button65, ButtonLit65, 4, 2, 65, 1, 1
+    AddFloorButton 1, Button64, ButtonLit64, 5, 6, 64, 1, 1
+    AddFloorButton 1, Button63, ButtonLit63, 5, 5, 63, 1, 1
+    AddFloorButton 1, Button62, ButtonLit62, 5, 4, 62, 1, 1
+    AddFloorButton 1, Button61, ButtonLit61, 5, 3, 61, 1, 1
+    AddFloorButton 1, Button60, ButtonLit60, 5, 2, 60, 1, 1
+    AddFloorButton 1, Button59, ButtonLit59, 6, 6, 59, 1, 1
+    AddFloorButton 1, Button58, ButtonLit58, 6, 5, 58, 1, 1
+    AddFloorButton 1, Button57, ButtonLit57, 6, 4, 57, 1, 1
+    AddFloorButton 1, Button56, ButtonLit56, 6, 3, 56, 1, 1
+    AddFloorButton 1, Button55, ButtonLit55, 6, 2, 55, 1, 1
+    AddFloorButton 1, Button54, ButtonLit54, 7, 6, 54, 1, 1
+    AddFloorButton 1, Button53, ButtonLit53, 7, 5, 53, 1, 1
+    AddFloorButton 1, Button52, ButtonLit52, 7, 4, 52, 1, 1
+    AddFloorButton 1, Button51, ButtonLit51, 7, 3, 51, 1, 1
+    AddFloorButton 1, Button50, ButtonLit50, 7, 2, 50, 1, 1
+    AddFloorButton 1, Button49, ButtonLit49, 8, 6, 49, 1, 1
+    AddFloorButton 1, Button48, ButtonLit48, 8, 5, 48, 1, 1
+    AddFloorButton 1, Button47, ButtonLit47, 8, 4, 47, 1, 1
+    AddFloorButton 1, Button46, ButtonLit46, 8, 3, 46, 1, 1
+    AddFloorButton 1, Button45, ButtonLit45, 8, 2, 45, 1, 1
+    AddFloorButton 1, Button44, ButtonLit44, 9, 6, 44, 1, 1
+    AddFloorButton 1, Button43, ButtonLit43, 9, 5, 43, 1, 1
+    AddFloorButton 1, Button42, ButtonLit42, 9, 4, 42, 1, 1
+    AddFloorButton 1, Button41, ButtonLit41, 9, 3, 41, 1, 1
+    AddFloorButton 1, Button40, ButtonLit40, 9, 2, 40, 1, 1
+    AddFloorButton 1, Button39, ButtonLit39, 10, 6, 39, 1, 1
+    AddFloorButton 1, Button38, ButtonLit38, 10, 5, 38, 1, 1
+    AddFloorButton 1, Button37, ButtonLit37, 10, 4, 37, 1, 1
+    AddFloorButton 1, Button36, ButtonLit36, 10, 3, 36, 1, 1
+    AddFloorButton 1, Button35, ButtonLit35, 10, 2, 35, 1, 1
     AddControlButton 1, ButtonOpen, 12, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 12, 3, close, 1, 1
     AddControlButton 1, ButtonCancel, 12, 4, cancel, 1, 1
@@ -6022,49 +6035,49 @@ DrawWalls = true, true, false, false, false, false
 
     #left panel
     CreatePanel ElevPanel, 13, 7, right, -3.625 + 0.2 + 0.001, -1.75 - 1.1875 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 2, Button34, 2, 6, 34, 1, 1
-    AddFloorButton 2, Button33, 2, 5, 33, 1, 1
-    AddFloorButton 2, Button32, 2, 4, 32, 1, 1
-    AddFloorButton 2, Button31, 2, 3, 31, 1, 1
-    AddFloorButton 2, Button30, 2, 2, 30, 1, 1
-    AddFloorButton 2, Button29, 3, 6, 29, 1, 1
-    AddFloorButton 2, Button28, 3, 5, 28, 1, 1
-    AddFloorButton 2, Button27, 3, 4, 27, 1, 1
-    AddFloorButton 2, Button26, 3, 3, 26, 1, 1
-    AddFloorButton 2, Button25, 3, 2, 25, 1, 1
-    AddFloorButton 2, Button24, 4, 6, 24, 1, 1
-    AddFloorButton 2, Button23, 4, 5, 23, 1, 1
-    AddFloorButton 2, Button22, 4, 4, 22, 1, 1
-    AddFloorButton 2, Button21, 4, 3, 21, 1, 1
-    AddFloorButton 2, Button20, 4, 2, 20, 1, 1
-    AddFloorButton 2, Button19, 5, 6, 19, 1, 1
-    AddFloorButton 2, Button18, 5, 5, 18, 1, 1
-    AddFloorButton 2, Button17, 5, 4, 17, 1, 1
-    AddFloorButton 2, Button16, 5, 3, 16, 1, 1
-    AddFloorButton 2, Button15, 5, 2, 15, 1, 1
-    AddFloorButton 2, Button14, 6, 6, 14, 1, 1
-    AddFloorButton 2, Button13, 6, 5, 13, 1, 1
-    AddFloorButton 2, Button12, 6, 4, 12, 1, 1
-    AddFloorButton 2, Button11, 6, 3, 11, 1, 1
-    AddFloorButton 2, Button10, 6, 2, 10, 1, 1
-    AddFloorButton 2, Button9, 7, 6, 9, 1, 1
-    AddFloorButton 2, Button8, 7, 5, 8, 1, 1
-    AddFloorButton 2, Button7, 7, 4, 7, 1, 1
-    AddFloorButton 2, Button6, 7, 3, 6, 1, 1
-    AddFloorButton 2, Button5, 7, 2, 5, 1, 1
-    AddFloorButton 2, Button4, 8, 6, 4, 1, 1
-    AddFloorButton 2, Button3, 8, 5, 3, 1, 1
-    AddFloorButton 2, Button2, 8, 4, 2, 1, 1
-    AddFloorButton 2, ButtonM, 8, 3, 1, 1, 1
-    AddFloorButton 2, ButtonL, 8, 2, 0, 1, 1
-    AddFloorButton 2, ButtonLL1, 9, 6, -1, 1, 1
-    AddFloorButton 2, ButtonLL2, 9, 5, -2, 1, 1
-    AddFloorButton 2, ButtonP1, 9, 4, -3, 1, 1
-    AddFloorButton 2, ButtonP2, 9, 3, -4, 1, 1
-    AddFloorButton 2, ButtonP3, 9, 2, -5, 1, 1
-    AddFloorButton 2, ButtonP4, 10, 5, -6, 1, 1
-    AddFloorButton 2, ButtonP5, 10, 4, -7, 1, 1
-    AddFloorButton 2, ButtonS, 10, 3, -8, 1, 1
+    AddFloorButton 2, Button34, ButtonLit34, 2, 6, 34, 1, 1
+    AddFloorButton 2, Button33, ButtonLit33, 2, 5, 33, 1, 1
+    AddFloorButton 2, Button32, ButtonLit32, 2, 4, 32, 1, 1
+    AddFloorButton 2, Button31, ButtonLit31, 2, 3, 31, 1, 1
+    AddFloorButton 2, Button30, ButtonLit30, 2, 2, 30, 1, 1
+    AddFloorButton 2, Button29, ButtonLit29, 3, 6, 29, 1, 1
+    AddFloorButton 2, Button28, ButtonLit28, 3, 5, 28, 1, 1
+    AddFloorButton 2, Button27, ButtonLit27, 3, 4, 27, 1, 1
+    AddFloorButton 2, Button26, ButtonLit26, 3, 3, 26, 1, 1
+    AddFloorButton 2, Button25, ButtonLit25, 3, 2, 25, 1, 1
+    AddFloorButton 2, Button24, ButtonLit24, 4, 6, 24, 1, 1
+    AddFloorButton 2, Button23, ButtonLit23, 4, 5, 23, 1, 1
+    AddFloorButton 2, Button22, ButtonLit22, 4, 4, 22, 1, 1
+    AddFloorButton 2, Button21, ButtonLit21, 4, 3, 21, 1, 1
+    AddFloorButton 2, Button20, ButtonLit20, 4, 2, 20, 1, 1
+    AddFloorButton 2, Button19, ButtonLit19, 5, 6, 19, 1, 1
+    AddFloorButton 2, Button18, ButtonLit18, 5, 5, 18, 1, 1
+    AddFloorButton 2, Button17, ButtonLit17, 5, 4, 17, 1, 1
+    AddFloorButton 2, Button16, ButtonLit16, 5, 3, 16, 1, 1
+    AddFloorButton 2, Button15, ButtonLit15, 5, 2, 15, 1, 1
+    AddFloorButton 2, Button14, ButtonLit14, 6, 6, 14, 1, 1
+    AddFloorButton 2, Button13, ButtonLit13, 6, 5, 13, 1, 1
+    AddFloorButton 2, Button12, ButtonLit12, 6, 4, 12, 1, 1
+    AddFloorButton 2, Button11, ButtonLit11, 6, 3, 11, 1, 1
+    AddFloorButton 2, Button10, ButtonLit10, 6, 2, 10, 1, 1
+    AddFloorButton 2, Button9, ButtonLit9, 7, 6, 9, 1, 1
+    AddFloorButton 2, Button8, ButtonLit8, 7, 5, 8, 1, 1
+    AddFloorButton 2, Button7, ButtonLit7, 7, 4, 7, 1, 1
+    AddFloorButton 2, Button6, ButtonLit6, 7, 3, 6, 1, 1
+    AddFloorButton 2, Button5, ButtonLit5, 7, 2, 5, 1, 1
+    AddFloorButton 2, Button4, ButtonLit4, 8, 6, 4, 1, 1
+    AddFloorButton 2, Button3, ButtonLit3, 8, 5, 3, 1, 1
+    AddFloorButton 2, Button2, ButtonLit2, 8, 4, 2, 1, 1
+    AddFloorButton 2, ButtonM, ButtonLitM, 8, 3, 1, 1, 1
+    AddFloorButton 2, ButtonL, ButtonLitL, 8, 2, 0, 1, 1
+    AddFloorButton 2, ButtonLL1, ButtonLitLL1, 9, 6, -1, 1, 1
+    AddFloorButton 2, ButtonLL2, ButtonLitLL2, 9, 5, -2, 1, 1
+    AddFloorButton 2, ButtonP1, ButtonLitP1, 9, 4, -3, 1, 1
+    AddFloorButton 2, ButtonP2, ButtonLitP2, 9, 3, -4, 1, 1
+    AddFloorButton 2, ButtonP3, ButtonLitP3, 9, 2, -5, 1, 1
+    AddFloorButton 2, ButtonP4, ButtonLitP4, 10, 5, -6, 1, 1
+    AddFloorButton 2, ButtonP5, ButtonLitP5, 10, 4, -7, 1, 1
+    AddFloorButton 2, ButtonS, ButtonLitS, 10, 3, -8, 1, 1
     AddControlButton 2, ButtonOpen, 12, 6, open, 1, 1
     AddControlButton 2, ButtonClose, 12, 5, close, 1, 1
     AddControlButton 2, ButtonCancel, 12, 4, cancel, 1, 1
@@ -6132,84 +6145,84 @@ DrawWalls = true, true, false, false, false, false
 
     #right panel
     CreatePanel ElevPanel, 17, 8, left, 3.917 - 0.2 - 0.001, -2.25 - 1.9375 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button141, 2, 7, 141, 1, 1
-    AddFloorButton 1, Button140, 2, 6, 140, 1, 1
-    AddFloorButton 1, Button139, 2, 5, 139, 1, 1
-    AddFloorButton 1, Button138, 2, 4, 138, 1, 1
-    AddFloorButton 1, Button137, 2, 3, 137, 1, 1
-    AddFloorButton 1, Button136, 2, 2, 136, 1, 1
-    AddFloorButton 1, Button135, 3, 7, 135, 1, 1
-    AddFloorButton 1, Button134, 3, 6, 134, 1, 1
-    AddFloorButton 1, Button133, 3, 5, 133, 1, 1
-    AddFloorButton 1, Button132, 3, 4, 132, 1, 1
-    AddFloorButton 1, Button131, 3, 3, 131, 1, 1
-    AddFloorButton 1, Button130, 3, 2, 130, 1, 1
-    AddFloorButton 1, Button129, 4, 7, 129, 1, 1
-    AddFloorButton 1, Button128, 4, 6, 128, 1, 1
-    AddFloorButton 1, Button127, 4, 5, 127, 1, 1
-    AddFloorButton 1, Button126, 4, 4, 126, 1, 1
-    AddFloorButton 1, Button125, 4, 3, 125, 1, 1
-    AddFloorButton 1, Button124, 4, 2, 124, 1, 1
-    AddFloorButton 1, Button123, 5, 7, 123, 1, 1
-    AddFloorButton 1, Button122, 5, 6, 122, 1, 1
-    AddFloorButton 1, Button121, 5, 5, 121, 1, 1
-    AddFloorButton 1, Button120, 5, 4, 120, 1, 1
-    AddFloorButton 1, Button119, 5, 3, 119, 1, 1
-    AddFloorButton 1, Button118, 5, 2, 118, 1, 1
-    AddFloorButton 1, Button117, 6, 7, 117, 1, 1
-    AddFloorButton 1, Button116, 6, 6, 116, 1, 1
-    AddFloorButton 1, Button115, 6, 5, 115, 1, 1
-    AddFloorButton 1, Button114, 6, 4, 114, 1, 1
-    AddFloorButton 1, Button113, 6, 3, 113, 1, 1
-    AddFloorButton 1, Button112, 6, 2, 112, 1, 1
-    AddFloorButton 1, Button111, 7, 7, 111, 1, 1
-    AddFloorButton 1, Button110, 7, 6, 110, 1, 1
-    AddFloorButton 1, Button109, 7, 5, 109, 1, 1
-    AddFloorButton 1, Button108, 7, 4, 108, 1, 1
-    AddFloorButton 1, Button107, 7, 3, 107, 1, 1
-    AddFloorButton 1, Button106, 7, 2, 106, 1, 1
-    AddFloorButton 1, Button105, 8, 7, 105, 1, 1
-    AddFloorButton 1, Button104, 8, 6, 104, 1, 1
-    AddFloorButton 1, Button103, 8, 5, 103, 1, 1
-    AddFloorButton 1, Button102, 8, 4, 102, 1, 1
-    AddFloorButton 1, Button101, 8, 3, 101, 1, 1
-    AddFloorButton 1, Button100, 8, 2, 100, 1, 1
-    AddFloorButton 1, Button99, 9, 7, 99, 1, 1
-    AddFloorButton 1, Button98, 9, 6, 98, 1, 1
-    AddFloorButton 1, Button97, 9, 5, 97, 1, 1
-    AddFloorButton 1, Button96, 9, 4, 96, 1, 1
-    AddFloorButton 1, Button95, 9, 3, 95, 1, 1
-    AddFloorButton 1, Button94, 9, 2, 94, 1, 1
-    AddFloorButton 1, Button93, 10, 7, 93, 1, 1
-    AddFloorButton 1, Button92, 10, 6, 92, 1, 1
-    AddFloorButton 1, Button91, 10, 5, 91, 1, 1
-    AddFloorButton 1, Button90, 10, 4, 90, 1, 1
-    AddFloorButton 1, Button89, 10, 3, 89, 1, 1
-    AddFloorButton 1, Button88, 10, 2, 88, 1, 1
-    AddFloorButton 1, Button87, 11, 7, 87, 1, 1
-    AddFloorButton 1, Button86, 11, 6, 86, 1, 1
-    AddFloorButton 1, Button85, 11, 5, 85, 1, 1
-    AddFloorButton 1, Button84, 11, 4, 84, 1, 1
-    AddFloorButton 1, Button83, 11, 3, 83, 1, 1
-    AddFloorButton 1, Button82, 11, 2, 82, 1, 1
-    AddFloorButton 1, Button81, 12, 7, 81, 1, 1
-    AddFloorButton 1, Button80, 12, 6, 80, 1, 1
-    AddFloorButton 1, Button79, 12, 5, 79, 1, 1
-    AddFloorButton 1, Button78, 12, 4, 78, 1, 1
-    AddFloorButton 1, Button77, 12, 3, 77, 1, 1
-    AddFloorButton 1, Button76, 12, 2, 76, 1, 1
-    AddFloorButton 1, Button75, 13, 7, 75, 1, 1
-    AddFloorButton 1, Button74, 13, 6, 74, 1, 1
-    AddFloorButton 1, Button73, 13, 5, 73, 1, 1
-    AddFloorButton 1, Button72, 13, 4, 72, 1, 1
-    AddFloorButton 1, Button71, 13, 3, 71, 1, 1
-    AddFloorButton 1, Button70, 13, 2, 70, 1, 1
-    AddFloorButton 1, Button69, 14, 7, 69, 1, 1
-    AddFloorButton 1, Button68, 14, 6, 68, 1, 1
-    AddFloorButton 1, Button67, 14, 5, 67, 1, 1
-    AddFloorButton 1, Button66, 14, 4, 66, 1, 1
-    AddFloorButton 1, Button65, 14, 3, 65, 1, 1
-    AddFloorButton 1, Button64, 14, 2, 64, 1, 1
+    AddFloorButton 1, Button141, ButtonLit141, 2, 7, 141, 1, 1
+    AddFloorButton 1, Button140, ButtonLit140, 2, 6, 140, 1, 1
+    AddFloorButton 1, Button139, ButtonLit139, 2, 5, 139, 1, 1
+    AddFloorButton 1, Button138, ButtonLit138, 2, 4, 138, 1, 1
+    AddFloorButton 1, Button137, ButtonLit137, 2, 3, 137, 1, 1
+    AddFloorButton 1, Button136, ButtonLit136, 2, 2, 136, 1, 1
+    AddFloorButton 1, Button135, ButtonLit135, 3, 7, 135, 1, 1
+    AddFloorButton 1, Button134, ButtonLit134, 3, 6, 134, 1, 1
+    AddFloorButton 1, Button133, ButtonLit133, 3, 5, 133, 1, 1
+    AddFloorButton 1, Button132, ButtonLit132, 3, 4, 132, 1, 1
+    AddFloorButton 1, Button131, ButtonLit131, 3, 3, 131, 1, 1
+    AddFloorButton 1, Button130, ButtonLit130, 3, 2, 130, 1, 1
+    AddFloorButton 1, Button129, ButtonLit129, 4, 7, 129, 1, 1
+    AddFloorButton 1, Button128, ButtonLit128, 4, 6, 128, 1, 1
+    AddFloorButton 1, Button127, ButtonLit127, 4, 5, 127, 1, 1
+    AddFloorButton 1, Button126, ButtonLit126, 4, 4, 126, 1, 1
+    AddFloorButton 1, Button125, ButtonLit125, 4, 3, 125, 1, 1
+    AddFloorButton 1, Button124, ButtonLit124, 4, 2, 124, 1, 1
+    AddFloorButton 1, Button123, ButtonLit123, 5, 7, 123, 1, 1
+    AddFloorButton 1, Button122, ButtonLit122, 5, 6, 122, 1, 1
+    AddFloorButton 1, Button121, ButtonLit121, 5, 5, 121, 1, 1
+    AddFloorButton 1, Button120, ButtonLit120, 5, 4, 120, 1, 1
+    AddFloorButton 1, Button119, ButtonLit119, 5, 3, 119, 1, 1
+    AddFloorButton 1, Button118, ButtonLit118, 5, 2, 118, 1, 1
+    AddFloorButton 1, Button117, ButtonLit117, 6, 7, 117, 1, 1
+    AddFloorButton 1, Button116, ButtonLit116, 6, 6, 116, 1, 1
+    AddFloorButton 1, Button115, ButtonLit115, 6, 5, 115, 1, 1
+    AddFloorButton 1, Button114, ButtonLit114, 6, 4, 114, 1, 1
+    AddFloorButton 1, Button113, ButtonLit113, 6, 3, 113, 1, 1
+    AddFloorButton 1, Button112, ButtonLit112, 6, 2, 112, 1, 1
+    AddFloorButton 1, Button111, ButtonLit111, 7, 7, 111, 1, 1
+    AddFloorButton 1, Button110, ButtonLit110, 7, 6, 110, 1, 1
+    AddFloorButton 1, Button109, ButtonLit109, 7, 5, 109, 1, 1
+    AddFloorButton 1, Button108, ButtonLit108, 7, 4, 108, 1, 1
+    AddFloorButton 1, Button107, ButtonLit107, 7, 3, 107, 1, 1
+    AddFloorButton 1, Button106, ButtonLit106, 7, 2, 106, 1, 1
+    AddFloorButton 1, Button105, ButtonLit105, 8, 7, 105, 1, 1
+    AddFloorButton 1, Button104, ButtonLit104, 8, 6, 104, 1, 1
+    AddFloorButton 1, Button103, ButtonLit103, 8, 5, 103, 1, 1
+    AddFloorButton 1, Button102, ButtonLit102, 8, 4, 102, 1, 1
+    AddFloorButton 1, Button101, ButtonLit101, 8, 3, 101, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 8, 2, 100, 1, 1
+    AddFloorButton 1, Button99, ButtonLit99, 9, 7, 99, 1, 1
+    AddFloorButton 1, Button98, ButtonLit98, 9, 6, 98, 1, 1
+    AddFloorButton 1, Button97, ButtonLit97, 9, 5, 97, 1, 1
+    AddFloorButton 1, Button96, ButtonLit96, 9, 4, 96, 1, 1
+    AddFloorButton 1, Button95, ButtonLit95, 9, 3, 95, 1, 1
+    AddFloorButton 1, Button94, ButtonLit94, 9, 2, 94, 1, 1
+    AddFloorButton 1, Button93, ButtonLit93, 10, 7, 93, 1, 1
+    AddFloorButton 1, Button92, ButtonLit92, 10, 6, 92, 1, 1
+    AddFloorButton 1, Button91, ButtonLit91, 10, 5, 91, 1, 1
+    AddFloorButton 1, Button90, ButtonLit90, 10, 4, 90, 1, 1
+    AddFloorButton 1, Button89, ButtonLit89, 10, 3, 89, 1, 1
+    AddFloorButton 1, Button88, ButtonLit88, 10, 2, 88, 1, 1
+    AddFloorButton 1, Button87, ButtonLit87, 11, 7, 87, 1, 1
+    AddFloorButton 1, Button86, ButtonLit86, 11, 6, 86, 1, 1
+    AddFloorButton 1, Button85, ButtonLit85, 11, 5, 85, 1, 1
+    AddFloorButton 1, Button84, ButtonLit84, 11, 4, 84, 1, 1
+    AddFloorButton 1, Button83, ButtonLit83, 11, 3, 83, 1, 1
+    AddFloorButton 1, Button82, ButtonLit82, 11, 2, 82, 1, 1
+    AddFloorButton 1, Button81, ButtonLit81, 12, 7, 81, 1, 1
+    AddFloorButton 1, Button80, ButtonLit80, 12, 6, 80, 1, 1
+    AddFloorButton 1, Button79, ButtonLit79, 12, 5, 79, 1, 1
+    AddFloorButton 1, Button78, ButtonLit78, 12, 4, 78, 1, 1
+    AddFloorButton 1, Button77, ButtonLit77, 12, 3, 77, 1, 1
+    AddFloorButton 1, Button76, ButtonLit76, 12, 2, 76, 1, 1
+    AddFloorButton 1, Button75, ButtonLit75, 13, 7, 75, 1, 1
+    AddFloorButton 1, Button74, ButtonLit74, 13, 6, 74, 1, 1
+    AddFloorButton 1, Button73, ButtonLit73, 13, 5, 73, 1, 1
+    AddFloorButton 1, Button72, ButtonLit72, 13, 4, 72, 1, 1
+    AddFloorButton 1, Button71, ButtonLit71, 13, 3, 71, 1, 1
+    AddFloorButton 1, Button70, ButtonLit70, 13, 2, 70, 1, 1
+    AddFloorButton 1, Button69, ButtonLit69, 14, 7, 69, 1, 1
+    AddFloorButton 1, Button68, ButtonLit68, 14, 6, 68, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 14, 5, 67, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 14, 4, 66, 1, 1
+    AddFloorButton 1, Button65, ButtonLit65, 14, 3, 65, 1, 1
+    AddFloorButton 1, Button64, ButtonLit64, 14, 2, 64, 1, 1
     AddControlButton 1, ButtonOpen, 16, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 16, 3, close, 1, 1
     AddControlButton 1, ButtonCancel, 16, 4, cancel, 1, 1
@@ -6218,78 +6231,78 @@ DrawWalls = true, true, false, false, false, false
 
     #left panel
     CreatePanel ElevPanel, 16, 8, left, 3.917 - 0.2 - 0.001, 2.25 + 1.9375 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 2, Button63, 2, 7, 63, 1, 1
-    AddFloorButton 2, Button62, 2, 6, 62, 1, 1
-    AddFloorButton 2, Button61, 2, 5, 61, 1, 1
-    AddFloorButton 2, Button60, 2, 4, 60, 1, 1
-    AddFloorButton 2, Button59, 2, 3, 59, 1, 1
-    AddFloorButton 2, Button58, 2, 2, 58, 1, 1
-    AddFloorButton 2, Button57, 3, 7, 57, 1, 1
-    AddFloorButton 2, Button56, 3, 6, 56, 1, 1
-    AddFloorButton 2, Button55, 3, 5, 55, 1, 1
-    AddFloorButton 2, Button54, 3, 4, 54, 1, 1
-    AddFloorButton 2, Button53, 3, 3, 53, 1, 1
-    AddFloorButton 2, Button52, 3, 2, 52, 1, 1
-    AddFloorButton 2, Button51, 4, 7, 51, 1, 1
-    AddFloorButton 2, Button50, 4, 6, 50, 1, 1
-    AddFloorButton 2, Button49, 4, 5, 49, 1, 1
-    AddFloorButton 2, Button48, 4, 4, 48, 1, 1
-    AddFloorButton 2, Button47, 4, 3, 47, 1, 1
-    AddFloorButton 2, Button46, 4, 2, 46, 1, 1
-    AddFloorButton 2, Button45, 5, 7, 45, 1, 1
-    AddFloorButton 2, Button44, 5, 6, 44, 1, 1
-    AddFloorButton 2, Button43, 5, 5, 43, 1, 1
-    AddFloorButton 2, Button42, 5, 4, 42, 1, 1
-    AddFloorButton 2, Button41, 5, 3, 41, 1, 1
-    AddFloorButton 2, Button40, 5, 2, 40, 1, 1
-    AddFloorButton 2, Button39, 6, 7, 39, 1, 1
-    AddFloorButton 2, Button38, 6, 6, 38, 1, 1
-    AddFloorButton 2, Button37, 6, 5, 37, 1, 1
-    AddFloorButton 2, Button36, 6, 4, 36, 1, 1
-    AddFloorButton 2, Button35, 6, 3, 35, 1, 1
-    AddFloorButton 2, Button34, 6, 2, 34, 1, 1
-    AddFloorButton 2, Button33, 7, 7, 33, 1, 1
-    AddFloorButton 2, Button32, 7, 6, 32, 1, 1
-    AddFloorButton 2, Button31, 7, 5, 31, 1, 1
-    AddFloorButton 2, Button30, 7, 4, 30, 1, 1
-    AddFloorButton 2, Button29, 7, 3, 29, 1, 1
-    AddFloorButton 2, Button28, 7, 2, 28, 1, 1
-    AddFloorButton 2, Button27, 8, 7, 27, 1, 1
-    AddFloorButton 2, Button26, 8, 6, 26, 1, 1
-    AddFloorButton 2, Button25, 8, 5, 25, 1, 1
-    AddFloorButton 2, Button24, 8, 4, 24, 1, 1
-    AddFloorButton 2, Button23, 8, 3, 23, 1, 1
-    AddFloorButton 2, Button22, 8, 2, 22, 1, 1
-    AddFloorButton 2, Button21, 9, 7, 21, 1, 1
-    AddFloorButton 2, Button20, 9, 6, 20, 1, 1
-    AddFloorButton 2, Button19, 9, 5, 19, 1, 1
-    AddFloorButton 2, Button18, 9, 4, 18, 1, 1
-    AddFloorButton 2, Button17, 9, 3, 17, 1, 1
-    AddFloorButton 2, Button16, 9, 2, 16, 1, 1
-    AddFloorButton 2, Button15, 10, 7, 15, 1, 1
-    AddFloorButton 2, Button14, 10, 6, 14, 1, 1
-    AddFloorButton 2, Button13, 10, 5, 13, 1, 1
-    AddFloorButton 2, Button12, 10, 4, 12, 1, 1
-    AddFloorButton 2, Button11, 10, 3, 11, 1, 1
-    AddFloorButton 2, Button10, 10, 2, 10, 1, 1
-    AddFloorButton 2, Button9, 11, 7, 9, 1, 1
-    AddFloorButton 2, Button8, 11, 6, 8, 1, 1
-    AddFloorButton 2, Button7, 11, 5, 7, 1, 1
-    AddFloorButton 2, Button6, 11, 4, 6, 1, 1
-    AddFloorButton 2, Button5, 11, 3, 5, 1, 1
-    AddFloorButton 2, Button4, 11, 2, 4, 1, 1
-    AddFloorButton 2, Button3, 12, 7, 3, 1, 1
-    AddFloorButton 2, Button2, 12, 6, 2, 1, 1
-    AddFloorButton 2, ButtonM, 12, 5, 1, 1, 1
-    AddFloorButton 2, ButtonL, 12, 4, 0, 1, 1
-    AddFloorButton 2, ButtonLL1, 12, 3, -1, 1, 1
-    AddFloorButton 2, ButtonLL2, 12, 2, -2, 1, 1
-    AddFloorButton 2, ButtonP1, 13, 7, -3, 1, 1
-    AddFloorButton 2, ButtonP2, 13, 6, -4, 1, 1
-    AddFloorButton 2, ButtonP3, 13, 5, -5, 1, 1
-    AddFloorButton 2, ButtonP4, 13, 4, -6, 1, 1
-    AddFloorButton 2, ButtonP5, 13, 3, -7, 1, 1
-    AddFloorButton 2, ButtonS, 13, 2, -8, 1, 1
+    AddFloorButton 2, Button63, ButtonLit63, 2, 7, 63, 1, 1
+    AddFloorButton 2, Button62, ButtonLit62, 2, 6, 62, 1, 1
+    AddFloorButton 2, Button61, ButtonLit61, 2, 5, 61, 1, 1
+    AddFloorButton 2, Button60, ButtonLit60, 2, 4, 60, 1, 1
+    AddFloorButton 2, Button59, ButtonLit59, 2, 3, 59, 1, 1
+    AddFloorButton 2, Button58, ButtonLit58, 2, 2, 58, 1, 1
+    AddFloorButton 2, Button57, ButtonLit57, 3, 7, 57, 1, 1
+    AddFloorButton 2, Button56, ButtonLit56, 3, 6, 56, 1, 1
+    AddFloorButton 2, Button55, ButtonLit55, 3, 5, 55, 1, 1
+    AddFloorButton 2, Button54, ButtonLit54, 3, 4, 54, 1, 1
+    AddFloorButton 2, Button53, ButtonLit53, 3, 3, 53, 1, 1
+    AddFloorButton 2, Button52, ButtonLit52, 3, 2, 52, 1, 1
+    AddFloorButton 2, Button51, ButtonLit51, 4, 7, 51, 1, 1
+    AddFloorButton 2, Button50, ButtonLit50, 4, 6, 50, 1, 1
+    AddFloorButton 2, Button49, ButtonLit49, 4, 5, 49, 1, 1
+    AddFloorButton 2, Button48, ButtonLit48, 4, 4, 48, 1, 1
+    AddFloorButton 2, Button47, ButtonLit47, 4, 3, 47, 1, 1
+    AddFloorButton 2, Button46, ButtonLit46, 4, 2, 46, 1, 1
+    AddFloorButton 2, Button45, ButtonLit45, 5, 7, 45, 1, 1
+    AddFloorButton 2, Button44, ButtonLit44, 5, 6, 44, 1, 1
+    AddFloorButton 2, Button43, ButtonLit43, 5, 5, 43, 1, 1
+    AddFloorButton 2, Button42, ButtonLit42, 5, 4, 42, 1, 1
+    AddFloorButton 2, Button41, ButtonLit41, 5, 3, 41, 1, 1
+    AddFloorButton 2, Button40, ButtonLit40, 5, 2, 40, 1, 1
+    AddFloorButton 2, Button39, ButtonLit39, 6, 7, 39, 1, 1
+    AddFloorButton 2, Button38, ButtonLit38, 6, 6, 38, 1, 1
+    AddFloorButton 2, Button37, ButtonLit37, 6, 5, 37, 1, 1
+    AddFloorButton 2, Button36, ButtonLit36, 6, 4, 36, 1, 1
+    AddFloorButton 2, Button35, ButtonLit35, 6, 3, 35, 1, 1
+    AddFloorButton 2, Button34, ButtonLit34, 6, 2, 34, 1, 1
+    AddFloorButton 2, Button33, ButtonLit33, 7, 7, 33, 1, 1
+    AddFloorButton 2, Button32, ButtonLit32, 7, 6, 32, 1, 1
+    AddFloorButton 2, Button31, ButtonLit31, 7, 5, 31, 1, 1
+    AddFloorButton 2, Button30, ButtonLit30, 7, 4, 30, 1, 1
+    AddFloorButton 2, Button29, ButtonLit29, 7, 3, 29, 1, 1
+    AddFloorButton 2, Button28, ButtonLit28, 7, 2, 28, 1, 1
+    AddFloorButton 2, Button27, ButtonLit27, 8, 7, 27, 1, 1
+    AddFloorButton 2, Button26, ButtonLit26, 8, 6, 26, 1, 1
+    AddFloorButton 2, Button25, ButtonLit25, 8, 5, 25, 1, 1
+    AddFloorButton 2, Button24, ButtonLit24, 8, 4, 24, 1, 1
+    AddFloorButton 2, Button23, ButtonLit23, 8, 3, 23, 1, 1
+    AddFloorButton 2, Button22, ButtonLit22, 8, 2, 22, 1, 1
+    AddFloorButton 2, Button21, ButtonLit21, 9, 7, 21, 1, 1
+    AddFloorButton 2, Button20, ButtonLit20, 9, 6, 20, 1, 1
+    AddFloorButton 2, Button19, ButtonLit19, 9, 5, 19, 1, 1
+    AddFloorButton 2, Button18, ButtonLit18, 9, 4, 18, 1, 1
+    AddFloorButton 2, Button17, ButtonLit17, 9, 3, 17, 1, 1
+    AddFloorButton 2, Button16, ButtonLit16, 9, 2, 16, 1, 1
+    AddFloorButton 2, Button15, ButtonLit15, 10, 7, 15, 1, 1
+    AddFloorButton 2, Button14, ButtonLit14, 10, 6, 14, 1, 1
+    AddFloorButton 2, Button13, ButtonLit13, 10, 5, 13, 1, 1
+    AddFloorButton 2, Button12, ButtonLit12, 10, 4, 12, 1, 1
+    AddFloorButton 2, Button11, ButtonLit11, 10, 3, 11, 1, 1
+    AddFloorButton 2, Button10, ButtonLit10, 10, 2, 10, 1, 1
+    AddFloorButton 2, Button9, ButtonLit9, 11, 7, 9, 1, 1
+    AddFloorButton 2, Button8, ButtonLit8, 11, 6, 8, 1, 1
+    AddFloorButton 2, Button7, ButtonLit7, 11, 5, 7, 1, 1
+    AddFloorButton 2, Button6, ButtonLit6, 11, 4, 6, 1, 1
+    AddFloorButton 2, Button5, ButtonLit5, 11, 3, 5, 1, 1
+    AddFloorButton 2, Button4, ButtonLit4, 11, 2, 4, 1, 1
+    AddFloorButton 2, Button3, ButtonLit3, 12, 7, 3, 1, 1
+    AddFloorButton 2, Button2, ButtonLit2, 12, 6, 2, 1, 1
+    AddFloorButton 2, ButtonM, ButtonLitM, 12, 5, 1, 1, 1
+    AddFloorButton 2, ButtonL, ButtonLitL, 12, 4, 0, 1, 1
+    AddFloorButton 2, ButtonLL1, ButtonLitLL1, 12, 3, -1, 1, 1
+    AddFloorButton 2, ButtonLL2, ButtonLitLL2, 12, 2, -2, 1, 1
+    AddFloorButton 2, ButtonP1, ButtonLitP1, 13, 7, -3, 1, 1
+    AddFloorButton 2, ButtonP2, ButtonLitP2, 13, 6, -4, 1, 1
+    AddFloorButton 2, ButtonP3, ButtonLitP3, 13, 5, -5, 1, 1
+    AddFloorButton 2, ButtonP4, ButtonLitP4, 13, 4, -6, 1, 1
+    AddFloorButton 2, ButtonP5, ButtonLitP5, 13, 3, -7, 1, 1
+    AddFloorButton 2, ButtonS, ButtonLitS, 13, 2, -8, 1, 1
     AddControlButton 2, ButtonOpen, 15, 7, open, 1, 1
     AddControlButton 2, ButtonClose, 15, 6, close, 1, 1
     AddControlButton 2, ButtonCancel, 15, 5, cancel, 1, 1
@@ -6371,26 +6384,26 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 14, 5, front, 1.75 + 1.083 - 0.1, 3.75 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button99, 2, 4, 99, 0, 1
-    AddFloorButton 1, Button98, 2, 2, 98, 0, 1
-    AddFloorButton 1, Button97, 3, 4, 97, 0, 1
-    AddFloorButton 1, Button96, 3, 2, 96, 0, 1
-    AddFloorButton 1, Button95, 4, 4, 95, 0, 1
-    AddFloorButton 1, Button94, 4, 2, 94, 0, 1
-    AddFloorButton 1, Button93, 5, 4, 93, 0, 1
-    AddFloorButton 1, Button92, 5, 2, 92, 0, 1
-    AddFloorButton 1, Button91, 6, 4, 91, 0, 1
-    AddFloorButton 1, Button90, 6, 2, 90, 0, 1
-    AddFloorButton 1, Button89, 7, 4, 89, 0, 1
-    AddFloorButton 1, Button88, 7, 2, 88, 0, 1
-    AddFloorButton 1, Button87, 8, 4, 87, 0, 1
-    AddFloorButton 1, Button86, 8, 2, 86, 0, 1
-    AddFloorButton 1, Button85, 9, 4, 85, 0, 1
-    AddFloorButton 1, Button84, 9, 2, 84, 0, 1
-    AddFloorButton 1, Button83, 10, 4, 83, 0, 1
-    AddFloorButton 1, Button82, 10, 2, 82, 0, 1
-    AddFloorButton 1, Button81, 11, 4, 81, 0, 1
-    AddFloorButton 1, Button80, 11, 2, 80, 0, 1
+    AddFloorButton 1, Button99, ButtonLit99, 2, 4, 99, 0, 1
+    AddFloorButton 1, Button98, ButtonLit98, 2, 2, 98, 0, 1
+    AddFloorButton 1, Button97, ButtonLit97, 3, 4, 97, 0, 1
+    AddFloorButton 1, Button96, ButtonLit96, 3, 2, 96, 0, 1
+    AddFloorButton 1, Button95, ButtonLit95, 4, 4, 95, 0, 1
+    AddFloorButton 1, Button94, ButtonLit94, 4, 2, 94, 0, 1
+    AddFloorButton 1, Button93, ButtonLit93, 5, 4, 93, 0, 1
+    AddFloorButton 1, Button92, ButtonLit92, 5, 2, 92, 0, 1
+    AddFloorButton 1, Button91, ButtonLit91, 6, 4, 91, 0, 1
+    AddFloorButton 1, Button90, ButtonLit90, 6, 2, 90, 0, 1
+    AddFloorButton 1, Button89, ButtonLit89, 7, 4, 89, 0, 1
+    AddFloorButton 1, Button88, ButtonLit88, 7, 2, 88, 0, 1
+    AddFloorButton 1, Button87, ButtonLit87, 8, 4, 87, 0, 1
+    AddFloorButton 1, Button86, ButtonLit86, 8, 2, 86, 0, 1
+    AddFloorButton 1, Button85, ButtonLit85, 9, 4, 85, 0, 1
+    AddFloorButton 1, Button84, ButtonLit84, 9, 2, 84, 0, 1
+    AddFloorButton 1, Button83, ButtonLit83, 10, 4, 83, 0, 1
+    AddFloorButton 1, Button82, ButtonLit82, 10, 2, 82, 0, 1
+    AddFloorButton 1, Button81, ButtonLit81, 11, 4, 81, 0, 1
+    AddFloorButton 1, Button80, ButtonLit80, 11, 2, 80, 0, 1
     AddControlButton 1, ButtonOpen, 12, 2, open, 0, 1
     AddControlButton 1, ButtonClose, 12, 4, close, 0, 1
     AddControlButton 1, ButtonCancel, 13, 2, cancel, 0, 1
@@ -6459,37 +6472,37 @@ DrawWalls = true, true, false, false, false, false
 
     #right panel
     CreatePanel ElevPanel, 13, 6, right, -3.625 + 0.2 + 0.001, 1.75 + 1.1875 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button130, 2, 4, 130, 1, 1
-    AddFloorButton 1, Button129, 2, 3, 129, 1, 1
-    AddFloorButton 1, Button128, 2, 2, 128, 1, 1
-    AddFloorButton 1, Button127, 3, 5, 127, 1, 1
-    AddFloorButton 1, Button126, 3, 4, 126, 1, 1
-    AddFloorButton 1, Button125, 3, 3, 125, 1, 1
-    AddFloorButton 1, Button124, 3, 2, 124, 1, 1
-    AddFloorButton 1, Button123, 4, 5, 123, 1, 1
-    AddFloorButton 1, Button122, 4, 4, 122, 1, 1
-    AddFloorButton 1, Button121, 4, 3, 121, 1, 1
-    AddFloorButton 1, Button120, 4, 2, 120, 1, 1
-    AddFloorButton 1, Button119, 5, 5, 119, 1, 1
-    AddFloorButton 1, Button118, 5, 4, 118, 1, 1
-    AddFloorButton 1, Button117, 5, 3, 117, 1, 1
-    AddFloorButton 1, Button116, 5, 2, 116, 1, 1
-    AddFloorButton 1, Button115, 6, 5, 115, 1, 1
-    AddFloorButton 1, Button114, 6, 4, 114, 1, 1
-    AddFloorButton 1, Button113, 6, 3, 113, 1, 1
-    AddFloorButton 1, Button112, 6, 2, 112, 1, 1
-    AddFloorButton 1, Button111, 7, 5, 111, 1, 1
-    AddFloorButton 1, Button110, 7, 4, 110, 1, 1
-    AddFloorButton 1, Button109, 7, 3, 109, 1, 1
-    AddFloorButton 1, Button108, 7, 2, 108, 1, 1
-    AddFloorButton 1, Button107, 8, 5, 107, 1, 1
-    AddFloorButton 1, Button106, 8, 4, 106, 1, 1
-    AddFloorButton 1, Button105, 8, 3, 105, 1, 1
-    AddFloorButton 1, Button104, 8, 2, 104, 1, 1
-    AddFloorButton 1, Button103, 9, 5, 103, 1, 1
-    AddFloorButton 1, Button102, 9, 4, 102, 1, 1
-    AddFloorButton 1, Button101, 9, 3, 101, 1, 1
-    AddFloorButton 1, Button100, 9, 2, 100, 1, 1
+    AddFloorButton 1, Button130, ButtonLit130, 2, 4, 130, 1, 1
+    AddFloorButton 1, Button129, ButtonLit129, 2, 3, 129, 1, 1
+    AddFloorButton 1, Button128, ButtonLit128, 2, 2, 128, 1, 1
+    AddFloorButton 1, Button127, ButtonLit127, 3, 5, 127, 1, 1
+    AddFloorButton 1, Button126, ButtonLit126, 3, 4, 126, 1, 1
+    AddFloorButton 1, Button125, ButtonLit125, 3, 3, 125, 1, 1
+    AddFloorButton 1, Button124, ButtonLit124, 3, 2, 124, 1, 1
+    AddFloorButton 1, Button123, ButtonLit123, 4, 5, 123, 1, 1
+    AddFloorButton 1, Button122, ButtonLit122, 4, 4, 122, 1, 1
+    AddFloorButton 1, Button121, ButtonLit121, 4, 3, 121, 1, 1
+    AddFloorButton 1, Button120, ButtonLit120, 4, 2, 120, 1, 1
+    AddFloorButton 1, Button119, ButtonLit119, 5, 5, 119, 1, 1
+    AddFloorButton 1, Button118, ButtonLit118, 5, 4, 118, 1, 1
+    AddFloorButton 1, Button117, ButtonLit117, 5, 3, 117, 1, 1
+    AddFloorButton 1, Button116, ButtonLit116, 5, 2, 116, 1, 1
+    AddFloorButton 1, Button115, ButtonLit115, 6, 5, 115, 1, 1
+    AddFloorButton 1, Button114, ButtonLit114, 6, 4, 114, 1, 1
+    AddFloorButton 1, Button113, ButtonLit113, 6, 3, 113, 1, 1
+    AddFloorButton 1, Button112, ButtonLit112, 6, 2, 112, 1, 1
+    AddFloorButton 1, Button111, ButtonLit111, 7, 5, 111, 1, 1
+    AddFloorButton 1, Button110, ButtonLit110, 7, 4, 110, 1, 1
+    AddFloorButton 1, Button109, ButtonLit109, 7, 3, 109, 1, 1
+    AddFloorButton 1, Button108, ButtonLit108, 7, 2, 108, 1, 1
+    AddFloorButton 1, Button107, ButtonLit107, 8, 5, 107, 1, 1
+    AddFloorButton 1, Button106, ButtonLit106, 8, 4, 106, 1, 1
+    AddFloorButton 1, Button105, ButtonLit105, 8, 3, 105, 1, 1
+    AddFloorButton 1, Button104, ButtonLit104, 8, 2, 104, 1, 1
+    AddFloorButton 1, Button103, ButtonLit103, 9, 5, 103, 1, 1
+    AddFloorButton 1, Button102, ButtonLit102, 9, 4, 102, 1, 1
+    AddFloorButton 1, Button101, ButtonLit101, 9, 3, 101, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 9, 2, 100, 1, 1
     AddControlButton 1, ButtonOpen, 11, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 11, 5, close, 1, 1
     AddControlButton 1, ButtonCancel, 12, 3, cancel, 1, 1
