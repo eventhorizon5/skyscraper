@@ -245,13 +245,13 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		}
 		if (AreShaftDoorsOpen(floor) == true)
 		{
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + " already open on floor " + csString(_itoa(floor, intbuffer, 10)));
+			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + " already open on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": opening shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)));
+			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": opening shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": manually opening shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)));
+			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": manually opening shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": opening doors" + doornumber);
@@ -336,13 +336,13 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		}
 		if (AreShaftDoorsOpen(floor) == false && whichdoors == 3)
 		{
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + "already closed on floor " + csString(_itoa(floor, intbuffer, 10)));
+			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + "already closed on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": closing shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)));
+			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": closing shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": manually closing shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)));
+			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": manually closing shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": closing doors" + doornumber);
@@ -393,7 +393,7 @@ void ElevatorDoor::StopDoors()
 	if (OpenDoor == -2 || OpenDoor == 2)
 	{
 		if (WhichDoors == 3)
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": stopping shaft doors" + doornumber + " on floor " + csString(_itoa(ShaftDoorFloor, intbuffer, 10)));
+			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": stopping shaft doors" + doornumber + " on floor " + csString(_itoa(ShaftDoorFloor, intbuffer, 10)) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
 		else
 			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": stopping doors" + doornumber);
 

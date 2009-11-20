@@ -326,26 +326,26 @@ void Elevator::AddRoute(int floor, int direction)
 		if (UpQueue.Find(floor) != csArrayItemNotFound)
 		{
 			//exit if entry already exits
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " already exists");
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
 			return;
 		}
 		UpQueue.InsertSorted(floor);
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = 1;
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction up");
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction up");
 	}
 	else
 	{
 		if (DownQueue.Find(floor) != csArrayItemNotFound)
 		{
 			//exit if entry already exits
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " already exists");
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
 			return;
 		}
 		DownQueue.InsertSorted(floor);
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = -1;
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction down");
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction down");
 	}
 
 	//turn on button lights
@@ -372,13 +372,13 @@ void Elevator::DeleteRoute(int floor, int direction)
 	{
 		//delete floor entry from up queue
 		UpQueue.Delete(floor);
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction up");
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction up");
 	}
 	else
 	{
 		//delete floor entry from down queue
 		DownQueue.Delete(floor);
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " direction down");
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction down");
 	}
 
 	//turn off button lights
@@ -537,7 +537,6 @@ void Elevator::ProcessCallQueue()
 				GotoFloor = UpQueue[i];
 				CloseDoors();
 				MoveElevator = true;
-				DeleteRoute(UpQueue[i], 1);
 				return;
 			}
 			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
@@ -566,7 +565,6 @@ void Elevator::ProcessCallQueue()
 				GotoFloor = DownQueue[i];
 				CloseDoors();
 				MoveElevator = true;
-				DeleteRoute(DownQueue[i], -1);
 				return;
 			}
 			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
@@ -791,7 +789,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//notify about movement
 		if (InspectionService == false)
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
+			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 		else
 			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string);
 		IsMoving = true;
@@ -1085,6 +1083,14 @@ void Elevator::MoveElevatorToFloor()
 
 		//the elevator is now stopped on a valid floor; set OnFloor to true
 		OnFloor = true;
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": arrived at floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+
+		//dequeue floor route
+		//the direction value is reversed at this stage, due to the elevator slowdown above
+		if (Direction == -1)
+			DeleteRoute(GotoFloor, 1);
+		else
+			DeleteRoute(GotoFloor, -1);
 	}
 
 	//reset values if at destination floor
@@ -1497,7 +1503,7 @@ void Elevator::GoPending(int floor)
 
 	GotoFloor = floor;
 	MovePending = true;
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": pending move to floor " + csString(_itoa(GotoFloor, intbuffer, 10)));
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": pending move to floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 }
 
 void Elevator::GoToRecallFloor()
