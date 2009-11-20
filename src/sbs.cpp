@@ -190,6 +190,9 @@ SBS::~SBS()
 	Buildings_state = 0;
 	Buildings = 0;
 
+	//remove referenced sounds
+	sndmanager->RemoveSounds();
+
 	//remove all engine objects
 	Report("Deleting CS engine objects...");
 	engine->DeleteAll();
@@ -432,6 +435,9 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 	sndloader = csQueryRegistry<iSndSysLoader> (object_reg);
 	if (!sndloader)
 		return ReportError("No sound loader plugin found");
+	sndmanager = csQueryRegistry<iSndSysManager> (object_reg);
+	if (!sndmanager)
+		return ReportError("No sound manager plugin found");
 	confman = csQueryRegistry<iConfigManager> (object_reg);
 	if (!confman)
 		return ReportError("No configuration manager plugin found");

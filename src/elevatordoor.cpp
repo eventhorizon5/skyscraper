@@ -471,6 +471,24 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		door_changed = false;
 		door_section = 0;
 
+		int checkfloor;
+		if (WhichDoors == 3)
+			checkfloor = ShaftDoorFloor;
+		else
+			checkfloor = elev->GetFloor();
+		index = elev->ServicedFloors.Find(checkfloor);
+		if (ShaftDoorsExist(checkfloor) == false)
+		{
+			if (WhichDoors != 2)
+			{
+				//reset and exit if shaft doors selected for opening
+				OpenDoor = 0;
+				WhichDoors = 0;
+				DoorIsRunning = false;
+				return;
+			}
+		}
+		
 		if (manual == false)
 		{
 			OpenChange = OpenSpeed / 50;
@@ -500,24 +518,6 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				ElevatorDoorSpeed = -0.2;
 		}
 
-		int checkfloor;
-		if (WhichDoors == 3)
-			checkfloor = ShaftDoorFloor;
-		else
-			checkfloor = elev->GetFloor();
-		index = elev->ServicedFloors.Find(checkfloor);
-		if (ShaftDoorsExist(checkfloor) == false)
-		{
-			if (WhichDoors != 2)
-			{
-				//reset and exit if shaft doors selected for opening
-				OpenDoor = 0;
-				WhichDoors = 0;
-				DoorIsRunning = false;
-				return;
-			}
-		}
-		
 		if (WhichDoors == 3)
 		{
 			//turn on related floor before opening shaft doors

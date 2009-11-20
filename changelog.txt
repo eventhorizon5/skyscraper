@@ -11,6 +11,7 @@ Version 1.6 (2.0 Alpha 6)
 -added new simulator/building statistics dialog
 -moved button code into separate control class
 -added support for elevator button lighting
+-fixed issue involving elevator door sound playing for non-serviced doors
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

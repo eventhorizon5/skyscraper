@@ -77,6 +77,7 @@ public:
 	csRef<iReporter> rep;
 	csRef<iSndSysRenderer> sndrenderer;
 	csRef<iSndSysLoader> sndloader;
+	csRef<iSndSysManager> sndmanager;
 	csRef<iSector> area;
 	csRef<iObjectRegistry> object_reg;
 	csRef<iConfigManager> confman;

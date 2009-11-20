@@ -42,10 +42,16 @@ Sound::Sound()
 	DirectionalRadiation = 0;
 	SoundLoop = sbs->confman->GetBool("Skyscraper.SBS.Sound.Loop", false);
 	Speed = sbs->confman->GetInt("Skyscraper.SBS.Sound.Speed", 100);
+	sndwrapper = sbs->sndmanager->CreateSound("");
 }
 
 Sound::~Sound()
 {
+	Stop();
+	sbs->sndrenderer->RemoveSource(sndsource);
+	sbs->sndrenderer->RemoveStream(sndstream);
+	sbs->sndmanager->RemoveSound(sndwrapper);
+
 	//destructor
 	directional = 0;
 	sndsource3d = 0;
@@ -282,8 +288,9 @@ void Sound::Load(const char *filename, bool force)
 		sbs->ReportError("Can't load sound '%s'", filename);
 		return;
 	}
+	sndwrapper->SetData(snddata);
 
-	sndstream = sbs->sndrenderer->CreateStream(snddata, CS_SND3D_ABSOLUTE);
+	sndstream = sbs->sndrenderer->CreateStream(sndwrapper->GetData(), CS_SND3D_ABSOLUTE);
 	if (!sndstream)
 	{
 		sbs->ReportError("Can't create stream for '%s'", filename);

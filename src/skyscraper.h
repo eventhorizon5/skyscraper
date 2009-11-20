@@ -63,6 +63,7 @@ public:
 	//sound system
 	csRef<iSndSysRenderer> sndrenderer;
 	csRef<iSndSysLoader> sndloader;
+	csRef<iSndSysManager> sndmanager;
 
 	bool RenderOnly; //skip sim processing and only render graphics
 	bool InputOnly; //skip sim processing and only run input and rendering code

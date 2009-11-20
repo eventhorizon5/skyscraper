@@ -454,6 +454,12 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 		ReportError("Failed to locate sound loader");
 		DisableSound = true;
 	}
+	sndmanager = csQueryRegistry<iSndSysManager> (object_reg);
+	if (!sndmanager)
+	{
+		ReportError("Failed to locate sound manager");
+		DisableSound = true;
+	}
 	csRef<iBase> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	plug->IncRef ();
@@ -1027,6 +1033,8 @@ void Skyscraper::StopSound()
 	//stop and unload sound
 	if (sndstream)
 		sndstream->Pause();
+	sndrenderer->RemoveSource(sndsource);
+	sndrenderer->RemoveStream(sndstream);
 	sndsource = 0;
 	sndstream = 0;
 }
