@@ -45,7 +45,9 @@ public:
 	void Enabled(bool value);
 	void SetLight(bool value);
 	void ChangeLight(bool value);
+	csVector3 GetPosition();
 	void SetPosition(const csVector3 &position);
+	void SetPositionY(float position);
 	void Move(const csVector3 &position);
 	void SetKnobPosition(int position);
 

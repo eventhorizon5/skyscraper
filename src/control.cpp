@@ -120,10 +120,24 @@ void Control::ChangeLight(bool value)
 	SetLight(value);
 }
 
+csVector3 Control::GetPosition()
+{
+	//return current position
+	return ControlMesh->GetMovable()->GetPosition();
+}
+
 void Control::SetPosition(const csVector3 &position)
 {
 	//set control position
 	ControlMesh->GetMovable()->SetPosition(position);
+	ControlMesh->GetMovable()->UpdateMove();
+}
+
+void Control::SetPositionY(float position)
+{
+	//set control position
+	csVector3 pos = ControlMesh->GetMovable()->GetPosition();
+	ControlMesh->GetMovable()->SetPosition(csVector3(pos.x, position, pos.z));
 	ControlMesh->GetMovable()->UpdateMove();
 }
 
