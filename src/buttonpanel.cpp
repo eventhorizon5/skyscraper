@@ -297,6 +297,12 @@ void ButtonPanel::SetToElevatorAltitude()
 	csVector3 pos_new = csVector3(pos.x, sbs->GetElevator(elevator)->GetPosition().y, pos.z);
 	ButtonPanelMesh->GetMovable()->SetPosition(pos_new);
 	ButtonPanelMesh->GetMovable()->UpdateMove();
+
+	//move controls
+	for (int i = 0; i < controls.GetSize(); i++)
+	{
+		controls[i]->SetPositionY(pos_new.y);
+	}
 }
 
 void ButtonPanel::Enabled(bool value)
