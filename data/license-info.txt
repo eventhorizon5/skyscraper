@@ -55,6 +55,7 @@ textures:
 -stucco22.jpg, wall5.jpg, stucco30.jpg, stucco2f.jpg, metal10.jpg and cem_tr.jpg from telias.free.fr
 -doverindicator*.gif by TampaBayElevator
 -otis4_* by epco_rules
+-brassdoor.jpg, elevmove3.wav, elevstart3.wav and elevstop3.wav by escalatorgeek881
 
 sounds:
 -chime1.wav made by me
