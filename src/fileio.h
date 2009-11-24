@@ -26,15 +26,15 @@
 #define FILEIO_H
 
 class ScriptProcessor;
-#include "skyscraper.h"
 
 class ScriptProcessor
 {
 	public:
-	ScriptProcessor(Skyscraper *parent);
+	ScriptProcessor();
 	~ScriptProcessor();
-	bool LoadBuilding(const char *filename);
+	bool LoadBuilding();
 	bool LoadDataFile(const char *filename);
+	bool LoadFromText(const char *text);
 
 	private:
 	int line; //line number
@@ -62,7 +62,6 @@ class ScriptProcessor
 	bool setshaftdoors;
 	csArray<csString> BuildingData;
 	csArray<csString> UserVariable;
-	Skyscraper* skyscraper;
 
 	bool ScriptError(const char *message);
 	csString Calc(const char *expression);

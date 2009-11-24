@@ -23,6 +23,12 @@
 */
 
 #include "console.h"
+#include "globals.h"
+#include "unix.h"
+#include "fileio.h"
+#include "skyscraper.h"
+
+extern Skyscraper *skyscraper;
 
 //(*InternalHeaders(Console)
 #include <wx/intl.h>
@@ -79,8 +85,15 @@ Console::~Console()
 
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
+	ScriptProcessor *processor = new ScriptProcessor();
+	processor->LoadFromText(tCommand->GetValue().ToAscii());
+	processor->LoadBuilding();
+	delete processor;
+	processor = 0;
+	skyscraper->Prepare();
 }
 
 void Console::On_bClose_Click(wxCommandEvent& event)
 {
+	this->Close();
 }

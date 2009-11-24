@@ -1111,9 +1111,11 @@ bool Skyscraper::Start()
 		BuildingFile.Insert(0, "/root/buildings/");
 
 	//load script processor object and load building
-	processor = new ScriptProcessor(this);
-	if (!processor->LoadBuilding(BuildingFile))
-		return ReportError("Error loading building\n");
+	processor = new ScriptProcessor();
+	if (!processor->LoadDataFile(BuildingFile))
+		return ReportError("Error loading building file\n");
+	if (!processor->LoadBuilding())
+		return ReportError("Error processing building\n");
 
 	//unload script processor
 	delete processor;
@@ -1123,7 +1125,7 @@ bool Skyscraper::Start()
 	Simcore->CreateSky(Simcore->SkyName);
 
 	//have CS process textures, bounding boxes and lighting
-	engine->Prepare();
+	Prepare();
 
 	//start simulation
 	if (!Simcore->Start())
@@ -1173,4 +1175,10 @@ void Skyscraper::AllowResize(bool value)
 	else
 		window->SetWindowStyleFlag(wxDEFAULT_FRAME_STYLE & ~wxMAXIMIZE);
 	window->Refresh();
+}
+
+void Skyscraper::Prepare()
+{
+	//prepare CS engine objects
+	engine->Prepare();
 }

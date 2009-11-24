@@ -25,7 +25,6 @@
 #ifndef SKYSCRAPER_H
 #define SKYSCRAPER_H
 
-class Skyscraper;
 #include "fileio.h"
 
 int main (int argc, char* argv[]);
@@ -103,6 +102,7 @@ public:
 	bool SelectBuilding();
 	bool Start();
 	void AllowResize(bool value);
+	void Prepare();
 
 private:
 	csEventID FocusGained;

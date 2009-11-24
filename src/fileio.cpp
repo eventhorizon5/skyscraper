@@ -27,6 +27,7 @@
 #include "globals.h"
 #include <stdlib.h>
 #include "fileio.h"
+#include "skyscraper.h"
 #include "sbs.h"
 #include "camera.h"
 #include "floor.h"
@@ -36,6 +37,7 @@
 #include "unix.h"
 
 extern SBS *Simcore;
+extern Skyscraper *skyscraper;
 
 #define sContinue 0
 #define sNextLine 1
@@ -44,10 +46,8 @@ extern SBS *Simcore;
 #define sBreak 4
 #define sRecalc 5
 
-ScriptProcessor::ScriptProcessor(Skyscraper *parent)
+ScriptProcessor::ScriptProcessor()
 {
-	skyscraper = parent;
-
 	//set variable array size
 	UserVariable.SetSize(256);
 }
@@ -57,13 +57,9 @@ ScriptProcessor::~ScriptProcessor()
 
 }
 
-bool ScriptProcessor::LoadBuilding(const char *filename)
+bool ScriptProcessor::LoadBuilding()
 {
 	//building loader/script interpreter
-
-	//load building into buffer
-	if (!LoadDataFile(filename))
-		return false;
 
 	line = 0; //line number
 	LineData = "";  //line contents
@@ -557,6 +553,23 @@ bool ScriptProcessor::LoadDataFile(const char *filename)
 		BuildingData.Push(buffer);
 	}
 
+	return true;
+}
+
+bool ScriptProcessor::LoadFromText(const char *text)
+{
+	//loads building commands from a string
+	csStringArray textarray;
+	textarray.SplitString(text, "\n");
+
+	//clear building data
+	BuildingData.DeleteAll();
+
+	//feed each line of text into the script array
+	for (int i = 0; i < textarray.GetSize(); i++)
+	{
+		BuildingData.Push(textarray[i]);
+	}
 	return true;
 }
 
