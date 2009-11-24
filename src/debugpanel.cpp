@@ -38,6 +38,7 @@
 #include "elevator.h"
 #include "unix.h"
 #include "cameracontrol.h"
+#include "console.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
 DebugPanel *dp; //self pointer
@@ -46,6 +47,7 @@ editelevator *ee;
 CameraControl *cc;
 KeyDialog *kd;
 Stats *stats;
+Console *console;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
@@ -78,6 +80,7 @@ const long DebugPanel::ID_bCameraControl = wxNewId();
 const long DebugPanel::ID_bEditElevator = wxNewId();
 const long DebugPanel::ID_bControlReference = wxNewId();
 const long DebugPanel::ID_bStats = wxNewId();
+const long DebugPanel::ID_bConsole = wxNewId();
 const long DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
@@ -176,6 +179,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer3->Add(bControlReference, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bStats = new wxButton(Panel1, ID_bStats, _("Simulator Statistics"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStats"));
 	BoxSizer3->Add(bStats, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bConsole = new wxButton(Panel1, ID_bConsole, _("Script Console"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bConsole"));
+	BoxSizer3->Add(bConsole, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer3, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
 	BoxSizer11->Fit(Panel1);
@@ -198,6 +203,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bEditElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEditElevator_Click);
 	Connect(ID_bControlReference,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bControlReference_Click);
 	Connect(ID_bStats,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bStats_Click);
+	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
 	//*)
 	dp = this;
 	OnInit();
@@ -217,6 +223,8 @@ DebugPanel::~DebugPanel()
 	kd = 0;
 	stats->Destroy();
 	stats = 0;
+	console->Destroy();
+	console = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
@@ -274,6 +282,7 @@ void DebugPanel::OnInit()
 	cc = new CameraControl(dp, -1);
 	kd = new KeyDialog(dp, -1);
 	stats = new Stats(dp, -1);
+	console = new Console(dp, -1);
 
 	timer = new Timer();
 	timer->Start(40);
@@ -361,4 +370,9 @@ void DebugPanel::On_bStats_Click(wxCommandEvent& event)
 {
 	stats->CenterOnScreen();
 	stats->Show();
+}
+
+void DebugPanel::On_bConsole_Click(wxCommandEvent& event)
+{
+	console->Show();
 }

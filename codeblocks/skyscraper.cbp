@@ -108,6 +108,8 @@
 		<Unit filename="..\src\camera.h" />
 		<Unit filename="..\src\cameracontrol.cpp" />
 		<Unit filename="..\src\cameracontrol.h" />
+		<Unit filename="..\src\console.cpp" />
+		<Unit filename="..\src\console.h" />
 		<Unit filename="..\src\debugpanel.cpp" />
 		<Unit filename="..\src\debugpanel.h" />
 		<Unit filename="..\src\editelevator.cpp" />
@@ -149,6 +151,7 @@
 					<wxDialog wxs="wxsmith/MeshControl.wxs" src="..\src\meshcontrol.cpp" hdr="..\src\meshcontrol.h" name="MeshControl" language="CPP" />
 					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="..\src\keydialog.cpp" hdr="..\src\keydialog.h" name="KeyDialog" language="CPP" />
 					<wxDialog wxs="wxsmith/Stats.wxs" src="..\src\stats.cpp" hdr="..\src\stats.h" name="Stats" language="CPP" />
+					<wxDialog wxs="wxsmith/Console.wxs" src="..\src\console.cpp" hdr="..\src\console.h" name="Console" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />
