@@ -1238,7 +1238,7 @@ int Elevator::AddWall(const char *name, const char *texture, float thickness, fl
 	}
 	th2 = sbs->AutoSize(0, height1, false, th, force_enable, force_mode);
 
-	return sbs->AddWallMain(Elevator_state, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw2, th2);
+	return sbs->AddWallMain(ElevatorMesh, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw2, th2);
 }
 
 int Elevator::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
@@ -1261,7 +1261,7 @@ int Elevator::AddFloor(const char *name, const char *texture, float thickness, f
 	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
-	return sbs->AddFloorMain(Elevator_state, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw2, th2);
+	return sbs->AddFloorMain(ElevatorMesh, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw2, th2);
 }
 
 void Elevator::AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)

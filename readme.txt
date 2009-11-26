@@ -152,6 +152,7 @@ Esc - exit to main menu
 --- Mouse actions ---
 -elevator shaft doors can be manually opened and closed by holding down the Shift key and clicking on them
 -hallway call buttons can be lit and unlit also by holding down Shift and clicking on them (this does not call an elevator, but just changes the light status)
+-polygons (wall/floor sides) can be deleted by holding down Ctrl and clicking on the object
 
 --- Debug options ---
 Other functions are available via a Crystal Space plugin called BugPlug.

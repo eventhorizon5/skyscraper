@@ -2,18 +2,22 @@
 <wxsmith>
 	<object class="wxDialog" name="Console">
 		<title>Script Console</title>
+		<centered>1</centered>
 		<pos_arg>1</pos_arg>
 		<size_arg>1</size_arg>
+		<style>wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX</style>
 		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 			<object class="sizeritem">
 				<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="no">
 					<cols>3</cols>
+					<growablecols>0,1</growablecols>
+					<growablerows>0</growablerows>
 					<object class="sizeritem">
 						<object class="wxTextCtrl" name="ID_tCommand" variable="tCommand" member="yes">
 							<size>400,100</size>
 							<style>wxTE_MULTILINE|wxHSCROLL|wxTE_DONTWRAP</style>
 						</object>
-						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
@@ -44,7 +48,7 @@
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 				<border>5</border>
 				<option>1</option>
 			</object>

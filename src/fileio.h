@@ -54,7 +54,7 @@ class ScriptProcessor
 	int RangeL;
 	int RangeH;
 	long RangeStart;
-	csRef<iThingFactoryState> tmpMesh;
+	csRef<iMeshWrapper> tmpMesh;
 	char intbuffer[65];
 	csString buffer;
 	int startpos;

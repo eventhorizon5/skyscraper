@@ -146,9 +146,9 @@ int Floor::AddFloor(const char *name, const char *texture, float thickness, floa
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	if (isexternal == false)
-		return sbs->AddFloorMain(Level_state, name, texture, thickness, x1, z1, x2, z2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
+		return sbs->AddFloorMain(Level, name, texture, thickness, x1, z1, x2, z2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
 	else
-		return sbs->AddFloorMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+		return sbs->AddFloorMain(sbs->External, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
 
 void Floor::DeleteFloor(int index)
@@ -176,7 +176,7 @@ int Floor::AddInterfloorFloor(const char *name, const char *texture, float thick
 	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
-	return sbs->AddFloorMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+	return sbs->AddFloorMain(Interfloor, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
 
 void Floor::DeleteInterfloorFloor(int index)
@@ -223,9 +223,9 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 	th2 = sbs->AutoSize(0, height_in1, false, th, force_enable, force_mode);
 
 	if (isexternal == false)
-		return sbs->AddWallMain(Level_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
+		return sbs->AddWallMain(Level, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
 	else
-		return sbs->AddWallMain(sbs->External_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+		return sbs->AddWallMain(sbs->External, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
 
 void Floor::DeleteWall(int index)
@@ -256,7 +256,7 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, float thickn
 		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
 	th2 = sbs->AutoSize(0, height_in1, false, th, force_enable, force_mode);
 
-	return sbs->AddWallMain(Interfloor_state, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+	return sbs->AddWallMain(Interfloor, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
 
 void Floor::DeleteInterfloorWall(int index)
@@ -315,9 +315,9 @@ void Floor::Cut(const csVector3 &start, const csVector3 &end, bool cutwalls, boo
 	//Y values are relative to the floor's altitude
 	//if fast is specified, skips the interfloor scan
 
-	sbs->Cut(Level_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
+	sbs->Cut(Level, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
 	if (fast == false)
-		sbs->Cut(Interfloor_state, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
+		sbs->Cut(Interfloor, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
 }
 
 void Floor::AddGroupFloor(int number)
@@ -431,7 +431,7 @@ int Floor::ColumnWallBox(const char *name, const char *texture, float x1, float 
 		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
 	th2 = sbs->AutoSize(0, height_in, false, th, force_enable, force_mode);
 
-	return sbs->CreateWallBox(ColumnFrame_state, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom);
+	return sbs->CreateWallBox(ColumnFrame, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom);
 }
 
 int Floor::ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)

@@ -1012,13 +1012,13 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		buffer.Downcase();
 		if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			tmpMesh = Simcore->GetFloor(Current)->Level;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External_state;
+			tmpMesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape_state;
+			tmpMesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings_state;
+			tmpMesh = Simcore->Buildings;
 		else
 		{
 			ScriptError("Invalid object");
@@ -1156,11 +1156,11 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		buffer.Downcase();
 		if (buffer == "external")
-			tmpMesh = Simcore->External_state;
+			tmpMesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape_state;
+			tmpMesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings_state;
+			tmpMesh = Simcore->Buildings;
 		else
 		{
 			ScriptError("Invalid object");
@@ -1229,13 +1229,13 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		buffer.Downcase();
 		if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			tmpMesh = Simcore->GetFloor(Current)->Level;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External_state;
+			tmpMesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape_state;
+			tmpMesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings_state;
+			tmpMesh = Simcore->Buildings;
 		else
 		{
 			ScriptError("Invalid object");
@@ -1288,13 +1288,13 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		buffer.Downcase();
 		if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			tmpMesh = Simcore->GetFloor(Current)->Level;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External_state;
+			tmpMesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape_state;
+			tmpMesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings_state;
+			tmpMesh = Simcore->Buildings;
 		else
 		{
 			ScriptError("Invalid object");
@@ -1337,13 +1337,13 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		buffer.Downcase();
 		if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			tmpMesh = Simcore->GetFloor(Current)->Level;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External_state;
+			tmpMesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape_state;
+			tmpMesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings_state;
+			tmpMesh = Simcore->Buildings;
 		else
 		{
 			ScriptError("Invalid object");
@@ -1392,13 +1392,13 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		buffer.Downcase();
 		if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			tmpMesh = Simcore->GetFloor(Current)->Level;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External_state;
+			tmpMesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape_state;
+			tmpMesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings_state;
+			tmpMesh = Simcore->Buildings;
 		else
 		{
 			ScriptError("Invalid object");
@@ -1892,21 +1892,22 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		buffer.Downcase();
+		csRef<iThingFactoryState> tmpState;
 		if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level_state;
+			tmpState = Simcore->GetFloor(Current)->Level_state;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External_state;
+			tmpState = Simcore->External_state;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape_state;
+			tmpState = Simcore->Landscape_state;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings_state;
+			tmpState = Simcore->Buildings_state;
 		else
 		{
 			ScriptError("Invalid object");
 			return sError;
 		}
 
-		csVector3 isect = Simcore->GetPoint(tmpMesh, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
+		csVector3 isect = Simcore->GetPoint(tmpState, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 		tempdata.DeleteAll();
 
 		buffer = csString(LineData).Slice(0, temp5 - 1) + csString(wxVariant(isect.x).GetString().ToAscii()) + csString(wxVariant(isect.y).GetString().ToAscii()) + csString(wxVariant(isect.z).GetString().ToAscii()) + csString(LineData).Slice(temp3 + 1);

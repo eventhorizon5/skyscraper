@@ -442,6 +442,23 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 	else
 		polyname = "";
 
+	//delete polygon if ctrl is pressed
+	if (state && ctrl == true)
+	{
+		//remove polygon
+		state->RemovePolygon(result.polygon_idx);
+		
+		//remove mesh collider
+		sbs->DeleteColliders(result.mesh);
+
+		//regenerate mesh collider
+		sbs->CreateColliders(result.mesh);
+
+		//reprepare engine
+		sbs->engine->Prepare();
+		sbs->Report("Deleted polygon " + polyname + " on mesh " + meshname);
+	}
+
 	//show result
 	if (state)
 		sbs->Report("Clicked on object - Mesh: " + meshname + ", Polygon: " + polyname);

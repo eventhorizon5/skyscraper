@@ -27,7 +27,9 @@
 #include "unix.h"
 #include "fileio.h"
 #include "skyscraper.h"
+#include "sbs.h"
 
+extern SBS *Simcore;
 extern Skyscraper *skyscraper;
 
 //(*InternalHeaders(Console)
@@ -53,23 +55,27 @@ Console::Console(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize&
 	wxBoxSizer* BoxSizer1;
 	wxFlexGridSizer* FlexGridSizer1;
 	
-	Create(parent, id, _("Script Console"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
+	Create(parent, id, _("Script Console"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX, _T("id"));
 	SetClientSize(wxDefaultSize);
 	Move(wxDefaultPosition);
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
 	FlexGridSizer1 = new wxFlexGridSizer(0, 3, 0, 0);
+	FlexGridSizer1->AddGrowableCol(0);
+	FlexGridSizer1->AddGrowableCol(1);
+	FlexGridSizer1->AddGrowableRow(0);
 	tCommand = new wxTextCtrl(this, ID_tCommand, wxEmptyString, wxDefaultPosition, wxSize(400,100), wxTE_MULTILINE|wxHSCROLL|wxTE_DONTWRAP, wxDefaultValidator, _T("ID_tCommand"));
-	FlexGridSizer1->Add(tCommand, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer1->Add(tCommand, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2 = new wxBoxSizer(wxVERTICAL);
 	bSend = new wxButton(this, ID_bSend, _("Send"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSend"));
 	BoxSizer2->Add(bSend, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bClose = new wxButton(this, ID_bClose, _("Close"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bClose"));
 	BoxSizer2->Add(bClose, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer1->Add(FlexGridSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer1->Add(FlexGridSizer1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
+	Center();
 	
 	Connect(ID_bSend,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bSend_Click);
 	Connect(ID_bClose,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bClose_Click);
@@ -85,12 +91,14 @@ Console::~Console()
 
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
+	Simcore->RecreateColliders = true;
 	ScriptProcessor *processor = new ScriptProcessor();
 	processor->LoadFromText(tCommand->GetValue().ToAscii());
 	processor->LoadBuilding();
 	delete processor;
 	processor = 0;
 	skyscraper->Prepare();
+	Simcore->RecreateColliders = false;
 }
 
 void Console::On_bClose_Click(wxCommandEvent& event)

@@ -931,11 +931,11 @@ int ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, fl
 	//create doors
 	sbs->DrawWalls(true, true, true, true, true, true);
 	sbs->ResetTextureMapping(true);
-	int firstidx = sbs->AddWallMain(ElevatorDoorL_state, "Door", lefttexture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
-	sbs->AddWallMain(ElevatorDoorR_state, "Door", righttexture, thickness, x3, z3, x4, z4, height, height, 0, 0, tw, th);
+	int firstidx = sbs->AddWallMain(ElevatorDoorL, "Door", lefttexture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
+	sbs->AddWallMain(ElevatorDoorR, "Door", righttexture, thickness, x3, z3, x4, z4, height, height, 0, 0, tw, th);
 	//create connection pieces
-	sbs->AddWallMain(elev->Elevator_state, "DoorF1", "Connection", thickness, x1, z1, x4, z4, 1, 1, -1.001, -1.001, 0, 0);
-	sbs->AddWallMain(elev->Elevator_state, "DoorF2", "Connection", thickness, x1, z1, x4, z4, 1, 1, height + 0.001, height + 0.001, 0, 0);
+	sbs->AddWallMain(elev->ElevatorMesh, "DoorF1", "Connection", thickness, x1, z1, x4, z4, 1, 1, -1.001, -1.001, 0, 0);
+	sbs->AddWallMain(elev->ElevatorMesh, "DoorF2", "Connection", thickness, x1, z1, x4, z4, 1, 1, height + 0.001, height + 0.001, 0, 0);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
 	//relocate sound object
@@ -1031,7 +1031,7 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *
 	}
 
 	//create doorway walls
-	sbs->AddDoorwayWalls(floorobj->Level_state, "ConnectionWall", 0, 0);
+	sbs->AddDoorwayWalls(floorobj->Level, "ConnectionWall", 0, 0);
 
 	//create meshes
 	buffer3 = elev->Number;
@@ -1068,8 +1068,8 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *
 	ShaftDoorR[index]->GetMovable()->UpdateMove();
 
 	//create doors
-	sbs->AddWallMain(ShaftDoorL_state[index], "Door", lefttexture, ShaftDoorThickness, x1, z1, x2, z2, DoorHeight, DoorHeight, base2, base2, tw, th);
-	sbs->AddWallMain(ShaftDoorR_state[index], "Door", righttexture, ShaftDoorThickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base2, base2, tw, th);
+	sbs->AddWallMain(ShaftDoorL[index], "Door", lefttexture, ShaftDoorThickness, x1, z1, x2, z2, DoorHeight, DoorHeight, base2, base2, tw, th);
+	sbs->AddWallMain(ShaftDoorR[index], "Door", righttexture, ShaftDoorThickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base2, base2, tw, th);
 
 	//create connection pieces
 	float xoffset = elev->Origin.x - shaft->origin.x;
