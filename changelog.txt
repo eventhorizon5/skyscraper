@@ -13,6 +13,7 @@ Version 1.6 (2.0 Alpha 6)
 -added support for elevator button lighting
 -fixed issue involving elevator door sound playing for non-serviced doors
 -added script console
+-text-to-texture objects now support transparency
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

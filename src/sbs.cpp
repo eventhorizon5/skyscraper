@@ -496,8 +496,14 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	// Load a texture
-	if (!loader->LoadTexture(name, filename, CS_TEXTURE_3D, 0, true, true, false))
+	csRef<iTextureWrapper> wrapper = loader->LoadTexture(name, filename, CS_TEXTURE_3D, 0, true, true, false);
+
+	if (!wrapper)
 		return ReportError("Error loading texture");
+
+	//if texture has an alpha map, force binary alpha
+	if (wrapper->GetTextureHandle()->GetAlphaMap() == true)
+		wrapper->GetTextureHandle()->SetAlphaType(csAlphaMode::alphaBinary);
 
 	TextureInfo info;
 	info.name = name;
@@ -558,6 +564,10 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	if (!handle)
 		return ReportError("LoadTextureCropped: Error registering texture");
 
+	//if texture has an alpha map, force binary alpha
+	if (handle->GetAlphaMap() == true)
+		handle->SetAlphaType(csAlphaMode::alphaBinary);
+
 	//create texture wrapper
 	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->NewTexture(handle);
 	wrapper->QueryObject()->SetName(name);
@@ -615,13 +625,16 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	wrapper->GetTextureHandle()->GetOriginalDimensions(width, height);
 
 	//create new empty texture
-	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "rgb8", CS_TEXTURE_3D);
+	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "argb8", CS_TEXTURE_3D);
 	if (!th)
 	{
 		ReportError("AddTextToTexture: Error creating texture");
 		th = 0;
 		return false;
 	}
+
+	//force binary alpha on texture
+	th->SetAlphaType(csAlphaMode::alphaBinary);
 
 	//get new texture dimensions, if it was resized
 	th->GetOriginalDimensions(width, height);
@@ -673,9 +686,6 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	if (!g3d->ValidateRenderTargets())
 		return false;
 	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
-
-	//set background as transparent
-	//g2d->Clear(g2d->FindRGB(255, 255, 255, 0));
 
 	/*iTextureManager *tm = g3d->GetTextureManager();
 	csRef<iImage> image = loader->LoadImage("/root/data/callbutton.gif", tm->GetTextureFormat());
@@ -759,6 +769,10 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	csRef<iTextureHandle> handle = g3d->GetTextureManager()->RegisterTexture(imagemem, CS_TEXTURE_3D);
 	if (!handle)
 		return ReportError("AddTextureOverlay: Error registering texture");
+
+	//if texture has an alpha map, force binary alpha
+	if (handle->GetAlphaMap() == true)
+		handle->SetAlphaType(csAlphaMode::alphaBinary);
 
 	//create texture wrapper
 	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->NewTexture(handle);
