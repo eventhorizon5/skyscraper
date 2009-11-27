@@ -687,10 +687,6 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		return false;
 	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
 
-	/*iTextureManager *tm = g3d->GetTextureManager();
-	csRef<iImage> image = loader->LoadImage("/root/data/callbutton.gif", tm->GetTextureFormat());
-	g2d->Blit(0, 0, image->GetWidth(), image->GetHeight(), (unsigned char*)image->GetImageData());*/
-
 	//draw original image onto backbuffer
 	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, 0, 0, width, height);
 
