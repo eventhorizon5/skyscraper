@@ -16,6 +16,7 @@ Version 1.6 (2.0 Alpha 6)
 -text-to-texture objects now support transparency
 -fixed floor sign autosizing issues
 -many elevator queue fixes
+-fixed call cancel button
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

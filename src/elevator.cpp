@@ -411,13 +411,13 @@ void Elevator::CancelLastRoute()
 
 	//LastQueueFloor holds the floor and direction of the last route; array element 0 is the floor and 1 is the direction
 
-	if (LastQueueFloor[1] != 1 || LastQueueFloor[1] != -1)
+	if (LastQueueFloor[1] == 0)
 		return;
 
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cancelling last route");
 	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
 	LastQueueFloor[0] = 0;
 	LastQueueFloor[1] = 0;
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cancelling last route");
 }
 
 void Elevator::Alarm()
