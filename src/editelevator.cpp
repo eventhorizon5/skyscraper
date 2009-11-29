@@ -691,14 +691,14 @@ void editelevator::On_bCall_Click(wxCommandEvent& event)
 {
 	//calls elevator to the current camera floor
 	if (Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetFloor() > Simcore->camera->CurrentFloor)
-		Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(Simcore->camera->CurrentFloor, -1);
+		Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(Simcore->camera->CurrentFloor, -1, false);
 	if (Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->GetFloor() < Simcore->camera->CurrentFloor)
-		Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(Simcore->camera->CurrentFloor, 1);
+		Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(Simcore->camera->CurrentFloor, 1, false);
 }
 
 void editelevator::On_bEnqueueUp_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition() - Simcore->Basements, 1);
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition() - Simcore->Basements, 1, true);
 }
 
 void editelevator::On_bGo_Click(wxCommandEvent& event)
@@ -708,7 +708,7 @@ void editelevator::On_bGo_Click(wxCommandEvent& event)
 
 void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition() - Simcore->Basements, -1);
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->AddRoute(sFloor->GetThumbPosition() - Simcore->Basements, -1, true);
 }
 
 void editelevator::On_bOpen_Click(wxCommandEvent& event)

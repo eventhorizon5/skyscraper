@@ -232,11 +232,11 @@ void ButtonPanel::Press(int index)
 
 		//elevator is above floor
 		if (elev_floor > floor)
-			sbs->GetElevator(elevator)->AddRoute(floor, -1);
+			sbs->GetElevator(elevator)->AddRoute(floor, -1, true);
 
 		//elevator is below floor
 		if (elev_floor < floor)
-			sbs->GetElevator(elevator)->AddRoute(floor, 1);
+			sbs->GetElevator(elevator)->AddRoute(floor, 1, true);
 
 		//elevator is on floor
 		if (elev_floor == floor)
@@ -253,12 +253,12 @@ void ButtonPanel::Press(int index)
 			else if (sbs->GetElevator(elevator)->Direction == -1)
 			{
 				//elevator is on floor but already moving down; add an upward route
-				sbs->GetElevator(elevator)->AddRoute(floor, 1);
+				sbs->GetElevator(elevator)->AddRoute(floor, 1, true);
 			}
 			else if (sbs->GetElevator(elevator)->Direction == 1)
 			{
 				//elevator is on floor but already moving up; add a downward route
-				sbs->GetElevator(elevator)->AddRoute(floor, -1);
+				sbs->GetElevator(elevator)->AddRoute(floor, -1, true);
 			}
 		}
 	}

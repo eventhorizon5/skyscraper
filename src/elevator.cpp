@@ -302,10 +302,24 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	return true;
 }
 
-void Elevator::AddRoute(int floor, int direction)
+void Elevator::AddRoute(int floor, int direction, bool change_light)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
+
+	//discard route if it's for the down queue and above the current floor
+	if (floor > GetFloor() && direction == -1)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": bad route");
+		return;
+	}
+
+	//discard route if it's for the up queue and below the current floor
+	if (floor < GetFloor() && direction == 1)
+	{
+		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": bad route");
+		return;
+	}
 
 	//if in independent service or fire service phase 2 (on) mode, go to floor in pending state
 	if (IndependentService == true || FireServicePhase2 == 1)
@@ -349,10 +363,13 @@ void Elevator::AddRoute(int floor, int direction)
 	}
 
 	//turn on button lights
-	if (Panel)
-		Panel->ChangeLight(floor, true);
-	if (Panel2)
-		Panel2->ChangeLight(floor, true);
+	if (change_light == true)
+	{
+		if (Panel)
+			Panel->ChangeLight(floor, true);
+		if (Panel2)
+			Panel2->ChangeLight(floor, true);
+	}
 }
 
 void Elevator::DeleteRoute(int floor, int direction)
@@ -458,6 +475,15 @@ void Elevator::ProcessCallQueue()
 		DownQueue.DeleteAll();
 		PauseQueueSearch = true;
 		ResetQueues = false;
+
+		//turn off button lights
+		for (int i = 0; i < ServicedFloors.GetSize(); i++)
+		{
+			if (Panel)
+				Panel->ChangeLight(ServicedFloors[i], false);
+			if (Panel2)
+				Panel2->ChangeLight(ServicedFloors[i], false);
+		}
 		return;
 	}
 
@@ -489,13 +515,13 @@ void Elevator::ProcessCallQueue()
 		//if DownPeak mode is active, send elevator to the top serviced floor if not already there
 		if (GetFloor() != TopFloor && DownPeak == true && IsMoving == false)
 		{
-			AddRoute(TopFloor, 1);
+			AddRoute(TopFloor, 1, false);
 			return;
 		}
 		//if UpPeak mode is active, send elevator to the bottom serviced floor if not already there
 		else if (GetFloor() != BottomFloor && UpPeak == true && IsMoving == false)
 		{
-			AddRoute(BottomFloor, -1);
+			AddRoute(BottomFloor, -1, false);
 			return;
 		}
 
@@ -528,10 +554,10 @@ void Elevator::ProcessCallQueue()
 	if (QueuePositionDirection == 1)
 	{
 		//search through up queue
-		for (size_t i = 0; i < UpQueue.GetSize(); i++)
+		for (int i = 0; i < UpQueue.GetSize(); i++)
 		{
 			//if the queued floor number is a different floor, dispatch the elevator to that floor
-			if (UpQueue[i] > GetFloor() || (UpQueue[i] < GetFloor() && UpQueue.GetSize() == 1))
+			if (UpQueue[i] > GetFloor())
 			{
 				PauseQueueSearch = true;
 				GotoFloor = UpQueue[i];
@@ -555,11 +581,11 @@ void Elevator::ProcessCallQueue()
 	}
 	else if (QueuePositionDirection == -1)
 	{
-		//search through down queue
-		for (size_t i = 0; i < DownQueue.GetSize(); i++)
+		//search through down queue (search order is reversed since calls need to be processed in decending order)
+		for (int i = DownQueue.GetSize() - 1; i >= 0; i--)
 		{
 			//if the queued floor number is a different floor, dispatch the elevator to that floor
-			if (DownQueue[i] < GetFloor() || (DownQueue[i] > GetFloor() && DownQueue.GetSize() == 1))
+			if (DownQueue[i] < GetFloor())
 			{
 				PauseQueueSearch = true;
 				GotoFloor = DownQueue[i];
@@ -2400,7 +2426,8 @@ void Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 		z = CenterZ;
 	}
 
-	csVector2 autosize = sbs->GetAutoSize();
+	bool autosize_x, autosize_y;
+	sbs->GetAutoSize(autosize_x, autosize_y);
 	sbs->SetAutoSize(false, false);
 
 	for (int i = 0; i < ServicedFloors.GetSize(); i++)
@@ -2427,7 +2454,7 @@ void Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 			sbs->ResetWalls();
 		}
 	}
-	sbs->SetAutoSize(autosize.x, autosize.y);
+	sbs->SetAutoSize(autosize_x, autosize_y);
 }
 
 void Elevator::SetCallButtons(int floor, bool direction, bool value)

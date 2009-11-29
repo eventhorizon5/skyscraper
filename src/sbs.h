@@ -196,7 +196,7 @@ public:
 	void ReverseAxis(bool value);
 	bool GetReverseAxis();
 	void SetAutoSize(bool x, bool y);
-	csVector2 GetAutoSize();
+	void GetAutoSize(bool &x, bool &y);
 	int GetDrawWallsCount();
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, const csVector3 &start, const csVector3 &end);
 	void Cut(csRef<iMeshWrapper> mesh, const csVector3 &start, const csVector3 &end, bool cutwalls, bool cutfloors, const csVector3 &mesh_origin, const csVector3 &object_origin, int checkwallnumber = 0, const char *checkstring = "");

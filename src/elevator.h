@@ -101,7 +101,7 @@ public:
 	Elevator(int number);
 	~Elevator();
 	bool CreateElevator(bool relative, float x, float z, int floor);
-	void AddRoute(int floor, int direction);
+	void AddRoute(int floor, int direction, bool change_light);
 	void DeleteRoute(int floor, int direction);
 	void CancelLastRoute();
 	void Alarm();

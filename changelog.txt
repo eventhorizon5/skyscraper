@@ -14,6 +14,8 @@ Version 1.6 (2.0 Alpha 6)
 -fixed issue involving elevator door sound playing for non-serviced doors
 -added script console
 -text-to-texture objects now support transparency
+-fixed floor sign autosizing issues
+-many elevator queue fixes
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

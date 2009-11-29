@@ -2647,9 +2647,11 @@ void SBS::SetAutoSize(bool x, bool y)
 	AutoY = y;
 }
 
-csVector2 SBS::GetAutoSize()
+void SBS::GetAutoSize(bool &x, bool &y)
 {
-	return csVector2(AutoX, AutoY);
+	//return autosizing values
+	x = AutoX;
+	y = AutoY;
 }
 
 void SBS::ReverseAxis(bool value)
