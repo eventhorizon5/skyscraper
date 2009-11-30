@@ -1869,28 +1869,30 @@ void SBS::ListAltitudes()
 		Report(csString(_itoa(i, intbuffer, 10)) + "(" + GetFloor(i)->ID + ")\t----\t" + csString(_gcvt(GetFloor(i)->FullHeight(), 6, buffer)) + "\t----\t" + csString(_gcvt(GetFloor(i)->Altitude, 6, buffer)));
 }
 
-void SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+bool SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a shaft object
 
 	for (size_t i = 0; i < ShaftArray.GetSize(); i++)
 		if (ShaftArray[i].number == number)
-			return;
+			return false;
 	ShaftArray.SetSize(ShaftArray.GetSize() + 1);
 	ShaftArray[ShaftArray.GetSize() - 1].number = number;
 	ShaftArray[ShaftArray.GetSize() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
+	return true;
 }
 
-void SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+bool SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a stairwell object
 
 	for (size_t i = 0; i < StairsArray.GetSize(); i++)
 		if (StairsArray[i].number == number)
-			return;
+			return false;
 	StairsArray.SetSize(StairsArray.GetSize() + 1);
 	StairsArray[StairsArray.GetSize() - 1].number = number;
 	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
+	return true;
 }
 
 iMaterialWrapper* SBS::ChangeTexture(iMeshWrapper *mesh, const char *texture, bool matcheck)
@@ -3369,5 +3371,6 @@ void SBS::DeleteColliders(csRef<iMeshWrapper> mesh)
 {
 	//delete colliders for the given mesh
 	csColliderWrapper *collider = csColliderWrapper::GetColliderWrapper(mesh->QueryObject());
-	engine->RemoveObject(collider);
+	if (collider)
+		engine->RemoveObject(collider);
 }

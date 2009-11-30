@@ -795,7 +795,7 @@ void editelevator::OnInit()
 		sNumber->SetScrollbar(0, 1, Simcore->Elevators(), 1);
 
 		//set floor range slider
-		sFloor->SetScrollbar(Simcore->Basements, 1, Simcore->TotalFloors() + 1, 1);
+		sFloor->SetScrollbar(Simcore->Basements, 1, Simcore->TotalFloors(), 1);
 
 		//set door range slider
 		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->NumDoors + 1, 1);
@@ -808,10 +808,16 @@ void editelevator::Loop()
 {
 	static int last_elevator;
 	static int last_door;
+	static int last_elevator_count;
+	static int last_floor_count;
 	int elev_num;
 	int door_num;
+	int elevator_count;
+	int floor_count;
 	elev_num = sNumber->GetThumbPosition() + 1;
 	door_num = sDoor->GetThumbPosition();
+	elevator_count = Simcore->Elevators();
+	floor_count = Simcore->TotalFloors();
 	elevator = Simcore->GetElevator(elev_num);
 	door = elevator->GetDoor(door_num);
 
@@ -827,6 +833,23 @@ void editelevator::Loop()
 		last_door = door_num;
 		SetMainValues();
 	}
+	if (elevator_count != last_elevator_count && elevator_count > 0)
+	{
+		//elevator count changed; update slider
+		last_elevator_count = elevator_count;
+
+		//set elevator range slider
+		sNumber->SetScrollbar(0, 1, Simcore->Elevators(), 1);
+	}
+	if (floor_count != last_floor_count)
+	{
+		//floor count changed; update slider
+		last_floor_count = floor_count;
+
+		//set floor range slider
+		sFloor->SetScrollbar(Simcore->Basements, 1, Simcore->TotalFloors(), 1);
+	}
+
 	tElevator->SetLabel(wxT("Number " + wxVariant((long)sNumber->GetThumbPosition() + 1).GetString()));
 	tFloor->SetLabel(wxT("Floor " + wxVariant(((long)sFloor->GetThumbPosition()) - Simcore->Basements).GetString()));
 	tDoor->SetLabel(wxT("Door " + wxVariant((long)sDoor->GetThumbPosition()).GetString() + wxT(" (0 = all)")));

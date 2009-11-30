@@ -103,6 +103,8 @@ public:
 	bool Start();
 	void AllowResize(bool value);
 	void Prepare();
+	void Unload();
+	void Exit();
 
 private:
 	csEventID FocusGained;

@@ -170,8 +170,8 @@ public:
 	float GetDistance(float x1, float x2, float z1, float z2);
 	void DumpVertices(csRef<iMeshWrapper> mesh);
 	void ListAltitudes();
-	void CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	void CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	bool CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	bool CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th);
 	iMaterialWrapper* ChangeTexture(iMeshWrapper *mesh, const char *texture, bool matcheck = true);
 	iMaterialWrapper* GetTextureMaterial(const char *texture, bool &result, const char *polygon_name = 0);

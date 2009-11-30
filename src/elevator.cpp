@@ -189,6 +189,12 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//if relative is true, then x and z coordinates are relative
 	//to the assigned shaft's center
 
+	if (Created == true)
+	{
+		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + " has already been created");
+		return false;
+	}
+
 	//make sure required values are set
 	if (ElevatorSpeed <= 0)
 	{

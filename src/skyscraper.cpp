@@ -302,29 +302,12 @@ void Skyscraper::SetupFrame()
 	if (Shutdown == true)
 	{
 		Shutdown = false;
+		//if showmenu is true, unload simulator and return to main menu
 		if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
-		{
-			//if showmenu is true, unload simulator and return to main menu
-			BuildingFile = "";
-			IsRunning = false;
-			Starting = false;
-			Pause = false;
-			UnloadSim();
-			DrawBackground();
-			StartSound();
-			StartupRunning = true;
-			mouse->Reset();
-		}
+			Unload();
+		//otherwise exit app
 		else
-		{
-			//otherwise exit app
-			if(dpanel)
-			{
-				if(dpanel->timer)
-					dpanel->timer->Stop();
-			}
-			wxGetApp().Exit();
-		}
+			Exit();
 	}
 
 	//reload building if requested
@@ -1111,15 +1094,31 @@ bool Skyscraper::Start()
 		BuildingFile.Insert(0, "/root/buildings/");
 
 	//load script processor object and load building
+	bool loaderror = false;
 	processor = new ScriptProcessor();
 	if (!processor->LoadDataFile(BuildingFile))
-		return ReportError("Error loading building file\n");
-	if (!processor->LoadBuilding())
-		return ReportError("Error processing building\n");
+	{
+		loaderror = true;
+		ReportError("Error loading building file\n");
+	}
+	if (loaderror == false)
+	{
+		if (!processor->LoadBuilding())
+		{
+			loaderror = true;
+			ReportError("Error processing building\n");
+		}
+	}
 
 	//unload script processor
 	delete processor;
 	processor = 0;
+
+	if (loaderror == true)
+	{
+		Unload();
+		return false;
+	}
 
 	//the sky needs to be created before Prepare() is called
 	Simcore->CreateSky(Simcore->SkyName);
@@ -1181,4 +1180,29 @@ void Skyscraper::Prepare()
 {
 	//prepare CS engine objects
 	engine->Prepare();
+}
+
+void Skyscraper::Unload()
+{
+	//unload sim and return to the main menu
+	BuildingFile = "";
+	IsRunning = false;
+	Starting = false;
+	Pause = false;
+	UnloadSim();
+	DrawBackground();
+	StartSound();
+	StartupRunning = true;
+	mouse->Reset();
+}
+
+void Skyscraper::Exit()
+{
+	//exit app
+	if(dpanel)
+	{
+		if(dpanel->timer)
+			dpanel->timer->Stop();
+	}
+	wxGetApp().Exit();
 }

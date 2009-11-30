@@ -1452,8 +1452,11 @@ int ScriptProcessor::ProcCommands()
 			return sError;
 		}
 
-
-		Simcore->CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+		if (!Simcore->CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5])))
+		{
+			ScriptError("Shaft " + csString(tempdata[0]).Trim() + " already exists");
+			return sError;
+		}
 
 		tempdata.DeleteAll();
 	}
@@ -1674,9 +1677,7 @@ int ScriptProcessor::ProcCommands()
 			}
 		}
 
-		if (!Simcore->GetStairs(atoi(tempdata[0])))
-			Simcore->CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]));
-		else
+		if (!Simcore->CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4])))
 		{
 			ScriptError("Stairwell " + csString(tempdata[0]).Trim() + " already exists");
 			return sError;
