@@ -104,7 +104,7 @@ public:
 	void AllowResize(bool value);
 	void Prepare();
 	void Unload();
-	void Exit();
+	void Quit();
 
 private:
 	csEventID FocusGained;

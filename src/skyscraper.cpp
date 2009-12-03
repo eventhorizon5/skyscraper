@@ -307,7 +307,7 @@ void Skyscraper::SetupFrame()
 			Unload();
 		//otherwise exit app
 		else
-			Exit();
+			Quit();
 	}
 
 	//reload building if requested
@@ -1196,7 +1196,7 @@ void Skyscraper::Unload()
 	mouse->Reset();
 }
 
-void Skyscraper::Exit()
+void Skyscraper::Quit()
 {
 	//exit app
 	if(dpanel)
