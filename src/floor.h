@@ -29,6 +29,7 @@
 #include "callbutton.h"
 #include "door.h"
 #include "floorindicator.h"
+#include "sound.h"
 
 class SBSIMPEXP Floor
 {
@@ -87,10 +88,14 @@ public:
 	void Loop();
 	csArray<int> GetCallButtons(int elevator);
 	void AddFillerWalls(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th);
+	bool AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
 
 private:
 	char intbuffer[65];
 	char buffer[20];
+
+	//sound objects
+	csArray<Sound*> sounds;
 };
 
 #endif

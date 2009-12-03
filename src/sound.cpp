@@ -31,9 +31,10 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Sound::Sound()
+Sound::Sound(const char *name)
 {
 	//first set default values
+	PositionOffset = 0;
 	Position = csVector3(0);
 	Volume = sbs->confman->GetFloat("Skyscraper.SBS.Sound.Volume", 1.0);
 	MaxDistance = sbs->confman->GetFloat("Skyscraper.SBS.Sound.MaxDistance", -1.0);
@@ -43,6 +44,7 @@ Sound::Sound()
 	SoundLoop = sbs->confman->GetBool("Skyscraper.SBS.Sound.Loop", false);
 	Speed = sbs->confman->GetInt("Skyscraper.SBS.Sound.Speed", 100);
 	sndwrapper = sbs->sndmanager->CreateSound("");
+	sbs->IncrementSoundCount();
 }
 
 Sound::~Sound()

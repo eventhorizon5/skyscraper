@@ -104,6 +104,13 @@ int Stairs::AddStairs(int floor, const char *name, const char *texture, const ch
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
 	//direction is where the stair base is - front, back, left, or right.
 
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+	{
+		sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - AddStairs: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		return -1;
+	}
+
 	csString buffer, buffer2, buffer3;
 	csString Direction = direction;
 	Direction.Downcase();
@@ -211,6 +218,13 @@ int Stairs::AddWall(int floor, const char *name, const char *texture, float thic
 	float tempw1;
 	float tempw2;
 
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+	{
+		sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - AddWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		return -1;
+	}
+
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
 	x2 = x2 * sbs->HorizScale;
@@ -248,6 +262,13 @@ int Stairs::AddFloor(int floor, const char *name, const char *texture, float thi
 {
 	float tw2;
 	float th2;
+
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+	{
+		sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - AddFloor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		return -1;
+	}
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -341,9 +362,16 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 	return hit;
 }
 
-void Stairs::AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+bool Stairs::AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//add a door
+
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+	{
+		sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - AddDoor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		return false;
+	}
 
 	Floor *floorptr = sbs->GetFloor(floor);
 	float x1, z1, x2, z2;
@@ -384,6 +412,7 @@ void Stairs::AddDoor(int floor, const char *texture, float thickness, int direct
 	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
 	DoorArray[DoorArray.GetSize() - 1].object = new Door("Stairwell " + stairsnum + ":Door " + num, texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->InterfloorHeight + voffset, tw, th);
 	floorptr = 0;
+	return true;
 }
 
 void Stairs::CutFloors(bool relative, const csVector2 &start, const csVector2 &end, float startvoffset, float endvoffset)
@@ -415,10 +444,17 @@ void Stairs::CutFloors(bool relative, const csVector2 &start, const csVector2 &e
 	}
 }
 
-void Stairs::CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber, const char *checkstring)
+bool Stairs::CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber, const char *checkstring)
 {
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's altitude + interfloor
+
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+	{
+		sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		return false;
+	}
 
 	float base = sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight;
 
@@ -426,6 +462,7 @@ void Stairs::CutWall(bool relative, int floor, const csVector3 &start, const csV
 		sbs->Cut(StairArray[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
 	else
 		sbs->Cut(StairArray[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
+	return true;
 }
 
 void Stairs::EnableRange(int floor, int range)
@@ -497,4 +534,17 @@ bool Stairs::IsEnabledFloor(int floor)
 		return EnableArray[floor - startfloor];
 	else
 		return false;
+}
+
+bool Stairs::IsValidFloor(int floor)
+{
+	//return true if the shaft services the specified floor
+
+	if (floor < startfloor || floor > endfloor)
+		return false;
+
+	if (!StairArray[floor - startfloor])
+		return false;
+
+	return true;
 }

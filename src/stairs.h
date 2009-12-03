@@ -49,15 +49,16 @@ public:
 	void Enabled(int floor, bool value);
 	void EnableWholeStairwell(bool value);
 	bool IsInStairwell(const csVector3 &position);
-	void AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	bool AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void CutFloors(bool relative, const csVector2 &start, const csVector2 &end, float startvoffset, float endvoffset);
-	void CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber = 0, const char *checkstring = "");
+	bool CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range);
 	void EnableDoor(int floor, bool value);
 	void OpenDoor(int number);
 	void CloseDoor(int number);
 	bool IsDoorOpen(int number);
 	bool IsEnabledFloor(int floor);
+	bool IsValidFloor(int floor);
 
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array

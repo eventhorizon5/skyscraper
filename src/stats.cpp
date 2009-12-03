@@ -42,6 +42,8 @@ const long Stats::ID_STATICTEXT3 = wxNewId();
 const long Stats::ID_tTextures = wxNewId();
 const long Stats::ID_STATICTEXT4 = wxNewId();
 const long Stats::ID_tMaterials = wxNewId();
+const long Stats::ID_STATICTEXT21 = wxNewId();
+const long Stats::ID_tSounds = wxNewId();
 const long Stats::ID_STATICTEXT10 = wxNewId();
 const long Stats::ID_tInStairwell = wxNewId();
 const long Stats::ID_STATICTEXT11 = wxNewId();
@@ -113,6 +115,10 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	FlexGridSizer2->Add(StaticText4, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tMaterials = new wxTextCtrl(this, ID_tMaterials, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tMaterials"));
 	FlexGridSizer2->Add(tMaterials, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText21 = new wxStaticText(this, ID_STATICTEXT21, _("Sounds:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT21"));
+	FlexGridSizer2->Add(StaticText21, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	tSounds = new wxTextCtrl(this, ID_tSounds, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tSounds"));
+	FlexGridSizer2->Add(tSounds, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText10 = new wxStaticText(this, ID_STATICTEXT10, _("InStairwell:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
 	FlexGridSizer2->Add(StaticText10, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tInStairwell = new wxTextCtrl(this, ID_tInStairwell, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tInStairwell"));
@@ -213,6 +219,7 @@ void Stats::OnInit()
 	tFactories->SetValue(wxVariant(Simcore->GetMeshFactoryCount()).GetString());
 	tTextures->SetValue(wxVariant(Simcore->GetTextureCount()).GetString());
 	tMaterials->SetValue(wxVariant(Simcore->GetMaterialCount()).GetString());
+	tSounds->SetValue(wxVariant(Simcore->GetSoundCount()).GetString());
 	tHorizScale->SetValue(TruncateNumber(Simcore->HorizScale, 2));
 
 	tName->SetValue(wxString::FromAscii(Simcore->BuildingName.GetData()));

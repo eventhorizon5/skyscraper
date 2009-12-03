@@ -177,6 +177,15 @@ Elevator::~Elevator()
 		delete motorsound;
 	motorsound = 0;
 
+	//delete sounds
+	for (int i = 0; i < sounds.GetSize(); i++)
+	{
+		if (sounds[i])
+			delete sounds[i];
+		sounds[i] = 0;
+	}
+	sounds.DeleteAll();
+
 	Elevator_movable = 0;
 	Elevator_state = 0;
 	ElevatorMesh = 0;
@@ -282,12 +291,12 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	IndicatorArray.SetSize(ServicedFloors.GetSize());
 
 	//create sound objects
-	mainsound = new Sound();
+	mainsound = new Sound("Main");
 	mainsound->SetPosition(Origin);
-	idlesound = new Sound();
+	idlesound = new Sound("Idle");
 	idlesound->SetPosition(Origin);
 	idlesound->Load(CarIdleSound.GetData());
-	motorsound = new Sound();
+	motorsound = new Sound("Motor");
 	motorsound->SetPosition(Origin);
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != csVector3(0, 0, 0))
@@ -295,11 +304,11 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	else
 		motorsound->SetPositionY(sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->Altitude + sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->InterfloorHeight);
 	MotorPosition = csVector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
-	alarm = new Sound();
+	alarm = new Sound("Alarm");
 	alarm->SetPosition(Origin);
-	floorbeep = new Sound();
+	floorbeep = new Sound("Floor Beep");
 	floorbeep->SetPosition(Origin);
-	floorsound = new Sound();
+	floorsound = new Sound("Floor Sound");
 	floorsound->SetPosition(Origin);
 
 	Created = true;
@@ -889,6 +898,11 @@ void Elevator::MoveElevatorToFloor()
 	alarm->SetPosition(GetPosition());
 	floorbeep->SetPosition(GetPosition());
 	floorsound->SetPosition(GetPosition());
+	for (int i = 0; i < sounds.GetSize(); i++)
+	{
+		if (sounds[i])
+			sounds[i]->SetPositionY(GetPosition().y + sounds[i]->PositionOffset.y);
+	}
 
 	//motion calculation
 	if (Brakes == false)
@@ -1112,6 +1126,11 @@ void Elevator::MoveElevatorToFloor()
 		//move sounds
 		mainsound->SetPosition(GetPosition());
 		alarm->SetPosition(GetPosition());
+		for (int i = 0; i < sounds.GetSize(); i++)
+		{
+			if (sounds[i])
+				sounds[i]->SetPositionY(GetPosition().y + sounds[i]->PositionOffset.y);
+		}
 
 		//the elevator is now stopped on a valid floor; set OnFloor to true
 		OnFloor = true;
@@ -1338,16 +1357,30 @@ void Elevator::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicators and button panels
 
+	//floor indicators
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Enabled(value);
 	}
 
+	//panels
 	if (Panel)
 		Panel->Enabled(value);
 	if (Panel2)
 		Panel2->Enabled(value);
+
+	//sounds
+	for (int i = 0; i < sounds.GetSize(); i++)
+	{
+		if (sounds[i])
+		{
+			if (value == false)
+				sounds[i]->Stop();
+			else
+				sounds[i]->Play();
+		}
+	}
 }
 
 bool Elevator::IsElevator(csRef<iMeshWrapper> test)
@@ -2515,4 +2548,28 @@ void Elevator::SetFloorSound(const char *prefix)
 	FloorSound = prefix;
 	FloorSound.Trim();
 	UseFloorSounds = true;
+}
+
+bool Elevator::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
+{
+	//create a looping sound object
+	sounds.SetSize(sounds.GetSize() + 1);
+	Sound *sound = sounds[sounds.GetSize() - 1];
+	sound = new Sound(name);
+
+	//set parameters and play sound
+	sound->PositionOffset = position;
+	sound->SetPosition(Origin + position);
+	sound->SetDirection(direction);
+	sound->SetVolume(volume);
+	sound->SetSpeed(speed);
+	sound->SetMinimumDistance(min_distance);
+	sound->SetMaximumDistance(max_distance);
+	sound->SetDirection(direction);
+	sound->SetDirectionalRadiation(dir_radiation);
+	sound->Load(filename);
+	sound->Loop(true);
+	sound->Play();
+
+	return true;
 }

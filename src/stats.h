@@ -58,11 +58,13 @@ class Stats: public wxDialog
 		wxStaticText* StaticText19;
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText11;
+		wxTextCtrl* tSounds;
 		wxStaticText* StaticText18;
 		wxTextCtrl* tStartTime;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText3;
 		wxTextCtrl* tTextures;
+		wxStaticText* StaticText21;
 		wxTextCtrl* tFloors;
 		wxTextCtrl* tName;
 		wxStaticText* StaticText5;
@@ -96,6 +98,8 @@ class Stats: public wxDialog
 		static const long ID_tTextures;
 		static const long ID_STATICTEXT4;
 		static const long ID_tMaterials;
+		static const long ID_STATICTEXT21;
+		static const long ID_tSounds;
 		static const long ID_STATICTEXT10;
 		static const long ID_tInStairwell;
 		static const long ID_STATICTEXT11;

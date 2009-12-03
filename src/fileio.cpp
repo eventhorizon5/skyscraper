@@ -2049,6 +2049,59 @@ int ScriptProcessor::ProcCommands()
 		Simcore->AddFloorAutoArea(csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])));
 		tempdata.DeleteAll();
 	}
+
+	//AddSound
+	if (LineData.Slice(0, 8).CompareNoCase("addsound") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer.Trim());
+		}
+		if (tempdata.GetSize() != 5 && tempdata.GetSize() != 13)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		bool partial = false;
+		if (tempdata.GetSize() == 5)
+			partial = true;
+
+		//check numeric values
+		if (partial == true)
+		{
+			for (int i = 2; i <= 4; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+		}
+		else
+		{
+			for (int i = 2; i <= 12; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+		}
+
+		if (partial == true)
+			Simcore->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])));
+		else
+			Simcore->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csVector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]))); 
+		tempdata.DeleteAll();
+	}
 	return 0;
 }
 
@@ -2139,14 +2192,16 @@ int ScriptProcessor::ProcFloors()
 {
 	//process floors
 
+	Floor *floor = Simcore->GetFloor(Current);
+
 	//replace variables with actual values
 	buffer = Current;
 	LineData.ReplaceAll("%floor%", buffer);
-	buffer = Simcore->GetFloor(Current)->Height;
+	buffer = floor->Height;
 	LineData.ReplaceAll("%height%", buffer);
-	buffer = Simcore->GetFloor(Current)->FullHeight();
+	buffer = floor->FullHeight();
 	LineData.ReplaceAll("%fullheight%", buffer);
-	buffer = Simcore->GetFloor(Current)->InterfloorHeight;
+	buffer = floor->InterfloorHeight;
 	LineData.ReplaceAll("%interfloorheight%", buffer);
 
 	if (getfloordata == true)
@@ -2165,7 +2220,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		if (!IsNumeric(Calc(temp2.GetData()).Trim().GetData(), Simcore->GetFloor(Current)->Height))
+		if (!IsNumeric(Calc(temp2.GetData()).Trim().GetData(), floor->Height))
 		{
 			ScriptError("Invalid value");
 			return sError;
@@ -2182,7 +2237,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		if (!IsNumeric(Calc(temp2.GetData()).Trim().GetData(), Simcore->GetFloor(Current)->InterfloorHeight))
+		if (!IsNumeric(Calc(temp2.GetData()).Trim().GetData(), floor->InterfloorHeight))
 		{
 			ScriptError("Invalid value");
 			return sError;
@@ -2199,7 +2254,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		if (!IsNumeric(Calc(temp2.GetData()).Trim().GetData(), Simcore->GetFloor(Current)->Altitude))
+		if (!IsNumeric(Calc(temp2.GetData()).Trim().GetData(), floor->Altitude))
 		{
 			ScriptError("Invalid value");
 			return sError;
@@ -2212,7 +2267,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		Simcore->GetFloor(Current)->ID = Calc(temp2);
+		floor->ID = Calc(temp2);
 	}
 	if (LineData.Slice(0, 4).CompareNoCase("name") == true)
 	{
@@ -2221,7 +2276,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		Simcore->GetFloor(Current)->Name = Calc(temp2);
+		floor->Name = Calc(temp2);
 	}
 	if (LineData.Slice(0, 4).CompareNoCase("type") == true)
 	{
@@ -2230,7 +2285,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		Simcore->GetFloor(Current)->FloorType = temp2;
+		floor->FloorType = temp2;
 	}
 	if (LineData.Slice(0, 11).CompareNoCase("description") == true)
 	{
@@ -2239,7 +2294,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		Simcore->GetFloor(Current)->Description = temp2;
+		floor->Description = temp2;
 	}
 	if (LineData.Slice(0, 16).CompareNoCase("indicatortexture") == true)
 	{
@@ -2248,7 +2303,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		Simcore->GetFloor(Current)->IndicatorTexture = Calc(temp2);
+		floor->IndicatorTexture = Calc(temp2);
 	}
 	if (LineData.Slice(0, 5).CompareNoCase("group") == true)
 	{
@@ -2280,7 +2335,7 @@ int ScriptProcessor::ProcFloors()
 				}
 
 				for (int k = start; k <= end; k++)
-					Simcore->GetFloor(Current)->AddGroupFloor(k);
+					floor->AddGroupFloor(k);
 			}
 			else
 			{
@@ -2290,7 +2345,7 @@ int ScriptProcessor::ProcFloors()
 					ScriptError("Invalid value");
 					return sError;
 				}
-				Simcore->GetFloor(Current)->AddGroupFloor(data);
+				floor->AddGroupFloor(data);
 			}
 		}
 		tempdata.DeleteAll();
@@ -2300,7 +2355,7 @@ int ScriptProcessor::ProcFloors()
 	if (FloorCheck == 3)
 	{
 		FloorCheck = 0;
-		Simcore->GetFloor(Current)->CalculateAltitude();
+		floor->CalculateAltitude();
 	}
 
 	//IF statement
@@ -2362,7 +2417,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create floor
-		Simcore->GetFloor(Current)->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"));
+		floor->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"));
 
 		tempdata.DeleteAll();
 	}
@@ -2477,7 +2532,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create floor
-		Simcore->GetFloor(Current)->AddInterfloorFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+		floor->AddInterfloorFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
 		tempdata.DeleteAll();
 	}
 
@@ -2509,7 +2564,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create wall
-		Simcore->GetFloor(Current)->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), csString(tempdata[13]).CompareNoCase("true"));
+		floor->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), csString(tempdata[13]).CompareNoCase("true"));
 
 		tempdata.DeleteAll();
 	}
@@ -2624,7 +2679,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create wall
-		Simcore->GetFloor(Current)->AddInterfloorWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+		floor->AddInterfloorWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
 		tempdata.DeleteAll();
 	}
 
@@ -2652,7 +2707,7 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 
-		Simcore->GetFloor(Current)->ColumnWallBox(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"));
+		floor->ColumnWallBox(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 	}
 
@@ -2680,7 +2735,7 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 
-		Simcore->GetFloor(Current)->ColumnWallBox2(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"));
+		floor->ColumnWallBox2(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 	}
 
@@ -2797,9 +2852,9 @@ int ScriptProcessor::ProcFloors()
 
 		//create call button
 		if (compatibility == true)
-			Simcore->GetFloor(Current)->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), csString(tempdata[9]).CompareNoCase("true"), atof(tempdata[10]), atof(tempdata[11]));
+			floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), csString(tempdata[9]).CompareNoCase("true"), atof(tempdata[10]), atof(tempdata[11]));
 		else
-			Simcore->GetFloor(Current)->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), atof(tempdata[12]), atof(tempdata[13]));
+			floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), atof(tempdata[12]), atof(tempdata[13]));
 
 		tempdata.DeleteAll();
 	}
@@ -2872,7 +2927,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create door
-		Simcore->GetFloor(Current)->AddDoor(tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
+		floor->AddDoor(tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
 		tempdata.DeleteAll();
 	}
 
@@ -3080,9 +3135,9 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		if (compat == false)
-			Simcore->GetFloor(Current)->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+			floor->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
 		else
-			Simcore->GetFloor(Current)->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), "Button", tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+			floor->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), "Button", tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
 
 		tempdata.DeleteAll();
 	}
@@ -3117,8 +3172,61 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 
-		Simcore->GetFloor(Current)->AddFillerWalls(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
+		floor->AddFillerWalls(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
 
+		tempdata.DeleteAll();
+	}
+
+	//AddSound
+	if (LineData.Slice(0, 8).CompareNoCase("addsound") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer.Trim());
+		}
+		if (tempdata.GetSize() != 5 && tempdata.GetSize() != 13)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		bool partial = false;
+		if (tempdata.GetSize() == 5)
+			partial = true;
+
+		//check numeric values
+		if (partial == true)
+		{
+			for (int i = 2; i <= 4; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+		}
+		else
+		{
+			for (int i = 2; i <= 12; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+		}
+
+		if (partial == true)
+			floor->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])));
+		else
+			floor->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csVector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]))); 
 		tempdata.DeleteAll();
 	}
 
@@ -4446,6 +4554,58 @@ int ScriptProcessor::ProcElevators()
 		tempdata.DeleteAll();
 	}
 
+	//AddSound
+	if (LineData.Slice(0, 8).CompareNoCase("addsound") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer.Trim());
+		}
+		if (tempdata.GetSize() != 5 && tempdata.GetSize() != 13)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		bool partial = false;
+		if (tempdata.GetSize() == 5)
+			partial = true;
+
+		//check numeric values
+		if (partial == true)
+		{
+			for (int i = 2; i <= 4; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+		}
+		else
+		{
+			for (int i = 2; i <= 12; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+		}
+
+		if (partial == true)
+			elev->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])));
+		else
+			elev->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csVector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]))); 
+		tempdata.DeleteAll();
+	}
 
 	//Set command
 	if (LineData.Slice(0, 4).CompareNoCase("set ") == true)

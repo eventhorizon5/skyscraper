@@ -111,6 +111,13 @@ int Shaft::AddWall(int floor, const char *name, const char *texture, float thick
 	float tempw1;
 	float tempw2;
 
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+	{
+		sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - AddWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		return -1;
+	}
+
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
 	x2 = x2 * sbs->HorizScale;
@@ -148,6 +155,13 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 {
 	float tw2;
 	float th2;
+
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+	{
+		sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - AddFloor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		return -1;
+	}
 
 	//Set horizontal scaling
 	x1 = x1 * sbs->HorizScale;
@@ -308,14 +322,14 @@ bool Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVe
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's altitude
 
-	float base = sbs->GetFloor(floor)->Altitude;
-
-	//exit with an error if floor is less than startfloor or greater than enfloor
-	if (floor < startfloor || floor > endfloor)
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
 	{
 		sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
 		return false;
 	}
+
+	float base = sbs->GetFloor(floor)->Altitude;
 
 	if (relative == true)
 		sbs->Cut(ShaftArray[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
@@ -403,4 +417,17 @@ void Shaft::RemoveShowOutside(int floor)
 
 	if (ShowOutsideList.Find(floor) != csArrayItemNotFound)
 		ShowOutsideList.Delete(floor);
+}
+
+bool Shaft::IsValidFloor(int floor)
+{
+	//return true if the shaft services the specified floor
+
+	if (floor < startfloor || floor > endfloor)
+		return false;
+
+	if (!ShaftArray[floor - startfloor])
+		return false;
+
+	return true;
 }

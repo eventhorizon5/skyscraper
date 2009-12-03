@@ -188,6 +188,7 @@ public:
 	void QueueReset();
 	void SetBeepSound(const char *filename);
 	void SetFloorSound(const char *prefix);
+	bool AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -222,6 +223,7 @@ private:
 	Sound *alarm;
 	Sound *floorbeep;
 	Sound *floorsound;
+	csArray<Sound*> sounds; //generic sounds
 
 	//directional indicators
 	csArray<DirectionalIndicator*> IndicatorArray;

@@ -433,7 +433,33 @@
     <em>x1, y1, z1, x2, y2, z2</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddFloorAutoArea 
     -100, 0, -100, 100, 100, 100</font></p>
-  <p align="left">&nbsp;</p>
+  <p align="left"><strong>ab. AddSound</strong> - creates a user-defined looping 
+    sound at the specified position<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddSound <em>name, 
+    filename, x, y, z[, volume, speed, min_distance, max_distance, dir_radiation, 
+    direction_x, direction_y, direction_z]</em></font><br>
+    Example 1: <font size="2" face="Courier New, Courier, mono">AddSound MySound, 
+    data/sound.wav, 10, 100, 5<br>
+    </font>Example 2: <font size="2" face="Courier New, Courier, mono">AddSound 
+    MySound, data/sound.wav, 10, 100, 5, 1, 100, 1, -1, 0, 0, 0, 0</font></p>
+  <p align="left">This command creates a custom sound in the specified position, 
+    and has a number of optional parameters - the defaults for the optional parameters 
+    are shown in Example 2. If you're going to use any of the optional parameters, 
+    you must specify them all. <em>X</em>, <em>Y</em> and <em>Z</em> specify the 
+    location in 3D space that the sound will be at, <em>volume</em> specifies 
+    the volume percentage (with 1.0 being 100%) of the sound, <em>speed</em> determines 
+    the playback speed of the sound in percent, <em>min_distance</em> and <em>max_distance</em> 
+    set the minimum and maximum distances that the sound can be heard at full 
+    volume - by default, minimum is 1 and maximum is -1. <em>Dir_radiation</em> 
+    specifies the directional radiation of the sound in radians (more info below), 
+    and <em>direction_x</em>, <em>direction_y</em> and <em>direction_z</em> specify 
+    the direction of the sound cone.</p>
+  <p align="left"> From the Crystal Space docs on directional radiation:<br>
+    &quot;The directional radiation applies to sound that are oriented in a particular 
+    direction. This value is expressed in radians and describes the half-angle 
+    of a cone spreading from the position of the source and opening in the direction 
+    of the source. Set this value to 0.0 for an omni-directional sound.&quot;<br>
+  </p>
   <p align="left"><strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
     script and start the simulation. This is optional.<br>
@@ -524,7 +550,7 @@
     be 4 (2 times 2), and the texture will be repeated 4 times horizontally. The 
     <em>force</em> value is optional, and if set to false, autosizing will always 
     be disabled for this texture; if set to true, autosizing will always be enabled.</p>
-  <p align="left"><strong></strong><strong>2. LoadRange</strong> - loads a numeric 
+  <p align="left"><strong>2. LoadRange</strong> - loads a numeric 
     range of textures, and the current number is available in the <em>number</em> 
     variable (<font size="2" face="Courier New, Courier, mono">%number%</font>)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">LoadRange <em>startnumber</em>, 
@@ -781,7 +807,7 @@
     mesh <br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateWallBox2 <em>destobject</em>, 
     <em>name, texturename</em>, <em>centerx</em>, <em>centerz</em>, <em>widthx</em>, 
-    <em>lengthz</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font><font size="2" face="Courier New, Courier, mono"><em>, 
+    <em>lengthz</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em><em>, 
     inside, outside, top, bottom </em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">CreateWallBox2 external, 
     My Box, brick, 0, 0, 10, 10, 15, 0, 0, 0, false, true, false, false</font></p>
@@ -829,7 +855,7 @@
     at the specified location.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddStairs<em> number, 
     name, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_stairs, 
-    voffset, tw, th</em></font><em></em><br>
+    voffset, tw, th</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddStairs 1, TestStairs, 
     Brick, left, 10, 15, 5, 0.5, 0.5, 10, 0, 0, 0</font></p>
   <p align="left">The <em>direction</em> parameter specifies the direction the 
@@ -969,8 +995,20 @@
     parameters. Direction is either true if the door faces the front/back (width 
     is along the X axis), or false if the door faces left/right (width is along 
     the Z axis).</p>
+  <p align="left"><strong>22. AddSound</strong> - creates a user-defined looping 
+    sound at the specified position<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddSound <em>name, 
+    filename, x, y, z[, volume, speed, min_distance, max_distance, dir_radiation, 
+    direction_x, direction_y, direction_z]</em></font><br>
+    Example 1: <font size="2" face="Courier New, Courier, mono">AddSound MySound, 
+    data/sound.wav, 10, 100, 5<br>
+    </font>Example 2: <font size="2" face="Courier New, Courier, mono">AddSound 
+    MySound, data/sound.wav, 10, 100, 5, 1, 100, 1, -1, 0, 0, 0, 0</font></p>
+  <p align="left">For information on the parameters, see the AddSound command 
+    in the Globals section. The only difference here is that the Y value is relative 
+    of the floor's base (altitude plus interfloor height).</p>
   <p align="left">&nbsp;</p>
-  <p align="left"><strong><font size="+1">6</font><font size="+1">. The <em>Elevator</em> 
+  <p align="left"><strong><font size="+1">6. The <em>Elevator</em> 
     Section</font></strong></p>
   <p align="left">The <em>Elevator</em> section allows you to create elevators 
     for your building. Elevators are numbered, starting with 1. Parameters that 
@@ -1136,7 +1174,7 @@
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
     the specified location<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CreateElevator <em>relative, 
-    x</em>, <em>z</em>, <em>floor</em><em><br>
+    x</em>, <em>z</em>, <em>floor<br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
     </em>CreateElevator false, 0, 10, 0</font></p>
   <p align="left"><em>Relative </em>determines if the coordinates are relative 
@@ -1153,7 +1191,7 @@
   <p align="left"><strong>3. AddWall</strong> - adds a textured wall for the elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddWall <em>name, 
     texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>, z2, <em>height1</em>, 
-    <em>height2</em>, <em>voffset1</em>, <em>voffset2, </em></font><font size="2" face="Courier New, Courier, mono"><em>tw</em>, 
+    <em>height2</em>, <em>voffset1</em>, <em>voffset2, </em><em>tw</em>, 
     <em>th</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddWall Wall1, Wood1, 
     0.5, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 2, 2</font></p>
@@ -1308,6 +1346,18 @@
     shaft doors don't exist on a certain floor for the specified door, the sign 
     won't be created on that floor. This can be bypassed by setting door_number 
     to 0.</p>
+  <p align="left"><strong>13. AddSound</strong> - creates a user-defined looping 
+    sound at the specified position<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddSound <em>name, 
+    filename, x, y, z[, volume, speed, min_distance, max_distance, dir_radiation, 
+    direction_x, direction_y, direction_z]</em></font><br>
+    Example 1: <font size="2" face="Courier New, Courier, mono">AddSound MySound, 
+    data/sound.wav, 10, 100, 5<br>
+    </font>Example 2: <font size="2" face="Courier New, Courier, mono">AddSound 
+    MySound, data/sound.wav, 10, 100, 5, 1, 100, 1, -1, 0, 0, 0, 0</font></p>
+  <p align="left">For information on the parameters, see the AddSound command 
+    in the Globals section. The only difference here is that the X, Y and Z position 
+    values are relative of the elevator's center/origin.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 

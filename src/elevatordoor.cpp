@@ -107,9 +107,9 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	ShaftDoorsState.SetSize(elev->ServicedFloors.GetSize());
 
 	//create sound object
-	doorsound = new Sound();
+	doorsound = new Sound("Door Sound");
 	doorsound->SetPosition(elevator->Origin);
-	chime = new Sound();
+	chime = new Sound("Chime");
 }
 
 ElevatorDoor::~ElevatorDoor()

@@ -109,6 +109,15 @@ Floor::~Floor()
 	}
 	FloorIndicatorArray.DeleteAll();
 
+	//delete sounds
+	for (int i = 0; i < sounds.GetSize(); i++)
+	{
+		if (sounds[i])
+			delete sounds[i];
+		sounds[i] = 0;
+	}
+	sounds.DeleteAll();
+
 	ColumnFrame_state = 0;
 	ColumnFrame = 0;
 	Interfloor_state = 0;
@@ -291,6 +300,18 @@ void Floor::Enabled(bool value)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Enabled(value);
+	}
+
+	//sounds
+	for (int i = 0; i < sounds.GetSize(); i++)
+	{
+		if (sounds[i])
+		{
+			if (value == false)
+				sounds[i]->Stop();
+			else
+				sounds[i]->Play();
+		}
 	}
 }
 
@@ -568,4 +589,27 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	}
 	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, tw, th, false);
 	sbs->ResetWalls();
+}
+
+bool Floor::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
+{
+	//create a looping sound object
+	sounds.SetSize(sounds.GetSize() + 1);
+	Sound *sound = sounds[sounds.GetSize() - 1];
+	sound = new Sound(name);
+
+	//set parameters and play sound
+	sound->SetPosition(csVector3(position.x, Altitude + InterfloorHeight + position.y, position.z));
+	sound->SetDirection(direction);
+	sound->SetVolume(volume);
+	sound->SetSpeed(speed);
+	sound->SetMinimumDistance(min_distance);
+	sound->SetMaximumDistance(max_distance);
+	sound->SetDirection(direction);
+	sound->SetDirectionalRadiation(dir_radiation);
+	sound->Load(filename);
+	sound->Loop(true);
+	sound->Play();
+
+	return true;
 }

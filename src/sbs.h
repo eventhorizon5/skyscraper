@@ -239,6 +239,9 @@ public:
 	int GetMeshFactoryCount();
 	void CreateColliders(csRef<iMeshWrapper> mesh);
 	void DeleteColliders(csRef<iMeshWrapper> mesh);
+	bool AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
+	int GetSoundCount();
+	void IncrementSoundCount();
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -342,6 +345,10 @@ private:
 
 	//floor auto area array
 	csArray<AutoArea> FloorAutoArea;
+
+	//generic sound objects
+	csArray<Sound*> sounds;
+	int soundcount;
 };
 
 #endif

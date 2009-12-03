@@ -129,6 +129,7 @@ SBS::SBS()
 	}
 	ResetTextureMapping(true); //set default texture map values
 	RecreateColliders = false;
+	soundcount = 0;
 }
 
 SBS::~SBS()
@@ -181,6 +182,15 @@ SBS::~SBS()
 		StairsArray[i].object = 0;
 	}
 	StairsArray.DeleteAll();
+
+	//delete sounds
+	for (int i = 0; i < sounds.GetSize(); i++)
+	{
+		if (sounds[i])
+			delete sounds[i];
+		sounds[i] = 0;
+	}
+	sounds.DeleteAll();
 
 	SkyBox_state = 0;
 	SkyBox = 0;
@@ -3373,4 +3383,38 @@ void SBS::DeleteColliders(csRef<iMeshWrapper> mesh)
 	csColliderWrapper *collider = csColliderWrapper::GetColliderWrapper(mesh->QueryObject());
 	if (collider)
 		engine->RemoveObject(collider);
+}
+
+bool SBS::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
+{
+	//create a looping sound object
+	sounds.SetSize(sounds.GetSize() + 1);
+	Sound *sound = sounds[sounds.GetSize() - 1];
+	sound = new Sound(name);
+
+	//set parameters and play sound
+	sound->SetPosition(position);
+	sound->SetDirection(direction);
+	sound->SetVolume(volume);
+	sound->SetSpeed(speed);
+	sound->SetMinimumDistance(min_distance);
+	sound->SetMaximumDistance(max_distance);
+	sound->SetDirection(direction);
+	sound->SetDirectionalRadiation(dir_radiation);
+	sound->Load(filename);
+	sound->Loop(true);
+	sound->Play();
+
+	return true;
+}
+
+int SBS::GetSoundCount()
+{
+	//return total number of allocated sounds
+	return soundcount;
+}
+
+void SBS::IncrementSoundCount()
+{
+	soundcount++;
 }
