@@ -19,6 +19,8 @@ Version 1.6 (2.0 Alpha 6)
 -fixed call cancel button
 -app now properly exits to the main menu if a building fails to load
 -added custom sound objects
+-added new Simple building with basements
+-more comments added to the Simple building
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------
