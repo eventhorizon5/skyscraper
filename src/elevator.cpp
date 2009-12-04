@@ -322,20 +322,6 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
 
-	//discard route if it's for the down queue and above the current floor
-	if (floor > GetFloor() && direction == -1)
-	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": bad route");
-		return;
-	}
-
-	//discard route if it's for the up queue and below the current floor
-	if (floor < GetFloor() && direction == 1)
-	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": bad route");
-		return;
-	}
-
 	//if in independent service or fire service phase 2 (on) mode, go to floor in pending state
 	if (IndependentService == true || FireServicePhase2 == 1)
 	{
@@ -571,8 +557,17 @@ void Elevator::ProcessCallQueue()
 		//search through up queue
 		for (int i = 0; i < UpQueue.GetSize(); i++)
 		{
-			//if the queued floor number is a different floor, dispatch the elevator to that floor
+			//if the queued floor number is a higher floor, dispatch the elevator to that floor
 			if (UpQueue[i] > GetFloor())
+			{
+				PauseQueueSearch = true;
+				GotoFloor = UpQueue[i];
+				CloseDoors();
+				MoveElevator = true;
+				return;
+			}
+			//if the queued floor number is a lower floor and it's the only entry, dispatch the elevator to that floor
+			if (UpQueue[i] < GetFloor() && UpQueue.GetSize() == 1)
 			{
 				PauseQueueSearch = true;
 				GotoFloor = UpQueue[i];
@@ -599,8 +594,17 @@ void Elevator::ProcessCallQueue()
 		//search through down queue (search order is reversed since calls need to be processed in decending order)
 		for (int i = DownQueue.GetSize() - 1; i >= 0; i--)
 		{
-			//if the queued floor number is a different floor, dispatch the elevator to that floor
+			//if the queued floor number is a lower floor, dispatch the elevator to that floor
 			if (DownQueue[i] < GetFloor())
+			{
+				PauseQueueSearch = true;
+				GotoFloor = DownQueue[i];
+				CloseDoors();
+				MoveElevator = true;
+				return;
+			}
+			//if the queued floor number is a higher floor and it's the only entry, dispatch the elevator to that floor
+			if (DownQueue[i] > GetFloor() && DownQueue.GetSize() == 1)
 			{
 				PauseQueueSearch = true;
 				GotoFloor = DownQueue[i];
@@ -704,27 +708,6 @@ void Elevator::MoveElevatorToFloor()
 		ElevatorFloor = GetFloor();
 		oldfloor = ElevatorFloor;
 
-		//If elevator is already on specified floor, open doors and exit
-		if (ElevatorFloor == GotoFloor && InspectionService == false)
-		{
-			sbs->Report("Elevator already on specified floor");
-			MoveElevator = false;
-			ElevatorIsRunning = false;
-			//do not automatically open doors if in fire service phase 2
-			if (FireServicePhase2 == 0)
-				OpenDoors();
-			return;
-		}
-
-		//if destination floor is not a serviced floor, reset and exit
-		if (IsServicedFloor(GotoFloor) == false && InspectionService == false)
-		{
-			sbs->Report("Destination floor not in ServicedFloors list");
-			MoveElevator = false;
-			ElevatorIsRunning = false;
-			return;
-		}
-
 		//Determine direction
 		if (InspectionService == false)
 		{
@@ -747,6 +730,29 @@ void Elevator::MoveElevatorToFloor()
 				dir_string = "up";
 		}
 
+		//If elevator is already on specified floor, open doors and exit
+		if (ElevatorFloor == GotoFloor && InspectionService == false)
+		{
+			sbs->Report("Elevator already on specified floor");
+			MoveElevator = false;
+			ElevatorIsRunning = false;
+			DeleteRoute(GotoFloor, Direction);
+			//do not automatically open doors if in fire service phase 2
+			if (FireServicePhase2 == 0)
+				OpenDoors();
+			return;
+		}
+
+		//if destination floor is not a serviced floor, reset and exit
+		if (IsServicedFloor(GotoFloor) == false && InspectionService == false)
+		{
+			sbs->Report("Destination floor not in ServicedFloors list");
+			MoveElevator = false;
+			ElevatorIsRunning = false;
+			DeleteRoute(GotoFloor, Direction);
+			return;
+		}
+
 		//Determine distance to destination floor
 		if (InspectionService == false)
 		{
@@ -765,6 +771,7 @@ void Elevator::MoveElevatorToFloor()
 					Destination = 0;
 					MoveElevator = false;
 					ElevatorIsRunning = false;
+					DeleteRoute(GotoFloor, Direction);
 					Direction = 0;
 					return;
 				}
@@ -778,6 +785,7 @@ void Elevator::MoveElevatorToFloor()
 					Destination = 0;
 					MoveElevator = false;
 					ElevatorIsRunning = false;
+					DeleteRoute(GotoFloor, Direction);
 					Direction = 0;
 					return;
 				}

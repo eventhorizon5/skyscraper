@@ -2371,7 +2371,7 @@ int ScriptProcessor::ProcFloors()
 		if (IfProc(temp2) == true)
 		{
 			LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
-			return sRecalc;
+			return sCheckFloors;
 		}
 		else
 			return sNextLine; //skip line
@@ -3885,7 +3885,10 @@ int ScriptProcessor::ProcElevators()
 			temp2 = "";
 		temp2.Trim();
 		if (IfProc(temp2) == true)
+		{
 			LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
+			return sCheckFloors;
+		}
 		else
 			return sNextLine; //skip line
 	}
