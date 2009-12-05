@@ -3316,6 +3316,15 @@ int ScriptProcessor::ProcElevators()
 	Elevator *elev = Simcore->GetElevator(Current);
 
 	//parameters
+	if (LineData.Slice(0, 4).CompareNoCase("name") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		elev->Name = temp2.Trim();
+	}
 	if (LineData.Slice(0, 5).CompareNoCase("speed") == true)
 	{
 		if (temp2check < 0)
