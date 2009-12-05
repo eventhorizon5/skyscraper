@@ -1130,6 +1130,10 @@ bool Skyscraper::Start()
 	if (!Simcore->Start())
 		return ReportError("Error starting simulator\n");
 
+	g2d->Clear(0);
+	g2d->FinishDraw();
+	g2d->Print(0);
+
 	//set to saved position if reloading building
 	if (PositionOverride == true)
 	{
