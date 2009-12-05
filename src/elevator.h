@@ -189,6 +189,7 @@ public:
 	void SetBeepSound(const char *filename);
 	void SetFloorSound(const char *prefix);
 	bool AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
+	void DeleteActiveRoute();
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -208,6 +209,8 @@ private:
 	float JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
 	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	bool ResetQueues; //clear queues and open doors; usually for service mode
+	int ActiveCallFloor; //floor number of active call (that the elevator's currently responding too)
+	int ActiveCallDirection; //direction of active call (that the elevator's currently responding too)
 
 	//functions
 	void MoveElevatorToFloor();

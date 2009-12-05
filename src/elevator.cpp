@@ -114,6 +114,8 @@ Elevator::Elevator(int number)
 	UseFloorBeeps = false;
 	UseFloorSounds = false;
 	MotorPosition = csVector3(0, 0, 0);
+	ActiveCallFloor = 0;
+	ActiveCallDirection = 0;
 
 	//create object meshes
 	buffer = Number;
@@ -560,6 +562,8 @@ void Elevator::ProcessCallQueue()
 			//if the queued floor number is a higher floor, dispatch the elevator to that floor
 			if (UpQueue[i] > GetFloor())
 			{
+				ActiveCallFloor = UpQueue[i];
+				ActiveCallDirection = 1;
 				PauseQueueSearch = true;
 				GotoFloor = UpQueue[i];
 				CloseDoors();
@@ -569,6 +573,8 @@ void Elevator::ProcessCallQueue()
 			//if the queued floor number is a lower floor and it's the only entry, dispatch the elevator to that floor
 			if (UpQueue[i] < GetFloor() && UpQueue.GetSize() == 1)
 			{
+				ActiveCallFloor = UpQueue[i];
+				ActiveCallDirection = 1;
 				PauseQueueSearch = true;
 				GotoFloor = UpQueue[i];
 				CloseDoors();
@@ -597,6 +603,8 @@ void Elevator::ProcessCallQueue()
 			//if the queued floor number is a lower floor, dispatch the elevator to that floor
 			if (DownQueue[i] < GetFloor())
 			{
+				ActiveCallFloor = DownQueue[i];
+				ActiveCallDirection = -1;
 				PauseQueueSearch = true;
 				GotoFloor = DownQueue[i];
 				CloseDoors();
@@ -606,6 +614,8 @@ void Elevator::ProcessCallQueue()
 			//if the queued floor number is a higher floor and it's the only entry, dispatch the elevator to that floor
 			if (DownQueue[i] > GetFloor() && DownQueue.GetSize() == 1)
 			{
+				ActiveCallFloor = DownQueue[i];
+				ActiveCallDirection = -1;
 				PauseQueueSearch = true;
 				GotoFloor = DownQueue[i];
 				CloseDoors();
@@ -736,7 +746,7 @@ void Elevator::MoveElevatorToFloor()
 			sbs->Report("Elevator already on specified floor");
 			MoveElevator = false;
 			ElevatorIsRunning = false;
-			DeleteRoute(GotoFloor, Direction);
+			DeleteActiveRoute();
 			//do not automatically open doors if in fire service phase 2
 			if (FireServicePhase2 == 0)
 				OpenDoors();
@@ -749,7 +759,7 @@ void Elevator::MoveElevatorToFloor()
 			sbs->Report("Destination floor not in ServicedFloors list");
 			MoveElevator = false;
 			ElevatorIsRunning = false;
-			DeleteRoute(GotoFloor, Direction);
+			DeleteActiveRoute();
 			return;
 		}
 
@@ -769,10 +779,10 @@ void Elevator::MoveElevatorToFloor()
 				{
 					//don't go above top floor
 					Destination = 0;
+					Direction = 0;
 					MoveElevator = false;
 					ElevatorIsRunning = false;
-					DeleteRoute(GotoFloor, Direction);
-					Direction = 0;
+					DeleteActiveRoute();
 					return;
 				}
 			}
@@ -783,10 +793,10 @@ void Elevator::MoveElevatorToFloor()
 				{
 					//don't go below bottom floor
 					Destination = 0;
+					Direction = 0;
 					MoveElevator = false;
 					ElevatorIsRunning = false;
-					DeleteRoute(GotoFloor, Direction);
-					Direction = 0;
+					DeleteActiveRoute();
 					return;
 				}
 			}
@@ -1145,11 +1155,7 @@ void Elevator::MoveElevatorToFloor()
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": arrived at floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 
 		//dequeue floor route
-		//the direction value is reversed at this stage, due to the elevator slowdown above
-		if (Direction == -1)
-			DeleteRoute(GotoFloor, 1);
-		else
-			DeleteRoute(GotoFloor, -1);
+		DeleteActiveRoute();
 	}
 
 	//reset values if at destination floor
@@ -2580,4 +2586,12 @@ bool Elevator::AddSound(const char *name, const char *filename, csVector3 positi
 	sound->Play();
 
 	return true;
+}
+
+void Elevator::DeleteActiveRoute()
+{
+	//deletes the active route
+	DeleteRoute(ActiveCallFloor, ActiveCallDirection);
+	ActiveCallFloor = 0;
+	ActiveCallDirection = 0;
 }
