@@ -456,8 +456,12 @@ void Elevator::StopElevator()
 	if (InspectionService == true)
 		return;
 
-	EmergencyStop = true;
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": emergency stop");
+
+	EmergencyStop = true;
+
+	//clear elevator queues
+	QueueReset();
 }
 
 void Elevator::OpenHatch()
