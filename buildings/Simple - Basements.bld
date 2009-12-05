@@ -52,7 +52,9 @@
     AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
     AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
     AddText Black, ButtonG, nimbus_sans.ttf, 47, G, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitG, nimbus_sans.ttf, 47, G, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonR, nimbus_sans.ttf, 47, R, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitR, nimbus_sans.ttf, 47, R, -1, -1, -1, -1, center, center, 255, 255, 255
     AddTextRange 1, 20, Black, ButtonB%number%, nimbus_sans.ttf, 47, B%number%, -1, -1, -1, -1, center, center, 255, 255, 255
     AddTextRange 1, 20, BlackLit, ButtonLitB%number%, nimbus_sans.ttf, 47, B%number%, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
