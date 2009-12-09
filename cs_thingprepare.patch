@@ -1,0 +1,11 @@
+diff -urN CS.old/plugins/mesh/thing/object/thing.cpp CS.new/plugins/mesh/thing/object/thing.cpp
+--- CS.old/plugins/mesh/thing/object/thing.cpp	2009-12-09 15:58:29.475352000 -0600
++++ CS.new/plugins/mesh/thing/object/thing.cpp	2009-12-09 15:56:11.668352925 -0600
+@@ -1821,6 +1821,7 @@
+ void csThing::Unprepare ()
+ {
+   SetPrepared (false);
++  static_data->SetPrepared(false);
+ }
+ 
+ void csThing::PreparePolygons ()
