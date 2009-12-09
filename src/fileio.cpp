@@ -176,7 +176,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
-		if (LineData.CompareNoCase("<endfloor>") == true)
+		if (LineData.CompareNoCase("<endfloor>") == true && RangeL == RangeH)
 		{
 			if (Section != 2 || Context != "Floor")
 			{
@@ -237,7 +237,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
-		if (LineData.CompareNoCase("<endelevator>") == true)
+		if (LineData.CompareNoCase("<endelevator>") == true && RangeL == RangeH)
 		{
 			if (Section != 4 || Context != "Elevator")
 			{
@@ -3263,7 +3263,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//handle floor range
-	if (RangeL != RangeH && LineData.Slice(0, 11).CompareNoCase("<endfloors>") == true)
+	if (RangeL != RangeH && LineData.Slice(0, 9).CompareNoCase("<endfloor") == true)
 	{
 		if (RangeL < RangeH)
 		{
@@ -3276,6 +3276,9 @@ int ScriptProcessor::ProcFloors()
 			else
 			{
 				Section = 0; //break out of loop
+				Context = "None";
+				RangeL = 0;
+				RangeH = 0;
 				return sNextLine;
 			}
 		}
@@ -3291,6 +3294,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				Section = 0; //break out of loop
 				Context = "None";
+				RangeL = 0;
+				RangeH = 0;
 				return sNextLine;
 			}
 		}
@@ -4644,7 +4649,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//handle elevator range
-	if (RangeL != RangeH && LineData.Slice(0, 14).CompareNoCase("<endelevators>") == true)
+	if (RangeL != RangeH && LineData.Slice(0, 12).CompareNoCase("<endelevator") == true)
 	{
 		if (Current < RangeH)
 		{
@@ -4656,6 +4661,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			Section = 0; //break out of loop
 			Context = "None";
+			RangeL = 0;
+			RangeH = 0;
 			return sNextLine;
 		}
 	}
