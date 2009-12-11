@@ -344,10 +344,10 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 		csVector3 endposition;
 		endposition.Set(position.x, position.y - floorptr->FullHeight(), position.z);
 		if (floor > startfloor)
-			hit = StairArray[(floor - 1) - startfloor]->HitBeam(position, endposition).hit;
+			hit = StairArray[(floor - 1) - startfloor]->HitBeam(sbs->ToRemote(position), sbs->ToRemote(endposition)).hit;
 		if (floor >= startfloor && floor <= endfloor)
 		{
-			hittmp = StairArray[floor - startfloor]->HitBeam(position, endposition).hit;
+			hittmp = StairArray[floor - startfloor]->HitBeam(sbs->ToRemote(position), sbs->ToRemote(endposition)).hit;
 			if (hittmp == true)
 				hit = true;
 		}

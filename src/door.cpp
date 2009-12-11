@@ -99,7 +99,7 @@ Door::Door(const char *name, const char *texture, float thickness, int direction
 	DoorMesh_movable = DoorMesh->GetMovable();
 	DoorMesh->SetZBufMode(CS_ZBUF_USE);
 	DoorMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	DoorMesh_movable->SetPosition(origin);
+	DoorMesh_movable->SetPosition(sbs->ToRemote(origin));
 	DoorMesh_movable->UpdateMove();
 
 	//create door

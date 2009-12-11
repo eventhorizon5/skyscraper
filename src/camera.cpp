@@ -98,7 +98,7 @@ Camera::~Camera()
 void Camera::SetPosition(const csVector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
-	MainCamera->GetTransform().SetOrigin(vector);
+	MainCamera->GetTransform().SetOrigin(sbs->ToRemote(vector));
 }
 
 void Camera::SetDirection(const csVector3 &vector)
@@ -137,7 +137,7 @@ void Camera::SetRotation(csVector3 vector)
 csVector3 Camera::GetPosition()
 {
 	//returns the camera's current position
-	return MainCamera->GetTransform().GetOrigin();
+	return sbs->ToLocal(MainCamera->GetTransform().GetOrigin());
 }
 
 void Camera::GetDirection(csVector3 &front, csVector3 &top)
@@ -589,7 +589,7 @@ void Camera::CreateColliders()
 	csVector3 legs (cfg_legs_width, cfg_legs_height, cfg_legs_depth);
 	csVector3 body (cfg_body_width, cfg_body_height, cfg_body_depth);
 	csVector3 shift (0, -(cfg_legs_height + cfg_body_height), 0);
-	collider_actor.InitializeColliders (MainCamera, legs, body, shift);
+	collider_actor.InitializeColliders (MainCamera, sbs->ToRemote(legs), sbs->ToRemote(body), sbs->ToRemote(shift));
 	collider_actor.SetCamera(MainCamera, true);
 	EnableGravity(GravityStatus);
 }

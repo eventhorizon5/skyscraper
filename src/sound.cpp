@@ -66,7 +66,7 @@ void Sound::SetPosition(csVector3 position)
 	//set position of sound object
 	Position = position;
 	if (sndsource3d)
-		sndsource3d->SetPosition(Position);
+		sndsource3d->SetPosition(sbs->ToRemote(Position));
 }
 
 void Sound::SetPositionY(float position)
@@ -74,14 +74,14 @@ void Sound::SetPositionY(float position)
 	//set vertical position of sound object
 	Position.y = position;
 	if (sndsource3d)
-		sndsource3d->SetPosition(Position);
+		sndsource3d->SetPosition(sbs->ToRemote(Position));
 }
 
 csVector3 Sound::GetPosition()
 {
 	//get position of sound object
 	if (sndsource3d)
-		return sndsource3d->GetPosition();
+		return sbs->ToLocal(sndsource3d->GetPosition());
 	else
 		return csVector3(0, 0, 0);
 }
@@ -107,13 +107,13 @@ void Sound::SetMinimumDistance(float distance)
 {
 	MinDistance = distance;
 	if (sndsource3d)
-		sndsource3d->SetMinimumDistance(MinDistance);
+		sndsource3d->SetMinimumDistance(sbs->ToRemote(MinDistance));
 }
 
 float Sound::GetMinimumDistance()
 {
 	if (sndsource3d)
-		return sndsource3d->GetMinimumDistance();
+		return sbs->ToLocal(sndsource3d->GetMinimumDistance());
 	else
 		return 0;
 }
@@ -123,13 +123,13 @@ void Sound::SetMaximumDistance(float distance)
 	//set the max distance at which the sound can be heard at full volume
 	MaxDistance = distance;
 	if (sndsource3d)
-		sndsource3d->SetMaximumDistance(MaxDistance);
+		sndsource3d->SetMaximumDistance(sbs->ToRemote(MaxDistance));
 }
 
 float Sound::GetMaximumDistance()
 {
 	if (sndsource3d)
-		return sndsource3d->GetMaximumDistance();
+		return sbs->ToLocal(sndsource3d->GetMaximumDistance());
 	else
 		return 0;
 }

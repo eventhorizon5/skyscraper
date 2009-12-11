@@ -130,6 +130,7 @@ SBS::SBS()
 	ResetTextureMapping(true); //set default texture map values
 	RecreateColliders = false;
 	soundcount = 0;
+	UnitScale = 1;
 }
 
 SBS::~SBS()
@@ -805,7 +806,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 void SBS::AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b)
 {
 	csRef<iLightList> ll = area->GetLights();
-	csRef<iLight> light = engine->CreateLight(name, csVector3(x, y, z), radius, csColor(r, g, b));
+	csRef<iLight> light = engine->CreateLight(name, csVector3(ToRemote(x), ToRemote(y), ToRemote(z)), radius, csColor(r, g, b));
 	ll->Add(light);
 }
 
@@ -919,6 +920,16 @@ int SBS::AddWallMain(csRef<iMeshWrapper> dest, const char *name, const char *tex
             v4.x -= thickness;
 		}
 	}
+
+	//convert positions to remote (CS) values
+	v1 = ToRemote(v1);
+	v2 = ToRemote(v2);
+	v3 = ToRemote(v3);
+	v4 = ToRemote(v4);
+	v5 = ToRemote(v5);
+	v6 = ToRemote(v6);
+	v7 = ToRemote(v7);
+	v8 = ToRemote(v8);
 
 	//create polygons and set names
 	int index = -1;
@@ -1122,6 +1133,16 @@ int SBS::AddFloorMain(csRef<iMeshWrapper> dest, const char *name, const char *te
 		v4.y -= thickness;
 	}
 
+	//convert positions to remote (CS) values
+	v1 = ToRemote(v1);
+	v2 = ToRemote(v2);
+	v3 = ToRemote(v3);
+	v4 = ToRemote(v4);
+	v5 = ToRemote(v5);
+	v6 = ToRemote(v6);
+	v7 = ToRemote(v7);
+	v8 = ToRemote(v8);
+
 	//create polygons and set names
 	int index = -1;
 	int tmpindex = -1;
@@ -1299,7 +1320,7 @@ int SBS::CreateWallBox(csRef<iMeshWrapper> dest, const char *name, const char *t
 	if (inside == true)
 	{
 		//generate a box visible from the inside
-		csBox3 box (csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
+		csBox3 box (csVector3(ToRemote(x1) * HorizScale, ToRemote(voffset), ToRemote(z1) * HorizScale), csVector3(ToRemote(x2) * HorizScale, ToRemote(voffset + height_in), z2 * HorizScale));
 		firstidx = dest_state->AddQuad( //front
 			box.GetCorner(CS_BOX_CORNER_xyz),
 			box.GetCorner(CS_BOX_CORNER_Xyz),
@@ -1346,7 +1367,7 @@ int SBS::CreateWallBox(csRef<iMeshWrapper> dest, const char *name, const char *t
 
 	if (outside == true)
 	{
-		csBox3 box (csVector3(x1 * HorizScale, voffset, z1 * HorizScale), csVector3(x2 * HorizScale, voffset + height_in, z2 * HorizScale));
+		csBox3 box (csVector3(ToRemote(x1) * HorizScale, ToRemote(voffset), ToRemote(z1) * HorizScale), csVector3(ToRemote(x2) * HorizScale, ToRemote(voffset + height_in), ToRemote(z2) * HorizScale));
 		tmpidx = dest_state->AddQuad( //front
 			box.GetCorner(CS_BOX_CORNER_xYz),
 			box.GetCorner(CS_BOX_CORNER_XYz),
@@ -1474,7 +1495,7 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 
 	//Set horizontal scaling
 	for (i = 0; i < num; i++)
-		varray1.AddVertex(varray[i].x * HorizScale, varray[i].y, varray[i].z * HorizScale);
+		varray1.AddVertex(ToRemote(varray[i].x) * HorizScale, ToRemote(varray[i].y), ToRemote(varray[i].z) * HorizScale);
 
 	//create a second array with reversed vertices
 	for (i = num - 1; i >= 0; i--)
@@ -1483,9 +1504,9 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	csVector2 x, y, z;
 
 	//get extents for texture autosizing
-	x = GetExtents(varray1, 1);
-	y = GetExtents(varray1, 2);
-	z = GetExtents(varray1, 3);
+	x = ToLocal(GetExtents(varray1, 1));
+	y = ToLocal(GetExtents(varray1, 2));
+	z = ToLocal(GetExtents(varray1, 3));
 
 	bool force_enable, force_mode;
 	GetTextureForce(texture, force_enable, force_mode);
@@ -1577,7 +1598,7 @@ int SBS::AddCustomFloor(csRef<iMeshWrapper> dest, const char *name, const char *
 
 	//Set horizontal scaling
 	for (i = 0; i < num; i++)
-		varray1.AddVertex(varray[i].x * HorizScale, varray[i].y, varray[i].z * HorizScale);
+		varray1.AddVertex(ToRemote(varray[i].x) * HorizScale, ToRemote(varray[i].y), ToRemote(varray[i].z) * HorizScale);
 
 	//create a second array with reversed vertices
 	for (i = num - 1; i >= 0; i--)
@@ -1586,9 +1607,9 @@ int SBS::AddCustomFloor(csRef<iMeshWrapper> dest, const char *name, const char *
 	csVector2 x, y, z;
 
 	//get extents for texture autosizing
-	x = GetExtents(varray, 1);
-	y = GetExtents(varray, 2);
-	z = GetExtents(varray, 3);
+	x = ToLocal(GetExtents(varray, 1));
+	y = ToLocal(GetExtents(varray, 2));
+	z = ToLocal(GetExtents(varray, 3));
 
 	bool force_enable, force_mode;
 	GetTextureForce(texture, force_enable, force_mode);
@@ -1766,7 +1787,8 @@ int SBS::CreateSky(const char *filenamebase)
 	SkyBox->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 
 	//create a skybox that extends 30 miles (30 * 5280 ft) in each direction
-	int firstidx = SkyBox_state->AddInsideBox(csVector3(-158400, -158400, -158400), csVector3(158400, 158400, 158400));
+	float skysize = -158400;
+	int firstidx = SkyBox_state->AddInsideBox(ToRemote(csVector3(-skysize, -skysize, -skysize)), ToRemote(csVector3(skysize, skysize, skysize)));
 	bool result;
 	csRef<iMaterialWrapper> material = GetTextureMaterial("SkyBack", result);
 	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
@@ -2307,12 +2329,12 @@ csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, co
 	csVector3 isect;
 	float dist;
 	csPlane3 plane = mesh->GetPolygonObjectPlane(polyindex);
-	csIntersect3::SegmentPlane(start, end, plane, isect, dist);
+	csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), plane, isect, dist);
 
-	return isect;
+	return ToLocal(isect);
 }
 
-void SBS::Cut(csRef<iMeshWrapper> mesh, const csVector3 &start, const csVector3 &end, bool cutwalls, bool cutfloors, const csVector3 &mesh_origin, const csVector3 &object_origin, int checkwallnumber, const char *checkstring)
+void SBS::Cut(csRef<iMeshWrapper> mesh, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber, const char *checkstring)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 	//mesh_origin is a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
@@ -2323,6 +2345,12 @@ void SBS::Cut(csRef<iMeshWrapper> mesh, const csVector3 &start, const csVector3 
 
 	if (cutwalls == false && cutfloors == false)
 		return;
+
+	//convert values to remote
+	start = ToRemote(start);
+	end = ToRemote(end);
+	mesh_origin = ToRemote(mesh_origin);
+	object_origin = ToRemote(object_origin);
 
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 	int addpolys;
@@ -2628,6 +2656,11 @@ int SBS::AddDoorwayWalls(csRef<iMeshWrapper> mesh, const char *texture, float tw
 	int index = 0;
 	if (wall1a == true && wall2a == true)
 	{
+		//convert values to local
+		wall_extents_x = ToLocal(wall_extents_x);
+		wall_extents_y = ToLocal(wall_extents_y);
+		wall_extents_z = ToLocal(wall_extents_z);
+
 		wall1a = false;
 		wall1b = false;
 		wall2a = false;
@@ -2681,7 +2714,7 @@ void SBS::SetListenerLocation(const csVector3 &location)
 {
 	//set position of sound listener object
 	if (DisableSound == false)
-		sndrenderer->GetListener()->SetPosition(location);
+		sndrenderer->GetListener()->SetPosition(ToRemote(location));
 }
 
 void SBS::SetListenerDirection(const csVector3 &front, const csVector3 &top)
@@ -2694,13 +2727,13 @@ void SBS::SetListenerDirection(const csVector3 &front, const csVector3 &top)
 void SBS::SetListenerDistanceFactor(float factor)
 {
 	if (DisableSound == false)
-		sndrenderer->GetListener()->SetDistanceFactor(factor);
+		sndrenderer->GetListener()->SetDistanceFactor(ToRemote(factor));
 }
 
 float SBS::GetListenerDistanceFactor()
 {
 	if (DisableSound == false)
-		return sndrenderer->GetListener()->GetDistanceFactor();
+		return ToLocal(sndrenderer->GetListener()->GetDistanceFactor());
 	else
 		return 0;
 }
@@ -2899,7 +2932,7 @@ int SBS::AddGround(const char *name, const char *texture, float x1, float z1, fl
 			v3.Set(i, altitude, j); //top left
 			v4.Set(i + sizex, altitude, j); //top right
 
-			tmpindex = Landscape_state->AddQuad(v4, v3, v2, v1);
+			tmpindex = Landscape_state->AddQuad(ToRemote(v4), ToRemote(v3), ToRemote(v2), ToRemote(v1));
 			Landscape_state->SetPolygonName(csPolygonRange(tmpindex, tmpindex), name);
 			if (tmpindex > index && index == -1)
 				index = tmpindex;
@@ -3193,7 +3226,7 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 	csVector2 table[] = {csVector2(tw2, th2), csVector2(0, th2), csVector2(tw2, 0), csVector2(0, 0)};
 
 	//create a quad, map the texture, and append to the mesh
-	CS::Geometry::TesselatedQuad wall (csVector3(x2, altitude, z2), csVector3(x1, altitude, z1), csVector3(x2, altitude + height, z2));
+	CS::Geometry::TesselatedQuad wall (csVector3(ToRemote(x2), ToRemote(altitude), ToRemote(z2)), csVector3(ToRemote(x1), ToRemote(altitude), ToRemote(z1)), csVector3(ToRemote(x2), ToRemote(altitude + height), ToRemote(z2)));
 	CS::Geometry::TableTextureMapper mapper(table);
 	wall.SetMapper(&mapper);
 	wall.Append(mesh->GetFactory());
@@ -3417,4 +3450,40 @@ int SBS::GetSoundCount()
 void SBS::IncrementSoundCount()
 {
 	soundcount++;
+}
+
+float SBS::ToLocal(float remote_value)
+{
+	//convert remote (Crystal Space) vertex positions to local (SBS) positions
+	return remote_value * UnitScale;
+}
+
+csVector2 SBS::ToLocal(csVector2 remote_value)
+{
+	//convert remote (Crystal Space) vertex positions to local (SBS) positions
+	return remote_value * UnitScale;
+}
+
+csVector3 SBS::ToLocal(csVector3 remote_value)
+{
+	//convert remote (Crystal Space) vertex positions to local (SBS) positions
+	return remote_value * UnitScale;
+}
+
+float SBS::ToRemote(float local_value)
+{
+	//convert local (SBS) vertex positions to remote (Crystal Space) positions
+	return local_value / UnitScale;
+}
+
+csVector2 SBS::ToRemote(csVector2 local_value)
+{
+	//convert local (SBS) vertex positions to remote (Crystal Space) positions
+	return local_value / UnitScale;
+}
+
+csVector3 SBS::ToRemote(csVector3 local_value)
+{
+	//convert local (SBS) vertex positions to remote (Crystal Space) positions
+	return local_value / UnitScale;
 }

@@ -132,6 +132,7 @@ public:
 	csString dir_char;
 	bool DisableSound; //disable sound system if true
 	bool RecreateColliders; //true if system should recreate mesh colliders on each modification
+	float UnitScale; //scale of 3D positions; this value equals 1 3D unit
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
@@ -199,7 +200,7 @@ public:
 	void GetAutoSize(bool &x, bool &y);
 	int GetDrawWallsCount();
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, const csVector3 &start, const csVector3 &end);
-	void Cut(csRef<iMeshWrapper> mesh, const csVector3 &start, const csVector3 &end, bool cutwalls, bool cutfloors, const csVector3 &mesh_origin, const csVector3 &object_origin, int checkwallnumber = 0, const char *checkstring = "");
+	void Cut(csRef<iMeshWrapper> mesh, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(csRef<iMeshWrapper> mesh, const char *texture, float tw, float th);
@@ -242,6 +243,12 @@ public:
 	bool AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
 	int GetSoundCount();
 	void IncrementSoundCount();
+	float ToLocal(float remote_value);
+	csVector2 ToLocal(csVector2 remote_value);
+	csVector3 ToLocal(csVector3 remote_value);
+	float ToRemote(float local_value);
+	csVector2 ToRemote(csVector2 local_value);
+	csVector3 ToRemote(csVector3 local_value);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

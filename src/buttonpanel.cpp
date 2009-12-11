@@ -293,9 +293,9 @@ void ButtonPanel::Move(const csVector3 &position)
 
 void ButtonPanel::SetToElevatorAltitude()
 {
-	csVector3 pos = ButtonPanelMesh->GetMovable()->GetPosition();
+	csVector3 pos = sbs->ToLocal(ButtonPanelMesh->GetMovable()->GetPosition());
 	csVector3 pos_new = csVector3(pos.x, sbs->GetElevator(elevator)->GetPosition().y, pos.z);
-	ButtonPanelMesh->GetMovable()->SetPosition(pos_new);
+	ButtonPanelMesh->GetMovable()->SetPosition(sbs->ToRemote(pos_new));
 	ButtonPanelMesh->GetMovable()->UpdateMove();
 
 	//move controls

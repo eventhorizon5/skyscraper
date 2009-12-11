@@ -286,7 +286,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 
 	//move objects to positions
-	Elevator_movable->SetPosition(Origin);
+	Elevator_movable->SetPosition(sbs->ToRemote(Origin));
 	Elevator_movable->UpdateMove();
 
 	//resize directional indicator array
@@ -667,8 +667,8 @@ void Elevator::MonitorLoop()
 	{
 		for (int i = 0; i < Elevator_state->GetVertexCount(); i++)
 		{
-			if (Elevator_state->GetVertex(i).y > Height)
-				Height = Elevator_state->GetVertex(i).y;
+			if (sbs->ToLocal(Elevator_state->GetVertex(i).y) > Height)
+				Height = sbs->ToLocal(Elevator_state->GetVertex(i).y);
 		}
 	}
 
@@ -898,7 +898,7 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//move elevator objects and camera
-	Elevator_movable->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
+	Elevator_movable->MovePosition(csVector3(0, sbs->ToRemote(ElevatorRate * sbs->delta), 0));
 	Elevator_movable->UpdateMove();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
@@ -1130,7 +1130,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//set elevator and objects to floor altitude (corrects offset errors)
 		//move elevator objects
-		Elevator_movable->SetPosition(csVector3(GetPosition().x, Destination, GetPosition().z));
+		Elevator_movable->SetPosition(sbs->ToRemote(csVector3(GetPosition().x, Destination, GetPosition().z)));
 		Elevator_movable->UpdateMove();
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
@@ -1346,7 +1346,7 @@ void Elevator::AddFloorIndicator(const char *texture_prefix, const char *directi
 const csVector3 Elevator::GetPosition()
 {
 	//returns the elevator's position
-	return Elevator_movable->GetPosition();
+	return sbs->ToLocal(Elevator_movable->GetPosition());
 }
 
 void Elevator::DumpQueues()
@@ -1412,7 +1412,7 @@ bool Elevator::IsElevator(csRef<iMeshWrapper> test)
 csHitBeamResult Elevator::HitBeam(const csVector3 &start, const csVector3 &end)
 {
 	//passes info onto HitBeam function
-	return ElevatorMesh->HitBeam(start, end);
+	return ElevatorMesh->HitBeam(sbs->ToRemote(start), sbs->ToRemote(end));
 }
 
 bool Elevator::IsInElevator(const csVector3 &position)
@@ -1425,7 +1425,7 @@ bool Elevator::IsInElevator(const csVector3 &position)
 
 	if (position.y > GetPosition().y && position.y < GetPosition().y + Height)
 	{
-		csHitBeamResult result = ElevatorMesh->HitBeam(position, csVector3(position.x, position.y - Height, position.z));
+		csHitBeamResult result = HitBeam(sbs->ToRemote(position), sbs->ToRemote(csVector3(position.x, position.y - Height, position.z)));
 
 		//cache values
 		lastcheckresult = result.hit;

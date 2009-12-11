@@ -75,14 +75,14 @@ void FloorIndicator::Enabled(bool value)
 void FloorIndicator::SetPosition(csVector3 position)
 {
 	//set position of indicator
-	FloorIndicator_movable->SetPosition(position);
+	FloorIndicator_movable->SetPosition(sbs->ToRemote(position));
 	FloorIndicator_movable->UpdateMove();
 }
 
 void FloorIndicator::MovePosition(csVector3 position)
 {
 	//move indicator by a relative amount
-	FloorIndicator_movable->MovePosition(position);
+	FloorIndicator_movable->MovePosition(sbs->ToRemote(position));
 	FloorIndicator_movable->UpdateMove();
 }
 
@@ -100,5 +100,5 @@ void FloorIndicator::Update(const char *value)
 csVector3 FloorIndicator::GetPosition()
 {
 	//return current position of the indicator
-	return FloorIndicator_movable->GetPosition();
+	return sbs->ToLocal(FloorIndicator_movable->GetPosition());
 }

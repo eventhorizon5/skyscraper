@@ -93,9 +93,9 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	timer = new Timer(this, elev);
 
 	//move objects to positions
-	ElevatorDoorL_movable->SetPosition(elev->Origin);
+	ElevatorDoorL_movable->SetPosition(sbs->ToRemote(elev->Origin));
 	ElevatorDoorL_movable->UpdateMove();
-	ElevatorDoorR_movable->SetPosition(elev->Origin);
+	ElevatorDoorR_movable->SetPosition(sbs->ToRemote(elev->Origin));
 	ElevatorDoorR_movable->UpdateMove();
 
 	//resize shaft door arrays
@@ -465,12 +465,12 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	float tempposition, temporigin;
 	if (DoorDirection == false)
 	{
-		tempposition = tmpMovable->GetPosition().z;
+		tempposition = sbs->ToLocal(tmpMovable->GetPosition().z);
 		temporigin = DoorOrigin.z;
 	}
 	else
 	{
-		tempposition = tmpMovable->GetPosition().x;
+		tempposition = sbs->ToLocal(tmpMovable->GetPosition().x);
 		temporigin = DoorOrigin.x;
 	}
 
@@ -607,17 +607,17 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				if (DoorDirection == false)
 				{
 					//move elevator doors
-					ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
+					ElevatorDoorL_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
 					ElevatorDoorL_movable->UpdateMove();
-					ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
+					ElevatorDoorR_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
 					ElevatorDoorR_movable->UpdateMove();
 				}
 				else
 				{
 					//move elevator doors
-					ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ElevatorDoorL_movable->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
 					ElevatorDoorL_movable->UpdateMove();
-					ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ElevatorDoorR_movable->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
 					ElevatorDoorR_movable->UpdateMove();
 				}
 			}
@@ -627,17 +627,17 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				if (DoorDirection == false)
 				{
 					//move shaft doors
-					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
+					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
 					ShaftDoorL[index]->GetMovable()->UpdateMove();
-					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
+					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
 					ShaftDoorR[index]->GetMovable()->UpdateMove();
 				}
 				else
 				{
 					//move shaft doors
-					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
 					ShaftDoorL[index]->GetMovable()->UpdateMove();
-					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
 					ShaftDoorR[index]->GetMovable()->UpdateMove();
 				}
 			}
@@ -660,17 +660,17 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			if (DoorDirection == false)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
+				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
+				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 			else
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
+				ElevatorDoorL_movable->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
+				ElevatorDoorR_movable->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 		}
@@ -680,17 +680,17 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			if (DoorDirection == false)
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 			else
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
+				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
+				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -714,18 +714,18 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				if (elevdoors == true)
 				{
 					//move elevator doors
-					ElevatorDoorL_movable->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
+					ElevatorDoorL_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
 					ElevatorDoorL_movable->UpdateMove();
-					ElevatorDoorR_movable->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
+					ElevatorDoorR_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
 					ElevatorDoorR_movable->UpdateMove();
 				}
 
 				if (shaftdoors == true && ShaftDoorL[index])
 				{
 					//move shaft doors
-					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, -ElevatorDoorSpeed * sbs->delta));
+					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
 					ShaftDoorL[index]->GetMovable()->UpdateMove();
-					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, ElevatorDoorSpeed * sbs->delta));
+					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
 					ShaftDoorR[index]->GetMovable()->UpdateMove();
 				}
 			}
@@ -734,18 +734,18 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				if (elevdoors == true)
 				{
 					//move elevator doors
-					ElevatorDoorL_movable->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ElevatorDoorL_movable->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
 					ElevatorDoorL_movable->UpdateMove();
-					ElevatorDoorR_movable->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ElevatorDoorR_movable->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
 					ElevatorDoorR_movable->UpdateMove();
 				}
 
 				if (shaftdoors == true && ShaftDoorL[index])
 				{
 					//move shaft doors
-					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(-ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
 					ShaftDoorL[index]->GetMovable()->UpdateMove();
-					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(ElevatorDoorSpeed * sbs->delta, 0, 0));
+					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
 					ShaftDoorR[index]->GetMovable()->UpdateMove();
 				}
 			}
@@ -765,18 +765,18 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->SetPosition(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z - (DoorWidth / 2)));
+				ElevatorDoorL_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z - (DoorWidth / 2))));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->SetPosition(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z + (DoorWidth / 2)));
+				ElevatorDoorR_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z + (DoorWidth / 2))));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true && ShaftDoorL[index])
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z - (DoorWidth / 2)));
+				ShaftDoorL[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z - (DoorWidth / 2))));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z + (DoorWidth / 2)));
+				ShaftDoorR[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z + (DoorWidth / 2))));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -785,18 +785,18 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->SetPosition(csVector3(elev->Origin.x - (DoorWidth / 2), elev->GetPosition().y, elev->Origin.z));
+				ElevatorDoorL_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x - (DoorWidth / 2), elev->GetPosition().y, elev->Origin.z)));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->SetPosition(csVector3(elev->Origin.x + (DoorWidth / 2), elev->GetPosition().y, elev->Origin.z));
+				ElevatorDoorR_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x + (DoorWidth / 2), elev->GetPosition().y, elev->Origin.z)));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true && ShaftDoorL[index])
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x - (DoorWidth / 2), 0, elev->Origin.z));
+				ShaftDoorL[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x - (DoorWidth / 2), 0, elev->Origin.z)));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x + (DoorWidth / 2), 0, elev->Origin.z));
+				ShaftDoorR[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x + (DoorWidth / 2), 0, elev->Origin.z)));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -808,18 +808,18 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->SetPosition(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z));
+				ElevatorDoorL_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z)));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->SetPosition(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z));
+				ElevatorDoorR_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z)));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true && ShaftDoorL[index])
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));
+				ShaftDoorL[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));
+				ShaftDoorR[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -828,18 +828,18 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			if (elevdoors == true)
 			{
 				//move elevator doors
-				ElevatorDoorL_movable->SetPosition(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z));
+				ElevatorDoorL_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z)));
 				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->SetPosition(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z));
+				ElevatorDoorR_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z)));
 				ElevatorDoorR_movable->UpdateMove();
 			}
 
 			if (shaftdoors == true && ShaftDoorL[index])
 			{
 				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));
+				ShaftDoorL[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
 				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));
+				ShaftDoorR[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
 				ShaftDoorR[index]->GetMovable()->UpdateMove();
 			}
 		}
@@ -1076,9 +1076,9 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *
 	ShaftDoorR[index]->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	//reposition meshes
-	ShaftDoorL[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));
+	ShaftDoorL[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
 	ShaftDoorL[index]->GetMovable()->UpdateMove();
-	ShaftDoorR[index]->GetMovable()->SetPosition(csVector3(elev->Origin.x, 0, elev->Origin.z));
+	ShaftDoorR[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
 	ShaftDoorR[index]->GetMovable()->UpdateMove();
 
 	//create doors
@@ -1255,31 +1255,31 @@ void ElevatorDoor::Move(const csVector3 position, bool relative_x, bool relative
 	if (relative_x == false)
 		pos.x = position.x;
 	else
-		pos.x = ElevatorDoorL_movable->GetPosition().x + position.x;
+		pos.x = sbs->ToLocal(ElevatorDoorL_movable->GetPosition().x) + position.x;
 	if (relative_y == false)
 		pos.y = position.y;
 	else
-		pos.y = ElevatorDoorL_movable->GetPosition().y + position.y;
+		pos.y = sbs->ToLocal(ElevatorDoorL_movable->GetPosition().y) + position.y;
 	if (relative_z == false)
 		pos.z = position.z;
 	else
-		pos.z = ElevatorDoorL_movable->GetPosition().z + position.z;
-	ElevatorDoorL_movable->SetPosition(pos);
+		pos.z = sbs->ToLocal(ElevatorDoorL_movable->GetPosition().z) + position.z;
+	ElevatorDoorL_movable->SetPosition(sbs->ToRemote(pos));
 	ElevatorDoorL_movable->UpdateMove();
 
 	if (relative_x == false)
 		pos.x = position.x;
 	else
-		pos.x = ElevatorDoorR_movable->GetPosition().x + position.x;
+		pos.x = sbs->ToLocal(ElevatorDoorR_movable->GetPosition().x) + position.x;
 	if (relative_y == false)
 		pos.y = position.y;
 	else
-		pos.y = ElevatorDoorR_movable->GetPosition().y + position.y;
+		pos.y = sbs->ToLocal(ElevatorDoorR_movable->GetPosition().y) + position.y;
 	if (relative_z == false)
 		pos.z = position.z;
 	else
-		pos.z = ElevatorDoorR_movable->GetPosition().z + position.z;
-	ElevatorDoorR_movable->SetPosition(pos);
+		pos.z = sbs->ToLocal(ElevatorDoorR_movable->GetPosition().z) + position.z;
+	ElevatorDoorR_movable->SetPosition(sbs->ToRemote(pos));
 	ElevatorDoorR_movable->UpdateMove();
 }
 
