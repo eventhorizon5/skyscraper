@@ -21,6 +21,7 @@ Version 1.6 (2.0 Alpha 6)
 -added custom sound objects
 -added new Simple building with basements
 -more comments added to the Simple building
+-elevators can now be named
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------
