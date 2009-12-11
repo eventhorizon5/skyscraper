@@ -1425,7 +1425,7 @@ bool Elevator::IsInElevator(const csVector3 &position)
 
 	if (position.y > GetPosition().y && position.y < GetPosition().y + Height)
 	{
-		csHitBeamResult result = HitBeam(sbs->ToRemote(position), sbs->ToRemote(csVector3(position.x, position.y - Height, position.z)));
+		csHitBeamResult result = HitBeam(position, csVector3(position.x, position.y - Height, position.z));
 
 		//cache values
 		lastcheckresult = result.hit;

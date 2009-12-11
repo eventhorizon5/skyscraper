@@ -193,7 +193,7 @@ void Door::MoveDoor()
 	}
 
 	csMatrix3 rot = csYRotMatrix3(DegreesToRadians(rotation));
-	csOrthoTransform ot (rot, origin);
+	csOrthoTransform ot (rot, sbs->ToRemote(origin));
 	DoorMesh_movable->SetTransform(ot);
 	DoorMesh_movable->UpdateMove();
 }

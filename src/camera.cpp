@@ -609,7 +609,7 @@ void Camera::Loop()
 
 	//general movement
 	float delta = sbs->vc->GetElapsedTicks() / 1000.0f;
-	collider_actor.Move(delta, speed, velocity, angle_velocity);
+	collider_actor.Move(delta, speed, sbs->ToRemote(velocity), angle_velocity);
 
 	//get list of hit meshes and put them into the 'hitlist' array
 	if (EnableCollisions == true)
@@ -757,7 +757,7 @@ void Camera::InterpolateMovement()
 void Camera::SetGravity(float gravity)
 {
 	Gravity = gravity;
-	collider_actor.SetGravity(Gravity);
+	collider_actor.SetGravity(sbs->ToRemote(Gravity));
 }
 
 float Camera::GetGravity()
@@ -768,7 +768,7 @@ float Camera::GetGravity()
 void Camera::EnableGravity(bool value)
 {
 	if (value == true)
-		collider_actor.SetGravity(Gravity);
+		collider_actor.SetGravity(sbs->ToRemote(Gravity));
 	else
 		collider_actor.SetGravity(0.0f);
 	GravityStatus = value;

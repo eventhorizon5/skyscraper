@@ -281,7 +281,7 @@ void ButtonPanel::Press(int index)
 void ButtonPanel::Move(const csVector3 &position)
 {
 	//relative movement
-	ButtonPanelMesh->GetMovable()->MovePosition(position);
+	ButtonPanelMesh->GetMovable()->MovePosition(sbs->ToRemote(position));
 	ButtonPanelMesh->GetMovable()->UpdateMove();
 
 	//move controls

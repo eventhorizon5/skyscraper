@@ -486,6 +486,7 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 	FloorDisplayRange = confman->GetInt("Skyscraper.SBS.FloorDisplayRange", 3);
 	ProcessElevators = confman->GetBool("Skyscraper.SBS.ProcessElevators", true);
 	DisableSound = confman->GetBool("Skyscraper.SBS.DisableSound", false);
+	UnitScale = confman->GetFloat("Skyscraper.SBS.UnitScale", 5);
 
 	//mount sign texture packs
 	Mount("signs-sans.zip", "/root/signs/sans");
@@ -1787,7 +1788,7 @@ int SBS::CreateSky(const char *filenamebase)
 	SkyBox->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 
 	//create a skybox that extends 30 miles (30 * 5280 ft) in each direction
-	float skysize = -158400;
+	float skysize = 158400;
 	int firstidx = SkyBox_state->AddInsideBox(ToRemote(csVector3(-skysize, -skysize, -skysize)), ToRemote(csVector3(skysize, skysize, skysize)));
 	bool result;
 	csRef<iMaterialWrapper> material = GetTextureMaterial("SkyBack", result);
