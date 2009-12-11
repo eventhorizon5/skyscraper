@@ -2728,13 +2728,13 @@ void SBS::SetListenerDirection(const csVector3 &front, const csVector3 &top)
 void SBS::SetListenerDistanceFactor(float factor)
 {
 	if (DisableSound == false)
-		sndrenderer->GetListener()->SetDistanceFactor(ToRemote(factor));
+		sndrenderer->GetListener()->SetDistanceFactor(factor);
 }
 
 float SBS::GetListenerDistanceFactor()
 {
 	if (DisableSound == false)
-		return ToLocal(sndrenderer->GetListener()->GetDistanceFactor());
+		return sndrenderer->GetListener()->GetDistanceFactor();
 	else
 		return 0;
 }
