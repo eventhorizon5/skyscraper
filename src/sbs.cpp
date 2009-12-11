@@ -2715,7 +2715,7 @@ void SBS::SetListenerLocation(const csVector3 &location)
 {
 	//set position of sound listener object
 	if (DisableSound == false)
-		sndrenderer->GetListener()->SetPosition(ToRemote(location));
+		sndrenderer->GetListener()->SetPosition(location);
 }
 
 void SBS::SetListenerDirection(const csVector3 &front, const csVector3 &top)
