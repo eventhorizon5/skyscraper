@@ -1419,7 +1419,7 @@ int SBS::CreateWallBox(csRef<iMeshWrapper> dest, const char *name, const char *t
 	bool result;
 	iMaterialWrapper* tm = GetTextureMaterial(texture, result);
 	dest_state->SetPolygonMaterial(csPolygonRange(firstidx, firstidx + range + range2), tm);
-	dest_state->SetPolygonTextureMapping(csPolygonRange(firstidx, firstidx + range + range2), 3);
+	dest_state->SetPolygonTextureMapping(csPolygonRange(firstidx, firstidx + range + range2), ToRemote(3));
 
 	//polygon names
 	csString NewName;
