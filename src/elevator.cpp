@@ -328,10 +328,9 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	//if doors are open or moving in independent service mode, quit; otherwise go to floor in pending state
 	if (IndependentService == true)
 	{
-		if (AreDoorsOpen() == false && CheckOpenDoor() == false)
-			return;
-		else
+		if (AreDoorsOpen() == true || CheckOpenDoor() == true)
 			GoPending(floor);
+		return;
 	}
 
 	//if in fire service phase 2 (on) mode, go to floor in pending state
@@ -1598,7 +1597,7 @@ bool Elevator::IsServicedFloor(int floor)
 bool Elevator::InServiceMode()
 {
 	//report if an elevator is in a service mode
-	if (IndependentService == true || InspectionService == true || FireServicePhase1 != 0 || FireServicePhase2 != 0)
+	if (IndependentService == true || InspectionService == true || FireServicePhase1 != 0)
 		return true;
 	else
 		return false;
