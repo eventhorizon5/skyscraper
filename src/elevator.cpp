@@ -45,7 +45,6 @@ Elevator::Elevator(int number)
 	LastQueueDirection = 0;
 	LastQueueFloor[0] = 0;
 	LastQueueFloor[1] = 0;
-	PauseQueueSearch = true;
 	ElevatorSpeed = 0;
 	MoveElevator = false;
 	GotoFloor = 0;
@@ -494,7 +493,6 @@ void Elevator::ProcessCallQueue()
 			UpQueue.DeleteAll();
 		if (ResetDownQueue == true)
 			DownQueue.DeleteAll();
-		PauseQueueSearch = true;
 		ResetUpQueue = false;
 		ResetDownQueue = false;
 
@@ -513,34 +511,26 @@ void Elevator::ProcessCallQueue()
 	if (InServiceMode() == true)
 		return;
 
-	//set queue search direction if queues aren't empty
-	if (QueuePositionDirection == 0 && PauseQueueSearch == false)
-	{
-		LastQueueDirection = 0;
-
-		if (UpQueue.GetSize() != 0)
-			QueuePositionDirection = 1;
-		if (DownQueue.GetSize() != 0)
-			QueuePositionDirection = -1;
-	}
-
 	//if both queues are empty
 	if (UpQueue.GetSize() == 0 && DownQueue.GetSize() == 0)
 	{
 		int TopFloor = GetTopFloor();
 		int BottomFloor = GetBottomFloor();
 
-		//if DownPeak mode is active, send elevator to the top serviced floor if not already there
-		if (GetFloor() != TopFloor && DownPeak == true && IsMoving == false)
+		if (DownPeak == true || UpPeak == true)
 		{
-			AddRoute(TopFloor, 1, false);
-			return;
-		}
-		//if UpPeak mode is active, send elevator to the bottom serviced floor if not already there
-		else if (GetFloor() != BottomFloor && UpPeak == true && IsMoving == false)
-		{
-			AddRoute(BottomFloor, -1, false);
-			return;
+			//if DownPeak mode is active, send elevator to the top serviced floor if not already there
+			if (GetFloor() != TopFloor && DownPeak == true && IsMoving == false)
+			{
+				AddRoute(TopFloor, 1, false);
+				return;
+			}
+			//if UpPeak mode is active, send elevator to the bottom serviced floor if not already there
+			else if (GetFloor() != BottomFloor && UpPeak == true && IsMoving == false)
+			{
+				AddRoute(BottomFloor, -1, false);
+				return;
+			}
 		}
 
 		if (IsIdle() == true && QueuePositionDirection != 0)
@@ -549,9 +539,16 @@ void Elevator::ProcessCallQueue()
 			LastQueueDirection = QueuePositionDirection;
 			QueuePositionDirection = 0;
 		}
-		//pause queue search
-		PauseQueueSearch = true;
 		return;
+	}
+	else if (QueuePositionDirection == 0)
+	{
+		LastQueueDirection = 0;
+
+		if (UpQueue.GetSize() != 0)
+			QueuePositionDirection = 1;
+		if (DownQueue.GetSize() != 0)
+			QueuePositionDirection = -1;
 	}
 
 	//set search direction to 0 if any related queue is empty
@@ -566,18 +563,6 @@ void Elevator::ProcessCallQueue()
 		LastQueueDirection = -1;
 	}
 
-	//if elevator is moving, keep queue paused
-	if (MoveElevator == true)
-		PauseQueueSearch = true;
-
-	//if elevator is idle, unpause queue
-	if (IsIdle() == true)
-		PauseQueueSearch = false;
-
-	//exit if queue is paused
-	if (PauseQueueSearch == true)
-		return;
-
 	//Search through queue lists and find next valid floor call
 	if (QueuePositionDirection == 1)
 	{
@@ -585,26 +570,42 @@ void Elevator::ProcessCallQueue()
 		for (int i = 0; i < UpQueue.GetSize(); i++)
 		{
 			//if the queued floor number is a higher floor, dispatch the elevator to that floor
-			if (UpQueue[i] > GetFloor())
+			if (UpQueue[i] > ElevatorFloor)
 			{
-				ActiveCallFloor = UpQueue[i];
-				ActiveCallDirection = 1;
-				PauseQueueSearch = true;
-				GotoFloor = UpQueue[i];
-				CloseDoors();
-				MoveElevator = true;
-				LastQueueDirection = 1;
+				if (MoveElevator == false)
+				{
+					ActiveCallFloor = UpQueue[i];
+					ActiveCallDirection = 1;
+					GotoFloor = UpQueue[i];
+					CloseDoors();
+					MoveElevator = true;
+					LastQueueDirection = 1;
+				}
+				else
+				{
+					//if elevator is moving, change destination floor if not beyond decel marker of that floor
+					if (GotoFloor != UpQueue[i])
+					{
+						float tmpdestination = sbs->GetFloor(UpQueue[i])->Altitude + sbs->GetFloor(UpQueue[i])->InterfloorHeight;
+						if (BeyondDecelMarker(1, tmpdestination) == false)
+						{
+							ActiveCallFloor = UpQueue[i];
+							GotoFloor = UpQueue[i];
+							Destination = tmpdestination;
+							sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": changing destination floor to " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+						}
+					}
+				}
 				return;
 			}
 			//if the queued floor number is a lower floor
-			if (UpQueue[i] < GetFloor())
+			if (UpQueue[i] < ElevatorFloor && MoveElevator == false)
 			{
 				//dispatch elevator if it's idle
 				if (IsIdle() == true && LastQueueDirection == 0)
 				{
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
-					PauseQueueSearch = true;
 					GotoFloor = UpQueue[i];
 					CloseDoors();
 					MoveElevator = true;
@@ -620,7 +621,7 @@ void Elevator::ProcessCallQueue()
 				//otherwise skip it if it's not the last entry
 			}
 			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
-			if (UpQueue[i] == GetFloor())
+			if (UpQueue[i] == ElevatorFloor && MoveElevator == false)
 			{
 				OpenDoors();
 				DeleteRoute(UpQueue[i], 1);
@@ -639,26 +640,42 @@ void Elevator::ProcessCallQueue()
 		for (int i = DownQueue.GetSize() - 1; i >= 0; i--)
 		{
 			//if the queued floor number is a lower floor, dispatch the elevator to that floor
-			if (DownQueue[i] < GetFloor())
+			if (DownQueue[i] < ElevatorFloor)
 			{
-				ActiveCallFloor = DownQueue[i];
-				ActiveCallDirection = -1;
-				PauseQueueSearch = true;
-				GotoFloor = DownQueue[i];
-				CloseDoors();
-				MoveElevator = true;
-				LastQueueDirection = -1;
+				if (MoveElevator == false)
+				{
+					ActiveCallFloor = DownQueue[i];
+					ActiveCallDirection = -1;
+					GotoFloor = DownQueue[i];
+					CloseDoors();
+					MoveElevator = true;
+					LastQueueDirection = -1;
+				}
+				else
+				{
+					//if elevator is moving, change destination floor if not beyond decel marker of that floor
+					if (GotoFloor != DownQueue[i])
+					{
+						float tmpdestination = sbs->GetFloor(DownQueue[i])->Altitude + sbs->GetFloor(DownQueue[i])->InterfloorHeight;
+						if (BeyondDecelMarker(-1, tmpdestination) == false)
+						{
+							ActiveCallFloor = DownQueue[i];
+							GotoFloor = DownQueue[i];
+							Destination = tmpdestination;
+							sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": changing destination floor to " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+						}
+					}
+				}
 				return;
 			}
 			//if the queued floor number is an upper floor
-			if (DownQueue[i] > GetFloor())
+			if (DownQueue[i] > ElevatorFloor && MoveElevator == false)
 			{
 				//dispatch elevator if idle
 				if (IsIdle() == true && LastQueueDirection == 0)
 				{
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
-					PauseQueueSearch = true;
 					GotoFloor = DownQueue[i];
 					CloseDoors();
 					MoveElevator = true;
@@ -674,7 +691,7 @@ void Elevator::ProcessCallQueue()
 				//otherwise skip it if it's not the last entry
 			}
 			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
-			if (DownQueue[i] == GetFloor())
+			if (DownQueue[i] == ElevatorFloor && MoveElevator == false)
 			{
 				OpenDoors();
 				DeleteRoute(DownQueue[i], -1);
@@ -1071,55 +1088,44 @@ void Elevator::MoveElevatorToFloor()
 	//by determining if the next "jump" will overrun the deceleration marker (which is Dest's Altitude minus Stopping Distance), and temporarily altering the deceleration rate according to how far off the mark it is
 	//and then starting the deceleration process immediately.
 
-	//up movement
-	if (Brakes == false && Direction == 1)
+	//determine if next jump altitude is over deceleration marker
+	if (Brakes == false)
 	{
-		//determine if next jump altitude is over deceleration marker
-		if (((GetPosition().y + (ElevatorRate * sbs->delta)) > (Destination - StoppingDistance)))
+		if (BeyondDecelMarker(Direction, Destination) == true)
 		{
-			CalculateStoppingDistance = false;
-			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-			TempDeceleration = Deceleration * (StoppingDistance / (Destination - GetPosition().y));
-			//start deceleration
-			Direction = -1;
-			Brakes = true;
-			if (InspectionService == false)
-				ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
-			else
-				ElevatorRate -= (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
+			//up movement
+			if (Direction == 1)
+			{
+				CalculateStoppingDistance = false;
+				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
+				TempDeceleration = Deceleration * (StoppingDistance / (Destination - GetPosition().y));
+				//start deceleration
+				Direction = -1;
+				Brakes = true;
+				if (InspectionService == false)
+					ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
+				else
+					ElevatorRate -= (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
+			}
+			//down movement
+			else if (Direction == -1)
+			{
+				CalculateStoppingDistance = false;
+				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
+				TempDeceleration = Deceleration * (StoppingDistance / (GetPosition().y - Destination));
+				//start deceleration
+				Direction = 1;
+				Brakes = true;
+				if (InspectionService == false)
+					ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
+				else
+					ElevatorRate += (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
+			}
+
 			//stop sounds
 			mainsound->Stop();
 			motorsound->Stop();
 			//play elevator stopping sounds
-			mainsound->Load(CarStopSound.GetData());
-			mainsound->Loop(false);
-			mainsound->Play();
-			motorsound->Load(MotorStopSound.GetData());
-			motorsound->Loop(false);
-			motorsound->Play();
-		}
-	}
-
-	//down movement
-	if (Brakes == false && Direction == -1)
-	{
-	//determine if next jump altitude is below deceleration marker
-		if (((GetPosition().y - (ElevatorRate * sbs->delta)) < (Destination + StoppingDistance)))
-		{
-			CalculateStoppingDistance = false;
-			//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-			TempDeceleration = Deceleration * (StoppingDistance / (GetPosition().y - Destination));
-			//start deceleration
-			Direction = 1;
-			Brakes = true;
-			if (InspectionService == false)
-				ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
-			else
-				ElevatorRate += (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
-			//stop sounds
-			mainsound->Stop();
-			motorsound->Stop();
-			//play stopping sounds
 			mainsound->Load(CarStopSound.GetData());
 			mainsound->Loop(false);
 			mainsound->Play();
@@ -2649,5 +2655,23 @@ bool Elevator::IsQueueActive()
 {
 	if ((QueuePositionDirection == 1 && UpQueue.GetSize() != 0) || (QueuePositionDirection == -1 && DownQueue.GetSize() != 0))
 		return true;
+	return false;
+}
+
+bool Elevator::BeyondDecelMarker(int direction, float destination)
+{
+	//return true if elevator is beyond the deceleration marker for the specified direction
+	//directions are 1 for up, -1 for down
+
+	if (direction == 1)
+	{
+		if (((GetPosition().y + (ElevatorRate * sbs->delta)) > (destination - StoppingDistance)))
+			return true;
+	}
+	if (direction == -1)
+	{
+		if (((GetPosition().y - (ElevatorRate * sbs->delta)) < (destination + StoppingDistance)))
+			return true;
+	}
 	return false;
 }

@@ -316,7 +316,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
 	if (OpenDoor != 0 && manual == false)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": will close doors" + doornumber + " one second after staying open");
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": will close doors" + doornumber + " two seconds after staying open");
 		quick_close = true;
 		return;
 	}
@@ -892,7 +892,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		if (quick_close == false)
 			timer->Start(DoorTimer, true);
 		else
-			timer->Start(1000, true);
+			timer->Start(2000, true);
 		quick_close = false;
 	}
 

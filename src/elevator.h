@@ -43,7 +43,6 @@ public:
 	bool Created; //has elevator been created with the CreateElevator function?
 	int QueuePositionDirection; //queue processing direction
 	int LastQueueDirection; //last queue processing direction
-	bool PauseQueueSearch; //pause queue processor
 	int LastQueueFloor[2]; //last route added to either queue; element 0 is the floor, and element 1 is the direction
 	float ElevatorSpeed; //maximum elevator speed
 	bool MoveElevator; //Tells elevator to start going to specified floor
@@ -191,6 +190,7 @@ public:
 	bool AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
 	void DeleteActiveRoute();
 	bool IsQueueActive();
+	bool BeyondDecelMarker(int direction, float destination);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

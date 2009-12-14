@@ -886,7 +886,6 @@ void editelevator::Loop()
 	txtQueueDirection->SetValue(wxVariant((long)elevator->QueuePositionDirection).GetString());
 	txtQueueLastDown->SetValue(wxVariant((long)elevator->LastQueueFloor[0]).GetString());
 	txtQueueLastUp->SetValue(wxVariant((long)elevator->LastQueueFloor[1]).GetString());
-	txtQueuePause->SetValue(wxString::FromAscii(BoolToString(elevator->PauseQueueSearch)));
 	txtRate->SetValue(TruncateNumber(elevator->ElevatorRate, 2));
 	txtShaft->SetValue(wxVariant((long)elevator->AssignedShaft).GetString());
 	txtStop->SetValue(wxString::FromAscii(BoolToString(elevator->GetEmergencyStopStatus())));
