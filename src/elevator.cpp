@@ -325,11 +325,23 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
 
-	//if in independent service or fire service phase 2 (on) mode, go to floor in pending state
-	if (IndependentService == true || FireServicePhase2 == 1)
+	//if doors are open or moving in independent service mode, quit; otherwise go to floor in pending state
+	if (IndependentService == true)
 	{
-		GoPending(floor);
-		return;
+		if (AreDoorsOpen() == false && CheckOpenDoor() == false)
+			return;
+		else
+			GoPending(floor);
+	}
+
+	//if in fire service phase 2 (on) mode, go to floor in pending state
+	if (FireServicePhase2 == 1)
+	{
+		if (AreDoorsOpen() == true || CheckOpenDoor() == true)
+		{
+			GoPending(floor);
+			return;
+		}
 	}
 
 	//do not add routes if in any other service mode
