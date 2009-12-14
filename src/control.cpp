@@ -113,8 +113,8 @@ void Control::ChangeLight(bool value)
 		return;
 
 	//exit if control is disabled
-	if (IsEnabled == false)
-		return;
+//	if (IsEnabled == false)
+//		return;
 
 	//set light status
 	SetLight(value);

@@ -214,8 +214,10 @@ void ButtonPanel::Press(int index)
 	if (index == -1)
 		return;
 
+	Elevator *elev = sbs->GetElevator(elevator);
+
 	//exit if in inspection mode or in fire service phase 1 mode
-	if (sbs->GetElevator(elevator)->InspectionService == true || sbs->GetElevator(elevator)->FireServicePhase1 == 1)
+	if (elev->InspectionService == true || elev->FireServicePhase1 == 1)
 		return;
 
 	//exit if index is invalid
@@ -228,53 +230,49 @@ void ButtonPanel::Press(int index)
 	if (IsNumeric(name) == true)
 	{
 		int floor = atoi(name);
-		int elev_floor = sbs->GetElevator(elevator)->GetFloor();
+		int elev_floor = elev->GetFloor();
 
-		//elevator is above floor
-		if (elev_floor > floor)
-			sbs->GetElevator(elevator)->AddRoute(floor, -1, true);
-
-		//elevator is below floor
-		if (elev_floor < floor)
-			sbs->GetElevator(elevator)->AddRoute(floor, 1, true);
-
-		//elevator is on floor
-		if (elev_floor == floor)
+		//if elevator is processing a queue, add floor to the queue
+		if (elev->IsQueueActive())
+			elev->AddRoute(floor, elev->QueuePositionDirection, true);
+		else
 		{
-			if (sbs->GetElevator(elevator)->Direction == 0)
+			//elevator is above floor
+			if (elev_floor > floor)
+				elev->AddRoute(floor, -1, true);
+
+			//elevator is below floor
+			if (elev_floor < floor)
+				elev->AddRoute(floor, 1, true);
+
+			//elevator is on floor
+			if (elev_floor == floor)
 			{
-				//stopped - play chime and open doors
-				if (sbs->GetElevator(elevator)->QueuePositionDirection == -1 || sbs->GetElevator(elevator)->LastQueueDirection == -1)
-					sbs->GetElevator(elevator)->Chime(0, floor, false);
-				else if (sbs->GetElevator(elevator)->QueuePositionDirection == 1 || sbs->GetElevator(elevator)->LastQueueDirection == 1)
-					sbs->GetElevator(elevator)->Chime(0, floor, true);
-				sbs->GetElevator(elevator)->OpenDoors();
-			}
-			else if (sbs->GetElevator(elevator)->Direction == -1)
-			{
-				//elevator is on floor but already moving down; add an upward route
-				sbs->GetElevator(elevator)->AddRoute(floor, 1, true);
-			}
-			else if (sbs->GetElevator(elevator)->Direction == 1)
-			{
-				//elevator is on floor but already moving up; add a downward route
-				sbs->GetElevator(elevator)->AddRoute(floor, -1, true);
+				if (elev->Direction == 0)
+				{
+					//stopped - play chime and open doors
+					if (elev->LastQueueDirection == -1)
+						elev->Chime(0, floor, false);
+					else if (elev->LastQueueDirection == 1)
+						elev->Chime(0, floor, true);
+					elev->OpenDoors();
+				}
 			}
 		}
 	}
 	else
 	{
 		name.Downcase();
-		if (name == "open" && sbs->GetElevator(elevator)->Direction == 0)
-			sbs->GetElevator(elevator)->OpenDoors();
-		if (name == "close" && sbs->GetElevator(elevator)->Direction == 0)
-			sbs->GetElevator(elevator)->CloseDoors();
+		if (name == "open" && elev->Direction == 0)
+			elev->OpenDoors();
+		if (name == "close" && elev->Direction == 0)
+			elev->CloseDoors();
 		if (name == "cancel")
-			sbs->GetElevator(elevator)->CancelLastRoute();
+			elev->CancelLastRoute();
 		if (name == "stop")
-			sbs->GetElevator(elevator)->StopElevator();
+			elev->StopElevator();
 		if (name == "alarm")
-			sbs->GetElevator(elevator)->Alarm();
+			elev->Alarm();
 	}
 }
 

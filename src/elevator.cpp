@@ -98,7 +98,8 @@ Elevator::Elevator(int number)
 	FireServicePhase2 = 0;
 	RecallFloor = 0;
 	RecallFloorAlternate = 0;
-	ResetQueues = false;
+	ResetUpQueue = false;
+	ResetDownQueue = false;
 	OnFloor = true;
 	RecallSet = false;
 	RecallAltSet = false;
@@ -475,13 +476,16 @@ void Elevator::ProcessCallQueue()
 {
 	//Processes the elevator's call queue, and sends elevators to called floors
 
-	//if ResetQueues is set, clear both queues open doors, and pause queue
-	if (ResetQueues == true)
+	//if queue reset is requested, clear requested queue, open doors, and pause queue
+	if (ResetUpQueue == true || ResetDownQueue == true)
 	{
-		UpQueue.DeleteAll();
-		DownQueue.DeleteAll();
+		if (ResetUpQueue == true)
+			UpQueue.DeleteAll();
+		if (ResetDownQueue == true)
+			DownQueue.DeleteAll();
 		PauseQueueSearch = true;
-		ResetQueues = false;
+		ResetUpQueue = false;
+		ResetDownQueue = false;
 
 		//turn off button lights
 		for (int i = 0; i < ServicedFloors.GetSize(); i++)
@@ -501,16 +505,12 @@ void Elevator::ProcessCallQueue()
 	//set queue search direction if queues aren't empty
 	if (QueuePositionDirection == 0 && PauseQueueSearch == false)
 	{
+		LastQueueDirection = 0;
+
 		if (UpQueue.GetSize() != 0)
-		{
 			QueuePositionDirection = 1;
-			LastQueueDirection = 1;
-		}
 		if (DownQueue.GetSize() != 0)
-		{
 			QueuePositionDirection = -1;
-			LastQueueDirection = -1;
-		}
 	}
 
 	//if both queues are empty
@@ -532,24 +532,34 @@ void Elevator::ProcessCallQueue()
 			return;
 		}
 
-		//otherwise pause queue search
-		QueuePositionDirection = 0;
+		if (IsIdle() == true && QueuePositionDirection != 0)
+		{
+			//set search direction to 0 if idle
+			LastQueueDirection = QueuePositionDirection;
+			QueuePositionDirection = 0;
+		}
+		//pause queue search
 		PauseQueueSearch = true;
 		return;
 	}
 
 	//set search direction to 0 if any related queue is empty
 	if (QueuePositionDirection == 1 && UpQueue.GetSize() == 0)
+	{
 		QueuePositionDirection = 0;
+		LastQueueDirection = 1;
+	}
 	if (QueuePositionDirection == -1 && DownQueue.GetSize() == 0)
+	{
 		QueuePositionDirection = 0;
+		LastQueueDirection = -1;
+	}
 
 	//if elevator is moving, keep queue paused
 	if (MoveElevator == true)
 		PauseQueueSearch = true;
 
 	//if elevator is idle, unpause queue
-	//if (QueuePositionDirection == 0 && IsIdle() == true)
 	if (IsIdle() == true)
 		PauseQueueSearch = false;
 
@@ -572,18 +582,31 @@ void Elevator::ProcessCallQueue()
 				GotoFloor = UpQueue[i];
 				CloseDoors();
 				MoveElevator = true;
+				LastQueueDirection = 1;
 				return;
 			}
-			//if the queued floor number is a lower floor and it's the only entry, dispatch the elevator to that floor
-			if (UpQueue[i] < GetFloor() && UpQueue.GetSize() == 1)
+			//if the queued floor number is a lower floor
+			if (UpQueue[i] < GetFloor())
 			{
-				ActiveCallFloor = UpQueue[i];
-				ActiveCallDirection = 1;
-				PauseQueueSearch = true;
-				GotoFloor = UpQueue[i];
-				CloseDoors();
-				MoveElevator = true;
-				return;
+				//dispatch elevator if it's idle
+				if (IsIdle() == true && LastQueueDirection == 0)
+				{
+					ActiveCallFloor = UpQueue[i];
+					ActiveCallDirection = 1;
+					PauseQueueSearch = true;
+					GotoFloor = UpQueue[i];
+					CloseDoors();
+					MoveElevator = true;
+					LastQueueDirection = 1;
+					return;
+				}
+				//reset queue if it's the last entry
+				if (i == UpQueue.GetSize() - 1)
+				{
+					ResetUpQueue = true;
+					return;
+				}
+				//otherwise skip it if it's not the last entry
 			}
 			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
 			if (UpQueue[i] == GetFloor())
@@ -613,18 +636,31 @@ void Elevator::ProcessCallQueue()
 				GotoFloor = DownQueue[i];
 				CloseDoors();
 				MoveElevator = true;
+				LastQueueDirection = -1;
 				return;
 			}
-			//if the queued floor number is a higher floor and it's the only entry, dispatch the elevator to that floor
-			if (DownQueue[i] > GetFloor() && DownQueue.GetSize() == 1)
+			//if the queued floor number is an upper floor
+			if (DownQueue[i] > GetFloor())
 			{
-				ActiveCallFloor = DownQueue[i];
-				ActiveCallDirection = -1;
-				PauseQueueSearch = true;
-				GotoFloor = DownQueue[i];
-				CloseDoors();
-				MoveElevator = true;
-				return;
+				//dispatch elevator if idle
+				if (IsIdle() == true && LastQueueDirection == 0)
+				{
+					ActiveCallFloor = DownQueue[i];
+					ActiveCallDirection = -1;
+					PauseQueueSearch = true;
+					GotoFloor = DownQueue[i];
+					CloseDoors();
+					MoveElevator = true;
+					LastQueueDirection = -1;
+					return;
+				}
+				//reset queue if it's the first entry
+				if (i == 0)
+				{
+					ResetDownQueue = true;
+					return;
+				}
+				//otherwise skip it if it's not the last entry
 			}
 			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
 			if (DownQueue[i] == GetFloor())
@@ -1107,19 +1143,6 @@ void Elevator::MoveElevatorToFloor()
 	//finish move
 	if (EmergencyStop == false)
 	{
-		//play chime sound
-		if (InServiceMode() == false)
-		{
-			if (GetFloor() == GetTopFloor())
-				Chime(0, GotoFloor, false); //chime down if on top floor
-			else if (GetFloor() == GetBottomFloor())
-				Chime(0, GotoFloor, true); //chime up if on bottom floor
-			else if (QueuePositionDirection == 1 || LastQueueDirection == 1)
-				Chime(0, GotoFloor, true); //chime up if queue direction is or was up
-			else if (QueuePositionDirection == -1 || LastQueueDirection == -1)
-				Chime(0, GotoFloor, false); //chime down if queue direction is or was down
-		}
-
 		//store error offset value
 		if (Direction == -1)
 			ErrorOffset = GetPosition().y - Destination;
@@ -1207,33 +1230,39 @@ void Elevator::MoveElevatorToFloor()
 		//change directional indicator and disable call button light
 		if (InServiceMode() == false)
 		{
+			//reverse queue if at end of current queue
+			if ((QueuePositionDirection == 1 && UpQueue.GetSize() == 0) || (QueuePositionDirection == -1 && DownQueue.GetSize() == 0))
+			{
+				LastQueueDirection = QueuePositionDirection;
+				QueuePositionDirection = -QueuePositionDirection;
+			}
+
 			bool LightDirection = false; //true for up, false for down
-			
+
 			if (GetFloor() == GetTopFloor())
 				LightDirection = false; //turn on down light if on top floor
 			else if (GetFloor() == GetBottomFloor())
 				LightDirection = true; //turn on up light if on bottom floor
-			else if (QueuePositionDirection == 1 || LastQueueDirection == 1)
-				LightDirection = true; //turn on up light if queue direction is or was up
-			else if (QueuePositionDirection == -1 || LastQueueDirection == -1)
-				LightDirection = false; //turn on down light if queue direction is or was down
-			
-			//change indicator
+			else if (QueuePositionDirection == 1)
+				LightDirection = true; //turn on up light if queue direction is up
+			else if (QueuePositionDirection == -1)
+				LightDirection = false; //turn on down light if queue direction is down
+
+			//play chime sound and change indicator
 			if (LightDirection == true)
+			{
+				Chime(0, GetFloor(), true);
 				SetDirectionalIndicator(GetFloor(), true, false);
+			}
 			else
+			{
+				Chime(0, GetFloor(), false);
 				SetDirectionalIndicator(GetFloor(), false, true);
+			}
 
 			//disable call button lights
 			SetCallButtons(GetFloor(), LightDirection, false);
 		}
-
-		//reset queues if queue direction is up and up queue is empty
-		if ((QueuePositionDirection == 1 || LastQueueDirection == 1) && UpQueue.GetSize() == 0)
-			ResetQueues = true;
-		//reset queues if queue direction is down and down queue is empty
-		if ((QueuePositionDirection == -1 || LastQueueDirection == -1) && DownQueue.GetSize() == 0)
-			ResetQueues = true;
 
 		//open doors
 		//do not automatically open doors if in fire service phase 2
@@ -1701,7 +1730,8 @@ void Elevator::EnableIndependentService(bool value)
 		EnableInspectionService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
-		ResetQueues = true;
+		ResetUpQueue = true;
+		ResetDownQueue = true;
 		if (IsMoving == false)
 			OpenDoors();
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Independent Service mode enabled");
@@ -1729,7 +1759,8 @@ void Elevator::EnableInspectionService(bool value)
 		EnableIndependentService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
-		ResetQueues = true;
+		ResetUpQueue = true;
+		ResetDownQueue = true;
 		if (IsMoving == true)
 			StopElevator();
 		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Inspection Service mode enabled");
@@ -1765,7 +1796,8 @@ void Elevator::EnableFireService1(int value)
 		EnableIndependentService(false);
 		EnableInspectionService(false);
 		EnableFireService2(0);
-		ResetQueues = true;
+		ResetUpQueue = true;
+		ResetDownQueue = true;
 		if (value == 1)
 		{
 			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 1 mode set to On");
@@ -1803,7 +1835,8 @@ void Elevator::EnableFireService2(int value)
 		EnableIndependentService(false);
 		EnableInspectionService(false);
 		EnableFireService1(0);
-		ResetQueues = true;
+		ResetUpQueue = true;
+		ResetDownQueue = true;
 		if (value == 1)
 			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 2 mode set to On");
 		else
@@ -2549,7 +2582,8 @@ void Elevator::QueueReset()
 {
 	//reset queues
 	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Resetting queues");
-	ResetQueues = true;
+	ResetUpQueue = true;
+	ResetDownQueue = true;
 }
 
 void Elevator::SetBeepSound(const char *filename)
@@ -2598,4 +2632,11 @@ void Elevator::DeleteActiveRoute()
 	DeleteRoute(ActiveCallFloor, ActiveCallDirection);
 	ActiveCallFloor = 0;
 	ActiveCallDirection = 0;
+}
+
+bool Elevator::IsQueueActive()
+{
+	if ((QueuePositionDirection == 1 && UpQueue.GetSize() != 0) || (QueuePositionDirection == -1 && DownQueue.GetSize() != 0))
+		return true;
+	return false;
 }

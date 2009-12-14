@@ -324,7 +324,7 @@ void CallButton::Loop(bool direction)
 			if ((current > floor && direction == false) || (current < floor && direction == true) || current == floor || elevator->IsIdle())
 			{
 				//and if it's either going the same direction as the call or idle
-				if ((elevator->QueuePositionDirection == tmpdirection || elevator->LastQueueDirection == tmpdirection) || elevator->IsIdle())
+				if (elevator->QueuePositionDirection == tmpdirection || elevator->IsIdle())
 				{
 					//and if it's not in any service mode
 					if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
@@ -357,7 +357,7 @@ void CallButton::Loop(bool direction)
 		return;
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
-	if (elevator->GetFloor() == floor && elevator->LastQueueDirection == tmpdirection && elevator->IsIdle() == false)
+	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == tmpdirection && elevator->IsIdle() == false)
 	{
 		if (direction == false)
 		{
