@@ -384,6 +384,7 @@ void CallButton::Loop(bool direction)
 		//otherwise add a route entry to this floor
 		elevator->AddRoute(floor, direction, false);
 
-	//unregister callback
-	sbs->UnregisterCallButtonCallback(this);
+	//unregister callback if inactive
+	if (UpStatus == false && DownStatus == false)
+		sbs->UnregisterCallButtonCallback(this);
 }
