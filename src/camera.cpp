@@ -34,6 +34,10 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 Camera::Camera()
 {
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, sbs->object, "Camera", true);
+
 	MainCamera = sbs->view->GetCamera();
 	MainCamera->SetSector(sbs->area);
 
@@ -93,6 +97,7 @@ Camera::~Camera()
 {
 	//Destructor
 	MainCamera = 0;
+	delete object;
 }
 
 void Camera::SetPosition(const csVector3 &vector)

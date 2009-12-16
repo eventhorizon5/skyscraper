@@ -30,6 +30,7 @@ class SBSIMPEXP FloorIndicator
 {
 public:
 
+	Object *object; //SBS object
 	int Elevator; //elevator this indicator is assigned to
 	bool IsEnabled;
 	csString Prefix; //texture name prefix

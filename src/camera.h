@@ -29,6 +29,7 @@
 class SBSIMPEXP Camera
 {
 public:
+	Object *object; //SBS object
 	int CurrentFloor; //floor camera's on
 	csString CurrentFloorID; //indicator ID of camera's current floor
 	int StartFloor; //Starting floor

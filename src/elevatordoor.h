@@ -33,6 +33,7 @@ class Elevator;
 class SBSIMPEXP ElevatorDoor
 {
 public:
+	Object *object; //SBS object
 	int Number; //door instance number
 	Elevator *elev; //pointer to associated elevator object
 	float OpenSpeed; //door opening/closing speed

@@ -34,6 +34,10 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 Elevator::Elevator(int number)
 {
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, sbs->object, "Elevator", false);
+
 	csString buffer;
 
 	//set elevator number
@@ -191,6 +195,7 @@ Elevator::~Elevator()
 	Elevator_movable = 0;
 	Elevator_state = 0;
 	ElevatorMesh = 0;
+	delete object;
 }
 
 bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
@@ -293,12 +298,12 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	IndicatorArray.SetSize(ServicedFloors.GetSize());
 
 	//create sound objects
-	mainsound = new Sound("Main");
+	mainsound = new Sound(this->object, "Main");
 	mainsound->SetPosition(Origin);
-	idlesound = new Sound("Idle");
+	idlesound = new Sound(this->object, "Idle");
 	idlesound->SetPosition(Origin);
 	idlesound->Load(CarIdleSound.GetData());
-	motorsound = new Sound("Motor");
+	motorsound = new Sound(this->object, "Motor");
 	motorsound->SetPosition(Origin);
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != csVector3(0, 0, 0))
@@ -306,11 +311,11 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	else
 		motorsound->SetPositionY(sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->Altitude + sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->InterfloorHeight);
 	MotorPosition = csVector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
-	alarm = new Sound("Alarm");
+	alarm = new Sound(this->object, "Alarm");
 	alarm->SetPosition(Origin);
-	floorbeep = new Sound("Floor Beep");
+	floorbeep = new Sound(this->object, "Floor Beep");
 	floorbeep->SetPosition(Origin);
-	floorsound = new Sound("Floor Sound");
+	floorsound = new Sound(this->object, "Floor Sound");
 	floorsound->SetPosition(Origin);
 
 	Created = true;
@@ -2624,7 +2629,7 @@ bool Elevator::AddSound(const char *name, const char *filename, csVector3 positi
 	//create a looping sound object
 	sounds.SetSize(sounds.GetSize() + 1);
 	Sound *sound = sounds[sounds.GetSize() - 1];
-	sound = new Sound(name);
+	sound = new Sound(this->object, name);
 
 	//set parameters and play sound
 	sound->PositionOffset = position;

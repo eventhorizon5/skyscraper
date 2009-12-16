@@ -41,6 +41,10 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	//2 = elevator shaft
 	//3 = stairwell shaft
 
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, sbs->object, "Shaft", false);
+
 	ShaftType = type;
 	ShaftNumber = number;
 	startfloor = _startfloor;
@@ -102,6 +106,7 @@ Shaft::~Shaft()
 		ShaftArray[i] = 0;
 	ShaftArray_state.DeleteAll();
 	ShaftArray.DeleteAll();
+	delete object;
 }
 
 int Shaft::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)

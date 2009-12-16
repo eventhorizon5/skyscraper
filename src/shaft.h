@@ -30,6 +30,7 @@ class SBSIMPEXP Shaft
 {
 public:
 
+	Object *object; //SBS object
 	int ShaftType; //type of shaft
 	int ShaftNumber; //shaft number
 	csVector3 origin; //origin vector

@@ -37,6 +37,10 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	//Create an elevator button panel
 	//index is for specifying multiple panels within the same elevator
 
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, sbs->GetElevator(_elevator)->object, "ButtonPanel", false);
+
 	elevator = _elevator;
 	Index = index;
 	Direction = direction;
@@ -109,6 +113,7 @@ ButtonPanel::~ButtonPanel()
 	//delete panel
 	ButtonPanel_state = 0;
 	ButtonPanelMesh = 0;
+	delete object;
 }
 
 void ButtonPanel::AddFloorButton(const char *texture, const char *texture_lit, int row, int column, int floor, float width, float height, float hoffset, float voffset)
@@ -197,7 +202,7 @@ void ButtonPanel::AddButton(const char *name, const char *texture, const char *t
 	buffer4 = control_index;
 	buffer = "Button Panel " + buffer2 + ":" + buffer3 + " Control " + buffer4;
 	buffer.Trim();
-	controls[control_index] = new Control(1, buffer, name, texture, texture_lit, Direction, xpos, zpos, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+	controls[control_index] = new Control(this->object, 1, buffer, name, texture, texture_lit, Direction, xpos, zpos, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
 	//move control
 	controls[control_index]->SetPositionY(sbs->GetElevator(elevator)->GetPosition().y);
 }

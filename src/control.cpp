@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(int type, const char *name, const char *action_name, const char *texture, const char *texture_lit, const char *direction, float x, float z, float width, float height, float voffset)
+Control::Control(Object *parent, int type, const char *name, const char *action_name, const char *texture, const char *texture_lit, const char *direction, float x, float z, float width, float height, float voffset)
 {
 	//create a control at the specified location
 	//type is either:
@@ -40,6 +40,10 @@ Control::Control(int type, const char *name, const char *action_name, const char
 	//the parent object is responsible for control actions via a click callback.
 	//action_name is simply a second name used to determine the control's action, instead of
 	//needing it embedded in the mesh object
+
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, parent, "Control", false);
 
 	if (type == 1)
 	{
@@ -85,6 +89,7 @@ Control::Control(int type, const char *name, const char *action_name, const char
 Control::~Control()
 {
 	ControlMesh = 0;
+	delete object;
 }
 
 void Control::Enabled(bool value)

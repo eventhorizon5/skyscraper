@@ -32,6 +32,10 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 {
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, elevator->object, "ElevatorDoor", false);
+
 	//create a new elevator door
 	Number = number + 1;
 	elev = elevator;
@@ -107,9 +111,9 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	ShaftDoorsState.SetSize(elev->ServicedFloors.GetSize());
 
 	//create sound object
-	doorsound = new Sound("Door Sound");
+	doorsound = new Sound(this->object, "Door Sound");
 	doorsound->SetPosition(elevator->Origin);
-	chime = new Sound("Chime");
+	chime = new Sound(this->object, "Chime");
 }
 
 ElevatorDoor::~ElevatorDoor()
@@ -148,6 +152,7 @@ ElevatorDoor::~ElevatorDoor()
 	ElevatorDoorL_movable = 0;
 	ElevatorDoorL_state = 0;
 	ElevatorDoorL = 0;
+	delete object;
 }
 
 void ElevatorDoor::OpenDoorsEmergency(int whichdoors, int floor)

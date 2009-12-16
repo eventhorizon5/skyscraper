@@ -32,6 +32,7 @@ class SBSIMPEXP Stairs
 {
 public:
 
+	Object *object; //SBS object
 	int StairsNum; //number
 	int startfloor; //starting floor
 	int endfloor; //ending floor

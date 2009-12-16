@@ -33,6 +33,10 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, sbs->object, "Stairs", false);
+
 	StairsNum = number;
 	startfloor = _startfloor;
 	endfloor = _endfloor;
@@ -97,6 +101,7 @@ Stairs::~Stairs()
 	StairArray.DeleteAll();
 	StairDoorArray_state.DeleteAll();
 	StairDoorArray.DeleteAll();
+	delete object;
 }
 
 int Stairs::AddStairs(int floor, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th)
@@ -410,7 +415,7 @@ bool Stairs::AddDoor(int floor, const char *texture, float thickness, int direct
 	DoorArray[DoorArray.GetSize() - 1].floornumber = floor;
 	csString stairsnum = _itoa(StairsNum, intbuffer, 10);
 	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
-	DoorArray[DoorArray.GetSize() - 1].object = new Door("Stairwell " + stairsnum + ":Door " + num, texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->InterfloorHeight + voffset, tw, th);
+	DoorArray[DoorArray.GetSize() - 1].object = new Door(this->object, "Stairwell " + stairsnum + ":Door " + num, texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->InterfloorHeight + voffset, tw, th);
 	floorptr = 0;
 	return true;
 }

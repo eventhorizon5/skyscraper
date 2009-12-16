@@ -33,6 +33,10 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 Floor::Floor(int number)
 {
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, sbs->object, "Floor", false);
+
 	csString buffer;
 
 	//Set floor's object number
@@ -124,6 +128,7 @@ Floor::~Floor()
 	Interfloor = 0;
 	Level_state = 0;
 	Level = 0;
+	delete object;
 }
 
 void Floor::SetCameraFloor()
@@ -402,7 +407,7 @@ void Floor::AddDoor(const char *texture, float thickness, int direction, float C
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
 	csString floornum = _itoa(Number, intbuffer, 10);
 	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
-	DoorArray[DoorArray.GetSize() - 1] = new Door("Floor " + floornum + ":Door " + num, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude + InterfloorHeight, tw, th);
+	DoorArray[DoorArray.GetSize() - 1] = new Door(this->object, "Floor " + floornum + ":Door " + num, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude + InterfloorHeight, tw, th);
 }
 
 float Floor::CalculateAltitude()
@@ -596,7 +601,7 @@ bool Floor::AddSound(const char *name, const char *filename, csVector3 position,
 	//create a looping sound object
 	sounds.SetSize(sounds.GetSize() + 1);
 	Sound *sound = sounds[sounds.GetSize() - 1];
-	sound = new Sound(name);
+	sound = new Sound(this->object, name);
 
 	//set parameters and play sound
 	sound->SetPosition(csVector3(position.x, Altitude + InterfloorHeight + position.y, position.z));

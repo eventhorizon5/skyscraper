@@ -36,6 +36,10 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 {
 	//create a set of call buttons
 
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, sbs->GetFloor(floornum)->object, "CallButton", false);
+
 	IsEnabled = true;
 	Elevators.SetSize(elevators.GetSize());
 	for (size_t i = 0; i < elevators.GetSize(); i++)
@@ -185,6 +189,7 @@ CallButton::~CallButton()
 	CallButtonMeshDown = 0;
 	CallButtonMeshUp = 0;
 	CallButtonBackMesh = 0;
+	delete object;
 }
 
 void CallButton::Enabled(bool value)

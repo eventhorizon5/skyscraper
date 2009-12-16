@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(const char *name, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(Object *parent, const char *name, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -45,6 +45,10 @@ Door::Door(const char *name, const char *texture, float thickness, int direction
 	//6 = faces front, opens back
 	//7 = faces back, opens back
 	//8 = faces back, opens front
+
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, parent, "Door", false);
 
 	Name = name;
 	Direction = direction;
@@ -123,6 +127,7 @@ Door::~Door()
 	DoorMesh_movable = 0;
 	DoorMesh_state = 0;
 	DoorMesh = 0;
+	delete object;
 }
 
 void Door::Open()

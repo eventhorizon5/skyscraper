@@ -34,6 +34,10 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 {
 	//create a directional indicator
 
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, sbs->GetFloor(floor)->object, "DirectionalIndicator", false);
+
 	IsEnabled = true;
 	elevator_num = elevator;
 	floor_num = floor;
@@ -260,6 +264,7 @@ DirectionalIndicator::~DirectionalIndicator()
 	DirectionalMesh = 0;
 	DirectionalMeshUp = 0;
 	DirectionalMeshDown = 0;
+	delete object;
 }
 
 void DirectionalIndicator::Enabled(bool value)

@@ -31,8 +31,12 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Sound::Sound(const char *name)
+Sound::Sound(Object *parent, const char *name)
 {
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, parent, "Sound", false);
+
 	//first set default values
 	PositionOffset = 0;
 	Position = csVector3(0);
@@ -59,6 +63,7 @@ Sound::~Sound()
 	sndsource3d = 0;
 	sndsource = 0;
 	sndstream = 0;
+	delete object;
 }
 
 void Sound::SetPosition(csVector3 position)

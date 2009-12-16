@@ -30,6 +30,7 @@ class SBSIMPEXP DirectionalIndicator
 {
 public:
 
+	Object *object; //SBS object
 	int elevator_num; //elevator this indicator is assigned to
 	int floor_num; //floor the indicator is on
 	csString Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'

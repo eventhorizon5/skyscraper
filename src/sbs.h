@@ -65,6 +65,8 @@ class SBSIMPEXP SBS
 {
 public:
 
+	Object *object; //SBS object
+
 	//CS engine objects
 	csRef<iEngine> engine;
 	csRef<iGraphics3D> g3d;
@@ -249,6 +251,11 @@ public:
 	float ToRemote(float local_value);
 	csVector2 ToRemote(csVector2 local_value);
 	csVector3 ToRemote(csVector3 local_value);
+	int GetObjectCount();
+	Object* GetObject(int index);
+	int RegisterObject(Object *object);
+	bool UnregisterObject(Object *object);
+	bool UnregisterObject(int index);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -301,6 +308,9 @@ private:
 	csArray<csVector2> MapUV;
 	csArray<csVector2> OldMapUV;
 	bool AutoX, AutoY; //autosizing
+
+	//global object array (only pointers to actual objects)
+	csArray<Object*> ObjectArray;
 
 	//object arrays
 	csArray<FloorMap> FloorArray; //floor object array

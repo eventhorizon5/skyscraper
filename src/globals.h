@@ -23,13 +23,13 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef _SBS_GLOBALS_H
+#define _SBS_GLOBALS_H
+
 #include <wx/panel.h>
 #include <wx/timer.h>
 #include <crystalspace.h>
 #include "ivideo/wxwin.h"
-
-#ifndef _SBS_GLOBALS_H
-#define _SBS_GLOBALS_H
 
 //DLL Exporting
 #ifdef _WIN32
@@ -61,5 +61,7 @@ SBSIMPEXP float RadiansToDegrees(float radians);
 SBSIMPEXP float DegreesToRadians(float degrees);
 
 const double pi = 3.14159265;
+
+#include "object.h"
 
 #endif

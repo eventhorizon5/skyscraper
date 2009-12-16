@@ -44,6 +44,10 @@ SBS::SBS()
 {
 	sbs = this;
 
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, 0, "SBS", true);
+
 	//Print SBS banner
 	PrintBanner();
 
@@ -205,9 +209,13 @@ SBS::~SBS()
 	//remove referenced sounds
 	sndmanager->RemoveSounds();
 
+	delete object;
+
 	//remove all engine objects
 	Report("Deleting CS engine objects...");
 	engine->DeleteAll();
+
+	ObjectArray.DeleteAll();
 
 	//clear self reference
 	sbs = 0;
@@ -3424,7 +3432,7 @@ bool SBS::AddSound(const char *name, const char *filename, csVector3 position, i
 	//create a looping sound object
 	sounds.SetSize(sounds.GetSize() + 1);
 	Sound *sound = sounds[sounds.GetSize() - 1];
-	sound = new Sound(name);
+	sound = new Sound(this->object, name);
 
 	//set parameters and play sound
 	sound->SetPosition(position);
@@ -3487,4 +3495,38 @@ csVector3 SBS::ToRemote(csVector3 local_value)
 {
 	//convert local (SBS) vertex positions to remote (Crystal Space) positions
 	return local_value / UnitScale;
+}
+
+int SBS::GetObjectCount()
+{
+	//return number of registered SBS objects
+	return ObjectArray.GetSize();
+}
+
+Object* SBS::GetObject(int index)
+{
+	//return object pointer from global array
+	if (index >= 0 && index < ObjectArray.GetSize())
+		return ObjectArray[index];
+	else
+		return 0;
+}
+
+int SBS::RegisterObject(Object *object)
+{
+	//add object to global array
+	return ObjectArray.Push(object);
+}
+
+bool SBS::UnregisterObject(Object *object)
+{
+	//remove object by reference
+	return ObjectArray.Delete(object);
+}
+
+bool SBS::UnregisterObject(int index)
+{
+	//remove object by index
+	return ObjectArray.DeleteIndex(index);
+	//return ObjectArray.DeleteIndexFast(index);
 }

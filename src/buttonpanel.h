@@ -32,6 +32,7 @@ class SBSIMPEXP ButtonPanel
 {
 public:
 
+	Object *object; //SBS object
 	int elevator;
 	int Index; //index number of panel
 	csString Direction;

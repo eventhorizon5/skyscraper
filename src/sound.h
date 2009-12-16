@@ -30,9 +30,10 @@ class SBSIMPEXP Sound
 {
 public:
 
+	Object *object; //SBS object
 	csVector3 PositionOffset; //optional position offset, used only by other objects
 
-	Sound(const char *name);
+	Sound(Object *parent, const char *name);
 	~Sound();
 	void SetPosition(csVector3 position);
 	void SetPositionY(float position);

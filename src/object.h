@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Door Class
+	Scalable Building Simulator - Generic Object Class
 	The Skyscraper Project - Version 1.6 Alpha
 	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -23,39 +23,29 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_DOOR_H
-#define _SBS_DOOR_H
+#ifndef _SBS_OBJECT_H
+#define _SBS_OBJECT_H
 
-class SBSIMPEXP Door
+class SBSIMPEXP Object
 {
 public:
-
-	Object *object; //SBS object
-	csString Name; //door name
-	int Direction;
-	bool OpenState;
-	csVector3 origin; //door origin
-	bool IsMoving; //is door moving?
-	bool OpenDoor; //open or close door?
-	bool Clockwise; //if door should rotate clockwise
-
-	Door(Object *parent, const char *name, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
-	~Door();
-	void Open();
-	void Close();
-	bool IsOpen();
-	void Enabled(bool value);
-	void MoveDoor();
+	//functions
+	Object();
+	~Object();
+	void SetValues(void *object, Object *parent, const char *type, bool is_permanent);
+	bool IsPermanent();
+	Object* GetParent();
+	void* GetRawObject();
+	const char* GetObjectType();
+	int GetObjectIndex();
 
 private:
-	csRef<iMeshWrapper> DoorMesh; //door mesh
-	csRef<iThingFactoryState> DoorMesh_state;
-	csRef<iMovable> DoorMesh_movable;
+	bool Permanent; //is object permanent?
+	Object *Parent; //parent object
+	void *raw_object; //raw object
+	csString Type; //object type
+	int Index; //object array index
 
-	float rotation;
-
-	char intbuffer[65];
-	char buffer[20];
 };
 
 #endif

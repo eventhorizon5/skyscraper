@@ -33,6 +33,11 @@ extern SBS *sbs; //external pointer to the SBS engine
 FloorIndicator::FloorIndicator(int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude)
 {
 	//creates a new floor indicator at the specified position
+
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, sbs->GetElevator(elevator)->object, "FloorIndicator", false);
+
 	Elevator = elevator;
 	Prefix = texture_prefix;
 
@@ -63,6 +68,7 @@ FloorIndicator::~FloorIndicator()
 {
 	FloorIndicator_movable = 0;
 	FloorIndicatorMesh = 0;
+	delete object;
 }
 
 void FloorIndicator::Enabled(bool value)

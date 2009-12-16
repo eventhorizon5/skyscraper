@@ -34,6 +34,7 @@
 class SBSIMPEXP Floor
 {
 public:
+	Object *object; //SBS object
 	csRef<iMeshWrapper> Level; //level mesh
 	csRef<iThingFactoryState> Level_state;
 

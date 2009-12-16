@@ -37,6 +37,7 @@ class SBSIMPEXP Elevator
 	friend class ElevatorDoor;
 
 public:
+	Object *object; //SBS object
 	int Number; //elevator number
 	csString Name; //elevator name
 	int NumDoors; //number of elevator doors
