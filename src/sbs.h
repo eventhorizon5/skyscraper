@@ -135,6 +135,7 @@ public:
 	bool DisableSound; //disable sound system if true
 	bool RecreateColliders; //true if system should recreate mesh colliders on each modification
 	float UnitScale; //scale of 3D positions; this value equals 1 3D unit
+	bool Verbose; //set to true to enable verbose mode
 
 	//mouse coordinates
 	int mouse_x, mouse_y;

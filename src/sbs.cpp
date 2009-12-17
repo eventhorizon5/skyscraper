@@ -135,6 +135,7 @@ SBS::SBS()
 	RecreateColliders = false;
 	soundcount = 0;
 	UnitScale = 1;
+	Verbose = false;
 }
 
 SBS::~SBS()
@@ -495,6 +496,7 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 	ProcessElevators = confman->GetBool("Skyscraper.SBS.ProcessElevators", true);
 	DisableSound = confman->GetBool("Skyscraper.SBS.DisableSound", false);
 	UnitScale = confman->GetFloat("Skyscraper.SBS.UnitScale", 5);
+	Verbose = confman->GetBool("Skyscraper.SBS.Verbose", true);
 
 	//mount sign texture packs
 	Mount("signs-sans.zip", "/root/signs/sans");
