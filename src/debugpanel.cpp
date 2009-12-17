@@ -73,7 +73,7 @@ const long DebugPanel::ID_chkFrameLimiter = wxNewId();
 const long DebugPanel::ID_chkProcessElevators = wxNewId();
 const long DebugPanel::ID_chkAutoShafts = wxNewId();
 const long DebugPanel::ID_chkAutoStairs = wxNewId();
-const long DebugPanel::ID_chkFrameSync = wxNewId();
+const long DebugPanel::ID_CHECKBOX1 = wxNewId();
 const long DebugPanel::ID_bListAltitudes = wxNewId();
 const long DebugPanel::ID_bMeshControl = wxNewId();
 const long DebugPanel::ID_bCameraControl = wxNewId();
@@ -160,10 +160,9 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	chkAutoStairs = new wxCheckBox(Panel1, ID_chkAutoStairs, _("Automatic Stairs"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAutoStairs"));
 	chkAutoStairs->SetValue(false);
 	BoxSizer5->Add(chkAutoStairs, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	chkFrameSync = new wxCheckBox(Panel1, ID_chkFrameSync, _("Framerate Sync"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkFrameSync"));
-	chkFrameSync->SetValue(false);
-	chkFrameSync->Disable();
-	BoxSizer5->Add(chkFrameSync, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	chkVerbose = new wxCheckBox(Panel1, ID_CHECKBOX1, _("Verbose Mode"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
+	chkVerbose->SetValue(false);
+	BoxSizer5->Add(chkVerbose, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer5, 0, wxALL|wxALIGN_RIGHT|wxALIGN_TOP, 0);
 	BoxSizer11->Add(BoxSizer2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
@@ -196,7 +195,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkProcessElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkProcessElevators_Click);
 	Connect(ID_chkAutoShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoShafts_Click);
 	Connect(ID_chkAutoStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoStairs_Click);
-	Connect(ID_chkFrameSync,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkFrameSync_Click);
+	Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkVerbose_Click);
 	Connect(ID_bListAltitudes,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bListAltitudes_Click);
 	Connect(ID_bMeshControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
 	Connect(ID_bCameraControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bCameraControl_Click);
@@ -247,11 +246,6 @@ void DebugPanel::On_chkAutoShafts_Click(wxCommandEvent& event)
 	Simcore->AutoShafts = chkAutoShafts->GetValue();
 }
 
-void DebugPanel::On_chkFrameSync_Click(wxCommandEvent& event)
-{
-
-}
-
 void DebugPanel::On_bListAltitudes_Click(wxCommandEvent& event)
 {
 	Simcore->ListAltitudes();
@@ -276,6 +270,7 @@ void DebugPanel::OnInit()
 	chkProcessElevators->SetValue(Simcore->ProcessElevators);
 	chkAutoShafts->SetValue(Simcore->AutoShafts);
 	chkAutoStairs->SetValue(Simcore->AutoStairs);
+	chkVerbose->SetValue(Simcore->Verbose);
 
 	mc = new MeshControl(dp, -1);
 	ee = new editelevator(dp, -1);
@@ -375,4 +370,9 @@ void DebugPanel::On_bStats_Click(wxCommandEvent& event)
 void DebugPanel::On_bConsole_Click(wxCommandEvent& event)
 {
 	console->Show();
+}
+
+void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
+{
+	Simcore->Verbose = chkVerbose->GetValue();
 }

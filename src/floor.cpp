@@ -618,3 +618,15 @@ bool Floor::AddSound(const char *name, const char *filename, csVector3 position,
 
 	return true;
 }
+
+void Floor::Report(const char *message)
+{
+	//general reporting function
+	sbs->Report("Floor " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
+}
+
+void Floor::ReportError(const char *message)
+{
+	//general reporting function
+	sbs->ReportError("Floor " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
+}

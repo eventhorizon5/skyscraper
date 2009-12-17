@@ -192,6 +192,8 @@ public:
 	void DeleteActiveRoute();
 	bool IsQueueActive();
 	bool BeyondDecelMarker(int direction, float destination);
+	void Report(const char *message);
+	void ReportError(const char *message);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

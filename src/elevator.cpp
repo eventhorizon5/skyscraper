@@ -207,49 +207,49 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 
 	if (Created == true)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + " has already been created");
+		ReportError("Has already been created");
 		return false;
 	}
 
 	//make sure required values are set
 	if (ElevatorSpeed <= 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Speed not set or invalid");
+		ReportError("Speed not set or invalid");
 		return false;
 	}
 	if (Acceleration <= 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Acceleration not set or invalid");
+		ReportError("Acceleration not set or invalid");
 		return false;
 	}
 	if (Deceleration <= 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Deceleration not set or invalid");
+		ReportError("Deceleration not set or invalid");
 		return false;
 	}
 	if (NumDoors < 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Number of doors invalid");
+		ReportError("Number of doors invalid");
 		return false;
 	}
 	if (AccelJerk <= 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid value for AccelJerk");
+		ReportError("Invalid value for AccelJerk");
 		return false;
 	}
 	if (DecelJerk <= 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid value for DecelJerk");
+		ReportError("Invalid value for DecelJerk");
 		return false;
 	}
 	if (AssignedShaft <= 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Not assigned to a shaft");
+		ReportError("Not assigned to a shaft");
 		return false;
 	}
 	if (floor < sbs->GetShaft(AssignedShaft)->startfloor || floor > sbs->GetShaft(AssignedShaft)->endfloor)
 	{
-		sbs->ReportError("Elevator " +  csString(_itoa(Number, intbuffer, 10)) + ": Invalid starting floor");
+		ReportError("Invalid starting floor");
 		return false;
 	}
 
@@ -320,7 +320,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 
 	Created = true;
 
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
+	Report("created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
 	return true;
 }
 
@@ -350,7 +350,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	//do not add routes if in any other service mode
 	if (InServiceMode() == true)
 	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cannot add route while in a service mode");
+		Report("cannot add route while in a service mode");
 		return;
 	}
 
@@ -359,26 +359,26 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		if (UpQueue.Find(floor) != csArrayItemNotFound)
 		{
 			//exit if entry already exits
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
+			Report("route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
 			return;
 		}
 		UpQueue.InsertSorted(floor);
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = 1;
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction up");
+		Report("adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction up");
 	}
 	else
 	{
 		if (DownQueue.Find(floor) != csArrayItemNotFound)
 		{
 			//exit if entry already exits
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
+			Report("route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
 			return;
 		}
 		DownQueue.InsertSorted(floor);
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = -1;
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction down");
+		Report("adding route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction down");
 	}
 
 	//turn on button lights
@@ -408,13 +408,13 @@ void Elevator::DeleteRoute(int floor, int direction)
 	{
 		//delete floor entry from up queue
 		UpQueue.Delete(floor);
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction up");
+		Report("deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction up");
 	}
 	else
 	{
 		//delete floor entry from down queue
 		DownQueue.Delete(floor);
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction down");
+		Report("deleting route to floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction down");
 	}
 
 	//turn off button lights
@@ -433,7 +433,7 @@ void Elevator::CancelLastRoute()
 	if (LastQueueFloor[1] == 0)
 		return;
 
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": cancelling last route");
+	Report("cancelling last route");
 	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
 	LastQueueFloor[0] = 0;
 	LastQueueFloor[1] = 0;
@@ -447,7 +447,7 @@ void Elevator::Alarm()
 	{
 		//ring alarm
 		AlarmActive = true;
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": alarm on");
+		Report("alarm on");
 		alarm->Load(AlarmSound.GetData());
 		alarm->Loop(true);
 		alarm->Play();
@@ -460,7 +460,7 @@ void Elevator::Alarm()
 		alarm->Load(AlarmSoundStop.GetData());
 		alarm->Loop(false);
 		alarm->Play();
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": alarm off");
+		Report("alarm off");
 	}
 }
 
@@ -472,7 +472,7 @@ void Elevator::StopElevator()
 	if (InspectionService == true)
 		return;
 
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": emergency stop");
+	Report("emergency stop");
 
 	EmergencyStop = true;
 
@@ -484,7 +484,7 @@ void Elevator::OpenHatch()
 {
 	//Opens the elevator's upper escape hatch, allowing access to the shaft
 
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": opening hatch");
+	Report("opening hatch");
 }
 
 void Elevator::ProcessCallQueue()
@@ -597,7 +597,7 @@ void Elevator::ProcessCallQueue()
 							ActiveCallFloor = UpQueue[i];
 							GotoFloor = UpQueue[i];
 							Destination = tmpdestination;
-							sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": changing destination floor to " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+							Report("changing destination floor to " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 						}
 					}
 				}
@@ -667,7 +667,7 @@ void Elevator::ProcessCallQueue()
 							ActiveCallFloor = DownQueue[i];
 							GotoFloor = DownQueue[i];
 							Destination = tmpdestination;
-							sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": changing destination floor to " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+							Report("changing destination floor to " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 						}
 					}
 				}
@@ -921,9 +921,9 @@ void Elevator::MoveElevatorToFloor()
 
 		//notify about movement
 		if (InspectionService == false)
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+			Report("moving " + dir_string + " to floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": moving " + dir_string);
+			Report("moving " + dir_string);
 		IsMoving = true;
 		OnFloor = false;
 	}
@@ -1201,7 +1201,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//the elevator is now stopped on a valid floor; set OnFloor to true
 		OnFloor = true;
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": arrived at floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+		Report("arrived at floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 
 		//dequeue floor route
 		DeleteActiveRoute();
@@ -1552,7 +1552,7 @@ void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, con
 	else if (!Panel2)
 		Panel2 = new ButtonPanel(Number, 2, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
 	else
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Button panels already exist");
+		ReportError("Button panels already exist");
 }
 
 void Elevator::UpdateFloorIndicators()
@@ -1638,7 +1638,7 @@ void Elevator::GoPending(int floor)
 
 	GotoFloor = floor;
 	MovePending = true;
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": pending move to floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+	Report("pending move to floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 }
 
 void Elevator::GoToRecallFloor()
@@ -1648,12 +1648,12 @@ void Elevator::GoToRecallFloor()
 
 	if (RecallUnavailable == false)
 	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Proceeding to recall floor");
+		Report("Proceeding to recall floor");
 		Go(RecallFloor);
 	}
 	else
 	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Proceeding to alternate recall floor");
+		Report("Proceeding to alternate recall floor");
 		Go(RecallFloorAlternate);
 	}
 }
@@ -1676,10 +1676,10 @@ void Elevator::EnableACP(bool value)
 		EnableInspectionService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": ACP mode enabled");
+		Report("ACP mode enabled");
 	}
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": ACP mode disabled");
+		Report("ACP mode disabled");
 
 }
 
@@ -1703,10 +1703,10 @@ void Elevator::EnableUpPeak(bool value)
 		EnableFireService2(0);
 		if (IsMoving == false && GetFloor() == GetBottomFloor())
 			OpenDoors();
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Up Peak mode enabled");
+		Report("Up Peak mode enabled");
 	}
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Up Peak mode disabled");
+		Report("Up Peak mode disabled");
 }
 
 void Elevator::EnableDownPeak(bool value)
@@ -1729,10 +1729,10 @@ void Elevator::EnableDownPeak(bool value)
 		EnableFireService2(0);
 		if (IsMoving == false && GetFloor() == GetTopFloor())
 			OpenDoors();
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Down Peak mode enabled");
+		Report("Down Peak mode enabled");
 	}
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Down Peak mode disabled");
+		Report("Down Peak mode disabled");
 }
 
 void Elevator::EnableIndependentService(bool value)
@@ -1757,12 +1757,12 @@ void Elevator::EnableIndependentService(bool value)
 		ResetDownQueue = true;
 		if (IsMoving == false)
 			OpenDoors();
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Independent Service mode enabled");
+		Report("Independent Service mode enabled");
 	}
 	else
 	{
 		ResetDoorTimer();
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Independent Service mode disabled");
+		Report("Independent Service mode disabled");
 	}
 }
 
@@ -1786,12 +1786,12 @@ void Elevator::EnableInspectionService(bool value)
 		ResetDownQueue = true;
 		if (IsMoving == true)
 			StopElevator();
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Inspection Service mode enabled");
+		Report("Inspection Service mode enabled");
 	}
 	else
 	{
 		ResetDoorTimer();
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Inspection Service mode disabled");
+		Report("Inspection Service mode disabled");
 	}
 
 	InspectionService = value;
@@ -1823,16 +1823,16 @@ void Elevator::EnableFireService1(int value)
 		ResetDownQueue = true;
 		if (value == 1)
 		{
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 1 mode set to On");
+			Report("Fire Service Phase 1 mode set to On");
 			GoToRecallFloor();
 		}
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 1 mode set to Bypass");
+			Report("Fire Service Phase 1 mode set to Bypass");
 	}
 	else
 	{
 		ResetDoorTimer();
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 1 mode set to Off");
+		Report("Fire Service Phase 1 mode set to Off");
 	}
 }
 
@@ -1861,14 +1861,14 @@ void Elevator::EnableFireService2(int value)
 		ResetUpQueue = true;
 		ResetDownQueue = true;
 		if (value == 1)
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 2 mode set to On");
+			Report("Fire Service Phase 2 mode set to On");
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 2 mode set to Hold");
+			Report("Fire Service Phase 2 mode set to Hold");
 	}
 	else
 	{
 		ResetDoorTimer();
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Fire Service Phase 2 mode set to Off");
+		Report("Fire Service Phase 2 mode set to Off");
 		GoToRecallFloor();
 	}
 }
@@ -1878,12 +1878,12 @@ bool Elevator::SetRecallFloor(int floor)
 	//set elevator's fire recall floor
 	if (ServicedFloors.GetSize() == 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": No serviced floors assigned");
+		ReportError("No serviced floors assigned");
 		return false;
 	}
 	if (IsServicedFloor(floor) == false)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid recall floor");
+		ReportError("Invalid recall floor");
 		return false;
 	}
 	RecallFloor = floor;
@@ -1896,12 +1896,12 @@ bool Elevator::SetAlternateRecallFloor(int floor)
 	//set elevator's alternate fire recall floor
 	if (ServicedFloors.GetSize() == 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": No serviced floors assigned");
+		ReportError("No serviced floors assigned");
 		return false;
 	}
 	if (IsServicedFloor(floor) == false)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid alternate recall floor");
+		ReportError("Invalid alternate recall floor");
 		return false;
 	}
 	RecallFloorAlternate = floor;
@@ -1914,12 +1914,12 @@ bool Elevator::SetACPFloor(int floor)
 	//set elevator's ACP floor
 	if (ServicedFloors.GetSize() == 0)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": No serviced floors assigned");
+		ReportError("No serviced floors assigned");
 		return false;
 	}
 	if (IsServicedFloor(floor) == false)
 	{
-		sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid ACP floor");
+		ReportError("Invalid ACP floor");
 		return false;
 	}
 	ACPFloor = floor;
@@ -1932,7 +1932,7 @@ bool Elevator::MoveUp()
 	//moves elevator upwards if in Inspection Service mode
 	if (InspectionService == false)
 	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Not in inspection service mode");
+		Report("Not in inspection service mode");
 		return false;
 	}
 
@@ -1954,7 +1954,7 @@ bool Elevator::MoveDown()
 	//moves elevator downwards if in Inspection Service mode
 	if (InspectionService == false)
 	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Not in inspection service mode");
+		Report("Not in inspection service mode");
 		return false;
 	}
 
@@ -1979,7 +1979,7 @@ bool Elevator::StopMove()
 
 	if (InspectionService == false)
 	{
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Not in inspection service mode");
+		Report("Not in inspection service mode");
 		return false;
 	}
 
@@ -1987,7 +1987,7 @@ bool Elevator::StopMove()
 		return false;
 
 	EmergencyStop = true;
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Stopping elevator");
+	Report("Stopping elevator");
 	return true;
 }
 
@@ -2164,7 +2164,7 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual)
 		if (GetDoor(i))
 			GetDoor(i)->OpenDoors(whichdoors, floor, manual);
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
 }
 
@@ -2193,7 +2193,7 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual)
 		if (GetDoor(i))
 			GetDoor(i)->CloseDoors(whichdoors, floor, manual);
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
 }
 
@@ -2218,7 +2218,7 @@ void Elevator::StopDoors(int number)
 		if (GetDoor(i))
 			GetDoor(i)->StopDoors();
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
 }
 
@@ -2230,7 +2230,7 @@ int Elevator::AddDoors(int number, const char *lefttexture, const char *righttex
 	if (GetDoor(number))
 		return GetDoor(number)->AddDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, width, height, direction, tw, th);
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return 0;
 }
 
@@ -2242,7 +2242,7 @@ int Elevator::AddShaftDoors(int number, const char *lefttexture, const char *rig
 	if (GetDoor(number))
 		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, tw, th);
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return 0;
 }
 
@@ -2279,7 +2279,7 @@ void Elevator::ShaftDoorsEnabled(int number, int floor, bool value)
 		if (GetDoor(i))
 			GetDoor(i)->ShaftDoorsEnabled(floor, value);
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
 }
 
@@ -2305,7 +2305,7 @@ void Elevator::ShaftDoorsEnabledRange(int number, int floor, int range)
 		if (GetDoor(i))
 			GetDoor(i)->ShaftDoorsEnabledRange(floor, range);
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
 }
 
@@ -2332,7 +2332,7 @@ bool Elevator::AreDoorsOpen(int number)
 				return true;
 		}
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
 	return false;
 }
@@ -2344,7 +2344,7 @@ bool Elevator::AreShaftDoorsOpen(int number, int floor)
 	if (GetDoor(number))
 		return GetDoor(number)->AreShaftDoorsOpen(floor);
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
@@ -2355,7 +2355,7 @@ float Elevator::GetCurrentDoorSpeed(int number)
 	if (GetDoor(number))
 		return GetDoor(number)->GetCurrentDoorSpeed();
 	else
-		sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return 0;
 }
 
@@ -2379,7 +2379,7 @@ void Elevator::Chime(int number, int floor, bool direction)
 		if (GetDoor(i))
 			GetDoor(i)->Chime(floor, direction);
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
 }
 
@@ -2403,7 +2403,7 @@ void Elevator::ResetDoorTimer(int number)
 		if (GetDoor(i))
 			GetDoor(i)->ResetDoorTimer();
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
 }
 
@@ -2425,7 +2425,7 @@ bool Elevator::DoorsStopped(int number)
 		if (GetDoor(i))
 			return GetDoor(i)->DoorsStopped();
 		else
-			sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Invalid door " + csString(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
 	return false;
 }
@@ -2576,6 +2576,9 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 	//for direction, true is up and false is down
 
 	//get call buttons associated with this elevator
+	if (sbs->Verbose)
+		Report("SetCallButtons: getting associated call buttons");
+
 	csArray<int> buttons = sbs->GetFloor(GetFloor())->GetCallButtons(Number);
 
 	for (int i = 0; i < buttons.GetSize(); i++)
@@ -2604,7 +2607,7 @@ bool Elevator::IsIdle()
 void Elevator::QueueReset()
 {
 	//reset queues
-	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": Resetting queues");
+	Report("Resetting queues");
 	ResetUpQueue = true;
 	ResetDownQueue = true;
 }
@@ -2680,4 +2683,17 @@ bool Elevator::BeyondDecelMarker(int direction, float destination)
 			return true;
 	}
 	return false;
+}
+
+void Elevator::Report(const char *message)
+{
+	//general reporting function
+	sbs->Report("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
+
+}
+
+void Elevator::ReportError(const char *message)
+{
+	//general reporting function
+	sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
 }

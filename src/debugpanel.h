@@ -74,7 +74,7 @@ class DebugPanel: public wxFrame
 		static const long ID_chkProcessElevators;
 		static const long ID_chkAutoShafts;
 		static const long ID_chkAutoStairs;
-		static const long ID_chkFrameSync;
+		static const long ID_CHECKBOX1;
 		static const long ID_bListAltitudes;
 		static const long ID_bMeshControl;
 		static const long ID_bCameraControl;
@@ -109,6 +109,7 @@ class DebugPanel: public wxFrame
 		void On_bControlReference_Click(wxCommandEvent& event);
 		void On_bStats_Click(wxCommandEvent& event);
 		void On_bConsole_Click(wxCommandEvent& event);
+		void On_chkVerbose_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -142,13 +143,13 @@ class DebugPanel: public wxFrame
 		wxStaticText* t_object;
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText7;
-		wxCheckBox* chkFrameSync;
 		wxBoxSizer* BoxSizer1;
 		wxStaticText* t_camerap;
 		wxStaticText* t_camerafloor;
 		wxStaticText* t_collision;
 		wxBoxSizer* BoxSizer3;
 		wxCheckBox* chkAutoStairs;
+		wxCheckBox* chkVerbose;
 		wxCheckBox* chkAutoShafts;
 		wxStaticText* StaticText4;
 		wxCheckBox* chkFrameLimiter;

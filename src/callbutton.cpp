@@ -215,15 +215,25 @@ void CallButton::Call(bool direction)
 	}
 
 	//set light and direction value
-	if (direction == true)
+
+	if (sbs->Verbose)
+		Report("Call: finding grouped call buttons");
+
+	//this call will return at least this call button
+	csArray<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Elevators[0]);
+
+	for (int i = 0; i < buttons.GetSize(); i++)
 	{
-		UpLight(true);
-		ProcessedUp = false;
-	}
-	else
-	{
-		DownLight(true);
-		ProcessedDown = false;
+		if (direction == true)
+		{
+			sbs->GetFloor(floor)->CallButtonArray[i]->UpLight(true);
+			ProcessedUp = false;
+		}
+		else
+		{
+			sbs->GetFloor(floor)->CallButtonArray[i]->DownLight(true);
+			ProcessedDown = false;
+		}
 	}
 
 	//register callback for this button
@@ -316,8 +326,6 @@ bool CallButton::ServicesElevator(int elevator)
 			return true;
 		}
 	}
-	if (sbs->Verbose)
-		Report("Does not service elevator " + csString(_itoa(elevator, intbuffer, 10)));
 	return false;
 }
 
@@ -370,6 +378,8 @@ void CallButton::Loop(bool direction)
 					//and if it's not in any service mode
 					if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
 					{
+						if (sbs->Verbose)
+							Report("Marking - closest so far");
 						closest = abs(current - floor);
 						closest_elev = i;
 						check = true;
@@ -409,7 +419,7 @@ void CallButton::Loop(bool direction)
 		return;
 
 	if (sbs->Verbose)
-		Report("Found elevator " + csString(_itoa(elevator->Number, intbuffer, 10)));
+		Report("Using elevator " + csString(_itoa(elevator->Number, intbuffer, 10)));
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
 	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == tmpdirection && elevator->IsIdle() == false)

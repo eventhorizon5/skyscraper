@@ -229,13 +229,13 @@
 											<option>1</option>
 										</object>
 										<object class="sizeritem">
-											<object class="wxCheckBox" name="ID_chkFrameSync" variable="chkFrameSync" member="yes">
-												<label>Framerate Sync</label>
-												<enabled>0</enabled>
-												<handler function="On_chkFrameSync_Click" entry="EVT_CHECKBOX" />
+											<object class="wxCheckBox" name="ID_CHECKBOX1" variable="chkVerbose" member="yes">
+												<label>Verbose Mode</label>
+												<handler function="On_chkVerbose_Click" entry="EVT_CHECKBOX" />
 											</object>
 											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
+											<option>1</option>
 										</object>
 									</object>
 									<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
