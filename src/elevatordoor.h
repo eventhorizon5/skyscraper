@@ -38,7 +38,6 @@ public:
 	Elevator *elev; //pointer to associated elevator object
 	float OpenSpeed; //door opening/closing speed
 	bool DoorDirection; //if direction is false, doors are on the left/right side
-	float DoorAcceleration; //door acceleration
 	float DoorWidth; //elevator door width
 	float DoorHeight; //elevator door height
 	csVector3 DoorOrigin; //elevator door origin

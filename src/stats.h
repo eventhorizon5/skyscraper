@@ -42,6 +42,7 @@ class Stats: public wxDialog
 
 		//(*Declarations(Stats)
 		wxStaticText* StaticText10;
+		wxStaticText* StaticText22;
 		wxStaticText* StaticText9;
 		wxTextCtrl* tShafts;
 		wxStaticText* StaticText20;
@@ -53,6 +54,7 @@ class Stats: public wxDialog
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText14;
 		wxTextCtrl* tElevators;
+		wxTextCtrl* tObjects;
 		wxStaticText* StaticText6;
 		wxTextCtrl* tDescription;
 		wxStaticText* StaticText19;
@@ -100,6 +102,8 @@ class Stats: public wxDialog
 		static const long ID_tMaterials;
 		static const long ID_STATICTEXT21;
 		static const long ID_tSounds;
+		static const long ID_STATICTEXT22;
+		static const long ID_TEXTCTRL1;
 		static const long ID_STATICTEXT10;
 		static const long ID_tInStairwell;
 		static const long ID_STATICTEXT11;

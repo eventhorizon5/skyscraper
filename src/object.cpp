@@ -44,10 +44,15 @@ Object::~Object()
 	//remove object from engine
 
 	//if global object index is still the same, remove by index - otherwise by pointer
-	/*if (sbs->GetObject(Index)->Index == Index)
-		sbs->UnregisterObject(Index);
-	else
-		sbs->UnregisterObject(this);*/
+	if (sbs->GetObject(Index))
+	{
+		if (sbs->GetObject(Index)->Index == Index)
+		{
+			sbs->UnregisterObject(Index);
+			return;
+		}
+	}
+	sbs->UnregisterObject(this);
 }
 
 void Object::SetValues(void *object, Object *parent, const char *type, bool is_permanent)

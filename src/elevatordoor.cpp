@@ -45,7 +45,6 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	ElevatorDoorSpeed = 0;
 	WhichDoors = 0;
 	ShaftDoorFloor = 0;
-	DoorAcceleration = 0;
 	DoorTimer = sbs->confman->GetInt("Skyscraper.SBS.Elevator.Door.Timer", 5000);
 	DoorIsRunning = false;
 	OpenChange = 0;

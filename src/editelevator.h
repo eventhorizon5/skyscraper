@@ -136,8 +136,6 @@ class editelevator: public wxDialog
 		static const long ID_txtOnFloor;
 		static const long ID_STATICTEXT38;
 		static const long ID_txtQueueDirection;
-		static const long ID_STATICTEXT39;
-		static const long ID_txtQueuePause;
 		static const long ID_STATICTEXT40;
 		static const long ID_txtQueueLastUp;
 		static const long ID_STATICTEXT41;
@@ -157,9 +155,6 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT24;
 		static const long ID_txtOpenSpeed;
 		static const long ID_bSetOpenSpeed;
-		static const long ID_STATICTEXT25;
-		static const long ID_txtDoorAcceleration;
-		static const long ID_bSetDoorAccel;
 		static const long ID_STATICTEXT1;
 		static const long ID_txtAccelJerk;
 		static const long ID_bSetAccelJerk;
@@ -271,7 +266,6 @@ class editelevator: public wxDialog
 		wxRadioButton* Fire1Off;
 		wxTextCtrl* txtBrakes;
 		wxScrollBar* sFloor;
-		wxTextCtrl* txtQueuePause;
 		wxButton* bSetDecelJerk;
 		wxButton* bCall;
 		wxStaticText* StaticText32;
@@ -287,7 +281,6 @@ class editelevator: public wxDialog
 		wxButton* bDumpQueues;
 		wxButton* bSetRecallFloor;
 		wxBoxSizer* BoxSizer2;
-		wxButton* bSetDoorAccel;
 		wxButton* bSetDeceleration;
 		wxStaticText* StaticText41;
 		wxToggleButton* bACPMode;
@@ -304,7 +297,6 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtOpenSpeed;
 		wxStaticText* StaticText48;
 		wxStaticText* StaticText5;
-		wxStaticText* StaticText25;
 		wxStaticText* StaticText6;
 		wxTextCtrl* txtStop;
 		wxStaticText* StaticText52;
@@ -319,7 +311,6 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtIsIdle;
 		wxToggleButton* bUp;
 		wxButton* bOpenManual;
-		wxStaticText* StaticText39;
 		wxFlexGridSizer* FlexGridSizer3;
 		wxBoxSizer* BoxSizer1;
 		wxToggleButton* bUpPeak;
@@ -367,7 +358,6 @@ class editelevator: public wxDialog
 		wxButton* bSetRecallAlternate;
 		wxStaticText* StaticText14;
 		wxStaticText* StaticText34;
-		wxTextCtrl* txtDoorAcceleration;
 		wxStaticBoxSizer* StaticBoxSizer7;
 		wxTextCtrl* txtJerkRate;
 		wxStaticText* StaticText18;

@@ -94,6 +94,22 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT22" variable="StaticText22" member="yes">
+											<label>Objects:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_TEXTCTRL1" variable="tObjects" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT10" variable="StaticText10" member="yes">
 											<label>InStairwell:</label>
 										</object>

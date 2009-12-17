@@ -44,6 +44,8 @@ const long Stats::ID_STATICTEXT4 = wxNewId();
 const long Stats::ID_tMaterials = wxNewId();
 const long Stats::ID_STATICTEXT21 = wxNewId();
 const long Stats::ID_tSounds = wxNewId();
+const long Stats::ID_STATICTEXT22 = wxNewId();
+const long Stats::ID_TEXTCTRL1 = wxNewId();
 const long Stats::ID_STATICTEXT10 = wxNewId();
 const long Stats::ID_tInStairwell = wxNewId();
 const long Stats::ID_STATICTEXT11 = wxNewId();
@@ -119,6 +121,10 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	FlexGridSizer2->Add(StaticText21, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tSounds = new wxTextCtrl(this, ID_tSounds, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tSounds"));
 	FlexGridSizer2->Add(tSounds, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText22 = new wxStaticText(this, ID_STATICTEXT22, _("Objects:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT22"));
+	FlexGridSizer2->Add(StaticText22, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	tObjects = new wxTextCtrl(this, ID_TEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_TEXTCTRL1"));
+	FlexGridSizer2->Add(tObjects, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText10 = new wxStaticText(this, ID_STATICTEXT10, _("InStairwell:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
 	FlexGridSizer2->Add(StaticText10, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tInStairwell = new wxTextCtrl(this, ID_tInStairwell, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tInStairwell"));
@@ -232,6 +238,7 @@ void Stats::OnInit()
 	tElevators->SetValue(wxVariant(Simcore->Elevators()).GetString());
 	tShafts->SetValue(wxVariant(Simcore->Shafts()).GetString());
 	tStairs->SetValue(wxVariant(Simcore->StairsNum()).GetString());
+	tObjects->SetValue(wxVariant(Simcore->GetObjectCount()).GetString());
 }
 
 void Stats::Loop()
