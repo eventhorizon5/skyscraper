@@ -226,12 +226,12 @@ void CallButton::Call(bool direction)
 	{
 		if (direction == true)
 		{
-			sbs->GetFloor(floor)->CallButtonArray[i]->UpLight(true);
+			sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->UpLight(true);
 			ProcessedUp = false;
 		}
 		else
 		{
-			sbs->GetFloor(floor)->CallButtonArray[i]->DownLight(true);
+			sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->DownLight(true);
 			ProcessedDown = false;
 		}
 	}
