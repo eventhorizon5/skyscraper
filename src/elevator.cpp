@@ -1225,6 +1225,7 @@ void Elevator::MoveElevatorToFloor()
 	{
 		//update elevator's floor number
 		GetFloor();
+		ElevatorFloor = GetFloor();
 
 		//Turn on objects if user is in elevator
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
@@ -1252,8 +1253,8 @@ void Elevator::MoveElevatorToFloor()
 		//change directional indicator and disable call button light
 		if (InServiceMode() == false)
 		{
-			//reverse queue if at end of current queue
-			if ((QueuePositionDirection == 1 && UpQueue.GetSize() == 0) || (QueuePositionDirection == -1 && DownQueue.GetSize() == 0))
+			//reverse queue if at end of current queue, and if elevator was moving in the correct direction (not moving up for a down call, etc)
+			if ((QueuePositionDirection == 1 && UpQueue.GetSize() == 0 && ElevatorFloor < GotoFloor) || (QueuePositionDirection == -1 && DownQueue.GetSize() == 0 && ElevatorFloor > GotoFloor))
 			{
 				LastQueueDirection = QueuePositionDirection;
 				QueuePositionDirection = -QueuePositionDirection;

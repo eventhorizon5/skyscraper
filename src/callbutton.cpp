@@ -289,6 +289,7 @@ bool CallButton::ServicesElevator(int elevator)
 		if (Elevators[i] == elevator)
 			return true;
 	}
+	return false;
 }
 
 void CallButton::Loop(bool direction)
