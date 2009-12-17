@@ -130,11 +130,17 @@ Elevator::Elevator(int number)
 	Elevator_movable = ElevatorMesh->GetMovable();
 	ElevatorMesh->SetZBufMode(CS_ZBUF_USE);
 	ElevatorMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+
+	if (sbs->Verbose)
+		Report("elevator object created");
 }
 
 Elevator::~Elevator()
 {
 	//delete directional indicators
+	if (sbs->Verbose)
+		Report("deleting directional indicators");
+
 	for (int i = 0; i < IndicatorArray.GetSize(); i++)
 	{
 		if (IndicatorArray[i])
@@ -143,6 +149,9 @@ Elevator::~Elevator()
 	IndicatorArray.DeleteAll();
 
 	//delete doors
+	if (sbs->Verbose)
+		Report("deleting doors");
+
 	if (DoorArray.GetSize() > 0)
 	{
 		for (int i = 0; i < DoorArray.GetSize(); i++)
@@ -153,6 +162,9 @@ Elevator::~Elevator()
 	}
 
 	//delete floor indicators
+	if (sbs->Verbose)
+		Report("deleting floor indicators");
+
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
 		if (FloorIndicatorArray[i])
@@ -161,6 +173,8 @@ Elevator::~Elevator()
 	FloorIndicatorArray.DeleteAll();
 
 	//Destructor
+	if (sbs->Verbose)
+		Report("deleting objects");
 	if (Panel)
 		delete Panel;
 	Panel = 0;
@@ -184,6 +198,9 @@ Elevator::~Elevator()
 	motorsound = 0;
 
 	//delete sounds
+	if (sbs->Verbose)
+		Report("deleting sounds");
+
 	for (int i = 0; i < sounds.GetSize(); i++)
 	{
 		if (sounds[i])
@@ -272,7 +289,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	OriginFloor = floor;
 
 	//add elevator to associated shaft's list
-	sbs->GetShaft(AssignedShaft)->elevators.InsertSorted(Number);
+	sbs->GetShaft(AssignedShaft)->AddElevator(Number);
 
 	//set recall/ACP floors if not already set
 	if (RecallSet == false)
@@ -283,6 +300,8 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		SetACPFloor(GetBottomFloor());
 
 	//create door objects
+	if (sbs->Verbose)
+		Report("creating doors");
 	if (NumDoors > 0)
 	{
 		DoorArray.SetSize(NumDoors);
@@ -291,6 +310,8 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 
 	//move objects to positions
+	if (sbs->Verbose)
+		Report("moving elevator to origin position");
 	Elevator_movable->SetPosition(sbs->ToRemote(Origin));
 	Elevator_movable->UpdateMove();
 
@@ -298,6 +319,8 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	IndicatorArray.SetSize(ServicedFloors.GetSize());
 
 	//create sound objects
+	if (sbs->Verbose)
+		Report("creating sound objects");
 	mainsound = new Sound(this->object, "Main");
 	mainsound->SetPosition(Origin);
 	idlesound = new Sound(this->object, "Idle");
@@ -384,6 +407,8 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	//turn on button lights
 	if (change_light == true)
 	{
+		if (sbs->Verbose)
+			Report("AddRoute: turning on button lights for floor " + csString(_itoa(floor, intbuffer, 10)));
 		if (Panel)
 			Panel->ChangeLight(floor, true);
 		if (Panel2)
@@ -401,6 +426,8 @@ void Elevator::DeleteRoute(int floor, int direction)
 	{
 		GotoFloor = 0;
 		MovePending = false;
+		if (sbs->Verbose)
+			Report("DeleteRoute: clearing pending move status");
 		return;
 	}
 
@@ -418,6 +445,8 @@ void Elevator::DeleteRoute(int floor, int direction)
 	}
 
 	//turn off button lights
+	if (sbs->Verbose)
+		Report("DeleteRoute: turning off button lights for floor " + csString(_itoa(floor, intbuffer, 10)));
 	if (Panel)
 		Panel->ChangeLight(floor, false);
 	if (Panel2)
@@ -431,7 +460,11 @@ void Elevator::CancelLastRoute()
 	//LastQueueFloor holds the floor and direction of the last route; array element 0 is the floor and 1 is the direction
 
 	if (LastQueueFloor[1] == 0)
+	{
+		if (sbs->Verbose)
+			Report("CancelLastRoute: route not valid");
 		return;
+	}
 
 	Report("cancelling last route");
 	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
@@ -470,7 +503,11 @@ void Elevator::StopElevator()
 
 	//exit if in inspection mode
 	if (InspectionService == true)
+	{
+		if (sbs->Verbose)
+			Report("cannot stop while in inspection service");
 		return;
+	}
 
 	Report("emergency stop");
 
@@ -495,13 +532,23 @@ void Elevator::ProcessCallQueue()
 	if (ResetUpQueue == true || ResetDownQueue == true)
 	{
 		if (ResetUpQueue == true)
+		{
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: resetting up queue");
 			UpQueue.DeleteAll();
+		}
 		if (ResetDownQueue == true)
+		{
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: resetting down queue");
 			DownQueue.DeleteAll();
+		}
 		ResetUpQueue = false;
 		ResetDownQueue = false;
 
 		//turn off button lights
+		if (sbs->Verbose)
+			Report("ProcessCallQueue: turning off button lights for queue reset");
 		for (int i = 0; i < ServicedFloors.GetSize(); i++)
 		{
 			if (Panel)
@@ -527,12 +574,16 @@ void Elevator::ProcessCallQueue()
 			//if DownPeak mode is active, send elevator to the top serviced floor if not already there
 			if (GetFloor() != TopFloor && DownPeak == true && IsMoving == false)
 			{
+				if (sbs->Verbose)
+					Report("ProcessCallQueue: sending elevator to top floor for DownPeak mode");
 				AddRoute(TopFloor, 1, false);
 				return;
 			}
 			//if UpPeak mode is active, send elevator to the bottom serviced floor if not already there
 			else if (GetFloor() != BottomFloor && UpPeak == true && IsMoving == false)
 			{
+				if (sbs->Verbose)
+					Report("ProcessCallQueue: sending elevator to bottom floor for UpPeak mode");
 				AddRoute(BottomFloor, -1, false);
 				return;
 			}
@@ -541,6 +592,8 @@ void Elevator::ProcessCallQueue()
 		if (IsIdle() == true && QueuePositionDirection != 0)
 		{
 			//set search direction to 0 if idle
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: resetting search direction due to idle");
 			LastQueueDirection = QueuePositionDirection;
 			QueuePositionDirection = 0;
 		}
@@ -551,19 +604,31 @@ void Elevator::ProcessCallQueue()
 		LastQueueDirection = 0;
 
 		if (UpQueue.GetSize() != 0)
+		{
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: setting search direction to up");
 			QueuePositionDirection = 1;
+		}
 		if (DownQueue.GetSize() != 0)
+		{
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: setting search direction to down");
 			QueuePositionDirection = -1;
+		}
 	}
 
 	//set search direction to 0 if any related queue is empty
 	if (QueuePositionDirection == 1 && UpQueue.GetSize() == 0)
 	{
+		if (sbs->Verbose)
+			Report("ProcessCallQueue: resetting search direction due to empty up queue");
 		QueuePositionDirection = 0;
 		LastQueueDirection = 1;
 	}
 	if (QueuePositionDirection == -1 && DownQueue.GetSize() == 0)
 	{
+		if (sbs->Verbose)
+			Report("ProcessCallQueue: resetting search direction due to empty down queue");
 		QueuePositionDirection = 0;
 		LastQueueDirection = -1;
 	}
@@ -579,6 +644,8 @@ void Elevator::ProcessCallQueue()
 			{
 				if (MoveElevator == false)
 				{
+					if (sbs->Verbose)
+						Report("ProcessCallQueue up: standard dispatch, floor " + csString(_itoa(UpQueue[i], intbuffer, 10)));
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i];
@@ -599,6 +666,8 @@ void Elevator::ProcessCallQueue()
 							Destination = tmpdestination;
 							Report("changing destination floor to " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 						}
+						else if (sbs->Verbose)
+							Report("ProcessCallQueue up: cannot change destination floor to " + csString(_itoa(UpQueue[i], intbuffer, 10)));
 					}
 				}
 				return;
@@ -609,6 +678,8 @@ void Elevator::ProcessCallQueue()
 				//dispatch elevator if it's idle
 				if (IsIdle() == true && LastQueueDirection == 0)
 				{
+					if (sbs->Verbose)
+						Report("ProcessCallQueue up: dispatching idle lower elevator, floor " + csString(_itoa(UpQueue[i], intbuffer, 10)));
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i];
@@ -620,14 +691,20 @@ void Elevator::ProcessCallQueue()
 				//reset queue if it's the last entry
 				if (i == UpQueue.GetSize() - 1)
 				{
+					if (sbs->Verbose)
+						Report("ProcessCallQueue up: last entry (" + csString(_itoa(UpQueue[i], intbuffer, 10)) + ") is lower; resetting queue");
 					ResetUpQueue = true;
 					return;
 				}
 				//otherwise skip it if it's not the last entry
+				if (sbs->Verbose)
+					Report("ProcessCallQueue up: skipping floor entry " + csString(_itoa(UpQueue[i], intbuffer, 10)));
 			}
 			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
 			if (UpQueue[i] == ElevatorFloor && MoveElevator == false)
 			{
+				if (sbs->Verbose)
+					Report("ProcessCallQueue up: on queued floor; opening doors");
 				OpenDoors();
 				DeleteRoute(UpQueue[i], 1);
 				//turn off up call buttons if on
@@ -649,6 +726,8 @@ void Elevator::ProcessCallQueue()
 			{
 				if (MoveElevator == false)
 				{
+					if (sbs->Verbose)
+						Report("ProcessCallQueue down: standard dispatch, floor " + csString(_itoa(DownQueue[i], intbuffer, 10)));
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i];
@@ -669,6 +748,8 @@ void Elevator::ProcessCallQueue()
 							Destination = tmpdestination;
 							Report("changing destination floor to " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 						}
+						else if (sbs->Verbose)
+							Report("ProcessCallQueue down: cannot change destination floor to " + csString(_itoa(DownQueue[i], intbuffer, 10)));
 					}
 				}
 				return;
@@ -679,6 +760,8 @@ void Elevator::ProcessCallQueue()
 				//dispatch elevator if idle
 				if (IsIdle() == true && LastQueueDirection == 0)
 				{
+					if (sbs->Verbose)
+						Report("ProcessCallQueue down: dispatching idle higher elevator, floor " + csString(_itoa(DownQueue[i], intbuffer, 10)));
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i];
@@ -690,14 +773,20 @@ void Elevator::ProcessCallQueue()
 				//reset queue if it's the first entry
 				if (i == 0)
 				{
+					if (sbs->Verbose)
+						Report("ProcessCallQueue down: last entry (" + csString(_itoa(DownQueue[i], intbuffer, 10)) + ") is higher; resetting queue");
 					ResetDownQueue = true;
 					return;
 				}
 				//otherwise skip it if it's not the last entry
+				if (sbs->Verbose)
+					Report("ProcessCallQueue down: skipping floor entry " + csString(_itoa(DownQueue[i], intbuffer, 10)));
 			}
 			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
 			if (DownQueue[i] == ElevatorFloor && MoveElevator == false)
 			{
+				if (sbs->Verbose)
+					Report("ProcessCallQueue down: on queued floor; opening doors");
 				OpenDoors();
 				DeleteRoute(DownQueue[i], -1);
 				//turn off down call buttons if on
@@ -744,11 +833,17 @@ void Elevator::MonitorLoop()
 	//play idle sound if in elevator, or if doors open
 	if (((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true) && idlesound->IsPlaying() == false)
 	{
+		if (sbs->Verbose)
+			Report("playing idle sound");
 		idlesound->Loop(true);
 		idlesound->Play();
 	}
 	else if (((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false) && idlesound->IsPlaying() == true)
+	{
+		if (sbs->Verbose)
+			Report("stopping idle sound");
 		idlesound->Stop();
+	}
 
 	//process alarm
 	if (AlarmActive == true)
@@ -781,6 +876,9 @@ void Elevator::MoveElevatorToFloor()
 
 	if (ElevatorIsRunning == false)
 	{
+		if (sbs->Verbose)
+			Report("starting elevator movement procedure");
+
 		ElevatorIsRunning = true;
 		csString dir_string;
 
@@ -851,6 +949,7 @@ void Elevator::MoveElevatorToFloor()
 				if (ElevatorStart >= Destination)
 				{
 					//don't go above top floor
+					Report("cannot go above top floor");
 					Destination = 0;
 					Direction = 0;
 					MoveElevator = false;
@@ -865,6 +964,7 @@ void Elevator::MoveElevatorToFloor()
 				if (ElevatorStart <= Destination)
 				{
 					//don't go below bottom floor
+					Report("cannot go below bottom floor");
 					Destination = 0;
 					Direction = 0;
 					MoveElevator = false;
@@ -880,6 +980,9 @@ void Elevator::MoveElevatorToFloor()
 		//If user is riding this elevator, then turn off objects
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		{
+			if (sbs->Verbose)
+				Report("user in elevator - turning off objects");
+
 			//turn off floor
 			if (sbs->GetShaft(AssignedShaft)->ShowFloors == false)
 			{
@@ -910,6 +1013,8 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//Play starting sounds
+		if (sbs->Verbose)
+			Report("playing starting sounds");
 		mainsound->Stop();
 		mainsound->Load(CarStartSound.GetData());
 		mainsound->Loop(false);
@@ -931,6 +1036,8 @@ void Elevator::MoveElevatorToFloor()
 	if (EmergencyStop == true && Brakes == false)
 	{
 		//emergency stop
+		if (sbs->Verbose)
+			Report("handling emergency stop");
 		CalculateStoppingDistance = false;
 		TempDeceleration = Deceleration;
 		if (Direction == 1)
@@ -942,6 +1049,8 @@ void Elevator::MoveElevatorToFloor()
 		mainsound->Stop();
 		motorsound->Stop();
 		//play stopping sounds
+		if (sbs->Verbose)
+			Report("playing stopping sounds");
 		mainsound->Load(CarStopSound.GetData());
 		mainsound->Loop(false);
 		mainsound->Play();
@@ -953,6 +1062,8 @@ void Elevator::MoveElevatorToFloor()
 	if (mainsound->IsPlaying() == false && Brakes == false)
 	{
 		//Movement sound
+		if (sbs->Verbose)
+			Report("playing car movement sound");
 		mainsound->Load(CarMoveSound.GetData());
 		mainsound->Loop(true);
 		mainsound->Play();
@@ -961,6 +1072,8 @@ void Elevator::MoveElevatorToFloor()
 	if (motorsound->IsPlaying() == false && Brakes == false)
 	{
 		//Motor sound
+		if (sbs->Verbose)
+			Report("playing motor run sound");
 		motorsound->Load(MotorRunSound.GetData());
 		motorsound->Loop(true);
 		motorsound->Play();
@@ -1098,6 +1211,9 @@ void Elevator::MoveElevatorToFloor()
 	{
 		if (BeyondDecelMarker(Direction, Destination) == true)
 		{
+			if (sbs->Verbose)
+				Report("beyond deceleration marker - slowing down");
+
 			//up movement
 			if (Direction == 1)
 			{
@@ -1131,6 +1247,8 @@ void Elevator::MoveElevatorToFloor()
 			mainsound->Stop();
 			motorsound->Stop();
 			//play elevator stopping sounds
+			if (sbs->Verbose)
+				Report("playing stopping sounds");
 			mainsound->Load(CarStopSound.GetData());
 			mainsound->Loop(false);
 			mainsound->Play();
@@ -1142,9 +1260,14 @@ void Elevator::MoveElevatorToFloor()
 
 	if (GetFloor() != oldfloor)
 	{
+		if (sbs->Verbose)
+			Report("on floor " + csString(_itoa(GetFloor(), intbuffer, 10)));
+
 		//play floor beep sound if not empty
 		if (BeepSound != "" && IsServicedFloor(GetFloor()) == true && UseFloorBeeps == true)
 		{
+			if (sbs->Verbose)
+				Report("playing floor beep sound");
 			floorbeep->Stop();
 			floorbeep->Load(BeepSound);
 			floorbeep->Loop(false);
@@ -1165,6 +1288,9 @@ void Elevator::MoveElevatorToFloor()
 	//finish move
 	if (EmergencyStop == false)
 	{
+		if (sbs->Verbose)
+			Report("storing error offset");
+
 		//store error offset value
 		if (Direction == -1)
 			ErrorOffset = GetPosition().y - Destination;
@@ -1175,6 +1301,8 @@ void Elevator::MoveElevatorToFloor()
 
 		//set elevator and objects to floor altitude (corrects offset errors)
 		//move elevator objects
+		if (sbs->Verbose)
+			Report("setting elevator to floor altitude");
 		Elevator_movable->SetPosition(sbs->ToRemote(csVector3(GetPosition().x, Destination, GetPosition().z)));
 		Elevator_movable->UpdateMove();
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
@@ -1208,6 +1336,8 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//reset values if at destination floor
+	if (sbs->Verbose)
+		Report("resetting elevator motion values");
 	ElevatorRate = 0;
 	JerkRate = 0;
 	Direction = 0;
@@ -1230,6 +1360,9 @@ void Elevator::MoveElevatorToFloor()
 		//Turn on objects if user is in elevator
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		{
+			if (sbs->Verbose)
+				Report("user in elevator - turning on objects");
+
 			UpdateFloorIndicators();
 
 			//turn on floor
@@ -1249,6 +1382,8 @@ void Elevator::MoveElevatorToFloor()
 				sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
 			}
 		}
+		else if (sbs->Verbose)
+			Report("user not in elevator - not turning on objects");
 
 		//change directional indicator and disable call button light
 		if (InServiceMode() == false)
@@ -1256,6 +1391,8 @@ void Elevator::MoveElevatorToFloor()
 			//reverse queue if at end of current queue, and if elevator was moving in the correct direction (not moving up for a down call, etc)
 			if ((QueuePositionDirection == 1 && UpQueue.GetSize() == 0 && ElevatorFloor < GotoFloor) || (QueuePositionDirection == -1 && DownQueue.GetSize() == 0 && ElevatorFloor > GotoFloor))
 			{
+				if (sbs->Verbose)
+					Report("reversing queue search direction");
 				LastQueueDirection = QueuePositionDirection;
 				QueuePositionDirection = -QueuePositionDirection;
 			}
@@ -1296,6 +1433,8 @@ void Elevator::MoveElevatorToFloor()
 			//play floor sound if not empty
 			if (FloorSound != "" && UseFloorSounds == true)
 			{
+				if (sbs->Verbose)
+					Report("playing floor sound");
 				csString newsound = FloorSound;
 				//change the asterisk into the current floor number
 				newsound.ReplaceAll("*", csString(_itoa(GotoFloor, intbuffer, 10)).Trim());
@@ -1308,6 +1447,8 @@ void Elevator::MoveElevatorToFloor()
 	}
 	else
 	{
+		if (sbs->Verbose)
+			Report("emergency stop complete");
 		EmergencyStop = false;
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		{
@@ -1418,6 +1559,14 @@ void Elevator::Enabled(bool value)
 {
 	//shows/hides elevator
 
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("enabling elevator");
+		else
+			Report("disabling elevator");
+	}
+
 	sbs->EnableMesh(ElevatorMesh, value);
 	EnableDoors(value);
 	IsEnabled = value;
@@ -1426,6 +1575,14 @@ void Elevator::Enabled(bool value)
 void Elevator::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicators and button panels
+
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("enabling objects");
+		else
+			Report("disabling objects");
+	}
 
 	//floor indicators
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
@@ -1534,12 +1691,16 @@ void Elevator::DumpServicedFloors()
 
 void Elevator::AddServicedFloor(int number)
 {
+	if (sbs->Verbose)
+		Report("adding serviced floor " + csString(_itoa(number, intbuffer, 10)));
 	if (IsServicedFloor(number) == false)
 		ServicedFloors.InsertSorted(number);
 }
 
 void Elevator::RemoveServicedFloor(int number)
 {
+	if (sbs->Verbose)
+		Report("removing serviced floor " + csString(_itoa(number, intbuffer, 10)));
 	if (IsServicedFloor(number) == true)
 		ServicedFloors.Delete(number);
 }
@@ -1548,9 +1709,17 @@ void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, con
 {
 	//create a new button panel object and store the pointer
 	if (!Panel)
+	{
+		if (sbs->Verbose)
+			Report("creating button panel 1");
 		Panel = new ButtonPanel(Number, 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+	}
 	else if (!Panel2)
+	{
+		if (sbs->Verbose)
+			Report("creating button panel 2");
 		Panel2 = new ButtonPanel(Number, 2, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+	}
 	else
 		ReportError("Button panels already exist");
 }
@@ -1586,6 +1755,9 @@ float Elevator::GetJerkPosition()
 void Elevator::SetFloorSkipText(const char *id)
 {
 	//sets the text shown in the floor indicator while skipping floors (an express zone)
+
+	if (sbs->Verbose)
+		Report("setting floor skip text to " + csString(id));
 	UseFloorSkipText = true;
 	FloorSkipText = id;
 	FloorSkipText.Trim();
@@ -1601,9 +1773,17 @@ bool Elevator::IsServicedFloor(int floor)
 {
 	//returns true if floor is in serviced floor list, otherwise false
 	if (ServicedFloors.Find(floor) == csArrayItemNotFound)
+	{
+		if (sbs->Verbose)
+			Report("Floor " + csString(_itoa(floor, intbuffer, 10)) + " is not a serviced floor");
 		return false;
+	}
 	else
+	{
+		if (sbs->Verbose)
+			Report("Floor " + csString(_itoa(floor, intbuffer, 10)) + " is a serviced floor");
 		return true;
+	}
 }
 
 bool Elevator::InServiceMode()
@@ -1621,8 +1801,14 @@ void Elevator::Go(int floor)
 
 	//exit if in inspection mode
 	if (InspectionService == true)
+	{
+		if (sbs->Verbose)
+			Report("Go: in inspection mode");
 		return;
+	}
 
+	if (sbs->Verbose)
+		Report("Go: proceeding to floor " + csString(_itoa(floor, intbuffer, 10)));
 	GotoFloor = floor;
 	MoveElevator = true;
 }
@@ -1634,7 +1820,11 @@ void Elevator::GoPending(int floor)
 
 	//exit if in inspection mode
 	if (InspectionService == true)
+	{
+		if (sbs->Verbose)
+			Report("GoPending: in inspection service mode");
 		return;
+	}
 
 	GotoFloor = floor;
 	MovePending = true;
@@ -1664,7 +1854,11 @@ void Elevator::EnableACP(bool value)
 
 	//exit if no change
 	if (ACP == value)
+	{
+		if (sbs->Verbose)
+			Report("EnableACP: mode is the same");
 		return;
+	}
 
 	ACP = value;
 
@@ -1689,7 +1883,11 @@ void Elevator::EnableUpPeak(bool value)
 
 	//exit if no change
 	if (UpPeak == value)
+	{
+		if (sbs->Verbose)
+			Report("EnableUpPeak: mode is the same");
 		return;
+	}
 
 	UpPeak = value;
 
@@ -1715,7 +1913,11 @@ void Elevator::EnableDownPeak(bool value)
 
 	//exit if no change
 	if (DownPeak == value)
+	{
+		if (sbs->Verbose)
+			Report("EnableDownPeak: mode is the same");
 		return;
+	}
 
 	DownPeak = value;
 
@@ -1741,7 +1943,11 @@ void Elevator::EnableIndependentService(bool value)
 
 	//exit if no change
 	if (IndependentService == value)
+	{
+		if (sbs->Verbose)
+			Report("EnableIndependentService: mode is the same");
 		return;
+	}
 
 	IndependentService = value;
 
@@ -1772,7 +1978,11 @@ void Elevator::EnableInspectionService(bool value)
 
 	//exit if no change
 	if (InspectionService == value)
+	{
+		if (sbs->Verbose)
+			Report("EnableInspectionService: mode is the same");
 		return;
+	}
 
 	if (value == true)
 	{
@@ -1804,12 +2014,20 @@ void Elevator::EnableFireService1(int value)
 
 	//exit if no change
 	if (FireServicePhase1 == value)
+	{
+		if (sbs->Verbose)
+			Report("EnableFireService1: mode is the same");
 		return;
+	}
 
 	if (value >= 0 && value <= 2)
 		FireServicePhase1 = value;
 	else
+	{
+		if (sbs->Verbose)
+			Report("EnableFireService1: invalid value");
 		return;
+	}
 
 	if (value > 0)
 	{
@@ -1843,12 +2061,20 @@ void Elevator::EnableFireService2(int value)
 
 	//exit if no change
 	if (FireServicePhase2 == value)
+	{
+		if (sbs->Verbose)
+			Report("EnableFireService2: mode is the same");
 		return;
+	}
 
 	if (value >= 0 && value <= 2)
 		FireServicePhase2 = value;
 	else
+	{
+		if (sbs->Verbose)
+			Report("EnableFireService2: invalid value");
 		return;
+	}
 
 	if (value > 0)
 	{
@@ -1886,6 +2112,9 @@ bool Elevator::SetRecallFloor(int floor)
 		ReportError("Invalid recall floor");
 		return false;
 	}
+
+	if (sbs->Verbose)
+		Report("setting recall floor to " + csString(_itoa(floor, intbuffer, 10)));
 	RecallFloor = floor;
 	RecallSet = true;
 	return true;
@@ -1904,6 +2133,9 @@ bool Elevator::SetAlternateRecallFloor(int floor)
 		ReportError("Invalid alternate recall floor");
 		return false;
 	}
+
+	if (sbs->Verbose)
+		Report("setting alternate recall floor to " + csString(_itoa(floor, intbuffer, 10)));
 	RecallFloorAlternate = floor;
 	RecallAltSet = true;
 	return true;
@@ -1922,6 +2154,9 @@ bool Elevator::SetACPFloor(int floor)
 		ReportError("Invalid ACP floor");
 		return false;
 	}
+
+	if (sbs->Verbose)
+		Report("setting ACP floor to " + csString(_itoa(floor, intbuffer, 10)));
 	ACPFloor = floor;
 	ACPFloorSet = true;
 	return true;
@@ -1938,14 +2173,24 @@ bool Elevator::MoveUp()
 
 	//make sure Go button is on
 	if (ManualGo == false)
+	{
+		if (sbs->Verbose)
+			Report("MoveUp: go button is off");
 		return false;
+	}
 
 	if (IsMoving == true)
+	{
+		if (sbs->Verbose)
+			Report("MoveUp: already moving");
 		return false;
+	}
 
 	//set direction
 	Direction = 1;
 	MoveElevator = true;
+	if (sbs->Verbose)
+		Report("MoveUp: moving elevator");
 	return true;
 }
 
@@ -1960,14 +2205,24 @@ bool Elevator::MoveDown()
 
 	//make sure Go button is on
 	if (ManualGo == false)
+	{
+		if (sbs->Verbose)
+			Report("MoveDown: go button is off");
 		return false;
+	}
 
 	if (IsMoving == true)
+	{
+		if (sbs->Verbose)
+			Report("MoveDown: already moving");
 		return false;
+	}
 
 	//set direction
 	Direction = -1;
 	MoveElevator = true;
+	if (sbs->Verbose)
+		Report("MoveDown: moving elevator");
 	return true;
 }
 
@@ -1984,7 +2239,11 @@ bool Elevator::StopMove()
 	}
 
 	if (IsMoving == false)
+	{
+		if (sbs->Verbose)
+			Report("StopMove: not moving");
 		return false;
+	}
 
 	EmergencyStop = true;
 	Report("Stopping elevator");
@@ -1999,6 +2258,14 @@ void Elevator::SetGoButton(bool value)
 		StopMove();
 
 	ManualGo = value;
+
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("setting go button status to true");
+		else
+			Report("setting go button status to false");
+	}
 }
 
 int Elevator::GetTopFloor()
@@ -2016,6 +2283,9 @@ int Elevator::GetBottomFloor()
 void Elevator::AddDirectionalIndicators(bool relative, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create all directional indicators
+
+	if (sbs->Verbose)
+		Report("adding directional indicators");
 
 	float x, z;
 	if (relative == true)
@@ -2035,6 +2305,9 @@ void Elevator::AddDirectionalIndicators(bool relative, bool single, bool vertica
 bool Elevator::AddDirectionalIndicator(int floor, bool relative, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator on a single floor
+
+	if (sbs->Verbose)
+		Report("adding directional indicator for floor " + csString(_itoa(floor, intbuffer, 10)));
 
 	float x, z;
 	if (relative == true)
@@ -2063,7 +2336,11 @@ void Elevator::EnableDirectionalIndicator(int floor, bool value)
 	int index = ServicedFloors.Find(floor);
 
 	if (index == -1)
+	{
+		if (sbs->Verbose)
+			Report("EnableDirectionalIndicator: elevator does not service floor " + csString(_itoa(floor, intbuffer, 10)));
 		return;
+	}
 
 	if (IndicatorArray[index])
 		IndicatorArray[index]->Enabled(value);
@@ -2076,7 +2353,11 @@ void Elevator::SetDirectionalIndicator(int floor, bool UpLight, bool DownLight)
 	int index = ServicedFloors.Find(floor);
 
 	if (index == -1)
+	{
+		if (sbs->Verbose)
+			Report("SetDirectionalIndicator: elevator does not service floor " + csString(_itoa(floor, intbuffer, 10)));
 		return;
+	}
 
 	if (IndicatorArray[index])
 	{
@@ -2088,6 +2369,15 @@ void Elevator::SetDirectionalIndicator(int floor, bool UpLight, bool DownLight)
 void Elevator::EnableDirectionalIndicators(bool value)
 {
 	//turn on/off all directional indicators
+
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("enabling directional indicators");
+		else
+			Report("disabling directional indicators");
+	}
+
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
 	{
 		if (IndicatorArray[i])
@@ -2467,7 +2757,15 @@ void Elevator::MoveDoors(int number, const csVector3 position, bool relative_x, 
 
 void Elevator::EnableDoors(bool value)
 {
-	//move all doors
+	//enable/disable all doors
+
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("enabling doors");
+		else
+			Report("disabling doors");
+	}
 
 	for (int i = 1; i <= NumDoors; i++)
 	{
@@ -2607,7 +2905,7 @@ bool Elevator::IsIdle()
 void Elevator::QueueReset()
 {
 	//reset queues
-	Report("Resetting queues");
+	Report("resetting queues");
 	ResetUpQueue = true;
 	ResetDownQueue = true;
 }
@@ -2615,6 +2913,8 @@ void Elevator::QueueReset()
 void Elevator::SetBeepSound(const char *filename)
 {
 	//set sound used for floor beeps
+	if (sbs->Verbose)
+		Report("setting beep sound");
 	BeepSound = filename;
 	BeepSound.Trim();
 	UseFloorBeeps = true;
@@ -2623,6 +2923,8 @@ void Elevator::SetBeepSound(const char *filename)
 void Elevator::SetFloorSound(const char *prefix)
 {
 	//set prefix of floor sound
+	if (sbs->Verbose)
+		Report("setting floor sound");
 	FloorSound = prefix;
 	FloorSound.Trim();
 	UseFloorSounds = true;
@@ -2655,6 +2957,8 @@ bool Elevator::AddSound(const char *name, const char *filename, csVector3 positi
 void Elevator::DeleteActiveRoute()
 {
 	//deletes the active route
+	if (sbs->Verbose)
+		Report("deleting active route");
 	DeleteRoute(ActiveCallFloor, ActiveCallDirection);
 	ActiveCallFloor = 0;
 	ActiveCallDirection = 0;

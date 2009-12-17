@@ -88,11 +88,17 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	Direction.Downcase();
 	Direction.Trim();
 
+	if (sbs->Verbose)
+		Report("Created");
+
 	sbs->ResetTextureMapping(true);
 
 	//create panel
 	if (ShowBack == true)
 	{
+		if (sbs->Verbose)
+			Report("Creating back panel");
+
 		if (Direction == "front" || Direction == "back")
 		{
 			if (Direction == "front")
@@ -116,6 +122,9 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	//create buttons
 	int bottomfloor = sbs->GetElevator(Elevators[0])->GetBottomFloor();
 	int topfloor = sbs->GetElevator(Elevators[0])->GetTopFloor();
+
+	if (sbs->Verbose)
+		Report("Creating buttons");
 
 	if (Direction == "front" || Direction == "back")
 	{
@@ -199,6 +208,14 @@ void CallButton::Enabled(bool value)
 	sbs->EnableMesh(CallButtonMeshUp, value);
 	sbs->EnableMesh(CallButtonMeshDown, value);
 	IsEnabled = value;
+
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("Enabled");
+		else
+			Report("Disabled");
+	}
 }
 
 void CallButton::Call(bool direction)
@@ -237,6 +254,9 @@ void CallButton::Call(bool direction)
 	}
 
 	//register callback for this button
+	if (sbs->Verbose)
+		Report("Registering callback");
+
 	sbs->RegisterCallButtonCallback(this);
 }
 
@@ -287,24 +307,28 @@ void CallButton::SetLights(int up, int down)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning on up light");
+
 		sbs->ChangeTexture(CallButtonMeshUp, UpTextureLit);
 	}
 	if (up == 2 && CallButtonMeshUp)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning off up light");
+
 		sbs->ChangeTexture(CallButtonMeshUp, UpTexture);
 	}
 	if (down == 1 && CallButtonMeshDown)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning on down light");
+
 		sbs->ChangeTexture(CallButtonMeshDown, DownTextureLit);
 	}
 	if (down == 2 && CallButtonMeshDown)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning off down light");
+
 		sbs->ChangeTexture(CallButtonMeshDown, DownTexture);
 	}
 
@@ -391,7 +415,7 @@ void CallButton::Loop(bool direction)
 					Report("Skipping - going a different direction and is not idle");
 			}
 			else if (sbs->Verbose == true)
-				Report("Skipping - proximity wrong for call");
+				Report("Skipping - position/direction wrong for call");
 		}
 		else if (sbs->Verbose == true)
 			Report("Skipping - not closer than previous");
@@ -454,7 +478,11 @@ void CallButton::Loop(bool direction)
 
 	//unregister callback if inactive
 	if (UpStatus == false && DownStatus == false)
+	{
+		if (sbs->Verbose)
+			Report("Unregistering callback");
 		sbs->UnregisterCallButtonCallback(this);
+	}
 }
 
 void CallButton::Report(const char *message)

@@ -22,6 +22,9 @@ Version 1.6 (2.0 Alpha 6)
 -added new Simple building with basements
 -more comments added to the Simple building
 -elevators can now be named
+-call buttons now light up in groups
+-added Schindler MT textures and sounds
+-added verbose mode
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

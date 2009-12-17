@@ -436,3 +436,15 @@ bool Shaft::IsValidFloor(int floor)
 
 	return true;
 }
+
+void Shaft::AddElevator(int number)
+{
+	//add specified elevator to list
+	elevators.InsertSorted(number);
+}
+
+void Shaft::RemoveElevator(int number)
+{
+	//remove specified elevator from list
+	elevators.Delete(number);
+}

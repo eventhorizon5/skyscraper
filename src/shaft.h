@@ -67,6 +67,8 @@ public:
 	void AddShowOutside(int floor);
 	void RemoveShowOutside(int floor);
 	bool IsValidFloor(int floor);
+	void AddElevator(int number);
+	void RemoveElevator(int number);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array
