@@ -207,10 +207,12 @@ void CallButton::Call(bool direction)
 	//and also depending on the direction it's traveling
 
 	//exit if call has already been made
-	if (direction == true && UpStatus == true)
+	if ((direction == true && UpStatus == true) || (direction == false && DownStatus == true))
+	{
+		if (sbs->Verbose)
+			sbs->Report("Call has already been made");
 		return;
-	if (direction == false && DownStatus == true)
-		return;
+	}
 
 	//set light and direction value
 	if (direction == true)
@@ -232,11 +234,11 @@ void CallButton::UpLight(bool value)
 {
 	//turn on the 'up' directional light
 	if (value == UpStatus)
+	{
+		if (sbs->Verbose)
+			Report("UpLight: already in requested status");
 		return;
-
-	//exit if indicator is disabled
-	if (IsEnabled == false)
-		return;
+	}
 
 	//set light status
 	if (value == true)
@@ -251,11 +253,11 @@ void CallButton::DownLight(bool value)
 {
 	//turn on the 'down' directional light
 	if (value == DownStatus)
+	{
+		if (sbs->Verbose)
+			Report("DownLight: already in requested status");
 		return;
-
-	//exit if indicator is disabled
-	if (IsEnabled == false)
-		return;
+	}
 
 	//set light status
 	if (value == true)
@@ -272,13 +274,34 @@ void CallButton::SetLights(int up, int down)
 	//values are 0 for no change, 1 for on, and 2 for off
 
 	if (up == 1 && CallButtonMeshUp)
+	{
+		if (sbs->Verbose)
+			Report("SetLights: turning on up light");
 		sbs->ChangeTexture(CallButtonMeshUp, UpTextureLit);
+	}
 	if (up == 2 && CallButtonMeshUp)
+	{
+		if (sbs->Verbose)
+			Report("SetLights: turning off up light");
 		sbs->ChangeTexture(CallButtonMeshUp, UpTexture);
+	}
 	if (down == 1 && CallButtonMeshDown)
+	{
+		if (sbs->Verbose)
+			Report("SetLights: turning on down light");
 		sbs->ChangeTexture(CallButtonMeshDown, DownTextureLit);
+	}
 	if (down == 2 && CallButtonMeshDown)
+	{
+		if (sbs->Verbose)
+			Report("SetLights: turning off down light");
 		sbs->ChangeTexture(CallButtonMeshDown, DownTexture);
+	}
+
+	if (up > 0 && !CallButtonMeshUp && sbs->Verbose)
+		Report("SetLights: cannot change up light status");
+	if (down > 0 && !CallButtonMeshDown && sbs->Verbose)
+		Report("SetLights: cannot change down light status");
 }
 
 bool CallButton::ServicesElevator(int elevator)
@@ -287,8 +310,14 @@ bool CallButton::ServicesElevator(int elevator)
 	for (int i = 0; i < Elevators.GetSize(); i++)
 	{
 		if (Elevators[i] == elevator)
+		{
+			if (sbs->Verbose)
+				Report("Services elevator " + csString(_itoa(elevator, intbuffer, 10)));
 			return true;
+		}
 	}
+	if (sbs->Verbose)
+		Report("Does not service elevator " + csString(_itoa(elevator, intbuffer, 10)));
 	return false;
 }
 
@@ -316,11 +345,17 @@ void CallButton::Loop(bool direction)
 	else
 		tmpdirection = -1;
 
+	if (sbs->Verbose)
+		Report("Finding nearest available elevator...");
+
 	//check each elevator associated with this call button to find the closest available one
 	for (size_t i = 0; i < Elevators.GetSize(); i++)
 	{
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		int current = elevator->GetFloor();
+
+		if (sbs->Verbose)
+			Report("Checking elevator " + csString(_itoa(elevator->Number, intbuffer, 10)));
 
 		//if elevator is closer than the previously checked one or we're starting the checks
 		if (abs(current - floor) < closest || check == false)
@@ -339,14 +374,25 @@ void CallButton::Loop(bool direction)
 						closest_elev = i;
 						check = true;
 					}
+					else if (sbs->Verbose == true)
+						Report("Skipping - in service mode");
 				}
+				else if (sbs->Verbose == true)
+					Report("Skipping - going a different direction and is not idle");
 			}
+			else if (sbs->Verbose == true)
+				Report("Skipping - proximity wrong for call");
 		}
+		else if (sbs->Verbose == true)
+			Report("Skipping - not closer than previous");
 	}
 
 	if (check == false)
 	{
 		//exit if no elevator found
+
+		if (sbs->Verbose)
+			Report("No elevator found");
 		return;
 	}
 
@@ -362,9 +408,15 @@ void CallButton::Loop(bool direction)
 	if (elevator->InServiceMode() == true)
 		return;
 
+	if (sbs->Verbose)
+		Report("Found elevator " + csString(_itoa(elevator->Number, intbuffer, 10)));
+
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
 	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == tmpdirection && elevator->IsIdle() == false)
 	{
+		if (sbs->Verbose)
+			Report("Elevator active on current floor - opening");
+
 		if (direction == false)
 		{
 			//turn off button light
@@ -393,4 +445,17 @@ void CallButton::Loop(bool direction)
 	//unregister callback if inactive
 	if (UpStatus == false && DownStatus == false)
 		sbs->UnregisterCallButtonCallback(this);
+}
+
+void CallButton::Report(const char *message)
+{
+	//general reporting function
+	sbs->Report("Call button " + csString(_itoa(floor, intbuffer, 10)) + ":" + csString(_itoa(Number, intbuffer, 10)) + " - " + message);
+
+}
+
+void CallButton::ReportError(const char *message)
+{
+	//general reporting function
+	sbs->ReportError("Call button " + csString(_itoa(floor, intbuffer, 10)) + ":" + csString(_itoa(Number, intbuffer, 10)) + " - " + message);
 }

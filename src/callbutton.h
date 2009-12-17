@@ -49,6 +49,8 @@ public:
 	void SetLights(int up, int down);
 	bool ServicesElevator(int elevator);
 	void Loop(bool direction);
+	void Report(const char *message);
+	void ReportError(const char *message);
 
 private:
 	csRef<iMeshWrapper> CallButtonBackMesh; //call button mesh object
