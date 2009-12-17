@@ -247,6 +247,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\object.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\sbs.cpp"
 				>
 			</File>
@@ -314,6 +318,10 @@
 			</File>
 			<File
 				RelativePath="..\src\globals.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\object.h"
 				>
 			</File>
 			<File
