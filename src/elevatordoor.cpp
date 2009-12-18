@@ -1289,6 +1289,9 @@ void ElevatorDoor::Move(const csVector3 position, bool relative_x, bool relative
 
 void ElevatorDoor::Enabled(bool value)
 {
+	if (IsEnabled == value)
+		return;
+
 	sbs->EnableMesh(ElevatorDoorL, value);
 	sbs->EnableMesh(ElevatorDoorR, value);
 	IsEnabled = value;

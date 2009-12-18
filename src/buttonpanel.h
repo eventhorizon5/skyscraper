@@ -45,6 +45,7 @@ public:
 	float SpacingY;
 	int Rows;
 	int Columns;
+	bool IsEnabled;
 
 	//functions
 	ButtonPanel(int _elevator, int index, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th);

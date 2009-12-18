@@ -203,7 +203,10 @@ CallButton::~CallButton()
 
 void CallButton::Enabled(bool value)
 {
-	//turns panel on/off
+	//turns call buttons on/off
+	if (IsEnabled == value)
+		return;
+
 	sbs->EnableMesh(CallButtonBackMesh, value);
 	sbs->EnableMesh(CallButtonMeshUp, value);
 	sbs->EnableMesh(CallButtonMeshDown, value);

@@ -41,6 +41,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	object = new Object();
 	object->SetValues(this, sbs->GetElevator(_elevator)->object, "ButtonPanel", false);
 
+	IsEnabled = true;
 	elevator = _elevator;
 	Index = index;
 	Direction = direction;
@@ -312,12 +313,16 @@ void ButtonPanel::Enabled(bool value)
 {
 	//enable or disable button panel
 
+	if (IsEnabled == value)
+		return;
+
 	sbs->EnableMesh(ButtonPanelMesh, value);
 
 	for (int i = 0; i < controls.GetSize(); i++)
 	{
 		controls[i]->Enabled(value);
 	}
+	IsEnabled = value;
 }
 
 int ButtonPanel::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)

@@ -323,7 +323,8 @@ void Camera::CheckShaft()
 			if (shaft->InsideShaft == false && sbs->InElevator == true && sbs->GetElevator(sbs->ElevatorNumber)->IsMoving == true)
 			{
 				//if specified, show floors or outside if user is in a moving elevator
-				sbs->EnableFloorRange(CurrentFloor, sbs->FloorDisplayRange, true, true, i);
+				if (shaft->ShowFloors == true)
+					sbs->EnableFloorRange(CurrentFloor, sbs->FloorDisplayRange, true, true, i);
 
 				if (shaft->ShowOutside == true)
 				{

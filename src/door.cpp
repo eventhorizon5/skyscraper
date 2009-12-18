@@ -50,6 +50,7 @@ Door::Door(Object *parent, const char *name, const char *texture, float thicknes
 	object = new Object();
 	object->SetValues(this, parent, "Door", false);
 
+	IsEnabled = true;
 	Name = name;
 	Direction = direction;
 	OpenState = false;
@@ -157,7 +158,11 @@ bool Door::IsOpen()
 
 void Door::Enabled(bool value)
 {
+	if (IsEnabled == value)
+		return;
+
 	sbs->EnableMesh(DoorMesh, value);
+	IsEnabled = value;
 }
 
 void Door::MoveDoor()

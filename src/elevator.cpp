@@ -1357,11 +1357,11 @@ void Elevator::MoveElevatorToFloor()
 	mainsound->Stop();
 	motorsound->Stop();
 
+	//update elevator's floor number
+	ElevatorFloor = GetFloor();
+
 	if (EmergencyStop == false && InspectionService == false)
 	{
-		//update elevator's floor number
-		ElevatorFloor = GetFloor();
-
 		//update floor indicators on current camera floor
 		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
 
@@ -1566,6 +1566,9 @@ void Elevator::DumpQueues()
 void Elevator::Enabled(bool value)
 {
 	//shows/hides elevator
+
+	if (IsEnabled == value)
+		return;
 
 	if (sbs->Verbose)
 	{
@@ -2345,8 +2348,8 @@ void Elevator::EnableDirectionalIndicator(int floor, bool value)
 
 	if (index == -1)
 	{
-		if (sbs->Verbose)
-			Report("EnableDirectionalIndicator: elevator does not service floor " + csString(_itoa(floor, intbuffer, 10)));
+		/*if (sbs->Verbose)
+			Report("EnableDirectionalIndicator: elevator does not service floor " + csString(_itoa(floor, intbuffer, 10)));*/
 		return;
 	}
 
@@ -2362,8 +2365,8 @@ void Elevator::SetDirectionalIndicator(int floor, bool UpLight, bool DownLight)
 
 	if (index == -1)
 	{
-		if (sbs->Verbose)
-			Report("SetDirectionalIndicator: elevator does not service floor " + csString(_itoa(floor, intbuffer, 10)));
+		/*if (sbs->Verbose)
+			Report("SetDirectionalIndicator: elevator does not service floor " + csString(_itoa(floor, intbuffer, 10)));*/
 		return;
 	}
 

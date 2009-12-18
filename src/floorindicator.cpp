@@ -74,6 +74,10 @@ FloorIndicator::~FloorIndicator()
 void FloorIndicator::Enabled(bool value)
 {
 	//turns indicator on/off
+
+	if (IsEnabled == value)
+		return;
+
 	sbs->EnableMesh(FloorIndicatorMesh, value);
 	IsEnabled = value;
 }

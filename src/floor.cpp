@@ -282,6 +282,9 @@ void Floor::Enabled(bool value)
 {
 	//turns floor on/off
 
+	if (IsEnabled == value)
+		return;
+
 	sbs->EnableMesh(Level, value);
 	sbs->EnableMesh(Interfloor, value);
 	IsEnabled = value;
