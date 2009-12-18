@@ -1257,33 +1257,33 @@ void ElevatorDoor::Move(const csVector3 position, bool relative_x, bool relative
 	//moves doors
 	csVector3 pos;
 	if (relative_x == false)
-		pos.x = position.x;
+		pos.x = sbs->ToRemote(position.x);
 	else
-		pos.x = sbs->ToLocal(ElevatorDoorL_movable->GetPosition().x) + position.x;
+		pos.x = ElevatorDoorL_movable->GetPosition().x + sbs->ToRemote(position.x);
 	if (relative_y == false)
-		pos.y = position.y;
+		pos.y = sbs->ToRemote(position.y);
 	else
-		pos.y = sbs->ToLocal(ElevatorDoorL_movable->GetPosition().y) + position.y;
+		pos.y = ElevatorDoorL_movable->GetPosition().y + sbs->ToRemote(position.y);
 	if (relative_z == false)
-		pos.z = position.z;
+		pos.z = sbs->ToRemote(position.z);
 	else
-		pos.z = sbs->ToLocal(ElevatorDoorL_movable->GetPosition().z) + position.z;
-	ElevatorDoorL_movable->SetPosition(sbs->ToRemote(pos));
+		pos.z = ElevatorDoorL_movable->GetPosition().z + sbs->ToRemote(position.z);
+	ElevatorDoorL_movable->SetPosition(pos);
 	ElevatorDoorL_movable->UpdateMove();
 
 	if (relative_x == false)
-		pos.x = position.x;
+		pos.x = sbs->ToRemote(position.x);
 	else
-		pos.x = sbs->ToLocal(ElevatorDoorR_movable->GetPosition().x) + position.x;
+		pos.x = ElevatorDoorR_movable->GetPosition().x + sbs->ToRemote(position.x);
 	if (relative_y == false)
-		pos.y = position.y;
+		pos.y = sbs->ToRemote(position.y);
 	else
-		pos.y = sbs->ToLocal(ElevatorDoorR_movable->GetPosition().y) + position.y;
+		pos.y = ElevatorDoorR_movable->GetPosition().y + sbs->ToRemote(position.y);
 	if (relative_z == false)
-		pos.z = position.z;
+		pos.z = sbs->ToRemote(position.z);
 	else
-		pos.z = sbs->ToLocal(ElevatorDoorR_movable->GetPosition().z) + position.z;
-	ElevatorDoorR_movable->SetPosition(sbs->ToRemote(pos));
+		pos.z = ElevatorDoorR_movable->GetPosition().z + sbs->ToRemote(position.z);
+	ElevatorDoorR_movable->SetPosition(pos);
 	ElevatorDoorR_movable->UpdateMove();
 }
 
