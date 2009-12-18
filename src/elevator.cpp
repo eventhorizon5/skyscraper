@@ -341,6 +341,9 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	floorsound = new Sound(this->object, "Floor Sound");
 	floorsound->SetPosition(Origin);
 
+	//set elevator's floor
+	ElevatorFloor = floor;
+
 	Created = true;
 
 	Report("created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
@@ -1277,6 +1280,9 @@ void Elevator::MoveElevatorToFloor()
 		//update floor indicators
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			UpdateFloorIndicators();
+
+		//update floor indicators on current floor
+		sbs->GetFloor(GetFloor())->UpdateFloorIndicators(Number);
 	}
 
 	oldfloor = GetFloor();
@@ -1354,8 +1360,10 @@ void Elevator::MoveElevatorToFloor()
 	if (EmergencyStop == false && InspectionService == false)
 	{
 		//update elevator's floor number
-		GetFloor();
 		ElevatorFloor = GetFloor();
+
+		//update floor indicators on current floor
+		sbs->GetFloor(ElevatorFloor)->UpdateFloorIndicators(Number);
 
 		//Turn on objects if user is in elevator
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)

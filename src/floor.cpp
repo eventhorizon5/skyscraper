@@ -496,22 +496,25 @@ bool Floor::AddFloorIndicator(int elevator, bool relative, const char *texture_p
 	return true;
 }
 
-void Floor::UpdateFloorIndicators()
+void Floor::UpdateFloorIndicators(int elevator)
 {
-	//changes the number texture on the floor indicators to the elevator's current floor
+	//changes the number texture on the floor indicators to the specified elevator's current floor
 
 	csString value;
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
 		if (FloorIndicatorArray[i])
 		{
-			Elevator *elevator = sbs->GetElevator(FloorIndicatorArray[i]->Elevator);
-			if (elevator->UseFloorSkipText == true && elevator->IsServicedFloor(elevator->GetFloor()) == false)
-				value = elevator->GetFloorSkipText();
-			else
-				value = sbs->GetFloor(elevator->GetFloor())->ID;
-			value.Trim();
-			FloorIndicatorArray[i]->Update(value);
+			if (FloorIndicatorArray[i]->Elevator == elevator)
+			{
+				Elevator *elev = sbs->GetElevator(elevator);
+				if (elev->UseFloorSkipText == true && elev->IsServicedFloor(elev->GetFloor()) == false)
+					value = elev->GetFloorSkipText();
+				else
+					value = sbs->GetFloor(elev->GetFloor())->ID;
+				value.Trim();
+				FloorIndicatorArray[i]->Update(value);
+			}
 		}
 	}
 }
@@ -520,7 +523,6 @@ void Floor::Loop()
 {
 	//floor object main loop; runs if camera is currently on this floor
 
-	UpdateFloorIndicators();
 }
 
 csArray<int> Floor::GetCallButtons(int elevator)
