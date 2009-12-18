@@ -1281,8 +1281,8 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			UpdateFloorIndicators();
 
-		//update floor indicators on current floor
-		sbs->GetFloor(GetFloor())->UpdateFloorIndicators(Number);
+		//update floor indicators on current camera floor
+		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
 	}
 
 	oldfloor = GetFloor();
@@ -1362,8 +1362,8 @@ void Elevator::MoveElevatorToFloor()
 		//update elevator's floor number
 		ElevatorFloor = GetFloor();
 
-		//update floor indicators on current floor
-		sbs->GetFloor(ElevatorFloor)->UpdateFloorIndicators(Number);
+		//update floor indicators on current camera floor
+		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
 
 		//Turn on objects if user is in elevator
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)

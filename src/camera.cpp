@@ -186,6 +186,10 @@ void Camera::UpdateCameraFloor()
 	else
 		newlastfloor = sbs->GetFloorNumber(GetPosition().y);
 
+	//if camera moved to a different floor, update floor indicators
+	if (lastfloor != newlastfloor)
+		sbs->GetFloor(newlastfloor)->UpdateFloorIndicators();
+
 	lastfloor = newlastfloor;
 	lastfloorset = true;
 	CurrentFloor = lastfloor;

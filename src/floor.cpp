@@ -306,6 +306,8 @@ void Floor::Enabled(bool value)
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Enabled(value);
 	}
+	//update floor indicator values
+	UpdateFloorIndicators();
 
 	//sounds
 	for (int i = 0; i < sounds.GetSize(); i++)
@@ -515,6 +517,26 @@ void Floor::UpdateFloorIndicators(int elevator)
 				value.Trim();
 				FloorIndicatorArray[i]->Update(value);
 			}
+		}
+	}
+}
+
+void Floor::UpdateFloorIndicators()
+{
+	//changes the number texture on the floor indicators
+
+	csString value;
+	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	{
+		if (FloorIndicatorArray[i])
+		{
+			Elevator *elevator = sbs->GetElevator(FloorIndicatorArray[i]->Elevator);
+			if (elevator->UseFloorSkipText == true && elevator->IsServicedFloor(elevator->GetFloor()) == false)
+				value = elevator->GetFloorSkipText();
+			else
+				value = sbs->GetFloor(elevator->GetFloor())->ID;
+			value.Trim();
+			FloorIndicatorArray[i]->Update(value);
 		}
 	}
 }
