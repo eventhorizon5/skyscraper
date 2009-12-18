@@ -25,6 +25,7 @@ Version 1.6 (2.0 Alpha 6)
 -call buttons now light up in groups
 -added Schindler MT textures and sounds
 -added verbose mode
+-control panel can now be reopened by pressing F12
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

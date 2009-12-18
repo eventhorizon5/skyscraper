@@ -680,6 +680,13 @@ void Skyscraper::GetInput()
 			bugplug->ExecCommand("scrshot");
 			wait = true;
 		}
+		if (wxGetKeyState(WXK_F12) && !dpanel)
+		{
+			//show control panel if closed
+			dpanel = new DebugPanel(NULL, -1);
+			dpanel->Show(true);
+			dpanel->SetPosition(wxPoint(10, 10));
+		}
 		if (wxGetKeyState(WXK_F5) && wait == false)
 		{
 			//enable/disable freelook mode

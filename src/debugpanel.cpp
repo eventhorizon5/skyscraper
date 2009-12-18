@@ -41,6 +41,7 @@
 #include "console.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
+extern DebugPanel *dpanel;
 DebugPanel *dp; //self pointer
 MeshControl *mc;
 editelevator *ee;
@@ -211,6 +212,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 DebugPanel::~DebugPanel()
 {
 	//delete timer;
+	timer->Stop();
+	delete timer;
 	timer = 0;
 	mc->Destroy();
 	mc = 0;
@@ -224,6 +227,7 @@ DebugPanel::~DebugPanel()
 	stats = 0;
 	console->Destroy();
 	console = 0;
+	dpanel = 0; //clear external pointer
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
