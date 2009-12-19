@@ -491,6 +491,12 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	view = csPtr<iView>(new csView (engine, g3d));
 	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
 
+	//workaround for a canvas quirk on Mac
+#ifdef CS_PLATFORM_MACOSX
+	canvas->SetSize(canvas_width, canvas_height + 1);
+	canvas->SetSize(canvas_width, canvas_height);
+#endif
+
 	return true;
 }
 
