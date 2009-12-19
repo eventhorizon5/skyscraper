@@ -2906,8 +2906,8 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 
 bool Elevator::IsIdle()
 {
-	//return true if elevator is idle (not moving, doors are closed and not moving)
-	if (MoveElevator == false && AreDoorsOpen() == false && CheckOpenDoor() == false)
+	//return true if elevator is idle (not moving, doors are closed (unless in a peak mode) and not moving)
+	if (MoveElevator == false && (AreDoorsOpen() == false || UpPeak == true || DownPeak == true) && CheckOpenDoor() == false)
 		return true;
 	else
 		return false;
