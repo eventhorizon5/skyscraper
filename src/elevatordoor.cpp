@@ -224,7 +224,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	if (DoorsOpen == true && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
 	{
 		//reset timer if not in a service mode
-		if (elev->InServiceMode() == false && elev->FireServicePhase2 == 0)
+		if (elev->InServiceMode() == false)
 		{
 			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already open; resetting timer");
 			ResetDoorTimer();
@@ -889,7 +889,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	doors_stopped = false;
 
 	//turn on autoclose timer
-	if (manual == false && elev->InServiceMode() == false && elev->FireServicePhase2 == 0 &&
+	if (manual == false && elev->InServiceMode() == false &&
 		(elev->UpPeak == false || elev->GetFloor() != elev->GetBottomFloor()) &&
 		(elev->DownPeak == false || elev->GetFloor() != elev->GetTopFloor()))
 	{

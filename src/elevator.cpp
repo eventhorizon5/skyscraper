@@ -1394,7 +1394,7 @@ void Elevator::MoveElevatorToFloor()
 			Report("user not in elevator - not turning on objects");
 
 		//change directional indicator and disable call button light
-		if (InServiceMode() == false && FireServicePhase2 == 0)
+		if (InServiceMode() == false)
 		{
 			//reverse queue if at end of current queue, and if elevator was moving in the correct direction (not moving up for a down call, etc)
 			if ((QueuePositionDirection == 1 && UpQueue.GetSize() == 0 && ElevatorFloor < GotoFloor) || (QueuePositionDirection == -1 && DownQueue.GetSize() == 0 && ElevatorFloor > GotoFloor))
@@ -1800,7 +1800,7 @@ bool Elevator::IsServicedFloor(int floor)
 bool Elevator::InServiceMode()
 {
 	//report if an elevator is in a service mode
-	if (IndependentService == true || InspectionService == true || FireServicePhase1 != 0)
+	if (IndependentService == true || InspectionService == true || FireServicePhase1 != 0 || FireServicePhase2 != 0)
 		return true;
 	else
 		return false;
