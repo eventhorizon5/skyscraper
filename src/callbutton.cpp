@@ -380,48 +380,58 @@ void CallButton::Loop(bool direction)
 	else
 		tmpdirection = -1;
 
-	if (sbs->Verbose)
-		Report("Finding nearest available elevator...");
-
-	//check each elevator associated with this call button to find the closest available one
-	for (size_t i = 0; i < Elevators.GetSize(); i++)
+	if (Elevators.GetSize() > 1)
 	{
-		Elevator *elevator = sbs->GetElevator(Elevators[i]);
-		int current = elevator->GetFloor();
-
+		//search through elevator list if call button serves more than 1 elevator
 		if (sbs->Verbose)
-			Report("Checking elevator " + csString(_itoa(elevator->Number, intbuffer, 10)));
+			Report("Finding nearest available elevator...");
 
-		//if elevator is closer than the previously checked one or we're starting the checks
-		if (abs(current - floor) < closest || check == false)
+		//check each elevator associated with this call button to find the closest available one
+		for (size_t i = 0; i < Elevators.GetSize(); i++)
 		{
-			//and if it's above the current floor and should be called down, or below the
-			//current floor and called up, or on the same floor, or idle
-			if ((current > floor && direction == false) || (current < floor && direction == true) || current == floor || elevator->IsIdle())
+			Elevator *elevator = sbs->GetElevator(Elevators[i]);
+			int current = elevator->GetFloor();
+
+			if (sbs->Verbose)
+				Report("Checking elevator " + csString(_itoa(elevator->Number, intbuffer, 10)));
+
+			//if elevator is closer than the previously checked one or we're starting the checks
+			if (abs(current - floor) < closest || check == false)
 			{
-				//and if it's either going the same direction as the call or idle
-				if (elevator->QueuePositionDirection == tmpdirection || elevator->IsIdle())
+				//and if it's above the current floor and should be called down, or below the
+				//current floor and called up, or on the same floor, or idle
+				if ((current > floor && direction == false) || (current < floor && direction == true) || current == floor || elevator->IsIdle())
 				{
-					//and if it's not in any service mode
-					if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
+					//and if it's either going the same direction as the call or idle
+					if (elevator->QueuePositionDirection == tmpdirection || elevator->IsIdle())
 					{
-						if (sbs->Verbose)
-							Report("Marking - closest so far");
-						closest = abs(current - floor);
-						closest_elev = i;
-						check = true;
+						//and if it's not in any service mode
+						if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
+						{
+							if (sbs->Verbose)
+								Report("Marking - closest so far");
+							closest = abs(current - floor);
+							closest_elev = i;
+							check = true;
+						}
+						else if (sbs->Verbose == true)
+							Report("Skipping - in service mode");
 					}
 					else if (sbs->Verbose == true)
-						Report("Skipping - in service mode");
+						Report("Skipping - going a different direction and is not idle");
 				}
 				else if (sbs->Verbose == true)
-					Report("Skipping - going a different direction and is not idle");
+					Report("Skipping - position/direction wrong for call");
 			}
 			else if (sbs->Verbose == true)
-				Report("Skipping - position/direction wrong for call");
+				Report("Skipping - not closer than previous");
 		}
-		else if (sbs->Verbose == true)
-			Report("Skipping - not closer than previous");
+	}
+	else
+	{
+		//set elevator to first elevator if call button only serves one
+		closest_elev = 0;
+		check = true;
 	}
 
 	if (check == false)

@@ -89,7 +89,6 @@ public:
 	int FireServicePhase2; //Fire service (EFS) phase 2 modes: 0 for off, 1 for on, and 2 for hold
 	int RecallFloor; //Fire service recall floor
 	int RecallFloorAlternate; //Fire service alternate recall floor
-	bool MovePending; //for service and fire modes; a move request is pending (waiting for doors to be manually closed)
 	bool OnFloor; //true if elevator is stopped on a floor, false if not
 	bool ManualGo; //go toggle for inspection service mode
 	bool AlarmActive; //true if alarm is active
@@ -137,7 +136,6 @@ public:
 	bool IsServicedFloor(int floor);
 	bool InServiceMode();
 	void Go(int floor);
-	void GoPending(int floor);
 	void EnableACP(bool value);
 	void EnableUpPeak(bool value);
 	void EnableDownPeak(bool value);

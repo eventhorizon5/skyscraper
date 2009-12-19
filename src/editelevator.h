@@ -198,8 +198,6 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT47;
 		static const long ID_txtRecallAlternate;
 		static const long ID_bSetRecallAlternate;
-		static const long ID_STATICTEXT48;
-		static const long ID_txtMovePending;
 		//*)
 		void Loop();
 		void SetMainValues();
@@ -295,7 +293,6 @@ class editelevator: public wxDialog
 		wxBoxSizer* BoxSizer9;
 		wxStaticText* StaticText42;
 		wxTextCtrl* txtOpenSpeed;
-		wxStaticText* StaticText48;
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText6;
 		wxTextCtrl* txtStop;
@@ -331,7 +328,6 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtACPFloor;
 		wxToggleButton* bDown;
 		wxTextCtrl* txtNumber;
-		wxTextCtrl* txtMovePending;
 		wxTextCtrl* txtDoorsOpen;
 		wxButton* bSetAccelJerk;
 		wxButton* bSetAcceleration;

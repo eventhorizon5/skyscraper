@@ -191,8 +191,6 @@ const long editelevator::ID_bSetRecallFloor = wxNewId();
 const long editelevator::ID_STATICTEXT47 = wxNewId();
 const long editelevator::ID_txtRecallAlternate = wxNewId();
 const long editelevator::ID_bSetRecallAlternate = wxNewId();
-const long editelevator::ID_STATICTEXT48 = wxNewId();
-const long editelevator::ID_txtMovePending = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(editelevator,wxDialog)
@@ -602,11 +600,6 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer5->Add(txtRecallAlternate, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetRecallAlternate = new wxButton(this, ID_bSetRecallAlternate, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetRecallAlternate"));
 	FlexGridSizer5->Add(bSetRecallAlternate, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText48 = new wxStaticText(this, ID_STATICTEXT48, _("MovePend:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT48"));
-	FlexGridSizer5->Add(StaticText48, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	txtMovePending = new wxTextCtrl(this, ID_txtMovePending, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMovePending"));
-	FlexGridSizer5->Add(txtMovePending, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer5->Add(-1,-1,1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer4->Add(FlexGridSizer5, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer7->Add(StaticBoxSizer4, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer3->Add(BoxSizer7, 1, wxBOTTOM|wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
@@ -871,7 +864,6 @@ void editelevator::Loop()
 	txtTempDecel->SetValue(TruncateNumber(elevator->TempDeceleration, 2));
 	txtJerkRate->SetValue(TruncateNumber(elevator->GetJerkRate(), 4));
 	txtIsMoving->SetValue(wxString::FromAscii(BoolToString(elevator->IsMoving)));
-	txtMovePending->SetValue(wxString::FromAscii(BoolToString(elevator->MovePending)));
 	txtUseSkipFloor->SetValue(wxString::FromAscii(BoolToString(elevator->UseFloorSkipText)));
 	txtOnFloor->SetValue(wxString::FromAscii(BoolToString(elevator->OnFloor)));
 	txtAlarm->SetValue(wxString::FromAscii(BoolToString(elevator->AlarmActive)));

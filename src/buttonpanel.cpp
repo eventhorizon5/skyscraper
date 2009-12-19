@@ -257,11 +257,15 @@ void ButtonPanel::Press(int index)
 				if (elev->Direction == 0)
 				{
 					//stopped - play chime and open doors
-					if (elev->LastQueueDirection == -1)
-						elev->Chime(0, floor, false);
-					else if (elev->LastQueueDirection == 1)
-						elev->Chime(0, floor, true);
-					elev->OpenDoors();
+					if (elev->InServiceMode() == false)
+					{
+						if (elev->LastQueueDirection == -1)
+							elev->Chime(0, floor, false);
+						else if (elev->LastQueueDirection == 1)
+							elev->Chime(0, floor, true);
+					}
+					if (elev->FireServicePhase2 == 0)
+						elev->OpenDoors();
 				}
 			}
 		}

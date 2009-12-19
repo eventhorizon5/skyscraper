@@ -855,15 +855,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		if (open == true)
 			DoorsOpen = true;
 		else
-		{
 			DoorsOpen = false;
-			//move elevator if in pending state
-			if (elev->MovePending == true)
-			{
-				elev->MoveElevator = true;
-				elev->MovePending = false;
-			}
-		}
 	}
 	else
 	{

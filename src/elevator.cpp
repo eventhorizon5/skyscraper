@@ -111,7 +111,6 @@ Elevator::Elevator(int number)
 	ManualGo = false;
 	AlarmActive = false;
 	NumDoors = 1;
-	MovePending = false;
 	Created = false;
 	lastcheckresult = false;
 	checkfirstrun = true;
@@ -355,28 +354,22 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
 
-	//if doors are open or moving in independent service mode, quit; otherwise go to floor in pending state
-	if (IndependentService == true)
+	//if doors are open or moving in independent service mode, quit
+	if (IndependentService == true && (AreDoorsOpen() == false || CheckOpenDoor() == true))
 	{
-		if (AreDoorsOpen() == true || CheckOpenDoor() == true)
-			GoPending(floor);
+		Report("floor button must be pressed before closing doors while in independent service");
 		return;
 	}
 
-	//if in fire service phase 2 (on) mode, go to floor in pending state
-	if (FireServicePhase2 == 1)
+	//do not add routes if in inspection service or fire phase 1 modes
+	if (InspectionService == true)
 	{
-		if (AreDoorsOpen() == true || CheckOpenDoor() == true)
-		{
-			GoPending(floor);
-			return;
-		}
+		Report("cannot add route while in inspection service mode");
+		return;
 	}
-
-	//do not add routes if in any other service mode (but not fire phase 2)
-	if (InServiceMode() == true && FireServicePhase2 == 0)
+	if (FireServicePhase1 != 0)
 	{
-		Report("cannot add route while in a service mode");
+		Report("cannot add route while in fire service phase 1 mdoe");
 		return;
 	}
 
@@ -423,16 +416,6 @@ void Elevator::DeleteRoute(int floor, int direction)
 {
 	//Delete call route from elevator routing table
 	//directions are either 1 for up, or -1 for down
-
-	//if MovePending is on clear pending information (since normal routing is turned off) and quit
-	if (MovePending == true)
-	{
-		GotoFloor = 0;
-		MovePending = false;
-		if (sbs->Verbose)
-			Report("DeleteRoute: clearing pending move status");
-		return;
-	}
 
 	if (direction == 1)
 	{
@@ -562,8 +545,8 @@ void Elevator::ProcessCallQueue()
 		return;
 	}
 
-	//exit if in a service mode (but not fire phase 2)
-	if (InServiceMode() == true && FireServicePhase2 == 0)
+	//exit if in inspection service or fire phase 1 modes
+	if (InspectionService == true || FireServicePhase1 != 0)
 		return;
 
 	//if both queues are empty
@@ -620,21 +603,26 @@ void Elevator::ProcessCallQueue()
 		}
 	}
 
-	//set search direction to 0 if any related queue is empty
-	if (QueuePositionDirection == 1 && UpQueue.GetSize() == 0)
+	//set search direction to 0 if any related queue is empty, and if doors are not open or moving
+	if (AreDoorsOpen() == false && CheckOpenDoor() == false)
 	{
-		if (sbs->Verbose)
-			Report("ProcessCallQueue: resetting search direction due to empty up queue");
-		QueuePositionDirection = 0;
-		LastQueueDirection = 1;
+		if (QueuePositionDirection == 1 && UpQueue.GetSize() == 0)
+		{
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: resetting search direction due to empty up queue");
+			QueuePositionDirection = 0;
+			LastQueueDirection = 1;
+		}
+		if (QueuePositionDirection == -1 && DownQueue.GetSize() == 0)
+		{
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: resetting search direction due to empty down queue");
+			QueuePositionDirection = 0;
+			LastQueueDirection = -1;
+		}
 	}
-	if (QueuePositionDirection == -1 && DownQueue.GetSize() == 0)
-	{
-		if (sbs->Verbose)
-			Report("ProcessCallQueue: resetting search direction due to empty down queue");
-		QueuePositionDirection = 0;
-		LastQueueDirection = -1;
-	}
+	else if (UpPeak == false && DownPeak == false)
+		return; //don't process the main queue code if doors are open or moving
 
 	//Search through queue lists and find next valid floor call
 	if (QueuePositionDirection == 1)
@@ -643,7 +631,7 @@ void Elevator::ProcessCallQueue()
 		for (int i = 0; i < UpQueue.GetSize(); i++)
 		{
 			//if the queued floor number is a higher floor, dispatch the elevator to that floor
-			if (UpQueue[i] > ElevatorFloor)
+			if (UpQueue[i] >= ElevatorFloor)
 			{
 				if (MoveElevator == false)
 				{
@@ -652,7 +640,8 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i];
-					CloseDoors();
+					if (FireServicePhase2 == 0)
+						CloseDoors();
 					MoveElevator = true;
 					LastQueueDirection = 1;
 				}
@@ -686,7 +675,8 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i];
-					CloseDoors();
+					if (FireServicePhase2 == 0)
+						CloseDoors();
 					MoveElevator = true;
 					LastQueueDirection = 1;
 					return;
@@ -703,20 +693,6 @@ void Elevator::ProcessCallQueue()
 				if (sbs->Verbose)
 					Report("ProcessCallQueue up: skipping floor entry " + csString(_itoa(UpQueue[i], intbuffer, 10)));
 			}
-			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
-			if (UpQueue[i] == ElevatorFloor && MoveElevator == false)
-			{
-				if (sbs->Verbose)
-					Report("ProcessCallQueue up: on queued floor; opening doors");
-				OpenDoors();
-				DeleteRoute(UpQueue[i], 1);
-				//turn off up call buttons if on
-				SetCallButtons(GetFloor(), true, false);
-				//set directional indicator
-				SetDirectionalIndicator(GetFloor(), true, false);
-				//play chime
-				Chime(0, GetFloor(), true);
-			}
 		}
 	}
 	else if (QueuePositionDirection == -1)
@@ -725,7 +701,7 @@ void Elevator::ProcessCallQueue()
 		for (int i = DownQueue.GetSize() - 1; i >= 0; i--)
 		{
 			//if the queued floor number is a lower floor, dispatch the elevator to that floor
-			if (DownQueue[i] < ElevatorFloor)
+			if (DownQueue[i] <= ElevatorFloor)
 			{
 				if (MoveElevator == false)
 				{
@@ -734,7 +710,8 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i];
-					CloseDoors();
+					if (FireServicePhase2 == 0)
+						CloseDoors();
 					MoveElevator = true;
 					LastQueueDirection = -1;
 				}
@@ -768,7 +745,8 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i];
-					CloseDoors();
+					if (FireServicePhase2 == 0)
+						CloseDoors();
 					MoveElevator = true;
 					LastQueueDirection = -1;
 					return;
@@ -784,20 +762,6 @@ void Elevator::ProcessCallQueue()
 				//otherwise skip it if it's not the last entry
 				if (sbs->Verbose)
 					Report("ProcessCallQueue down: skipping floor entry " + csString(_itoa(DownQueue[i], intbuffer, 10)));
-			}
-			//if the queued floor is the current elevator's floor, open doors and turn off related call buttons
-			if (DownQueue[i] == ElevatorFloor && MoveElevator == false)
-			{
-				if (sbs->Verbose)
-					Report("ProcessCallQueue down: on queued floor; opening doors");
-				OpenDoors();
-				DeleteRoute(DownQueue[i], -1);
-				//turn off down call buttons if on
-				SetCallButtons(GetFloor(), false, false);
-				//set directional indicator
-				SetDirectionalIndicator(GetFloor(), false, true);
-				//play chime
-				Chime(0, GetFloor(), false);
 			}
 		}
 	}
@@ -873,8 +837,8 @@ void Elevator::MoveElevatorToFloor()
 	//Main processing routine; sends elevator to floor specified in GotoFloor
 	//if InspectionService is enabled, this function ignores GotoFloor values, since the elevator is manually moved
 
-	//exit if doors are moving
-	if (CheckOpenDoor() == true)
+	//exit if doors are open or moving
+	if (AreDoorsOpen() == true || CheckOpenDoor() == true)
 		return;
 
 	if (ElevatorIsRunning == false)
@@ -918,13 +882,8 @@ void Elevator::MoveElevatorToFloor()
 		if (ElevatorFloor == GotoFloor && InspectionService == false)
 		{
 			sbs->Report("Elevator already on specified floor");
-			MoveElevator = false;
-			ElevatorIsRunning = false;
 			DeleteActiveRoute();
-			//do not automatically open doors if in fire service phase 2
-			if (FireServicePhase2 == 0)
-				OpenDoors();
-			return;
+			goto finish; //skip main processing and run cleanup section
 		}
 
 		//if destination floor is not a serviced floor, reset and exit
@@ -1342,6 +1301,7 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//reset values if at destination floor
+finish:
 	if (sbs->Verbose)
 		Report("resetting elevator motion values");
 	ElevatorRate = 0;
@@ -1356,9 +1316,6 @@ void Elevator::MoveElevatorToFloor()
 	IsMoving = false;
 	mainsound->Stop();
 	motorsound->Stop();
-
-	//update elevator's floor number
-	ElevatorFloor = GetFloor();
 
 	if (EmergencyStop == false && InspectionService == false)
 	{
@@ -1468,6 +1425,9 @@ void Elevator::MoveElevatorToFloor()
 			}
 		}
 	}
+
+	//update elevator's floor number
+	ElevatorFloor = GetFloor();
 }
 
 int Elevator::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
@@ -1822,24 +1782,6 @@ void Elevator::Go(int floor)
 		Report("Go: proceeding to floor " + csString(_itoa(floor, intbuffer, 10)));
 	GotoFloor = floor;
 	MoveElevator = true;
-}
-
-void Elevator::GoPending(int floor)
-{
-	//go to specified floor, without using the queuing system and turn on pending value
-	//(doors need to be manually closed to proceed)
-
-	//exit if in inspection mode
-	if (InspectionService == true)
-	{
-		if (sbs->Verbose)
-			Report("GoPending: in inspection service mode");
-		return;
-	}
-
-	GotoFloor = floor;
-	MovePending = true;
-	Report("pending move to floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 }
 
 void Elevator::GoToRecallFloor()
@@ -2977,7 +2919,8 @@ void Elevator::DeleteActiveRoute()
 
 bool Elevator::IsQueueActive()
 {
-	if ((QueuePositionDirection == 1 && UpQueue.GetSize() != 0) || (QueuePositionDirection == -1 && DownQueue.GetSize() != 0))
+	//if ((QueuePositionDirection == 1 && UpQueue.GetSize() != 0) || (QueuePositionDirection == -1 && DownQueue.GetSize() != 0))
+	if (QueuePositionDirection != 0)
 		return true;
 	return false;
 }
