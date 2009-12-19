@@ -373,8 +373,8 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		}
 	}
 
-	//do not add routes if in any other service mode
-	if (InServiceMode() == true)
+	//do not add routes if in any other service mode (but not fire phase 2)
+	if (InServiceMode() == true && FireServicePhase2 == 0)
 	{
 		Report("cannot add route while in a service mode");
 		return;
@@ -562,8 +562,8 @@ void Elevator::ProcessCallQueue()
 		return;
 	}
 
-	//exit if in a service mode
-	if (InServiceMode() == true)
+	//exit if in a service mode (but not fire phase 2)
+	if (InServiceMode() == true && FireServicePhase2 == 0)
 		return;
 
 	//if both queues are empty
