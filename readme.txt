@@ -140,6 +140,7 @@ F5 - Freelook (mouse look) mode
 F6 - Full camera reset (respawn)
 F10 - Fullscreen mode
 F11 - Take screenshot
+F12 - Open control panel
 Shift - Run (hold down with other keys)
 Control - Walk slowly (hold down with other keys)
 Alt + arrow keys - Strafe
