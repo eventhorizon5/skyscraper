@@ -215,6 +215,7 @@ private:
 	bool ResetDownQueue; //clear down queue and open doors; usually for service mode
 	int ActiveCallFloor; //floor number of active call (that the elevator's currently responding too)
 	int ActiveCallDirection; //direction of active call (that the elevator's currently responding too)
+	bool FirstRun; //used for setting first-run items in the run loop
 
 	//functions
 	void MoveElevatorToFloor();

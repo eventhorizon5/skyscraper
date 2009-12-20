@@ -91,8 +91,8 @@ Elevator::Elevator(int number)
 	AlarmSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.AlarmSound", "bell1.wav");
 	AlarmSoundStop = sbs->confman->GetStr("Skyscraper.SBS.Elevator.AlarmSoundStop", "bell1-stop.wav");
 	UseFloorSkipText = false;
-	ACP = false;
-	ACPFloor = 0;
+	ACP = sbs->confman->GetBool("Skyscraper.SBS.Elevator.ACP", false);
+	ACPFloor = sbs->confman->GetInt("Skyscraper.SBS.Elevator.ACPFloor", 0);
 	UpPeak = sbs->confman->GetBool("Skyscraper.SBS.Elevator.UpPeak", false);
 	DownPeak = sbs->confman->GetBool("Skyscraper.SBS.Elevator.DownPeak", false);
 	IndependentService = sbs->confman->GetBool("Skyscraper.SBS.Elevator.IndependentService", false);
@@ -122,6 +122,7 @@ Elevator::Elevator(int number)
 	lastdoor_result = 0;
 	lastdoor_number = 0;
 	QueueResets = sbs->confman->GetBool("Skyscraper.SBS.Elevator.QueueResets", false);
+	FirstRun = true;
 
 	//create object meshes
 	buffer = Number;
@@ -800,6 +801,29 @@ void Elevator::MonitorLoop()
 		{
 			if (sbs->ToLocal(Elevator_state->GetVertex(i).y) > Height)
 				Height = sbs->ToLocal(Elevator_state->GetVertex(i).y);
+		}
+	}
+
+	//perform first-run tasks
+	if (FirstRun == true)
+	{
+		FirstRun = false;
+
+		if (UpPeak == true)
+			EnableUpPeak(true);
+		if (DownPeak == true)
+			EnableDownPeak(true);
+		if (IndependentService == true)
+			EnableIndependentService(true);
+		if (InspectionService == true)
+			EnableInspectionService(true);
+		if (ACP == true)
+			EnableACP(true);
+		if (ACPFloor != 0)
+		{
+			int tmp = ACPFloor;
+			ACPFloor = 0;
+			SetACPFloor(tmp);
 		}
 	}
 

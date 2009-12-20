@@ -3896,6 +3896,51 @@ int ScriptProcessor::ProcElevators()
 		}
 		elev->QueueResets = csString(temp2).CompareNoCase("true");
 	}
+	if (LineData.Slice(0, 3).CompareNoCase("acp") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		elev->ACP = csString(temp2).CompareNoCase("true");
+	}
+	if (LineData.Slice(0, 6).CompareNoCase("uppeak") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		elev->UpPeak = csString(temp2).CompareNoCase("true");
+	}
+	if (LineData.Slice(0, 8).CompareNoCase("downpeak") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		elev->DownPeak = csString(temp2).CompareNoCase("true");
+	}
+	if (LineData.Slice(0, 18).CompareNoCase("independentservice") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		elev->IndependentService = csString(temp2).CompareNoCase("true");
+	}
+	if (LineData.Slice(0, 17).CompareNoCase("inspectionservice") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		elev->InspectionService = csString(temp2).CompareNoCase("true");
+	}
 
 	//IF statement
 	if (LineData.Slice(0, 2).CompareNoCase("if") == true)

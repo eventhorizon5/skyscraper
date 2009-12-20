@@ -1156,14 +1156,16 @@
     is the highest serviced floor. <br>
     Example: <font size="2" face="Courier New, Courier, mono">AlternateRecallFloor 
     = 6</font></p>
-  <p align="left"><strong>29. ACPFloor</strong> - sets the floor the elevator 
-    will stop at while in ACP (Anti-Crime Protection) mode. Default is the lowest 
-    serviced floor. <br>
+  <p align="left"><strong>29. ACP</strong> - enables ACP (Anti-Crime Protection) 
+    mode<br>
+    Example: <font size="2" face="Courier New, Courier, mono">ACP = true</font></p>
+  <p align="left"><strong>30. ACPFloor</strong> - sets the floor the elevator 
+    will stop at while in ACP mode. Default is the lowest serviced floor. <br>
     Example: <font size="2" face="Courier New, Courier, mono">ACPFloor = 5</font></p>
-  <p align="left"><strong>30. Doors</strong> - sets the number of doors the elevator 
+  <p align="left"><strong>31. Doors</strong> - sets the number of doors the elevator 
     will have. The default is 1. Set to 0 in order to have a doorless elevator.<br>
     Example: <font size="2" face="Courier New, Courier, mono">Doors = 2</font></p>
-  <p align="left"><strong>31. MotorPosition</strong> - sets the position of the 
+  <p align="left"><strong>32. MotorPosition</strong> - sets the position of the 
     motor sound emitter; if this command is not specified, it'll be placed at 
     the base (altitude + interfloor) of the highest floor in the corresponding 
     shaft. The X and Z values are relative of the elevator center.<br>
@@ -1171,12 +1173,26 @@
     y, z<br>
     </font>Example: <font size="2" face="Courier New, Courier, mono">MotorPosition 
     = 2</font></p>
-  <p align="left"><strong>32. QueueResets</strong> - set this to true if you want 
+  <p align="left"><strong>33. QueueResets</strong> - set this to true if you want 
     the elevator to reset the related queue (up or down) after it reaches the 
     last valid entry. If the elevator is moving up for example with this setting 
     on, and you press buttons for floors below you, the elevator will remove those 
     entries after it reaches the highest selected floor.<br>
     Example: <font size="2" face="Courier New, Courier, mono">QueueResets = true</font></p>
+  <p align="left"><strong>34. UpPeak</strong> - enables up peak mode for this 
+    elevator.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">UpPeak = true</font></p>
+  <p align="left"><strong>35. DownPeak</strong> - enables down peak mode for this 
+    elevator.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">DownPeak = true</font></p>
+  <p align="left"><strong>36. IndependentService</strong> - enables independent 
+    service mode for this elevator.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">IndependentService 
+    = true</font></p>
+  <p align="left"><strong>37. InspectionService</strong> - enables inspection 
+    service mode for this elevator.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">InspectionService 
+    = true</font></p>
   <p align="left"></p>
   <p align="left"><strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
