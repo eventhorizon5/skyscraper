@@ -464,10 +464,20 @@ void CallButton::Loop(bool direction)
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
 
+		//this call will return at least this call button
+		csArray<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Elevators[0]);
+
+		//turn off all button lights in the group
+		for (int i = 0; i < buttons.GetSize(); i++)
+		{
+			if (direction == true)
+				sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->UpLight(false);
+			else
+				sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->DownLight(false);
+		}
+
 		if (direction == false)
 		{
-			//turn off button light
-			DownLight(false);
 			//turn on directional indicator
 			elevator->SetDirectionalIndicator(floor, false, true);
 			//play chime sound
@@ -475,8 +485,6 @@ void CallButton::Loop(bool direction)
 		}
 		else
 		{
-			//turn off button light
-			UpLight(false);
 			//turn on directional indicator
 			elevator->SetDirectionalIndicator(floor, true, false);
 			//play chime sound
