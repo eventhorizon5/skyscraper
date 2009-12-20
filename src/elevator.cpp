@@ -119,6 +119,8 @@ Elevator::Elevator(int number)
 	MotorPosition = csVector3(0, 0, 0);
 	ActiveCallFloor = 0;
 	ActiveCallDirection = 0;
+	lastdoor_result = 0;
+	lastdoor_number = 0;
 
 	//create object meshes
 	buffer = Number;
@@ -195,6 +197,9 @@ Elevator::~Elevator()
 	if (motorsound)
 		delete motorsound;
 	motorsound = 0;
+	if (idlesound)
+		delete idlesound;
+	idlesound = 0;
 
 	//delete sounds
 	if (sbs->Verbose)
@@ -798,18 +803,24 @@ void Elevator::MonitorLoop()
 	}
 
 	//play idle sound if in elevator, or if doors open
-	if (((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true) && idlesound->IsPlaying() == false)
+	if (idlesound->IsPlaying() == false)
 	{
-		if (sbs->Verbose)
-			Report("playing idle sound");
-		idlesound->Loop(true);
-		idlesound->Play();
+		if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true)
+		{
+			if (sbs->Verbose)
+				Report("playing idle sound");
+			idlesound->Loop(true);
+			idlesound->Play();
+		}
 	}
-	else if (((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false) && idlesound->IsPlaying() == true)
+	else
 	{
-		if (sbs->Verbose)
-			Report("stopping idle sound");
-		idlesound->Stop();
+		if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
+		{
+			if (sbs->Verbose)
+				Report("stopping idle sound");
+			idlesound->Stop();
+		}
 	}
 
 	//process alarm
@@ -822,8 +833,9 @@ void Elevator::MonitorLoop()
 	//door operations
 	for (int i = 1; i <= NumDoors; i++)
 	{
-		if (GetDoor(i))
-			GetDoor(i)->Loop();
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->Loop();
 	}
 
 	//elevator movement
@@ -2342,10 +2354,18 @@ ElevatorDoor* Elevator::GetDoor(int number)
 {
 	//get elevator door object
 
+	//return cached check if number is the same
+	if (lastdoor_number == number)
+		return lastdoor_result;
+
 	if (number > 0 && number <= DoorArray.GetSize())
 	{
 		if (DoorArray[number - 1])
-			return DoorArray[number - 1];
+		{
+			lastdoor_result = DoorArray[number - 1];
+			lastdoor_number = number;
+			return lastdoor_result;
+		}
 	}
 	return 0;
 }
@@ -2519,8 +2539,9 @@ void Elevator::ShaftDoorsEnabled(int number, int floor, bool value)
 	}
 	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(i))
-			GetDoor(i)->ShaftDoorsEnabled(floor, value);
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->ShaftDoorsEnabled(floor, value);
 		else
 			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
@@ -2545,8 +2566,9 @@ void Elevator::ShaftDoorsEnabledRange(int number, int floor, int range)
 	}
 	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(i))
-			GetDoor(i)->ShaftDoorsEnabledRange(floor, range);
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->ShaftDoorsEnabledRange(floor, range);
 		else
 			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
@@ -2569,9 +2591,10 @@ bool Elevator::AreDoorsOpen(int number)
 	}
 	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(i))
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
 		{
-			if (GetDoor(i)->AreDoorsOpen() == true)
+			if (door->AreDoorsOpen() == true)
 				return true;
 		}
 		else
@@ -2584,8 +2607,9 @@ bool Elevator::AreShaftDoorsOpen(int number, int floor)
 {
 	//returns the internal shaft door state
 
-	if (GetDoor(number))
-		return GetDoor(number)->AreShaftDoorsOpen(floor);
+	ElevatorDoor *door = GetDoor(number);
+	if (door)
+		return door->AreShaftDoorsOpen(floor);
 	else
 		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
@@ -2595,8 +2619,9 @@ float Elevator::GetCurrentDoorSpeed(int number)
 {
 	//returns the internal door speed value
 
-	if (GetDoor(number))
-		return GetDoor(number)->GetCurrentDoorSpeed();
+	ElevatorDoor *door = GetDoor(number);
+	if (door)
+		return door->GetCurrentDoorSpeed();
 	else
 		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return 0;
@@ -2619,8 +2644,9 @@ void Elevator::Chime(int number, int floor, bool direction)
 	}
 	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(i))
-			GetDoor(i)->Chime(floor, direction);
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->Chime(floor, direction);
 		else
 			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
@@ -2643,8 +2669,9 @@ void Elevator::ResetDoorTimer(int number)
 	}
 	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(i))
-			GetDoor(i)->ResetDoorTimer();
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->ResetDoorTimer();
 		else
 			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
@@ -2665,8 +2692,9 @@ bool Elevator::DoorsStopped(int number)
 	}
 	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(i))
-			return GetDoor(i)->DoorsStopped();
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			return door->DoorsStopped();
 		else
 			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
@@ -2680,9 +2708,10 @@ bool Elevator::CheckOpenDoor()
 
 	for (int i = 1; i <= NumDoors; i++)
 	{
-		if (GetDoor(i))
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
 		{
-			if (GetDoor(i)->OpenDoor != 0)
+			if (door->OpenDoor != 0)
 				return true;
 		}
 	}
@@ -2722,8 +2751,9 @@ void Elevator::EnableDoors(bool value)
 
 	for (int i = 1; i <= NumDoors; i++)
 	{
-		if (GetDoor(i))
-			GetDoor(i)->Enabled(value);
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->Enabled(value);
 	}
 }
 

@@ -250,6 +250,8 @@ private:
 	bool RecallAltSet;
 	bool ACPFloorSet;
 	bool RecallUnavailable; //true if recall floor is unavailable (alarm has been triggered on that floor)
+	ElevatorDoor* lastdoor_result;
+	int lastdoor_number;
 
 	//cache objects for IsInElevator()
 	csVector3 lastposition;
