@@ -121,6 +121,7 @@ Elevator::Elevator(int number)
 	ActiveCallDirection = 0;
 	lastdoor_result = 0;
 	lastdoor_number = 0;
+	QueueResets = sbs->confman->GetBool("Skyscraper.SBS.Elevator.QueueResets", false);
 
 	//create object meshes
 	buffer = Number;
@@ -687,7 +688,7 @@ void Elevator::ProcessCallQueue()
 					return;
 				}
 				//reset queue if it's the last entry
-				if (i == UpQueue.GetSize() - 1)
+				if (i == UpQueue.GetSize() - 1 && QueueResets == true)
 				{
 					if (sbs->Verbose)
 						Report("ProcessCallQueue up: last entry (" + csString(_itoa(UpQueue[i], intbuffer, 10)) + ") is lower; resetting queue");
@@ -757,7 +758,7 @@ void Elevator::ProcessCallQueue()
 					return;
 				}
 				//reset queue if it's the first entry
-				if (i == 0)
+				if (i == 0 && QueueResets == true)
 				{
 					if (sbs->Verbose)
 						Report("ProcessCallQueue down: last entry (" + csString(_itoa(DownQueue[i], intbuffer, 10)) + ") is higher; resetting queue");

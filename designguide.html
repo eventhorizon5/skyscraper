@@ -1171,6 +1171,12 @@
     y, z<br>
     </font>Example: <font size="2" face="Courier New, Courier, mono">MotorPosition 
     = 2</font></p>
+  <p align="left"><strong>32. QueueResets</strong> - set this to true if you want 
+    the elevator to reset the related queue (up or down) after it reaches the 
+    last valid entry. If the elevator is moving up for example with this setting 
+    on, and you press buttons for floors below you, the elevator will remove those 
+    entries after it reaches the highest selected floor.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">QueueResets = true</font></p>
   <p align="left"></p>
   <p align="left"><strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 

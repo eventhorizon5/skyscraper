@@ -3887,6 +3887,15 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorPosition = csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
 		tempdata.DeleteAll();
 	}
+	if (LineData.Slice(0, 11).CompareNoCase("queueresets") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		elev->QueueResets = csString(temp2).CompareNoCase("true");
+	}
 
 	//IF statement
 	if (LineData.Slice(0, 2).CompareNoCase("if") == true)

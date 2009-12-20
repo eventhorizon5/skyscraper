@@ -95,6 +95,7 @@ public:
 	bool UseFloorBeeps; //true if floor beeps should be used
 	bool UseFloorSounds; //true if floor sounds should be used
 	csVector3 MotorPosition; //position of motor sound emitter
+	bool QueueResets; //true if system should use automatic queue resets for normal operation
 
 	//functions
 	Elevator(int number);

@@ -238,8 +238,8 @@ void ButtonPanel::Press(int index)
 		int floor = atoi(name);
 		int elev_floor = elev->GetFloor();
 
-		//if elevator is processing a queue, add floor to the queue
-		if (elev->IsQueueActive())
+		//if elevator is processing a queue, add floor to the queue (if auto queue resets are active)
+		if (elev->IsQueueActive() && elev->QueueResets == true)
 			elev->AddRoute(floor, elev->QueuePositionDirection, true);
 		else
 		{
