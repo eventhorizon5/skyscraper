@@ -1393,10 +1393,19 @@ finish:
 			//reverse queue if at end of current queue, and if elevator was moving in the correct direction (not moving up for a down call, etc)
 			if ((QueuePositionDirection == 1 && UpQueue.GetSize() == 0 && ElevatorFloor < GotoFloor) || (QueuePositionDirection == -1 && DownQueue.GetSize() == 0 && ElevatorFloor > GotoFloor))
 			{
-				if (sbs->Verbose)
-					Report("reversing queue search direction");
-				LastQueueDirection = QueuePositionDirection;
-				QueuePositionDirection = -QueuePositionDirection;
+				csArray<int> buttons = sbs->GetFloor(GotoFloor)->GetCallButtons(Number);
+				if (buttons.GetSize() > 0)
+				{
+					CallButton *button =  sbs->GetFloor(GotoFloor)->CallButtonArray[buttons[0]];
+					//only reverse the queue direction if no related active call is on the floor
+					if ((button->UpStatus == false && QueuePositionDirection == 1) || (button->DownStatus == false && QueuePositionDirection == -1))
+					{
+						if (sbs->Verbose)
+							Report("reversing queue search direction");
+						LastQueueDirection = QueuePositionDirection;
+						QueuePositionDirection = -QueuePositionDirection;
+					}
+				}
 			}
 
 			bool LightDirection = false; //true for up, false for down
