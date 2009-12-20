@@ -417,6 +417,18 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		if (Panel2)
 			Panel2->ChangeLight(floor, true);
 	}
+
+	//add ACP route recursively if mode is enabled
+	if (ACP == true && floor != ACPFloor)
+	{
+		//only add ACP route if original route will pass ACP floor
+		if ((GetFloor() < ACPFloor && floor > ACPFloor) || (GetFloor() > ACPFloor && floor < ACPFloor))
+		{
+			if (sbs->Verbose)
+				Report("Adding ACP route");
+			AddRoute(ACPFloor, direction, false);
+		}
+	}
 }
 
 void Elevator::DeleteRoute(int floor, int direction)
@@ -1899,11 +1911,17 @@ void Elevator::EnableUpPeak(bool value)
 		EnableFireService1(0);
 		EnableFireService2(0);
 		if (IsMoving == false && GetFloor() == GetBottomFloor())
+		{
+			SetDirectionalIndicator(GetFloor(), true, false);
 			OpenDoors();
+		}
 		Report("Up Peak mode enabled");
 	}
 	else
+	{
+		ResetDoorTimer();
 		Report("Up Peak mode disabled");
+	}
 }
 
 void Elevator::EnableDownPeak(bool value)
@@ -1929,11 +1947,17 @@ void Elevator::EnableDownPeak(bool value)
 		EnableFireService1(0);
 		EnableFireService2(0);
 		if (IsMoving == false && GetFloor() == GetTopFloor())
+		{
+			SetDirectionalIndicator(GetFloor(), false, true);
 			OpenDoors();
+		}
 		Report("Down Peak mode enabled");
 	}
 	else
+	{
+		ResetDoorTimer();
 		Report("Down Peak mode disabled");
+	}
 }
 
 void Elevator::EnableIndependentService(bool value)

@@ -28,6 +28,7 @@ Version 1.6 (2.0 Alpha 6)
 -control panel can now be reopened by pressing F12
 -fixed blank canvas issue on Mac
 -elevator modes can now be set from building scripts and the INI file
+-fixed ACP mode
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------
