@@ -310,10 +310,17 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		return;
 	}
 
-	//do not close doors while in fire service mode 1 (in on position)
+	//do not close doors while fire service mode 1 is on
 	if (manual == false && elev->FireServicePhase1 == 1)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is on");
+		return;
+	}
+
+	//do not close doors while fire service mode 2 is set to hold
+	if (manual == false && elev->FireServicePhase2 == 2)
+	{
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 2 is set to hold");
 		return;
 	}
 

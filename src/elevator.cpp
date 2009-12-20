@@ -374,9 +374,14 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		Report("cannot add route while in inspection service mode");
 		return;
 	}
-	if (FireServicePhase1 != 0)
+	if (FireServicePhase1 == 1)
 	{
-		Report("cannot add route while in fire service phase 1 mdoe");
+		Report("cannot add route while in fire service phase 1 mode");
+		return;
+	}
+	if (FireServicePhase2 == 2)
+	{
+		Report("cannot add route while in held state");
 		return;
 	}
 
@@ -565,7 +570,7 @@ void Elevator::ProcessCallQueue()
 	}
 
 	//exit if in inspection service or fire phase 1 modes
-	if (InspectionService == true || FireServicePhase1 != 0)
+	if (InspectionService == true || FireServicePhase1 == 1)
 		return;
 
 	//if both queues are empty
@@ -1818,7 +1823,7 @@ bool Elevator::IsServicedFloor(int floor)
 bool Elevator::InServiceMode()
 {
 	//report if an elevator is in a service mode
-	if (IndependentService == true || InspectionService == true || FireServicePhase1 != 0 || FireServicePhase2 != 0)
+	if (IndependentService == true || InspectionService == true || FireServicePhase1 == 1 || FireServicePhase2 != 0)
 		return true;
 	else
 		return false;
@@ -2112,7 +2117,11 @@ void Elevator::EnableFireService2(int value)
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
 		else
+		{
+			if (IsMoving == false)
+				OpenDoors();
 			Report("Fire Service Phase 2 mode set to Hold");
+		}
 	}
 	else
 	{
