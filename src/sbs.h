@@ -258,7 +258,6 @@ public:
 	int RegisterObject(Object *object);
 	bool UnregisterObject(Object *object);
 	bool UnregisterObject(int index);
-	csString Calc(const char *expression);
 	void GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3);
 
 	//Meshes

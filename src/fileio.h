@@ -64,6 +64,7 @@ class ScriptProcessor
 	csArray<csString> UserVariable;
 
 	bool ScriptError(const char *message);
+	csString Calc(const char *expression);
 	bool IfProc(const char *expression);
 	int ProcCommands();
 	int ProcGlobals();

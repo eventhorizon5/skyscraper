@@ -2352,13 +2352,13 @@ void SBS::SetTextureMapping2(csString x1, csString y1, csString z1, csVector2 uv
 	}
 
 	MapVerts1[0] = x1;
-	MapVerts2[1] = y1;
-	MapVerts3[2] = z1;
-	MapVerts1[0] = x2;
+	MapVerts1[1] = y1;
+	MapVerts1[2] = z1;
+	MapVerts2[0] = x2;
 	MapVerts2[1] = y2;
-	MapVerts3[2] = z2;
-	MapVerts1[0] = x3;
-	MapVerts2[1] = y3;
+	MapVerts2[2] = z2;
+	MapVerts3[0] = x3;
+	MapVerts3[1] = y3;
 	MapVerts3[2] = z3;
 	MapUV[0] = uv1;
 	MapUV[1] = uv2;
@@ -2378,10 +2378,10 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 		{
 			for (int j = 0; j < 3; j++)
 			{
-			csString string;
-			if (j == 0)
-				string = MapVerts1[i];
-			if (j == 1)
+				csString string;
+				if (j == 0)
+					string = MapVerts1[i];
+				if (j == 1)
 					string = MapVerts2[i];
 				if (j == 2)
 					string = MapVerts3[i];
@@ -2393,7 +2393,8 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 				if (location >= 0)
 				{
 					csString number = string.GetAt(location + 1);
-					string.ReplaceAll("x" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).x, 12, buffer));
+					csVector3 v = state->GetPolygonVertex(index, atoi(number));
+					string.ReplaceAll("x" + number, _gcvt(v.x, 12, buffer));
 				}
 
 				//find Y component
@@ -2411,9 +2412,6 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 					csString number = string.GetAt(location + 1);
 					string.ReplaceAll("z" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).z, 12, buffer));
 				}
-
-				//calculate values
-				string = Calc(string);
 
 				//store values
 				if (i == 0)
@@ -3692,162 +3690,4 @@ bool SBS::UnregisterObject(int index)
 	//remove object by index
 	return ObjectArray.DeleteIndex(index);
 	//return ObjectArray.DeleteIndexFast(index);
-}
-
-csString SBS::Calc(const char *expression)
-{
-	//performs a calculation operation on a string
-	//for example, the string "1 + 1" would output to "2"
-	//supports multiple and nested operations (within parenthesis)
-
-	int temp1;
-	csString tmpcalc = expression;
-	char buffer[20];
-	csString one;
-	csString two;
-	int start, end;
-
-	//first remove all whitespace from the string
-	tmpcalc.ReplaceAll(" ", "");
-
-	//find parenthesis
-	do
-	{
-		start = tmpcalc.Find("(", 0);
-		if (start >= 0)
-		{
-			//find matching parenthesis
-			int match = 1;
-			int end = -1;
-			for (int i = start + 1; i < tmpcalc.Length(); i++)
-			{
-				if (tmpcalc.GetAt(i) == '(')
-					match++;
-				if (tmpcalc.GetAt(i) == ')')
-					match--;
-				if (match == 0)
-				{
-					end = i;
-					break;
-				}
-			}
-			if (end != -1)
-			{
-				//call function recursively
-				csString newdata;
-				newdata = Calc(tmpcalc.Slice(start + 1, end - start - 1));
-				//construct new string
-				one = tmpcalc.Slice(0, start);
-				if (end < tmpcalc.Length() - 1)
-					two = tmpcalc.Slice(end + 1);
-				else
-					two = "";
-				tmpcalc = one + newdata + two;
-			}
-			else
-			{
-				ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
-				return "false";
-			}
-		}
-		else
-			break;
-	} while (1 == 1);
-
-	//find number of operators and recurse if multiple found
-	int operators;
-	do
-	{
-		operators = 0;
-		end = 0;
-		for (int i = 1; i < tmpcalc.Length(); i++)
-		{
-			if (tmpcalc.GetAt(i) == '+' || tmpcalc.GetAt(i) == '/' || tmpcalc.GetAt(i) == '*')
-			{
-				operators++;
-				if (operators == 2)
-					end = i;
-			}
-			if (tmpcalc.GetAt(i) == '-' && tmpcalc.GetAt(i - 1) != '-' && tmpcalc.GetAt(i - 1) != '+' && tmpcalc.GetAt(i - 1) != '/' && tmpcalc.GetAt(i - 1) != '*')
-			{
-				operators++;
-				if (operators == 2)
-					end = i;
-			}
-		}
-		if (end >= tmpcalc.Length() - 1 && operators > 0)
-		{
-			ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
-			return "false";
-		}
-		if (operators > 1)
-		{
-			csString newdata;
-			newdata = Calc(tmpcalc.Slice(0, end));
-			//construct new string
-			two = tmpcalc.Slice(end);
-			tmpcalc = newdata + two;
-		}
-		else
-			break;
-	} while (1 == 1);
-
-	//return value if none found
-	if (operators == 0)
-		return tmpcalc.GetData();
-
-	//otherwise perform math
-	temp1 = tmpcalc.Find("+", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.Slice(0, temp1);
-		two = tmpcalc.Slice(temp1 + 1);
-		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-		{
-			tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-			return tmpcalc.GetData();
-		}
-	}
-	temp1 = tmpcalc.Find("-", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.Slice(0, temp1);
-		two = tmpcalc.Slice(temp1 + 1);
-		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-		{
-			tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-			return tmpcalc.GetData();
-		}
-	}
-	temp1 = tmpcalc.Find("/", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.Slice(0, temp1);
-		two = tmpcalc.Slice(temp1 + 1);
-		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-		{
-			tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-			return tmpcalc.GetData();
-		}
-	}
-	temp1 = tmpcalc.Find("*", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.Slice(0, temp1);
-		two = tmpcalc.Slice(temp1 + 1);
-		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
-		{
-			tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
-			return tmpcalc.GetData();
-		}
-	}
-	return tmpcalc.GetData();
 }
