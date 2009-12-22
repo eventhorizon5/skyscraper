@@ -2393,8 +2393,11 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 				if (location >= 0)
 				{
 					csString number = string.GetAt(location + 1);
-					csVector3 v = state->GetPolygonVertex(index, atoi(number));
-					string.ReplaceAll("x" + number, _gcvt(v.x, 12, buffer));
+					int num = state->GetPolygonVertexCount(index);
+					if (atoi(number) < num)
+						string.ReplaceAll("x" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).x, 12, buffer));
+					else
+						string.ReplaceAll("x" + number, "0"); //number value out of bounds
 				}
 
 				//find Y component
@@ -2402,7 +2405,11 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 				if (location >= 0)
 				{
 					csString number = string.GetAt(location + 1);
-					string.ReplaceAll("y" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).y, 12, buffer));
+					int num = state->GetPolygonVertexCount(index);
+					if (atoi(number) < num)
+						string.ReplaceAll("y" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).y, 12, buffer));
+					else
+						string.ReplaceAll("y" + number, "0"); //number value out of bounds
 				}
 
 				//find Z component
@@ -2410,7 +2417,11 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 				if (location >= 0)
 				{
 					csString number = string.GetAt(location + 1);
-					string.ReplaceAll("z" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).z, 12, buffer));
+					int num = state->GetPolygonVertexCount(index);
+					if (atoi(number) < num)
+						string.ReplaceAll("z" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).z, 12, buffer));
+					else
+						string.ReplaceAll("z" + number, "0"); //number value out of bounds
 				}
 
 				//store values
@@ -2419,25 +2430,25 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 					if (j == 0)
 						v1.x = atof(string);
 					if (j == 1)
-						v1.y = atof(string);
+						v2.x = atof(string);
 					if (j == 2)
-						v1.z = atof(string);
+						v3.x = atof(string);
 				}
 				if (i == 1)
 				{
 					if (j == 0)
-						v2.x = atof(string);
+						v1.y = atof(string);
 					if (j == 1)
 						v2.y = atof(string);
 					if (j == 2)
-						v2.z = atof(string);
+						v3.y = atof(string);
 				}
 				if (i == 2)
 				{
 					if (j == 0)
-						v3.x = atof(string);
+						v1.z = atof(string);
 					if (j == 1)
-						v3.y = atof(string);
+						v2.z = atof(string);
 					if (j == 2)
 						v3.z = atof(string);
 				}
