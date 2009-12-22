@@ -196,6 +196,7 @@ public:
 	void DrawWalls(bool MainN, bool MainP, bool SideN, bool SideP, bool Top, bool Bottom);
 	void ResetWalls(bool ToDefaults = false);
 	void SetTextureMapping(int vertindex1, csVector2 uv1, int vertindex2, csVector2 uv2, int vertindex3, csVector2 uv3);
+	void SetTextureMapping2(csString x1, csString y1, csString z1, csVector2 uv1, csString x2, csString y2, csString z2, csVector2 uv2, csString x3, csString y3, csString z3, csVector2 uv3);
 	void ResetTextureMapping(bool todefaults = false);
 	void ReverseAxis(bool value);
 	bool GetReverseAxis();
@@ -257,6 +258,8 @@ public:
 	int RegisterObject(Object *object);
 	bool UnregisterObject(Object *object);
 	bool UnregisterObject(int index);
+	csString Calc(const char *expression);
+	void GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -308,7 +311,15 @@ private:
 	csArray<int> OldMapIndex;
 	csArray<csVector2> MapUV;
 	csArray<csVector2> OldMapUV;
+	csArray<csString> MapVerts1;
+	csArray<csString> MapVerts2;
+	csArray<csString> MapVerts3;
+	csArray<csString> OldMapVerts1;
+	csArray<csString> OldMapVerts2;
+	csArray<csString> OldMapVerts3;
 	bool AutoX, AutoY; //autosizing
+	bool UseVerts;
+	bool OldVerts;
 
 	//global object array (only pointers to actual objects)
 	csArray<Object*> ObjectArray;

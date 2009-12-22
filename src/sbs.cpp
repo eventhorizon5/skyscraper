@@ -124,6 +124,12 @@ SBS::SBS()
 	MapUV.SetSize(3);
 	OldMapIndex.SetSize(3);
 	OldMapUV.SetSize(3);
+	MapVerts1.SetSize(3);
+	MapVerts2.SetSize(3);
+	MapVerts3.SetSize(3);
+	OldMapVerts1.SetSize(3);
+	OldMapVerts2.SetSize(3);
+	OldMapVerts3.SetSize(3);
 	for (int i = 0; i <= 2; i++)
 	{
 		MapIndex[i] = 0;
@@ -136,6 +142,8 @@ SBS::SBS()
 	soundcount = 0;
 	UnitScale = 1;
 	Verbose = false;
+	UseVerts = false;
+	OldVerts = false;
 }
 
 SBS::~SBS()
@@ -1561,12 +1569,14 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	//UV texture mapping
 	for (int i = firstidx; i <= firstidx + 1; i++)
 	{
+		csVector3 v1, v2, v3;
+		GetTextureMapping(dest_state, i, v1, v2, v3);
 		dest_state->SetPolygonTextureMapping (csPolygonRange(i, i),
-			dest_state->GetPolygonVertex(i, MapIndex[0]),
+			v1,
 			csVector2(MapUV[0].x * tw3, MapUV[0].y * th3),
-			dest_state->GetPolygonVertex(i, MapIndex[1]),
+			v2,
 			csVector2(MapUV[1].x * tw3, MapUV[1].y * th3),
-			dest_state->GetPolygonVertex(i, MapIndex[2]),
+			v3,
 			csVector2(MapUV[2].x * tw3, MapUV[2].y * th3));
 	}
 
@@ -1664,12 +1674,14 @@ int SBS::AddCustomFloor(csRef<iMeshWrapper> dest, const char *name, const char *
 	//UV texture mapping
 	for (int i = firstidx; i <= firstidx + 1; i++)
 	{
+		csVector3 v1, v2, v3;
+		GetTextureMapping(dest_state, i, v1, v2, v3);
 		dest_state->SetPolygonTextureMapping (csPolygonRange(i, i),
-			dest_state->GetPolygonVertex(i, MapIndex[0]),
+			v1,
 			csVector2(MapUV[0].x * tw3, MapUV[0].y * th3),
-			dest_state->GetPolygonVertex(i, MapIndex[1]),
+			v2,
 			csVector2(MapUV[1].x * tw3, MapUV[1].y * th3),
-			dest_state->GetPolygonVertex(i, MapIndex[2]),
+			v3,
 			csVector2(MapUV[2].x * tw3, MapUV[2].y * th3));
 	}
 
@@ -2007,12 +2019,14 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 		{
 			mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
 			//set UV texture mapping
+			csVector3 v1, v2, v3;
+			GetTextureMapping(mesh, i, v1, v2, v3);
 			mesh->SetPolygonTextureMapping (csPolygonRange(i, i),
-				mesh->GetPolygonVertex(i, MapIndex[0]),
+				v1,
 				csVector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
-				mesh->GetPolygonVertex(i, MapIndex[1]),
+				v2,
 				csVector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
-				mesh->GetPolygonVertex(i, MapIndex[2]),
+				v3,
 				csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2));
 		}
 	}
@@ -2020,12 +2034,14 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 	{
 			mesh->SetPolygonMaterial(csPolygonRange(index, index), material);
 			//set UV texture mapping
+			csVector3 v1, v2, v3;
+			GetTextureMapping(mesh, index, v1, v2, v3);
 			mesh->SetPolygonTextureMapping (csPolygonRange(index, index),
-				mesh->GetPolygonVertex(index, MapIndex[0]),
+				v1,
 				csVector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
-				mesh->GetPolygonVertex(index, MapIndex[1]),
+				v2,
 				csVector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
-				mesh->GetPolygonVertex(index, MapIndex[2]),
+				v3,
 				csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2));
 	}
 }
@@ -2283,10 +2299,22 @@ void SBS::ResetWalls(bool ToDefaults)
 void SBS::SetTextureMapping(int vertindex1, csVector2 uv1, int vertindex2, csVector2 uv2, int vertindex3, csVector2 uv3)
 {
 	//Manually sets UV texture mapping.  Use ResetTextureMapping to return to default values
+
 	//backup old values
 	for (int i = 0; i <= 2; i++)
 	{
-		OldMapIndex[i] = MapIndex[i];
+		if (UseVerts == false)
+		{
+			OldMapIndex[i] = MapIndex[i];
+			OldVerts = false;
+		}
+		else
+		{
+			OldMapVerts1[i] = MapVerts1[i];
+			OldMapVerts1[i] = MapVerts1[i];
+			OldMapVerts1[i] = MapVerts1[i];
+			OldVerts = true;
+		}
 		OldMapUV[i] = MapUV[i];
 	}
 
@@ -2297,6 +2325,134 @@ void SBS::SetTextureMapping(int vertindex1, csVector2 uv1, int vertindex2, csVec
 	MapUV[0] = uv1;
 	MapUV[1] = uv2;
 	MapUV[2] = uv3;
+	UseVerts = false;
+}
+
+void SBS::SetTextureMapping2(csString x1, csString y1, csString z1, csVector2 uv1, csString x2, csString y2, csString z2, csVector2 uv2, csString x3, csString y3, csString z3, csVector2 uv3)
+{
+	//Manually sets UV texture mapping (advanced version)
+	//Use ResetTextureMapping to return to default values
+
+	for (int i = 0; i <= 2; i++)
+	{
+		//backup old values
+		if (UseVerts == false)
+		{
+			OldMapIndex[i] = MapIndex[i];
+			OldVerts = false;
+		}
+		else
+		{
+			OldMapVerts1[i] = MapVerts1[i];
+			OldMapVerts1[i] = MapVerts1[i];
+			OldMapVerts1[i] = MapVerts1[i];
+			OldVerts = true;
+		}
+		OldMapUV[i] = MapUV[i];
+	}
+
+	MapVerts1[0] = x1;
+	MapVerts2[1] = y1;
+	MapVerts3[2] = z1;
+	MapVerts1[0] = x2;
+	MapVerts2[1] = y2;
+	MapVerts3[2] = z2;
+	MapVerts1[0] = x3;
+	MapVerts2[1] = y3;
+	MapVerts3[2] = z3;
+	MapUV[0] = uv1;
+	MapUV[1] = uv2;
+	MapUV[2] = uv3;
+	UseVerts = true;
+}
+
+void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3)
+{
+	//returns texture mapping coordinates for the specified polygon index, in the v1, v2, and v3 vectors
+
+	if (UseVerts == true)
+	{
+		//advanced manual vertex method
+
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+			csString string;
+			if (j == 0)
+				string = MapVerts1[i];
+			if (j == 1)
+					string = MapVerts2[i];
+				if (j == 2)
+					string = MapVerts3[i];
+
+				string.Downcase();
+
+				//find X component
+				int location = string.Find("x");
+				if (location >= 0)
+				{
+					csString number = string.GetAt(location + 1);
+					string.ReplaceAll("x" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).x, 12, buffer));
+				}
+
+				//find Y component
+				location = string.Find("y");
+				if (location >= 0)
+				{
+					csString number = string.GetAt(location + 1);
+					string.ReplaceAll("y" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).y, 12, buffer));
+				}
+
+				//find Z component
+				location = string.Find("z");
+				if (location >= 0)
+				{
+					csString number = string.GetAt(location + 1);
+					string.ReplaceAll("z" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).z, 12, buffer));
+				}
+
+				//calculate values
+				string = Calc(string);
+
+				//store values
+				if (i == 0)
+				{
+					if (j == 0)
+						v1.x = atof(string);
+					if (j == 1)
+						v1.y = atof(string);
+					if (j == 2)
+						v1.z = atof(string);
+				}
+				if (i == 1)
+				{
+					if (j == 0)
+						v2.x = atof(string);
+					if (j == 1)
+						v2.y = atof(string);
+					if (j == 2)
+						v2.z = atof(string);
+				}
+				if (i == 2)
+				{
+					if (j == 0)
+						v3.x = atof(string);
+					if (j == 1)
+						v3.y = atof(string);
+					if (j == 2)
+						v3.z = atof(string);
+				}
+			}
+		}
+	}
+	else
+	{
+		//basic index method
+		v1 = state->GetPolygonVertex(index, MapIndex[0]);
+		v2 = state->GetPolygonVertex(index, MapIndex[1]);
+		v3 = state->GetPolygonVertex(index, MapIndex[2]);
+	}
 }
 
 void SBS::ResetTextureMapping(bool todefaults)
@@ -2305,7 +2461,12 @@ void SBS::ResetTextureMapping(bool todefaults)
 	if (todefaults == true)
 		SetTextureMapping(0, csVector2(0, 0), 1, csVector2(1, 0), 2, csVector2(1, 1));
 	else
-		SetTextureMapping(OldMapIndex[0], OldMapUV[0], OldMapIndex[1], OldMapUV[1], OldMapIndex[2], OldMapUV[2]);
+	{
+		if (OldVerts = false)
+			SetTextureMapping(OldMapIndex[0], OldMapUV[0], OldMapIndex[1], OldMapUV[1], OldMapIndex[2], OldMapUV[2]);
+		else
+			SetTextureMapping2(OldMapVerts1[0], OldMapVerts1[1], OldMapVerts1[2], OldMapUV[0], OldMapVerts2[0], OldMapVerts2[1], OldMapVerts2[2], OldMapUV[1], OldMapVerts3[0], OldMapVerts3[1], OldMapVerts3[2], OldMapUV[2]);
+	}
 }
 
 int SBS::GetDrawWallsCount()
@@ -3531,4 +3692,162 @@ bool SBS::UnregisterObject(int index)
 	//remove object by index
 	return ObjectArray.DeleteIndex(index);
 	//return ObjectArray.DeleteIndexFast(index);
+}
+
+csString SBS::Calc(const char *expression)
+{
+	//performs a calculation operation on a string
+	//for example, the string "1 + 1" would output to "2"
+	//supports multiple and nested operations (within parenthesis)
+
+	int temp1;
+	csString tmpcalc = expression;
+	char buffer[20];
+	csString one;
+	csString two;
+	int start, end;
+
+	//first remove all whitespace from the string
+	tmpcalc.ReplaceAll(" ", "");
+
+	//find parenthesis
+	do
+	{
+		start = tmpcalc.Find("(", 0);
+		if (start >= 0)
+		{
+			//find matching parenthesis
+			int match = 1;
+			int end = -1;
+			for (int i = start + 1; i < tmpcalc.Length(); i++)
+			{
+				if (tmpcalc.GetAt(i) == '(')
+					match++;
+				if (tmpcalc.GetAt(i) == ')')
+					match--;
+				if (match == 0)
+				{
+					end = i;
+					break;
+				}
+			}
+			if (end != -1)
+			{
+				//call function recursively
+				csString newdata;
+				newdata = Calc(tmpcalc.Slice(start + 1, end - start - 1));
+				//construct new string
+				one = tmpcalc.Slice(0, start);
+				if (end < tmpcalc.Length() - 1)
+					two = tmpcalc.Slice(end + 1);
+				else
+					two = "";
+				tmpcalc = one + newdata + two;
+			}
+			else
+			{
+				ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+				return "false";
+			}
+		}
+		else
+			break;
+	} while (1 == 1);
+
+	//find number of operators and recurse if multiple found
+	int operators;
+	do
+	{
+		operators = 0;
+		end = 0;
+		for (int i = 1; i < tmpcalc.Length(); i++)
+		{
+			if (tmpcalc.GetAt(i) == '+' || tmpcalc.GetAt(i) == '/' || tmpcalc.GetAt(i) == '*')
+			{
+				operators++;
+				if (operators == 2)
+					end = i;
+			}
+			if (tmpcalc.GetAt(i) == '-' && tmpcalc.GetAt(i - 1) != '-' && tmpcalc.GetAt(i - 1) != '+' && tmpcalc.GetAt(i - 1) != '/' && tmpcalc.GetAt(i - 1) != '*')
+			{
+				operators++;
+				if (operators == 2)
+					end = i;
+			}
+		}
+		if (end >= tmpcalc.Length() - 1 && operators > 0)
+		{
+			ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+			return "false";
+		}
+		if (operators > 1)
+		{
+			csString newdata;
+			newdata = Calc(tmpcalc.Slice(0, end));
+			//construct new string
+			two = tmpcalc.Slice(end);
+			tmpcalc = newdata + two;
+		}
+		else
+			break;
+	} while (1 == 1);
+
+	//return value if none found
+	if (operators == 0)
+		return tmpcalc.GetData();
+
+	//otherwise perform math
+	temp1 = tmpcalc.Find("+", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("-", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("/", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	temp1 = tmpcalc.Find("*", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.Slice(0, temp1);
+		two = tmpcalc.Slice(temp1 + 1);
+		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
+		{
+			tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
+			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
+				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			return tmpcalc.GetData();
+		}
+	}
+	return tmpcalc.GetData();
 }
