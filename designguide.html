@@ -254,27 +254,57 @@
     0, 0, 0, 1, 1, 0, 2, 1, 1</font></p>
   <p align="left">The example shown above is the default value used by the simulator. 
     This command maps the texture coordinates to the specified 3 vertex indices 
-    - normally a side of a wall will have 4 vertices (0 to 3), and by default 
-    the first three are used (top left, top right and bottom right respectively), 
-    with the UV coordinates representing the size percentage of the texture (with 
-    1 being 100%, 0.5 being 50%, etc; normally this would relate to absolute texture 
-    coordinates) - so in the example, texture coordinate 0,0 (top left) is mapped 
-    at the first vertex (top left); texture coordinate 1,0 (really &quot;width, 
-    0&quot;) being mapped at the second vertex (top right), and texture coordinate 
-    1,1 (really &quot;width, height&quot;) being mapped to the bottom right. For 
-    a standard wall, the valid vertex values are from 0 to 3. If a wall or floor 
-    is created with AddCustomWall/AddCustomFloor, and if it has for example 7 
-    vertex points, the valid values for this command would then be 0 to 6 (but 
-    only 3 vertices can be used for mapping purposes). Textures can also be cropped 
-    with this command - for example, to map only a central square of a texture, 
-    you'd use:<br>
+    - normally a side of a wall will have 4 vertices/sets of coordinates (0 to 
+    3), and by default the first three are used (top left, top right and bottom 
+    right respectively), with the UV coordinates representing the size percentage 
+    of the texture (with 1 being 100%, 0.5 being 50%, etc; normally this would 
+    relate to absolute texture coordinates) - so in the example, texture coordinate 
+    0,0 (top left) is mapped at the first vertex (top left); texture coordinate 
+    1,0 (really &quot;width, 0&quot;) being mapped at the second vertex (top right), 
+    and texture coordinate 1,1 (really &quot;width, height&quot;) being mapped 
+    to the bottom right. For a standard wall, the valid vertex values are from 
+    0 to 3. If a wall or floor is created with AddCustomWall/AddCustomFloor, and 
+    if it has for example 7 vertex points, the valid values for this command would 
+    then be 0 to 6 (but only 3 vertices can be used for mapping purposes). Textures 
+    can also be cropped with this command - for example, to map only a central 
+    square of a texture, you'd use:<br>
     <font size="2" face="Courier New, Courier, mono">SetTextureMapping 0, 0.25, 
     0.25, 1, 0.75, 0.25, 2, 0.75, 0.75</font></p>
+  <p align="left">Here's an easier way to see the example above:</p>
+  <p align="left"><font size="2" face="Courier New, Courier, mono">0 -&gt; 0, 
+    0<br>
+    1 -&gt; 1, 0<br>
+    2 -&gt; 1, 1</font></p>
   <p align="left">The following diagram shows the mapping described above. Texture 
     location 0,0 is mapped to wall vertex 0, location 1,0 is mapped to vertex 
     1, etc:</p>
   <p align="left"><img src="guide/texture_mapping.jpg" width="300" height="300"></p>
-  <p align="left"><strong>n. ResetTextureMapping</strong> - resets the texture 
+  <p align="left"><strong>n. SetTextureMapping2</strong> - advanced version of 
+    SetTextureMapping - manually sets UV texture mapping for all polygons generated 
+    after this command; ResetTextureMapping restores the values to the defaults 
+    or previous<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> SetTextureMapping2 
+    v1x, v1y, v1z, u1, v1, v2x, v2y, v2z, u2, v2, v3x, v3y, v3z, u3, v3</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">SetTextureMapping2 
+    x0, y0, z0, 0, 0, x1, y1, z1, 1, 0, x2, y2, z2, 1, 1</font></p>
+  <p align="left">See the above description of SetTextureMapping for a detailed 
+    description on texture mapping in general. This command mostly does the same 
+    as that command, and the example given is the default command (and is equivalent 
+    to the SetTextureMapping example). Instead of just choosing which vertex indices 
+    to use like SetTextureMapping, this command lets you create your own texture 
+    vertices (sets of coordinates) using coordinates of already-existing vertices. 
+    The vertex values that can be used start with an &quot;x&quot;, &quot;y&quot; 
+    or &quot;z&quot;, followed by the vertex index. In the example, the X, Y and 
+    Z values of the first vertex are mapped to UV coordinate 0,0 - this is because 
+    &quot;x0, y0, z0&quot; was specified. A specification of &quot;x0, y2, z0&quot; 
+    will use the X and Z values from vertex 0, but the Y value from vertex 2. 
+    This way you can specify coordinates outside of the wall/polygon's range. 
+    Here's an easier way to see the example:</p>
+  <p align="left"><font size="2" face="Courier New, Courier, mono">x0, y0, z0 
+    -&gt; 0, 0<br>
+    x1, y1, z1 -&gt; 1, 0<br>
+    x2, y2, z2 -&gt; 1, 1</font></p>
+  <p align="left"><strong>o. ResetTextureMapping</strong> - resets the texture 
     mapping parameters to either the default or previous values<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ResetTextureMapping 
     default</font><br>
@@ -283,14 +313,14 @@
   <p align="left">If <em>default</em> is true, the texture mapping values are 
     reset to the default, which is shown above in the SetTextureMapping's example. 
     If <em>default</em> is false, the previous values will be loaded and used.</p>
-  <p align="left"><strong>o. ReverseAxis</strong> - reverses the axis that the 
+  <p align="left"><strong>p. ReverseAxis</strong> - reverses the axis that the 
     difference in altitude/voffset for floors corresponds to. In the AddFloor 
     command, there are parameters for specifying two different altitudes. By default, 
     if the altitudes are different, the floor will angle upward/downward along 
     the Z axis (front/back), but if this is set to true, the floor will angle 
     along the X axis (left/right).<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ReverseAxis = value</font></p>
-  <p align="left"> <strong>p. ShaftCut</strong> - used in conjunction with a shaft 
+  <p align="left"> <strong>q. ShaftCut</strong> - used in conjunction with a shaft 
     object - performs a vertical box cut on all floor objects (floors, ceilings, 
     interfloor, etc) in the specified range.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ShaftCut number, 
@@ -306,7 +336,7 @@
     cuts a box for shaft 1, with a width from -4 to 4, and a length from -3.5 
     to 3.5, starting at the starting floor's altitude, and ending at 5 feet above 
     the ending floor's altitude.</p>
-  <p align="left"><strong>q. CutStairwell</strong> - used in conjunction with 
+  <p align="left"><strong>r. CutStairwell</strong> - used in conjunction with 
     a stairwell object - performs a vertical box cut on all floor objects (floors, 
     ceilings, interfloor, etc) in the specified range. For the parameters, see 
     the ShaftCut command.<strong><br>
@@ -314,7 +344,7 @@
     number, startx, startz, endx, endz, start_voffset, end_voffset</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">CutStairwell 1, 
     -4, -3.5, 4, 3.5, 0, 5</font></p>
-  <p align="left"><strong>r. Isect</strong> - the Isect function calculates the 
+  <p align="left"><strong>s. Isect</strong> - the Isect function calculates the 
     position that a line intersects with a certain object, such as a floor. This 
     is mainly used with angled walls that span multiple floors, to find the edge 
     location of the wall at each level without doing any manual calculations. 
@@ -329,7 +359,7 @@
     <em>endy</em> and <em>endz</em> make up the ending position. The first intersection 
     of the named object is the return value, in &quot;X, Y, Z&quot; format (for 
     example, &quot;10, 1, 3&quot;).</p>
-  <p align="left"><strong>s. SetAutoSize</strong> - enables or disables texture 
+  <p align="left"><strong>t. SetAutoSize</strong> - enables or disables texture 
     autosizing<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> SetAutoSize = <em>AutoWidth, 
     AutoHeight </em></font><br>
@@ -348,7 +378,7 @@
     stored &quot;th&quot; value is 1, then the texture will be tiled twice vertically. 
     If either are true, the specified value will me multiplied by the related 
     stored texture value and then autoadjusted.</p>
-  <p align="left"><strong>t. TextureOverride</strong> - overrides textures for 
+  <p align="left"><strong>u. TextureOverride</strong> - overrides textures for 
     the next command. Currently only works with the different AddWall, AddFloor 
     and AddInterFloor commands.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> TextureOverride <em>MainNegativeTex, 
@@ -360,7 +390,7 @@
     after this one. In the above example, the Main Positive side of the object 
     will have the texture &quot;ElevFloor&quot;, but all other sides will use 
     &quot;Metal1&quot;.</p>
-  <p align="left"><strong>u. ShaftShowFloors</strong> - allows a range of floors 
+  <p align="left"><strong>v. ShaftShowFloors</strong> - allows a range of floors 
     to be shown either while inside the specified shaft or while inside an elevator 
     in the shaft - primarily for glass elevators.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ShaftShowFloors <em>ShaftNumber</em> 
@@ -372,7 +402,7 @@
     2nd floor will be visible/enabled while they're in the elevator (since it 
     was in the range specified with this command), but when they reach the 11th 
     floor, that floor will be invisible/disabled.</p>
-  <p align="left"><strong>v. ShaftShowOutside</strong> - allows objects outside 
+  <p align="left"><strong>w. ShaftShowOutside</strong> - allows objects outside 
     the building (sky, landscape, etc) to be enabled while the user is both inside 
     the specified shaft and on one of the specified floors - primarily for glass 
     elevators.<br>
@@ -390,13 +420,13 @@
     lower (atrium) section would be specified using <em>ShaftShowFloors</em> (such 
     as 1-10), while the upper (outdoor) floors would be specified using <em>ShaftShowOutside</em> 
     (such as 11-20).</p>
-  <p align="left"><strong>w. ShowFullShaft</strong> - determines if an entire 
+  <p align="left"><strong>x. ShowFullShaft</strong> - determines if an entire 
     shaft should always be shown, such as a glass elevator track.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> ShowFullShaft <em>ShaftNumber</em> 
     = <em>value</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">ShowFullShaft 1 
     = true</font></p>
-  <p align="left"><strong>x. TextureFlip</strong> - flips specified textures for 
+  <p align="left"><strong>y. TextureFlip</strong> - flips specified textures for 
     the next command.. Currently only works with the different AddWall, AddFloor 
     and AddInterFloor commands. The values available are 0 for no flipping, 1 
     for horizontal flip, 2 for vertical flip, and 3 for both horizontal and vertical.<br>
@@ -409,7 +439,7 @@
     on the command immediately after this one. In the above example, the Main 
     Positive and Main Negative sides of the object will have their textures flipped 
     horizontally.</p>
-  <p align="left"><strong>y. Cut</strong> - performs a manual box cut on an object<br>
+  <p align="left"><strong>z. Cut</strong> - performs a manual box cut on an object<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Cut <em>destobject</em>, 
     x1, y1, z1, x2, y2, z2, cutwalls, cutfloors<br>
     </font>Example: <font size="2" face="Courier New, Courier, mono">Cut external, 
@@ -417,7 +447,7 @@
   <p align="left">The x, y and z values specify the start and end coordinates 
     of the box cut. If cutwalls is true, the function will cut walls; if cutfloors 
     is true, it'll cut floors.</p>
-  <p align="left"><strong>z. Mount</strong> - mounts a zip file in the data directory 
+  <p align="left"><strong>aa. Mount</strong> - mounts a zip file in the data directory 
     into a virtual path.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Mount <em>filename</em>, 
     <em>path</em></font><br>
@@ -426,14 +456,14 @@
   <p align="left">In this example, the file myfile.zip located in Skyscraper's 
     data directory will be mounted as &quot;mydirectory&quot;, and so a file such 
     as test.jpg inside that zip file will appear as &quot;mydirectory/test.jpg&quot;.</p>
-  <p align="left"><strong>aa. AddFloorAutoArea</strong> - defines an area that 
+  <p align="left"><strong>ab. AddFloorAutoArea</strong> - defines an area that 
     will automatically enable and disable floors when the user moves within it, 
     similar to a stairwell<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorAutoArea 
     <em>x1, y1, z1, x2, y2, z2</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddFloorAutoArea 
     -100, 0, -100, 100, 100, 100</font></p>
-  <p align="left"><strong>ab. AddSound</strong> - creates a user-defined looping 
+  <p align="left"><strong>ac. AddSound</strong> - creates a user-defined looping 
     sound at the specified position<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddSound <em>name, 
     filename, x, y, z[, volume, speed, min_distance, max_distance, dir_radiation, 

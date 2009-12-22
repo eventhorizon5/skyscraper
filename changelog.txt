@@ -30,6 +30,7 @@ Version 1.6 (2.0 Alpha 6)
 -elevator modes can now be set from building scripts and the INI file
 -fixed ACP mode
 -fixed other service modes
+-added SetTextureMapping2 command
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

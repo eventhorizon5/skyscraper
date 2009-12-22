@@ -393,8 +393,9 @@ AddCustomWall external, Front - Main, MainWindows, -100.64, Floor(65).Altitude +
 AddTriangleWall external, Front - Left, MainWindows, -83.04, Floor(65).Altitude + 6, -20.64, -83.04, Floor(79).Altitude + 6, -20.64, -100.64, Floor(65).Altitude + 6, -46.24, 0, 14
 #AddTriangleWall external, Front - Right Front, MainWindows, -12.2, Floor(58).Altitude, -51.8, -14.4, Floor(60).Altitude, -46.3, -14.4, Floor(58).Altitude, -47.8, 0, -2
 #AddCustomWall external, Front - Right Back, Brick, -14.4, Floor(58).Altitude, -47.8, -14.4, Floor(60).Altitude, -46.3, -16.9, Floor(60).Altitude, -43.4, -12.2, Floor(58).Altitude, -45.6, 0, -2
-AddTriangleWall external, Front - Back, MainWindows, -18.88, Floor(80).Altitude, -36.8, -79.2, Floor(80).Altitude, -15.2, -18.88, Floor(58).Altitude, -36.8, 0, 19
-AddTriangleWall external, Front - Bottom, MainWindows, -100.64, Floor(58).Altitude, -46.24, -100.64, Floor(65).Altitude + 6, -46.24, -21.76, Floor(58).Altitude, -45.92, 0, 7.5
+AddTriangleWall external, Front - Back, MainWindows, -79.2, Floor(80).Altitude, -15.2, -18.88, Floor(80).Altitude, -36.8, -18.88, Floor(58).Altitude, -36.8, 0, 19
+SetTextureMapping2 x1, y2, z1, 0, 1, x0, y2, z0, 1, 1, x0, y0, z0, 1, 0
+AddTriangleWall external, Front - Bottom, MainWindows, -21.76, Floor(58).Altitude, -45.92, -100.64, Floor(58).Altitude, -46.24, -100.64, Floor(65).Altitude + 6, -46.24, 0, 7.5
 #AddCustomWall external, Front - Back Filler, Brick, -14.4, Floor(60).Altitude, -46.3, -16.9, Floor(60).Altitude, -43.4, -75.1, Floor(77).Altitude, -16.9, -73, Floor(77).Altitude, -21.2, 0, 1
 #AddTriangleWall external, Front - Top Triangle Filler 1, MainWindows, -75.1, Floor(77).Altitude, -16.9, -76.9, Floor(78).Altitude, -19.4, -73, Floor(77).Altitude, -21.2, 0, 1
 #AddTriangleWall external, Front - Top Triangle Filler 2, MainWindows, -75.1, Floor(77).Altitude, -16.9, -76.9, Floor(78).Altitude, -19.4, -76.9, Floor(77).Altitude, -19.4, 0, 1
