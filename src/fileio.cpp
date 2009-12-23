@@ -1707,13 +1707,13 @@ int ScriptProcessor::ProcCommands()
 			getfloordata = false;
 
 		temp1 = LineData.Find("(", 0);
-		temp3 = LineData.Find(")", 0);
-		if (temp3 < 0)
+		temp4 = LineData.Find(")", 0);
+		if (temp1 < 0 || temp4 < 0)
 		{
 			ScriptError("Syntax error");
 			return sError;
 		}
-		tempdata.SplitString(LineData.Slice(temp1 + 1, temp3 - temp1 - 1).GetData(), ",");
+		tempdata.SplitString(LineData.Slice(temp1 + 1, temp4 - temp1 - 1).GetData(), ",");
 		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 		{
 			buffer = Calc(tempdata[temp3]);
@@ -1755,9 +1755,72 @@ int ScriptProcessor::ProcCommands()
 		csVector3 isect = Simcore->GetPoint(tmpState, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 		tempdata.DeleteAll();
 
-		buffer = csString(LineData).Slice(0, temp5 - 1) + csString(wxVariant(isect.x).GetString().ToAscii()) + csString(wxVariant(isect.y).GetString().ToAscii()) + csString(wxVariant(isect.z).GetString().ToAscii()) + csString(LineData).Slice(temp3 + 1);
+		buffer = csString(LineData).Slice(0, temp5) + csString(wxVariant(isect.x).GetString().ToAscii()) + csString(", ") + csString(wxVariant(isect.y).GetString().ToAscii()) + csString(", ") + csString(wxVariant(isect.z).GetString().ToAscii()) + csString(LineData).Slice(temp4 + 1);
 		LineData = buffer.GetData();
 
+	}
+
+	//GetWallExtents function
+	temp5 = csString(LineData).Downcase().Find("getwallextents(", 0);
+	while (temp5 > -1)
+	{
+		if (Section == 2 && getfloordata == false)
+		{
+			//process floor-specific variables if in a floor section
+			getfloordata = true;
+			return sRecalc;
+		}
+		else
+			getfloordata = false;
+
+		temp1 = LineData.Find("(", 0);
+		temp4 = LineData.Find(")", 0);
+		if (temp1 < 0 || temp4 < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		tempdata.SplitString(LineData.Slice(temp1 + 1, temp4 - temp1 - 1).GetData(), ",");
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		if (!IsNumeric(csString(tempdata[2]).Trim().GetData()))
+		{
+			ScriptError("Invalid value: " + csString(tempdata[2]));
+			return sError;
+		}
+
+		buffer = tempdata[0];
+		buffer.Downcase();
+		csRef<iThingFactoryState> tmpState;
+		if (buffer == "floor")
+			tmpState = Simcore->GetFloor(Current)->Level_state;
+		else if (buffer == "external")
+			tmpState = Simcore->External_state;
+		else if (buffer == "landscape")
+			tmpState = Simcore->Landscape_state;
+		else if (buffer == "buildings")
+			tmpState = Simcore->Buildings_state;
+		else
+		{
+			ScriptError("Invalid object");
+			return sError;
+		}
+
+		csVector3 result = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), csString(tempdata[3]).CompareNoCase("true"));
+		tempdata.DeleteAll();
+
+		buffer = csString(LineData).Slice(0, temp5) + csString(wxVariant(result.x).GetString().ToAscii()) + csString(", ") + csString(wxVariant(result.y).GetString().ToAscii()) + csString(", ") + csString(wxVariant(result.z).GetString().ToAscii()) + csString(LineData).Slice(temp4 + 1);
+		LineData = buffer.GetData();
 	}
 
 	//SetAutoSize command

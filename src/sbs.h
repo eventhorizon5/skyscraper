@@ -259,6 +259,7 @@ public:
 	bool UnregisterObject(int index);
 	void GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3);
 	void ReverseExtents(bool X, bool Y, bool Z);
+	csVector3 GetWallExtents(csRef<iThingFactoryState> state, const char *name, float altitude,  bool get_max);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

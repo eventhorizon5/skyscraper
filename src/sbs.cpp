@@ -3699,3 +3699,57 @@ bool SBS::UnregisterObject(int index)
 	return ObjectArray.DeleteIndex(index);
 	//return ObjectArray.DeleteIndexFast(index);
 }
+
+csVector3 SBS::GetWallExtents(csRef<iThingFactoryState> state, const char *name, float altitude, bool get_max)
+{
+	//return the X and Z extents of a standard wall (by name), by doing a double plane cut
+
+	csString newname;
+	csString name2 = name;
+	for (int i = 0; i < 6; i++)
+	{
+		if (i == 0)
+			newname = name2;
+		if (i == 1)
+			newname = name2 + ":0";
+		if (i == 2)
+			newname = name2 + ":1";
+		if (i == 3)
+			newname = name2 + ":front";
+		if (i == 4)
+			newname = name2 + ":back";
+		if (i == 5)
+			newname = name2 + ":left";
+		if (i == 6)
+			newname = name2 + ":right";
+
+		int index = state->FindPolygonByName(newname);
+		if (index >= 0)
+		{
+			csPoly3D original, tmp1, tmp2;
+			for (int i = 0; i < state->GetPolygonVertexCount(index); i++)
+				original.AddVertex(state->GetPolygonVertex(index, i));
+			//get upper
+			original.SplitWithPlaneY(tmp1, tmp2, ToRemote(altitude) - 0.001);
+
+			//get lower part of upper
+			tmp2.SplitWithPlaneY(original, tmp1, ToRemote(altitude) + 0.001);
+
+			csVector3 result;
+			if (get_max == false)
+			{
+				//get minimum extents
+				result.x = ToLocal(GetExtents(original, 0).x);
+				result.z = ToLocal(GetExtents(original, 2).x);
+			}
+			else
+			{
+				//get maximum extents
+				result.x = ToLocal(GetExtents(original, 0).y);
+				result.z = ToLocal(GetExtents(original, 2).y);
+			}
+			result.y = altitude;
+			return result;
+		}
+	}
+}
