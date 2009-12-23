@@ -163,7 +163,6 @@ public:
 	int CreateWallBox2(csRef<iMeshWrapper> dest, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 	int AddTriangleWall(csRef<iMeshWrapper> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
 	int AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
-	int AddCustomFloor(csRef<iMeshWrapper> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
 	csVector2 GetExtents(csPoly3D &varray, int coord);
 	void InitMeshes();
 	void EnableBuildings(bool value);
@@ -259,6 +258,7 @@ public:
 	bool UnregisterObject(Object *object);
 	bool UnregisterObject(int index);
 	void GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3);
+	void ReverseExtents(bool X, bool Y, bool Z);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -317,8 +317,10 @@ private:
 	csArray<csString> OldMapVerts2;
 	csArray<csString> OldMapVerts3;
 	bool AutoX, AutoY; //autosizing
-	bool UseVerts;
-	bool OldVerts;
+	int MapMethod; //texture mapping method - 0=planar, 1=index, 2=verts
+	int OldMapMethod;
+	bool RevX, RevY, RevZ; //extent reversals (planar texture mapping)
+	bool OldRevX, OldRevY, OldRevZ;
 
 	//global object array (only pointers to actual objects)
 	csArray<Object*> ObjectArray;
@@ -332,6 +334,7 @@ private:
 	//private functions
 	void PrintBanner();
 	void CheckAutoAreas();
+	void BackupMapping();
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;

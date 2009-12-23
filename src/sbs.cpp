@@ -142,8 +142,14 @@ SBS::SBS()
 	soundcount = 0;
 	UnitScale = 1;
 	Verbose = false;
-	UseVerts = false;
-	OldVerts = false;
+	MapMethod = 0;
+	OldMapMethod = 0;
+	RevX = false;
+	RevY = false;
+	RevZ = false;
+	OldRevX = false;
+	OldRevY = false;
+	OldRevZ = false;
 }
 
 SBS::~SBS()
@@ -1599,111 +1605,6 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	return firstidx;
 }
 
-int SBS::AddCustomFloor(csRef<iMeshWrapper> dest, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
-{
-	//Adds a wall from a specified array of 3D vectors
-
-	//get thing factory state
-	csRef<iThingFactoryState> dest_state = scfQueryInterface<iThingFactoryState> (dest->GetMeshObject()->GetFactory());
-
-	float tw2 = tw;
-	float th2;
-	float tempw1;
-	float tempw2;
-	int num;
-	int i;
-	csPoly3D varray1;
-
-	//get number of stored vertices
-	num = varray.GetVertexCount();
-
-	//Set horizontal scaling
-	for (i = 0; i < num; i++)
-		varray1.AddVertex(ToRemote(varray[i].x) * HorizScale, ToRemote(varray[i].y), ToRemote(varray[i].z) * HorizScale);
-
-	//create a second array with reversed vertices
-	for (i = num - 1; i >= 0; i--)
-		varray1.AddVertex(varray1[i]);
-
-	csVector2 x, y, z;
-
-	//get extents for texture autosizing
-	x = ToLocal(GetExtents(varray, 1));
-	y = ToLocal(GetExtents(varray, 2));
-	z = ToLocal(GetExtents(varray, 3));
-
-	bool force_enable, force_mode;
-	GetTextureForce(texture, force_enable, force_mode);
-
-	//Call texture autosizing formulas
-	if (z.x == z.y)
-		tw2 = AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
-	if (x.x == x.y)
-		tw2 = AutoSize(z.x, z.y, true, tw, force_enable, force_mode);
-	if ((z.x != z.y) && (x.x != x.y))
-	{
-		//calculate diagonals
-		tempw1 = fabs(x.y - x.x);
-		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
-	}
-	th2 = AutoSize(0, fabs(y.y - y.x), false, th, force_enable, force_mode);
-
-	//create 2 polygons (front and back) from the vertex array
-	int firstidx = dest_state->AddPolygon(varray.GetVertices(), num);
-	dest_state->AddPolygon(varray1.GetVertices(), num);
-
-	csString polyname = dest_state->GetPolygonName(firstidx);
-	csString texname = texture;
-	bool result;
-	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, polyname.GetData());
-	if (!result)
-		texname = "Default";
-	dest_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
-
-	float tw3 = tw2, th3 = th2;
-	float mw, mh;
-	if (GetTextureTiling(texname.GetData(), mw, mh))
-	{
-		//multiply the tiling parameters (tw and th) by
-		//the stored multipliers for that texture
-		tw3 = tw2 * mw;
-		th3 = th2 * mh;
-	}
-
-	//UV texture mapping
-	for (int i = firstidx; i <= firstidx + 1; i++)
-	{
-		csVector3 v1, v2, v3;
-		GetTextureMapping(dest_state, i, v1, v2, v3);
-		dest_state->SetPolygonTextureMapping (csPolygonRange(i, i),
-			v1,
-			csVector2(MapUV[0].x * tw3, MapUV[0].y * th3),
-			v2,
-			csVector2(MapUV[1].x * tw3, MapUV[1].y * th3),
-			v3,
-			csVector2(MapUV[2].x * tw3, MapUV[2].y * th3));
-	}
-
-	//set polygon names
-	csString NewName;
-	NewName = name;
-	NewName.Append(":0");
-	dest_state->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
-	NewName = name;
-	NewName.Append(":1");
-	dest_state->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
-
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		DeleteColliders(dest);
-		CreateColliders(dest);
-	}
-
-	return firstidx;
-}
-
 int SBS::AddTriangleWall(csRef<iMeshWrapper> dest, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions
@@ -2296,27 +2197,25 @@ void SBS::ResetWalls(bool ToDefaults)
 		DrawWalls(DrawMainNOld, DrawMainPOld, DrawSideNOld, DrawSidePOld, DrawTopOld, DrawBottomOld);
 }
 
+void SBS::ReverseExtents(bool X, bool Y, bool Z)
+{
+	//reverses planar texture mapping per axis
+
+	//first backup old parameters
+	BackupMapping();
+
+	//now set new parameters
+	RevX = X;
+	RevY = Y;
+	RevZ = Z;
+	MapMethod = 0;
+}
+
 void SBS::SetTextureMapping(int vertindex1, csVector2 uv1, int vertindex2, csVector2 uv2, int vertindex3, csVector2 uv3)
 {
 	//Manually sets UV texture mapping.  Use ResetTextureMapping to return to default values
 
-	//backup old values
-	for (int i = 0; i <= 2; i++)
-	{
-		if (UseVerts == false)
-		{
-			OldMapIndex[i] = MapIndex[i];
-			OldVerts = false;
-		}
-		else
-		{
-			OldMapVerts1[i] = MapVerts1[i];
-			OldMapVerts1[i] = MapVerts1[i];
-			OldMapVerts1[i] = MapVerts1[i];
-			OldVerts = true;
-		}
-		OldMapUV[i] = MapUV[i];
-	}
+	BackupMapping();
 
 	//set new values
 	MapIndex[0] = vertindex1;
@@ -2325,7 +2224,7 @@ void SBS::SetTextureMapping(int vertindex1, csVector2 uv1, int vertindex2, csVec
 	MapUV[0] = uv1;
 	MapUV[1] = uv2;
 	MapUV[2] = uv3;
-	UseVerts = false;
+	MapMethod = 1;
 }
 
 void SBS::SetTextureMapping2(csString x1, csString y1, csString z1, csVector2 uv1, csString x2, csString y2, csString z2, csVector2 uv2, csString x3, csString y3, csString z3, csVector2 uv3)
@@ -2333,23 +2232,7 @@ void SBS::SetTextureMapping2(csString x1, csString y1, csString z1, csVector2 uv
 	//Manually sets UV texture mapping (advanced version)
 	//Use ResetTextureMapping to return to default values
 
-	for (int i = 0; i <= 2; i++)
-	{
-		//backup old values
-		if (UseVerts == false)
-		{
-			OldMapIndex[i] = MapIndex[i];
-			OldVerts = false;
-		}
-		else
-		{
-			OldMapVerts1[i] = MapVerts1[i];
-			OldMapVerts1[i] = MapVerts1[i];
-			OldMapVerts1[i] = MapVerts1[i];
-			OldVerts = true;
-		}
-		OldMapUV[i] = MapUV[i];
-	}
+	BackupMapping();
 
 	MapVerts1[0] = x1;
 	MapVerts1[1] = y1;
@@ -2363,14 +2246,129 @@ void SBS::SetTextureMapping2(csString x1, csString y1, csString z1, csVector2 uv
 	MapUV[0] = uv1;
 	MapUV[1] = uv2;
 	MapUV[2] = uv3;
-	UseVerts = true;
+	MapMethod = 2;
+}
+
+void SBS::BackupMapping()
+{
+	//backup texture mapping parameters
+	if (MapMethod == 0)
+	{
+		OldRevX = RevX;
+		OldRevY = RevY;
+		OldRevZ = RevZ;
+	}
+	else
+	{
+		for (int i = 0; i <= 2; i++)
+		{
+			if (MapMethod == 1)
+				OldMapIndex[i] = MapIndex[i];
+			if (MapMethod == 2)
+			{
+				OldMapVerts1[i] = MapVerts1[i];
+				OldMapVerts1[i] = MapVerts1[i];
+				OldMapVerts1[i] = MapVerts1[i];
+			}
+			OldMapUV[i] = MapUV[i];
+		}
+	}
+	OldMapMethod = MapMethod;
 }
 
 void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3)
 {
 	//returns texture mapping coordinates for the specified polygon index, in the v1, v2, and v3 vectors
+	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
 
-	if (UseVerts == true)
+	if (MapMethod == 0)
+	{
+		//planar method
+
+		csVector2 x, y, z;
+		csPoly3D varray;
+
+		//copy all polygon vertices
+		for (int i = 0; i < state->GetPolygonVertexCount(index); i++)
+			varray.AddVertex(state->GetPolygonVertex(index, i));
+		x = GetExtents(varray, 1);
+		y = GetExtents(varray, 2);
+		z = GetExtents(varray, 3);
+
+		//reverse extents if specified
+		float tmpv;
+		if (RevX == true)
+		{
+			tmpv = x.x;
+			x.x = x.y;
+			x.y = tmpv;
+		}
+		if (RevY == true)
+		{
+			tmpv = y.x;
+			y.x = y.y;
+			y.y = tmpv;
+		}
+		if (RevZ == true)
+		{
+			tmpv = z.x;
+			z.x = z.y;
+			z.y = tmpv;
+		}
+
+		//reverse values if normal axis is negative
+		//this is because we need the vertices to represent the top left, top right, and bottom right
+		//(using just min/max values isn't going to always give us this info)
+
+		csVector3 normal = state->GetPolygonObjectPlane(index).GetNormal();
+		if (normal.x > 0 && normal.z > 0)
+		{
+			//if both X and Z portions of the normal are positive, swap Z coordinates
+			//this is because in this situation, the top-left Z is greater than the top-right Z
+			tmpv = z.x;
+			z.x = z.y;
+			z.y = tmpv;
+		}
+		if (normal.x < 0 && normal.z < 0)
+		{
+			//if both X and X portions of the normal are negative, swap X coordinates
+			//this is because in this situation, the top-left X is greater than the top-right X
+			tmpv = x.x;
+			x.x = x.y;
+			x.y = tmpv;
+		}
+
+		//return results
+		if (normal.y > -0.5 && normal.y < 0.5)
+		{
+			//return standard wall mapping
+			v1 = csVector3(x.x, y.y, z.x);
+			v2 = csVector3(x.y, y.y, z.y);
+			v3 = csVector3(x.y, y.x, z.y);
+		}
+		else
+		{
+			//floor mapping
+			if (normal.y > 0)
+			{
+				//if Y is positive (floor is facing downwards), flip Y since the top-left Y is greater than the top-right
+				tmpv = y.x;
+				y.x = y.y;
+				y.y = tmpv;
+			}
+			v1 = csVector3(x.x, y.x, z.x);
+			v2 = csVector3(x.y, y.x, z.x);
+			v3 = csVector3(x.y, y.y, z.y);
+		}
+	}
+	if (MapMethod == 1)
+	{
+		//index method
+		v1 = state->GetPolygonVertex(index, MapIndex[0]);
+		v2 = state->GetPolygonVertex(index, MapIndex[1]);
+		v3 = state->GetPolygonVertex(index, MapIndex[2]);
+	}
+	if (MapMethod == 2)
 	{
 		//advanced manual vertex method
 
@@ -2455,25 +2453,20 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 			}
 		}
 	}
-	else
-	{
-		//basic index method
-		v1 = state->GetPolygonVertex(index, MapIndex[0]);
-		v2 = state->GetPolygonVertex(index, MapIndex[1]);
-		v3 = state->GetPolygonVertex(index, MapIndex[2]);
-	}
 }
 
 void SBS::ResetTextureMapping(bool todefaults)
 {
 	//Resets UV texture mapping to defaults or previous values
 	if (todefaults == true)
-		SetTextureMapping(0, csVector2(0, 0), 1, csVector2(1, 0), 2, csVector2(1, 1));
+		ReverseExtents(false, false, false);
 	else
 	{
-		if (OldVerts == false)
+		if (OldMapMethod == 0)
+			ReverseExtents(OldRevX, OldRevY, OldRevZ);
+		if (OldMapMethod == 1)
 			SetTextureMapping(OldMapIndex[0], OldMapUV[0], OldMapIndex[1], OldMapUV[1], OldMapIndex[2], OldMapUV[2]);
-		else
+		if (OldMapMethod == 2)
 			SetTextureMapping2(OldMapVerts1[0], OldMapVerts1[1], OldMapVerts1[2], OldMapUV[0], OldMapVerts2[0], OldMapVerts2[1], OldMapVerts2[2], OldMapUV[1], OldMapVerts3[0], OldMapVerts3[1], OldMapVerts3[2], OldMapUV[2]);
 	}
 }

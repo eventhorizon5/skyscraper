@@ -1203,62 +1203,6 @@ int ScriptProcessor::ProcCommands()
 		tempdata.DeleteAll();
 	}
 
-	//AddCustomFloor command
-	if (LineData.Slice(0, 15).CompareNoCase("addcustomfloor ") == true)
-	{
-		if (Section == 2 && getfloordata == false)
-		{
-			//process floor-specific variables if in a floor section
-			getfloordata = true;
-			return sRecalc;
-		}
-		else
-			getfloordata = false;
-
-		tempdata.SplitString(LineData.Slice(15).GetData(), ",");
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
-		{
-			buffer = Calc(tempdata[temp3]);
-			tempdata.Put(temp3, buffer.Trim());
-		}
-
-		//check numeric values
-		for (int i = 3; i < tempdata.GetSize() - 2; i++)
-		{
-			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
-		}
-
-		buffer = tempdata[0];
-		buffer.Downcase();
-		if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level;
-		else if (buffer == "external")
-			tmpMesh = Simcore->External;
-		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape;
-		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings;
-		else
-		{
-			ScriptError("Invalid object");
-			return sError;
-		}
-
-		csPoly3D varray;
-		int alength;
-		alength = tempdata.GetSize();
-		for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
-			varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
-
-		Simcore->AddCustomFloor(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
-
-		tempdata.DeleteAll();
-	}
-
 	//AddShaft command
 	if (LineData.Slice(0, 9).CompareNoCase("addshaft ") == true)
 	{
@@ -1709,6 +1653,28 @@ int ScriptProcessor::ProcCommands()
 		temp2.Trim();
 
 		Simcore->ResetTextureMapping(temp2.CompareNoCase("true"));
+	}
+
+	//ReverseExtents command
+	if (LineData.Slice(0, 14).CompareNoCase("reverseextents") == true)
+	{
+		tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+		{
+			ScriptError("Incorrect number of parameters");
+			return false;
+		}
+
+		Simcore->ReverseExtents(csString(tempdata[0]).CompareNoCase("true"),
+					csString(tempdata[1]).CompareNoCase("true"),
+					csString(tempdata[2]).CompareNoCase("true"));
+
+		tempdata.DeleteAll();
 	}
 
 	//ReverseAxis command

@@ -386,41 +386,28 @@
 
 SetAutoSize = true, false
 # front setback
-SetTextureMapping2 x0, y3, z0, 0, 0, x3, y3, z1, 1, 0, x3, y1, z1, 1, 1
 AddCustomWall external, Front - Main, MainWindows, -100.64, Floor(65).Altitude + 6, -46.24, -83.04, Floor(79).Altitude + 6, -20.64, -24.48, Floor(60).Altitude + 6, -41.44, -21.76, Floor(58).Altitude, -45.92, 0, 21.5
-SetTextureMapping2  x0, y0, z0, 1, 7.5, x1, y1, z1, 0, 7.5, x2, y2, z2, 0, -6.5
-AddTriangleWall external, Front - Left, MainWindows, -100.64, Floor(65).Altitude + 6, -46.24, -83.04, Floor(65).Altitude + 6, -20.64, -83.04, Floor(79).Altitude + 6, -20.64, 0, 1
-ResetTextureMapping = true
+SetTextureMapping2 x0, y0, z0, 1, 7.5, x1, y1, z1, 0, 7.5, x2, y2, z2, 0, 6.5
+AddTriangleWall external, Front - Left, MainWindows, -100.64, Floor(65).Altitude + 6, -46.24, -83.04, Floor(65).Altitude + 6, -20.64, -83.04, Floor(79).Altitude + 6, -20.64, 0, 14
+ResetTextureMapping true
 AddTriangleWall external, Front - Back, MainWindows, -79.2, Floor(80).Altitude, -15.2, -18.88, Floor(80).Altitude, -36.8, -18.88, Floor(58).Altitude, -36.8, 0, 19
-SetTextureMapping2 x1, y2, z1, 0, 1, x0, y2, z0, 1, 1, x0, y0, z0, 1, 0
 AddTriangleWall external, Front - Bottom, MainWindows, -21.76, Floor(58).Altitude, -45.92, -100.64, Floor(58).Altitude, -46.24, -100.64, Floor(65).Altitude + 6, -46.24, 0, 7.5
 
 # back setback
-SetTextureMapping2 x0, y0, z0, 0, 1, x1, y1, z1, 0, 0, x2, y2, z2, 1, 0
 AddTriangleWall external, Back - Back, MainWindows, 37.28, Floor(31).Altitude, 36.64, 37.28, Floor(58).Altitude, 36.64, -43.36, Floor(58).Altitude, 36.64, 0, 27
-SetTextureMapping2 x3, y1, z1, 0, 0, x1, y1, z1, 1, 0, x3, y3, z3, 1, 1
 AddCustomWall external, Back - Main, MainWindows, 37.92, Floor(33).Altitude + 6, 43.52, -48.64, Floor(58).Altitude, 43.2, -18.88, Floor(42).Altitude + 6, 68.8, 40.64, Floor(31).Altitude, 46.08, 0, 27
-SetTextureMapping2 x0, y0, z0, 0, 1, x1, y1, z1, 0, 0, x2, y2, z2, 1, 0
 AddTriangleWall external, Back - Right, MainWindows, -18.88, Floor(42).Altitude + 6, 68.8, -18.88, Floor(31).Altitude, 68.8, 40.64, Floor(31).Altitude, 46.08, 0, 11.5
-SetTextureMapping2 x2, y0, z2, 0, 0, x0, y0, z0, 1, 0, x1, y1, z1, 1, 1
 AddTriangleWall external, Back - Left, MainWindows, -48.64, Floor(58).Altitude, 43.2, -48.64, Floor(42).Altitude + 6, 43.2, -18.88, Floor(42).Altitude + 6, 68.8, 0, -15.5
 
 # right setback
-SetTextureMapping2 x0, y0, z0, 0, 0, x2, y2, z2, 1, 0, x2, y1, z2, 1, 1
 AddTriangleWall external, Right - Main, MainWindows, 18.4, Floor(137).Altitude, -36.8, 77.6, Floor(85).Altitude, -7.84, 58.08, Floor(137).Altitude, 21.44, 0, 52
-SetTextureMapping2 x2, y0, z2, 0, 0, x0, y0, z0, 1, 0, x0, y2, z0, 1, 1
 AddTriangleWall external, Right - Front, MainWindows, 18.4, Floor(137).Altitude, -36.8, 18.4, Floor(85).Altitude, -36.8, 77.6, Floor(85).Altitude, -7.84, 0, 52
-ResetTextureMapping = true
-SetTextureMapping2 x0, y0, z0, 1, 0, x2, y0, z2, 0, 0, x2, y2, z2, 0, 1
 AddTriangleWall external, Right - Back, MainWindows, 58.08, Floor(137).Altitude, 21.44, 58.08, Floor(85).Altitude, 21.44, 77.6, Floor(85).Altitude, -7.84, 0, 52
 
 # left setback
-SetTextureMapping2 x0, y0, z0, 0, 0, x2, y2, z2, 1, 0, x2, y1, z2, 1, 1
 AddTriangleWall external, Left - Main, MainWindows, -43.36, Floor(137).Altitude, 36.64, -84.32, Floor(110).Altitude, 7.84, -79.2, Floor(137).Altitude, -15.2, 0, 27
-SetTextureMapping2 x0, y0, z0, 1, 0, x2, y0, z2, 0, 0, x2, y2, z2, 0, 1
 AddTriangleWall external, Left - Front, MainWindows, -79.2, Floor(137).Altitude, -15.2, -79.2, Floor(110).Altitude, -15.2, -84.32, Floor(110).Altitude, 7.84, 0, 27
 AddTriangleWall external, Left - Back, MainWindows, -43.36, Floor(137).Altitude, 36.64, -43.36, Floor(110).Altitude, 36.64, -84.32, Floor(110).Altitude, 7.84, 0, 27
-ResetTextureMapping = true
 
 <end>
 

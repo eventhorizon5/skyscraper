@@ -245,6 +245,29 @@
     the left to the right), and that it has the same z values. With that, MainNegative 
     would be the front wall, MainPositive the back, SideNegative the left, SidePositive 
     the right, etc.</p>
+  <p align="left"><strong>m. ReverseExtents</strong> - reverses the automatic 
+    texture mapping per axis.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> ReverseExtents X, 
+    Y, Z</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">ReverseExtents false, 
+    false, true</font></p>
+  <p align="left">Skyscraper by default uses a simple planar texture mapper, which 
+    in simple terms draws the texture in a box around the object. With a basic 
+    wall, the top-left of the texture image is mapped to the top left of the wall, 
+    the top-right is mapped to the top-right of the wall, etc. If you want the 
+    top-right of the texture mapped to the top-left of the wall for example (to 
+    flip or change alignment), you'd set X to false. This command is mainly used 
+    to change alignment - since the top-left of the texture is mapped to the top-left 
+    of the object, that means that textures have a left/top alignment by default. 
+    If you change X to true, it'll be right-aligned. If you change Y to true, 
+    it'll be bottom-aligned. See this picture for an example:</p>
+  <p align="left"><img src="guide/extents.jpg"></p>
+  <p align="left">In the above picture, I tiled a texture (a black box with yellow 
+    around it) 2.5 times on width and height. The bottom floor shows the default 
+    texture mapping (ReverseExtents false, false, false); you'll notice that it's 
+    aligned to the top-right. In the middle one, I set the X value to true (ReverseExtents 
+    true, false, false). In the top one, I set the Y value to true (ReverseExtents 
+    false, true, false).</p>
   <p align="left"><strong>m. SetTextureMapping</strong> - manually sets UV texture 
     mapping for all polygons generated after this command; ResetTextureMapping 
     restores the values to the defaults or previous<br>
@@ -263,11 +286,11 @@
     1,0 (really &quot;width, 0&quot;) being mapped at the second vertex (top right), 
     and texture coordinate 1,1 (really &quot;width, height&quot;) being mapped 
     to the bottom right. For a standard wall, the valid vertex values are from 
-    0 to 3. If a wall or floor is created with AddCustomWall/AddCustomFloor, and 
-    if it has for example 7 vertex points, the valid values for this command would 
-    then be 0 to 6 (but only 3 vertices can be used for mapping purposes). Textures 
-    can also be cropped with this command - for example, to map only a central 
-    square of a texture, you'd use:<br>
+    0 to 3. If a wall or floor is created with AddCustomWall, and if it has for 
+    example 7 vertex points, the valid values for this command would then be 0 
+    to 6 (but only 3 vertices can be used for mapping purposes). Textures can 
+    also be cropped with this command - for example, to map only a central square 
+    of a texture, you'd use:<br>
     <font size="2" face="Courier New, Courier, mono">SetTextureMapping 0, 0.25, 
     0.25, 1, 0.75, 0.25, 2, 0.75, 0.75</font></p>
   <p align="left">Here's an easier way to see the example above:</p>
