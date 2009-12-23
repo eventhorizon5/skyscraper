@@ -130,18 +130,6 @@ SBS::SBS()
 	OldMapVerts1.SetSize(3);
 	OldMapVerts2.SetSize(3);
 	OldMapVerts3.SetSize(3);
-	for (int i = 0; i <= 2; i++)
-	{
-		MapIndex[i] = 0;
-		OldMapIndex[i] = 0;
-		MapUV[i] = 0;
-		OldMapUV[i] = 0;
-	}
-	ResetTextureMapping(true); //set default texture map values
-	RecreateColliders = false;
-	soundcount = 0;
-	UnitScale = 1;
-	Verbose = false;
 	MapMethod = 0;
 	OldMapMethod = 0;
 	RevX = false;
@@ -150,6 +138,18 @@ SBS::SBS()
 	OldRevX = false;
 	OldRevY = false;
 	OldRevZ = false;
+	for (int i = 0; i <= 2; i++)
+	{
+		MapIndex[i] = 0;
+		OldMapIndex[i] = 0;
+		OldMapUV[i] = 0;
+		MapUV[i] = 0;
+	}
+	ResetTextureMapping(true); //set default texture map values
+	RecreateColliders = false;
+	soundcount = 0;
+	UnitScale = 1;
+	Verbose = false;
 }
 
 SBS::~SBS()
@@ -2208,6 +2208,9 @@ void SBS::ReverseExtents(bool X, bool Y, bool Z)
 	RevX = X;
 	RevY = Y;
 	RevZ = Z;
+	MapUV[0] = csVector2(0, 0);
+	MapUV[1] = csVector2(1, 0);
+	MapUV[2] = csVector2(1, 1);
 	MapMethod = 0;
 }
 
@@ -2270,9 +2273,10 @@ void SBS::BackupMapping()
 				OldMapVerts1[i] = MapVerts1[i];
 				OldMapVerts1[i] = MapVerts1[i];
 			}
-			OldMapUV[i] = MapUV[i];
 		}
 	}
+	for (int i = 0; i <= 2; i++)
+		OldMapUV[i] = MapUV[i];
 	OldMapMethod = MapMethod;
 }
 
