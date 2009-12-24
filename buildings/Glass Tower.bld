@@ -26,8 +26,9 @@
     Description = The fictitious 138-story building from the movie The Towering Inferno.
     Version = 1
     CameraFloor = 0
-    CameraPosition = 0, -300
+    CameraPosition = 0, 0
     CameraRotation = 0, 0, 0
+    InterfloorOnTop = true
 <EndGlobals>
 
 <Textures>
@@ -86,8 +87,27 @@
     AddFloor Floor, Marble4, 0.5, -355.5, -355.5, 355.5, 355.5, 0, 0, 0, 0, False
     #AddFloor Ceiling, Ceiling1, 0.5, -91, -85.3, 91, 85.3, %height% - 0.05, %height% - 0.05, 0, 0, False
 
+    #Floor
+    Set 1 = Floor(%floor%).Base
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall floor, FrontFinFloor, Carpet1, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
+    AddCustomWall floor, FrontDetachmentFloor, Carpet1, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
+    AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 34.24, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
+    AddCustomWall floor, BackDetachmentFloor, Carpet1, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
+    AddCustomWall floor, BackFinFloor, Carpet1, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 40.64, %1%, 46.08, 37.92, %1%, 43.52, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, 0, 0
+
+    #Ceiling
+    Set 1 = Floor(%floor%).Altitude + Floor(%floor%).Height
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall floor, FrontFinCeiling, Marble3, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
+    AddCustomWall floor, FrontDetachmentCeiling, Marble3, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
+    AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 34.24, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
+    AddCustomWall floor, BackDetachmentCeiling, Marble3, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
+    AddCustomWall floor, BackFinCeiling, Marble3, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 40.64, %1%, 46.08, 37.92, %1%, 43.52, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, 0, 0
+
     #Lobby Front
     SetAutoSize = true, false
+    DrawWalls = true, true, false, false, false, false
     AddWall Back Fin Left, LobbyFront, 0, -48.64, 43.2, -18.88, 68.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Back Fin Extension Left, Backing, 0, -48.64, 43.2, -44.96, 43.2, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Back Fin Left Detachment, Backing, 0, -44.96, 35.52, -44.96, 43.2, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -122,8 +142,23 @@
     Height = 9.5
     InterfloorHeight = 2.5
 
-    AddFloor Floor, Carpet1, 0.5, -355.5, -355.5, 355.5, 355.5, 0, 0, 0, 0, False
-    AddFloor Ceiling, Marble3, 0.5, -355.5, -355.5, 355.5, 355.5, %height%, %height%, 0, 0, False
+    #Floor
+    Set 1 = Floor(%floor%).Base
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall floor, FrontFinFloor, Carpet1, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
+    AddCustomWall floor, FrontDetachmentFloor, Carpet1, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
+    AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 34.24, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
+    AddCustomWall floor, BackDetachmentFloor, Carpet1, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
+    AddCustomWall floor, BackFinFloor, Carpet1, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 40.64, %1%, 46.08, 37.92, %1%, 43.52, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, 0, 0
+
+    #Ceiling
+    Set 1 = Floor(%floor%).Altitude + Floor(%floor%).Height
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall floor, FrontFinCeiling, Marble3, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
+    AddCustomWall floor, FrontDetachmentCeiling, Marble3, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
+    AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 34.24, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
+    AddCustomWall floor, BackDetachmentCeiling, Marble3, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
+    AddCustomWall floor, BackFinCeiling, Marble3, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 40.64, %1%, 46.08, 37.92, %1%, 43.52, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, 0, 0
 
     # Interfloor bottom
 
@@ -133,6 +168,7 @@
 
     #External windows/walls
     SetAutoSize = true, false
+    DrawWalls = true, true, false, false, false, false
     AddWall Back Fin Left, MainWindows, 0, -48.64, 43.2, -18.88, 68.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Back Fin Extension Left, Backing, 0, -48.64, 43.2, -44.96, 43.2, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Back Fin Left Detachment, Backing, 0, -44.96, 35.52, -44.96, 43.2, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -169,8 +205,23 @@
     Height = 9.5
     InterfloorHeight = 2.5
 
-    AddFloor Floor, Carpet1, 0.5, -355.5, -355.5, 355.5, 355.5, 0, 0, 0, 0, False
-    AddFloor Ceiling, Marble3, 0.5, -355.5, -355.5, 355.5, 355.5, %height%, %height%, 0, 0, False
+    #Floor
+    Set 1 = Floor(%floor%).Base
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall floor, FrontFinFloor, Carpet1, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
+    AddCustomWall floor, FrontDetachmentFloor, Carpet1, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
+    AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 34.24, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
+    AddCustomWall floor, BackDetachmentFloor, Carpet1, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
+    AddCustomWall floor, BackFinFloor, Carpet1, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 40.64, %1%, 46.08, 37.92, %1%, 43.52, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, 0, 0
+
+    #Ceiling
+    Set 1 = Floor(%floor%).Altitude + Floor(%floor%).Height
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall floor, FrontFinCeiling, Marble3, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
+    AddCustomWall floor, FrontDetachmentCeiling, Marble3, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
+    AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 34.24, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
+    AddCustomWall floor, BackDetachmentCeiling, Marble3, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
+    AddCustomWall floor, BackFinCeiling, Marble3, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 40.64, %1%, 46.08, 37.92, %1%, 43.52, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, 0, 0
 
     # Interfloor bottom
 
@@ -180,6 +231,7 @@
 
     #External windows/walls
     SetAutoSize = true, false
+    DrawWalls = true, true, false, false, false, false
     if[%floor% < 42] AddWall Back Fin Left, MainWindows, 0, -48.64, 43.2, -18.88, 68.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     if[%floor% = 42] AddWall Back Fin Left, MainWindows, 0, -48.64, 43.2, -18.88, 68.8, %fullheight% / 2, %fullheight% / 2, 0, 0, 0, 0, True
     AddWall Back Fin Extension Left, Backing, 0, -48.64, 43.2, -44.96, 43.2, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -212,8 +264,19 @@
     Height = 9.5
     InterfloorHeight = 2.5
 
-    if[%floor% ! 65] AddFloor Floor, Carpet1, 0.5, -355.5, -355.5, 355.5, 355.5, 0, 0, 0, 0, False
-    if[%floor% ! 64] AddFloor Ceiling, Marble3, 0.5, -355.5, -355.5, 355.5, 355.5, %height%, %height%, 0, 0, False
+    #Floor
+    Set 1 = Floor(%floor%).Base
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall floor, FrontFinFloor, Carpet1, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
+    AddCustomWall floor, FrontDetachmentFloor, Carpet1, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
+    AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
+
+    #Ceiling
+    Set 1 = Floor(%floor%).Altitude + Floor(%floor%).Height
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall floor, FrontFinCeiling, Marble3, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
+    AddCustomWall floor, FrontDetachmentCeiling, Marble3, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
+    AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
 
     # Interfloor bottom
 
@@ -223,6 +286,7 @@
 
     #External windows/walls
     SetAutoSize = true, false
+    DrawWalls = true, true, false, false, false, false
     AddWall Back, MainWindows, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0, -84.32, 7.84, -43.36, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Lower, MainWindows, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -250,8 +314,15 @@
     Height = 9.5
     InterfloorHeight = 3.5
 
-    AddFloor Floor, Carpet1, 0.5, -355.5, -355.5, 355.5, 355.5, 0, 0, 0, 0, False
-    AddFloor Ceiling, Marble3, 0.5, -355.5, -355.5, 355.5, 355.5, %height%, %height%, 0, 0, False
+    #Floor
+    Set 1 = Floor(%floor%).Base
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+
+    #Ceiling
+    Set 1 = Floor(%floor%).Altitude + Floor(%floor%).Height
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
 
     # Interfloor bottom
 
@@ -261,6 +332,7 @@
 
     #External windows/walls
     SetAutoSize = true, false
+    DrawWalls = true, true, false, false, false, false
     AddWall Back, MainWindows, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0, -84.32, 7.84, -43.36, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Lower, MainWindows, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -280,8 +352,15 @@
     Height = 9.5
     InterfloorHeight = 2.5
 
-    AddFloor Floor, Carpet1, 0.5, -355.5, -355.5, 355.5, 355.5, 0, 0, 0, 0, False
-    AddFloor Ceiling, Marble3, 0.5, -355.5, -355.5, 355.5, 355.5, %height%, %height%, 0, 0, False
+    #Floor
+    Set 1 = Floor(%floor%).Base
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+
+    #Ceiling
+    Set 1 = Floor(%floor%).Altitude + Floor(%floor%).Height
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
 
     # Interfloor bottom
 
@@ -291,6 +370,7 @@
 
     #External windows/walls
     SetAutoSize = true, false
+    DrawWalls = true, true, false, false, false, false
     AddWall Back, MainWindows, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0, -84.32, 7.84, -43.36, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Lower, MainWindows, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -310,8 +390,15 @@
     Height = 9.5
     InterfloorHeight = 2.5
 
-    AddFloor Floor, Carpet1, 0.5, -355.5, -355.5, 355.5, 355.5, 0, 0, 0, 0, False
-    AddFloor Ceiling, Marble3, 0.5, -355.5, -355.5, 355.5, 355.5, %height%, %height%, 0, 0, False
+    #Floor
+    Set 1 = Floor(%floor%).Base
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+
+    #Ceiling
+    Set 1 = Floor(%floor%).Altitude + Floor(%floor%).Height
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
 
     # Interfloor bottom
 
@@ -321,6 +408,7 @@
 
     #External windows/walls
     SetAutoSize = true, false
+    DrawWalls = true, true, false, false, false, false
     AddWall Back, MainWindows, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front, MainWindows, 0, -79.2, -15.2, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -366,8 +454,10 @@
     Height = 24
     InterfloorHeight = 2.5
 
-    AddFloor Floor, Marble4, 0.5, -355.5, -355.5, 355.5, 355.5, 0, 0, 0, 0, False
-    AddFloor Ceiling, Marble4, 0.5, -355.5, -355.5, 355.5, 355.5, %height%, %height%, 0, 0, False
+    #Floor
+    Set 1 = Floor(%floor%).Base
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
 
     # Interfloor bottom
 
@@ -385,6 +475,7 @@
 <EndFloor>
 
 SetAutoSize = true, false
+DrawWalls = true, true, false, false, false, false
 # front setback
 ResetTextureMapping = true
 AddCustomWall external, Front - Main, MainWindows, -100.64, Floor(65).Altitude + 6, -46.24, -83.04, Floor(79).Altitude + 6, -20.64, -24.48, Floor(60).Altitude + 6, -41.44, -21.76, Floor(58).Altitude, -45.92, 0, 21.5
@@ -441,7 +532,7 @@ ShowFullShaft 2 = true
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     if[%floor% ! 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 15.25 - 0.33, 4.125 - 49.85, 3.05 + 15.25 + 0.33, 4.125 - 49.85, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% = 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 15.25 - 0.33, 4.125 - 49.85, 3.05 + 15.25 + 0.33, 4.125 - 49.85, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    if[%floor% = 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 15.25 - 0.33, 4.125 - 49.85, 3.05 + 15.25 + 0.33, 4.125 - 49.85, %fullheight%, %fullheight%, -%base%, -%base%, 0, 0, False
 <EndFloors>
 
 #test elevator

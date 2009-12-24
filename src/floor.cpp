@@ -133,10 +133,10 @@ Floor::~Floor()
 
 void Floor::SetCameraFloor()
 {
-	//Moves camera to specified floor (sets altitude to the floor's altitude plus DefaultAltitude)
+	//Moves camera to specified floor (sets altitude to the floor's base plus DefaultAltitude)
 
 	csVector3 camlocation = sbs->camera->GetPosition();
-	sbs->camera->SetPosition(csVector3(camlocation.x, Altitude + InterfloorHeight + sbs->camera->cfg_body_height + sbs->camera->cfg_legs_height, camlocation.z));
+	sbs->camera->SetPosition(csVector3(camlocation.x, GetBase() + sbs->camera->cfg_body_height + sbs->camera->cfg_legs_height, camlocation.z));
 }
 
 int Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th, bool isexternal)
@@ -160,7 +160,7 @@ int Floor::AddFloor(const char *name, const char *texture, float thickness, floa
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	if (isexternal == false)
-		return sbs->AddFloorMain(Level, name, texture, thickness, x1, z1, x2, z2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
+		return sbs->AddFloorMain(Level, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, tw2, th2);
 	else
 		return sbs->AddFloorMain(sbs->External, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
@@ -237,7 +237,7 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 	th2 = sbs->AutoSize(0, height_in1, false, th, force_enable, force_mode);
 
 	if (isexternal == false)
-		return sbs->AddWallMain(Level, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + InterfloorHeight + voffset1, Altitude + InterfloorHeight + voffset2, tw2, th2);
+		return sbs->AddWallMain(Level, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, tw2, th2);
 	else
 		return sbs->AddWallMain(sbs->External, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
@@ -405,14 +405,14 @@ void Floor::AddDoor(const char *texture, float thickness, int direction, float C
 
 	//cut area
 	if (direction < 5)
-		Cut(csVector3(x1 - 1, InterfloorHeight + voffset, z1), csVector3(x2 + 1, InterfloorHeight + voffset + height, z2), true, false, true);
+		Cut(csVector3(x1 - 1, GetBase(true) + voffset, z1), csVector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false, true);
 	else
-		Cut(csVector3(x1, InterfloorHeight + voffset, z1 - 1), csVector3(x2, InterfloorHeight + voffset + height, z2 + 1), true, false, true);
+		Cut(csVector3(x1, GetBase(true) + voffset, z1 - 1), csVector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false, true);
 
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
 	csString floornum = _itoa(Number, intbuffer, 10);
 	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
-	DoorArray[DoorArray.GetSize() - 1] = new Door(this->object, "Floor " + floornum + ":Door " + num, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + Altitude + InterfloorHeight, tw, th);
+	DoorArray[DoorArray.GetSize() - 1] = new Door(this->object, "Floor " + floornum + ":Door " + num, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
 }
 
 float Floor::CalculateAltitude()
@@ -489,12 +489,12 @@ bool Floor::AddFloorIndicator(int elevator, bool relative, const char *texture_p
 	FloorIndicatorArray.SetSize(size + 1);
 
 	if (relative == false)
-		FloorIndicatorArray[size] = new FloorIndicator(elevator, texture_prefix, direction, CenterX, CenterZ, width, height, Altitude + InterfloorHeight + voffset);
+		FloorIndicatorArray[size] = new FloorIndicator(elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
 	else
 	{
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
-			FloorIndicatorArray[size] = new FloorIndicator(elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, Altitude + + InterfloorHeight + voffset);
+			FloorIndicatorArray[size] = new FloorIndicator(elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase(true) + voffset);
 		else
 			return false;
 	}
@@ -631,7 +631,7 @@ bool Floor::AddSound(const char *name, const char *filename, csVector3 position,
 	sound = new Sound(this->object, name);
 
 	//set parameters and play sound
-	sound->SetPosition(csVector3(position.x, Altitude + InterfloorHeight + position.y, position.z));
+	sound->SetPosition(csVector3(position.x, GetBase() + position.y, position.z));
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
@@ -656,4 +656,25 @@ void Floor::ReportError(const char *message)
 {
 	//general reporting function
 	sbs->ReportError("Floor " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
+}
+
+float Floor::GetBase(bool relative)
+{
+	//returns the base of the floor
+	//if Interfloor is on the bottom of the level (by default), the base is GetBase()
+	//otherwise the base is just altitude
+	if (relative == false)
+	{
+		if (sbs->InterfloorOnTop == false)
+			return Altitude + InterfloorHeight;
+		else
+			return Altitude;
+	}
+	else
+	{
+		if (sbs->InterfloorOnTop == false)
+			return InterfloorHeight;
+		else
+			return 0;
+	}
 }

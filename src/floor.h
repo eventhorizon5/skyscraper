@@ -93,6 +93,7 @@ public:
 	bool AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
 	void Report(const char *message);
 	void ReportError(const char *message);
+	float GetBase(bool relative = false);
 
 private:
 	char intbuffer[65];

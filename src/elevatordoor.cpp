@@ -1030,7 +1030,7 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *
 	//create doors
 	Floor *floorobj = sbs->GetFloor(floor);
 	Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-	base = floorobj->InterfloorHeight; //relative to floor
+	base = floorobj->GetBase(true); //relative to floor
 	base2 = floorobj->Altitude + base; //absolute
 
 	//cut shaft and floor walls
@@ -1222,7 +1222,7 @@ void ElevatorDoor::Chime(int floor, bool direction)
 	else
 		chime->Load(UpChimeSound);
 	chime->Loop(false);
-	chime->SetPositionY(sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight + DoorHeight);
+	chime->SetPositionY(sbs->GetFloor(floor)->GetBase() + DoorHeight);
 	chime->Play();
 }
 

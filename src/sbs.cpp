@@ -150,6 +150,7 @@ SBS::SBS()
 	soundcount = 0;
 	UnitScale = 1;
 	Verbose = false;
+	InterfloorOnTop = false;
 }
 
 SBS::~SBS()
@@ -1551,8 +1552,19 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	th2 = AutoSize(0, fabs(y.y - y.x), false, th, force_enable, force_mode);
 
 	//create 2 polygons (front and back) from the vertex array
-	int firstidx = dest_state->AddPolygon(varray1.GetVertices(), num);
-	dest_state->AddPolygon(varray2.GetVertices(), num);
+	int tmpindex, firstidx, numindices = 0;
+	if (DrawMainN == true)
+	{
+		firstidx = dest_state->AddPolygon(varray1.GetVertices(), num);
+		numindices++;
+	}
+	if (DrawMainP == true)
+	{
+		tmpindex = dest_state->AddPolygon(varray2.GetVertices(), num);
+		if (DrawMainN == false)
+			firstidx = tmpindex;
+		numindices++;
+	}
 
 	csString polyname = dest_state->GetPolygonName(firstidx);
 	csString texname = texture;
@@ -1560,7 +1572,7 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, polyname.GetData());
 	if (!result)
 		texname = "Default";
-	dest_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + 1), material);
+	dest_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + (numindices - 1)), material);
 
 	float tw3 = tw2, th3 = th2;
 	float mw, mh;
@@ -1573,7 +1585,7 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	}
 
 	//UV texture mapping
-	for (int i = firstidx; i <= firstidx + 1; i++)
+	for (int i = firstidx; i <= firstidx + (numindices - 1); i++)
 	{
 		csVector3 v1, v2, v3;
 		GetTextureMapping(dest_state, i, v1, v2, v3);
@@ -1590,10 +1602,17 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	csString NewName;
 	NewName = name;
 	NewName.Append(":0");
-	dest_state->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
+	if (DrawMainN == true)
+		dest_state->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
 	NewName = name;
 	NewName.Append(":1");
-	dest_state->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+	if (DrawMainP == true)
+	{
+		if (DrawMainN == true)
+			dest_state->SetPolygonName(csPolygonRange(firstidx + 1, firstidx + 1), NewName);
+		else
+			dest_state->SetPolygonName(csPolygonRange(firstidx, firstidx), NewName);
+	}
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)

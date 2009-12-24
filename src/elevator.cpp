@@ -281,7 +281,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		AddServicedFloor(floor);
 
 	//set data
-	Origin.y = sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->InterfloorHeight;
+	Origin.y = sbs->GetFloor(floor)->GetBase();
 	if (relative == false)
 	{
 		Origin.x = x;
@@ -338,7 +338,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (MotorPosition != csVector3(0, 0, 0))
 		motorsound->SetPosition(csVector3(MotorPosition.x + Origin.x, MotorPosition.y, MotorPosition.z + Origin.z));
 	else
-		motorsound->SetPositionY(sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->Altitude + sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->InterfloorHeight);
+		motorsound->SetPositionY(sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->GetBase());
 	MotorPosition = csVector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
 	alarm = new Sound(this->object, "Alarm");
 	alarm->SetPosition(Origin);
@@ -674,7 +674,7 @@ void Elevator::ProcessCallQueue()
 					//if elevator is moving, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != UpQueue[i])
 					{
-						float tmpdestination = sbs->GetFloor(UpQueue[i])->Altitude + sbs->GetFloor(UpQueue[i])->InterfloorHeight;
+						float tmpdestination = sbs->GetFloor(UpQueue[i])->GetBase();
 						if (BeyondDecelMarker(1, tmpdestination) == false)
 						{
 							ActiveCallFloor = UpQueue[i];
@@ -744,7 +744,7 @@ void Elevator::ProcessCallQueue()
 					//if elevator is moving, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != DownQueue[i])
 					{
-						float tmpdestination = sbs->GetFloor(DownQueue[i])->Altitude + sbs->GetFloor(DownQueue[i])->InterfloorHeight;
+						float tmpdestination = sbs->GetFloor(DownQueue[i])->GetBase();
 						if (BeyondDecelMarker(-1, tmpdestination) == false)
 						{
 							ActiveCallFloor = DownQueue[i];
@@ -953,7 +953,7 @@ void Elevator::MoveElevatorToFloor()
 		//Determine distance to destination floor
 		if (InspectionService == false)
 		{
-			Destination = sbs->GetFloor(GotoFloor)->Altitude + sbs->GetFloor(GotoFloor)->InterfloorHeight;
+			Destination = sbs->GetFloor(GotoFloor)->GetBase();
 			DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
 		}
 		else
@@ -961,7 +961,7 @@ void Elevator::MoveElevatorToFloor()
 			//otherwise if inspection service is on, choose the altitude of the top/bottom floor
 			if (Direction == 1)
 			{
-				Destination = sbs->GetFloor(GetTopFloor())->Altitude + sbs->GetFloor(GetTopFloor())->InterfloorHeight;
+				Destination = sbs->GetFloor(GetTopFloor())->GetBase();
 				if (ElevatorStart >= Destination)
 				{
 					//don't go above top floor
@@ -976,7 +976,7 @@ void Elevator::MoveElevatorToFloor()
 			}
 			else
 			{
-				Destination = sbs->GetFloor(GetBottomFloor())->Altitude + sbs->GetFloor(GetBottomFloor())->InterfloorHeight;
+				Destination = sbs->GetFloor(GetBottomFloor())->GetBase();
 				if (ElevatorStart <= Destination)
 				{
 					//don't go below bottom floor

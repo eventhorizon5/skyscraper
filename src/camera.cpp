@@ -233,7 +233,7 @@ csVector3 Camera::GetStartRotation()
 
 void Camera::SetToStartPosition()
 {
-	SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->Altitude + sbs->GetFloor(StartFloor)->InterfloorHeight + cfg_body_height + cfg_legs_height, StartPositionZ));
+	SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->GetBase() + cfg_body_height + cfg_legs_height, StartPositionZ));
 }
 
 void Camera::SetToStartDirection()

@@ -415,6 +415,18 @@ checkfloors:
 				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
 			}
 			temp5 = csString(LineData).Downcase().Find("floor(", 0);
+			//base parameter
+			buffer = temp4;
+			temp6 = "floor(" + buffer.Trim() + ").base";
+			buffer = LineData;
+			buffer.Downcase();
+			temp1 = buffer.Find(temp6.GetData(), 0);
+			if (temp1 > 0)
+			{
+				buffer = Simcore->GetFloor(temp4)->GetBase();
+				LineData = LineData.Slice(0, temp1) + buffer.Trim() + LineData.Slice(temp1 + temp6.Length());
+			}
+			temp5 = csString(LineData).Downcase().Find("floor(", 0);
 		}
 
 		//Extent variables
@@ -865,7 +877,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			 buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[4]);
 			 tempdata.Put(4, buffer);
-			 buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[7]);
+			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[7]);
 			 tempdata.Put(7, buffer);
 		}
 		buffer = tempdata[0];
@@ -1082,7 +1094,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[8]);
+			buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8]);
 			tempdata.Put(8, buffer);
 		}
 		buffer = tempdata[0];
@@ -1141,7 +1153,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			buffer = Simcore->GetFloor(Current)->Altitude + Simcore->GetFloor(Current)->InterfloorHeight + atof(tempdata[8]);
+			buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8]);
 			tempdata.Put(8, buffer);
 		}
 		buffer = tempdata[0];
@@ -2153,6 +2165,10 @@ int ScriptProcessor::ProcGlobals()
 		}
 		Simcore->camera->SetStartRotation(csVector3(x, y, z));
 	}
+	if (LineData.Slice(0, 15).CompareNoCase("interfloorontop") == true)
+	{
+		Simcore->InterfloorOnTop = csString(temp2).CompareNoCase("true");
+	}
 	return 0;
 }
 
@@ -2171,6 +2187,8 @@ int ScriptProcessor::ProcFloors()
 	LineData.ReplaceAll("%fullheight%", buffer);
 	buffer = floor->InterfloorHeight;
 	LineData.ReplaceAll("%interfloorheight%", buffer);
+	buffer = floor->GetBase();
+	LineData.ReplaceAll("%base%", buffer);
 
 	if (getfloordata == true)
 		return sCheckFloors;
