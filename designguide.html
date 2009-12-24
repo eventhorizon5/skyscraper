@@ -368,10 +368,8 @@
     Example: <font size="2" face="Courier New, Courier, mono">CutStairwell 1, 
     -4, -3.5, 4, 3.5, 0, 5</font></p>
   <p align="left"><strong>s. Isect</strong> - the Isect function calculates the 
-    position that a line intersects with a certain object, such as a floor. This 
-    is mainly used with angled walls that span multiple floors, to find the edge 
-    location of the wall at each level without doing any manual calculations. 
-    Since this is a function, it can be used in-line anywhere.<br>
+    position that a line intersects with a certain object, such as a floor. Since 
+    this is a function, it can be used in-line anywhere.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> isect(destobject, 
     objectname, startx, starty, startz, endx, endy, endz)</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">isect(external, 
@@ -511,8 +509,38 @@
     &quot;The directional radiation applies to sound that are oriented in a particular 
     direction. This value is expressed in radians and describes the half-angle 
     of a cone spreading from the position of the source and opening in the direction 
-    of the source. Set this value to 0.0 for an omni-directional sound.&quot;<br>
-  </p>
+    of the source. Set this value to 0.0 for an omni-directional sound.&quot;</p>
+  <p align="left"><strong>ad. GetWallExtents</strong> - the GetWallExtents command 
+    returns the X and Z extents (minimum of maximum values) of a wall, at the 
+    specified altitude. The command will return the results in the ExtentsX and 
+    ExtentsZ variables.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> GetWallExtents destobject, 
+    wallname, altitude, get_maximum</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">GetWallExtents external, 
+    wall1:front, 10, false</font></p>
+  <p align="left">Then to use the values:<br>
+    Example: <font size="2" face="Courier New, Courier, mono">Set 2 = %extentsx%</font></p>
+  <p align="left"><em>Destobject</em> is the destination object to get the object 
+    from (floor, external, landscape, or buildings). <em>Wallname </em>specifies 
+    the name of the wall to get the extents from. Generally this should be in 
+    the form of &quot;name:side&quot;, but if you leave out the &quot;side&quot; 
+    parameter, it'll choose one of the sides from a pre-defined search list. Sides 
+    of walls made from any AddWall command generally have &quot;front&quot;, &quot;back&quot;, 
+    &quot;left&quot; and &quot;right&quot; sides. Walls made using AddCustomWall 
+    and AddTriangleWall have sides of &quot;0&quot; (front) and &quot;1&quot; 
+    (back), so with those you'd specify &quot;name:0&quot; for the front. <em>Altitude</em> 
+    specifies the altitude to use for the check - basically it makes a copy of 
+    the wall, cuts it down to a line at that altitude, and returns the coordinates 
+    of the endpoints. <em>Get_maximum</em> specifies if the function should return 
+    the maximum or minimum coordinates. The command will store the results in 
+    the ExtentsX and ExtentsZ variables, which can be used anywhere in the script 
+    - to get the X result, you'd use %extentsx%.</p>
+  <p align="left"><strong>ae. Print</strong> - prints the contents of a line to 
+    the console. This command will still convert variables and even math expressions, 
+    and output the results.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> Print text</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">Print 1+1</font></p>
+  <p align="left">&nbsp;</p>
   <p align="left"><strong>7. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
     script and start the simulation. This is optional.<br>

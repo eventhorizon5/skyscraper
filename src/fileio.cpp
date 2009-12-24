@@ -80,6 +80,8 @@ bool ScriptProcessor::LoadBuilding()
 	getfloordata = false;
 	setshaftdoors = false;
 	int returncode = 0;
+	Extent = 0;
+	char buffer2[20];
 
 	while (line < BuildingData.GetSize() - 1)
 	{
@@ -414,6 +416,10 @@ checkfloors:
 			}
 			temp5 = csString(LineData).Downcase().Find("floor(", 0);
 		}
+
+		//Extent variables
+		LineData.ReplaceAll("%extentx%", _gcvt(Extent.x, 12, buffer2));
+		LineData.ReplaceAll("%extentz%", _gcvt(Extent.z, 12, buffer2));
 
 		//Global commands
 		returncode = ProcCommands();
@@ -808,6 +814,16 @@ bool ScriptProcessor::ScriptError(const char *message)
 int ScriptProcessor::ProcCommands()
 {
 	//process global commands
+
+	//Print command
+	if (LineData.Slice(0, 5).CompareNoCase("print") == true && Section != 2 && Section != 4)
+	{
+		//calculate inline math
+		buffer = Calc(LineData.Slice(6));
+
+		//print line
+		skyscraper->Report(buffer);
+	}
 
 	//AddTriangleWall command
 	if (LineData.Slice(0, 15).CompareNoCase("addtrianglewall") == true)
@@ -1758,6 +1774,51 @@ int ScriptProcessor::ProcCommands()
 		buffer = csString(LineData).Slice(0, temp5) + csString(wxVariant(isect.x).GetString().ToAscii()) + csString(", ") + csString(wxVariant(isect.y).GetString().ToAscii()) + csString(", ") + csString(wxVariant(isect.z).GetString().ToAscii()) + csString(LineData).Slice(temp4 + 1);
 		LineData = buffer.GetData();
 
+	}
+
+	//GetWallExtents command
+	if (LineData.Slice(0, 14).CompareNoCase("getwallextents") == true)
+	{
+		tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		if (!IsNumeric(csString(tempdata[2]).Trim().GetData()))
+		{
+			ScriptError("Invalid value: " + csString(tempdata[2]));
+			return sError;
+		}
+
+		buffer = tempdata[0];
+		buffer.Downcase();
+		csRef<iThingFactoryState> tmpState;
+		if (buffer == "floor")
+			tmpState = Simcore->GetFloor(Current)->Level_state;
+		else if (buffer == "external")
+			tmpState = Simcore->External_state;
+		else if (buffer == "landscape")
+			tmpState = Simcore->Landscape_state;
+		else if (buffer == "buildings")
+			tmpState = Simcore->Buildings_state;
+		else
+		{
+			ScriptError("Invalid object");
+			return sError;
+		}
+
+		csVector3 result = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), csString(tempdata[3]).CompareNoCase("true"));
+		tempdata.DeleteAll();
+		Extent.x = result.x;
+		Extent.z = result.z;
 	}
 
 	//GetWallExtents function

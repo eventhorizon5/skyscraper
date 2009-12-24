@@ -3739,14 +3739,14 @@ csVector3 SBS::GetWallExtents(csRef<iThingFactoryState> state, const char *name,
 			if (get_max == false)
 			{
 				//get minimum extents
-				result.x = ToLocal(GetExtents(original, 0).x);
-				result.z = ToLocal(GetExtents(original, 2).x);
+				result.x = ToLocal(GetExtents(original, 1).x);
+				result.z = ToLocal(GetExtents(original, 3).x);
 			}
 			else
 			{
 				//get maximum extents
-				result.x = ToLocal(GetExtents(original, 0).y);
-				result.z = ToLocal(GetExtents(original, 2).y);
+				result.x = ToLocal(GetExtents(original, 1).y);
+				result.z = ToLocal(GetExtents(original, 3).y);
 			}
 			result.y = altitude;
 			return result;
