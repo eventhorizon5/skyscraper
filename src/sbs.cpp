@@ -2344,7 +2344,7 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 		//(using just min/max values isn't going to always give us this info)
 
 		csVector3 normal = state->GetPolygonObjectPlane(index).GetNormal();
-		if (normal.x > 0 && normal.z > 0)
+		if (normal.x > 0 && normal.z > 0 || normal.x == 1)
 		{
 			//if both X and Z portions of the normal are positive, swap Z coordinates
 			//this is because in this situation, the top-left Z is greater than the top-right Z
@@ -2352,7 +2352,7 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 			z.x = z.y;
 			z.y = tmpv;
 		}
-		if (normal.x < 0 && normal.z < 0)
+		if (normal.x < 0 && normal.z < 0 || normal.z == -1)
 		{
 			//if both X and X portions of the normal are negative, swap X coordinates
 			//this is because in this situation, the top-left X is greater than the top-right X
