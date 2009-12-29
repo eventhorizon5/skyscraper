@@ -2310,40 +2310,186 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 
 		csVector2 x, y, z;
 		csPoly3D varray;
+		bool rev_x = false, rev_z = false;
 
-		//copy all polygon vertices
+		csPlane3 plane = state->GetPolygonObjectPlane(index);
+		csVector3 normal = plane.GetNormal();
+		int projDimension = 0; //x
+
+		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
+			projDimension = 1; //y biggest
+		else if (fabsf (normal.z) > fabsf (normal.x))
+			projDimension = 2; //z biggest
+	    
+		size_t selX = CS::Math::NextModulo3(projDimension);
+		size_t selY = CS::Math::NextModulo3(selX);
+
 		for (int i = 0; i < state->GetPolygonVertexCount(index); i++)
-			varray.AddVertex(state->GetPolygonVertex(index, i));
-		x = GetExtents(varray, 1);
-		y = GetExtents(varray, 2);
-		z = GetExtents(varray, 3);
+			varray.AddVertex(state->GetPolygonVertex(index, i)[selX], state->GetPolygonVertex(index, i)[selY], 0);
 
-		//reverse extents if specified
-		float tmpv;
-		if (RevX == true)
+		if (RevX == true || normal.x < 0 && normal.z < 0 || normal.z == -1)
+			rev_x = true;
+
+		if (RevZ == true || normal.x > 0 && normal.z > 0 || normal.x == 1)
+			rev_z = true;
+
+		csVector2 a, b;
+		a = GetExtents(varray, 1);
+		b = GetExtents(varray, 2);
+		if (projDimension == 0)
 		{
-			tmpv = x.x;
-			x.x = x.y;
-			x.y = tmpv;
+			if (RevY == false)
+			{
+				v1.y = a.y;
+				v2.y = a.y;
+				v3.y = a.x;
+			}
+			else
+			{
+				v1.y = a.x;
+				v2.y = a.x;
+				v3.y = a.y;
+			}
+			if (rev_z == false)
+			{
+				v1.z = b.x;
+				v2.z = b.y;
+				v3.z = b.y;
+			}
+			else
+			{
+				v1.z = b.y;
+				v2.z = b.x;
+				v3.z = b.x;
+			}
 		}
-		if (RevY == true)
+		if (projDimension == 1)
 		{
-			tmpv = y.x;
-			y.x = y.y;
-			y.y = tmpv;
+			if (rev_z == false)
+			{
+				v1.z = a.y;
+				v2.z = a.y;
+				v3.z = a.x;
+			}
+			else
+			{
+				v1.z = a.x;
+				v2.z = a.x;
+				v3.z = a.y;
+			}
+			if (rev_x == false)
+			{
+				v1.x = b.x;
+				v2.x = b.y;
+				v3.x = b.y;
+			}
+			else
+			{
+				v1.x = b.y;
+				v2.x = b.x;
+				v3.x = b.x;
+			}
 		}
-		if (RevZ == true)
+		if (projDimension == 2)
 		{
-			tmpv = z.x;
-			z.x = z.y;
-			z.y = tmpv;
+			if (rev_x == false)
+			{
+				v1.x = a.x;
+				v2.x = a.y;
+				v3.x = a.y;
+			}
+			else
+			{
+				v1.x = a.y;
+				v2.x = a.x;
+				v3.x = a.x;
+			}
+			if (RevY == false)
+			{
+				v1.y = b.y;
+				v2.y = b.y;
+				v3.y = b.x;
+			}
+			else
+			{
+				v1.y = b.x;
+				v2.y = b.x;
+				v3.y = b.y;
+			}
 		}
 
+		if (projDimension == 0)
+		{
+			v1.x = -((plane.B() * v1.y) + (plane.C() * v1.z) + plane.D()) / plane.A(); //get X
+			v2.x = -((plane.B() * v2.y) + (plane.C() * v2.z) + plane.D()) / plane.A(); //get X
+			v3.x = -((plane.B() * v3.y) + (plane.C() * v3.z) + plane.D()) / plane.A(); //get X
+		}
+		if (projDimension == 1)
+		{
+			v1.y = -((plane.A() * v1.x) + (plane.C() * v1.z) + plane.D()) / plane.B(); //get Y
+			v2.y = -((plane.A() * v2.x) + (plane.C() * v2.z) + plane.D()) / plane.B(); //get Y
+			v3.y = -((plane.A() * v3.x) + (plane.C() * v3.z) + plane.D()) / plane.B(); //get Y
+		}
+		if (projDimension == 2)
+		{
+			v1.z = -((plane.A() * v1.x) + (plane.B() * v1.y) + plane.D()) / plane.C(); //get Z
+			v2.z = -((plane.A() * v2.x) + (plane.B() * v2.y) + plane.D()) / plane.C(); //get Z
+			v3.z = -((plane.A() * v3.x) + (plane.B() * v3.y) + plane.D()) / plane.C(); //get Z
+		}
+
+		
+		/*
 		//reverse values if normal axis is negative
 		//this is because we need the vertices to represent the top left, top right, and bottom right
 		//(using just min/max values isn't going to always give us this info)
 
-		csVector3 normal = state->GetPolygonObjectPlane(index).GetNormal();
+		bool reverse_x_map = false;
+		bool reverse_y_map = false;
+		bool reverse_z_map = false;
+
+		csVector3 x2, y2, z2;
+		x2 = 0;
+		y2 = 0;
+		z2 = 0;
+		float temp;
+
+		//Y vector
+		y2 = -normal;
+
+		//get a vector perpendicular to the Y vector and use as the X vector
+		//find minimum value of the absolute values of the x, y and z components
+		if (abs(y2.x) < abs(y2.y))
+			temp = abs(y2.x);
+		else
+			temp = abs(y2.y);
+		if (temp > abs(y2.z))
+			temp = abs(y2.z);
+
+		if (abs(y2.z) == temp)
+			x2.Cross(y2, csVector3(0, 0, 1));
+		else
+		{
+			if (abs(y2.y) == temp)
+				x2.Cross(y2, csVector3(0, 1, 0));
+			else
+				x2.Cross(y2, csVector3(1, 0, 0));
+		}
+
+		//Z vector
+		z2.Cross(x2, y2);
+
+		//normalize vectors
+		x2.Normalize();
+		y2.Normalize();
+		z2.Normalize();
+
+		//csReversibleTransform *a = new csReversibleTransform(csMatrix3(x2.x, x2.y, x2.z, y2.x, y2.y, y2.z, z2.x, z2.y, z2.z), csVector3(0, 0, 0));
+		csReversibleTransform *a = new csReversibleTransform(csMatrix3(1 - x2.x, x2.y, x2.z, y2.x, 1 - y2.y, y2.z, z2.x, z2.y, 1 - z2.z), csVector3(0, 0, 0));
+
+		for (int i = 0; i < state->GetPolygonVertexCount(index); i++)
+			csVector3 aa = ToLocal(a->Other2This(state->GetPolygonVertex(index, i)));
+		
+
 		if (normal.x > 0 && normal.z > 0 || normal.x == 1)
 		{
 			//if both X and Z portions of the normal are positive, swap Z coordinates
@@ -2365,9 +2511,27 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 		if (normal.y > -0.5 && normal.y < 0.5)
 		{
 			//return standard wall mapping
-			v1 = csVector3(x.x, y.y, z.x);
-			v2 = csVector3(x.y, y.y, z.y);
-			v3 = csVector3(x.y, y.x, z.y);
+			if (normal.y == 0)
+			{
+				//normal wall
+				v1 = csVector3(x.x, y.y, z.x);
+				v2 = csVector3(x.y, y.y, z.y);
+				v3 = csVector3(x.y, y.x, z.y);
+			}
+			if (normal.y < 0)
+			{
+				//wall faces slightly upward
+				v1 = csVector3(x.x, y.y, z.x);
+				v2 = csVector3(x.y, y.y, z.y);
+				v3 = csVector3(x.y, y.x, z.y);
+			}
+			if (normal.y > 0)
+			{
+				//wall faces slightly downward
+				v1 = csVector3(x.x, y.y, z.x);
+				v2 = csVector3(x.y, y.y, z.y);
+				v3 = csVector3(x.y, y.x, z.y);
+			}
 		}
 		else
 		{
@@ -2382,7 +2546,7 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 			v1 = csVector3(x.x, y.x, z.x);
 			v2 = csVector3(x.y, y.x, z.x);
 			v3 = csVector3(x.y, y.y, z.y);
-		}
+		}*/
 	}
 	if (MapMethod == 1)
 	{
