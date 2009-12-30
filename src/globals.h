@@ -59,6 +59,8 @@ SBSIMPEXP bool IsNumeric(const char *string, float &number);
 SBSIMPEXP const char *BoolToString(bool item);
 SBSIMPEXP float RadiansToDegrees(float radians);
 SBSIMPEXP float DegreesToRadians(float degrees);
+SBSIMPEXP float Min3(float a, float b, float c);
+SBSIMPEXP float Max3(float a, float b, float c);
 
 const double pi = 3.14159265;
 

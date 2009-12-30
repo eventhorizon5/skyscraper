@@ -138,6 +138,8 @@ SBS::SBS()
 	OldRevX = false;
 	OldRevY = false;
 	OldRevZ = false;
+	PlanarFlat = false;
+	OldPlanarFlat = false;
 	for (int i = 0; i <= 2; i++)
 	{
 		MapIndex[i] = 0;
@@ -2216,9 +2218,11 @@ void SBS::ResetWalls(bool ToDefaults)
 		DrawWalls(DrawMainNOld, DrawMainPOld, DrawSideNOld, DrawSidePOld, DrawTopOld, DrawBottomOld);
 }
 
-void SBS::ReverseExtents(bool X, bool Y, bool Z)
+void SBS::SetPlanarMapping(bool flat, bool X, bool Y, bool Z)
 {
-	//reverses planar texture mapping per axis
+	//sets planar texture mapping parameters
+	//X, Y and Z reverse planar texture mapping per axis
+	//Flat determines if depth should be ignored when mapping
 
 	//first backup old parameters
 	BackupMapping();
@@ -2230,6 +2234,7 @@ void SBS::ReverseExtents(bool X, bool Y, bool Z)
 	MapUV[0] = csVector2(0, 0);
 	MapUV[1] = csVector2(1, 0);
 	MapUV[2] = csVector2(1, 1);
+	PlanarFlat = flat;
 	MapMethod = 0;
 }
 
@@ -2279,6 +2284,7 @@ void SBS::BackupMapping()
 		OldRevX = RevX;
 		OldRevY = RevY;
 		OldRevZ = RevZ;
+		OldPlanarFlat = PlanarFlat;
 	}
 	else
 	{
@@ -2423,18 +2429,42 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 			v1.x = -((plane.B() * v1.y) + (plane.C() * v1.z) + plane.D()) / plane.A(); //get X
 			v2.x = -((plane.B() * v2.y) + (plane.C() * v2.z) + plane.D()) / plane.A(); //get X
 			v3.x = -((plane.B() * v3.y) + (plane.C() * v3.z) + plane.D()) / plane.A(); //get X
+
+			if (PlanarFlat == true)
+			{
+				if (normal.x < 0)
+					v1.x = Min3(v1.x, v2.x, v3.x);
+				else
+					v1.x = Max3(v1.x, v2.x, v3.x);
+			}
 		}
 		if (projDimension == 1)
 		{
 			v1.y = -((plane.A() * v1.x) + (plane.C() * v1.z) + plane.D()) / plane.B(); //get Y
 			v2.y = -((plane.A() * v2.x) + (plane.C() * v2.z) + plane.D()) / plane.B(); //get Y
 			v3.y = -((plane.A() * v3.x) + (plane.C() * v3.z) + plane.D()) / plane.B(); //get Y
+
+			if (PlanarFlat == true)
+			{
+				if (normal.y < 0)
+					v1.y = Min3(v1.y, v2.y, v3.y);
+				else
+					v1.y = Max3(v1.y, v2.y, v3.y);
+			}
 		}
 		if (projDimension == 2)
 		{
 			v1.z = -((plane.A() * v1.x) + (plane.B() * v1.y) + plane.D()) / plane.C(); //get Z
 			v2.z = -((plane.A() * v2.x) + (plane.B() * v2.y) + plane.D()) / plane.C(); //get Z
 			v3.z = -((plane.A() * v3.x) + (plane.B() * v3.y) + plane.D()) / plane.C(); //get Z
+
+			if (PlanarFlat == true)
+			{
+				if (normal.z < 0)
+					v1.z = Min3(v1.z, v2.z, v3.z);
+				else
+					v1.z = Max3(v1.z, v2.z, v3.z);
+			}
 		}
 	}
 	if (MapMethod == 1)
@@ -2535,11 +2565,11 @@ void SBS::ResetTextureMapping(bool todefaults)
 {
 	//Resets UV texture mapping to defaults or previous values
 	if (todefaults == true)
-		ReverseExtents(false, false, false);
+		SetPlanarMapping(false, false, false, false);
 	else
 	{
 		if (OldMapMethod == 0)
-			ReverseExtents(OldRevX, OldRevY, OldRevZ);
+			SetPlanarMapping(OldPlanarFlat, OldRevX, OldRevY, OldRevZ);
 		if (OldMapMethod == 1)
 			SetTextureMapping(OldMapIndex[0], OldMapUV[0], OldMapIndex[1], OldMapUV[1], OldMapIndex[2], OldMapUV[2]);
 		if (OldMapMethod == 2)

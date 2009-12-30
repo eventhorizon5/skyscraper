@@ -1683,24 +1683,25 @@ int ScriptProcessor::ProcCommands()
 		Simcore->ResetTextureMapping(temp2.CompareNoCase("true"));
 	}
 
-	//ReverseExtents command
-	if (LineData.Slice(0, 14).CompareNoCase("reverseextents") == true)
+	//SetPlanarMapping command
+	if (LineData.Slice(0, 16).CompareNoCase("setplanarmapping") == true)
 	{
-		tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+		tempdata.SplitString(LineData.Slice(17).GetData(), ",");
 		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 		{
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
 		{
 			ScriptError("Incorrect number of parameters");
 			return false;
 		}
 
-		Simcore->ReverseExtents(csString(tempdata[0]).CompareNoCase("true"),
+		Simcore->SetPlanarMapping(csString(tempdata[0]).CompareNoCase("true"),
 					csString(tempdata[1]).CompareNoCase("true"),
-					csString(tempdata[2]).CompareNoCase("true"));
+					csString(tempdata[2]).CompareNoCase("true"),
+					csString(tempdata[3]).CompareNoCase("true"));
 
 		tempdata.DeleteAll();
 	}

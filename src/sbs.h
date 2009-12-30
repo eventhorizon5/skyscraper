@@ -259,7 +259,7 @@ public:
 	bool UnregisterObject(Object *object);
 	bool UnregisterObject(int index);
 	void GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3);
-	void ReverseExtents(bool X, bool Y, bool Z);
+	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
 	csVector3 GetWallExtents(csRef<iThingFactoryState> state, const char *name, float altitude,  bool get_max);
 
 	//Meshes
@@ -323,6 +323,7 @@ private:
 	int OldMapMethod;
 	bool RevX, RevY, RevZ; //extent reversals (planar texture mapping)
 	bool OldRevX, OldRevY, OldRevZ;
+	bool PlanarFlat, OldPlanarFlat;
 
 	//global object array (only pointers to actual objects)
 	csArray<Object*> ObjectArray;

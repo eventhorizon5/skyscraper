@@ -31,9 +31,10 @@ Version 1.6 (2.0 Alpha 6)
 -fixed ACP mode
 -fixed other service modes
 -added SetTextureMapping2 command
--brought back the ReverseExtents command and created new planar texture mapper
+-created new planar texture mapper
 -added the GetWallExtents and Print commands
 -added InterfloorOnTop global parameter and base variable
+-made new SetPlanarMapping command which is an extended version of the old ReverseExtents command
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

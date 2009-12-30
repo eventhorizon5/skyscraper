@@ -245,13 +245,10 @@
     the left to the right), and that it has the same z values. With that, MainNegative 
     would be the front wall, MainPositive the back, SideNegative the left, SidePositive 
     the right, etc.</p>
-  <p align="left"><strong>m. ReverseExtents</strong> - reverses the automatic 
-    texture mapping per axis.<br>
-    Syntax:<font size="2" face="Courier New, Courier, mono"> ReverseExtents X, 
-    Y, Z</font><br>
-    Example: <font size="2" face="Courier New, Courier, mono">ReverseExtents false, 
-    false, true</font></p>
-  <p align="left">Skyscraper by default uses a simple planar texture mapper, which 
+  <p align="left"><strong>m. SetPlanarMapping</strong> - sets the planar texture mapper's parameters.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> SetPlanarMapping Flat, X, Y, Z</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">SetPlanarMapping false, false, false, true</font></p>
+  <p align="left">X, Y and Z reverse the texture mapping per axis, and Flat has it ignore depth.  Skyscraper by default uses a simple planar texture mapper, which 
     in simple terms draws the texture in a box around the object. With a basic 
     wall, the top-left of the texture image is mapped to the top left of the wall, 
     the top-right is mapped to the top-right of the wall, etc. If you want the 
