@@ -26,6 +26,10 @@
 #ifndef _SBS_SOUND_H
 #define _SBS_SOUND_H
 
+#include <isndsys/ss_stream.h>
+#include <isndsys/ss_source.h>
+#include <isndsys/ss_manager.h>
+
 class SBSIMPEXP Sound
 {
 public:

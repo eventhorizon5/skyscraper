@@ -24,10 +24,12 @@
 */
 
 #include "globals.h"
-#include "door.h"
 #include "sbs.h"
+#include "door.h"
 #include "camera.h"
 #include "unix.h"
+
+#include <iengine/movable.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 

@@ -26,6 +26,8 @@
 #ifndef _SBS_CONTROL_H
 #define _SBS_CONTROL_H
 
+#include "globals.h"
+
 class SBSIMPEXP Control
 {
 public:

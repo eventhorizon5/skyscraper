@@ -27,10 +27,9 @@
 
 #include <wx/wx.h>
 #include <crystalspace.h>
-#include "ivideo/wxwin.h"
 #include "globals.h"
-#include "skyscraper.h"
 #include "sbs.h"
+#include "skyscraper.h"
 #include "debugpanel.h"
 #include "loader.h"
 

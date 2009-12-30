@@ -25,6 +25,8 @@
 #ifndef FILEIO_H
 #define FILEIO_H
 
+#include <csutil/stringarray.h>
+
 class ScriptProcessor;
 
 class ScriptProcessor

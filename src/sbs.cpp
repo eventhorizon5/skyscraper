@@ -30,6 +30,7 @@
 
 #include <wx/wx.h>
 #include <wx/variant.h>
+#include <crystalspace.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"

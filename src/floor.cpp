@@ -24,8 +24,8 @@
 */
 
 #include "globals.h"
-#include "floor.h"
 #include "sbs.h"
+#include "floor.h"
 #include "camera.h"
 #include "unix.h"
 

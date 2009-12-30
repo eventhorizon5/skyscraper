@@ -24,10 +24,10 @@
 */
 
 #include "globals.h"
+#include "sbs.h"
 #include "callbutton.h"
 #include "buttonpanel.h"
 #include "camera.h"
-#include "sbs.h"
 #include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine

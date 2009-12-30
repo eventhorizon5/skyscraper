@@ -24,9 +24,11 @@
 */
 
 #include "globals.h"
-#include "directional.h"
 #include "sbs.h"
+#include "directional.h"
 #include "elevator.h"
+
+#include <cstool/genmeshbuilder.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 

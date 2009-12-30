@@ -24,9 +24,9 @@
 */
 
 #include "globals.h"
+#include "sbs.h"
 #include "buttonpanel.h"
 #include "elevator.h"
-#include "sbs.h"
 #include "camera.h"
 #include "unix.h"
 

@@ -24,11 +24,13 @@
 */
 
 #include "globals.h"
-#include "callbutton.h"
 #include "sbs.h"
+#include "callbutton.h"
 #include "camera.h"
 #include "elevator.h"
 #include "unix.h"
+
+#include <cstool/genmeshbuilder.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 

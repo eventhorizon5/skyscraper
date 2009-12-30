@@ -26,6 +26,8 @@
 #ifndef _SBS_OBJECT_H
 #define _SBS_OBJECT_H
 
+#include <csutil/csstring.h>
+
 class SBSIMPEXP Object
 {
 public:

@@ -24,8 +24,8 @@
 */
 
 #include "globals.h"
-#include "shaft.h"
 #include "sbs.h"
+#include "shaft.h"
 #include "camera.h"
 #include "unix.h"
 

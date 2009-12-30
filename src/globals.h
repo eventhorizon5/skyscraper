@@ -26,10 +26,8 @@
 #ifndef _SBS_GLOBALS_H
 #define _SBS_GLOBALS_H
 
-#include <wx/panel.h>
-#include <wx/timer.h>
-#include <crystalspace.h>
-#include "ivideo/wxwin.h"
+#include "cssysdef.h"
+#include "wx/platform.h"
 
 //DLL Exporting
 #ifdef _WIN32

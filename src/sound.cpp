@@ -24,8 +24,8 @@
 */
 
 #include "globals.h"
-#include "sound.h"
 #include "sbs.h"
+#include "sound.h"
 #include "camera.h"
 #include "unix.h"
 

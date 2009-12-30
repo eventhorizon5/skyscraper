@@ -26,6 +26,29 @@
 #ifndef _SBS_H
 #define _SBS_H
 
+#include <iengine/engine.h>
+#include <ivideo/graph2d.h>
+#include <ivideo/graph3d.h>
+#include <imap/loader.h>
+#include <csutil/array.h>
+#include <csutil/csstring.h>
+#include <csutil/ref.h>
+#include <iengine/sector.h>
+#include <iengine/mesh.h>
+#include <imesh/object.h>
+#include <imesh/thing.h>
+#include <iutil/virtclk.h>
+#include <iutil/vfs.h>
+#include <isndsys/ss_renderer.h>
+#include <isndsys/ss_loader.h>
+#include <iutil/cfgmgr.h>
+#include <ivaria/view.h>
+#include <csgeom/poly3d.h>
+#include <cstool/collider.h>
+#include <ivaria/reporter.h>
+#include <isndsys/ss_manager.h>
+#include <iutil/objreg.h>
+
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"

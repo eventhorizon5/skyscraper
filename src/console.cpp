@@ -24,10 +24,10 @@
 
 #include "console.h"
 #include "globals.h"
+#include "sbs.h"
 #include "unix.h"
 #include "fileio.h"
 #include "skyscraper.h"
-#include "sbs.h"
 
 extern SBS *Simcore;
 extern Skyscraper *skyscraper;

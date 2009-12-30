@@ -24,9 +24,12 @@
 */
 
 #include "globals.h"
-#include "floorindicator.h"
 #include "sbs.h"
+#include "floorindicator.h"
 #include "elevator.h"
+
+#include <iengine/movable.h>
+#include <cstool/genmeshbuilder.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 

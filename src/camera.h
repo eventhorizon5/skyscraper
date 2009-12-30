@@ -26,6 +26,9 @@
 #ifndef _SBS_CAMERA_H
 #define _SBS_CAMERA_H
 
+#include <iengine/camera.h>
+#include <iengine/movable.h>
+
 class SBSIMPEXP Camera
 {
 public:

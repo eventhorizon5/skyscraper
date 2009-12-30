@@ -26,6 +26,7 @@
 #ifndef _SBS_ELEVATORDOOR_H
 #define _SBS_ELEVATORDOOR_H
 
+#include <wx/timer.h>
 #include "sound.h"
 
 class Elevator;

@@ -25,6 +25,18 @@
 #ifndef SKYSCRAPER_H
 #define SKYSCRAPER_H
 
+#include <wx/app.h>
+#include <iutil/csinput.h>
+#include <ivaria/conout.h>
+#include <igraphic/imageio.h>
+#include <iutil/cmdline.h>
+#include <ivaria/stdrep.h>
+#include <iutil/eventq.h>
+#include <iutil/event.h>
+#include <csutil/eventnames.h>
+#include <ivaria/bugplug.h>
+#include <csutil/common_handlers.h>
+#include "ivideo/wxwin.h"
 #include "fileio.h"
 
 int main (int argc, char* argv[]);

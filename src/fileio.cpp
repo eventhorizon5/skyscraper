@@ -22,19 +22,20 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <wx/wx.h>
 #include <wx/variant.h>
 #include "globals.h"
+#include "sbs.h"
 #include <stdlib.h>
 #include "fileio.h"
 #include "skyscraper.h"
-#include "sbs.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"
 #include "callbutton.h"
 #include "unix.h"
+
+#include <csutil/filereadhelper.h>
 
 extern SBS *Simcore;
 extern Skyscraper *skyscraper;
