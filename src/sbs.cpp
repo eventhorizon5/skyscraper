@@ -1589,7 +1589,7 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	}
 
 	//apply UV texture mapping
-	ApplyTextureMapping(dest_state, firstidx, firstidx + (numindices - 1), sizing.x, sizing.y);
+	ApplyTextureMapping(dest_state, firstidx, firstidx + (numindices - 1), tw2, th2);
 
 	//set polygon names
 	csString NewName;
@@ -2422,12 +2422,7 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 			v3.x = -((plane.B() * v3.y) + (plane.C() * v3.z) + plane.D()) / plane.A(); //get X
 
 			if (PlanarFlat == true)
-			{
-				if (normal.x < 0)
-					v1.x = Min3(v1.x, v2.x, v3.x);
-				else
-					v1.x = Max3(v1.x, v2.x, v3.x);
-			}
+				v3.x = v2.x;
 		}
 		if (projDimension == 1)
 		{
@@ -2436,12 +2431,7 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 			v3.y = -((plane.A() * v3.x) + (plane.C() * v3.z) + plane.D()) / plane.B(); //get Y
 
 			if (PlanarFlat == true)
-			{
-				if (normal.y < 0)
-					v1.y = Min3(v1.y, v2.y, v3.y);
-				else
-					v1.y = Max3(v1.y, v2.y, v3.y);
-			}
+				v3.y = v2.y;
 		}
 		if (projDimension == 2)
 		{
@@ -2450,12 +2440,7 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 			v3.z = -((plane.A() * v3.x) + (plane.B() * v3.y) + plane.D()) / plane.C(); //get Z
 
 			if (PlanarFlat == true)
-			{
-				if (normal.z < 0)
-					v1.z = Min3(v1.z, v2.z, v3.z);
-				else
-					v1.z = Max3(v1.z, v2.z, v3.z);
-			}
+				v3.z = v2.z;
 		}
 	}
 	if (MapMethod == 1)

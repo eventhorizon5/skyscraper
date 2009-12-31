@@ -479,7 +479,6 @@ SetPlanarMapping true, false, false, false
 SetAutoSize = true, false
 DrawWalls = true, true, false, false, false, false
 # front setback
-#ResetTextureMapping = true
 AddCustomWall external, Front - Main, MainWindows, -100.64, Floor(65).Altitude + 6, -46.24, -83.04, Floor(79).Altitude + 6, -20.64, -24.48, Floor(60).Altitude + 6, -41.44, -21.76, Floor(58).Altitude, -45.92, 0, 21.5
 #SetTextureMapping2 x0, y0, z0, 1, 7.5, x1, y1, z1, 0, 7.5, x2, y2, z2, 0, 6.5
 AddTriangleWall external, Front - Left, MainWindows, -100.64, Floor(65).Altitude + 6, -46.24, -83.04, Floor(65).Altitude + 6, -20.64, -83.04, Floor(79).Altitude + 6, -20.64, 0, 14
@@ -494,7 +493,6 @@ AddTriangleWall external, Back - Right, MainWindows, -18.88, Floor(42).Altitude 
 AddTriangleWall external, Back - Left, MainWindows, -48.64, Floor(58).Altitude, 43.2, -48.64, Floor(42).Altitude + 6, 43.2, -18.88, Floor(42).Altitude + 6, 68.8, 0, -15.5
 
 # right setback
-SetPlanarMapping true, false, false, false
 AddTriangleWall external, Right - Main, MainWindows, 18.4, Floor(137).Altitude, -36.8, 77.6, Floor(85).Altitude, -7.84, 58.08, Floor(137).Altitude, 21.44, 0, 52
 AddTriangleWall external, Right - Front, MainWindows, 18.4, Floor(137).Altitude, -36.8, 18.4, Floor(85).Altitude, -36.8, 77.6, Floor(85).Altitude, -7.84, 0, 52
 AddTriangleWall external, Right - Back, MainWindows, 58.08, Floor(137).Altitude, 21.44, 58.08, Floor(85).Altitude, 21.44, 77.6, Floor(85).Altitude, -7.84, 0, 52
