@@ -281,9 +281,12 @@ public:
 	int RegisterObject(Object *object);
 	bool UnregisterObject(Object *object);
 	bool UnregisterObject(int index);
-	void GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3);
+	void GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3);
 	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
 	csVector3 GetWallExtents(csRef<iThingFactoryState> state, const char *name, float altitude,  bool get_max);
+	csVector3 GetPolygonDirection(csPoly3D &polygon);
+	csVector2 CalculateSizing(const char *texture, csVector2 x, csVector2 y, csVector2 z, float tw, float th);
+	void ApplyTextureMapping(iThingFactoryState *state, int start_index, int end_index, float tw, float th);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

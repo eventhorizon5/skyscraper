@@ -111,11 +111,6 @@ Shaft::~Shaft()
 
 int Shaft::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
-	float tw2 = tw;
-	float th2;
-	float tempw1;
-	float tempw2;
-
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
@@ -129,31 +124,15 @@ int Shaft::AddWall(int floor, const char *name, const char *texture, float thick
 	z1 = z1 * sbs->HorizScale;
 	z2 = z2 * sbs->HorizScale;
 
-	//get texture force value
-	bool force_enable, force_mode;
-	sbs->GetTextureForce(texture, force_enable, force_mode);
+	//calculate autosizing
+	float tmpheight;
+	if (voffset1 > voffset2)
+		tmpheight = voffset1;
+	else
+		tmpheight = voffset2;
+	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
-	//Call texture autosizing formulas
-	if (z1 == z2)
-		tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
-	if (x1 == x2)
-		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
-	if ((z1 != z2) && (x1 != x2))
-	{
-		//calculate diagonals
-		if (x1 > x2)
-			tempw1 = x1 - x2;
-		else
-			tempw1 = x2 - x1;
-		if (z1 > z2)
-			tempw2 = z1 - z2;
-		else
-			tempw2 = z2 - z1;
-		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
-	}
-	th2 = sbs->AutoSize(0, height1, false, th, force_enable, force_mode);
-
-	return sbs->AddWallMain(ShaftArray[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw2, th2);
+	return sbs->AddWallMain(ShaftArray[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, sizing.x, sizing.y);
 }
 
 int Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)

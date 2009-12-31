@@ -1510,12 +1510,7 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	//get thing factory state
 	csRef<iThingFactoryState> dest_state = scfQueryInterface<iThingFactoryState> (dest->GetMeshObject()->GetFactory());
 
-	float tw2 = tw;
-	float th2;
-	float tempw1;
-	float tempw2;
 	int num;
-	int i;
 	csPoly3D varray1;
 	csPoly3D varray2;
 
@@ -1523,11 +1518,11 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	num = varray.GetVertexCount();
 
 	//Set horizontal scaling
-	for (i = 0; i < num; i++)
+	for (int i = 0; i < num; i++)
 		varray1.AddVertex(ToRemote(varray[i].x) * HorizScale, ToRemote(varray[i].y), ToRemote(varray[i].z) * HorizScale);
 
 	//create a second array with reversed vertices
-	for (i = num - 1; i >= 0; i--)
+	for (int i = num - 1; i >= 0; i--)
 		varray2.AddVertex(varray1[i]);
 
 	csVector2 x, y, z;
@@ -1537,25 +1532,26 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	y = ToLocal(GetExtents(varray1, 2));
 	z = ToLocal(GetExtents(varray1, 3));
 
-	bool force_enable, force_mode;
-	GetTextureForce(texture, force_enable, force_mode);
-
-	//Call texture autosizing formulas
-	if (z.x == z.y)
-		tw2 = AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
-	if (x.x == x.y)
-		tw2 = AutoSize(z.x, z.y, true, tw, force_enable, force_mode);
-	if ((z.x != z.y) && (x.x != x.y))
-	{
-		//calculate diagonals
-		tempw1 = fabs(x.y - x.x);
-		tempw2 = fabs(z.y - z.x);
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
-	}
-	th2 = AutoSize(0, fabs(y.y - y.x), false, th, force_enable, force_mode);
+	//calculate autosizing
+	csVector2 sizing = CalculateSizing(texture, x, y, z, tw, th);
 
 	//create 2 polygons (front and back) from the vertex array
 	int tmpindex, firstidx, numindices = 0;
+
+	//get polygon native direction
+	csVector3 direction = GetPolygonDirection(varray1);
+
+	//if the polygon is facing right, down or to the back, reverse faces
+	//to keep the vertices clockwise
+	csPoly3D tmppoly;
+	if (direction.x == 1 || direction.y == -1 || direction.z == 1)
+	{
+		tmppoly = varray1;
+		varray1 = varray2;
+		varray2 = tmppoly;
+	}
+
+	//add the polygons
 	if (DrawMainN == true)
 	{
 		firstidx = dest_state->AddPolygon(varray1.GetVertices(), num);
@@ -1575,31 +1571,10 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, polyname.GetData());
 	if (!result)
 		texname = "Default";
-	dest_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx + (numindices - 1)), material);
+	dest_state->SetPolygonMaterial(csPolygonRange(firstidx, firstidx + (numindices - 1)), material);
 
-	float tw3 = tw2, th3 = th2;
-	float mw, mh;
-	if (GetTextureTiling(texname.GetData(), mw, mh))
-	{
-		//multiply the tiling parameters (tw and th) by
-		//the stored multipliers for that texture
-		tw3 = tw2 * mw;
-		th3 = th2 * mh;
-	}
-
-	//UV texture mapping
-	for (int i = firstidx; i <= firstidx + (numindices - 1); i++)
-	{
-		csVector3 v1, v2, v3;
-		GetTextureMapping(dest_state, i, v1, v2, v3);
-		dest_state->SetPolygonTextureMapping (csPolygonRange(i, i),
-			v1,
-			csVector2(MapUV[0].x * tw3, MapUV[0].y * th3),
-			v2,
-			csVector2(MapUV[1].x * tw3, MapUV[1].y * th3),
-			v3,
-			csVector2(MapUV[2].x * tw3, MapUV[2].y * th3));
-	}
+	//apply UV texture mapping
+	ApplyTextureMapping(dest_state, firstidx, firstidx + (numindices - 1), sizing.x, sizing.y);
 
 	//set polygon names
 	csString NewName;
@@ -2306,7 +2281,7 @@ void SBS::BackupMapping()
 	OldMapMethod = MapMethod;
 }
 
-void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3)
+void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3)
 {
 	//returns texture mapping coordinates for the specified polygon index, in the v1, v2, and v3 vectors
 	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
@@ -2334,10 +2309,10 @@ void SBS::GetTextureMapping(csRef<iThingFactoryState> state, int index, csVector
 		for (int i = 0; i < state->GetPolygonVertexCount(index); i++)
 			varray.AddVertex(state->GetPolygonVertex(index, i)[selX], state->GetPolygonVertex(index, i)[selY], 0);
 
-		if (RevX == true || normal.x < 0 && normal.z < 0 || normal.z == -1)
+		if (RevX == true || (normal.x < 0 && normal.z < 0) || normal.z == -1)
 			rev_x = true;
 
-		if (RevZ == true || normal.x > 0 && normal.z > 0 || normal.x == 1)
+		if (RevZ == true || (normal.x > 0 && normal.z > 0) || normal.x == 1)
 			rev_z = true;
 
 		csVector2 a, b;
@@ -3075,10 +3050,6 @@ int SBS::AddWall(const char *meshname, const char *name, const char *texture, fl
 	//external, landscape, or buildings
 
 	//Adds a wall with the specified dimensions
-	float tw2 = tw;
-	float th2;
-	float tempw1;
-	float tempw2;
 	csString mesh = meshname;
 	mesh.Trim();
 
@@ -3088,28 +3059,13 @@ int SBS::AddWall(const char *meshname, const char *name, const char *texture, fl
 	z1 = z1 * HorizScale;
 	z2 = z2 * HorizScale;
 
-	bool force_enable, force_mode;
-	GetTextureForce(texture, force_enable, force_mode);
-
-	//Call texture autosizing formulas
-	if (z1 == z2)
-		tw2 = AutoSize(x1, x2, true, tw, force_enable, force_mode);
-	if (x1 == x2)
-		tw2 = AutoSize(z1, z2, true, tw, force_enable, force_mode);
-	if ((z1 != z2) && (x1 != x2))
-	{
-		//calculate diagonals
-		if (x1 > x2)
-			tempw1 = x1 - x2;
-		else
-			tempw1 = x2 - x1;
-		if (z1 > z2)
-			tempw2 = z1 - z2;
-		else
-			tempw2 = z2 - z1;
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
-	}
-	th2 = AutoSize(0, height_in1, false, th, force_enable, force_mode);
+	//calculate autosizing
+	float tmpheight;
+	if (height_in1 > height_in2)
+		tmpheight = height_in1;
+	else
+		tmpheight = height_in2;
+	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
 	csRef<iMeshWrapper> tmpmesh;
 	if (mesh.CompareNoCase("external") == true)
@@ -3119,7 +3075,7 @@ int SBS::AddWall(const char *meshname, const char *name, const char *texture, fl
 	if (mesh.CompareNoCase("landscape") == true)
 		tmpmesh = Landscape;
 
-	return AddWallMain(tmpmesh, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw2, th2);
+	return AddWallMain(tmpmesh, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, sizing.x, sizing.y);
 }
 
 int SBS::AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th)
@@ -3854,5 +3810,108 @@ csVector3 SBS::GetWallExtents(csRef<iThingFactoryState> state, const char *name,
 			result.y = altitude;
 			return result;
 		}
+	}
+}
+
+csVector3 SBS::GetPolygonDirection(csPoly3D &polygon)
+{
+	//returns the direction the polygon faces, in a 3D vector
+	//for example, <-1, 0, 0> means that the wall faces left.
+
+	//get largest normal
+
+	csVector3 normal = polygon.ComputeNormal();
+
+	int largest_normal = 0; //x
+
+	if (fabsf(normal.y) > fabsf(normal.x) && fabsf(normal.y) > fabsf(normal.z))
+		largest_normal = 1; //y biggest
+	else if (fabsf(normal.z) > fabsf(normal.x))
+		largest_normal = 2; //z biggest
+
+	if (largest_normal == 0)
+	{
+		if (normal.x < 0)
+			return csVector3(1, 0, 0);
+		else
+			return csVector3(-1, 0, 0);
+	}
+
+	if (largest_normal == 1)
+	{
+		if (normal.y < 0)
+			return csVector3(0, 1, 0);
+		else
+			return csVector3(0, -1, 0);
+	}
+
+	if (largest_normal == 2)
+	{
+		if (normal.z < 0)
+			return csVector3(0, 0, 1);
+		else
+			return csVector3(0, 0, -1);
+	}
+}
+
+csVector2 SBS::CalculateSizing(const char *texture, csVector2 x, csVector2 y, csVector2 z, float tw, float th)
+{
+	//calculate autosizing based on polygon extents
+
+	//Call texture autosizing formulas
+	float tw2 = tw, th2 = th;
+
+	bool force_enable, force_mode;
+	GetTextureForce(texture, force_enable, force_mode);
+
+	if (z.x == z.y)
+		tw2 = AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
+	if (x.x == x.y)
+		tw2 = AutoSize(z.x, z.y, true, tw, force_enable, force_mode);
+	if ((z.x != z.y) && (x.x != x.y))
+	{
+		//calculate diagonals
+		float tempw1, tempw2;
+		if (x.x > x.y)
+			tempw1 = x.x - x.y;
+		else
+			tempw1 = x.y - x.x;
+		if (z.x > z.y)
+			tempw2 = z.x - z.y;
+		else
+			tempw2 = z.y - z.x;
+		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
+	}
+	th2 = AutoSize(y.x, y.y, false, th, force_enable, force_mode);
+
+	//get tiling
+	float tw3 = tw2, th3 = th2;
+	float mw, mh;
+	if (GetTextureTiling(texture, mw, mh))
+	{
+		//multiply the tiling parameters (tw and th) by
+		//the stored multipliers for that texture
+		tw3 = tw2 * mw;
+		th3 = th2 * mh;
+	}
+
+	//return results
+	return csVector2(tw3, th3);
+}
+
+void SBS::ApplyTextureMapping(iThingFactoryState *state, int start_index, int end_index, float tw, float th)
+{
+	//apply UV texture mapping
+	for (int i = start_index; i <= end_index; i++)
+	{
+		csVector3 v1, v2, v3;
+		GetTextureMapping(state, i, v1, v2, v3);
+		state->SetPolygonTextureMapping(csPolygonRange(i, i),
+			v1,
+			csVector2(MapUV[0].x * tw, MapUV[0].y * th),
+			v2,
+			csVector2(MapUV[1].x * tw, MapUV[1].y * th),
+			v3,
+			csVector2(MapUV[2].x * tw, MapUV[2].y * th));
 	}
 }

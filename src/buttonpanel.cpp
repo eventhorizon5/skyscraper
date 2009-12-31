@@ -343,31 +343,15 @@ int ButtonPanel::AddWall(const char *name, const char *texture, float thickness,
 	z1 = z1 * sbs->HorizScale;
 	z2 = z2 * sbs->HorizScale;
 
-	//get texture force value
-	bool force_enable, force_mode;
-	sbs->GetTextureForce(texture, force_enable, force_mode);
+	//calculate autosizing
+	float tmpheight;
+	if (voffset1 > voffset2)
+		tmpheight = voffset1;
+	else
+		tmpheight = voffset1;
+	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
-	//Call texture autosizing formulas
-	if (z1 == z2)
-		tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
-	if (x1 == x2)
-		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
-	if ((z1 != z2) && (x1 != x2))
-	{
-		//calculate diagonals
-		if (x1 > x2)
-			tempw1 = x1 - x2;
-		else
-			tempw1 = x2 - x1;
-		if (z1 > z2)
-			tempw2 = z1 - z2;
-		else
-			tempw2 = z2 - z1;
-		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
-	}
-	th2 = sbs->AutoSize(0, height1, false, th, force_enable, force_mode);
-
-	return sbs->AddWallMain(ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw2, th2);
+	return sbs->AddWallMain(ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, sizing.x, sizing.y);
 }
 
 Control* ButtonPanel::GetControl(int index)
