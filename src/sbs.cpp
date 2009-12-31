@@ -148,12 +148,12 @@ SBS::SBS()
 		OldMapUV[i] = 0;
 		MapUV[i] = 0;
 	}
-	ResetTextureMapping(true); //set default texture map values
 	RecreateColliders = false;
 	soundcount = 0;
 	UnitScale = 1;
 	Verbose = false;
 	InterfloorOnTop = false;
+	DefaultMapper = 0;
 }
 
 SBS::~SBS()
@@ -518,6 +518,8 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 	DisableSound = confman->GetBool("Skyscraper.SBS.DisableSound", false);
 	UnitScale = confman->GetFloat("Skyscraper.SBS.UnitScale", 5);
 	Verbose = confman->GetBool("Skyscraper.SBS.Verbose", true);
+	DefaultMapper = confman->GetInt("Skyscraper.SBS.TextureMapper", 0);
+	ResetTextureMapping(true); //set default texture map values
 
 	//mount sign texture packs
 	Mount("signs-sans.zip", "/root/signs/sans");
@@ -2554,7 +2556,14 @@ void SBS::ResetTextureMapping(bool todefaults)
 {
 	//Resets UV texture mapping to defaults or previous values
 	if (todefaults == true)
-		SetPlanarMapping(false, false, false, false);
+	{
+		if (DefaultMapper == 0)
+			SetPlanarMapping(false, false, false, false);
+		if (DefaultMapper == 1)
+			SetTextureMapping(0, csVector2(0, 0), 1, csVector2(1, 0), 2, csVector2(1, 1));
+		if (DefaultMapper == 2)
+			SetTextureMapping2("x0", "y0", "z0", csVector2(0, 0), "x1", "y1", "z1", csVector2(1, 0), "x2", "y2", "z2", csVector2(1, 1));
+	}
 	else
 	{
 		if (OldMapMethod == 0)

@@ -350,6 +350,7 @@ private:
 	bool RevX, RevY, RevZ; //extent reversals (planar texture mapping)
 	bool OldRevX, OldRevY, OldRevZ;
 	bool PlanarFlat, OldPlanarFlat;
+	int DefaultMapper; //default texture mapper
 
 	//global object array (only pointers to actual objects)
 	csArray<Object*> ObjectArray;
