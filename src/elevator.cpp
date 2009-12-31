@@ -69,7 +69,7 @@ Elevator::Elevator(int number)
 	Brakes = false;
 	EmergencyStop = false;
 	AssignedShaft = 0;
-	IsEnabled = sbs->confman->GetBool("Skyscraper.SBS.Elevator.IsEnabled", true);
+	IsEnabled = true;
 	Height = 0;
 	Panel = 0;
 	Panel2 = 0;

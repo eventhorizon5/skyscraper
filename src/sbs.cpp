@@ -306,6 +306,7 @@ bool SBS::Start()
 	//init elevators
 	for (int i = 0; i < Elevators(); i++)
 	{
+		bool enable_elevators = sbs->confman->GetBool("Skyscraper.SBS.Elevator.IsEnabled", true);
 		if (ElevatorArray[i].object)
 		{
 			//turn on shaft doors
@@ -318,6 +319,8 @@ bool SBS::Start()
 			ElevatorArray[i].object->EnableDirectionalIndicator(camera->StartFloor, true);
 			//disable objects
 			ElevatorArray[i].object->EnableObjects(false);
+			if (enable_elevators == false)
+				ElevatorArray[i].object->Enabled(false);
 		}
 	}
 

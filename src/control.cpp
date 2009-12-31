@@ -86,9 +86,6 @@ Control::Control(Object *parent, int type, const char *name, const char *action_
 		sbs->AddGenWall(ControlMesh, texture, x, z, x, z - width, height, voffset, 1, 1);
 	if (Direction == "right")
 		sbs->AddGenWall(ControlMesh, texture, x, z, x, z + width, height, voffset, 1, 1);
-
-	//disable on startup
-	Enabled(false);
 }
 
 Control::~Control()

@@ -41,6 +41,7 @@ FloorIndicator::FloorIndicator(int elevator, const char *texture_prefix, const c
 	object = new Object();
 	object->SetValues(this, sbs->GetElevator(elevator)->object, "FloorIndicator", false);
 
+	IsEnabled = true;
 	Elevator = elevator;
 	Prefix = texture_prefix;
 

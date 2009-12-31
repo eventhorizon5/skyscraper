@@ -119,9 +119,6 @@ Door::Door(Object *parent, const char *name, const char *texture, float thicknes
 	sbs->AddWallMain(DoorMesh, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
-
-	//disable on creation
-	Enabled(false);
 }
 
 Door::~Door()

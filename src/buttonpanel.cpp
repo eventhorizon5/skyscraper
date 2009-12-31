@@ -99,7 +99,6 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	}
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
-	Enabled(false); //disable mesh at startup
 }
 
 ButtonPanel::~ButtonPanel()
@@ -341,10 +340,10 @@ int ButtonPanel::AddWall(const char *name, const char *texture, float thickness,
 
 	//calculate autosizing
 	float tmpheight;
-	if (voffset1 > voffset2)
-		tmpheight = voffset1;
+	if (height1 > height2)
+		tmpheight = height1;
 	else
-		tmpheight = voffset1;
+		tmpheight = height2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
 	return sbs->AddWallMain(ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, sizing.x, sizing.y);

@@ -216,37 +216,8 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 		tmpheight = height_in2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
-	float tw2 = tw;
-	float th2;
-	float tempw1;
-	float tempw2;
-
-	//get texture force value
-	bool force_enable, force_mode;
-	sbs->GetTextureForce(texture, force_enable, force_mode);
-
-	//Call texture autosizing formulas
-	if (z1 == z2)
-		tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
-	if (x1 == x2)
-		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
-	if ((z1 != z2) && (x1 != x2))
-	{
-		//calculate diagonals
-		if (x1 > x2)
-			tempw1 = x1 - x2;
-		else
-			tempw1 = x2 - x1;
-		if (z1 > z2)
-			tempw2 = z1 - z2;
-		else
-			tempw2 = z2 - z1;
-		tw2 = sbs->AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
-	}
-	th2 = sbs->AutoSize(0, height_in1, false, th, force_enable, force_mode);
-
 	if (isexternal == false)
-		return sbs->AddWallMain(Level, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, tw2, th2);
+		return sbs->AddWallMain(Level, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, sizing.x, sizing.y);
 	else
 		return sbs->AddWallMain(sbs->External, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
 }

@@ -126,10 +126,10 @@ int Shaft::AddWall(int floor, const char *name, const char *texture, float thick
 
 	//calculate autosizing
 	float tmpheight;
-	if (voffset1 > voffset2)
-		tmpheight = voffset1;
+	if (height1 > height1)
+		tmpheight = height1;
 	else
-		tmpheight = voffset2;
+		tmpheight = height2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
 	return sbs->AddWallMain(ShaftArray[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, sizing.x, sizing.y);
