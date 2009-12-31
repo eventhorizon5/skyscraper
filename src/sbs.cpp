@@ -1573,6 +1573,16 @@ int SBS::AddCustomWall(csRef<iMeshWrapper> dest, const char *name, const char *t
 		texname = "Default";
 	dest_state->SetPolygonMaterial(csPolygonRange(firstidx, firstidx + (numindices - 1)), material);
 
+	float tw2 = sizing.x, th2 = sizing.y;
+	float mw, mh;
+	if (GetTextureTiling(texname.GetData(), mw, mh))
+	{
+		//multiply the tiling parameters (tw and th) by
+		//the stored multipliers for that texture
+		tw2 = sizing.x * mw;
+		th2 = sizing.y * mh;
+	}
+
 	//apply UV texture mapping
 	ApplyTextureMapping(dest_state, firstidx, firstidx + (numindices - 1), sizing.x, sizing.y);
 
@@ -3884,19 +3894,8 @@ csVector2 SBS::CalculateSizing(const char *texture, csVector2 x, csVector2 y, cs
 	}
 	th2 = AutoSize(y.x, y.y, false, th, force_enable, force_mode);
 
-	//get tiling
-	float tw3 = tw2, th3 = th2;
-	float mw, mh;
-	if (GetTextureTiling(texture, mw, mh))
-	{
-		//multiply the tiling parameters (tw and th) by
-		//the stored multipliers for that texture
-		tw3 = tw2 * mw;
-		th3 = th2 * mh;
-	}
-
 	//return results
-	return csVector2(tw3, th3);
+	return csVector2(tw2, th2);
 }
 
 void SBS::ApplyTextureMapping(iThingFactoryState *state, int start_index, int end_index, float tw, float th)
