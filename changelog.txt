@@ -35,6 +35,7 @@ Version 1.6 (2.0 Alpha 6)
 -added the GetWallExtents and Print commands
 -added InterfloorOnTop global parameter and base variable
 -made new SetPlanarMapping command which is an extended version of the old ReverseExtents command
+-new planar texture mapper is now the default
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------
