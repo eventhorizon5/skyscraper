@@ -3177,28 +3177,11 @@ int SBS::AddGround(const char *name, const char *texture, float x1, float z1, fl
 			else
 				sizez = tile_z;
 
-			v1.Set(i + sizex, altitude, j + sizez); //bottom right
-			v2.Set(i, altitude, j + sizez); //bottom left
-			v3.Set(i, altitude, j); //top left
-			v4.Set(i + sizex, altitude, j); //top right
-
-			tmpindex = Landscape_state->AddQuad(ToRemote(v4), ToRemote(v3), ToRemote(v2), ToRemote(v1));
-			Landscape_state->SetPolygonName(csPolygonRange(tmpindex, tmpindex), name);
+			tmpindex = AddFloorMain(Landscape, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, 1, 1);
 			if (tmpindex > index && index == -1)
 				index = tmpindex;
-
-			//set texture
-			SetTexture(Landscape_state, tmpindex, texture, false, 1, 1);
 		}
 	}
-
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		DeleteColliders(Landscape);
-		CreateColliders(Landscape);
-	}
-
 	return index;
 }
 
