@@ -59,9 +59,9 @@ public:
 	csArray<Door*> DoorArray; //pointer array to door objects
 	csArray<FloorIndicator*> FloorIndicatorArray; //pointer array to floor indicator objects
 	csArray<int> Group; //floor group
-	csArray<PolygonObject*> level_polys;
-	csArray<PolygonObject*> interfloor_polys;
-	csArray<PolygonObject*> columnframe_polys;
+	csArray<WallObject*> level_walls;
+	csArray<WallObject*> interfloor_walls;
+	csArray<WallObject*> columnframe_walls;
 
 	//functions
 	Floor(int number);

@@ -23,19 +23,19 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_POLYOBJECT_H
-#define _SBS_POLYOBJECT_H
+#ifndef _SBS_WALL_H
+#define _SBS_WALL_H
 
-class PolygonObject : public Object
+class WallObject : public Object
 {
 public:
 	//functions
-	PolygonObject(csRef<iMeshWrapper> wrapper);
-	~PolygonObject();
+	WallObject(csRef<iMeshWrapper> wrapper);
+	~WallObject();
 	int AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4);
 	int AddPolygon(csVector3 *vertices, int num);
 	void CreateHandle(int index);
-	void SetName(int index, const char *name);
+	void SetPolygonName(int index, const char *name);
 
 	//polygon handle array
 	csRefArray<iPolygonHandle> handles;
@@ -45,6 +45,9 @@ public:
 
 	//mesh factory state
 	csRef<iThingFactoryState> state;
+
+	//name
+	csString name;
 };
 
-#endif _SBS_POLYOBJECT_H
+#endif _SBS_WALL_H

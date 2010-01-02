@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Polygon Object Class
+	Scalable Building Simulator - Wall Object Class
 	The Skyscraper Project - Version 1.6 Alpha
 	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -25,19 +25,19 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "polyobject.h"
+#include "wall.h"
 #include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-PolygonObject::PolygonObject(csRef<iMeshWrapper> wrapper)
+WallObject::WallObject(csRef<iMeshWrapper> wrapper)
 {
 	//polygon object constructor
 	meshwrapper = wrapper;
 	state = scfQueryInterface<iThingFactoryState> (wrapper->GetMeshObject()->GetFactory());
 }
 
-PolygonObject::~PolygonObject()
+WallObject::~WallObject()
 {
 	//polygon object destructor
 	handles = 0;
@@ -45,7 +45,7 @@ PolygonObject::~PolygonObject()
 	state = 0;
 }
 
-int PolygonObject::AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)
+int WallObject::AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)
 {
 	//add a quad polygon
 	int newhandle = state->AddQuad(v1, v2, v3, v4);
@@ -53,7 +53,7 @@ int PolygonObject::AddQuad(const csVector3 &v1, const csVector3 &v2, const csVec
 	return newhandle;
 }
 
-int PolygonObject::AddPolygon(csVector3 *vertices, int num)
+int WallObject::AddPolygon(csVector3 *vertices, int num)
 {
 	//create a generic polygon
 	int index = state->AddPolygon(vertices, num);
@@ -61,14 +61,14 @@ int PolygonObject::AddPolygon(csVector3 *vertices, int num)
 	return index;
 }
 
-void PolygonObject::CreateHandle(int index)
+void WallObject::CreateHandle(int index)
 {
 	//create a polygon handle
 	csRef<iPolygonHandle> newhandle = state->CreatePolygonHandle(index);
 	handles.Push(newhandle);
 }
 
-void PolygonObject::SetName(int index, const char *name)
+void WallObject::SetPolygonName(int index, const char *name)
 {
 	//set polygon name
 	state->SetPolygonName(csPolygonRange(index, index), name);

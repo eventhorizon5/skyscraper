@@ -100,11 +100,11 @@ Shaft::~Shaft()
 	//destructor
 
 	//delete polygon objects
-	for (int i = 0; i < shaft_polys.GetSize(); i++)
+	for (int i = 0; i < shaft_walls.GetSize(); i++)
 	{
-		if (shaft_polys[i])
-			delete shaft_polys[i];
-		shaft_polys[i] = 0;
+		if (shaft_walls[i])
+			delete shaft_walls[i];
+		shaft_walls[i] = 0;
 	}
 
 	//delete mesh array objects
@@ -140,8 +140,8 @@ int Shaft::AddWall(int floor, const char *name, const char *texture, float thick
 		tmpheight = height2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
-	PolygonObject *poly = sbs->CreatePolygonObject(shaft_polys, ShaftArray[floor - startfloor]);
-	return sbs->AddWallMain(poly, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, sizing.x, sizing.y);
+	WallObject *wall = sbs->CreateWallObject(shaft_walls, ShaftArray[floor - startfloor], this->object, name);
+	return sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, sizing.x, sizing.y);
 }
 
 int Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
@@ -182,8 +182,8 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	PolygonObject *poly = sbs->CreatePolygonObject(shaft_polys, ShaftArray[floor - startfloor]);
-	return sbs->AddFloorMain(poly, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw2, th2);
+	WallObject *wall = sbs->CreateWallObject(shaft_walls, ShaftArray[floor - startfloor], this->object, name);
+	return sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw2, th2);
 }
 
 void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)

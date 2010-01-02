@@ -218,11 +218,11 @@ Elevator::~Elevator()
 	sounds.DeleteAll();
 
 	//delete polygon objects
-	for (int i = 0; i < elevator_polys.GetSize(); i++)
+	for (int i = 0; i < elevator_walls.GetSize(); i++)
 	{
-		if (elevator_polys[i])
-			delete elevator_polys[i];
-		elevator_polys[i] = 0;
+		if (elevator_walls[i])
+			delete elevator_walls[i];
+		elevator_walls[i] = 0;
 	}
 
 	Elevator_movable = 0;
@@ -1521,8 +1521,8 @@ int Elevator::AddWall(const char *name, const char *texture, float thickness, fl
 		tmpheight = height2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
-	PolygonObject *poly = sbs->CreatePolygonObject(elevator_polys, ElevatorMesh);
-	return sbs->AddWallMain(poly, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, sizing.x, sizing.y);
+	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, this->object, name);
+	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, sizing.x, sizing.y);
 }
 
 int Elevator::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
@@ -1545,8 +1545,8 @@ int Elevator::AddFloor(const char *name, const char *texture, float thickness, f
 	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
-	PolygonObject *poly = sbs->CreatePolygonObject(elevator_polys, ElevatorMesh);
-	return sbs->AddFloorMain(poly, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw2, th2);
+	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, this->object, name);
+	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw2, th2);
 }
 
 void Elevator::AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)

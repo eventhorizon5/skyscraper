@@ -251,10 +251,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\polyobject.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\sbs.cpp"
 				>
 			</File>
@@ -272,6 +268,10 @@
 			</File>
 			<File
 				RelativePath="..\src\unix.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wall.cpp"
 				>
 			</File>
 		</Filter>
@@ -329,10 +329,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\polyobject.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\sbs.h"
 				>
 			</File>
@@ -350,6 +346,10 @@
 			</File>
 			<File
 				RelativePath="..\src\unix.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wall.h"
 				>
 			</File>
 		</Filter>

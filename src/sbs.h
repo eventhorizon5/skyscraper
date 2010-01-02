@@ -49,7 +49,7 @@
 #include <isndsys/ss_manager.h>
 #include <iutil/objreg.h>
 
-#include "polyobject.h"
+#include "wall.h"
 #include "floor.h"
 #include "elevator.h"
 #include "shaft.h"
@@ -178,16 +178,16 @@ public:
 	bool Start();
 	int CreateSky(const char *filenamebase);
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
-	int AddWallMain(PolygonObject* polyobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
+	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
 	int AddWallMain(csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
-	int AddFloorMain(PolygonObject* polyobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
+	int AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
 	int AddFloorMain(csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
 	void CalculateFrameRate();
 	void MainLoop();
-	int CreateWallBox(PolygonObject* polyobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
-	int CreateWallBox2(PolygonObject* polyobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
-	int AddTriangleWall(PolygonObject* polyobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
-	int AddCustomWall(PolygonObject* polyobject, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
+	int CreateWallBox(WallObject* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
+	int CreateWallBox2(WallObject* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
+	int AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
+	int AddCustomWall(WallObject* wallobject, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
 	csVector2 GetExtents(csPoly3D &varray, int coord);
 	void InitMeshes();
 	void EnableBuildings(bool value);
@@ -196,7 +196,7 @@ public:
 	void EnableSkybox(bool value);
 	int GetFloorNumber(float altitude, int lastfloor = 0, bool checklastfloor = false);
 	float GetDistance(float x1, float x2, float z1, float z2);
-	void DumpVertices(PolygonObject* polyobject);
+	void DumpVertices(WallObject* wallobject);
 	void ListAltitudes();
 	bool CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	bool CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
@@ -288,20 +288,20 @@ public:
 	csVector3 GetPolygonDirection(csPoly3D &polygon);
 	csVector2 CalculateSizing(const char *texture, csVector2 x, csVector2 y, csVector2 z, float tw, float th);
 	void ApplyTextureMapping(iThingFactoryState *state, int start_index, int end_index, float tw, float th);
-	PolygonObject* CreatePolygonObject(csArray<PolygonObject*> &array, csRef<iMeshWrapper> mesh);
+	WallObject* CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrapper> mesh, Object *parent, const char *name);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
 		csRef<iThingFactoryState> Buildings_state;
-		csArray<PolygonObject*> Buildings_polys;
+		csArray<WallObject*> Buildings_walls;
 
 	csRef<iMeshWrapper> External; //external mesh
 		csRef<iThingFactoryState> External_state;
-		csArray<PolygonObject*> External_polys;
+		csArray<WallObject*> External_walls;
 
 	csRef<iMeshWrapper> Landscape; //landscape mesh
 		csRef<iThingFactoryState> Landscape_state;
-		csArray<PolygonObject*> Landscape_polys;
+		csArray<WallObject*> Landscape_walls;
 
 	csRef<iMeshWrapper> SkyBox; //skybox mesh
 		csRef<iThingFactoryState> SkyBox_state;

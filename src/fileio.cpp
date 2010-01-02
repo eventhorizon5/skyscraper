@@ -886,22 +886,22 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			polyobject = Simcore->CreatePolygonObject(Simcore->GetFloor(Current)->level_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			polyobject = Simcore->CreatePolygonObject(Simcore->External_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			polyobject = Simcore->CreatePolygonObject(Simcore->Landscape_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			polyobject = Simcore->CreatePolygonObject(Simcore->Buildings_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else
 		{
@@ -910,7 +910,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//create triangle wall
-		Simcore->AddTriangleWall(polyobject, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+		Simcore->AddTriangleWall(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
 		tempdata.DeleteAll();
 	}
 
@@ -1115,22 +1115,22 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			polyobject = Simcore->CreatePolygonObject(Simcore->GetFloor(Current)->level_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			polyobject = Simcore->CreatePolygonObject(Simcore->External_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			polyobject = Simcore->CreatePolygonObject(Simcore->Landscape_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			polyobject = Simcore->CreatePolygonObject(Simcore->Buildings_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else
 		{
@@ -1138,7 +1138,7 @@ int ScriptProcessor::ProcCommands()
 			return sError;
 		}
 
-		Simcore->CreateWallBox2(polyobject, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
+		Simcore->CreateWallBox2(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 	}
 
@@ -1186,22 +1186,22 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			polyobject = Simcore->CreatePolygonObject(Simcore->GetFloor(Current)->level_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			polyobject = Simcore->CreatePolygonObject(Simcore->External_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			polyobject = Simcore->CreatePolygonObject(Simcore->Landscape_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			polyobject = Simcore->CreatePolygonObject(Simcore->Buildings_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else
 		{
@@ -1209,7 +1209,7 @@ int ScriptProcessor::ProcCommands()
 			return sError;
 		}
 
-		Simcore->CreateWallBox(polyobject, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
+		Simcore->CreateWallBox(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 	}
 
@@ -1247,22 +1247,22 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			polyobject = Simcore->CreatePolygonObject(Simcore->GetFloor(Current)->level_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			polyobject = Simcore->CreatePolygonObject(Simcore->External_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			polyobject = Simcore->CreatePolygonObject(Simcore->Landscape_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			polyobject = Simcore->CreatePolygonObject(Simcore->Buildings_polys, tmpMesh);
+			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else
 		{
@@ -1276,7 +1276,7 @@ int ScriptProcessor::ProcCommands()
 		for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
 			varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
-		Simcore->AddCustomWall(polyobject, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
+		Simcore->AddCustomWall(wall, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
 		tempdata.DeleteAll();
 	}
 
