@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Generic Object Class
+	Scalable Building Simulator - Polygon Object Class
 	The Skyscraper Project - Version 1.6 Alpha
 	Copyright (C)2005-2009 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -23,30 +23,28 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_OBJECT_H
-#define _SBS_OBJECT_H
+#ifndef _SBS_POLYOBJECT_H
+#define _SBS_POLYOBJECT_H
 
-#include <csutil/csstring.h>
-
-class SBSIMPEXP Object
+class PolygonObject : public Object
 {
 public:
 	//functions
-	Object();
-	~Object();
-	void SetValues(void *object, Object *parent, const char *type, bool is_permanent);
-	bool IsPermanent();
-	Object* GetParent();
-	void* GetRawObject();
-	const char* GetObjectType();
-	int GetObjectIndex();
+	PolygonObject(csRef<iMeshWrapper> wrapper);
+	~PolygonObject();
+	int AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4);
+	int AddPolygon(csVector3 *vertices, int num);
+	void CreateHandle(int index);
+	void SetName(int index, const char *name);
 
-private:
-	bool Permanent; //is object permanent?
-	Object *Parent; //parent object
-	void *raw_object; //raw object
-	csString Type; //object type
-	int Index; //object array index
+	//polygon handle array
+	csRefArray<iPolygonHandle> handles;
+
+	//mesh wrapper
+	csRef<iMeshWrapper> meshwrapper;
+
+	//mesh factory state
+	csRef<iThingFactoryState> state;
 };
 
-#endif
+#endif _SBS_POLYOBJECT_H

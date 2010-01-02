@@ -35,6 +35,7 @@ class SBSIMPEXP ElevatorDoor
 {
 public:
 	Object *object; //SBS object
+	csArray<Object*> shaftdoor_objects; //shaft door objects
 	int Number; //door instance number
 	Elevator *elev; //pointer to associated elevator object
 	float OpenSpeed; //door opening/closing speed

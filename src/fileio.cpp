@@ -884,13 +884,25 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		buffer.Downcase();
 		if (buffer == "floor")
+		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
+			polyobject = Simcore->CreatePolygonObject(Simcore->GetFloor(Current)->level_polys, tmpMesh);
+		}
 		else if (buffer == "external")
+		{
 			tmpMesh = Simcore->External;
+			polyobject = Simcore->CreatePolygonObject(Simcore->External_polys, tmpMesh);
+		}
 		else if (buffer == "landscape")
+		{
 			tmpMesh = Simcore->Landscape;
+			polyobject = Simcore->CreatePolygonObject(Simcore->Landscape_polys, tmpMesh);
+		}
 		else if (buffer == "buildings")
+		{
 			tmpMesh = Simcore->Buildings;
+			polyobject = Simcore->CreatePolygonObject(Simcore->Buildings_polys, tmpMesh);
+		}
 		else
 		{
 			ScriptError("Invalid object");
@@ -898,7 +910,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//create triangle wall
-		Simcore->AddTriangleWall(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+		Simcore->AddTriangleWall(polyobject, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
 		tempdata.DeleteAll();
 	}
 
@@ -1101,20 +1113,32 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		buffer.Downcase();
 		if (buffer == "floor")
+		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
+			polyobject = Simcore->CreatePolygonObject(Simcore->GetFloor(Current)->level_polys, tmpMesh);
+		}
 		else if (buffer == "external")
+		{
 			tmpMesh = Simcore->External;
+			polyobject = Simcore->CreatePolygonObject(Simcore->External_polys, tmpMesh);
+		}
 		else if (buffer == "landscape")
+		{
 			tmpMesh = Simcore->Landscape;
+			polyobject = Simcore->CreatePolygonObject(Simcore->Landscape_polys, tmpMesh);
+		}
 		else if (buffer == "buildings")
+		{
 			tmpMesh = Simcore->Buildings;
+			polyobject = Simcore->CreatePolygonObject(Simcore->Buildings_polys, tmpMesh);
+		}
 		else
 		{
 			ScriptError("Invalid object");
 			return sError;
 		}
 
-		Simcore->CreateWallBox2(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
+		Simcore->CreateWallBox2(polyobject, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 	}
 
@@ -1160,20 +1184,32 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		buffer.Downcase();
 		if (buffer == "floor")
+		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
+			polyobject = Simcore->CreatePolygonObject(Simcore->GetFloor(Current)->level_polys, tmpMesh);
+		}
 		else if (buffer == "external")
+		{
 			tmpMesh = Simcore->External;
+			polyobject = Simcore->CreatePolygonObject(Simcore->External_polys, tmpMesh);
+		}
 		else if (buffer == "landscape")
+		{
 			tmpMesh = Simcore->Landscape;
+			polyobject = Simcore->CreatePolygonObject(Simcore->Landscape_polys, tmpMesh);
+		}
 		else if (buffer == "buildings")
+		{
 			tmpMesh = Simcore->Buildings;
+			polyobject = Simcore->CreatePolygonObject(Simcore->Buildings_polys, tmpMesh);
+		}
 		else
 		{
 			ScriptError("Invalid object");
 			return sError;
 		}
 
-		Simcore->CreateWallBox(tmpMesh, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
+		Simcore->CreateWallBox(polyobject, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 	}
 
@@ -1209,13 +1245,25 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		buffer.Downcase();
 		if (buffer == "floor")
+		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
+			polyobject = Simcore->CreatePolygonObject(Simcore->GetFloor(Current)->level_polys, tmpMesh);
+		}
 		else if (buffer == "external")
+		{
 			tmpMesh = Simcore->External;
+			polyobject = Simcore->CreatePolygonObject(Simcore->External_polys, tmpMesh);
+		}
 		else if (buffer == "landscape")
+		{
 			tmpMesh = Simcore->Landscape;
+			polyobject = Simcore->CreatePolygonObject(Simcore->Landscape_polys, tmpMesh);
+		}
 		else if (buffer == "buildings")
+		{
 			tmpMesh = Simcore->Buildings;
+			polyobject = Simcore->CreatePolygonObject(Simcore->Buildings_polys, tmpMesh);
+		}
 		else
 		{
 			ScriptError("Invalid object");
@@ -1228,7 +1276,7 @@ int ScriptProcessor::ProcCommands()
 		for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
 			varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
-		Simcore->AddCustomWall(tmpMesh, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
+		Simcore->AddCustomWall(polyobject, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
 		tempdata.DeleteAll();
 	}
 

@@ -122,6 +122,26 @@ Floor::~Floor()
 	}
 	sounds.DeleteAll();
 
+	//delete polygon objects
+	for (int i = 0; i < level_polys.GetSize(); i++)
+	{
+		if (level_polys[i])
+			delete level_polys[i];
+		level_polys[i] = 0;
+	}
+	for (int i = 0; i < interfloor_polys.GetSize(); i++)
+	{
+		if (interfloor_polys[i])
+			delete interfloor_polys[i];
+		interfloor_polys[i] = 0;
+	}
+	for (int i = 0; i < columnframe_polys.GetSize(); i++)
+	{
+		if (columnframe_polys[i])
+			delete columnframe_polys[i];
+		columnframe_polys[i] = 0;
+	}
+
 	ColumnFrame_state = 0;
 	ColumnFrame = 0;
 	Interfloor_state = 0;
@@ -160,9 +180,15 @@ int Floor::AddFloor(const char *name, const char *texture, float thickness, floa
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	if (isexternal == false)
-		return sbs->AddFloorMain(Level, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, tw2, th2);
+	{
+		PolygonObject *poly = sbs->CreatePolygonObject(level_polys, Level);
+		return sbs->AddFloorMain(poly, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, tw2, th2);
+	}
 	else
-		return sbs->AddFloorMain(sbs->External, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+	{
+		PolygonObject *poly = sbs->CreatePolygonObject(sbs->External_polys, sbs->External);
+		return sbs->AddFloorMain(poly, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+	}
 }
 
 void Floor::DeleteFloor(int index)
@@ -190,7 +216,8 @@ int Floor::AddInterfloorFloor(const char *name, const char *texture, float thick
 	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
-	return sbs->AddFloorMain(Interfloor, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+	PolygonObject *poly = sbs->CreatePolygonObject(interfloor_polys, Interfloor);
+	return sbs->AddFloorMain(poly, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 }
 
 void Floor::DeleteInterfloorFloor(int index)
@@ -217,9 +244,15 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
 	if (isexternal == false)
-		return sbs->AddWallMain(Level, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, sizing.x, sizing.y);
+	{
+		PolygonObject *poly = sbs->CreatePolygonObject(level_polys, Level);
+		return sbs->AddWallMain(poly, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, sizing.x, sizing.y);
+	}
 	else
-		return sbs->AddWallMain(sbs->External, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
+	{
+		PolygonObject *poly = sbs->CreatePolygonObject(sbs->External_polys, sbs->External);
+		return sbs->AddWallMain(poly, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
+	}
 }
 
 void Floor::DeleteWall(int index)
@@ -245,7 +278,8 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, float thickn
 		tmpheight = height_in2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
-	return sbs->AddWallMain(Interfloor, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
+	PolygonObject *poly = sbs->CreatePolygonObject(interfloor_polys, Interfloor);
+	return sbs->AddWallMain(poly, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
 }
 
 void Floor::DeleteInterfloorWall(int index)
@@ -437,7 +471,9 @@ int Floor::ColumnWallBox(const char *name, const char *texture, float x1, float 
 		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
 	th2 = sbs->AutoSize(0, height_in, false, th, force_enable, force_mode);
 
-	return sbs->CreateWallBox(ColumnFrame, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom);
+	columnframe_polys.SetSize(columnframe_polys.GetSize() + 1);
+	columnframe_polys[columnframe_polys.GetSize() - 1] = new PolygonObject(ColumnFrame);
+	return sbs->CreateWallBox(columnframe_polys[columnframe_polys.GetSize() - 1], name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom);
 }
 
 int Floor::ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)

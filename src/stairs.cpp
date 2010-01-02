@@ -88,6 +88,14 @@ Stairs::~Stairs()
 	}
 	DoorArray.DeleteAll();
 
+	//delete polygon objects
+	for (int i = 0; i < stairs_polys.GetSize(); i++)
+	{
+		if (stairs_polys[i])
+			delete stairs_polys[i];
+		stairs_polys[i] = 0;
+	}
+
 	//delete mesh array objects
 	for (int i = 0; i < StairArray_state.GetSize(); i++)
 		StairArray_state[i] = 0;
@@ -239,7 +247,8 @@ int Stairs::AddWall(int floor, const char *name, const char *texture, float thic
 		tmpheight = height2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
-	return sbs->AddWallMain(StairArray[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->GetBase() + voffset1, sbs->GetFloor(floor)->GetBase() + voffset2, sizing.x, sizing.y);
+	PolygonObject *poly = sbs->CreatePolygonObject(stairs_polys, StairArray[floor - startfloor]);
+	return sbs->AddWallMain(poly, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->GetBase() + voffset1, sbs->GetFloor(floor)->GetBase() + voffset2, sizing.x, sizing.y);
 }
 
 int Stairs::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
@@ -268,7 +277,8 @@ int Stairs::AddFloor(int floor, const char *name, const char *texture, float thi
 	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
-	return sbs->AddFloorMain(StairArray[floor - startfloor], name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, sbs->GetFloor(floor)->GetBase() + voffset1, sbs->GetFloor(floor)->GetBase() + voffset2, tw2, th2);
+	PolygonObject *poly = sbs->CreatePolygonObject(stairs_polys, StairArray[floor - startfloor]);
+	return sbs->AddFloorMain(poly, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, sbs->GetFloor(floor)->GetBase() + voffset1, sbs->GetFloor(floor)->GetBase() + voffset2, tw2, th2);
 }
 
 void Stairs::Enabled(int floor, bool value)

@@ -56,7 +56,8 @@ class ScriptProcessor
 	int RangeL;
 	int RangeH;
 	long RangeStart;
-	csRef<iMeshWrapper> tmpMesh;
+	iMeshWrapper *tmpMesh;
+	PolygonObject *polyobject;
 	char intbuffer[65];
 	csString buffer;
 	int startpos;

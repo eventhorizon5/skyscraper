@@ -119,6 +119,14 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 
 ElevatorDoor::~ElevatorDoor()
 {
+	//delete shaft door objects
+	for (int i = 0; i < shaftdoor_objects.GetSize(); i++)
+	{
+		if (shaftdoor_objects[i])
+			delete shaftdoor_objects[i];
+		shaftdoor_objects[i] = 0;
+	}
+
 	//delete mesh array objects
 	for (int i = 0; i < ShaftDoorL_state.GetSize(); i++)
 		ShaftDoorL_state[i] = 0;
@@ -1063,6 +1071,11 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *
 	csRef<iMeshWrapper> tmpmesh;
 	csRef<iThingFactoryState> tmpstate;
 	int index = elev->ServicedFloors.Find(floor);
+
+	//create object
+	shaftdoor_objects.SetSize(shaftdoor_objects.GetSize() + 1);
+	shaftdoor_objects[shaftdoor_objects.GetSize() - 1] = new Object();
+	shaftdoor_objects[shaftdoor_objects.GetSize() - 1]->SetValues(0, this->object, "ShaftDoor", false);
 
 	//door L
 	tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());

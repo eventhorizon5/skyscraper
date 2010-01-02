@@ -96,6 +96,7 @@ public:
 	bool UseFloorSounds; //true if floor sounds should be used
 	csVector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
+	csArray<PolygonObject*> elevator_polys;
 
 	//functions
 	Elevator(int number);
