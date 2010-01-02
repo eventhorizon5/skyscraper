@@ -154,6 +154,8 @@ SBS::SBS()
 	Verbose = false;
 	InterfloorOnTop = false;
 	DefaultMapper = 0;
+	ObjectCount = 0;
+	FastDelete = false;
 }
 
 SBS::~SBS()
@@ -161,6 +163,8 @@ SBS::~SBS()
 	//engine destructor
 
 	Report("Deleting SBS objects...");
+
+	FastDelete = true;
 
 	//delete camera object
 	if (camera)
@@ -216,7 +220,7 @@ SBS::~SBS()
 	}
 	sounds.DeleteAll();
 
-	//delete polygon objects
+	//delete wall objects
 	for (int i = 0; i < Buildings_walls.GetSize(); i++)
 	{
 		if (Buildings_walls[i])
@@ -3728,14 +3732,14 @@ csVector3 SBS::ToRemote(csVector3 local_value)
 int SBS::GetObjectCount()
 {
 	//return number of registered SBS objects
-	return ObjectArray.GetSize();
+	return ObjectCount;
 }
 
-Object* SBS::GetObject(int index)
+Object* SBS::GetObject(int number)
 {
 	//return object pointer from global array
-	if (index >= 0 && index < ObjectArray.GetSize())
-		return ObjectArray[index];
+	if (number >= 0 && number < ObjectArray.GetSize())
+		return ObjectArray[number];
 	else
 		return 0;
 }
@@ -3743,20 +3747,28 @@ Object* SBS::GetObject(int index)
 int SBS::RegisterObject(Object *object)
 {
 	//add object to global array
+	ObjectCount++;
 	return ObjectArray.Push(object);
 }
 
-bool SBS::UnregisterObject(Object *object)
+bool SBS::UnregisterObject(int number)
 {
-	//remove object by reference
-	return ObjectArray.Delete(object);
-}
+	//remove object
+	//note - this doesn't delete the objects
+	ObjectCount--;
 
-bool SBS::UnregisterObject(int index)
-{
-	//remove object by index
-	return ObjectArray.DeleteIndex(index);
-	//return ObjectArray.DeleteIndexFast(index);
+	if (number < ObjectArray.GetSize())
+	{
+		if (ObjectArray[number])
+		{
+			if (ObjectArray[number]->GetNumber() == number)
+			{
+				ObjectArray[number] == 0;
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 csVector3 SBS::GetWallExtents(csRef<iThingFactoryState> state, const char *name, float altitude, bool get_max)

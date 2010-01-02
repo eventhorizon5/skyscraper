@@ -217,7 +217,7 @@ Elevator::~Elevator()
 	}
 	sounds.DeleteAll();
 
-	//delete polygon objects
+	//delete wall objects
 	for (int i = 0; i < elevator_walls.GetSize(); i++)
 	{
 		if (elevator_walls[i])

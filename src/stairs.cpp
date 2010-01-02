@@ -88,7 +88,7 @@ Stairs::~Stairs()
 	}
 	DoorArray.DeleteAll();
 
-	//delete polygon objects
+	//delete wall objects
 	for (int i = 0; i < stairs_walls.GetSize(); i++)
 	{
 		if (stairs_walls[i])

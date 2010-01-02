@@ -161,6 +161,7 @@ public:
 	float UnitScale; //scale of 3D positions; this value equals 1 3D unit
 	bool Verbose; //set to true to enable verbose mode
 	bool InterfloorOnTop; //set to true to have interfloor area on top (it's on the bottom by default)
+	bool FastDelete; //used internally for quick object deletion
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
@@ -278,10 +279,9 @@ public:
 	csVector2 ToRemote(csVector2 local_value);
 	csVector3 ToRemote(csVector3 local_value);
 	int GetObjectCount();
-	Object* GetObject(int index);
+	Object* GetObject(int number);
 	int RegisterObject(Object *object);
-	bool UnregisterObject(Object *object);
-	bool UnregisterObject(int index);
+	bool UnregisterObject(int number);
 	void GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3);
 	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
 	csVector3 GetWallExtents(csRef<iThingFactoryState> state, const char *name, float altitude,  bool get_max);
@@ -416,6 +416,8 @@ private:
 	//generic sound objects
 	csArray<Sound*> sounds;
 	int soundcount;
+
+	int ObjectCount; //number of simulator objects
 };
 
 #endif

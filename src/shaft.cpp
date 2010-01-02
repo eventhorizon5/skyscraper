@@ -99,7 +99,7 @@ Shaft::~Shaft()
 {
 	//destructor
 
-	//delete polygon objects
+	//delete wall objects
 	for (int i = 0; i < shaft_walls.GetSize(); i++)
 	{
 		if (shaft_walls[i])

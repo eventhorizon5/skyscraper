@@ -122,7 +122,7 @@ Floor::~Floor()
 	}
 	sounds.DeleteAll();
 
-	//delete polygon objects
+	//delete wall objects
 	for (int i = 0; i < level_walls.GetSize(); i++)
 	{
 		if (level_walls[i])

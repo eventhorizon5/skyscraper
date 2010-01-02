@@ -36,23 +36,18 @@ Object::Object()
 	raw_object = 0;
 
 	//register object with engine
-	Index = sbs->RegisterObject(this);
+	Number = sbs->RegisterObject(this);
 }
 
 Object::~Object()
 {
 	//remove object from engine
 
-	//if global object index is still the same, remove by index - otherwise by pointer
-	if (sbs->GetObject(Index))
-	{
-		if (sbs->GetObject(Index)->Index == Index)
-		{
-			sbs->UnregisterObject(Index);
-			return;
-		}
-	}
-	sbs->UnregisterObject(this);
+	//if fastdelete is enabled, don't unregister (just delete)
+	if (sbs->FastDelete == true)
+		return;
+
+	sbs->UnregisterObject(Number);
 }
 
 void Object::SetValues(void *object, Object *parent, const char *type, bool is_permanent)
@@ -82,14 +77,14 @@ void* Object::GetRawObject()
 	return raw_object;
 }
 
-const char* Object::GetObjectType()
+const char* Object::GetType()
 {
 	//return object type string
 	return Type;
 }
 
-int Object::GetObjectIndex()
+int Object::GetNumber()
 {
-	//return object's global array index
-	return Index;
+	//return object's global numeric identifier
+	return Number;
 }

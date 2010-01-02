@@ -38,15 +38,15 @@ public:
 	bool IsPermanent();
 	Object* GetParent();
 	void* GetRawObject();
-	const char* GetObjectType();
-	int GetObjectIndex();
+	const char* GetType();
+	int GetNumber();
 
 private:
 	bool Permanent; //is object permanent?
 	Object *Parent; //parent object
 	void *raw_object; //raw object
 	csString Type; //object type
-	int Index; //object array index
+	int Number; //object identifier
 };
 
 #endif
