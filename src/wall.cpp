@@ -82,15 +82,6 @@ void WallObject::DeletePolygons()
 {
 	//delete polygons and handles
 	
-	for (int i = 0; i < state->GetPolygonCount(); i++)
-	{
-		csString index;
-		index = i;
-		index.Append("-");
-		index.Append(state->GetPolygonName(i));
-		sbs->Report(index);
-	}
-
 	for (int i = 0; i < handles.GetSize(); i++)
 	{
 		if (handles[i] > -1)
@@ -100,15 +91,6 @@ void WallObject::DeletePolygons()
 			handles[i] = -1;
 			ReindexPolygons(tmphandle);
 		}
-	}
-
-	for (int i = 0; i < state->GetPolygonCount(); i++)
-	{
-		csString index;
-		index = i;
-		index.Append("-");
-		index.Append(state->GetPolygonName(i));
-		sbs->Report(index);
 	}
 	handles.DeleteAll();
 
