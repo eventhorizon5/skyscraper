@@ -38,6 +38,8 @@ public:
 	void CreateHandle(int index);
 	void SetPolygonName(int index, const char *name);
 	void DeletePolygons();
+	void DeletePolygon(int index, bool recreate_colliders);
+	void ReindexPolygons(int deleted_index);
 
 	//polygon index array
 	csArray<int> handles;
@@ -53,9 +55,6 @@ public:
 
 	//parent array
 	csArray<WallObject*> *parent_array;
-
-private:
-	void ProcessIndices(int deleted_index);
 };
 
 #endif _SBS_WALL_H

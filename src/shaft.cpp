@@ -75,6 +75,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	ShaftArray.SetSize(endfloor - startfloor + 1);
 	ShaftArray_state.SetSize(endfloor - startfloor + 1);
 	EnableArray.SetSize(endfloor - startfloor + 1);
+	shaft_walls.SetSize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -102,9 +103,12 @@ Shaft::~Shaft()
 	//delete wall objects
 	for (int i = 0; i < shaft_walls.GetSize(); i++)
 	{
-		if (shaft_walls[i])
-			delete shaft_walls[i];
-		shaft_walls[i] = 0;
+		for (int j = 0; j < shaft_walls[i].GetSize(); j++)
+		{
+			if (shaft_walls[i][j])
+				delete shaft_walls[i][j];
+			shaft_walls[i][j] = 0;
+		}
 	}
 
 	//delete mesh array objects
@@ -140,7 +144,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 		tmpheight = height2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
-	WallObject *wall = sbs->CreateWallObject(shaft_walls, ShaftArray[floor - startfloor], this->object, name);
+	WallObject *wall = sbs->CreateWallObject(shaft_walls[floor - startfloor], ShaftArray[floor - startfloor], this->object, name);
 	sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, sizing.x, sizing.y);
 	return wall;
 }
@@ -183,7 +187,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	WallObject *wall = sbs->CreateWallObject(shaft_walls, ShaftArray[floor - startfloor], this->object, name);
+	WallObject *wall = sbs->CreateWallObject(shaft_walls[floor - startfloor], ShaftArray[floor - startfloor], this->object, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw2, th2);
 	return wall;
 }
@@ -328,9 +332,9 @@ bool Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVe
 	float base = sbs->GetFloor(floor)->Altitude;
 
 	if (relative == true)
-		sbs->Cut(ShaftArray[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
+		sbs->Cut(ShaftArray[floor - startfloor], shaft_walls[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
 	else
-		sbs->Cut(ShaftArray[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
+		sbs->Cut(ShaftArray[floor - startfloor], shaft_walls[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
 	return true;
 }
 

@@ -2613,17 +2613,17 @@ csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, co
 	return ToLocal(isect);
 }
 
-void SBS::Cut(csRef<iMeshWrapper> mesh, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber, const char *checkstring)
+void SBS::Cut(csRef<iMeshWrapper> mesh, csArray<WallObject*> &wallarray, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber, const char *checkstring)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 	//mesh_origin is a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
 	//object_origin is for the object's (such as a shaft) central position, used for calculating wall offsets
 
-	//get thing factory state
-	csRef<iThingFactoryState> state = scfQueryInterface<iThingFactoryState> (mesh->GetMeshObject()->GetFactory());
-
 	if (cutwalls == false && cutfloors == false)
 		return;
+
+	//get thing factory state
+	csRef<iThingFactoryState> state = scfQueryInterface<iThingFactoryState> (mesh->GetMeshObject()->GetFactory());
 
 	//convert values to remote
 	start = ToRemote(start);
@@ -2855,8 +2855,11 @@ void SBS::Cut(csRef<iMeshWrapper> mesh, csVector3 start, csVector3 end, bool cut
 				csMatrix3 mapping;
 				state->GetPolygonTextureMapping(i, mapping, oldvector);
 
+				//get wall object
+				WallObject *wallobject = GetWallObject(wallarray, i);
+
 				//delete original polygon
-				state->RemovePolygon(i);
+				wallobject->DeletePolygon(i, false);
 				i--;
 				polycount--;
 
@@ -2864,8 +2867,8 @@ void SBS::Cut(csRef<iMeshWrapper> mesh, csVector3 start, csVector3 end, bool cut
 				if (temppoly.GetVertexCount() > 2)
 				{
 					addpolys++;
-					tmpindex_tmp = state->AddPolygon(temppoly.GetVertices(), temppoly.GetVertexCount());
-					state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
+					tmpindex_tmp = wallobject->AddPolygon(temppoly.GetVertices(), temppoly.GetVertexCount());
+					wallobject->SetPolygonName(tmpindex_tmp, name);
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
@@ -2873,8 +2876,8 @@ void SBS::Cut(csRef<iMeshWrapper> mesh, csVector3 start, csVector3 end, bool cut
 				if (temppoly2.GetVertexCount() > 2)
 				{
 					addpolys++;
-					tmpindex_tmp = state->AddPolygon(temppoly2.GetVertices(), temppoly2.GetVertexCount());
-					state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
+					tmpindex_tmp = wallobject->AddPolygon(temppoly2.GetVertices(), temppoly2.GetVertexCount());
+					wallobject->SetPolygonName(tmpindex_tmp, name);
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
@@ -2882,8 +2885,8 @@ void SBS::Cut(csRef<iMeshWrapper> mesh, csVector3 start, csVector3 end, bool cut
 				if (temppoly3.GetVertexCount() > 2)
 				{
 					addpolys++;
-					tmpindex_tmp = state->AddPolygon(temppoly3.GetVertices(), temppoly3.GetVertexCount());
-					state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
+					tmpindex_tmp = wallobject->AddPolygon(temppoly3.GetVertices(), temppoly3.GetVertexCount());
+					wallobject->SetPolygonName(tmpindex_tmp, name);
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
@@ -2891,8 +2894,8 @@ void SBS::Cut(csRef<iMeshWrapper> mesh, csVector3 start, csVector3 end, bool cut
 				if (temppoly4.GetVertexCount() > 2)
 				{
 					addpolys++;
-					tmpindex_tmp = state->AddPolygon(temppoly4.GetVertices(), temppoly4.GetVertexCount());
-					state->SetPolygonName(csPolygonRange(tmpindex_tmp, tmpindex_tmp), name);
+					tmpindex_tmp = wallobject->AddPolygon(temppoly4.GetVertices(), temppoly4.GetVertexCount());
+					wallobject->SetPolygonName(tmpindex_tmp, name);
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
@@ -3928,4 +3931,18 @@ WallObject* SBS::CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrappe
 	array[array.GetSize() - 1]->parent_array = &array;
 	array[array.GetSize() - 1]->SetValues(0, parent, "Wall", false);
 	return array[array.GetSize() - 1];
+}
+
+WallObject* SBS::GetWallObject(csArray<WallObject*> &wallarray, int polygon_index)
+{
+	//returns the wall object that contains the specified polygon index
+	for (int i = 0; i < wallarray.GetSize(); i++)
+	{
+		for (int j = 0; j < wallarray[i]->handles.GetSize(); j++)
+		{
+			if (wallarray[i]->handles[j] == polygon_index)
+				return wallarray[i];
+		}
+	}
+	return 0;
 }

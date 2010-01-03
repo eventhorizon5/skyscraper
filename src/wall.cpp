@@ -98,7 +98,7 @@ void WallObject::DeletePolygons()
 			state->RemovePolygon(handles[i]);
 			int tmphandle = handles[i];
 			handles[i] = -1;
-			ProcessIndices(tmphandle);
+			ReindexPolygons(tmphandle);
 		}
 	}
 
@@ -117,9 +117,33 @@ void WallObject::DeletePolygons()
 	sbs->CreateColliders(meshwrapper);
 }
 
-void WallObject::ProcessIndices(int deleted_index)
+void WallObject::DeletePolygon(int index, bool recreate_colliders)
 {
-	//rebuild list of polygon handles in all associated arrays
+	//delete a single polygon
+
+	for (int i = 0; i < handles.GetSize(); i++)
+	{
+		if (handles[i] == index)
+		{
+			state->RemovePolygon(index);
+			handles[i] = -1;
+			ReindexPolygons(index);
+			handles.DeleteIndex(i);
+			return;
+		}
+	}
+
+	//recreate colliders if specified
+	if (recreate_colliders == true)
+	{
+		sbs->DeleteColliders(meshwrapper);
+		sbs->CreateColliders(meshwrapper);
+	}
+}
+
+void WallObject::ReindexPolygons(int deleted_index)
+{
+	//reindex all polygon indices in the given wall array
 
 	for (int i = 0; i < parent_array->GetSize(); i++)
 	{

@@ -1042,12 +1042,22 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		buffer.Downcase();
+		csArray<WallObject*> *wallarray;
 		if (buffer == "external")
+		{
 			tmpMesh = Simcore->External;
+			wallarray = &Simcore->External_walls;
+		}
 		else if (buffer == "landscape")
+		{
 			tmpMesh = Simcore->Landscape;
+			wallarray = &Simcore->Landscape_walls;
+		}
 		else if (buffer == "buildings")
+		{
 			tmpMesh = Simcore->Buildings;
+			wallarray = &Simcore->Buildings_walls;
+		}
 		else
 		{
 			ScriptError("Invalid object");
@@ -1055,7 +1065,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//perform cut
-		Simcore->Cut(tmpMesh, csVector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), csVector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), csString(tempdata[7]).CompareNoCase("true"), csString(tempdata[8]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
+		Simcore->Cut(tmpMesh, *wallarray, csVector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), csVector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), csString(tempdata[7]).CompareNoCase("true"), csString(tempdata[8]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
 		tempdata.DeleteAll();
 	}
 

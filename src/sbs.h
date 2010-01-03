@@ -229,7 +229,7 @@ public:
 	void GetAutoSize(bool &x, bool &y);
 	int GetDrawWallsCount();
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, const csVector3 &start, const csVector3 &end);
-	void Cut(csRef<iMeshWrapper> mesh, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
+	void Cut(csRef<iMeshWrapper> mesh, csArray<WallObject*> &wallarray, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(csRef<iMeshWrapper> mesh, const char *texture, float tw, float th);
@@ -289,6 +289,7 @@ public:
 	csVector2 CalculateSizing(const char *texture, csVector2 x, csVector2 y, csVector2 z, float tw, float th);
 	void ApplyTextureMapping(iThingFactoryState *state, int start_index, int end_index, float tw, float th);
 	WallObject* CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrapper> mesh, Object *parent, const char *name);
+	WallObject* GetWallObject(csArray<WallObject*> &wallarray, int polygon_index);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

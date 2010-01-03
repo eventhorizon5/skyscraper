@@ -49,7 +49,7 @@ public:
 	csArray<int> ShowFloorsList; //list of floors to enable while inside the shaft/elevator
 	csArray<int> ShowOutsideList; //list of floors that the outside should be enabled on
 	bool ShowFullShaft; //if true, always show full shaft during elevator movement instead of only a selected range
-	csArray<WallObject*> shaft_walls;
+	csArray<csArray<WallObject*>> shaft_walls;
 
 	Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
