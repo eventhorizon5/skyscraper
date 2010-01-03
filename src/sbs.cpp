@@ -1835,7 +1835,7 @@ void SBS::DumpVertices(WallObject* wallobject)
 	Report("--- Polygon Vertex Dump ---\n");
 	for (int i = 0; i < wallobject->handles.GetSize(); i++)
 	{
-		int index = wallobject->handles[i]->GetIndex();
+		int index = wallobject->handles[i];
 		for (int j = 0; j < wallobject->state->GetPolygonVertexCount(index); i++)
 		{
 			csVector3 vertex = wallobject->state->GetPolygonVertex(index, j);
@@ -3925,6 +3925,7 @@ WallObject* SBS::CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrappe
 	array.SetSize(array.GetSize() + 1);
 	array[array.GetSize() - 1] = new WallObject(mesh);
 	array[array.GetSize() - 1]->name = name;
+	array[array.GetSize() - 1]->parent_array = &array;
 	array[array.GetSize() - 1]->SetValues(0, parent, "Wall", false);
 	return array[array.GetSize() - 1];
 }

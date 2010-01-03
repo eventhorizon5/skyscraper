@@ -40,7 +40,7 @@ WallObject::WallObject(csRef<iMeshWrapper> wrapper)
 WallObject::~WallObject()
 {
 	//polygon object destructor
-	handles = 0;
+	handles.DeleteAll();
 	meshwrapper = 0;
 	state = 0;
 }
@@ -48,9 +48,9 @@ WallObject::~WallObject()
 int WallObject::AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)
 {
 	//add a quad polygon
-	int newhandle = state->AddQuad(v1, v2, v3, v4);
-	CreateHandle(newhandle);
-	return newhandle;
+	int index = state->AddQuad(v1, v2, v3, v4);
+	CreateHandle(index);
+	return index;
 }
 
 int WallObject::AddPolygon(csVector3 *vertices, int num)
@@ -64,8 +64,7 @@ int WallObject::AddPolygon(csVector3 *vertices, int num)
 void WallObject::CreateHandle(int index)
 {
 	//create a polygon handle
-	csRef<iPolygonHandle> newhandle = state->CreatePolygonHandle(index);
-	handles.Push(newhandle);
+	handles.Push(index);
 }
 
 void WallObject::SetPolygonName(int index, const char *name)
@@ -77,4 +76,57 @@ void WallObject::SetPolygonName(int index, const char *name)
 	newname.Append(num + ")");
 	newname.Append(name);
 	state->SetPolygonName(csPolygonRange(index, index), newname);
+}
+
+void WallObject::DeletePolygons()
+{
+	//delete polygons and handles
+	
+	for (int i = 0; i < state->GetPolygonCount(); i++)
+	{
+		csString index;
+		index = i;
+		index.Append("-");
+		index.Append(state->GetPolygonName(i));
+		sbs->Report(index);
+	}
+
+	for (int i = 0; i < handles.GetSize(); i++)
+	{
+		if (handles[i] > -1)
+		{
+			state->RemovePolygon(handles[i]);
+			int tmphandle = handles[i];
+			handles[i] = -1;
+			ProcessIndices(tmphandle);
+		}
+	}
+
+	for (int i = 0; i < state->GetPolygonCount(); i++)
+	{
+		csString index;
+		index = i;
+		index.Append("-");
+		index.Append(state->GetPolygonName(i));
+		sbs->Report(index);
+	}
+	handles.DeleteAll();
+
+	//recreate colliders
+	sbs->DeleteColliders(meshwrapper);
+	sbs->CreateColliders(meshwrapper);
+}
+
+void WallObject::ProcessIndices(int deleted_index)
+{
+	//rebuild list of polygon handles in all associated arrays
+
+	for (int i = 0; i < parent_array->GetSize(); i++)
+	{
+		for (int j = 0; j < parent_array->Get(i)->handles.GetSize(); j++)
+		{
+			if (parent_array->Get(i)->handles[j] >= deleted_index)
+				parent_array->Get(i)->handles[j]--;
+		}
+	}
 }

@@ -470,28 +470,30 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 	}
 	number = object_number;
 
-	//delete polygon if ctrl is pressed
-	if (state && ctrl == true)
-	{
-		//remove polygon
-		state->RemovePolygon(result.polygon_idx);
-		
-		//remove mesh collider
-		sbs->DeleteColliders(result.mesh);
-
-		//regenerate mesh collider
-		sbs->CreateColliders(result.mesh);
-
-		//reprepare engine
-		sbs->engine->Prepare();
-		sbs->Report("Deleted polygon " + polyname + " on mesh " + meshname);
-	}
-
 	//show result
 	if (state)
 		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Polygon: " + polyname);
 	else
 		sbs->Report("Clicked on object " + number + ": " + meshname);
+
+	//delete object if ctrl is pressed
+	if (state && ctrl == true && object_number > 0)
+	{
+		Object *object = sbs->GetObject(object_number);
+		if (object)
+		{
+			if (csString(object->GetType()) == "Wall")
+			{
+				WallObject *wall = (WallObject*)object;
+				wall->DeletePolygons();
+
+				//reprepare engine
+				sbs->engine->Prepare();
+				sbs->Report("Deleted object " + number);
+			}
+		}
+		return;
+	}
 
 	//check call buttons
 	if (meshname.Find("Call Button") != -1)

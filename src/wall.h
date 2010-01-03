@@ -29,6 +29,7 @@
 class WallObject : public Object
 {
 public:
+
 	//functions
 	WallObject(csRef<iMeshWrapper> wrapper);
 	~WallObject();
@@ -36,9 +37,10 @@ public:
 	int AddPolygon(csVector3 *vertices, int num);
 	void CreateHandle(int index);
 	void SetPolygonName(int index, const char *name);
+	void DeletePolygons();
 
-	//polygon handle array
-	csRefArray<iPolygonHandle> handles;
+	//polygon index array
+	csArray<int> handles;
 
 	//mesh wrapper
 	csRef<iMeshWrapper> meshwrapper;
@@ -48,6 +50,12 @@ public:
 
 	//name
 	csString name;
+
+	//parent array
+	csArray<WallObject*> *parent_array;
+
+private:
+	void ProcessIndices(int deleted_index);
 };
 
 #endif _SBS_WALL_H
