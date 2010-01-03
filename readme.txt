@@ -1,5 +1,5 @@
 Skyscraper 2.0 Alpha 6
-Copyright (C)2003-2009 Ryan Thoryk
+Copyright (C)2003-2010 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
 

@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 1.6 Alpha
-	Copyright (C)2005-2009 Ryan Thoryk
+	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -382,7 +382,7 @@ float SBS::AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_
 void SBS::PrintBanner()
 {
 	csPrintf("\n Scalable Building Simulator 0.6 Alpha\n");
-	csPrintf(" Copyright (C)2004-2009 Ryan Thoryk\n");
+	csPrintf(" Copyright (C)2004-2010 Ryan Thoryk\n");
 	csPrintf(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
 	csPrintf(" software, and you are welcome to redistribute it under certain\n");
 	csPrintf(" conditions. For details, see the file gpl.txt\n\n");
