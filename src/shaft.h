@@ -53,8 +53,8 @@ public:
 
 	Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
-	int AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
-	int AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
+	WallObject* AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
+	WallObject* AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
 	void Enabled(int floor, bool value, bool EnableShaftDoors);
 	bool IsShaft(csRef<iMeshWrapper> test);
 	void EnableWholeShaft(bool value, bool EnableShaftDoors, bool force = false);

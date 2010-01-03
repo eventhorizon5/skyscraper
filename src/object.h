@@ -31,6 +31,11 @@
 class SBSIMPEXP Object
 {
 public:
+
+	csString command; //command line used to create object, if applicable
+	csString command_processed; //processed command used to create object
+	int linenum; //script line number where object was created
+
 	//functions
 	Object();
 	~Object();
@@ -41,7 +46,7 @@ public:
 	const char* GetType();
 	int GetNumber();
 
-private:
+protected:
 	bool Permanent; //is object permanent?
 	Object *Parent; //parent object
 	void *raw_object; //raw object

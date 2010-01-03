@@ -101,7 +101,7 @@ public:
 	//functions
 	Elevator(int number);
 	~Elevator();
-	bool CreateElevator(bool relative, float x, float z, int floor);
+	Object* CreateElevator(bool relative, float x, float z, int floor);
 	void AddRoute(int floor, int direction, bool change_light);
 	void DeleteRoute(int floor, int direction);
 	void CancelLastRoute();
@@ -112,10 +112,10 @@ public:
 	int GetFloor();
 	void MonitorLoop();
 	const csVector3 GetPosition();
-	int AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
-	int AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
-	void AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
-	void CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
+	WallObject* AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
+	WallObject* AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
+	Object* AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
+	Object* CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
 	void DumpQueues();
 	void Enabled(bool value);
 	void EnableObjects(bool value);
@@ -156,7 +156,7 @@ public:
 	int GetTopFloor();
 	int GetBottomFloor();
 	void AddDirectionalIndicators(bool relative, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	bool AddDirectionalIndicator(int floor, bool relative, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	Object* AddDirectionalIndicator(int floor, bool relative, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	void EnableDirectionalIndicator(int floor, bool value);
 	void SetDirectionalIndicator(int floor, bool UpLight, bool DownLight);
 	void EnableDirectionalIndicators(bool value);
@@ -173,9 +173,9 @@ public:
 	float GetCurrentDoorSpeed(int number = 0);
 	void ResetDoorTimer(int number = 0);
 	bool DoorsStopped(int number = 0);
-	int AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
+	Object* AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
 	int AddShaftDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th);
-	bool AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th);
+	Object* AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th);
 	void Chime(int number, int floor, bool direction);
 	void MoveDoors(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
@@ -188,7 +188,7 @@ public:
 	void QueueReset();
 	void SetBeepSound(const char *filename);
 	void SetFloorSound(const char *prefix);
-	bool AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
+	Object* AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
 	void DeleteActiveRoute();
 	bool IsQueueActive();
 	bool BeyondDecelMarker(int direction, float destination);

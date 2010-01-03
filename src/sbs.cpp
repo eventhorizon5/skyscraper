@@ -1006,7 +1006,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.Append(":front");
-		wallobject->state->SetPolygonName(csPolygonRange(tmpindex, tmpindex), NewName);
+		wallobject->SetPolygonName(tmpindex, NewName);
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
@@ -1469,13 +1469,15 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 	{
 		NewName = name;
 		NewName.Append(":inside");
-		wallobject->state->SetPolygonName(csPolygonRange(firstidx, firstidx + range), NewName);
+		for (int i = firstidx; i <= firstidx + range; i++)
+			wallobject->SetPolygonName(i, NewName);
 	}
 	if (outside == true)
 	{
 		NewName = name;
 		NewName.Append(":outside");
-		wallobject->state->SetPolygonName(csPolygonRange(tmpidx, tmpidx + range2), NewName);
+		for (int i = tmpidx; i <= tmpidx + range2; i++)
+			wallobject->SetPolygonName(i, NewName);
 	}
 
 	return firstidx;
@@ -1851,30 +1853,30 @@ void SBS::ListAltitudes()
 		Report(csString(_itoa(i, intbuffer, 10)) + "(" + GetFloor(i)->ID + ")\t----\t" + csString(_gcvt(GetFloor(i)->FullHeight(), 6, buffer)) + "\t----\t" + csString(_gcvt(GetFloor(i)->Altitude, 6, buffer)));
 }
 
-bool SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a shaft object
 
 	for (size_t i = 0; i < ShaftArray.GetSize(); i++)
 		if (ShaftArray[i].number == number)
-			return false;
+			return 0;
 	ShaftArray.SetSize(ShaftArray.GetSize() + 1);
 	ShaftArray[ShaftArray.GetSize() - 1].number = number;
 	ShaftArray[ShaftArray.GetSize() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
-	return true;
+	return ShaftArray[ShaftArray.GetSize() - 1].object->object;
 }
 
-bool SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a stairwell object
 
 	for (size_t i = 0; i < StairsArray.GetSize(); i++)
 		if (StairsArray[i].number == number)
-			return false;
+			return 0;
 	StairsArray.SetSize(StairsArray.GetSize() + 1);
 	StairsArray[StairsArray.GetSize() - 1].number = number;
 	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
-	return true;
+	return StairsArray[StairsArray.GetSize() - 1].object->object;
 }
 
 iMaterialWrapper* SBS::ChangeTexture(iMeshWrapper *mesh, const char *texture, bool matcheck)
@@ -3065,7 +3067,7 @@ void SBS::SetTextureFlip(int mainneg, int mainpos, int sideneg, int sidepos, int
 	FlipTexture = true;
 }
 
-int SBS::AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
+WallObject* SBS::AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
 {
 	//meshname can either be:
 	//external, landscape, or buildings
@@ -3096,10 +3098,11 @@ int SBS::AddWall(const char *meshname, const char *name, const char *texture, fl
 	if (mesh.CompareNoCase("landscape") == true)
 		wall = CreateWallObject(Landscape_walls, Landscape, this->object, name);
 
-	return AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, sizing.x, sizing.y);
+	AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, sizing.x, sizing.y);
+	return wall;
 }
 
-int SBS::AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th)
+WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th)
 {
 	//meshname can either be:
 	//external, landscape, or buildings
@@ -3131,10 +3134,11 @@ int SBS::AddFloor(const char *meshname, const char *name, const char *texture, f
 	if (mesh.CompareNoCase("landscape") == true)
 		wall = CreateWallObject(Landscape_walls, Landscape, this->object, name);
 
-	return AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw2, th2);
+	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw2, th2);
+	return wall;
 }
 
-int SBS::AddGround(const char *name, const char *texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z)
+WallObject* SBS::AddGround(const char *name, const char *texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z)
 {
 	//Adds ground based on a tiled-floor layout, with the specified dimensions and vertical offset
 	//this does not support thickness
@@ -3165,8 +3169,7 @@ int SBS::AddGround(const char *name, const char *texture, float x1, float z1, fl
 		maxz = z1;
 	}
 
-	int index = -1;
-	int tmpindex = -1;
+	WallObject *wall = CreateWallObject(Landscape_walls, Landscape, this->object, name);
 
 	//create polygon tiles
 	for (float i = minx; i < maxx; i += tile_x)
@@ -3185,12 +3188,10 @@ int SBS::AddGround(const char *name, const char *texture, float x1, float z1, fl
 			else
 				sizez = tile_z;
 
-			tmpindex = AddFloorMain(Landscape, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, 1, 1);
-			if (tmpindex > index && index == -1)
-				index = tmpindex;
+			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, 1, 1);
 		}
 	}
-	return index;
+	return wall;
 }
 
 void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber)
@@ -3659,7 +3660,7 @@ void SBS::DeleteColliders(csRef<iMeshWrapper> mesh)
 		engine->RemoveObject(collider);
 }
 
-bool SBS::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
+Object* SBS::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
 {
 	//create a looping sound object
 	sounds.SetSize(sounds.GetSize() + 1);
@@ -3679,7 +3680,7 @@ bool SBS::AddSound(const char *name, const char *filename, csVector3 position, i
 	sound->Loop(true);
 	sound->Play();
 
-	return true;
+	return sound->object;
 }
 
 int SBS::GetSoundCount()

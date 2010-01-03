@@ -912,7 +912,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	DoorIsRunning = false;
 }
 
-int ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator origin)
 	//if direction is false, doors are on the left/right side; otherwise front/back
@@ -958,7 +958,7 @@ int ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, fl
 	//create doors
 	sbs->DrawWalls(true, true, true, true, true, true);
 	sbs->ResetTextureMapping(true);
-	int firstidx = sbs->AddWallMain(ElevatorDoorL, "Door", lefttexture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
+	sbs->AddWallMain(ElevatorDoorL, "Door", lefttexture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
 	sbs->AddWallMain(ElevatorDoorR, "Door", righttexture, thickness, x3, z3, x4, z4, height, height, 0, 0, tw, th);
 	//create connection pieces
 	sbs->AddWallMain(elev->ElevatorMesh, "DoorF1", "Connection", thickness, x1, z1, x4, z4, 1, 1, -1.001, -1.001, 0, 0);
@@ -967,7 +967,7 @@ int ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, fl
 	sbs->ResetTextureMapping();
 	//relocate sound object
 	doorsound->SetPosition(csVector3(DoorOrigin.x, DoorOrigin.y + (DoorHeight / 2), DoorOrigin.z));
-	return firstidx;
+	return object;
 }
 
 bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th)
@@ -989,7 +989,7 @@ bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttextu
 	return true;
 }
 
-bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th)
+Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th)
 {
 	//adds a single elevator shaft door, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -997,7 +997,7 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *
 
 	//exit if floor is not serviced by the elevator
 	if (!elev->IsServicedFloor(floor))
-		return false;
+		return 0;
 
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
@@ -1047,13 +1047,13 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *
 	if (DoorDirection == false)
 	{
 		if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), 1, "Shaft"))
-			return false;
+			return 0;
 		floorobj->Cut(csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), true, false, true, 2, "Shaft");
 	}
 	else
 	{
 		if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), 1, "Shaft"))
-			return false;
+			return 0;
 		floorobj->Cut(csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
 	}
 
@@ -1122,7 +1122,7 @@ bool ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *
 	//relocate chime sound object
 	chime->SetPosition(csVector3(ShaftDoorOrigin.x, ShaftDoorOrigin.y + DoorHeight, ShaftDoorOrigin.z));
 
-	return true;
+	return shaftdoor_objects[shaftdoor_objects.GetSize() - 1];
 }
 
 void ElevatorDoor::SetShaftDoors(float thickness, float CenterX, float CenterZ)

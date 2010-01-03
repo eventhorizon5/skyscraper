@@ -101,6 +101,7 @@ public:
 	void ClickedObject(bool shift, bool ctrl);
 	const char* GetClickedMeshName();
 	const char* GetClickedPolyName();
+	int GetClickedObjectNumber();
 	void CreateColliders();
 	void Loop();
 	void Strafe(float speed);
@@ -125,6 +126,7 @@ private:
 	csVector3 StartRotation; //camera's startup rotation
 	csString meshname; //last clicked mesh name
 	csString polyname; //last clicked polygon name
+	int object_number; //last clicked object number
 	char intbuffer[65];
 	char buffer[20];
 	int FloorTemp; //previous floor check value

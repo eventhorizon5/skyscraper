@@ -117,13 +117,13 @@ Shaft::~Shaft()
 	delete object;
 }
 
-int Shaft::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
 		sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - AddWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
-		return -1;
+		return 0;
 	}
 
 	//Set horizontal scaling
@@ -141,10 +141,11 @@ int Shaft::AddWall(int floor, const char *name, const char *texture, float thick
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
 	WallObject *wall = sbs->CreateWallObject(shaft_walls, ShaftArray[floor - startfloor], this->object, name);
-	return sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, sizing.x, sizing.y);
+	sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, sizing.x, sizing.y);
+	return wall;
 }
 
-int Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
+WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
 	float tw2;
 	float th2;
@@ -153,7 +154,7 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 	if (IsValidFloor(floor) == false)
 	{
 		sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - AddFloor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
-		return -1;
+		return 0;
 	}
 
 	//Set horizontal scaling
@@ -183,7 +184,8 @@ int Shaft::AddFloor(int floor, const char *name, const char *texture, float thic
 		top = altitude + voffset2;
 
 	WallObject *wall = sbs->CreateWallObject(shaft_walls, ShaftArray[floor - startfloor], this->object, name);
-	return sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw2, th2);
+	sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw2, th2);
+	return wall;
 }
 
 void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)

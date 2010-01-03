@@ -67,9 +67,9 @@ public:
 	float GetCurrentDoorSpeed();
 	void ResetDoorTimer();
 	bool DoorsStopped();
-	int AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
+	Object* AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
 	bool AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th);
-	bool AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th);
+	Object* AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th);
 	void Chime(int floor, bool direction);
 	void Loop();
 	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);

@@ -91,6 +91,7 @@ Camera::Camera()
 	Freelook_speed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
 	FOV = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
 	ResetOnGround = sbs->confman->GetBool("Skyscraper.SBS.Camera.ResetOnGround", false);
+	object_number = 0;
 }
 
 Camera::~Camera()
@@ -452,6 +453,23 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 	else
 		polyname = "";
 
+	//get object number
+	csString number;
+	object_number = 0;
+	if (polyname.Find("(") == 0)
+	{
+		int index = polyname.Find(")");
+		object_number = atoi(polyname.Slice(1, index - 1));
+		polyname.DeleteAt(0, index + 1);
+	}
+	else if (meshname.Find("(") == 0)
+	{
+		int index = meshname.Find(")");
+		object_number = atoi(meshname.Slice(1, index - 1));
+		meshname.DeleteAt(0, index + 1);
+	}
+	number = object_number;
+
 	//delete polygon if ctrl is pressed
 	if (state && ctrl == true)
 	{
@@ -471,9 +489,9 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 
 	//show result
 	if (state)
-		sbs->Report("Clicked on object - Mesh: " + meshname + ", Polygon: " + polyname);
+		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Polygon: " + polyname);
 	else
-		sbs->Report("Clicked on object: " + meshname);
+		sbs->Report("Clicked on object " + number + ": " + meshname);
 
 	//check call buttons
 	if (meshname.Find("Call Button") != -1)
@@ -588,6 +606,12 @@ const char* Camera::GetClickedPolyName()
 	//return name of last clicked polygon
 
 	return polyname.GetData();
+}
+
+int Camera::GetClickedObjectNumber()
+{
+	//return number of last clicked object
+	return object_number;
 }
 
 void Camera::CreateColliders()

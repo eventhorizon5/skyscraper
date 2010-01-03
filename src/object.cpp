@@ -34,6 +34,7 @@ Object::Object()
 	Permanent = 0;
 	Parent = 0;
 	raw_object = 0;
+	linenum = 0;
 
 	//register object with engine
 	Number = sbs->RegisterObject(this);

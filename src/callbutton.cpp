@@ -59,24 +59,25 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	ProcessedDown = false;
 
 	//create object mesh
-	csString buffer, buffer2, buffer3;
+	csString buffer, buffer2, buffer3, buffer4;
+	buffer4 = object->GetNumber();
 	buffer2 = floornum;
 	buffer3 = number;
-	buffer = "Call Panel " + buffer2 + ":" + buffer3;
+	buffer = "(" + buffer4 + ")Call Panel " + buffer2 + ":" + buffer3;
 	buffer.Trim();
 	CallButtonBackMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	CallButton_back_state = scfQueryInterface<iThingFactoryState> (CallButtonBackMesh->GetMeshObject()->GetFactory());
 	CallButtonBackMesh->SetZBufMode(CS_ZBUF_USE);
 	CallButtonBackMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
-	buffer = "Call Button " + buffer2 + ":" + buffer3 + ":Up";
+	buffer = "(" + buffer4 + ")Call Button " + buffer2 + ":" + buffer3 + ":Up";
 	CallButtonMeshUp = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 	CallButtonMeshUp->SetZBufMode(CS_ZBUF_USE);
 	CallButtonMeshUp->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTexture);
 	CallButtonMeshUp->GetMeshObject()->SetMaterialWrapper(mat);
 
-	buffer = "Call Button " + buffer2 + ":" + buffer3 + ":Down";
+	buffer = "(" + buffer4 + ")Call Button " + buffer2 + ":" + buffer3 + ":Down";
 	CallButtonMeshDown = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 	CallButtonMeshDown->SetZBufMode(CS_ZBUF_USE);
 	CallButtonMeshDown->SetRenderPriority(sbs->engine->GetObjectRenderPriority());

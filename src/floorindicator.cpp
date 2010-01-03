@@ -45,9 +45,10 @@ FloorIndicator::FloorIndicator(int elevator, const char *texture_prefix, const c
 	Elevator = elevator;
 	Prefix = texture_prefix;
 
-	csString buffer;
+	csString buffer, buffer2;
+	buffer2 = object->GetNumber();
 	buffer = elevator;
-	buffer.Insert(0, "FloorIndicator ");
+	buffer.Insert(0, "(" + buffer2 + ")FloorIndicator ");
 	buffer.Trim();
 	FloorIndicatorMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 	FloorIndicatorMesh->SetZBufMode(CS_ZBUF_USE);

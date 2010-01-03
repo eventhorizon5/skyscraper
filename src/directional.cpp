@@ -54,10 +54,11 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 	Vertical = vertical;
 
 	//create object mesh
-	csString buffer, buffer2, buffer3;
+	csString buffer, buffer2, buffer3, buffer4;
 	buffer2 = elevator;
 	buffer3 = floor;
-	buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Back";
+	buffer4 = object->GetNumber();
+	buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Back";
 	buffer.Trim();
 	DirectionalMeshBack = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	Directional_back_state = scfQueryInterface<iThingFactoryState> (DirectionalMeshBack->GetMeshObject()->GetFactory());
@@ -66,14 +67,14 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 
 	if (Single == false)
 	{
-		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Up";
+		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Up";
 		DirectionalMeshUp = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 		DirectionalMeshUp->SetZBufMode(CS_ZBUF_USE);
 		DirectionalMeshUp->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 		csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTextureUnlit);
 		DirectionalMeshUp->GetMeshObject()->SetMaterialWrapper(mat);
 
-		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Down";
+		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Down";
 		DirectionalMeshDown = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 		DirectionalMeshDown->SetZBufMode(CS_ZBUF_USE);
 		DirectionalMeshDown->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
@@ -82,7 +83,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool single,
 	}
 	else
 	{
-		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Arrow";
+		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Arrow";
 		DirectionalMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 		DirectionalMesh->SetZBufMode(CS_ZBUF_USE);
 		DirectionalMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());

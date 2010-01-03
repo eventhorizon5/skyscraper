@@ -231,7 +231,7 @@ Elevator::~Elevator()
 	delete object;
 }
 
-bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
+Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 {
 	//Creates elevator at specified location and floor
 	//x and z are the center coordinates
@@ -241,49 +241,49 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (Created == true)
 	{
 		ReportError("Has already been created");
-		return false;
+		return 0;
 	}
 
 	//make sure required values are set
 	if (ElevatorSpeed <= 0)
 	{
 		ReportError("Speed not set or invalid");
-		return false;
+		return 0;
 	}
 	if (Acceleration <= 0)
 	{
 		ReportError("Acceleration not set or invalid");
-		return false;
+		return 0;
 	}
 	if (Deceleration <= 0)
 	{
 		ReportError("Deceleration not set or invalid");
-		return false;
+		return 0;
 	}
 	if (NumDoors < 0)
 	{
 		ReportError("Number of doors invalid");
-		return false;
+		return 0;
 	}
 	if (AccelJerk <= 0)
 	{
 		ReportError("Invalid value for AccelJerk");
-		return false;
+		return 0;
 	}
 	if (DecelJerk <= 0)
 	{
 		ReportError("Invalid value for DecelJerk");
-		return false;
+		return 0;
 	}
 	if (AssignedShaft <= 0)
 	{
 		ReportError("Not assigned to a shaft");
-		return false;
+		return 0;
 	}
 	if (floor < sbs->GetShaft(AssignedShaft)->startfloor || floor > sbs->GetShaft(AssignedShaft)->endfloor)
 	{
 		ReportError("Invalid starting floor");
-		return false;
+		return 0;
 	}
 
 	//add elevator's starting floor to serviced floor list - this also ensures that the list is populated to prevent errors
@@ -363,7 +363,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	Created = true;
 
 	Report("created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
-	return true;
+	return object;
 }
 
 void Elevator::AddRoute(int floor, int direction, bool change_light)
@@ -1503,7 +1503,7 @@ finish:
 	ElevatorFloor = GetFloor();
 }
 
-int Elevator::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+WallObject* Elevator::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds a wall with the specified dimensions
 
@@ -1522,10 +1522,11 @@ int Elevator::AddWall(const char *name, const char *texture, float thickness, fl
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
 	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, this->object, name);
-	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, sizing.x, sizing.y);
+	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, sizing.x, sizing.y);
+	return wall;
 }
 
-int Elevator::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
+WallObject* Elevator::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	float tw2;
@@ -1546,10 +1547,11 @@ int Elevator::AddFloor(const char *name, const char *texture, float thickness, f
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, this->object, name);
-	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw2, th2);
+	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw2, th2);
+	return wall;
 }
 
-void Elevator::AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
 
@@ -1557,6 +1559,7 @@ void Elevator::AddFloorIndicator(const char *texture_prefix, const char *directi
 	FloorIndicatorArray.SetSize(size + 1);
 	FloorIndicatorArray[size] = new FloorIndicator(Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
 	FloorIndicatorArray[size]->SetPosition(Origin);
+	return FloorIndicatorArray[size]->object;
 }
 
 const csVector3 Elevator::GetPosition()
@@ -1731,7 +1734,7 @@ void Elevator::RemoveServicedFloor(int number)
 		ServicedFloors.Delete(number);
 }
 
-void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
+Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
 {
 	//create a new button panel object and store the pointer
 	if (!Panel)
@@ -1739,15 +1742,20 @@ void Elevator::CreateButtonPanel(const char *texture, int rows, int columns, con
 		if (sbs->Verbose)
 			Report("creating button panel 1");
 		Panel = new ButtonPanel(Number, 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+		return Panel->object;
 	}
 	else if (!Panel2)
 	{
 		if (sbs->Verbose)
 			Report("creating button panel 2");
 		Panel2 = new ButtonPanel(Number, 2, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+		return Panel->object;
 	}
 	else
+	{
 		ReportError("Button panels already exist");
+		return 0;
+	}
 }
 
 void Elevator::UpdateFloorIndicators()
@@ -2326,7 +2334,7 @@ void Elevator::AddDirectionalIndicators(bool relative, bool single, bool vertica
 		IndicatorArray[i] = new DirectionalIndicator(Number, ServicedFloors[i], single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 }
 
-bool Elevator::AddDirectionalIndicator(int floor, bool relative, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+Object* Elevator::AddDirectionalIndicator(int floor, bool relative, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator on a single floor
 
@@ -2349,8 +2357,8 @@ bool Elevator::AddDirectionalIndicator(int floor, bool relative, bool single, bo
 	if (index != -1)
 		IndicatorArray[index] = new DirectionalIndicator(Number, floor, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	else
-		return false;
-	return true;
+		return 0;
+	return IndicatorArray[index]->object;
 }
 
 void Elevator::EnableDirectionalIndicator(int floor, bool value)
@@ -2544,7 +2552,7 @@ void Elevator::StopDoors(int number)
 	}
 }
 
-int Elevator::AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+Object* Elevator::AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator origin)
 	//if direction is false, doors are on the left/right side; otherwise front/back
@@ -2568,7 +2576,7 @@ int Elevator::AddShaftDoors(int number, const char *lefttexture, const char *rig
 	return 0;
 }
 
-bool Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th)
+Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -2577,8 +2585,7 @@ bool Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, cons
 	if (index != -1 && GetDoor(number))
 		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, tw, th);
 	else
-		return false;
-	return true;
+		return 0;
 }
 
 void Elevator::ShaftDoorsEnabled(int number, int floor, bool value)
@@ -2972,7 +2979,7 @@ void Elevator::SetFloorSound(const char *prefix)
 	UseFloorSounds = true;
 }
 
-bool Elevator::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
+Object* Elevator::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
 {
 	//create a looping sound object
 	sounds.SetSize(sounds.GetSize() + 1);
@@ -2993,7 +3000,7 @@ bool Elevator::AddSound(const char *name, const char *filename, csVector3 positi
 	sound->Loop(true);
 	sound->Play();
 
-	return true;
+	return sound->object;
 }
 
 void Elevator::DeleteActiveRoute()

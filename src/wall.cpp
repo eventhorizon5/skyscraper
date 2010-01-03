@@ -71,5 +71,10 @@ void WallObject::CreateHandle(int index)
 void WallObject::SetPolygonName(int index, const char *name)
 {
 	//set polygon name
-	state->SetPolygonName(csPolygonRange(index, index), name);
+	csString newname = "(";
+	csString num;
+	num = Number;
+	newname.Append(num + ")");
+	newname.Append(name);
+	state->SetPolygonName(csPolygonRange(index, index), newname);
 }

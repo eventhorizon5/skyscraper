@@ -159,7 +159,7 @@ void Floor::SetCameraFloor()
 	sbs->camera->SetPosition(csVector3(camlocation.x, GetBase() + sbs->camera->cfg_body_height + sbs->camera->cfg_legs_height, camlocation.z));
 }
 
-int Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th, bool isexternal)
+WallObject* Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th, bool isexternal)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	float tw2;
@@ -179,16 +179,18 @@ int Floor::AddFloor(const char *name, const char *texture, float thickness, floa
 	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
+	WallObject *wall;
 	if (isexternal == false)
 	{
-		WallObject *wall = sbs->CreateWallObject(level_walls, Level, this->object, name);
-		return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, tw2, th2);
+		wall = sbs->CreateWallObject(level_walls, Level, this->object, name);
+		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, tw2, th2);
 	}
 	else
 	{
-		WallObject *wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, this->object, name);
-		return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+		wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, this->object, name);
+		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 	}
+	return wall;
 }
 
 void Floor::DeleteFloor(int index)
@@ -196,7 +198,7 @@ void Floor::DeleteFloor(int index)
 	//delete floor polygon from level mesh
 }
 
-int Floor::AddInterfloorFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
+WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 	float tw2;
@@ -217,7 +219,8 @@ int Floor::AddInterfloorFloor(const char *name, const char *texture, float thick
 	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, this->object, name);
-	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+	return wall;
 }
 
 void Floor::DeleteInterfloorFloor(int index)
@@ -225,7 +228,7 @@ void Floor::DeleteInterfloorFloor(int index)
 	//delete floor polygon from interfloor mesh
 }
 
-int Floor::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th, bool isexternal)
+WallObject* Floor::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th, bool isexternal)
 {
 	//Adds a wall with the specified dimensions
 
@@ -243,15 +246,18 @@ int Floor::AddWall(const char *name, const char *texture, float thickness, float
 		tmpheight = height_in2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
+	WallObject *wall;
 	if (isexternal == false)
 	{
-		WallObject *wall = sbs->CreateWallObject(level_walls, Level, this->object, name);
-		return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, sizing.x, sizing.y);
+		wall = sbs->CreateWallObject(level_walls, Level, this->object, name);
+		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, sizing.x, sizing.y);
+		return wall;
 	}
 	else
 	{
-		WallObject *wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, this->object, name);
-		return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
+		wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, this->object, name);
+		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
+		return wall;
 	}
 }
 
@@ -260,7 +266,7 @@ void Floor::DeleteWall(int index)
 	//delete wall polygon from level mesh
 }
 
-int Floor::AddInterfloorWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
+WallObject* Floor::AddInterfloorWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds an interfloor wall with the specified dimensions
 
@@ -279,7 +285,8 @@ int Floor::AddInterfloorWall(const char *name, const char *texture, float thickn
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
 	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, this->object, name);
-	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
+	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
+	return wall;
 }
 
 void Floor::DeleteInterfloorWall(int index)
@@ -340,13 +347,14 @@ float Floor::FullHeight()
 	return InterfloorHeight + Height;
 }
 
-void Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+Object* Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//adds call buttons
 
 	CallButtonArray.SetSize(CallButtonArray.GetSize() + 1);
 	int Current = CallButtonArray.GetSize() - 1;
 	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	return CallButtonArray[Current]->object;
 }
 
 void Floor::Cut(const csVector3 &start, const csVector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, const char *checkstring)
@@ -391,7 +399,7 @@ void Floor::EnableGroup(bool value)
 	}
 }
 
-void Floor::AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Object* Floor::AddDoor(const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -422,6 +430,7 @@ void Floor::AddDoor(const char *texture, float thickness, int direction, float C
 	csString floornum = _itoa(Number, intbuffer, 10);
 	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
 	DoorArray[DoorArray.GetSize() - 1] = new Door(this->object, "Floor " + floornum + ":Door " + num, texture, thickness, direction, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
+	return DoorArray[DoorArray.GetSize() - 1]->object;
 }
 
 float Floor::CalculateAltitude()
@@ -448,7 +457,7 @@ void Floor::EnableColumnFrame(bool value)
 	IsColumnFrameEnabled = value;
 }
 
-int Floor::ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+WallObject* Floor::ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box
 	float tw2 = tw;
@@ -472,10 +481,11 @@ int Floor::ColumnWallBox(const char *name, const char *texture, float x1, float 
 	th2 = sbs->AutoSize(0, height_in, false, th, force_enable, force_mode);
 
 	WallObject *wall = sbs->CreateWallObject(columnframe_walls, ColumnFrame, this->object, name);
-	return sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom);
+	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom);
+	return wall;
 }
 
-int Floor::ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+WallObject* Floor::ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box from a central location
 	float x1;
@@ -491,7 +501,7 @@ int Floor::ColumnWallBox2(const char *name, const char *texture, float CenterX, 
 	return ColumnWallBox(name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom);
 }
 
-bool Floor::AddFloorIndicator(int elevator, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
 
@@ -499,16 +509,21 @@ bool Floor::AddFloorIndicator(int elevator, bool relative, const char *texture_p
 	FloorIndicatorArray.SetSize(size + 1);
 
 	if (relative == false)
+	{
 		FloorIndicatorArray[size] = new FloorIndicator(elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
+		return FloorIndicatorArray[size]->object;
+	}
 	else
 	{
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
+		{
 			FloorIndicatorArray[size] = new FloorIndicator(elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase(true) + voffset);
+			return FloorIndicatorArray[size]->object;
+		}
 		else
-			return false;
+			return 0;
 	}
-	return true;
 }
 
 void Floor::UpdateFloorIndicators(int elevator)
@@ -633,7 +648,7 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	sbs->ResetWalls();
 }
 
-bool Floor::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
+Object* Floor::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
 {
 	//create a looping sound object
 	sounds.SetSize(sounds.GetSize() + 1);
@@ -653,7 +668,7 @@ bool Floor::AddSound(const char *name, const char *filename, csVector3 position,
 	sound->Loop(true);
 	sound->Play();
 
-	return true;
+	return sound->object;
 }
 
 void Floor::Report(const char *message)

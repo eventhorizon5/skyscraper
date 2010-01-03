@@ -909,6 +909,9 @@ int ScriptProcessor::ProcCommands()
 			return sError;
 		}
 
+		//store command and line info in object
+		StoreCommand(wall);
+
 		//create triangle wall
 		Simcore->AddTriangleWall(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
 		tempdata.DeleteAll();
@@ -942,7 +945,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//create wall
-		Simcore->AddWall(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+		StoreCommand(Simcore->AddWall(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
 		tempdata.DeleteAll();
 	}
 
@@ -974,7 +977,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//create floor
-		Simcore->AddFloor(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
+		StoreCommand(Simcore->AddFloor(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
 		tempdata.DeleteAll();
 	}
 
@@ -1006,7 +1009,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//create tiled ground
-		Simcore->AddGround(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]));
+		StoreCommand(Simcore->AddGround(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8])));
 		tempdata.DeleteAll();
 	}
 
@@ -1138,6 +1141,8 @@ int ScriptProcessor::ProcCommands()
 			return sError;
 		}
 
+		StoreCommand(wall);
+
 		Simcore->CreateWallBox2(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 	}
@@ -1209,6 +1214,8 @@ int ScriptProcessor::ProcCommands()
 			return sError;
 		}
 
+		StoreCommand(wall);
+
 		Simcore->CreateWallBox(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"), csString(tempdata[14]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 	}
@@ -1276,6 +1283,8 @@ int ScriptProcessor::ProcCommands()
 		for (temp3 = 3; temp3 < alength - 2; temp3 += 3)
 			varray.AddVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
 
+		StoreCommand(wall);
+
 		Simcore->AddCustomWall(wall, tempdata[1], tempdata[2], varray, atof(tempdata[alength - 2]), atof(tempdata[alength - 1]));
 		tempdata.DeleteAll();
 	}
@@ -1316,11 +1325,14 @@ int ScriptProcessor::ProcCommands()
 			return sError;
 		}
 
-		if (!Simcore->CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5])))
+		Object *object = Simcore->CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+		if (!object)
 		{
 			ScriptError("Shaft " + csString(tempdata[0]).Trim() + " already exists");
 			return sError;
 		}
+
+		StoreCommand(object);
 
 		tempdata.DeleteAll();
 	}
@@ -1541,11 +1553,14 @@ int ScriptProcessor::ProcCommands()
 			}
 		}
 
-		if (!Simcore->CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4])))
+		Object *object = Simcore->CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]));
+		if (!object)
 		{
 			ScriptError("Stairwell " + csString(tempdata[0]).Trim() + " already exists");
 			return sError;
 		}
+
+		StoreCommand(object);
 
 		tempdata.DeleteAll();
 	}
@@ -2127,9 +2142,9 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		if (partial == true)
-			Simcore->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])));
+			StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]))));
 		else
-			Simcore->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csVector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]))); 
+			StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csVector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])))); 
 		tempdata.DeleteAll();
 	}
 	return 0;
@@ -2453,7 +2468,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create floor
-		floor->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"));
+		StoreCommand(floor->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true")));
 
 		tempdata.DeleteAll();
 	}
@@ -2489,7 +2504,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create floor
 		if (Simcore->GetShaft(atoi(tempdata[0])))
-			Simcore->GetShaft(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
+			StoreCommand(Simcore->GetShaft(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
 		else
 		{
 			ScriptError("Invalid shaft");
@@ -2530,7 +2545,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create floor
 		if (Simcore->GetStairs(atoi(tempdata[0])))
-			Simcore->GetStairs(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]));
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
 		else
 		{
 			ScriptError("Invalid stairwell");
@@ -2568,7 +2583,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create floor
-		floor->AddInterfloorFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+		StoreCommand(floor->AddInterfloorFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10])));
 		tempdata.DeleteAll();
 	}
 
@@ -2600,7 +2615,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create wall
-		floor->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), csString(tempdata[13]).CompareNoCase("true"));
+		StoreCommand(floor->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), csString(tempdata[13]).CompareNoCase("true")));
 
 		tempdata.DeleteAll();
 	}
@@ -2636,7 +2651,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create wall
 		if (Simcore->GetShaft(atoi(tempdata[0])))
-			Simcore->GetShaft(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+			StoreCommand(Simcore->GetShaft(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
 		else
 		{
 			ScriptError("Invalid shaft");
@@ -2677,7 +2692,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create wall
 		if (Simcore->GetStairs(atoi(tempdata[0])))
-			Simcore->GetStairs(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
 		else
 		{
 			ScriptError("Invalid stairwell");
@@ -2715,7 +2730,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create wall
-		floor->AddInterfloorWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+		StoreCommand(floor->AddInterfloorWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
 		tempdata.DeleteAll();
 	}
 
@@ -2743,7 +2758,7 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 
-		floor->ColumnWallBox(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"));
+		StoreCommand(floor->ColumnWallBox(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true")));
 		tempdata.DeleteAll();
 	}
 
@@ -2771,7 +2786,7 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 
-		floor->ColumnWallBox2(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true"));
+		StoreCommand(floor->ColumnWallBox2(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true")));
 		tempdata.DeleteAll();
 	}
 
@@ -2888,9 +2903,9 @@ int ScriptProcessor::ProcFloors()
 
 		//create call button
 		if (compatibility == true)
-			floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), csString(tempdata[9]).CompareNoCase("true"), atof(tempdata[10]), atof(tempdata[11]));
+			StoreCommand(floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), csString(tempdata[9]).CompareNoCase("true"), atof(tempdata[10]), atof(tempdata[11])));
 		else
-			floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), atof(tempdata[12]), atof(tempdata[13]));
+			StoreCommand(floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), csString(tempdata[11]).CompareNoCase("true"), atof(tempdata[12]), atof(tempdata[13])));
 
 		tempdata.DeleteAll();
 	}
@@ -2926,7 +2941,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create stairs
 		if (Simcore->GetStairs(atoi(tempdata[0])))
-			Simcore->GetStairs(atoi(tempdata[0]))->AddStairs(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atoi(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddStairs(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atoi(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
 		else
 		{
 			ScriptError("Invalid stairwell");
@@ -2963,7 +2978,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create door
-		floor->AddDoor(tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
+		StoreCommand(floor->AddDoor(tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9])));
 		tempdata.DeleteAll();
 	}
 
@@ -2998,7 +3013,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create door
 		if (Simcore->GetStairs(atoi(tempdata[0])))
-			Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], atof(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], atof(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10])));
 		else
 		{
 			ScriptError("Invalid stairwell");
@@ -3045,7 +3060,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Invalid elevator");
 			return sError;
 		}
-		Simcore->GetElevator(atoi(tempdata[0]))->AddDirectionalIndicator(Current, csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), csString(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17]));
+		StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddDirectionalIndicator(Current, csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), csString(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17])));
 
 		tempdata.DeleteAll();
 	}
@@ -3113,9 +3128,9 @@ int ScriptProcessor::ProcFloors()
 			return sError;
 		}
 		if (compat == false)
-			Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]));
+			StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5])));
 		else
-			Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4]));
+			StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4])));
 
 		tempdata.DeleteAll();
 	}
@@ -3171,9 +3186,9 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		if (compat == false)
-			floor->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8])));
 		else
-			floor->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), "Button", tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), "Button", tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 
 		tempdata.DeleteAll();
 	}
@@ -3260,9 +3275,9 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		if (partial == true)
-			floor->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])));
+			StoreCommand(floor->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]))));
 		else
-			floor->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csVector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]))); 
+			StoreCommand(floor->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csVector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])))); 
 		tempdata.DeleteAll();
 	}
 
@@ -4024,11 +4039,14 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		if (!elev->CreateElevator(csString(tempdata[0]).CompareNoCase("true"), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3])))
+		Object *object = elev->CreateElevator(csString(tempdata[0]).CompareNoCase("true"), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]));
+		if (!object)
 		{
 			ScriptError("An error occurred while creating the elevator.  See the console output for more information");
 			return sError;
 		}
+		StoreCommand(object);
+
 		tempdata.DeleteAll();
 	}
 
@@ -4060,7 +4078,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//create floor
-		elev->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]));
+		StoreCommand(elev->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10])));
 
 		tempdata.DeleteAll();
 	}
@@ -4093,7 +4111,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//create wall
-		elev->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+		StoreCommand(elev->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
 
 		tempdata.DeleteAll();
 	}
@@ -4153,9 +4171,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), csString(tempdata[8]).CompareNoCase("true"), atof(tempdata[9]), atof(tempdata[10]));
+			StoreCommand(elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), csString(tempdata[8]).CompareNoCase("true"), atof(tempdata[9]), atof(tempdata[10])));
 		else
-			elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
+			StoreCommand(elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9])));
 
 		tempdata.DeleteAll();
 	}
@@ -4283,7 +4301,7 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		elev->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]));
+		StoreCommand(elev->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
 
 		tempdata.DeleteAll();
 	}
@@ -4547,9 +4565,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			elev->AddFloorIndicator(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+			StoreCommand(elev->AddFloorIndicator(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])));
 		else
-			elev->AddFloorIndicator("Button", tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]));
+			StoreCommand(elev->AddFloorIndicator("Button", tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])));
 
 		tempdata.DeleteAll();
 	}
@@ -4708,9 +4726,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (partial == true)
-			elev->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])));
+			StoreCommand(elev->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]))));
 		else
-			elev->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csVector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]))); 
+			StoreCommand(elev->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csVector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])))); 
 		tempdata.DeleteAll();
 	}
 
@@ -5140,4 +5158,15 @@ csString ScriptProcessor::Calc(const char *expression)
 		}
 	}
 	return tmpcalc.GetData();
+}
+
+void ScriptProcessor::StoreCommand(Object *object)
+{
+	//store command and line info in object
+	if (object)
+	{
+		object->command = BuildingData[line].Trim();
+		object->command_processed = LineData;
+		object->linenum = line + 1;
+	}
 }

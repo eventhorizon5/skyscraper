@@ -199,8 +199,8 @@ public:
 	float GetDistance(float x1, float x2, float z1, float z2);
 	void DumpVertices(WallObject* wallobject);
 	void ListAltitudes();
-	bool CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	bool CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Object* CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	void SetTexture(csRef<iThingFactoryState> mesh, int index, const char *texture, bool has_thickness, float tw, float th);
 	iMaterialWrapper* ChangeTexture(iMeshWrapper *mesh, const char *texture, bool matcheck = true);
 	iMaterialWrapper* GetTextureMaterial(const char *texture, bool &result, const char *polygon_name = 0);
@@ -241,9 +241,9 @@ public:
 	float GetListenerRollOffFactor();
 	void SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom);
 	void SetTextureFlip(int mainneg, int mainpos, int sideneg, int sidepos, int top, int bottom);
-	int AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
-	int AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
-	int AddGround(const char *name, const char *texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z);
+	WallObject* AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
+	WallObject* AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
+	WallObject* AddGround(const char *name, const char *texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z);
 	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0);
 	bool RegisterDoorCallback(Door *door);
 	bool UnregisterDoorCallback(Door *door);
@@ -269,7 +269,7 @@ public:
 	int GetMeshFactoryCount();
 	void CreateColliders(csRef<iMeshWrapper> mesh);
 	void DeleteColliders(csRef<iMeshWrapper> mesh);
-	bool AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
+	Object* AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
 	int GetSoundCount();
 	void IncrementSoundCount();
 	float ToLocal(float remote_value);

@@ -70,6 +70,7 @@ class ScriptProcessor
 	bool ScriptError(const char *message);
 	csString Calc(const char *expression);
 	bool IfProc(const char *expression);
+	void StoreCommand(Object *object);
 	int ProcCommands();
 	int ProcGlobals();
 	int ProcFloors();
