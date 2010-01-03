@@ -557,7 +557,7 @@ void Skyscraper::GetInput()
 	{
 		MouseDown = true;
 		Simcore->camera->MouseDown = MouseDown;
-		Simcore->camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL));
+		Simcore->camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT));
 	}
 
 	//reset mouse state

@@ -29,15 +29,18 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Object::Object()
+Object::Object(bool temporary)
 {
 	Permanent = 0;
 	Parent = 0;
 	raw_object = 0;
 	linenum = 0;
+	Number = -1;
+	Temporary = temporary;
 
 	//register object with engine
-	Number = sbs->RegisterObject(this);
+	if (temporary == false)
+		Number = sbs->RegisterObject(this);
 }
 
 Object::~Object()
@@ -45,7 +48,7 @@ Object::~Object()
 	//remove object from engine
 
 	//if fastdelete is enabled, don't unregister (just delete)
-	if (sbs->FastDelete == true)
+	if (sbs->FastDelete == true || Temporary == true)
 		return;
 
 	sbs->UnregisterObject(Number);

@@ -30,11 +30,15 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-WallObject::WallObject(csRef<iMeshWrapper> wrapper)
+WallObject::WallObject(csRef<iMeshWrapper> wrapper, Object *proxy, bool temporary) : Object(temporary)
 {
 	//polygon object constructor
 	meshwrapper = wrapper;
 	state = scfQueryInterface<iThingFactoryState> (wrapper->GetMeshObject()->GetFactory());
+
+	//if proxy object is set, set object's number as proxy object's number
+	if (proxy)
+		Number = proxy->GetNumber();
 }
 
 WallObject::~WallObject()
@@ -70,11 +74,20 @@ void WallObject::CreateHandle(int index)
 void WallObject::SetPolygonName(int index, const char *name)
 {
 	//set polygon name
+	csString name_modified = name;
+
+	//strip off object ID from name if it exists
+	if (name_modified.Find("(") == 0)
+		name_modified.DeleteAt(0, name_modified.Find(")") + 1);
+
+	//construct name
 	csString newname = "(";
 	csString num;
 	num = Number;
 	newname.Append(num + ")");
-	newname.Append(name);
+	newname.Append(name_modified);
+
+	//set polygon name
 	state->SetPolygonName(csPolygonRange(index, index), newname);
 }
 

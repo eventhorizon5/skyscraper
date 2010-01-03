@@ -92,6 +92,7 @@ Camera::Camera()
 	FOV = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
 	ResetOnGround = sbs->confman->GetBool("Skyscraper.SBS.Camera.ResetOnGround", false);
 	object_number = 0;
+	object_line = 0;
 }
 
 Camera::~Camera()
@@ -414,7 +415,7 @@ void Camera::CheckStairwell()
 	FloorTemp = CurrentFloor;
 }
 
-void Camera::ClickedObject(bool shift, bool ctrl)
+void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 {
 	//some code and comments from the CrystalSpace manual
 	//this returns the mesh that the user clicks on
@@ -470,6 +471,15 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 	}
 	number = object_number;
 
+	//store parameters of object
+	Object *obj = sbs->GetObject(object_number);
+	if (obj)
+	{
+		object_line = obj->linenum;
+		object_cmd = obj->command;
+		object_cmd_processed = obj->command_processed;
+	}
+
 	//show result
 	if (state)
 		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Polygon: " + polyname);
@@ -479,12 +489,11 @@ void Camera::ClickedObject(bool shift, bool ctrl)
 	//delete object if ctrl is pressed
 	if (state && ctrl == true && object_number > 0)
 	{
-		Object *object = sbs->GetObject(object_number);
-		if (object)
+		if (obj)
 		{
-			if (csString(object->GetType()) == "Wall")
+			if (csString(obj->GetType()) == "Wall")
 			{
-				WallObject *wall = (WallObject*)object;
+				WallObject *wall = (WallObject*)obj;
 				wall->DeletePolygons();
 
 				//reprepare engine

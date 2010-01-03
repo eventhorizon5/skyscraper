@@ -412,7 +412,8 @@ Object* Stairs::AddDoor(int floor, const char *texture, float thickness, int dir
 	}
 
 	//create doorway walls
-	sbs->AddDoorwayWalls(StairArray[floor - startfloor], "ConnectionWall", 0, 0);
+	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], object, "Connection Walls");
+	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
 	DoorArray[DoorArray.GetSize() - 1].floornumber = floor;

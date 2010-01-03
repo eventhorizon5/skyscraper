@@ -31,7 +31,7 @@ class WallObject : public Object
 public:
 
 	//functions
-	WallObject(csRef<iMeshWrapper> wrapper);
+	WallObject(csRef<iMeshWrapper> wrapper, Object *proxy = 0, bool temporary = false);
 	~WallObject();
 	int AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4);
 	int AddPolygon(csVector3 *vertices, int num);

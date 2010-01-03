@@ -37,7 +37,7 @@ public:
 	int linenum; //script line number where object was created
 
 	//functions
-	Object();
+	Object(bool temporary = false);
 	~Object();
 	void SetValues(void *object, Object *parent, const char *type, bool is_permanent);
 	bool IsPermanent();
@@ -52,6 +52,7 @@ protected:
 	void *raw_object; //raw object
 	csString Type; //object type
 	int Number; //object identifier
+	bool Temporary;
 };
 
 #endif

@@ -346,7 +346,7 @@ int ButtonPanel::AddWall(const char *name, const char *texture, float thickness,
 		tmpheight = height2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
-	return sbs->AddWallMain(ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, sizing.x, sizing.y);
+	return sbs->AddWallMain(object, ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, sizing.x, sizing.y);
 }
 
 Control* ButtonPanel::GetControl(int index)

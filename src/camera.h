@@ -98,7 +98,7 @@ public:
 	void CheckElevator();
 	void CheckShaft();
 	void CheckStairwell();
-	void ClickedObject(bool shift, bool ctrl);
+	void ClickedObject(bool shift, bool ctrl, bool alt);
 	const char* GetClickedMeshName();
 	const char* GetClickedPolyName();
 	int GetClickedObjectNumber();
@@ -127,6 +127,9 @@ private:
 	csString meshname; //last clicked mesh name
 	csString polyname; //last clicked polygon name
 	int object_number; //last clicked object number
+	int object_line; //script line number of last clicked object
+	csString object_cmd; //original script command of last clicked object
+	csString object_cmd_processed; //processed script command of last clicked object
 	char intbuffer[65];
 	char buffer[20];
 	int FloorTemp; //previous floor check value

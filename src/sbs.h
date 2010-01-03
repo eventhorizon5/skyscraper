@@ -180,9 +180,9 @@ public:
 	int CreateSky(const char *filenamebase);
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
-	int AddWallMain(csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
+	int AddWallMain(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
 	int AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
-	int AddFloorMain(csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
+	int AddFloorMain(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th);
 	void CalculateFrameRate();
 	void MainLoop();
 	int CreateWallBox(WallObject* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
@@ -232,7 +232,7 @@ public:
 	void Cut(csRef<iMeshWrapper> mesh, csArray<WallObject*> &wallarray, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
-	int AddDoorwayWalls(csRef<iMeshWrapper> mesh, const char *texture, float tw, float th);
+	int AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, float th);
 	void SetListenerLocation(const csVector3 &location);
 	void SetListenerDirection(const csVector3 &front, const csVector3 &top);
 	void SetListenerDistanceFactor(float factor);
