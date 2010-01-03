@@ -269,7 +269,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 	}
 
 	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], this->object, name);
-	AddFloor(wall, floor, name, texture, thickness, x1, x2, z1, z2, voffset1, voffset2, tw, th);
+	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th);
 	return wall;
 }
 
