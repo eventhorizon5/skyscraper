@@ -36,6 +36,7 @@ Version 1.6 (2.0 Alpha 6)
 -added InterfloorOnTop global parameter and base variable
 -made new SetPlanarMapping command which is an extended version of the old ReverseExtents command
 -new planar texture mapper is now the default
+-added object information dialog
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

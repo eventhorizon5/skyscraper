@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
@@ -64,6 +64,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../skyscraper.ico" />
 		<Unit filename="../src/buttonpanel.cpp" />
 		<Unit filename="../src/buttonpanel.h" />
 		<Unit filename="../src/callbutton.cpp" />
@@ -72,6 +73,8 @@
 		<Unit filename="../src/camera.h" />
 		<Unit filename="../src/cameracontrol.cpp" />
 		<Unit filename="../src/cameracontrol.h" />
+		<Unit filename="../src/console.cpp" />
+		<Unit filename="../src/console.h" />
 		<Unit filename="../src/debugpanel.cpp" />
 		<Unit filename="../src/debugpanel.h" />
 		<Unit filename="../src/editelevator.cpp" />
@@ -83,10 +86,14 @@
 		<Unit filename="../src/floor.h" />
 		<Unit filename="../src/globals.cpp" />
 		<Unit filename="../src/globals.h" />
+		<Unit filename="../src/keydialog.cpp" />
+		<Unit filename="../src/keydialog.h" />
 		<Unit filename="../src/loader.cpp" />
 		<Unit filename="../src/loader.h" />
 		<Unit filename="../src/meshcontrol.cpp" />
 		<Unit filename="../src/meshcontrol.h" />
+		<Unit filename="../src/objectinfo.cpp" />
+		<Unit filename="../src/objectinfo.h" />
 		<Unit filename="../src/sbs.cpp" />
 		<Unit filename="../src/sbs.h" />
 		<Unit filename="../src/shaft.cpp" />
@@ -95,6 +102,8 @@
 		<Unit filename="../src/skyscraper.h" />
 		<Unit filename="../src/stairs.cpp" />
 		<Unit filename="../src/stairs.h" />
+		<Unit filename="../src/stats.cpp" />
+		<Unit filename="../src/stats.h" />
 		<Unit filename="../src/unix.cpp" />
 		<Unit filename="../src/unix.h" />
 		<Extensions>
@@ -110,6 +119,10 @@
                                         <wxDialog wxs="wxsmith/CameraControl.wxs" src="../src/cameracontrol.cpp" hdr="../src/cameracontrol.h" name="CameraControl" language="CPP" />
                                         <wxDialog wxs="wxsmith/editelevator.wxs" src="../src/editelevator.cpp" hdr="../src/editelevator.h" name="editelevator" language="CPP" />
                                         <wxDialog wxs="wxsmith/MeshControl.wxs" src="../src/meshcontrol.cpp" hdr="../src/meshcontrol.h" name="MeshControl" language="CPP" />
+					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="../src/keydialog.cpp" hdr="../src/keydialog.h" name="KeyDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/Stats.wxs" src="../src/stats.cpp" hdr="../src/stats.h" name="Stats" language="CPP" />
+					<wxDialog wxs="wxsmith/Console.wxs" src="../src/console.cpp" hdr="../src/console.h" name="Console" language="CPP" />
+					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="../src/objectinfo.cpp" hdr="../src/objectinfo.h" name="ObjectInfo" language="CPP" />
                                 </resources>
 			</wxsmith>
 		</Extensions>

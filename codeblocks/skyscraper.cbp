@@ -127,6 +127,8 @@
 		<Unit filename="..\src\loader.h" />
 		<Unit filename="..\src\meshcontrol.cpp" />
 		<Unit filename="..\src\meshcontrol.h" />
+		<Unit filename="..\src\objectinfo.cpp" />
+		<Unit filename="..\src\objectinfo.h" />
 		<Unit filename="..\src\sbs.cpp" />
 		<Unit filename="..\src\sbs.h" />
 		<Unit filename="..\src\shaft.cpp" />
@@ -152,6 +154,7 @@
 					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="..\src\keydialog.cpp" hdr="..\src\keydialog.h" name="KeyDialog" language="CPP" />
 					<wxDialog wxs="wxsmith/Stats.wxs" src="..\src\stats.cpp" hdr="..\src\stats.h" name="Stats" language="CPP" />
 					<wxDialog wxs="wxsmith/Console.wxs" src="..\src\console.cpp" hdr="..\src\console.h" name="Console" language="CPP" />
+					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="..\src\objectinfo.cpp" hdr="..\src\objectinfo.h" name="ObjectInfo" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />

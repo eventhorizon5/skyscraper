@@ -82,6 +82,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bControlReference;
 		static const long ID_bStats;
 		static const long ID_bConsole;
+		static const long ID_bObjectInfo;
 		static const long ID_PANEL1;
 		//*)
 		class Timer : public wxTimer
@@ -110,6 +111,7 @@ class DebugPanel: public wxFrame
 		void On_bStats_Click(wxCommandEvent& event);
 		void On_bConsole_Click(wxCommandEvent& event);
 		void On_chkVerbose_Click(wxCommandEvent& event);
+		void On_bObjectInfo_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -129,6 +131,7 @@ class DebugPanel: public wxFrame
 		wxStaticText* StaticText6;
 		wxButton* bEditElevator;
 		wxButton* bMeshControl;
+		wxButton* bObjectInfo;
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText11;
 		wxStaticText* t_framerate;

@@ -39,6 +39,7 @@
 #include "unix.h"
 #include "cameracontrol.h"
 #include "console.h"
+#include "objectinfo.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
 extern DebugPanel *dpanel;
@@ -49,6 +50,7 @@ CameraControl *cc;
 KeyDialog *kd;
 Stats *stats;
 Console *console;
+ObjectInfo *objectinfo;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
@@ -82,6 +84,7 @@ const long DebugPanel::ID_bEditElevator = wxNewId();
 const long DebugPanel::ID_bControlReference = wxNewId();
 const long DebugPanel::ID_bStats = wxNewId();
 const long DebugPanel::ID_bConsole = wxNewId();
+const long DebugPanel::ID_bObjectInfo = wxNewId();
 const long DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
@@ -181,6 +184,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer3->Add(bStats, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bConsole = new wxButton(Panel1, ID_bConsole, _("Script Console"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bConsole"));
 	BoxSizer3->Add(bConsole, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bObjectInfo = new wxButton(Panel1, ID_bObjectInfo, _("Object Information"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bObjectInfo"));
+	BoxSizer3->Add(bObjectInfo, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer3, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
 	BoxSizer11->Fit(Panel1);
@@ -204,6 +209,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bControlReference,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bControlReference_Click);
 	Connect(ID_bStats,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bStats_Click);
 	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
+	Connect(ID_bObjectInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
 	//*)
 	dp = this;
 	OnInit();
@@ -227,6 +233,8 @@ DebugPanel::~DebugPanel()
 	stats = 0;
 	console->Destroy();
 	console = 0;
+	objectinfo->Destroy();
+	objectinfo = 0;
 	dpanel = 0; //clear external pointer
 }
 
@@ -282,6 +290,7 @@ void DebugPanel::OnInit()
 	kd = new KeyDialog(dp, -1);
 	stats = new Stats(dp, -1);
 	console = new Console(dp, -1);
+	objectinfo = new ObjectInfo(dp, -1);
 
 	timer = new Timer();
 	timer->Start(40);
@@ -323,6 +332,9 @@ void DebugPanel::Timer::Notify()
 
 	if (stats->IsShown() == true)
 		stats->Loop();
+
+	if (objectinfo->IsShown() == true)
+		objectinfo->Loop();
 }
 
 wxString TruncateNumber(double value, int decimals)
@@ -379,4 +391,9 @@ void DebugPanel::On_bConsole_Click(wxCommandEvent& event)
 void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
 {
 	Simcore->Verbose = chkVerbose->GetValue();
+}
+
+void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
+{
+	objectinfo->Show();
 }

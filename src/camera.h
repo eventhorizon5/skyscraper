@@ -102,6 +102,9 @@ public:
 	const char* GetClickedMeshName();
 	const char* GetClickedPolyName();
 	int GetClickedObjectNumber();
+	int GetClickedObjectLine();
+	const char* GetClickedObjectCommand();
+	const char* GetClickedObjectCommandP();
 	void CreateColliders();
 	void Loop();
 	void Strafe(float speed);

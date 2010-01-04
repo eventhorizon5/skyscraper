@@ -258,6 +258,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\objectinfo.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\skyscraper.cpp"
 				>
 			</File>
@@ -300,6 +304,10 @@
 			</File>
 			<File
 				RelativePath="..\src\meshcontrol.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\objectinfo.h"
 				>
 			</File>
 			<File

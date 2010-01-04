@@ -625,6 +625,24 @@ int Camera::GetClickedObjectNumber()
 	return object_number;
 }
 
+int Camera::GetClickedObjectLine()
+{
+	//return line number of last clicked object
+	return object_line;
+}
+
+const char *Camera::GetClickedObjectCommand()
+{
+	//return command line of last clicked object
+	return object_cmd;
+}
+
+const char *Camera::GetClickedObjectCommandP()
+{
+	//return processed command line of last clicked object
+	return object_cmd_processed;
+}
+
 void Camera::CreateColliders()
 {
 	// Define the player bounding box.
