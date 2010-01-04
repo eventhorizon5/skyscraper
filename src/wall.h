@@ -57,4 +57,4 @@ public:
 	csArray<WallObject*> *parent_array;
 };
 
-#endif _SBS_WALL_H
+#endif
