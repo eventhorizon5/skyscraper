@@ -41,7 +41,7 @@ public:
 	csVector2 cutend; //cut ending vector
 	bool InsideStairwell; //true if user/camera is in the stairwell
 	bool IsEnabled; //true if the entire stairwell has been enabled
-	csArray<csArray<WallObject*>> stairs_walls;
+	csArray<csArray<WallObject*> > stairs_walls;
 
 	Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Stairs();
