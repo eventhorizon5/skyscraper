@@ -3827,6 +3827,7 @@ csVector3 SBS::GetWallExtents(csRef<iThingFactoryState> state, const char *name,
 			return result;
 		}
 	}
+	return 0;
 }
 
 csVector3 SBS::GetPolygonDirection(csPoly3D &polygon)
