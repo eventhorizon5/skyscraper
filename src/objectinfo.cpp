@@ -151,8 +151,8 @@ void ObjectInfo::Loop()
 	oldobject = number;
 	tNumber->SetValue(wxVariant(number).GetString());
 	tLineNum->SetValue(wxVariant(Simcore->camera->GetClickedObjectLine()).GetString());
-	tScriptCommand->SetValue(wxVariant(Simcore->camera->GetClickedObjectCommand()).GetString());
-	tScriptCommand2->SetValue(wxVariant(Simcore->camera->GetClickedObjectCommandP()).GetString());
+	tScriptCommand->SetValue(wxString::FromAscii(Simcore->camera->GetClickedObjectCommand()));
+	tScriptCommand2->SetValue(wxString::FromAscii(Simcore->camera->GetClickedObjectCommandP()));
 	tName->Clear();
 	tType->Clear();
 	tParent->Clear();
@@ -163,13 +163,13 @@ void ObjectInfo::Loop()
 
 	if (object)
 	{
-		tType->SetValue(wxVariant(object->GetType()).GetString());
+		tType->SetValue(wxString::FromAscii(object->GetType()));
 
 		Object *parent = object->GetParent();
 		if (parent)
 		{
 			tParent->SetValue(wxVariant(parent->GetNumber()).GetString());
-			tParentType->SetValue(wxVariant(parent->GetType()).GetString());
+			tParentType->SetValue(wxString::FromAscii(parent->GetType()));
 		}
 	}
 }
