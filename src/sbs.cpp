@@ -3908,7 +3908,7 @@ csVector2 SBS::CalculateSizing(const char *texture, csVector2 x, csVector2 y, cs
 void SBS::ApplyTextureMapping(iThingFactoryState *state, int start_index, int end_index, float tw, float th)
 {
 	//apply UV texture mapping
-	for (int i = 0; i <= end_index; i++)
+	for (int i = start_index; i <= end_index; i++)
 	{
 		csVector3 v1, v2, v3;
 		GetTextureMapping(state, i, v1, v2, v3);
