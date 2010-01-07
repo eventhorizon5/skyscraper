@@ -36,7 +36,12 @@ SetPlanarMapping true, false, false, false
 <Textures>
     Load data/brick1.jpg, Brick, 0.269, 0.25
     Load data/lobbyfront.jpg, LobbyFront, 0.022, 1
-    Load data/windows11e.jpg, MainWindows, 0.072, 1
+    #Load data/windows11e.jpg, MainWindows, 0.101, 1
+    Load data/windows11e.jpg, MainWindows, 0.106, 1
+    Load data/windows11e.jpg, MainWindows2, 1, 1
+    Load data/windows11e_inside.gif, MainWindowsInside, 1, 1
+    Load data/windows11e-2.jpg, MainWindows2single, 1, 1
+    Load data/windows11e_inside2.gif, MainWindowsInsideSingle, 1, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     Load data/symb5.jpg, Marble3, 0.269, 0.25
     Load data/marb047.jpg, Marble4, 0.269, 0.25
@@ -90,13 +95,13 @@ SetPlanarMapping true, false, false, false
     #AddFloor Ceiling, Ceiling1, 0.5, -91, -85.3, 91, 85.3, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Floor
-    Set 1 = Floor(%floor%).Base
-    DrawWalls = true, false, false, false, false, false
-    AddCustomWall floor, FrontFinFloor, Carpet1, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
-    AddCustomWall floor, FrontDetachmentFloor, Carpet1, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
-    AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 34.24, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
-    AddCustomWall floor, BackDetachmentFloor, Carpet1, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
-    AddCustomWall floor, BackFinFloor, Carpet1, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 40.64, %1%, 46.08, 37.92, %1%, 43.52, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, 0, 0
+    #Set 1 = Floor(%floor%).Base
+    #DrawWalls = true, false, false, false, false, false
+    #AddCustomWall floor, FrontFinFloor, Carpet1, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
+    #AddCustomWall floor, FrontDetachmentFloor, Carpet1, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
+    #AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 34.24, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
+    #AddCustomWall floor, BackDetachmentFloor, Carpet1, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
+    #AddCustomWall floor, BackFinFloor, Carpet1, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 40.64, %1%, 46.08, 37.92, %1%, 43.52, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, 0, 0
 
     #Ceiling
     Set 1 = Floor(%floor%).Altitude + Floor(%floor%).Height
@@ -181,9 +186,6 @@ SetPlanarMapping true, false, false, false
     AddWall Back Fin Right Detachment, Backing, 0, 34.24, 36.64, 34.24, 43.52, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #AddWall Left Upper, MainWindows, 0, -84.32, 7.84, -43.36, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0, -84.32, 7.84, -44.96, 35.52, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Left Lower, MainWindows, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Front Fin Left, MainWindows, 0, -100.64, -46.24, -83.04, -20.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Front Fin Main, MainWindows, 0, -100.64, -46.24, -21.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Corner, MainWindows, 0, -21.76, -45.92, -24.48, -41.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Right Detachment, Backing, 0, -24.48, -41.44, -22.24, -35.68, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Left Detachment, Backing, 0, -79.36, -21.92, -76.8, -16.16, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -191,9 +193,6 @@ SetPlanarMapping true, false, false, false
     AddWall Front Fin Extension Left Lower, Backing, 0, -83.04, -20.64, -79.36, -21.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Extension Left Upper, Backing, 0, -79.2, -15.2, -76.8, -16.16, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Lower, MainWindows, 0, 18.4, -36.8, 77.6, -7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Upper, MainWindows, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Upper Corner, MainWindows, 0, 37.28, 36.64, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
     
     #AddAutoFloor Test, Carpet1, 0, 0, 0
@@ -242,9 +241,6 @@ SetPlanarMapping true, false, false, false
     #AddWall Back Fin Right Corner, MainWindows, 0, 37.92, 43.52, 40.64, 46.08, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #AddWall Left Upper, MainWindows, 0, -84.32, 7.84, -43.36, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0, -84.32, 7.84, -44.96, 35.52, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Left Lower, MainWindows, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Front Fin Left, MainWindows, 0, -100.64, -46.24, -83.04, -20.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Front Fin Main, MainWindows, 0, -100.64, -46.24, -21.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Corner, MainWindows, 0, -21.76, -45.92, -24.48, -41.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Right Detachment, Backing, 0, -24.48, -41.44, -22.24, -35.68, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Left Detachment, Backing, 0, -79.36, -21.92, -76.8, -16.16, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -252,9 +248,6 @@ SetPlanarMapping true, false, false, false
     AddWall Front Fin Extension Left Lower, Backing, 0, -83.04, -20.64, -79.36, -21.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Extension Left Upper, Backing, 0, -79.2, -15.2, -76.8, -16.16, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Lower, MainWindows, 0, 18.4, -36.8, 77.6, -7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Upper, MainWindows, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Upper Corner, MainWindows, 0, 37.28, 36.64, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloors>
 
@@ -291,10 +284,6 @@ SetPlanarMapping true, false, false, false
     DrawWalls = true, true, false, false, false, false
     AddWall Back, MainWindows, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0, -84.32, 7.84, -43.36, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Left Lower, MainWindows, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    if[%floor% < 65] AddWall Front Fin Left, MainWindows, 0, -100.64, -46.24, -83.04, -20.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    if[%floor% = 65] AddWall Front Fin Left, MainWindows, 0, -100.64, -46.24, -83.04, -20.64, %fullheight% / 2, %fullheight% / 2, 0, 0, 0, 0, True
-    #AddWall Front Fin Main, MainWindows, 0, -100.64, -46.24, -21.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #AddWall Front Fin Corner, MainWindows, 0, -21.76, -45.92, -24.48, -41.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #AddWall Front Fin Right Detachment, Backing, 0, -24.48, -41.44, -22.24, -35.68, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Left Detachment, Backing, 0, -79.36, -21.92, -76.8, -16.16, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -302,9 +291,6 @@ SetPlanarMapping true, false, false, false
     AddWall Front Fin Extension Left Lower, Backing, 0, -83.04, -20.64, -79.36, -21.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Extension Left Upper, Backing, 0, -79.2, -15.2, -76.8, -16.16, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Lower, MainWindows, 0, 18.4, -36.8, 77.6, -7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Upper, MainWindows, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Upper Corner, MainWindows, 0, 37.28, 36.64, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloors>
 
@@ -337,12 +323,7 @@ SetPlanarMapping true, false, false, false
     DrawWalls = true, true, false, false, false, false
     AddWall Back, MainWindows, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0, -84.32, 7.84, -43.36, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Left Lower, MainWindows, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Front, MainWindows, 0, -79.2, -15.2, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Lower, MainWindows, 0, 18.4, -36.8, 77.6, -7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Upper, MainWindows, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Upper Corner, MainWindows, 0, 37.28, 36.64, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloors>
 
@@ -375,12 +356,7 @@ SetPlanarMapping true, false, false, false
     DrawWalls = true, true, false, false, false, false
     AddWall Back, MainWindows, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left Upper, MainWindows, 0, -84.32, 7.84, -43.36, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Left Lower, MainWindows, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Front, MainWindows, 0, -79.2, -15.2, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    #AddWall Right Lower, MainWindows, 0, 18.4, -36.8, 77.6, -7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    #AddWall Right Upper, MainWindows, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Upper Corner, MainWindows, 0, 37.28, 36.64, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloors>
 
@@ -412,9 +388,7 @@ SetPlanarMapping true, false, false, false
     SetAutoSize = true, false
     DrawWalls = true, true, false, false, false, false
     AddWall Back, MainWindows, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Front, MainWindows, 0, -79.2, -15.2, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right Upper Corner, MainWindows, 0, 37.28, 36.64, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloors>
 
@@ -470,13 +444,75 @@ SetPlanarMapping true, false, false, false
     #External windows/walls
     SetAutoSize = true, false
     #AddWall Back, Concrete, 0, -47.1, 44.9, 47.1, 46, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    #AddWall Front, Concrete, 0, -75.1, -16.9, -12.2, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #AddWall Glass Elevator Back, Backing, 0, -12.2, -45.6, 18.3, -45.6, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #AddWall Right Top Corner, Concrete, 0, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloor>
 
+SetAutoSize = false, false
+SetTextureMapping 0, -0.333, 0, 1, 6.333, 0, 2, 6.333, 1
+<Floors 1 to 57>
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Fin Main, MainWindows2, 0, -100.64, -46.24, -21.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Fin Main, MainWindowsInside, 0, -100.64, -46.24, -21.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+<Floors 1 to 84>
+    SetTextureMapping 0, -0.333, 0, 1, 6.333, 0, 2, 6.333, 1
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right Lower, MainWindows2, 0, 18.4, -36.8, 77.6, -7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right Lower, MainWindowsInside, 0, 18.4, -36.8, 77.6, -7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    
+    SetTextureMapping 0, -0.666, 0, 1, 3, 0, 2, 3, 1
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right Upper, MainWindows2, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right Upper, MainWindowsInside, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+SetTextureMapping 0, -0.333, 0, 1, 6.333, 0, 2, 6.333, 1
+<Floors 80 to 136>
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front, MainWindows2, 0, -79.2, -15.2, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, MainWindowsInside, 0, -79.2, -15.2, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+SetTextureMapping 0, -0.333, 0, 1, 2.333, 0, 2, 2.333, 1
+<Floors 1 to 109>
+    DrawWalls = true, false, false, false, false, false
+    AddWall Left Lower, MainWindows2, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left Lower, MainWindowsInside, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+<Floors 1 to 65>
+    DrawWalls = true, false, false, false, false, false
+    SetTextureMapping 0, -0.5, 0, 1, 8.75, 0, 2, 8.75, 1
+    if[%floor% < 65] AddWall Front Fin Left, MainWindows2single, 0, -100.64, -46.24, -83.04, -20.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetTextureMapping 0, -0.5, 0.5, 1, 8.75, 0.5, 2, 8.75, 1
+    if[%floor% = 65] AddWall Front Fin Left, MainWindows2single, 0, -100.64, -46.24, -83.04, -20.64, %fullheight% / 2, %fullheight% / 2, 0, 0, 0, 0, True
+
+    DrawWalls = false, true, false, false, false, false
+    SetTextureMapping 0, -0.5, 0, 1, 8.75, 0, 2, 8.75, 1
+    if[%floor% < 65] AddWall Front Fin Left, MainWindowsInsideSingle, 0, -100.64, -46.24, -83.04, -20.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetTextureMapping 0, -0.5, 0.5, 1, 8.75, 0.5, 2, 8.75, 1
+    if[%floor% = 65] AddWall Front Fin Left, MainWindowsInsideSingle, 0, -100.64, -46.24, -83.04, -20.64, %fullheight% / 2, %fullheight% / 2, 0, 0, 0, 0, True
+<EndFloors>
+
+SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+<Floors 1 to 136>
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right Upper Corner, MainWindowsInside, 0, 37.28, 36.64, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right Upper Corner, MainWindows2, 0, 37.28, 36.64, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+<EndFloors>
+
+ResetTextureMapping = True
 SetAutoSize = true, false
+
 DrawWalls = true, true, false, false, false, false
 # front setback
 AddCustomWall external, Front - Main, MainWindows, -100.64, Floor(65).Altitude + 6, -46.24, -83.04, Floor(79).Altitude + 6, -20.64, -24.48, Floor(60).Altitude + 6, -41.44, -21.76, Floor(58).Altitude, -45.92, 0, 21.5
