@@ -125,6 +125,7 @@ Elevator::Elevator(int number)
 	lastdoor_number = 0;
 	QueueResets = sbs->confman->GetBool("Skyscraper.SBS.Elevator.QueueResets", false);
 	FirstRun = true;
+	CameraOffset = 0;
 
 	//create object meshes
 	buffer = Number;
@@ -1109,7 +1110,7 @@ void Elevator::MoveElevatorToFloor()
 	Elevator_movable->MovePosition(csVector3(0, sbs->ToRemote(ElevatorRate * sbs->delta), 0));
 	Elevator_movable->UpdateMove();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
+		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
 	MoveDoors(0, csVector3(0, ElevatorRate * sbs->delta, 0), true, true, true);
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
@@ -1335,7 +1336,7 @@ void Elevator::MoveElevatorToFloor()
 		Elevator_movable->SetPosition(sbs->ToRemote(csVector3(GetPosition().x, Destination, GetPosition().z)));
 		Elevator_movable->UpdateMove();
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + sbs->camera->cfg_legs_height + sbs->camera->cfg_body_height, sbs->camera->GetPosition().z));
+			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
 		MoveDoors(0, csVector3(0, Destination, 0), true, false, true);
 		for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 		{
@@ -1387,7 +1388,7 @@ finish:
 		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
 
 		//Turn on objects if user is in elevator
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && CameraOffset < Height)
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning on objects");
@@ -1660,6 +1661,12 @@ bool Elevator::IsInElevator(const csVector3 &position)
 		return lastcheckresult;
 
 	checkfirstrun = false;
+
+	if (IsMoving == false)
+	{
+		//store camera offset if elevator is not moving
+		CameraOffset = position.y - GetPosition().y;
+	}
 
 	if (position.y > GetPosition().y && position.y < GetPosition().y + Height)
 	{

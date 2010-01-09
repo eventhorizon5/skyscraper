@@ -97,6 +97,7 @@ public:
 	csVector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
 	csArray<WallObject*> elevator_walls;
+	float CameraOffset; //camera vertical offset for movement
 
 	//functions
 	Elevator(int number);
