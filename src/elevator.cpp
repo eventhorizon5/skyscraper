@@ -1662,21 +1662,26 @@ bool Elevator::IsInElevator(const csVector3 &position)
 
 	checkfirstrun = false;
 
-	if (IsMoving == false)
-	{
-		//store camera offset if elevator is not moving
-		CameraOffset = position.y - GetPosition().y;
-	}
-
-	if (position.y > GetPosition().y && position.y < GetPosition().y + Height)
+	if (position.y > GetPosition().y && position.y < GetPosition().y + (Height * 2))
 	{
 		csHitBeamResult result = HitBeam(position, csVector3(position.x, position.y - Height, position.z));
 
-		//cache values
-		lastcheckresult = result.hit;
-		lastposition = position;
+		if (IsMoving == false && result.hit == true)
+		{
+			//store camera offset if elevator is not moving
+			CameraOffset = position.y - GetPosition().y;
+		}
+		else if (result.hit == false)
+			CameraOffset = 0;
 
-		return result.hit;
+		if (position.y < GetPosition().y + Height)
+		{
+			//cache values
+			lastcheckresult = result.hit;
+			lastposition = position;
+
+			return result.hit;
+		}
 	}
 
 	//cache values

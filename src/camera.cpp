@@ -275,10 +275,11 @@ void Camera::CheckElevator()
 		}
 		else if (sbs->InElevator == true && sbs->ElevatorNumber == i)
 			elevator->EnableObjects(false); //turn off objects if user is not in the checked elevator
-		else if (elevator->CameraOffset > 0 && elevator->CameraOffset < elevator->Height * 2)
+		else if (elevator->CameraOffset > elevator->Height && elevator->CameraOffset < elevator->Height * 2)
 		{
 			//if camera is within vertical elevator range, turn on syncing to allow things like elevator surfing
 			test = true;
+			sbs->ElevatorNumber = i;
 			sbs->ElevatorSync = true;
 		}
 		elevator = 0;

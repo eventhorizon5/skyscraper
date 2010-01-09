@@ -1796,6 +1796,8 @@ int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
 				{
 					if (GetFloor(i - 1)->Altitude <= altitude && GetFloor(i)->Altitude > altitude)
 						return i - 1;
+					if (i == Floors - 1 && GetFloor(i)->Altitude < altitude)
+						return i; //return top floor if on top
 				}
 			}
 		}
