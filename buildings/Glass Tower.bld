@@ -26,7 +26,7 @@
     Description = The fictitious 138-story building from the movie The Towering Inferno.
     Version = 1
     CameraFloor = 0
-    CameraPosition = 0, 0
+    CameraPosition = 0, -30
     CameraRotation = 0, 0, 0
     InterfloorOnTop = true
 <EndGlobals>
@@ -429,7 +429,7 @@ SetPlanarMapping true, false, false, false
     #Floor
     Set 1 = Floor(%floor%).Base
     DrawWalls = true, false, false, false, false, false
-    AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+    AddCustomWall floor, MainFloor, Brick, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
 
     # Interfloor bottom
 
@@ -602,8 +602,6 @@ SetAutoSize = true, false
 ResetTextureMapping = True
 DrawWalls = true, true, false, false, false, false
 
-<end>
-
 #Glass Elevator Shaft
 AddShaft 1, 2, 3.05, -49.85, 0, 137
 ShaftCut 1, -15.25, -4.25 + 0.33, 15.25, 4.25, 0, 5
@@ -611,7 +609,7 @@ ShaftShowOutside 1 = 0 - 137
 ShowFullShaft 1 = true
 
 #Test elevator
-AddShaft 2, 2, 40, 40, 0, 137
+AddShaft 2, 2, 0, 0, 0, 137
 ShaftCut 2, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 ShowFullShaft 2 = true
 
@@ -620,20 +618,20 @@ ShowFullShaft 2 = true
     SetAutoSize = true, true
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, -0.1, -0.1, 0, 0
+    #if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, -0.1, -0.1, 0, 0
     DrawWalls = true, false, false, false, false, false
-    if[%floor% = 138] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, %fullheight%, %fullheight%, 0, 0
+    #if[%floor% = 138] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, %fullheight%, %fullheight%, 0, 0
     SetAutoSize = true, false
     DrawWalls = true, true, false, false, false, false
     WallOrientation = right
     #AddShaftWall 1, Shaft1Right, Brick, 0.33, 4, -4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 1
-    AddShaftWall 1, Shaft1Back, Backing, 0.33, -15.25, 4.125, 15.25, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 1
+    #AddShaftWall 1, Shaft1Back, Backing, 0.33, -15.25, 4.125, 15.25, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 1
 	
     SetAutoSize = true, true
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    if[%floor% ! 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 15.25 - 0.33, 4.125 - 49.85, 3.05 + 15.25 + 0.33, 4.125 - 49.85, %height%, %height%, 0, 0, 0, 0, False
-    if[%floor% = 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 15.25 - 0.33, 4.125 - 49.85, 3.05 + 15.25 + 0.33, 4.125 - 49.85, %fullheight%, %fullheight%, -%base%, -%base%, 0, 0, False
+    #if[%floor% ! 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 15.25 - 0.33, 4.125 - 49.85, 3.05 + 15.25 + 0.33, 4.125 - 49.85, %height%, %height%, 0, 0, 0, 0, False
+    #if[%floor% = 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 15.25 - 0.33, 4.125 - 49.85, 3.05 + 15.25 + 0.33, 4.125 - 49.85, %fullheight%, %fullheight%, -%base%, -%base%, 0, 0, False
 <EndFloors>
 
 #test elevator
@@ -653,12 +651,12 @@ ShowFullShaft 2 = true
 
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft2LeftE, Wall1, 0.33, 40 - 4, 40 - 4.125 - 0.33, 40 - 4, 40 + 4.125 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Shaft2FrontE, Wall1, 0.33, 40 - 4 - 0.33, 40 - 4.125, 40 + 4 + 0.33, 40 - 4.125, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft2LeftE, Wall1, 0.33, 0 - 4, 0 - 4.125 - 0.33, 0 - 4, 0 + 4.125 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft2FrontE, Wall1, 0.33, 0 - 4 - 0.33, 0 - 4.125, 0 + 4 + 0.33, 0 - 4.125, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft2RightE, Wall1, 0.33, 40 + 4, 40 - 4.125 - 0.33, 40 + 4, 40 + 4.125 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Shaft2BackE, Wall1, 0.33, 40 - 4 - 0.33, 40 + 4.125, 40 + 4 + 0.33, 40 + 4.125, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft2RightE, Wall1, 0.33, 0 + 4, 0 - 4.125 - 0.33, 0 + 4, 0 + 4.125 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Shaft2BackE, Wall1, 0.33, 0 - 4 - 0.33, 0 + 4.125, 0 + 4 + 0.33, 0 + 4.125, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
 
@@ -737,17 +735,17 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
     AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    #AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
-    AddFloorSigns true, left, 3.5 / 2 - 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 5.5
-    AddFloorSigns true, right, -3.5 / 2 + 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 5.5
+    #AddFloorSigns true, left, 3.5 / 2 - 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 5.5
+    #AddFloorSigns true, right, -3.5 / 2 + 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 5.5
 
     #panel
     CreatePanel ElevPanel, 6, 3, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button135, 2, 2, 133, 1, 1
-    AddFloorButton 1, Button1, 3, 2, 0, 1, 1
+    #AddFloorButton 1, Button135, 2, 2, 133, 1, 1
+    #AddFloorButton 1, Button1, 3, 2, 0, 1, 1
     AddControlButton 1, ButtonOpen, 4, 1, open, 1, 1
     AddControlButton 1, ButtonClose, 4, 3, close, 1, 1
     AddControlButton 1, ButtonCancel, 5, 1, cancel, 1, 1
@@ -768,7 +766,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 2, 64 - 67, 69, 80, 119, 131 - 137
     AssignedShaft = 2
-    CreateElevator false, 40, 40 - 0.294, 0
+    CreateElevator false, 0, 0 - 0.294, 0
     
     #floor
     FloorOrientation = top
@@ -844,17 +842,17 @@ DrawWalls = true, true, false, false, false, false
 
 <Floor 0>
     CallButtonElevators = 1, 2, 3
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -1.35, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 7.45, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    #CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -1.35, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    #CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 7.45, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 133>
     CallButtonElevators = 1, 2, 3
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -1.35, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 7.45, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    #CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -1.35, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    #CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 7.45, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 0 to 137>
     CallButtonElevators = 4
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 40 + 3, 40 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 0 + 3, 0 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
