@@ -3847,7 +3847,7 @@ csVector3 SBS::GetWallExtents(csRef<iThingFactoryState> state, const char *name,
 			//if given altitude is outside of polygon's range, return 0
 			csVector2 yextents = GetExtents(original, 2);
 			float tmpaltitude = ToRemote(altitude);
-			if (yextents.x < tmpaltitude || tmpaltitude > yextents.y)
+			if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
 				return 0;
 
 			//get upper

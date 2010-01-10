@@ -65,7 +65,8 @@ class ScriptProcessor
 	bool setshaftdoors;
 	csArray<csString> BuildingData;
 	csArray<csString> UserVariable;
-	csVector3 Extent;
+	csVector3 MinExtent;
+	csVector3 MaxExtent;
 
 	bool ScriptError(const char *message);
 	csString Calc(const char *expression);

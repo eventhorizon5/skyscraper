@@ -81,7 +81,8 @@ bool ScriptProcessor::LoadBuilding()
 	getfloordata = false;
 	setshaftdoors = false;
 	int returncode = 0;
-	Extent = 0;
+	MinExtent = 0;
+	MaxExtent = 0;
 	char buffer2[20];
 
 	while (line < BuildingData.GetSize() - 1)
@@ -431,8 +432,10 @@ checkfloors:
 		}
 
 		//Extent variables
-		LineData.ReplaceAll("%extentx%", _gcvt(Extent.x, 12, buffer2));
-		LineData.ReplaceAll("%extentz%", _gcvt(Extent.z, 12, buffer2));
+		LineData.ReplaceAll("%minx%", _gcvt(MinExtent.x, 12, buffer2));
+		LineData.ReplaceAll("%minz%", _gcvt(MinExtent.z, 12, buffer2));
+		LineData.ReplaceAll("%maxx%", _gcvt(MaxExtent.x, 12, buffer2));
+		LineData.ReplaceAll("%maxz%", _gcvt(MaxExtent.z, 12, buffer2));
 
 		//Global commands
 		returncode = ProcCommands();
@@ -1872,7 +1875,7 @@ int ScriptProcessor::ProcCommands()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
+		if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
@@ -1902,10 +1905,9 @@ int ScriptProcessor::ProcCommands()
 			return sError;
 		}
 
-		csVector3 result = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), csString(tempdata[3]).CompareNoCase("true"));
+		MinExtent = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), false);
+		MaxExtent = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), true);
 		tempdata.DeleteAll();
-		Extent.x = result.x;
-		Extent.z = result.z;
 	}
 
 	//GetWallExtents function

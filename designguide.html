@@ -509,14 +509,14 @@
     of the source. Set this value to 0.0 for an omni-directional sound.&quot;</p>
   <p align="left"><strong>ad. GetWallExtents</strong> - the GetWallExtents command 
     returns the X and Z extents (minimum and maximum values) of a wall, at the 
-    specified altitude. The command will return the results in the ExtentX and 
-    ExtentZ variables.<br>
+    specified altitude. The command will return the results in the MinX, MinZ, 
+    MaxX and MaxZ variables.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> GetWallExtents destobject, 
-    wallname, altitude, get_maximum</font><br>
+    wallname, altitude</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">GetWallExtents external, 
-    wall1:front, 10, false</font></p>
+    wall1:front, 10</font></p>
   <p align="left">Then to use the values:<br>
-    Example: <font size="2" face="Courier New, Courier, mono">Set 2 = %extentx%</font></p>
+    Example: <font size="2" face="Courier New, Courier, mono">Set 2 = %minz%</font></p>
   <p align="left"><em>Destobject</em> is the destination object to get the object 
     from (floor, external, landscape, or buildings). <em>Wallname </em>specifies 
     the name of the wall to get the extents from. Generally this should be in 
@@ -528,10 +528,9 @@
     (back), so with those you'd specify &quot;name:0&quot; for the front. <em>Altitude</em> 
     specifies the altitude to use for the check - basically it makes a copy of 
     the wall, cuts it down to a line at that altitude, and returns the coordinates 
-    of the endpoints. <em>Get_maximum</em> specifies if the function should return 
-    the maximum or minimum coordinates. The command will store the results in 
-    the ExtentsX and ExtentsZ variables, which can be used anywhere in the script 
-    - to get the X result, you'd use %extentx%.</p>
+    of the endpoints. The command will store the results in the MinX, MinZ, MaxX 
+    and MaxZ variables, which can be used anywhere in the script - to get the 
+    minimum X result, you'd use %minx%.</p>
   <p align="left"><strong>ae. Print</strong> - prints the contents of a line to 
     the console. This command will still convert variables and even math expressions, 
     and output the results.<br>
