@@ -509,14 +509,14 @@
     of the source. Set this value to 0.0 for an omni-directional sound.&quot;</p>
   <p align="left"><strong>ad. GetWallExtents</strong> - the GetWallExtents command 
     returns the X and Z extents (minimum and maximum values) of a wall, at the 
-    specified altitude. The command will return the results in the ExtentsX and 
-    ExtentsZ variables.<br>
+    specified altitude. The command will return the results in the ExtentX and 
+    ExtentZ variables.<br>
     Syntax:<font size="2" face="Courier New, Courier, mono"> GetWallExtents destobject, 
     wallname, altitude, get_maximum</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">GetWallExtents external, 
     wall1:front, 10, false</font></p>
   <p align="left">Then to use the values:<br>
-    Example: <font size="2" face="Courier New, Courier, mono">Set 2 = %extentsx%</font></p>
+    Example: <font size="2" face="Courier New, Courier, mono">Set 2 = %extentx%</font></p>
   <p align="left"><em>Destobject</em> is the destination object to get the object 
     from (floor, external, landscape, or buildings). <em>Wallname </em>specifies 
     the name of the wall to get the extents from. Generally this should be in 
