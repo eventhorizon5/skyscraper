@@ -79,7 +79,7 @@ bool Skyscraper::OnInit(void)
 	DisableSound = false;
 	DrewButtons = false;
 	FullScreen = false;
-	bool Shutdown = false;
+	Shutdown = false;
 	PositionOverride = false;
 	Reload = false;
 

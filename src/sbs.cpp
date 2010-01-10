@@ -1676,10 +1676,10 @@ csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 	//first parameter must be a vertex array object
 	//second must be either 1 (for x), 2 (for y) or 3 (for z)
 
-	float esmall;
-	float ebig;
-	float tempnum;
-	int i;
+	float esmall = 0;
+	float ebig = 0;
+	float tempnum = 0;
+	int i = 0;
 	int num = varray.GetVertexCount();
 
 	//return 0,0 if coord value is out of range

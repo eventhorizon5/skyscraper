@@ -245,7 +245,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//exit if doors are manually opening
-	if (OpenDoor = 2 && DoorIsRunning == true)
+	if (OpenDoor == 2 && DoorIsRunning == true)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " in use");
 		return;
@@ -350,7 +350,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//exit if doors are manually closing
-	if (OpenDoor = -2 && DoorIsRunning == true)
+	if (OpenDoor == -2 && DoorIsRunning == true)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " in use");
 		return;

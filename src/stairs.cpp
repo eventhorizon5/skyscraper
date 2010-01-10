@@ -145,9 +145,9 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 
 	for (int i = 1; i <= num_stairs; i++)
 	{
-		float pos;
+		float pos = 0;
 		buffer2 = i;
-		float thickness;
+		float thickness = 0;
 		if (i < num_stairs - 1)
 			thickness = treadsize * 2;
 		if (i == num_stairs - 1)

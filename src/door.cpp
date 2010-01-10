@@ -57,7 +57,7 @@ Door::Door(Object *parent, const char *name, const char *texture, float thicknes
 	Direction = direction;
 	OpenState = false;
 	IsMoving = false;
-	float x1, z1, x2, z2;
+	float x1 = 0, z1 = 0, x2 = 0, z2 = 0;
 	rotation = 0;
 	OpenDoor = false;
 

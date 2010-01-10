@@ -594,7 +594,7 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	//convenience function for adding filler walls around doors
 	//direction is either "false" for a door that faces left/right, or "true" for one that faces front/back
 
-	float x1, x2, z1, z2, depth1, depth2;
+	float x1 = 0, x2 = 0, z1 = 0, z2 = 0, depth1 = 0, depth2 = 0;
 
 	if (sbs->GetWallOrientation() == 0)
 	{

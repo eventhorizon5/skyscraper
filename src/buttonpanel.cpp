@@ -149,7 +149,7 @@ void ButtonPanel::AddControlButton(const char *texture, const char *texture_lit,
 void ButtonPanel::AddButton(const char *name, const char *texture, const char *texture_lit, int row, int column, float bwidth, float bheight, float hoffset, float voffset)
 {
 	//create the button polygon
-	float xpos, ypos, zpos;
+	float xpos = 0, ypos = 0, zpos = 0;
 
 	//set to default if value is 0
 	if (bwidth == 0)

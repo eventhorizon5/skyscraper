@@ -708,7 +708,7 @@ void Camera::Loop()
 					int index = mesh.Find("Shaft Door");
 					int index2 = mesh.Find(":", index);
 					int number = atoi(mesh.Slice(index + 10, index2 - (index + 10)));
-					int floor = atoi(mesh.Slice(index2 + 1, mesh.Length() - index2 - 2));
+					//int floor = atoi(mesh.Slice(index2 + 1, mesh.Length() - index2 - 2));
 					Elevator *tmpelevator = sbs->GetElevator(elevator);
 					int whichdoors = tmpelevator->GetDoor(number)->GetWhichDoors();
 					if (tmpelevator->GetDoor(number)->OpenDoor == -1 && whichdoors == 1)
