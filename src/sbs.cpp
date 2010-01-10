@@ -2604,15 +2604,34 @@ csVector3 SBS::GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, co
 {
 	//do a line intersection with a specified mesh, and return
 	//the intersection point
-	int polyindex = mesh->FindPolygonByName(polyname);
+	int polyindex = -1;
 
-	//do a plane intersection with a line
-	csVector3 isect;
-	float dist;
-	csPlane3 plane = mesh->GetPolygonObjectPlane(polyindex);
-	csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), plane, isect, dist);
+	for (int i = 0; i < mesh->GetPolygonCount(); i++)
+	{
+		csString tmpname = mesh->GetPolygonName(i);
+		if (tmpname.Find("(") == 0)
+		{
+			//strip object number
+			int loc = tmpname.Find(")");
+			tmpname.DeleteAt(0, loc + 1);
+		}
+		if (polyname == tmpname)
+		{
+			polyindex = i;
+			break;
+		}
+	}
 
-	return ToLocal(isect);
+	if (polyindex >= 0)
+	{
+		//do a plane intersection with a line
+		csVector3 isect;
+		float dist;
+		csPlane3 plane = mesh->GetPolygonObjectPlane(polyindex);
+		csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), plane, isect, dist);
+		return ToLocal(isect);
+	}
+	return 0;
 }
 
 void SBS::Cut(csRef<iMeshWrapper> mesh, csArray<WallObject*> &wallarray, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber, const char *checkstring)
@@ -3800,17 +3819,40 @@ csVector3 SBS::GetWallExtents(csRef<iThingFactoryState> state, const char *name,
 		if (i == 6)
 			newname = name2 + ":right";
 
-		int index = state->FindPolygonByName(newname);
+		int index = -1;
+		for (int j = 0; j < state->GetPolygonCount(); j++)
+		{
+			csString tmpname = state->GetPolygonName(j);
+			if (tmpname.Find("(") == 0)
+			{
+				//strip object number
+				int loc = tmpname.Find(")");
+				tmpname.DeleteAt(0, loc + 1);
+			}
+			if (newname == tmpname)
+			{
+				index = j;
+				break;
+			}
+		}
+
 		if (index >= 0)
 		{
 			csPoly3D original, tmp1, tmp2;
 			for (int i = 0; i < state->GetPolygonVertexCount(index); i++)
 				original.AddVertex(state->GetPolygonVertex(index, i));
+
+			//if given altitude is outside of polygon's range, return 0
+			csVector2 yextents = GetExtents(original, 2);
+			float tmpaltitude = ToRemote(altitude);
+			if (yextents.x < tmpaltitude || tmpaltitude > yextents.y)
+				return 0;
+
 			//get upper
-			original.SplitWithPlaneY(tmp1, tmp2, ToRemote(altitude) - 0.001);
+			original.SplitWithPlaneY(tmp1, tmp2, tmpaltitude - 0.001);
 
 			//get lower part of upper
-			tmp2.SplitWithPlaneY(original, tmp1, ToRemote(altitude) + 0.001);
+			tmp2.SplitWithPlaneY(original, tmp1, tmpaltitude + 0.001);
 
 			csVector3 result;
 			if (get_max == false)
