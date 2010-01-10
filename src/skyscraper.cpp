@@ -932,6 +932,7 @@ void Skyscraper::GetMenuInput()
         			{
         				//user clicked on button
         				Click(i);
+	        			button->drawn_selected = true;
         				return;
         			}
         			button->drawn_selected = true;
@@ -1200,12 +1201,18 @@ void Skyscraper::Prepare()
 
 void Skyscraper::Unload()
 {
-	//unload sim and return to the main menu
+	//unload sim
 	BuildingFile = "";
 	IsRunning = false;
 	Starting = false;
 	Pause = false;
 	UnloadSim();
+
+	//cleanup sound
+	if (sndsource)
+		StopSound();
+
+	//return to main menu
 	DrawBackground();
 	StartSound();
 	StartupRunning = true;

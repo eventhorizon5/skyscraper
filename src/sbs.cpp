@@ -156,6 +156,7 @@ SBS::SBS()
 	DefaultMapper = 0;
 	ObjectCount = 0;
 	FastDelete = false;
+	Skybox_object = 0;
 }
 
 SBS::~SBS()
@@ -252,7 +253,8 @@ SBS::~SBS()
 	//remove referenced sounds
 	sndmanager->RemoveSounds();
 
-	delete Skybox_object;
+	if (Skybox_object)
+		delete Skybox_object;
 	delete object;
 
 	//remove all engine objects
