@@ -3790,7 +3790,7 @@ bool SBS::UnregisterObject(int number)
 		{
 			if (ObjectArray[number]->GetNumber() == number)
 			{
-				ObjectArray[number] == 0;
+				ObjectArray[number] = 0;
 				return true;
 			}
 		}
