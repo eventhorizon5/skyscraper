@@ -129,7 +129,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     AddWall Front Fin Corner, MainWindows, 0, -21.76, -45.92, -24.48, -41.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Right Detachment, Backing, 0, -24.48, -41.44, -22.24, -35.68, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Extension Right, Backing, 0, -22.24, -35.68, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloor>
 
@@ -174,7 +174,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     AddWall Front Fin Corner, MainWindows, 0, -21.76, -45.92, -24.48, -41.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Right Detachment, Backing, 0, -24.48, -41.44, -22.24, -35.68, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Extension Right, Backing, 0, -22.24, -35.68, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true   
 <EndFloor>
 
@@ -224,7 +224,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     AddWall Front Fin Corner, MainWindows, 0, -21.76, -45.92, -24.48, -41.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Right Detachment, Backing, 0, -24.48, -41.44, -22.24, -35.68, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Extension Right, Backing, 0, -22.24, -35.68, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
     
     #AddAutoFloor Test, Carpet1, 0, 0, 0
@@ -274,7 +274,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     AddWall Front Fin Right Detachment, Backing, 0, -24.48, -41.44, -22.24, -35.68, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Left Detachment, Backing, 0, -79.36, -21.92, -76.8, -16.16, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Front Fin Extension Right, Backing, 0, -22.24, -35.68, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloors>
 
@@ -298,7 +298,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     #AddWall Front Fin Corner, MainWindows, 0, -21.76, -45.92, -24.48, -41.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #AddWall Front Fin Right Detachment, Backing, 0, -24.48, -41.44, -22.24, -35.68, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #AddWall Front Fin Extension Right, Backing, 0, -22.24, -35.68, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloors>
 
@@ -329,7 +329,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     #External windows/walls
     SetAutoSize = true, false
     DrawWalls = true, true, false, false, false, false
-    AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloors>
 
@@ -360,7 +360,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     #External windows/walls
     SetAutoSize = true, false
     DrawWalls = true, true, false, false, false, false
-    AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloors>
 
@@ -391,7 +391,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     #External windows/walls
     SetAutoSize = true, false
     DrawWalls = true, true, false, false, false, false
-    AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloors>
 
@@ -446,7 +446,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
 
     #External windows/walls
     SetAutoSize = true, false
-    AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    #AddWall Glass Elevator Back, Backing, 0, -18.88, -36.8, 18.4, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #AddWall Right Top Corner, Concrete, 0, 47.1, 46, 59.3, 19.4, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 <EndFloor>
@@ -674,8 +674,8 @@ DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
 #Glass Elevator Shaft
-AddShaft 1, 2, 3.05, -49.85, 0, 137
-ShaftCut 1, -15.25, -4.25 + 0.33, 15.25, 4.25, 0, 5
+AddShaft 1, 2, -0.24, -41.05, 0, 137
+ShaftCut 1, -18.64, -4.25 + 0.33, 18.64, 4.25, 0, 5
 ShaftShowOutside 1 = 0 - 137
 ShowFullShaft 1 = true
 
@@ -689,20 +689,20 @@ ShowFullShaft 2 = true
     SetAutoSize = true, true
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    #if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, -0.1, -0.1, 0, 0
+    if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, -0.1, -0.1, 0, 0
     DrawWalls = true, false, false, false, false, false
-    #if[%floor% = 138] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, %fullheight%, %fullheight%, 0, 0
+    if[%floor% = 138] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, %fullheight%, %fullheight%, 0, 0
     SetAutoSize = true, false
     DrawWalls = true, true, false, false, false, false
     WallOrientation = right
     #AddShaftWall 1, Shaft1Right, Brick, 0.33, 4, -4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 1
-    #AddShaftWall 1, Shaft1Back, Backing, 0.33, -15.25, 4.125, 15.25, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 1
+    AddShaftWall 1, Shaft1Back, Backing, 0.33, -18.64, 4.125, 18.64, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 1
 	
     SetAutoSize = true, true
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    #if[%floor% ! 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 15.25 - 0.33, 4.125 - 49.85, 3.05 + 15.25 + 0.33, 4.125 - 49.85, %height%, %height%, 0, 0, 0, 0, False
-    #if[%floor% = 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 15.25 - 0.33, 4.125 - 49.85, 3.05 + 15.25 + 0.33, 4.125 - 49.85, %fullheight%, %fullheight%, -%base%, -%base%, 0, 0, False
+    #if[%floor% ! 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 18.64 - 0.33, 4.125 - 41.05, 3.05 + 18.64 + 0.33, 4.125 - 41.05, %height%, %height%, 0, 0, 0, 0, False
+    #if[%floor% = 134] AddWall Shaft1BackE, Wall1, 0.33, 3.05 - 18.64 - 0.33, 4.125 - 41.05, 3.05 + 18.64 + 0.33, 4.125 - 41.05, %fullheight%, %fullheight%, -%base%, -%base%, 0, 0, False
 <EndFloors>
 
 #test elevator
@@ -742,7 +742,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 133
     AssignedShaft = 1
-    CreateElevator false, -5.75, -49.85 + 0.294, 0
+    CreateElevator false, -0.24 - 8.8, -41.05 + 0.294, 0
 <EndElevator>
 
 <Elevator 2>
@@ -753,7 +753,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 133
     AssignedShaft = 1
-    CreateElevator false, 3.05, -49.85 + 0.294, 0
+    CreateElevator false, -0.24, -41.05 + 0.294, 0
 <EndElevator>
 
 <Elevator 3>
@@ -764,7 +764,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 133
     AssignedShaft = 1
-    CreateElevator false, 11.85, -49.85 + 0.294, 0
+    CreateElevator false, -0.24 + 8.8, -41.05 + 0.294, 0
 <EndElevator>
 
 <Elevators 1 to 3>    
@@ -806,7 +806,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
     AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    #AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -815,8 +815,8 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     CreatePanel ElevPanel, 6, 3, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    #AddFloorButton 1, Button135, 2, 2, 133, 1, 1
-    #AddFloorButton 1, Button1, 3, 2, 0, 1, 1
+    AddFloorButton 1, Button135, 2, 2, 133, 1, 1
+    AddFloorButton 1, Button1, 3, 2, 0, 1, 1
     AddControlButton 1, ButtonOpen, 4, 1, open, 1, 1
     AddControlButton 1, ButtonClose, 4, 3, close, 1, 1
     AddControlButton 1, ButtonCancel, 5, 1, cancel, 1, 1
@@ -913,14 +913,14 @@ DrawWalls = true, true, false, false, false, false
 
 <Floor 0>
     CallButtonElevators = 1, 2, 3
-    #CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -1.35, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
-    #CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 7.45, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 - 4.4, -41.05 + 4.345 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 + 4.4, -41.05 + 4.345 + 0.1, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 133>
     CallButtonElevators = 1, 2, 3
-    #CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -1.35, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
-    #CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 7.45, -45.395 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 - 4.4, -41.05 + 4.345 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 + 4.4, -41.05 + 4.345 + 0.1, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 0 to 137>
