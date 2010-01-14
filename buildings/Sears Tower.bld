@@ -260,7 +260,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 #zone 1 skeleton
 <Floors 3 to 27>
     Height = 10
-    if(%floor% = 26) Height = 15
+    if[%floor% = 26] Height = 15
     InterfloorHeight = 2.24
 
     #Floor
@@ -827,7 +827,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 #zone 3 upper skeleton
 <Floors 89 to 102>
     Height = 10
-    if(%floor% = 102) Height = 12
+    if[%floor% = 102] Height = 12
     InterfloorHeight = 2.24
 
     #Floor
