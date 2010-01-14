@@ -33,6 +33,7 @@
 <Textures>
     Load data/brick1.jpg, Brick, 0.269, 0.25
     Load data/searstower.jpg, MainWindows, 0.067, 1
+    Load data/windows11e_inside.gif, MainWindowsInside, 0.067, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     Load data/symb5.jpg, Marble3, 0.269, 0.25
     Load data/marb047.jpg, Marble4, 0.269, 0.25
@@ -41,25 +42,25 @@
     Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
     Load data/vents1.jpg, VentsInt, 1, 1
     Load data/vents1c.jpg, VentsExt, 1, 1
-    Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/st_wall.jpg, Wall1, 0.269, 0.25
     Load data/callbutton.gif, ButtonUp, 1, 1
     Load data/callbutton.gif, ButtonDown, 1, -1
     Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
     Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
     Load data/floorsign.jpg, FloorSign, 1, 1
-    Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
+    Load data/otis4_weaveceiling_3x3_symmetrical.jpg, ElevCeiling, 1, 1, false
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 0.5, 0.5
     Load data/MetalBare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
     Load data/metal080.jpg, ServiceElevPanelMain, 0.5, 0.5
-    Load data/diamond18h.jpg, OfficeElevWall, 0.333, 0.333
-    Load data/diamond18b.jpg, ExpressElevWall, 0.333, 0.333
+    Load data/otis4_weavebackdouble.jpg, ExpressElevWall, 1, 1, false
+    Load data/otis4_weavebackdouble.jpg, OfficeElevWall, 1, 1, false
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
-    Load data/text16.jpg, ElevDoors, 1, 1
+    Load data/st_doors.jpg, ElevDoors, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
     Load data/panel-back2.jpg, ElevExtPanels2, 1, 1
-    Load data/marb148.jpg, ElevPanel, 1, 1
-    Load data/diamond18j.jpg, ElevPanelMain, 1, 1
+    Load data/metal080.jpg, ElevPanel, 1, 1
+    Load data/otis4_weaveelevpanel.jpg, ElevPanelMain, 1, 1, false
     Load data/stucco4c.jpg, Stucco4, 0.25, 0.25
     Load data/downtown.jpg, Downtown, 1, 1
     Load data/darrow_unlit.gif, ArrowUp, 1, 1
@@ -69,12 +70,17 @@
 
     #floor indicator/button pictures
     Load data/black.jpg, Black, 1, 1
+    Load data/black_lit.jpg, BlackLit, 1, 1
     AddText Black, ButtonPL, nimbus_sans.ttf, 47, PL, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonM, nimbus_sans.ttf, 47, M, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonCC, nimbus_sans.ttf, 47, CC, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonLL1, nimbus_sans.ttf, 47, LL1, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonLL2, nimbus_sans.ttf, 47, LL2, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonLL3, nimbus_sans.ttf, 47, LL3, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitPL, nimbus_sans.ttf, 47, PL, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitCC, nimbus_sans.ttf, 47, CC, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitLL1, nimbus_sans.ttf, 47, LL1, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitLL2, nimbus_sans.ttf, 47, LL2, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitLL3, nimbus_sans.ttf, 47, LL3, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -82,6 +88,7 @@
     AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
     AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
     AddTextRange 1, 110, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 110, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
 
 # Ground
@@ -2117,10 +2124,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button34, 2, 3, 33, 1, 1
-    AddFloorButton 1, Button33, 3, 3, 32, 1, 1
-    AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, Button34, ButtonLit34, 2, 3, 33, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 3, 3, 32, 1, 1
+    AddFloorButton 1, ButtonPL, ButtonLitPL, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -2219,10 +2226,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button34, 2, 3, 33, 1, 1
-    AddFloorButton 1, Button33, 3, 3, 32, 1, 1
-    AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, Button34, ButtonLit34, 2, 3, 33, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 3, 3, 32, 1, 1
+    AddFloorButton 1, ButtonPL, ButtonLitPL, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -2310,12 +2317,12 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button67, 2, 4, 66, 1, 1
-    AddFloorButton 1, Button66, 2, 2, 65, 1, 1
-    AddFloorButton 1, Button34, 3, 4, 33, 1, 1
-    AddFloorButton 1, Button33, 3, 2, 32, 1, 1
-    AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 2, 4, 66, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 2, 2, 65, 1, 1
+    AddFloorButton 1, Button34, ButtonLit34, 3, 4, 33, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 3, 2, 32, 1, 1
+    AddFloorButton 1, ButtonPL, ButtonLitPL, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -2403,12 +2410,12 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button67, 2, 4, 66, 1, 1
-    AddFloorButton 1, Button66, 2, 2, 65, 1, 1
-    AddFloorButton 1, Button34, 3, 4, 33, 1, 1
-    AddFloorButton 1, Button33, 3, 2, 32, 1, 1
-    AddFloorButton 1, ButtonPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 2, 4, 66, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 2, 2, 65, 1, 1
+    AddFloorButton 1, Button34, ButtonLit34, 3, 4, 33, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 3, 2, 32, 1, 1
+    AddFloorButton 1, ButtonPL, ButtonLitPL, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -2497,15 +2504,15 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button10, 2, 4, 9, 1, 1
-    AddFloorButton 1, Button9, 2, 2, 8, 1, 1
-    AddFloorButton 1, Button8, 3, 4, 7, 1, 1
-    AddFloorButton 1, Button7, 3, 2, 6, 1, 1
-    AddFloorButton 1, Button6, 4, 4, 5, 1, 1
-    AddFloorButton 1, Button5, 4, 2, 4, 1, 1
-    AddFloorButton 1, Button4, 5, 4, 3, 1, 1
-    AddFloorButton 1, Button3, 5, 2, 2, 1, 1
-    AddFloorButton 1, ButtonCC, 6, 3, 0, 1, 1
+    AddFloorButton 1, Button10, ButtonLit10, 2, 4, 9, 1, 1
+    AddFloorButton 1, Button9, ButtonLit9, 2, 2, 8, 1, 1
+    AddFloorButton 1, Button8, ButtonLit8, 3, 4, 7, 1, 1
+    AddFloorButton 1, Button7, ButtonLit7, 3, 2, 6, 1, 1
+    AddFloorButton 1, Button6, ButtonLit6, 4, 4, 5, 1, 1
+    AddFloorButton 1, Button5, ButtonLit5, 4, 2, 4, 1, 1
+    AddFloorButton 1, Button4, ButtonLit4, 5, 4, 3, 1, 1
+    AddFloorButton 1, Button3, ButtonLit3, 5, 2, 2, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -2593,15 +2600,15 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button10, 2, 4, 9, 1, 1
-    AddFloorButton 1, Button9, 2, 2, 8, 1, 1
-    AddFloorButton 1, Button8, 3, 4, 7, 1, 1
-    AddFloorButton 1, Button7, 3, 2, 6, 1, 1
-    AddFloorButton 1, Button6, 4, 4, 5, 1, 1
-    AddFloorButton 1, Button5, 4, 2, 4, 1, 1
-    AddFloorButton 1, Button4, 5, 4, 3, 1, 1
-    AddFloorButton 1, Button3, 5, 2, 2, 1, 1
-    AddFloorButton 1, ButtonCC, 6, 3, 0, 1, 1
+    AddFloorButton 1, Button10, ButtonLit10, 2, 4, 9, 1, 1
+    AddFloorButton 1, Button9, ButtonLit9, 2, 2, 8, 1, 1
+    AddFloorButton 1, Button8, ButtonLit8, 3, 4, 7, 1, 1
+    AddFloorButton 1, Button7, ButtonLit7, 3, 2, 6, 1, 1
+    AddFloorButton 1, Button6, ButtonLit6, 4, 4, 5, 1, 1
+    AddFloorButton 1, Button5, ButtonLit5, 4, 2, 4, 1, 1
+    AddFloorButton 1, Button4, ButtonLit4, 5, 4, 3, 1, 1
+    AddFloorButton 1, Button3, ButtonLit3, 5, 2, 2, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -2690,15 +2697,15 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button17, 2, 4, 16, 1, 1
-    AddFloorButton 1, Button16, 2, 2, 15, 1, 1
-    AddFloorButton 1, Button15, 3, 4, 14, 1, 1
-    AddFloorButton 1, Button14, 3, 2, 13, 1, 1
-    AddFloorButton 1, Button13, 4, 4, 12, 1, 1
-    AddFloorButton 1, Button12, 4, 2, 11, 1, 1
-    AddFloorButton 1, Button11, 5, 4, 10, 1, 1
-    AddFloorButton 1, Button10, 5, 2, 9, 1, 1
-    AddFloorButton 1, ButtonCC, 6, 3, 0, 1, 1
+    AddFloorButton 1, Button17, ButtonLit17, 2, 4, 16, 1, 1
+    AddFloorButton 1, Button16, ButtonLit16, 2, 2, 15, 1, 1
+    AddFloorButton 1, Button15, ButtonLit15, 3, 4, 14, 1, 1
+    AddFloorButton 1, Button14, ButtonLit14, 3, 2, 13, 1, 1
+    AddFloorButton 1, Button13, ButtonLit13, 4, 4, 12, 1, 1
+    AddFloorButton 1, Button12, ButtonLit12, 4, 2, 11, 1, 1
+    AddFloorButton 1, Button11, ButtonLit11, 5, 4, 10, 1, 1
+    AddFloorButton 1, Button10, ButtonLit10, 5, 2, 9, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -2786,15 +2793,15 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button17, 2, 4, 16, 1, 1
-    AddFloorButton 1, Button16, 2, 2, 15, 1, 1
-    AddFloorButton 1, Button15, 3, 4, 14, 1, 1
-    AddFloorButton 1, Button14, 3, 2, 13, 1, 1
-    AddFloorButton 1, Button13, 4, 4, 12, 1, 1
-    AddFloorButton 1, Button12, 4, 2, 11, 1, 1
-    AddFloorButton 1, Button11, 5, 4, 10, 1, 1
-    AddFloorButton 1, Button10, 5, 2, 9, 1, 1
-    AddFloorButton 1, ButtonCC, 6, 3, 0, 1, 1
+    AddFloorButton 1, Button17, ButtonLit17, 2, 4, 16, 1, 1
+    AddFloorButton 1, Button16, ButtonLit16, 2, 2, 15, 1, 1
+    AddFloorButton 1, Button15, ButtonLit15, 3, 4, 14, 1, 1
+    AddFloorButton 1, Button14, ButtonLit14, 3, 2, 13, 1, 1
+    AddFloorButton 1, Button13, ButtonLit13, 4, 4, 12, 1, 1
+    AddFloorButton 1, Button12, ButtonLit12, 4, 2, 11, 1, 1
+    AddFloorButton 1, Button11, ButtonLit11, 5, 4, 10, 1, 1
+    AddFloorButton 1, Button10, ButtonLit10, 5, 2, 9, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -2883,14 +2890,14 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button23, 2, 4, 22, 1, 1
-    AddFloorButton 1, Button22, 2, 2, 21, 1, 1
-    AddFloorButton 1, Button21, 3, 4, 20, 1, 1
-    AddFloorButton 1, Button20, 3, 2, 19, 1, 1
-    AddFloorButton 1, Button19, 4, 4, 18, 1, 1
-    AddFloorButton 1, Button18, 4, 2, 17, 1, 1
-    AddFloorButton 1, Button17, 5, 4, 16, 1, 1
-    AddFloorButton 1, ButtonCC, 5, 2, 0, 1, 1
+    AddFloorButton 1, Button23, ButtonLit23, 2, 4, 22, 1, 1
+    AddFloorButton 1, Button22, ButtonLit22, 2, 2, 21, 1, 1
+    AddFloorButton 1, Button21, ButtonLit21, 3, 4, 20, 1, 1
+    AddFloorButton 1, Button20, ButtonLit20, 3, 2, 19, 1, 1
+    AddFloorButton 1, Button19, ButtonLit19, 4, 4, 18, 1, 1
+    AddFloorButton 1, Button18, ButtonLit18, 4, 2, 17, 1, 1
+    AddFloorButton 1, Button17, ButtonLit17, 5, 4, 16, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 2, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -2978,14 +2985,14 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button23, 2, 4, 22, 1, 1
-    AddFloorButton 1, Button22, 2, 2, 21, 1, 1
-    AddFloorButton 1, Button21, 3, 4, 20, 1, 1
-    AddFloorButton 1, Button20, 3, 2, 19, 1, 1
-    AddFloorButton 1, Button19, 4, 4, 18, 1, 1
-    AddFloorButton 1, Button18, 4, 2, 17, 1, 1
-    AddFloorButton 1, Button17, 5, 4, 16, 1, 1
-    AddFloorButton 1, ButtonM, 5, 2, 2, 1, 1
+    AddFloorButton 1, Button23, ButtonLit23, 2, 4, 22, 1, 1
+    AddFloorButton 1, Button22, ButtonLit22, 2, 2, 21, 1, 1
+    AddFloorButton 1, Button21, ButtonLit21, 3, 4, 20, 1, 1
+    AddFloorButton 1, Button20, ButtonLit20, 3, 2, 19, 1, 1
+    AddFloorButton 1, Button19, ButtonLit19, 4, 4, 18, 1, 1
+    AddFloorButton 1, Button18, ButtonLit18, 4, 2, 17, 1, 1
+    AddFloorButton 1, Button17, ButtonLit17, 5, 4, 16, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 2, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -3074,13 +3081,13 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button28, 2, 4, 27, 1, 1
-    AddFloorButton 1, Button27, 2, 2, 26, 1, 1
-    AddFloorButton 1, Button26, 3, 4, 25, 1, 1
-    AddFloorButton 1, Button25, 3, 2, 24, 1, 1
-    AddFloorButton 1, Button24, 4, 4, 23, 1, 1
-    AddFloorButton 1, Button23, 4, 2, 22, 1, 1
-    AddFloorButton 1, ButtonCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, Button28, ButtonLit28, 2, 4, 27, 1, 1
+    AddFloorButton 1, Button27, ButtonLit27, 2, 2, 26, 1, 1
+    AddFloorButton 1, Button26, ButtonLit26, 3, 4, 25, 1, 1
+    AddFloorButton 1, Button25, ButtonLit25, 3, 2, 24, 1, 1
+    AddFloorButton 1, Button24, ButtonLit24, 4, 4, 23, 1, 1
+    AddFloorButton 1, Button23, ButtonLit23, 4, 2, 22, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -3157,13 +3164,13 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button28, 2, 4, 27, 1, 1
-    AddFloorButton 1, Button27, 2, 2, 26, 1, 1
-    AddFloorButton 1, Button26, 3, 4, 25, 1, 1
-    AddFloorButton 1, Button25, 3, 2, 24, 1, 1
-    AddFloorButton 1, Button24, 4, 4, 23, 1, 1
-    AddFloorButton 1, Button23, 4, 2, 22, 1, 1
-    AddFloorButton 1, ButtonCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, Button28, ButtonLit28, 2, 4, 27, 1, 1
+    AddFloorButton 1, Button27, ButtonLit27, 2, 2, 26, 1, 1
+    AddFloorButton 1, Button26, ButtonLit26, 3, 4, 25, 1, 1
+    AddFloorButton 1, Button25, ButtonLit25, 3, 2, 24, 1, 1
+    AddFloorButton 1, Button24, ButtonLit24, 4, 4, 23, 1, 1
+    AddFloorButton 1, Button23, ButtonLit23, 4, 2, 22, 1, 1
+    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -3252,15 +3259,15 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button42, 2, 4, 41, 1, 1
-    AddFloorButton 1, Button41, 2, 2, 40, 1, 1
-    AddFloorButton 1, Button40, 3, 4, 39, 1, 1
-    AddFloorButton 1, Button39, 3, 2, 38, 1, 1
-    AddFloorButton 1, Button38, 4, 4, 37, 1, 1
-    AddFloorButton 1, Button37, 4, 2, 36, 1, 1
-    AddFloorButton 1, Button36, 5, 4, 35, 1, 1
-    AddFloorButton 1, Button35, 5, 2, 34, 1, 1
-    AddFloorButton 1, Button33, 6, 3, 32, 1, 1
+    AddFloorButton 1, Button42, ButtonLit42, 2, 4, 41, 1, 1
+    AddFloorButton 1, Button41, ButtonLit41, 2, 2, 40, 1, 1
+    AddFloorButton 1, Button40, ButtonLit40, 3, 4, 39, 1, 1
+    AddFloorButton 1, Button39, ButtonLit39, 3, 2, 38, 1, 1
+    AddFloorButton 1, Button38, ButtonLit38, 4, 4, 37, 1, 1
+    AddFloorButton 1, Button37, ButtonLit37, 4, 2, 36, 1, 1
+    AddFloorButton 1, Button36, ButtonLit36, 5, 4, 35, 1, 1
+    AddFloorButton 1, Button35, ButtonLit35, 5, 2, 34, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 6, 3, 32, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3348,15 +3355,15 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button42, 2, 4, 41, 1, 1
-    AddFloorButton 1, Button41, 2, 2, 40, 1, 1
-    AddFloorButton 1, Button40, 3, 4, 39, 1, 1
-    AddFloorButton 1, Button39, 3, 2, 38, 1, 1
-    AddFloorButton 1, Button38, 4, 4, 37, 1, 1
-    AddFloorButton 1, Button37, 4, 2, 36, 1, 1
-    AddFloorButton 1, Button36, 5, 4, 35, 1, 1
-    AddFloorButton 1, Button35, 5, 2, 34, 1, 1
-    AddFloorButton 1, Button33, 6, 3, 32, 1, 1
+    AddFloorButton 1, Button42, ButtonLit42, 2, 4, 41, 1, 1
+    AddFloorButton 1, Button41, ButtonLit41, 2, 2, 40, 1, 1
+    AddFloorButton 1, Button40, ButtonLit40, 3, 4, 39, 1, 1
+    AddFloorButton 1, Button39, ButtonLit39, 3, 2, 38, 1, 1
+    AddFloorButton 1, Button38, ButtonLit38, 4, 4, 37, 1, 1
+    AddFloorButton 1, Button37, ButtonLit37, 4, 2, 36, 1, 1
+    AddFloorButton 1, Button36, ButtonLit36, 5, 4, 35, 1, 1
+    AddFloorButton 1, Button35, ButtonLit35, 5, 2, 34, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 6, 3, 32, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3445,15 +3452,15 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button49, 2, 4, 48, 1, 1
-    AddFloorButton 1, Button48, 2, 2, 47, 1, 1
-    AddFloorButton 1, Button47, 3, 4, 46, 1, 1
-    AddFloorButton 1, Button46, 3, 2, 45, 1, 1
-    AddFloorButton 1, Button45, 4, 4, 44, 1, 1
-    AddFloorButton 1, Button44, 4, 2, 43, 1, 1
-    AddFloorButton 1, Button43, 5, 4, 42, 1, 1
-    AddFloorButton 1, Button42, 5, 2, 41, 1, 1
-    AddFloorButton 1, Button33, 6, 3, 32, 1, 1
+    AddFloorButton 1, Button49, ButtonLit49, 2, 4, 48, 1, 1
+    AddFloorButton 1, Button48, ButtonLit48, 2, 2, 47, 1, 1
+    AddFloorButton 1, Button47, ButtonLit47, 3, 4, 46, 1, 1
+    AddFloorButton 1, Button46, ButtonLit46, 3, 2, 45, 1, 1
+    AddFloorButton 1, Button45, ButtonLit45, 4, 4, 44, 1, 1
+    AddFloorButton 1, Button44, ButtonLit44, 4, 2, 43, 1, 1
+    AddFloorButton 1, Button43, ButtonLit43, 5, 4, 42, 1, 1
+    AddFloorButton 1, Button42, ButtonLit42, 5, 2, 41, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 6, 3, 32, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3541,15 +3548,15 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button49, 2, 4, 48, 1, 1
-    AddFloorButton 1, Button48, 2, 2, 47, 1, 1
-    AddFloorButton 1, Button47, 3, 4, 46, 1, 1
-    AddFloorButton 1, Button46, 3, 2, 45, 1, 1
-    AddFloorButton 1, Button45, 4, 4, 44, 1, 1
-    AddFloorButton 1, Button44, 4, 2, 43, 1, 1
-    AddFloorButton 1, Button43, 5, 4, 42, 1, 1
-    AddFloorButton 1, Button42, 5, 2, 41, 1, 1
-    AddFloorButton 1, Button33, 6, 3, 32, 1, 1
+    AddFloorButton 1, Button49, ButtonLit49, 2, 4, 48, 1, 1
+    AddFloorButton 1, Button48, ButtonLit48, 2, 2, 47, 1, 1
+    AddFloorButton 1, Button47, ButtonLit47, 3, 4, 46, 1, 1
+    AddFloorButton 1, Button46, ButtonLit46, 3, 2, 45, 1, 1
+    AddFloorButton 1, Button45, ButtonLit45, 4, 4, 44, 1, 1
+    AddFloorButton 1, Button44, ButtonLit44, 4, 2, 43, 1, 1
+    AddFloorButton 1, Button43, ButtonLit43, 5, 4, 42, 1, 1
+    AddFloorButton 1, Button42, ButtonLit42, 5, 2, 41, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 6, 3, 32, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3638,16 +3645,16 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button57, 2, 4, 56, 1, 1
-    AddFloorButton 1, Button56, 2, 2, 55, 1, 1
-    AddFloorButton 1, Button55, 3, 4, 54, 1, 1
-    AddFloorButton 1, Button54, 3, 2, 53, 1, 1
-    AddFloorButton 1, Button53, 4, 4, 52, 1, 1
-    AddFloorButton 1, Button52, 4, 2, 51, 1, 1
-    AddFloorButton 1, Button51, 5, 4, 50, 1, 1
-    AddFloorButton 1, Button50, 5, 2, 49, 1, 1
-    AddFloorButton 1, Button49, 6, 4, 48, 1, 1
-    AddFloorButton 1, Button34, 6, 2, 33, 1, 1
+    AddFloorButton 1, Button57, ButtonLit57, 2, 4, 56, 1, 1
+    AddFloorButton 1, Button56, ButtonLit56, 2, 2, 55, 1, 1
+    AddFloorButton 1, Button55, ButtonLit55, 3, 4, 54, 1, 1
+    AddFloorButton 1, Button54, ButtonLit54, 3, 2, 53, 1, 1
+    AddFloorButton 1, Button53, ButtonLit53, 4, 4, 52, 1, 1
+    AddFloorButton 1, Button52, ButtonLit52, 4, 2, 51, 1, 1
+    AddFloorButton 1, Button51, ButtonLit51, 5, 4, 50, 1, 1
+    AddFloorButton 1, Button50, ButtonLit50, 5, 2, 49, 1, 1
+    AddFloorButton 1, Button49, ButtonLit49, 6, 4, 48, 1, 1
+    AddFloorButton 1, Button34, ButtonLit34, 6, 2, 33, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3735,16 +3742,16 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button57, 2, 4, 56, 1, 1
-    AddFloorButton 1, Button56, 2, 2, 55, 1, 1
-    AddFloorButton 1, Button55, 3, 4, 54, 1, 1
-    AddFloorButton 1, Button54, 3, 2, 53, 1, 1
-    AddFloorButton 1, Button53, 4, 4, 52, 1, 1
-    AddFloorButton 1, Button52, 4, 2, 51, 1, 1
-    AddFloorButton 1, Button51, 5, 4, 50, 1, 1
-    AddFloorButton 1, Button50, 5, 2, 49, 1, 1
-    AddFloorButton 1, Button49, 6, 4, 48, 1, 1
-    AddFloorButton 1, Button34, 6, 2, 33, 1, 1
+    AddFloorButton 1, Button57, ButtonLit57, 2, 4, 56, 1, 1
+    AddFloorButton 1, Button56, ButtonLit56, 2, 2, 55, 1, 1
+    AddFloorButton 1, Button55, ButtonLit55, 3, 4, 54, 1, 1
+    AddFloorButton 1, Button54, ButtonLit54, 3, 2, 53, 1, 1
+    AddFloorButton 1, Button53, ButtonLit53, 4, 4, 52, 1, 1
+    AddFloorButton 1, Button52, ButtonLit52, 4, 2, 51, 1, 1
+    AddFloorButton 1, Button51, ButtonLit51, 5, 4, 50, 1, 1
+    AddFloorButton 1, Button50, ButtonLit50, 5, 2, 49, 1, 1
+    AddFloorButton 1, Button49, ButtonLit49, 6, 4, 48, 1, 1
+    AddFloorButton 1, Button34, ButtonLit34, 6, 2, 33, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -3833,13 +3840,13 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button63, 2, 4, 62, 1, 1
-    AddFloorButton 1, Button62, 2, 2, 61, 1, 1
-    AddFloorButton 1, Button61, 3, 4, 60, 1, 1
-    AddFloorButton 1, Button60, 3, 2, 59, 1, 1
-    AddFloorButton 1, Button59, 4, 4, 58, 1, 1
-    AddFloorButton 1, Button58, 4, 2, 57, 1, 1
-    AddFloorButton 1, Button34, 5, 3, 33, 1, 1
+    AddFloorButton 1, Button63, ButtonLit63, 2, 4, 62, 1, 1
+    AddFloorButton 1, Button62, ButtonLit62, 2, 2, 61, 1, 1
+    AddFloorButton 1, Button61, ButtonLit61, 3, 4, 60, 1, 1
+    AddFloorButton 1, Button60, ButtonLit60, 3, 2, 59, 1, 1
+    AddFloorButton 1, Button59, ButtonLit59, 4, 4, 58, 1, 1
+    AddFloorButton 1, Button58, ButtonLit58, 4, 2, 57, 1, 1
+    AddFloorButton 1, Button34, ButtonLit34, 5, 3, 33, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -3916,13 +3923,13 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button63, 2, 4, 62, 1, 1
-    AddFloorButton 1, Button62, 2, 2, 61, 1, 1
-    AddFloorButton 1, Button61, 3, 4, 60, 1, 1
-    AddFloorButton 1, Button60, 3, 2, 59, 1, 1
-    AddFloorButton 1, Button59, 4, 4, 58, 1, 1
-    AddFloorButton 1, Button58, 4, 2, 57, 1, 1
-    AddFloorButton 1, Button34, 5, 3, 33, 1, 1
+    AddFloorButton 1, Button63, ButtonLit63, 2, 4, 62, 1, 1
+    AddFloorButton 1, Button62, ButtonLit62, 2, 2, 61, 1, 1
+    AddFloorButton 1, Button61, ButtonLit61, 3, 4, 60, 1, 1
+    AddFloorButton 1, Button60, ButtonLit60, 3, 2, 59, 1, 1
+    AddFloorButton 1, Button59, ButtonLit59, 4, 4, 58, 1, 1
+    AddFloorButton 1, Button58, ButtonLit58, 4, 2, 57, 1, 1
+    AddFloorButton 1, Button34, ButtonLit34, 5, 3, 33, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -4000,14 +4007,14 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button74, 2, 4, 73, 1, 1
-    AddFloorButton 1, Button73, 2, 2, 72, 1, 1
-    AddFloorButton 1, Button72, 3, 4, 71, 1, 1
-    AddFloorButton 1, Button71, 3, 2, 70, 1, 1
-    AddFloorButton 1, Button70, 4, 4, 69, 1, 1
-    AddFloorButton 1, Button69, 4, 2, 68, 1, 1
-    AddFloorButton 1, Button68, 5, 4, 67, 1, 1
-    AddFloorButton 1, Button66, 5, 2, 65, 1, 1
+    AddFloorButton 1, Button74, ButtonLit74, 2, 4, 73, 1, 1
+    AddFloorButton 1, Button73, ButtonLit73, 2, 2, 72, 1, 1
+    AddFloorButton 1, Button72, ButtonLit72, 3, 4, 71, 1, 1
+    AddFloorButton 1, Button71, ButtonLit71, 3, 2, 70, 1, 1
+    AddFloorButton 1, Button70, ButtonLit70, 4, 4, 69, 1, 1
+    AddFloorButton 1, Button69, ButtonLit69, 4, 2, 68, 1, 1
+    AddFloorButton 1, Button68, ButtonLit68, 5, 4, 67, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 5, 2, 65, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -4084,14 +4091,14 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button74, 2, 4, 73, 1, 1
-    AddFloorButton 1, Button73, 2, 2, 72, 1, 1
-    AddFloorButton 1, Button72, 3, 4, 71, 1, 1
-    AddFloorButton 1, Button71, 3, 2, 70, 1, 1
-    AddFloorButton 1, Button70, 4, 4, 69, 1, 1
-    AddFloorButton 1, Button69, 4, 2, 68, 1, 1
-    AddFloorButton 1, Button68, 5, 4, 67, 1, 1
-    AddFloorButton 1, Button66, 5, 2, 65, 1, 1
+    AddFloorButton 1, Button74, ButtonLit74, 2, 4, 73, 1, 1
+    AddFloorButton 1, Button73, ButtonLit73, 2, 2, 72, 1, 1
+    AddFloorButton 1, Button72, ButtonLit72, 3, 4, 71, 1, 1
+    AddFloorButton 1, Button71, ButtonLit71, 3, 2, 70, 1, 1
+    AddFloorButton 1, Button70, ButtonLit70, 4, 4, 69, 1, 1
+    AddFloorButton 1, Button69, ButtonLit69, 4, 2, 68, 1, 1
+    AddFloorButton 1, Button68, ButtonLit68, 5, 4, 67, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 5, 2, 65, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -4169,14 +4176,14 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button81, 2, 4, 80, 1, 1
-    AddFloorButton 1, Button80, 2, 2, 79, 1, 1
-    AddFloorButton 1, Button79, 3, 4, 78, 1, 1
-    AddFloorButton 1, Button78, 3, 2, 77, 1, 1
-    AddFloorButton 1, Button77, 4, 4, 76, 1, 1
-    AddFloorButton 1, Button76, 4, 2, 75, 1, 1
-    AddFloorButton 1, Button75, 5, 4, 74, 1, 1
-    AddFloorButton 1, Button66, 5, 2, 65, 1, 1
+    AddFloorButton 1, Button81, ButtonLit81, 2, 4, 80, 1, 1
+    AddFloorButton 1, Button80, ButtonLit80, 2, 2, 79, 1, 1
+    AddFloorButton 1, Button79, ButtonLit79, 3, 4, 78, 1, 1
+    AddFloorButton 1, Button78, ButtonLit78, 3, 2, 77, 1, 1
+    AddFloorButton 1, Button77, ButtonLit77, 4, 4, 76, 1, 1
+    AddFloorButton 1, Button76, ButtonLit76, 4, 2, 75, 1, 1
+    AddFloorButton 1, Button75, ButtonLit75, 5, 4, 74, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 5, 2, 65, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -4253,14 +4260,14 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button81, 2, 4, 80, 1, 1
-    AddFloorButton 1, Button80, 2, 2, 79, 1, 1
-    AddFloorButton 1, Button79, 3, 4, 78, 1, 1
-    AddFloorButton 1, Button78, 3, 2, 77, 1, 1
-    AddFloorButton 1, Button77, 4, 4, 76, 1, 1
-    AddFloorButton 1, Button76, 4, 2, 75, 1, 1
-    AddFloorButton 1, Button75, 5, 4, 74, 1, 1
-    AddFloorButton 1, Button66, 5, 2, 65, 1, 1
+    AddFloorButton 1, Button81, ButtonLit81, 2, 4, 80, 1, 1
+    AddFloorButton 1, Button80, ButtonLit80, 2, 2, 79, 1, 1
+    AddFloorButton 1, Button79, ButtonLit79, 3, 4, 78, 1, 1
+    AddFloorButton 1, Button78, ButtonLit78, 3, 2, 77, 1, 1
+    AddFloorButton 1, Button77, ButtonLit77, 4, 4, 76, 1, 1
+    AddFloorButton 1, Button76, ButtonLit76, 4, 2, 75, 1, 1
+    AddFloorButton 1, Button75, ButtonLit75, 5, 4, 74, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 5, 2, 65, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -4338,13 +4345,13 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button87, 2, 4, 86, 1, 1
-    AddFloorButton 1, Button86, 2, 2, 85, 1, 1
-    AddFloorButton 1, Button85, 3, 4, 84, 1, 1
-    AddFloorButton 1, Button84, 3, 2, 83, 1, 1
-    AddFloorButton 1, Button83, 4, 4, 82, 1, 1
-    AddFloorButton 1, Button82, 4, 2, 81, 1, 1
-    AddFloorButton 1, Button67, 5, 3, 66, 1, 1
+    AddFloorButton 1, Button87, ButtonLit87, 2, 4, 86, 1, 1
+    AddFloorButton 1, Button86, ButtonLit86, 2, 2, 85, 1, 1
+    AddFloorButton 1, Button85, ButtonLit85, 3, 4, 84, 1, 1
+    AddFloorButton 1, Button84, ButtonLit84, 3, 2, 83, 1, 1
+    AddFloorButton 1, Button83, ButtonLit83, 4, 4, 82, 1, 1
+    AddFloorButton 1, Button82, ButtonLit82, 4, 2, 81, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 5, 3, 66, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -4421,13 +4428,13 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button87, 2, 4, 86, 1, 1
-    AddFloorButton 1, Button86, 2, 2, 85, 1, 1
-    AddFloorButton 1, Button85, 3, 4, 84, 1, 1
-    AddFloorButton 1, Button84, 3, 2, 83, 1, 1
-    AddFloorButton 1, Button83, 4, 4, 82, 1, 1
-    AddFloorButton 1, Button82, 4, 2, 81, 1, 1
-    AddFloorButton 1, Button67, 5, 3, 66, 1, 1
+    AddFloorButton 1, Button87, ButtonLit87, 2, 4, 86, 1, 1
+    AddFloorButton 1, Button86, ButtonLit86, 2, 2, 85, 1, 1
+    AddFloorButton 1, Button85, ButtonLit85, 3, 4, 84, 1, 1
+    AddFloorButton 1, Button84, ButtonLit84, 3, 2, 83, 1, 1
+    AddFloorButton 1, Button83, ButtonLit83, 4, 4, 82, 1, 1
+    AddFloorButton 1, Button82, ButtonLit82, 4, 2, 81, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 5, 3, 66, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -4516,20 +4523,20 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button102, 2, 4, 101, 1, 1
-    AddFloorButton 1, Button101, 2, 3, 100, 1, 1
-    AddFloorButton 1, Button100, 2, 2, 99, 1, 1
-    AddFloorButton 1, Button99, 3, 4, 98, 1, 1
-    AddFloorButton 1, Button98, 3, 3, 97, 1, 1
-    AddFloorButton 1, Button97, 3, 2, 96, 1, 1
-    AddFloorButton 1, Button96, 4, 4, 95, 1, 1
-    AddFloorButton 1, Button95, 4, 3, 94, 1, 1
-    AddFloorButton 1, Button94, 4, 2, 93, 1, 1
-    AddFloorButton 1, Button93, 5, 4, 92, 1, 1
-    AddFloorButton 1, Button92, 5, 3, 91, 1, 1
-    AddFloorButton 1, Button91, 5, 2, 90, 1, 1
-    AddFloorButton 1, Button90, 6, 4, 89, 1, 1
-    AddFloorButton 1, Button67, 6, 2, 66, 1, 1
+    AddFloorButton 1, Button102, ButtonLit102, 2, 4, 101, 1, 1
+    AddFloorButton 1, Button101, ButtonLit101, 2, 3, 100, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 2, 2, 99, 1, 1
+    AddFloorButton 1, Button99, ButtonLit99, 3, 4, 98, 1, 1
+    AddFloorButton 1, Button98, ButtonLit98, 3, 3, 97, 1, 1
+    AddFloorButton 1, Button97, ButtonLit97, 3, 2, 96, 1, 1
+    AddFloorButton 1, Button96, ButtonLit96, 4, 4, 95, 1, 1
+    AddFloorButton 1, Button95, ButtonLit95, 4, 3, 94, 1, 1
+    AddFloorButton 1, Button94, ButtonLit94, 4, 2, 93, 1, 1
+    AddFloorButton 1, Button93, ButtonLit93, 5, 4, 92, 1, 1
+    AddFloorButton 1, Button92, ButtonLit92, 5, 3, 91, 1, 1
+    AddFloorButton 1, Button91, ButtonLit91, 5, 2, 90, 1, 1
+    AddFloorButton 1, Button90, ButtonLit90, 6, 4, 89, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 6, 2, 66, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -4606,20 +4613,20 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button102, 2, 4, 101, 1, 1
-    AddFloorButton 1, Button101, 2, 3, 100, 1, 1
-    AddFloorButton 1, Button100, 2, 2, 99, 1, 1
-    AddFloorButton 1, Button99, 3, 4, 98, 1, 1
-    AddFloorButton 1, Button98, 3, 3, 97, 1, 1
-    AddFloorButton 1, Button97, 3, 2, 96, 1, 1
-    AddFloorButton 1, Button96, 4, 4, 95, 1, 1
-    AddFloorButton 1, Button95, 4, 3, 94, 1, 1
-    AddFloorButton 1, Button94, 4, 2, 93, 1, 1
-    AddFloorButton 1, Button93, 5, 4, 92, 1, 1
-    AddFloorButton 1, Button92, 5, 3, 91, 1, 1
-    AddFloorButton 1, Button91, 5, 2, 90, 1, 1
-    AddFloorButton 1, Button90, 6, 4, 89, 1, 1
-    AddFloorButton 1, Button67, 6, 2, 66, 1, 1
+    AddFloorButton 1, Button102, ButtonLit102, 2, 4, 101, 1, 1
+    AddFloorButton 1, Button101, ButtonLit101, 2, 3, 100, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 2, 2, 99, 1, 1
+    AddFloorButton 1, Button99, ButtonLit99, 3, 4, 98, 1, 1
+    AddFloorButton 1, Button98, ButtonLit98, 3, 3, 97, 1, 1
+    AddFloorButton 1, Button97, ButtonLit97, 3, 2, 96, 1, 1
+    AddFloorButton 1, Button96, ButtonLit96, 4, 4, 95, 1, 1
+    AddFloorButton 1, Button95, ButtonLit95, 4, 3, 94, 1, 1
+    AddFloorButton 1, Button94, ButtonLit94, 4, 2, 93, 1, 1
+    AddFloorButton 1, Button93, ButtonLit93, 5, 4, 92, 1, 1
+    AddFloorButton 1, Button92, ButtonLit92, 5, 3, 91, 1, 1
+    AddFloorButton 1, Button91, ButtonLit91, 5, 2, 90, 1, 1
+    AddFloorButton 1, Button90, ButtonLit90, 6, 4, 89, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 6, 2, 66, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -4697,9 +4704,9 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 8, 5, right, -4.09 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button103, 2, 3, 102, 1, 1
-    AddFloorButton 1, Button99, 3, 3, 98, 1, 1
-    AddFloorButton 1, ButtonLL2, 4, 3, -2, 1, 1
+    AddFloorButton 1, Button103, ButtonLit103, 2, 3, 102, 1, 1
+    AddFloorButton 1, Button99, ButtonLit99, 3, 3, 98, 1, 1
+    AddFloorButton 1, ButtonLL2, ButtonLitLL2, 4, 3, -2, 1, 1
     AddControlButton 1, ButtonOpen, 5, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 5, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 6, 4, cancel, 1, 1
