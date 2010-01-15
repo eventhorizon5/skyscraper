@@ -31,7 +31,6 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
-#include "loader.h"
 
 CS_IMPLEMENT_APPLICATION
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
@@ -1042,7 +1041,8 @@ bool Skyscraper::SelectBuilding()
 	srand (time (0));
 
 	//set building file
-	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings"), _(""), _("Building files (*.bld)|*.bld"), wxOPEN);
+	//wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld;*.txt)|*.bld;*.txt"), wxOPEN);
+	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld)|*.bld"), wxOPEN);
 	int result = Selector->ShowModal();
 	if (result == wxID_CANCEL)
 	{

@@ -84,6 +84,8 @@ bool ScriptProcessor::LoadBuilding()
 	MinExtent = 0;
 	MaxExtent = 0;
 	char buffer2[20];
+	InFunction = false;
+	FunctionCallLine = 0;
 
 	while (line < BuildingData.GetSize() - 1)
 	{
@@ -292,6 +294,49 @@ breakpoint:
 			skyscraper->Report("Script breakpoint reached");
 			goto Nextline;
 		}
+		if (LineData.Slice(0, 8).CompareNoCase("<include") == true)
+		{
+			//include another file at the current script location
+
+			int endloc = LineData.Find(">");
+			csString includefile = LineData.Slice(9, endloc - 9).Trim();
+
+			//delete current line
+			BuildingData.DeleteIndex(line);
+
+			//insert file at current line
+			LoadDataFile(includefile, true, line);
+
+			skyscraper->Report("Inserted file " + includefile);
+			line--;
+			goto Nextline;
+		}
+		if (LineData.Slice(0, 9).CompareNoCase("<function") == true)
+		{
+			//define a function
+
+			int endloc = LineData.Find(">");
+			csString function = LineData.Slice(10, endloc - 10).Trim();
+
+			//store function info in array
+			FunctionInfo info;
+			info.name = function;
+			info.line = line;
+			functions.Push(info);
+
+			//skip to end of function
+			for (int i = line + 1; i < BuildingData.GetSize(); i++)
+			{
+				if (BuildingData[i].CompareNoCase("<endfunction>") == true)
+				{
+					line = i;
+					break;
+				}
+			}
+
+			skyscraper->Report("Defined function " + function);
+			goto Nextline;
+		}
 
 		startpos = 0;
 		do
@@ -437,6 +482,19 @@ checkfloors:
 		LineData.ReplaceAll("%maxx%", _gcvt(MaxExtent.x, 12, buffer2));
 		LineData.ReplaceAll("%maxz%", _gcvt(MaxExtent.z, 12, buffer2));
 
+		//check for functions
+		for (int i = 0; i < functions.GetSize(); i++)
+		{
+			int location = LineData.Find(functions[i].name + "(");
+			if (location >= 0)
+			{
+				InFunction = true;
+				FunctionCallLine = line;
+				line = functions[i].line;
+				goto Nextline;
+			}
+		}
+
 		//Global commands
 		returncode = ProcCommands();
 
@@ -540,11 +598,17 @@ Nextline:
 	return true;
 }
 
-bool ScriptProcessor::LoadDataFile(const char *filename)
+bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert_line)
 {
 	//loads a building data file into the runtime buffer
 	bool streamnotfinished = true;
 	char buffer[1000];
+	int location = insert_line;
+
+	//if insert location is greater than array size, return with error
+	if (insert == true)
+		if (location > BuildingData.GetSize() - 1 || location < 0)
+			return false;
 
 	//make sure file exists
 	if (Simcore->vfs->Exists(filename) == false)
@@ -560,7 +624,8 @@ bool ScriptProcessor::LoadDataFile(const char *filename)
 	csFileReadHelper file_r(file);
 
 	//clear array
-	BuildingData.DeleteAll();
+	if (insert == false)
+		BuildingData.DeleteAll();
 
 	while (streamnotfinished == true)
 	{
@@ -572,7 +637,14 @@ bool ScriptProcessor::LoadDataFile(const char *filename)
 		streamnotfinished = file_r.GetString(buffer, 1000, true);
 
 		//push buffer onto the tail end of the BuildingData array
-		BuildingData.Push(buffer);
+		if (insert == false)
+			BuildingData.Push(buffer);
+		else
+		{
+			//otherwise insert data into building array
+			BuildingData.Insert(location, buffer);
+			location++;
+		}
 	}
 
 	return true;

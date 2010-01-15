@@ -35,7 +35,7 @@ class ScriptProcessor
 	ScriptProcessor();
 	~ScriptProcessor();
 	bool LoadBuilding();
-	bool LoadDataFile(const char *filename);
+	bool LoadDataFile(const char *filename, bool insert = false, int insert_line = 0);
 	bool LoadFromText(const char *text);
 
 	private:
@@ -67,6 +67,8 @@ class ScriptProcessor
 	csArray<csString> UserVariable;
 	csVector3 MinExtent;
 	csVector3 MaxExtent;
+	bool InFunction;
+	int FunctionCallLine;
 
 	bool ScriptError(const char *message);
 	csString Calc(const char *expression);
@@ -77,6 +79,14 @@ class ScriptProcessor
 	int ProcFloors();
 	int ProcElevators();
 	int ProcTextures();
+
+	struct FunctionInfo
+	{
+		csString name;
+		int line;
+	};
+
+	csArray<FunctionInfo> functions; //stored functions
 };
 
 #endif
