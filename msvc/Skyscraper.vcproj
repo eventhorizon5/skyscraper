@@ -250,10 +250,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\loader.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\meshcontrol.cpp"
 				>
 			</File>
@@ -296,10 +292,6 @@
 			</File>
 			<File
 				RelativePath="..\src\keydialog.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\loader.h"
 				>
 			</File>
 			<File
