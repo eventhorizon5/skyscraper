@@ -319,9 +319,9 @@ breakpoint:
 			line--;
 			goto Nextline;
 		}
-		if (LineData.Slice(0, 9).CompareNoCase("<function") == true)
+		if (LineData.Slice(0, 9).CompareNoCase("<function") == true && Section == 0)
 		{
-			//define a function
+			//define a function (only available outside sections)
 
 			int endloc = LineData.Find(">");
 			csString function = LineData.Slice(10, endloc - 10).Trim();
