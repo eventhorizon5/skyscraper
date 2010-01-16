@@ -1104,7 +1104,7 @@ bool Skyscraper::Start()
 	csSleep(1000);
 
 	if (Reload == false)
-		BuildingFile.Insert(0, "/root/buildings/");
+		BuildingFile.Insert(0, "buildings/");
 
 	//load script processor object and load building
 	bool loaderror = false;

@@ -307,7 +307,6 @@ breakpoint:
 
 			int endloc = LineData.Find(">");
 			csString includefile = LineData.Slice(9, endloc - 9).Trim();
-			includefile.Insert(0, "/root/");
 
 			//delete current line
 			BuildingData.DeleteIndex(line);
@@ -618,6 +617,9 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	bool streamnotfinished = true;
 	char buffer[1000];
 	int location = insert_line;
+	csString Filename = filename;
+
+	Filename.Insert(0, "/root/");
 
 	//if insert location is greater than array size, return with error
 	if (insert == true)
@@ -625,11 +627,11 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 			return false;
 
 	//make sure file exists
-	if (Simcore->vfs->Exists(filename) == false)
+	if (Simcore->vfs->Exists(Filename) == false)
 		return false;
 
 	//load file
-	csRef<iFile> file (Simcore->vfs->Open(filename, VFS_FILE_READ));
+	csRef<iFile> file (Simcore->vfs->Open(Filename, VFS_FILE_READ));
 
 	//exit if an error occurred while loading
 	if (!file)
@@ -661,6 +663,16 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 		}
 	}
 
+	if (insert == true)
+	{
+		//store include info in array
+		IncludeInfo info;
+		info.filename = filename;
+		info.start_line = line;
+		info.end_line = location - 1;
+		includes.Push(info);
+	}
+	
 	return true;
 }
 
@@ -898,9 +910,38 @@ bool ScriptProcessor::IfProc(const char *expression)
 
 bool ScriptProcessor::ScriptError(const char *message)
 {
+	//first see if the current line is from an included file
+
+	int linenum = line;
+	int included_lines = 0;
+	bool isinclude = false;
+	csString includefile;
+
+	for (int i = 0; i < includes.GetSize(); i++)
+	{
+		if (linenum < includes[i].start_line)
+			break;
+
+		//keep track of original script position (keep a count of how many lines are "included" lines)
+		if (linenum > includes[i].end_line)
+			included_lines += (includes[i].end_line - includes[i].start_line);
+
+		//line is part of an included file
+		if (linenum >= includes[i].start_line && linenum <= includes[i].end_line)
+		{
+			isinclude = true;
+			includefile = includes[i].filename;
+			linenum = linenum - includes[i].start_line + 1;
+		}
+	}
+
 	//Script error reporting function
 	char intbuffer[65];
-	csString error = "Script error on line " + csString(_itoa(line + 1, intbuffer, 10)) + ": " + csString(message) + "\nSection: " + csString(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+	csString error;
+	if (isinclude == false)
+		error = "Script error on line " + csString(_itoa(linenum - included_lines + 1, intbuffer, 10)) + ": " + csString(message) + "\nSection: " + csString(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+	else
+		error = "Script error in included file " + includefile + " on line " + csString(_itoa(linenum, intbuffer, 10)) + ": " + csString(message) + "\nSection: " + csString(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
 
 	skyscraper->ReportError(error);
 

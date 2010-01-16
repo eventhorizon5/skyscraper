@@ -91,6 +91,15 @@ class ScriptProcessor
 	};
 
 	csArray<FunctionInfo> functions; //stored functions
+
+	struct IncludeInfo
+	{
+		csString filename;
+		int start_line;
+		int end_line;
+	};
+
+	csArray<IncludeInfo> includes; //stored include mappings
 };
 
 #endif
