@@ -86,6 +86,7 @@ bool ScriptProcessor::LoadBuilding()
 	char buffer2[20];
 	InFunction = false;
 	FunctionCallLine = 0;
+	ReplaceLine = false;
 
 	while (line < BuildingData.GetSize() - 1)
 	{
@@ -94,6 +95,12 @@ bool ScriptProcessor::LoadBuilding()
 
 		LineData = BuildingData[line];
 		LineData.Trim();
+
+		if (ReplaceLine == true)
+		{
+			LineData = FunctionCallLineData;
+			ReplaceLine = false;
+		}
 
 		//skip blank lines
 		if (LineData == "")
@@ -300,6 +307,7 @@ breakpoint:
 
 			int endloc = LineData.Find(">");
 			csString includefile = LineData.Slice(9, endloc - 9).Trim();
+			includefile.Insert(0, "/root/");
 
 			//delete current line
 			BuildingData.DeleteIndex(line);
@@ -327,7 +335,7 @@ breakpoint:
 			//skip to end of function
 			for (int i = line + 1; i < BuildingData.GetSize(); i++)
 			{
-				if (BuildingData[i].CompareNoCase("<endfunction>") == true)
+				if (BuildingData[i].Slice(0, 13).CompareNoCase("<endfunction>") == true)
 				{
 					line = i;
 					break;
@@ -335,6 +343,15 @@ breakpoint:
 			}
 
 			skyscraper->Report("Defined function " + function);
+			goto Nextline;
+		}
+		if (LineData.Slice(0, 13).CompareNoCase("<endfunction>") == true && InFunction == true)
+		{
+			//end function and return to original line
+			InFunction = false;
+			FunctionParams.DeleteAll();
+			ReplaceLine = true;
+			line = FunctionCallLine - 1;
 			goto Nextline;
 		}
 
@@ -482,16 +499,13 @@ checkfloors:
 		LineData.ReplaceAll("%maxx%", _gcvt(MaxExtent.x, 12, buffer2));
 		LineData.ReplaceAll("%maxz%", _gcvt(MaxExtent.z, 12, buffer2));
 
-		//check for functions
-		for (int i = 0; i < functions.GetSize(); i++)
+		//function parameter variables
+		if (InFunction == true)
 		{
-			int location = LineData.Find(functions[i].name + "(");
-			if (location >= 0)
+			for (int i = 0; i < FunctionParams.GetSize(); i++)
 			{
-				InFunction = true;
-				FunctionCallLine = line;
-				line = functions[i].line;
-				goto Nextline;
+				csString num = _itoa(i + 1, intbuffer, 10);
+				LineData.ReplaceAll("%param" + num + "%", FunctionParams[i]);
 			}
 		}
 
@@ -902,6 +916,13 @@ bool ScriptProcessor::ScriptError(const char *message)
 int ScriptProcessor::ProcCommands()
 {
 	//process global commands
+
+	if (Section != 2 && Section != 4)
+	{
+		//process any functions first
+		if (FunctionProc() == true)
+			return sNextLine;
+	}
 
 	//Print command
 	if (LineData.Slice(0, 5).CompareNoCase("print") == true && Section != 2 && Section != 4)
@@ -2342,6 +2363,10 @@ int ScriptProcessor::ProcFloors()
 	if (getfloordata == true)
 		return sCheckFloors;
 
+	//process any functions first
+	if (FunctionProc() == true)
+		return sNextLine;
+
 	//get text after equal sign
 	int temp2check = LineData.Find("=", 0);
 	temp2 = LineData.Slice(temp2check + 1);
@@ -2491,6 +2516,16 @@ int ScriptProcessor::ProcFloors()
 	{
 		FloorCheck = 0;
 		floor->CalculateAltitude();
+	}
+
+	//Print command
+	if (LineData.Slice(0, 5).CompareNoCase("print") == true)
+	{
+		//calculate inline math
+		buffer = Calc(LineData.Slice(6));
+
+		//print line
+		skyscraper->Report(buffer);
 	}
 
 	//IF statement
@@ -3449,6 +3484,10 @@ int ScriptProcessor::ProcElevators()
 	buffer = Current;
 	LineData.ReplaceAll("%elevator%", buffer);
 
+	//process any functions first
+	if (FunctionProc() == true)
+		return sNextLine;
+
 	//get text after equal sign
 	int temp2check = LineData.Find("=", 0);
 	temp2 = LineData.Slice(temp2check + 1).Trim();
@@ -4075,6 +4114,16 @@ int ScriptProcessor::ProcElevators()
 			return sError;
 		}
 		elev->InspectionService = csString(temp2).CompareNoCase("true");
+	}
+
+	//Print command
+	if (LineData.Slice(0, 5).CompareNoCase("print") == true)
+	{
+		//calculate inline math
+		buffer = Calc(LineData.Slice(6));
+
+		//print line
+		skyscraper->Report(buffer);
 	}
 
 	//IF statement
@@ -5253,4 +5302,46 @@ void ScriptProcessor::StoreCommand(Object *object)
 		object->command_processed = LineData;
 		object->linenum = line + 1;
 	}
+}
+
+bool ScriptProcessor::FunctionProc()
+{
+	//process functions
+	for (int i = 0; i < functions.GetSize(); i++)
+	{
+		int location = LineData.Find(functions[i].name + "(");
+		if (location >= 0)
+		{
+			//found a function
+
+			//store info
+			InFunction = true;
+			FunctionCallLine = line;
+
+			//get function parameters
+			int location2 = location + functions[i].name.Length() + 1;
+			int end_loc = LineData.Find(")", location);
+			csString newdata = LineData.Slice(location2, end_loc - location2);
+			//tempdata.SplitString(LineData.Slice(location2, end_loc - location2), ",");
+			tempdata.SplitString(newdata, ",");
+
+			//calculate inline math
+			for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+			{
+				buffer = Calc(tempdata[temp3]);
+				FunctionParams.Push(buffer.Trim());
+			}
+
+			//remove function statement
+			LineData = LineData.Slice(0, location) + LineData.Slice(end_loc + 1);
+
+			//switch to function line
+			FunctionCallLineData = LineData;
+			line = functions[i].line;
+
+			tempdata.DeleteAll();
+			return true;
+		}
+	}
+	return false;
 }

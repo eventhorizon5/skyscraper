@@ -69,6 +69,9 @@ class ScriptProcessor
 	csVector3 MaxExtent;
 	bool InFunction;
 	int FunctionCallLine;
+	csString FunctionCallLineData;
+	csArray<csString> FunctionParams;
+	bool ReplaceLine;
 
 	bool ScriptError(const char *message);
 	csString Calc(const char *expression);
@@ -79,6 +82,7 @@ class ScriptProcessor
 	int ProcFloors();
 	int ProcElevators();
 	int ProcTextures();
+	bool FunctionProc();
 
 	struct FunctionInfo
 	{
