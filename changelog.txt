@@ -37,6 +37,8 @@ Version 1.6 (2.0 Alpha 6)
 -made new SetPlanarMapping command which is an extended version of the old ReverseExtents command
 -new planar texture mapper is now the default
 -added object information dialog
+-added support for file includes
+-added support for script functions
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

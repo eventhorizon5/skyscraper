@@ -91,8 +91,53 @@
     been created.</p>
   <p align="left">Example:<font size="2" face="Courier New, Courier, mono"><br>
     Set 1 = Floor(5).Altitude</font></p>
-  <p align="left"><br>
-    <strong>6. Global commands or functions that can be used anywhere in the script</strong></p>
+  <p align="left"><strong><font size="2" face="Courier New, Courier, mono"><br>
+    </font>6. Includes</strong></p>
+  <p align="left">Other script files can be included (inserted) anywhere in the 
+    current script by using the &lt;Include&gt; command.</p>
+  <p align="left">Syntax:<br>
+    <font size="2" face="Courier New, Courier, mono">&lt;Include <em>filename</em>&gt;</font></p>
+  <p align="left">To include a file called test.txt that's in the data folder, 
+    you would enter:<br>
+    <font size="2" face="Courier New, Courier, mono"><br>
+    &lt;Include data/test.txt&gt;<br>
+    </font></p>
+  <p align="left"><strong>7. Functions</strong></p>
+  <p align="left">Functions can be created to share code between sections of scripts, 
+    and also between entire scripts when used in conjunction with includes. An 
+    unlimited number of parameters can be specified for each function.</p>
+  <p align="left">Syntax:<br>
+    <font size="2" face="Courier New, Courier, mono">&lt;Function <em>name</em>&gt;<br>
+    <em>(code)</em><br>
+    &lt;EndFunction&gt; </font></p>
+  <p align="left">The above is a function definition, and must be used outside 
+    of any sections (such as &lt;Floor&gt;) and also before the function call. 
+    To call the function later in your code, you use the function name followed 
+    by a list of parameters contained within parenthesis, or just parenthesis 
+    if you're not passing any parameters:</p>
+  <p align="left">Syntax:<br>
+    <em>name</em>(<em>parameter1</em>, <em>parameter2</em>, ...)<br>
+    or<br>
+    name()<br>
+    <br>
+    The parameters appear as variables inside the function in the form of <font size="2" face="Courier New, Courier, mono">%param#%</font> 
+    - so the first parameter passed is <font size="2" face="Courier New, Courier, mono">%param1%</font>, 
+    the second is <font size="2" face="Courier New, Courier, mono">%param2%</font>, 
+    etc. For an example, I'll create a function called Test with a single SetAutoSize 
+    command within it, and call that function:</p>
+</div>
+<div align="left"> 
+  <p><font size="2" face="Courier New, Courier, mono">&lt;Function test&gt;<br>
+    SetAutoSize = %param1%, %param2%<br>
+    &lt;EndFunction&gt;<br>
+    <br>
+    test(false, false)</font></p>
+  <p>In the above example, the command that ends up being performed is &quot;SetAutoSize 
+    = false, false&quot;.</p>
+</div>
+<div align="center">
+<p align="left"><br>
+    <strong>8. Global commands or functions that can be used anywhere in the script</strong></p>
   <p align="left">In this section, <em>Destobject</em> refers to the destination 
     object to create other objects in. It can be either <em>floor </em>(only available 
     within a Floor section)<em>, external</em>, <em>landscape</em>, or <em>buildings</em> 
@@ -245,19 +290,23 @@
     the left to the right), and that it has the same z values. With that, MainNegative 
     would be the front wall, MainPositive the back, SideNegative the left, SidePositive 
     the right, etc.</p>
-  <p align="left"><strong>m. SetPlanarMapping</strong> - sets the planar texture mapper's parameters.<br>
-    Syntax:<font size="2" face="Courier New, Courier, mono"> SetPlanarMapping Flat, X, Y, Z</font><br>
-    Example: <font size="2" face="Courier New, Courier, mono">SetPlanarMapping false, false, false, true</font></p>
-  <p align="left">X, Y and Z reverse the texture mapping per axis, and Flat has it ignore depth.  Skyscraper by default uses a simple planar texture mapper, which 
-    in simple terms draws the texture in a box around the object. With a basic 
-    wall, the top-left of the texture image is mapped to the top left of the wall, 
-    the top-right is mapped to the top-right of the wall, etc. If you want the 
-    top-right of the texture mapped to the top-left of the wall for example (to 
-    flip or change alignment), you'd set X to false. This command is mainly used 
-    to change alignment - since the top-left of the texture is mapped to the top-left 
-    of the object, that means that textures have a left/top alignment by default. 
-    If you change X to true, it'll be right-aligned. If you change Y to true, 
-    it'll be bottom-aligned. See this picture for an example:</p>
+  <p align="left"><strong>m. SetPlanarMapping</strong> - sets the planar texture 
+    mapper's parameters.<br>
+    Syntax:<font size="2" face="Courier New, Courier, mono"> SetPlanarMapping 
+    Flat, X, Y, Z</font><br>
+    Example: <font size="2" face="Courier New, Courier, mono">SetPlanarMapping 
+    false, false, false, true</font></p>
+  <p align="left">X, Y and Z reverse the texture mapping per axis, and Flat has 
+    it ignore depth. Skyscraper by default uses a simple planar texture mapper, 
+    which in simple terms draws the texture in a box around the object. With a 
+    basic wall, the top-left of the texture image is mapped to the top left of 
+    the wall, the top-right is mapped to the top-right of the wall, etc. If you 
+    want the top-right of the texture mapped to the top-left of the wall for example 
+    (to flip or change alignment), you'd set X to false. This command is mainly 
+    used to change alignment - since the top-left of the texture is mapped to 
+    the top-left of the object, that means that textures have a left/top alignment 
+    by default. If you change X to true, it'll be right-aligned. If you change 
+    Y to true, it'll be bottom-aligned. See this picture for an example:</p>
   <p align="left"><img src="guide/extents.jpg"></p>
   <p align="left">In the above picture, I tiled a texture (a black box with yellow 
     around it) 2.5 times on width and height. The bottom floor shows the default 
@@ -329,7 +378,7 @@
     Syntax:<font size="2" face="Courier New, Courier, mono"> ResetTextureMapping 
     = default</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">ResetTextureMapping 
-     = true </font></p>
+    = true </font></p>
   <p align="left">If <em>default</em> is true, the texture mapping values are 
     reset to the default, which is shown above in the SetTextureMapping's example. 
     If <em>default</em> is false, the previous values will be loaded and used.</p>
@@ -537,12 +586,12 @@
     Syntax:<font size="2" face="Courier New, Courier, mono"> Print text</font><br>
     Example: <font size="2" face="Courier New, Courier, mono">Print 1+1</font></p>
   <p align="left">&nbsp;</p>
-  <p align="left"><strong>7. END command</strong></p>
+  <p align="left"><strong>8. END command</strong></p>
   <p align="left">The End command tells the software to stop processing the current 
     script and start the simulation. This is optional.<br>
     Example: <font size="2" face="Courier New, Courier, mono">&lt;end&gt;</font></p>
   <p align="left"><br>
-    <strong>8. BREAK command</strong></p>
+    <strong>10. BREAK command</strong></p>
   <p align="left">The Break command triggers a break section in the script processor, 
     and is used when running the simulator in debug mode. A debugger breakpoint 
     can be set on the associated line in fileio.cpp, and when this command is 
@@ -627,9 +676,8 @@
     be 4 (2 times 2), and the texture will be repeated 4 times horizontally. The 
     <em>force</em> value is optional, and if set to false, autosizing will always 
     be disabled for this texture; if set to true, autosizing will always be enabled.</p>
-  <p align="left"><strong>2. LoadRange</strong> - loads a numeric 
-    range of textures, and the current number is available in the <em>number</em> 
-    variable (<font size="2" face="Courier New, Courier, mono">%number%</font>)<br>
+  <p align="left"><strong>2. LoadRange</strong> - loads a numeric range of textures, 
+    and the current number is available in the <em>number</em> variable (<font size="2" face="Courier New, Courier, mono">%number%</font>)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">LoadRange <em>startnumber</em>, 
     <em>endnumber</em>, <em>filename</em>, <em>name</em>, <em>tile_x</em>, <em>tile_y[, 
     force] </em></font><br>
@@ -977,43 +1025,48 @@
   <p align="left">Number specifies the stairwell number. Direction specifies the 
     direction the door faces and also the direction it opens. For values of this, 
     look at the AddDoor command above.</p>
-  <p align="left"><strong>17. AddDirectionalIndicator</strong> - creates a single
-    elevator directional indicator/lantern on the current floor (similar to the CreateCallButtons
-    command) <br>
+  <p align="left"><strong>17. AddDirectionalIndicator</strong> - creates a single 
+    elevator directional indicator/lantern on the current floor (similar to the 
+    CreateCallButtons command) <br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicator<em> 
-    Elevator, Relative, Single, Vertical, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, DownTexture, 
-    DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, 
-    ShowBack, tw, th<br>
+    Elevator, Relative, Single, Vertical, BackTexture</em>, <em>UpTexture</em>, 
+    <em>UpTextureLit, DownTexture, DownTextureLit, CenterX, CenterZ, voffset, 
+    direction, BackWidth, BackHeight, ShowBack, tw, th<br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
-    AddDirectionalIndicator 1, true, false, true, Metal, UpLight, UpLightOn, DownLight, DownLightOn, 
-    -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
-  <p align="left">This command will create a directional indicator on the current floor
-    (only if the elevator serves it). It'll also automatically create the up and down lights
-    depending on the floor.</p>
-  <p align="left"><em>Elevator</em> specifies the elevator to create the indicators for.</p>
-  <p align="left"><em>Relative</em> determines if the X and Z coordinates are
-      relative to the elevator's origin (center) or not.</p>
-  <p align="left"><em>Single</em> determines if a single indicator light should be created instead of two.  If this is true, the unlit texture is specified in <em>UpLight</em>, and the <em>DownLight</em> value is ignored.</p>
-  <p align="left"><em>Vertical</em> determines if the two lights should be vertically separated (true), or horizontally separated (false)</p>
-  <p align="left"><em>BackTexture</em> is the texture of the wall plate behind
+    AddDirectionalIndicator 1, true, false, true, Metal, UpLight, UpLightOn, DownLight, 
+    DownLightOn, -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
+  <p align="left">This command will create a directional indicator on the current 
+    floor (only if the elevator serves it). It'll also automatically create the 
+    up and down lights depending on the floor.</p>
+  <p align="left"><em>Elevator</em> specifies the elevator to create the indicators 
+    for.</p>
+  <p align="left"><em>Relative</em> determines if the X and Z coordinates are 
+    relative to the elevator's origin (center) or not.</p>
+  <p align="left"><em>Single</em> determines if a single indicator light should 
+    be created instead of two. If this is true, the unlit texture is specified 
+    in <em>UpLight</em>, and the <em>DownLight</em> value is ignored.</p>
+  <p align="left"><em>Vertical</em> determines if the two lights should be vertically 
+    separated (true), or horizontally separated (false)</p>
+  <p align="left"><em>BackTexture</em> is the texture of the wall plate behind 
     the lights</p>
-  <p align="left"><em>UpTexture</em> and <em>DownTexture</em> are the textures
-    used for the lights themselves, and the &quot;Lit&quot; texures are the ones
-    to show when the light is on.  <em>DownTexture</em> is ignored if <em>Single</em> is true.</p>
-  <p align="left"><em>CenterX</em> and <em>CenterZ</em> are the central location
+  <p align="left"><em>UpTexture</em> and <em>DownTexture</em> are the textures 
+    used for the lights themselves, and the &quot;Lit&quot; texures are the ones 
+    to show when the light is on. <em>DownTexture</em> is ignored if <em>Single</em> 
+    is true.</p>
+  <p align="left"><em>CenterX</em> and <em>CenterZ</em> are the central location 
     of the indicators</p>
-  <p align="left"><em>voffset</em> is the altitude offset that the object is above
+  <p align="left"><em>voffset</em> is the altitude offset that the object is above 
     each floor</p>
   <p align="left"><em>direction </em>determines the direction the indicators face:<br>
     'front' means they face towards the front of the building<br>
     'back' means they face towards the back of the building<br>
     'left' means they face left<br>
     'right' means they face right</p>
-  <p align="left"><em>BackWidth</em> and <em>BackHeight</em> are the width and
+  <p align="left"><em>BackWidth</em> and <em>BackHeight</em> are the width and 
     height of the wall plate</p>
-  <p align="left"><em>ShowBack</em> determines if the wall plate should be shown,
+  <p align="left"><em>ShowBack</em> determines if the wall plate should be shown, 
     and is either true or false</p>
-  <p align="left"><em>tw</em> and <em>th</em> are the texture scaling for the
+  <p align="left"><em>tw</em> and <em>th</em> are the texture scaling for the 
     wall plate.</p>
   <p align="left"><strong>18. AddShaftDoor</strong> - creates shaft elevator doors 
     on the current floor only<br>
@@ -1037,8 +1090,8 @@
   <p align="left"><strong>19. AddFloorIndicator</strong> - creates a floor indicator 
     associated with a specific elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em> 
-    elevator, relative, texture_prefix, direction, CenterX, CenterZ, width, height, voffset</em></font> 
-  </p>
+    elevator, relative, texture_prefix, direction, CenterX, CenterZ, width, height, 
+    voffset</em></font> </p>
   <p align="left">The AddFloorIndicator command creates a floor indicator at the 
     position specified by <em>CenterX</em> and <em>CenterZ</em>, associated with 
     the elevator specified by <em>elevator</em>. <em>Direction</em> is the direction 
@@ -1046,9 +1099,9 @@
     &quot;front&quot; or &quot;back&quot;. <em>Relative</em> determines if the 
     <em>CenterX</em> and <em>CenterZ</em> values are relative of the elevator's 
     center or not. This command can be given multiple times to create multiple 
-    indicators.  Texture_prefix is the base name of the texture to load when displaying
-    a floor ID; for example if the indicator is on floor 3, and you specify a prefix
-    of "Button", it'll load the "Button3" texture.</p>
+    indicators. Texture_prefix is the base name of the texture to load when displaying 
+    a floor ID; for example if the indicator is on floor 3, and you specify a 
+    prefix of "Button", it'll load the "Button3" texture.</p>
   <p align="left"><strong>20. Cut</strong> - performs a manual box cut on an area 
     within the current floor<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Cut x1, y1, z1, x2, 
@@ -1085,8 +1138,7 @@
     in the Globals section. The only difference here is that the Y value is relative 
     of the floor's base (altitude plus interfloor height).</p>
   <p align="left">&nbsp;</p>
-  <p align="left"><strong><font size="+1">6. The <em>Elevator</em> 
-    Section</font></strong></p>
+  <p align="left"><strong><font size="+1">6. The <em>Elevator</em> Section</font></strong></p>
   <p align="left">The <em>Elevator</em> section allows you to create elevators 
     for your building. Elevators are numbered, starting with 1. Parameters that 
     have defaults listed are optional.</p>
@@ -1151,7 +1203,8 @@
     Example: <font size="2" face="Courier New, Courier, mono">CloseSound 1 = close.wav</font></p>
   <p align="left"><strong>11. CarStartSound</strong> - the sound file to play 
     when the elevator starts moving/speeds up. By default no sound is played.<br>
-    Example: <font size="2" face="Courier New, Courier, mono">CarStartSound = start.wav</font></p>
+    Example: <font size="2" face="Courier New, Courier, mono">CarStartSound = 
+    start.wav</font></p>
   <p align="left"><strong>12. CarMoveSound</strong> - the sound file to play while 
     the elevator is moving. This file is automatically looped by the simulator. 
     By default no sound is played.<br>
@@ -1177,7 +1230,7 @@
     stop.wav</font></p>
   <p align="left"><strong>18. MotorIdleSound</strong> - the sound file to play 
     when the elevator motor is idling. There is no default yet.<br>
-    Example: <font size="2" face="Courier New, Courier, mono">MotorIdleSound =
+    Example: <font size="2" face="Courier New, Courier, mono">MotorIdleSound = 
     idle.wav</font></p>
   <p align="left"><strong>19. ChimeSound</strong> - the sound file to play when 
     the elevator arrives at a floor. Default is <em>chime1.wav</em>. This must 
@@ -1189,14 +1242,14 @@
   <p align="left"><strong>20. UpChimeSound</strong> - the sound file to play when 
     the elevator arrives at a floor and it's direction is up. Default is <em>chime1.wav</em>. 
     This must be specified after the CreateElevator command.<br>
-    Syntax: <font size="2" face="Courier New, Courier, mono">UpChimeSound <em>doornumber</em>
+    Syntax: <font size="2" face="Courier New, Courier, mono">UpChimeSound <em>doornumber</em> 
     = <em>filename</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">UpChimeSound 1 = 
     chime.wav</font></p>
   <p align="left"><strong>21. DownChimeSound</strong> - the sound file to play 
     when the elevator arrives at a floor and it's direction is down. Default is 
     <em>chime1.wav</em>. This must be specified after the CreateElevator command.<br>
-    Syntax: <font size="2" face="Courier New, Courier, mono">DownChimeSound <em>doornumber</em>
+    Syntax: <font size="2" face="Courier New, Courier, mono">DownChimeSound <em>doornumber</em> 
     = <em>filename</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">DownChimeSound 1 
     = chime.wav</font></p>
@@ -1292,16 +1345,15 @@
   <p align="left"><strong>3. AddWall</strong> - adds a textured wall for the elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddWall <em>name, 
     texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>, z2, <em>height1</em>, 
-    <em>height2</em>, <em>voffset1</em>, <em>voffset2, </em><em>tw</em>, 
-    <em>th</em></font><br>
+    <em>height2</em>, <em>voffset1</em>, <em>voffset2, </em><em>tw</em>, <em>th</em></font><br>
     Example: <font size="2" face="Courier New, Courier, mono">AddWall Wall1, Wood1, 
     0.5, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 2, 2</font></p>
   <p align="left">The elevator's AddWall command is similar to the other AddWall 
     commands.</p>
   <p align="left"><strong>4. AddDoors</strong> - creates elevator doors<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDoors <em>number, 
-    lefttexture, righttexture</em>, <em>thickness, CenterX, CenterZ, width, height, direction, 
-    tw, th</em></font></p>
+    lefttexture, righttexture</em>, <em>thickness, CenterX, CenterZ, width, height, 
+    direction, tw, th</em></font></p>
   <p align="left">The AddDoors command creates working elevator doors at the central 
     location specified by <em>CenterX</em> and <em>CenterZ</em>, with <em>width</em> 
     and <em>height</em> specifiying the width and height of each door, and <em>Direction</em> 
@@ -1349,8 +1401,10 @@
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorButton <em>panel_number, 
     texture_unlit</em>, <em>texture_lit, row, column, floor, width, height[, hoffset, 
     voffset]</em></font><br>
-    Example 1: <font size="2" face="Courier New, Courier, mono">AddFloorButton 1, Button5, 7, 3, 4, 1, 1</font><br>
-    Example 2: <font size="2" face="Courier New, Courier, mono">AddFloorButton 1, Button5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p> 
+    Example 1: <font size="2" face="Courier New, Courier, mono">AddFloorButton 
+    1, Button5, 7, 3, 4, 1, 1</font><br>
+    Example 2: <font size="2" face="Courier New, Courier, mono">AddFloorButton 
+    1, Button5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p>
   <p align="left">The AddFloorButton command creates a floor button on the button 
     panel created with CreatePanel. Panel_number specifies the number of the panel 
     to add the button to; the number can be either 1 or 2. <em>Row</em> and <em>Column</em> 
@@ -1361,11 +1415,11 @@
     of 1 is used for both values. If only one of the values is 0, then the exact 
     size other is used; for example, if <em>width</em> is 0 and <em>height</em> 
     is 1 (or any other number), then the width will end up being the same size 
-    as the height. <em>Hoffset</em> and <em>Voffset</em> are optional parameters,
-    and are used to position the button outside the normal grid, and are in grid units
-    (buttonwidth and buttonheight parameters of the CreatePanel function).
-    In the second example, the button is positioned 0.1 grid units to the right, and 0.1
-    grid units down.</p>
+    as the height. <em>Hoffset</em> and <em>Voffset</em> are optional parameters, 
+    and are used to position the button outside the normal grid, and are in grid 
+    units (buttonwidth and buttonheight parameters of the CreatePanel function). 
+    In the second example, the button is positioned 0.1 grid units to the right, 
+    and 0.1 grid units down.</p>
   <p align="left"><strong>8. AddControlButton</strong> - creates a control button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddControlButton 
@@ -1375,40 +1429,46 @@
     panel created with CreatePanel. <em>Row</em> and <em>Column</em> are the same 
     as the AddFloorButton command, and <em>Type</em> can be either &quot;open&quot;, 
     &quot;close&quot;, &quot;cancel&quot;, &quot;stop&quot; or &quot;alarm&quot;. 
-    See the above command (AddFloorButton) for a description of the other parameters.</p> 
+    See the above command (AddFloorButton) for a description of the other parameters.</p>
   <p align="left"><strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em> 
-    texture_prefix, direction, CenterX, CenterZ, width, height, voffset</em></font> </p>
+    texture_prefix, direction, CenterX, CenterZ, width, height, voffset</em></font> 
+  </p>
   <p align="left">The AddFloorIndicator command creates a floor indicator at the 
     position (relative to the elevator) specified by <em>CenterX</em> and <em>CenterZ</em>. 
     <em>Direction</em> is the direction the indicator faces, and can be either 
     &quot;left&quot;, &quot;right&quot;, &quot;front&quot; or &quot;back&quot;. 
-    This command can be given multiple times to create multiple indicators.
-    Texture_prefix is the base name of the texture to load when displaying
-    a floor ID; for example if the elevator is on floor 3, and you specify a prefix
-    of "Button", it'll load the "Button3" texture.</p>
+    This command can be given multiple times to create multiple indicators. Texture_prefix 
+    is the base name of the texture to load when displaying a floor ID; for example 
+    if the elevator is on floor 3, and you specify a prefix of "Button", it'll 
+    load the "Button3" texture.</p>
   <p align="left"><strong>10. AddDirectionalIndicators</strong> - creates the 
     elevator's directional indicator/lanterns (similar to the CreateCallButtons 
     command) <br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicators<em> 
-    Relative, Single, Vertical, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, DownTexture, 
-    DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, 
-    ShowBack, tw, th<br>
+    Relative, Single, Vertical, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, 
+    DownTexture, DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth, 
+    BackHeight, ShowBack, tw, th<br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
-    AddDirectionalIndicators true, false, true, Metal, UpLight, UpLightOn, DownLight, DownLightOn, 
-    -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
+    AddDirectionalIndicators true, false, true, Metal, UpLight, UpLightOn, DownLight, 
+    DownLightOn, -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
   <p align="left">This command will create directional indicators on all floors 
     the elevator serves. It'll also automatically create the up and down lights 
-    depending on the floor. To create indicators on a per-floor basis, use the AddDirectionalIndicator command in the Floor section.</p>
-  <p align="left"><em>Relative</em> determines if the X and Z coordinates are
-      relative to the elevator's origin (center) or not.</p>
-  <p align="left"><em>Single</em> determines if a single indicator light should be created instead of two.  If this is true, the unlit texture is specified in <em>UpLight</em>, and the <em>DownLight</em> value is ignored.</p>
-  <p align="left"><em>Vertical</em> determines if the two lights should be vertically separated (true), or horizontally separated (false)</p>
+    depending on the floor. To create indicators on a per-floor basis, use the 
+    AddDirectionalIndicator command in the Floor section.</p>
+  <p align="left"><em>Relative</em> determines if the X and Z coordinates are 
+    relative to the elevator's origin (center) or not.</p>
+  <p align="left"><em>Single</em> determines if a single indicator light should 
+    be created instead of two. If this is true, the unlit texture is specified 
+    in <em>UpLight</em>, and the <em>DownLight</em> value is ignored.</p>
+  <p align="left"><em>Vertical</em> determines if the two lights should be vertically 
+    separated (true), or horizontally separated (false)</p>
   <p align="left"><em>BackTexture</em> is the texture of the wall plate behind 
     the lights</p>
   <p align="left"><em>UpTexture</em> and <em>DownTexture</em> are the textures 
     used for the lights themselves, and the &quot;Lit&quot; texures are the ones 
-    to show when the light is on.  <em>DownTexture</em> is ignored if <em>Single</em> is true.</p>
+    to show when the light is on. <em>DownTexture</em> is ignored if <em>Single</em> 
+    is true.</p>
   <p align="left"><em>CenterX</em> and <em>CenterZ</em> are the central location 
     of the indicators</p>
   <p align="left"><em>voffset</em> is the altitude offset that the object is above 
