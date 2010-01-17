@@ -1720,7 +1720,7 @@ csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 
 csVector2 SBS::GetExtents(csRef<iThingFactoryState> state, int coord)
 {
-	return GetExtents(state.GetVertices(), state.GetVertexCount(), coord);
+	return GetExtents(state->GetVertices(), state->GetVertexCount(), coord);
 }
 
 int SBS::CreateSky(const char *filenamebase)

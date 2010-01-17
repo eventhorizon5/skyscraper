@@ -295,7 +295,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//check if elevator doors are already closed
-	if (DoorsOpen == false && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
+	if (Doors->Open == false && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already closed");
 		return;
@@ -417,7 +417,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//rate to marker 2, and then decelerates after marker 2.
 	//this offset system is not used if manual is true (in that case, it simply sets a speed value, and moves
 	//the doors until they reach the ends
-
+/*
 	csString doornumber;
 	if (elev->NumDoors > 1)
 	{
@@ -862,6 +862,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	}
 
 	DoorIsRunning = false;
+	*/
 }
 
 Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
@@ -899,16 +900,16 @@ Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture
 	}
 
 	//create left door
-	AddDoorComponent(Doors, "Left", lefttexture, lefttexture, thickness, 2, OpenSpeed, x1, z1, x2, z2, height, 0, tw, th, tw, th);
+	AddDoorComponent("Left", lefttexture, lefttexture, thickness, 2, OpenSpeed, x1, z1, x2, z2, height, 0, tw, th, tw, th);
 
 	//create right door
-	AddDoorComponent(Doors, "Right", righttexture, righttexture, thickness, 3, OpenSpeed, x3, z3, x4, z4, height, 0, tw, th, tw, th);
+	AddDoorComponent("Right", righttexture, righttexture, thickness, 3, OpenSpeed, x3, z3, x4, z4, height, 0, tw, th, tw, th);
 
 	//finish doors
-	FinishDoors(Doors, false, CenterX, CenterZ);
+	return FinishDoors(CenterX, CenterZ);
 }
 
-void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//creates a door component - finish with FinishDoor()
 
@@ -942,16 +943,16 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 void ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	csString elevnumber, doornumber, Name, buffer;
-	elevnumber = parent->elev->Number;
+	elevnumber = elev->Number;
 	elevnumber.Trim();
-	doornumber = parent->Number;
+	doornumber = Number;
 	doornumber.Trim();
 	Name = name;
 	Name.Trim();
 	buffer = "ElevatorDoor " + elevnumber + ":" + doornumber + ":" + Name;
 	buffer.Trim();
 
-	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, CenterX, CenterZ, height, voffset, tw, th, side_tw, side_th);
+	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 }
 
 void ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
@@ -971,7 +972,7 @@ void ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char
 	Name.Trim();
 	buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
 
-	AddDoorComponent(ShaftDoors[elev->ServicedFloors.Find(floor)], name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, CenterX, CenterZ, height, voffset, tw, th, side_tw, side_th);
+	AddDoorComponent(ShaftDoors[elev->ServicedFloors.Find(floor)], name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 }
 
 Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, bool ShaftDoor, float voffset, float CenterX, float CenterZ)
@@ -985,9 +986,9 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, bool ShaftDoor, float vo
 	float x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
 	for (int i = 0; i < wrapper->doors.GetSize(); i++)
 	{
-		for (int j = 1; i <= 3; j++)
+		for (int j = 1; j <= 3; j++)
 		{
-			csVector2 extents = sbs->GetExtents(wrapper->doors[j]->state, j);
+			csVector2 extents = sbs->GetExtents(wrapper->doors[i]->state, j);
 			if (j == 1)
 			{
 				if (extents.x < x1)
@@ -1050,7 +1051,7 @@ Object* ElevatorDoor::FinishShaftDoors(int floor, float CenterX, float CenterZ)
 	if (!elev->IsServicedFloor(floor))
 		return 0;
 
-	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], true, sbs->GetFloor(floor)->Altitude + base, CenterX, CenterZ);
+	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], true, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->GetBase(true), CenterX, CenterZ);
 }
 
 bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th)
@@ -1424,7 +1425,7 @@ ElevatorDoor::DoorWrapper::~DoorWrapper()
 	object = 0;
 }
 
-DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, int direction, float speed)
+ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, int direction, float speed)
 {
 	//initialize a door component
 	

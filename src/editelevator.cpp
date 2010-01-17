@@ -836,11 +836,11 @@ void editelevator::Loop()
 	if (door)
 	{
 		txtDoorDirection->SetValue(wxString::FromAscii(BoolToString(door->DoorDirection)));
-		txtDoorHeight->SetValue(TruncateNumber(door->DoorHeight, 2));
-		txtDoorOrigin->SetValue(TruncateNumber(door->DoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->DoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->DoorOrigin.z, 2));
+		//txtDoorHeight->SetValue(TruncateNumber(door->Doors->Height, 2));
+		//txtDoorOrigin->SetValue(TruncateNumber(door->Doors->Origin.x, 2) + wxT(", ") + TruncateNumber(door->Doors->Origin.y, 2) + wxT(", ") + TruncateNumber(door->Doors->Origin.z, 2));
 		txtDoorsOpen->SetValue(wxString::FromAscii(BoolToString(door->AreDoorsOpen())));
 		txtDoorSpeed->SetValue(TruncateNumber(door->GetCurrentDoorSpeed(), 2));
-		txtDoorWidth->SetValue(TruncateNumber(door->DoorWidth, 2));
+		//txtDoorWidth->SetValue(TruncateNumber(door->DoorWidth, 2));
 		txtShaftDoorOrigin->SetValue(TruncateNumber(door->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.z, 2));
 		txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(door->DoorsStopped())));
 	}
