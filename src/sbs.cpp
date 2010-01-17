@@ -2335,6 +2335,7 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 		//planar method
 
 		csVector2 x, y, z;
+		csPoly3D varray;
 		bool rev_x = false, rev_z = false;
 
 		csPlane3 plane = state->GetPolygonObjectPlane(index);
@@ -2349,6 +2350,9 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 		size_t selX = CS::Math::NextModulo3(projDimension);
 		size_t selY = CS::Math::NextModulo3(selX);
 
+		for (int i = 0; i < state->GetPolygonVertexCount(index); i++)
+			varray.AddVertex(state->GetPolygonVertex(index, i)[selX], state->GetPolygonVertex(index, i)[selY], 0);
+
 		if (RevX == true || (normal.x < 0.001 && normal.z < 0.001 && abs(normal.x) > 0.999 && abs(normal.z) > 0.999) || normal.z < -0.999)
 			rev_x = true;
 
@@ -2356,8 +2360,9 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 			rev_z = true;
 
 		csVector2 a, b;
-		a = GetExtents(state->GetVertices(), state->GetVertexCount(), 1);
-		b = GetExtents(state->GetVertices(), state->GetVertexCount(), 2);
+		a = GetExtents(varray, 1);
+		b = GetExtents(varray, 2);
+
 		if (projDimension == 0)
 		{
 			if (RevY == false)
