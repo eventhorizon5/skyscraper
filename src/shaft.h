@@ -70,6 +70,7 @@ public:
 	bool IsValidFloor(int floor);
 	void AddElevator(int number);
 	void RemoveElevator(int number);
+	csRef<iMeshWrapper> GetMeshWrapper(int floor);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array

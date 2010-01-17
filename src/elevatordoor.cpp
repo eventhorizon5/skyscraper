@@ -914,7 +914,7 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 	//creates a door component - finish with FinishDoor()
 
 	//create door object
-	DoorObject *door = Doors->CreateDoor(meshname, direction, speed);
+	DoorObject *door = wrapper->CreateDoor(meshname, direction, speed);
 	
 	if (tw == 0)
 		tw = 1;
@@ -975,7 +975,7 @@ void ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char
 	AddDoorComponent(ShaftDoors[elev->ServicedFloors.Find(floor)], name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 }
 
-Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, bool ShaftDoor, float voffset, float CenterX, float CenterZ)
+Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, float voffset, float CenterX, float CenterZ)
 {
 	//finishes a door creation
 
@@ -984,31 +984,36 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, bool ShaftDoor, float vo
 
 	//get full width and height of doors
 	float x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
+	bool firstrun = true;
 	for (int i = 0; i < wrapper->doors.GetSize(); i++)
 	{
 		for (int j = 1; j <= 3; j++)
 		{
 			csVector2 extents = sbs->GetExtents(wrapper->doors[i]->state, j);
+			extents.x = sbs->ToLocal(extents.x);
+			extents.y = sbs->ToLocal(extents.y);
+
 			if (j == 1)
 			{
-				if (extents.x < x1)
+				if (extents.x < x1 || firstrun == true)
 					x1 = extents.x;
-				if (extents.y > x2)
+				if (extents.y > x2 || firstrun == true)
 					x2 = extents.y;
 			}
 			if (j == 2)
 			{
-				if (extents.x < y1)
+				if (extents.x < y1 || firstrun == true)
 					y1 = extents.x;
-				if (extents.y > y2)
+				if (extents.y > y2 || firstrun == true)
 					y2 = extents.y;
 			}
 			if (j == 3)
 			{
-				if (extents.x < z1)
+				if (extents.x < z1 || firstrun == true)
 					z1 = extents.x;
-				if (extents.y > z2)
+				if (extents.y > z2 || firstrun == true)
 					z2 = extents.y;
+				firstrun = false;
 			}
 		}
 	}
@@ -1025,10 +1030,32 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, bool ShaftDoor, float vo
 	}
 	wrapper->Height = y2 - y1;
 
+	sbs->ResetTextureMapping(true);
+
 	//create connection pieces
-	sbs->AddWallMain(elev->object, elev->ElevatorMesh, "DoorF1", "Connection", wrapper->Thickness, x1, z1, x2, z2, 1, 1, -1.001 + voffset, -1.001 + voffset, 0, 0);
-	sbs->AddWallMain(elev->object, elev->ElevatorMesh, "DoorF2", "Connection", wrapper->Thickness, x1, z1, x2, z2, 1, 1, wrapper->Height + 0.001 + voffset, wrapper->Height + 0.001 + voffset, 0, 0);
-	sbs->ResetWalls();
+	WallObject *wall;
+	csString name1, name2;
+	if (ShaftDoor == false)
+	{
+		wall = new WallObject(elev->ElevatorMesh, elev->object, true);
+		name1 = "DoorF1";
+		name2 = "DoorF2";
+	}
+	else
+	{
+		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
+		wall = new WallObject(shaft->GetMeshWrapper(floor), shaft->object, true);
+		name1 = "ShaftDoorF1";
+		name2 = "ShaftDoorF2";
+		x1 += elev->Origin.x;
+		x2 += elev->Origin.x;
+		z1 += elev->Origin.z;
+		z2 += elev->Origin.z;
+	}
+	sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true);
+	sbs->CreateWallBox(wall, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true);
+	delete wall;
+
 	sbs->ResetTextureMapping();
 
 	//relocate sound object
@@ -1042,7 +1069,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, bool ShaftDoor, float vo
 
 Object* ElevatorDoor::FinishDoors(float CenterX, float CenterZ)
 {
-	return FinishDoors(Doors, false, 0, CenterX, CenterZ);
+	return FinishDoors(Doors, 0, false, 0, CenterX, CenterZ);
 }
 
 Object* ElevatorDoor::FinishShaftDoors(int floor, float CenterX, float CenterZ)
@@ -1051,7 +1078,7 @@ Object* ElevatorDoor::FinishShaftDoors(int floor, float CenterX, float CenterZ)
 	if (!elev->IsServicedFloor(floor))
 		return 0;
 
-	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], true, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->GetBase(true), CenterX, CenterZ);
+	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], floor, true, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->GetBase(true), CenterX, CenterZ);
 }
 
 bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th)

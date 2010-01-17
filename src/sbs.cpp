@@ -1365,7 +1365,7 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 	if (inside == true)
 	{
 		//generate a box visible from the inside
-		csBox3 box (csVector3(ToRemote(x1) * HorizScale, ToRemote(voffset), ToRemote(z1) * HorizScale), csVector3(ToRemote(x2) * HorizScale, ToRemote(voffset + height_in), z2 * HorizScale));
+		csBox3 box (csVector3(ToRemote(x1) * HorizScale, ToRemote(voffset), ToRemote(z1) * HorizScale), csVector3(ToRemote(x2) * HorizScale, ToRemote(voffset + height_in), ToRemote(z2) * HorizScale));
 		firstidx = wallobject->state->AddQuad( //front
 			box.GetCorner(CS_BOX_CORNER_xyz),
 			box.GetCorner(CS_BOX_CORNER_Xyz),

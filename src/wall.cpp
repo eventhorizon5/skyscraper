@@ -32,7 +32,7 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 WallObject::WallObject(csRef<iMeshWrapper> wrapper, Object *proxy, bool temporary) : Object(temporary)
 {
-	//polygon object constructor
+	//wall object constructor
 	meshwrapper = wrapper;
 	state = scfQueryInterface<iThingFactoryState> (wrapper->GetMeshObject()->GetFactory());
 
@@ -43,10 +43,10 @@ WallObject::WallObject(csRef<iMeshWrapper> wrapper, Object *proxy, bool temporar
 
 WallObject::~WallObject()
 {
-	//polygon object destructor
+	//wall object destructor
 	handles.DeleteAll();
-	meshwrapper = 0;
-	state = 0;
+	//meshwrapper = 0;
+	//state = 0;
 }
 
 int WallObject::AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)

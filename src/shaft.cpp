@@ -144,7 +144,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 		tmpheight = height2;
 	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
 
-	WallObject *wall = sbs->CreateWallObject(shaft_walls[floor - startfloor], ShaftArray[floor - startfloor], this->object, name);
+	WallObject *wall = sbs->CreateWallObject(shaft_walls[floor - startfloor], GetMeshWrapper(floor), this->object, name);
 	sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, sizing.x, sizing.y);
 	return wall;
 }
@@ -187,7 +187,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	WallObject *wall = sbs->CreateWallObject(shaft_walls[floor - startfloor], ShaftArray[floor - startfloor], this->object, name);
+	WallObject *wall = sbs->CreateWallObject(shaft_walls[floor - startfloor], GetMeshWrapper(floor), this->object, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw2, th2);
 	return wall;
 }
@@ -199,7 +199,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 		//turns shaft on/off for a specific floor
 		if (value == true)
 		{
-			sbs->EnableMesh(ShaftArray[floor - startfloor], value);
+			sbs->EnableMesh(GetMeshWrapper(floor), value);
 			EnableArray[floor - startfloor] = true;
 		}
 		else
@@ -207,7 +207,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 			//leave bottom and top on
 			if (floor != startfloor && floor != endfloor)
 			{
-				sbs->EnableMesh(ShaftArray[floor - startfloor], value);
+				sbs->EnableMesh(GetMeshWrapper(floor), value);
 				EnableArray[floor - startfloor] = false;
 			}
 			else
@@ -332,9 +332,9 @@ bool Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVe
 	float base = sbs->GetFloor(floor)->Altitude;
 
 	if (relative == true)
-		sbs->Cut(ShaftArray[floor - startfloor], shaft_walls[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
+		sbs->Cut(GetMeshWrapper(floor), shaft_walls[floor - startfloor], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
 	else
-		sbs->Cut(ShaftArray[floor - startfloor], shaft_walls[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
+		sbs->Cut(GetMeshWrapper(floor), shaft_walls[floor - startfloor], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
 	return true;
 }
 
@@ -442,4 +442,14 @@ void Shaft::RemoveElevator(int number)
 {
 	//remove specified elevator from list
 	elevators.Delete(number);
+}
+
+csRef<iMeshWrapper> Shaft::GetMeshWrapper(int floor)
+{
+	//returns the mesh wrapper for the specified floor
+
+	if (!IsValidFloor(floor))
+		return 0;
+
+	return ShaftArray[floor - startfloor];
 }
