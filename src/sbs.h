@@ -190,6 +190,8 @@ public:
 	int AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
 	int AddCustomWall(WallObject* wallobject, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
 	csVector2 GetExtents(csPoly3D &varray, int coord);
+	csVector2 GetExtents(csRef<iThingFactoryState> state, int coord);
+	csVector2 GetExtents(const csVector3 *varray, int count, int coord);
 	void InitMeshes();
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);

@@ -34,24 +34,56 @@ class Elevator;
 class SBSIMPEXP ElevatorDoor
 {
 public:
+	//door component object
+	struct DoorObject
+	{
+		DoorObject(const char *doorname, ElevatorDoor *parent);
+		~DoorObject();
+
+		csRef<iMeshWrapper> mesh;
+		csRef<iThingFactoryState> state;
+		csRef<iMovable> movable;
+		int direction; //direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
+		float speed;
+		csString name;
+	};
+
+	//wrapper that represents the entire set of doors
+	class DoorWrapper
+	{
+	public:
+		DoorWrapper(ElevatorDoor *parentobject);
+		~DoorWrapper();
+
+		DoorObject* CreateDoor(const char *doorname, int direction, float speed);
+		void Enable(bool value);
+
+		Object *object;
+		csArray<DoorObject*> doors;
+		csString name;
+		bool Open;
+		bool Enabled;
+		csVector3 Origin;
+		float Width;
+		float Height;
+		float Thickness;
+	private:
+		ElevatorDoor *parent;
+	};
+
 	Object *object; //SBS object
-	csArray<Object*> shaftdoor_objects; //shaft door objects
 	int Number; //door instance number
 	Elevator *elev; //pointer to associated elevator object
-	float OpenSpeed; //door opening/closing speed
+	float OpenSpeed; //door opening/closing speed (for backwards-compatibility only)
 	bool DoorDirection; //if direction is false, doors are on the left/right side
-	float DoorWidth; //elevator door width
-	float DoorHeight; //elevator door height
-	csVector3 DoorOrigin; //elevator door origin
-	csVector3 ShaftDoorOrigin; //shaft door origin
 	int DoorTimer; //door autoclose timer value, in milliseconds
 	csString OpenSound; //door open sound
 	csString CloseSound; //door close sound
 	csString UpChimeSound; //elevator up chime sound
 	csString DownChimeSound; //elevator down chime sound
 	int OpenDoor; //1=open doors, -1=close doors
-	bool IsEnabled; //are doors enabled?
-	float ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command)
+	float ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command) - deprecated
+	csVector3 ShaftDoorOrigin; //shaft door origin (deprecated)
 
 	ElevatorDoor(int number, Elevator* elevator);
 	~ElevatorDoor();
@@ -75,30 +107,28 @@ public:
 	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void MoveSound(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void Enabled(bool value);
+	bool IsEnabled();
 	bool GetDoorsOpen();
 	void SetShaftDoors(float thickness, float CenterX, float CenterZ);
 	bool ShaftDoorsExist(int floor);
 	int GetWhichDoors();
+	void AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	void AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	void AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	Object* FinishDoors(DoorWrapper *wrapper, bool ShaftDoor, float voffset, float CenterX, float CenterZ);
+	Object* FinishDoors(float CenterX, float CenterZ);
+	Object* FinishShaftDoors(int floor, float CenterX, float CenterZ);
 
 private:
-	csRef<iMeshWrapper> ElevatorDoorL; //left inside door
-		csRef<iThingFactoryState> ElevatorDoorL_state;
-		csRef<iMovable> ElevatorDoorL_movable;
-	csRef<iMeshWrapper> ElevatorDoorR; //right inside door
-		csRef<iThingFactoryState> ElevatorDoorR_state;
-		csRef<iMovable> ElevatorDoorR_movable;
+
+	//elevator doors
+	DoorWrapper *Doors;
 
 	//Internal door simulation data
-	bool DoorsOpen; //elevator door state
-	csArray<bool> ShaftDoorsOpen; //shaft door state
-	csArray<bool> ShaftDoorsState; //shaft door enabled state
 	float ElevatorDoorSpeed;
 	int WhichDoors;
 	int ShaftDoorFloor;
-	csRefArray<iMeshWrapper> ShaftDoorL; //shaft door array
-	csRefArray<iThingFactoryState> ShaftDoorL_state; //shaft door array state
-	csRefArray<iMeshWrapper> ShaftDoorR; //shaft door array
-	csRefArray<iThingFactoryState> ShaftDoorR_state; //shaft door array state
+	csArray<DoorWrapper*> ShaftDoors; //shaft doors
 
 	void MoveDoors(bool open, bool manual);
 

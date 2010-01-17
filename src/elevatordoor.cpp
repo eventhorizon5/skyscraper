@@ -43,7 +43,6 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	elev = elevator;
 	OpenDoor = 0;
 	OpenSpeed = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3);
-	DoorsOpen = false;
 	ElevatorDoorSpeed = 0;
 	WhichDoors = 0;
 	ShaftDoorFloor = 0;
@@ -65,51 +64,19 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	UpChimeSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.UpChimeSound", "chime1-up.wav");
 	DownChimeSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.DownChimeSound", "chime1-down.wav");
 	doors_stopped = false;
-	IsEnabled = true;
 	ShaftDoorThickness = 0;
+	ShaftDoorOrigin = 0;
 
-	//create object meshes
-	csString elevnumber, doornumber, buffer;
-	elevnumber = elev->Number;
-	elevnumber.Trim();
-	doornumber = Number;
-	doornumber.Trim();
-	buffer = "ElevatorDoorL " + elevnumber + ":" + doornumber;
-	buffer.Trim();
-	ElevatorDoorL = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	ElevatorDoorL_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorL->GetMeshObject()->GetFactory());
-	ElevatorDoorL_movable = ElevatorDoorL->GetMovable();
-	ElevatorDoorL->SetZBufMode(CS_ZBUF_USE);
-	ElevatorDoorL->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-
-	elevnumber = elev->Number;
-	elevnumber.Trim();
-	doornumber = Number;
-	doornumber.Trim();
-	buffer = "ElevatorDoorR " + elevnumber + ":" + doornumber;
-	buffer.Trim();
-	ElevatorDoorR = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	ElevatorDoorR_state = scfQueryInterface<iThingFactoryState> (ElevatorDoorR->GetMeshObject()->GetFactory());
-	ElevatorDoorR_movable = ElevatorDoorR->GetMovable();
-	ElevatorDoorR->SetZBufMode(CS_ZBUF_USE);
-	ElevatorDoorR->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	//create main door object
+	Doors = new DoorWrapper(this);
 
 	//create timer
 	timer = new Timer(this, elev);
 
-	//move objects to positions
-	ElevatorDoorL_movable->SetPosition(sbs->ToRemote(elev->Origin));
-	ElevatorDoorL_movable->UpdateMove();
-	ElevatorDoorR_movable->SetPosition(sbs->ToRemote(elev->Origin));
-	ElevatorDoorR_movable->UpdateMove();
-
-	//resize shaft door arrays
-	ShaftDoorL.SetSize(elev->ServicedFloors.GetSize());
-	ShaftDoorR.SetSize(elev->ServicedFloors.GetSize());
-	ShaftDoorL_state.SetSize(elev->ServicedFloors.GetSize());
-	ShaftDoorR_state.SetSize(elev->ServicedFloors.GetSize());
-	ShaftDoorsOpen.SetSize(elev->ServicedFloors.GetSize());
-	ShaftDoorsState.SetSize(elev->ServicedFloors.GetSize());
+	//create shaft door objects
+	ShaftDoors.SetSize(elev->ServicedFloors.GetSize());
+	for (int i = 0; i < ShaftDoors.GetSize(); i++)
+		ShaftDoors[i] = new DoorWrapper(this);
 
 	//create sound object
 	doorsound = new Sound(this->object, "Door Sound");
@@ -120,26 +87,12 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 ElevatorDoor::~ElevatorDoor()
 {
 	//delete shaft door objects
-	for (int i = 0; i < shaftdoor_objects.GetSize(); i++)
+	for (int i = 0; i < ShaftDoors.GetSize(); i++)
 	{
-		if (shaftdoor_objects[i])
-			delete shaftdoor_objects[i];
-		shaftdoor_objects[i] = 0;
+		if (ShaftDoors[i])
+			delete ShaftDoors[i];
+		ShaftDoors[i] = 0;
 	}
-
-	//delete mesh array objects
-	for (int i = 0; i < ShaftDoorL_state.GetSize(); i++)
-		ShaftDoorL_state[i] = 0;
-	for (int i = 0; i < ShaftDoorL.GetSize(); i++)
-		ShaftDoorL[i] = 0;
-	for (int i = 0; i < ShaftDoorR_state.GetSize(); i++)
-		ShaftDoorR_state[i] = 0;
-	for (int i = 0; i < ShaftDoorR.GetSize(); i++)
-		ShaftDoorR[i] = 0;
-	ShaftDoorL_state.DeleteAll();
-	ShaftDoorL.DeleteAll();
-	ShaftDoorR_state.DeleteAll();
-	ShaftDoorR.DeleteAll();
 
 	//Destructor
 	if (timer)
@@ -155,12 +108,11 @@ ElevatorDoor::~ElevatorDoor()
 		delete chime;
 	chime = 0;
 
-	ElevatorDoorR_movable = 0;
-	ElevatorDoorR_state = 0;
-	ElevatorDoorR = 0;
-	ElevatorDoorL_movable = 0;
-	ElevatorDoorL_state = 0;
-	ElevatorDoorL = 0;
+	//delete main doors
+	if (Doors)
+		delete Doors;
+	Doors = 0;
+
 	delete object;
 }
 
@@ -231,7 +183,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//check if elevator doors are already open
-	if (DoorsOpen == true && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
+	if (Doors->Open == true && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
 	{
 		//reset timer if not in a service mode
 		if (elev->InServiceMode() == false)
@@ -920,16 +872,7 @@ Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture
 	float z1, z2, z3, z4;
 	float spacing = 0.025f; //spacing between doors
 
-	if (tw == 0)
-		tw = 1;
-	if (th == 0)
-		th = 1;
-
-	//set door parameters
 	DoorDirection = direction;
-	DoorWidth = width;
-	DoorHeight = height;
-	DoorOrigin = csVector3(elev->Origin.x + CenterX, elev->Origin.y, elev->Origin.z + CenterZ);
 
 	//set up coordinates
 	if (direction == false)
@@ -955,19 +898,159 @@ Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture
 		z4 = CenterZ;
 	}
 
-	//create doors
-	sbs->DrawWalls(true, true, true, true, true, true);
+	//create left door
+	AddDoorComponent(Doors, "Left", lefttexture, lefttexture, thickness, 2, OpenSpeed, x1, z1, x2, z2, height, 0, tw, th, tw, th);
+
+	//create right door
+	AddDoorComponent(Doors, "Right", righttexture, righttexture, thickness, 3, OpenSpeed, x3, z3, x4, z4, height, 0, tw, th, tw, th);
+
+	//finish doors
+	FinishDoors(Doors, false, CenterX, CenterZ);
+}
+
+void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+{
+	//creates a door component - finish with FinishDoor()
+
+	//create door object
+	DoorObject *door = Doors->CreateDoor(meshname, direction, speed);
+	
+	if (tw == 0)
+		tw = 1;
+	if (th == 0)
+		th = 1;
+	if (side_tw == 0)
+		side_tw = 1;
+	if (side_th == 0)
+		side_th = 1;
+
 	sbs->ResetTextureMapping(true);
-	sbs->AddWallMain(object, ElevatorDoorL, "Door", lefttexture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
-	sbs->AddWallMain(object, ElevatorDoorR, "Door", righttexture, thickness, x3, z3, x4, z4, height, height, 0, 0, tw, th);
+
+	//add main walls
+	sbs->DrawWalls(true, true, false, false, false, false);
+	sbs->AddWallMain(wrapper->object, door->mesh, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th);
+	sbs->ResetWalls();
+
+	//add side walls
+	sbs->DrawWalls(false, false, true, true, true, true);
+	sbs->AddWallMain(wrapper->object, door->mesh, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th);
+	sbs->ResetWalls();
+
+	sbs->ResetTextureMapping();
+}
+
+void ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+{
+	csString elevnumber, doornumber, Name, buffer;
+	elevnumber = parent->elev->Number;
+	elevnumber.Trim();
+	doornumber = parent->Number;
+	doornumber.Trim();
+	Name = name;
+	Name.Trim();
+	buffer = "ElevatorDoor " + elevnumber + ":" + doornumber + ":" + Name;
+	buffer.Trim();
+
+	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, CenterX, CenterZ, height, voffset, tw, th, side_tw, side_th);
+}
+
+void ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+{
+	//exit if floor is not serviced by the elevator
+	if (!elev->IsServicedFloor(floor))
+		return;
+
+	csString elevnumber, floornumber, doornumber, Name, buffer;
+	elevnumber = elev->Number;
+	elevnumber.Trim();
+	floornumber = floor;
+	floornumber.Trim();
+	doornumber = Number;
+	doornumber.Trim();
+	Name = name;
+	Name.Trim();
+	buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
+
+	AddDoorComponent(ShaftDoors[elev->ServicedFloors.Find(floor)], name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, CenterX, CenterZ, height, voffset, tw, th, side_tw, side_th);
+}
+
+Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, bool ShaftDoor, float voffset, float CenterX, float CenterZ)
+{
+	//finishes a door creation
+
+	//set door parameters
+	wrapper->Origin = csVector3(elev->Origin.x + CenterX, elev->Origin.y, elev->Origin.z + CenterZ);
+
+	//get full width and height of doors
+	float x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
+	for (int i = 0; i < wrapper->doors.GetSize(); i++)
+	{
+		for (int j = 1; i <= 3; j++)
+		{
+			csVector2 extents = sbs->GetExtents(wrapper->doors[j]->state, j);
+			if (j == 1)
+			{
+				if (extents.x < x1)
+					x1 = extents.x;
+				if (extents.y > x2)
+					x2 = extents.y;
+			}
+			if (j == 2)
+			{
+				if (extents.x < y1)
+					y1 = extents.x;
+				if (extents.y > y2)
+					y2 = extents.y;
+			}
+			if (j == 3)
+			{
+				if (extents.x < z1)
+					z1 = extents.x;
+				if (extents.y > z2)
+					z2 = extents.y;
+			}
+		}
+	}
+
+	if (x2 - x1 > z2 - z1)
+	{
+		wrapper->Width = x2 - x1;
+		wrapper->Thickness = z2 - z1;
+	}
+	else
+	{
+		wrapper->Width = z2 - z1;
+		wrapper->Thickness = x2 - x1;
+	}
+	wrapper->Height = y2 - y1;
+
 	//create connection pieces
-	sbs->AddWallMain(elev->object, elev->ElevatorMesh, "DoorF1", "Connection", thickness, x1, z1, x4, z4, 1, 1, -1.001, -1.001, 0, 0);
-	sbs->AddWallMain(elev->object, elev->ElevatorMesh, "DoorF2", "Connection", thickness, x1, z1, x4, z4, 1, 1, height + 0.001, height + 0.001, 0, 0);
+	sbs->AddWallMain(elev->object, elev->ElevatorMesh, "DoorF1", "Connection", wrapper->Thickness, x1, z1, x2, z2, 1, 1, -1.001 + voffset, -1.001 + voffset, 0, 0);
+	sbs->AddWallMain(elev->object, elev->ElevatorMesh, "DoorF2", "Connection", wrapper->Thickness, x1, z1, x2, z2, 1, 1, wrapper->Height + 0.001 + voffset, wrapper->Height + 0.001 + voffset, 0, 0);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
+
 	//relocate sound object
-	doorsound->SetPosition(csVector3(DoorOrigin.x, DoorOrigin.y + (DoorHeight / 2), DoorOrigin.z));
-	return object;
+	if (ShaftDoor == false)
+		doorsound->SetPosition(csVector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
+	else
+		chime->SetPosition(csVector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
+
+	return wrapper->object;
+}
+
+Object* ElevatorDoor::FinishDoors(float CenterX, float CenterZ)
+{
+	return FinishDoors(Doors, false, 0, CenterX, CenterZ);
+}
+
+Object* ElevatorDoor::FinishShaftDoors(int floor, float CenterX, float CenterZ)
+{
+	//exit if floor is not serviced by the elevator
+	if (!elev->IsServicedFloor(floor))
+		return 0;
+
+	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], true, sbs->GetFloor(floor)->Altitude + base, CenterX, CenterZ);
 }
 
 bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th)
@@ -1002,11 +1085,7 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
 	float base, base2;
-
-	if (tw == 0)
-		tw = 1;
-	if (th == 0)
-		th = 1;
+	int index = elev->ServicedFloors.Find(floor);
 
 	//set up coordinates
 	if (DoorDirection == false)
@@ -1015,17 +1094,17 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 		x2 = ShaftDoorOrigin.x - elev->Origin.x;
 		x3 = ShaftDoorOrigin.x - elev->Origin.x;
 		x4 = ShaftDoorOrigin.x - elev->Origin.x;
-		z1 = ShaftDoorOrigin.z - elev->Origin.z - (DoorWidth / 2);
+		z1 = ShaftDoorOrigin.z - elev->Origin.z - (Doors->Width / 2);
 		z2 = ShaftDoorOrigin.z - elev->Origin.z;
 		z3 = ShaftDoorOrigin.z - elev->Origin.z;
-		z4 = ShaftDoorOrigin.z - elev->Origin.z + (DoorWidth / 2);
+		z4 = ShaftDoorOrigin.z - elev->Origin.z + (Doors->Width / 2);
 	}
 	else
 	{
-		x1 = ShaftDoorOrigin.x - elev->Origin.x - (DoorWidth / 2);
+		x1 = ShaftDoorOrigin.x - elev->Origin.x - (Doors->Width / 2);
 		x2 = ShaftDoorOrigin.x - elev->Origin.x;
 		x3 = ShaftDoorOrigin.x - elev->Origin.x;
-		x4 = ShaftDoorOrigin.x - elev->Origin.x + (DoorWidth / 2);
+		x4 = ShaftDoorOrigin.x - elev->Origin.x + (Doors->Width / 2);
 		z1 = ShaftDoorOrigin.z - elev->Origin.z;
 		z2 = ShaftDoorOrigin.z - elev->Origin.z;
 		z3 = ShaftDoorOrigin.z - elev->Origin.z;
@@ -1046,84 +1125,41 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	//cut shaft and floor walls
 	if (DoorDirection == false)
 	{
-		if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), 1, "Shaft"))
+		if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z4), 1, "Shaft"))
 			return 0;
-		floorobj->Cut(csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + DoorHeight, elev->Origin.z + z4), true, false, true, 2, "Shaft");
+		floorobj->Cut(csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z4), true, false, true, 2, "Shaft");
 	}
 	else
 	{
-		if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), 1, "Shaft"))
+		if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + Doors->Height, elev->Origin.z + z1 + 2), 1, "Shaft"))
 			return 0;
-		floorobj->Cut(csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + DoorHeight, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
+		floorobj->Cut(csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
 	}
 
 	//create doorway walls
 	WallObject *wall = sbs->CreateWallObject(floorobj->level_walls, floorobj->Level, floorobj->object, "Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
-	//create meshes
-	buffer3 = elev->Number;
-	buffer4 = floor;
-	buffer5 = Number;
-	buffer = "Elevator " + buffer3 + ": Shaft Door " + buffer5 + ":" + buffer4 + "L";
-	buffer2 = "Elevator " + buffer3 + ": Shaft Door " + buffer5 + ":" + buffer4 + "R";
-	buffer.Trim();
-	buffer2.Trim();
-	csRef<iMeshWrapper> tmpmesh;
-	csRef<iThingFactoryState> tmpstate;
-	int index = elev->ServicedFloors.Find(floor);
+	sbs->ResetWalls();
+	sbs->ResetTextureMapping();
 
-	//create object
-	shaftdoor_objects.SetSize(shaftdoor_objects.GetSize() + 1);
-	shaftdoor_objects[shaftdoor_objects.GetSize() - 1] = new Object();
-	shaftdoor_objects[shaftdoor_objects.GetSize() - 1]->SetValues(0, this->object, "ShaftDoor", false);
+	//create left door
+	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, ShaftDoorThickness, 2, OpenSpeed, x1, z1, x2, z2, Doors->Height, base2, tw, th, tw, th);
 
-	//door L
-	tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	ShaftDoorL[index] = tmpmesh;
-	tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorL[index]->GetMeshObject()->GetFactory());
-	ShaftDoorL_state[index] = tmpstate;
-	ShaftDoorL[index]->SetZBufMode(CS_ZBUF_USE);
-	ShaftDoorL[index]->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	//create right door
+	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, 3, OpenSpeed, x3, z3, x4, z4, Doors->Height, base2, tw, th, tw, th);
 
-	//door R
-	tmpmesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer2.GetData());
-	ShaftDoorR[index] = tmpmesh;
-	tmpstate = scfQueryInterface<iThingFactoryState> (ShaftDoorR[index]->GetMeshObject()->GetFactory());
-	ShaftDoorR_state[index] = tmpstate;
-	ShaftDoorR[index]->SetZBufMode(CS_ZBUF_USE);
-	ShaftDoorR[index]->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-
-	//reposition meshes
-	ShaftDoorL[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
-	ShaftDoorL[index]->GetMovable()->UpdateMove();
-	ShaftDoorR[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
-	ShaftDoorR[index]->GetMovable()->UpdateMove();
-
-	//create doors
-	sbs->AddWallMain(shaftdoor_objects[shaftdoor_objects.GetSize() - 1], ShaftDoorL[index], "Door", lefttexture, ShaftDoorThickness, x1, z1, x2, z2, DoorHeight, DoorHeight, base2, base2, tw, th);
-	sbs->AddWallMain(shaftdoor_objects[shaftdoor_objects.GetSize() - 1], ShaftDoorR[index], "Door", righttexture, ShaftDoorThickness, x3, z3, x4, z4, DoorHeight, DoorHeight, base2, base2, tw, th);
-
-	//create connection pieces
-	float xoffset = elev->Origin.x - shaft->origin.x;
-	float zoffset = elev->Origin.z - shaft->origin.z;
-	shaft->AddWall(floor, "ShaftDoorF1", "Connection", ShaftDoorThickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base - 1.001, base - 1.001, 0, 0);
-	shaft->AddWall(floor, "ShaftDoorF2", "Connection", ShaftDoorThickness, xoffset + x1, zoffset + z1, xoffset + x4, zoffset + z4, 1, 1, base + DoorHeight + 0.001, base + DoorHeight + 0.001, 0, 0);
+	//finish doors
+	Object *object = FinishShaftDoors(floor, ShaftDoorOrigin.x, ShaftDoorOrigin.z);
 
 	//make doors invisible on start
-	sbs->EnableMesh(ShaftDoorL[index], false);
-	sbs->EnableMesh(ShaftDoorR[index], false);
+	for (int i = 0; i < ShaftDoors[index]->doors.GetSize(); i++)
+		sbs->EnableMesh(ShaftDoors[index]->doors[i]->mesh, false);
 
 	floorobj = 0;
 	shaft = 0;
 
-	sbs->ResetWalls();
-	sbs->ResetTextureMapping();
-
-	//relocate chime sound object
-	chime->SetPosition(csVector3(ShaftDoorOrigin.x, ShaftDoorOrigin.y + DoorHeight, ShaftDoorOrigin.z));
-
-	return shaftdoor_objects[shaftdoor_objects.GetSize() - 1];
+	return object;
 }
 
 void ElevatorDoor::SetShaftDoors(float thickness, float CenterX, float CenterZ)
@@ -1148,24 +1184,16 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 	if ((floor == sbs->GetShaft(elev->AssignedShaft)->startfloor || floor == sbs->GetShaft(elev->AssignedShaft)->endfloor) && value == false)
 		return;
 
-	size_t index = elev->ServicedFloors.Find(floor);
 	//exit if elevator doesn't service the requested floor
+	size_t index = elev->ServicedFloors.Find(floor);
 	if (index == csArrayItemNotFound)
 		return;
 
-	//exit if value is the same as the current state
-	if (ShaftDoorsState[index] == value)
-		return;
-
 	//exit if the specified floor has no shaft doors
-	if (!ShaftDoorL[index])
+	if (ShaftDoorsExist(floor) == false)
 		return;
 
-	sbs->EnableMesh(ShaftDoorL[index], value);
-	sbs->EnableMesh(ShaftDoorR[index], value);
-
-	//set enabled state
-	ShaftDoorsState[index] = value;
+	ShaftDoors[index]->Enable(value);
 }
 
 void ElevatorDoor::ShaftDoorsEnabledRange(int floor, int range)
@@ -1204,14 +1232,14 @@ void ElevatorDoor::ShaftDoorsEnabledRange(int floor, int range)
 bool ElevatorDoor::AreDoorsOpen()
 {
 	//returns the internal door state
-	return DoorsOpen;
+	return Doors->Open;
 }
 
 bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 {
 	//returns the internal door state
 	if (ShaftDoorsExist(floor))
-		return ShaftDoorsOpen[elev->ServicedFloors.Find(floor)];
+		return ShaftDoors[elev->ServicedFloors.Find(floor)]->Open;
 	return false;
 }
 
@@ -1238,7 +1266,7 @@ void ElevatorDoor::Chime(int floor, bool direction)
 	else
 		chime->Load(UpChimeSound);
 	chime->Loop(false);
-	chime->SetPositionY(sbs->GetFloor(floor)->GetBase() + DoorHeight);
+	chime->SetPositionY(sbs->GetFloor(floor)->GetBase() + Doors->Height);
 	chime->Play();
 }
 
@@ -1270,51 +1298,41 @@ void ElevatorDoor::Loop()
 void ElevatorDoor::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//moves doors
-	csVector3 pos;
-	if (relative_x == false)
-		pos.x = sbs->ToRemote(position.x);
-	else
-		pos.x = ElevatorDoorL_movable->GetPosition().x + sbs->ToRemote(position.x);
-	if (relative_y == false)
-		pos.y = sbs->ToRemote(position.y);
-	else
-		pos.y = ElevatorDoorL_movable->GetPosition().y + sbs->ToRemote(position.y);
-	if (relative_z == false)
-		pos.z = sbs->ToRemote(position.z);
-	else
-		pos.z = ElevatorDoorL_movable->GetPosition().z + sbs->ToRemote(position.z);
-	ElevatorDoorL_movable->SetPosition(pos);
-	ElevatorDoorL_movable->UpdateMove();
 
-	if (relative_x == false)
-		pos.x = sbs->ToRemote(position.x);
-	else
-		pos.x = ElevatorDoorR_movable->GetPosition().x + sbs->ToRemote(position.x);
-	if (relative_y == false)
-		pos.y = sbs->ToRemote(position.y);
-	else
-		pos.y = ElevatorDoorR_movable->GetPosition().y + sbs->ToRemote(position.y);
-	if (relative_z == false)
-		pos.z = sbs->ToRemote(position.z);
-	else
-		pos.z = ElevatorDoorR_movable->GetPosition().z + sbs->ToRemote(position.z);
-	ElevatorDoorR_movable->SetPosition(pos);
-	ElevatorDoorR_movable->UpdateMove();
+	for (int i = 0; i < Doors->doors.GetSize(); i++)
+	{
+		csVector3 pos;
+		if (relative_x == false)
+			pos.x = sbs->ToRemote(position.x);
+		else
+			pos.x = Doors->doors[i]->movable->GetPosition().x + sbs->ToRemote(position.x);
+		if (relative_y == false)
+			pos.y = sbs->ToRemote(position.y);
+		else
+			pos.y = Doors->doors[i]->movable->GetPosition().y + sbs->ToRemote(position.y);
+		if (relative_z == false)
+			pos.z = sbs->ToRemote(position.z);
+		else
+			pos.z = Doors->doors[i]->movable->GetPosition().z + sbs->ToRemote(position.z);
+		Doors->doors[i]->movable->SetPosition(pos);
+		Doors->doors[i]->movable->UpdateMove();
+	}
 }
 
 void ElevatorDoor::Enabled(bool value)
 {
-	if (IsEnabled == value)
-		return;
+	Doors->Enable(value);
+}
 
-	sbs->EnableMesh(ElevatorDoorL, value);
-	sbs->EnableMesh(ElevatorDoorR, value);
-	IsEnabled = value;
+bool ElevatorDoor::IsEnabled()
+{
+	//are doors enabled?
+	return Doors->Enabled;
 }
 
 bool ElevatorDoor::GetDoorsOpen()
 {
-	return DoorsOpen;
+	return Doors->Open;
 }
 
 int ElevatorDoor::GetWhichDoors()
@@ -1330,15 +1348,15 @@ void ElevatorDoor::MoveSound(const csVector3 position, bool relative_x, bool rel
 	if (relative_x == false)
 		pos.x = position.x;
 	else
-		pos.x = DoorOrigin.x + position.x;
+		pos.x = Doors->Origin.x + position.x;
 	if (relative_y == false)
-		pos.y = position.y + (DoorHeight / 2);
+		pos.y = position.y + (Doors->Height / 2);
 	else
-		pos.y = DoorOrigin.y + position.y;
+		pos.y = Doors->Origin.y + position.y;
 	if (relative_z == false)
 		pos.z = position.z;
 	else
-		pos.z = DoorOrigin.z + position.z;
+		pos.z = Doors->Origin.z + position.z;
 	doorsound->SetPosition(pos);
 }
 
@@ -1347,7 +1365,83 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 	//return true if shaft doors have been created for this door on the specified floor
 
 	int index = elev->ServicedFloors.Find(floor);
-	if (index != -1 && ShaftDoorL[index])
+	if (index != -1 && ShaftDoors[index]->doors.GetSize() > 0)
 		return true;
 	return false;
+}
+
+ElevatorDoor::DoorObject::DoorObject(const char *doorname, ElevatorDoor *parent)
+{
+	name = doorname;
+
+	//create object mesh
+	mesh = sbs->engine->CreateSectorWallsMesh (sbs->area, doorname);
+	state = scfQueryInterface<iThingFactoryState> (mesh->GetMeshObject()->GetFactory());
+	movable = mesh->GetMovable();
+	mesh->SetZBufMode(CS_ZBUF_USE);
+	mesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	
+	//move object to positions
+	movable->SetPosition(sbs->ToRemote(parent->elev->Origin));
+	movable->UpdateMove();
+
+	direction = 0;
+	speed = 0;
+}
+
+ElevatorDoor::DoorObject::~DoorObject()
+{
+	//clear references
+	movable = 0;
+	state = 0;
+	mesh = 0;
+}
+
+ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject)
+{
+	parent = parentobject;
+	Open = false;
+	Enabled = false;
+	Width = 0;
+	Height = 0;
+	Origin = 0;
+	Thickness = 0;
+
+	object = new Object();
+	object->SetValues(this, parent->object, "DoorWrapper", false);
+}
+
+ElevatorDoor::DoorWrapper::~DoorWrapper()
+{
+	for (int i = 0; i < doors.GetSize(); i++)
+	{
+		if (doors[i])
+			delete doors[i];
+		doors[i] = 0;
+	}
+	if (object)
+		delete object;
+	object = 0;
+}
+
+DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, int direction, float speed)
+{
+	//initialize a door component
+	
+	doors.SetSize(doors.GetSize() + 1);
+	int index = doors.GetSize() - 1;
+	doors[index] = new DoorObject(doorname, parent);
+	return doors[index];
+}
+
+void ElevatorDoor::DoorWrapper::Enable(bool value)
+{
+	//enable/disable door meshes
+
+	if (value == Enabled)
+		return;
+
+	for (int i = 0; i < doors.GetSize(); i++)
+		sbs->EnableMesh(doors[i]->mesh, value);
+	Enabled = value;
 }

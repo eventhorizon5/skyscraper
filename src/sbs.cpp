@@ -1671,7 +1671,7 @@ void SBS::EnableSkybox(bool value)
 	IsSkyboxEnabled = value;
 }
 
-csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
+csVector2 SBS::GetExtents(const csVector3 *varray, int count, int coord)
 {
 	//returns the smallest and largest values from a specified coordinate type
 	//(x, y, or z) from a vertex array (polygon).
@@ -1682,13 +1682,12 @@ csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 	float ebig = 0;
 	float tempnum = 0;
 	int i = 0;
-	int num = varray.GetVertexCount();
 
 	//return 0,0 if coord value is out of range
 	if (coord < 1 || coord > 3)
 		return csVector2(0, 0);
 
-	for (i = 0; i < num; i++)
+	for (i = 0; i < count; i++)
 	{
 		if (coord == 1)
 			tempnum = varray[i].x;
@@ -1712,6 +1711,16 @@ csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
 	}
 
 	return csVector2(esmall, ebig);
+}
+
+csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
+{
+	return GetExtents(varray.GetVertices(), varray.GetVertexCount(), coord);
+}
+
+csVector2 SBS::GetExtents(csRef<iThingFactoryState> state, int coord)
+{
+	return GetExtents(state.GetVertices(), state.GetVertexCount(), coord);
 }
 
 int SBS::CreateSky(const char *filenamebase)
@@ -2326,7 +2335,6 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 		//planar method
 
 		csVector2 x, y, z;
-		csPoly3D varray;
 		bool rev_x = false, rev_z = false;
 
 		csPlane3 plane = state->GetPolygonObjectPlane(index);
@@ -2341,9 +2349,6 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 		size_t selX = CS::Math::NextModulo3(projDimension);
 		size_t selY = CS::Math::NextModulo3(selX);
 
-		for (int i = 0; i < state->GetPolygonVertexCount(index); i++)
-			varray.AddVertex(state->GetPolygonVertex(index, i)[selX], state->GetPolygonVertex(index, i)[selY], 0);
-
 		if (RevX == true || (normal.x < 0.001 && normal.z < 0.001 && abs(normal.x) > 0.999 && abs(normal.z) > 0.999) || normal.z < -0.999)
 			rev_x = true;
 
@@ -2351,8 +2356,8 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 			rev_z = true;
 
 		csVector2 a, b;
-		a = GetExtents(varray, 1);
-		b = GetExtents(varray, 2);
+		a = GetExtents(state->GetVertices(), state->GetVertexCount(), 1);
+		b = GetExtents(state->GetVertices(), state->GetVertexCount(), 2);
 		if (projDimension == 0)
 		{
 			if (RevY == false)
@@ -3800,7 +3805,7 @@ bool SBS::UnregisterObject(int number)
 
 csVector3 SBS::GetWallExtents(csRef<iThingFactoryState> state, const char *name, float altitude, bool get_max)
 {
-	//return the X and Z extents of a standard wall (by name), by doing a double plane cut
+	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut
 
 	csString newname;
 	csString name2 = name;
