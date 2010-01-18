@@ -35,28 +35,46 @@ class SBSIMPEXP ElevatorDoor
 {
 public:
 	//door component object
+	struct DoorWrapper;
 	struct DoorObject
 	{
-		DoorObject(const char *doorname, ElevatorDoor *parent);
+		DoorObject(const char *doorname, DoorWrapper *Wrapper);
 		~DoorObject();
+		void MoveDoors(bool open, bool manual);
+		void Move();
 
 		csRef<iMeshWrapper> mesh;
 		csRef<iThingFactoryState> state;
 		csRef<iMovable> movable;
 		int direction; //direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
 		float speed;
+		float active_speed;
+		float openchange;
 		csString name;
+		DoorWrapper *wrapper; //associated wrapper
+		ElevatorDoor *parent;
+		float marker1;
+		float marker2;
+		int door_section; //door movement section; used for both reversal tracking and debugging
+		float stopping_distance;
+		float temp_change;
+		bool accelerating;
+		bool is_open;
+		bool finished;
 	};
 
 	//wrapper that represents the entire set of doors
-	class DoorWrapper
+	struct DoorWrapper
 	{
-	public:
 		DoorWrapper(ElevatorDoor *parentobject);
 		~DoorWrapper();
 
 		DoorObject* CreateDoor(const char *doorname, int direction, float speed);
 		void Enable(bool value);
+		bool CheckDoorsOpen();
+		bool IsFinished();
+		void MoveDoors(bool open, bool manual);
+		void StopDoors();
 
 		Object *object;
 		csArray<DoorObject*> doors;
@@ -67,7 +85,6 @@ public:
 		float Width;
 		float Height;
 		float Thickness;
-	private:
 		ElevatorDoor *parent;
 	};
 
@@ -125,7 +142,6 @@ private:
 	DoorWrapper *Doors;
 
 	//Internal door simulation data
-	float ElevatorDoorSpeed;
 	int WhichDoors;
 	int ShaftDoorFloor;
 	csArray<DoorWrapper*> ShaftDoors; //shaft doors
@@ -158,16 +174,9 @@ private:
 
 	//door internals
 	bool DoorIsRunning;
-	float OpenChange;
-	float marker1;
-	float marker2;
 	int index;
-	float stopping_distance;
-	float temp_change;
-	bool accelerating;
 	bool previous_open;
 	bool door_changed;
-	int door_section; //door movement section; used for both reversal tracking and debugging
 	bool quick_close; //used if user presses close button while doors are opening; results in a faster timer length
 	bool doors_stopped;
 };

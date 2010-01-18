@@ -43,21 +43,13 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	elev = elevator;
 	OpenDoor = 0;
 	OpenSpeed = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3);
-	ElevatorDoorSpeed = 0;
 	WhichDoors = 0;
 	ShaftDoorFloor = 0;
 	DoorTimer = sbs->confman->GetInt("Skyscraper.SBS.Elevator.Door.Timer", 5000);
 	DoorIsRunning = false;
-	OpenChange = 0;
-	marker1 = 0;
-	marker2 = 0;
 	index = 0;
-	stopping_distance = 0;
-	temp_change = 0;
-	accelerating = false;
 	previous_open = false;
 	door_changed = false;
-	door_section = 0;
 	quick_close = false;
 	OpenSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.OpenSound", "elevatoropen.wav");
 	CloseSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.CloseSound", "elevatorclose.wav");
@@ -384,11 +376,14 @@ void ElevatorDoor::StopDoors()
 		else
 			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": stopping doors" + doornumber);
 
+		if (WhichDoors == 1 || WhichDoors == 2)
+			Doors->StopDoors();
+		if (WhichDoors == 1 || WhichDoors == 3)
+			ShaftDoors[index]->StopDoors();
+
 		DoorIsRunning = false;
 		OpenDoor = 0;
-		ElevatorDoorSpeed = 0;
 		WhichDoors = 0;
-		door_section = 0;
 		door_changed = false;
 		doors_stopped = true;
 	}
@@ -413,11 +408,11 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 	//this door system is based on offsets from the door origin (usually 0).
 	//the right (positive side) door is used as a reference, with the leftmost side of it being the position.
-	//when opening, the door starts and the origin, accelerates to marker 1, moves at a constant
+	//when opening, the door starts at the origin, accelerates to marker 1, moves at a constant
 	//rate to marker 2, and then decelerates after marker 2.
 	//this offset system is not used if manual is true (in that case, it simply sets a speed value, and moves
 	//the doors until they reach the ends
-/*
+
 	csString doornumber;
 	if (elev->NumDoors > 1)
 	{
@@ -428,35 +423,12 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//stop timer
 	timer->Stop();
 
-	//get movable object reference
-	csRef<iMovable> tmpMovable;
-	if (WhichDoors < 3)
-		tmpMovable = ElevatorDoorR_movable;
-	else
-		tmpMovable = ShaftDoorR[index]->GetMovable();
-
-	float tempposition, temporigin;
-	if (DoorDirection == false)
-	{
-		tempposition = sbs->ToLocal(tmpMovable->GetPosition().z);
-		temporigin = DoorOrigin.z;
-	}
-	else
-	{
-		tempposition = sbs->ToLocal(tmpMovable->GetPosition().x);
-		temporigin = DoorOrigin.x;
-	}
-
-	//debug - show current section as function is running
-	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
-
 	if (DoorIsRunning == false || (manual == true && previous_open != open))
 	{
 		//initialization code
 
 		DoorIsRunning = true;
 		door_changed = false;
-		door_section = 0;
 
 		int checkfloor;
 		if (WhichDoors == 3)
@@ -478,10 +450,6 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		
 		if (manual == false)
 		{
-			OpenChange = OpenSpeed / 50;
-			marker1 = DoorWidth / 8;
-			marker2 = (DoorWidth / 2) - (DoorWidth / 8);
-			ElevatorDoorSpeed = 0;
 			if (open == true)
 			{
 				//play elevator opening sound
@@ -494,15 +462,6 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				doorsound->Load(CloseSound.GetData());
 				doorsound->Play();
 			}
-		}
-		else
-		{
-			marker1 = 0;
-			marker2 = DoorWidth / 2;
-			if (open == true)
-				ElevatorDoorSpeed = 0.2;
-			else
-				ElevatorDoorSpeed = -0.2;
 		}
 
 		if (WhichDoors == 3)
@@ -523,23 +482,12 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	{
 		//if a different direction was specified during movement
 		door_changed = true;
-		//only change directions immediately if re-opening (closing, then opening)
-		if (open == true)
-		{
-			//relocate marker 1 to the door's current position, in order to stop it
-			float offset = marker1 - (tempposition - temporigin);
-			if (tempposition - temporigin >= marker1)
-				//place marker at door position
-				marker1 = tempposition - temporigin;
-			else
-				//place marker to the right based on the offset, to bring door back to full speed
-				marker1 = tempposition - temporigin + offset;
-		}
 	}
 
 	//update call status (previous_open detects call changes during movement)
 	previous_open = open;
 
+	//find which doors should be moved
 	bool elevdoors = false, shaftdoors = false;
 	if (WhichDoors == 1)
 	{
@@ -551,288 +499,40 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	if (WhichDoors == 3)
 		shaftdoors = true;
 
-	//Speed up doors (only if manual is false)
-	if (manual == false)
+	//perform door movement and get open state of each door
+	if (elevdoors == true)
 	{
-		//if door is opening and is left of marker 1
-		//or if door is closing and is to the right of marker 2
-		if ((tempposition - temporigin <= marker1 && open == true) || (tempposition - temporigin > marker2 && open == false))
+		for (int i = 0; i < Doors->doors.GetSize(); i++)
 		{
-			accelerating = true;
-			if (door_changed == false)
-			{
-				//normal door acceleration
-				if (open == true)
-					ElevatorDoorSpeed += OpenChange;
-				else
-					ElevatorDoorSpeed -= OpenChange;
-			}
-			else
-			{
-				//reverse movement if transitioning from close to open
-				//this will trigger if door is closing, and is told to open while left of relocated marker 1
-				if (tempposition - temporigin <= marker1)
-					ElevatorDoorSpeed += OpenChange;
-			}
+			Doors->doors[i]->MoveDoors(open, manual);
+		}
+	}
 
-			if (elevdoors == true)
-			{
-				if (DoorDirection == false)
-				{
-					//move elevator doors
-					ElevatorDoorL_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
-					ElevatorDoorL_movable->UpdateMove();
-					ElevatorDoorR_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
-					ElevatorDoorR_movable->UpdateMove();
-				}
-				else
-				{
-					//move elevator doors
-					ElevatorDoorL_movable->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
-					ElevatorDoorL_movable->UpdateMove();
-					ElevatorDoorR_movable->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
-					ElevatorDoorR_movable->UpdateMove();
-				}
-			}
+	if (shaftdoors == true)
+	{
+		for (int i = 0; i < Doors->doors.GetSize(); i++)
+		{
+			ShaftDoors[index]->doors[i]->MoveDoors(open, manual);
+		}
+	}
 
-			if (shaftdoors == true && ShaftDoorL[index])
-			{
-				if (DoorDirection == false)
-				{
-					//move shaft doors
-					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
-					ShaftDoorL[index]->GetMovable()->UpdateMove();
-					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
-					ShaftDoorR[index]->GetMovable()->UpdateMove();
-				}
-				else
-				{
-					//move shaft doors
-					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
-					ShaftDoorL[index]->GetMovable()->UpdateMove();
-					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
-					ShaftDoorR[index]->GetMovable()->UpdateMove();
-				}
-			}
-
-			//get stopping distance
-			stopping_distance = tempposition - temporigin;
-
-			door_section = 1;
+	//wait until the doors are finished moving
+	if (elevdoors == true)
+	{
+		Doors->CheckDoorsOpen();
+		if (Doors->IsFinished() == false)
 			return;
-		}
 	}
-
-	door_section = 2;
-
-	//Normal door movement
-	if ((tempposition - temporigin <= marker2 && open == true) || (tempposition - temporigin > marker1 && open == false))
+	if (shaftdoors == true)
 	{
-		if (elevdoors == true)
-		{
-			if (DoorDirection == false)
-			{
-				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
-				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
-				ElevatorDoorR_movable->UpdateMove();
-			}
-			else
-			{
-				//move elevator doors
-				ElevatorDoorL_movable->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
-				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
-				ElevatorDoorR_movable->UpdateMove();
-			}
-		}
-
-		if (shaftdoors == true && ShaftDoorL[index])
-		{
-			if (DoorDirection == false)
-			{
-				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
-				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
-				ShaftDoorR[index]->GetMovable()->UpdateMove();
-			}
-			else
-			{
-				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
-				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
-				ShaftDoorR[index]->GetMovable()->UpdateMove();
-			}
-		}
-		door_section = 3;
-		return;
-	}
-
-	accelerating = false;
-
-	//slow down doors (only if manual is false)
-	if (manual == false)
-	{
-		if ((ElevatorDoorSpeed > 0 && open == true) || (ElevatorDoorSpeed < 0 && open == false))
-		{
-			if (open == true)
-				ElevatorDoorSpeed -= OpenChange;
-			else
-				ElevatorDoorSpeed += OpenChange;
-			if (DoorDirection == false)
-			{
-				if (elevdoors == true)
-				{
-					//move elevator doors
-					ElevatorDoorL_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
-					ElevatorDoorL_movable->UpdateMove();
-					ElevatorDoorR_movable->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
-					ElevatorDoorR_movable->UpdateMove();
-				}
-
-				if (shaftdoors == true && ShaftDoorL[index])
-				{
-					//move shaft doors
-					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta)));
-					ShaftDoorL[index]->GetMovable()->UpdateMove();
-					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(0, 0, sbs->ToRemote(ElevatorDoorSpeed * sbs->delta)));
-					ShaftDoorR[index]->GetMovable()->UpdateMove();
-				}
-			}
-			else
-			{
-				if (elevdoors == true)
-				{
-					//move elevator doors
-					ElevatorDoorL_movable->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
-					ElevatorDoorL_movable->UpdateMove();
-					ElevatorDoorR_movable->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
-					ElevatorDoorR_movable->UpdateMove();
-				}
-
-				if (shaftdoors == true && ShaftDoorL[index])
-				{
-					//move shaft doors
-					ShaftDoorL[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(-ElevatorDoorSpeed * sbs->delta), 0, 0));
-					ShaftDoorL[index]->GetMovable()->UpdateMove();
-					ShaftDoorR[index]->GetMovable()->MovePosition(csVector3(sbs->ToRemote(ElevatorDoorSpeed * sbs->delta), 0, 0));
-					ShaftDoorR[index]->GetMovable()->UpdateMove();
-				}
-			}
-			door_section = 4;
+		ShaftDoors[index]->CheckDoorsOpen();
+		if (ShaftDoors[index]->IsFinished() == false)
 			return;
-		}
-	}
-
-	//report on what section preceded the finishing code (should be 4)
-	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
-
-	//place doors in positions (fixes any overrun errors)
-	if (open == true)
-	{
-		if (DoorDirection == false)
-		{
-			if (elevdoors == true)
-			{
-				//move elevator doors
-				ElevatorDoorL_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z - (DoorWidth / 2))));
-				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z + (DoorWidth / 2))));
-				ElevatorDoorR_movable->UpdateMove();
-			}
-
-			if (shaftdoors == true && ShaftDoorL[index])
-			{
-				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z - (DoorWidth / 2))));
-				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z + (DoorWidth / 2))));
-				ShaftDoorR[index]->GetMovable()->UpdateMove();
-			}
-		}
-		else
-		{
-			if (elevdoors == true)
-			{
-				//move elevator doors
-				ElevatorDoorL_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x - (DoorWidth / 2), elev->GetPosition().y, elev->Origin.z)));
-				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x + (DoorWidth / 2), elev->GetPosition().y, elev->Origin.z)));
-				ElevatorDoorR_movable->UpdateMove();
-			}
-
-			if (shaftdoors == true && ShaftDoorL[index])
-			{
-				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x - (DoorWidth / 2), 0, elev->Origin.z)));
-				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x + (DoorWidth / 2), 0, elev->Origin.z)));
-				ShaftDoorR[index]->GetMovable()->UpdateMove();
-			}
-		}
-	}
-	else
-	{
-		if (DoorDirection == false)
-		{
-			if (elevdoors == true)
-			{
-				//move elevator doors
-				ElevatorDoorL_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z)));
-				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z)));
-				ElevatorDoorR_movable->UpdateMove();
-			}
-
-			if (shaftdoors == true && ShaftDoorL[index])
-			{
-				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
-				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
-				ShaftDoorR[index]->GetMovable()->UpdateMove();
-			}
-		}
-		else
-		{
-			if (elevdoors == true)
-			{
-				//move elevator doors
-				ElevatorDoorL_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z)));
-				ElevatorDoorL_movable->UpdateMove();
-				ElevatorDoorR_movable->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, elev->GetPosition().y, elev->Origin.z)));
-				ElevatorDoorR_movable->UpdateMove();
-			}
-
-			if (shaftdoors == true && ShaftDoorL[index])
-			{
-				//move shaft doors
-				ShaftDoorL[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
-				ShaftDoorL[index]->GetMovable()->UpdateMove();
-				ShaftDoorR[index]->GetMovable()->SetPosition(sbs->ToRemote(csVector3(elev->Origin.x, 0, elev->Origin.z)));
-				ShaftDoorR[index]->GetMovable()->UpdateMove();
-			}
-		}
 	}
 
 	//the doors are open or closed now
-	if (WhichDoors != 3)
+	if (WhichDoors == 3)
 	{
-		if (open == true)
-			DoorsOpen = true;
-		else
-			DoorsOpen = false;
-	}
-	else
-	{
-		if (open == true)
-			ShaftDoorsOpen[elev->ServicedFloors.Find(ShaftDoorFloor)] = true;
-		else
-			ShaftDoorsOpen[elev->ServicedFloors.Find(ShaftDoorFloor)] = false;
-
 		//turn off related floor
 		if (open == false && (sbs->InShaft == true || sbs->InElevator == true))
 		{
@@ -842,10 +542,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	}
 
 	//reset values
-	ElevatorDoorSpeed = 0;
 	OpenDoor = 0;
 	WhichDoors = 0;
-	door_section = 0;
 	door_changed = false;
 	doors_stopped = false;
 
@@ -862,7 +560,6 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	}
 
 	DoorIsRunning = false;
-	*/
 }
 
 Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
@@ -872,8 +569,6 @@ Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
 	float spacing = 0.025f; //spacing between doors
-
-	DoorDirection = direction;
 
 	//set up coordinates
 	if (direction == false)
@@ -1020,11 +715,15 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 
 	if (x2 - x1 > z2 - z1)
 	{
+		if (ShaftDoor == false)
+			DoorDirection = true;
 		wrapper->Width = x2 - x1;
 		wrapper->Thickness = z2 - z1;
 	}
 	else
 	{
+		if (ShaftDoor == false)
+			DoorDirection = false;
 		wrapper->Width = z2 - z1;
 		wrapper->Thickness = x2 - x1;
 	}
@@ -1274,7 +973,8 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 float ElevatorDoor::GetCurrentDoorSpeed()
 {
 	//returns the internal door speed value
-	return ElevatorDoorSpeed;
+	//return ElevatorDoorSpeed;
+	return 0;
 }
 
 void ElevatorDoor::Timer::Notify()
@@ -1398,9 +1098,11 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 	return false;
 }
 
-ElevatorDoor::DoorObject::DoorObject(const char *doorname, ElevatorDoor *parent)
+ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper)
 {
 	name = doorname;
+	wrapper = Wrapper;
+	parent = wrapper->parent;
 
 	//create object mesh
 	mesh = sbs->engine->CreateSectorWallsMesh (sbs->area, doorname);
@@ -1415,6 +1117,16 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, ElevatorDoor *parent)
 
 	direction = 0;
 	speed = 0;
+	active_speed = 0;
+	openchange = 0;
+	marker1 = 0;
+	marker2 = 0;
+	door_section = 0;
+	stopping_distance = 0;
+	temp_change = 0;
+	accelerating = false;
+	is_open = false;
+	finished = false;
 }
 
 ElevatorDoor::DoorObject::~DoorObject()
@@ -1458,7 +1170,7 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *door
 	
 	doors.SetSize(doors.GetSize() + 1);
 	int index = doors.GetSize() - 1;
-	doors[index] = new DoorObject(doorname, parent);
+	doors[index] = new DoorObject(doorname, this);
 	return doors[index];
 }
 
@@ -1472,4 +1184,273 @@ void ElevatorDoor::DoorWrapper::Enable(bool value)
 	for (int i = 0; i < doors.GetSize(); i++)
 		sbs->EnableMesh(doors[i]->mesh, value);
 	Enabled = value;
+}
+
+void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
+{
+	//opens or closes elevator doors
+	//currently only supports doors on either the left/right or front/back
+	//diagonal doors will be done later, by possibly using relative plane movement
+
+	//WhichDoors is the doors to move:
+	//1 = both shaft and elevator doors
+	//2 = only elevator doors
+	//3 = only shaft doors
+
+	//ShaftDoorFloor is the floor the shaft doors are on - only has effect if whichdoors is 3
+
+	//this door system is based on offsets from the door origin (usually 0).
+	//the right (positive side) door is used as a reference, with the leftmost side of it being the position.
+	//when opening, the door starts at the origin, accelerates to marker 1, moves at a constant
+	//rate to marker 2, and then decelerates after marker 2.
+	//this offset system is not used if manual is true (in that case, it simply sets a speed value, and moves
+	//the doors until they reach the ends
+
+	csString doornumber;
+	/*if (parent->elev->NumDoors > 1)
+	{
+		doornumber = " ";
+		doornumber = doornumber + _itoa(parent->Number, parent->intbuffer, 10);
+	}*/
+
+	float tempposition, temporigin;
+	if (parent->DoorDirection == false)
+	{
+		tempposition = sbs->ToLocal(movable->GetPosition().z);
+		temporigin = wrapper->Origin.z;
+	}
+	else
+	{
+		tempposition = sbs->ToLocal(movable->GetPosition().x);
+		temporigin = wrapper->Origin.x;
+	}
+
+	//debug - show current section as function is running
+	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
+
+	if (parent->door_changed == false)
+	{
+		//initialization code
+
+		door_section = 0;
+		finished = false;
+
+		if (manual == false)
+		{
+			openchange = speed / 50;
+			marker1 = wrapper->Width / 8;
+			marker2 = (wrapper->Width / 2) - (wrapper->Width / 8);
+			active_speed = 0;
+		}
+		else
+		{
+			marker1 = 0;
+			marker2 = wrapper->Width / 2;
+			if (open == true)
+				active_speed = 0.2;
+			else
+				active_speed = -0.2;
+		}
+	}
+	else
+	{
+		//if a different direction was specified during movement
+		//only change directions immediately if re-opening (closing, then opening)
+		if (open == true)
+		{
+			//relocate marker 1 to the door's current position, in order to stop it
+			float offset = marker1 - (tempposition - temporigin);
+			if (tempposition - temporigin >= marker1)
+				//place marker at door position
+				marker1 = tempposition - temporigin;
+			else
+				//place marker to the right based on the offset, to bring door back to full speed
+				marker1 = tempposition - temporigin + offset;
+		}
+	}
+
+	//Speed up doors (only if manual is false)
+	if (manual == false)
+	{
+		//if door is opening and is left of marker 1
+		//or if door is closing and is to the right of marker 2
+		if ((tempposition - temporigin <= marker1 && open == true) || (tempposition - temporigin > marker2 && open == false))
+		{
+			accelerating = true;
+			if (parent->door_changed == false)
+			{
+				//normal door acceleration
+				if (open == true)
+					active_speed += openchange;
+				else
+					active_speed -= openchange;
+			}
+			else
+			{
+				//reverse movement if transitioning from close to open
+				//this will trigger if door is closing, and is told to open while left of relocated marker 1
+				if (tempposition - temporigin <= marker1)
+					active_speed += openchange;
+			}
+
+			//move elevator doors
+			Move();
+
+			//get stopping distance
+			stopping_distance = tempposition - temporigin;
+
+			door_section = 1;
+			return;
+		}
+	}
+
+	door_section = 2;
+
+	//Normal door movement
+	if ((tempposition - temporigin <= marker2 && open == true) || (tempposition - temporigin > marker1 && open == false))
+	{
+		Move();
+		door_section = 3;
+		return;
+	}
+
+	accelerating = false;
+
+	//slow down doors (only if manual is false)
+	if (manual == false)
+	{
+		if ((active_speed > 0 && open == true) || (active_speed < 0 && open == false))
+		{
+			if (open == true)
+				active_speed -= openchange;
+			else
+				active_speed += openchange;
+			
+			Move();
+			door_section = 4;
+			return;
+		}
+	}
+
+	//report on what section preceded the finishing code (should be 4)
+	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
+
+	//place doors in positions (fixes any overrun errors)
+	if (open == true)
+	{
+		if (parent->DoorDirection == false)
+		{
+			//move elevator doors
+			movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y, parent->elev->Origin.z + (wrapper->Width / 2))));
+		}
+		else
+		{
+			//move elevator doors
+			movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x + (wrapper->Width / 2), parent->elev->GetPosition().y, parent->elev->Origin.z)));
+		}
+	}
+	else
+	{
+		if (parent->DoorDirection == false)
+		{
+			//move elevator doors
+			movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y, parent->elev->Origin.z)));
+		}
+		else
+		{
+			//move elevator doors
+			movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y, parent->elev->Origin.z)));
+		}
+	}
+	movable->UpdateMove();
+
+	//the door is open or closed now
+	is_open = open;
+	finished = true;
+
+	//reset values
+	active_speed = 0;
+	door_section = 0;
+}
+
+void ElevatorDoor::DoorObject::Move()
+{
+		//move elevator doors
+
+		//up movement
+		if (direction == 0)
+			movable->MovePosition(csVector3(0, sbs->ToRemote(active_speed * sbs->delta), 0));
+
+		//down movement
+		if (direction == 1)
+			movable->MovePosition(csVector3(0, sbs->ToRemote(-active_speed * sbs->delta), 0));
+
+		if (parent->DoorDirection == false)
+		{
+			//left movement
+			if (direction == 2)
+				movable->MovePosition(csVector3(0, 0, sbs->ToRemote(-active_speed * sbs->delta)));
+
+			//right movement
+			if (direction == 3)
+				movable->MovePosition(csVector3(0, 0, sbs->ToRemote(active_speed * sbs->delta)));
+		}
+		else
+		{
+			//left movement
+			if (direction == 2)
+				movable->MovePosition(csVector3(sbs->ToRemote(-active_speed * sbs->delta), 0, 0));
+
+			//right movement
+			if (direction == 3)
+				movable->MovePosition(csVector3(sbs->ToRemote(active_speed * sbs->delta), 0, 0));
+		}
+
+		movable->UpdateMove();
+}
+
+void ElevatorDoor::DoorWrapper::MoveDoors(bool open, bool manual)
+{
+	//calls per-door move function
+	for (int i = 0; i < doors.GetSize(); i++)
+		doors[i]->MoveDoors(open, manual);
+}
+
+bool ElevatorDoor::DoorWrapper::CheckDoorsOpen()
+{
+	//checks to see if doors are open or closed, and returns true if the status changed
+
+	for (int i = 0; i < doors.GetSize(); i++)
+	{
+		//exit if the status is the same on any door
+		if (doors[i]->is_open == Open)
+			return false;
+	}
+
+	//if the status changed, set the new status and return true
+	Open = !Open;
+	return true;
+}
+
+bool ElevatorDoor::DoorWrapper::IsFinished()
+{
+	//checks to see if all of the doors are finished
+
+	for (int i = 0; i < doors.GetSize(); i++)
+	{
+		//exit if any door is not finished
+		if (doors[i]->finished == false)
+			return false;
+	}
+}
+
+void ElevatorDoor::DoorWrapper::StopDoors()
+{
+	//stop all doors
+
+	for (int i = 0; i < doors.GetSize(); i++)
+	{
+		doors[i]->active_speed = 0;
+		doors[i]->door_section = 0;
+	}
 }
