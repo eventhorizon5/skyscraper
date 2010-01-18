@@ -632,6 +632,30 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 	sbs->AddWallMain(wrapper->object, door->mesh, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th);
 	sbs->ResetWalls();
 
+	//store extents
+	if (x1 < x2)
+	{
+		door->extents_min.x = x1;
+		door->extents_max.x = x2;
+	}
+	else
+	{
+		door->extents_min.x = x2;
+		door->extents_max.x = x1;
+	}
+	if (z1 < z2)
+	{
+		door->extents_min.z = z1;
+		door->extents_max.z = z2;
+	}
+	else
+	{
+		door->extents_min.z = z2;
+		door->extents_max.z = z1;
+	}
+	door->extents_min.y = voffset;
+	door->extents_max.y = voffset + height;
+
 	sbs->ResetTextureMapping();
 }
 
@@ -1213,16 +1237,25 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		doornumber = doornumber + _itoa(parent->Number, parent->intbuffer, 10);
 	}*/
 
+	//first get position and origin of door, and adjust values to reflect the "edge" of the door
 	float tempposition, temporigin;
-	if (parent->DoorDirection == false)
+	if (direction > 1)
 	{
-		tempposition = sbs->ToLocal(movable->GetPosition().z);
-		temporigin = wrapper->Origin.z;
+		if (parent->DoorDirection == false)
+		{
+			tempposition = sbs->ToLocal(movable->GetPosition().z);
+			temporigin = wrapper->Origin.z;
+		}
+		else
+		{
+			tempposition = sbs->ToLocal(movable->GetPosition().x);
+			temporigin = wrapper->Origin.x;
+		}
 	}
 	else
 	{
-		tempposition = sbs->ToLocal(movable->GetPosition().x);
-		temporigin = wrapper->Origin.x;
+		tempposition = sbs->ToLocal(movable->GetPosition().y);
+		temporigin = wrapper->Origin.y;
 	}
 
 	//debug - show current section as function is running
@@ -1234,17 +1267,53 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 
 		finished = false;
 
+		//marker1 is the position to stop accelerating at
+		//marker2 is the position to start decelerating at
 		if (manual == false)
 		{
 			openchange = speed / 50;
-			marker1 = wrapper->Width / 8;
-			marker2 = (wrapper->Width / 2) - (wrapper->Width / 8);
+			if (direction > 1)
+			{
+				float width;
+				float mainwidth = wrapper->Width / 2;
+				if (parent->DoorDirection == false)
+					width = abs(extents_max.z - extents_min.z);
+				else
+					width = abs(extents_max.x - extents_min.x);
+				marker1 = width / 4;
+				marker2 = (mainwidth + (width - mainwidth)) - (width / 4);
+			}
+			else
+			{
+				float height = abs(extents_max.y - extents_min.y);
+				float mainheight = wrapper->Height / 2;
+				marker1 = height / 4;
+				marker2 = (mainheight + (height - mainheight)) - (height / 4);
+			}
 			active_speed = 0;
 		}
 		else
 		{
-			marker1 = 0;
-			marker2 = wrapper->Width / 2;
+			//manual movement speed
+			if (direction > 1)
+			{
+				float width;
+				float mainwidth = wrapper->Width / 2;
+				if (parent->DoorDirection == false)
+					width = abs(extents_max.z - extents_min.z);
+				else
+					width = abs(extents_max.x - extents_min.x);
+				marker1 = 0;
+				marker2 = mainwidth + (width - mainwidth);
+			}
+			else
+			{
+				float height = abs(extents_max.y - extents_min.y);
+				float mainheight = wrapper->Height / 2;
+				marker1 = height / 4;
+				marker2 = mainheight + (height - mainheight);
+			}
+
 			if (open == true)
 				active_speed = 0.2;
 			else
@@ -1273,7 +1342,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	{
 		//if door is opening and is left of marker 1
 		//or if door is closing and is to the right of marker 2
-		if ((tempposition - temporigin <= marker1 && open == true) || (tempposition - temporigin > marker2 && open == false))
+		if ((abs(tempposition - temporigin) <= marker1 && open == true) || (abs(tempposition - temporigin) > marker2 && open == false))
 		{
 			accelerating = true;
 			if (parent->door_changed == false)
@@ -1306,7 +1375,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	door_section = 2;
 
 	//Normal door movement
-	if ((tempposition - temporigin <= marker2 && open == true) || (tempposition - temporigin > marker1 && open == false))
+	if ((abs(tempposition - temporigin) <= marker2 && open == true) || (abs(tempposition - temporigin) > marker1 && open == false))
 	{
 		Move();
 		door_section = 3;
@@ -1337,29 +1406,40 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	//place doors in positions (fixes any overrun errors)
 	if (open == true)
 	{
-		if (parent->DoorDirection == false)
+		//move elevator doors
+		if (direction > 1)
 		{
-			//move elevator doors
-			movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y, parent->elev->Origin.z + (wrapper->Width / 2))));
+			float mainwidth = wrapper->Width / 2;
+			if (parent->DoorDirection == false)
+			{
+				float width = abs(extents_max.z - extents_min.z);
+				if (direction == 2)
+					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y, parent->elev->Origin.z - (mainwidth + (width - mainwidth)))));
+				else
+					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y, parent->elev->Origin.z + (mainwidth + (width - mainwidth)))));
+			}
+			else
+			{
+				float width = abs(extents_max.x - extents_min.x);
+				if (direction == 2)
+					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x - (mainwidth + (width - mainwidth)), parent->elev->GetPosition().y, parent->elev->Origin.z)));
+				else
+					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x + (mainwidth + (width - mainwidth)), parent->elev->GetPosition().y, parent->elev->Origin.z)));
+			}
 		}
 		else
 		{
-			//move elevator doors
-			movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x + (wrapper->Width / 2), parent->elev->GetPosition().y, parent->elev->Origin.z)));
+			float mainheight = wrapper->Height / 2;
+			float height = abs(extents_max.y - extents_min.y);
+			if (direction == 0)
+				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y - (mainheight + (height - mainheight)), parent->elev->Origin.z)));
+			else
+				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y + (mainheight + (height - mainheight)), parent->elev->Origin.z)));
 		}
 	}
 	else
 	{
-		if (parent->DoorDirection == false)
-		{
-			//move elevator doors
-			movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y, parent->elev->Origin.z)));
-		}
-		else
-		{
-			//move elevator doors
-			movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y, parent->elev->Origin.z)));
-		}
+		movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, parent->elev->GetPosition().y, parent->elev->Origin.z)));
 	}
 	movable->UpdateMove();
 

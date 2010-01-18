@@ -61,6 +61,8 @@ public:
 		bool accelerating;
 		bool is_open;
 		bool finished;
+		csVector3 extents_min;
+		csVector3 extents_max;
 	};
 
 	//wrapper that represents the entire set of doors
