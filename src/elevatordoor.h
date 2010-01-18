@@ -38,7 +38,7 @@ public:
 	struct DoorWrapper;
 	struct DoorObject
 	{
-		DoorObject(const char *doorname, DoorWrapper *Wrapper);
+		DoorObject(const char *doorname, DoorWrapper *Wrapper, int direction, float speed);
 		~DoorObject();
 		void MoveDoors(bool open, bool manual);
 		void Move();
@@ -69,7 +69,7 @@ public:
 		DoorWrapper(ElevatorDoor *parentobject);
 		~DoorWrapper();
 
-		DoorObject* CreateDoor(const char *doorname, int direction, float speed);
+		DoorObject* CreateDoor(const char *doorname, int Direction, float Speed);
 		void Enable(bool value);
 		bool CheckDoorsOpen();
 		bool IsFinished();

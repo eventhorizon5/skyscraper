@@ -420,12 +420,12 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		doornumber = doornumber + _itoa(Number, intbuffer, 10);
 	}
 
-	//stop timer
-	timer->Stop();
-
 	if (DoorIsRunning == false || (manual == true && previous_open != open))
 	{
 		//initialization code
+
+		//stop timer
+		timer->Stop();
 
 		DoorIsRunning = true;
 		door_changed = false;
@@ -1098,7 +1098,7 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 	return false;
 }
 
-ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper)
+ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper, int Direction, float Speed)
 {
 	name = doorname;
 	wrapper = Wrapper;
@@ -1115,8 +1115,8 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper)
 	movable->SetPosition(sbs->ToRemote(parent->elev->Origin));
 	movable->UpdateMove();
 
-	direction = 0;
-	speed = 0;
+	direction = Direction;
+	speed = Speed;
 	active_speed = 0;
 	openchange = 0;
 	marker1 = 0;
@@ -1141,7 +1141,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject)
 {
 	parent = parentobject;
 	Open = false;
-	Enabled = false;
+	Enabled = true;
 	Width = 0;
 	Height = 0;
 	Origin = 0;
@@ -1170,7 +1170,7 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *door
 	
 	doors.SetSize(doors.GetSize() + 1);
 	int index = doors.GetSize() - 1;
-	doors[index] = new DoorObject(doorname, this);
+	doors[index] = new DoorObject(doorname, this, direction, speed);
 	return doors[index];
 }
 
@@ -1228,11 +1228,10 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	//debug - show current section as function is running
 	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
 
-	if (parent->door_changed == false)
+	if (parent->door_changed == false && door_section == 0)
 	{
 		//initialization code
 
-		door_section = 0;
 		finished = false;
 
 		if (manual == false)
@@ -1252,7 +1251,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				active_speed = -0.2;
 		}
 	}
-	else
+	else if (parent->door_changed == true)
 	{
 		//if a different direction was specified during movement
 		//only change directions immediately if re-opening (closing, then opening)
