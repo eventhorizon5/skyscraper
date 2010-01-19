@@ -661,6 +661,8 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 
 void ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
+	//adds an elevator door component; remake of AddDoors command
+
 	csString elevnumber, doornumber, Name, buffer;
 	elevnumber = elev->Number;
 	elevnumber.Trim();
@@ -676,6 +678,8 @@ void ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const
 
 void ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
+	//adds a shaft door component; remake of AddShaftDoor command
+
 	//exit if floor is not serviced by the elevator
 	if (!elev->IsServicedFloor(floor))
 		return;
@@ -692,6 +696,29 @@ void ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char
 	buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
 
 	AddDoorComponent(ShaftDoors[elev->ServicedFloors.Find(floor)], name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+}
+
+void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+{
+	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
+
+	csString elevnumber, floornumber, doornumber, Name, buffer;
+	elevnumber = elev->Number;
+	elevnumber.Trim();
+	doornumber = Number;
+	doornumber.Trim();
+	Name = name;
+	Name.Trim();
+
+	//create doors
+	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
+	{
+		int floor = elev->ServicedFloors[i];
+		floornumber = floor;
+		floornumber.Trim();
+		buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
+		AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	}
 }
 
 Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, float voffset, float CenterX, float CenterZ)
@@ -756,9 +783,42 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	}
 	wrapper->Height = y2 - y1;
 
-	sbs->ResetTextureMapping(true);
+	//if shaft door, cut walls for door
+	if (ShaftDoor == true)
+	{
+		sbs->DrawWalls(true, true, true, true, true, true);
+		sbs->ResetTextureMapping(true);
+
+		//create doors
+		Floor *floorobj = sbs->GetFloor(floor);
+		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
+		float base = floorobj->GetBase(true); //relative to floor
+		float base2 = floorobj->Altitude + base; //absolute
+
+		//cut shaft and floor walls
+		if (DoorDirection == false)
+		{
+			if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), 1, "Shaft"))
+				return 0;
+			floorobj->Cut(csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), true, false, true, 2, "Shaft");
+		}
+		else
+		{
+			if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), 1, "Shaft"))
+				return 0;
+			floorobj->Cut(csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
+		}
+
+		//create doorway walls
+		WallObject *wall = sbs->CreateWallObject(floorobj->level_walls, floorobj->Level, floorobj->object, "Connection Walls");
+		sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
+
+		sbs->ResetWalls();
+		sbs->ResetTextureMapping();
+	}
 
 	//create connection pieces
+	sbs->ResetTextureMapping(true);
 	WallObject *wall;
 	csString name1, name2;
 	if (ShaftDoor == false)
@@ -795,16 +855,31 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 
 Object* ElevatorDoor::FinishDoors(float CenterX, float CenterZ)
 {
+	//finish elevator doors
+
 	return FinishDoors(Doors, 0, false, 0, CenterX, CenterZ);
 }
 
-Object* ElevatorDoor::FinishShaftDoors(int floor, float CenterX, float CenterZ)
+Object* ElevatorDoor::FinishShaftDoor(int floor, float CenterX, float CenterZ)
 {
+	//finish shaft door on a specified floor
+
 	//exit if floor is not serviced by the elevator
 	if (!elev->IsServicedFloor(floor))
 		return 0;
 
 	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], floor, true, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->GetBase(true), CenterX, CenterZ);
+}
+
+bool ElevatorDoor::FinishShaftDoors(float CenterX, float CenterZ)
+{
+	//finish all shaft doors
+
+	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
+	{
+		if (!FinishShaftDoor(elev->ServicedFloors[i], CenterX, CenterZ))
+			return false;
+	}
 }
 
 bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th)
@@ -838,7 +913,6 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
-	float base, base2;
 	int index = elev->ServicedFloors.Find(floor);
 
 	//set up coordinates
@@ -867,35 +941,11 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 
 	csString buffer, buffer2, buffer3, buffer4, buffer5;
 
-	sbs->DrawWalls(true, true, true, true, true, true);
-	sbs->ResetTextureMapping(true);
-
 	//create doors
 	Floor *floorobj = sbs->GetFloor(floor);
 	Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-	base = floorobj->GetBase(true); //relative to floor
-	base2 = floorobj->Altitude + base; //absolute
-
-	//cut shaft and floor walls
-	if (DoorDirection == false)
-	{
-		if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z4), 1, "Shaft"))
-			return 0;
-		floorobj->Cut(csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z4), true, false, true, 2, "Shaft");
-	}
-	else
-	{
-		if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + Doors->Height, elev->Origin.z + z1 + 2), 1, "Shaft"))
-			return 0;
-		floorobj->Cut(csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x4, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
-	}
-
-	//create doorway walls
-	WallObject *wall = sbs->CreateWallObject(floorobj->level_walls, floorobj->Level, floorobj->object, "Connection Walls");
-	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
-
-	sbs->ResetWalls();
-	sbs->ResetTextureMapping();
+	float base = floorobj->GetBase(true); //relative to floor
+	float base2 = floorobj->Altitude + base; //absolute
 
 	//create left door
 	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, ShaftDoorThickness, 2, OpenSpeed, x1, z1, x2, z2, Doors->Height, base2, tw, th, tw, th);
@@ -904,7 +954,7 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, 3, OpenSpeed, x3, z3, x4, z4, Doors->Height, base2, tw, th, tw, th);
 
 	//finish doors
-	Object *object = FinishShaftDoors(floor, ShaftDoorOrigin.x, ShaftDoorOrigin.z);
+	Object *object = FinishShaftDoor(floor, ShaftDoorOrigin.x, ShaftDoorOrigin.z);
 
 	//make doors invisible on start
 	ShaftDoors[index]->Enable(false);
