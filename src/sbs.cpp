@@ -2353,10 +2353,10 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 		for (int i = 0; i < state->GetPolygonVertexCount(index); i++)
 			varray.AddVertex(state->GetPolygonVertex(index, i)[selX], state->GetPolygonVertex(index, i)[selY], 0);
 
-		if (RevX == true || (normal.x < 0.001 && normal.z < 0.001 && abs(normal.x) > 0.999 && abs(normal.z) > 0.999) || normal.z < -0.999)
+		if (RevX == true || (normal.x < 0.001 && normal.z < 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.z < -0.999)
 			rev_x = true;
 
-		if (RevZ == true || (normal.x > 0.001 && normal.z > 0.001 && abs(normal.x) > 0.999 && abs(normal.z) > 0.999) || normal.x > 0.999)
+		if (RevZ == true || (normal.x > 0.001 && normal.z > 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.x > 0.999)
 			rev_z = true;
 
 		csVector2 a, b;
