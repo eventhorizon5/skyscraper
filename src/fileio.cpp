@@ -4906,6 +4906,214 @@ int ScriptProcessor::ProcElevators()
 		tempdata.DeleteAll();
 	}
 
+	//AddDoorComponent command
+	if (LineData.Slice(0, 16).CompareNoCase("adddoorcomponent") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(17).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 17 || tempdata.GetSize() > 17)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 0; i <= 16; i++)
+		{
+			if (i == 1)
+				i = 4;
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		StoreCommand(elev->AddDoorComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16])));
+
+		tempdata.DeleteAll();
+	}
+
+	//AddShaftDoorComponent command
+	if (LineData.Slice(0, 21).CompareNoCase("addshaftdoorcomponent") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(22).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 18 || tempdata.GetSize() > 18)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 0; i <= 17; i++)
+		{
+			if (i == 2)
+				i = 5;
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[0]), atoi(tempdata[1]), tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
+
+		tempdata.DeleteAll();
+	}
+
+	//AddShaftDoorsComponent command
+	if (LineData.Slice(0, 22).CompareNoCase("addshaftdoorscomponent") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(23).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 17 || tempdata.GetSize() > 17)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 0; i <= 16; i++)
+		{
+			if (i == 1)
+				i = 4;
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		elev->AddShaftDoorsComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]));
+
+		tempdata.DeleteAll();
+	}
+
+	//FinishDoors command
+	if (LineData.Slice(0, 11).CompareNoCase("finishdoors") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(12).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 0; i <= 2; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		StoreCommand(elev->FinishDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])));
+
+		tempdata.DeleteAll();
+	}
+
+	//FinishShaftDoor command
+	if (LineData.Slice(0, 15).CompareNoCase("finishshaftdoor") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(16).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 0; i <= 3; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		StoreCommand(elev->FinishShaftDoor(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])));
+
+		tempdata.DeleteAll();
+	}
+
+	//FinishShaftDoors command
+	if (LineData.Slice(0, 16).CompareNoCase("finishshaftdoors") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(17).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 0; i <= 2; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		bool result;
+		result = elev->FinishShaftDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
+
+		if (result == false)
+			return ScriptError("Error finishing shaft doors");
+
+		tempdata.DeleteAll();
+	}
+
 	//Set command
 	if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
 	{

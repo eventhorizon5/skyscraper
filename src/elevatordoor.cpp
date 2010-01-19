@@ -659,7 +659,7 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 	sbs->ResetTextureMapping();
 }
 
-void ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds an elevator door component; remake of AddDoors command
 
@@ -674,9 +674,10 @@ void ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const
 	buffer.Trim();
 
 	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	return Doors->object;
 }
 
-void ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds a shaft door component; remake of AddShaftDoor command
 
@@ -684,6 +685,7 @@ void ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char
 	if (!elev->IsServicedFloor(floor))
 		return;
 
+	int index = elev->ServicedFloors.Find(floor);
 	csString elevnumber, floornumber, doornumber, Name, buffer;
 	elevnumber = elev->Number;
 	elevnumber.Trim();
@@ -695,7 +697,8 @@ void ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char
 	Name.Trim();
 	buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
 
-	AddDoorComponent(ShaftDoors[elev->ServicedFloors.Find(floor)], name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	AddDoorComponent(ShaftDoors[index], name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	return ShaftDoors[index]->object;
 }
 
 void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)

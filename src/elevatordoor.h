@@ -135,8 +135,8 @@ public:
 	bool ShaftDoorsExist(int floor);
 	int GetWhichDoors();
 	void AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	void AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	void AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	Object* AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	Object* AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	void AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	Object* FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, float voffset, float CenterX, float CenterZ);
 	Object* FinishDoors(float CenterX, float CenterZ);
