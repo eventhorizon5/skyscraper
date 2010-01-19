@@ -413,13 +413,6 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//this offset system is not used if manual is true (in that case, it simply sets a speed value, and moves
 	//the doors until they reach the ends
 
-	csString doornumber;
-	if (elev->NumDoors > 1)
-	{
-		doornumber = " ";
-		doornumber = doornumber + _itoa(Number, intbuffer, 10);
-	}
-
 	if (DoorIsRunning == false || (manual == true && previous_open != open))
 	{
 		//initialization code
@@ -1190,10 +1183,6 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	mesh->SetZBufMode(CS_ZBUF_USE);
 	mesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	
-	//move object to positions
-	movable->SetPosition(sbs->ToRemote(parent->elev->Origin));
-	movable->UpdateMove();
-
 	direction = Direction;
 	speed = Speed;
 	active_speed = 0;
@@ -1253,6 +1242,14 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *door
 	doors.SetSize(doors.GetSize() + 1);
 	int index = doors.GetSize() - 1;
 	doors[index] = new DoorObject(doorname, this, direction, speed);
+
+	//move object to positions
+	if (IsShaftDoor == false)
+		doors[index]->movable->SetPosition(sbs->ToRemote(parent->elev->Origin));
+	else
+		doors[index]->movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, 0, parent->elev->Origin.z)));
+	doors[index]->movable->UpdateMove();
+
 	return doors[index];
 }
 
@@ -1288,13 +1285,6 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	//this offset system is not used if manual is true (in that case, it simply sets a speed value, and moves
 	//the doors until they reach the ends
 
-	csString doornumber;
-	/*if (parent->elev->NumDoors > 1)
-	{
-		doornumber = " ";
-		doornumber = doornumber + _itoa(parent->Number, parent->intbuffer, 10);
-	}*/
-
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
 	float tempposition, temporigin;
 	if (direction > 1)
@@ -1326,7 +1316,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	old_difference = tempposition - temporigin;
 
 	//debug - show current section as function is running
-	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
+	//sbs->Report("Door section: " + csString(_itoa(door_section, parent->intbuffer, 10)));
 
 	if (parent->door_changed == false && door_section == 0)
 	{
@@ -1471,7 +1461,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	}
 
 	//report on what section preceded the finishing code (should be 4)
-	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
+	//sbs->Report("Door section: " + csString(_itoa(door_section, parent->intbuffer, 10)));
 
 	//place doors in positions (fixes any overrun errors)
 	float ypos;
