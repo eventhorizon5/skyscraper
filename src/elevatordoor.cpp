@@ -683,7 +683,7 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 
 	//exit if floor is not serviced by the elevator
 	if (!elev->IsServicedFloor(floor))
-		return;
+		return 0;
 
 	int index = elev->ServicedFloors.Find(floor);
 	csString elevnumber, floornumber, doornumber, Name, buffer;
