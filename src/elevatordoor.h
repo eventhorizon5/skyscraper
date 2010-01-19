@@ -63,6 +63,8 @@ public:
 		bool finished;
 		csVector3 extents_min;
 		csVector3 extents_max;
+		bool sign_changed;
+		float old_difference;
 	};
 
 	//wrapper that represents the entire set of doors

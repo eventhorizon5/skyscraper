@@ -1153,6 +1153,8 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	accelerating = false;
 	is_open = false;
 	finished = false;
+	sign_changed = false;
+	old_difference = 0;
 }
 
 ElevatorDoor::DoorObject::~DoorObject()
@@ -1261,6 +1263,15 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		temporigin = wrapper->Origin.y;
 	}
 
+	float difference = fabs(tempposition - temporigin);
+
+	if (old_difference != 0 && manual == true)
+	{
+		if (tempposition - temporigin > 0 && old_difference < 0 || tempposition - temporigin < 0 && old_difference > 0)
+			sign_changed = true;
+	}
+	old_difference = tempposition - temporigin;
+
 	//debug - show current section as function is running
 	//sbs->Report("Door section: " + csString(_itoa(door_section, intbuffer, 10)));
 
@@ -1323,20 +1334,20 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				active_speed = -0.2;
 		}
 	}
-	else if (parent->door_changed == true)
+	else if (parent->previous_open != open && parent->door_changed == true)
 	{
 		//if a different direction was specified during movement
 		//only change directions immediately if re-opening (closing, then opening)
 		if (open == true)
 		{
 			//relocate marker 1 to the door's current position, in order to stop it
-			float offset = marker1 - (tempposition - temporigin);
-			if (tempposition - temporigin >= marker1)
+			float offset = marker1 - difference;
+			if (difference >= marker1)
 				//place marker at door position
-				marker1 = tempposition - temporigin;
+				marker1 = difference;
 			else
 				//place marker to the right based on the offset, to bring door back to full speed
-				marker1 = tempposition - temporigin + offset;
+				marker1 = difference + offset;
 		}
 	}
 
@@ -1345,7 +1356,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	{
 		//if door is opening and is left of marker 1
 		//or if door is closing and is to the right of marker 2
-		if ((fabs(tempposition - temporigin) <= marker1 && open == true) || (fabs(tempposition - temporigin) > marker2 && open == false))
+		if ((difference <= marker1 && open == true) || (difference > marker2 && open == false))
 		{
 			accelerating = true;
 			if (parent->door_changed == false)
@@ -1360,7 +1371,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				//reverse movement if transitioning from close to open
 				//this will trigger if door is closing, and is told to open while left of relocated marker 1
-				if (tempposition - temporigin <= marker1)
+				if (difference <= marker1)
 					active_speed += openchange;
 			}
 
@@ -1368,7 +1379,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			Move();
 
 			//get stopping distance
-			stopping_distance = tempposition - temporigin;
+			stopping_distance = difference;
 
 			door_section = 1;
 			return;
@@ -1378,11 +1389,14 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	door_section = 2;
 
 	//Normal door movement
-	if ((fabs(tempposition - temporigin) <= marker2 && open == true) || (fabs(tempposition - temporigin) > marker1 && open == false))
+	if ((difference <= marker2 && open == true) || (difference > marker1 && open == false))
 	{
-		Move();
-		door_section = 3;
-		return;
+		if (sign_changed == false) //don't run movement code if difference went beyond 0, for manual only
+		{
+			Move();
+			door_section = 3;
+			return;
+		}
 	}
 
 	accelerating = false;
@@ -1459,6 +1473,9 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	//reset values
 	active_speed = 0;
 	door_section = 0;
+	sign_changed = false;
+	old_difference = 0;
+	stopping_distance = 0;
 }
 
 void ElevatorDoor::DoorObject::Move()
