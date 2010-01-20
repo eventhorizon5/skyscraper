@@ -9,7 +9,11 @@
 #in a line, all text after it will be ignored.  If a line starts with that sign, the whole
 #line is ignored.
 
-#The first thing you'll need to do when creating a building is define the global parameters.
+#What we'll do first is include some fancy elevator door functions for use later.
+#This gives us access to a bunch of pre-made elevator door types
+<Include data/scripts/elevator_doors.txt>
+
+#Then the thing you'll need to do when creating a building is define the global parameters.
 #These are contained inside the "Global" section.  The following code shows this building's
 #basic parameters:
 
@@ -270,14 +274,13 @@ DrawWalls = true, true, false, false, false, false
     TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
     AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 0, 0 #right panel
     
-    #now the doors - the elevator car's doors need to be created first, and then the shaft doors.
-    #shaft doors can either be specified here (to create them all at once) or later in the floor
-    #section for them to be made on a per-floor basis
+    #now the doors - this calls one of the functions defined in the data/scripts/elevator_doors.txt file
+    #that we included at the beginning.  That file provides a number of pre-made door styles, and for this
+    #we're going to use the standard center-open style.
+    #shaft doors can also be created later in the floor section for them to be made on a per-floor basis
     
-    WallOrientation = right
-    DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 0, -3.01, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 0, -3.301, 0, 0 #shaft doors
+    elevdoor_center()
+    
     WallOrientation = left
     SetAutoSize = true, true
 
