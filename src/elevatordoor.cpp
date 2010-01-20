@@ -1514,9 +1514,9 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			float mainheight = wrapper->Height / 2;
 			float height = fabs(extents_max.y - extents_min.y);
 			if (direction == 0)
-				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight)), parent->elev->Origin.z)));
-			else
 				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos + (mainheight + (height - mainheight)), parent->elev->Origin.z)));
+			else
+				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight)), parent->elev->Origin.z)));
 		}
 	}
 	else
