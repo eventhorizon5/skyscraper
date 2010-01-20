@@ -588,16 +588,16 @@ Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture
 	}
 
 	//create left door
-	AddDoorComponent("Left", lefttexture, lefttexture, thickness, 2, OpenSpeed, x1, z1, x2, z2, height, 0, tw, th, tw, th);
+	AddDoorComponent("Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, x1, z1, x2, z2, height, 0, tw, th, tw, th);
 
 	//create right door
-	AddDoorComponent("Right", righttexture, righttexture, thickness, 3, OpenSpeed, x3, z3, x4, z4, height, 0, tw, th, tw, th);
+	AddDoorComponent("Right", righttexture, righttexture, thickness, "Right", OpenSpeed, x3, z3, x4, z4, height, 0, tw, th, tw, th);
 
 	//finish doors
 	return FinishDoors(CenterX, CenterZ);
 }
 
-void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//creates a door component - finish with FinishDoor()
 
@@ -652,7 +652,7 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 	sbs->ResetTextureMapping();
 }
 
-Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds an elevator door component; remake of AddDoors command
 
@@ -670,7 +670,7 @@ Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, co
 	return Doors->object;
 }
 
-Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds a shaft door component; remake of AddShaftDoor command
 
@@ -694,7 +694,7 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 	return ShaftDoors[index]->object;
 }
 
-void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
@@ -945,10 +945,10 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	float base2 = floorobj->Altitude + base; //absolute
 
 	//create left door
-	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, ShaftDoorThickness, 2, OpenSpeed, x1, z1, x2, z2, Doors->Height, base2, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, ShaftDoorThickness, "Left", OpenSpeed, x1, z1, x2, z2, Doors->Height, base2, tw, th, tw, th);
 
 	//create right door
-	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, 3, OpenSpeed, x3, z3, x4, z4, Doors->Height, base2, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, "Right", OpenSpeed, x3, z3, x4, z4, Doors->Height, base2, tw, th, tw, th);
 
 	//finish doors
 	Object *object = FinishShaftDoor(floor, ShaftDoorOrigin.x - elev->Origin.x, ShaftDoorOrigin.z - elev->Origin.z);
@@ -1171,7 +1171,7 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 	return false;
 }
 
-ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper, int Direction, float Speed)
+ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper, const char *Direction, float Speed)
 {
 	name = doorname;
 	wrapper = Wrapper;
@@ -1184,7 +1184,18 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	mesh->SetZBufMode(CS_ZBUF_USE);
 	mesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	
-	direction = Direction;
+	csString direction_check = Direction;
+	direction_check.Trim();
+
+	//set direction value from strings
+	direction = 0;
+	if (direction_check == "down")
+		direction = 1;
+	if (direction_check == "left" || direction_check == "forward")
+		direction = 2;
+	if (direction_check == "right" || direction_check == "back")
+		direction = 3;
+
 	speed = Speed;
 	active_speed = 0;
 	openchange = 0;
@@ -1236,7 +1247,7 @@ ElevatorDoor::DoorWrapper::~DoorWrapper()
 	object = 0;
 }
 
-ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, int direction, float speed)
+ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, const char *direction, float speed)
 {
 	//initialize a door component
 	

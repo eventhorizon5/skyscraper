@@ -3064,7 +3064,7 @@ void Elevator::ReportError(const char *message)
 	sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
 }
 
-Object* Elevator::AddDoorComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+Object* Elevator::AddDoorComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds an elevator door component to the specified door at a relative central position (off of elevator origin)
 
@@ -3075,7 +3075,7 @@ Object* Elevator::AddDoorComponent(int number, const char *name, const char *tex
 	return 0;
 }
 
-Object* Elevator::AddShaftDoorComponent(int number, int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+Object* Elevator::AddShaftDoorComponent(int number, int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds a single elevator shaft door component on the specified floor
 
@@ -3086,7 +3086,7 @@ Object* Elevator::AddShaftDoorComponent(int number, int floor, const char *name,
 		return 0;
 }
 
-void Elevator::AddShaftDoorsComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+void Elevator::AddShaftDoorsComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds shaft's elevator door components specified at a relative central position (off of elevator origin)
 

@@ -38,7 +38,7 @@ public:
 	struct DoorWrapper;
 	struct DoorObject
 	{
-		DoorObject(const char *doorname, DoorWrapper *Wrapper, int direction, float speed);
+		DoorObject(const char *doorname, DoorWrapper *Wrapper, const char *direction, float speed);
 		~DoorObject();
 		void MoveDoors(bool open, bool manual);
 		void Move();
@@ -73,7 +73,7 @@ public:
 		DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor);
 		~DoorWrapper();
 
-		DoorObject* CreateDoor(const char *doorname, int Direction, float Speed);
+		DoorObject* CreateDoor(const char *doorname, const char *Direction, float Speed);
 		void Enable(bool value);
 		bool CheckDoorsOpen();
 		bool IsFinished();
@@ -134,10 +134,10 @@ public:
 	void SetShaftDoors(float thickness, float CenterX, float CenterZ);
 	bool ShaftDoorsExist(int floor);
 	int GetWhichDoors();
-	void AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	Object* AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	Object* AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	void AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, int direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	void AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	Object* AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	Object* AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	void AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	Object* FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, float voffset, float CenterX, float CenterZ);
 	Object* FinishDoors(float CenterX, float CenterZ);
 	Object* FinishShaftDoor(int floor, float CenterX, float CenterZ);

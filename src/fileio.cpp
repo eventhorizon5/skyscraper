@@ -4929,6 +4929,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			if (i == 1)
 				i = 4;
+			if (i == 5)
+				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 			{
 				ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -4936,7 +4938,7 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		StoreCommand(elev->AddDoorComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16])));
+		StoreCommand(elev->AddDoorComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16])));
 
 		tempdata.DeleteAll();
 	}
@@ -4964,6 +4966,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			if (i == 2)
 				i = 5;
+			if (i == 6)
+				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 			{
 				ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -4971,7 +4975,7 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[0]), atoi(tempdata[1]), tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
+		StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[0]), atoi(tempdata[1]), tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
 
 		tempdata.DeleteAll();
 	}
@@ -4999,6 +5003,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			if (i == 1)
 				i = 4;
+			if (i == 5)
+				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 			{
 				ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -5006,7 +5012,7 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		elev->AddShaftDoorsComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]));
+		elev->AddShaftDoorsComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]));
 
 		tempdata.DeleteAll();
 	}
