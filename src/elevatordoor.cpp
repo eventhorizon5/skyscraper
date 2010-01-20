@@ -234,7 +234,11 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 
 	//if opening both doors, exit if shaft doors don't exist
 	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false)
+	{
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors");
+		OpenDoor = 0;
 		return;
+	}
 
 	WhichDoors = whichdoors;
 	ShaftDoorFloor = floor;
@@ -339,7 +343,11 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 
 	//if closing both doors, exit if shaft doors don't exist
 	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false)
+	{
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors");
+		OpenDoor = 0;
 		return;
+	}
 
 	//turn off directional indicators
 	if (whichdoors == 1)
@@ -690,7 +698,9 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 	Name.Trim();
 	buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
 
-	AddDoorComponent(ShaftDoors[index], name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	Floor *floorobj = sbs->GetFloor(floor);
+
+	AddDoorComponent(ShaftDoors[index], name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, floorobj->Altitude + floorobj->GetBase(true) + voffset, tw, th, side_tw, side_th);
 	return ShaftDoors[index]->object;
 }
 
@@ -864,7 +874,8 @@ Object* ElevatorDoor::FinishShaftDoor(int floor, float CenterX, float CenterZ)
 	if (!elev->IsServicedFloor(floor))
 		return 0;
 
-	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], floor, true, sbs->GetFloor(floor)->Altitude + sbs->GetFloor(floor)->GetBase(true), CenterX, CenterZ);
+	Floor *floorobj = sbs->GetFloor(floor);
+	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], floor, true, floorobj->Altitude + floorobj->GetBase(true), CenterX, CenterZ);
 }
 
 bool ElevatorDoor::FinishShaftDoors(float CenterX, float CenterZ)
@@ -939,25 +950,18 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	csString buffer, buffer2, buffer3, buffer4, buffer5;
 
 	//create doors
-	Floor *floorobj = sbs->GetFloor(floor);
-	Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-	float base = floorobj->GetBase(true); //relative to floor
-	float base2 = floorobj->Altitude + base; //absolute
 
 	//create left door
-	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, ShaftDoorThickness, "Left", OpenSpeed, x1, z1, x2, z2, Doors->Height, base2, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, ShaftDoorThickness, "Left", OpenSpeed, x1, z1, x2, z2, Doors->Height, 0, tw, th, tw, th);
 
 	//create right door
-	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, "Right", OpenSpeed, x3, z3, x4, z4, Doors->Height, base2, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, "Right", OpenSpeed, x3, z3, x4, z4, Doors->Height, 0, tw, th, tw, th);
 
 	//finish doors
 	Object *object = FinishShaftDoor(floor, ShaftDoorOrigin.x - elev->Origin.x, ShaftDoorOrigin.z - elev->Origin.z);
 
 	//make doors invisible on start
 	ShaftDoors[index]->Enable(false);
-
-	floorobj = 0;
-	shaft = 0;
 
 	return object;
 }

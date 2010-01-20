@@ -3226,7 +3226,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftDoor command
-	if (LineData.Slice(0, 12).CompareNoCase("addshaftdoor") == true)
+	if (LineData.Slice(0, 13).CompareNoCase("addshaftdoor ") == true)
 	{
 		//exit if the SetShaftDoors command was never used
 		if (setshaftdoors == false)
@@ -4386,7 +4386,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddShaftDoors command
-	if (LineData.Slice(0, 13).CompareNoCase("addshaftdoors") == true)
+	if (LineData.Slice(0, 14).CompareNoCase("addshaftdoors ") == true)
 	{
 		//get data
 		tempdata.SplitString(LineData.Slice(14).GetData(), ",");
@@ -5051,7 +5051,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//FinishShaftDoor command
-	if (LineData.Slice(0, 15).CompareNoCase("finishshaftdoor") == true)
+	if (LineData.Slice(0, 16).CompareNoCase("finishshaftdoor ") == true)
 	{
 		//get data
 		tempdata.SplitString(LineData.Slice(16).GetData(), ",");
