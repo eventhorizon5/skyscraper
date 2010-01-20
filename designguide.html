@@ -1519,6 +1519,68 @@
   <p align="left">For information on the parameters, see the AddSound command 
     in the Globals section. The only difference here is that the X, Y and Z position 
     values are relative of the elevator's center/origin.</p>
+  <p align="left"><strong>14. AddDoorComponent</strong> - creates a single elevator 
+    door component, used for creating custom door styles<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddDoorComponent 
+    <em>number, name, texture, sidetexture, thickness, direction, speed, x1, z1, 
+    x2, z2, height, voffset, tw, th, side_tw, side_th</em></font></p>
+  <p align="left">Example: <font size="2" face="Courier New, Courier, mono">AddDoorComponent 
+    1, Left, ElevDoors, Black, 0.2, left, 0.3, -1.75, 0, 1.75, 0, 8, 0, 0, 0, 
+    0, 0</font></p>
+  <p align="left">The AddDoorComponent command allows you to create your own custom 
+    door styles. It creates a single door component within a set - for example, 
+    the standard center-open doors have 2 door components: left and right. With 
+    this command you specify the positioning of a component similar to wall creation, 
+    specify it's textures, tell it which direction it's going to travel during 
+    opening, and what it's speed will be. <em>Number</em> specifies the number 
+    of the door to create (related to the <em>Doors</em> command) - if the elevator 
+    only has one door, or if the Doors command was not used, specify 1 here. <em>Texture</em> 
+    refers to the texture used on the main (front and back) sides of the door. 
+    <em>SideTexture</em> refers to the texture used on the sides (and top/bottom) 
+    of the door. <em>Direction</em> is either Up, Down, Left (or Front; is the 
+    same), or Right (or Back; is also the same). <em>Side_tw</em> and <em>side_th</em> 
+    specify the texture tiling for the sides. Use the FinishDoors command after 
+    creating the components. The above example creates the left door component 
+    for the standard center-open doors, and uses the default speed value. This 
+    command replaces the AddDoors command.</p>
+  <p align="left"><strong>15. AddShaftDoorComponent</strong> - creates a single 
+    shaft door component, used for creating custom door styles<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoorComponent 
+    <em>number, floor, name, texture, sidetexture, thickness, direction, speed, 
+    x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th</em></font></p>
+  <p align="left">This command is almost identical to the AddDoorComponent command, 
+    except that it creates shaft doors. Use the FinishShaftDoor command after 
+    creating the components. This command replaces the AddShaftDoor command.</p>
+  <p align="left"><strong>16. AddShaftDoorsComponent</strong> - creates a single 
+    shaft door component for all serviced floors - used for creating custom door 
+    styles<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoorsComponent 
+    <em>number, name, texture, sidetexture, thickness, direction, speed, x1, z1, 
+    x2, z2, height, voffset, tw, th, side_tw, side_th</em></font></p>
+  <p align="left">This command is almost identical to the AddDoorComponent command, 
+    except that it creates shaft doors. Use the FinishShaftDoors command after 
+    creating the components. This command replaces the AddShaftDoors command.</p>
+  <p align="left"><strong>17. FinishDoors</strong> - finishes elevator door creation 
+    - use this after all related AddDoorComponent commands are used.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">FinishDoors <em>CenterX, 
+    CenterZ</em></font></p>
+  <p align="left">This command completes the elevator door creation by storing 
+    the central location, cutting walls for the door, creating side connection 
+    pieces for the cut, etc. CenterX and CenterZ specify the central location 
+    of the entire door itself.</p>
+  <p align="left"><strong>18. FinishShaftDoor</strong> - finishes shaft door creation 
+    - use this after all related AddShaftDoorComponent commands are used.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoor<em> 
+    floor, CenterX, CenterZ</em></font></p>
+  <p align="left">This command is almost identical to the FinishDoors command 
+    except that it's used for finishing a shaft door.</p>
+  <p align="left"><strong>19. FinishShaftDoors</strong> - finishes shaft door 
+    creation for all serviced floors - use this after all related AddShaftDoorsComponent 
+    commands are used.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoors 
+    <em>CenterX, CenterZ</em></font></p>
+  <p align="left">This command is almost identical to the FinishDoors command 
+    except that it's used for finishing shaft doors on all serviced floors.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1">8. Small Example Building</font></strong></p>
   <p align="left">To see an example of a small simplistic building in code, look 
