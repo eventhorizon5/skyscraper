@@ -1,0 +1,56 @@
+#Elevator door functions
+
+<Function elevdoor_single>
+    #parameters:
+    #1. door number
+    #2. direction door faces (false for left/right, true for forward/backward)
+    #3. movement direction (left/right/up/down)
+    #4. elevator door texture
+    #5. shaft door texture
+    #6. side texture
+    #7. thickness
+    #8. X position
+    #9. Z position
+    #10. width
+    #11. height
+    
+    WallOrientation = right
+    AddDoorComponent 1, Main, ElevDoors2, Black, 0.2, left, 0.3, -1.75, -3.01, 1.75, -3.01, 8, 0, 0, 0, 0, 0
+    FinishDoors 1, 0, -3.01
+    AddShaftDoorsComponent 1, Main, ElevDoors, Black, 0.2, left, 0.3, -1.75, -3.301, 1.75, -3.301, 8, 0, 0, 0, 0, 0
+    FinishShaftDoors 1, 0, -3.301
+<EndFunction>
+
+<Function elevdoor_center>
+    WallOrientation = right
+    AddDoorComponent 1, Left, ElevDoors2, Black, 0.2, left, 0.3, -1.75, -3.01, 0, -3.01, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, Right, ElevDoors, Black, 0.2, right, 0.3, 0, -3.01, 1.75, -3.01, 8, 0, 0, 0, 0, 0
+    FinishDoors 1, 0, -3.01
+    AddShaftDoorsComponent 1, Left, ElevDoors, Black, 0.2, left, 0.3, -1.75, -3.301, 0, -3.301, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, Right, ElevDoors2, Black, 0.2, right, 0.3, 0, -3.301, 1.75, -3.301, 8, 0, 0, 0, 0, 0
+    FinishShaftDoors 1, 0, -3.301
+<EndFunction>
+
+<Function elevdoor_dualspeed>
+    WallOrientation = right
+    AddDoorComponent 1, Full, ElevDoors2, Black, 0.1, left, 0.3, -1.75, -3.01, 1.75, -3.101, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, Half, ElevDoors2, Black, 0.1, left, 0.175, -1.75, -3.01, 0, -3.01, 8, 0, 0, 0, 0, 0
+    FinishDoors 1, 0, -3.01
+    AddShaftDoorsComponent 1, Full, ElevDoors, Black, 0.1, left, 0.3, -1.75, -3.301, 1.75, -3.201, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, Half, ElevDoors, Black, 0.1, left, 0.175, -1.75, -3.301, 0, -3.301, 8, 0, 0, 0, 0, 0
+    FinishShaftDoors 1, 0, -3.301
+<EndFunction>
+
+<Function elevdoor_center_dualspeed>
+    WallOrientation = right
+    AddDoorComponent 1, Left1, ElevDoors2, Black, 0.1, left, 0.3, -1.75, -3.101, 0, -3.101, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, Left2, ElevDoors2, Black, 0.1, left, 0.15, -1.75, -3.01, -0.875, -3.01, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, Right1, ElevDoors, Black, 0.1, right, 0.15, 0.875, -3.01, 1.75, -3.01, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, Right2, ElevDoors, Black, 0.1, right, 0.3, 0, -3.101, 1.75, -3.101, 8, 0, 0, 0, 0, 0
+    FinishDoors 1, 0, -3.01
+    AddShaftDoorsComponent 1, Left1, ElevDoors, Black, 0.1, left, 0.3, -1.75, -3.201, 0, -3.201, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, Left2, ElevDoors, Black, 0.1, left, 0.15, -1.75, -3.301, -0.875, -3.301, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, Right1, ElevDoors2, Black, 0.1, right, 0.15, 0.875, -3.301, 1.75, -3.301, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, Right2, ElevDoors2, Black, 0.1, right, 0.3, 0, -3.201, 1.75, -3.201, 8, 0, 0, 0, 0, 0
+    FinishShaftDoors 1, 0, -3.301
+<EndFunction>
