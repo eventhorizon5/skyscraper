@@ -876,6 +876,7 @@ bool ElevatorDoor::FinishShaftDoors(float CenterX, float CenterZ)
 		if (!FinishShaftDoor(elev->ServicedFloors[i], CenterX, CenterZ))
 			return false;
 	}
+	return true;
 }
 
 bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th)
@@ -1590,6 +1591,7 @@ bool ElevatorDoor::DoorWrapper::IsFinished()
 		if (doors[i]->finished == false)
 			return false;
 	}
+	return true;
 }
 
 void ElevatorDoor::DoorWrapper::StopDoors()
