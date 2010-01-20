@@ -951,7 +951,7 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, 3, OpenSpeed, x3, z3, x4, z4, Doors->Height, base2, tw, th, tw, th);
 
 	//finish doors
-	Object *object = FinishShaftDoor(floor, ShaftDoorOrigin.x, ShaftDoorOrigin.z);
+	Object *object = FinishShaftDoor(floor, ShaftDoorOrigin.x - elev->Origin.x, ShaftDoorOrigin.z - elev->Origin.z);
 
 	//make doors invisible on start
 	ShaftDoors[index]->Enable(false);
