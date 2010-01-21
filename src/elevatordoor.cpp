@@ -1189,7 +1189,7 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	mesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	
 	csString direction_check = Direction;
-	direction_check.Trim();
+	direction_check.Downcase().Trim();
 
 	//set direction value from strings
 	direction = 0;
