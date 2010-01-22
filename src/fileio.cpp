@@ -3441,6 +3441,90 @@ int ScriptProcessor::ProcFloors()
 		tempdata.DeleteAll();
 	}
 
+	//AddShaftDoorComponent command
+	if (LineData.Slice(0, 21).CompareNoCase("addshaftdoorcomponent") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(22).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 18 || tempdata.GetSize() > 18)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 0; i <= 17; i++)
+		{
+			if (i == 2)
+				i = 5;
+			if (i == 6)
+				i++;
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0]));
+		if (!elev)
+		{
+			ScriptError("Invalid elevator");
+			return sError;
+		}
+
+		StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
+
+		tempdata.DeleteAll();
+	}
+
+	//FinishShaftDoor command
+	if (LineData.Slice(0, 16).CompareNoCase("finishshaftdoor ") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(16).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 0; i <= 3; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0]));
+		if (!elev)
+		{
+			ScriptError("Invalid elevator");
+			return sError;
+		}
+
+		StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1]), Current, atof(tempdata[2]), atof(tempdata[3])));
+
+		tempdata.DeleteAll();
+	}
+
 	//Cut command
 	if (LineData.Slice(0, 3).CompareNoCase("cut") == true)
 	{
@@ -4943,43 +5027,6 @@ int ScriptProcessor::ProcElevators()
 		tempdata.DeleteAll();
 	}
 
-	//AddShaftDoorComponent command
-	if (LineData.Slice(0, 21).CompareNoCase("addshaftdoorcomponent") == true)
-	{
-		//get data
-		tempdata.SplitString(LineData.Slice(22).GetData(), ",");
-
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
-		{
-			buffer = Calc(tempdata[temp3]);
-			tempdata.Put(temp3, buffer);
-		}
-		if (tempdata.GetSize() < 18 || tempdata.GetSize() > 18)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
-
-		//check numeric values
-		for (int i = 0; i <= 17; i++)
-		{
-			if (i == 2)
-				i = 5;
-			if (i == 6)
-				i++;
-			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
-		}
-
-		StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[0]), atoi(tempdata[1]), tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
-
-		tempdata.DeleteAll();
-	}
-
 	//AddShaftDoorsComponent command
 	if (LineData.Slice(0, 22).CompareNoCase("addshaftdoorscomponent") == true)
 	{
@@ -5046,39 +5093,6 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		StoreCommand(elev->FinishDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])));
-
-		tempdata.DeleteAll();
-	}
-
-	//FinishShaftDoor command
-	if (LineData.Slice(0, 16).CompareNoCase("finishshaftdoor ") == true)
-	{
-		//get data
-		tempdata.SplitString(LineData.Slice(16).GetData(), ",");
-
-		//calculate inline math
-		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
-		{
-			buffer = Calc(tempdata[temp3]);
-			tempdata.Put(temp3, buffer);
-		}
-		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
-
-		//check numeric values
-		for (int i = 0; i <= 3; i++)
-		{
-			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
-		}
-
-		StoreCommand(elev->FinishShaftDoor(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])));
 
 		tempdata.DeleteAll();
 	}
