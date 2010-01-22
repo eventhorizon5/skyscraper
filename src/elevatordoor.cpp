@@ -511,7 +511,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 	if (shaftdoors == true)
 	{
-		for (int i = 0; i < Doors->doors.GetSize(); i++)
+		for (int i = 0; i < ShaftDoors[index]->doors.GetSize(); i++)
 		{
 			ShaftDoors[index]->doors[i]->MoveDoors(open, manual);
 		}
