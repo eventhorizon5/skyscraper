@@ -1139,8 +1139,8 @@
     of the floor's base (altitude plus interfloor height).</p>
   <p align="left"><strong>23. AddShaftDoorComponent</strong> - creates a single
     shaft door component, used for creating custom door styles<br>
-    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoorComponent
-    <em>number, name, texture, sidetexture, thickness, direction, speed, 
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoorComponent 
+    <em>elevator, number, name, texture, sidetexture, thickness, direction, speed, 
     x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th</em></font></p>
   <p align="left">This command is almost identical to the AddDoorComponent command (in the elevator section below -
     see that for more information), except that it creates shaft doors. Use the FinishShaftDoor command after
@@ -1148,7 +1148,7 @@
   <p align="left"><strong>24. FinishShaftDoor</strong> - finishes shaft door creation
     - use this after all related AddShaftDoorComponent commands are used.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoor<em> 
-    number, CenterX, CenterZ</em></font></p>
+    elevator, number, CenterX, CenterZ</em></font></p>
   <p align="left">This command is almost identical to the FinishDoors command (in the elevator section below -
     see that for more information) except that it's used for finishing a shaft door.</p>
   <p align="left">&nbsp;</p>
