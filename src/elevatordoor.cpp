@@ -1319,7 +1319,10 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	else
 	{
 		tempposition = sbs->ToLocal(movable->GetPosition().y);
-		temporigin = wrapper->Origin.y;
+		if (wrapper->IsShaftDoor == false)
+			temporigin = parent->elev->GetPosition().y;
+		else
+			temporigin = 0;
 	}
 
 	float difference = fabs(tempposition - temporigin);
