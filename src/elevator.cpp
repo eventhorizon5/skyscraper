@@ -363,7 +363,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 
 	Created = true;
 
-	Report("created at " + csString(_gcvt(x, 12, buffer)) + ", " + csString(_gcvt(z, 12, buffer)) + ", " + csString(_itoa(floor, buffer, 12)));
+	Report("created at " + csString(sbs->TruncateNumber(x, 4)) + ", " + csString(sbs->TruncateNumber(x, 4)) + ", " + csString(_itoa(floor, buffer, 12)));
 	return object;
 }
 

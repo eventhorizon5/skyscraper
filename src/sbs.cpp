@@ -4003,3 +4003,39 @@ WallObject* SBS::GetWallObject(csArray<WallObject*> &wallarray, int polygon_inde
 	}
 	return 0;
 }
+
+csString SBS::TruncateNumber(double value, int decimals)
+{
+	//truncates the numeric value to the specified number of decimal places (does not round)
+	csString number = _gcvt(value, 12, buffer);
+	if (decimals < 1)
+		return number;
+	number.Truncate(number.Find(".") + decimals + 1);
+	if (number.GetAt(number.Length() - 1) == '.')
+		number = number.Slice(0, number.Length() - 1); //strip of extra decimal point if even
+	return number;
+}
+
+csString SBS::TruncateNumber(float value, int decimals)
+{
+	//truncates the numeric value to the specified number of decimal places (does not round)
+	csString number = _gcvt(value, 12, buffer);
+	if (decimals < 1)
+		return number;
+	number.Truncate(number.Find(".") + decimals + 1);
+	if (number.GetAt(number.Length() - 1) == '.')
+		number = number.Slice(0, number.Length() - 1); //strip of extra decimal point if even
+	return number;
+}
+
+csString SBS::TruncateNumber(const char *value, int decimals)
+{
+	//truncates the numeric value to the specified number of decimal places (does not round)
+	csString number = value;
+	if (decimals < 1)
+		return number;
+	number.Truncate(number.Find(".") + decimals + 1);
+	if (number.GetAt(number.Length() - 1) == '.')
+		number = number.Slice(0, number.Length() - 1); //strip of extra decimal point if even
+	return number;
+}

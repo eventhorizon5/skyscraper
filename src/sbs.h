@@ -292,6 +292,9 @@ public:
 	void ApplyTextureMapping(iThingFactoryState *state, int start_index, int end_index, float tw, float th);
 	WallObject* CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrapper> mesh, Object *parent, const char *name);
 	WallObject* GetWallObject(csArray<WallObject*> &wallarray, int polygon_index);
+	csString TruncateNumber(double value, int decimals);
+	csString TruncateNumber(float value, int decimals);
+	csString TruncateNumber(const char *number, int decimals);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

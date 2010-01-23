@@ -1451,7 +1451,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	door_section = 2;
 
 	//Normal door movement
-	if ((difference <= marker2 && open == true) || (difference > marker1 && open == false))
+	if ((difference < marker2 && open == true) || (difference > marker1 && open == false))
 	{
 		if (sign_changed == false) //don't run movement code if difference went beyond 0, for manual only
 		{
