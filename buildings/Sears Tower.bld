@@ -4714,7 +4714,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     DecelJerk = 0.2
     ServicedFloors = -2, 98, 102
     AssignedShaft = 31
-    CreateElevator false, -42.471, -12.828, 103
+    CreateElevator false, -42.471, -12.828, 102
 <EndElevator>
 
 <Elevators 78 to 79>
