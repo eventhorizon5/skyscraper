@@ -5514,9 +5514,8 @@ csString ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.Slice(temp1 + 1);
 		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
 		{
-			tmpcalc = _gcvt(atof(one.GetData()) + atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			float tmpnum = atof(one.GetData()) + atof(two.GetData());
+			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc.GetData();
 		}
 	}
@@ -5527,9 +5526,8 @@ csString ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.Slice(temp1 + 1);
 		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
 		{
-			tmpcalc = _gcvt(atof(one.GetData()) - atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			float tmpnum = atof(one.GetData()) - atof(two.GetData());
+			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc.GetData();
 		}
 	}
@@ -5540,9 +5538,8 @@ csString ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.Slice(temp1 + 1);
 		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
 		{
-			tmpcalc = _gcvt(atof(one.GetData()) / atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			float tmpnum = atof(one.GetData()) / atof(two.GetData());
+			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc.GetData();
 		}
 	}
@@ -5553,9 +5550,8 @@ csString ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.Slice(temp1 + 1);
 		if (IsNumeric(one.GetData()) == true && IsNumeric(two.GetData()) == true)
 		{
-			tmpcalc = _gcvt(atof(one.GetData()) * atof(two.GetData()), 12, buffer);
-			if (tmpcalc.GetAt(tmpcalc.Length() - 1) == '.')
-				tmpcalc = tmpcalc.Slice(0, tmpcalc.Length() - 1); //strip of extra decimal point if even
+			float tmpnum = atof(one.GetData()) * atof(two.GetData());
+			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc.GetData();
 		}
 	}

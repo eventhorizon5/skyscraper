@@ -404,8 +404,6 @@ void ElevatorDoor::StopDoors()
 void ElevatorDoor::MoveDoors(bool open, bool manual)
 {
 	//opens or closes elevator doors
-	//currently only supports doors on either the left/right or front/back
-	//diagonal doors will be done later, by possibly using relative plane movement
 
 	//WhichDoors is the doors to move:
 	//1 = both shaft and elevator doors
@@ -414,12 +412,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 	//ShaftDoorFloor is the floor the shaft doors are on - only has effect if whichdoors is 3
 
-	//this door system is based on offsets from the door origin (usually 0).
-	//the right (positive side) door is used as a reference, with the leftmost side of it being the position.
-	//when opening, the door starts at the origin, accelerates to marker 1, moves at a constant
-	//rate to marker 2, and then decelerates after marker 2.
-	//this offset system is not used if manual is true (in that case, it simply sets a speed value, and moves
-	//the doors until they reach the ends
+	//this is the parent controller function that runs the movement function for each
+	//individual door component.
 
 	if (DoorIsRunning == false || (manual == true && previous_open != open))
 	{
@@ -1287,18 +1281,10 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	//currently only supports doors on either the left/right or front/back
 	//diagonal doors will be done later, by possibly using relative plane movement
 
-	//WhichDoors is the doors to move:
-	//1 = both shaft and elevator doors
-	//2 = only elevator doors
-	//3 = only shaft doors
-
-	//ShaftDoorFloor is the floor the shaft doors are on - only has effect if whichdoors is 3
-
-	//this door system is based on offsets from the door origin (usually 0).
-	//the right (positive side) door is used as a reference, with the leftmost side of it being the position.
+	//this door system is based on offsets from the door origin (starting position).
 	//when opening, the door starts at the origin, accelerates to marker 1, moves at a constant
 	//rate to marker 2, and then decelerates after marker 2.
-	//this offset system is not used if manual is true (in that case, it simply sets a speed value, and moves
+	//the acceleration/deceleration sections aren't used if manual is true (in that case, it simply sets a speed value, and moves
 	//the doors until they reach the ends
 
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
