@@ -4010,6 +4010,7 @@ csString SBS::TruncateNumber(double value, int decimals)
 	csString number, dec;
 	dec = decimals;
 	dec.Trim();
+	number = value;
 
 	//format number if it's a float
 	if ((int)value != value)
@@ -4024,6 +4025,7 @@ csString SBS::TruncateNumber(float value, int decimals)
 	csString number, dec;
 	dec = decimals;
 	dec.Trim();
+	number = value;
 
 	//format number if it's a float
 	if ((int)value != value)
