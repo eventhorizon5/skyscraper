@@ -126,6 +126,11 @@ Elevator::Elevator(int number)
 	QueueResets = sbs->confman->GetBool("Skyscraper.SBS.Elevator.QueueResets", false);
 	FirstRun = true;
 	CameraOffset = 0;
+	ParkingFloor = 0;
+	ParkingDelay = 0;
+
+	//create timer
+	timer = new Timer(this);
 
 	//create object meshes
 	buffer = Number;
@@ -146,6 +151,14 @@ Elevator::~Elevator()
 	//delete directional indicators
 	if (sbs->Verbose)
 		Report("deleting directional indicators");
+
+	//delete timer
+	if (timer)
+	{
+		timer->Stop();
+		delete timer;
+	}
+	timer = 0;
 
 	for (int i = 0; i < IndicatorArray.GetSize(); i++)
 	{
@@ -889,6 +902,13 @@ void Elevator::MonitorLoop()
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
 			door->Loop();
+	}
+
+	//enable auto-park timer if specified
+	if (ParkingDelay > 0)
+	{
+		if (timer->IsRunning() == false)
+			timer->Start(ParkingDelay * 1000, true);
 	}
 
 	//elevator movement
@@ -3124,4 +3144,18 @@ bool Elevator::FinishShaftDoors(int number, float CenterX, float CenterZ)
 	else
 		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
+}
+
+void Elevator::Timer::Notify()
+{
+	//parking timer
+
+	if (elevator->ParkingDelay > 0)
+	{
+		int floor = elevator->GetFloor();
+		if (elevator->ParkingFloor > floor)
+			elevator->AddRoute(elevator->ParkingFloor, 1, false);
+		else
+			elevator->AddRoute(elevator->ParkingFloor, -1, false);
+	}
 }

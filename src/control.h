@@ -43,7 +43,7 @@ public:
 	int positions; //number of knob positions; default is 3
 
 	//functions
-	Control(Object *parent, int type, const char *name, const char *action_name, const char *texture, const char *texture_lit, const char *direction, float x, float z, float width, float height, float voffset);
+	Control(Object *parent, int type, const char *name, const char *action_name, const char *sound, const char *texture, const char *texture_lit, const char *direction, float x, float z, float width, float height, float voffset);
 	~Control();
 	void Enabled(bool value);
 	void SetLight(bool value);
@@ -53,10 +53,13 @@ public:
 	void SetPositionY(float position);
 	void Move(const csVector3 &position);
 	void SetKnobPosition(int position);
+	void PlaySound();
 
 private:
 	csRef<iMeshWrapper> ControlMesh; //control mesh object
 	int current_position; //current knob position
+
+	Sound *sound;
 
 };
 

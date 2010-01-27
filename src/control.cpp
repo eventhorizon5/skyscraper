@@ -33,7 +33,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, int type, const char *name, const char *action_name, const char *texture, const char *texture_lit, const char *direction, float x, float z, float width, float height, float voffset)
+Control::Control(Object *parent, int type, const char *name, const char *action_name, const char *sound_file, const char *texture, const char *texture_lit, const char *direction, float x, float z, float width, float height, float voffset)
 {
 	//create a control at the specified location
 	//type is either:
@@ -86,10 +86,17 @@ Control::Control(Object *parent, int type, const char *name, const char *action_
 		sbs->AddGenWall(ControlMesh, texture, x, z, x, z - width, height, voffset, 1, 1);
 	if (Direction == "right")
 		sbs->AddGenWall(ControlMesh, texture, x, z, x, z + width, height, voffset, 1, 1);
+
+	//create sound object
+	sound = new Sound(this->object, "Control");
+	sound->Load(sound_file);
 }
 
 Control::~Control()
 {
+	if (sound)
+		delete sound;
+	sound = 0;
 	ControlMesh = 0;
 	delete object;
 }
@@ -140,6 +147,7 @@ csVector3 Control::GetPosition()
 void Control::SetPosition(const csVector3 &position)
 {
 	//set control position
+	sound->SetPosition(position);
 	ControlMesh->GetMovable()->SetPosition(sbs->ToRemote(position));
 	ControlMesh->GetMovable()->UpdateMove();
 }
@@ -148,7 +156,9 @@ void Control::SetPositionY(float position)
 {
 	//set control position
 	csVector3 pos = ControlMesh->GetMovable()->GetPosition();
-	ControlMesh->GetMovable()->SetPosition(sbs->ToRemote(csVector3(pos.x, position, pos.z)));
+	pos.y = position;
+	sound->SetPositionY(position);
+	ControlMesh->GetMovable()->SetPosition(sbs->ToRemote(pos));
 	ControlMesh->GetMovable()->UpdateMove();
 }
 
@@ -157,9 +167,19 @@ void Control::Move(const csVector3 &position)
 	//relative movement
 	ControlMesh->GetMovable()->MovePosition(sbs->ToRemote(position));
 	ControlMesh->GetMovable()->UpdateMove();
+
+	//move sound
+	sound->SetPosition(ControlMesh->GetMovable()->GetPosition());
 }
 
 void Control::SetKnobPosition(int position)
 {
 	//knob position change
+}
+
+void Control::PlaySound()
+{
+	//play associated button sound
+	sound->Loop(false);
+	sound->Play();
 }

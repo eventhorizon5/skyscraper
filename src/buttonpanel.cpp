@@ -116,7 +116,7 @@ ButtonPanel::~ButtonPanel()
 	delete object;
 }
 
-void ButtonPanel::AddFloorButton(const char *texture, const char *texture_lit, int row, int column, int floor, float width, float height, float hoffset, float voffset)
+void ButtonPanel::AddFloorButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, int floor, float width, float height, float hoffset, float voffset)
 {
 	//create a standard floor button at specified row/column position
 	//width and height are the button size percentage that the button should be (divided by 100); default is 1 for each, aka 100%.
@@ -124,10 +124,10 @@ void ButtonPanel::AddFloorButton(const char *texture, const char *texture_lit, i
 
 	csString floornum;
 	floornum = floor;
-	AddButton(floornum, texture, texture_lit, row, column, width, height, hoffset, voffset);
+	AddButton(floornum, sound, texture, texture_lit, row, column, width, height, hoffset, voffset);
 }
 
-void ButtonPanel::AddControlButton(const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset, float voffset)
+void ButtonPanel::AddControlButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset, float voffset)
 {
 	//create a control button at specified row/column position
 	//width and height are the button size percentage that the button should be (divided by 100); default is 1 for each, aka 100%
@@ -143,10 +143,10 @@ void ButtonPanel::AddControlButton(const char *texture, const char *texture_lit,
 	csString name = type;
 	name.Downcase();
 
-	AddButton(name.GetData(), texture, texture_lit, row, column, width, height, hoffset, voffset);
+	AddButton(name.GetData(), sound, texture, texture_lit, row, column, width, height, hoffset, voffset);
 }
 
-void ButtonPanel::AddButton(const char *name, const char *texture, const char *texture_lit, int row, int column, float bwidth, float bheight, float hoffset, float voffset)
+void ButtonPanel::AddButton(const char *name, const char *sound, const char *texture, const char *texture_lit, int row, int column, float bwidth, float bheight, float hoffset, float voffset)
 {
 	//create the button polygon
 	float xpos = 0, ypos = 0, zpos = 0;
@@ -202,7 +202,7 @@ void ButtonPanel::AddButton(const char *name, const char *texture, const char *t
 	buffer4 = control_index;
 	buffer = "Button Panel " + buffer2 + ":" + buffer3 + " Control " + buffer4;
 	buffer.Trim();
-	controls[control_index] = new Control(this->object, 1, buffer, name, texture, texture_lit, Direction, xpos, zpos, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+	controls[control_index] = new Control(this->object, 1, buffer, name, sound, texture, texture_lit, Direction, xpos, zpos, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
 	//move control
 	controls[control_index]->SetPositionY(sbs->GetElevator(elevator)->GetPosition().y);
 }
@@ -221,12 +221,15 @@ void ButtonPanel::Press(int index)
 
 	Elevator *elev = sbs->GetElevator(elevator);
 
-	//exit if in inspection mode or in fire service phase 1 mode
-	if (elev->InspectionService == true || elev->FireServicePhase1 == 1)
-		return;
-
 	//exit if index is invalid
 	if (index < 0 || index > controls.GetSize() - 1)
+		return;
+
+	//play button sound
+	controls[index]->PlaySound();
+
+	//exit if in inspection mode or in fire service phase 1 mode
+	if (elev->InspectionService == true || elev->FireServicePhase1 == 1)
 		return;
 
 	//get action name of button

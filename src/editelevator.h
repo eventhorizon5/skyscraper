@@ -152,9 +152,6 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT23;
 		static const long ID_txtDeceleration;
 		static const long ID_bSetDeceleration;
-		static const long ID_STATICTEXT24;
-		static const long ID_txtOpenSpeed;
-		static const long ID_bSetOpenSpeed;
 		static const long ID_STATICTEXT1;
 		static const long ID_txtAccelJerk;
 		static const long ID_bSetAccelJerk;
@@ -165,8 +162,6 @@ class editelevator: public wxDialog
 		static const long ID_txtRate;
 		static const long ID_STATICTEXT27;
 		static const long ID_txtDirection;
-		static const long ID_STATICTEXT28;
-		static const long ID_txtDoorSpeed;
 		static const long ID_STATICTEXT2;
 		static const long ID_txtJerkRate;
 		static const long ID_STATICTEXT49;
@@ -292,7 +287,6 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtDistance;
 		wxBoxSizer* BoxSizer9;
 		wxStaticText* StaticText42;
-		wxTextCtrl* txtOpenSpeed;
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText6;
 		wxTextCtrl* txtStop;
@@ -302,8 +296,8 @@ class editelevator: public wxDialog
 		wxStaticText* tDoor;
 		wxCheckBox* chkVisible;
 		wxTextCtrl* txtElevStart;
-		wxTextCtrl* txtRecallAlternate;
 		wxStaticText* StaticText19;
+		wxTextCtrl* txtRecallAlternate;
 		wxStaticBoxSizer* StaticBoxSizer3;
 		wxTextCtrl* txtIsIdle;
 		wxToggleButton* bUp;
@@ -316,7 +310,6 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText35;
 		wxTextCtrl* txtErrorOffset;
 		wxBoxSizer* BoxSizer6;
-		wxButton* bSetOpenSpeed;
 		wxButton* bEnqueueUp;
 		wxToggleButton* bDownPeak;
 		wxStaticText* StaticText23;
@@ -346,7 +339,6 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText47;
 		wxButton* bCloseManual;
 		wxStaticText* StaticText43;
-		wxStaticText* StaticText24;
 		wxTextCtrl* txtDoorWidth;
 		wxTextCtrl* txtSpeed;
 		wxTextCtrl* txtEnabled;
@@ -397,14 +389,12 @@ class editelevator: public wxDialog
 		wxBoxSizer* BoxSizer3;
 		wxStaticText* StaticText8;
 		wxButton* bSetSkipFloorText;
-		wxStaticText* StaticText28;
 		wxStaticText* StaticText30;
 		wxStaticText* StaticText29;
 		wxButton* bSetName;
 		wxTextCtrl* txtShaft;
 		wxButton* bOpen;
 		wxTextCtrl* txtIsMoving;
-		wxTextCtrl* txtDoorSpeed;
 		wxStaticBoxSizer* StaticBoxSizer5;
 		wxTextCtrl* txtRate;
 		wxStaticBoxSizer* StaticBoxSizer1;

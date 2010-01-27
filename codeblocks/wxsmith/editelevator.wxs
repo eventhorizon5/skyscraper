@@ -1019,27 +1019,6 @@
 										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT24" variable="StaticText24" member="yes">
-											<label>OpenSpd:</label>
-										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_txtOpenSpeed" variable="txtOpenSpeed" member="yes">
-											<size>75,-1</size>
-										</object>
-										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
-										<border>5</border>
-									</object>
-									<object class="sizeritem">
-										<object class="wxButton" name="ID_bSetOpenSpeed" variable="bSetOpenSpeed" member="yes">
-											<label>Set</label>
-											<style>wxBU_EXACTFIT</style>
-											<handler function="On_bSetOpenSpeed_Click" entry="EVT_BUTTON" />
-										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
-									</object>
-									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
 											<label>AccelJerk:</label>
 										</object>
@@ -1116,23 +1095,6 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDirection" variable="txtDirection" member="yes">
-											<size>75,-1</size>
-											<style>wxTE_READONLY</style>
-										</object>
-										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
-										<border>5</border>
-									</object>
-									<object class="spacer">
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
-									</object>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT28" variable="StaticText28" member="yes">
-											<label>DSpeed:</label>
-										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_txtDoorSpeed" variable="txtDoorSpeed" member="yes">
 											<size>75,-1</size>
 											<style>wxTE_READONLY</style>
 										</object>

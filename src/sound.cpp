@@ -268,6 +268,10 @@ void Sound::Load(const char *filename, bool force)
 	if (filename_new == Filename && force == false)
 		return;
 
+	//exit if none specified
+	if (filename_new == "")
+		return;
+
 	//clear old object references
 	directional = 0;
 	sndsource3d = 0;

@@ -145,9 +145,6 @@ const long editelevator::ID_bSetAcceleration = wxNewId();
 const long editelevator::ID_STATICTEXT23 = wxNewId();
 const long editelevator::ID_txtDeceleration = wxNewId();
 const long editelevator::ID_bSetDeceleration = wxNewId();
-const long editelevator::ID_STATICTEXT24 = wxNewId();
-const long editelevator::ID_txtOpenSpeed = wxNewId();
-const long editelevator::ID_bSetOpenSpeed = wxNewId();
 const long editelevator::ID_STATICTEXT1 = wxNewId();
 const long editelevator::ID_txtAccelJerk = wxNewId();
 const long editelevator::ID_bSetAccelJerk = wxNewId();
@@ -158,8 +155,6 @@ const long editelevator::ID_STATICTEXT26 = wxNewId();
 const long editelevator::ID_txtRate = wxNewId();
 const long editelevator::ID_STATICTEXT27 = wxNewId();
 const long editelevator::ID_txtDirection = wxNewId();
-const long editelevator::ID_STATICTEXT28 = wxNewId();
-const long editelevator::ID_txtDoorSpeed = wxNewId();
 const long editelevator::ID_STATICTEXT2 = wxNewId();
 const long editelevator::ID_txtJerkRate = wxNewId();
 const long editelevator::ID_STATICTEXT49 = wxNewId();
@@ -485,12 +480,6 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer6->Add(txtDeceleration, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bSetDeceleration = new wxButton(this, ID_bSetDeceleration, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetDeceleration"));
 	FlexGridSizer6->Add(bSetDeceleration, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
-	StaticText24 = new wxStaticText(this, ID_STATICTEXT24, _("OpenSpd:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT24"));
-	FlexGridSizer6->Add(StaticText24, 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
-	txtOpenSpeed = new wxTextCtrl(this, ID_txtOpenSpeed, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtOpenSpeed"));
-	FlexGridSizer6->Add(txtOpenSpeed, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	bSetOpenSpeed = new wxButton(this, ID_bSetOpenSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetOpenSpeed"));
-	FlexGridSizer6->Add(bSetOpenSpeed, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("AccelJerk:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
 	FlexGridSizer6->Add(StaticText1, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtAccelJerk = new wxTextCtrl(this, ID_txtAccelJerk, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtAccelJerk"));
@@ -512,11 +501,6 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer6->Add(StaticText27, 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	txtDirection = new wxTextCtrl(this, ID_txtDirection, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtDirection"));
 	FlexGridSizer6->Add(txtDirection, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	FlexGridSizer6->Add(-1,-1,0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
-	StaticText28 = new wxStaticText(this, ID_STATICTEXT28, _("DSpeed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT28"));
-	FlexGridSizer6->Add(StaticText28, 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
-	txtDoorSpeed = new wxTextCtrl(this, ID_txtDoorSpeed, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtDoorSpeed"));
-	FlexGridSizer6->Add(txtDoorSpeed, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer6->Add(-1,-1,0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("JerkRate:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	FlexGridSizer6->Add(StaticText2, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -649,7 +633,6 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bSetSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetSpeed_Click);
 	Connect(ID_bSetAcceleration,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAcceleration_Click);
 	Connect(ID_bSetDeceleration,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDeceleration_Click);
-	Connect(ID_bSetOpenSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetOpenSpeed_Click);
 	Connect(ID_bSetAccelJerk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAccelJerk_Click);
 	Connect(ID_bSetDecelJerk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDecelJerk_Click);
 	Connect(ID_bSetACPFloor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetACPFloor_Click);
@@ -740,12 +723,6 @@ void editelevator::On_bSetDeceleration_Click(wxCommandEvent& event)
 {
 	if (elevator)
 		elevator->Deceleration = atof(txtDeceleration->GetValue().ToAscii());
-}
-
-void editelevator::On_bSetOpenSpeed_Click(wxCommandEvent& event)
-{
-	if (door)
-		door->OpenSpeed = atof(txtOpenSpeed->GetValue().ToAscii());
 }
 
 void editelevator::On_bDumpFloors_Click(wxCommandEvent& event)
@@ -839,8 +816,7 @@ void editelevator::Loop()
 		//txtDoorHeight->SetValue(TruncateNumber(door->Doors->Height, 2));
 		//txtDoorOrigin->SetValue(TruncateNumber(door->Doors->Origin.x, 2) + wxT(", ") + TruncateNumber(door->Doors->Origin.y, 2) + wxT(", ") + TruncateNumber(door->Doors->Origin.z, 2));
 		txtDoorsOpen->SetValue(wxString::FromAscii(BoolToString(door->AreDoorsOpen())));
-		txtDoorSpeed->SetValue(TruncateNumber(door->GetCurrentDoorSpeed(), 2));
-		//txtDoorWidth->SetValue(TruncateNumber(door->DoorWidth, 2));
+		//txtDoorWidth->SetValue(TruncateNumber(door->Doors->Width, 2));
 		txtShaftDoorOrigin->SetValue(TruncateNumber(door->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.z, 2));
 		txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(door->DoorsStopped())));
 	}
@@ -878,7 +854,6 @@ void editelevator::SetMainValues()
 	if (door)
 	{
 		txtDoorTimer->SetValue(wxVariant((int)door->DoorTimer).GetString());
-		txtOpenSpeed->SetValue(TruncateNumber(door->OpenSpeed, 4));
 	}
 	txtSpeed->SetValue(TruncateNumber(elevator->ElevatorSpeed, 4));
 	txtAcceleration->SetValue(TruncateNumber(elevator->Acceleration, 4));

@@ -40,6 +40,8 @@ Version 1.6 (2.0 Alpha 6)
 -added support for file includes
 -added support for script functions
 -added support for user-defined elevator and shaft doors
+-added automatic elevator parking support
+-added button sound support
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

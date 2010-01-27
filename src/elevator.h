@@ -98,6 +98,8 @@ public:
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
 	csArray<WallObject*> elevator_walls;
 	float CameraOffset; //camera vertical offset for movement
+	int ParkingFloor; //floor to automatically park the elevator on when idle
+	float ParkingDelay; //time to wait in idle mode before parking
 
 	//functions
 	Elevator(int number);
@@ -206,6 +208,21 @@ private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
 		csRef<iThingFactoryState> Elevator_state;
 		csRef<iMovable> Elevator_movable;
+
+	//elevator parking timer
+	class Timer : public wxTimer
+	{
+	public:
+		Elevator *elevator;
+		Timer(Elevator *elev)
+		{
+			elevator = elev;
+		};
+		virtual void Notify();
+	};
+
+	//parking timer object
+	Timer *timer;
 
 	//Internal elevator simulation data
 	csArray<int> UpQueue; //up call queue
