@@ -4635,27 +4635,30 @@ int ScriptProcessor::ProcElevators()
 		}
 		if (tempdata.GetSize() == 9)
 		{
-			//1.5 compatibility mode
-			//check numeric values
-			for (int i = 0; i <= 8; i++)
+			if (IsNumeric(csString(tempdata[2]).Trim().GetData()) == true)
 			{
-				if (i == 1)
-					i = 2;
-				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				//1.5 compatibility mode
+				//check numeric values
+				for (int i = 0; i <= 8; i++)
 				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
+					if (i == 1)
+						i = 2;
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return sError;
+					}
 				}
+				hoffset = atof(tempdata[7]);
+				voffset = atof(tempdata[8]);
+				compat = 1;
 			}
-			hoffset = atof(tempdata[7]);
-			voffset = atof(tempdata[8]);
-			compat = 1;
 		}
-		if (tempdata.GetSize() == 10)
+		if (tempdata.GetSize() == 8 || tempdata.GetSize() == 10)
 		{
 			//pre-Alpha 6 compatibility
 			//check numeric values
-			for (int i = 0; i <= 9; i++)
+			for (int i = 0; i <= 7; i++)
 			{
 				if (i == 1)
 					i = 3;
@@ -4665,14 +4668,17 @@ int ScriptProcessor::ProcElevators()
 					return sError;
 				}
 			}
-			hoffset = atof(tempdata[8]);
-			voffset = atof(tempdata[9]);
+			if (tempdata.GetSize() == 10)
+			{
+				hoffset = atof(tempdata[8]);
+				voffset = atof(tempdata[9]);
+			}
 			compat = 2;
 		}
-		if (tempdata.GetSize() == 11)
+		if (tempdata.GetSize() == 9 || tempdata.GetSize() == 11)
 		{
 			//check numeric values
-			for (int i = 0; i <= 10; i++)
+			for (int i = 0; i <= 8; i++)
 			{
 				if (i == 1)
 					i = 4;
@@ -4682,8 +4688,11 @@ int ScriptProcessor::ProcElevators()
 					return sError;
 				}
 			}
-			hoffset = atof(tempdata[9]);
-			voffset = atof(tempdata[10]);
+			if (tempdata.GetSize() == 11)
+			{
+				hoffset = atof(tempdata[9]);
+				voffset = atof(tempdata[10]);
+			}
 		}
 
 		if (atoi(tempdata[0]) == 1)
@@ -4762,27 +4771,30 @@ int ScriptProcessor::ProcElevators()
 		}
 		if (tempdata.GetSize() == 9)
 		{
-			//1.5 compatibility mode
-			//check numeric values
-			for (int i = 1; i <= 8; i++)
+			if (IsNumeric(csString(tempdata[2]).Trim().GetData()) == true)
 			{
-				if (i == 1 || i == 4)
-					i++;
-				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				//1.5 compatibility mode
+				//check numeric values
+				for (int i = 1; i <= 8; i++)
 				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
+					if (i == 1 || i == 4)
+						i++;
+					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+					{
+						ScriptError("Invalid value: " + csString(tempdata[i]));
+						return sError;
+					}
 				}
+				hoffset = atof(tempdata[7]);
+				voffset = atof(tempdata[8]);
+				compat = 1;
 			}
-			hoffset = atof(tempdata[7]);
-			voffset = atof(tempdata[8]);
-			compat = 1;
 		}
-		if (tempdata.GetSize() == 10)
+		if (tempdata.GetSize() == 8 || tempdata.GetSize() == 10)
 		{
 			//pre-Alpha 6 compatibility
 			//check numeric values
-			for (int i = 1; i <= 9; i++)
+			for (int i = 1; i <= 7; i++)
 			{
 				if (i == 1)
 					i = 3;
@@ -4794,14 +4806,17 @@ int ScriptProcessor::ProcElevators()
 					return sError;
 				}
 			}
-			hoffset = atof(tempdata[8]);
-			voffset = atof(tempdata[9]);
+			if (tempdata.GetSize() == 10)
+			{
+				hoffset = atof(tempdata[8]);
+				voffset = atof(tempdata[9]);
+			}
 			compat = 2;
 		}
-		if (tempdata.GetSize() == 11)
+		if (tempdata.GetSize() == 9 || tempdata.GetSize() == 11)
 		{
 			//check numeric values
-			for (int i = 1; i <= 10; i++)
+			for (int i = 1; i <= 8; i++)
 			{
 				if (i == 1)
 					i = 4;
@@ -4813,8 +4828,11 @@ int ScriptProcessor::ProcElevators()
 					return sError;
 				}
 			}
-			hoffset = atof(tempdata[9]);
-			voffset = atof(tempdata[10]);
+			if (tempdata.GetSize() == 11)
+			{
+				hoffset = atof(tempdata[9]);
+				voffset = atof(tempdata[10]);
+			}
 		}
 
 		if (atoi(tempdata[0]) == 1)

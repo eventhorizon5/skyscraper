@@ -1419,12 +1419,12 @@
   <p align="left"><strong>7. AddFloorButton</strong> - creates a floor button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorButton <em>panel_number, 
-    texture_unlit</em>, <em>texture_lit, row, column, floor, width, height[, hoffset, 
-    voffset]</em></font><br>
+    sound, texture_unlit</em>, <em>texture_lit, row, column, floor, width, height[, 
+    hoffset, voffset]</em></font><br>
     Example 1: <font size="2" face="Courier New, Courier, mono">AddFloorButton 
-    1, Button5, 7, 3, 4, 1, 1</font><br>
+    1, data/button.wav, Button5, ButtonLit5, 7, 3, 4, 1, 1</font><br>
     Example 2: <font size="2" face="Courier New, Courier, mono">AddFloorButton 
-    1, Button5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p>
+    1, &quot;&quot;, Button5, ButtonLit5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p>
   <p align="left">The AddFloorButton command creates a floor button on the button 
     panel created with CreatePanel. Panel_number specifies the number of the panel 
     to add the button to; the number can be either 1 or 2. <em>Row</em> and <em>Column</em> 
@@ -1443,8 +1443,8 @@
   <p align="left"><strong>8. AddControlButton</strong> - creates a control button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddControlButton 
-    <em>panel_number, texture_unlit</em>, <em>texture_lit, row, column, type, 
-    width, height[, hoffset, voffset]</em></font></p>
+    <em>panel_number, sound, texture_unlit</em>, <em>texture_lit, row, column, 
+    type, width, height[, hoffset, voffset]</em></font></p>
   <p align="left">The AddControlButton command creates a command button on the 
     panel created with CreatePanel. <em>Row</em> and <em>Column</em> are the same 
     as the AddFloorButton command, and <em>Type</em> can be either &quot;open&quot;, 
