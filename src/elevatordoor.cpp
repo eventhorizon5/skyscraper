@@ -1287,6 +1287,8 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	//the acceleration/deceleration sections aren't used if manual is true (in that case, it simply sets a speed value, and moves
 	//the doors until they reach the ends
 
+	//direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
+
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
 	float tempposition, temporigin;
 	if (direction > 1)
@@ -1339,18 +1341,36 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float width;
 				float mainwidth = wrapper->Width / 2;
 				if (parent->DoorDirection == false)
+				{
 					width = fabs(extents_max.z - extents_min.z);
+					if (direction == 2)
+						offset = extents_min.z + width;
+					else
+						offset = extents_max.z - width;
+				}
 				else
+				{
 					width = fabs(extents_max.x - extents_min.x);
-				marker1 = width / 4;
-				marker2 = (mainwidth + (width - mainwidth)) - (width / 4);
+					if (direction == 2)
+						offset = extents_min.x + width;
+					else
+						offset = extents_max.x - width;
+				}
+				float newwidth = width + offset;
+				marker1 = newwidth / 4;
+				marker2 = (mainwidth + (width - mainwidth)) - (newwidth / 4) + offset;
 			}
 			else
 			{
 				float height = fabs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
-				marker1 = height / 4;
-				marker2 = (mainheight + (height - mainheight)) - (height / 4);
+				if (direction == 0)
+					offset = (extents_min.y - wrapper->Origin.y) + mainheight;
+				else
+					offset = (extents_max.y - wrapper->Origin.y) - mainheight;
+				float newheight = height + offset;
+				marker1 = newheight / 4;
+				marker2 = (mainheight + (height - mainheight)) - (newheight / 4) + offset;
 			}
 			active_speed = 0;
 		}
@@ -1362,18 +1382,34 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float width;
 				float mainwidth = wrapper->Width / 2;
 				if (parent->DoorDirection == false)
+				{
 					width = fabs(extents_max.z - extents_min.z);
+					if (direction == 2)
+						offset = extents_min.z + width;
+					else
+						offset = extents_max.z - width;
+				}
 				else
+				{
 					width = fabs(extents_max.x - extents_min.x);
+					if (direction == 2)
+						offset = extents_min.x + width;
+					else
+						offset = extents_max.x - width;
+				}
 				marker1 = 0;
-				marker2 = mainwidth + (width - mainwidth);
+				marker2 = mainwidth + (width - mainwidth) + offset;
 			}
 			else
 			{
 				float height = fabs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
+				if (direction == 0)
+					offset = (extents_min.y - wrapper->Origin.y) + mainheight;
+				else
+					offset = (extents_max.y - wrapper->Origin.y) - mainheight;
 				marker1 = height / 4;
-				marker2 = mainheight + (height - mainheight);
+				marker2 = mainheight + (height - mainheight) + offset;
 			}
 
 			if (open == true)
@@ -1485,17 +1521,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				float width = fabs(extents_max.z - extents_min.z);
 				if (direction == 2)
-					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z - (mainwidth + (width - mainwidth)))));
+					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z - (mainwidth + (width - mainwidth) + offset))));
 				else
-					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z + (mainwidth + (width - mainwidth)))));
+					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z + (mainwidth + (width - mainwidth) + offset))));
 			}
 			else
 			{
 				float width = fabs(extents_max.x - extents_min.x);
 				if (direction == 2)
-					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x - (mainwidth + (width - mainwidth)), ypos, parent->elev->Origin.z)));
+					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x - (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z)));
 				else
-					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x + (mainwidth + (width - mainwidth)), ypos, parent->elev->Origin.z)));
+					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x + (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z)));
 			}
 		}
 		else
@@ -1503,9 +1539,9 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			float mainheight = wrapper->Height / 2;
 			float height = fabs(extents_max.y - extents_min.y);
 			if (direction == 0)
-				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos + (mainheight + (height - mainheight)), parent->elev->Origin.z)));
+				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos + (mainheight + (height - mainheight) + offset), parent->elev->Origin.z)));
 			else
-				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight)), parent->elev->Origin.z)));
+				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight) + offset), parent->elev->Origin.z)));
 		}
 	}
 	else
