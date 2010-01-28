@@ -1406,7 +1406,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float height = fabs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
 				if (direction == 0)
-					offset = extents_max.y - wrapper->Origin.y) - wrapper->Height;
+					offset = (extents_max.y - wrapper->Origin.y) - wrapper->Height;
 				else
 					offset = extents_min.y - wrapper->Origin.y;
 				marker1 = height / 4;
