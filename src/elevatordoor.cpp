@@ -1344,17 +1344,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				{
 					width = fabs(extents_max.z - extents_min.z);
 					if (direction == 2)
-						offset = extents_min.z + width;
+						offset = mainwidth + extents_min.z;
 					else
-						offset = extents_max.z - width;
+						offset = mainwidth - extents_max.z;
 				}
 				else
 				{
 					width = fabs(extents_max.x - extents_min.x);
 					if (direction == 2)
-						offset = extents_min.x + width;
+						offset = mainwidth + extents_min.x;
 					else
-						offset = extents_max.x - width;
+						offset = mainwidth - extents_max.x;
 				}
 				float newwidth = width + offset;
 				marker1 = newwidth / 4;
@@ -1364,10 +1364,11 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				float height = fabs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
+				offset = extents_min.y - wrapper->Origin.y;
 				if (direction == 0)
-					offset = (extents_min.y - wrapper->Origin.y) + mainheight;
+					offset = (extents_max.y - wrapper->Origin.y) - wrapper->Height;
 				else
-					offset = (extents_max.y - wrapper->Origin.y) - mainheight;
+					offset = extents_min.y - wrapper->Origin.y;
 				float newheight = height + offset;
 				marker1 = newheight / 4;
 				marker2 = (mainheight + (height - mainheight)) - (newheight / 4) + offset;
@@ -1385,17 +1386,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				{
 					width = fabs(extents_max.z - extents_min.z);
 					if (direction == 2)
-						offset = extents_min.z + width;
+						offset = mainwidth + extents_min.z;
 					else
-						offset = extents_max.z - width;
+						offset = mainwidth - extents_max.z;
 				}
 				else
 				{
 					width = fabs(extents_max.x - extents_min.x);
 					if (direction == 2)
-						offset = extents_min.x + width;
+						offset = mainwidth + extents_min.x;
 					else
-						offset = extents_max.x - width;
+						offset = mainwidth - extents_max.x;
 				}
 				marker1 = 0;
 				marker2 = mainwidth + (width - mainwidth) + offset;
@@ -1405,9 +1406,9 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float height = fabs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
 				if (direction == 0)
-					offset = (extents_min.y - wrapper->Origin.y) + mainheight;
+					offset = extents_max.y - wrapper->Origin.y) - wrapper->Height;
 				else
-					offset = (extents_max.y - wrapper->Origin.y) - mainheight;
+					offset = extents_min.y - wrapper->Origin.y;
 				marker1 = height / 4;
 				marker2 = mainheight + (height - mainheight) + offset;
 			}
