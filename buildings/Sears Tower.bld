@@ -71,13 +71,13 @@
     #floor indicator/button pictures
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
-    AddText Black, ButtonPL, nimbus_sans.ttf, 47, PL, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonCC, nimbus_sans.ttf, 47, CC, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonR, nimbus_sans.ttf, 47, R, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonLL1, nimbus_sans.ttf, 47, LL1, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonLL2, nimbus_sans.ttf, 47, LL2, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonLL3, nimbus_sans.ttf, 47, LL3, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText BlackLit, ButtonLitPL, nimbus_sans.ttf, 47, PL, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText BlackLit, ButtonLitCC, nimbus_sans.ttf, 47, CC, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitR, nimbus_sans.ttf, 47, R, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitLL1, nimbus_sans.ttf, 47, LL1, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitLL2, nimbus_sans.ttf, 47, LL2, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitLL3, nimbus_sans.ttf, 47, LL3, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -146,8 +146,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 
 #Franklin Concourse
 <Floor 0>
-    ID = CC
-    Name = Concourse
+    ID = L
+    Name = Lobby Level
     Type = Lobby
     Description = Lobby Level
     Height = 12.24
@@ -183,8 +183,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 
 #Plaza
 <Floor 1>
-    ID = PL
-    Name = Plaza
+    ID = R
+    Name = Restaurant Level
     Type = Lobby
     Description = Restaurant Level
     Height = 12.24
@@ -2182,8 +2182,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreatePanel ElevPanel, 9, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button34, ButtonLit34, 2, 3, 33, 1, 1
     AddFloorButton 1, Button33, ButtonLit33, 3, 3, 32, 1, 1
-    AddFloorButton 1, ButtonPL, ButtonLitPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -2284,8 +2284,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreatePanel ElevPanel, 9, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     AddFloorButton 1, Button34, ButtonLit34, 2, 3, 33, 1, 1
     AddFloorButton 1, Button33, ButtonLit33, 3, 3, 32, 1, 1
-    AddFloorButton 1, ButtonPL, ButtonLitPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -2377,8 +2377,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorButton 1, Button66, ButtonLit66, 2, 2, 65, 1, 1
     AddFloorButton 1, Button34, ButtonLit34, 3, 4, 33, 1, 1
     AddFloorButton 1, Button33, ButtonLit33, 3, 2, 32, 1, 1
-    AddFloorButton 1, ButtonPL, ButtonLitPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -2470,8 +2470,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorButton 1, Button66, ButtonLit66, 2, 2, 65, 1, 1
     AddFloorButton 1, Button34, ButtonLit34, 3, 4, 33, 1, 1
     AddFloorButton 1, Button33, ButtonLit33, 3, 2, 32, 1, 1
-    AddFloorButton 1, ButtonPL, ButtonLitPL, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -2568,7 +2568,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorButton 1, Button5, ButtonLit5, 4, 2, 4, 1, 1
     AddFloorButton 1, Button4, ButtonLit4, 5, 4, 3, 1, 1
     AddFloorButton 1, Button3, ButtonLit3, 5, 2, 2, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 6, 3, 0, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -2664,7 +2664,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorButton 1, Button5, ButtonLit5, 4, 2, 4, 1, 1
     AddFloorButton 1, Button4, ButtonLit4, 5, 4, 3, 1, 1
     AddFloorButton 1, Button3, ButtonLit3, 5, 2, 2, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 6, 3, 0, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -2761,7 +2761,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorButton 1, Button12, ButtonLit12, 4, 2, 11, 1, 1
     AddFloorButton 1, Button11, ButtonLit11, 5, 4, 10, 1, 1
     AddFloorButton 1, Button10, ButtonLit10, 5, 2, 9, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 6, 3, 0, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -2857,7 +2857,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorButton 1, Button12, ButtonLit12, 4, 2, 11, 1, 1
     AddFloorButton 1, Button11, ButtonLit11, 5, 4, 10, 1, 1
     AddFloorButton 1, Button10, ButtonLit10, 5, 2, 9, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 6, 3, 0, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
@@ -2953,7 +2953,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorButton 1, Button19, ButtonLit19, 4, 4, 18, 1, 1
     AddFloorButton 1, Button18, ButtonLit18, 4, 2, 17, 1, 1
     AddFloorButton 1, Button17, ButtonLit17, 5, 4, 16, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 2, 0, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 5, 2, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -3048,7 +3048,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorButton 1, Button19, ButtonLit19, 4, 4, 18, 1, 1
     AddFloorButton 1, Button18, ButtonLit18, 4, 2, 17, 1, 1
     AddFloorButton 1, Button17, ButtonLit17, 5, 4, 16, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 2, 0, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 5, 2, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -3143,7 +3143,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorButton 1, Button25, ButtonLit25, 3, 2, 24, 1, 1
     AddFloorButton 1, Button24, ButtonLit24, 4, 4, 23, 1, 1
     AddFloorButton 1, Button23, ButtonLit23, 4, 2, 22, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -3226,7 +3226,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorButton 1, Button25, ButtonLit25, 3, 2, 24, 1, 1
     AddFloorButton 1, Button24, ButtonLit24, 4, 4, 23, 1, 1
     AddFloorButton 1, Button23, ButtonLit23, 4, 2, 22, 1, 1
-    AddFloorButton 1, ButtonCC, ButtonLitCC, 5, 3, 0, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
