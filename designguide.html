@@ -1422,9 +1422,9 @@
     sound, texture_unlit</em>, <em>texture_lit, row, column, floor, width, height[, 
     hoffset, voffset]</em></font><br>
     Example 1: <font size="2" face="Courier New, Courier, mono">AddFloorButton 
-    1, data/button.wav, Button5, ButtonLit5, 7, 3, 4, 1, 1</font><br>
+    1, switch.wav, Button5, ButtonLit5, 7, 3, 4, 1, 1</font><br>
     Example 2: <font size="2" face="Courier New, Courier, mono">AddFloorButton 
-    1, &quot;&quot;, Button5, ButtonLit5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p>
+    1, , Button5, ButtonLit5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p>
   <p align="left">The AddFloorButton command creates a floor button on the button 
     panel created with CreatePanel. Panel_number specifies the number of the panel 
     to add the button to; the number can be either 1 or 2. <em>Row</em> and <em>Column</em> 
@@ -1439,7 +1439,8 @@
     and are used to position the button outside the normal grid, and are in grid 
     units (buttonwidth and buttonheight parameters of the CreatePanel function). 
     In the second example, the button is positioned 0.1 grid units to the right, 
-    and 0.1 grid units down.</p>
+    and 0.1 grid units down. Notice that no sound is specified in the 2nd example - this
+    means that a sound won't be played.</p>
   <p align="left"><strong>8. AddControlButton</strong> - creates a control button 
     on the panel<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddControlButton 
