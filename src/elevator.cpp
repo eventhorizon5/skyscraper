@@ -294,9 +294,18 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		ReportError("Not assigned to a shaft");
 		return 0;
 	}
+	if (!sbs->GetShaft(AssignedShaft))
+	{
+		csString num;
+		num = AssignedShaft;
+		ReportError("Shaft " + num + " doesn't exist");
+		return 0;
+	}
 	if (floor < sbs->GetShaft(AssignedShaft)->startfloor || floor > sbs->GetShaft(AssignedShaft)->endfloor)
 	{
-		ReportError("Invalid starting floor");
+		csString num;
+		num = floor;
+		ReportError("Invalid starting floor " + num);
 		return 0;
 	}
 
