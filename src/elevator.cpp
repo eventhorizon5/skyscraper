@@ -1100,10 +1100,20 @@ void Elevator::MoveElevatorToFloor()
 			Report("playing stopping sounds");
 		mainsound->Load(CarStopSound.GetData());
 		mainsound->Loop(false);
-		mainsound->Play();
+		bool adjust = sbs->confman->GetBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
+		//set play position to current percent of the total speed
+		if (adjust == true)
+			mainsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
+		else
+			mainsound->Reset();
+		mainsound->Play(false);
 		motorsound->Load(MotorStopSound.GetData());
 		motorsound->Loop(false);
-		motorsound->Play();
+		if (adjust == true)
+			motorsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
+		else
+			motorsound->Reset();
+		motorsound->Play(false);
 	}
 
 	if (mainsound->IsPlaying() == false && Brakes == false)
@@ -1296,12 +1306,22 @@ void Elevator::MoveElevatorToFloor()
 			//play elevator stopping sounds
 			if (sbs->Verbose)
 				Report("playing stopping sounds");
+			bool adjust = sbs->confman->GetBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
 			mainsound->Load(CarStopSound.GetData());
 			mainsound->Loop(false);
-			mainsound->Play();
+			//set play position to current percent of the total speed
+			if (adjust == true)
+				mainsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
+			else
+				mainsound->Reset();
+			mainsound->Play(false);
 			motorsound->Load(MotorStopSound.GetData());
 			motorsound->Loop(false);
-			motorsound->Play();
+			if (adjust == true)
+				motorsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
+			else
+				motorsound->Reset();
+			motorsound->Play(false);
 		}
 	}
 

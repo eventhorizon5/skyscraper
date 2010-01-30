@@ -57,12 +57,14 @@ public:
 	void Pause();
 	bool IsPaused();
 	void Stop();
-	void Play();
+	void Play(bool reset = true);
 	void Reset();
 	void SetSpeed(int percent);
 	int GetSpeed();
 	void Load(const char *filename, bool force = false);
 	bool IsPlaying();
+	float GetPlayPosition();
+	void SetPlayPosition(float percent);
 
 private:
 

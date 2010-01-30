@@ -248,9 +248,10 @@ void Sound::Stop()
 	Reset();
 }
 
-void Sound::Play()
+void Sound::Play(bool reset)
 {
-	Reset();
+	if (reset == true)
+		Reset();
 	if (sndstream)
 		sndstream->Unpause();
 }
@@ -331,4 +332,22 @@ void Sound::Load(const char *filename, bool force)
 	SetDirectionalRadiation(DirectionalRadiation);
 	Loop(SoundLoop);
 	SetSpeed(Speed);
+}
+
+float Sound::GetPlayPosition()
+{
+	//returns the current sound playback position, in percent (1 = 100%)
+
+	if (sndstream)
+		return sndstream->GetPosition() / sndstream->GetFrameCount();
+	else
+		return 0;
+}
+
+void Sound::SetPlayPosition(float percent)
+{
+	//sets the current sound playback position, in percent (1 = 100%)
+
+	if (sndstream)
+		sndstream->SetPosition(percent * sndstream->GetFrameCount());
 }

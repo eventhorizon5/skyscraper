@@ -42,6 +42,7 @@ Version 1.6 (2.0 Alpha 6)
 -added support for user-defined elevator and shaft doors
 -added automatic elevator parking support
 -added button sound support
+-elevator and motor sounds now start at a position based on the elevator's speed
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------
