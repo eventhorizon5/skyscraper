@@ -381,21 +381,21 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
     SetAutoSize = true, false
-    AddWall Front, MainWindows2b, 0.1, -75, -70, 75, -70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
-    AddWall Left, MainWindows2b, 0.1, -75, 70, -75, -70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
+    AddWall Front, MainWindows2b, 0.1, -75, -70, 75, -70, %height% + 1.5, %height% + 1.5, %interfloorheight%, %interfloorheight%, 1, 1, True
+    AddWall Left, MainWindows2b, 0.1, -75, 70, -75, -70, %height% + 1.5, %height% + 1.5, %interfloorheight%, %interfloorheight%, 1, 1, True
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddWall Right, MainWindows2b, 0.1, 75, -70, 75, 70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
-    AddWall Back, MainWindows2b, 0.1, 75, 70, -75, 70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
+    AddWall Right, MainWindows2b, 0.1, 75, -70, 75, 70, %height% + 1.5, %height% + 1.5, %interfloorheight%, %interfloorheight%, 1, 1, True
+    AddWall Back, MainWindows2b, 0.1, 75, 70, -75, 70, %height% + 1.5, %height% + 1.5, %interfloorheight%, %interfloorheight%, 1, 1, True
 
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddWall Front, MainWindowsInt2, 0.1, -75, -70, 75, -70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
-    AddWall Left, MainWindowsInt2, 0.1, -75, 70, -75, -70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
+    AddWall Front, MainWindowsInt2, 0.1, -75, -70, 75, -70, %height% + 1.5, %height% + 1.5, 0, 0, 1, 1, False
+    AddWall Left, MainWindowsInt2, 0.1, -75, 70, -75, -70, %height% + 1.5, %height% + 1.5, 0, 0, 1, 1, False
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    AddWall Right, MainWindowsInt2, 0.1, 75, -70, 75, 70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
-    AddWall Back, MainWindowsInt2, 0.1, 75, 70, -75, 70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
+    AddWall Right, MainWindowsInt2, 0.1, 75, -70, 75, 70, %height% + 1.5, %height% + 1.5, 0, 0, 1, 1, False
+    AddWall Back, MainWindowsInt2, 0.1, 75, 70, -75, 70, %height% + 1.5, %height% + 1.5, 0, 0, 1, 1, False
     SetAutoSize = true, true
 
     #Left Restroom
@@ -441,21 +441,21 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
     SetAutoSize = true, false
-    AddWall Front, MainWindowsDouble, 0.1, -75, -70, 75, -70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
-    AddWall Left, MainWindowsDouble, 0.1, -75, 70, -75, -70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
+    AddWall Front, MainWindowsDouble, 0.1, -75, -70, 75, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 1, 1, True
+    AddWall Left, MainWindowsDouble, 0.1, -75, 70, -75, -70, %height%, %height%, %interfloorheight%, %interfloorheight%, 1, 1, True
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddWall Right, MainWindowsDouble, 0.1, 75, -70, 75, 70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
-    AddWall Back, MainWindowsDouble, 0.1, 75, 70, -75, 70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
+    AddWall Right, MainWindowsDouble, 0.1, 75, -70, 75, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 1, 1, True
+    AddWall Back, MainWindowsDouble, 0.1, 75, 70, -75, 70, %height%, %height%, %interfloorheight%, %interfloorheight%, 1, 1, True
 
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddWall Front, MainWindowsIntDouble, 0.1, -75, -70, 75, -70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
-    AddWall Left, MainWindowsIntDouble, 0.1, -75, 70, -75, -70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
+    AddWall Front, MainWindowsIntDouble, 0.1, -75, -70, 75, -70, %fullheight%, %fullheight%, 0, 0, 1, 1, False
+    AddWall Left, MainWindowsIntDouble, 0.1, -75, 70, -75, -70, %fullheight%, %fullheight%, 0, 0, 1, 1, False
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    AddWall Right, MainWindowsIntDouble, 0.1, 75, -70, 75, 70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
-    AddWall Back, MainWindowsIntDouble, 0.1, 75, 70, -75, 70, %fullheight%, %fullheight%, 2.24, 2.24, 1, 1, True
+    AddWall Right, MainWindowsIntDouble, 0.1, 75, -70, 75, 70, %fullheight%, %fullheight%, 0, 0, 1, 1, False
+    AddWall Back, MainWindowsIntDouble, 0.1, 75, 70, -75, 70, %fullheight%, %fullheight%, 0, 0, 1, 1, False
     SetAutoSize = true, true
 
     FloorOrientation = top
