@@ -1409,7 +1409,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 					offset = wrapper->Height - (extents_max.y - wrapper->Origin.y);
 				else
 					offset = extents_min.y - wrapper->Origin.y;
-				marker1 = height / 4;
+				marker1 = 0;
 				marker2 = mainheight + (height - mainheight) + offset;
 			}
 
