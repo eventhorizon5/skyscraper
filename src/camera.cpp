@@ -852,7 +852,8 @@ bool Camera::GetGravityStatus()
 void Camera::SetFOVAngle(float angle)
 {
 	//set camera FOV angle
-	MainCamera->SetFOVAngle(angle, sbs->g2d->GetWidth());
+	if (angle > 0 && angle < 179.63)
+		MainCamera->SetFOVAngle(angle, sbs->g2d->GetWidth());
 }
 
 float Camera::GetFOVAngle()
