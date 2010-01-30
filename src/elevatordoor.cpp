@@ -1207,6 +1207,7 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	finished = false;
 	sign_changed = false;
 	old_difference = 0;
+	recheck_difference = false;
 }
 
 ElevatorDoor::DoorObject::~DoorObject()
@@ -1315,12 +1316,19 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 
 	float difference = fabs(tempposition - temporigin);
 
-	if (old_difference != 0 && manual == true)
+	if (old_difference != 0 && manual == true && recheck_difference == true)
 	{
-		if (tempposition - temporigin > 0 && old_difference < 0 || tempposition - temporigin < 0 && old_difference > 0)
+		if ((tempposition - temporigin > 0 && old_difference < 0) || (tempposition - temporigin < 0 && old_difference > 0))
 			sign_changed = true;
 	}
-	old_difference = tempposition - temporigin;
+
+	if (recheck_difference == false && old_difference != 0)
+	{
+		recheck_difference = true;
+		old_difference = 0;
+	}
+	else
+		old_difference = tempposition - temporigin;
 
 	//debug - show current section as function is running
 	//sbs->Report("Door section: " + csString(_itoa(door_section, parent->intbuffer, 10)));
@@ -1330,6 +1338,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		//initialization code
 
 		finished = false;
+		recheck_difference = false;
 
 		//marker1 is the position to stop accelerating at
 		//marker2 is the position to start decelerating at

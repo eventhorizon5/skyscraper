@@ -66,6 +66,7 @@ public:
 		bool sign_changed;
 		float old_difference;
 		float offset;
+		bool recheck_difference;
 	};
 
 	//wrapper that represents the entire set of doors
