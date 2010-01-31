@@ -1292,16 +1292,19 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
 	float tempposition, temporigin;
+	float origin_offset = 0;
 	if (direction > 1)
 	{
 		if (parent->DoorDirection == false)
 		{
-			tempposition = sbs->ToLocal(movable->GetPosition().z);
+			origin_offset = wrapper->Origin.z - parent->elev->Origin.z;
+			tempposition = sbs->ToLocal(movable->GetPosition().z) + origin_offset;
 			temporigin = wrapper->Origin.z;
 		}
 		else
 		{
-			tempposition = sbs->ToLocal(movable->GetPosition().x);
+			origin_offset = wrapper->Origin.x - parent->elev->Origin.x;
+			tempposition = sbs->ToLocal(movable->GetPosition().x) + origin_offset;
 			temporigin = wrapper->Origin.x;
 		}
 	}
@@ -1353,17 +1356,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				{
 					width = fabs(extents_max.z - extents_min.z);
 					if (direction == 2)
-						offset = mainwidth + extents_min.z;
+						offset = mainwidth + (extents_min.z - (origin_offset / 2));
 					else
-						offset = mainwidth - extents_max.z;
+						offset = mainwidth - (extents_max.z - (origin_offset / 2));
 				}
 				else
 				{
 					width = fabs(extents_max.x - extents_min.x);
 					if (direction == 2)
-						offset = mainwidth + extents_min.x;
+						offset = mainwidth + (extents_min.x - (origin_offset / 2));
 					else
-						offset = mainwidth - extents_max.x;
+						offset = mainwidth - (extents_max.x - (origin_offset / 2));
 				}
 				float newwidth = width + offset;
 				marker1 = newwidth / 4;
@@ -1395,17 +1398,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				{
 					width = fabs(extents_max.z - extents_min.z);
 					if (direction == 2)
-						offset = mainwidth + extents_min.z;
+						offset = mainwidth + (extents_min.z - (origin_offset / 2));
 					else
-						offset = mainwidth - extents_max.z;
+						offset = mainwidth - (extents_max.z - (origin_offset / 2));
 				}
 				else
 				{
 					width = fabs(extents_max.x - extents_min.x);
 					if (direction == 2)
-						offset = mainwidth + extents_min.x;
+						offset = mainwidth + (extents_min.x - (origin_offset / 2));
 					else
-						offset = mainwidth - extents_max.x;
+						offset = mainwidth - (extents_max.x - (origin_offset / 2));
 				}
 				marker1 = 0;
 				marker2 = mainwidth + (width - mainwidth) + offset;
