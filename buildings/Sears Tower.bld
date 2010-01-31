@@ -48,7 +48,7 @@
     Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
     Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
     Load data/floorsign.jpg, FloorSign, 1, 1
-    Load data/otis4_weaveceiling_3x3_symmetrical.jpg, ElevCeiling, 1, 1, false
+    Load data/otis4_weaveceiling_3x3.jpg, ElevCeiling, 1, 1, false
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 0.5, 0.5
     Load data/MetalBare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
