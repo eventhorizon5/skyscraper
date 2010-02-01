@@ -3145,31 +3145,31 @@ void Elevator::AddShaftDoorsComponent(int number, const char *name, const char *
 		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 }
 
-Object* Elevator::FinishDoors(int number, float CenterX, float CenterZ)
+Object* Elevator::FinishDoors(int number)
 {
 	//finishes elevator door
 	if (GetDoor(number))
-		return GetDoor(number)->FinishDoors(CenterX, CenterZ);
+		return GetDoor(number)->FinishDoors();
 	else
 		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return 0;
 }
 
-Object* Elevator::FinishShaftDoor(int number, int floor, float CenterX, float CenterZ)
+Object* Elevator::FinishShaftDoor(int number, int floor)
 {
 	//finishes a single shaft door
 	int index = ServicedFloors.Find(floor);
 	if (index != -1 && GetDoor(number))
-		return GetDoor(number)->FinishShaftDoor(floor, CenterX, CenterZ);
+		return GetDoor(number)->FinishShaftDoor(floor);
 	else
 		return 0;
 }
 
-bool Elevator::FinishShaftDoors(int number, float CenterX, float CenterZ)
+bool Elevator::FinishShaftDoors(int number)
 {
 	//finishes all shaft doors
 	if (GetDoor(number))
-		return GetDoor(number)->FinishShaftDoors(CenterX, CenterZ);
+		return GetDoor(number)->FinishShaftDoors();
 	else
 		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;

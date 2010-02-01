@@ -3497,14 +3497,14 @@ int ScriptProcessor::ProcFloors()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
+		if (tempdata.GetSize() < 2)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
 		}
 
 		//check numeric values
-		for (int i = 0; i <= 3; i++)
+		for (int i = 0; i <= 1; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 			{
@@ -3520,7 +3520,7 @@ int ScriptProcessor::ProcFloors()
 			return sError;
 		}
 
-		StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1]), Current, atof(tempdata[2]), atof(tempdata[3])));
+		StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1]), Current));
 
 		tempdata.DeleteAll();
 	}
@@ -5172,23 +5172,20 @@ int ScriptProcessor::ProcElevators()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+		if (tempdata.GetSize() < 1)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
 		}
 
 		//check numeric values
-		for (int i = 0; i <= 2; i++)
+		if (!IsNumeric(csString(tempdata[0]).Trim().GetData()))
 		{
-			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+			ScriptError("Invalid value: " + csString(tempdata[0]));
+			return sError;
 		}
 
-		StoreCommand(elev->FinishDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])));
+		StoreCommand(elev->FinishDoors(atoi(tempdata[0])));
 
 		tempdata.DeleteAll();
 	}
@@ -5205,24 +5202,21 @@ int ScriptProcessor::ProcElevators()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
+		if (tempdata.GetSize() < 1)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
 		}
 
 		//check numeric values
-		for (int i = 0; i <= 2; i++)
+		if (!IsNumeric(csString(tempdata[0]).Trim().GetData()))
 		{
-			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+			ScriptError("Invalid value: " + csString(tempdata[0]));
+			return sError;
 		}
 
 		bool result;
-		result = elev->FinishShaftDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
+		result = elev->FinishShaftDoors(atoi(tempdata[0]));
 
 		if (result == false)
 			return ScriptError("Error finishing shaft doors");

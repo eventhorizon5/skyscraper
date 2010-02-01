@@ -596,7 +596,7 @@ Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture
 	AddDoorComponent("Right", righttexture, righttexture, thickness, "Right", OpenSpeed, x3, z3, x4, z4, height, 0, tw, th, tw, th);
 
 	//finish doors
-	return FinishDoors(CenterX, CenterZ);
+	return FinishDoors();
 }
 
 void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
@@ -721,15 +721,15 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 	}
 }
 
-Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, float voffset, float CenterX, float CenterZ)
+Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, float voffset)
 {
 	//finishes a door creation
 
 	//set door parameters
+	wrapper->Origin = csVector3(elev->Origin.x, voffset, elev->Origin.z);
+
 	if (ShaftDoor == false)
-		wrapper->Origin = csVector3(elev->Origin.x + CenterX, elev->Origin.y + voffset, elev->Origin.z + CenterZ);
-	else
-		wrapper->Origin = csVector3(elev->Origin.x + CenterX, voffset, elev->Origin.z + CenterZ);
+		wrapper->Origin.y += elev->Origin.y;
 
 	//get full width and height of doors
 	float x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
@@ -773,6 +773,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 			DoorDirection = true;
 		wrapper->Width = x2 - x1;
 		wrapper->Thickness = z2 - z1;
+		wrapper->Shift = x2 - (wrapper->Width / 2);
 	}
 	else
 	{
@@ -780,6 +781,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 			DoorDirection = false;
 		wrapper->Width = z2 - z1;
 		wrapper->Thickness = x2 - x1;
+		wrapper->Shift = z2 - (wrapper->Width / 2);
 	}
 	wrapper->Height = y2 - y1;
 
@@ -853,14 +855,14 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	return wrapper->object;
 }
 
-Object* ElevatorDoor::FinishDoors(float CenterX, float CenterZ)
+Object* ElevatorDoor::FinishDoors()
 {
 	//finish elevator doors
 
-	return FinishDoors(Doors, 0, false, 0, CenterX, CenterZ);
+	return FinishDoors(Doors, 0, false, 0);
 }
 
-Object* ElevatorDoor::FinishShaftDoor(int floor, float CenterX, float CenterZ)
+Object* ElevatorDoor::FinishShaftDoor(int floor)
 {
 	//finish shaft door on a specified floor
 
@@ -869,16 +871,16 @@ Object* ElevatorDoor::FinishShaftDoor(int floor, float CenterX, float CenterZ)
 		return 0;
 
 	Floor *floorobj = sbs->GetFloor(floor);
-	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], floor, true, floorobj->Altitude + floorobj->GetBase(true), CenterX, CenterZ);
+	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], floor, true, floorobj->Altitude + floorobj->GetBase(true));
 }
 
-bool ElevatorDoor::FinishShaftDoors(float CenterX, float CenterZ)
+bool ElevatorDoor::FinishShaftDoors()
 {
 	//finish all shaft doors
 
 	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
 	{
-		if (!FinishShaftDoor(elev->ServicedFloors[i], CenterX, CenterZ))
+		if (!FinishShaftDoor(elev->ServicedFloors[i]))
 			return false;
 	}
 	return true;
@@ -952,7 +954,7 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, "Right", OpenSpeed, x3, z3, x4, z4, Doors->Height, 0, tw, th, tw, th);
 
 	//finish doors
-	Object *object = FinishShaftDoor(floor, ShaftDoorOrigin.x - elev->Origin.x, ShaftDoorOrigin.z - elev->Origin.z);
+	Object *object = FinishShaftDoor(floor);
 
 	//make doors invisible on start
 	ShaftDoors[index]->Enable(false);
@@ -1228,6 +1230,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	Origin = 0;
 	Thickness = 0;
 	IsShaftDoor = shaftdoor;
+	Shift = 0;
 
 	object = new Object();
 	object->SetValues(this, parent->object, "DoorWrapper", false);
@@ -1292,20 +1295,18 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
 	float tempposition, temporigin;
-	float origin_offset = 0;
+
 	if (direction > 1)
 	{
 		if (parent->DoorDirection == false)
 		{
-			origin_offset = wrapper->Origin.z - parent->elev->Origin.z;
-			tempposition = sbs->ToLocal(movable->GetPosition().z) + origin_offset;
-			temporigin = wrapper->Origin.z;
+			tempposition = sbs->ToLocal(movable->GetPosition().z) + wrapper->Shift;
+			temporigin = wrapper->Origin.z + wrapper->Shift;
 		}
 		else
 		{
-			origin_offset = wrapper->Origin.x - parent->elev->Origin.x;
-			tempposition = sbs->ToLocal(movable->GetPosition().x) + origin_offset;
-			temporigin = wrapper->Origin.x;
+			tempposition = sbs->ToLocal(movable->GetPosition().x) + wrapper->Shift;
+			temporigin = wrapper->Origin.x + wrapper->Shift;
 		}
 	}
 	else
@@ -1356,17 +1357,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				{
 					width = fabs(extents_max.z - extents_min.z);
 					if (direction == 2)
-						offset = mainwidth + (extents_min.z - (origin_offset / 2));
+						offset = mainwidth + (extents_min.z - wrapper->Shift);
 					else
-						offset = mainwidth - (extents_max.z - (origin_offset / 2));
+						offset = mainwidth - (extents_max.z - wrapper->Shift);
 				}
 				else
 				{
 					width = fabs(extents_max.x - extents_min.x);
 					if (direction == 2)
-						offset = mainwidth + (extents_min.x - (origin_offset / 2));
+						offset = mainwidth + (extents_min.x - wrapper->Shift);
 					else
-						offset = mainwidth - (extents_max.x - (origin_offset / 2));
+						offset = mainwidth - (extents_max.x - wrapper->Shift);
 				}
 				float newwidth = width + offset;
 				marker1 = newwidth / 4;
@@ -1398,17 +1399,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				{
 					width = fabs(extents_max.z - extents_min.z);
 					if (direction == 2)
-						offset = mainwidth + (extents_min.z - (origin_offset / 2));
+						offset = mainwidth + (extents_min.z - wrapper->Shift);
 					else
-						offset = mainwidth - (extents_max.z - (origin_offset / 2));
+						offset = mainwidth - (extents_max.z - wrapper->Shift);
 				}
 				else
 				{
 					width = fabs(extents_max.x - extents_min.x);
 					if (direction == 2)
-						offset = mainwidth + (extents_min.x - (origin_offset / 2));
+						offset = mainwidth + (extents_min.x - wrapper->Shift);
 					else
-						offset = mainwidth - (extents_max.x - (origin_offset / 2));
+						offset = mainwidth - (extents_max.x - wrapper->Shift);
 				}
 				marker1 = 0;
 				marker2 = mainwidth + (width - mainwidth) + offset;

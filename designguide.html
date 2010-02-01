@@ -1148,7 +1148,7 @@
   <p align="left"><strong>24. FinishShaftDoor</strong> - finishes shaft door creation
     - use this after all related AddShaftDoorComponent commands are used.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoor<em> 
-    elevator, number, CenterX, CenterZ</em></font></p>
+    elevator, number</em></font></p>
   <p align="left">This command is almost identical to the FinishDoors command (in the elevator section below -
     see that for more information) except that it's used for finishing a shaft door.</p>
   <p align="left">&nbsp;</p>
@@ -1576,17 +1576,15 @@
     shaft doors on a per-floor basis, use the AddShaftDoorComponent command in the Floors section.</p>
   <p align="left"><strong>16. FinishDoors</strong> - finishes elevator door creation 
     - use this after all related AddDoorComponent commands are used.<br>
-    Syntax: <font size="2" face="Courier New, Courier, mono">FinishDoors <em>number, 
-    CenterX, CenterZ</em></font></p>
+    Syntax: <font size="2" face="Courier New, Courier, mono">FinishDoors <em>number</em></font></p>
   <p align="left">This command completes the elevator door creation by storing 
-    the central location, cutting walls for the door, creating side connection 
-    pieces for the cut, etc. CenterX and CenterZ specify the central location 
-    of the entire door itself.</p>
+    the central location and shift factor, cutting walls for the door, creating 
+    side connection pieces for the cut, etc.</p>
   <p align="left"><strong>17. FinishShaftDoors</strong> - finishes shaft door 
     creation for all serviced floors - use this after all related AddShaftDoorsComponent 
     commands are used.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoors 
-    <em>number, CenterX, CenterZ</em></font></p>
+    <em>number</em></font></p>
   <p align="left">This command is almost identical to the FinishDoors command 
     except that it's used for finishing shaft doors on all serviced floors.</p>
   <p align="left">&nbsp;</p>
