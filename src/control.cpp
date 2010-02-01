@@ -169,7 +169,7 @@ void Control::Move(const csVector3 &position)
 	ControlMesh->GetMovable()->UpdateMove();
 
 	//move sound
-	sound->SetPosition(ControlMesh->GetMovable()->GetPosition());
+	sound->SetPosition(GetPosition());
 }
 
 void Control::SetKnobPosition(int position)
