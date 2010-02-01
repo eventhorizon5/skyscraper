@@ -4695,39 +4695,18 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		if (atoi(tempdata[0]) == 1)
-		{
-			if (!elev->Panel)
-			{
-				skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
-				return sNextLine;
-			}
-			if (compat == 0)
-				elev->Panel->AddFloorButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
-			if (compat == 1)
-				elev->Panel->AddFloorButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
-			if (compat == 2)
-				elev->Panel->AddFloorButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
-		}
-		else if (atoi(tempdata[0]) == 2)
-		{
-			if (!elev->Panel2)
-			{
-				skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
-				return sNextLine;
-			}
-			if (compat == 0)
-				elev->Panel2->AddFloorButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
-			if (compat == 1)
-				elev->Panel2->AddFloorButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
-			if (compat == 2)
-				elev->Panel2->AddFloorButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
-		}
-		else
+		if (!elev->GetPanel(atoi(tempdata[0])))
 		{
 			ScriptError("Invalid panel number");
 			return sError;
 		}
+
+		if (compat == 0)
+			elev->GetPanel(atoi(tempdata[0]))->AddFloorButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
+		if (compat == 1)
+			elev->GetPanel(atoi(tempdata[0]))->AddFloorButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+		if (compat == 2)
+			elev->GetPanel(atoi(tempdata[0]))->AddFloorButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
 
 		tempdata.DeleteAll();
 	}
@@ -4835,39 +4814,18 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		if (atoi(tempdata[0]) == 1)
-		{
-			if (!elev->Panel)
-			{
-				skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
-				return sNextLine;
-			}
-			if (compat == 0)
-				elev->Panel->AddControlButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
-			if (compat == 1)
-				elev->Panel->AddControlButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
-			if (compat == 2)
-				elev->Panel->AddControlButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
-		}
-		else if (atoi(tempdata[0]) == 2)
-		{
-			if (!elev->Panel2)
-			{
-				skyscraper->Report("Elevator " + csString(_itoa(Current, intbuffer, 10)) + ": cannot add button");
-				return sNextLine;
-			}
-			if (compat == 0)
-				elev->Panel2->AddControlButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
-			if (compat == 1)
-				elev->Panel2->AddControlButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
-			if (compat == 2)
-				elev->Panel2->AddControlButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
-		}
-		else
+		if (!elev->GetPanel(atoi(tempdata[0])))
 		{
 			ScriptError("Invalid panel number");
 			return sError;
 		}
+
+		if (compat == 0)
+			elev->GetPanel(atoi(tempdata[0]))->AddControlButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
+		if (compat == 1)
+			elev->GetPanel(atoi(tempdata[0]))->AddControlButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+		if (compat == 2)
+			elev->GetPanel(atoi(tempdata[0]))->AddControlButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
 
 		tempdata.DeleteAll();
 	}

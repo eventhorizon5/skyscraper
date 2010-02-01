@@ -43,6 +43,7 @@ Version 1.6 (2.0 Alpha 6)
 -added automatic elevator parking support
 -added button sound support
 -elevator and motor sounds now start at a position based on the elevator's speed
+-elevators now support an unlimited number of button panels
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

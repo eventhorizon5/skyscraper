@@ -552,10 +552,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		int control_number = atoi(meshname.Slice(index2 + 8));
 
 		//press button
-		if (panel_number == 1)
-			sbs->GetElevator(elevator)->Panel->Press(control_number);
-		else
-			sbs->GetElevator(elevator)->Panel2->Press(control_number);
+		sbs->GetElevator(elevator)->GetPanel(panel_number)->Press(control_number);
 	}
 
 	//check shaft doors

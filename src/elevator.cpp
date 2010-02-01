@@ -71,8 +71,6 @@ Elevator::Elevator(int number)
 	AssignedShaft = 0;
 	IsEnabled = true;
 	Height = 0;
-	Panel = 0;
-	Panel2 = 0;
 	TempDeceleration = 0;
 	ErrorOffset = 0;
 	JerkRate = 0;
@@ -148,17 +146,20 @@ Elevator::Elevator(int number)
 
 Elevator::~Elevator()
 {
-	//delete directional indicators
-	if (sbs->Verbose)
-		Report("deleting directional indicators");
-
 	//delete timer
+	if (sbs->Verbose)
+		Report("deleting timer");
+
 	if (timer)
 	{
 		timer->Stop();
 		delete timer;
 	}
 	timer = 0;
+
+	//delete directional indicators
+	if (sbs->Verbose)
+		Report("deleting directional indicators");
 
 	for (int i = 0; i < IndicatorArray.GetSize(); i++)
 	{
@@ -191,15 +192,21 @@ Elevator::~Elevator()
 	}
 	FloorIndicatorArray.DeleteAll();
 
+	//delete panels
+	if (sbs->Verbose)
+		Report("deleting button panels");
+
+	for (int i = 0; i < PanelArray.GetSize(); i++)
+	{
+		if (PanelArray[i])
+			delete PanelArray[i];
+		PanelArray[i] = 0;
+	}
+	PanelArray.DeleteAll();
+
 	//Destructor
 	if (sbs->Verbose)
 		Report("deleting objects");
-	if (Panel)
-		delete Panel;
-	Panel = 0;
-	if (Panel2)
-		delete Panel2;
-	Panel2 = 0;
 	if (mainsound)
 		delete mainsound;
 	mainsound = 0;
@@ -450,10 +457,8 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	{
 		if (sbs->Verbose)
 			Report("AddRoute: turning on button lights for floor " + csString(_itoa(floor, intbuffer, 10)));
-		if (Panel)
-			Panel->ChangeLight(floor, true);
-		if (Panel2)
-			Panel2->ChangeLight(floor, true);
+		for (int i = 0; i < PanelArray.GetSize(); i++)
+			PanelArray[i]->ChangeLight(floor, true);
 	}
 
 	//add ACP route recursively if mode is enabled
@@ -490,10 +495,8 @@ void Elevator::DeleteRoute(int floor, int direction)
 	//turn off button lights
 	if (sbs->Verbose)
 		Report("DeleteRoute: turning off button lights for floor " + csString(_itoa(floor, intbuffer, 10)));
-	if (Panel)
-		Panel->ChangeLight(floor, false);
-	if (Panel2)
-		Panel2->ChangeLight(floor, false);
+	for (int i = 0; i < PanelArray.GetSize(); i++)
+		PanelArray[i]->ChangeLight(floor, false);
 }
 
 void Elevator::CancelLastRoute()
@@ -594,10 +597,8 @@ void Elevator::ProcessCallQueue()
 			Report("ProcessCallQueue: turning off button lights for queue reset");
 		for (int i = 0; i < ServicedFloors.GetSize(); i++)
 		{
-			if (Panel)
-				Panel->ChangeLight(ServicedFloors[i], false);
-			if (Panel2)
-				Panel2->ChangeLight(ServicedFloors[i], false);
+			for (int j = 0; j < PanelArray.GetSize(); j++)
+				PanelArray[j]->ChangeLight(ServicedFloors[i], false);
 		}
 		return;
 	}
@@ -1156,10 +1157,8 @@ void Elevator::MoveElevatorToFloor()
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
 	}
-	if (Panel)
-		Panel->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
-	if (Panel2)
-		Panel2->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
+	for (int i = 0; i < PanelArray.GetSize(); i++)
+		PanelArray[i]->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
 
 	//move sounds
 	mainsound->SetPosition(GetPosition());
@@ -1392,10 +1391,8 @@ void Elevator::MoveElevatorToFloor()
 			if (FloorIndicatorArray[i])
 				FloorIndicatorArray[i]->SetPosition(csVector3(FloorIndicatorArray[i]->GetPosition().x, Destination, FloorIndicatorArray[i]->GetPosition().z));
 		}
-		if (Panel)
-			Panel->SetToElevatorAltitude();
-		if (Panel2)
-			Panel2->SetToElevatorAltitude();
+		for (int i = 0; i < PanelArray.GetSize(); i++)
+			PanelArray[i]->SetToElevatorAltitude();
 
 		//move sounds
 		mainsound->SetPosition(GetPosition());
@@ -1671,10 +1668,8 @@ void Elevator::EnableObjects(bool value)
 	}
 
 	//panels
-	if (Panel)
-		Panel->Enabled(value);
-	if (Panel2)
-		Panel2->Enabled(value);
+	for (int i = 0; i < PanelArray.GetSize(); i++)
+		PanelArray[i]->Enabled(value);
 
 	//sounds
 	for (int i = 0; i < sounds.GetSize(); i++)
@@ -1798,25 +1793,21 @@ void Elevator::RemoveServicedFloor(int number)
 Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
 {
 	//create a new button panel object and store the pointer
-	if (!Panel)
-	{
-		if (sbs->Verbose)
-			Report("creating button panel 1");
-		Panel = new ButtonPanel(Number, 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
-		return Panel->object;
-	}
-	else if (!Panel2)
-	{
-		if (sbs->Verbose)
-			Report("creating button panel 2");
-		Panel2 = new ButtonPanel(Number, 2, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
-		return Panel->object;
-	}
+
+	int index = PanelArray.GetSize();
+	csString number;
+	number = index + 1;
+	number.Trim();
+	PanelArray.SetSize(index + 1);
+
+	if (sbs->Verbose)
+		Report("creating button panel " + number);
+
+	PanelArray[index] = new ButtonPanel(Number, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+	if (PanelArray[index])
+		return PanelArray[index]->object;
 	else
-	{
-		ReportError("Button panels already exist");
 		return 0;
-	}
 }
 
 void Elevator::UpdateFloorIndicators()
@@ -3187,4 +3178,14 @@ void Elevator::Timer::Notify()
 		else
 			elevator->AddRoute(elevator->ParkingFloor, -1, false);
 	}
+}
+
+ButtonPanel* Elevator::GetPanel(int index)
+{
+	//get a button panel object
+
+	if (index > PanelArray.GetSize() || index < 1)
+		return 0;
+
+	return PanelArray[index - 1];
 }

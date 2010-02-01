@@ -63,8 +63,6 @@ public:
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
 	float Height; //elevator height
-	ButtonPanel *Panel; //elevator button panel object
-	ButtonPanel *Panel2; //elevator button panel object
 	bool IsMoving; //is elevator moving?
 	csString CarStartSound; //elevator start/speedup sound
 	csString CarMoveSound; //elevator move sound
@@ -203,6 +201,7 @@ public:
 	Object* FinishDoors(int number);
 	Object* FinishShaftDoor(int number, int floor);
 	bool FinishShaftDoors(int number);
+	ButtonPanel* GetPanel(int index);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -266,6 +265,9 @@ private:
 
 	//floor indicators
 	csArray<FloorIndicator*> FloorIndicatorArray;
+
+	//button panel array
+	csArray<ButtonPanel*> PanelArray; //elevator button panel objects
 
 	//elevator misc internals
 	bool ElevatorIsRunning;
