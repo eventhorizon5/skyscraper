@@ -479,9 +479,6 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		door_changed = true;
 	}
 
-	//update call status (previous_open detects call changes during movement)
-	previous_open = open;
-
 	//find which doors should be moved
 	bool elevdoors = false, shaftdoors = false;
 	if (WhichDoors == 1)
@@ -510,6 +507,9 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			ShaftDoors[index]->doors[i]->MoveDoors(open, manual);
 		}
 	}
+
+	//update call status (previous_open detects call changes during movement)
+	previous_open = open;
 
 	//wait until the doors are finished moving
 	if (elevdoors == true)
@@ -1470,7 +1470,9 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				//reverse movement if transitioning from close to open
 				//this will trigger if door is closing, and is told to open while left of relocated marker 1
 				if (difference <= marker1)
+				{
 					active_speed += openchange;
+				}
 			}
 
 			//move elevator doors
