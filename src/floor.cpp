@@ -368,6 +368,30 @@ void Floor::Cut(const csVector3 &start, const csVector3 &end, bool cutwalls, boo
 		sbs->Cut(Interfloor, interfloor_walls, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
 }
 
+void Floor::CutAll(const csVector3 &start, const csVector3 &end, bool cutwalls, bool cutfloors)
+{
+	//cuts all objects related to this floor (floor, interfloor, shafts and stairs)
+	//Y values are relative to the floor's altitude
+
+	Cut(start, end, cutwalls, cutfloors, false);
+
+	for (int i = 1; i <= sbs->Shafts(); i++)
+	{
+		if (cutwalls == true)
+			sbs->GetShaft(i)->CutWall(true, Number, start, end);
+		if (cutfloors == true)
+			sbs->GetShaft(i)->CutFloors(false, csVector2(start.x, start.z), csVector2(end.x, end.z), Altitude, Altitude + FullHeight());
+	}
+
+	for (int i = 1; i <= sbs->StairsNum(); i++)
+	{
+		if (cutwalls == true)
+			sbs->GetStairs(i)->CutWall(true, Number, start, end);
+		if (cutfloors == true)
+			sbs->GetStairs(i)->CutFloors(false, csVector2(start.x, start.z), csVector2(end.x, end.z), Altitude, Altitude + FullHeight());
+	}
+}
+
 void Floor::AddGroupFloor(int number)
 {
 	//adds a floor number to the group list.

@@ -1109,10 +1109,21 @@
     </font>Example: <font size="2" face="Courier New, Courier, mono">Cut -5, -5, 
     -5, 5, 5, 5, false, true</font></p>
   <p align="left">The x, y and z values specify the start and end coordinates 
-    of the box cut. The Y values are relative to the current floor's altitude.. 
+    of the box cut. The Y values are relative to the current floor's altitude. 
     If cutwalls is true, the function will cut walls; if cutfloors is true, it'll 
     cut floors.</p>
-  <p align="left"><strong>21. AddFillerWalls</strong> - helper function to add 
+  <p align="left"><strong>21. CutAll</strong> - performs a manual box cut on all 
+    objects associated with the current floor (the level itself, interfloor, shafts 
+    and stairs)<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">CutAll x1, y1, z1, 
+    x2, y2, z2, cutwalls, cutfloors<br>
+    </font>Example: <font size="2" face="Courier New, Courier, mono">CutAll -5, 
+    -5, -5, 5, 5, 5, false, true</font></p>
+  <p align="left">The x, y and z values specify the start and end coordinates 
+    of the box cut. The Y values are relative to the current floor's altitude. 
+    If cutwalls is true, the function will cut walls; if cutfloors is true, it'll 
+    cut floors.</p>
+  <p align="left"><strong>22. AddFillerWalls</strong> - helper function to add 
     fillers around a door's cut location. When a door is created, the wall in 
     it's location is cut to provide space; after the cut, the sides are open (if 
     the wall has thickness) - this creates a covering wall on each side and a 
@@ -1125,7 +1136,7 @@
     parameters. Direction is either true if the door faces the front/back (width 
     is along the X axis), or false if the door faces left/right (width is along 
     the Z axis).</p>
-  <p align="left"><strong>22. AddSound</strong> - creates a user-defined looping 
+  <p align="left"><strong>23. AddSound</strong> - creates a user-defined looping 
     sound at the specified position<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddSound <em>name, 
     filename, x, y, z[, volume, speed, min_distance, max_distance, dir_radiation, 
@@ -1137,7 +1148,7 @@
   <p align="left">For information on the parameters, see the AddSound command 
     in the Globals section. The only difference here is that the Y value is relative 
     of the floor's base (altitude plus interfloor height).</p>
-  <p align="left"><strong>23. AddShaftDoorComponent</strong> - creates a single
+  <p align="left"><strong>24. AddShaftDoorComponent</strong> - creates a single 
     shaft door component, used for creating custom door styles<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoorComponent 
     <em>elevator, number, name, texture, sidetexture, thickness, direction, speed, 
@@ -1145,7 +1156,7 @@
   <p align="left">This command is almost identical to the AddDoorComponent command (in the elevator section below -
     see that for more information), except that it creates shaft doors. Use the FinishShaftDoor command after
     creating the components. This command replaces the AddShaftDoor command.</p>
-  <p align="left"><strong>24. FinishShaftDoor</strong> - finishes shaft door creation
+  <p align="left"><strong>25. FinishShaftDoor</strong> - finishes shaft door creation 
     - use this after all related AddShaftDoorComponent commands are used.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoor<em> 
     elevator, number</em></font></p>

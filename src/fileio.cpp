@@ -3526,7 +3526,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//Cut command
-	if (LineData.Slice(0, 3).CompareNoCase("cut") == true)
+	if (LineData.Slice(0, 4).CompareNoCase("cut ") == true)
 	{
 		//get data
 		tempdata.SplitString(LineData.Slice(4).GetData(), ",");
@@ -3554,6 +3554,38 @@ int ScriptProcessor::ProcFloors()
 
 		//perform cut on floor
 		Simcore->GetFloor(Current)->Cut(csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), csString(tempdata[6]).CompareNoCase("true"), csString(tempdata[7]).CompareNoCase("true"), false);
+		tempdata.DeleteAll();
+	}
+
+	//Cut command
+	if (LineData.Slice(0, 6).CompareNoCase("cutall") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(7).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 8 || tempdata.GetSize() > 8)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+		//check numeric values
+		for (int i = 0; i <= 5; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		//perform cut on all objects related to the current floor
+		Simcore->GetFloor(Current)->CutAll(csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), csString(tempdata[6]).CompareNoCase("true"), csString(tempdata[7]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 	}
 
