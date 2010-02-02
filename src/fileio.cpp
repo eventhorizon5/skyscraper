@@ -3194,25 +3194,50 @@ int ScriptProcessor::ProcFloors()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 18 || tempdata.GetSize() > 18)
+		if (tempdata.GetSize() < 18 || tempdata.GetSize() > 19)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
 		}
+
+		bool compatibility = false;
+
 		//check numeric values
-		for (int i = 0; i <= 17; i++)
+		if (tempdata.GetSize() == 18)
 		{
-			if (i == 1)
-				i = 9;
-			if (i == 12)
-				i = 13;
-			if (i == 15)
-				i = 16;
-			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			for (int i = 0; i <= 17; i++)
 			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
+				if (i == 1)
+					i = 9;
+				if (i == 12)
+					i = 13;
+				if (i == 15)
+					i = 16;
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
 			}
+			compatibility = true;
+		}
+		if (tempdata.GetSize() == 19)
+		{
+			for (int i = 0; i <= 18; i++)
+			{
+				if (i == 1)
+					i = 10;
+				if (i == 13)
+					i = 14;
+				if (i == 16)
+					i = 17;
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+			compatibility = true;
 		}
 
 		if (!Simcore->GetElevator(atoi(tempdata[0])))
@@ -3220,7 +3245,11 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Invalid elevator");
 			return sError;
 		}
-		StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddDirectionalIndicator(Current, csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), csString(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17])));
+
+		if (compatibility == true)
+			StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddDirectionalIndicator(Current, csString(tempdata[1]).CompareNoCase("true"), false, csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), csString(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17])));
+		else
+			StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddDirectionalIndicator(Current, csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), csString(tempdata[4]).CompareNoCase("true"), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), tempdata[13], atof(tempdata[14]), atof(tempdata[15]), csString(tempdata[16]).CompareNoCase("true"), atof(tempdata[17]), atof(tempdata[18])));
 
 		tempdata.DeleteAll();
 	}

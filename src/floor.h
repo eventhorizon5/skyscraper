@@ -91,6 +91,7 @@ public:
 	Object* AddFloorIndicator(int elevator, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	void UpdateFloorIndicators(int elevator);
 	void UpdateFloorIndicators();
+	Object* AddDirectionalIndicator(bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	void Loop();
 	csArray<int> GetCallButtons(int elevator);
 	void AddFillerWalls(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th);

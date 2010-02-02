@@ -156,11 +156,13 @@ public:
 	void SetGoButton(bool value);
 	int GetTopFloor();
 	int GetBottomFloor();
-	void AddDirectionalIndicators(bool relative, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	Object* AddDirectionalIndicator(int floor, bool relative, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	void AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	Object* AddDirectionalIndicator(int floor, bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	Object* AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	void EnableDirectionalIndicator(int floor, bool value);
 	void SetDirectionalIndicator(int floor, bool UpLight, bool DownLight);
-	void EnableDirectionalIndicators(bool value);
+	void SetDirectionalIndicators(bool UpLight, bool DownLight);
+	void EnableDirectionalIndicators(bool interior, bool value);
 	ElevatorDoor* GetDoor(int number);
 	void OpenDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0);
 	void CloseDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0);
@@ -258,7 +260,8 @@ private:
 	csArray<Sound*> sounds; //generic sounds
 
 	//directional indicators
-	csArray<DirectionalIndicator*> IndicatorArray;
+	csArray<DirectionalIndicator*> IndicatorArray; //per-floor indicators
+	csArray<DirectionalIndicator*> IntIndicatorArray;  //interior indicators
 
 	//doors and shaft doors
 	csArray<ElevatorDoor*> DoorArray;

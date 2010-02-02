@@ -1029,11 +1029,11 @@
     elevator directional indicator/lantern on the current floor (similar to the 
     CreateCallButtons command) <br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicator<em> 
-    Elevator, Relative, Single, Vertical, BackTexture</em>, <em>UpTexture</em>, 
+    Elevator, Relative, ActiveDirection, Single, Vertical, BackTexture</em>, <em>UpTexture</em>, 
     <em>UpTextureLit, DownTexture, DownTextureLit, CenterX, CenterZ, voffset, 
     direction, BackWidth, BackHeight, ShowBack, tw, th<br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
-    AddDirectionalIndicator 1, true, false, true, Metal, UpLight, UpLightOn, DownLight, 
+    AddDirectionalIndicator 1, true, false, false, true, Metal, UpLight, UpLightOn, DownLight, 
     DownLightOn, -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
   <p align="left">This command will create a directional indicator on the current 
     floor (only if the elevator serves it). It'll also automatically create the 
@@ -1042,6 +1042,9 @@
     for.</p>
   <p align="left"><em>Relative</em> determines if the X and Z coordinates are 
     relative to the elevator's origin (center) or not.</p>
+  <p align="left"><em>ActiveDirection</em> determines if the indicator should continuously 
+    display the active elevator direction (true), or if it should show the elevator's
+    direction for the current call (false, default)</p>
   <p align="left"><em>Single</em> determines if a single indicator light should 
     be created instead of two. If this is true, the unlit texture is specified 
     in <em>UpLight</em>, and the <em>DownLight</em> value is ignored.</p>
@@ -1478,11 +1481,11 @@
     elevator's directional indicator/lanterns (similar to the CreateCallButtons 
     command) <br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicators<em> 
-    Relative, Single, Vertical, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, 
+    Relative, ActiveDirection, Single, Vertical, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, 
     DownTexture, DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth, 
     BackHeight, ShowBack, tw, th<br>
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"><em> 
-    AddDirectionalIndicators true, false, true, Metal, UpLight, UpLightOn, DownLight, 
+    AddDirectionalIndicators true, false, false, true, Metal, UpLight, UpLightOn, DownLight, 
     DownLightOn, -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
   <p align="left">This command will create directional indicators on all floors 
     the elevator serves. It'll also automatically create the up and down lights 
@@ -1490,6 +1493,9 @@
     AddDirectionalIndicator command in the Floor section.</p>
   <p align="left"><em>Relative</em> determines if the X and Z coordinates are 
     relative to the elevator's origin (center) or not.</p>
+  <p align="left"><em>ActiveDirection</em> determines if the indicator should continuously
+    display the active elevator direction (true), or if it should show the elevator's
+    direction for the current call (false, default)</p>
   <p align="left"><em>Single</em> determines if a single indicator light should 
     be created instead of two. If this is true, the unlit texture is specified 
     in <em>UpLight</em>, and the <em>DownLight</em> value is ignored.</p>
