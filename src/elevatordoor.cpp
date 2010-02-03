@@ -171,7 +171,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	if (elev->OnFloor == false && whichdoors != 3 && manual == false)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; emergency stop enabled");
-		return;
+		//return;
 	}
 
 	//check if elevator doors are already open

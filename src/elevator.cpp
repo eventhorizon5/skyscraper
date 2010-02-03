@@ -922,7 +922,8 @@ void Elevator::MonitorLoop()
 	}
 
 	//elevator movement
-	if (MoveElevator == true && (AreDoorsOpen() == false || InspectionService == true))
+	//if (MoveElevator == true && (AreDoorsOpen() == false || InspectionService == true))
+	if (MoveElevator == true)
 		MoveElevatorToFloor();
 
 }
@@ -935,8 +936,8 @@ void Elevator::MoveElevatorToFloor()
 	csVector3 movement = 0;
 
 	//exit if doors are open or moving
-	if (AreDoorsOpen() == true || CheckOpenDoor() == true)
-		return;
+	//if (AreDoorsOpen() == true || CheckOpenDoor() == true)
+		//return;
 
 	if (ElevatorIsRunning == false)
 	{
