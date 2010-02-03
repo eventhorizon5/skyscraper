@@ -5840,7 +5840,7 @@ DrawWalls = true, true, false, false, false, false
     Acceleration = 0.3
     Deceleration = 0.3
     AccelJerk = 0.2
-    DecelJerk = 0.3
+    DecelJerk = 0.2
     ServicedFloors = 0, 79 - 141
     AssignedShaft = 14
     CreateElevator false, -8.953, 18.542, 0

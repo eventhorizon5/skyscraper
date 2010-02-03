@@ -392,7 +392,7 @@ void SBS::MainLoop()
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
-	float elapsed = remaining_delta + (vc->GetElapsedTicks() / 1000.0);
+	double elapsed = remaining_delta + (vc->GetElapsedTicks() / 1000.0);
 
 	//calculate start and running time
 	if (start_time == 0)
@@ -1803,7 +1803,7 @@ int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
 				{
 					if (GetFloor(i - 1)->Altitude <= altitude && GetFloor(i)->Altitude > altitude)
 						return i - 1;
-					if (i == Floors - 1 && GetFloor(i)->Altitude < altitude)
+					if (i == Floors - 1 && GetFloor(i)->Altitude <= altitude)
 						return i; //return top floor if on top
 				}
 			}

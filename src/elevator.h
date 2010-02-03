@@ -54,10 +54,10 @@ public:
 	float DecelJerk;
 	int OriginFloor; //elevator starting floor
 	csVector3 Origin; //3D elevator origin vector
-	float TempDeceleration; //temporary deceleration value, used in overrun correction
+	double TempDeceleration; //temporary deceleration value, used in overrun correction
 	float ErrorOffset;
 	float DistanceToTravel; //distance in Y to travel
-	float ElevatorRate;
+	double ElevatorRate;
 	csArray<int> ServicedFloors; //list of floors this elevator services
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
@@ -98,6 +98,9 @@ public:
 	float CameraOffset; //camera vertical offset for movement
 	int ParkingFloor; //floor to automatically park the elevator on when idle
 	float ParkingDelay; //time to wait in idle mode before parking
+	bool Leveling; //is elevator in leveling mode?
+	float LevelingSpeed; //leveling speed
+	float LevelingOffset; //leveling offset factor
 
 	//functions
 	Elevator(int number);

@@ -126,6 +126,9 @@ Elevator::Elevator(int number)
 	CameraOffset = 0;
 	ParkingFloor = 0;
 	ParkingDelay = 0;
+	Leveling = false;
+	LevelingSpeed = 0.1;
+	LevelingOffset = 0.5;
 
 	//create timer
 	timer = new Timer(this);
@@ -1205,7 +1208,7 @@ void Elevator::MoveElevatorToFloor()
 		if (Direction == -1)
 			ElevatorRate -= ElevatorSpeed * ((Acceleration * JerkRate) * sbs->delta);
 	}
-	else
+	else if (Leveling == false)
 	{
 		//slow down
 
@@ -1298,14 +1301,15 @@ void Elevator::MoveElevatorToFloor()
 			{
 				CalculateStoppingDistance = false;
 				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-				TempDeceleration = Deceleration * (StoppingDistance / (Destination - GetPosition().y));
+				TempDeceleration = Deceleration * ((Destination - GetPosition().y) / StoppingDistance);
+				TempDeceleration += LevelingOffset / ElevatorSpeed; //throw it a little off for leveling purposes
 				//start deceleration
 				Direction = -1;
 				Brakes = true;
-				if (InspectionService == false)
+				/*if (InspectionService == false)
 					ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 				else
-					ElevatorRate -= (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
+					ElevatorRate -= (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);*/
 			}
 			//down movement
 			else if (Direction == -1)
@@ -1313,13 +1317,14 @@ void Elevator::MoveElevatorToFloor()
 				CalculateStoppingDistance = false;
 				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
 				TempDeceleration = Deceleration * (StoppingDistance / (GetPosition().y - Destination));
+				TempDeceleration += LevelingOffset / ElevatorSpeed; //throw it a little off for leveling purposes
 				//start deceleration
 				Direction = 1;
 				Brakes = true;
-				if (InspectionService == false)
+				/*if (InspectionService == false)
 					ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 				else
-					ElevatorRate += (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
+					ElevatorRate += (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);*/
 			}
 
 			//stop sounds
@@ -1344,6 +1349,30 @@ void Elevator::MoveElevatorToFloor()
 			else
 				motorsound->Reset();
 			motorsound->Play(false);
+		}
+	}
+	else if (Leveling == false)
+	{
+		if (fabs(ElevatorRate) <= LevelingSpeed)
+		{
+			if (sbs->Verbose)
+				Report("leveling mode enabled");
+			Leveling = true;
+		}
+	}
+
+	if (Leveling == true)
+	{
+		//floor leveling routine
+		if (Direction == -1 && (Destination - GetPosition().y) > 0)
+			ElevatorRate = LevelingSpeed;
+		else if (Direction == 1 && (GetPosition().y - Destination) > 0)
+			ElevatorRate = -LevelingSpeed;
+		else
+		{
+			if (sbs->Verbose)
+				Report("arrived at floor");
+			ElevatorRate = 0; //stop if on floor
 		}
 	}
 
@@ -1447,6 +1476,7 @@ finish:
 	ElevatorIsRunning = false;
 	MoveElevator = false;
 	IsMoving = false;
+	Leveling = false;
 	mainsound->Stop();
 	motorsound->Stop();
 
