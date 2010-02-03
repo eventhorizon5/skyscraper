@@ -159,21 +159,14 @@ Elevator::~Elevator()
 
 	//delete directional indicators
 	if (sbs->Verbose)
-		Report("deleting directional indicators");
+		Report("deleting interior directional indicators");
 
-	for (int i = 0; i < IndicatorArray.GetSize(); i++)
+	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
 	{
-		if (IndicatorArray[i])
-			delete IndicatorArray[i];
+		if (DirIndicatorArray[i])
+			delete DirIndicatorArray[i];
 	}
-	IndicatorArray.DeleteAll();
-
-	for (int i = 0; i < IntIndicatorArray.GetSize(); i++)
-	{
-		if (IntIndicatorArray[i])
-			delete IntIndicatorArray[i];
-	}
-	IntIndicatorArray.DeleteAll();
+	DirIndicatorArray.DeleteAll();
 
 	//delete doors
 	if (sbs->Verbose)
@@ -367,9 +360,6 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		Report("moving elevator to origin position");
 	Elevator_movable->SetPosition(sbs->ToRemote(Origin));
 	Elevator_movable->UpdateMove();
-
-	//resize directional indicator array
-	IndicatorArray.SetSize(ServicedFloors.GetSize());
 
 	//create sound objects
 	if (sbs->Verbose)
@@ -1090,9 +1080,9 @@ void Elevator::MoveElevatorToFloor()
 
 		//set interior directional indicators
 		if (Direction == 1)
-			SetDirectionalIndicators(true, true, false);
+			SetDirectionalIndicators(true, false);
 		else
-			SetDirectionalIndicators(true, false, true);
+			SetDirectionalIndicators(false, true);
 
 		//notify about movement
 		if (InspectionService == false)
@@ -1160,18 +1150,29 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//move elevator objects and camera
+	csVector3 movement = 0;
+	movement.y = ElevatorRate * sbs->delta;
+
 	Elevator_movable->MovePosition(csVector3(0, sbs->ToRemote(ElevatorRate * sbs->delta), 0));
 	Elevator_movable->UpdateMove();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
-	MoveDoors(0, csVector3(0, ElevatorRate * sbs->delta, 0), true, true, true);
+	MoveDoors(0, movement, true, true, true);
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
 		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->MovePosition(csVector3(0, ElevatorRate * sbs->delta, 0));
+			FloorIndicatorArray[i]->MovePosition(movement);
 	}
 	for (int i = 0; i < PanelArray.GetSize(); i++)
-		PanelArray[i]->Move(csVector3(0, ElevatorRate * sbs->delta, 0));
+	{
+		if (PanelArray[i])
+			PanelArray[i]->Move(movement);
+	}
+	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	{
+		if (DirIndicatorArray[i])
+			DirIndicatorArray[i]->Move(movement);
+	}
 
 	//move sounds
 	mainsound->SetPosition(GetPosition());
@@ -1405,7 +1406,15 @@ void Elevator::MoveElevatorToFloor()
 				FloorIndicatorArray[i]->SetPosition(csVector3(FloorIndicatorArray[i]->GetPosition().x, Destination, FloorIndicatorArray[i]->GetPosition().z));
 		}
 		for (int i = 0; i < PanelArray.GetSize(); i++)
-			PanelArray[i]->SetToElevatorAltitude();
+		{
+			if (PanelArray[i])
+				PanelArray[i]->SetToElevatorAltitude();
+		}
+		for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+		{
+			if (DirIndicatorArray[i])
+				DirIndicatorArray[i]->SetPosition(csVector3(FloorIndicatorArray[i]->GetPosition().x, Destination, FloorIndicatorArray[i]->GetPosition().z));
+		}
 
 		//move sounds
 		mainsound->SetPosition(GetPosition());
@@ -1442,7 +1451,7 @@ finish:
 	motorsound->Stop();
 
 	//turn off interior directional indicators
-	SetDirectionalIndicators(true, false, false);
+	SetDirectionalIndicators(false, false);
 
 	if (EmergencyStop == false && InspectionService == false)
 	{
@@ -1513,12 +1522,12 @@ finish:
 			if (LightDirection == true)
 			{
 				Chime(0, GetFloor(), true);
-				SetDirectionalIndicator(GetFloor(), true, false);
+				sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, true, false);
 			}
 			else
 			{
 				Chime(0, GetFloor(), false);
-				SetDirectionalIndicator(GetFloor(), false, true);
+				sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, false, true);
 			}
 
 			//disable call button lights
@@ -1684,7 +1693,7 @@ void Elevator::EnableObjects(bool value)
 	}
 
 	//interior directional indicators
-	EnableDirectionalIndicators(true, value);
+	EnableDirectionalIndicators(value);
 
 	//panels
 	for (int i = 0; i < PanelArray.GetSize(); i++)
@@ -1988,7 +1997,7 @@ void Elevator::EnableUpPeak(bool value)
 		EnableFireService2(0);
 		if (IsMoving == false && GetFloor() == GetBottomFloor())
 		{
-			SetDirectionalIndicator(GetFloor(), true, false);
+			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, true, false);
 			OpenDoors();
 		}
 		Report("Up Peak mode enabled");
@@ -2024,7 +2033,7 @@ void Elevator::EnableDownPeak(bool value)
 		EnableFireService2(0);
 		if (IsMoving == false && GetFloor() == GetTopFloor())
 		{
-			SetDirectionalIndicator(GetFloor(), false, true);
+			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, false, true);
 			OpenDoors();
 		}
 		Report("Down Peak mode enabled");
@@ -2390,46 +2399,8 @@ void Elevator::AddDirectionalIndicators(bool relative, bool active_direction, bo
 	if (sbs->Verbose)
 		Report("adding directional indicators");
 
-	float x, z;
-	if (relative == true)
-	{
-		x = Origin.x + CenterX;
-		z = Origin.z + CenterZ;
-	}
-	else
-	{
-		x = CenterX;
-		z = CenterZ;
-	}
 	for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
-		IndicatorArray[i] = new DirectionalIndicator(Number, ServicedFloors[i], false, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-}
-
-Object* Elevator::AddDirectionalIndicator(int floor, bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
-{
-	//create a directional indicator on a single floor
-
-	if (sbs->Verbose)
-		Report("adding directional indicator for floor " + csString(_itoa(floor, intbuffer, 10)));
-
-	float x, z;
-	if (relative == true)
-	{
-		x = Origin.x + CenterX;
-		z = Origin.z + CenterZ;
-	}
-	else
-	{
-		x = CenterX;
-		z = CenterZ;
-	}
-
-	int index = ServicedFloors.Find(floor);
-	if (index != -1)
-		IndicatorArray[index] = new DirectionalIndicator(Number, floor, false, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-	else
-		return 0;
-	return IndicatorArray[index]->object;
+		sbs->GetFloor(ServicedFloors[i])->AddDirectionalIndicator(Number, relative, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 }
 
 Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
@@ -2442,98 +2413,42 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	float x = Origin.x + CenterX;
 	float z = Origin.z + CenterZ;
 
-	int index = IntIndicatorArray.GetSize() + 1;
-	IntIndicatorArray.SetSize(index);
-	IntIndicatorArray[index] = new DirectionalIndicator(Number, 0, true, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-	return IntIndicatorArray[index]->object;
-}
-
-void Elevator::EnableDirectionalIndicator(int floor, bool value)
-{
-	//enable/disable the specified directional indicator
-
-	int index = ServicedFloors.Find(floor);
-
-	if (index == -1)
-	{
-		/*if (sbs->Verbose)
-			Report("EnableDirectionalIndicator: elevator does not service floor " + csString(_itoa(floor, intbuffer, 10)));*/
-		return;
-	}
-
-	if (IndicatorArray[index])
-		IndicatorArray[index]->Enabled(value);
-}
-
-void Elevator::SetDirectionalIndicator(int floor, bool UpLight, bool DownLight)
-{
-	//set light status of directional indicator
-
-	int index = ServicedFloors.Find(floor);
-
-	if (index == -1)
-	{
-		/*if (sbs->Verbose)
-			Report("SetDirectionalIndicator: elevator does not service floor " + csString(_itoa(floor, intbuffer, 10)));*/
-		return;
-	}
-
-	if (IndicatorArray[index])
-	{
-		IndicatorArray[index]->DownLight(DownLight);
-		IndicatorArray[index]->UpLight(UpLight);
-	}
+	int index = DirIndicatorArray.GetSize() + 1;
+	DirIndicatorArray.SetSize(index);
+	DirIndicatorArray[index] = new DirectionalIndicator(Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	return DirIndicatorArray[index]->object;
 }
 
 void Elevator::SetDirectionalIndicators(bool UpLight, bool DownLight)
 {
 	//set light status of interior directional indicators
 
-	for (int i = 0; i < IntIndicatorArray.GetSize(); i++)
+	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
 	{
-		if (IntIndicatorArray[i])
+		if (DirIndicatorArray[i])
 		{
-			IntIndicatorArray[i]->DownLight(DownLight);
-			IntIndicatorArray[i]->UpLight(UpLight);
+			DirIndicatorArray[i]->DownLight(DownLight);
+			DirIndicatorArray[i]->UpLight(UpLight);
 		}
 	}
 }
 
-void Elevator::EnableDirectionalIndicators(bool interior, bool value)
+void Elevator::EnableDirectionalIndicators(bool value)
 {
 	//turn on/off all directional indicators
 
-	if (interior == false)
+	if (sbs->Verbose)
 	{
-		if (sbs->Verbose)
-		{
-			if (value == true)
-				Report("enabling directional indicators");
-			else
-				Report("disabling directional indicators");
-		}
-
-		for (size_t i = 0; i < ServicedFloors.GetSize(); i++)
-		{
-			if (IndicatorArray[i])
-				IndicatorArray[i]->Enabled(value);
-		}
+		if (value == true)
+			Report("enabling interior directional indicators");
+		else
+			Report("disabling interior directional indicators");
 	}
-	else
-	{
-		if (sbs->Verbose)
-		{
-			if (value == true)
-				Report("enabling interior directional indicators");
-			else
-				Report("disabling interior directional indicators");
-		}
 
-		for (int i = 0; i < IntIndicatorArray.GetSize(); i++)
-		{
-			if (IntIndicatorArray[i])
-				IntIndicatorArray[i]->Enabled(value);
-		}
+	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	{
+		if (DirIndicatorArray[i])
+			DirIndicatorArray[i]->Enabled(value);
 	}
 }
 
@@ -2941,16 +2856,6 @@ void Elevator::EnableDoors(bool value)
 		if (door)
 			door->Enabled(value);
 	}
-}
-
-DirectionalIndicator* Elevator::GetIndicator(int floor)
-{
-	//get a directional indicator for a floor
-	int index = ServicedFloors.Find(floor);
-	if (IndicatorArray[index])
-		return IndicatorArray[index];
-	else
-		return 0;
 }
 
 void Elevator::MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z)

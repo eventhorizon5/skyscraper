@@ -32,7 +32,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool in_elevator, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator
 	//if InElevator is true, the floor parameter is ignored
@@ -54,7 +54,6 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool in_elev
 	Single = single;
 	Vertical = vertical;
 	ActiveDirection = active_direction;
-	InElevator = in_elevator;
 
 	//create object mesh
 	csString buffer, buffer2, buffer3, buffer4;
@@ -356,4 +355,32 @@ void DirectionalIndicator::SetLights(int up, int down)
 				sbs->ChangeTexture(DirectionalMesh, UpTextureUnlit);
 		}
 	}
+}
+
+void DirectionalIndicator::SetPosition(csVector3 position)
+{
+	//set position of indicator objects
+
+	if (DirectionalMeshBack)
+		DirectionalMeshBack->GetMovable()->SetPosition(position);
+	if (DirectionalMeshUp)
+		DirectionalMeshUp->GetMovable()->SetPosition(position);
+	if (DirectionalMeshDown)
+		DirectionalMeshDown->GetMovable()->SetPosition(position);
+	if (DirectionalMesh)
+		DirectionalMesh->GetMovable()->SetPosition(position);
+}
+
+void DirectionalIndicator::Move(csVector3 position)
+{
+	//move indicator objects
+
+	if (DirectionalMeshBack)
+		DirectionalMeshBack->GetMovable()->MovePosition(position);
+	if (DirectionalMeshUp)
+		DirectionalMeshUp->GetMovable()->MovePosition(position);
+	if (DirectionalMeshDown)
+		DirectionalMeshDown->GetMovable()->MovePosition(position);
+	if (DirectionalMesh)
+		DirectionalMesh->GetMovable()->MovePosition(position);
 }

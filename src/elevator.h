@@ -157,12 +157,9 @@ public:
 	int GetTopFloor();
 	int GetBottomFloor();
 	void AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	Object* AddDirectionalIndicator(int floor, bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	Object* AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	void EnableDirectionalIndicator(int floor, bool value);
-	void SetDirectionalIndicator(int floor, bool UpLight, bool DownLight);
 	void SetDirectionalIndicators(bool UpLight, bool DownLight);
-	void EnableDirectionalIndicators(bool interior, bool value);
+	void EnableDirectionalIndicators(bool value);
 	ElevatorDoor* GetDoor(int number);
 	void OpenDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0);
 	void CloseDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0);
@@ -183,7 +180,6 @@ public:
 	void MoveDoors(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void EnableDoors(bool value);
-	DirectionalIndicator* GetIndicator(int floor);
 	void SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
 	void AddFloorSigns(int door_number, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	void SetCallButtons(int floor, bool direction, bool value);
@@ -259,9 +255,8 @@ private:
 	Sound *floorsound;
 	csArray<Sound*> sounds; //generic sounds
 
-	//directional indicators
-	csArray<DirectionalIndicator*> IndicatorArray; //per-floor indicators
-	csArray<DirectionalIndicator*> IntIndicatorArray;  //interior indicators
+	//interior directional indicators
+	csArray<DirectionalIndicator*> DirIndicatorArray;
 
 	//doors and shaft doors
 	csArray<ElevatorDoor*> DoorArray;

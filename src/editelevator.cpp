@@ -1072,7 +1072,7 @@ void editelevator::On_bDown_Toggle(wxCommandEvent& event)
 
 void editelevator::On_bUpIndicator_Click(wxCommandEvent& event)
 {
-	if (elevator)
+	/*if (elevator)
 	{
 		DirectionalIndicator *indicator = elevator->GetIndicator(sFloor->GetThumbPosition() - Simcore->Basements);
 		if (indicator)
@@ -1082,12 +1082,12 @@ void editelevator::On_bUpIndicator_Click(wxCommandEvent& event)
 			else
 				indicator->UpLight(false);
 		}
-	}
+	}*/
 }
 
 void editelevator::On_bDownIndicator_Click(wxCommandEvent& event)
 {
-	if (elevator)
+	/*if (elevator)
 	{
 		DirectionalIndicator *indicator = elevator->GetIndicator(sFloor->GetThumbPosition() - Simcore->Basements);
 		if (indicator)
@@ -1097,7 +1097,7 @@ void editelevator::On_bDownIndicator_Click(wxCommandEvent& event)
 			else
 				indicator->DownLight(false);
 		}
-	}
+	}*/
 }
 
 void editelevator::On_bResetQueues_Click(wxCommandEvent& event)

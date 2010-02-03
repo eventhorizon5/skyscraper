@@ -482,14 +482,14 @@ void CallButton::Loop(bool direction)
 		if (direction == false)
 		{
 			//turn on directional indicator
-			elevator->SetDirectionalIndicator(floor, false, true);
+			sbs->GetFloor(floor)->SetDirectionalIndicators(elevator->Number, false, true);
 			//play chime sound
 			elevator->Chime(0, floor, false);
 		}
 		else
 		{
 			//turn on directional indicator
-			elevator->SetDirectionalIndicator(floor, true, false);
+			sbs->GetFloor(floor)->SetDirectionalIndicators(elevator->Number, true, false);
 			//play chime sound
 			elevator->Chime(0, floor, true);
 		}

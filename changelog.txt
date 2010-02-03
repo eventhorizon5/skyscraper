@@ -45,6 +45,8 @@ Version 1.6 (2.0 Alpha 6)
 -elevator and motor sounds now start at a position based on the elevator's speed
 -elevators now support an unlimited number of button panels
 -added CutAll command
+-added support for internal elevator directional indicators
+-directional indicators can now show active (running) elevator direction
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

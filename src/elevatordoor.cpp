@@ -351,14 +351,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 
 	//turn off directional indicators
 	if (whichdoors == 1)
-	{
-		DirectionalIndicator *indicator = elev->GetIndicator(elev->GetFloor());
-		if (indicator)
-		{
-			indicator->DownLight(false);
-			indicator->UpLight(false);
-		}
-	}
+		sbs->GetFloor(elev->GetFloor())->SetDirectionalIndicators(elev->Number, false, false);
 
 	WhichDoors = whichdoors;
 	ShaftDoorFloor = floor;

@@ -3247,9 +3247,9 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		if (compatibility == true)
-			StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddDirectionalIndicator(Current, csString(tempdata[1]).CompareNoCase("true"), false, csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), csString(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17])));
+			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), false, csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), csString(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17])));
 		else
-			StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddDirectionalIndicator(Current, csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), csString(tempdata[4]).CompareNoCase("true"), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), tempdata[13], atof(tempdata[14]), atof(tempdata[15]), csString(tempdata[16]).CompareNoCase("true"), atof(tempdata[17]), atof(tempdata[18])));
+			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), csString(tempdata[4]).CompareNoCase("true"), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), tempdata[13], atof(tempdata[14]), atof(tempdata[15]), csString(tempdata[16]).CompareNoCase("true"), atof(tempdata[17]), atof(tempdata[18])));
 
 		tempdata.DeleteAll();
 	}
@@ -4957,26 +4957,47 @@ int ScriptProcessor::ProcElevators()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 17 || tempdata.GetSize() > 17)
+		if (tempdata.GetSize() < 17 || tempdata.GetSize() > 18)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
 		}
-		//check numeric values
-		for (int i = 8; i <= 16; i++)
+
+		bool compat = false;
+		if (tempdata.GetSize() == 17)
 		{
-			if (i == 11)
-				i = 12;
-			if (i == 14)
-				i = 15;
-			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			//check numeric values
+			for (int i = 8; i <= 16; i++)
 			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
+				if (i == 11 || i == 14)
+					i++;
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+			compat = true;
+		}
+		else
+		{
+			//check numeric values
+			for (int i = 9; i <= 17; i++)
+			{
+				if (i == 12 || i == 15)
+					i++;
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
 			}
 		}
 
-		elev->AddDirectionalIndicators(csString(tempdata[0]).CompareNoCase("true"), csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), csString(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16]));
+		if (compat == false)
+			elev->AddDirectionalIndicators(csString(tempdata[0]).CompareNoCase("true"), csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), csString(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17]));
+		else
+			elev->AddDirectionalIndicators(csString(tempdata[0]).CompareNoCase("true"), false, csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), csString(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16]));
 
 		tempdata.DeleteAll();
 	}
@@ -5239,6 +5260,43 @@ int ScriptProcessor::ProcElevators()
 
 		if (result == false)
 			return ScriptError("Error finishing shaft doors");
+
+		tempdata.DeleteAll();
+	}
+
+	//AddDirectionalIndicator command
+	if (LineData.Slice(0, 24).CompareNoCase("adddirectionalindicator ") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(24).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 17 || tempdata.GetSize() > 17)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 0; i <= 17; i++)
+		{
+			if (i == 1)
+				i = 9;
+			if (i == 12 || i == 15)
+				i++;
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		StoreCommand(elev->AddDirectionalIndicator(csString(tempdata[0]).CompareNoCase("true"), csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), csString(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16])));
 
 		tempdata.DeleteAll();
 	}
