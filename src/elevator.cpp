@@ -932,6 +932,8 @@ void Elevator::MoveElevatorToFloor()
 	//Main processing routine; sends elevator to floor specified in GotoFloor
 	//if InspectionService is enabled, this function ignores GotoFloor values, since the elevator is manually moved
 
+	csVector3 movement = 0;
+
 	//exit if doors are open or moving
 	if (AreDoorsOpen() == true || CheckOpenDoor() == true)
 		return;
@@ -1153,7 +1155,6 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//move elevator objects and camera
-	csVector3 movement = 0;
 	movement.y = ElevatorRate * sbs->delta;
 
 	Elevator_movable->MovePosition(csVector3(0, sbs->ToRemote(ElevatorRate * sbs->delta), 0));
