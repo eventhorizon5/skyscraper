@@ -392,7 +392,7 @@ void SBS::MainLoop()
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
-	double elapsed = remaining_delta + (vc->GetElapsedTicks() / 1000.0);
+	float elapsed = remaining_delta + (vc->GetElapsedTicks() / 1000.0);
 
 	//calculate start and running time
 	if (start_time == 0)

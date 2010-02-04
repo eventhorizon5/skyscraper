@@ -1304,14 +1304,10 @@ void Elevator::MoveElevatorToFloor()
 				CalculateStoppingDistance = false;
 				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
 				TempDeceleration = Deceleration * ((Destination - GetPosition().y) / StoppingDistance);
-				TempDeceleration += LevelingOffset / ElevatorSpeed; //throw it a little off for leveling purposes
+				//TempDeceleration += LevelingOffset / ElevatorSpeed; //throw it a little off for leveling purposes
 				//start deceleration
 				Direction = -1;
 				Brakes = true;
-				/*if (InspectionService == false)
-					ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
-				else
-					ElevatorRate -= (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);*/
 			}
 			//down movement
 			else if (Direction == -1)
@@ -1319,14 +1315,10 @@ void Elevator::MoveElevatorToFloor()
 				CalculateStoppingDistance = false;
 				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
 				TempDeceleration = Deceleration * (StoppingDistance / (GetPosition().y - Destination));
-				TempDeceleration += LevelingOffset / ElevatorSpeed; //throw it a little off for leveling purposes
+				//TempDeceleration += LevelingOffset / ElevatorSpeed; //throw it a little off for leveling purposes
 				//start deceleration
 				Direction = 1;
 				Brakes = true;
-				/*if (InspectionService == false)
-					ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
-				else
-					ElevatorRate += (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);*/
 			}
 
 			//stop sounds
@@ -1359,14 +1351,14 @@ void Elevator::MoveElevatorToFloor()
 		{
 			if (sbs->Verbose)
 				Report("leveling mode enabled");
-			Leveling = true;
+			//Leveling = true;
 		}
 	}
 
 	if (Leveling == true)
 	{
 		//floor leveling routine
-		if (Direction == -1 && (Destination - GetPosition().y) > 0)
+		/*if (Direction == -1 && (Destination - GetPosition().y) > 0)
 			ElevatorRate = LevelingSpeed;
 		else if (Direction == 1 && (GetPosition().y - Destination) > 0)
 			ElevatorRate = -LevelingSpeed;
@@ -1375,7 +1367,7 @@ void Elevator::MoveElevatorToFloor()
 			if (sbs->Verbose)
 				Report("arrived at floor");
 			ElevatorRate = 0; //stop if on floor
-		}
+		}*/
 	}
 
 	if (GetFloor() != oldfloor)
@@ -1893,7 +1885,7 @@ float Elevator::GetJerkRate()
 	return JerkRate;
 }
 
-float Elevator::GetJerkPosition()
+double Elevator::GetJerkPosition()
 {
 	return JerkPos;
 }

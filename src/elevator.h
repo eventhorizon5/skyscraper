@@ -136,7 +136,7 @@ public:
 	void RemoveServicedFloor(int number);
 	void UpdateFloorIndicators();
 	float GetJerkRate();
-	float GetJerkPosition();
+	double GetJerkPosition();
 	void SetFloorSkipText(const char *id);
 	const char* GetFloorSkipText();
 	bool IsServicedFloor(int floor);
@@ -235,7 +235,7 @@ private:
 	bool Brakes; //internal brake status
 	bool EmergencyStop; //internal stop status
 	float JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
-	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
+	double JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	bool ResetUpQueue; //clear up queue and open doors; usually for service mode
 	bool ResetDownQueue; //clear down queue and open doors; usually for service mode
 	int ActiveCallFloor; //floor number of active call (that the elevator's currently responding too)
