@@ -56,6 +56,7 @@ textures:
 -doverindicator*.gif by TampaBayElevator
 -otis4_* by epco_rules
 -brassdoor.jpg, elevmove3.wav, elevstart3.wav and elevstop3.wav by escalatorgeek881
+-otis-touch.gif and otis-touchlit.gif by Peter McLaughlin
 
 sounds:
 -chime1.wav made by me
