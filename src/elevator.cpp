@@ -1303,7 +1303,7 @@ void Elevator::MoveElevatorToFloor()
 			{
 				CalculateStoppingDistance = false;
 				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-				TempDeceleration = Deceleration * ((Destination - GetPosition().y) / StoppingDistance);
+				TempDeceleration = Deceleration * (StoppingDistance / (Destination - GetPosition().y));
 				//TempDeceleration += LevelingOffset / ElevatorSpeed; //throw it a little off for leveling purposes
 				//start deceleration
 				Direction = -1;
