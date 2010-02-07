@@ -5328,11 +5328,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//check numeric values
-		for (int i = 0; i <= 17; i++)
+		for (int i = 8; i <= 16; i++)
 		{
-			if (i == 1)
-				i = 9;
-			if (i == 12 || i == 15)
+			if (i == 11 || i == 14)
 				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 			{

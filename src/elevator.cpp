@@ -1240,8 +1240,6 @@ void Elevator::MoveElevatorToFloor()
 			JerkRate -= tmpDecelJerk * sbs->delta;
 		}
 		//prevent jerkrate from reaching 0
-		//if (JerkRate < (DecelJerk * sbs->delta))
-		//	JerkRate = DecelJerk * sbs->delta;
 		if (JerkRate < 0)
 		{
 			JerkRate = 0;
@@ -1441,8 +1439,8 @@ void Elevator::MoveElevatorToFloor()
 		}
 		for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
 		{
-			if (DirIndicatorArray[i])
-				DirIndicatorArray[i]->SetPosition(csVector3(FloorIndicatorArray[i]->GetPosition().x, Destination, FloorIndicatorArray[i]->GetPosition().z));
+			//if (DirIndicatorArray[i])
+				//DirIndicatorArray[i]->SetPosition(csVector3(DirIndicatorArray[i]->GetPosition().x, Destination, DirIndicatorArray[i]->GetPosition().z));
 		}
 
 		//move sounds
@@ -2457,8 +2455,8 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	float x = Origin.x + CenterX;
 	float z = Origin.z + CenterZ;
 
-	int index = DirIndicatorArray.GetSize() + 1;
-	DirIndicatorArray.SetSize(index);
+	int index = DirIndicatorArray.GetSize();
+	DirIndicatorArray.SetSize(index + 1);
 	DirIndicatorArray[index] = new DirectionalIndicator(Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	return DirIndicatorArray[index]->object;
 }

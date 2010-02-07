@@ -142,7 +142,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool active_
 		{
 			if (Vertical == true)
 			{
-				if (floor > bottomfloor && floor < topfloor)
+				if ((floor > bottomfloor && floor < topfloor) || ActiveDirection == true)
 				{
 					sbs->AddGenWall(DirectionalMeshUp, UpTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4), 1, 1);
 					sbs->AddGenWall(DirectionalMeshDown, DownTextureUnlit, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7), 1, 1);
@@ -158,7 +158,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool active_
 			else
 			{
 				//horizontal lights
-				if (floor > bottomfloor && floor < topfloor)
+				if ((floor > bottomfloor && floor < topfloor) || ActiveDirection == true)
 				{
 					float x3, x4;
 					if (Direction == "front")
@@ -211,7 +211,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool active_
 		{
 			if (Vertical == true)
 			{
-				if (floor > bottomfloor && floor < topfloor)
+				if ((floor > bottomfloor && floor < topfloor) || ActiveDirection == true)
 				{
 					sbs->AddGenWall(DirectionalMeshUp, UpTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4), 1, 1);
 					sbs->AddGenWall(DirectionalMeshDown, DownTextureUnlit, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7), 1, 1);
@@ -227,7 +227,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool active_
 			else
 			{
 				//horizontal lights
-				if (floor > bottomfloor && floor < topfloor)
+				if ((floor > bottomfloor && floor < topfloor) || ActiveDirection == true)
 				{
 					float z3, z4;
 					if (Direction == "left")
@@ -361,26 +361,58 @@ void DirectionalIndicator::SetPosition(csVector3 position)
 {
 	//set position of indicator objects
 
+	csVector3 positionnew = sbs->ToRemote(position);
 	if (DirectionalMeshBack)
-		DirectionalMeshBack->GetMovable()->SetPosition(position);
+	{
+		DirectionalMeshBack->GetMovable()->SetPosition(positionnew);
+		DirectionalMeshBack->GetMovable()->UpdateMove();
+	}
 	if (DirectionalMeshUp)
-		DirectionalMeshUp->GetMovable()->SetPosition(position);
+	{
+		DirectionalMeshUp->GetMovable()->SetPosition(positionnew);
+		DirectionalMeshUp->GetMovable()->UpdateMove();
+	}
 	if (DirectionalMeshDown)
-		DirectionalMeshDown->GetMovable()->SetPosition(position);
+	{
+		DirectionalMeshDown->GetMovable()->SetPosition(positionnew);
+		DirectionalMeshDown->GetMovable()->UpdateMove();
+	}
 	if (DirectionalMesh)
-		DirectionalMesh->GetMovable()->SetPosition(position);
+	{
+		DirectionalMesh->GetMovable()->SetPosition(positionnew);
+		DirectionalMesh->GetMovable()->UpdateMove();
+	}
 }
 
 void DirectionalIndicator::Move(csVector3 position)
 {
 	//move indicator objects
 
+	csVector3 positionnew = sbs->ToRemote(position);
 	if (DirectionalMeshBack)
-		DirectionalMeshBack->GetMovable()->MovePosition(position);
+	{
+		DirectionalMeshBack->GetMovable()->MovePosition(positionnew);
+		DirectionalMeshBack->GetMovable()->UpdateMove();
+	}
 	if (DirectionalMeshUp)
-		DirectionalMeshUp->GetMovable()->MovePosition(position);
+	{
+		DirectionalMeshUp->GetMovable()->MovePosition(positionnew);
+		DirectionalMeshUp->GetMovable()->UpdateMove();
+	}
 	if (DirectionalMeshDown)
-		DirectionalMeshDown->GetMovable()->MovePosition(position);
+	{
+		DirectionalMeshDown->GetMovable()->MovePosition(positionnew);
+		DirectionalMeshDown->GetMovable()->UpdateMove();
+	}
 	if (DirectionalMesh)
-		DirectionalMesh->GetMovable()->MovePosition(position);
+	{
+		DirectionalMesh->GetMovable()->MovePosition(positionnew);
+		DirectionalMesh->GetMovable()->UpdateMove();
+	}
+}
+
+csVector3 DirectionalIndicator::GetPosition()
+{
+	//return indicator position
+	return sbs->ToLocal(DirectionalMeshBack->GetMovable()->GetPosition());
 }

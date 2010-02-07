@@ -54,6 +54,7 @@ public:
 	void SetLights(int up, int down);
 	void SetPosition(csVector3 position);
 	void Move(csVector3 position);
+	csVector3 GetPosition();
 
 private:
 	csRef<iMeshWrapper> DirectionalMeshBack; //indicator mesh back object
