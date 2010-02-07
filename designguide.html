@@ -1041,8 +1041,9 @@
     AddDirectionalIndicator 1, true, false, false, true, Metal, UpLight, UpLightOn, DownLight, 
     DownLightOn, -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
   <p align="left">This command will create a directional indicator on the current 
-    floor (only if the elevator serves it). It'll also automatically create the 
-    up and down lights depending on the floor.</p>
+    floor (if ActiveDirection is false, then it'll only create it if the elevator 
+    serves that floor). It'll also automatically create the up and down lights 
+    depending on the floor.</p>
   <p align="left"><em>Elevator</em> specifies the elevator to create the indicators 
     for.</p>
   <p align="left"><em>Relative</em> determines if the X and Z coordinates are 

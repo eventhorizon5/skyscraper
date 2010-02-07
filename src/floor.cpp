@@ -768,6 +768,13 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 		z = CenterZ;
 	}
 
+	if (active_direction == false)
+	{
+		//if active_direction is false, only create indicator if the elevator serves the floor
+		if (elev->IsServicedFloor(Number) == false)
+			return 0;
+	}
+
 	int index = DirIndicatorArray.GetSize();
 	DirIndicatorArray.SetSize(index + 1);
 	DirIndicatorArray[index] = new DirectionalIndicator(elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
