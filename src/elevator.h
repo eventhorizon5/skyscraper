@@ -135,7 +135,7 @@ public:
 	void AddServicedFloor(int number);
 	void RemoveServicedFloor(int number);
 	void UpdateFloorIndicators();
-	float GetJerkRate();
+	double GetJerkRate();
 	double GetJerkPosition();
 	void SetFloorSkipText(const char *id);
 	const char* GetFloorSkipText();
@@ -234,7 +234,7 @@ private:
 	bool CalculateStoppingDistance;
 	bool Brakes; //internal brake status
 	bool EmergencyStop; //internal stop status
-	float JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
+	double JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
 	double JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	bool ResetUpQueue; //clear up queue and open doors; usually for service mode
 	bool ResetDownQueue; //clear down queue and open doors; usually for service mode
@@ -283,6 +283,7 @@ private:
 	ElevatorDoor* lastdoor_result;
 	int lastdoor_number;
 	csVector3 elevposition;
+	double tmpDecelJerk;
 
 	//cache objects for IsInElevator()
 	csVector3 lastposition;
