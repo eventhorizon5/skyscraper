@@ -282,6 +282,7 @@ private:
 	bool RecallUnavailable; //true if recall floor is unavailable (alarm has been triggered on that floor)
 	ElevatorDoor* lastdoor_result;
 	int lastdoor_number;
+	csVector3 elevposition;
 
 	//cache objects for IsInElevator()
 	csVector3 lastposition;
