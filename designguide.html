@@ -715,7 +715,12 @@
     the color of the text, and the values range from 0 to 255. If all values are 
     255, the text is white, and if all values are 0, then it's black. The <em>force</em> 
     value is optional, and if set to false, autosizing will always be disabled 
-    for this texture; if set to true, autosizing will always be enabled.</p>
+    for this texture; if set to true, autosizing will always be enabled. Note 
+    that the source texture needs to be a power-of-two size, such as 128x128, 
+    256x256, 512x512, etc - this is because the work is done directly on the graphics 
+    card, and the majority of cards only support those kinds of sizes. Normal 
+    textures loaded with the Load command are internally resized by Crystal Space 
+    before use, and don't have that limitation.</p>
   <p align="left"><strong>4. AddTextRange</strong> - similar to LoadRange, but 
     draws text onto a texture<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddText startnumber, 
