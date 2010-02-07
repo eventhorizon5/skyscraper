@@ -47,6 +47,8 @@ Version 1.6 (2.0 Alpha 6)
 -added CutAll command
 -added support for internal elevator directional indicators
 -directional indicators can now show active (running) elevator direction
+-fixed some quirks with elevator movement
+-added elevator leveling support
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------
