@@ -4333,6 +4333,51 @@ int ScriptProcessor::ProcElevators()
 		elev->ParkingDelay = atof(tempdata[1]);
 		tempdata.DeleteAll();
 	}
+	if (LineData.Slice(0, 13).CompareNoCase("levelingspeed") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		float leveling;
+		if (!IsNumeric(temp2.GetData(), leveling))
+		{
+			ScriptError("Invalid value");
+			return sError;
+		}
+		elev->LevelingSpeed = leveling;
+	}
+	if (LineData.Slice(0, 14).CompareNoCase("levelingoffset") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		float leveling;
+		if (!IsNumeric(temp2.GetData(), leveling))
+		{
+			ScriptError("Invalid value");
+			return sError;
+		}
+		elev->LevelingOffset = leveling;
+	}
+	if (LineData.Slice(0, 12).CompareNoCase("levelingopen") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		float leveling;
+		if (!IsNumeric(temp2.GetData(), leveling))
+		{
+			ScriptError("Invalid value");
+			return sError;
+		}
+		elev->LevelingOpen = leveling;
+	}
 
 	//Print command
 	if (LineData.Slice(0, 5).CompareNoCase("print") == true)

@@ -101,6 +101,7 @@ public:
 	bool Leveling; //is elevator in leveling mode?
 	float LevelingSpeed; //leveling speed
 	float LevelingOffset; //leveling offset factor
+	float LevelingOpen; //leveling door open offset
 
 	//functions
 	Elevator(int number);
@@ -244,6 +245,7 @@ private:
 
 	//functions
 	void MoveElevatorToFloor();
+	void FinishMove();
 	bool CheckOpenDoor();
 
 	char intbuffer[65];
@@ -284,6 +286,7 @@ private:
 	int lastdoor_number;
 	csVector3 elevposition;
 	double tmpDecelJerk;
+	bool FinishedMove;
 
 	//cache objects for IsInElevator()
 	csVector3 lastposition;

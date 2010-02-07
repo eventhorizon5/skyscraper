@@ -127,9 +127,11 @@ Elevator::Elevator(int number)
 	ParkingFloor = 0;
 	ParkingDelay = 0;
 	Leveling = false;
-	LevelingSpeed = 0.2;
-	LevelingOffset = 0.5;
+	LevelingSpeed = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.LevelingSpeed", 0.2);
+	LevelingOffset = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.LevelingOffset", 0.5);
+	LevelingOpen = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.LevelingOpen", 0);
 	tmpDecelJerk = 0;
+	FinishedMove = false;
 
 	//create timer
 	timer = new Timer(this);
@@ -946,6 +948,7 @@ void Elevator::MoveElevatorToFloor()
 			Report("starting elevator movement procedure");
 
 		ElevatorIsRunning = true;
+		FinishedMove = false;
 		csString dir_string;
 
 		//get elevator's current altitude
@@ -1362,6 +1365,15 @@ void Elevator::MoveElevatorToFloor()
 				Report("arrived at floor");
 			ElevatorRate = 0; //stop if on floor
 		}
+
+		//open doors if leveling open offset is not zero
+		if (LevelingOpen > 0 && FinishedMove == false)
+		{
+			if (Direction == -1 && (Destination - elevposition.y) < LevelingOpen)
+				FinishMove();
+			else if (Direction == 1 && (elevposition.y - Destination) < LevelingOpen)
+				FinishMove();
+		}
 	}
 
 	if (GetFloor() != oldfloor)
@@ -1441,13 +1453,6 @@ void Elevator::MoveElevatorToFloor()
 			if (sounds[i])
 				sounds[i]->SetPositionY(GetPosition().y + sounds[i]->PositionOffset.y);
 		}
-
-		//the elevator is now stopped on a valid floor; set OnFloor to true
-		OnFloor = true;
-		Report("arrived at floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
-
-		//dequeue floor route
-		DeleteActiveRoute();
 	}
 
 	//reset values if at destination floor
@@ -1469,6 +1474,24 @@ finish:
 	motorsound->Stop();
 	tmpDecelJerk = 0;
 
+	if (FinishedMove == false)
+		FinishMove();
+}
+
+void Elevator::FinishMove()
+{
+	//post-move operations, such as chimes, opening doors, updating indicators, etc
+
+	if (EmergencyStop == false)
+	{
+		//the elevator is now stopped on a valid floor; set OnFloor to true
+		OnFloor = true;
+		Report("arrived at floor " + csString(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+
+		//dequeue floor route
+		DeleteActiveRoute();
+	}
+
 	//turn off interior directional indicators
 	SetDirectionalIndicators(false, false);
 
@@ -1477,7 +1500,7 @@ finish:
 		//update floor indicators on current camera floor
 		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
 
-		//Turn on objects if user is in elevator
+		//turn on objects if user is in elevator
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && CameraOffset < Height)
 		{
 			if (sbs->Verbose)
@@ -1528,9 +1551,9 @@ finish:
 
 			bool LightDirection = false; //true for up, false for down
 
-			if (GetFloor() == GetTopFloor())
+			if (GotoFloor == GetTopFloor())
 				LightDirection = false; //turn on down light if on top floor
-			else if (GetFloor() == GetBottomFloor())
+			else if (GotoFloor == GetBottomFloor())
 				LightDirection = true; //turn on up light if on bottom floor
 			else if (QueuePositionDirection == 1)
 				LightDirection = true; //turn on up light if queue direction is up
@@ -1540,17 +1563,17 @@ finish:
 			//play chime sound and change indicator
 			if (LightDirection == true)
 			{
-				Chime(0, GetFloor(), true);
-				sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, true, false);
+				Chime(0, GotoFloor, true);
+				sbs->GetFloor(GotoFloor)->SetDirectionalIndicators(Number, true, false);
 			}
 			else
 			{
-				Chime(0, GetFloor(), false);
-				sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, false, true);
+				Chime(0, GotoFloor, false);
+				sbs->GetFloor(GotoFloor)->SetDirectionalIndicators(Number, false, true);
 			}
 
 			//disable call button lights
-			SetCallButtons(GetFloor(), LightDirection, false);
+			SetCallButtons(GotoFloor, LightDirection, false);
 		}
 
 		//open doors
@@ -1591,7 +1614,9 @@ finish:
 	}
 
 	//update elevator's floor number
-	ElevatorFloor = GetFloor();
+	ElevatorFloor = GotoFloor;
+
+	FinishedMove = true;
 }
 
 WallObject* Elevator::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
