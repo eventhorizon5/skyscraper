@@ -668,6 +668,9 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//if either x1 or y1 are -1, the value of 0 is used.
 	//If either x2 or y2 are -1, the width or height of the texture is used.
 
+	csString hAlign = h_align;
+	csString vAlign = v_align;
+
 	//load font
 	csRef<iFont> font = g2d->GetFontServer()->LoadFont(font_filename, font_size);
 	if (!font)
@@ -763,17 +766,17 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	font->GetDimensions(text, w, h);
 
 	//horizontal alignment
-	if (h_align == "left")
+	if (hAlign == "left")
 		x = x1;
-	else if (h_align == "right")
+	else if (hAlign == "right")
 		x = x2 - w;
 	else //center
 		x = x1 + ((x2 - x1) >> 1) - (w >> 1);
 
 	//vertical alignment
-	if (v_align == "top")
+	if (vAlign == "top")
 		y = y1;
-	else if (v_align == "bottom")
+	else if (vAlign == "bottom")
 		y = y2 - h;
 	else //center
 		y = y1 + ((y2 - y1) >> 1) - (h >> 1);
