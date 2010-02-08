@@ -938,10 +938,6 @@ void Elevator::MoveElevatorToFloor()
 
 	csVector3 movement = 0;
 
-	//exit if doors are open or moving
-	//if (AreDoorsOpen() == true || CheckOpenDoor() == true)
-		//return;
-
 	if (ElevatorIsRunning == false)
 	{
 		if (sbs->Verbose)
@@ -1188,7 +1184,7 @@ void Elevator::MoveElevatorToFloor()
 	//move sounds
 	mainsound->SetPosition(elevposition);
 	idlesound->SetPosition(elevposition);
-	MoveDoorSound(0, elevposition, true, false, true);
+	MoveDoorSound(0, elevposition, false, false, false);
 	alarm->SetPosition(elevposition);
 	floorbeep->SetPosition(elevposition);
 	floorsound->SetPosition(elevposition);
@@ -1207,8 +1203,6 @@ void Elevator::MoveElevatorToFloor()
 			JerkRate += AccelJerk * sbs->delta;
 			JerkPos = ElevatorRate;
 		}
-		//if (JerkRate > 1)
-		//	JerkRate = 1;
 
 		//regular motion
 		float limit = 0;
@@ -1439,13 +1433,17 @@ void Elevator::MoveElevatorToFloor()
 		}
 		for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
 		{
-			//if (DirIndicatorArray[i])
-				//DirIndicatorArray[i]->SetPosition(csVector3(DirIndicatorArray[i]->GetPosition().x, Destination, DirIndicatorArray[i]->GetPosition().z));
+			if (DirIndicatorArray[i])
+				DirIndicatorArray[i]->SetPosition(csVector3(DirIndicatorArray[i]->GetPosition().x, Destination, DirIndicatorArray[i]->GetPosition().z));
 		}
 
 		//move sounds
 		mainsound->SetPosition(GetPosition());
+		idlesound->SetPosition(GetPosition());
+		MoveDoorSound(0, GetPosition(), false, false, false);
 		alarm->SetPosition(GetPosition());
+		floorbeep->SetPosition(GetPosition());
+		floorsound->SetPosition(GetPosition());
 		for (int i = 0; i < sounds.GetSize(); i++)
 		{
 			if (sounds[i])
