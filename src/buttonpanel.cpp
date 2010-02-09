@@ -204,7 +204,7 @@ void ButtonPanel::AddButton(const char *name, const char *sound, const char *tex
 	buffer.Trim();
 	controls[control_index] = new Control(this->object, 1, buffer, name, sound, texture, texture_lit, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
 	//move control
-	controls[control_index]->SetPosition(csVector3(xpos, 0, zpos));
+	controls[control_index]->SetPosition(csVector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
 }
 
 void ButtonPanel::DeleteButton(int row, int column)
