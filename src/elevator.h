@@ -102,6 +102,7 @@ public:
 	float LevelingSpeed; //leveling speed
 	float LevelingOffset; //leveling offset factor
 	float LevelingOpen; //leveling door open offset
+	bool WaitForDoors; //set to true for the MoveElevatorToFloor() function to wait for the doors to close before running
 
 	//functions
 	Elevator(int number);

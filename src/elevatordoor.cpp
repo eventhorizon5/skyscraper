@@ -269,7 +269,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//do not close doors while fire service mode 1 is on
-	if (manual == false && elev->FireServicePhase1 == 1)
+	if (manual == false && elev->FireServicePhase1 == 1 && elev->WaitForDoors == false)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is on");
 		return;
@@ -536,15 +536,11 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	doors_stopped = false;
 
 	//turn on autoclose timer
-	if (manual == false && elev->InServiceMode() == false &&
+	if (manual == false && (elev->InServiceMode() == false || elev->WaitForDoors == true) &&
 		(elev->UpPeak == false || elev->GetFloor() != elev->GetBottomFloor()) &&
 		(elev->DownPeak == false || elev->GetFloor() != elev->GetTopFloor()))
 	{
-		if (quick_close == false)
-			timer->Start(DoorTimer, true);
-		else
-			timer->Start(3000, true);
-		quick_close = false;
+		ResetDoorTimer();
 	}
 
 	DoorIsRunning = false;
@@ -1048,7 +1044,7 @@ void ElevatorDoor::Timer::Notify()
 	//door autoclose timer
 
 	//close doors if open
-	if (door->AreDoorsOpen() == true && elevator->InServiceMode() == false)
+	if (door->AreDoorsOpen() == true && (elevator->InServiceMode() == false || elevator->WaitForDoors == true))
 		door->CloseDoors();
 }
 
@@ -1067,8 +1063,11 @@ void ElevatorDoor::Chime(int floor, bool direction)
 void ElevatorDoor::ResetDoorTimer()
 {
 	//reset elevator door timer
-	timer->Stop();
-	timer->Start(DoorTimer, true);
+	if (quick_close == false)
+		timer->Start(DoorTimer, true);
+	else
+		timer->Start(3000, true);
+	quick_close = false;
 }
 
 bool ElevatorDoor::DoorsStopped()

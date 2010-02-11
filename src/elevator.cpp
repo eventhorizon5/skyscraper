@@ -132,6 +132,7 @@ Elevator::Elevator(int number)
 	LevelingOpen = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.LevelingOpen", 0);
 	tmpDecelJerk = 0;
 	FinishedMove = false;
+	WaitForDoors = false;
 
 	//create timer
 	timer = new Timer(this);
@@ -701,8 +702,11 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i];
-					if (FireServicePhase2 == 0)
+					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
+					{
 						CloseDoors();
+						WaitForDoors = true;
+					}
 					MoveElevator = true;
 					LastQueueDirection = 1;
 				}
@@ -736,8 +740,11 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i];
-					if (FireServicePhase2 == 0)
+					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
+					{
 						CloseDoors();
+						WaitForDoors = true;
+					}
 					MoveElevator = true;
 					LastQueueDirection = 1;
 					return;
@@ -771,8 +778,11 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i];
-					if (FireServicePhase2 == 0)
+					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
+					{
 						CloseDoors();
+						WaitForDoors = true;
+					}
 					MoveElevator = true;
 					LastQueueDirection = -1;
 				}
@@ -806,8 +816,11 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i];
-					if (FireServicePhase2 == 0)
+					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
+					{
 						CloseDoors();
+						WaitForDoors = true;
+					}
 					MoveElevator = true;
 					LastQueueDirection = -1;
 					return;
@@ -937,6 +950,15 @@ void Elevator::MoveElevatorToFloor()
 	//if InspectionService is enabled, this function ignores GotoFloor values, since the elevator is manually moved
 
 	csVector3 movement = 0;
+
+	//wait until doors are fully closed if WaitForDoors is true
+	if (WaitForDoors == true)
+	{
+		if (AreDoorsOpen() == true || CheckOpenDoor() == true)
+			return;
+		else
+			WaitForDoors = false;
+	}
 
 	if (ElevatorIsRunning == false)
 	{
@@ -1964,6 +1986,8 @@ void Elevator::Go(int floor)
 	if (sbs->Verbose)
 		Report("Go: proceeding to floor " + csString(_itoa(floor, intbuffer, 10)));
 	GotoFloor = floor;
+	WaitForDoors = true;
+	CloseDoors();
 	MoveElevator = true;
 }
 
