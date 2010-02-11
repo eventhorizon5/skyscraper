@@ -1039,7 +1039,7 @@ void Elevator::MoveElevatorToFloor()
 		CalculateStoppingDistance = true;
 
 		//If user is riding this elevator, then turn off objects
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && InspectionService == false)
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning off objects");
@@ -1334,7 +1334,7 @@ void Elevator::MoveElevatorToFloor()
 			motorsound->Play(false);
 		}
 	}
-	else if (Leveling == false)
+	else if (Leveling == false && EmergencyStop == false)
 	{
 		if (fabs(ElevatorRate) <= LevelingSpeed)
 		{
@@ -2150,6 +2150,32 @@ void Elevator::EnableInspectionService(bool value)
 	{
 		ResetDoorTimer();
 		Report("Inspection Service mode disabled");
+
+		//turn on objects if user is in elevator
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		{
+			if (sbs->Verbose)
+				Report("user in elevator - turning on objects");
+
+			UpdateFloorIndicators();
+
+			//turn on floor
+			sbs->GetFloor(GetFloor())->Enabled(true);
+			sbs->GetFloor(GetFloor())->EnableGroup(true);
+
+			//Turn on sky, buildings, and landscape
+			sbs->EnableSkybox(true);
+			sbs->EnableBuildings(true);
+			sbs->EnableLandscape(true);
+			sbs->EnableExternal(true);
+
+			//reset shaft doors
+			for (int i = 1; i <= sbs->Shafts(); i++)
+			{
+				sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, false, true);
+				sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, true, true);
+			}
+		}
 	}
 
 	InspectionService = value;
