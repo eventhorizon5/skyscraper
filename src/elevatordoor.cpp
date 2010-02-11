@@ -1652,3 +1652,9 @@ void ElevatorDoor::DoorWrapper::StopDoors()
 		doors[i]->door_section = 0;
 	}
 }
+
+ElevatorDoor::DoorWrapper* ElevatorDoor::GetDoorWrapper()
+{
+	//return door wrapper object
+	return Doors;
+}
