@@ -6181,8 +6181,17 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, 3.918, 0, 4.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ServiceElevDoors, ServiceElevDoors2, 0.2, 4.218, 0, 0, 0 #shaft doors
+    AddDoorComponent 1, FreightDoor1, ServiceElevDoors, Black, 0.2, down, 0.3, 3.918, -2.25, 3.918, 2.25, 4, 0, 0, 0, 0, 0
+    AddDoorComponent 1, FreightDoor2, ServiceElevDoors, Black, 0.2, up, 0.3, 3.918, -2.25, 3.918, 2.25, 4, 4, 0, 0, 0, 0
+    FinishDoors 1
+    AddShaftDoorsComponent 1, FreightShaftDoor1, ServiceElevDoors2, Black, 0.1, left, 0.3 / 2, 4.128 + 0.1, -2.25, 4.128 + 0.1, -1.125, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor2, ServiceElevDoors2, Black, 0.1, left, 0.3, 4.128, -1.125, 4.128, 0, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor3, ServiceElevDoors, Black, 0.1, right, 0.3, 4.128, 0, 4.128, 1.125, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor4, ServiceElevDoors, Black, 0.1, right, 0.3 / 2, 4.128 + 0.1, 1.125, 4.128 + 0.1, 2.25, 8, 0, 0, 0, 0, 0
+    FinishShaftDoors 1
+
+    #AddDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, 3.918, 0, 4.5, 8, false, 0, 0 #doors
+    #AddShaftDoors 1, ServiceElevDoors, ServiceElevDoors2, 0.2, 4.218, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
