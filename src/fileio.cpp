@@ -2404,7 +2404,26 @@ int ScriptProcessor::ProcFloors()
 	if (getfloordata == true)
 		return sCheckFloors;
 
-	//process any functions first
+	//IF statement
+	if (LineData.Slice(0, 2).CompareNoCase("if") == true)
+	{
+		temp1 = LineData.Find("[", 0);
+		temp3 = LineData.Find("]", 0);
+		if (temp1 + temp3 > 0)
+			temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
+		else
+			temp2 = "";
+		temp2.Trim();
+		if (IfProc(temp2) == true)
+		{
+			LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
+			return sCheckFloors;
+		}
+		else
+			return sNextLine; //skip line
+	}
+
+	//process functions
 	if (FunctionProc() == true)
 		return sNextLine;
 
@@ -2567,25 +2586,6 @@ int ScriptProcessor::ProcFloors()
 
 		//print line
 		skyscraper->Report(buffer);
-	}
-
-	//IF statement
-	if (LineData.Slice(0, 2).CompareNoCase("if") == true)
-	{
-		temp1 = LineData.Find("[", 0);
-		temp3 = LineData.Find("]", 0);
-		if (temp1 + temp3 > 0)
-			temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
-		else
-			temp2 = "";
-		temp2.Trim();
-		if (IfProc(temp2) == true)
-		{
-			LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
-			return sCheckFloors;
-		}
-		else
-			return sNextLine; //skip line
 	}
 
 	//Exit command
@@ -3669,7 +3669,26 @@ int ScriptProcessor::ProcElevators()
 	buffer = Current;
 	LineData.ReplaceAll("%elevator%", buffer);
 
-	//process any functions first
+	//IF statement
+	if (LineData.Slice(0, 2).CompareNoCase("if") == true)
+	{
+		temp1 = LineData.Find("[", 0);
+		temp3 = LineData.Find("]", 0);
+		if (temp1 + temp3 > 0)
+			temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
+		else
+			temp2 = "";
+		temp2.Trim();
+		if (IfProc(temp2) == true)
+		{
+			LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
+			return sCheckFloors;
+		}
+		else
+			return sNextLine; //skip line
+	}
+
+	//process functions
 	if (FunctionProc() == true)
 		return sNextLine;
 
@@ -4386,25 +4405,6 @@ int ScriptProcessor::ProcElevators()
 
 		//print line
 		skyscraper->Report(buffer);
-	}
-
-	//IF statement
-	if (LineData.Slice(0, 2).CompareNoCase("if") == true)
-	{
-		temp1 = LineData.Find("[", 0);
-		temp3 = LineData.Find("]", 0);
-		if (temp1 + temp3 > 0)
-			temp2 = LineData.Slice(temp1 + 1, temp3 - temp1 - 1);
-		else
-			temp2 = "";
-		temp2.Trim();
-		if (IfProc(temp2) == true)
-		{
-			LineData = LineData.Slice(temp3 + 1).Trim(); //trim off IF statement
-			return sCheckFloors;
-		}
-		else
-			return sNextLine; //skip line
 	}
 
 	if (LineData.Slice(0, 7).CompareNoCase("<break>") == true)
