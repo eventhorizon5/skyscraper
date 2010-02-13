@@ -103,6 +103,7 @@ public:
 	float LevelingOffset; //leveling offset factor
 	float LevelingOpen; //leveling door open offset
 	bool WaitForDoors; //set to true for the MoveElevatorToFloor() function to wait for the doors to close before running
+	int ActiveDirection; //variant of Direction that doesn't change during slowdown
 
 	//functions
 	Elevator(int number);

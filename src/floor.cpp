@@ -335,6 +335,7 @@ void Floor::Enabled(bool value)
 		if (DirIndicatorArray[i])
 			DirIndicatorArray[i]->Enabled(value);
 	}
+	UpdateDirectionalIndicators();
 
 	//floor indicators
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
@@ -783,14 +784,77 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 
 void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
 {
-	//set light status of all directional indicators associated with the given elevator
+	//set light status of all standard (non active-direction) directional indicators associated with the given elevator
 
 	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
 	{
-		if (DirIndicatorArray[i]->elevator_num == elevator)
+		if (DirIndicatorArray[i]->elevator_num == elevator && DirIndicatorArray[i]->ActiveDirection == false)
 		{
 			DirIndicatorArray[i]->DownLight(DownLight);
 			DirIndicatorArray[i]->UpLight(UpLight);
+		}
+	}
+}
+
+void Floor::UpdateDirectionalIndicators(int elevator)
+{
+	//updates the active-direction indicators associated with the given elevator
+
+	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	{
+		if (DirIndicatorArray[i])
+		{
+			if (DirIndicatorArray[i]->elevator_num == elevator && DirIndicatorArray[i]->ActiveDirection == true)
+			{
+				Elevator *elev = sbs->GetElevator(elevator);
+				if (elev->ActiveDirection == 1)
+				{
+					DirIndicatorArray[i]->UpLight(true);
+					DirIndicatorArray[i]->DownLight(false);
+				}
+				if (elev->ActiveDirection == 0)
+				{
+					DirIndicatorArray[i]->UpLight(false);
+					DirIndicatorArray[i]->DownLight(false);
+				}
+				if (elev->ActiveDirection == -1)
+				{
+					DirIndicatorArray[i]->UpLight(false);
+					DirIndicatorArray[i]->DownLight(true);
+				}
+			}
+		}
+	}
+}
+
+void Floor::UpdateDirectionalIndicators()
+{
+	//updates all active-direction indicators
+
+	csString value;
+	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	{
+		if (DirIndicatorArray[i])
+		{
+			if (DirIndicatorArray[i]->ActiveDirection == true)
+			{
+				Elevator *elev = sbs->GetElevator(DirIndicatorArray[i]->elevator_num);
+				if (elev->ActiveDirection == 1)
+				{
+					DirIndicatorArray[i]->UpLight(true);
+					DirIndicatorArray[i]->DownLight(false);
+				}
+				if (elev->ActiveDirection == 0)
+				{
+					DirIndicatorArray[i]->UpLight(false);
+					DirIndicatorArray[i]->DownLight(false);
+				}
+				if (elev->ActiveDirection == -1)
+				{
+					DirIndicatorArray[i]->UpLight(false);
+					DirIndicatorArray[i]->DownLight(true);
+				}
+			}
 		}
 	}
 }

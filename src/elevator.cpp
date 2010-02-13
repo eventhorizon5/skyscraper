@@ -133,6 +133,7 @@ Elevator::Elevator(int number)
 	tmpDecelJerk = 0;
 	FinishedMove = false;
 	WaitForDoors = false;
+	ActiveDirection = 0;
 
 	//create timer
 	timer = new Timer(this);
@@ -999,6 +1000,8 @@ void Elevator::MoveElevatorToFloor()
 				dir_string = "up";
 		}
 
+		ActiveDirection = Direction;
+
 		//If elevator is already on specified floor, open doors and exit
 		if (ElevatorFloor == GotoFloor && InspectionService == false)
 		{
@@ -1112,6 +1115,9 @@ void Elevator::MoveElevatorToFloor()
 			SetDirectionalIndicators(true, false);
 		else
 			SetDirectionalIndicators(false, true);
+
+		//set external active-direction indicators
+		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
 		//notify about movement
 		if (InspectionService == false)
@@ -1480,6 +1486,7 @@ finish:
 	ElevatorRate = 0;
 	JerkRate = 0;
 	Direction = 0;
+	ActiveDirection = 0;
 	Brakes = false;
 	Destination = 0;
 	DistanceToTravel = 0;
@@ -1512,6 +1519,9 @@ void Elevator::FinishMove()
 
 	//turn off interior directional indicators
 	SetDirectionalIndicators(false, false);
+
+	//update external active-direction indicators
+	sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
 	if (EmergencyStop == false && InspectionService == false)
 	{

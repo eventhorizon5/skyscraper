@@ -3237,7 +3237,6 @@ int ScriptProcessor::ProcFloors()
 					return sError;
 				}
 			}
-			compatibility = true;
 		}
 
 		if (!Simcore->GetElevator(atoi(tempdata[0])))
