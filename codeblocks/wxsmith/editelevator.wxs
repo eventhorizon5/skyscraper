@@ -723,6 +723,27 @@
 										<border>5</border>
 										<option>1</option>
 									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT28" variable="StaticText28" member="yes">
+											<label>WaitDoors:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtWaitForDoors" variable="txtWaitForDoors" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 							</object>
@@ -854,6 +875,40 @@
 												<border>5</border>
 												<option>1</option>
 											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT25" variable="StaticText25" member="yes">
+													<label>Motor:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtMotor" variable="txtMotor" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT54" variable="StaticText54" member="yes">
+													<label>Camera:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtCameraOffset" variable="txtCameraOffset" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
 										</object>
 										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
@@ -870,7 +925,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT38" variable="StaticText38" member="yes">
 													<label>Direction:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueDirection" variable="txtQueueDirection" member="yes">
@@ -884,7 +939,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT40" variable="StaticText40" member="yes">
 													<label>LastUp:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueLastUp" variable="txtQueueLastUp" member="yes">
@@ -898,7 +953,7 @@
 												<object class="wxStaticText" name="ID_STATICTEXT41" variable="StaticText41" member="yes">
 													<label>LastDwn:</label>
 												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueLastDown" variable="txtQueueLastDown" member="yes">
@@ -974,7 +1029,7 @@
 											<style>wxBU_EXACTFIT</style>
 											<handler function="On_bSetSpeed_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT22" variable="StaticText22" member="yes">
@@ -995,7 +1050,7 @@
 											<style>wxBU_EXACTFIT</style>
 											<handler function="On_bSetAcceleration_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT23" variable="StaticText23" member="yes">
@@ -1016,7 +1071,7 @@
 											<style>wxBU_EXACTFIT</style>
 											<handler function="On_bSetDeceleration_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
@@ -1040,7 +1095,7 @@
 											<style>wxBU_EXACTFIT</style>
 											<handler function="On_bSetAccelJerk_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -1066,7 +1121,7 @@
 											<style>wxBU_EXACTFIT</style>
 											<handler function="On_bSetDecelJerk_Click" entry="EVT_BUTTON" />
 										</object>
-										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -1167,6 +1222,128 @@
 									</object>
 									<object class="spacer">
 										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT24" variable="StaticText24" member="yes">
+											<label>Manual:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtManualGo" variable="txtManualGo" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT55" variable="StaticText55" member="yes">
+											<label>Leveling:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtLeveling" variable="txtLeveling" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT56" variable="StaticText56" member="yes">
+											<label>LevSpeed:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtLevelingSpeed" variable="txtLevelingSpeed" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetLevelingSpeed" variable="bSetLevelingSpeed" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetLevelingSpeed_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT57" variable="StaticText57" member="yes">
+											<label>LvOffset:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtLevelingOffset" variable="txtLevelingOffset" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetLevelingOffset" variable="bSetLevelingOffset" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetLevelingOffset_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT58" variable="StaticText58" member="yes">
+											<label>LevOpen:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtLevelingOpen" variable="txtLevelingOpen" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetLevelingOpen" variable="bSetLevelingOpen" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetLevelingOpen_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -1428,6 +1605,58 @@
 													<label>Set</label>
 													<style>wxBU_EXACTFIT</style>
 													<handler function="On_bSetRecallAlternate_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT39" variable="StaticText39" member="yes">
+													<label>Park Flr:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtParkingFloor" variable="txtParkingFloor" member="yes">
+													<size>75,-1</size>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetParkingFloor" variable="bSetParkingFloor" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetParkingFloor_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT48" variable="StaticText48" member="yes">
+													<label>Park Dly:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtParkingDelay" variable="txtParkingDelay" member="yes">
+													<size>75,-1</size>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetParkingDelay" variable="bSetParkingDelay" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetParkingDelay_Click" entry="EVT_BUTTON" />
 												</object>
 												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
