@@ -39,7 +39,7 @@ Sound::Sound(Object *parent, const char *name)
 
 	//first set default values
 	PositionOffset = 0;
-	Position = csVector3(0);
+	Position = 0;
 	Volume = sbs->confman->GetFloat("Skyscraper.SBS.Sound.Volume", 1.0);
 	MaxDistance = sbs->confman->GetFloat("Skyscraper.SBS.Sound.MaxDistance", -1.0);
 	MinDistance = sbs->confman->GetFloat("Skyscraper.SBS.Sound.MinDistance", 1.0);
@@ -78,8 +78,7 @@ void Sound::SetPositionY(float position)
 {
 	//set vertical position of sound object
 	Position.y = position;
-	if (sndsource3d)
-		sndsource3d->SetPosition(Position);
+	SetPosition(Position);
 }
 
 csVector3 Sound::GetPosition()

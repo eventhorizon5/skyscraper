@@ -33,7 +33,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, int type, const char *name, const char *action_name, const char *sound_file, const char *texture, const char *texture_lit, const char *direction, float x, float z, float width, float height, float voffset)
+Control::Control(Object *parent, int type, const char *name, const char *action_name, const char *sound_file, const char *texture, const char *texture_lit, const char *direction, float width, float height, float voffset)
 {
 	//create a control at the specified location
 	//type is either:
@@ -79,13 +79,13 @@ Control::Control(Object *parent, int type, const char *name, const char *action_
 	ControlMesh->GetMeshObject()->SetMaterialWrapper(mat);
 
 	if (Direction == "front")
-		sbs->AddGenWall(ControlMesh, texture, x, z, x + width, z, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, texture, 0, 0, width, 0, height, voffset, 1, 1);
 	if (Direction == "back")
-		sbs->AddGenWall(ControlMesh, texture, x, z, x - width, z, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, texture, 0, 0, -width, 0, height, voffset, 1, 1);
 	if (Direction == "left")
-		sbs->AddGenWall(ControlMesh, texture, x, z, x, z - width, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, texture, 0, 0, 0, -width, height, voffset, 1, 1);
 	if (Direction == "right")
-		sbs->AddGenWall(ControlMesh, texture, x, z, x, z + width, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, texture, 0, 0, 0, width, height, voffset, 1, 1);
 
 	//create sound object
 	sound = new Sound(this->object, "Control");
@@ -155,11 +155,9 @@ void Control::SetPosition(const csVector3 &position)
 void Control::SetPositionY(float position)
 {
 	//set control position
-	csVector3 pos = ControlMesh->GetMovable()->GetPosition();
+	csVector3 pos = GetPosition();
 	pos.y = position;
-	sound->SetPositionY(position);
-	ControlMesh->GetMovable()->SetPosition(sbs->ToRemote(pos));
-	ControlMesh->GetMovable()->UpdateMove();
+	SetPosition(pos);
 }
 
 void Control::Move(const csVector3 &position)

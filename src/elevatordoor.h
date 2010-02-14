@@ -145,6 +145,7 @@ public:
 	Object* FinishDoors();
 	Object* FinishShaftDoor(int floor);
 	bool FinishShaftDoors();
+	DoorWrapper* GetDoorWrapper();
 
 private:
 

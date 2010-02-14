@@ -335,6 +335,7 @@ void Floor::Enabled(bool value)
 		if (DirIndicatorArray[i])
 			DirIndicatorArray[i]->Enabled(value);
 	}
+	UpdateDirectionalIndicators();
 
 	//floor indicators
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
@@ -463,9 +464,9 @@ Object* Floor::AddDoor(const char *texture, float thickness, int direction, floa
 
 	//cut area
 	if (direction < 5)
-		Cut(csVector3(x1 - 1, GetBase(true) + voffset, z1), csVector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false, true);
+		CutAll(csVector3(x1 - 1, GetBase(true) + voffset, z1), csVector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
 	else
-		Cut(csVector3(x1, GetBase(true) + voffset, z1 - 1), csVector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false, true);
+		CutAll(csVector3(x1, GetBase(true) + voffset, z1 - 1), csVector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
 	csString floornum = _itoa(Number, intbuffer, 10);
@@ -657,7 +658,7 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	{
 		//door faces left/right
 		x1 = CenterX - depth1;
-		x2 = CenterX + depth1;
+		x2 = CenterX + depth2;
 		z1 = CenterZ - (width / 2);
 		z2 = CenterZ + (width / 2);
 	}
@@ -667,9 +668,13 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 		x1 = CenterX - (width / 2);
 		x2 = CenterX + (width / 2);
 		z1 = CenterZ - depth1;
-		z2 = CenterZ + depth1;
+		z2 = CenterZ + depth2;
 	}
 
+	//perform a cut in the area
+	CutAll(csVector3(x1, GetBase(true) + voffset, z1), csVector3(x2, GetBase(true) + voffset + height, z2), true, false);
+
+	//create walls
 	sbs->DrawWalls(false, true, false, false, false, false);
 	if (direction == false)
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, false);
@@ -768,6 +773,13 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 		z = CenterZ;
 	}
 
+	if (active_direction == false)
+	{
+		//if active_direction is false, only create indicator if the elevator serves the floor
+		if (elev->IsServicedFloor(Number) == false)
+			return 0;
+	}
+
 	int index = DirIndicatorArray.GetSize();
 	DirIndicatorArray.SetSize(index + 1);
 	DirIndicatorArray[index] = new DirectionalIndicator(elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
@@ -776,14 +788,77 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 
 void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
 {
-	//set light status of all directional indicators associated with the given elevator
+	//set light status of all standard (non active-direction) directional indicators associated with the given elevator
 
 	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
 	{
-		if (DirIndicatorArray[i]->elevator_num == elevator)
+		if (DirIndicatorArray[i]->elevator_num == elevator && DirIndicatorArray[i]->ActiveDirection == false)
 		{
 			DirIndicatorArray[i]->DownLight(DownLight);
 			DirIndicatorArray[i]->UpLight(UpLight);
+		}
+	}
+}
+
+void Floor::UpdateDirectionalIndicators(int elevator)
+{
+	//updates the active-direction indicators associated with the given elevator
+
+	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	{
+		if (DirIndicatorArray[i])
+		{
+			if (DirIndicatorArray[i]->elevator_num == elevator && DirIndicatorArray[i]->ActiveDirection == true)
+			{
+				Elevator *elev = sbs->GetElevator(elevator);
+				if (elev->ActiveDirection == 1)
+				{
+					DirIndicatorArray[i]->UpLight(true);
+					DirIndicatorArray[i]->DownLight(false);
+				}
+				if (elev->ActiveDirection == 0)
+				{
+					DirIndicatorArray[i]->UpLight(false);
+					DirIndicatorArray[i]->DownLight(false);
+				}
+				if (elev->ActiveDirection == -1)
+				{
+					DirIndicatorArray[i]->UpLight(false);
+					DirIndicatorArray[i]->DownLight(true);
+				}
+			}
+		}
+	}
+}
+
+void Floor::UpdateDirectionalIndicators()
+{
+	//updates all active-direction indicators
+
+	csString value;
+	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	{
+		if (DirIndicatorArray[i])
+		{
+			if (DirIndicatorArray[i]->ActiveDirection == true)
+			{
+				Elevator *elev = sbs->GetElevator(DirIndicatorArray[i]->elevator_num);
+				if (elev->ActiveDirection == 1)
+				{
+					DirIndicatorArray[i]->UpLight(true);
+					DirIndicatorArray[i]->DownLight(false);
+				}
+				if (elev->ActiveDirection == 0)
+				{
+					DirIndicatorArray[i]->UpLight(false);
+					DirIndicatorArray[i]->DownLight(false);
+				}
+				if (elev->ActiveDirection == -1)
+				{
+					DirIndicatorArray[i]->UpLight(false);
+					DirIndicatorArray[i]->DownLight(true);
+				}
+			}
 		}
 	}
 }

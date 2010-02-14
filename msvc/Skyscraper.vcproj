@@ -53,6 +53,7 @@
 				StringPooling="true"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
+				EnableEnhancedInstructionSet="1"
 				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/Skyscraper.pch"
@@ -87,6 +88,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\Skyscraper.pdb"
 				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -155,6 +158,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
+				EnableEnhancedInstructionSet="1"
 				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/Skyscraper.pch"
@@ -188,6 +192,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/Skyscraper.pdb"
 				SubSystem="1"
+				OptimizeReferences="0"
+				EnableCOMDATFolding="0"
 				TargetMachine="1"
 			/>
 			<Tool

@@ -132,6 +132,8 @@ Elevator::Elevator(int number)
 	LevelingOpen = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.LevelingOpen", 0);
 	tmpDecelJerk = 0;
 	FinishedMove = false;
+	WaitForDoors = false;
+	ActiveDirection = 0;
 
 	//create timer
 	timer = new Timer(this);
@@ -701,8 +703,11 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i];
-					if (FireServicePhase2 == 0)
+					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
+					{
 						CloseDoors();
+						WaitForDoors = true;
+					}
 					MoveElevator = true;
 					LastQueueDirection = 1;
 				}
@@ -736,8 +741,11 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i];
-					if (FireServicePhase2 == 0)
+					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
+					{
 						CloseDoors();
+						WaitForDoors = true;
+					}
 					MoveElevator = true;
 					LastQueueDirection = 1;
 					return;
@@ -771,8 +779,11 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i];
-					if (FireServicePhase2 == 0)
+					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
+					{
 						CloseDoors();
+						WaitForDoors = true;
+					}
 					MoveElevator = true;
 					LastQueueDirection = -1;
 				}
@@ -806,8 +817,11 @@ void Elevator::ProcessCallQueue()
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i];
-					if (FireServicePhase2 == 0)
+					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
+					{
 						CloseDoors();
+						WaitForDoors = true;
+					}
 					MoveElevator = true;
 					LastQueueDirection = -1;
 					return;
@@ -938,9 +952,14 @@ void Elevator::MoveElevatorToFloor()
 
 	csVector3 movement = 0;
 
-	//exit if doors are open or moving
-	//if (AreDoorsOpen() == true || CheckOpenDoor() == true)
-		//return;
+	//wait until doors are fully closed if WaitForDoors is true
+	if (WaitForDoors == true)
+	{
+		if (AreDoorsOpen() == true || CheckOpenDoor() == true)
+			return;
+		else
+			WaitForDoors = false;
+	}
 
 	if (ElevatorIsRunning == false)
 	{
@@ -980,6 +999,8 @@ void Elevator::MoveElevatorToFloor()
 			else if (Direction == 1)
 				dir_string = "up";
 		}
+
+		ActiveDirection = Direction;
 
 		//If elevator is already on specified floor, open doors and exit
 		if (ElevatorFloor == GotoFloor && InspectionService == false)
@@ -1043,7 +1064,7 @@ void Elevator::MoveElevatorToFloor()
 		CalculateStoppingDistance = true;
 
 		//If user is riding this elevator, then turn off objects
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && InspectionService == false)
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning off objects");
@@ -1094,6 +1115,9 @@ void Elevator::MoveElevatorToFloor()
 			SetDirectionalIndicators(true, false);
 		else
 			SetDirectionalIndicators(false, true);
+
+		//set external active-direction indicators
+		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
 		//notify about movement
 		if (InspectionService == false)
@@ -1188,7 +1212,7 @@ void Elevator::MoveElevatorToFloor()
 	//move sounds
 	mainsound->SetPosition(elevposition);
 	idlesound->SetPosition(elevposition);
-	MoveDoorSound(0, elevposition, true, false, true);
+	MoveDoorSound(0, elevposition, false, false, false);
 	alarm->SetPosition(elevposition);
 	floorbeep->SetPosition(elevposition);
 	floorsound->SetPosition(elevposition);
@@ -1207,8 +1231,6 @@ void Elevator::MoveElevatorToFloor()
 			JerkRate += AccelJerk * sbs->delta;
 			JerkPos = ElevatorRate;
 		}
-		//if (JerkRate > 1)
-		//	JerkRate = 1;
 
 		//regular motion
 		float limit = 0;
@@ -1340,7 +1362,7 @@ void Elevator::MoveElevatorToFloor()
 			motorsound->Play(false);
 		}
 	}
-	else if (Leveling == false)
+	else if (Leveling == false && EmergencyStop == false)
 	{
 		if (fabs(ElevatorRate) <= LevelingSpeed)
 		{
@@ -1439,13 +1461,17 @@ void Elevator::MoveElevatorToFloor()
 		}
 		for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
 		{
-			//if (DirIndicatorArray[i])
-				//DirIndicatorArray[i]->SetPosition(csVector3(DirIndicatorArray[i]->GetPosition().x, Destination, DirIndicatorArray[i]->GetPosition().z));
+			if (DirIndicatorArray[i])
+				DirIndicatorArray[i]->SetPosition(csVector3(DirIndicatorArray[i]->GetPosition().x, Destination, DirIndicatorArray[i]->GetPosition().z));
 		}
 
 		//move sounds
 		mainsound->SetPosition(GetPosition());
+		idlesound->SetPosition(GetPosition());
+		MoveDoorSound(0, GetPosition(), false, false, false);
 		alarm->SetPosition(GetPosition());
+		floorbeep->SetPosition(GetPosition());
+		floorsound->SetPosition(GetPosition());
 		for (int i = 0; i < sounds.GetSize(); i++)
 		{
 			if (sounds[i])
@@ -1460,6 +1486,7 @@ finish:
 	ElevatorRate = 0;
 	JerkRate = 0;
 	Direction = 0;
+	ActiveDirection = 0;
 	Brakes = false;
 	Destination = 0;
 	DistanceToTravel = 0;
@@ -1492,6 +1519,9 @@ void Elevator::FinishMove()
 
 	//turn off interior directional indicators
 	SetDirectionalIndicators(false, false);
+
+	//update external active-direction indicators
+	sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
 	if (EmergencyStop == false && InspectionService == false)
 	{
@@ -1966,6 +1996,8 @@ void Elevator::Go(int floor)
 	if (sbs->Verbose)
 		Report("Go: proceeding to floor " + csString(_itoa(floor, intbuffer, 10)));
 	GotoFloor = floor;
+	WaitForDoors = true;
+	CloseDoors();
 	MoveElevator = true;
 }
 
@@ -2152,6 +2184,32 @@ void Elevator::EnableInspectionService(bool value)
 	{
 		ResetDoorTimer();
 		Report("Inspection Service mode disabled");
+
+		//turn on objects if user is in elevator
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		{
+			if (sbs->Verbose)
+				Report("user in elevator - turning on objects");
+
+			UpdateFloorIndicators();
+
+			//turn on floor
+			sbs->GetFloor(GetFloor())->Enabled(true);
+			sbs->GetFloor(GetFloor())->EnableGroup(true);
+
+			//Turn on sky, buildings, and landscape
+			sbs->EnableSkybox(true);
+			sbs->EnableBuildings(true);
+			sbs->EnableLandscape(true);
+			sbs->EnableExternal(true);
+
+			//reset shaft doors
+			for (int i = 1; i <= sbs->Shafts(); i++)
+			{
+				sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, false, true);
+				sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, true, true);
+			}
+		}
 	}
 
 	InspectionService = value;
