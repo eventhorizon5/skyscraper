@@ -91,6 +91,9 @@
     Load data/darrow_unlit.gif, ArrowDown, 1, -1
     Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
     Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
+    Load data/darrow_single_up.jpg, ArrowUpSingle, 1, 1
+    Load data/darrow_single_down.jpg, ArrowDownSingle, 1, 1
+    Load data/metal080.jpg, MainPanelBack, 0.5, 0.5
 
     #signs
     Load data/triton_signs/2-14.png, Sign2-14, 1, 1
@@ -275,7 +278,7 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
 <EndFloor>
 
 <Floors -3 to -8>
-    Group = -7 - -3
+    if[%floor% > -8] Group = -7 - -3
 
     #Floor
     FloorOrientation = top
@@ -464,7 +467,7 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     AddFloor Floor, Carpet1, 0.5, 48.5, -70, 75, 70, 0, 0, 0, 0, False
     AddFloor Floor, Carpet1, 0.5, -48.5, -23.833, 48.5, -13.833, 0, 0, 0, 0, False #crosswalk
     AddFloor Floor, Carpet1, 0.5, -5.5, -13.833, 5.5, 13.5, 0, 0, 0, 0, False #center
-    AddFloor Floor, Carpet1, 0.5, -4.5, 13.5, 4.5, 37.5, 0, 0, 0, 0, False #service area
+    AddFloor Floor, Carpet1, 0.5, -4.5 - 0.33, 13.5, 4.5 + 0.33, 37.5, 0, 0, 0, 0, False #service area
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     AddFloor Ceiling, Marble4, 0.5, -75, -70, 75, 70, %height%, %height%, 0, 0, False
@@ -2025,11 +2028,6 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
 #cut roof area for penthouse floor
 Cut external, -20, Floor(143).Altitude - 5, -40, 20, Floor(143).Altitude + 5, 40, false, true
 
-#roof walls cut for doors
-Cut external, -21, Floor(143).Altitude + Floor(143).InterfloorHeight, -1.75, -19, Floor(143).Altitude + Floor(143).InterfloorHeight + 8, 1.75, true, false
-Cut external, 19, Floor(143).Altitude + Floor(143).InterfloorHeight, -1.75, 21, Floor(143).Altitude + Floor(143).InterfloorHeight + 8, 1.75, true, false
-
-
 # Zone 3B Column Frame
 <Floors 120 to 142>
     ColumnWallBox2 ColumnL1, ColumnTex, -39 + 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
@@ -2138,7 +2136,7 @@ ShaftCut 16, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
 
 #Core utility shaft
 AddShaft 17, 1, 0, 42.71, -8, 142
-ShaftCut 17, -4.33, -4.75, 4.33, 4.75, 0, 5
+ShaftCut 17, -4.33, -4.75, 4.33 - 0.33, 4.75, 0, 5
 
 #Office zone 2 local shafts
 AddShaft 18, 2, -23.85, 9.25, 39, 62
@@ -2703,6 +2701,10 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% < -1] AddWall Shaft17RightE, %5%, 0.33, 4.33, -4.75 + 42.71 - 0.33, 4.33, 4.75 + 42.71 + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% > -2 & %floor% < 79] AddWall Shaft17BackE, %5%, 0.33, -4.33, 4.75 + 42.71, 4.33, 4.75 + 42.71, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < -1] AddWall Shaft17BackE, %5%, 0.33, -4.33, 4.75 + 42.71, 4.33 + 0.33, 4.75 + 42.71, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = center
+    <break>
+    if[%floor% = -8] AddDoor StairsDoor, 0.2, 3, 4.33, 42.71, 3.5, 8, 0, 1, 1
+    if[%floor% = -8] AddFillerWalls ConnectionWall, 0.66, 4.33, 42.71, 3.5, 8, 0, false, 0, 0
 
 <EndFloors>
 
@@ -6181,13 +6183,15 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoorComponent 1, FreightDoor1, ServiceElevDoors, Black, 0.2, down, 0.3, 3.918, -2.25, 3.918, 2.25, 4, 0, 0, 0, 0, 0
-    AddDoorComponent 1, FreightDoor2, ServiceElevDoors, Black, 0.2, up, 0.3, 3.918, -2.25, 3.918, 2.25, 4, 4, 0, 0, 0, 0
+    AddDoorComponent 1, FreightDoor1, ServiceElevDoors2, Black, 0.1, left, 0.3 / 2, 3.918, -2.25, 3.918, -1.125, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, FreightDoor2, ServiceElevDoors2, Black, 0.1, left, 0.3, 3.918 + 0.1, -1.125, 3.918 + 0.1, 0, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, FreightDoor3, ServiceElevDoors, Black, 0.1, right, 0.3, 3.918 + 0.1, 0, 3.918 + 0.1, 1.125, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, FreightDoor4, ServiceElevDoors, Black, 0.1, right, 0.3 / 2, 3.918, 1.125, 3.918, 2.25, 8, 0, 0, 0, 0, 0
     FinishDoors 1
-    AddShaftDoorsComponent 1, FreightShaftDoor1, ServiceElevDoors2, Black, 0.1, left, 0.3 / 2, 4.128 + 0.1, -2.25, 4.128 + 0.1, -1.125, 8, 0, 0, 0, 0, 0
-    AddShaftDoorsComponent 1, FreightShaftDoor2, ServiceElevDoors2, Black, 0.1, left, 0.3, 4.128, -1.125, 4.128, 0, 8, 0, 0, 0, 0, 0
-    AddShaftDoorsComponent 1, FreightShaftDoor3, ServiceElevDoors, Black, 0.1, right, 0.3, 4.128, 0, 4.128, 1.125, 8, 0, 0, 0, 0, 0
-    AddShaftDoorsComponent 1, FreightShaftDoor4, ServiceElevDoors, Black, 0.1, right, 0.3 / 2, 4.128 + 0.1, 1.125, 4.128 + 0.1, 2.25, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor1, ServiceElevDoors, Black, 0.1, left, 0.3 / 2, 4.218 + 0.1, -2.25, 4.218 + 0.1, -1.125, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor2, ServiceElevDoors, Black, 0.1, left, 0.3, 4.218, -1.125, 4.218, 0, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor3, ServiceElevDoors2, Black, 0.1, right, 0.3, 4.218, 0, 4.218, 1.125, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor4, ServiceElevDoors2, Black, 0.1, right, 0.3 / 2, 4.218 + 0.1, 1.125, 4.218 + 0.1, 2.25, 8, 0, 0, 0, 0, 0
     FinishShaftDoors 1
 
     #AddDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, 3.918, 0, 4.5, 8, false, 0, 0 #doors
@@ -6974,35 +6978,221 @@ DrawWalls = true, true, false, false, false, false
     DrawWalls = true, false, false, false, false, false
     
     #zone 1 locals 2-14
-    AddWall Panel, ElevExtPanels, 0, -27.67 - 0.5, 13.5 - 0.25 - 0.01, -27.67 + 0.5, 13.5 - 0.25 - 0.01, 2, 2, 4, 4, 0, 0, False
-    AddFloorIndicator 13, false, front, -27.67 - 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5.5 - 0.175
-    AddFloorIndicator 14, false, front, -27.67 - 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5 - 0.175
-    AddFloorIndicator 15, false, front, -27.67 - 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 4.5 - 0.175
-    AddFloorIndicator 16, false, front, -27.67 + 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5.5 - 0.175
-    AddFloorIndicator 17, false, front, -27.67 + 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5 - 0.175
-    AddFloorIndicator 18, false, front, -27.67 + 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 4.5 - 0.175
+    AddWall Panel, ElevExtPanels, 0, -27.67 - 0.7, 13.5 - 0.25 - 0.01, -27.67 + 0.7, 13.5 - 0.25 - 0.01, 2, 2, 4, 4, 0, 0, False
+    AddFloorIndicator 13, false, front, -27.67 - 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5.5 - 0.15
+    AddFloorIndicator 14, false, front, -27.67 - 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5 - 0.15
+    AddFloorIndicator 15, false, front, -27.67 - 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 4.5 - 0.15
+    AddFloorIndicator 16, false, front, -27.67 + 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5.5 - 0.15
+    AddFloorIndicator 17, false, front, -27.67 + 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 5 - 0.15
+    AddFloorIndicator 18, false, front, -27.67 + 0.25, 13.5 - 0.25 - 0.02, 0.35, 0.3, 4.5 - 0.15
+    AddDirectionalIndicator 13, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -27.67 - 0.54, 13.5 - 0.25 - 0.02, 5.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 14, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -27.67 - 0.54, 13.5 - 0.25 - 0.02, 5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 15, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -27.67 - 0.54, 13.5 - 0.25 - 0.02, 4.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 16, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -27.67 + 0.54, 13.5 - 0.25 - 0.02, 5.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 17, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -27.67 + 0.54, 13.5 - 0.25 - 0.02, 5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 18, false, true, true, true, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -27.67 + 0.54, 13.5 - 0.25 - 0.02, 4.5 - 0.1, front, 0.2, 0.2, true, 0, 0
     
     #zone 1 locals 15-26
-    AddWall Panel, ElevExtPanels, 0, 27.67 - 0.5, 18.08 - 4.75 - 0.33 - 0.01, 27.67 + 0.5, 18.08 - 4.75 - 0.33 - 0.01, 2, 2, 4, 4, 0, 0, False
-    AddFloorIndicator 7, false, front, 27.67 - 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5.5 - 0.175
-    AddFloorIndicator 8, false, front, 27.67 - 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.175
-    AddFloorIndicator 9, false, front, 27.67 - 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 4.5 - 0.175
-    AddFloorIndicator 10, false, front, 27.67 + 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5.5 - 0.175
-    AddFloorIndicator 11, false, front, 27.67 + 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.175
-    AddFloorIndicator 12, false, front, 27.67 + 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 4.5 - 0.175
+    AddWall Panel, ElevExtPanels, 0, 27.67 - 0.7, 18.08 - 4.75 - 0.33 - 0.01, 27.67 + 0.7, 18.08 - 4.75 - 0.33 - 0.01, 2, 2, 4, 4, 0, 0, False
+    AddFloorIndicator 7, false, front, 27.67 - 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5.5 - 0.15
+    AddFloorIndicator 8, false, front, 27.67 - 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.15
+    AddFloorIndicator 9, false, front, 27.67 - 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 4.5 - 0.15
+    AddFloorIndicator 10, false, front, 27.67 + 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5.5 - 0.15
+    AddFloorIndicator 11, false, front, 27.67 + 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.15
+    AddFloorIndicator 12, false, front, 27.67 + 0.25, 18.08 - 4.75 - 0.33 - 0.02, 0.35, 0.3, 4.5 - 0.15
+    AddDirectionalIndicator 7, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 27.67 - 0.54, 18.08 - 4.75 - 0.33 - 0.02, 5.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 8, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 27.67 - 0.54, 18.08 - 4.75 - 0.33 - 0.02, 5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 9, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 27.67 - 0.54, 18.08 - 4.75 - 0.33 - 0.02, 4.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 10, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 27.67 + 0.54, 18.08 - 4.75 - 0.33 - 0.02, 5.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 11, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 27.67 + 0.54, 18.08 - 4.75 - 0.33 - 0.02, 5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 12, false, true, true, true, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 27.67 + 0.54, 18.08 - 4.75 - 0.33 - 0.02, 4.5 - 0.1, front, 0.2, 0.2, true, 0, 0
     
     #zone 1 locals 27-37
-    AddWall Panel, ElevExtPanels, 0, -3 - 0.5, 14.29 - 0.01, -3 + 0.5, 14.29 - 0.01, 2, 2, 4, 4, 0, 0, False
-    AddFloorIndicator 1, false, front, -3 - 0.25, 14.29 - 0.02, 0.35, 0.3, 5.5 - 0.175
-    AddFloorIndicator 2, false, front, -3 - 0.25, 14.29 - 0.02, 0.35, 0.3, 5 - 0.175
-    AddFloorIndicator 3, false, front, -3 - 0.25, 14.29 - 0.02, 0.35, 0.3, 4.5 - 0.175
-    AddFloorIndicator 4, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 5.5 - 0.175
-    AddFloorIndicator 5, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 5 - 0.175
-    AddFloorIndicator 6, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 4.5 - 0.175
-    
+    AddWall Panel, ElevExtPanels, 0, -3 - 0.7, 14.29 - 0.01, -3 + 0.7, 14.29 - 0.01, 2, 2, 4, 4, 0, 0, False
+    AddFloorIndicator 1, false, front, -3 - 0.25, 14.29 - 0.02, 0.35, 0.3, 5.5 - 0.15
+    AddFloorIndicator 2, false, front, -3 - 0.25, 14.29 - 0.02, 0.35, 0.3, 5 - 0.15
+    AddFloorIndicator 3, false, front, -3 - 0.25, 14.29 - 0.02, 0.35, 0.3, 4.5 - 0.15
+    AddFloorIndicator 4, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 5.5 - 0.15
+    AddFloorIndicator 5, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 5 - 0.15
+    AddFloorIndicator 6, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 4.5 - 0.15
+    AddDirectionalIndicator 13, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 - 0.54, 14.29 - 0.02, 5.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 14, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 - 0.54, 14.29 - 0.02, 5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 15, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 - 0.54, 14.29 - 0.02, 4.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 16, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 + 0.54, 14.29 - 0.02, 5.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 17, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 + 0.54, 14.29 - 0.02, 5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 18, false, true, true, true, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 + 0.54, 14.29 - 0.02, 4.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+  
     SetAutoSize = true, true
 <EndFloor>
 
+<Function MainPanel>
+    #Main indicator panel
+    AddWall Panel, MainPanelBack, 0, -2.28, -4.75 + 42.71 - 0.33 - 0.01, 2.28, -4.75 + 42.71 - 0.33 - 0.01, 6.2, 6.2, 2.05, 2.05, 0, 0, False
+    
+    AddFloorIndicator 1, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 5) + 0.25
+    AddFloorIndicator 2, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 5) + 0.25
+    AddFloorIndicator 3, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 5) + 0.25
+    AddFloorIndicator 4, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 5) + 0.25
+    AddFloorIndicator 5, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 5) + 0.25
+    AddFloorIndicator 6, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 5) + 0.25
+    AddDirectionalIndicator 1, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 5) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 2, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 5) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 3, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 5) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 4, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 5) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 5, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 5) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 6, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 5) + 0.3, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 7, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 4) + 0.25
+    AddFloorIndicator 8, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 4) + 0.25
+    AddFloorIndicator 9, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 4) + 0.25
+    AddFloorIndicator 10, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 4) + 0.25
+    AddFloorIndicator 11, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 4) + 0.25
+    AddFloorIndicator 12, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 4) + 0.25
+    AddDirectionalIndicator 7, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 4) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 8, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 4) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 9, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 4) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 10, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 4) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 11, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 4) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 12, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 4) + 0.3, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 13, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 3) + 0.25
+    AddFloorIndicator 14, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 3) + 0.25
+    AddFloorIndicator 15, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 3) + 0.25
+    AddFloorIndicator 16, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 3) + 0.25
+    AddFloorIndicator 17, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 3) + 0.25
+    AddFloorIndicator 18, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 3) + 0.25
+    AddDirectionalIndicator 13, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 3) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 14, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 3) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 15, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 3) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 16, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 3) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 17, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 3) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 18, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 3) + 0.3, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 19, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 2) + 0.25
+    AddFloorIndicator 20, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 2) + 0.25
+    AddFloorIndicator 21, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 2) + 0.25
+    AddFloorIndicator 22, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 2) + 0.25
+    AddFloorIndicator 23, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 2) + 0.25
+    AddFloorIndicator 24, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 2) + 0.25
+    AddDirectionalIndicator 19, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 2) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 20, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 2) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 21, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 2) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 22, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 2) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 23, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 2) + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 24, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + (0.5 * 2) + 0.3, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 25, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.5 + 0.25
+    AddFloorIndicator 26, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.5 + 0.25
+    AddFloorIndicator 27, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.5 + 0.25
+    AddFloorIndicator 28, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.5 + 0.25
+    AddFloorIndicator 29, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.5 + 0.25
+    AddFloorIndicator 30, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.5 + 0.25
+    AddDirectionalIndicator 25, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.5 + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 26, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.5 + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 27, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.5 + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 28, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.5 + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 29, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.5 + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 30, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.5 + 0.3, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 31, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.25
+    AddFloorIndicator 32, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.25
+    AddFloorIndicator 33, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.25
+    AddFloorIndicator 34, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.25
+    AddFloorIndicator 35, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.25
+    AddFloorIndicator 36, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + 0.25
+    AddDirectionalIndicator 31, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 32, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 33, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 34, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 35, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.3, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 36, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 + 0.3, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 37, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.25
+    AddFloorIndicator 38, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.25
+    AddFloorIndicator 39, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.25
+    AddFloorIndicator 40, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.25
+    AddFloorIndicator 41, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.25
+    AddFloorIndicator 42, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.25
+    AddDirectionalIndicator 37, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 38, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 39, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 40, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 41, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 42, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.2, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 43, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.5 - 0.25
+    AddFloorIndicator 44, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.5 - 0.25
+    AddFloorIndicator 45, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.5 - 0.25
+    AddFloorIndicator 46, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.5 - 0.25
+    AddFloorIndicator 47, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.5 - 0.25
+    AddFloorIndicator 48, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - 0.5 - 0.25
+    AddDirectionalIndicator 43, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.5 - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 44, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.5 - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 45, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.5 - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 46, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.5 - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 47, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.5 - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 48, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - 0.5 - 0.2, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 49, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 2) - 0.25
+    AddFloorIndicator 50, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 2) - 0.25
+    AddFloorIndicator 51, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 2) - 0.25
+    AddFloorIndicator 52, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 2) - 0.25
+    AddFloorIndicator 53, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 2) - 0.25
+    AddFloorIndicator 54, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 2) - 0.25
+    AddDirectionalIndicator 49, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 2) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 50, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 2) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 51, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 2) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 52, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 2) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 53, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 2) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 54, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 2) - 0.2, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 55, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 3) - 0.25
+    AddFloorIndicator 56, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 3) - 0.25
+    AddFloorIndicator 57, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 3) - 0.25
+    AddFloorIndicator 58, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 3) - 0.25
+    AddFloorIndicator 59, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 3) - 0.25
+    AddFloorIndicator 60, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 3) - 0.25
+    AddDirectionalIndicator 55, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 3) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 56, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 3) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 57, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 3) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 58, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 3) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 59, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 3) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 60, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 3) - 0.2, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 61, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 4) - 0.25
+    AddFloorIndicator 62, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 4) - 0.25
+    AddFloorIndicator 63, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 4) - 0.25
+    AddFloorIndicator 64, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 4) - 0.25
+    AddFloorIndicator 65, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 4) - 0.25
+    AddFloorIndicator 66, false, front, (0.765 * 2) + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 4) - 0.25
+    AddDirectionalIndicator 61, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 4) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 62, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 4) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 63, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 4) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 64, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 4) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 65, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 4) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 66, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (0.765 * 2) + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 4) - 0.2, front, 0.2, 0.2, true, 0, 0
+
+    AddFloorIndicator 67, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 5) - 0.25
+    AddFloorIndicator 68, false, front, -0.765 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 5) - 0.25
+    AddFloorIndicator 69, false, front, -0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 5) - 0.25
+    AddFloorIndicator 70, false, front, 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 5) - 0.25
+    AddFloorIndicator 71, false, front, 0.765 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 - (0.5 * 5) - 0.25
+    AddDirectionalIndicator 67, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, (-0.765 * 2) - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 5) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 68, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.765 - 0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 5) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 69, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -0.275 - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 5) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 70, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 5) - 0.2, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 71, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, 0.765 + 0.275 + 0.275, -4.75 + 42.71 - 0.33 - 0.02, 5 - (0.5 * 5) - 0.2, front, 0.2, 0.2, true, 0, 0
+<EndFunction>
+
+<Floors -8 to 141>
+if[%floor% = -8] MainPanel()
+if[%floor% = 0] MainPanel()
+if[%floor% = 38] MainPanel()
+if[%floor% = 39] MainPanel()
+if[%floor% = 79] MainPanel()
+if[%floor% = 119] MainPanel()
+if[%floor% = 141] MainPanel()
+<EndFloors>
 
 #Elevator signs
 WallOrientation = center
@@ -7168,7 +7358,7 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 1, StairsLower1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
     AddStairs 1, StairsUpper1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708 - 0.43, 4.5, -5, 0, 0, 1, 1
     AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
