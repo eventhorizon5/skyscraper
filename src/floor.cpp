@@ -464,9 +464,9 @@ Object* Floor::AddDoor(const char *texture, float thickness, int direction, floa
 
 	//cut area
 	if (direction < 5)
-		Cut(csVector3(x1 - 1, GetBase(true) + voffset, z1), csVector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false, true);
+		CutAll(csVector3(x1 - 1, GetBase(true) + voffset, z1), csVector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
 	else
-		Cut(csVector3(x1, GetBase(true) + voffset, z1 - 1), csVector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false, true);
+		CutAll(csVector3(x1, GetBase(true) + voffset, z1 - 1), csVector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
 	csString floornum = _itoa(Number, intbuffer, 10);
@@ -658,7 +658,7 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	{
 		//door faces left/right
 		x1 = CenterX - depth1;
-		x2 = CenterX + depth1;
+		x2 = CenterX + depth2;
 		z1 = CenterZ - (width / 2);
 		z2 = CenterZ + (width / 2);
 	}
@@ -668,9 +668,13 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 		x1 = CenterX - (width / 2);
 		x2 = CenterX + (width / 2);
 		z1 = CenterZ - depth1;
-		z2 = CenterZ + depth1;
+		z2 = CenterZ + depth2;
 	}
 
+	//perform a cut in the area
+	CutAll(csVector3(x1, GetBase(true) + voffset, z1), csVector3(x2, GetBase(true) + voffset + height, z2), true, false);
+
+	//create walls
 	sbs->DrawWalls(false, true, false, false, false, false);
 	if (direction == false)
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, false);
