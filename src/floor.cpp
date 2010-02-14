@@ -445,6 +445,12 @@ Object* Floor::AddDoor(const char *texture, float thickness, int direction, floa
 {
 	//interface to the SBS AddDoor function
 
+	if (direction > 8 | direction < 1)
+	{
+		ReportError("Door direction out of range");
+		return 0;
+	}
+
 	float x1, z1, x2, z2;
 	//set up coordinates
 	if (direction < 5)
