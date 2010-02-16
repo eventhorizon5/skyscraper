@@ -348,8 +348,11 @@ bool SBS::Start()
 	}
 
 	//turn on start floor
-	GetFloor(camera->StartFloor)->Enabled(true);
-	GetFloor(camera->StartFloor)->EnableGroup(true);
+	if (GetFloor(camera->StartFloor))
+	{
+		GetFloor(camera->StartFloor)->Enabled(true);
+		GetFloor(camera->StartFloor)->EnableGroup(true);
+	}
 
 	return true;
 }
@@ -1772,6 +1775,9 @@ int SBS::CreateSky(const char *filenamebase)
 int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
 {
 	//Returns floor number located at a specified altitude
+
+	if (TotalFloors() == 0)
+		return 0;
 
 	//check to see if altitude is below bottom floor
 	if (altitude < GetFloor(-Basements)->Altitude)
@@ -3458,17 +3464,20 @@ bool SBS::GetTextureForce(const char *texture, bool &enable_force, bool &force_m
 void SBS::EnableMesh(csRef<iMeshWrapper> mesh, bool value)
 {
 	//enables or disables a mesh
-	if (value == true)
+	if (mesh)
 	{
-		mesh->GetFlags().Reset(CS_ENTITY_INVISIBLEMESH);
-		mesh->GetFlags().Reset(CS_ENTITY_NOSHADOWS);
-		mesh->GetFlags().Reset(CS_ENTITY_NOHITBEAM);
-	}
-	else
-	{
-		mesh->GetFlags().Set(CS_ENTITY_INVISIBLEMESH);
-		mesh->GetFlags().Set(CS_ENTITY_NOSHADOWS);
-		mesh->GetFlags().Set(CS_ENTITY_NOHITBEAM);
+		if (value == true)
+		{
+			mesh->GetFlags().Reset(CS_ENTITY_INVISIBLEMESH);
+			mesh->GetFlags().Reset(CS_ENTITY_NOSHADOWS);
+			mesh->GetFlags().Reset(CS_ENTITY_NOHITBEAM);
+		}
+		else
+		{
+			mesh->GetFlags().Set(CS_ENTITY_INVISIBLEMESH);
+			mesh->GetFlags().Set(CS_ENTITY_NOSHADOWS);
+			mesh->GetFlags().Set(CS_ENTITY_NOHITBEAM);
+		}
 	}
 }
 
