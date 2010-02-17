@@ -3373,6 +3373,12 @@ bool SBS::UnregisterCallButtonCallback(CallButton *button)
 void SBS::ProcessTextureFlip(float tw, float th)
 {
 	//process texture flip info
+
+	if (tw == 0)
+		tw = 1;
+	if (th == 0)
+		th = 1;
+
 	for (int i = 0; i <= 5; i++)
 	{
 		widthscale[i] = tw;
