@@ -317,7 +317,7 @@ void DebugPanel::Timer::Notify()
 	if (ee->IsShown() == true)
 		ee->Loop();
 
-	if (mc->IsShown() == true)
+	if (mc->IsShown() == true && Simcore->GetFloor(Simcore->camera->CurrentFloor))
 	{
 		mc->chkFloor->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsEnabled);
 		mc->chkColumnFrame->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsColumnFrameEnabled);

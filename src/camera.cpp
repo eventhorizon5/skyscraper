@@ -180,7 +180,6 @@ csVector3 Camera::GetRotation()
 
 void Camera::UpdateCameraFloor()
 {
-
 	int newlastfloor;
 
 	if (lastfloorset == true)
@@ -189,13 +188,14 @@ void Camera::UpdateCameraFloor()
 		newlastfloor = sbs->GetFloorNumber(GetPosition().y);
 
 	//if camera moved to a different floor, update floor indicators
-	if (lastfloor != newlastfloor)
+	if ((lastfloor != newlastfloor) && sbs->GetFloor(newlastfloor))
 		sbs->GetFloor(newlastfloor)->UpdateFloorIndicators();
 
 	lastfloor = newlastfloor;
 	lastfloorset = true;
 	CurrentFloor = lastfloor;
-	CurrentFloorID = sbs->GetFloor(CurrentFloor)->ID;
+	if (sbs->GetFloor(CurrentFloor))
+		CurrentFloorID = sbs->GetFloor(CurrentFloor)->ID;
 }
 
 bool Camera::Move(const csVector3 &vector, float speed)
@@ -235,7 +235,8 @@ csVector3 Camera::GetStartRotation()
 
 void Camera::SetToStartPosition()
 {
-	SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->GetBase() + cfg_body_height + cfg_legs_height, StartPositionZ));
+	if (sbs->GetFloor(StartFloor))
+		SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->GetBase() + cfg_body_height + cfg_legs_height, StartPositionZ));
 }
 
 void Camera::SetToStartDirection()

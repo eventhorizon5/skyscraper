@@ -2702,7 +2702,6 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% > -2 & %floor% < 79] AddWall Shaft17BackE, %5%, 0.33, -4.33, 4.75 + 42.71, 4.33, 4.75 + 42.71, %3%, %3%, %4%, %4%, 0, 0, False
     if[%floor% < -1] AddWall Shaft17BackE, %5%, 0.33, -4.33, 4.75 + 42.71, 4.33 + 0.33, 4.75 + 42.71, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = center
-    <break>
     if[%floor% = -8] AddDoor StairsDoor, 0.2, 3, 4.33, 42.71, 3.5, 8, 0, 1, 1
     if[%floor% = -8] AddFillerWalls ConnectionWall, 0.66, 4.33, 42.71, 3.5, 8, 0, false, 0, 0
 
