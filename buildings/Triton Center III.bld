@@ -32,7 +32,7 @@
     Description = This project is focused on realism, code organization, and efficiency.
     Version = 1
     HorizScale = 1
-    CameraFloor = 88
+    CameraFloor = 44
     CameraPosition = 0, -30
     CameraRotation = 0, 0, 0
 <EndGlobals>
@@ -279,39 +279,39 @@
     AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
     
     #Floor Indicator
-    AddTextRange 1, 166, Black, Ind_Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonM, nimbus_sans.ttf, 47, M, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonMU, nimbus_sans.ttf, 47, MU, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonRF, nimbus_sans.ttf, 47, RF, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonRP, nimbus_sans.ttf, 47, RP, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonP1, nimbus_sans.ttf, 47, P1, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonP2, nimbus_sans.ttf, 47, P2, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonP3, nimbus_sans.ttf, 47, P3, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonP4, nimbus_sans.ttf, 47, P4, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonP5, nimbus_sans.ttf, 47, P5, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonP6, nimbus_sans.ttf, 47, P6, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonP7, nimbus_sans.ttf, 47, P7, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonIC, nimbus_sans.ttf, 47, IC, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonSB, nimbus_sans.ttf, 47, SB, -1, -1, -1, -1, right, center, 0, 255, 0
-    AddText Black, Ind_ButtonEZ, nimbus_sans.ttf, 47, EZ, -1, -1, -1, -1, right, center, 0, 255, 0
+    AddTextRange 1, 166, Black, Ind_Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonM, nimbus_sans.ttf, 47, M, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonMU, nimbus_sans.ttf, 47, MU, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonRF, nimbus_sans.ttf, 47, RF, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonRP, nimbus_sans.ttf, 47, RP, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonP1, nimbus_sans.ttf, 47, P1, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonP2, nimbus_sans.ttf, 47, P2, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonP3, nimbus_sans.ttf, 47, P3, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonP4, nimbus_sans.ttf, 47, P4, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonP5, nimbus_sans.ttf, 47, P5, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonP6, nimbus_sans.ttf, 47, P6, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonP7, nimbus_sans.ttf, 47, P7, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonIC, nimbus_sans.ttf, 47, IC, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonSB, nimbus_sans.ttf, 47, SB, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonEZ, nimbus_sans.ttf, 47, EZ, -1, -1, -1, -1, center, center, 0, 255, 0
 
-    #AddTextRange 1, 166, Black, Ind_Button%number%, otis.ttf, 72, %number%, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonL, otis.ttf, 72, L, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonM, otis.ttf, 72, M, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonMU, otis.ttf, 72, MU, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonRF, otis.ttf, 72, RF, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonRP, otis.ttf, 72, RP, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP1, otis.ttf, 72, P1, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP2, otis.ttf, 72, P2, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP3, otis.ttf, 72, P3, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP4, otis.ttf, 72, P4, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP5, otis.ttf, 72, P5, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP6, otis.ttf, 72, P6, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP7, otis.ttf, 72, P7, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonIC, otis.ttf, 72, IC, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonSB, otis.ttf, 72, SB, -1, -1, -1, -1, right, center, 0, 255, 0
-    #AddText Black, Ind_ButtonEZ, otis.ttf, 72, EZ, -1, -1, -1, -1, right, center, 0, 255, 0
+    #AddTextRange 1, 166, Black, Ind_Button%number%, otis.ttf, 72, %number%, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonL, otis.ttf, 72, L, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonM, otis.ttf, 72, M, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonMU, otis.ttf, 72, MU, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonRF, otis.ttf, 72, RF, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonRP, otis.ttf, 72, RP, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonP1, otis.ttf, 72, P1, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonP2, otis.ttf, 72, P2, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonP3, otis.ttf, 72, P3, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonP4, otis.ttf, 72, P4, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonP5, otis.ttf, 72, P5, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonP6, otis.ttf, 72, P6, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonP7, otis.ttf, 72, P7, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonIC, otis.ttf, 72, IC, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonSB, otis.ttf, 72, SB, -1, -1, -1, -1, center, center, 0, 255, 0
+    #AddText Black, Ind_ButtonEZ, otis.ttf, 72, EZ, -1, -1, -1, -1, center, center, 0, 255, 0
 <EndTextures>
 
 Set 1 = 110 #building x length
@@ -778,6 +778,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall1, %4%, 0.66, -77.48 - 4.25 - 0.33, -11.33, -15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
     TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
     AddWall Wall1, %4%, 0.66, -15.83, -11.33, 15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall40, %4%, 0.66, 33, -11.33, 33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
@@ -800,6 +801,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall33, %4%, 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall36, %4%, 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -10.17 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall38, %4%, 0.33, -22.66 - 4.25 - 0.33, 43.66 + 10.67, -10.17 - 4.25 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall39, %4%, 0.33, 53.65 + 4.25, -11.33, 53.65 + 4.25, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
@@ -810,7 +812,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall14, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall15, %4%, 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, -11.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall20, %4%, 0.33, -24.33 - 5.92 - 0.33, 11.33, -22.66 - 4.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
@@ -826,6 +828,10 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     WallOrientation = center
     AddDoor Door9b, 0.2, 4, -31.415, -15.83, 3.5, 8, 0, 1, 1
     AddDoor Door9b, 0.2, 2, -27.075, 36.565, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 2, 33, -5.415, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 1, 53.65 + 4.25 + 0.165, -5.415, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.66, 33, -5.415, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 53.65 + 4.25 + 0.165, -5.415, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -31.415, -15.83, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -27.075, 36.565, 3.5, 8, 0, false, 0, 0
 <EndFloor>
@@ -837,6 +843,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall1, %4%, 0.66, -77.48 - 4.25 - 0.33, -11.33, -15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
     TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
     AddWall Wall1, %4%, 0.66, -15.83, -11.33, 15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall40, %4%, 0.66, 33, -11.33, 33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
@@ -859,6 +866,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall33, %4%, 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall36, Concrete1, 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -10.17 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall38, Concrete1, 0.33, -24.33 - 5.92 - 0.33, 43.66 + 10.67, -10.17 - 4.25 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall39, %4%, 0.33, 43.99 + 5.25, -11.33, 43.99 + 5.25, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
 
     WallOrientation = right
@@ -872,7 +880,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     #AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     #AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 5.75 - 5.25 - 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, -11.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall20, Concrete1, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
@@ -885,6 +893,10 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
 
     WallOrientation = center
     AddDoor Door9b, 0.2, 4, -31.415, -15.83, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 2, 33, -5.415, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 1, 43.99 + 5.25 + 0.165, -5.415, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.66, 33, -5.415, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 43.99 + 5.25 + 0.165, -5.415, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -31.415, -15.83, 3.5, 8, 0, false, 0, 0
 <EndFloors>
 
@@ -895,6 +907,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall1, %4%, 0.66, -57.83 - 5.25 - 0.33, -11.33, -15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
     TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
     AddWall Wall1, %4%, 0.66, -15.83, -11.33, 15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall40_2, %4%, 0.66, 33, -11.33, 33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
@@ -916,6 +929,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall36, Concrete1, 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -10.17 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall38, Concrete1, 0.33, -24.33 - 5.92 - 0.33, 43.66 + 10.67, -0.08 - 5.5 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall40, Concrete1, 0.33, -0.08 - 5.5 - 0.33, 48.745 + 5.225 + 0.66, -0.08 - 5.5 - 0.33, 37.91 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall39_2, %4%, 0.33, 43.99 + 5.25, -11.33, 43.99 + 5.25, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
 
     WallOrientation = right
@@ -928,7 +942,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     #AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     #AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 5.75 - 5.25 - 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, -11.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall20, Concrete1, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
@@ -944,6 +958,10 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     WallOrientation = center
     AddDoor Door9b, 0.2, 4, -31.415, -15.83, 3.5, 8, 0, 1, 1
     AddDoor ServiceDoor1, 0.2, 4, -14.585, 48.73, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 2, 33, -5.415, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 1, 43.99 + 5.25 + 0.165, -5.415, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.66, 33, -5.415, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 43.99 + 5.25 + 0.165, -5.415, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -14.585, 48.73, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -31.415, -15.83, 3.5, 8, 0, false, 0, 0
 <EndFloors>
@@ -955,6 +973,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall1, %4%, 0.66, -57.83 - 5.25 - 0.33, -11.33, -15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
     TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
     AddWall Wall1, %4%, 0.66, -15.83, -11.33, 15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall40_2, %4%, 0.66, 33, -11.33, 33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
@@ -974,6 +993,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall36, Concrete1, 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -10.17 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall38, Concrete1, 0.33, -24.33 - 5.92 - 0.33, 43.66 + 10.67, -0.08 - 5.5 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall40, Concrete1, 0.33, -0.08 - 5.5 - 0.33, 48.745 + 5.225 + 0.66, -0.08 - 5.5 - 0.33, 37.91 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall39_2, %4%, 0.33, 43.99 + 5.25, -11.33, 43.99 + 5.25, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
 
     WallOrientation = right
@@ -985,7 +1005,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     #AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     #AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 5.75 - 5.25 - 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, -11.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall20, Concrete1, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
@@ -1001,6 +1021,10 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     WallOrientation = center
     AddDoor Door9b, 0.2, 4, -31.415, -15.83, 3.5, 8, 0, 1, 1
     AddDoor ServiceDoor1, 0.2, 4, -14.585, 48.73, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 2, 33, -5.415, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 1, 43.99 + 5.25 + 0.165, -5.415, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.66, 33, -5.415, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 43.99 + 5.25 + 0.165, -5.415, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -14.585, 48.73, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -31.415, -15.83, 3.5, 8, 0, false, 0, 0
 <EndFloors>
@@ -1008,10 +1032,11 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
 <Floors 34 to 41>
     WallOrientation = center
     DrawWalls = true, true, false, false, false, false
-    AddWall Wall1, %4%, 0.66, 15.83, -11.33, 15.83 + 6.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, %4%, 0.66, 15.83, -11.33, 43.99 + 5.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall1, %4%, 0.66, -57.83 - 5.25 - 0.33, -11.33, -15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
     TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
     AddWall Wall1, %4%, 0.66, -15.83, -11.33, 15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall40_2, %4%, 0.66, 33, -11.33, 33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
@@ -1031,6 +1056,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall36, Concrete1, 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -10.17 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall38, Concrete1, 0.33, -24.33 - 5.92 - 0.33, 43.66 + 10.67, -0.08 - 5.5 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall40, Concrete1, 0.33, -0.08 - 5.5 - 0.33, 48.745 + 5.225 + 0.66, -0.08 - 5.5 - 0.33, 37.91 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall39_2, %4%, 0.33, 43.99 + 5.25, -11.33, 43.99 + 5.25, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
 
     WallOrientation = right
@@ -1042,7 +1068,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     #AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     #AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 5.75 - 5.25 - 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, -11.66, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall20, Concrete1, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
@@ -1058,6 +1084,10 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     WallOrientation = center
     AddDoor Door9b, 0.2, 4, -31.415, -15.83, 3.5, 8, 0, 1, 1
     AddDoor ServiceDoor1, 0.2, 4, -14.585, 48.73, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 2, 33, -5.415, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 1, 43.99 + 5.25 + 0.165, -5.415, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.66, 33, -5.415, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 43.99 + 5.25 + 0.165, -5.415, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -14.585, 48.73, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -31.415, -15.83, 3.5, 8, 0, false, 0, 0
 <EndFloors>
@@ -1172,28 +1202,28 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall2, %4%, 0.33, -47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall3, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -27 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall4, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    #AddWall Wall5, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall7, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 43.99 + 5.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall8, %4%, 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall9, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.66, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
-    #AddWall Wall25, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall11, %4%, 0.33, 15.83 + 6.25 + 0.33, -33.5 - 5 - 0.33, 32.74 + 10 + 0.33, -33.5 - 5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall26, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall28, %4%, 0.33, -47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall29, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall31, %4%, 0.33, -11.83 - 6.25 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall33, %4%, 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall38, %4%, 0.33, -24.33 - 5.92 - 0.33, 43.66 + 10.67, -11.83 - 6.25 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall39, %4%, 0.33, 43.99 + 5.25, -11.33, 43.99 + 5.25, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    #AddWall Wall11, %4%, 0.33, 47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, 47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall12, %4%, 0.33, 15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, 15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12A, %4%, 0.33, 15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, 15.83 + 6.25 + 0.33, -33.5 - 5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12B, %4%, 0.33, 15.83 + 6.25 + 0.33, -33.5 + 5 + 0.33, 15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall13, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall14, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    #AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    #AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 5.75 - 5.25 - 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall17, %4%, 0.33, 15.83 + 6.25 + 0.33, -33.5 + 5 + 0.33, 32.74 + 10 + 0.33, -33.5 + 5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall18, %4%, 0.33, 32.74 + 10 + 0.33, -33.5 - 5 - 0.33, 32.74 + 10 + 0.33, -33.5 + 5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, -11.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall20, %4%, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
@@ -1203,8 +1233,17 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall34, %4%, 0.33, -27 - 4.25, -34.16 + 13.5 + 0.33, -27 - 4.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall37, %4%, 0.33, -24.33 - 5.92, 11.33, -24.33 - 5.92, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
 
+
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall40, %4%, 0.33, 32.74 + 10 + 0.33, -33.5 + 5 + 0.33, 43.99 + 5.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall Wall5, %4%, 0.33, 44.07 + 5 + 0.33, 10.5 - 10 - 0.33, %1%, -0.165, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall25, %4%, 0.33, -%1%, -0.165, -57.83 - 5.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+
     WallOrientation = center
     AddDoor ServiceDoor1, 0.2, 4, -31.415, -15.83, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 1, 43.99 + 5.25 + 0.165, -5.415, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 43.99 + 5.25 + 0.165, -5.415, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -31.415, -15.83, 3.5, 8, 0, false, 0, 0
 
     #Core Walls
@@ -1261,6 +1300,92 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall RightVentsInt, VentsInt, 0, %1%, -%2%, %1%, %2%, %height%, %height%, 0, 0, 5, 1, False
     AddWall BackVentsInt, VentsInt, 0, -%1%, %2%, %1%, %2%, %height%, %height%, 0, 0, 5, 1, False
     SetAutoSize = true, true
+
+    #Interior Walls
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, %4%, 0.33, -40.74 - 18 - 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall2, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 40.74 + 18 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall6, %4%, 0.33, 32.74 + 10 + 0.33, -23.59 - 4.25 - 0.33, 40.74 + 18 + 0.33, -23.59 - 4.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall11, %4%, 0.33, -15.83 + 6.25 + 0.33, -11.33, 15.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, %4%, 0.33, 11.83 - 6.25 - 0.33, -11.33, 11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, 4.75 - 4.25 - 0.33, 57.4 + 18 + 0.33, 4.75 - 4.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall21, %4%, 0.33, 43.99 - 5.25 - 0.33, 11.33, 43.99 - 5.25 - 0.33, 14.16 + 4.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall25, %4%, 0.33, -11.83 - 6.25 - 0.33, 11.33, -11.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall27A, %4%, 0.33, -41.25 + 10.67, 0.33, -41.25 + 10.67, 10, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall27B, %4%, 0.33, -41.25 + 10.67, 10, -41.25 + 10.67, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall33, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.33, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall34, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.33, -15.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall35, %4%, 0.33, -15.83 - 6.25 - 0.33, -43.41 + 4.25 + 0.33, -15.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall37, %4%, 0.33, -40.74 - 18 - 0.33, -43.41 - 4.25 - 0.33, -40.74 - 18 - 0.33, -43.41 + 4.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall40A, %4%, 0.33, -11.83 - 6.25 - 0.33, 33.33, -11.83 - 6.25 - 0.33, 48.745 + 5.225 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall40B, %4%, 0.33, -11.83 - 6.25 - 0.33, 32.405 - 10.625 - 0.33, -11.83 - 6.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall41, %4%, 0.33, -11.83 - 6.25 - 0.33, 32.405 - 10.625 - 0.33, 5.75 + 11.33 + 0.33, 32.405 - 10.625 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall43, %4%, 0.33, 43.99 - 5.25 - 0.33, 48.745 - 5.225 - 0.33, 5.75 + 11.33 + 0.33, 48.745 - 5.225 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall44, %4%, 0.33, 43.99 - 5.25 - 0.33, 43.33 - 10.67 - 0.33, 43.99 - 5.25 - 0.33, 48.745 - 5.225 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall45, %4%, 0.33, 43.99 - 5.25 - 0.33, 43.33 - 10.67 - 0.33, 43.99 + 5.25 + 0.33, 43.33 - 10.67 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall46, %4%, 0.33, 43.99 + 5.25, 14.16 + 4.5 + 0.33, 43.99 + 5.25, 43.33 - 10.67 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall Wall, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall3, %4%, 0.33, 40.74 + 18 + 0.33, -29.66 - 18 - 0.33, 40.74 + 18 + 0.33, -43.41 + 4.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, 32.74 + 10 + 0.33, -43.41 + 4.25 + 0.33, 40.74 + 18 + 0.33, -43.41 + 4.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall5, %4%, 0.33, 32.74 + 10 + 0.33, -43.41 + 4.25 + 0.33, 32.74 + 10 + 0.33, -23.59 - 4.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall7, %4%, 0.33, 40.74 + 18 + 0.33, -23.59 - 4.25 - 0.33, 40.74 + 18 + 0.33, -23.59 + 4.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8, %4%, 0.33, 15.83 + 6.25 + 0.33, -23.59 + 4.25 + 0.33, 40.74 + 18 + 0.33, -23.59 + 4.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, %4%, 0.33, 15.83 + 6.25 + 0.33, -23.59 + 4.25 + 0.33, 15.83 + 6.25 + 0.33, -29.66 + 18 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall10, %4%, 0.33, 11.83 + 6.25 + 0.33, -29.66 + 18 + 0.33, 15.83 + 6.25 + 0.33, -29.66 + 18 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12, %4%, 0.33, -11.83 + 6.25 + 0.33, -11.33, -11.83 + 6.25 + 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall13, %4%, 0.33, -11.83 + 6.25 + 0.33, -11, 11.83 - 6.25 - 0.33, -11, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall15, %4%, 0.33, 11.83 + 6.25 + 0.33, -29.66 + 18 + 0.33, 11.83 + 6.25 + 0.33, 4.75 - 4.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall17, %4%, 0.33, 57.4 + 18 + 0.33, 4.75 - 4.25 - 0.33, 57.4 + 18 + 0.33, 4.75 + 4.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 4.75 + 4.25 + 0.33, 57.4 + 18 + 0.33, 4.75 + 4.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall20, %4%, 0.33, 43.99 - 5.25 - 0.33, 14.16 + 4.5 + 0.33, 43.99 + 5.25 + 0.33, 14.16 + 4.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall22A, %4%, 0.33, -11.83 - 6.25 - 0.33, 11.33, -11.83 + 6.25 + 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall22B, %4%, 0.33, 11.83 - 6.25 - 0.33, 11.33, 43.99 - 5.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall23A, %4%, 0.33, -41.25 + 10.67 + 0.33, -11.33, -41.25 + 10.67 + 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall23B, %4%, 0.33, -41.25 + 10.67 + 0.33, 11.33, -41.25 + 10.67 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall26, %4%, 0.33, -41.25 + 10.67 + 0.33, -11, -11.83 - 6.25 - 0.33, -11, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall29, %4%, 0.33, -47.42 + 4.5 + 0.33, 0.33, -41.25 + 10.67 + 0.33, 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall32, %4%, 0.33, -57.83 + 5.25 + 0.33, 5.16 + 4.5 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall36, %4%, 0.33, -40.74 - 18 - 0.33, -43.41 + 4.25 + 0.33, -15.83 - 6.25 - 0.33, -43.41 + 4.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall38, %4%, 0.33, 43.99 + 5.25 + 0.33, 4.75 + 4.25 + 0.33, 43.99 + 5.25 + 0.33, 48.745 + 5.225 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall39, %4%, 0.33, -11.83 - 6.25 - 0.33, 48.745 + 5.225 + 0.33, 43.99 + 5.25 + 0.33, 48.745 + 5.225 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall42, %4%, 0.33, 5.75 + 11.33 + 0.33, 32.405 - 10.625 - 0.33, 5.75 + 11.33 + 0.33, 48.745 - 5.225 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+
+    Drawwalls = true, true, false, false, false, false
+    AddWall Wall28, %4%, 0.33, -57.83 + 5.25 + 0.33, 10, -41.25 + 10.67 + 0.33, 10, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall31A, %4%, 0.33, -57.83 - 5.25 - 0.33, 33.33, -41.25 + 10.67 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall31B, %4%, 0.33, -41.25 + 10.67 + 0.33, 33.33, -11.83 - 6.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall48, %4%, 0.33, 43.99 + 5.25 + 0.33, 48.745 + 5.225 + 0.33, 66.165, %2%, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = center
+    AddWall Wall30, %4%, 0.33, -41.25, 0.33, -41.25, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall Wall19, %4%, 0.33, -66.165, %2%, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall24, %4%, 0.33, -%1%, -66.165, -40.74 - 18 - 0.33, -43.41 - 4.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall47, %4%, 0.33, 40.74 + 18 + 0.33, -43.41 - 4.25 - 0.33, %1%, -66.165, %height%, %height%, 0, 0, 0, 0, False
+
+    #Doors
+    WallOrientation = center
+    AddDoor ServiceDoor1, 0.2, 8, -24.33 - 1.75, 33.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 5, -24.33 + 1.75, 33.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 5, -24.33 - 1.75, -11.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 3, -30.415, 5.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 5, -41.25 - 2.25, 33.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 8, -41.25 + 2.25, 33.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 4, 43.99 + 5.25 + 0.165, 25.66 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 1, 43.99 + 5.25 + 0.165, 25.66 - 1.75, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 5, 1.75, -11.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 8, -1.75, -11.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 0, -11.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -24.33, 33.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -24.33 - 1.75, -11.165, 3.5, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -30.415, 5.165, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 43.99 + 5.25 + 0.165, 25.66, 7, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -41.25 + 2.25, 33.165, 3.5, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -41.25 - 2.25, 33.165, 3.5, 8, 0, true, 0, 0
 <EndFloor>
 
 #Zone 1 Interfloor
@@ -2223,6 +2348,8 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddDoor ServiceDoor1, 0.2, 1, -63.245, -29.83, 3.5, 8, 0, 1, 1
     AddDoor ServiceDoor1, 0.2, 3, -18.245, 18.14, 3.5, 8, 0, 1, 1
     AddDoor ServiceDoor1, 0.2, 2, -18.245, 14.64, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 4, 42.905, -12.25, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 1, 42.905, -15.75, 3.5, 8, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.33, 1.75, 0.335, 3.5, 8, 0, true, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -24.33, 54.135, 7, 8, 0, true, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -30.415, 5.165, 3.5, 8, 0, false, 0, 0
@@ -2233,6 +2360,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddFillerWalls ConnectionWall, 0.33, 69.735, -10.495, 7, 8, 0, true, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -63.245, -28.08, 7, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -18.245, 16.39, 7, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 42.905, -14, 7, 8, 0, false, 0, 0
 <EndFloor>
 
 <Floor 89>
@@ -4883,6 +5011,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 10
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, 13.5, 14
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -4913,6 +5043,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 10
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, 4.5, 7
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -4943,6 +5075,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 10
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, -4.5, 8
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -4973,6 +5107,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 10
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, -13.5, 15
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5075,6 +5211,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 11
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, 13.5, 7
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5105,6 +5243,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 11
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, 4.5, 0
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5135,6 +5275,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 11
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, -4.5, 9
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5165,6 +5307,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 11
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, -13.5, 16
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5304,6 +5448,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 6
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, 13.5, 22
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5333,6 +5479,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 6
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, 4.5, 25
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5363,6 +5511,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 6
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, -4.5, 30
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5393,6 +5543,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 6
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, -13.5, 23
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5494,6 +5646,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 7
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, 13.5, 0
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5522,6 +5676,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 7
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, 4.5, 25
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5552,6 +5708,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 7
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, -4.5, 28
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5582,6 +5740,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 7
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, -13.5, 27
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5720,6 +5880,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 9
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, 13.5, 41
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5750,6 +5912,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 9
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, 4.5, 33
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5779,6 +5943,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 9
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, -4.5, 38
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5808,6 +5974,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 9
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, -13.5, 32
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5905,6 +6073,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 8
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, 9, 39
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5935,6 +6105,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 8
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, 0, 35
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -5964,6 +6136,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 8
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, -9, 0
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -6098,6 +6272,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 4
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, 9, 0
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -6124,6 +6300,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 4
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, -9, 0
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -6177,8 +6355,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
     AddDoorComponent 1, left1, ElevDoors3L, ElevDoors3L2, 0.1, left, 0.15, 5.226, -1.375, 5.226, -2.75, 9, 0, 0, 0, 0, 0
-    AddDoorComponent 1, left2, ElevDoors3L, ElevDoors3L2, 0.1, left, 0.3, 5.326, 0, 5.326, -2.75, 9, 0, 0, 0, 0, 0
-    AddDoorComponent 1, right1, ElevDoors3L2, ElevDoors3L2, 0.1, right, 0.3, 5.326, 2.75, 5.326, 0, 9, 0, 0, 0, 0, 0
+    AddDoorComponent 1, left2, ElevDoors3L, ElevDoors3L2, 0.1, left, 0.3, 5.326, 0, 5.326, -1.375, 9, 0, 0, 0, 0, 0
+    AddDoorComponent 1, right1, ElevDoors3L2, ElevDoors3L2, 0.1, right, 0.3, 5.326, 1.375, 5.326, 0, 9, 0, 0, 0, 0, 0
     AddDoorComponent 1, right2, ElevDoors3L2, ElevDoors3L2, 0.1, right, 0.15, 5.226, 2.75, 5.226, 1.375, 9, 0, 0, 0, 0, 0
     FinishDoors 1, 5.126, 0
 
@@ -6223,6 +6401,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 5
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, 9, 44
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -6249,6 +6429,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 5
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, -9, 44
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -6709,6 +6891,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 3
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 5, -0.298, 90
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -6738,6 +6922,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 3
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -5, -0.298, 0
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -6847,6 +7033,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 20
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, -5, 0
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -6874,6 +7062,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 20
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, 5, 158
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -6982,6 +7172,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 22
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 5, 0, 0
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -7011,6 +7203,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 22
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -5, 0, 159
     BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -7150,6 +7344,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 2
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, 6, 0
     #BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -7177,6 +7373,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 2
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, -6, 42
     #BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -7381,6 +7579,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     #Gap Filler for Two-Speed Doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevExt, ConnectionWall, ConnectionWall, ElevExt, ElevExt
     AddShaftWall 2, ElevDoorGapFiller, ElevExt, 0.2, -6.25 + 0.33, -1.5, -6.25 + 0.33, 1.5, 10, 10, %interfloorheight% - 1, %interfloorheight% - 1, 0, 0
 <EndFloors>
 
@@ -7397,6 +7596,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 1
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, 6, 87
     #BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -7426,6 +7627,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 1
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, -6, 0
     #BeepSound = beep1.wav
     UpChimeSound 1 = otis4_Series1_chimeup.wav
@@ -7742,6 +7945,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     #Gap Filler for Two-Speed Doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevExt, ConnectionWall, ConnectionWall, ElevExt, ElevExt
     AddShaftWall 1, ElevDoorGapFiller, ElevExt, 0.2, 6.25 - 0.33, -1.5, 6.25 - 0.33, 1.5, 10, 10, %interfloorheight% - 1, %interfloorheight% - 1, 0, 0
 <EndFloors>
 
@@ -7764,6 +7968,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     #Gap Filler for Two-Speed Doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevExt, ConnectionWall, ConnectionWall, ElevExt, ElevExt
     AddShaftWall 1, ElevDoorGapFiller, ElevExt, 0.2, 6.25 - 0.33, -1.5, 6.25 - 0.33, 1.5, 10, 10, %interfloorheight% - 1, %interfloorheight% - 1, 0, 0
 <EndFloors>
 
@@ -7789,6 +7994,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     #Gap Filler for Two-Speed Doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevExt, ConnectionWall, ConnectionWall, ElevExt, ElevExt
     AddShaftWall 1, ElevDoorGapFiller, ElevExt, 0.2, 6.25 - 0.33, -1.5, 6.25 - 0.33, 1.5, 10, 10, %interfloorheight% - 1, %interfloorheight% - 1, 0, 0
 <EndFloor>
 
@@ -7811,6 +8017,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     #Gap Filler for Two-Speed Doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevExt, ConnectionWall, ConnectionWall, ElevExt, ElevExt
     AddShaftWall 1, ElevDoorGapFiller, ElevExt, 0.2, -6.25 + 0.33, -1.5, -6.25 + 0.33, 1.5, 10, 10, %interfloorheight% - 1, %interfloorheight% - 1, 0, 0
 <EndFloors>
 
@@ -8051,6 +8258,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 26
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -13.5, -0.298, 44
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8081,6 +8290,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 26
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -4.5, -0.298, 59
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8111,6 +8322,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 26
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 4.5, -0.298, 57
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8141,6 +8354,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 26
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 13.5, -0.298, 66
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8273,6 +8488,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 28
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -13.5, -0.298, 80
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8303,6 +8520,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 28
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -4.5, -0.298, 79
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8332,6 +8551,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 28
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 4.5, -0.298, 44
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8361,6 +8582,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 28
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 13.5, -0.298, 83
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8491,6 +8714,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 27
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -13.5, 0.298, 67
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8520,6 +8745,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 27
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -4.5, 0.298, 75
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8549,6 +8776,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 27
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 4.5, 0.298, 70
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8578,6 +8807,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 27
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 13.5, 0.298, 44
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8711,6 +8942,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 19
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.58, -1.273, 0
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8740,6 +8973,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = EZ
     AssignedShaft = 19
     IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 11.08, -1.273, 113
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8971,6 +9206,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = 91
     AssignedShaft = 34
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, -5, 90
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -8999,6 +9236,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = 91
     AssignedShaft = 34
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, 0.298, 5, 90
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -9104,6 +9343,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = 91
     AssignedShaft = 33
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, -5, 90
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
@@ -9134,6 +9375,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     FloorSkipText = 91
     AssignedShaft = 33
     IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
     CreateElevator true, -0.298, 5, 90
     OpenSpeed 1 = 0.8
     OpenSound 1 = elevopenquick.wav
