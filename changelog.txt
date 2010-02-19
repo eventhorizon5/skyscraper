@@ -49,6 +49,11 @@ Version 1.6 (2.0 Alpha 6)
 -directional indicators can now show active (running) elevator direction
 -fixed some quirks with elevator movement
 -added elevator leveling support
+-Lines with both functions and IF statements now process the IF statement first
+-door cutting uses CutAll function, which now makes it cut stairs, shafts, external, etc
+-Texture flipping now works properly with zero tw/th values
+-call buttons are now only created if any of the given elevators serves the floor
+-ACP mode now works in conjunction with peak modes
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

@@ -23,7 +23,6 @@
     Location = 111 N. Dearborn, Chicago, IL
     Description = A fictitious Chicago-based 142-story skyscraper located on the northeast corner of Dearborn & Washington.
     Version = 3
-    HorizScale = 1
     CameraFloor = 0
     CameraPosition = 0, -41.6
     CameraRotation = 0, 0, 0

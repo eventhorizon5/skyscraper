@@ -233,7 +233,8 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		whichdoors = 2;
 
 	//if opening both doors, exit if shaft doors don't exist
-	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false)
+	int index = ManualFloors.Find(elev->GetFloor());
+	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && index == -1)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors");
 		OpenDoor = 0;
@@ -342,7 +343,8 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		whichdoors = 2;
 
 	//if closing both doors, exit if shaft doors don't exist
-	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false)
+	int index = ManualFloors.Find(elev->GetFloor());
+	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && index == -1)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors");
 		OpenDoor = 0;
@@ -424,7 +426,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		else
 			checkfloor = elev->GetFloor();
 		index = elev->ServicedFloors.Find(checkfloor);
-		if (ShaftDoorsExist(checkfloor) == false)
+		int index2 = ManualFloors.Find(checkfloor);
+		if (ShaftDoorsExist(checkfloor) == false && index2 == -1)
 		{
 			if (WhichDoors != 2)
 			{
@@ -504,7 +507,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//update call status (previous_open detects call changes during movement)
 	previous_open = open;
 
-	//wait until the doors are finished moving
+	//wait until all door components are finished moving
 	if (elevdoors == true)
 	{
 		Doors->CheckDoorsOpen();
@@ -714,6 +717,13 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 {
 	//finishes a door creation
 
+	//add floor to manual shaft door list if wrapper doesn't exist and exit
+	if (!wrapper && ShaftDoor == true)
+	{
+		ManualFloors.Push(floor);
+		return 0;
+	}
+
 	//set door parameters
 	wrapper->Origin = csVector3(elev->Origin.x, voffset, elev->Origin.z);
 
@@ -860,7 +870,20 @@ Object* ElevatorDoor::FinishShaftDoor(int floor)
 		return 0;
 
 	Floor *floorobj = sbs->GetFloor(floor);
-	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], floor, true, floorobj->Altitude + floorobj->GetBase(true));
+
+	if (!floorobj)
+		return 0;
+
+	DoorWrapper *wrapper;
+
+	int index = elev->ServicedFloors.Find(floor) > -1;
+
+	if (index > -1)
+		wrapper = ShaftDoors[elev->ServicedFloors.Find(floor)];
+	else
+		wrapper = 0;
+
+	return FinishDoors(wrapper, floor, true, floorobj->Altitude + floorobj->GetBase(true));
 }
 
 bool ElevatorDoor::FinishShaftDoors()
@@ -868,10 +891,7 @@ bool ElevatorDoor::FinishShaftDoors()
 	//finish all shaft doors
 
 	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
-	{
-		if (!FinishShaftDoor(elev->ServicedFloors[i]))
-			return false;
-	}
+		FinishShaftDoor(elev->ServicedFloors[i]);
 	return true;
 }
 
@@ -1032,13 +1052,6 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 	return false;
 }
 
-float ElevatorDoor::GetCurrentDoorSpeed()
-{
-	//returns the internal door speed value
-	//return ElevatorDoorSpeed;
-	return 0;
-}
-
 void ElevatorDoor::Timer::Notify()
 {
 	//door autoclose timer
@@ -1158,8 +1171,11 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 	//return true if shaft doors have been created for this door on the specified floor
 
 	int index = elev->ServicedFloors.Find(floor);
-	if (index != -1 && ShaftDoors[index]->doors.GetSize() > 0)
-		return true;
+	if (index != -1)
+	{
+		if (ShaftDoors[index]->doors.GetSize() > 0)
+			return true;
+	}
 	return false;
 }
 
@@ -1310,10 +1326,12 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			temporigin = 0;
 	}
 
+	//get distance from starting point
 	float difference = fabs(tempposition - temporigin);
 
 	if (old_difference != 0 && manual == true && recheck_difference == true)
 	{
+		//check if the position went beyond 0
 		if ((tempposition - temporigin > 0 && old_difference < 0) || (tempposition - temporigin < 0 && old_difference > 0))
 			sign_changed = true;
 	}
@@ -1336,13 +1354,15 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		finished = false;
 		recheck_difference = false;
 
-		//marker1 is the position to stop accelerating at
-		//marker2 is the position to start decelerating at
+		//marker1 is the position to stop accelerating at (accelerates to marker 1)
+		//marker2 is the position to start decelerating at (runs full speed until marker 2)
 		if (manual == false)
 		{
 			openchange = speed / 50;
 			if (direction > 1)
 			{
+				//get width and offset values (offset is the distance the door component
+				//is from the edge of the door frame)
 				float width;
 				float mainwidth = wrapper->Width / 2;
 				if (parent->DoorDirection == false)
@@ -1382,7 +1402,8 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		}
 		else
 		{
-			//manual movement speed
+			//manual movement positioning (same as normal positioning, but the markers are at the
+			//door frame extents
 			if (direction > 1)
 			{
 				float width;

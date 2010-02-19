@@ -711,9 +711,9 @@ void Elevator::ProcessCallQueue()
 					MoveElevator = true;
 					LastQueueDirection = 1;
 				}
-				else
+				else if (Leveling == false)
 				{
-					//if elevator is moving, change destination floor if not beyond decel marker of that floor
+					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != UpQueue[i])
 					{
 						float tmpdestination = sbs->GetFloor(UpQueue[i])->GetBase();
@@ -787,9 +787,9 @@ void Elevator::ProcessCallQueue()
 					MoveElevator = true;
 					LastQueueDirection = -1;
 				}
-				else
+				else if (Leveling == false)
 				{
-					//if elevator is moving, change destination floor if not beyond decel marker of that floor
+					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != DownQueue[i])
 					{
 						float tmpdestination = sbs->GetFloor(DownQueue[i])->GetBase();
@@ -878,15 +878,30 @@ void Elevator::MonitorLoop()
 		FirstRun = false;
 
 		if (UpPeak == true)
+		{
+			UpPeak = false;
 			EnableUpPeak(true);
+		}
 		if (DownPeak == true)
+		{
+			DownPeak = false;
 			EnableDownPeak(true);
+		}
 		if (IndependentService == true)
+		{
+			IndependentService = false;
 			EnableIndependentService(true);
+		}
 		if (InspectionService == true)
+		{
+			InspectionService = false;
 			EnableInspectionService(true);
+		}
 		if (ACP == true)
+		{
+			ACP = false;
 			EnableACP(true);
+		}
 		if (ACPFloor != 0)
 		{
 			int tmp = ACPFloor;
@@ -1366,6 +1381,7 @@ void Elevator::MoveElevatorToFloor()
 	{
 		if (fabs(ElevatorRate) <= LevelingSpeed)
 		{
+			//turn on leveling if elevator's rate is less than or equal to the leveling speed value
 			if (sbs->Verbose)
 				Report("leveling enabled");
 			Leveling = true;
@@ -1505,7 +1521,7 @@ finish:
 
 void Elevator::FinishMove()
 {
-	//post-move operations, such as chimes, opening doors, updating indicators, etc
+	//post-move operations, such as chimes, opening doors, indicator updates, etc
 
 	if (EmergencyStop == false)
 	{
@@ -1800,6 +1816,8 @@ csHitBeamResult Elevator::HitBeam(const csVector3 &start, const csVector3 &end)
 
 bool Elevator::IsInElevator(const csVector3 &position)
 {
+	//determine if the given 3D position is inside the elevator
+
 	//if last position is the same as new, return previous result
 	if (position == lastposition && checkfirstrun == false)
 		return lastcheckresult;
@@ -1983,7 +2001,7 @@ bool Elevator::InServiceMode()
 
 void Elevator::Go(int floor)
 {
-	//go to specified floor, without using the queuing system
+	//go to specified floor, bypassing the queuing system
 
 	//exit if in inspection mode
 	if (InspectionService == true)
@@ -2034,8 +2052,6 @@ void Elevator::EnableACP(bool value)
 
 	if (value == true)
 	{
-		EnableUpPeak(false);
-		EnableDownPeak(false);
 		EnableIndependentService(false);
 		EnableInspectionService(false);
 		EnableFireService1(0);
@@ -2063,7 +2079,6 @@ void Elevator::EnableUpPeak(bool value)
 
 	if (value == true)
 	{
-		EnableACP(false);
 		EnableDownPeak(false);
 		EnableIndependentService(false);
 		EnableInspectionService(false);
@@ -2099,7 +2114,6 @@ void Elevator::EnableDownPeak(bool value)
 
 	if (value == true)
 	{
-		EnableACP(false);
 		EnableUpPeak(false);
 		EnableIndependentService(false);
 		EnableInspectionService(false);
@@ -2494,7 +2508,7 @@ int Elevator::GetBottomFloor()
 
 void Elevator::AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
-	//create all directional indicators
+	//create external directional indicators on all serviced floors
 
 	if (sbs->Verbose)
 		Report("adding directional indicators");
@@ -2535,7 +2549,7 @@ void Elevator::SetDirectionalIndicators(bool UpLight, bool DownLight)
 
 void Elevator::EnableDirectionalIndicators(bool value)
 {
-	//turn on/off all directional indicators
+	//turn on/off all interior directional indicators
 
 	if (sbs->Verbose)
 	{
@@ -2814,18 +2828,6 @@ bool Elevator::AreShaftDoorsOpen(int number, int floor)
 	else
 		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
-}
-
-float Elevator::GetCurrentDoorSpeed(int number)
-{
-	//returns the internal door speed value
-
-	ElevatorDoor *door = GetDoor(number);
-	if (door)
-		return door->GetCurrentDoorSpeed();
-	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
-	return 0;
 }
 
 void Elevator::Chime(int number, int floor, bool direction)

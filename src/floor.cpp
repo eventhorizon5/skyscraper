@@ -201,11 +201,6 @@ WallObject* Floor::AddFloor(const char *name, const char *texture, float thickne
 	return wall;
 }
 
-void Floor::DeleteFloor(int index)
-{
-	//delete floor polygon from level mesh
-}
-
 WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
@@ -229,11 +224,6 @@ WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, flo
 	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, this->object, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
 	return wall;
-}
-
-void Floor::DeleteInterfloorFloor(int index)
-{
-	//delete floor polygon from interfloor mesh
 }
 
 WallObject* Floor::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th, bool isexternal)
@@ -269,11 +259,6 @@ WallObject* Floor::AddWall(const char *name, const char *texture, float thicknes
 	}
 }
 
-void Floor::DeleteWall(int index)
-{
-	//delete wall polygon from level mesh
-}
-
 WallObject* Floor::AddInterfloorWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds an interfloor wall with the specified dimensions
@@ -295,11 +280,6 @@ WallObject* Floor::AddInterfloorWall(const char *name, const char *texture, floa
 	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, this->object, name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
 	return wall;
-}
-
-void Floor::DeleteInterfloorWall(int index)
-{
-	//delete wall polygon from interfloor mesh
 }
 
 void Floor::Enabled(bool value)
@@ -369,6 +349,25 @@ Object* Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, 
 {
 	//adds call buttons
 
+	//check if any of the elevators serve the current floor
+	bool check = false;
+	for (int i = 0; i < elevators.GetSize(); i++)
+	{
+		if (sbs->GetElevator(elevators[i]))
+		{
+			if (sbs->GetElevator(elevators[i])->IsServicedFloor(Number) == true)
+			{
+				check = true;
+				break;
+			}
+		}
+	}
+
+	//exit if none of the elevators serve the floor
+	if (check == false)
+		return 0;
+
+	//create call button
 	CallButtonArray.SetSize(CallButtonArray.GetSize() + 1);
 	int Current = CallButtonArray.GetSize() - 1;
 	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);

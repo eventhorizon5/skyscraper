@@ -536,9 +536,9 @@
     filename, x, y, z[, volume, speed, min_distance, max_distance, dir_radiation, 
     direction_x, direction_y, direction_z]</em></font><br>
     Example 1: <font size="2" face="Courier New, Courier, mono">AddSound MySound, 
-    data/sound.wav, 10, 100, 5<br>
+    sound.wav, 10, 100, 5<br>
     </font>Example 2: <font size="2" face="Courier New, Courier, mono">AddSound 
-    MySound, data/sound.wav, 10, 100, 5, 1, 100, 1, -1, 0, 0, 0, 0</font></p>
+    MySound, ambient.ogg, 10, 100, 5, 1, 100, 1, -1, 0, 0, 0, 0</font></p>
   <p align="left">This command creates a custom sound in the specified position, 
     and has a number of optional parameters - the defaults for the optional parameters 
     are shown in Example 2. If you're going to use any of the optional parameters, 
@@ -626,33 +626,24 @@
     <strong>5. Version</strong> - Version of the building (can be text), optional<br>
     <font size="2" face="Courier New, Courier, mono">Version = 1</font><br>
     <br>
-    <strong>6. HorizScale</strong> - horizontal scaling modifier; default is 1, 
-    optional<br>
-    <font size="2" face="Courier New, Courier, mono">HorizScale = 2</font> (makes 
-    each horizontal foot become 2 feet, keeping vertical feet at the default)<br>
-    <br>
-    <strong>7. CameraAltitude</strong> - camera's normal altitude in feet above 
-    the floor, required<br>
-    <font size="2" face="Courier New, Courier, mono">CameraAltitude = 3.2</font><br>
-    <br>
-    <strong>8. CameraFloor</strong> - camera's starting floor, starting with 0 
-    (like Floors command), required<br>
+    <strong>6. CameraFloor</strong> - camera's starting floor, starting with 0 
+    (like Floors command), optional<br>
     <font size="2" face="Courier New, Courier, mono">CameraFloor = 0</font><br>
     <br>
-    <strong>9. CameraPosition</strong> - camera's starting position in X (left/right) 
-    and Z (in/out) feet coordinates, required<br>
+    <strong>7. CameraPosition</strong> - camera's starting position in X (left/right) 
+    and Z (in/out) feet coordinates, optional<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CameraPosition = 
     <em>X</em>, <em>Z</em></font><br>
     <font size="2" face="Courier New, Courier, mono">CameraPosition = 0, -10</font><br>
     <br>
-    <strong>10. CameraDirection</strong> - direction the camera's facing on startup, 
-    in X (left/right), Y (up down), and Z (in/out) feet coordinates, required<br>
+    <strong>8. CameraDirection</strong> - direction the camera's facing on startup, 
+    in X (left/right), Y (up down), and Z (in/out) feet coordinates, optional<br>
     <font size="2" face="Courier New, Courier, mono">CameraDirection = 0, 10, 
     28.8</font></p>
-  <p align="left"><strong>11. CameraRotation</strong> - rotation of the camera 
-    on startup, required<br>
+  <p align="left"><strong>9. CameraRotation</strong> - rotation of the camera 
+    on startup, optional<br>
     <font size="2" face="Courier New, Courier, mono">CameraRotation = 0, 0, 0</font></p>
-  <p align="left"><strong>12. Sky</strong> - which skybox texture pack to use. 
+  <p align="left"><strong>10. Sky</strong> - which skybox texture pack to use. 
     In the following example, the chosen pack is &quot;noon&quot;, and the file 
     &quot;sky-noon.zip&quot; will be loaded.<br>
     <font size="2" face="Courier New, Courier, mono">Sky = noon</font></p>
@@ -1166,7 +1157,9 @@
     see that for more information), except that it creates shaft doors. Use the FinishShaftDoor command after
     creating the components. This command replaces the AddShaftDoor command.</p>
   <p align="left"><strong>25. FinishShaftDoor</strong> - finishes shaft door creation 
-    - use this after all related AddShaftDoorComponent commands are used.<br>
+    - use this after all related AddShaftDoorComponent commands are used, or specify 
+    it without the AddShaftDoorComponent commands if you're creating a manual 
+    shaft door.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoor<em> 
     elevator, number</em></font></p>
   <p align="left">This command is almost identical to the FinishDoors command (in the elevator section below -
@@ -1656,7 +1649,8 @@
     side connection pieces for the cut, etc.</p>
   <p align="left"><strong>18. FinishShaftDoors</strong> - finishes shaft door 
     creation for all serviced floors - use this after all related AddShaftDoorsComponent 
-    commands are used.<br>
+    commands are used, or specify it without the AddShaftDoorComponent commands 
+    if you're creating a manual shaft door.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoors 
     <em>number</em></font></p>
   <p align="left">This command is almost identical to the FinishDoors command 
