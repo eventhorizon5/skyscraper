@@ -121,7 +121,6 @@ public:
 	void ShaftDoorsEnabledRange(int floor, int range);
 	bool AreDoorsOpen();
 	bool AreShaftDoorsOpen(int floor);
-	float GetCurrentDoorSpeed();
 	void ResetDoorTimer();
 	bool DoorsStopped();
 	Object* AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);

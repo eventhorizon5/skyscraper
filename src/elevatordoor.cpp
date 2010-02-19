@@ -504,7 +504,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//update call status (previous_open detects call changes during movement)
 	previous_open = open;
 
-	//wait until the doors are finished moving
+	//wait until all door components are finished moving
 	if (elevdoors == true)
 	{
 		Doors->CheckDoorsOpen();
@@ -1032,13 +1032,6 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 	return false;
 }
 
-float ElevatorDoor::GetCurrentDoorSpeed()
-{
-	//returns the internal door speed value
-	//return ElevatorDoorSpeed;
-	return 0;
-}
-
 void ElevatorDoor::Timer::Notify()
 {
 	//door autoclose timer
@@ -1310,10 +1303,12 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			temporigin = 0;
 	}
 
+	//get distance from starting point
 	float difference = fabs(tempposition - temporigin);
 
 	if (old_difference != 0 && manual == true && recheck_difference == true)
 	{
+		//check if the position went beyond 0
 		if ((tempposition - temporigin > 0 && old_difference < 0) || (tempposition - temporigin < 0 && old_difference > 0))
 			sign_changed = true;
 	}
@@ -1336,13 +1331,15 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		finished = false;
 		recheck_difference = false;
 
-		//marker1 is the position to stop accelerating at
-		//marker2 is the position to start decelerating at
+		//marker1 is the position to stop accelerating at (accelerates to marker 1)
+		//marker2 is the position to start decelerating at (runs full speed until marker 2)
 		if (manual == false)
 		{
 			openchange = speed / 50;
 			if (direction > 1)
 			{
+				//get width and offset values (offset is the distance the door component
+				//is from the edge of the door frame)
 				float width;
 				float mainwidth = wrapper->Width / 2;
 				if (parent->DoorDirection == false)
@@ -1382,7 +1379,8 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		}
 		else
 		{
-			//manual movement speed
+			//manual movement positioning (same as normal positioning, but the markers are at the
+			//door frame extents
 			if (direction > 1)
 			{
 				float width;

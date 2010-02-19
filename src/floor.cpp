@@ -369,6 +369,25 @@ Object* Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, 
 {
 	//adds call buttons
 
+	//check if any of the elevators serve the current floor
+	bool check = false;
+	for (int i = 0; i < elevators.GetSize(); i++)
+	{
+		if (sbs->GetElevator(elevators[i]))
+		{
+			if (sbs->GetElevator(elevators[i])->IsServicedFloor(Number) == true)
+			{
+				check = true;
+				break;
+			}
+		}
+	}
+
+	//exit if none of the elevators serve the floor
+	if (check == false)
+		return 0;
+
+	//create call button
 	CallButtonArray.SetSize(CallButtonArray.GetSize() + 1);
 	int Current = CallButtonArray.GetSize() - 1;
 	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
