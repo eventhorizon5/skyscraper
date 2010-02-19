@@ -233,7 +233,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		whichdoors = 2;
 
 	//if opening both doors, exit if shaft doors don't exist
-	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false)
+	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && ManualFloors.Find(elev->GetFloor()) == -1)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors");
 		OpenDoor = 0;
@@ -342,7 +342,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		whichdoors = 2;
 
 	//if closing both doors, exit if shaft doors don't exist
-	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false)
+	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && ManualFloors.Find(elev->GetFloor()) == -1)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors");
 		OpenDoor = 0;
@@ -424,7 +424,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		else
 			checkfloor = elev->GetFloor();
 		index = elev->ServicedFloors.Find(checkfloor);
-		if (ShaftDoorsExist(checkfloor) == false)
+		if (ShaftDoorsExist(checkfloor) == false && ManualFloors.Find(checkfloor) == -1)
 		{
 			if (WhichDoors != 2)
 			{
@@ -714,6 +714,13 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 {
 	//finishes a door creation
 
+	//add floor to manual shaft door list if wrapper doesn't exist and exit
+	if (!wrapper && ShaftDoor == true)
+	{
+		ManualFloors.Push(floor);
+		return 0;
+	}
+
 	//set door parameters
 	wrapper->Origin = csVector3(elev->Origin.x, voffset, elev->Origin.z);
 
@@ -860,7 +867,18 @@ Object* ElevatorDoor::FinishShaftDoor(int floor)
 		return 0;
 
 	Floor *floorobj = sbs->GetFloor(floor);
-	return FinishDoors(ShaftDoors[elev->ServicedFloors.Find(floor)], floor, true, floorobj->Altitude + floorobj->GetBase(true));
+
+	if (!floorobj)
+		return 0;
+
+	DoorWrapper *wrapper;
+
+	if (elev->ServicedFloors.Find(floor) > -1)
+		wrapper = ShaftDoors[elev->ServicedFloors.Find(floor)];
+	else
+		wrapper = 0;
+
+	return FinishDoors(wrapper, floor, true, floorobj->Altitude + floorobj->GetBase(true));
 }
 
 bool ElevatorDoor::FinishShaftDoors()
@@ -868,10 +886,7 @@ bool ElevatorDoor::FinishShaftDoors()
 	//finish all shaft doors
 
 	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
-	{
-		if (!FinishShaftDoor(elev->ServicedFloors[i]))
-			return false;
-	}
+		FinishShaftDoor(elev->ServicedFloors[i]);
 	return true;
 }
 
@@ -1151,8 +1166,11 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 	//return true if shaft doors have been created for this door on the specified floor
 
 	int index = elev->ServicedFloors.Find(floor);
-	if (index != -1 && ShaftDoors[index]->doors.GetSize() > 0)
-		return true;
+	if (index != -1)
+	{
+		if (ShaftDoors[index]->doors.GetSize() > 0)
+			return true;
+	}
 	return false;
 }
 

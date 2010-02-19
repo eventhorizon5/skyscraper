@@ -155,6 +155,7 @@ private:
 	int WhichDoors;
 	int ShaftDoorFloor;
 	csArray<DoorWrapper*> ShaftDoors; //shaft doors
+	csArray<int> ManualFloors; //list of floors that use manual shaft doors
 
 	void MoveDoors(bool open, bool manual);
 

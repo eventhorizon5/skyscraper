@@ -878,15 +878,30 @@ void Elevator::MonitorLoop()
 		FirstRun = false;
 
 		if (UpPeak == true)
+		{
+			UpPeak = false;
 			EnableUpPeak(true);
+		}
 		if (DownPeak == true)
+		{
+			DownPeak = false;
 			EnableDownPeak(true);
+		}
 		if (IndependentService == true)
+		{
+			IndependentService = false;
 			EnableIndependentService(true);
+		}
 		if (InspectionService == true)
+		{
+			InspectionService = false;
 			EnableInspectionService(true);
+		}
 		if (ACP == true)
+		{
+			ACP = false;
 			EnableACP(true);
+		}
 		if (ACPFloor != 0)
 		{
 			int tmp = ACPFloor;
