@@ -20,7 +20,6 @@
 <Globals>
     Name = My Building
     Designer = Me
-    HorizScale = 1
     CameraFloor = 0
     CameraPosition = 0, -60
     CameraRotation = 0, 0, 0

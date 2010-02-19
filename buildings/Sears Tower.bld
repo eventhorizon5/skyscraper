@@ -24,7 +24,6 @@
     Location = 233 S. Wacker Drive, Chicago, IL
     Description = The famous 108-story Sears Tower, tallest building in the US
     Version = 1
-    HorizScale = 1
     CameraFloor = 0
     CameraPosition = -100, 0
     CameraRotation = 0, 90, 0
