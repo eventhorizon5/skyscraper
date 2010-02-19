@@ -2343,14 +2343,16 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 		csPoly3D varray;
 		bool rev_x = false, rev_z = false;
 
+		//determine the largest projection dimension (the dimension that the polygon is generally on;
+		//with a floor Y would be biggest)
 		csPlane3 plane = state->GetPolygonObjectPlane(index);
 		csVector3 normal = plane.GetNormal();
-		int projDimension = 0; //x
+		int projDimension = 0; //x; faces left/right
 
 		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
-			projDimension = 1; //y biggest
+			projDimension = 1; //y biggest; faces up/down
 		else if (fabsf (normal.z) > fabsf (normal.x))
-			projDimension = 2; //z biggest
+			projDimension = 2; //z biggest; faces front/back
 	    
 		size_t selX = CS::Math::NextModulo3(projDimension);
 		size_t selY = CS::Math::NextModulo3(selX);
@@ -2364,92 +2366,95 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 		if (RevZ == true || (normal.x > 0.001 && normal.z > 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.x > 0.999)
 			rev_z = true;
 
+		//get extents of both dimensions, since the polygon is projected in 2D as X and Y coordinates
 		csVector2 a, b;
 		a = GetExtents(varray, 1);
 		b = GetExtents(varray, 2);
 
+		//set the result 2D coordinates
 		if (projDimension == 0)
 		{
-			if (RevY == false)
-			{
-				v1.y = a.y;
-				v2.y = a.y;
-				v3.y = a.x;
-			}
-			else
-			{
-				v1.y = a.x;
-				v2.y = a.x;
-				v3.y = a.y;
-			}
 			if (rev_z == false)
 			{
-				v1.z = b.x;
-				v2.z = b.y;
-				v3.z = b.y;
+				v1.z = b.x; //left
+				v2.z = b.y; //right
+				v3.z = b.y; //right
 			}
 			else
 			{
-				v1.z = b.y;
-				v2.z = b.x;
-				v3.z = b.x;
+				v1.z = b.y; //right
+				v2.z = b.x; //left
+				v3.z = b.x; //left
+			}
+			if (RevY == false)
+			{
+				v1.y = a.y; //top
+				v2.y = a.y; //top
+				v3.y = a.x; //bottom
+			}
+			else
+			{
+				v1.y = a.x; //bottom
+				v2.y = a.x; //bottom
+				v3.y = a.y; //top
 			}
 		}
 		if (projDimension == 1)
 		{
-			if (rev_z == false)
-			{
-				v1.z = a.y;
-				v2.z = a.y;
-				v3.z = a.x;
-			}
-			else
-			{
-				v1.z = a.x;
-				v2.z = a.x;
-				v3.z = a.y;
-			}
 			if (rev_x == false)
 			{
-				v1.x = b.x;
-				v2.x = b.y;
-				v3.x = b.y;
+				v1.x = b.x; //left
+				v2.x = b.y; //right
+				v3.x = b.y; //right
 			}
 			else
 			{
-				v1.x = b.y;
-				v2.x = b.x;
-				v3.x = b.x;
+				v1.x = b.y; //right
+				v2.x = b.x; //left
+				v3.x = b.x; //left
+			}
+			if (rev_z == false)
+			{
+				v1.z = a.y; //top
+				v2.z = a.y; //top
+				v3.z = a.x; //bottom
+			}
+			else
+			{
+				v1.z = a.x; //bottom
+				v2.z = a.x; //bottom
+				v3.z = a.y; //top
 			}
 		}
 		if (projDimension == 2)
 		{
 			if (rev_x == false)
 			{
-				v1.x = a.x;
-				v2.x = a.y;
-				v3.x = a.y;
+				v1.x = a.x; //left
+				v2.x = a.y; //right
+				v3.x = a.y; //right
 			}
 			else
 			{
-				v1.x = a.y;
-				v2.x = a.x;
-				v3.x = a.x;
+				v1.x = a.y; //right
+				v2.x = a.x; //left
+				v3.x = a.x; //left
 			}
 			if (RevY == false)
 			{
-				v1.y = b.y;
-				v2.y = b.y;
-				v3.y = b.x;
+				v1.y = b.y; //top
+				v2.y = b.y; //top
+				v3.y = b.x; //bottom
 			}
 			else
 			{
-				v1.y = b.x;
-				v2.y = b.x;
-				v3.y = b.y;
+				v1.y = b.x; //bottom
+				v2.y = b.x; //bottom
+				v3.y = b.y; //top
 			}
 		}
 
+		//use the plane equation to get the coordinate values of the dropped dimension
 		if (projDimension == 0)
 		{
 			v1.x = -((plane.B() * v1.y) + (plane.C() * v1.z) + plane.D()) / plane.A(); //get X
