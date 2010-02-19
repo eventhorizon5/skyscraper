@@ -711,9 +711,9 @@ void Elevator::ProcessCallQueue()
 					MoveElevator = true;
 					LastQueueDirection = 1;
 				}
-				else
+				else if (Leveling == false)
 				{
-					//if elevator is moving, change destination floor if not beyond decel marker of that floor
+					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != UpQueue[i])
 					{
 						float tmpdestination = sbs->GetFloor(UpQueue[i])->GetBase();
@@ -787,9 +787,9 @@ void Elevator::ProcessCallQueue()
 					MoveElevator = true;
 					LastQueueDirection = -1;
 				}
-				else
+				else if (Leveling == false)
 				{
-					//if elevator is moving, change destination floor if not beyond decel marker of that floor
+					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != DownQueue[i])
 					{
 						float tmpdestination = sbs->GetFloor(DownQueue[i])->GetBase();
