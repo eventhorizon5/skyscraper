@@ -233,7 +233,8 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		whichdoors = 2;
 
 	//if opening both doors, exit if shaft doors don't exist
-	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && ManualFloors.Find(elev->GetFloor()) == -1)
+	int index = ManualFloors.Find(elev->GetFloor());
+	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && index == -1)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors");
 		OpenDoor = 0;
@@ -342,7 +343,8 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		whichdoors = 2;
 
 	//if closing both doors, exit if shaft doors don't exist
-	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && ManualFloors.Find(elev->GetFloor()) == -1)
+	int index = ManualFloors.Find(elev->GetFloor());
+	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && index == -1)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors");
 		OpenDoor = 0;
@@ -424,7 +426,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		else
 			checkfloor = elev->GetFloor();
 		index = elev->ServicedFloors.Find(checkfloor);
-		if (ShaftDoorsExist(checkfloor) == false && ManualFloors.Find(checkfloor) == -1)
+		int index2 = ManualFloors.Find(checkfloor);
+		if (ShaftDoorsExist(checkfloor) == false && index2 == -1)
 		{
 			if (WhichDoors != 2)
 			{
@@ -873,7 +876,9 @@ Object* ElevatorDoor::FinishShaftDoor(int floor)
 
 	DoorWrapper *wrapper;
 
-	if (elev->ServicedFloors.Find(floor) > -1)
+	int index = elev->ServicedFloors.Find(floor) > -1;
+
+	if (index > -1)
 		wrapper = ShaftDoors[elev->ServicedFloors.Find(floor)];
 	else
 		wrapper = 0;
