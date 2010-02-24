@@ -609,43 +609,45 @@
     <font size="2" face="Courier New, Courier, mono">Parameter = <em>value</em></font></p>
   <p align="left">Example:<br>
     <font size="2" face="Courier New, Courier, mono">Name = Triton Center</font></p>
-  <p align="left"><strong>Parameters</strong>:</p>
-  <p align="left"><strong>1. Name</strong> - building name, required<br>
+  <p align="left"><strong>Parameters (all are optional):</strong></p>
+  <p align="left"><strong>1. Name</strong> - building name<br>
     Example: <font size="2" face="Courier New, Courier, mono">Name = My Building</font></p>
-  <p align="left"> <strong>2. Designer</strong> - name of building's designer, 
-    optional<br>
+  <p align="left"> <strong>2. Designer</strong> - name of building's designer<br>
     <font size="2" face="Courier New, Courier, mono">Designer = Me</font><br>
     <br>
-    <strong>3. Location</strong> - location of the building, optional<br>
+    <strong>3. Location</strong> - location of the building<br>
     <font size="2" face="Courier New, Courier, mono">Location = 100 Main Street</font></p>
   <p align="left"> <strong>4. Description</strong> - Brief description of the 
-    building, optional<br>
+    building<br>
     <font size="2" face="Courier New, Courier, mono">Description = A really average 
     building</font><br>
     <br>
-    <strong>5. Version</strong> - Version of the building (can be text), optional<br>
+    <strong>5. Version</strong> - Version of the building (can be text)<br>
     <font size="2" face="Courier New, Courier, mono">Version = 1</font><br>
     <br>
     <strong>6. CameraFloor</strong> - camera's starting floor, starting with 0 
-    (like Floors command), optional<br>
+    (like Floors command) - default is 0<br>
     <font size="2" face="Courier New, Courier, mono">CameraFloor = 0</font><br>
     <br>
     <strong>7. CameraPosition</strong> - camera's starting position in X (left/right) 
-    and Z (in/out) feet coordinates, optional<br>
+    and Z (forward/backward) feet coordinates - default is "0, 0"<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CameraPosition = 
     <em>X</em>, <em>Z</em></font><br>
     <font size="2" face="Courier New, Courier, mono">CameraPosition = 0, -10</font><br>
     <br>
-    <strong>8. CameraDirection</strong> - direction the camera's facing on startup, 
-    in X (left/right), Y (up down), and Z (in/out) feet coordinates, optional<br>
+    <strong>8. CameraDirection</strong> - specifies a 3D point that the camera is looking at on startup (instead of specifying rotation),
+    in X (left/right), Y (up down), and Z (forward/backward) feet coordinates.<br>
     <font size="2" face="Courier New, Courier, mono">CameraDirection = 0, 10, 
     28.8</font></p>
-  <p align="left"><strong>9. CameraRotation</strong> - rotation of the camera 
-    on startup, optional<br>
-    <font size="2" face="Courier New, Courier, mono">CameraRotation = 0, 0, 0</font></p>
+  <p align="left"><strong>9. CameraRotation</strong> - axis rotation of the camera 
+    on startup - X is degrees up/down, Y is degrees left/right, and Z is spin.  Default is "0, 0, 0", and
+    the example makes the camera face right.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">CameraRotation =
+        <em>X</em>, <em>Y</em>, <em>Z</em></font><br>
+    <font size="2" face="Courier New, Courier, mono">CameraRotation = 0, 90, 0</font></p>
   <p align="left"><strong>10. Sky</strong> - which skybox texture pack to use. 
     In the following example, the chosen pack is &quot;noon&quot;, and the file 
-    &quot;sky-noon.zip&quot; will be loaded.<br>
+    &quot;sky-noon.zip&quot; will be loaded.  Default is "noon".<br>
     <font size="2" face="Courier New, Courier, mono">Sky = noon</font></p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong> <font size="+1">4. The <em>Textures</em> Section</font></strong></p>
