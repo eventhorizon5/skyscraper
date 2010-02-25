@@ -359,12 +359,10 @@ breakpoint:
 		{
 			//User variable conversion
 			temp1 = LineData.Find("%", startpos);
-			if (temp1 > startpos)
+			if (temp1 >= startpos)
 			{
 				temp3 = LineData.Find("%", temp1 + 1);
-				if (temp3 < LineData.Length())
-					startpos = temp3 + 1;
-				else
+				if (temp3 >= LineData.Length())
 				{
 					temp1 = 0;
 					temp3 = 0;
@@ -392,9 +390,13 @@ breakpoint:
 					}
 					//replace all occurrences of the variable with it's value
 					LineData.ReplaceAll("%" + temp2 + "%", UserVariable[temp4]);
-					startpos -= 1;
+					startpos = temp1;
 				}
+				else
+					startpos = temp3 + 1;
 			}
+			else
+				startpos++;
 		} while (1 == 1);
 
 		//////////////////////////
@@ -1218,7 +1220,8 @@ int ScriptProcessor::ProcCommands()
 			return sError;
 		}
 		UserVariable[temp3] = Calc(temp2);
-		//skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
+		if (Simcore->Verbose == true)
+			skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 	}
 
 	//CreateWallBox2 command
@@ -2971,7 +2974,8 @@ int ScriptProcessor::ProcFloors()
 			return sError;
 		}
 		UserVariable[temp3] = Calc(temp2);
-		//skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
+		if (Simcore->Verbose == true)
+			skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
 	}
 
 	//CallButtonElevators command
@@ -5364,7 +5368,8 @@ int ScriptProcessor::ProcElevators()
 			return sError;
 		}
 		UserVariable[temp3] = Calc(temp2);
-		skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+		if (Simcore->Verbose == true)
+			skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 	}
 
 	//handle elevator range
