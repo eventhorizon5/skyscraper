@@ -279,8 +279,10 @@ DrawWalls = true, true, false, false, false, false
     #we're going to use the standard center-open style.
     #shaft doors can also be created later in the floor section for them to be made on a per-floor basis
     
-    elevdoor_center()
-    
+    WallOrientation = right
+    elevdoor_center_classic(1, ElevDoors, Black, 0.2, 0, -3.01, 3.5, 8, front, 0.3, false)
+    elevdoor_center_classic(1, ElevDoors, Black, 0.2, 0, -3.301, 3.5, 8, front, 0.3, true)
+        
     WallOrientation = left
     SetAutoSize = true, true
 

@@ -1221,7 +1221,7 @@ int ScriptProcessor::ProcCommands()
 		}
 		UserVariable[temp3] = Calc(temp2);
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
+			skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 	}
 
 	//CreateWallBox2 command
@@ -2975,7 +2975,7 @@ int ScriptProcessor::ProcFloors()
 		}
 		UserVariable[temp3] = Calc(temp2);
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + Simcore->UserVariable[temp3]);
+			skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 	}
 
 	//CallButtonElevators command
