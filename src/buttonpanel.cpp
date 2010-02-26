@@ -378,10 +378,13 @@ int ButtonPanel::GetFloorButtonIndex(int floor)
 	csString floornum;
 	floornum = floor;
 
-	for (int i = 0; i < controls.GetSize(); i++)
+	if (controls.GetSize() > 0)
 	{
-		if (controls[i]->ActionName == floornum)
-			return i;
+		for (int i = 0; i < controls.GetSize(); i++)
+		{
+			if (controls[i]->ActionName == floornum)
+				return i;
+		}
 	}
 	return -1;
 }

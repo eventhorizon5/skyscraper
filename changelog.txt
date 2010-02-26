@@ -54,6 +54,7 @@ Version 1.6 (2.0 Alpha 6)
 -Texture flipping now works properly with zero tw/th values
 -call buttons are now only created if any of the given elevators serves the floor
 -ACP mode now works in conjunction with peak modes
+-added experimental random elevator traffic
 
 Version 1.5 (2.0 Alpha 5)
 -------------------------

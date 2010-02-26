@@ -136,8 +136,8 @@ Elevator::Elevator(int number)
 	WaitForDoors = false;
 	ActiveDirection = 0;
 	RandomActivity = sbs->confman->GetBool("Skyscraper.SBS.Elevator.RandomActivity", false);
-	RandomProbability = sbs->confman->GetInt("Skyscraper.SBS.Elevator.RandomProbability", 1);
-	RandomFrequency = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.RandomFrequency", 1);
+	RandomProbability = sbs->confman->GetInt("Skyscraper.SBS.Elevator.RandomProbability", 10);
+	RandomFrequency = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.RandomFrequency", 3);
 	RandomLobby = 0;
 	RandomLobbySet = false;
 
@@ -972,7 +972,7 @@ void Elevator::MonitorLoop()
 	}
 
 	//enable random call timer
-	if (random_timer->IsRunning() == false)
+	if (random_timer->IsRunning() == false && RandomActivity == true)
 		random_timer->Start(RandomFrequency * 1000, false);
 
 	//elevator movement
@@ -3282,7 +3282,8 @@ void Elevator::Timer::Notify()
 	{
 		//random call timer
 		
-		csRandomGen rnd_main, rnd_floor;
+		csRandomGen rnd_main;
+		csRandomGen rnd_floor(csGetTicks());
 		int num, floor;
 
 		//get call probability
@@ -3296,7 +3297,12 @@ void Elevator::Timer::Notify()
 		floor = elevator->ServicedFloors[index];
 
 		//if probability number matched, press selected floor button
-		if (num == 0)
+		csString number;
+		number = num;
+		csString Floor;
+		Floor = floor;
+		elevator->Report(number + " " + Floor);
+		if (num == 0 && elevator->IsQueued(floor) == false && floor != elevator->GetFloor())
 			elevator->SelectFloor(floor);
 	}
 }
@@ -3330,13 +3336,29 @@ void Elevator::SelectFloor(int floor)
 
 	int index = 0;
 
-	for (int i = 0; i < PanelArray.GetSize(); i++)
+	if (PanelArray.GetSize() > 0)
 	{
-		index = PanelArray[i]->GetFloorButtonIndex(floor);
-		if (index >= 0)
+		for (int i = 0; i < PanelArray.GetSize(); i++)
 		{
-			PanelArray[i]->Press(index);
-			break;
+			index = PanelArray[i]->GetFloorButtonIndex(floor);
+			if (index >= 0)
+			{
+				PanelArray[i]->Press(index);
+				return;
+			}
 		}
 	}
+}
+
+bool Elevator::IsQueued(int floor)
+{
+	//return true if the given floor is in either queue
+	
+	int index = UpQueue.Find(floor);
+	if (index > -1)
+		return true;
+	index = DownQueue.Find(floor);
+	if (index > -1)
+		return true;
+	return false;
 }

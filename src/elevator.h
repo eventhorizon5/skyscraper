@@ -211,6 +211,7 @@ public:
 	int GetRandomLobby();
 	void SetRandomLobby(int floor);
 	void SelectFloor(int floor);
+	bool IsQueued(int floor);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
