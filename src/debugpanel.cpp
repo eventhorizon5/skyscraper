@@ -99,7 +99,6 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	wxBoxSizer* BoxSizer11;
 	
 	Create(parent, wxID_ANY, _("Simulator Control Panel"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX, _T("wxID_ANY"));
-	Move(wxPoint(10,10));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	Panel1 = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
 	BoxSizer11 = new wxBoxSizer(wxVERTICAL);
