@@ -3297,11 +3297,6 @@ void Elevator::Timer::Notify()
 		floor = elevator->ServicedFloors[index];
 
 		//if probability number matched, press selected floor button
-		csString number;
-		number = num;
-		csString Floor;
-		Floor = floor;
-		elevator->Report(number + " " + Floor);
 		if (num == 0 && elevator->IsQueued(floor) == false && floor != elevator->GetFloor())
 			elevator->SelectFloor(floor);
 	}
