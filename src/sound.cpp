@@ -47,7 +47,7 @@ Sound::Sound(Object *parent, const char *name)
 	DirectionalRadiation = 0;
 	SoundLoop = sbs->confman->GetBool("Skyscraper.SBS.Sound.Loop", false);
 	Speed = sbs->confman->GetInt("Skyscraper.SBS.Sound.Speed", 100);
-	sndwrapper = sbs->sndmanager->CreateSound("");
+	Name = name;
 	sbs->IncrementSoundCount();
 }
 
@@ -57,6 +57,7 @@ Sound::~Sound()
 	sbs->sndrenderer->RemoveSource(sndsource);
 	sbs->sndrenderer->RemoveStream(sndstream);
 	sbs->sndmanager->RemoveSound(sndwrapper);
+	sbs->DecrementSoundCount();
 
 	//destructor
 	directional = 0;
@@ -274,13 +275,22 @@ void Sound::Load(const char *filename, bool force)
 
 	//clear old object references
 	directional = 0;
-	sndsource3d = 0;
+	if (sndsource)
+		sbs->sndrenderer->RemoveSource(sndsource);
 	sndsource = 0;
+	if (sndstream)
+		sbs->sndrenderer->RemoveStream(sndstream);
 	sndstream = 0;
+	if (sndwrapper)
+		sbs->sndmanager->RemoveSound(sndwrapper);
+	sndwrapper = 0;
 
 	//exit if sound is disabled
 	if (sbs->DisableSound == true)
 		return;
+
+	//first create sound wrapper
+	sndwrapper = sbs->sndmanager->CreateSound(Name);
 
 	//load new sound
 	Filename = filename;

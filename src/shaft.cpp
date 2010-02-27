@@ -325,7 +325,8 @@ bool Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVe
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		if (sbs->Verbose)
+			sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
 		return false;
 	}
 

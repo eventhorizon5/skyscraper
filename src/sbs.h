@@ -274,6 +274,7 @@ public:
 	Object* AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
 	int GetSoundCount();
 	void IncrementSoundCount();
+	void DecrementSoundCount();
 	float ToLocal(float remote_value);
 	csVector2 ToLocal(csVector2 remote_value);
 	csVector3 ToLocal(csVector3 remote_value);

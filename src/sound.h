@@ -87,6 +87,7 @@ private:
 	bool SoundLoop;
 	int Speed;
 	csString Filename;
+	csString Name;
 
 };
 
