@@ -260,6 +260,8 @@ void Skyscraper::Render()
 void Skyscraper::SetupFrame()
 {
 	//Main simulator loop
+
+	//main menu routine
 	if (IsRunning == false)
 	{
 		DrawBackground();
@@ -294,6 +296,7 @@ void Skyscraper::SetupFrame()
 	//process camera loop
 	Simcore->camera->Loop();
 
+	//render graphics
 	Render();
 
 	//exit if shutdown request received
@@ -689,7 +692,7 @@ void Skyscraper::GetInput()
 			//show control panel if closed
 			dpanel = new DebugPanel(NULL, -1);
 			dpanel->Show(true);
-			dpanel->SetPosition(wxPoint(10, 25));
+			dpanel->SetPosition(wxPoint(confman->GetInt("Skyscraper.Frontend.ControlPanelX", 10), confman->GetInt("Skyscraper.Frontend.ControlPanelY", 25)));
 		}
 		if (wxGetKeyState(WXK_F5) && wait == false)
 		{
@@ -1160,7 +1163,7 @@ bool Skyscraper::Start()
 	{
 		dpanel = new DebugPanel(NULL, -1);
 		dpanel->Show(true);
-		dpanel->SetPosition(wxPoint(10, 25));
+		dpanel->SetPosition(wxPoint(confman->GetInt("Skyscraper.Frontend.ControlPanelX", 10), confman->GetInt("Skyscraper.Frontend.ControlPanelY", 25)));
 	}
 
 	window->Raise();
