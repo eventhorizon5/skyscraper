@@ -104,6 +104,9 @@ public:
 	float LevelingOpen; //leveling door open offset
 	bool WaitForDoors; //set to true for the MoveElevatorToFloor() function to wait for the doors to close before running
 	int ActiveDirection; //variant of Direction that doesn't change during slowdown
+	bool RandomActivity; //enables/disables random call activity
+	int RandomProbability; //probability ratio of random calls, starting with 1 - higher is less frequent
+	float RandomFrequency; //speed in seconds to make each random call
 
 	//functions
 	Elevator(int number);
@@ -205,6 +208,10 @@ public:
 	Object* FinishShaftDoor(int number, int floor);
 	bool FinishShaftDoors(int number);
 	ButtonPanel* GetPanel(int index);
+	int GetRandomLobby();
+	void SetRandomLobby(int floor);
+	void SelectFloor(int floor);
+	bool IsQueued(int floor);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -216,15 +223,20 @@ private:
 	{
 	public:
 		Elevator *elevator;
-		Timer(Elevator *elev)
+		bool IsParkingTimer;
+		Timer(Elevator *elev, bool ParkingTimer)
 		{
 			elevator = elev;
+			IsParkingTimer = ParkingTimer;
 		};
 		virtual void Notify();
 	};
 
 	//parking timer object
 	Timer *timer;
+
+	//random call timer object
+	Timer *random_timer;
 
 	//Internal elevator simulation data
 	csArray<int> UpQueue; //up call queue
@@ -243,6 +255,7 @@ private:
 	int ActiveCallFloor; //floor number of active call (that the elevator's currently responding too)
 	int ActiveCallDirection; //direction of active call (that the elevator's currently responding too)
 	bool FirstRun; //used for setting first-run items in the run loop
+	int RandomLobby; //lobby level of elevator to use for random predictions
 
 	//functions
 	void MoveElevatorToFloor();
@@ -288,6 +301,7 @@ private:
 	csVector3 elevposition;
 	double tmpDecelJerk;
 	bool FinishedMove;
+	bool RandomLobbySet;
 
 	//cache objects for IsInElevator()
 	csVector3 lastposition;

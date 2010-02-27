@@ -370,3 +370,21 @@ void ButtonPanel::ChangeLight(int floor, bool value)
 			controls[i]->ChangeLight(value);
 	}
 }
+
+int ButtonPanel::GetFloorButtonIndex(int floor)
+{
+	//return the index number of a floor button
+
+	csString floornum;
+	floornum = floor;
+
+	if (controls.GetSize() > 0)
+	{
+		for (int i = 0; i < controls.GetSize(); i++)
+		{
+			if (controls[i]->ActionName == floornum)
+				return i;
+		}
+	}
+	return -1;
+}

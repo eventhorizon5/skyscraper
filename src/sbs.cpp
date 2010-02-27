@@ -3749,6 +3749,11 @@ void SBS::IncrementSoundCount()
 	soundcount++;
 }
 
+void SBS::DecrementSoundCount()
+{
+	soundcount--;
+}
+
 float SBS::ToLocal(float remote_value)
 {
 	//convert remote (Crystal Space) vertex positions to local (SBS) positions

@@ -31,6 +31,8 @@
 #include "unix.h"
 
 #include <iengine/movable.h>
+#include <csutil/randomgen.h>
+#include <time.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 
@@ -134,9 +136,15 @@ Elevator::Elevator(int number)
 	FinishedMove = false;
 	WaitForDoors = false;
 	ActiveDirection = 0;
+	RandomActivity = sbs->confman->GetBool("Skyscraper.SBS.Elevator.RandomActivity", false);
+	RandomProbability = sbs->confman->GetInt("Skyscraper.SBS.Elevator.RandomProbability", 10);
+	RandomFrequency = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.RandomFrequency", 3);
+	RandomLobby = 0;
+	RandomLobbySet = false;
 
-	//create timer
-	timer = new Timer(this);
+	//create timers
+	timer = new Timer(this, true);
+	random_timer = new Timer(this, false);
 
 	//create object meshes
 	buffer = Number;
@@ -164,6 +172,13 @@ Elevator::~Elevator()
 		delete timer;
 	}
 	timer = 0;
+
+	if (random_timer)
+	{
+		random_timer->Stop();
+		delete random_timer;
+	}
+	random_timer = 0;
 
 	//delete directional indicators
 	if (sbs->Verbose)
@@ -872,6 +887,10 @@ void Elevator::MonitorLoop()
 		}
 	}
 
+	//set random lobby level if not set
+	if (RandomLobbySet == false)
+		SetRandomLobby(GetBottomFloor());
+
 	//perform first-run tasks
 	if (FirstRun == true)
 	{
@@ -952,6 +971,10 @@ void Elevator::MonitorLoop()
 		if (timer->IsRunning() == false)
 			timer->Start(ParkingDelay * 1000, true);
 	}
+
+	//enable random call timer
+	if (random_timer->IsRunning() == false && RandomActivity == true)
+		random_timer->Start(RandomFrequency * 1000, false);
 
 	//elevator movement
 	//if (MoveElevator == true && (AreDoorsOpen() == false || InspectionService == true))
@@ -3243,15 +3266,41 @@ bool Elevator::FinishShaftDoors(int number)
 
 void Elevator::Timer::Notify()
 {
-	//parking timer
-
-	if (elevator->ParkingDelay > 0)
+	if (IsParkingTimer == true)
 	{
-		int floor = elevator->GetFloor();
-		if (elevator->ParkingFloor > floor)
-			elevator->AddRoute(elevator->ParkingFloor, 1, false);
+		//parking timer
+	
+		if (elevator->ParkingDelay > 0)
+		{
+			int floor = elevator->GetFloor();
+			if (elevator->ParkingFloor > floor)
+				elevator->AddRoute(elevator->ParkingFloor, 1, false);
+			else
+				elevator->AddRoute(elevator->ParkingFloor, -1, false);
+		}
+	}
+	else if (elevator->RandomActivity == true)
+	{
+		//random call timer
+		
+		csRandomGen rnd_main(time(0) + (uint32)&elevator);
+		csRandomGen rnd_floor(csGetTicks() + (uint32)&elevator);
+
+		int num, floor;
+
+		//get call probability
+		if (elevator->RandomProbability > 1)
+			num = rnd_main.Get(elevator->RandomProbability - 1);
 		else
-			elevator->AddRoute(elevator->ParkingFloor, -1, false);
+			num = 0;
+
+		//get call floor
+		int index = rnd_floor.Get(elevator->ServicedFloors.GetSize() - 1);
+		floor = elevator->ServicedFloors[index];
+
+		//if probability number matched, press selected floor button
+		if (num == 0 && elevator->IsQueued(floor) == false && floor != elevator->GetFloor())
+			elevator->SelectFloor(floor);
 	}
 }
 
@@ -3263,4 +3312,50 @@ ButtonPanel* Elevator::GetPanel(int index)
 		return 0;
 
 	return PanelArray[index - 1];
+}
+
+int Elevator::GetRandomLobby()
+{
+	//return random lobby floor value
+	return RandomLobby;
+}
+
+void Elevator::SetRandomLobby(int floor)
+{
+	//set random lobby floor
+	RandomLobby = floor;
+	RandomLobbySet = true;
+}
+
+void Elevator::SelectFloor(int floor)
+{
+	//press a floor button
+
+	int index = 0;
+
+	if (PanelArray.GetSize() > 0)
+	{
+		for (int i = 0; i < PanelArray.GetSize(); i++)
+		{
+			index = PanelArray[i]->GetFloorButtonIndex(floor);
+			if (index >= 0)
+			{
+				PanelArray[i]->Press(index);
+				return;
+			}
+		}
+	}
+}
+
+bool Elevator::IsQueued(int floor)
+{
+	//return true if the given floor is in either queue
+	
+	int index = UpQueue.Find(floor);
+	if (index > -1)
+		return true;
+	index = DownQueue.Find(floor);
+	if (index > -1)
+		return true;
+	return false;
 }

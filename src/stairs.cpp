@@ -461,7 +461,8 @@ bool Stairs::CutWall(bool relative, int floor, const csVector3 &start, const csV
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		if (sbs->Verbose)
+			sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
 		return false;
 	}
 

@@ -689,7 +689,7 @@ void Skyscraper::GetInput()
 			//show control panel if closed
 			dpanel = new DebugPanel(NULL, -1);
 			dpanel->Show(true);
-			dpanel->SetPosition(wxPoint(10, 10));
+			dpanel->SetPosition(wxPoint(10, 25));
 		}
 		if (wxGetKeyState(WXK_F5) && wait == false)
 		{
@@ -1160,7 +1160,7 @@ bool Skyscraper::Start()
 	{
 		dpanel = new DebugPanel(NULL, -1);
 		dpanel->Show(true);
-		dpanel->SetPosition(wxPoint(10, 10));
+		dpanel->SetPosition(wxPoint(10, 25));
 	}
 
 	window->Raise();
