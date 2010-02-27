@@ -3283,8 +3283,8 @@ void Elevator::Timer::Notify()
 	{
 		//random call timer
 		
-		csRandomGen rnd_main(time(0) + (uint32)&elevator);
-		csRandomGen rnd_floor(csGetTicks() + (uint32)&elevator);
+		csRandomGen rnd_main(time(0) + elevator->Number);
+		csRandomGen rnd_floor(csGetTicks() + elevator->Number);
 
 		int num, floor;
 
