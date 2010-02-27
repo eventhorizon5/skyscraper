@@ -46,19 +46,19 @@
     #11. is shaft door? (true/false)
     
     if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
-    if[%param9% = front | %param9% = back] Set 201 = 0
+    if[%param9% = front | %param9% = back] Set 201 = %param5%
     if[%param9% = front | %param9% = back] Set 202 = %param6%
     if[%param9% = front | %param9% = back] Set 203 = %param6%
-    if[%param9% = front | %param9% = back] Set 204 = 0
+    if[%param9% = front | %param9% = back] Set 204 = %param5%
     if[%param9% = front | %param9% = back] Set 205 = (%param7% / 2) + %param5%
     if[%param9% = front | %param9% = back] Set 206 = %param6%
     if[%param9% = front | %param9% = back] Set 207 = %param6%
 
     if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
-    if[%param9% = left | %param9% = right] Set 203 = 0
+    if[%param9% = left | %param9% = right] Set 203 = %param6%
     if[%param9% = left | %param9% = right] Set 200 = %param5%
     if[%param9% = left | %param9% = right] Set 201 = %param5%
-    if[%param9% = left | %param9% = right] Set 206 = 0
+    if[%param9% = left | %param9% = right] Set 206 = %param6%
     if[%param9% = left | %param9% = right] Set 207 = (%param7% / 2) + %param6%
     if[%param9% = left | %param9% = right] Set 204 = %param5%
     if[%param9% = left | %param9% = right] Set 205 = %param5%
@@ -66,6 +66,52 @@
     if[%param11% = false] AddDoorComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
     if[%param11% = false] AddDoorComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
     if[%param11% = false] FinishDoors %param1%
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = true] FinishShaftDoors %param1%
+<EndFunction>
+
+<Function elevdoor_center_classic>
+    #parameters:
+    #1. door number
+    #2. texture
+    #3. side texture
+    #4. thickness
+    #5. X position of doors
+    #6. Z position of doors
+    #7. width
+    #8. height
+    #9. direction door faces (left, right, front, back)
+    #10. speed
+    #11. is shaft door? (true/false)
+    
+    if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 201 = -0.025 + %param5%
+    if[%param9% = front | %param9% = back] Set 202 = %param6%
+    if[%param9% = front | %param9% = back] Set 203 = %param6%
+    if[%param9% = front | %param9% = back] Set 204 = 0.025 + %param5%
+    if[%param9% = front | %param9% = back] Set 205 = (%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 206 = %param6%
+    if[%param9% = front | %param9% = back] Set 207 = %param6%
+
+    if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 203 = -0.025 + %param6%
+    if[%param9% = left | %param9% = right] Set 200 = %param5%
+    if[%param9% = left | %param9% = right] Set 201 = %param5%
+    if[%param9% = left | %param9% = right] Set 206 = 0.025 + %param6%
+    if[%param9% = left | %param9% = right] Set 207 = (%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 204 = %param5%
+    if[%param9% = left | %param9% = right] Set 205 = %param5%
+
+    if[%param11% = false] AddDoorComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = false] FinishDoors %param1%
+
+    if[%param9% = front | %param9% = back] Set 201 = %param5%
+    if[%param9% = front | %param9% = back] Set 204 = %param5%
+    if[%param9% = left | %param9% = right] Set 203 = %param6%
+    if[%param9% = left | %param9% = right] Set 206 = %param6%
+
     if[%param11% = true] AddShaftDoorsComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
     if[%param11% = true] AddShaftDoorsComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
     if[%param11% = true] FinishShaftDoors %param1%
@@ -86,19 +132,19 @@
     #11. is shaft door? (true/false)
     
     if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
-    if[%param9% = front | %param9% = back] Set 201 = 0
+    if[%param9% = front | %param9% = back] Set 201 = %param5%
     if[%param9% = front | %param9% = back] Set 202 = %param6%
     if[%param9% = front | %param9% = back] Set 203 = %param6%
-    if[%param9% = front | %param9% = back] Set 204 = 0
+    if[%param9% = front | %param9% = back] Set 204 = %param5%
     if[%param9% = front | %param9% = back] Set 205 = (%param7% / 2) + %param5%
     if[%param9% = front | %param9% = back] Set 206 = %param6%
     if[%param9% = front | %param9% = back] Set 207 = %param6%
 
     if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
-    if[%param9% = left | %param9% = right] Set 203 = 0
+    if[%param9% = left | %param9% = right] Set 203 = %param6%
     if[%param9% = left | %param9% = right] Set 200 = %param5%
     if[%param9% = left | %param9% = right] Set 201 = %param5%
-    if[%param9% = left | %param9% = right] Set 206 = 0
+    if[%param9% = left | %param9% = right] Set 206 = %param6%
     if[%param9% = left | %param9% = right] Set 207 = (%param7% / 2) + %param6%
     if[%param9% = left | %param9% = right] Set 204 = %param5%
     if[%param9% = left | %param9% = right] Set 205 = %param5%
@@ -131,19 +177,19 @@
     #11. is shaft door? (true/false)
     
     if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
-    if[%param9% = front | %param9% = back] Set 201 = 0
+    if[%param9% = front | %param9% = back] Set 201 = %param5%
     if[%param9% = front | %param9% = back] Set 202 = %param6%
     if[%param9% = front | %param9% = back] Set 203 = %param6%
-    if[%param9% = front | %param9% = back] Set 204 = 0
+    if[%param9% = front | %param9% = back] Set 204 = %param5%
     if[%param9% = front | %param9% = back] Set 205 = (%param7% / 2) + %param5%
     if[%param9% = front | %param9% = back] Set 206 = %param6%
     if[%param9% = front | %param9% = back] Set 207 = %param6%
 
     if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
-    if[%param9% = left | %param9% = right] Set 203 = 0
+    if[%param9% = left | %param9% = right] Set 203 = %param6%
     if[%param9% = left | %param9% = right] Set 200 = %param5%
     if[%param9% = left | %param9% = right] Set 201 = %param5%
-    if[%param9% = left | %param9% = right] Set 206 = 0
+    if[%param9% = left | %param9% = right] Set 206 = %param6%
     if[%param9% = left | %param9% = right] Set 207 = (%param7% / 2) + %param6%
     if[%param9% = left | %param9% = right] Set 204 = %param5%
     if[%param9% = left | %param9% = right] Set 205 = %param5%
