@@ -400,6 +400,18 @@ Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
     AddWall Back, MainWindowsInt2, 0.1, 75, 70, -75, 70, %height% + 1.5, %height% + 1.5, 0, 0, 1, 1, False
     SetAutoSize = true, true
 
+    #Dearborn street doors
+    #AddDoor StairsDoor2, 0.2, 8, 10, -70, 3.5, 8, 0, 0, 0
+    #AddFillerWalls ConnectionWall, 0.2, 10, -70, 3.5, 8, 0, true, 0, 0
+    #AddDoor StairsDoor2, 0.2, 5, -10, -70, 3.5, 8, 0, 0, 0
+    #AddFillerWalls ConnectionWall, 0.2, -10, -70, 3.5, 8, 0, true, 0, 0
+    
+    #State street/plaza doors
+    #AddDoor StairsDoor2, 0.2, 7, 10, 70, 3.5, 8, 0, 0, 0
+    #AddFillerWalls ConnectionWall, 0.2, 10, 70, 3.5, 8, 0, true, 0, 0
+    #AddDoor StairsDoor2, 0.2, 6, -10, 70, 3.5, 8, 0, 0, 0
+    #AddFillerWalls ConnectionWall, 0.2, -10, 70, 3.5, 8, 0, true, 0, 0
+    
     #Left Restroom
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
@@ -7013,12 +7025,12 @@ DrawWalls = true, true, false, false, false, false
     AddFloorIndicator 4, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 5.5 - 0.15
     AddFloorIndicator 5, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 5 - 0.15
     AddFloorIndicator 6, false, front, -3 + 0.25, 14.29 - 0.02, 0.35, 0.3, 4.5 - 0.15
-    AddDirectionalIndicator 13, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 - 0.54, 14.29 - 0.02, 5.5 - 0.1, front, 0.2, 0.2, true, 0, 0
-    AddDirectionalIndicator 14, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 - 0.54, 14.29 - 0.02, 5 - 0.1, front, 0.2, 0.2, true, 0, 0
-    AddDirectionalIndicator 15, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 - 0.54, 14.29 - 0.02, 4.5 - 0.1, front, 0.2, 0.2, true, 0, 0
-    AddDirectionalIndicator 16, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 + 0.54, 14.29 - 0.02, 5.5 - 0.1, front, 0.2, 0.2, true, 0, 0
-    AddDirectionalIndicator 17, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 + 0.54, 14.29 - 0.02, 5 - 0.1, front, 0.2, 0.2, true, 0, 0
-    AddDirectionalIndicator 18, false, true, true, true, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 + 0.54, 14.29 - 0.02, 4.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 1, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 - 0.54, 14.29 - 0.02, 5.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 2, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 - 0.54, 14.29 - 0.02, 5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 3, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 - 0.54, 14.29 - 0.02, 4.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 4, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 + 0.54, 14.29 - 0.02, 5.5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 5, false, true, true, false, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 + 0.54, 14.29 - 0.02, 5 - 0.1, front, 0.2, 0.2, true, 0, 0
+    AddDirectionalIndicator 6, false, true, true, true, Black, Black, ArrowUpSingle, Black, ArrowDownSingle, -3 + 0.54, 14.29 - 0.02, 4.5 - 0.1, front, 0.2, 0.2, true, 0, 0
   
     SetAutoSize = true, true
 <EndFloor>
