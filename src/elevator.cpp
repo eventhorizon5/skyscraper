@@ -32,6 +32,7 @@
 
 #include <iengine/movable.h>
 #include <csutil/randomgen.h>
+#include <time.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 
@@ -3282,8 +3283,9 @@ void Elevator::Timer::Notify()
 	{
 		//random call timer
 		
-		csRandomGen rnd_main;
-		csRandomGen rnd_floor(csGetTicks());
+		csRandomGen rnd_main(time(0) + (uint32)&elevator);
+		csRandomGen rnd_floor(csGetTicks() + (uint32)&elevator);
+
 		int num, floor;
 
 		//get call probability

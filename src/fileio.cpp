@@ -5626,7 +5626,6 @@ csString ScriptProcessor::Calc(const char *expression)
 
 	int temp1;
 	csString tmpcalc = expression;
-	char buffer[20];
 	csString one;
 	csString two;
 	int start, end;
