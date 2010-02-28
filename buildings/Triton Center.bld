@@ -93,6 +93,8 @@
     Load data/darrow_single_up.jpg, ArrowUpSingle, 1, 1
     Load data/darrow_single_down.jpg, ArrowDownSingle, 1, 1
     Load data/metal080.jpg, MainPanelBack, 0.5, 0.5
+    Load data/daley.jpg, Daley, 0.04, 1
+    Load data/searstower.jpg, SearsTower, 0.067, 1
 
     #signs
     Load data/triton_signs/2-14.png, Sign2-14, 1, 1
@@ -164,7 +166,7 @@
 
 # Ground
 AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
-Cut Landscape, -300, -1, -198.5, 400, 1, 321.5, false, true
+Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
 
 # Basements
 <Floor -1>
@@ -8101,89 +8103,117 @@ CutStairwell 7, -9.4 - 3, -15, -9.4 + 3, -2.5, 5, 5
 
 #Sears Tower
 
-#CC to 49
+#L to 49
 SetAutoSize = true, false
 WallOrientation = left
-AddWall Buildings, Front, MainWindows, 0, 1720 + -112.5, -1840 + -112.5, 1720 + 112.5, -1840 + -112.5, 668, 668, 0, 0, 0, 50
-AddWall Buildings, Left, MainWindows, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
+AddWall Buildings, Front, SearsTower, 0, 1720 + -112.5, -1840 + -112.5, 1720 + 112.5, -1840 + -112.5, 668, 668, 0, 0, 0, 50
+AddWall Buildings, Left, SearsTower, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
 WallOrientation = right
-AddWall Buildings, Back, MainWindows, 0, 1720 + -112.5, -1840 + 112.5, 1720 + 112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
-AddWall Buildings, Right, MainWindows, 0, 1720 + 112.5, -1840 + -112.5, 1720 + 112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
+AddWall Buildings, Back, SearsTower, 0, 1720 + -112.5, -1840 + 112.5, 1720 + 112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
+AddWall Buildings, Right, SearsTower, 0, 1720 + 112.5, -1840 + -112.5, 1720 + 112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
 
 #50 to to 65
 WallOrientation = left
 #front
-AddWall Buildings, Front1, MainWindows, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -112.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Front2, MainWindows, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -112.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Front3, MainWindows, 0, 1720 + -112.5, -1840 + 37.5, 1720 + -37.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Front1, SearsTower, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -112.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Front2, SearsTower, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -112.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Front3, SearsTower, 0, 1720 + -112.5, -1840 + 37.5, 1720 + -37.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
 #left
-AddWall Buildings, Left1, MainWindows, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -37.5, -1840 + -112.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Left2, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Left3, MainWindows, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Left1, SearsTower, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -37.5, -1840 + -112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Left2, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Left3, SearsTower, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
 #back
-AddWall Buildings, Back1, MainWindows, 0, 1720 + 37.5, -1840 + -37.5, 1720 + 112.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Back2, MainWindows, 0, 1720 + 112.5, -1840 + -37.5, 1720 + 112.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Back3, MainWindows, 0, 1720 + 112.5, -1840 + 37.5, 1720 + 112.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Back1, SearsTower, 0, 1720 + 37.5, -1840 + -37.5, 1720 + 112.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Back2, SearsTower, 0, 1720 + 112.5, -1840 + -37.5, 1720 + 112.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Back3, SearsTower, 0, 1720 + 112.5, -1840 + 37.5, 1720 + 112.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
 #right
-AddWall Buildings, Right1, MainWindows, 0, 1720 + -37.5, -1840 + 37.5, 1720 + -37.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Right2, MainWindows, 0, 1720 + -37.5, -1840 + 112.5, 1720 + 37.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Right3, MainWindows, 0, 1720 + 37.5, -1840 + 112.5, 1720 + 112.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Right1, SearsTower, 0, 1720 + -37.5, -1840 + 37.5, 1720 + -37.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Right2, SearsTower, 0, 1720 + -37.5, -1840 + 112.5, 1720 + 37.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Right3, SearsTower, 0, 1720 + 37.5, -1840 + 112.5, 1720 + 112.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
 
 #66 to 89
 WallOrientation = left
 #front
-AddWall Buildings, Front1, MainWindows, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Front2, MainWindows, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Front3, MainWindows, 0, 1720 + -112.5, -1840 + 37.5, 1720 + -37.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Front1, SearsTower, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Front2, SearsTower, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Front3, SearsTower, 0, 1720 + -112.5, -1840 + 37.5, 1720 + -37.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
 #back
-AddWall Buildings, Back1, MainWindows, 0, 1720 + 37.5, -1840 + -37.5, 1720 + 112.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Back2, MainWindows, 0, 1720 + 112.5, -1840 + -37.5, 1720 + 112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Back3, MainWindows, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Back1, SearsTower, 0, 1720 + 37.5, -1840 + -37.5, 1720 + 112.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Back2, SearsTower, 0, 1720 + 112.5, -1840 + -37.5, 1720 + 112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Back3, SearsTower, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
 #left
-AddWall Buildings, Left1, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Left2, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Left3, MainWindows, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Left1, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Left2, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Left3, SearsTower, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
 #right
-AddWall Buildings, Right1, MainWindows, 0, 1720 + -37.5, -1840 + 37.5, 1720 + -37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Right2, MainWindows, 0, 1720 + -37.5, -1840 + 112.5, 1720 + 37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Right3, MainWindows, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Right1, SearsTower, 0, 1720 + -37.5, -1840 + 37.5, 1720 + -37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Right2, SearsTower, 0, 1720 + -37.5, -1840 + 112.5, 1720 + 37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Right3, SearsTower, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
 
 #90 to 108
 WallOrientation = left
-AddWall Buildings, Front, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
-AddWall Buildings, Left, MainWindows, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 280, 280, 1174, 1174, 0, 19
-AddWall Buildings, Back, MainWindows, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
-AddWall Buildings, Right, MainWindows, 0, 1720 + -37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
+AddWall Buildings, Front, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
+AddWall Buildings, Left, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 280, 280, 1174, 1174, 0, 19
+AddWall Buildings, Back, SearsTower, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
+AddWall Buildings, Right, SearsTower, 0, 1720 + -37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
+
+
+#Daley Center
+
+DrawWalls = true, false, false, false, false, false
+AddWall Buildings, Front, Daley, 0, -290.5 + 58, -174.5 - 35 - 260, -290.5 + 58 + 145, -174.5 - 35 - 260, 648, 648, 0, 0, 0, 32
+AddWall Buildings, Left, Daley, 0, -290.5 + 58, -174.5 - 35 - 260, -290.5 + 58, -174.5 - 35, 648, 648, 0, 0, 0, 32
+DrawWalls = false, true, false, false, false, false
+AddWall Buildings, Back, Daley, 0, -290.5 + 58, -174.5 - 35, -290.5 + 58 + 145, -174.5 - 35, 648, 648, 0, 0, 0, 32
+AddWall Buildings, Right, Daley, 0, -290.5 + 58 + 145, -174.5 - 35 - 260, -290.5 + 58 + 145, -174.5 - 35, 648, 648, 0, 0, 0, 32
 
 SetAutoSize = true, true
+AddFloor Buildings, Roof, Ceiling1, 0, -290.5 + 58, -174.5 - 35 - 260, -290.5 + 58 + 145, -174.5 - 35, 648, 648, 0, 0
+
+DrawWalls = true, true, false, false, false, false
 
 
 #External stuff
 
 #Plaza
 FloorOrientation = top
-AddFloor Landscape, Dearborn Plaza, ParkingCeiling, 0.5, -300, -100.5, 105.5, -70, 0, 0, 0, 0
+AddFloor Landscape, Dearborn Plaza, ParkingCeiling, 0.5, -266.5, -100.5, 105.5, -70, 0, 0, 0, 0
 AddFloor Landscape, Washington Plaza, ParkingCeiling, 0.5, 75, -70, 105.5, 70, 0, 0, 0, 0
-AddFloor Landscape, North Plaza, ParkingCeiling, 0.5, -300, -70, -75, 70, 0, 0, 0, 0
-AddFloor Landscape, State Plaza, ParkingCeiling, 0.5, -300, 70, 105.5, 223.5, 0, 0, 0, 0
-AddFloor Landscape, South Block Filler, ParkingCeiling, 0.5, 203.5, -100.5, 400, 223.5, 0, 0, 0, 0
+AddFloor Landscape, North Plaza, ParkingCeiling, 0.5, -266.5, -70, -75, 70, 0, 0, 0, 0
+AddFloor Landscape, State Plaza, ParkingCeiling, 0.5, -266.5, 70, 105.5, 223.5, 0, 0, 0, 0
+AddFloor Landscape, South Block Filler East, ParkingCeiling, 0.5, 203.5, -100.5, 400, 223.5, 0, 0, 0, 0
+AddFloor Landscape, South Block Filler West, ParkingCeiling, 0.5, 203.5, -505, 400, -198.5, 0, 0, 0, 0
+AddFloor Landscape, Daley Plaza, ParkingCeiling, 0.5, -266.5, -505, 105.5, -198.5, 0, 0, 0, 0
 
 #Sidewalk
-AddFloor Landscape, Dearborn Sidewalk East, ParkingFloor, 0, -300, -124.5, 129.5, -100.5, 0, 0, 0, 0
-AddFloor Landscape, Dearborn Sidewalk West, ParkingFloor, 0, -300, -198.5, 129.5, -174.5, 0, 0, 0, 0
+AddFloor Landscape, Dearborn Sidewalk East, ParkingFloor, 0, -290.5, -124.5, 129.5, -100.5, 0, 0, 0, 0
+AddFloor Landscape, Dearborn Sidewalk West, ParkingFloor, 0, -290.5, -198.5, 129.5, -174.5, 0, 0, 0, 0
 AddFloor Landscape, Dearborn Sidewalk East 2, ParkingFloor, 0, 179.5, -124.5, 400, -100.5, 0, 0, 0, 0
 AddFloor Landscape, Dearborn Sidewalk West 2, ParkingFloor, 0, 179.5, -198.5, 400, -174.5, 0, 0, 0, 0
-AddFloor Landscape, Washington Sidewalk North, ParkingFloor, 0, 105.5, -100.5, 129.5, 223.5, 0, 0, 0, 0
-AddFloor Landscape, Washington Sidewalk South, ParkingFloor, 0, 179.5, -100.5, 203.5, 223.5, 0, 0, 0, 0
-AddFloor Landscape, State Sidewalk West, ParkingFloor, 0, -300, 223.5, 129.5, 247.5, 0, 0, 0, 0
-AddFloor Landscape, State Sidewalk East, ParkingFloor, 0, -300, 297.5, 129.5, 321.5, 0, 0, 0, 0
+AddFloor Landscape, Washington Sidewalk North East, ParkingFloor, 0, 105.5, -100.5, 129.5, 223.5, 0, 0, 0, 0
+AddFloor Landscape, Washington Sidewalk South East, ParkingFloor, 0, 179.5, -100.5, 203.5, 223.5, 0, 0, 0, 0
+AddFloor Landscape, Washington Sidewalk North West, ParkingFloor, 0, 105.5, -505, 129.5, -198.5, 0, 0, 0, 0
+AddFloor Landscape, Washington Sidewalk South West, ParkingFloor, 0, 179.5, -505, 203.5, -198.5, 0, 0, 0, 0
+AddFloor Landscape, State Sidewalk West, ParkingFloor, 0, -290.5, 223.5, 129.5, 247.5, 0, 0, 0, 0
+AddFloor Landscape, State Sidewalk East, ParkingFloor, 0, -290.5, 297.5, 129.5, 321.5, 0, 0, 0, 0
 AddFloor Landscape, State Sidewalk West 2, ParkingFloor, 0, 179.5, 223.5, 400, 247.5, 0, 0, 0, 0
 AddFloor Landscape, State Sidewalk East 2, ParkingFloor, 0, 179.5, 297.5, 400, 321.5, 0, 0, 0, 0
+AddFloor Landscape, Randolph Sidewalk South East, ParkingFloor, 0, -290.5, -100.5, -266.5, 223.5, 0, 0, 0, 0
+AddFloor Landscape, Randolph Sidewalk South West, ParkingFloor, 0, -290.5, -529, -266.5, -198.5, 0, 0, 0, 0
+AddFloor Landscape, Clark Sidewalk West, ParkingFloor, 0, -290.5, -603, 129.5, -579, 0, 0, 0, 0
+AddFloor Landscape, Clark Sidewalk East, ParkingFloor, 0, -290.5, -529, 129.5, -505, 0, 0, 0, 0
+AddFloor Landscape, Clark Sidewalk West 2, ParkingFloor, 0, 179.5, -603, 400, -579, 0, 0, 0, 0
+AddFloor Landscape, Clark Sidewalk East 2, ParkingFloor, 0, 179.5, -529, 400, -505, 0, 0, 0, 0
 
 #Streets
-AddFloor Landscape, Dearborn, ParkingWalls, 0, -300, -174.5, 400, -124.5, 0, 0, 0, 0
-AddFloor Landscape, Washington, ParkingWalls, 0, 129.5, -124.5, 179.5, 247.5, 0, 0, 0, 0
-AddFloor Landscape, State, ParkingWalls, 0, -300, 247.5, 400, 297.5, 0, 0, 0, 0
+AddFloor Landscape, Dearborn North, ParkingWalls, 0, -300, -174.5, 129.5, -124.5, 0, 0, 0, 0
+AddFloor Landscape, Dearborn South, ParkingWalls, 0, 179.5, -174.5, 400, -124.5, 0, 0, 0, 0
+AddFloor Landscape, Washington, ParkingWalls, 0, 129.5, -603, 179.5, 321.5, 0, 0, 0, 0
+AddFloor Landscape, State North, ParkingWalls, 0, -300, 247.5, 129.5, 297.5, 0, 0, 0, 0
+AddFloor Landscape, State South, ParkingWalls, 0, 179.5, 247.5, 400, 297.5, 0, 0, 0, 0
+AddFloor Landscape, Randolph, ParkingWalls, 0, -340.5, -603, -290.5, 321.5, 0, 0, 0, 0
+AddFloor Landscape, Clark North, ParkingWalls, 0, -300, -579, 129.5, -529, 0, 0, 0, 0
+AddFloor Landscape, Clark South, ParkingWalls, 0, 179.5, -579, 400, -529, 0, 0, 0, 0
 
 #Plaza cut for ramp
 Cut Landscape, -76.5, -1, 106.5, -46, 1, 223.5, false, true
