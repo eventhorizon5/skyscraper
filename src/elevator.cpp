@@ -2223,7 +2223,7 @@ void Elevator::EnableInspectionService(bool value)
 		Report("Inspection Service mode disabled");
 
 		//turn on objects if user is in elevator
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && IsMoving == false)
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning on objects");
@@ -2247,6 +2247,9 @@ void Elevator::EnableInspectionService(bool value)
 				sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, true, true);
 			}
 		}
+
+		if (IsMoving == true)
+			StopMove();
 	}
 
 	InspectionService = value;
