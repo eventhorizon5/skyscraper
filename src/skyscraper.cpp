@@ -992,32 +992,35 @@ void Skyscraper::StartSound()
 		return;
 	}
 
+	csString filename = confman->GetStr("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
+	csString filename_full = "/root/data/" + filename;
+
 	//load new sound
-	csRef<iDataBuffer> sndbuffer = vfs->ReadFile("/root/data/intro.ogg");
+	csRef<iDataBuffer> sndbuffer = vfs->ReadFile(filename_full);
 	if (!sndbuffer)
 	{
-		ReportError("Can't load file intro.ogg");
+		ReportError("Can't load file " + filename);
 		return;
 	}
 
 	csRef<iSndSysData> snddata = sndloader->LoadSound(sndbuffer);
 	if (!snddata)
 	{
-		ReportError("Can't load sound intro.ogg");
+		ReportError("Can't load sound " + filename);
 		return;
 	}
 
 	sndstream = sndrenderer->CreateStream(snddata, CS_SND3D_DISABLE);
 	if (!sndstream)
 	{
-		ReportError("Can't create stream for intro.ogg");
+		ReportError("Can't create stream for " + filename);
 		return;
 	}
 
 	sndsource = sndrenderer->CreateSource(sndstream);
 	if (!sndsource)
 	{
-		ReportError("Can't create source for intro.ogg");
+		ReportError("Can't create source for " + filename);
 		return;
 	}
 
