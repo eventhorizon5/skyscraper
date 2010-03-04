@@ -1512,7 +1512,15 @@ int ScriptProcessor::ProcCommands()
 			}
 		}
 
-		Simcore->GetShaft(atoi(tempdata[0]))->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
+		//check for existence of shaft
+		int shaftnum = atoi(tempdata[0]);
+		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
+		{
+			ScriptError("Invalid shaft " + csString(tempdata[0]));
+			return sError;
+		}
+
+		Simcore->GetShaft(shaftnum)->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
 
 		tempdata.DeleteAll();
 	}
