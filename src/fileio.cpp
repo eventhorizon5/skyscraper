@@ -115,6 +115,16 @@ bool ScriptProcessor::LoadBuilding()
 		if (LineData == "")
 			goto Nextline;
 
+		//function parameter variables
+		if (InFunction == true)
+		{
+			for (int i = 0; i < FunctionParams.GetSize(); i++)
+			{
+				csString num = _itoa(i + 1, intbuffer, 10);
+				LineData.ReplaceAll("%param" + num + "%", FunctionParams[i]);
+			}
+		}
+
 		//////////////////////
 		//Section information
 		//////////////////////
@@ -499,16 +509,6 @@ checkfloors:
 		LineData.ReplaceAll("%minz%", _gcvt(MinExtent.z, 12, buffer2));
 		LineData.ReplaceAll("%maxx%", _gcvt(MaxExtent.x, 12, buffer2));
 		LineData.ReplaceAll("%maxz%", _gcvt(MaxExtent.z, 12, buffer2));
-
-		//function parameter variables
-		if (InFunction == true)
-		{
-			for (int i = 0; i < FunctionParams.GetSize(); i++)
-			{
-				csString num = _itoa(i + 1, intbuffer, 10);
-				LineData.ReplaceAll("%param" + num + "%", FunctionParams[i]);
-			}
-		}
 
 		//Global commands
 		returncode = ProcCommands();
