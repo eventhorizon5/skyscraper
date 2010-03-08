@@ -432,19 +432,15 @@ SetTextureMapping 0, -0.333, 0, 1, 2.333, 0, 2, 2.333, 1
     SetTextureMapping 0, 0.26, 0, 1, 6.666, 0, 2, 6.666, 1
     DrawWalls = false, true, false, false, false, false
     if[%floor% < 57] AddWall Left Upper, MainWindows2, 0, -84.32, 7.84, -44.96, 35.52, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    SetTextureMapping 0, 0.26, 0.5, 1, 6.666, 0.5, 2, 6.666, 1
-    if[%floor% = 57] AddWall Left Upper, MainWindows2, 0, -84.32, 7.84, -44.96, 35.52, %fullheight% / 2, %fullheight% / 2, 0, 0, 0, 0, True
-    SetTextureMapping 0, 0, 1, 1, 6.666, 1, 2, 6.666, 0.5
-    if[%floor% = 57] AddWall Left Upper, MainWindows2, 0, -84.32, 7.84, -43.36, 36.64, %fullheight% / 2, %fullheight% / 2, 6, 6, 0, 0, True
+    SetTextureMapping 0, 0.26, 0, 1, 6.666, 0, 2, 6.666, 1
+    if[%floor% = 57] AddWall Left Upper, MainWindows2, 0, -84.32, 7.84, -44.96, 35.52, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetTextureMapping 0, 0, 0, 1, 6.666, 0, 2, 6.666, 1
     if[%floor% > 57] AddWall Left Upper, MainWindows2, 0, -84.32, 7.84, -43.36, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetTextureMapping 0, 6.666, 0, 1, 0.26, 0, 2, 0.26, 1
     DrawWalls = true, false, false, false, false, false
     if[%floor% < 57] AddWall Left Upper, MainWindowsInside, 0, -84.32, 7.84, -44.96, 35.52, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    SetTextureMapping 0, 6.666, 0.5, 1, 0.26, 0.5, 2, 0.26, 1
-    if[%floor% = 57] AddWall Left Upper, MainWindowsInside, 0, -84.32, 7.84, -44.96, 35.52, %fullheight% / 2, %fullheight% / 2, 0, 0, 0, 0, True
-    SetTextureMapping 0, 6.666, 1, 1, 0, 1, 2, 0, 0.5
-    if[%floor% = 57] AddWall Left Upper, MainWindowsInside, 0, -84.32, 7.84, -43.36, 36.64, %fullheight% / 2, %fullheight% / 2, 6, 6, 0, 0, True
+    SetTextureMapping 0, 6.666, 0, 1, 0.26, 0, 2, 0.26, 1
+    if[%floor% = 57] AddWall Left Upper, MainWindowsInside, 0, -84.32, 7.84, -44.96, 35.52, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetTextureMapping 0, -0.666, 0, 1, 6, 0, 2, 6, 1
     if[%floor% > 57] AddWall Left Upper, MainWindowsInside, 0, -84.32, 7.84, -43.36, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
 <EndFloors>
@@ -622,18 +618,30 @@ DrawWalls = true, true, false, false, false, false
 ResetTextureMapping = true
 SetAutoSize = false, false
 AddCustomWall external, Back - Top Detachment, Backing, -44.96, Floor(57).Altitude, 35.52, -44.96, Floor(57).Altitude, 43.2, 34.24, Floor(33).Altitude, 43.52, 34.24, Floor(33).Altitude, 36.64, -44.96, Floor(57).Altitude, 35.52, 30, 40
+AddCustomWall external, Back - Top Detachment Back Side, Backing, 34.24, Floor(33).Altitude, 43.52, 37.92, Floor(32).Altitude + 6, 43.52, -48.64, Floor(58).Altitude + 6, 43.2, -44.96, Floor(57).Altitude, 43.2, 34.24, Floor(33).Altitude, 43.52, 70, 50
+AddCustomWall external, Back - Top Detachment Front Side, Backing, -43.36, Floor(57).Altitude + 6, 36.64, -44.96, Floor(57).Altitude, 35.52, 34.24, Floor(33).Altitude, 36.64, 37.28, Floor(32).Altitude + 6, 36.64, -43.36, Floor(57).Altitude + 6, 36.64, 70, 50
+SetAutoSize = true, false
+AddCustomWall external, Back Fin Extension Right Upper, Backing, 34.24, Floor(33).Altitude, 43.52, 34.24, Floor(32).Altitude + 6, 43.52, 37.92, Floor(32).Altitude + 6, 43.52, 0, 0
+AddCustomWall external, Back Fin Extension Right Lower, Backing, 34.24, Floor(33).Altitude, 36.64, 34.24, Floor(32).Altitude + 6, 36.64, 37.28, Floor(32).Altitude + 6, 36.64, 0, 0
 
+SetAutoSize = false, false
 DrawWalls = true, false, false, false, false, false
 SetPlanarMapping false, false, true, false
 AddCustomWall external, Back Fin Right Corner, MainWindows2single, 37.92, Floor(31).Altitude, 43.52, 37.92, Floor(32).Altitude + 6, 43.52, 40.64, Floor(31).Altitude, 46.08, 1, 1.5
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Back Fin Right Corner, MainWindowsInsideSingle, 37.92, Floor(31).Altitude, 43.52, 37.92, Floor(32).Altitude + 6, 43.52, 40.64, Floor(31).Altitude, 46.08, 1, 1.5
 
-SetAutoSize = false, false
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Back Fin Extension Left, MainWindows2single, -48.64, Floor(57).Altitude, 43.2, -48.64, Floor(58).Altitude + 6, 43.2, -44.96, Floor(57).Altitude, 43.2, 1, 1.5
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Back Fin Extension Left, MainWindowsInsideSingle, -48.64, Floor(57).Altitude, 43.2, -48.64, Floor(58).Altitude + 6, 43.2, -44.96, Floor(57).Altitude, 43.2, 1, 1.5
+
+SetPlanarMapping false, true, false, false
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Back Fin Right Corner 2, MainWindows2, -44.96, Floor(57).Altitude, 35.52, -43.36, Floor(57).Altitude + 6, 36.64, -43.36, Floor(58).Altitude, 36.64, -44.96, Floor(58).Altitude, 35.52, 0.26, 1
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Back Fin Right Corner 2, MainWindowsInside, -44.96, Floor(57).Altitude, 35.52, -43.36, Floor(57).Altitude + 6, 36.64, -43.36, Floor(58).Altitude, 36.64, -44.96, Floor(58).Altitude, 35.52, 0.26, 1
+
 SetPlanarMapping false, false, false, false
 
 # right setback
