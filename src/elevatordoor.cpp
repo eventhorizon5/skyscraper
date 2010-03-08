@@ -1383,7 +1383,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				}
 				float newwidth = width + offset;
 				marker1 = newwidth / 4;
-				marker2 = (mainwidth + (width - mainwidth)) - (newwidth / 4) + offset;
+				marker2 = (mainwidth + (width - mainwidth)) - marker1 + offset;
 			}
 			else
 			{
@@ -1396,7 +1396,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 					offset = extents_min.y - wrapper->Origin.y;
 				float newheight = height + offset;
 				marker1 = newheight / 4;
-				marker2 = (mainheight + (height - mainheight)) - (newheight / 4) + offset;
+				marker2 = (mainheight + (height - mainheight)) - marker1 + offset;
 			}
 			active_speed = 0;
 		}
