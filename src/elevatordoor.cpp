@@ -410,6 +410,18 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//this is the parent controller function that runs the movement function for each
 	//individual door component.
 
+	//find which doors should be moved
+	bool elevdoors = false, shaftdoors = false;
+	if (WhichDoors == 1)
+	{
+		elevdoors = true;
+		shaftdoors = true;
+	}
+	if (WhichDoors == 2)
+		elevdoors = true;
+	if (WhichDoors == 3)
+		shaftdoors = true;
+
 	if (DoorIsRunning == false || (manual == true && previous_open != open))
 	{
 		//initialization code
@@ -468,24 +480,28 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				sbs->EnableExternal(true);
 			}
 		}
+		//reset finished states
+		if (elevdoors == true)
+		{
+			for (int i = 0; i < Doors->doors.GetSize(); i++)
+			{
+				Doors->doors[i]->finished = false;
+			}
+		}
+
+		if (shaftdoors == true)
+		{
+			for (int i = 0; i < ShaftDoors[index]->doors.GetSize(); i++)
+			{
+				ShaftDoors[index]->doors[i]->finished = false;
+			}
+		}
 	}
 	else if (previous_open != open && manual == false && door_changed == false)
 	{
 		//if a different direction was specified during movement
 		door_changed = true;
 	}
-
-	//find which doors should be moved
-	bool elevdoors = false, shaftdoors = false;
-	if (WhichDoors == 1)
-	{
-		elevdoors = true;
-		shaftdoors = true;
-	}
-	if (WhichDoors == 2)
-		elevdoors = true;
-	if (WhichDoors == 3)
-		shaftdoors = true;
 
 	//perform door movement and get open state of each door
 	if (elevdoors == true)
@@ -1303,6 +1319,9 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
 	float tempposition, temporigin;
+
+	if (finished == true)
+		return;
 
 	if (direction > 1)
 	{

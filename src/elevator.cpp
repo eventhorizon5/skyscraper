@@ -141,6 +141,12 @@ Elevator::Elevator(int number)
 	RandomFrequency = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.RandomFrequency", 3);
 	RandomLobby = 0;
 	RandomLobbySet = false;
+	mainsound = 0;
+	idlesound = 0;
+	motorsound = 0;
+	alarm = 0;
+	floorbeep = 0;
+	floorsound = 0;
 
 	//create timers
 	timer = new Timer(this, true);
