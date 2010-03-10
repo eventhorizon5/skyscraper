@@ -141,6 +141,12 @@ Elevator::Elevator(int number)
 	RandomFrequency = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.RandomFrequency", 3);
 	RandomLobby = 0;
 	RandomLobbySet = false;
+	mainsound = 0;
+	idlesound = 0;
+	motorsound = 0;
+	alarm = 0;
+	floorbeep = 0;
+	floorsound = 0;
 
 	//create timers
 	timer = new Timer(this, true);
@@ -2223,7 +2229,7 @@ void Elevator::EnableInspectionService(bool value)
 		Report("Inspection Service mode disabled");
 
 		//turn on objects if user is in elevator
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && IsMoving == false)
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning on objects");
@@ -2247,6 +2253,9 @@ void Elevator::EnableInspectionService(bool value)
 				sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, true, true);
 			}
 		}
+
+		if (IsMoving == true)
+			StopMove();
 	}
 
 	InspectionService = value;

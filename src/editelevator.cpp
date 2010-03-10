@@ -1060,6 +1060,14 @@ void editelevator::On_bInsService_Toggle(wxCommandEvent& event)
 	if (elevator)
 	{
 		elevator->EnableInspectionService(bInsService->GetValue());
+
+		if (bInsService->GetValue() == false)
+		{
+			elevator->SetGoButton(false);
+			bGoToggle->SetValue(false);
+			bUp->SetValue(false);
+			bDown->SetValue(false);
+		}
 		SetMainValues();
 	}
 }

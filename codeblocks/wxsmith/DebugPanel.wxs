@@ -198,6 +198,7 @@
 											<object class="wxCheckBox" name="ID_chkFrameLimiter" variable="chkFrameLimiter" member="yes">
 												<label>Frame Limiter</label>
 												<enabled>0</enabled>
+												<hidden>1</hidden>
 												<handler function="On_chkFrameLimiter_Click" entry="EVT_CHECKBOX" />
 											</object>
 											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
@@ -223,6 +224,15 @@
 											<object class="wxCheckBox" name="ID_chkAutoStairs" variable="chkAutoStairs" member="yes">
 												<label>Automatic Stairs</label>
 												<handler function="On_chkAutoStairs_Click" entry="EVT_CHECKBOX" />
+											</object>
+											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxCheckBox" name="ID_chkRandom" variable="chkRandom" member="yes">
+												<label>Random Activity</label>
+												<handler function="On_chkRandom_Click" entry="EVT_CHECKBOX" />
 											</object>
 											<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>

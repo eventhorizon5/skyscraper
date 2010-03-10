@@ -76,6 +76,7 @@ const long DebugPanel::ID_chkFrameLimiter = wxNewId();
 const long DebugPanel::ID_chkProcessElevators = wxNewId();
 const long DebugPanel::ID_chkAutoShafts = wxNewId();
 const long DebugPanel::ID_chkAutoStairs = wxNewId();
+const long DebugPanel::ID_chkRandom = wxNewId();
 const long DebugPanel::ID_CHECKBOX1 = wxNewId();
 const long DebugPanel::ID_bListAltitudes = wxNewId();
 const long DebugPanel::ID_bMeshControl = wxNewId();
@@ -99,6 +100,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	wxBoxSizer* BoxSizer11;
 	
 	Create(parent, wxID_ANY, _("Simulator Control Panel"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX, _T("wxID_ANY"));
+	Move(wxPoint(10,10));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	Panel1 = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
 	BoxSizer11 = new wxBoxSizer(wxVERTICAL);
@@ -153,6 +155,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	chkFrameLimiter = new wxCheckBox(Panel1, ID_chkFrameLimiter, _("Frame Limiter"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkFrameLimiter"));
 	chkFrameLimiter->SetValue(false);
 	chkFrameLimiter->Disable();
+	chkFrameLimiter->Hide();
 	BoxSizer5->Add(chkFrameLimiter, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkProcessElevators = new wxCheckBox(Panel1, ID_chkProcessElevators, _("Process Elevators"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkProcessElevators"));
 	chkProcessElevators->SetValue(false);
@@ -163,6 +166,9 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	chkAutoStairs = new wxCheckBox(Panel1, ID_chkAutoStairs, _("Automatic Stairs"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAutoStairs"));
 	chkAutoStairs->SetValue(false);
 	BoxSizer5->Add(chkAutoStairs, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	chkRandom = new wxCheckBox(Panel1, ID_chkRandom, _("Random Activity"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRandom"));
+	chkRandom->SetValue(false);
+	BoxSizer5->Add(chkRandom, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkVerbose = new wxCheckBox(Panel1, ID_CHECKBOX1, _("Verbose Mode"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
 	chkVerbose->SetValue(false);
 	BoxSizer5->Add(chkVerbose, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -200,6 +206,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkProcessElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkProcessElevators_Click);
 	Connect(ID_chkAutoShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoShafts_Click);
 	Connect(ID_chkAutoStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoStairs_Click);
+	Connect(ID_chkRandom,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkRandom_Click);
 	Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkVerbose_Click);
 	Connect(ID_bListAltitudes,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bListAltitudes_Click);
 	Connect(ID_bMeshControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
@@ -282,6 +289,8 @@ void DebugPanel::OnInit()
 	chkAutoShafts->SetValue(Simcore->AutoShafts);
 	chkAutoStairs->SetValue(Simcore->AutoStairs);
 	chkVerbose->SetValue(Simcore->Verbose);
+	if (Simcore->Elevators() > 0)
+		chkRandom->SetValue(Simcore->GetElevator(1)->RandomActivity);
 
 	mc = new MeshControl(dp, -1);
 	ee = new editelevator(dp, -1);
@@ -395,4 +404,15 @@ void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
 void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
 {
 	objectinfo->Show();
+}
+
+void DebugPanel::On_chkRandom_Click(wxCommandEvent& event)
+{
+	if (Simcore->Elevators() > 0)
+	{
+		for (int i = 1; i <= Simcore->Elevators(); i++)
+		{
+			Simcore->GetElevator(i)->RandomActivity = chkRandom->GetValue();
+		}
+	}
 }
