@@ -232,11 +232,21 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	if (whichdoors == 1 && elev->OnFloor == false)
 		whichdoors = 2;
 
-	//if opening both doors, exit if shaft doors don't exist
-	int index = ManualFloors.Find(elev->GetFloor());
-	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && index == -1)
+	//change floor to elevator's destination floor if it's currently leveling to that floor
+	//this fixes an issue where the elevator might not yet be on the destination floor when this function is called
+	if (whichdoors == 1)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors on " + csString(_itoa(elev->GetFloor(), intbuffer, 10)));
+		if (elev->MoveElevator == true && elev->Leveling == true)
+			floor = elev->GotoFloor;
+		else
+			floor = elev->GetFloor();
+	}
+
+	//if opening both doors, exit if shaft doors don't exist
+	int index = ManualFloors.Find(floor);
+	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
+	{
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors on " + csString(_itoa(floor, intbuffer, 10)));
 		OpenDoor = 0;
 		return;
 	}
@@ -342,18 +352,21 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	if (whichdoors == 1 && elev->OnFloor == false)
 		whichdoors = 2;
 
+	if (whichdoors != 3)
+		floor = elev->GetFloor();
+
 	//if closing both doors, exit if shaft doors don't exist
-	int index = ManualFloors.Find(elev->GetFloor());
-	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && index == -1)
+	int index = ManualFloors.Find(floor);
+	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors on " + csString(_itoa(elev->GetFloor(), intbuffer, 10)));
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors on " + csString(_itoa(floor, intbuffer, 10)));
 		OpenDoor = 0;
 		return;
 	}
 
 	//turn off directional indicators
 	if (whichdoors == 1)
-		sbs->GetFloor(elev->GetFloor())->SetDirectionalIndicators(elev->Number, false, false);
+		sbs->GetFloor(floor)->SetDirectionalIndicators(elev->Number, false, false);
 
 	WhichDoors = whichdoors;
 	ShaftDoorFloor = floor;
@@ -432,14 +445,9 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		DoorIsRunning = true;
 		door_changed = false;
 
-		int checkfloor;
-		if (WhichDoors == 3)
-			checkfloor = ShaftDoorFloor;
-		else
-			checkfloor = elev->GetFloor();
-		index = elev->ServicedFloors.Find(checkfloor);
-		int index2 = ManualFloors.Find(checkfloor);
-		if (ShaftDoorsExist(checkfloor) == false && index2 == -1)
+		index = elev->ServicedFloors.Find(ShaftDoorFloor);
+		int index2 = ManualFloors.Find(ShaftDoorFloor);
+		if (ShaftDoorsExist(ShaftDoorFloor) == false && index2 == -1)
 		{
 			if (WhichDoors != 2)
 			{
@@ -556,8 +564,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 	//turn on autoclose timer
 	if (manual == false && (elev->InServiceMode() == false || elev->WaitForDoors == true) &&
-		(elev->UpPeak == false || elev->GetFloor() != elev->GetBottomFloor()) &&
-		(elev->DownPeak == false || elev->GetFloor() != elev->GetTopFloor()))
+		(elev->UpPeak == false || ShaftDoorFloor != elev->GetBottomFloor()) &&
+		(elev->DownPeak == false || ShaftDoorFloor != elev->GetTopFloor()))
 	{
 		ResetDoorTimer();
 	}
