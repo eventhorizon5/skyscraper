@@ -235,8 +235,8 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     SetAutoSize = true, true
 <EndFloors>
 
-# floors 59 to 80
-<Floors 58 to 79>
+# floors 59 to 79
+<Floors 58 to 78>
     ID = %floor% + 1
     Name = Offices
     Type = Office
@@ -244,8 +244,8 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     InterfloorHeight = 2.5
 <EndFloors>
 
-# floors 81 to 85
-<Floors 80 To 84>
+# floors 80 to 85
+<Floors 79 To 84>
     ID = %floor% + 1
     Name = Residential
     Type = Residential
@@ -415,15 +415,15 @@ SetTextureMapping 0, -0.333, 0, 1, 2.333, 0, 2, 2.333, 1
 
 <Floors 0 to 65>
     DrawWalls = true, false, false, false, false, false
-    SetTextureMapping 0, -0.145, 0, 1, 9.333, 0, 2, 9.333, 1
+    SetTextureMapping 0, -0.218, 0, 1, 9.333, 0, 2, 9.333, 1
     if[%floor% < 65] AddWall Front Fin Left, MainWindows2single, 0, -100.64, -46.24, -83.04, -20.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    SetTextureMapping 0, -0.145, 0.5, 1, 9.333, 0.5, 2, 9.333, 1
+    SetTextureMapping 0, -0.218, 0.5, 1, 9.333, 0.5, 2, 9.333, 1
     if[%floor% = 65] AddWall Front Fin Left, MainWindows2single, 0, -100.64, -46.24, -83.04, -20.64, %fullheight% / 2, %fullheight% / 2, 0, 0, 0, 0, True
 
     DrawWalls = false, true, false, false, false, false
-    SetTextureMapping 0, -0.145, 0, 1, 9.333, 0, 2, 9.333, 1
+    SetTextureMapping 0, -0.218, 0, 1, 9.333, 0, 2, 9.333, 1
     if[%floor% < 65] AddWall Front Fin Left, MainWindowsInsideSingle, 0, -100.64, -46.24, -83.04, -20.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    SetTextureMapping 0, -0.145, 0.5, 1, 9.333, 0.5, 2, 9.333, 1
+    SetTextureMapping 0, -0.218, 0.5, 1, 9.333, 0.5, 2, 9.333, 1
     if[%floor% = 65] AddWall Front Fin Left, MainWindowsInsideSingle, 0, -100.64, -46.24, -83.04, -20.64, %fullheight% / 2, %fullheight% / 2, 0, 0, 0, 0, True
 <EndFloors>
 
@@ -725,8 +725,16 @@ DrawWalls = true, true, false, false, false, false
     if[%floor% = 33] AddCustomWall floor, BackFinFloor, Carpet1, -18.88, %1%, 68.8, %2%, %1%, %5%, %4%, %1%, %3%, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 0, 0
     if[%floor% > 33 & %floor% < 43] AddCustomWall floor, BackFinFloor, Carpet1, -18.88, %1%, 68.8, %2%, %1%, %5%, %4%, %1%, %3%, -44.96, %1%, 43.2, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 0, 0
     if[%floor% > 42 & %floor% < 57] AddCustomWall floor, BackFinFloor, Carpet1, %2%, %1%, %5%, %4%, %1%, %3%, -44.96, %1%, 43.2, -48.64, %1%, 43.2, %2%, %1%, %5%, 0, 0
-    if[%floor% < 56] AddCustomWall floor, BackDetachmentFloor, Carpet1, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
+    if[%floor% < 33] AddCustomWall floor, BackDetachmentFloor, Carpet1, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
     AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
+
+    GetWallExtents external, Back-TopDetachment, %1%
+    Set 2 = %minx%
+    Set 3 = %minz%
+    Set 4 = %maxx%
+    Set 5 = %maxz%
+
+    if[%floor% > 32 & %floor% < 57] AddCustomWall floor, BackDetachmentFloor, Carpet1, -44.96, %1%, 43.2, %2%, %1%, %5%, %2%, %1%, %3%, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
 
     #Ceiling
     Set 1 = Floor(%floor%).Base + Floor(%floor%).Height
@@ -743,8 +751,16 @@ DrawWalls = true, true, false, false, false, false
     if[%floor% = 32] AddCustomWall floor, BackFinFloor, Marble3, -18.88, %1%, 68.8, %2%, %1%, %5%, %4%, %1%, %3%, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 0, 0
     if[%floor% > 32 & %floor% < 42] AddCustomWall floor, BackFinFloor, Marble3, -18.88, %1%, 68.8, %2%, %1%, %5%, %4%, %1%, %3%, -44.96, %1%, 43.2, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 0, 0
     if[%floor% > 41 & %floor% < 56] AddCustomWall floor, BackFinFloor, Marble3, %2%, %1%, %5%, %4%, %1%, %3%, -44.96, %1%, 43.2, -48.64, %1%, 43.2, %2%, %1%, %5%, 0, 0
-    if[%floor% < 55] AddCustomWall floor, BackDetachmentCeiling, Marble3, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
+    if[%floor% < 33] AddCustomWall floor, BackDetachmentCeiling, Marble3, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
     AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
+
+    GetWallExtents external, Back-TopDetachment, %1%
+    Set 2 = %minx%
+    Set 3 = %minz%
+    Set 4 = %maxx%
+    Set 5 = %maxz%
+
+    if[%floor% > 32 & %floor% < 57] AddCustomWall floor, BackDetachmentFloor, Marble3, -44.96, %1%, 43.2, %2%, %1%, %5%, %2%, %1%, %3%, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
 <EndFloors>
 
 # floors 59 to 79
@@ -854,7 +870,6 @@ ShowFullShaft 1 = true
 #Test elevator
 AddShaft 2, 2, 0, 0, 0, 137
 ShaftCut 2, -4, -4.125 + 0.33, 4, 4.125, 0, 5
-ShowFullShaft 2 = true
 
 #Glass Elevator shaft
 <Floors 0 to 137>
