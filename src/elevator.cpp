@@ -147,6 +147,7 @@ Elevator::Elevator(int number)
 	alarm = 0;
 	floorbeep = 0;
 	floorsound = 0;
+	OriginFloor = 0;
 
 	//create timers
 	timer = new Timer(this, true);

@@ -236,7 +236,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	int index = ManualFloors.Find(elev->GetFloor());
 	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && index == -1)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors");
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors on " + csString(_itoa(elev->GetFloor(), intbuffer, 10)));
 		OpenDoor = 0;
 		return;
 	}
@@ -346,7 +346,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	int index = ManualFloors.Find(elev->GetFloor());
 	if (whichdoors == 1 && ShaftDoorsExist(elev->GetFloor()) == false && index == -1)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors");
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors on " + csString(_itoa(elev->GetFloor(), intbuffer, 10)));
 		OpenDoor = 0;
 		return;
 	}
