@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Skyscraper"
-!define PRODUCT_VERSION "2.0 Alpha 5"
+!define PRODUCT_VERSION "2.0 Alpha 6"
 !define PRODUCT_PUBLISHER "Ryan Thoryk"
 !define PRODUCT_WEB_SITE "http://www.skyscrapersim.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Skyscraper.exe"
@@ -20,10 +20,10 @@ SetCompressor lzma
 VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "TLI Networks"
-VIAddVersionKey LegalCopyright "©2003-2009 Ryan Thoryk"
-VIAddVersionKey FileVersion "1.5.0.0"
-VIAddVersionKey ProductVersion "1.5.0.0"
-VIProductVersion 1.5.0.0
+VIAddVersionKey LegalCopyright "©2003-2010 Ryan Thoryk"
+VIAddVersionKey FileVersion "1.6.0.0"
+VIAddVersionKey ProductVersion "1.6.0.0"
+VIProductVersion 1.6.0.0
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -70,7 +70,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "skyscraper20alpha5.exe"
+OutFile "skyscraper20alpha6.exe"
 InstallDir "$PROGRAMFILES\Skyscraper"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -104,6 +104,10 @@ Section "Application" SEC01
   File "${LOCAL_FILES}\data\triton_signs\*.*"
   SetOutPath "$INSTDIR\data\fonts"
   File "${LOCAL_FILES}\data\fonts\*.*"
+  SetOutPath "$INSTDIR\data\MT"
+  File "${LOCAL_FILES}\data\MT\*.*"
+  SetOutPath "$INSTDIR\data\scripts"
+  File "${LOCAL_FILES}\data\scripts\*.*"
 SectionEnd
 
 Section /o "Source Code" SEC02
@@ -188,7 +192,6 @@ Section "Crystal Space libraries" SEC04
   File "${LOCAL_FILES}\vfs.dll"
   File "${LOCAL_FILES}\wxgl.dll"
   File "${LOCAL_FILES}\xmlshader.dll"
-  File "${LOCAL_FILES}\msvcr80.dll"
   SetOutPath "$INSTDIR\data\config-plugins"
   File /r "${LOCAL_FILES}\data\config-plugins\*.*"
   SetOutPath "$INSTDIR\data\shader"
@@ -244,7 +247,7 @@ FunctionEnd
 Function CheckVCRedist
    Push $R0
    ClearErrors
-   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{7299052b-02a4-4627-81f2-1818da5d550d}" "Version"
+   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{770657D0-A123-3C07-8E44-1C83EC895118}" "Version"
 
    ; if VS 2005+ redist SP1 not installed, install it
    IfErrors 0 VSRedistInstalled
