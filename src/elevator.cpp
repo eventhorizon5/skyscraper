@@ -733,7 +733,7 @@ void Elevator::ProcessCallQueue()
 					MoveElevator = true;
 					LastQueueDirection = 1;
 				}
-				else if (Leveling == false)
+				else if (Leveling == false && ActiveDirection == 1)
 				{
 					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != UpQueue[i])
@@ -809,7 +809,7 @@ void Elevator::ProcessCallQueue()
 					MoveElevator = true;
 					LastQueueDirection = -1;
 				}
-				else if (Leveling == false)
+				else if (Leveling == false && ActiveDirection == -1)
 				{
 					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != DownQueue[i])

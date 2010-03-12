@@ -403,16 +403,16 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     SetAutoSize = true, true
 
     #Dearborn street doors
-    #AddDoor StairsDoor2, 0.2, 8, 10, -70, 3.5, 8, 0, 0, 0
-    #AddFillerWalls ConnectionWall, 0.2, 10, -70, 3.5, 8, 0, true, 0, 0
-    #AddDoor StairsDoor2, 0.2, 5, -10, -70, 3.5, 8, 0, 0, 0
-    #AddFillerWalls ConnectionWall, 0.2, -10, -70, 3.5, 8, 0, true, 0, 0
+    AddDoor StairsDoor2, 0.2, 8, 10, -70, 3.5, 8, 0, 0, 0
+    AddFillerWalls ConnectionWall, 0.2, 10, -70, 3.5, 8, 0, true, 0, 0
+    AddDoor StairsDoor2, 0.2, 5, -10, -70, 3.5, 8, 0, 0, 0
+    AddFillerWalls ConnectionWall, 0.2, -10, -70, 3.5, 8, 0, true, 0, 0
     
     #State street/plaza doors
-    #AddDoor StairsDoor2, 0.2, 7, 10, 70, 3.5, 8, 0, 0, 0
-    #AddFillerWalls ConnectionWall, 0.2, 10, 70, 3.5, 8, 0, true, 0, 0
-    #AddDoor StairsDoor2, 0.2, 6, -10, 70, 3.5, 8, 0, 0, 0
-    #AddFillerWalls ConnectionWall, 0.2, -10, 70, 3.5, 8, 0, true, 0, 0
+    AddDoor StairsDoor2, 0.2, 7, 10, 70, 3.5, 8, 0, 0, 0
+    AddFillerWalls ConnectionWall, 0.2, 10, 70, 3.5, 8, 0, true, 0, 0
+    AddDoor StairsDoor2, 0.2, 6, -10, 70, 3.5, 8, 0, 0, 0
+    AddFillerWalls ConnectionWall, 0.2, -10, 70, 3.5, 8, 0, true, 0, 0
     
     #Left Restroom
     DrawWalls = true, true, false, false, false, false
