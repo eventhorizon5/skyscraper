@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.6 Alpha - Statistics Dialog
+	Skyscraper 1.7 Alpha - Statistics Dialog
 	Copyright (C)2003-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

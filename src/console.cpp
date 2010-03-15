@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.6 Alpha - Script Console
+	Skyscraper 1.7 Alpha - Script Console
 	Copyright (C)2003-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
