@@ -1,4 +1,4 @@
-Skyscraper 2.0 Alpha 6
+Skyscraper 2.0 Alpha 7
 Copyright (C)2003-2010 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
@@ -50,7 +50,7 @@ files.
 
 3. Release Notes
 
-This release is the sixth development relase of the 2.0 series (which is a complete rewrite of
+This release is the seventh development relase of the 2.0 series (which is a complete rewrite of
 the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
 
 This software requires both the Crystal Space graphics engine library (version 1.4) which
