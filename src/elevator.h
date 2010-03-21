@@ -168,6 +168,7 @@ public:
 	void AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	Object* AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	void SetDirectionalIndicators(bool UpLight, bool DownLight);
+	void UpdateDirectionalIndicators();
 	void EnableDirectionalIndicators(bool value);
 	ElevatorDoor* GetDoor(int number);
 	void OpenDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0);

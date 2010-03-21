@@ -295,6 +295,10 @@ void DirectionalIndicator::UpLight(bool value)
 	if (value == UpStatus)
 		return;
 
+	//ignore if turning off other indicator in single mode
+	if (Single == true && value == false && DownStatus == true)
+		return;
+
 	//exit if indicator is disabled
 	if (IsEnabled == false)
 		return;
@@ -312,6 +316,10 @@ void DirectionalIndicator::DownLight(bool value)
 {
 	//turn on the 'down' directional light
 	if (value == DownStatus)
+		return;
+
+	//ignore if turning off other indicator in single mode
+	if (Single == true && value == false && UpStatus == true)
 		return;
 
 	//exit if indicator is disabled

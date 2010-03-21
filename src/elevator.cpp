@@ -1156,10 +1156,7 @@ void Elevator::MoveElevatorToFloor()
 		motorsound->Play();
 
 		//set interior directional indicators
-		if (Direction == 1)
-			SetDirectionalIndicators(true, false);
-		else
-			SetDirectionalIndicators(false, true);
+		UpdateDirectionalIndicators();
 
 		//set external active-direction indicators
 		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
@@ -1532,7 +1529,6 @@ finish:
 	ElevatorRate = 0;
 	JerkRate = 0;
 	Direction = 0;
-	ActiveDirection = 0;
 	Brakes = false;
 	Destination = 0;
 	DistanceToTravel = 0;
@@ -1564,7 +1560,8 @@ void Elevator::FinishMove()
 	}
 
 	//turn off interior directional indicators
-	SetDirectionalIndicators(false, false);
+	ActiveDirection = 0;
+	UpdateDirectionalIndicators();
 
 	//update external active-direction indicators
 	sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
@@ -1639,11 +1636,13 @@ void Elevator::FinishMove()
 			{
 				Chime(0, GotoFloor, true);
 				sbs->GetFloor(GotoFloor)->SetDirectionalIndicators(Number, true, false);
+				SetDirectionalIndicators(true, false);
 			}
 			else
 			{
 				Chime(0, GotoFloor, false);
 				sbs->GetFloor(GotoFloor)->SetDirectionalIndicators(Number, false, true);
+				SetDirectionalIndicators(false, true);
 			}
 
 			//disable call button lights
@@ -2117,6 +2116,7 @@ void Elevator::EnableUpPeak(bool value)
 		if (IsMoving == false && GetFloor() == GetBottomFloor())
 		{
 			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, true, false);
+			SetDirectionalIndicators(true, false);
 			OpenDoors();
 		}
 		Report("Up Peak mode enabled");
@@ -2152,6 +2152,7 @@ void Elevator::EnableDownPeak(bool value)
 		if (IsMoving == false && GetFloor() == GetTopFloor())
 		{
 			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, false, true);
+			SetDirectionalIndicators(false, true);
 			OpenDoors();
 		}
 		Report("Down Peak mode enabled");
@@ -2574,8 +2575,41 @@ void Elevator::SetDirectionalIndicators(bool UpLight, bool DownLight)
 	{
 		if (DirIndicatorArray[i])
 		{
-			DirIndicatorArray[i]->DownLight(DownLight);
-			DirIndicatorArray[i]->UpLight(UpLight);
+			if (DirIndicatorArray[i]->ActiveDirection == false)
+			{
+				DirIndicatorArray[i]->DownLight(DownLight);
+				DirIndicatorArray[i]->UpLight(UpLight);
+			}
+		}
+	}
+}
+
+void Elevator::UpdateDirectionalIndicators()
+{
+	//updates all interior active direction indicators
+
+	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	{
+		if (DirIndicatorArray[i])
+		{
+			if (DirIndicatorArray[i]->ActiveDirection == true)
+			{
+				if (ActiveDirection == 1)
+				{
+					DirIndicatorArray[i]->DownLight(false);
+					DirIndicatorArray[i]->UpLight(true);
+				}
+				if (ActiveDirection == 0)
+				{
+					DirIndicatorArray[i]->DownLight(false);
+					DirIndicatorArray[i]->UpLight(false);
+				}
+				if (ActiveDirection == -1)
+				{
+					DirIndicatorArray[i]->DownLight(true);
+					DirIndicatorArray[i]->UpLight(false);
+				}
+			}
 		}
 	}
 }
