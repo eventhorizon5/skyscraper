@@ -34,32 +34,32 @@ public:
 	Object *object; //SBS object
 	csString Name;
 	csString ActionName;
-	csString Type;
 	csString Direction;
-	csString TextureUnlit;
-	csString TextureLit;
-	bool LightStatus;
 	bool IsEnabled;
-	int positions; //number of knob positions; default is 3
+	int Positions; //number of control positions; default is 2
 
 	//functions
-	Control(Object *parent, int type, const char *name, const char *action_name, const char *sound, const char *texture, const char *texture_lit, const char *direction, float width, float height, float voffset);
+	Control(Object *parent, int positions, const char *name, const char *action_name, const char *sound, const char *texture, const char *direction, float width, float height, float voffset);
 	~Control();
 	void Enabled(bool value);
-	void SetLight(bool value);
-	void ChangeLight(bool value);
 	csVector3 GetPosition();
 	void SetPosition(const csVector3 &position);
 	void SetPositionY(float position);
 	void Move(const csVector3 &position);
-	void SetKnobPosition(int position);
+	bool SetSelectPosition(int position);
+	bool ChangeSelectPosition(int position);
+	bool NextSelectPosition();
+	bool PreviousSelectPosition();
+	int GetSelectPosition();
 	void PlaySound();
+	void SetTexture(int position, const char *texture);
 
 private:
 	csRef<iMeshWrapper> ControlMesh; //control mesh object
-	int current_position; //current knob position
+	int current_position; //current control position
+	csArray<csString> TextureArray; //selection texture array
 
-	Sound *sound;
+	Sound *sound; //sound object
 
 };
 

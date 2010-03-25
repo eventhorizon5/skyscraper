@@ -202,7 +202,8 @@ void ButtonPanel::AddButton(const char *name, const char *sound, const char *tex
 	buffer4 = control_index;
 	buffer = "Button Panel " + buffer2 + ":" + buffer3 + " Control " + buffer4;
 	buffer.Trim();
-	controls[control_index] = new Control(this->object, 1, buffer, name, sound, texture, texture_lit, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+	controls[control_index] = new Control(this->object, 2, buffer, name, sound, texture, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+	controls[control_index]->SetTexture(2, texture_lit);
 	//move control
 	controls[control_index]->SetPosition(csVector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
 }
@@ -367,7 +368,12 @@ void ButtonPanel::ChangeLight(int floor, bool value)
 	for (int i = 0; i < controls.GetSize(); i++)
 	{
 		if (controls[i]->ActionName == floornum)
-			controls[i]->ChangeLight(value);
+		{
+			if (value == false)
+				controls[i]->ChangeSelectPosition(1);
+			else
+				controls[i]->ChangeSelectPosition(2);
+		}
 	}
 }
 

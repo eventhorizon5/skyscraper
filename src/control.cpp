@@ -33,43 +33,27 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, int type, const char *name, const char *action_name, const char *sound_file, const char *texture, const char *texture_lit, const char *direction, float width, float height, float voffset)
+Control::Control(Object *parent, int positions, const char *name, const char *action_name, const char *sound_file, const char *texture, const char *direction, float width, float height, float voffset)
 {
 	//create a control at the specified location
-	//type is either:
-	//1: button
-	//2: switch
-	//3: knob
+
 	//the parent object is responsible for control actions via a click callback.
 	//action_name is simply a second name used to determine the control's action, instead of
 	//needing it embedded in the mesh object
+	//'texture' is the texture for the first selection position
 
 	//set up SBS object
 	object = new Object();
 	object->SetValues(this, parent, "Control", false);
 
-	if (type == 1)
-	{
-		Type = "Button";
-		positions = 2;
-	}
-	if (type == 2)
-	{
-		Type = "Switch";
-		positions = 2;
-	}
-	if (type == 3)
-	{
-		Type = "Knob";
-		positions = 3;
-	}
 	Name = name;
 	ActionName = action_name;
 	Direction = direction;
-	TextureUnlit = texture;
-	TextureLit = texture_lit;
-	LightStatus = false;
 	IsEnabled = true;
+	TextureArray.SetSize(positions);
+	TextureArray[0] = texture;
+	current_position = 1;
+	Positions = positions;
 
 	//create object mesh
 	ControlMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, Name, Name + " factory");
@@ -94,6 +78,7 @@ Control::Control(Object *parent, int type, const char *name, const char *action_
 
 Control::~Control()
 {
+	TextureArray.DeleteAll();
 	if (sound)
 		delete sound;
 	sound = 0;
@@ -110,32 +95,6 @@ void Control::Enabled(bool value)
 
 	sbs->EnableMesh(ControlMesh, value);
 	IsEnabled = value;
-}
-
-void Control::SetLight(bool value)
-{
-	//set light without checking state
-	LightStatus = value;
-
-	if (value == true)
-		sbs->ChangeTexture(ControlMesh, TextureLit);
-	else
-		sbs->ChangeTexture(ControlMesh, TextureUnlit);
-}
-
-void Control::ChangeLight(bool value)
-{
-	//change light status
-
-	if (value == LightStatus)
-		return;
-
-	//exit if control is disabled
-//	if (IsEnabled == false)
-//		return;
-
-	//set light status
-	SetLight(value);
 }
 
 csVector3 Control::GetPosition()
@@ -170,9 +129,50 @@ void Control::Move(const csVector3 &position)
 	sound->SetPosition(GetPosition());
 }
 
-void Control::SetKnobPosition(int position)
+bool Control::SetSelectPosition(int position)
 {
-	//knob position change
+	//set selection position without checking state
+
+	if (position < 1 || position > Positions)
+		return false;
+
+	current_position = position;
+
+	if (sbs->ChangeTexture(ControlMesh, TextureArray[position - 1]))
+		return true;
+	return false;
+}
+
+bool Control::ChangeSelectPosition(int position)
+{
+	//set selection position
+
+	if (position == current_position)
+		return false;
+
+	return SetSelectPosition(position);
+}
+
+bool Control::NextSelectPosition()
+{
+	//change to the next available control selection position
+
+	current_position++;
+	if (current_position > Positions)
+		current_position = 1;
+
+	return SetSelectPosition(current_position);
+}
+
+bool Control::PreviousSelectPosition()
+{
+	//change to the next available control selection position
+
+	current_position--;
+	if (current_position < 1)
+		current_position = Positions;
+
+	return SetSelectPosition(current_position);
 }
 
 void Control::PlaySound()
@@ -180,4 +180,20 @@ void Control::PlaySound()
 	//play associated button sound
 	sound->Loop(false);
 	sound->Play();
+}
+
+int Control::GetSelectPosition()
+{
+	//return control selection position
+	return current_position;
+}
+
+void Control::SetTexture(int position, const char *texture)
+{
+	//bind a texture to a specific position
+
+	if (position < 1 || position > Positions)
+		return;
+
+	TextureArray[position - 1] = texture;
 }
