@@ -1,6 +1,6 @@
 Version 1.7 (2.0 Alpha 6)
 -------------------------
-
+-added braille fonts
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------

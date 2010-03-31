@@ -4758,8 +4758,9 @@ int ScriptProcessor::ProcElevators()
 				//check numeric values
 				for (int i = 0; i <= 8; i++)
 				{
-					if (i == 1)
-						i = 2;
+					if (i == 1 || i == 4)
+						i++;
+
 					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 					{
 						ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -4779,6 +4780,8 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 3;
+				if (i == 5)
+					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 				{
 					ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -4799,6 +4802,8 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 4;
+				if (i == 6)
+					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 				{
 					ScriptError("Invalid value: " + csString(tempdata[i]));
@@ -4819,11 +4824,11 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == 0)
-			elev->GetPanel(atoi(tempdata[0]))->AddFloorButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
+			elev->GetPanel(atoi(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
 		if (compat == 1)
-			elev->GetPanel(atoi(tempdata[0]))->AddFloorButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+			elev->GetPanel(atoi(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 		if (compat == 2)
-			elev->GetPanel(atoi(tempdata[0]))->AddFloorButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
+			elev->GetPanel(atoi(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
 
 		tempdata.DeleteAll();
 	}
@@ -4938,11 +4943,111 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == 0)
-			elev->GetPanel(atoi(tempdata[0]))->AddControlButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
+			elev->GetPanel(atoi(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
 		if (compat == 1)
-			elev->GetPanel(atoi(tempdata[0]))->AddControlButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+			elev->GetPanel(atoi(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 		if (compat == 2)
-			elev->GetPanel(atoi(tempdata[0]))->AddControlButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
+			elev->GetPanel(atoi(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
+
+		tempdata.DeleteAll();
+	}
+
+	//AddButton command
+	if (LineData.Slice(0, 10).CompareNoCase("addbutton ") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(10).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		float hoffset = 0, voffset = 0;
+
+		if (tempdata.GetSize() == 9 || tempdata.GetSize() == 11)
+		{
+			//check numeric values
+			for (int i = 1; i <= 8; i++)
+			{
+				if (i == 1)
+					i = 4;
+				if (i == 6)
+					i++;
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+			if (tempdata.GetSize() == 11)
+			{
+				hoffset = atof(tempdata[9]);
+				voffset = atof(tempdata[10]);
+			}
+		}
+
+		if (!elev->GetPanel(atoi(tempdata[0])))
+		{
+			ScriptError("Invalid panel number");
+			return sError;
+		}
+
+		elev->GetPanel(atoi(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
+
+		tempdata.DeleteAll();
+	}
+
+	//AddControl command
+	if (LineData.Slice(0, 11).CompareNoCase("addcontrol ") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(11).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 11)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 1; i <= 9; i++)
+		{
+			if (i == 1 || i == 5)
+				i++;
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		if (!elev->GetPanel(atoi(tempdata[0])))
+		{
+			ScriptError("Invalid panel number");
+			return sError;
+		}
+
+		csArray<csString> sarray;
+		int slength;
+		slength = tempdata.GetSize();
+		for (temp3 = 10; temp3 < slength; temp3++)
+			sarray.Push(tempdata[temp3]);
+
+		elev->GetPanel(atoi(tempdata[0]))->AddControl(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), sarray);
 
 		tempdata.DeleteAll();
 	}

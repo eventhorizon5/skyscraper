@@ -33,7 +33,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, int positions, const char *name, const char *action_name, const char *sound_file, const char *texture, const char *direction, float width, float height, float voffset)
+Control::Control(Object *parent, int positions, const char *name, const char *action_name, const char *sound_file, csArray<csString> &textures, const char *direction, float width, float height, float voffset)
 {
 	//create a control at the specified location
 
@@ -50,8 +50,7 @@ Control::Control(Object *parent, int positions, const char *name, const char *ac
 	ActionName = action_name;
 	Direction = direction;
 	IsEnabled = true;
-	TextureArray.SetSize(positions);
-	TextureArray[0] = texture;
+	TextureArray = textures;
 	current_position = 1;
 	Positions = positions;
 
@@ -59,17 +58,17 @@ Control::Control(Object *parent, int positions, const char *name, const char *ac
 	ControlMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, Name, Name + " factory");
 	ControlMesh->SetZBufMode(CS_ZBUF_USE);
 	ControlMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(texture);
+	csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(textures[0]);
 	ControlMesh->GetMeshObject()->SetMaterialWrapper(mat);
 
 	if (Direction == "front")
-		sbs->AddGenWall(ControlMesh, texture, 0, 0, width, 0, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, width, 0, height, voffset, 1, 1);
 	if (Direction == "back")
-		sbs->AddGenWall(ControlMesh, texture, 0, 0, -width, 0, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, -width, 0, height, voffset, 1, 1);
 	if (Direction == "left")
-		sbs->AddGenWall(ControlMesh, texture, 0, 0, 0, -width, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, 0, -width, height, voffset, 1, 1);
 	if (Direction == "right")
-		sbs->AddGenWall(ControlMesh, texture, 0, 0, 0, width, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, 0, width, height, voffset, 1, 1);
 
 	//create sound object
 	sound = new Sound(this->object, "Control");

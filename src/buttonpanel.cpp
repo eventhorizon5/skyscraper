@@ -116,37 +116,30 @@ ButtonPanel::~ButtonPanel()
 	delete object;
 }
 
-void ButtonPanel::AddFloorButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, int floor, float width, float height, float hoffset, float voffset)
+void ButtonPanel::AddButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset, float voffset)
 {
-	//create a standard floor button at specified row/column position
+	//create a standard button at specified row/column position
 	//width and height are the button size percentage that the button should be (divided by 100); default is 1 for each, aka 100%.
 	//hoffset and voffset are the optional horizontal and vertical offsets to place the button (in order to place it outside of the default grid position)
 
-	csString floornum;
-	floornum = floor;
-	AddButton(floornum, sound, texture, texture_lit, row, column, width, height, hoffset, voffset);
-}
-
-void ButtonPanel::AddControlButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset, float voffset)
-{
-	//create a control button at specified row/column position
-	//width and height are the button size percentage that the button should be (divided by 100); default is 1 for each, aka 100%
-	//hoffset and voffset are the optional horizontal and vertical offsets to place the button (in order to place it outside of the default grid position)
-
 	//type is one of these:
+	//floor number
 	//open = Open Doors
 	//close = Close Doors
 	//cancel = Call Cancel
 	//stop = Stop
 	//alarm = Alarm
 
-	csString name = type;
-	name.Downcase();
+	csString floornum;
+	floornum = floor;
+	csArray<csString> textures;
+	textures.Push(texture);
+	textures.Push(texture_lit);
+	AddControl(sound, 2, row, column, type, width, height, hoffset, voffset, textures);
 
-	AddButton(name.GetData(), sound, texture, texture_lit, row, column, width, height, hoffset, voffset);
 }
 
-void ButtonPanel::AddButton(const char *name, const char *sound, const char *texture, const char *texture_lit, int row, int column, float bwidth, float bheight, float hoffset, float voffset)
+void ButtonPanel::AddControl(const char *sound, int positions, int row, int column, const char *name, float bwidth, float bheight, float hoffset, float voffset, csArray<csString> &textures)
 {
 	//create the button polygon
 	float xpos = 0, ypos = 0, zpos = 0;
@@ -202,8 +195,7 @@ void ButtonPanel::AddButton(const char *name, const char *sound, const char *tex
 	buffer4 = control_index;
 	buffer = "Button Panel " + buffer2 + ":" + buffer3 + " Control " + buffer4;
 	buffer.Trim();
-	controls[control_index] = new Control(this->object, 2, buffer, name, sound, texture, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
-	controls[control_index]->SetTexture(2, texture_lit);
+	controls[control_index] = new Control(this->object, positions, buffer, name, sound, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
 	//move control
 	controls[control_index]->SetPosition(csVector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
 }

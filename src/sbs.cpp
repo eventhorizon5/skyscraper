@@ -562,6 +562,8 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 
 	//create camera object
 	camera = new Camera();
+	
+	return true;
 }
 
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode)

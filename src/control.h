@@ -39,7 +39,7 @@ public:
 	int Positions; //number of control positions; default is 2
 
 	//functions
-	Control(Object *parent, int positions, const char *name, const char *action_name, const char *sound, const char *texture, const char *direction, float width, float height, float voffset);
+	Control(Object *parent, int positions, const char *name, const char *action_name, const char *sound, csArray<csString> &textures, const char *direction, float width, float height, float voffset);
 	~Control();
 	void Enabled(bool value);
 	csVector3 GetPosition();

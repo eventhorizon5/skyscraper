@@ -50,8 +50,8 @@ public:
 	//functions
 	ButtonPanel(int _elevator, int index, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th);
 	~ButtonPanel();
-	void AddFloorButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, int floor, float width, float height, float hoffset = 0, float voffset = 0);
-	void AddControlButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset = 0, float voffset = 0);
+	void AddButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset = 0, float voffset = 0);
+	void AddControl(const char *sound, int positions, int row, int column, const char *name, float bwidth, float bheight, float hoffset, float voffset, csArray<csString> &textures);
 	void DeleteButton(int row, int column);
 	void Press(int index);
 	void Move(const csVector3 &position);
@@ -68,7 +68,6 @@ private:
 
 	csArray<Control*> controls; //control objects
 
-	void AddButton(const char *name, const char *sound, const char *texture, const char *texture_lit, int row, int column, float bwidth, float bheight, float hoffset, float voffset);
 };
 
 #endif
