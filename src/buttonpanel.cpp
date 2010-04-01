@@ -130,8 +130,6 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	//stop = Stop
 	//alarm = Alarm
 
-	csString floornum;
-	floornum = floor;
 	csArray<csString> textures;
 	textures.Push(texture);
 	textures.Push(texture_lit);
