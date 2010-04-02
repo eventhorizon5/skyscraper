@@ -1707,3 +1707,9 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::GetDoorWrapper()
 	//return door wrapper object
 	return Doors;
 }
+
+void ElevatorDoor::Hold()
+{
+	//hold door (basically turn off timer)
+	timer->Stop();
+}

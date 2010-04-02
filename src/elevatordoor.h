@@ -117,6 +117,7 @@ public:
 	void OpenDoors(int whichdoors = 1, int floor = 0, bool manual = false);
 	void CloseDoors(int whichdoors = 1, int floor = 0, bool manual = false);
 	void StopDoors();
+	void Hold();
 	void ShaftDoorsEnabled(int floor, bool value);
 	void ShaftDoorsEnabledRange(int floor, int range);
 	bool AreDoorsOpen();

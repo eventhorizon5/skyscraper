@@ -5017,16 +5017,16 @@ int ScriptProcessor::ProcElevators()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 11)
+		if (tempdata.GetSize() < 12)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
 		}
 
 		//check numeric values
-		for (int i = 1; i <= 9; i++)
+		for (int i = 1; i <= 8; i++)
 		{
-			if (i == 1 || i == 5)
+			if (i == 1)
 				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 			{
@@ -5041,13 +5041,16 @@ int ScriptProcessor::ProcElevators()
 			return sError;
 		}
 
-		csArray<csString> sarray;
-		int slength;
+		csArray<csString> action_array, tex_array;
+		int slength, params;
 		slength = tempdata.GetSize();
-		for (temp3 = 10; temp3 < slength; temp3++)
-			sarray.Push(tempdata[temp3]);
+		params = slength - 10;
+		for (temp3 = 10; temp3 < slength - (params / 2); temp3++)
+			action_array.Push(tempdata[temp3]);
+		for (temp3 = slength - (params / 2); temp3 < slength; temp3++)
+			tex_array.Push(tempdata[temp3]);
 
-		elev->GetPanel(atoi(tempdata[0]))->AddControl(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), sarray);
+		elev->GetPanel(atoi(tempdata[0]))->AddControl(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), action_array, tex_array);
 
 		tempdata.DeleteAll();
 	}

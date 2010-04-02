@@ -148,6 +148,7 @@ Elevator::Elevator(int number)
 	floorbeep = 0;
 	floorsound = 0;
 	OriginFloor = 0;
+	Fan = true;
 
 	//create timers
 	timer = new Timer(this, true);
@@ -937,7 +938,7 @@ void Elevator::MonitorLoop()
 	}
 
 	//play idle sound if in elevator, or if doors open
-	if (idlesound->IsPlaying() == false)
+	if (idlesound->IsPlaying() == false && Fan == true)
 	{
 		if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true)
 		{
@@ -949,7 +950,13 @@ void Elevator::MonitorLoop()
 	}
 	else
 	{
-		if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
+		if (Fan == false && idlesound->IsPlaying() == true)
+		{
+			if (sbs->Verbose)
+				Report("stopping idle sound");
+			idlesound->Stop();
+		}
+		else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
 		{
 			if (sbs->Verbose)
 				Report("stopping idle sound");
@@ -3402,4 +3409,28 @@ bool Elevator::IsQueued(int floor)
 	if (index > -1)
 		return true;
 	return false;
+}
+
+void Elevator::HoldDoors(int number)
+{
+	//hold specified door, or all if "0" is given
+
+	int start, end;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	else
+	{
+		start = number;
+		end = number;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		if (GetDoor(i))
+			GetDoor(i)->Hold();
+		else
+			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
+	}
 }

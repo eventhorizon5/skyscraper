@@ -33,13 +33,11 @@ class SBSIMPEXP Control
 public:
 	Object *object; //SBS object
 	csString Name;
-	csString ActionName;
 	csString Direction;
 	bool IsEnabled;
-	int Positions; //number of control positions; default is 2
 
 	//functions
-	Control(Object *parent, int positions, const char *name, const char *action_name, const char *sound, csArray<csString> &textures, const char *direction, float width, float height, float voffset);
+	Control(Object *parent, int positions, const char *name, const char *sound, csArray<csString> &action_names, csArray<csString> &textures, const char *direction, float width, float height, float voffset);
 	~Control();
 	void Enabled(bool value);
 	csVector3 GetPosition();
@@ -48,16 +46,23 @@ public:
 	void Move(const csVector3 &position);
 	bool SetSelectPosition(int position);
 	bool ChangeSelectPosition(int position);
-	bool NextSelectPosition();
-	bool PreviousSelectPosition();
+	bool NextSelectPosition(bool check_state = true);
+	bool PreviousSelectPosition(bool check_state = true);
 	int GetSelectPosition();
+	const char *GetPositionAction(int position);
+	const char *GetSelectPositionAction();
+	int GetNextSelectPosition();
+	int GetPreviousSelectPosition();
+	int GetPositions();
 	void PlaySound();
 	void SetTexture(int position, const char *texture);
+	int FindActionPosition(const char *name);
 
 private:
 	csRef<iMeshWrapper> ControlMesh; //control mesh object
 	int current_position; //current control position
 	csArray<csString> TextureArray; //selection texture array
+	csArray<csString> Actions; //button actions
 
 	Sound *sound; //sound object
 

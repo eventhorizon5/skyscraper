@@ -33,7 +33,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, int positions, const char *name, const char *action_name, const char *sound_file, csArray<csString> &textures, const char *direction, float width, float height, float voffset)
+Control::Control(Object *parent, int positions, const char *name, const char *sound_file, csArray<csString> &action_names, csArray<csString> &textures, const char *direction, float width, float height, float voffset)
 {
 	//create a control at the specified location
 
@@ -47,12 +47,11 @@ Control::Control(Object *parent, int positions, const char *name, const char *ac
 	object->SetValues(this, parent, "Control", false);
 
 	Name = name;
-	ActionName = action_name;
+	Actions = action_names;
 	Direction = direction;
 	IsEnabled = true;
 	TextureArray = textures;
 	current_position = 1;
-	Positions = positions;
 
 	//create object mesh
 	ControlMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, Name, Name + " factory");
@@ -132,7 +131,7 @@ bool Control::SetSelectPosition(int position)
 {
 	//set selection position without checking state
 
-	if (position < 1 || position > Positions)
+	if (position < 1 || position > GetPositions())
 		return false;
 
 	current_position = position;
@@ -152,26 +151,48 @@ bool Control::ChangeSelectPosition(int position)
 	return SetSelectPosition(position);
 }
 
-bool Control::NextSelectPosition()
+bool Control::NextSelectPosition(bool check_state)
 {
 	//change to the next available control selection position
 
-	current_position++;
-	if (current_position > Positions)
-		current_position = 1;
+	current_position = GetNextSelectPosition();
 
-	return SetSelectPosition(current_position);
+	if (check_state == true)
+		return SetSelectPosition(current_position);
+	else
+		return ChangeSelectPosition(current_position);
 }
 
-bool Control::PreviousSelectPosition()
+int Control::GetNextSelectPosition()
+{
+	//determine next selection position
+	int pos = current_position;
+	pos++;
+	if (pos > GetPositions())
+		pos = 1;
+	return pos;
+}
+
+bool Control::PreviousSelectPosition(bool check_state)
 {
 	//change to the next available control selection position
 
-	current_position--;
-	if (current_position < 1)
-		current_position = Positions;
+	current_position = GetPreviousSelectPosition();
 
-	return SetSelectPosition(current_position);
+	if (check_state == true)
+		return SetSelectPosition(current_position);
+	else
+		return ChangeSelectPosition(current_position);
+}
+
+int Control::GetPreviousSelectPosition()
+{
+	//determine previous selection position
+	int pos = current_position;
+	pos--;
+	if (pos < 1)
+		pos = GetPositions();
+	return pos;
 }
 
 void Control::PlaySound()
@@ -187,12 +208,44 @@ int Control::GetSelectPosition()
 	return current_position;
 }
 
+const char *Control::GetPositionAction(int position)
+{
+	//return action name associated with the specified selection position
+	return Actions[position - 1];
+}
+
+const char *Control::GetSelectPositionAction()
+{
+	//return action name associated with current selection position
+	return GetPositionAction(current_position);
+}
+
 void Control::SetTexture(int position, const char *texture)
 {
 	//bind a texture to a specific position
 
-	if (position < 1 || position > Positions)
+	if (position < 1 || position > GetPositions())
 		return;
 
 	TextureArray[position - 1] = texture;
+}
+
+int Control::GetPositions()
+{
+	//return number of available positions, based on size of Actions array
+	return Actions.GetSize();
+}
+
+int Control::FindActionPosition(const char *name)
+{
+	//returns the position number that the specified action name is associated with.
+	//otherwise 0 if not found
+
+	for (int i = 1; i <= GetPositions(); i++)
+	{
+		if (GetPositionAction(i) == name)
+			return i;
+	}
+
+	return 0;
 }

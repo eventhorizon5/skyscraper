@@ -1,6 +1,10 @@
 Version 1.7 (2.0 Alpha 6)
 -------------------------
 -added braille fonts
+-added support for elevator panel switches and knobs
+-added elevator fan toggle
+-door open and close buttons now support specific doors
+-added door hold feature
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------

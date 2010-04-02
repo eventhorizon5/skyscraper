@@ -130,16 +130,53 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	//stop = Stop
 	//alarm = Alarm
 
-	csArray<csString> textures;
+	csArray<csString> textures, names;
+	int positions = 1;
 	textures.Push(texture);
 	textures.Push(texture_lit);
-	AddControl(sound, 2, row, column, type, width, height, hoffset, voffset, textures);
+	if (IsNumeric(type) == true)
+	{
+		names.Push("off");
+		names.Push(type);
+		positions = 2;
+	}
+	else
+		names.Push(type);
+	AddControl(sound, positions, row, column, width, height, hoffset, voffset, names, textures);
 
 }
 
-void ButtonPanel::AddControl(const char *sound, int positions, int row, int column, const char *name, float bwidth, float bheight, float hoffset, float voffset, csArray<csString> &textures)
+void ButtonPanel::AddControl(const char *sound, int positions, int row, int column, float bwidth, float bheight, float hoffset, float voffset, csArray<csString> action_names, csArray<csString> &textures)
 {
-	//create the button polygon
+	//create an elevator control (button, switch, knob)
+
+	//Supported action names:
+	//Off
+	//(floor number)
+	//Open = Open Doors
+	//Close = Close Doors
+	//Cancel = Call Cancel
+	//Stop
+	//Alarm
+	//Fire1Off
+	//Fire1On
+	//Fire1Bypass
+	//Fire2Off
+	//Fire2On
+	//Fire2Hold
+	//UpPeakOn
+	//UpPeakOff
+	//DownPeakOn
+	//DownPeakOff
+	//IndOn
+	//IndOff
+	//InsOn
+	//InsOff
+	//AcpOn
+	//AcpOff
+	//FanOn
+	//FanOff
+
 	float xpos = 0, ypos = 0, zpos = 0;
 
 	//set to default if value is 0
@@ -193,7 +230,7 @@ void ButtonPanel::AddControl(const char *sound, int positions, int row, int colu
 	buffer4 = control_index;
 	buffer = "Button Panel " + buffer2 + ":" + buffer3 + " Control " + buffer4;
 	buffer.Trim();
-	controls[control_index] = new Control(this->object, positions, buffer, name, sound, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+	controls[control_index] = new Control(this->object, positions, buffer, sound, action_names, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
 	//move control
 	controls[control_index]->SetPosition(csVector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
 }
@@ -219,15 +256,15 @@ void ButtonPanel::Press(int index)
 	//play button sound
 	controls[index]->PlaySound();
 
-	//exit if in inspection mode or in fire service phase 1 mode
-	if (elev->InspectionService == true || elev->FireServicePhase1 == 1)
-		return;
-
-	//get action name of button
-	csString name = controls[index]->ActionName;
+	//get action name of next position state
+	csString name = controls[index]->GetPositionAction(controls[index]->GetNextSelectPosition());
 
 	if (IsNumeric(name) == true)
 	{
+		//exit if in inspection mode or in fire service phase 1 mode
+		if (elev->InspectionService == true || elev->FireServicePhase1 == 1)
+			return;
+
 		int floor = atoi(name);
 		int elev_floor = elev->GetFloor();
 
@@ -262,20 +299,79 @@ void ButtonPanel::Press(int index)
 				}
 			}
 		}
+
+		return;
 	}
-	else
+
+	//change to next control position
+	controls[index]->NextSelectPosition();
+
+	name.Downcase();
+	if (name == "off")
+		return;
+	if (name.StartsWith("open", false) == true && elev->Direction == 0)
 	{
-		name.Downcase();
-		if (name == "open" && elev->Direction == 0)
-			elev->OpenDoors();
-		if (name == "close" && elev->Direction == 0)
-			elev->CloseDoors();
-		if (name == "cancel")
-			elev->CancelLastRoute();
-		if (name == "stop")
-			elev->StopElevator();
-		if (name == "alarm")
-			elev->Alarm();
+		int number = 0;
+		if (name.Length() > 4)
+			number = atoi(name.Slice(4, name.Length() - 4));
+		elev->OpenDoors(number);
+	}
+	if (name.StartsWith("close", false) == true && elev->Direction == 0)
+	{
+		int number = 0;
+		if (name.Length() > 5)
+			number = atoi(name.Slice(5, name.Length() - 5));
+		elev->CloseDoors(number);
+	}
+	if (name == "cancel")
+		elev->CancelLastRoute();
+	//if (name == "run")
+	if (name == "stop")
+		elev->StopElevator();
+	if (name == "alarm")
+		elev->Alarm();
+	if (name == "fire1off")
+		elev->EnableFireService1(0);
+	if (name == "fire1on")
+		elev->EnableFireService1(1);
+	if (name == "fire1bypass")
+		elev->EnableFireService1(2);
+	if (name == "fire2off")
+		elev->EnableFireService2(0);
+	if (name == "fire2on")
+		elev->EnableFireService2(1);
+	if (name == "fire2hold")
+		elev->EnableFireService2(2);
+	if (name == "uppeakon")
+		elev->EnableUpPeak(true);
+	if (name == "uppeakoff")
+		elev->EnableUpPeak(false);
+	if (name == "downpeakon")
+		elev->EnableDownPeak(true);
+	if (name == "downpeakoff")
+		elev->EnableDownPeak(false);
+	if (name == "indon")
+		elev->EnableIndependentService(true);
+	if (name == "indoff")
+		elev->EnableIndependentService(false);
+	if (name == "inson")
+		elev->EnableInspectionService(true);
+	if (name == "insoff")
+		elev->EnableInspectionService(false);
+	if (name == "acpon")
+		elev->EnableACP(true);
+	if (name == "acpoff")
+		elev->EnableACP(false);
+	if (name == "fanon")
+		elev->Fan = true;
+	if (name == "fanoff")
+		elev->Fan = false;
+	if (name.StartsWith("hold", false) == true && elev->Direction == 0)
+	{
+		int number = 0;
+		if (name.Length() > 4)
+			number = atoi(name.Slice(4, name.Length() - 4));
+		elev->HoldDoors(number);
 	}
 }
 
@@ -357,12 +453,14 @@ void ButtonPanel::ChangeLight(int floor, bool value)
 	floornum = floor;
 	for (int i = 0; i < controls.GetSize(); i++)
 	{
-		if (controls[i]->ActionName == floornum)
+		int index = controls[i]->FindActionPosition(floornum);
+		int index2 = controls[i]->FindActionPosition("off");
+		if (index > 0 && index2 > 0)
 		{
 			if (value == false)
-				controls[i]->ChangeSelectPosition(1);
+				controls[i]->ChangeSelectPosition(index2);
 			else
-				controls[i]->ChangeSelectPosition(2);
+				controls[i]->ChangeSelectPosition(index);
 		}
 	}
 }
@@ -378,7 +476,7 @@ int ButtonPanel::GetFloorButtonIndex(int floor)
 	{
 		for (int i = 0; i < controls.GetSize(); i++)
 		{
-			if (controls[i]->ActionName == floornum)
+			if (controls[i]->FindActionPosition(floornum))
 				return i;
 		}
 	}

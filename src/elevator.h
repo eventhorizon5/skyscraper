@@ -67,7 +67,7 @@ public:
 	csString CarStartSound; //elevator start/speedup sound
 	csString CarMoveSound; //elevator move sound
 	csString CarStopSound; //elevator stop/slowdown sound
-	csString CarIdleSound; //elevator idle sound
+	csString CarIdleSound; //elevator idle/fan sound
 	csString MotorStartSound; //motor start/speedup sound
 	csString MotorRunSound; //motor move sound
 	csString MotorStopSound; //motor stop/slowdown sound
@@ -107,6 +107,7 @@ public:
 	bool RandomActivity; //enables/disables random call activity
 	int RandomProbability; //probability ratio of random calls, starting with 1 - higher is less frequent
 	float RandomFrequency; //speed in seconds to make each random call
+	bool Fan; //fan enabled status
 
 	//functions
 	Elevator(int number);
@@ -176,6 +177,7 @@ public:
 	void OpenDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false);
 	void CloseDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false);
 	void StopDoors(int number = 0);
+	void HoldDoors(int number = 0);
 	void ShaftDoorsEnabled(int number, int floor, bool value);
 	void ShaftDoorsEnabledRange(int number, int floor, int range);
 	bool AreDoorsOpen(int number = 0);
