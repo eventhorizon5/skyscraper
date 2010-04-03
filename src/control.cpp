@@ -208,13 +208,13 @@ int Control::GetSelectPosition()
 	return current_position;
 }
 
-const char *Control::GetPositionAction(int position)
+const char* Control::GetPositionAction(int position)
 {
 	//return action name associated with the specified selection position
 	return Actions[position - 1];
 }
 
-const char *Control::GetSelectPositionAction()
+const char* Control::GetSelectPositionAction()
 {
 	//return action name associated with current selection position
 	return GetPositionAction(current_position);
@@ -243,7 +243,7 @@ int Control::FindActionPosition(const char *name)
 
 	for (int i = 1; i <= GetPositions(); i++)
 	{
-		if (GetPositionAction(i) == name)
+		if (*GetPositionAction(i) == *name)
 			return i;
 	}
 

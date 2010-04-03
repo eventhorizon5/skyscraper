@@ -49,8 +49,8 @@ public:
 	bool NextSelectPosition(bool check_state = true);
 	bool PreviousSelectPosition(bool check_state = true);
 	int GetSelectPosition();
-	const char *GetPositionAction(int position);
-	const char *GetSelectPositionAction();
+	const char* GetPositionAction(int position);
+	const char* GetSelectPositionAction();
 	int GetNextSelectPosition();
 	int GetPreviousSelectPosition();
 	int GetPositions();
