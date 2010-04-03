@@ -138,15 +138,14 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	{
 		names.Push("off");
 		names.Push(type);
-		positions = 2;
 	}
 	else
 		names.Push(type);
-	AddControl(sound, positions, row, column, width, height, hoffset, voffset, names, textures);
+	AddControl(sound, row, column, width, height, hoffset, voffset, names, textures);
 
 }
 
-void ButtonPanel::AddControl(const char *sound, int positions, int row, int column, float bwidth, float bheight, float hoffset, float voffset, csArray<csString> action_names, csArray<csString> &textures)
+void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, csArray<csString> action_names, csArray<csString> &textures)
 {
 	//create an elevator control (button, switch, knob)
 
@@ -230,7 +229,7 @@ void ButtonPanel::AddControl(const char *sound, int positions, int row, int colu
 	buffer4 = control_index;
 	buffer = "Button Panel " + buffer2 + ":" + buffer3 + " Control " + buffer4;
 	buffer.Trim();
-	controls[control_index] = new Control(this->object, positions, buffer, sound, action_names, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+	controls[control_index] = new Control(this->object, buffer, sound, action_names, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
 	//move control
 	controls[control_index]->SetPosition(csVector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
 }

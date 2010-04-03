@@ -33,7 +33,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, int positions, const char *name, const char *sound_file, csArray<csString> &action_names, csArray<csString> &textures, const char *direction, float width, float height, float voffset)
+Control::Control(Object *parent, const char *name, const char *sound_file, csArray<csString> &action_names, csArray<csString> &textures, const char *direction, float width, float height, float voffset)
 {
 	//create a control at the specified location
 

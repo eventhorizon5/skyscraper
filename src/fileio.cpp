@@ -5024,7 +5024,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//check numeric values
-		for (int i = 1; i <= 8; i++)
+		for (int i = 1; i <= 7; i++)
 		{
 			if (i == 1)
 				i++;
@@ -5043,14 +5043,24 @@ int ScriptProcessor::ProcElevators()
 
 		csArray<csString> action_array, tex_array;
 		int slength, params;
+
+		//get number of action & texture parameters
 		slength = tempdata.GetSize();
-		params = slength - 10;
-		for (temp3 = 10; temp3 < slength - (params / 2); temp3++)
+		params = slength - 8; //strip off main parameters
+
+		//action & texture param number needs to be even
+		if (IsEven(params) == false)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		for (temp3 = 8; temp3 < slength - (params / 2); temp3++)
 			action_array.Push(tempdata[temp3]);
 		for (temp3 = slength - (params / 2); temp3 < slength; temp3++)
 			tex_array.Push(tempdata[temp3]);
 
-		elev->GetPanel(atoi(tempdata[0]))->AddControl(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), action_array, tex_array);
+		elev->GetPanel(atoi(tempdata[0]))->AddControl(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), action_array, tex_array);
 
 		tempdata.DeleteAll();
 	}

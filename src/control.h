@@ -37,7 +37,7 @@ public:
 	bool IsEnabled;
 
 	//functions
-	Control(Object *parent, int positions, const char *name, const char *sound, csArray<csString> &action_names, csArray<csString> &textures, const char *direction, float width, float height, float voffset);
+	Control(Object *parent, const char *name, const char *sound, csArray<csString> &action_names, csArray<csString> &textures, const char *direction, float width, float height, float voffset);
 	~Control();
 	void Enabled(bool value);
 	csVector3 GetPosition();
