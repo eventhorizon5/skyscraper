@@ -1257,7 +1257,7 @@
     the elevator slows down and stops. By default no sound is played.<br>
     Example: <font size="2" face="Courier New, Courier, mono">CarStopSound = stop.wav</font></p>
   <p align="left"><strong>14. CarIdleSound</strong> - the sound file to play when 
-    the elevator is idle. Default is <em>elevidle.wav</em>.<br>
+    the elevator is idle (generally the fan sound). Default is <em>elevidle.wav</em>.<br>
     Example: <font size="2" face="Courier New, Courier, mono">CarIdleSound = idle.wav</font></p>
   <p align="left"><strong>15. MotorStartSound</strong> - the sound file to play 
     when the elevator motor starts moving/speeds up. Default is <em>elevstart.wav</em>.<br>
@@ -1457,42 +1457,73 @@
     button sizes. A simple formula for determining panel width or height is this 
     - for width, it's (columns * buttonwidth) + (spacingX * (columns + 1)); for 
     height, just swap columns with rows and spacingX with spacingY.</p>
-  <p align="left"><strong>7. AddFloorButton</strong> - creates a floor button 
-    on the panel<br>
-    Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorButton <em>panel_number, 
-    sound, texture_unlit</em>, <em>texture_lit, row, column, floor, width, height[, 
-    hoffset, voffset]</em></font><br>
-    Example 1: <font size="2" face="Courier New, Courier, mono">AddFloorButton 
-    1, switch.wav, Button5, ButtonLit5, 7, 3, 4, 1, 1</font><br>
-    Example 2: <font size="2" face="Courier New, Courier, mono">AddFloorButton 
-    1, , Button5, ButtonLit5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p>
-  <p align="left">The AddFloorButton command creates a floor button on the button 
-    panel created with CreatePanel. Panel_number specifies the number of the panel 
-    to add the button to. <em>Row</em> and <em>Column</em> specify the position 
-    on the grid where the button should be. <em>Floor</em> specifies the floor 
-    number that this button calls. <em>Width</em> and <em>Height</em> specify 
-    the width and height of the button, as a percentage of a single grid unit 
-    size (1 being 100%, 0.5 being 50%). If both values are 0, the default of 1 
-    is used for both values. If only one of the values is 0, then the exact size 
-    other is used; for example, if <em>width</em> is 0 and <em>height</em> is 
-    1 (or any other number), then the width will end up being the same size as 
-    the height. <em>Hoffset</em> and <em>Voffset</em> are optional parameters, 
+  <p align="left"><strong>7. AddButton</strong> - creates a standard button on 
+    the panel<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddButton <em>panel_number, 
+    sound, texture_unlit</em>, <em>texture_lit, row, column, floor/type, width, 
+    height[, hoffset, voffset]</em></font><br>
+    Example 1: <font size="2" face="Courier New, Courier, mono">AddButton 1, switch.wav, 
+    Button5, ButtonLit5, 7, 3, 4, 1, 1</font><br>
+    Example 2: <font size="2" face="Courier New, Courier, mono">AddButton 1, , 
+    Button5, ButtonLit5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p>
+  <p align="left">The AddButton command creates a button on the button panel created 
+    with CreatePanel. Panel_number specifies the number of the panel to add the 
+    button to. <em>Row</em> and <em>Column</em> specify the position on the grid 
+    where the button should be. <em>Floor/Type</em> specifies either the floor 
+    number that this button calls, or the action name such as &quot;Open&quot; 
+    (see the AddControl command for more info). <em>Width</em> and <em>Height</em> 
+    specify the width and height of the button, as a percentage of a single grid 
+    unit size (1 being 100%, 0.5 being 50%). If both values are 0, the default 
+    of 1 is used for both values. If only one of the values is 0, then the exact 
+    size other is used; for example, if <em>width</em> is 0 and <em>height</em> 
+    is 1 (or any other number), then the width will end up being the same size 
+    as the height. <em>Hoffset</em> and <em>Voffset</em> are optional parameters, 
     and are used to position the button outside the normal grid, and are in grid 
     units (buttonwidth and buttonheight parameters of the CreatePanel function). 
     In the second example, the button is positioned 0.1 grid units to the right, 
     and 0.1 grid units down. Notice that no sound is specified in the 2nd example 
     - this means that a sound won't be played.</p>
-  <p align="left"><strong>8. AddControlButton</strong> - creates a control button 
-    on the panel<br>
-    Syntax: <font size="2" face="Courier New, Courier, mono">AddControlButton 
-    <em>panel_number, sound, texture_unlit</em>, <em>texture_lit, row, column, 
-    type, width, height[, hoffset, voffset]</em></font></p>
-  <p align="left">The AddControlButton command creates a command button on the 
-    panel created with CreatePanel. <em>Row</em> and <em>Column</em> are the same 
-    as the AddFloorButton command, and <em>Type</em> can be either &quot;open&quot;, 
-    &quot;close&quot;, &quot;cancel&quot;, &quot;stop&quot; or &quot;alarm&quot;. 
-    See the above command (AddFloorButton) for a description of the other parameters.</p>
-  <p align="left"><strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
+  <p align="left"><strong>8. AddControl</strong> - advanced command for creating 
+    buttons, switches and knobs on the panel<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddControl <em>panel_number, 
+    sound, row, column, width, height, hoffset, voffset, action_name(s), texture_name(s)<br>
+    </em></font>Example 1: <font size="2" face="Courier New, Courier, mono">AddControl 
+    1, switch.wav, 7, 3, 1, 1, 0, 0, open, ButtonOpen</font><br>
+    Example 2: <font size="2" face="Courier New, Courier, mono">AddControl 1, 
+    switch.wav, 7, 3, 1, 1, 0, 0, FanOff, FanOn, SwitchFanOff, SwitchFanOn</font><br>
+    Example 3: <font size="2" face="Courier New, Courier, mono">AddControl 1, 
+    switch.wav, 7, 3, 1, 1, 0, 0, Off, 4, Button5, ButtonLit5</font><br>
+    Example 4: <font size="2" face="Courier New, Courier, mono">AddControl 1, 
+    switch.wav, 7, 3, 1, 1, 0, 0, Fire2Off, Fire2On, Fire2Hold, FireKnob1, FireKnob2, 
+    FireKnob3</font></p>
+  <p align="left">The AddControl command creates an advanced control on the specified 
+    button panel (created with CreatePanel). Most of the parameters are the same 
+    as the AddButton command, but the action_name(s) and texture_name(s) parameters 
+    allow you to specify a list of actions, and a list of textures to go along 
+    with those actions. There needs to be a texture for every action; if you specify 
+    3 actions and only 2 textures, you will get an error. The first example shows 
+    a door open button being created, with the action &quot;open&quot; and the 
+    texture &quot;ButtonOpen&quot;. The 2nd example shows a fan switch being created, 
+    with the first action being &quot;FanOff&quot; with the &quot;SwitchFanOff&quot; 
+    texture being used for that, and &quot;FanOn&quot; for the second action with 
+    the &quot;SwitchFanOn&quot; texture being used for that. Example 3 shows a 
+    standard floor button being created (which is what the AddButton command does) 
+    and example 4 shows a fire service mode knob being created with 3 positions.</p>
+  <p align="left">Available action names: <em>Off</em> (no action), [floor number], 
+    <em>Open</em> (open doors), <em>Close</em> (close doors), <em>Cancel</em> 
+    (call cancel), <em>Stop</em> (stop elevator), <em>Alarm</em>, <em>Fire1Off</em> 
+    (fire service phase 1 off), <em>Fire1On</em> (fire service phase 1 on), <em>Fire1Bypass</em> 
+    (fire service phase 1 bypass), <em>Fire2Off</em> (fire service phase 2 off), 
+    <em>Fire2On</em> (fire service phase 2 on), <em>Fire2Hold</em> (fire service 
+    phase 2 hold), <em>UpPeakOn</em> (enable up peak), <em>UpPeakOff</em> (disable 
+    up peak), <em>DownPeakOn</em> (enable down peak), <em>DownPeakOff</em> (disable 
+    down peak), <em>IndOn</em> (enable independent service mode), <em>IndOff</em> 
+    (disable independent service), <em>InsOn</em> (enable inspection service mode), 
+    <em>InsOff</em> (disable inspection service), <em>AcpOn</em> (enable ACP mode), 
+    <em>AcpOff</em> (disable ACP mode), <em>FanOn</em> (enable fan/idle sound), 
+    <em>FanOff</em> (disable fan/idle sound).<br>
+    <br>
+    <strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em> 
     texture_prefix, direction, CenterX, CenterZ, width, height, voffset</em></font> 
   </p>
