@@ -307,12 +307,13 @@ void ButtonPanel::Press(int index)
 		return;
 	}
 
-	//change to next control position
-	controls[index]->NextSelectPosition();
-
 	name.Downcase();
 	if (name == "off")
 		return;
+
+	//change to next control position
+	controls[index]->NextSelectPosition();
+
 	if (name.StartsWith("open", false) == true && elev->Direction == 0)
 	{
 		int number = 0;

@@ -5017,7 +5017,7 @@ int ScriptProcessor::ProcElevators()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 12)
+		if (tempdata.GetSize() < 10)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
