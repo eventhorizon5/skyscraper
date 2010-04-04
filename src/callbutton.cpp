@@ -462,7 +462,7 @@ void CallButton::Loop(bool direction)
 		Report("Using elevator " + csString(_itoa(elevator->Number, intbuffer, 10)));
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
-	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == tmpdirection && elevator->IsIdle() == false)
+	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == tmpdirection && elevator->IsIdle() == false && elevator->IsMoving == false)
 	{
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");

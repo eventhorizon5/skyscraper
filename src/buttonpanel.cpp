@@ -296,6 +296,11 @@ void ButtonPanel::Press(int index)
 					if (elev->FireServicePhase2 == 0)
 						elev->OpenDoors();
 				}
+				else
+				{
+					//add a route to the current floor if elevator is moving
+					elev->AddRoute(floor, -elev->Direction, true);
+				}
 			}
 		}
 

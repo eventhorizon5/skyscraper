@@ -773,13 +773,25 @@ void Elevator::ProcessCallQueue()
 					LastQueueDirection = 1;
 					return;
 				}
-				//reset queue if it's the last entry
-				if (i == UpQueue.GetSize() - 1 && QueueResets == true)
+				//reset search direction or queue if it's the last entry
+				if (i == UpQueue.GetSize() - 1)
 				{
-					if (sbs->Verbose)
-						Report("ProcessCallQueue up: last entry (" + csString(_itoa(UpQueue[i], intbuffer, 10)) + ") is lower; resetting queue");
-					ResetUpQueue = true;
-					return;
+					if (QueueResets == true)
+					{
+						if (sbs->Verbose)
+							Report("ProcessCallQueue up: last entry (" + csString(_itoa(UpQueue[i], intbuffer, 10)) + ") is lower; resetting queue");
+						ResetUpQueue = true;
+						return;
+					}
+					else if (IsIdle() == true && QueuePositionDirection != 0)
+					{
+						//set search direction to 0 if idle
+						if (sbs->Verbose)
+							Report("ProcessCallQueue up: resetting search direction since last entry is lower");
+						LastQueueDirection = QueuePositionDirection;
+						QueuePositionDirection = 0;
+						return;
+					}
 				}
 				//otherwise skip it if it's not the last entry
 				if (sbs->Verbose)
@@ -849,13 +861,25 @@ void Elevator::ProcessCallQueue()
 					LastQueueDirection = -1;
 					return;
 				}
-				//reset queue if it's the first entry
-				if (i == 0 && QueueResets == true)
+				//reset search direction or queue if it's the first entry
+				if (i == 0)
 				{
-					if (sbs->Verbose)
-						Report("ProcessCallQueue down: last entry (" + csString(_itoa(DownQueue[i], intbuffer, 10)) + ") is higher; resetting queue");
-					ResetDownQueue = true;
-					return;
+					if (QueueResets == true)
+					{
+						if (sbs->Verbose)
+							Report("ProcessCallQueue down: last entry (" + csString(_itoa(DownQueue[i], intbuffer, 10)) + ") is higher; resetting queue");
+						ResetDownQueue = true;
+						return;
+					}
+					else if (IsIdle() == true && QueuePositionDirection != 0)
+					{
+						//set search direction to 0 if idle
+						if (sbs->Verbose)
+							Report("ProcessCallQueue down: resetting search direction since last entry is higher");
+						LastQueueDirection = QueuePositionDirection;
+						QueuePositionDirection = 0;
+						return;
+					}
 				}
 				//otherwise skip it if it's not the last entry
 				if (sbs->Verbose)
