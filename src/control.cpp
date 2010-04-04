@@ -243,7 +243,7 @@ int Control::FindActionPosition(const char *name)
 
 	for (int i = 1; i <= GetPositions(); i++)
 	{
-		if (*GetPositionAction(i) == *name)
+		if (csString(GetPositionAction(i)) == csString(name))
 			return i;
 	}
 
