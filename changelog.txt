@@ -5,6 +5,9 @@ Version 1.7 (2.0 Alpha 6)
 -added elevator fan toggle
 -door open and close buttons now support specific doors
 -added door hold feature
+-elevator now resets queue search direction if last entry in active queue is in the opposite movement direction
+-elevator doors no longer try to open if you press the call button as it's passing the floor
+-floor buttons now properly add floor route if pressed on the same floor as elevator is moving
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------
