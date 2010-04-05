@@ -308,11 +308,15 @@ void ButtonPanel::Press(int index)
 	}
 
 	name.Downcase();
-	if (name == "off")
+	//exit without changing position if floor button is currently selected
+	if (name == "off" && IsNumeric(controls[index]->GetSelectPositionAction()) == true)
 		return;
 
 	//change to next control position
 	controls[index]->NextSelectPosition();
+
+	if (name == "off")
+		return;
 
 	if (name.StartsWith("open", false) == true && elev->Direction == 0)
 	{
