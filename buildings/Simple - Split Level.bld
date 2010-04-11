@@ -290,19 +290,19 @@ ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 	if[%floor% = 9] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4, -4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0
 	DrawWalls = true, true, false, false, false, false
 	WallOrientation = left
-	AddShaftWall 1, Shaft1Left, Brick, 0.33, -4, -4.125, -4, 4.125, %fullheight% + 15, %fullheight% + 15, 0, 0, 0, 0
-	AddShaftWall 1, Shaft1Front, Brick, 0.33, -4, -4.125, 4, -4.125, %fullheight% + 15, %fullheight% + 15, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Left, Brick, 0.33, -4, -4.125, -4, 4.125, %fullheight% + 10, %fullheight% + 10, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Front, Brick, 0.33, -4, -4.125, 4, -4.125, %fullheight% + 10, %fullheight% + 10, 0, 0, 0, 0
 	WallOrientation = right
-	AddShaftWall 1, Shaft1Right, Brick, 0.33, 4, -4.125, 4, 4.125, %fullheight% + 15, %fullheight% + 15, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Right, Brick, 0.33, 4, -4.125, 4, 4.125, %fullheight% + 10, %fullheight% + 10, 0, 0, 0, 0
 	AddShaftWall 1, Shaft1Back, Brick, 0.33, -4, 4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
 	
 	WallOrientation = right
 	DrawWalls = true, false, false, false, false, false
-	AddWall Shaft1LeftE, Wall1, 0.33, -4, -4.125 + 6 - 0.33, -4, 4.125 + 6 + 0.33, %height% + 15, %height% + 15, 0, 0, 0, 0, False
-	AddWall Shaft1FrontE, Wall1, 0.33, -4 - 0.33, -4.125 + 6, 4 + 0.33, -4.125 + 6, %height% + 15, %height% + 15, 0, 0, 0, 0, False
+	AddWall Shaft1LeftE, Wall1, 0.33, -4, -4.125 + 6 - 0.33, -4, 4.125 + 6 + 0.33, %height% + 10, %height% + 10, 0, 0, 0, 0, False
+	AddWall Shaft1FrontE, Wall1, 0.33, -4 - 0.33, -4.125 + 6, 4 + 0.33, -4.125 + 6, %height% + 10, %height% + 10, 0, 0, 0, 0, False
 	WallOrientation = left
 	DrawWalls = false, true, false, false, false, false
-	AddWall Shaft1RightE, Wall1, 0.33, 4, -4.125 + 6 - 0.33, 4, 4.125 + 6 + 0.33, %height% + 15, %height% + 15, 0, 0, 0, 0, False
+	AddWall Shaft1RightE, Wall1, 0.33, 4, -4.125 + 6 - 0.33, 4, 4.125 + 6 + 0.33, %height% + 10, %height% + 10, 0, 0, 0, 0, False
 	AddWall Shaft1BackE, Wall1, 0.33, -4 - 0.33, 4.125 + 6, 4 + 0.33, 4.125 + 6, %height%, %height%, 0, 0, 0, 0, False
 <EndFloor>
 
