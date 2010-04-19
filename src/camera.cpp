@@ -236,7 +236,7 @@ csVector3 Camera::GetStartRotation()
 void Camera::SetToStartPosition()
 {
 	if (sbs->GetFloor(StartFloor))
-		SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->GetBase() + cfg_body_height + cfg_legs_height, StartPositionZ));
+		SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->GetBase() + GetHeight(), StartPositionZ));
 }
 
 void Camera::SetToStartDirection()
@@ -863,4 +863,10 @@ void Camera::SetToDefaultFOV()
 {
 	//set to default FOV angle value
 	SetFOVAngle(FOV);
+}
+
+float Camera::GetHeight()
+{
+	//return camera's height
+	return cfg_body_height + cfg_legs_height;
 }

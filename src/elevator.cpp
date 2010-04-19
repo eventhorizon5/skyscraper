@@ -1888,12 +1888,23 @@ bool Elevator::IsInElevator(const csVector3 &position)
 	{
 		csHitBeamResult result = HitBeam(position, csVector3(position.x, position.y - Height, position.z));
 
-		if (IsMoving == false && result.hit == true)
+		if (result.hit == true)
 		{
-			//store camera offset if elevator is not moving
-			CameraOffset = position.y - GetPosition().y;
+			if (IsMoving == false)
+			{
+				//store camera offset if elevator is not moving
+				CameraOffset = position.y - GetPosition().y;
+			}
+			else if (CameraOffset == 0)
+			{
+				//reposition camera with a moving elevator if the offset is 0
+				if (position.y < GetPosition().y + Height)
+					CameraOffset = sbs->camera->GetHeight(); //if below ceiling, set to camera height
+				else
+					CameraOffset = Height + sbs->camera->GetHeight(); //if above ceiling, set to elev height + camera height
+			}
 		}
-		else if (result.hit == false)
+		else
 			CameraOffset = 0;
 
 		if (position.y < GetPosition().y + Height)

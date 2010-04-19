@@ -122,6 +122,7 @@ public:
 	void SetFOVAngle(float angle);
 	float GetFOVAngle();
 	void SetToDefaultFOV();
+	float GetHeight();
 
 private:
 	csRef<iCamera> MainCamera; //main first-person view camera
