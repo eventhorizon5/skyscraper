@@ -3381,7 +3381,7 @@ void Elevator::Timer::Notify()
 			num = 0;
 
 		//get call floor
-		int index = rnd_floor.Get(elevator->ServicedFloors.GetSize() - 1);
+		int index = rnd_floor.Get(elevator->ServicedFloors.GetSize());
 		floor = elevator->ServicedFloors[index];
 
 		//if probability number matched, press selected floor button
