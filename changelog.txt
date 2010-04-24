@@ -8,6 +8,9 @@ Version 1.7 (2.0 Alpha 6)
 -elevator now resets queue search direction if last entry in active queue is in the opposite movement direction
 -elevator doors no longer try to open if you press the call button as it's passing the floor
 -floor buttons now properly add floor route if pressed on the same floor as elevator is moving
+-Fix for vertically-moving elevator doors' offset calculations
+-Elevators now properly sync camera offsets if a person boards a moving elevator
+-Fixed an issue where the random activity system wouldn't select the top serviced floor
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------
