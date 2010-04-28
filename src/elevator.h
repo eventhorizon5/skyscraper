@@ -31,6 +31,7 @@
 #include "directional.h"
 #include "elevatordoor.h"
 #include "floorindicator.h"
+#include "door.h"
 
 class SBSIMPEXP Elevator
 {
@@ -215,6 +216,7 @@ public:
 	void SetRandomLobby(int floor);
 	void SelectFloor(int floor);
 	bool IsQueued(int floor);
+	Object* AddDoor(const char *texture, const char *open_sound, const char *close_sound, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -288,6 +290,9 @@ private:
 
 	//button panel array
 	csArray<ButtonPanel*> PanelArray; //elevator button panel objects
+
+	//standard door array
+	csArray<Door*> StdDoorArray; //pointer array to standard oor objects
 
 	//elevator misc internals
 	bool ElevatorIsRunning;

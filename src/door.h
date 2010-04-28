@@ -26,6 +26,8 @@
 #ifndef _SBS_DOOR_H
 #define _SBS_DOOR_H
 
+#include "sound.h"
+
 class SBSIMPEXP Door
 {
 public:
@@ -39,19 +41,26 @@ public:
 	bool OpenDoor; //open or close door?
 	bool Clockwise; //if door should rotate clockwise
 	bool IsEnabled;
+	csString OpenSound; //opening sound
+	csString CloseSound; //closing sound
 
-	Door(Object *parent, const char *name, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
+	Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	~Door();
 	void Open();
 	void Close();
 	bool IsOpen();
 	void Enabled(bool value);
 	void MoveDoor();
+	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
+	csVector3 GetPosition();
 
 private:
 	csRef<iMeshWrapper> DoorMesh; //door mesh
 	csRef<iThingFactoryState> DoorMesh_state;
 	csRef<iMovable> DoorMesh_movable;
+
+	//sound object
+	Sound *sound;
 
 	float rotation;
 

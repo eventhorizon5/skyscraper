@@ -3134,23 +3134,44 @@ int ScriptProcessor::ProcFloors()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 10 || tempdata.GetSize() > 10)
+		if (tempdata.GetSize() < 10 || tempdata.GetSize() > 12)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
 		}
+
+		bool compat = false;
+
 		//check numeric values
-		for (int i = 1; i <= 9; i++)
+		if (tempdata.GetSize() == 10)
 		{
-			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			for (int i = 1; i <= 9; i++)
 			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+			compat = true;
+		}
+		else
+		{
+			for (int i = 3; i <= 11; i++)
+			{
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
 			}
 		}
 
 		//create door
-		StoreCommand(floor->AddDoor(tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9])));
+		if (compat == true)
+			StoreCommand(floor->AddDoor(tempdata[0], "", "", atof(tempdata[1]), atoi(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9])));
+		else
+			StoreCommand(floor->AddDoor(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
 		tempdata.DeleteAll();
 	}
 
@@ -3166,26 +3187,52 @@ int ScriptProcessor::ProcFloors()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 11 || tempdata.GetSize() > 11)
+		if (tempdata.GetSize() < 11 || tempdata.GetSize() > 13)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
 		}
+
+		bool compat = false;
+
 		//check numeric values
-		for (int i = 0; i <= 10; i++)
+		if (tempdata.GetSize() == 11)
 		{
-			if (i == 1)
-				i = 2; //skip non-numeric parameters
-			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			for (int i = 0; i <= 10; i++)
 			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
+				if (i == 1)
+					i = 2; //skip non-numeric parameters
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
+			}
+			compat = true;
+		}
+		//check numeric values
+		else
+		{
+			for (int i = 0; i <= 12; i++)
+			{
+				if (i == 1)
+					i = 4; //skip non-numeric parameters
+				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				{
+					ScriptError("Invalid value: " + csString(tempdata[i]));
+					return sError;
+				}
 			}
 		}
 
 		//create door
 		if (Simcore->GetStairs(atoi(tempdata[0])))
-			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], atof(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10])));
+		{
+			if (compat == true)
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, "", "", tempdata[1], atof(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10])));
+			else
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
+		}
 		else
 		{
 			ScriptError("Invalid stairwell");

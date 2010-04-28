@@ -235,6 +235,18 @@ Elevator::~Elevator()
 	}
 	PanelArray.DeleteAll();
 
+	//delete doors
+	if (sbs->Verbose)
+		Report("deleting standard doors");
+
+	for (int i = 0; i < StdDoorArray.GetSize(); i++)
+	{
+		if (StdDoorArray[i])
+			delete StdDoorArray[i];
+		StdDoorArray[i] = 0;
+	}
+	StdDoorArray.DeleteAll();
+
 	//Destructor
 	if (sbs->Verbose)
 		Report("deleting objects");
@@ -1281,6 +1293,11 @@ void Elevator::MoveElevatorToFloor()
 		if (DirIndicatorArray[i])
 			DirIndicatorArray[i]->Move(movement);
 	}
+	for (int i = 0; i < StdDoorArray.GetSize(); i++)
+	{
+		if (StdDoorArray[i])
+			StdDoorArray[i]->Move(movement, true, true, true);
+	}
 
 	//move sounds
 	mainsound->SetPosition(elevposition);
@@ -1537,6 +1554,11 @@ void Elevator::MoveElevatorToFloor()
 		{
 			if (DirIndicatorArray[i])
 				DirIndicatorArray[i]->SetPosition(csVector3(DirIndicatorArray[i]->GetPosition().x, Destination, DirIndicatorArray[i]->GetPosition().z));
+		}
+		for (int i = 0; i < StdDoorArray.GetSize(); i++)
+		{
+			if (StdDoorArray[i])
+				StdDoorArray[i]->Move(csVector3(0, GetPosition().y, 0), true, false, true);
 		}
 
 		//move sounds
@@ -3468,4 +3490,45 @@ void Elevator::HoldDoors(int number)
 		else
 			Report("Invalid door " + csString(_itoa(i, intbuffer, 10)));
 	}
+}
+
+Object* Elevator::AddDoor(const char *texture, const char *open_sound, const char *close_sound, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+{
+	//interface to the SBS AddDoor function
+
+	if (direction > 8 | direction < 1)
+	{
+		ReportError("Door direction out of range");
+		return 0;
+	}
+
+	float x1, z1, x2, z2;
+	//set up coordinates
+	if (direction < 5)
+	{
+		x1 = CenterX;
+		x2 = CenterX;
+		z1 = CenterZ - (width / 2);
+		z2 = CenterZ + (width / 2);
+	}
+	else
+	{
+		x1 = CenterX - (width / 2);
+		x2 = CenterX + (width / 2);
+		z1 = CenterZ;
+		z2 = CenterZ;
+	}
+
+	//cut area
+	/*if (direction < 5)
+		CutAll(csVector3(x1 - 1, GetBase(true) + voffset, z1), csVector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
+	else
+		CutAll(csVector3(x1, GetBase(true) + voffset, z1 - 1), csVector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
+	*/
+
+	StdDoorArray.SetSize(StdDoorArray.GetSize() + 1);
+	csString elevnum = _itoa(Number, intbuffer, 10);
+	csString num = _itoa(StdDoorArray.GetSize() - 1, intbuffer, 10);
+	StdDoorArray[StdDoorArray.GetSize() - 1] = new Door(this->object, "Elevator " + elevnum + ":Door " + num, open_sound, close_sound, texture, thickness, direction, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	return StdDoorArray[StdDoorArray.GetSize() - 1]->object;
 }

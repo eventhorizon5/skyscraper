@@ -370,7 +370,7 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 	return hit;
 }
 
-Object* Stairs::AddDoor(int floor, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//add a door
 
@@ -419,7 +419,7 @@ Object* Stairs::AddDoor(int floor, const char *texture, float thickness, int dir
 	DoorArray[DoorArray.GetSize() - 1].floornumber = floor;
 	csString stairsnum = _itoa(StairsNum, intbuffer, 10);
 	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
-	DoorArray[DoorArray.GetSize() - 1].object = new Door(this->object, "Stairwell " + stairsnum + ":Door " + num, texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.GetSize() - 1].object = new Door(this->object, "Stairwell " + stairsnum + ":Door " + num, open_sound, close_sound, texture, thickness, direction, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.GetSize() - 1].object->object;
 }
