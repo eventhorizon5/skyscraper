@@ -11,6 +11,8 @@ Version 1.7 (2.0 Alpha 6)
 -Fix for vertically-moving elevator doors' offset calculations
 -Elevators now properly sync camera offsets if a person boards a moving elevator
 -Fixed an issue where the random activity system wouldn't select the top serviced floor
+-added standard doors to elevator objects
+-added sound support to doors
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------
