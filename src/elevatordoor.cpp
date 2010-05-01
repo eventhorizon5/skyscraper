@@ -1418,9 +1418,19 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float height = fabs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
 				if (direction == 0)
-					offset = wrapper->Height - (extents_max.y - (wrapper->Origin.y - temporigin));
+				{
+					if (wrapper->IsShaftDoor == false)
+						offset = wrapper->Height - extents_max.y;
+					else
+						offset = wrapper->Height - (extents_max.y - wrapper->Origin.y);
+				}
 				else
-					offset = extents_min.y - (wrapper->Origin.y - temporigin);
+				{
+					if (wrapper->IsShaftDoor == false)
+						offset = extents_min.y;
+					else
+						offset = extents_min.y - wrapper->Origin.y;
+				}
 				float newheight = height + offset;
 				marker1 = newheight / 4;
 				marker2 = (mainheight + (height - mainheight)) - marker1 + offset;
@@ -1459,9 +1469,19 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float height = fabs(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
 				if (direction == 0)
-					offset = wrapper->Height - (extents_max.y - (wrapper->Origin.y - temporigin));
+				{
+					if (wrapper->IsShaftDoor == false)
+						offset = wrapper->Height - extents_max.y;
+					else
+						offset = wrapper->Height - (extents_max.y - wrapper->Origin.y);
+				}
 				else
-					offset = extents_min.y - (wrapper->Origin.y - temporigin);
+				{
+					if (wrapper->IsShaftDoor == false)
+						offset = extents_min.y;
+					else
+						offset = extents_min.y - wrapper->Origin.y;
+				}
 				marker1 = 0;
 				marker2 = mainheight + (height - mainheight) + offset;
 			}
