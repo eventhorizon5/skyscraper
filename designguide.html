@@ -1012,9 +1012,9 @@
   <p align="left"><strong>15. AddDoor</strong> - adds a textured door in the specified 
     location, and performs a wall cut on that area (this must be called after 
     the associated wall is created)<br>
-    Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor <em> texturename, 
-    thickness</em>, <em>direction, CenterX</em>, <em>CenterZ</em>, <em>width</em>, 
-    <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor <em> opensound, 
+    closesound, texturename, thickness</em>, <em>direction, CenterX</em>, <em>CenterZ</em>, 
+    <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
   <p align="left">Direction specifies the direction the door faces (the side in 
     which the handle is on the left) and also the direction it opens. These are 
     the values:<br>
@@ -1032,8 +1032,9 @@
     This also performs a wall cut on that area (this must be called after the 
     associated wall is created)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsDoor <em> 
-    number, texturename, thickness</em>, <em>direction, CenterX</em>, <em>CenterZ</em>, 
-    <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
+    number, opensound, closesound, texturename, thickness</em>, <em>direction, 
+    CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>, <em>voffset</em>, 
+    <em>tw</em>, <em>th</em></font></p>
   <p align="left">Number specifies the stairwell number. Direction specifies the 
     direction the door faces and also the direction it opens. For values of this, 
     look at the AddDoor command above.</p>
