@@ -3507,7 +3507,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, const
 {
 	//interface to the SBS AddDoor function
 
-	if (direction > 8 | direction < 1)
+	if (direction > 8 || direction < 1)
 	{
 		ReportError("Door direction out of range");
 		return 0;
