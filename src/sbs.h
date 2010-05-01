@@ -296,6 +296,7 @@ public:
 	csString TruncateNumber(double value, int decimals);
 	csString TruncateNumber(float value, int decimals);
 	csString TruncateNumber(const char *number, int decimals);
+	bool IsValidFloor(int floor);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

@@ -2052,27 +2052,32 @@ Floor* SBS::GetFloor(int number)
 {
 	//return pointer to floor object
 
-	if (number < -Basements || number > Floors - 1)
-		return 0;
-
 	if (FloorArray.GetSize() > 0)
 	{
 		//quick prediction
-		if (FloorArray[Basements + number].number == number)
+		if (Basements + number <= FloorArray.GetSize() - 1)
 		{
-			if (FloorArray[Basements + number].object)
-				return FloorArray[Basements + number].object;
-			else
-				return 0;
-		}
-		else if (number < 0)
-		{
-			if (FloorArray[-(number + 1)].number == number)
+			FloorMap floor = FloorArray[Basements + number];
+			if (floor.number == number)
 			{
-				if (FloorArray[-(number + 1)].object)
-					return FloorArray[-(number + 1)].object;
+				if (floor.object)
+					return floor.object;
 				else
 					return 0;
+			}
+			else if (number < 0)
+			{
+				if (-(number + 1) <= FloorArray.GetSize() - 1)
+				{
+					floor = FloorArray[-(number + 1)];
+					if (floor.number == number)
+					{
+						if (floor.object)
+							return floor.object;
+						else
+							return 0;
+					}
+				}
 			}
 		}
 	}
@@ -3265,16 +3270,16 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	//disable floors 1 floor outside of range
 	if (value == true)
 	{
-		if (floor - additionalfloors - 1 >= -Basements && floor - additionalfloors - 1 < Floors)
+		if (IsValidFloor(floor - additionalfloors - 1))
 			GetFloor(floor - additionalfloors - 1)->Enabled(false);
-		if (floor + additionalfloors + 1 >= -Basements && floor + additionalfloors + 1 < Floors)
+		if (IsValidFloor(floor + additionalfloors + 1))
 			GetFloor(floor + additionalfloors + 1)->Enabled(false);
 	}
 
 	//enable floors within range
 	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
 	{
-		if (i >= -Basements && i < Floors)
+		if (IsValidFloor(i))
 		{
 			if (shaftnumber > 0)
 			{
@@ -4071,4 +4076,13 @@ csString SBS::TruncateNumber(const char *value, int decimals)
 	if (number.GetAt(number.Length() - 1) == '.')
 		number = number.Slice(0, number.Length() - 1); //strip of extra decimal point if even
 	return number;
+}
+
+bool SBS::IsValidFloor(int floor)
+{
+	//determine if a floor is valid
+
+	if (GetFloor(floor))
+		return true;
+	return false;
 }

@@ -140,7 +140,7 @@ public:
 	bool GetBrakeStatus();
 	bool GetEmergencyStopStatus();
 	void DumpServicedFloors();
-	void AddServicedFloor(int number);
+	bool AddServicedFloor(int number);
 	void RemoveServicedFloor(int number);
 	void UpdateFloorIndicators();
 	double GetJerkRate();

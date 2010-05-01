@@ -439,7 +439,7 @@ checkfloors:
 				ScriptError("Invalid floor " + tempdata);
 				return false;
 			}
-			if (temp4 < -Simcore->Basements || temp4 > Simcore->Floors - 1)
+			if (Simcore->IsValidFloor(temp4) == false)
 			{
 				ScriptError("Invalid floor " + tempdata);
 				return false;
@@ -2400,6 +2400,15 @@ int ScriptProcessor::ProcFloors()
 
 	Floor *floor = Simcore->GetFloor(Current);
 
+	//exit with error if floor is invalid
+	if (!floor)
+	{
+		csString floornum;
+		floornum = Current;
+		ScriptError("Invalid floor " + floornum);
+		return sError;
+	}
+
 	//replace variables with actual values
 	buffer = Current;
 	LineData.ReplaceAll("%floor%", buffer);
@@ -3903,7 +3912,13 @@ int ScriptProcessor::ProcElevators()
 				}
 
 				for (int k = start; k <= end; k++)
-					elev->AddServicedFloor(k);
+				{
+					if (!elev->AddServicedFloor(k))
+					{
+						ScriptError("Invalid floor");
+						return sError;
+					}
+				}
 			}
 			else
 			{
@@ -3913,7 +3928,11 @@ int ScriptProcessor::ProcElevators()
 					ScriptError("Invalid value");
 					return sError;
 				}
-				elev->AddServicedFloor(data);
+				if (!elev->AddServicedFloor(data))
+				{
+					ScriptError("Invalid floor");
+					return sError;
+				}
 			}
 		}
 		tempdata.DeleteAll();

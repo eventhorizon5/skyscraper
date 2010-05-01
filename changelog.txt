@@ -13,6 +13,7 @@ Version 1.7 (2.0 Alpha 6)
 -Fixed an issue where the random activity system wouldn't select the top serviced floor
 -added standard doors to elevator objects
 -added sound support to doors
+-fixed a crash that occurred if ServicedFloors included an invalid floor number
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------

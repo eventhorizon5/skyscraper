@@ -1985,12 +1985,23 @@ void Elevator::DumpServicedFloors()
 		sbs->Report(csString(_itoa(i, intbuffer, 10)) + " - " + csString(_itoa(ServicedFloors[i], intbuffer, 10)));
 }
 
-void Elevator::AddServicedFloor(int number)
+bool Elevator::AddServicedFloor(int number)
 {
 	if (sbs->Verbose)
 		Report("adding serviced floor " + csString(_itoa(number, intbuffer, 10)));
+
+	//check if floor is outside valid floor range
+	if (sbs->IsValidFloor(number) == false)
+	{
+		csString floor;
+		floor = number;
+		ReportError("AddServicedFloor: Invalid floor " + floor);
+		return false;
+	}
+
 	if (IsServicedFloor(number) == false)
 		ServicedFloors.InsertSorted(number);
+	return true;
 }
 
 void Elevator::RemoveServicedFloor(int number)
