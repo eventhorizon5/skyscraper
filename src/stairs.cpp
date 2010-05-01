@@ -558,3 +558,9 @@ bool Stairs::IsValidFloor(int floor)
 
 	return true;
 }
+
+bool Stairs::IsDoorMoving(int number)
+{
+	//check to see if door is moving
+	return DoorArray[number].object->IsMoving;
+}

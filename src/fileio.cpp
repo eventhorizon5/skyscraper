@@ -5539,6 +5539,39 @@ int ScriptProcessor::ProcElevators()
 		tempdata.DeleteAll();
 	}
 
+	//AddDoor command
+	if (LineData.Slice(0, 8).CompareNoCase("adddoor ") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(8).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
+		{
+			ScriptError("Incorrect number of parameters");
+			return sError;
+		}
+
+		//check numeric values
+		for (int i = 3; i <= 11; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+			{
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
+			}
+		}
+
+		//create door
+		StoreCommand(elev->AddDoor(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
+		tempdata.DeleteAll();
+	}
+
 	//Set command
 	if (LineData.Slice(0, 4).CompareNoCase("set ") == true)
 	{

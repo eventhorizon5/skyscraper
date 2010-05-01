@@ -113,6 +113,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 
 	//create sound object
 	sound = new Sound(object, "DoorSound");
+	sound->SetPosition(origin);
 
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);

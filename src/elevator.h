@@ -216,7 +216,11 @@ public:
 	void SetRandomLobby(int floor);
 	void SelectFloor(int floor);
 	bool IsQueued(int floor);
-	Object* AddDoor(const char *texture, const char *open_sound, const char *close_sound, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Object* AddDoor(const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	void OpenDoor(int number);
+	void CloseDoor(int number);
+	bool IsDoorOpen(int number);
+	bool IsDoorMoving(int number);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

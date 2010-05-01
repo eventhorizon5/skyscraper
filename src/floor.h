@@ -57,7 +57,6 @@ public:
 	bool IsEnabled; //is floor enabled?
 	bool IsColumnFrameEnabled; //is columnframe enabled?
 	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
-	csArray<Door*> DoorArray; //pointer array to door objects
 	csArray<FloorIndicator*> FloorIndicatorArray; //pointer array to floor indicator objects
 	csArray<int> Group; //floor group
 	csArray<WallObject*> level_walls;
@@ -99,6 +98,10 @@ public:
 	void Report(const char *message);
 	void ReportError(const char *message);
 	float GetBase(bool relative = false);
+	void OpenDoor(int number);
+	void CloseDoor(int number);
+	bool IsDoorOpen(int number);
+	bool IsDoorMoving(int number);
 
 private:
 	char intbuffer[65];
@@ -106,6 +109,9 @@ private:
 
 	//sound objects
 	csArray<Sound*> sounds;
+
+	//doors
+	csArray<Door*> DoorArray; //pointer array to door objects
 
 	//directional indicators
 	csArray<DirectionalIndicator*> DirIndicatorArray;

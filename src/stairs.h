@@ -63,6 +63,7 @@ public:
 	bool IsDoorOpen(int number);
 	bool IsEnabledFloor(int floor);
 	bool IsValidFloor(int floor);
+	bool IsDoorMoving(int number);
 
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array

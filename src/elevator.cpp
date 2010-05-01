@@ -3503,7 +3503,7 @@ void Elevator::HoldDoors(int number)
 	}
 }
 
-Object* Elevator::AddDoor(const char *texture, const char *open_sound, const char *close_sound, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -3542,4 +3542,34 @@ Object* Elevator::AddDoor(const char *texture, const char *open_sound, const cha
 	csString num = _itoa(StdDoorArray.GetSize() - 1, intbuffer, 10);
 	StdDoorArray[StdDoorArray.GetSize() - 1] = new Door(this->object, "Elevator " + elevnum + ":Door " + num, open_sound, close_sound, texture, thickness, direction, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
 	return StdDoorArray[StdDoorArray.GetSize() - 1]->object;
+}
+
+void Elevator::OpenDoor(int number)
+{
+	//open door
+	if (StdDoorArray[number])
+		StdDoorArray[number]->Open();
+}
+
+void Elevator::CloseDoor(int number)
+{
+	//close door
+	if (StdDoorArray[number])
+		StdDoorArray[number]->Close();
+}
+
+bool Elevator::IsDoorOpen(int number)
+{
+	//check to see if door is open
+	if (StdDoorArray[number])
+		return StdDoorArray[number]->IsOpen();
+	return false;
+}
+
+bool Elevator::IsDoorMoving(int number)
+{
+	//check to see if door is moving
+	if (StdDoorArray[number])
+		return StdDoorArray[number]->IsMoving;
+	return false;
 }

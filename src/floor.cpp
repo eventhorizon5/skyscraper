@@ -873,3 +873,33 @@ void Floor::UpdateDirectionalIndicators()
 		}
 	}
 }
+
+void Floor::OpenDoor(int number)
+{
+	//open door
+	if (DoorArray[number])
+		DoorArray[number]->Open();
+}
+
+void Floor::CloseDoor(int number)
+{
+	//close door
+	if (DoorArray[number])
+		DoorArray[number]->Close();
+}
+
+bool Floor::IsDoorOpen(int number)
+{
+	//check to see if door is open
+	if (DoorArray[number])
+		return DoorArray[number]->IsOpen();
+	return false;
+}
+
+bool Floor::IsDoorMoving(int number)
+{
+	//check to see if door is moving
+	if (DoorArray[number])
+		return DoorArray[number]->IsMoving;
+	return false;
+}

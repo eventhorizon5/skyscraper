@@ -592,20 +592,63 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			int marker = meshname.Find(":");
 			int floornumber = atoi(meshname.Slice(5, marker - 5));
 			int doornumber = atoi(meshname.Slice(marker + 5));
-			if (sbs->GetFloor(floornumber)->DoorArray[doornumber]->IsOpen() == false)
-				sbs->GetFloor(floornumber)->DoorArray[doornumber]->Open();
+			Floor *floor = sbs->GetFloor(floornumber);
+			if (floor->IsDoorOpen(doornumber) == false)
+			{
+				if (floor->IsDoorMoving(doornumber) == false)
+					floor->OpenDoor(doornumber);
+				else
+					floor->CloseDoor(doornumber);
+			}
 			else
-				sbs->GetFloor(floornumber)->DoorArray[doornumber]->Close();
+			{
+				if (floor->IsDoorMoving(doornumber) == false)
+					floor->CloseDoor(doornumber);
+				else
+					floor->OpenDoor(doornumber);
+			}
 		}
 		if (meshname.Slice(0, 9) == "Stairwell")
 		{
 			int marker = meshname.Find(":");
 			int stairsnumber = atoi(meshname.Slice(9, marker - 9));
 			int doornumber = atoi(meshname.Slice(marker + 5));
-			if (sbs->GetStairs(stairsnumber)->IsDoorOpen(doornumber) == false)
-				sbs->GetStairs(stairsnumber)->OpenDoor(doornumber);
+			Stairs *stairs = sbs->GetStairs(stairsnumber);
+			if (stairs->IsDoorOpen(doornumber) == false)
+			{
+				if (stairs->IsDoorMoving(doornumber) == false)
+					stairs->OpenDoor(doornumber);
+				else
+					stairs->CloseDoor(doornumber);
+			}
 			else
-				sbs->GetStairs(stairsnumber)->CloseDoor(doornumber);
+			{
+				if (stairs->IsDoorMoving(doornumber) == false)
+					stairs->CloseDoor(doornumber);
+				else
+					stairs->OpenDoor(doornumber);
+			}
+		}
+		if (meshname.Slice(0, 8) == "Elevator")
+		{
+			int marker = meshname.Find(":");
+			int elevnumber = atoi(meshname.Slice(8, marker - 8));
+			int doornumber = atoi(meshname.Slice(marker + 5));
+			Elevator *elevator = sbs->GetElevator(elevnumber);
+			if (elevator->IsDoorOpen(doornumber) == false)
+			{
+				if (elevator->IsDoorMoving(doornumber) == false)
+					elevator->OpenDoor(doornumber);
+				else
+					elevator->CloseDoor(doornumber);
+			}
+			else
+			{
+				if (elevator->IsDoorMoving(doornumber) == false)
+					elevator->CloseDoor(doornumber);
+				else
+					elevator->OpenDoor(doornumber);
+			}
 		}
 	}
 }
