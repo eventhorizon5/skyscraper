@@ -584,7 +584,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check doors
-	if (meshname.Find("Door") != -1)
+	if (meshname.Find("Door") != -1 && meshname.Find("Shaft Door") == -1)
 	{
 		//user clicked on a door
 		if (meshname.Slice(0, 5) == "Floor")
