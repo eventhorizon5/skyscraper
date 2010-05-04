@@ -3547,29 +3547,49 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, const
 void Elevator::OpenDoor(int number)
 {
 	//open door
-	if (StdDoorArray[number])
-		StdDoorArray[number]->Open();
+	if (number < StdDoorArray.GetSize())
+	{
+		if (StdDoorArray[number])
+			StdDoorArray[number]->Open();
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 }
 
 void Elevator::CloseDoor(int number)
 {
 	//close door
-	if (StdDoorArray[number])
-		StdDoorArray[number]->Close();
+	if (number < StdDoorArray.GetSize())
+	{
+		if (StdDoorArray[number])
+			StdDoorArray[number]->Close();
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 }
 
 bool Elevator::IsDoorOpen(int number)
 {
 	//check to see if door is open
-	if (StdDoorArray[number])
-		return StdDoorArray[number]->IsOpen();
+	if (number < StdDoorArray.GetSize())
+	{
+		if (StdDoorArray[number])
+			return StdDoorArray[number]->IsOpen();
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
 bool Elevator::IsDoorMoving(int number)
 {
 	//check to see if door is moving
-	if (StdDoorArray[number])
-		return StdDoorArray[number]->IsMoving;
+	if (number < StdDoorArray.GetSize())
+	{
+		if (StdDoorArray[number])
+			return StdDoorArray[number]->IsMoving;
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
 }

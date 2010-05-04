@@ -126,7 +126,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - AddWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -325,8 +325,7 @@ bool Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVe
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		if (sbs->Verbose)
-			sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
 		return false;
 	}
 
@@ -453,4 +452,16 @@ csRef<iMeshWrapper> Shaft::GetMeshWrapper(int floor)
 		return 0;
 
 	return ShaftArray[floor - startfloor];
+}
+
+void Shaft::Report(const char *message)
+{
+	//general reporting function
+	sbs->Report("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
+}
+
+void Shaft::ReportError(const char *message)
+{
+	//general reporting function
+	sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
 }

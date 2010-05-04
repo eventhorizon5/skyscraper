@@ -124,7 +124,7 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - AddStairs: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddStairs: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -231,7 +231,7 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - AddWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -264,7 +264,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - AddFloor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddFloor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -377,7 +377,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - AddDoor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddDoor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -462,7 +462,7 @@ bool Stairs::CutWall(bool relative, int floor, const csVector3 &start, const csV
 	if (IsValidFloor(floor) == false)
 	{
 		if (sbs->Verbose)
-			sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + " - CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+			ReportError("CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
 		return false;
 	}
 
@@ -523,19 +523,38 @@ void Stairs::EnableDoor(int floor, bool value)
 void Stairs::OpenDoor(int number)
 {
 	//open door
-	DoorArray[number].object->Open();
+	if (number < DoorArray.GetSize())
+	{
+		if (DoorArray[number].object)
+			DoorArray[number].object->Open();
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 }
 
 void Stairs::CloseDoor(int number)
 {
 	//close door
-	DoorArray[number].object->Close();
+	if (number < DoorArray.GetSize())
+	{
+		if (DoorArray[number].object)
+			DoorArray[number].object->Close();
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 }
 
 bool Stairs::IsDoorOpen(int number)
 {
 	//check to see if door is open
-	return DoorArray[number].object->IsOpen();
+	if (number < DoorArray.GetSize())
+	{
+		if (DoorArray[number].object)
+			return DoorArray[number].object->IsOpen();
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+	return false;
 }
 
 bool Stairs::IsEnabledFloor(int floor)
@@ -548,7 +567,7 @@ bool Stairs::IsEnabledFloor(int floor)
 
 bool Stairs::IsValidFloor(int floor)
 {
-	//return true if the shaft services the specified floor
+	//return true if the stairwell services the specified floor
 
 	if (floor < startfloor || floor > endfloor)
 		return false;
@@ -562,5 +581,24 @@ bool Stairs::IsValidFloor(int floor)
 bool Stairs::IsDoorMoving(int number)
 {
 	//check to see if door is moving
-	return DoorArray[number].object->IsMoving;
+	if (number < DoorArray.GetSize())
+	{
+		if (DoorArray[number].object)
+			return DoorArray[number].object->IsMoving;
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+	return false;
+}
+
+void Stairs::Report(const char *message)
+{
+	//general reporting function
+	sbs->Report("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
+}
+
+void Stairs::ReportError(const char *message)
+{
+	//general reporting function
+	sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
 }

@@ -877,29 +877,49 @@ void Floor::UpdateDirectionalIndicators()
 void Floor::OpenDoor(int number)
 {
 	//open door
-	if (DoorArray[number])
-		DoorArray[number]->Open();
+	if (number < DoorArray.GetSize())
+	{
+		if (DoorArray[number])
+			DoorArray[number]->Open();
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 }
 
 void Floor::CloseDoor(int number)
 {
 	//close door
-	if (DoorArray[number])
-		DoorArray[number]->Close();
+	if (number < DoorArray.GetSize())
+	{
+		if (DoorArray[number])
+			DoorArray[number]->Close();
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 }
 
 bool Floor::IsDoorOpen(int number)
 {
 	//check to see if door is open
-	if (DoorArray[number])
-		return DoorArray[number]->IsOpen();
+	if (number < DoorArray.GetSize())
+	{
+		if (DoorArray[number])
+			return DoorArray[number]->IsOpen();
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
 bool Floor::IsDoorMoving(int number)
 {
 	//check to see if door is moving
-	if (DoorArray[number])
-		return DoorArray[number]->IsMoving;
+	if (number < DoorArray.GetSize())
+	{
+		if (DoorArray[number])
+			return DoorArray[number]->IsMoving;
+	}
+	else
+		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
 }

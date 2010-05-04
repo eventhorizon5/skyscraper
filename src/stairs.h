@@ -64,6 +64,8 @@ public:
 	bool IsEnabledFloor(int floor);
 	bool IsValidFloor(int floor);
 	bool IsDoorMoving(int number);
+	void Report(const char *message);
+	void ReportError(const char *message);
 
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array
