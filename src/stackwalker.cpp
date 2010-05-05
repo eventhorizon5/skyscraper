@@ -21,6 +21,54 @@
  *                     - Added example for doing an exception-callstack-walking in main.cpp
  *                       (thanks to owillebo: http://www.codeproject.com/script/profile/whos_who.asp?id=536268)
  *  2005-08-05   v5    - Removed most Lint (http://www.gimpel.com/) errors... thanks to Okko Willeboordse!
+ *  2008-08-04   v6    - Fixed Bug: Missing LEAK-end-tag
+ *                       http://www.codeproject.com/KB/applications/leakfinder.aspx?msg=2502890#xx2502890xx
+ *                       Fixed Bug: Compiled with "WIN32_LEAN_AND_MEAN"
+ *                       http://www.codeproject.com/KB/applications/leakfinder.aspx?msg=1824718#xx1824718xx
+ *                       Fixed Bug: Compiling with "/Wall"
+ *                       http://www.codeproject.com/KB/threads/StackWalker.aspx?msg=2638243#xx2638243xx
+ *                       Fixed Bug: Now checking SymUseSymSrv
+ *                       http://www.codeproject.com/KB/threads/StackWalker.aspx?msg=1388979#xx1388979xx
+ *                       Fixed Bug: Support for recursive function calls
+ *                       http://www.codeproject.com/KB/threads/StackWalker.aspx?msg=1434538#xx1434538xx
+ *                       Fixed Bug: Missing FreeLibrary call in "GetModuleListTH32"
+ *                       http://www.codeproject.com/KB/threads/StackWalker.aspx?msg=1326923#xx1326923xx
+ *                       Fixed Bug: SymDia is number 7, not 9!
+ *  2008-09-11   v7      For some (undocumented) reason, dbhelp.h is needing a packing of 8!
+ *                       Thanks to Teajay which reported the bug...
+ *                       http://www.codeproject.com/KB/applications/leakfinder.aspx?msg=2718933#xx2718933xx
+ *  2008-11-27   v8      Debugging Tools for Windows are now stored in a different directory
+ *                       Thanks to Luiz Salamon which reported this "bug"...
+ *                       http://www.codeproject.com/KB/threads/StackWalker.aspx?msg=2822736#xx2822736xx
+ *  2009-04-10   v9      License slihtly corrected (<ORGANIZATION> replaced)
+ *  2009-11-01-  v10     Moved to stackwalker.codeplex.com
+ *
+ * LICENSE (http://www.opensource.org/licenses/bsd-license.php)
+ *
+ *   Copyright (c) 2005-2009, Jochen Kalmbach
+ *   All rights reserved.
+ *
+ *   Redistribution and use in source and binary forms, with or without modification, 
+ *   are permitted provided that the following conditions are met:
+ *
+ *   Redistributions of source code must retain the above copyright notice, 
+ *   this list of conditions and the following disclaimer. 
+ *   Redistributions in binary form must reproduce the above copyright notice, 
+ *   this list of conditions and the following disclaimer in the documentation 
+ *   and/or other materials provided with the distribution. 
+ *   Neither the name of Jochen Kalmbach nor the names of its contributors may be 
+ *   used to endorse or promote products derived from this software without 
+ *   specific prior written permission. 
+ *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+ *   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, 
+ *   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+ *   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE 
+ *   FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
+ *   (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+ *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+ *   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+ *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+ *   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  **********************************************************************/
 #include "globals.h"
@@ -29,12 +77,15 @@
 #include <windows.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <stdlib.h>
 #pragma comment(lib, "version.lib")  // for "VerQueryValue"
+#pragma warning(disable:4826)
 
-#include "stackwalker.h"
+#include "StackWalker.h"
 
 
 // If VC7 and later, then use the shipped 'dbghelp.h'-file
+#pragma pack(push,8)
 #if _MSC_VER >= 1300
 #include <dbghelp.h>
 #else
@@ -164,6 +215,7 @@ DWORD64
 #define UNDNAME_COMPLETE                 (0x0000)  // Enable full undecoration
 #define UNDNAME_NAME_ONLY                (0x1000)  // Crack only the name for primary declaration;
 #endif  // _MSC_VER < 1300
+#pragma pack(pop)
 
 // Some missing defines (for VC5/6):
 #ifndef INVALID_FILE_ATTRIBUTES
@@ -232,7 +284,40 @@ public:
       if (GetFileAttributes(szTemp) == INVALID_FILE_ATTRIBUTES)
       {
         // ".local" file does not exist, so we can try to load the dbghelp.dll from the "Debugging Tools for Windows"
-        if (GetEnvironmentVariable(_T("ProgramFiles"), szTemp, 4096) > 0)
+        // Ok, first try the new path according to the archtitecture:
+#ifdef _M_IX86
+        if ( (m_hDbhHelp == NULL) && (GetEnvironmentVariable(_T("ProgramFiles"), szTemp, 4096) > 0) )
+        {
+          _tcscat_s(szTemp, _T("\\Debugging Tools for Windows (x86)\\dbghelp.dll"));
+          // now check if the file exists:
+          if (GetFileAttributes(szTemp) != INVALID_FILE_ATTRIBUTES)
+          {
+            m_hDbhHelp = LoadLibrary(szTemp);
+          }
+        }
+#elif _M_X64
+        if ( (m_hDbhHelp == NULL) && (GetEnvironmentVariable(_T("ProgramFiles"), szTemp, 4096) > 0) )
+        {
+          _tcscat_s(szTemp, _T("\\Debugging Tools for Windows (x64)\\dbghelp.dll"));
+          // now check if the file exists:
+          if (GetFileAttributes(szTemp) != INVALID_FILE_ATTRIBUTES)
+          {
+            m_hDbhHelp = LoadLibrary(szTemp);
+          }
+        }
+#elif _M_IA64
+        if ( (m_hDbhHelp == NULL) && (GetEnvironmentVariable(_T("ProgramFiles"), szTemp, 4096) > 0) )
+        {
+          _tcscat_s(szTemp, _T("\\Debugging Tools for Windows (ia64)\\dbghelp.dll"));
+          // now check if the file exists:
+          if (GetFileAttributes(szTemp) != INVALID_FILE_ATTRIBUTES)
+          {
+            m_hDbhHelp = LoadLibrary(szTemp);
+          }
+        }
+#endif
+        // If still not found, try the old directories...
+        if ( (m_hDbhHelp == NULL) && (GetEnvironmentVariable(_T("ProgramFiles"), szTemp, 4096) > 0) )
         {
           _tcscat_s(szTemp, _T("\\Debugging Tools for Windows\\dbghelp.dll"));
           // now check if the file exists:
@@ -241,7 +326,8 @@ public:
             m_hDbhHelp = LoadLibrary(szTemp);
           }
         }
-          // Still not found? Then try to load the 64-Bit version:
+#if defined _M_X64 || defined _M_IA64
+        // Still not found? Then try to load the (old) 64-Bit version:
         if ( (m_hDbhHelp == NULL) && (GetEnvironmentVariable(_T("ProgramFiles"), szTemp, 4096) > 0) )
         {
           _tcscat_s(szTemp, _T("\\Debugging Tools for Windows 64-Bit\\dbghelp.dll"));
@@ -250,6 +336,7 @@ public:
             m_hDbhHelp = LoadLibrary(szTemp);
           }
         }
+#endif
       }
     }
     if (m_hDbhHelp == NULL)  // if not already loaded, try to load a default-one
@@ -344,6 +431,8 @@ public:
     BOOL     Publics;                // contains public symbols
 };
 */
+
+#pragma pack(push,8)
 typedef struct IMAGEHLP_MODULE64_V2 {
     DWORD    SizeOfStruct;           // set to sizeof(IMAGEHLP_MODULE64)
     DWORD64  BaseOfImage;            // base load address of module
@@ -356,6 +445,7 @@ typedef struct IMAGEHLP_MODULE64_V2 {
     CHAR     ImageName[256];         // image name
     CHAR     LoadedImageName[256];   // symbol file name
 };
+#pragma pack(pop)
 
 
   // SymCleanup()
@@ -490,7 +580,10 @@ private:
 
     hSnap = pCT32S( TH32CS_SNAPMODULE, pid );
     if (hSnap == (HANDLE) -1)
+    {
+      FreeLibrary(hToolhelp);
       return FALSE;
+    }
 
     keepGoing = !!pM32F( hSnap, &me );
     int cnt = 0;
@@ -652,29 +745,29 @@ private:
           case SymNone:
             szSymType = "-nosymbols-";
             break;
-          case SymCoff:
+          case SymCoff:  // 1
             szSymType = "COFF";
             break;
-          case SymCv:
+          case SymCv:  // 2
             szSymType = "CV";
             break;
-          case SymPdb:
+          case SymPdb:  // 3
             szSymType = "PDB";
             break;
-          case SymExport:
+          case SymExport:  // 4
             szSymType = "-exported-";
             break;
-          case SymDeferred:
+          case SymDeferred:  // 5
             szSymType = "-deferred-";
             break;
-          case SymSym:
+          case SymSym:  // 6
             szSymType = "SYM";
+            break;
+          case 7: // SymDia:
+            szSymType = "DIA";
             break;
           case 8: //SymVirtual:
             szSymType = "Virtual";
-            break;
-          case 9: // SymDia:
-            szSymType = "DIA";
             break;
         }
       }
@@ -745,6 +838,7 @@ StackWalker::StackWalker(DWORD dwProcessId, HANDLE hProcess)
   this->m_sw = new StackWalkerInternal(this, this->m_hProcess);
   this->m_dwProcessId = dwProcessId;
   this->m_szSymPath = NULL;
+  this->m_MaxRecursionCount = 1000;
 }
 StackWalker::StackWalker(int options, LPCSTR szSymPath, DWORD dwProcessId, HANDLE hProcess)
 {
@@ -760,6 +854,7 @@ StackWalker::StackWalker(int options, LPCSTR szSymPath, DWORD dwProcessId, HANDL
   }
   else
     this->m_szSymPath = NULL;
+  this->m_MaxRecursionCount = 1000;
 }
 
 StackWalker::~StackWalker()
@@ -855,7 +950,7 @@ BOOL StackWalker::LoadModules()
       strcat_s(szSymPath, nSymPathLen, ";");
     }
 
-    if ( (this->m_options & SymBuildPath) != 0)
+    if ( (this->m_options & SymUseSymSrv) != 0)
     {
       if (GetEnvironmentVariableA("SYSTEMDRIVE", szTemp, nTempLen) > 0)
       {
@@ -868,7 +963,7 @@ BOOL StackWalker::LoadModules()
       else
         strcat_s(szSymPath, nSymPathLen, "SRV*c:\\websymbols*http://msdl.microsoft.com/download/symbols;");
     }
-  }
+  }  // if SymBuildPath
 
   // First Init the whole stuff...
   BOOL bRet = this->m_sw->Init(szSymPath);
@@ -896,12 +991,14 @@ static LPVOID s_readMemoryFunction_UserData = NULL;
 
 BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadProcessMemoryRoutine readMemoryFunction, LPVOID pUserData)
 {
-  CONTEXT c;;
+  CONTEXT c;
   CallstackEntry csEntry;
   IMAGEHLP_SYMBOL64 *pSym = NULL;
   StackWalkerInternal::IMAGEHLP_MODULE64_V2 Module;
   IMAGEHLP_LINE64 Line;
   int frameNum;
+  bool bLastEntryCalled = true;
+  int curRecursionCount = 0;
 
   if (m_modulesLoaded == FALSE)
     this->LoadModules();  // ignore the result...
@@ -993,7 +1090,8 @@ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadPro
     // CONTEXT need not to be suplied if imageTyp is IMAGE_FILE_MACHINE_I386!
     if ( ! this->m_sw->pSW(imageType, this->m_hProcess, hThread, &s, &c, myReadProcMem, this->m_sw->pSFTA, this->m_sw->pSGMB, NULL) )
     {
-      this->OnDbgHelpErr("StackWalk64", GetLastError(), s.AddrPC.Offset);
+      // INFO: "StackWalk64" does not set "GetLastError"...
+      this->OnDbgHelpErr("StackWalk64", 0, s.AddrPC.Offset);
       break;
     }
 
@@ -1009,16 +1107,21 @@ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadPro
     csEntry.moduleName[0] = 0;
     if (s.AddrPC.Offset == s.AddrReturn.Offset)
     {
-      this->OnDbgHelpErr("StackWalk64-Endless-Callstack!", 0, s.AddrPC.Offset);
-      break;
+      if ( (this->m_MaxRecursionCount > 0) && (curRecursionCount > m_MaxRecursionCount) )
+      {
+        this->OnDbgHelpErr("StackWalk64-Endless-Callstack!", 0, s.AddrPC.Offset);
+        break;
+      }
+      curRecursionCount++;
     }
+    else
+      curRecursionCount = 0;
     if (s.AddrPC.Offset != 0)
     {
       // we seem to have a valid PC
       // show procedure info (SymGetSymFromAddr64())
       if (this->m_sw->pSGSFA(this->m_hProcess, s.AddrPC.Offset, &(csEntry.offsetFromSmybol), pSym) != FALSE)
       {
-        // TODO: Mache dies sicher...!
         strcpy_s(csEntry.name, pSym->Name);
         // UnDecorateSymbolName()
         this->m_sw->pUDSN( pSym->Name, csEntry.undName, STACKWALK_MAX_NAMELEN, UNDNAME_NAME_ONLY );
@@ -1098,10 +1201,12 @@ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadPro
     CallstackEntryType et = nextEntry;
     if (frameNum == 0)
       et = firstEntry;
+    bLastEntryCalled = false;
     this->OnCallstackEntry(et, csEntry);
     
     if (s.AddrReturn.Offset == 0)
     {
+      bLastEntryCalled = true;
       this->OnCallstackEntry(lastEntry, csEntry);
       SetLastError(ERROR_SUCCESS);
       break;
@@ -1110,6 +1215,9 @@ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadPro
 
   cleanup:
     if (pSym) free( pSym );
+
+  if (bLastEntryCalled == false)
+      this->OnCallstackEntry(lastEntry, csEntry);
 
   if (context == NULL)
     ResumeThread(hThread);
