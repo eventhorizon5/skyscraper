@@ -34,7 +34,7 @@
 
 #ifdef CS_PLATFORM_WIN32
 #include <windows.h>
-#include "StackWalker.h"
+#include "stackwalker.h"
 #endif
 
 CS_IMPLEMENT_APPLICATION
