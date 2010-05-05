@@ -55,7 +55,21 @@ iObjectRegistry* object_reg;
 
 int main (int argc, char* argv[])
 {
-	wxEntry(argc, argv);
+
+#ifdef CS_PLATFORM_WIN32
+	ExceptionStackTrace helper;
+	try
+	{
+#endif
+		wxEntry(argc, argv);
+#ifdef CS_PLATFORM_WIN32
+	}
+	catch(std::exception & ex)
+	{
+		std::cerr << "Exception occurred: " << ex.what() << std::endl;
+		    helper.printStackTrace( std::cerr );
+	}
+#endif
 
 	csInitializer::DestroyApplication (object_reg);
 	object_reg = 0;
