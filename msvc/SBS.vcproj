@@ -44,6 +44,7 @@
 				AdditionalIncludeDirectories="&quot;$(CRYSTAL)\include&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;CS_BUILD_SHARED_LIBS"
 				StringPooling="true"
+				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				EnableEnhancedInstructionSet="1"

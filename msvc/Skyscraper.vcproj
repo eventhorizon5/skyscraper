@@ -51,6 +51,7 @@
 				AdditionalUsingDirectories=""
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;CS_BUILD_SHARED_LIBS"
 				StringPooling="true"
+				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				EnableEnhancedInstructionSet="1"
@@ -155,6 +156,7 @@
 				AdditionalUsingDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;CS_BUILD_SHARED_LIBS"
 				MinimalRebuild="true"
+				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
@@ -268,7 +270,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\stackwalker.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\stats.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\textwindow.cpp"
 				>
 			</File>
 		</Filter>
@@ -313,7 +323,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\stackwalker.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\stats.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\textwindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\uexception.h"
 				>
 			</File>
 		</Filter>

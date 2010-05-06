@@ -110,6 +110,8 @@
 		<Unit filename="..\src\cameracontrol.h" />
 		<Unit filename="..\src\console.cpp" />
 		<Unit filename="..\src\console.h" />
+		<Unit filename="..\src\crashreport.cpp" />
+		<Unit filename="..\src\crashreport.h" />
 		<Unit filename="..\src\debugpanel.cpp" />
 		<Unit filename="..\src\debugpanel.h" />
 		<Unit filename="..\src\editelevator.cpp" />
@@ -137,6 +139,8 @@
 		<Unit filename="..\src\stairs.h" />
 		<Unit filename="..\src\stats.cpp" />
 		<Unit filename="..\src\stats.h" />
+		<Unit filename="..\src\textwindow.cpp" />
+		<Unit filename="..\src\textwindow.h" />
 		<Unit filename="..\src\unix.cpp" />
 		<Unit filename="..\src\unix.h" />
 		<Extensions>
@@ -152,6 +156,7 @@
 					<wxDialog wxs="wxsmith/Stats.wxs" src="..\src\stats.cpp" hdr="..\src\stats.h" name="Stats" language="CPP" />
 					<wxDialog wxs="wxsmith/Console.wxs" src="..\src\console.cpp" hdr="..\src\console.h" name="Console" language="CPP" />
 					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="..\src\objectinfo.cpp" hdr="..\src\objectinfo.h" name="ObjectInfo" language="CPP" />
+					<wxDialog wxs="wxsmith/TextWindow.wxs" src="..\src\textwindow.cpp" hdr="..\src\textwindow.h" name="TextWindow" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />

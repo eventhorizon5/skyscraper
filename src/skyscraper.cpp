@@ -33,8 +33,7 @@
 #include "debugpanel.h"
 
 #ifdef CS_PLATFORM_WIN32
-#include <windows.h>
-#include "stackwalker.h"
+#include "uexception.h"
 #endif
 
 CS_IMPLEMENT_APPLICATION
@@ -58,42 +57,15 @@ iObjectRegistry* object_reg;
 	#define SW_SHOWNORMAL 1
 #endif
 
-
-#ifdef CS_PLATFORM_WIN32
-//stackwalker function override for Windows
-class StackTrace : public StackWalker
-{
-public:
-	StackTrace() : StackWalker() {}
-protected:
-	virtual void OnOutput(LPCSTR szText)
-	{
-		printf(szText);
-		//StackWalker::OnOutput(szText);
-	}
-};
-#endif
-
 int main (int argc, char* argv[])
 {
 #ifdef CS_PLATFORM_WIN32
-	try
-	{
+	//initialize top-level exception handler
+	InitUnhandledExceptionFilter();
 #endif
 
-		//main wxWidgets entry point
-		wxEntry(argc, argv);
-
-#ifdef CS_PLATFORM_WIN32
-	}
-	catch(std::exception &ex) //dump app stack trace on Windows platforms
-	{
-		std::cerr << "Exception occurred: " << ex.what() << std::endl;
-		StackTrace trace;
-		trace.ShowCallstack();
-		return 0;
-	}
-#endif
+	//main wxWidgets entry point
+	wxEntry(argc, argv);
 
 	csInitializer::DestroyApplication (object_reg);
 	object_reg = 0;
