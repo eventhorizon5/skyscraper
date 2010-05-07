@@ -87,7 +87,8 @@ public:
   } StackWalkOptions;
 
   StackWalker(
-    int options = OptionsAll, // 'int' is by design, to combine the enum-flags
+    //int options = OptionsAll, // 'int' is by design, to combine the enum-flags
+    int options = RetrieveNone, // 'int' is by design, to combine the enum-flags
     LPCSTR szSymPath = NULL, 
     DWORD dwProcessId = GetCurrentProcessId(), 
     HANDLE hProcess = GetCurrentProcess()

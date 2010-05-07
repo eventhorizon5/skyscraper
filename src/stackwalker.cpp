@@ -975,9 +975,17 @@ BOOL StackWalker::LoadModules()
     return FALSE;
   }
 
+  CHAR buffer[STACKWALK_MAX_NAMELEN];
+  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "Loading module symbols");
+  OnOutput(buffer);
+
   bRet = this->m_sw->LoadModules(this->m_hProcess, this->m_dwProcessId);
   if (bRet != FALSE)
     m_modulesLoaded = TRUE;
+
+  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "\n\n");
+  OnOutput(buffer);
+
   return bRet;
 }
 
@@ -1081,6 +1089,10 @@ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadPro
   memset(&Module, 0, sizeof(Module));
   Module.SizeOfStruct = sizeof(Module);
 
+  CHAR buffer[STACKWALK_MAX_NAMELEN];
+  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "Call stack:\n");
+  OnOutput(buffer);
+
   for (frameNum = 0; ; ++frameNum )
   {
     // get next stack frame (StackWalk64(), SymFunctionTableAccess64(), SymGetModuleBase64())
@@ -1129,7 +1141,7 @@ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadPro
       }
       else
       {
-        this->OnDbgHelpErr("SymGetSymFromAddr64", GetLastError(), s.AddrPC.Offset);
+        //this->OnDbgHelpErr("SymGetSymFromAddr64", GetLastError(), s.AddrPC.Offset);
       }
 
       // show line number info, NT5.0-method (SymGetLineFromAddr64())
@@ -1143,7 +1155,7 @@ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadPro
         }
         else
         {
-          this->OnDbgHelpErr("SymGetLineFromAddr64", GetLastError(), s.AddrPC.Offset);
+          //this->OnDbgHelpErr("SymGetLineFromAddr64", GetLastError(), s.AddrPC.Offset);
         }
       } // yes, we have SymGetLineFromAddr64()
 
@@ -1250,7 +1262,7 @@ BOOL __stdcall StackWalker::myReadProcMem(
 void StackWalker::OnLoadModule(LPCSTR img, LPCSTR mod, DWORD64 baseAddr, DWORD size, DWORD result, LPCSTR symType, LPCSTR pdbName, ULONGLONG fileVersion)
 {
   CHAR buffer[STACKWALK_MAX_NAMELEN];
-  if (fileVersion == 0)
+/*  if (fileVersion == 0)
     _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "%s:%s (%p), size: %d (result: %d), SymType: '%s', PDB: '%s'\n", img, mod, (LPVOID) baseAddr, size, result, symType, pdbName);
   else
   {
@@ -1259,7 +1271,8 @@ void StackWalker::OnLoadModule(LPCSTR img, LPCSTR mod, DWORD64 baseAddr, DWORD s
     DWORD v2 = (DWORD) (fileVersion>>32) & 0xFFFF;
     DWORD v1 = (DWORD) (fileVersion>>48) & 0xFFFF;
     _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "%s:%s (%p), size: %d (result: %d), SymType: '%s', PDB: '%s', fileVersion: %d.%d.%d.%d\n", img, mod, (LPVOID) baseAddr, size, result, symType, pdbName, v1, v2, v3, v4);
-  }
+  }*/
+  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, ".");
   OnOutput(buffer);
 }
 
@@ -1290,14 +1303,15 @@ void StackWalker::OnCallstackEntry(CallstackEntryType eType, CallstackEntry &ent
 void StackWalker::OnDbgHelpErr(LPCSTR szFuncName, DWORD gle, DWORD64 addr)
 {
   CHAR buffer[STACKWALK_MAX_NAMELEN];
-  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "ERROR: %s, GetLastError: %d (Address: %p)\n", szFuncName, gle, (LPVOID) addr);
+  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "ERROR: %s, GetLastError: %d (Address: %p)\n\n", szFuncName, gle, (LPVOID) addr);
   OnOutput(buffer);
 }
 
 void StackWalker::OnSymInit(LPCSTR szSearchPath, DWORD symOptions, LPCSTR szUserName)
 {
   CHAR buffer[STACKWALK_MAX_NAMELEN];
-  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "SymInit: Symbol-SearchPath: '%s', symOptions: %d, UserName: '%s'\n", szSearchPath, symOptions, szUserName);
+  //_snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "SymInit: Symbol-SearchPath: '%s', symOptions: %d, UserName: '%s'\n\n", szSearchPath, symOptions, szUserName);
+  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "SymInit: Symbol-SearchPath: '%s', symOptions: %d, \n\n", szSearchPath, symOptions);
   OnOutput(buffer);
   // Also display the OS-version
 #if _MSC_VER <= 1200
@@ -1306,7 +1320,7 @@ void StackWalker::OnSymInit(LPCSTR szSearchPath, DWORD symOptions, LPCSTR szUser
   ver.dwOSVersionInfoSize = sizeof(ver);
   if (GetVersionExA(&ver) != FALSE)
   {
-    _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS-Version: %d.%d.%d (%s)\n", 
+    _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS-Version: %d.%d.%d (%s)\n\n", 
       ver.dwMajorVersion, ver.dwMinorVersion, ver.dwBuildNumber,
       ver.szCSDVersion);
     OnOutput(buffer);
@@ -1317,9 +1331,12 @@ void StackWalker::OnSymInit(LPCSTR szSearchPath, DWORD symOptions, LPCSTR szUser
   ver.dwOSVersionInfoSize = sizeof(ver);
   if (GetVersionExA( (OSVERSIONINFOA*) &ver) != FALSE)
   {
-    _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS-Version: %d.%d.%d (%s) 0x%x-0x%x\n", 
+    /*_snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS-Version: %d.%d.%d (%s) 0x%x-0x%x\n\n", 
       ver.dwMajorVersion, ver.dwMinorVersion, ver.dwBuildNumber,
-      ver.szCSDVersion, ver.wSuiteMask, ver.wProductType);
+      ver.szCSDVersion, ver.wSuiteMask, ver.wProductType);*/
+    _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS-Version: %d.%d.%d (%s)\n\n", 
+      ver.dwMajorVersion, ver.dwMinorVersion, ver.dwBuildNumber,
+      ver.szCSDVersion);
     OnOutput(buffer);
   }
 #endif

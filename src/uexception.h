@@ -94,7 +94,7 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 #endif
 
 	twindow = new TextWindow(NULL, -1);
-	twindow->SetTitle(wxT("Skyscraper Crash Report"));
+	twindow->SetTitle(wxT("Simulator Crash Report"));
 	twindow->Show(true);
 
 	TCHAR lString[500];
@@ -114,6 +114,7 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 	twindow->ShowModal();
 
 	//FatalAppExit(-1, lString);
+	FatalExit(0);
 	
 	if (twindow)
 		delete twindow;
