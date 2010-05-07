@@ -4,7 +4,7 @@
 // "SetUnhandledExceptionFilter" and VC8
 // http://blog.kalmbachnet.de/?postid=75
 // and
-// Unhandled exceptions in VC8 and above… for x86 and x64
+// Unhandled exceptions in VC8 and aboveï¿½ for x86 and x64
 // http://blog.kalmbach-software.de/2008/04/02/unhandled-exceptions-in-vc8-and-above-for-x86-and-x64/
 
 #include <windows.h>
@@ -99,11 +99,10 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 
 	TCHAR lString[500];
 	_stprintf_s(lString,
-	_T("*** Unhandled Exception!\n")
+	_T("*** Unhandled Exception\n")
 	_T("   ExpCode: 0x%8.8X\n")
     _T("   ExpFlags: %d\n")
-    _T("   ExpAddress: 0x%8.8X\n")
-    _T("   Please report!\n\n"),
+    _T("   ExpAddress: 0x%8.8X\n\n"),
     pExPtrs->ExceptionRecord->ExceptionCode,
     pExPtrs->ExceptionRecord->ExceptionFlags,
     pExPtrs->ExceptionRecord->ExceptionAddress);
@@ -111,9 +110,10 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 
 	StackWalkerToConsole sw;  // output to console
 	sw.ShowCallstack(GetCurrentThread(), pExPtrs->ContextRecord);
+
+	twindow->tMain->WriteText(wxString("\nCopy and paste this information (select it and press CTRL-C)\nand either post it to the Skyscraper forum at http://forum.skyscrapersim.com\nor email to ryan@skyscrapersim.com\n\nPress OK to close Skyscraper"));
 	twindow->ShowModal();
 
-	//FatalAppExit(-1, lString);
 	FatalExit(0);
 	
 	if (twindow)
