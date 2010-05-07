@@ -976,7 +976,7 @@ BOOL StackWalker::LoadModules()
   }
 
   CHAR buffer[STACKWALK_MAX_NAMELEN];
-  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "Loading module symbols");
+  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "Loading symbols");
   OnOutput(buffer);
 
   bRet = this->m_sw->LoadModules(this->m_hProcess, this->m_dwProcessId);
@@ -1310,8 +1310,8 @@ void StackWalker::OnDbgHelpErr(LPCSTR szFuncName, DWORD gle, DWORD64 addr)
 void StackWalker::OnSymInit(LPCSTR szSearchPath, DWORD symOptions, LPCSTR szUserName)
 {
   CHAR buffer[STACKWALK_MAX_NAMELEN];
-  //_snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "SymInit: Symbol-SearchPath: '%s', symOptions: %d, UserName: '%s'\n\n", szSearchPath, symOptions, szUserName);
-  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "SymInit: Symbol-SearchPath: '%s', symOptions: %d, \n\n", szSearchPath, symOptions);
+  //_snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "SymInit: Symbol SearchPath: '%s', symOptions: %d, UserName: '%s'\n\n", szSearchPath, symOptions, szUserName);
+  _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "SymInit: Symbol SearchPath: '%s', symOptions: %d, \n\n", szSearchPath, symOptions);
   OnOutput(buffer);
   // Also display the OS-version
 #if _MSC_VER <= 1200
@@ -1320,7 +1320,7 @@ void StackWalker::OnSymInit(LPCSTR szSearchPath, DWORD symOptions, LPCSTR szUser
   ver.dwOSVersionInfoSize = sizeof(ver);
   if (GetVersionExA(&ver) != FALSE)
   {
-    _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS-Version: %d.%d.%d (%s)\n\n", 
+    _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS Version: %d.%d.%d (%s)\n\n", 
       ver.dwMajorVersion, ver.dwMinorVersion, ver.dwBuildNumber,
       ver.szCSDVersion);
     OnOutput(buffer);
@@ -1334,7 +1334,7 @@ void StackWalker::OnSymInit(LPCSTR szSearchPath, DWORD symOptions, LPCSTR szUser
     /*_snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS-Version: %d.%d.%d (%s) 0x%x-0x%x\n\n", 
       ver.dwMajorVersion, ver.dwMinorVersion, ver.dwBuildNumber,
       ver.szCSDVersion, ver.wSuiteMask, ver.wProductType);*/
-    _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS-Version: %d.%d.%d (%s)\n\n", 
+    _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS Version: %d.%d.%d (%s)\n\n", 
       ver.dwMajorVersion, ver.dwMinorVersion, ver.dwBuildNumber,
       ver.szCSDVersion);
     OnOutput(buffer);
