@@ -100,6 +100,8 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 
 	//stop simulator
 	skyscraper->IsRunning = false;
+	skyscraper->StartupRunning = false;
+	skyscraper->Pause = true;
 
 	//print exception notice
 	TCHAR lString[500];
