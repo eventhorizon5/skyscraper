@@ -632,7 +632,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 					stairs->OpenDoor(doornumber);
 			}
 		}
-		if (meshname.Slice(0, 8) == "Elevator")
+		if (meshname.Slice(0, 8) == "Elevator" && meshname.Find("Shaft Door") == -1 && meshname.Find("ElevatorDoor") == -1)
 		{
 			int marker = meshname.Find(":");
 			int elevnumber = atoi(meshname.Slice(8, marker - 8));
