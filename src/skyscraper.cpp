@@ -599,6 +599,10 @@ void Skyscraper::GetInput()
 	float speed_fast = Simcore->camera->cfg_speedfast;
 	float speed_slow = Simcore->camera->cfg_speedslow;
 
+	//crash test
+	if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_ALT) && wxGetKeyState((wxKeyCode)'c'))
+		throw;
+
 	if (wxGetKeyState(WXK_CONTROL))
 	{
 		if (wxGetKeyState((wxKeyCode)'r'))
