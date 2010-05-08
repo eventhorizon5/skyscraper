@@ -4097,23 +4097,40 @@ csString SBS::DumpState()
 	output.Append("Building Name: " + BuildingName + "\n");
 	output.Append("Building Filename: " + BuildingFilename + "\n");
 	output.Append("Building Version: " + BuildingVersion + "\n");
-	output.Append("InStairwell: " + wxString::FromAscii(BoolToString(InStairwell)) + "\n");
-	output.Append("InElevator: " + wxString::FromAscii(BoolToString(InElevator)) + "\n");
-	output.Append("InShaft: " + wxString::FromAscii(BoolToString(InShaft)) + "\n");
-	output.Append("ElevatorNumber: " + wxVariant((int)ElevatorNumber).GetString() + "\n");
-	output.Append("ElevatorSync: " + wxString::FromAscii(BoolToString(ElevatorSync)) + "\n");
-	output.Append("Running Time: " + TruncateNumber(running_time, 2) + "\n");
-	output.Append("BuildingsEnabled: " + wxString::FromAscii(BoolToString(IsBuildingsEnabled)) + "\n");
-	output.Append("ExternalEnabled: " + wxString::FromAscii(BoolToString(IsExternalEnabled)) + "\n");
-	output.Append("LandscapeEnabled: " + wxString::FromAscii(BoolToString(IsLandscapeEnabled)) + "\n");
-	output.Append("SkyboxEnabled: " + wxString::FromAscii(BoolToString(IsSkyboxEnabled)) + "\n");
-	output.Append("Verbose: " + wxString::FromAscii(BoolToString(Verbose)) + "\n");
-	output.Append("InterfloorOnTop: " + wxString::FromAscii(BoolToString(InterfloorOnTop)) + "\n");
-	output.Append("Object Count: " + wxVariant((int)ObjectCount).GetString() + "\n");
+	output.Append("InStairwell: " + wxString::FromAscii(BoolToString(InStairwell)));
+	output.Append("\n");
+	output.Append("InElevator: " + wxString::FromAscii(BoolToString(InElevator)));
+	output.Append("\n");
+	output.Append("InShaft: " + wxString::FromAscii(BoolToString(InShaft)));
+	output.Append("\n");
+	output.Append("ElevatorNumber: " + wxVariant((int)ElevatorNumber).GetString());
+	output.Append("\n");
+	output.Append("ElevatorSync: " + wxString::FromAscii(BoolToString(ElevatorSync)));
+	output.Append("\n");
+	output.Append("Running Time: " + TruncateNumber(running_time, 2));
+	output.Append("\n");
+	output.Append("BuildingsEnabled: " + wxString::FromAscii(BoolToString(IsBuildingsEnabled)));
+	output.Append("\n");
+	output.Append("ExternalEnabled: " + wxString::FromAscii(BoolToString(IsExternalEnabled)));
+	output.Append("\n");
+	output.Append("LandscapeEnabled: " + wxString::FromAscii(BoolToString(IsLandscapeEnabled)));
+	output.Append("\n");
+	output.Append("SkyboxEnabled: " + wxString::FromAscii(BoolToString(IsSkyboxEnabled)));
+	output.Append("\n");
+	output.Append("Verbose: " + wxString::FromAscii(BoolToString(Verbose)));
+	output.Append("\n");
+	output.Append("InterfloorOnTop: " + wxString::FromAscii(BoolToString(InterfloorOnTop)));
+	output.Append("\n");
+	output.Append("Object Count: " + wxVariant((int)ObjectCount).GetString());
+	output.Append("\n");
 	if (camera)
 	{
-		output.Append("Camera Floor: " + wxVariant((int)camera->CurrentFloor).GetString() + "\n");
-		output.Append("Camera Position: " + TruncateNumber(camera->GetPosition().x, 2) + ", " + TruncateNumber(camera->GetPosition().y, 2) + ", " + TruncateNumber(camera->GetPosition().z, 2) + "\n");
+		output.Append("Camera Floor: " + wxVariant((int)camera->CurrentFloor).GetString());
+		output.Append("\n");
+		output.Append("Camera Position: " + TruncateNumber(camera->GetPosition().x, 2));
+		output.Append(", " + TruncateNumber(camera->GetPosition().y, 2));
+		output.Append(", " + TruncateNumber(camera->GetPosition().z, 2));
+		output.Append("\n");
 	}
 
 	return output;
