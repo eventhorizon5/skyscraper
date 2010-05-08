@@ -111,8 +111,13 @@ public:
 	csTicks elapsed_time;
 	float delta;
 
+	//SBS version
+	csString version;
+	csString version_state;
+
 	//Building information
 	csString BuildingName;
+	csString BuildingFilename;
 	csString BuildingDesigner;
 	csString BuildingLocation;
 	csString BuildingDescription;
@@ -297,6 +302,7 @@ public:
 	csString TruncateNumber(float value, int decimals);
 	csString TruncateNumber(const char *number, int decimals);
 	bool IsValidFloor(int floor);
+	csString DumpState();
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

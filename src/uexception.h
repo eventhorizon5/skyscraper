@@ -19,7 +19,7 @@ protected:
   virtual void OnOutput(LPCSTR szText)
   {
 	  twindow->tMain->WriteText(wxString::FromAscii(szText));
-	  printf("%s", szText);
+	  //printf("%s", szText);
   }
 };
 
@@ -93,10 +93,12 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
   }
 #endif
 
+	//create text window
 	twindow = new TextWindow(NULL, -1);
 	twindow->SetTitle(wxT("Simulator Crash Report"));
 	twindow->Show(true);
 
+	//print exception notice
 	TCHAR lString[500];
 	_stprintf_s(lString,
 	_T("*** Unhandled Exception\n")
@@ -108,10 +110,23 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
     pExPtrs->ExceptionRecord->ExceptionAddress);
 	twindow->tMain->WriteText(wxString::FromAscii(lString));
 
+	//print out stack trace
 	StackWalkerToConsole sw;  // output to console
 	sw.ShowCallstack(GetCurrentThread(), pExPtrs->ContextRecord);
 
-	twindow->tMain->WriteText(wxString("\nCopy and paste this information (select it and press CTRL-C)\nand either post it to the Skyscraper forum at http://forum.skyscrapersim.com\nor email to ryan@skyscrapersim.com\n\nPress OK to close Skyscraper"));
+	if (skyscraper)
+	{
+		twindow->tMain->WriteText("\nSimulator State Dump\n--------------------------\n");
+		twindow->tMain->WriteText(wxString("Skyscraper version: " + skyscraper->version + "\n"));
+	}
+
+	//print out simulator state
+	if (Simcore)
+		twindow->tMain->WriteText(wxString(Simcore->DumpState()));
+
+	//print instructions
+	twindow->tMain->WriteText("\n--------------------------\n");
+	twindow->tMain->WriteText(wxString("Copy and paste the above information (select it and press CTRL-C)\nand either post it to the Skyscraper forum at http://forum.skyscrapersim.com\nor email to ryan@skyscrapersim.com\n\nPress OK to close Skyscraper\n"));
 	twindow->ShowModal();
 
 	FatalExit(0);

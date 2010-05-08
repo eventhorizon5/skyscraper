@@ -44,6 +44,8 @@ SBS *sbs; //self reference
 SBS::SBS()
 {
 	sbs = this;
+	version = "0.7";
+	version_state = "Alpha";
 
 	//set up SBS object
 	object = new Object();
@@ -382,7 +384,7 @@ float SBS::AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_
 
 void SBS::PrintBanner()
 {
-	csPrintf("\n Scalable Building Simulator 0.7 Alpha\n");
+	csPrintf("\n Scalable Building Simulator " + version + " " + version_state + "\n");
 	csPrintf(" Copyright (C)2004-2010 Ryan Thoryk\n");
 	csPrintf(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
 	csPrintf(" software, and you are welcome to redistribute it under certain\n");
@@ -4085,4 +4087,34 @@ bool SBS::IsValidFloor(int floor)
 	if (GetFloor(floor))
 		return true;
 	return false;
+}
+
+csString SBS::DumpState()
+{
+	//dump basic simulator state to a character array
+
+	csString output = "SBS version: " + version + "\n";
+	output.Append("Building Name: " + BuildingName + "\n");
+	output.Append("Building Filename: " + BuildingFilename + "\n");
+	output.Append("Building Version: " + BuildingVersion + "\n");
+	output.Append("InStairwell: " + wxString::FromAscii(BoolToString(InStairwell)) + "\n");
+	output.Append("InElevator: " + wxString::FromAscii(BoolToString(InElevator)) + "\n");
+	output.Append("InShaft: " + wxString::FromAscii(BoolToString(InShaft)) + "\n");
+	output.Append("ElevatorNumber: " + wxVariant((int)ElevatorNumber).GetString() + "\n");
+	output.Append("ElevatorSync: " + wxString::FromAscii(BoolToString(ElevatorSync)) + "\n");
+	output.Append("Running Time: " + TruncateNumber(running_time, 2) + "\n");
+	output.Append("BuildingsEnabled: " + wxString::FromAscii(BoolToString(IsBuildingsEnabled)) + "\n");
+	output.Append("ExternalEnabled: " + wxString::FromAscii(BoolToString(IsExternalEnabled)) + "\n");
+	output.Append("LandscapeEnabled: " + wxString::FromAscii(BoolToString(IsLandscapeEnabled)) + "\n");
+	output.Append("SkyboxEnabled: " + wxString::FromAscii(BoolToString(IsSkyboxEnabled)) + "\n");
+	output.Append("Verbose: " + wxString::FromAscii(BoolToString(Verbose)) + "\n");
+	output.Append("InterfloorOnTop: " + wxString::FromAscii(BoolToString(InterfloorOnTop)) + "\n");
+	output.Append("Object Count: " + wxVariant((int)ObjectCount).GetString() + "\n");
+	if (camera)
+	{
+		output.Append("Camera Floor: " + wxVariant((int)camera->CurrentFloor).GetString() + "\n");
+		output.Append("Camera Position: " + TruncateNumber(camera->GetPosition().x, 2) + ", " + TruncateNumber(camera->GetPosition().y, 2) + ", " + TruncateNumber(camera->GetPosition().z, 2) + "\n");
+	}
+
+	return output;
 }

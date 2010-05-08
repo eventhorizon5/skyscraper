@@ -32,10 +32,6 @@
 #include "skyscraper.h"
 #include "debugpanel.h"
 
-#ifdef CS_PLATFORM_WIN32
-#include "uexception.h"
-#endif
-
 CS_IMPLEMENT_APPLICATION
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
 
@@ -52,6 +48,10 @@ Skyscraper *skyscraper;
 DebugPanel *dpanel;
 MainScreen *window;
 iObjectRegistry* object_reg;
+
+#ifdef CS_PLATFORM_WIN32
+#include "uexception.h"
+#endif
 
 #ifndef SW_SHOWNORMAL
 	#define SW_SHOWNORMAL 1
@@ -75,6 +75,8 @@ int main (int argc, char* argv[])
 
 bool Skyscraper::OnInit(void)
 {
+	version = "1.7";
+	version_state = "Alpha";
 	skyscraper = this;
 	MouseDown = false;
 	RenderOnly = false;
@@ -1115,6 +1117,7 @@ bool Skyscraper::Start()
 
 	//load building data file
 	Simcore->Report("\nLoading building data from " + BuildingFile + "...\n");
+	Simcore->BuildingFilename = BuildingFile;
 
 	//Pause for 1 second
 	csSleep(1000);

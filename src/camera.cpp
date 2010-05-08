@@ -144,7 +144,10 @@ void Camera::SetRotation(csVector3 vector)
 csVector3 Camera::GetPosition()
 {
 	//returns the camera's current position
-	return sbs->ToLocal(MainCamera->GetTransform().GetOrigin());
+	if (MainCamera)
+		return sbs->ToLocal(MainCamera->GetTransform().GetOrigin());
+	else
+		return 0;
 }
 
 void Camera::GetDirection(csVector3 &front, csVector3 &top)
