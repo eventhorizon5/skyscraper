@@ -98,6 +98,9 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 	twindow->SetTitle(wxT("Simulator Crash Report"));
 	twindow->Show(true);
 
+	//stop simulator
+	skyscraper->IsRunning = false;
+
 	//print exception notice
 	TCHAR lString[500];
 	_stprintf_s(lString,
