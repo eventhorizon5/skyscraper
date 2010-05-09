@@ -1,6 +1,9 @@
+#coppyright shsav2012 2010 all rights reserved
+<Include data/scripts/elevator_doors.txt>
+
 <Globals>
     Name = Palace Hotel
-    Desigener = shsavv2012
+    Desigener = shsav2012
     Location = Myrtle Beach SC
     Description = home of the worst dover elevators in YT history roumered very bad death-traps
     Version = 1
@@ -58,29 +61,31 @@
     Load data/Carpet0013b_S.jpg, HotelFloor, 0.25, 0.25
     Load data/stucco2f.jpg, HotelCeiling, 0.269, 0.25
     #Load data/plaque.jpg, Plaque, 1, 1
-    Load data/callbutton.gif, ButtonUp, 1, 1
-    Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
-    Load data/callbutton.gif, ButtonDown, 1, -1
-    Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
+    Load data/impulsecallbutton.gif, ButtonUp, 1, 1
+    Load data/impulsecallbutton_lit.gif, ButtonUpLit, 1, 1
+    Load data/impulsecallbutton.gif, ButtonDown, 1, -1
+    Load data/impulsecallbutton_lit.gif, ButtonDownLit, 1, -1
     Load data/floorsign.jpg, FloorSign, 1, 1
-    Load data/doverindicator_unlit.gif, ArrowUp, 1, 1
-    Load data/doverindicator_unlit.gif, ArrowDown, 1, -1
-    Load data/doverindicator_lit.gif, ArrowUp_Lit, 1, 1
-    Load data/doverindicator_lit.gif, ArrowDown_Lit, 1, -1
+    Load data/vr_off.gif, ArrowUp, 1, 1
+    Load data/vr_off.gif, ArrowDown, 1, -1
+    Load data/vr_green.gif, ArrowUp_Lit, 1, 1
+    Load data/vr_red.gif, ArrowDown_Lit, 1, -1
 
     #floor indicator/button pictures
+    Load data/doverind_logo.jpg, FloorIndicator1, 1, 1
+    Load data/doverind_nologo.jpg, FloorIndicator2, 1, 1
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
-    AddText Black, ButtonG, nimbus_sans.ttf, 47, G, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText BlackLit, ButtonLitG, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonAlarm, nimbus_sans.ttf, 28, Alarm, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
-    AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
-    AddTextRange 1, 23, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddTextRange 1, 23, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonG, DoverInd.ttf, 70, G, -1, -1, -1, -1, center, center, 255, 0, 0
+    AddText BlackLit, ButtonLitG, DoverInd.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 0, 0
+    AddText Black, ButtonOpen, DoverInd.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 0, 0
+    AddText Black, ButtonClose, DoverInd.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 0, 0
+    AddText Black, ButtonStop, DoverInd.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 0, 0
+    AddText Black, ButtonAlarm, DoverInd.ttf, 28, Alarm, -1, -1, -1, -1, center, center, 255, 0, 0
+    AddText Black, ButtonCancelTemp, DoverInd.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 0, 0
+    AddText ButtonCancelTemp, ButtonCancel, DoverInd.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 0, 0
+    AddTextRange 1, 23, Black, Button%number%, DoverInd.ttf, 70, %number%, -1, -1, -1, -1, center, center, 255, 0, 0
+    AddTextRange 1, 23, BlackLit, ButtonLit%number%, DoverInd.ttf, 70, %number%, -1, -1, -1, -1, center, center, 255, 0, 0
 <EndTextures>
 
 # Ground
@@ -93,7 +98,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Lobby
     Type = Lobby
     Description = lobby
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.25
     
     #Floor
@@ -163,7 +168,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -236,7 +241,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -309,7 +314,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -382,7 +387,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -455,7 +460,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -528,7 +533,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -601,7 +606,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -674,7 +679,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -747,7 +752,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -820,7 +825,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -893,7 +898,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -966,7 +971,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1039,7 +1044,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1112,7 +1117,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1185,7 +1190,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1258,7 +1263,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1331,7 +1336,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1404,7 +1409,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1477,7 +1482,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1550,7 +1555,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1623,7 +1628,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1696,7 +1701,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     Name = Hotel
     Type =Hotel
     Description = Hotel
-    Height = 10
+    Height = 9
     InterfloorHeight = 2.75
 
     #Floor
@@ -1806,7 +1811,7 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
 
 #Elevators
 <Elevator 1>
-    Speed = 15
+    Speed = 5
     Acceleration = 0.3
     Deceleration = 0.3
     AccelJerk = 0.3
@@ -1814,10 +1819,13 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     ServicedFloors = 0 - 22
     AssignedShaft = 1
     CreateElevator false, -12.414, -29.083, 0
+    UpChimeSound 1 = Up.wav
+    DownChimeSound 1 = Down.wav
+    BeepSound = doverchirp.wav
 <EndElevator>
 
 <Elevator 2>
-    Speed = 15
+    Speed = 5
     Acceleration = 0.3
     Deceleration = 0.3
     AccelJerk = 0.3
@@ -1825,10 +1833,13 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     ServicedFloors = 0 - 22
     AssignedShaft = 1
     CreateElevator false, -12.414, -38.916, 0
+    UpChimeSound 1 = Up.wav
+    DownChimeSound 1 = Down.wav
+    BeepSound = doverchirp.wav
 <EndElevator>
 
 <Elevator 3>
-    Speed = 15
+    Speed = 5
     Acceleration = 0.3
     Deceleration = 0.3
     AccelJerk = 0.3
@@ -1836,9 +1847,12 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     ServicedFloors = 0 - 22
     AssignedShaft = 1
     CreateElevator false, -12.414, -48.75, 0
+    UpChimeSound 1 = Up.wav
+    DownChimeSound 1 = Down.wav
+    BeepSound = doverchirp.wav
 <EndElevator>
 
-<Elevators 1 to 3>
+<Elevators 1 to 2>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -1914,8 +1928,88 @@ Cut Landscape, -80, -1, -80.5, 200, 1, 20.5, false, true
     AddControlButton 1, ButtonAlarm, 8, 3, alarm, 1, 1
 
     #Floor Indicator
-    AddFloorIndicator left, 3.75 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
+    AddFloorIndicator1 left, 3.75 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
 <EndElevator>
+
+<Elevator 3>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.916, 3.75, 3.916, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.916, 3.75, 3.916, 8, 8, 0, 0
+
+    #back wall (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ExpressElevWall, 0.2, -3.75, 3.916, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+
+    #front and left walls
+    WallOrientation = left
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ExpressElevWall, 0.2, -3.75, -3.916, 3.75, -3.916, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, ExpressElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ExpressElevWall, 0.2, -3.75, -3.916, -3.75, 3.916, 8, 8, 0, 0, 0, 0
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, 3.75, -3.916, 3.75, -1.75, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 3.75, 1.75, 3.75, 3.916, 8, 8, 0, 0, 0, 0
+
+    #doors
+    WallOrientation = left
+    AddDoors 1, ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 4.051, 0, 0, 0 #shaft doors
+    SetAutoSize = true, true
+
+    #floor signs
+    AddFloorSigns 0, true, Button, front, 4.051 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, 4.051 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+
+    #panel
+    CreatePanel ElevPanel, 8, 5, left, 3.75 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button23, ButtonLit23, 2, 3, 22, 1, 1
+    AddFloorButton 1, Button22, ButtonLit22, 2, 2, 21, 1, 1
+    AddFloorButton 1, Button21, ButtonLit21, 2, 1, 20, 1, 1
+    AddFloorButton 1, Button20, ButtonLit20, 3, 4, 19, 1, 1
+    AddFloorButton 1, Button19, ButtonLit19, 3, 3, 18, 1, 1
+    AddFloorButton 1, Button18, ButtonLit18, 3, 2, 17, 1, 1
+    AddFloorButton 1, Button17, ButtonLit17, 3, 1, 16, 1, 1
+    AddFloorButton 1, Button16, ButtonLit16, 4, 4, 15, 1, 1
+    AddFloorButton 1, Button15, ButtonLit15, 4, 3, 14, 1, 1
+    AddFloorButton 1, Button14, ButtonLit14, 4, 2, 13, 1, 1
+    AddFloorButton 1, Button12, ButtonLit12, 4, 1, 12, 1, 1
+    AddFloorButton 1, Button11, ButtonLit11, 5, 4, 11, 1, 1
+    AddFloorButton 1, Button10, ButtonLit10, 5, 3, 10, 1, 1
+    AddFloorButton 1, Button9, ButtonLit9, 5, 2, 9, 1, 1
+    AddFloorButton 1, Button8, ButtonLit8, 5, 1, 8, 1, 1
+    AddFloorButton 1, Button7, ButtonLit7, 6, 4, 7, 1, 1
+    AddFloorButton 1, Button6, ButtonLit6, 6, 3, 6, 1, 1
+    AddFloorButton 1, Button5, ButtonLit5, 6, 2, 5, 1, 1
+    AddFloorButton 1, Button4, ButtonLit4, 6, 1, 4, 1, 1
+    AddFloorButton 1, Button3, ButtonLit3, 7, 4, 3, 1, 1
+    AddFloorButton 1, Button2, ButtonLit2, 7, 3, 2, 1, 1
+    AddFloorButton 1, Button1, ButtonLit1, 7, 2, 1, 1, 1
+    AddFloorButton 1, ButtonG, ButtonLitG, 7, 1, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 1, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 8, 1, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 8, 3, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator2 left, 3.75 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
+<EndElevator>
+
 
 # Directional indicators
 <Floors 0 to 22>  
