@@ -134,13 +134,13 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 	twindow->tMain->WriteText(wxString("Copy and paste the above information (select it and press CTRL-C)\nand either post it to the Skyscraper forum at http://forum.skyscrapersim.com\nor email to ryan@skyscrapersim.com\n\nPress OK to close Skyscraper\n"));
 	twindow->ShowModal();
 
-	FatalExit(0);
-	
 	if (twindow)
 		delete twindow;
 	twindow = 0;
 
-  return EXCEPTION_CONTINUE_SEARCH;
+ 	FatalExit(0);
+
+ return EXCEPTION_CONTINUE_SEARCH;
 }
 
 static void InitUnhandledExceptionFilter()
