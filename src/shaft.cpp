@@ -43,7 +43,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->object, "Shaft", false);
+	object->SetValues(this, sbs->object, "Shaft", "", false);
 
 	ShaftType = type;
 	ShaftNumber = number;
@@ -71,6 +71,9 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	checkfirstrun = true;
 
 	csString buffer, buffer2, buffer3;
+
+	buffer = number;
+	object->SetName("Shaft " + buffer);
 
 	ShaftArray.SetSize(endfloor - startfloor + 1);
 	ShaftArray_state.SetSize(endfloor - startfloor + 1);

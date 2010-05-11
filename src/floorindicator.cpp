@@ -39,7 +39,7 @@ FloorIndicator::FloorIndicator(int elevator, const char *texture_prefix, const c
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->GetElevator(elevator)->object, "FloorIndicator", false);
+	object->SetValues(this, sbs->GetElevator(elevator)->object, "FloorIndicator", "", false);
 
 	IsEnabled = true;
 	Elevator = elevator;
@@ -50,6 +50,7 @@ FloorIndicator::FloorIndicator(int elevator, const char *texture_prefix, const c
 	buffer = elevator;
 	buffer.Insert(0, "(" + buffer2 + ")FloorIndicator ");
 	buffer.Trim();
+	object->SetName("Floor Indicator " + buffer);
 	FloorIndicatorMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
 	FloorIndicatorMesh->SetZBufMode(CS_ZBUF_USE);
 	FloorIndicatorMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());

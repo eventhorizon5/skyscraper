@@ -35,7 +35,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 {
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->object, "Stairs", false);
+	object->SetValues(this, sbs->object, "Stairs", "", false);
 
 	StairsNum = number;
 	startfloor = _startfloor;
@@ -53,6 +53,9 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	checkfirstrun = true;
 
 	csString buffer, buffer2, buffer3;
+
+	buffer = number;
+	object->SetName("Stairwell " + buffer);
 
 	StairArray.SetSize(endfloor - startfloor + 1);
 	StairArray_state.SetSize(endfloor - startfloor + 1);

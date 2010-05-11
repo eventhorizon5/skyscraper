@@ -40,7 +40,7 @@ Elevator::Elevator(int number)
 {
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->object, "Elevator", false);
+	object->SetValues(this, sbs->object, "Elevator", "", false);
 
 	csString buffer;
 
@@ -158,6 +158,7 @@ Elevator::Elevator(int number)
 	buffer = Number;
 	buffer.Insert(0, "Elevator ");
 	buffer.Trim();
+	object->SetName(buffer);
 	ElevatorMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	Elevator_state = scfQueryInterface<iThingFactoryState> (ElevatorMesh->GetMeshObject()->GetFactory());
 	Elevator_movable = ElevatorMesh->GetMovable();

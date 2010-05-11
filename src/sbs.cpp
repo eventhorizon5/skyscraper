@@ -49,7 +49,7 @@ SBS::SBS()
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, 0, "SBS", true);
+	object->SetValues(this, 0, "SBS", "SBS", true);
 
 	//Print SBS banner
 	PrintBanner();
@@ -1734,7 +1734,7 @@ int SBS::CreateSky(const char *filenamebase)
 {
 	//set up SBS object
 	Skybox_object = new Object();
-	Skybox_object->SetValues(0, this->object, "Skybox", false);
+	Skybox_object->SetValues(0, this->object, "Skybox", "Skybox", false);
 
 	csString file = filenamebase;
 	vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
@@ -4020,7 +4020,7 @@ WallObject* SBS::CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrappe
 	array[array.GetSize() - 1] = new WallObject(mesh);
 	array[array.GetSize() - 1]->name = name;
 	array[array.GetSize() - 1]->parent_array = &array;
-	array[array.GetSize() - 1]->SetValues(0, parent, "Wall", false);
+	array[array.GetSize() - 1]->SetValues(0, parent, "Wall", name, false);
 	return array[array.GetSize() - 1];
 }
 

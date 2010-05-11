@@ -35,7 +35,7 @@ Floor::Floor(int number)
 {
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->object, "Floor", false);
+	object->SetValues(this, sbs->object, "Floor", "", false);
 
 	csString buffer;
 
@@ -44,6 +44,7 @@ Floor::Floor(int number)
 
 	//Create primary level mesh
 	buffer = Number;
+	object->SetName("Floor " + buffer);
 	buffer.Insert(0, "Level ");
 	buffer.Trim();
 	Level = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());

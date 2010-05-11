@@ -39,7 +39,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool active_
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->GetFloor(floor)->object, "DirectionalIndicator", false);
+	object->SetValues(this, sbs->GetFloor(floor)->object, "DirectionalIndicator", "", false);
 
 	IsEnabled = true;
 	elevator_num = elevator;
@@ -62,6 +62,7 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool active_
 	buffer4 = object->GetNumber();
 	buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Back";
 	buffer.Trim();
+	object->SetName("Directional Indicator " + buffer2 + ":" + buffer3);
 	DirectionalMeshBack = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	Directional_back_state = scfQueryInterface<iThingFactoryState> (DirectionalMeshBack->GetMeshObject()->GetFactory());
 	DirectionalMeshBack->SetZBufMode(CS_ZBUF_USE);

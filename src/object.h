@@ -27,6 +27,7 @@
 #define _SBS_OBJECT_H
 
 #include <csutil/csstring.h>
+#include <csutil/array.h>
 
 class SBSIMPEXP Object
 {
@@ -39,12 +40,17 @@ public:
 	//functions
 	Object(bool temporary = false);
 	~Object();
-	void SetValues(void *object, Object *parent, const char *type, bool is_permanent);
+	void SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent);
 	bool IsPermanent();
 	Object* GetParent();
 	void* GetRawObject();
 	const char* GetType();
 	int GetNumber();
+	const char* GetName();
+	void SetName(const char *name);
+	void AddChild(Object *object);
+	Object* GetChild(int index);
+	int GetChildrenCount();
 
 protected:
 	bool Permanent; //is object permanent?
@@ -52,7 +58,9 @@ protected:
 	void *raw_object; //raw object
 	csString Type; //object type
 	int Number; //object identifier
-	bool Temporary;
+	bool Temporary; //true if object can be deleted during runtime
+	csString Name; //object name
+	csArray<Object*> children; //object's children
 };
 
 #endif

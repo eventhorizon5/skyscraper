@@ -36,7 +36,7 @@ Camera::Camera()
 {
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->object, "Camera", true);
+	object->SetValues(this, sbs->object, "Camera", "Camera", true);
 
 	MainCamera = sbs->view->GetCamera();
 	MainCamera->SetSector(sbs->area);

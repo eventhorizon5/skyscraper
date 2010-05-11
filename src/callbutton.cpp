@@ -40,7 +40,7 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->GetFloor(floornum)->object, "CallButton", false);
+	object->SetValues(this, sbs->GetFloor(floornum)->object, "CallButton", "", false);
 
 	IsEnabled = true;
 	Elevators.SetSize(elevators.GetSize());
@@ -65,6 +65,7 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	buffer3 = number;
 	buffer = "(" + buffer4 + ")Call Panel " + buffer2 + ":" + buffer3;
 	buffer.Trim();
+	object->SetName("Call Panel " + buffer2 + ":" + buffer3);
 	CallButtonBackMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	CallButton_back_state = scfQueryInterface<iThingFactoryState> (CallButtonBackMesh->GetMeshObject()->GetFactory());
 	CallButtonBackMesh->SetZBufMode(CS_ZBUF_USE);

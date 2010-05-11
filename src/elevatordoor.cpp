@@ -36,7 +36,11 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 {
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, elevator->object, "ElevatorDoor", false);
+	object->SetValues(this, elevator->object, "ElevatorDoor", "", false);
+
+	csString buffer;
+	buffer = number;
+	object->SetName("Elevator Door " + buffer);
 
 	//create a new elevator door
 	Number = number + 1;
@@ -1266,7 +1270,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	Shift = 0;
 
 	object = new Object();
-	object->SetValues(this, parent->object, "DoorWrapper", false);
+	object->SetValues(this, parent->object, "DoorWrapper", "Door Wrapper", false);
 }
 
 ElevatorDoor::DoorWrapper::~DoorWrapper()

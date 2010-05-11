@@ -54,13 +54,18 @@ Object::~Object()
 	sbs->UnregisterObject(Number);
 }
 
-void Object::SetValues(void *object, Object *parent, const char *type, bool is_permanent)
+void Object::SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent)
 {
 	//set object values
 	raw_object = object;
 	Parent = parent;
 	Permanent = is_permanent;
 	Type = type;
+	Name = name;
+
+	//register as child object if object has a valid parent
+	if (Parent)
+		Parent->AddChild(this);
 }
 
 bool Object::IsPermanent()
@@ -91,4 +96,37 @@ int Object::GetNumber()
 {
 	//return object's global numeric identifier
 	return Number;
+}
+
+const char* Object::GetName()
+{
+	//return object name
+	return Name;
+}
+
+void Object::SetName(const char *name)
+{
+	//set object name
+	Name = name;
+}
+
+void Object::AddChild(Object *object)
+{
+	//add a child object to the internal array
+	children.Push(object);
+}
+
+Object* Object::GetChild(int index)
+{
+	//return pointer to child object from an array index
+	if (index < children.GetSize())
+		return children[index];
+	else
+		return 0;
+}
+
+int Object::GetChildrenCount()
+{
+	//return number of child objects
+	return children.GetSize();
 }

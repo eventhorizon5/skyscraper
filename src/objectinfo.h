@@ -26,6 +26,7 @@
 #define OBJECTINFO_H
 
 //(*Headers(ObjectInfo)
+#include <wx/treectrl.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -44,6 +45,7 @@ class ObjectInfo: public wxDialog
 		//(*Declarations(ObjectInfo)
 		wxStaticText* StaticText9;
 		wxButton* bOK;
+		wxTreeCtrl* ObjectTree;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText6;
 		wxStaticText* StaticText8;
@@ -69,6 +71,8 @@ class ObjectInfo: public wxDialog
 	protected:
 
 		//(*Identifiers(ObjectInfo)
+		static const long ID_ObjectTree;
+		static const long ID_bOK;
 		static const long ID_STATICTEXT1;
 		static const long ID_tNumber;
 		static const long ID_STATICTEXT5;
@@ -88,7 +92,6 @@ class ObjectInfo: public wxDialog
 		static const long ID_tScriptCommand;
 		static const long ID_STATICTEXT9;
 		static const long ID_tScriptCommand2;
-		static const long ID_bOK;
 		//*)
 		//void OnInit();
 
@@ -97,6 +100,8 @@ class ObjectInfo: public wxDialog
 		//(*Handlers(ObjectInfo)
 		void On_bOK_Click(wxCommandEvent& event);
 		//*)
+		void PopulateTree();
+		void AddChildren(Object *parent, const wxTreeItemId& treeparent);
 
 		DECLARE_EVENT_TABLE()
 };

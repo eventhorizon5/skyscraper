@@ -50,7 +50,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, parent, "Door", false);
+	object->SetValues(this, parent, "Door", name, false);
 
 	IsEnabled = true;
 	Name = name;

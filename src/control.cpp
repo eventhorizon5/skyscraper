@@ -44,7 +44,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, parent, "Control", false);
+	object->SetValues(this, parent, "Control", name, false);
 
 	Name = name;
 	Actions = action_names;

@@ -35,7 +35,7 @@ Sound::Sound(Object *parent, const char *name)
 {
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, parent, "Sound", false);
+	object->SetValues(this, parent, "Sound", name, false);
 
 	//first set default values
 	PositionOffset = 0;

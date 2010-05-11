@@ -39,7 +39,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->GetElevator(_elevator)->object, "ButtonPanel", false);
+	object->SetValues(this, sbs->GetElevator(_elevator)->object, "ButtonPanel", "", false);
 
 	IsEnabled = true;
 	elevator = _elevator;
@@ -67,6 +67,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	buffer3 = index;
 	buffer = "Button Panel " + buffer2 + ":" + buffer3;
 	buffer.Trim();
+	object->SetName(buffer);
 	ButtonPanelMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
 	ButtonPanel_state = scfQueryInterface<iThingFactoryState> (ButtonPanelMesh->GetMeshObject()->GetFactory());
 	ButtonPanelMesh->SetZBufMode(CS_ZBUF_USE);

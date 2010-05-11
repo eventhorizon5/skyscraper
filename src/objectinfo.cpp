@@ -28,13 +28,15 @@
 //*)
 
 #include "debugpanel.h"
-#include "objectinfo.h"
 #include "globals.h"
 #include "sbs.h"
+#include "objectinfo.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
 
 //(*IdInit(ObjectInfo)
+const long ObjectInfo::ID_ObjectTree = wxNewId();
+const long ObjectInfo::ID_bOK = wxNewId();
 const long ObjectInfo::ID_STATICTEXT1 = wxNewId();
 const long ObjectInfo::ID_tNumber = wxNewId();
 const long ObjectInfo::ID_STATICTEXT5 = wxNewId();
@@ -54,7 +56,6 @@ const long ObjectInfo::ID_STATICTEXT8 = wxNewId();
 const long ObjectInfo::ID_tScriptCommand = wxNewId();
 const long ObjectInfo::ID_STATICTEXT9 = wxNewId();
 const long ObjectInfo::ID_tScriptCommand2 = wxNewId();
-const long ObjectInfo::ID_bOK = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(ObjectInfo,wxDialog)
@@ -65,13 +66,20 @@ END_EVENT_TABLE()
 ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(ObjectInfo)
+	wxFlexGridSizer* FlexGridSizer4;
 	wxFlexGridSizer* FlexGridSizer3;
 	wxFlexGridSizer* FlexGridSizer2;
 	wxBoxSizer* BoxSizer1;
 	wxFlexGridSizer* FlexGridSizer1;
 	
 	Create(parent, wxID_ANY, _("Object Info"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
-	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
+	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
+	FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
+	ObjectTree = new wxTreeCtrl(this, ID_ObjectTree, wxDefaultPosition, wxSize(300,300), wxTR_DEFAULT_STYLE|wxSUNKEN_BORDER|wxVSCROLL, wxDefaultValidator, _T("ID_ObjectTree"));
+	FlexGridSizer4->Add(ObjectTree, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
+	FlexGridSizer4->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer1->Add(FlexGridSizer4, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer1 = new wxFlexGridSizer(0, 2, 0, 0);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Number:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
@@ -116,8 +124,6 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	tScriptCommand2 = new wxTextCtrl(this, ID_tScriptCommand2, wxEmptyString, wxDefaultPosition, wxSize(-1,40), wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tScriptCommand2"));
 	FlexGridSizer2->Add(tScriptCommand2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer2->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
-	FlexGridSizer2->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
@@ -128,6 +134,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	//*)
 	//OnInit();
 	oldobject = -1;
+	PopulateTree();
 }
 
 ObjectInfo::~ObjectInfo()
@@ -163,13 +170,41 @@ void ObjectInfo::Loop()
 
 	if (object)
 	{
+		tName->SetValue(wxString::FromAscii(object->GetName()));
 		tType->SetValue(wxString::FromAscii(object->GetType()));
 
 		Object *parent = object->GetParent();
 		if (parent)
 		{
 			tParent->SetValue(wxVariant(parent->GetNumber()).GetString());
+			tParentName->SetValue(wxVariant(parent->GetName()).GetString());
 			tParentType->SetValue(wxString::FromAscii(parent->GetType()));
+		}
+	}
+}
+
+void ObjectInfo::PopulateTree()
+{
+	//populate object tree
+	ObjectTree->AddRoot(wxT("SBS"));
+
+}
+
+void ObjectInfo::AddChildren(Object *parent, const wxTreeItemId& treeparent)
+{
+	//add child objects of given SBS object to tree
+	if (parent->GetChildrenCount() > 0)
+	{
+		for (int i = 0; i < parent->GetChildrenCount(); i++)
+		{
+			if (parent->GetChild(i))
+			{
+				//add child object
+				wxTreeItemId id = ObjectTree->AppendItem(treeparent, wxString::FromAscii(parent->GetChild(i)->GetName()));
+				//if child object has children, call recursively to add those
+				if (parent->GetChild(i)->GetChildrenCount() > 0)
+					AddChildren(parent->GetChild(i), id);
+			}
 		}
 	}
 }
