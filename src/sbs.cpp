@@ -121,6 +121,7 @@ SBS::SBS()
 	heightscale.SetSize(6);
 	remaining_delta = 0;
 	start_time = 0;
+	running_time = 0;
 	InShaft = false;
 	DisableSound = false;
 	MapIndex.SetSize(3);

@@ -1015,7 +1015,7 @@ int ScriptProcessor::ProcCommands()
 		}
 		if (Section == 2)
 		{
-			 buffer = Simcore->GetFloor(Current)->Altitude + atof(tempdata[4]);
+			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[4]);
 			 tempdata.Put(4, buffer);
 			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[7]);
 			 tempdata.Put(7, buffer);
