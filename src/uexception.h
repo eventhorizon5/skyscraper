@@ -1,3 +1,5 @@
+/* $Id$ */
+
 //Skyscraper StackWalker interface for reporting information on unhandled exceptions
 
 // For more info about "PreventSetUnhandledExceptionFilter" see:
