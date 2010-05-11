@@ -403,6 +403,7 @@ void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
 {
+	objectinfo->PopulateTree();
 	objectinfo->Show();
 }
 

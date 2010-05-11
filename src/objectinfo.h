@@ -66,7 +66,9 @@ class ObjectInfo: public wxDialog
 		wxStaticText* StaticText4;
 		//*)
 		void Loop();
+		void PopulateTree();
 		int oldobject;
+		int oldcamobject;
 
 	protected:
 
@@ -99,11 +101,23 @@ class ObjectInfo: public wxDialog
 
 		//(*Handlers(ObjectInfo)
 		void On_bOK_Click(wxCommandEvent& event);
+		void On_ObjectTree_SelectionChanged(wxTreeEvent& event);
 		//*)
-		void PopulateTree();
 		void AddChildren(Object *parent, const wxTreeItemId& treeparent);
+		bool changed;
+		bool populated;
 
 		DECLARE_EVENT_TABLE()
+};
+
+class TreeItemData : public wxTreeItemData
+{
+public:
+    TreeItemData(const wxString& desc) : m_desc(desc) { }
+    const wxChar *GetDesc() const { return m_desc.c_str(); }
+
+private:
+    wxString m_desc;
 };
 
 #endif

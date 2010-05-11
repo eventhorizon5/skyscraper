@@ -130,11 +130,14 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	BoxSizer1->SetSizeHints(this);
 	Center();
 	
+	Connect(ID_ObjectTree,wxEVT_COMMAND_TREE_SEL_CHANGED,(wxObjectEventFunction)&ObjectInfo::On_ObjectTree_SelectionChanged);
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
 	//*)
 	//OnInit();
 	oldobject = -1;
-	PopulateTree();
+	oldcamobject = -1;
+	changed = false;
+	populated = false;
 }
 
 ObjectInfo::~ObjectInfo()
@@ -151,27 +154,46 @@ void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 
 void ObjectInfo::Loop()
 {
-	int number = Simcore->camera->GetClickedObjectNumber();
+	int number;
+	if (changed == false)
+	{
+		int newobject = Simcore->camera->GetClickedObjectNumber();;
+		if (newobject != oldcamobject)
+		{
+			number = Simcore->camera->GetClickedObjectNumber();
+			oldcamobject = Simcore->camera->GetClickedObjectNumber();
+		}
+		else
+			number = oldobject;
+	}
+	else
+	{
+		TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(ObjectTree->GetSelection());
+		number = atoi(data->GetDesc());
+		changed = false;
+	}
 	if (number == oldobject)
 		return;
-	
+
 	oldobject = number;
+	Object *object = Simcore->GetObject(number);
 	tNumber->SetValue(wxVariant(number).GetString());
-	tLineNum->SetValue(wxVariant(Simcore->camera->GetClickedObjectLine()).GetString());
-	tScriptCommand->SetValue(wxString::FromAscii(Simcore->camera->GetClickedObjectCommand()));
-	tScriptCommand2->SetValue(wxString::FromAscii(Simcore->camera->GetClickedObjectCommandP()));
+	tLineNum->Clear();
+	tScriptCommand->Clear();
+	tScriptCommand2->Clear();
 	tName->Clear();
 	tType->Clear();
 	tParent->Clear();
 	tParentName->Clear();
 	tParentType->Clear();
 
-	Object *object = Simcore->GetObject(number);
-
 	if (object)
 	{
 		tName->SetValue(wxString::FromAscii(object->GetName()));
 		tType->SetValue(wxString::FromAscii(object->GetType()));
+		tLineNum->SetValue(wxVariant(object->linenum).GetString());
+		tScriptCommand->SetValue(wxString::FromAscii(object->command));
+		tScriptCommand2->SetValue(wxString::FromAscii(object->command_processed));
 
 		Object *parent = object->GetParent();
 		if (parent)
@@ -186,12 +208,17 @@ void ObjectInfo::Loop()
 void ObjectInfo::PopulateTree()
 {
 	//populate object tree
-	ObjectTree->AddRoot(wxT("SBS"));
+	wxTreeItemId id = ObjectTree->AddRoot(wxString::FromAscii(Simcore->object->GetName()), -1, -1, new TreeItemData(wxVariant(Simcore->object->GetNumber()).GetString()));
 
+	//add child objects
+	AddChildren(Simcore->object, id);
 }
 
 void ObjectInfo::AddChildren(Object *parent, const wxTreeItemId& treeparent)
 {
+	if (!parent)
+		return;
+
 	//add child objects of given SBS object to tree
 	if (parent->GetChildrenCount() > 0)
 	{
@@ -200,11 +227,17 @@ void ObjectInfo::AddChildren(Object *parent, const wxTreeItemId& treeparent)
 			if (parent->GetChild(i))
 			{
 				//add child object
-				wxTreeItemId id = ObjectTree->AppendItem(treeparent, wxString::FromAscii(parent->GetChild(i)->GetName()));
+				wxTreeItemId id = ObjectTree->AppendItem(treeparent, wxString::FromAscii(parent->GetChild(i)->GetName()), -1, -1, new TreeItemData(wxVariant(parent->GetChild(i)->GetNumber()).GetString()));
+
 				//if child object has children, call recursively to add those
 				if (parent->GetChild(i)->GetChildrenCount() > 0)
 					AddChildren(parent->GetChild(i), id);
 			}
 		}
 	}
+}
+
+void ObjectInfo::On_ObjectTree_SelectionChanged(wxTreeEvent& event)
+{
+	changed = true;
 }
