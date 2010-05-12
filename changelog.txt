@@ -15,6 +15,10 @@ Version 1.7 (2.0 Alpha 6)
 -added sound support to doors
 -fixed a crash that occurred if ServicedFloors included an invalid floor number
 -added internal error reporting system
+-new object tree browser
+-elevator parking fixes
+-call cancel now only works in fire phase 2 mode
+-elevators now reroute properly if switched to fire phase 1 mode while moving
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------
