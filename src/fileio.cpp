@@ -188,7 +188,6 @@ bool ScriptProcessor::LoadBuilding()
 				return false;
 			}
 			Section = 2;
-			Context = "Floor";
 			RangeL = 0;
 			RangeH = 0;
 			if (!IsNumeric(LineData.Slice(7, LineData.Length() - 8).Trim().GetData(), Current))
@@ -196,12 +195,13 @@ bool ScriptProcessor::LoadBuilding()
 				ScriptError("Invalid floor");
 				return false;
 			}
+			Context = "Floor " + csString(_itoa(Current, intbuffer, 10));
 			skyscraper->Report("Processing floor " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endfloor>") == true && RangeL == RangeH)
 		{
-			if (Section != 2 || Context != "Floor")
+			if (Section != 2)
 			{
 				ScriptError("Not in floor section");
 				return false;
@@ -244,7 +244,6 @@ bool ScriptProcessor::LoadBuilding()
 				return false;
 			}
 			Section = 4;
-			Context = "Elevator";
 			RangeL = 0;
 			RangeH = 0;
 			if (!IsNumeric(LineData.Slice(10, LineData.Length() - 11).Trim().GetData(), Current))
@@ -257,12 +256,13 @@ bool ScriptProcessor::LoadBuilding()
 				ScriptError("Invalid elevator");
 				return false;
 			}
+			Context = "Elevator " + csString(_itoa(Current, intbuffer, 10));
 			skyscraper->Report("Processing elevator " + csString(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (LineData.CompareNoCase("<endelevator>") == true && RangeL == RangeH)
 		{
-			if (Section != 4 || Context != "Elevator")
+			if (Section != 4)
 			{
 				ScriptError("Not in elevator section");
 				return false;
@@ -6001,6 +6001,13 @@ void ScriptProcessor::StoreCommand(Object *object)
 		object->command = BuildingData[line].Trim();
 		object->command_processed = LineData;
 		object->linenum = line + 1;
+		object->context = Context;
+		csString current;
+		current = Current;
+		if (Section == 2)
+			object->context = "Floor " + current;
+		if (Section == 4)
+			object->context = "Elevator " + current;
 	}
 }
 

@@ -776,7 +776,7 @@ void editelevator::On_bCloseManual_Click(wxCommandEvent& event)
 
 void editelevator::On_bStop_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->Stop(false);
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->Stop(true);
 }
 
 void editelevator::On_bAlarm_Click(wxCommandEvent& event)

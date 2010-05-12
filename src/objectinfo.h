@@ -43,11 +43,13 @@ class ObjectInfo: public wxDialog
 		virtual ~ObjectInfo();
 
 		//(*Declarations(ObjectInfo)
+		wxStaticText* StaticText10;
 		wxStaticText* StaticText9;
 		wxButton* bOK;
 		wxTreeCtrl* ObjectTree;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText6;
+		wxTextCtrl* tContext;
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText3;
@@ -90,6 +92,8 @@ class ObjectInfo: public wxDialog
 		static const long ID_STATICLINE1;
 		static const long ID_STATICTEXT7;
 		static const long ID_tLineNum;
+		static const long ID_STATICTEXT10;
+		static const long ID_tContext;
 		static const long ID_STATICTEXT8;
 		static const long ID_tScriptCommand;
 		static const long ID_STATICTEXT9;
