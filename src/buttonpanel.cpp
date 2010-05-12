@@ -333,7 +333,7 @@ void ButtonPanel::Press(int index)
 			number = atoi(name.Slice(5, name.Length() - 5));
 		elev->CloseDoors(number);
 	}
-	if (name == "cancel")
+	if (name == "cancel" && elev->FireServicePhase2 == 1)
 		elev->CancelLastRoute();
 	//if (name == "run")
 	if (name == "stop")
