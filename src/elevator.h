@@ -195,7 +195,7 @@ public:
 	void AddFloorSigns(int door_number, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	void SetCallButtons(int floor, bool direction, bool value);
 	bool IsIdle();
-	void QueueReset();
+	void ResetQueue(bool up, bool down);
 	void SetBeepSound(const char *filename);
 	void SetFloorSound(const char *prefix);
 	Object* AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
@@ -258,8 +258,6 @@ private:
 	bool EmergencyStop; //internal stop status
 	double JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
 	double JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
-	bool ResetUpQueue; //clear up queue and open doors; usually for service mode
-	bool ResetDownQueue; //clear down queue and open doors; usually for service mode
 	int ActiveCallFloor; //floor number of active call (that the elevator's currently responding too)
 	int ActiveCallDirection; //direction of active call (that the elevator's currently responding too)
 	bool FirstRun; //used for setting first-run items in the run loop

@@ -1207,7 +1207,7 @@ void editelevator::On_bDownIndicator_Click(wxCommandEvent& event)
 void editelevator::On_bResetQueues_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->QueueReset();
+		elevator->ResetQueue(true, true);
 }
 
 void editelevator::On_bSetParkingFloor_Click(wxCommandEvent& event)

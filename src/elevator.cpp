@@ -103,8 +103,6 @@ Elevator::Elevator(int number)
 	FireServicePhase2 = 0;
 	RecallFloor = 0;
 	RecallFloorAlternate = 0;
-	ResetUpQueue = false;
-	ResetDownQueue = false;
 	OnFloor = true;
 	RecallSet = false;
 	RecallAltSet = false;
@@ -606,7 +604,7 @@ void Elevator::Stop(bool emergency)
 		Report("emergency stop");
 
 		//clear elevator queues
-		QueueReset();
+		ResetQueue(true, true);
 	}
 	else
 		Report("Stopping elevator");
@@ -623,37 +621,12 @@ void Elevator::ProcessCallQueue()
 {
 	//Processes the elevator's call queue, and sends elevators to called floors
 
-	//if queue reset is requested, clear requested queue, open doors, and pause queue
-	if (ResetUpQueue == true || ResetDownQueue == true)
-	{
-		if (ResetUpQueue == true)
-		{
-			if (sbs->Verbose)
-				Report("ProcessCallQueue: resetting up queue");
-			UpQueue.DeleteAll();
-		}
-		if (ResetDownQueue == true)
-		{
-			if (sbs->Verbose)
-				Report("ProcessCallQueue: resetting down queue");
-			DownQueue.DeleteAll();
-		}
-		ResetUpQueue = false;
-		ResetDownQueue = false;
-
-		//turn off button lights
-		if (sbs->Verbose)
-			Report("ProcessCallQueue: turning off button lights for queue reset");
-		for (int i = 0; i < ServicedFloors.GetSize(); i++)
-		{
-			for (int j = 0; j < PanelArray.GetSize(); j++)
-				PanelArray[j]->ChangeLight(ServicedFloors[i], false);
-		}
-		return;
-	}
-
 	//exit if in inspection service mode
 	if (InspectionService == true)
+		return;
+
+	//exit if stopping
+	if (EmergencyStop == true)
 		return;
 
 	//if both queues are empty
@@ -801,7 +774,7 @@ void Elevator::ProcessCallQueue()
 					{
 						if (sbs->Verbose)
 							Report("ProcessCallQueue up: last entry (" + csString(_itoa(UpQueue[i], intbuffer, 10)) + ") is lower; resetting queue");
-						ResetUpQueue = true;
+						ResetQueue(true, false);
 						return;
 					}
 					else if (IsIdle() == true && QueuePositionDirection != 0)
@@ -889,7 +862,7 @@ void Elevator::ProcessCallQueue()
 					{
 						if (sbs->Verbose)
 							Report("ProcessCallQueue down: last entry (" + csString(_itoa(DownQueue[i], intbuffer, 10)) + ") is higher; resetting queue");
-						ResetDownQueue = true;
+						ResetQueue(false, true);
 						return;
 					}
 					else if (IsIdle() == true && QueuePositionDirection != 0)
@@ -1735,7 +1708,7 @@ void Elevator::FinishMove()
 	else
 	{
 		if (sbs->Verbose)
-			Report("emergency stop complete");
+			Report("stop complete");
 		EmergencyStop = false;
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		{
@@ -2142,7 +2115,7 @@ void Elevator::GoToRecallFloor()
 		Stop(false);
 
 	//reset queues
-	QueueReset();
+	ResetQueue(true, true);
 
 	if (RecallUnavailable == false)
 	{
@@ -2283,8 +2256,7 @@ void Elevator::EnableIndependentService(bool value)
 		EnableInspectionService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
-		ResetUpQueue = true;
-		ResetDownQueue = true;
+		ResetQueue(true, true);
 		if (IsMoving == false)
 			OpenDoors();
 		Report("Independent Service mode enabled");
@@ -2316,13 +2288,9 @@ void Elevator::EnableInspectionService(bool value)
 		EnableIndependentService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
-		ResetUpQueue = true;
-		ResetDownQueue = true;
+		ResetQueue(true, true);
 		if (IsMoving == true)
-		{
 			Stop(false);
-			QueueReset();
-		}
 		Report("Inspection Service mode enabled");
 	}
 	else
@@ -2393,8 +2361,6 @@ void Elevator::EnableFireService1(int value)
 		EnableIndependentService(false);
 		EnableInspectionService(false);
 		EnableFireService2(0);
-		ResetUpQueue = true;
-		ResetDownQueue = true;
 		if (value == 1)
 		{
 			Report("Fire Service Phase 1 mode set to On");
@@ -2440,8 +2406,7 @@ void Elevator::EnableFireService2(int value)
 		EnableIndependentService(false);
 		EnableInspectionService(false);
 		EnableFireService1(0);
-		ResetUpQueue = true;
-		ResetDownQueue = true;
+		ResetQueue(true, true);
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
 		else
@@ -3224,12 +3189,30 @@ bool Elevator::IsIdle()
 		return false;
 }
 
-void Elevator::QueueReset()
+void Elevator::ResetQueue(bool up, bool down)
 {
 	//reset queues
-	Report("resetting queues");
-	ResetUpQueue = true;
-	ResetDownQueue = true;
+	if (up == true)
+	{
+		if (sbs->Verbose)
+			Report("QueueReset: resetting up queue");
+		UpQueue.DeleteAll();
+	}
+	if (down == true)
+	{
+		if (sbs->Verbose)
+			Report("QueueReset: resetting down queue");
+		DownQueue.DeleteAll();
+	}
+
+	//turn off button lights
+	if (sbs->Verbose)
+		Report("QueueReset: turning off button lights for queue reset");
+	for (int i = 0; i < ServicedFloors.GetSize(); i++)
+	{
+		for (int j = 0; j < PanelArray.GetSize(); j++)
+			PanelArray[j]->ChangeLight(ServicedFloors[i], false);
+	}
 }
 
 void Elevator::SetBeepSound(const char *filename)
