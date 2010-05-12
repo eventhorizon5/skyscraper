@@ -476,6 +476,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText44;
 		wxStaticText* StaticText3;
 		//*)
+		int last_elevator;
 
 	private:
 

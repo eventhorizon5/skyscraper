@@ -820,6 +820,8 @@ void editelevator::On_bDumpQueues_Click(wxCommandEvent& event)
 
 void editelevator::OnInit()
 {
+	last_elevator = 0;
+
 	if (Simcore->Elevators() > 0)
 	{
 		//set elevator range slider
@@ -837,7 +839,6 @@ void editelevator::OnInit()
 
 void editelevator::Loop()
 {
-	static int last_elevator;
 	static int last_door;
 	static int last_elevator_count;
 	static int last_floor_count;

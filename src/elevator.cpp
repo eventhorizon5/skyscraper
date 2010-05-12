@@ -3389,13 +3389,13 @@ void Elevator::Timer::Notify()
 	if (IsParkingTimer == true)
 	{
 		//parking timer
-	
-		if (elevator->ParkingDelay > 0)
+
+		if (elevator->ParkingDelay > 0 && elevator->IsIdle() == true)
 		{
 			int floor = elevator->GetFloor();
 			if (elevator->ParkingFloor > floor)
 				elevator->AddRoute(elevator->ParkingFloor, 1, false);
-			else
+			else if (elevator->ParkingFloor < floor)
 				elevator->AddRoute(elevator->ParkingFloor, -1, false);
 		}
 	}
