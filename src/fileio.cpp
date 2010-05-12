@@ -4527,7 +4527,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 9).CompareNoCase("addfloor ") == true)
 	{
 		//get data
-		tempdata.SplitString(LineData.Slice(10).GetData(), ",");
+		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
 
 		//calculate inline math
 		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
