@@ -169,7 +169,9 @@ void ObjectInfo::Loop()
 	else
 	{
 		TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(ObjectTree->GetSelection());
-		number = atoi(data->GetDesc());
+		wxString num;
+		num = data->GetDesc();
+		number = atoi(num.ToAscii());
 		changed = false;
 	}
 	if (number == oldobject)
