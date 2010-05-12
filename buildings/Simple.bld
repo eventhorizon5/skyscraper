@@ -311,21 +311,21 @@ DrawWalls = true, true, false, false, false, false
     #door just a tiny bit.
     
     CreatePanel ElevPanel, 15, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, switch.wav, Button10, ButtonLit10, 2, 3, 9, 1, 1
-    AddFloorButton 1, Button9, ButtonLit9, 3, 3, 8, 1, 1
-    AddFloorButton 1, Button8, ButtonLit8, 4, 3, 7, 1, 1
-    AddFloorButton 1, Button7, ButtonLit7, 5, 3, 6, 1, 1
-    AddFloorButton 1, Button6, ButtonLit6, 6, 3, 5, 1, 1
-    AddFloorButton 1, Button5, ButtonLit5, 7, 3, 4, 1, 1
-    AddFloorButton 1, Button4, ButtonLit4, 8, 3, 3, 1, 1
-    AddFloorButton 1, Button3, ButtonLit3, 9, 3, 2, 1, 1
-    AddFloorButton 1, Button2, ButtonLit2, 10, 3, 1, 1, 1
-    AddFloorButton 1, Button1, ButtonLit1, 11, 3, 0, 1, 1
-    AddControlButton 1, switch.wav, ButtonOpen, ButtonOpen, 13, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, ButtonClose, 13, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, ButtonCancel, 14, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, ButtonStop, 14, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, ButtonAlarm, 14, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 2, 3, 9, 1, 1
+    AddButton 1, switch.wav, Button9, ButtonLit9, 3, 3, 8, 1, 1
+    AddButton 1, switch.wav, Button8, ButtonLit8, 4, 3, 7, 1, 1
+    AddButton 1, switch.wav, Button7, ButtonLit7, 5, 3, 6, 1, 1
+    AddButton 1, switch.wav, Button6, ButtonLit6, 6, 3, 5, 1, 1
+    AddButton 1, switch.wav, Button5, ButtonLit5, 7, 3, 4, 1, 1
+    AddButton 1, switch.wav, Button4, ButtonLit4, 8, 3, 3, 1, 1
+    AddButton 1, switch.wav, Button3, ButtonLit3, 9, 3, 2, 1, 1
+    AddButton 1, switch.wav, Button2, ButtonLit2, 10, 3, 1, 1, 1
+    AddButton 1, switch.wav, Button1, ButtonLit1, 11, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 13, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 13, 4, close, 1, 1
+    AddButton 1, , ButtonCancel, ButtonCancel, 14, 2, cancel, 1, 1
+    AddButton 1, , ButtonStop, ButtonStop, 14, 3, stop, 1, 1
+    AddButton 1, , ButtonAlarm, ButtonAlarm, 14, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5

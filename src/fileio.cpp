@@ -5030,7 +5030,7 @@ int ScriptProcessor::ProcElevators()
 			buffer = Calc(tempdata[temp3]);
 			tempdata.Put(temp3, buffer);
 		}
-		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
+		if (tempdata.GetSize() < 9 || tempdata.GetSize() > 11)
 		{
 			ScriptError("Incorrect number of parameters");
 			return sError;
@@ -5038,26 +5038,23 @@ int ScriptProcessor::ProcElevators()
 
 		float hoffset = 0, voffset = 0;
 
-		if (tempdata.GetSize() == 9 || tempdata.GetSize() == 11)
+		//check numeric values
+		for (int i = 1; i <= 8; i++)
 		{
-			//check numeric values
-			for (int i = 1; i <= 8; i++)
+			if (i == 1)
+				i = 4;
+			if (i == 6)
+				i++;
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
 			{
-				if (i == 1)
-					i = 4;
-				if (i == 6)
-					i++;
-				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+				ScriptError("Invalid value: " + csString(tempdata[i]));
+				return sError;
 			}
-			if (tempdata.GetSize() == 11)
-			{
-				hoffset = atof(tempdata[9]);
-				voffset = atof(tempdata[10]);
-			}
+		}
+		if (tempdata.GetSize() == 11)
+		{
+			hoffset = atof(tempdata[9]);
+			voffset = atof(tempdata[10]);
 		}
 
 		if (!elev->GetPanel(atoi(tempdata[0])))
