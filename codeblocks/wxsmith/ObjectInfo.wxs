@@ -12,6 +12,7 @@
 						<object class="wxTreeCtrl" name="ID_ObjectTree" variable="ObjectTree" member="yes">
 							<size>300,300</size>
 							<style>wxTR_DEFAULT_STYLE|wxSUNKEN_BORDER|wxVSCROLL</style>
+							<handler function="On_ObjectTree_SelectionChanged" entry="EVT_TREE_SEL_CHANGED" />
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
