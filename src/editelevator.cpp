@@ -776,7 +776,7 @@ void editelevator::On_bCloseManual_Click(wxCommandEvent& event)
 
 void editelevator::On_bStop_Click(wxCommandEvent& event)
 {
-	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->StopElevator();
+	Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->Stop(false);
 }
 
 void editelevator::On_bAlarm_Click(wxCommandEvent& event)
@@ -1148,10 +1148,13 @@ void editelevator::On_bUp_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
 	{
+		if (elevator->InspectionService == false)
+			return;
+
 		if (bUp->GetValue() == true)
 			elevator->MoveUp();
 		else
-			elevator->StopMove();
+			elevator->Stop(false);
 	}
 }
 
@@ -1159,6 +1162,9 @@ void editelevator::On_bGoToggle_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
 	{
+		if (elevator->InspectionService == false)
+			return;
+
 		elevator->SetGoButton(bGoToggle->GetValue());
 
 		if (bUp->GetValue() == true)
@@ -1166,7 +1172,7 @@ void editelevator::On_bGoToggle_Toggle(wxCommandEvent& event)
 		else if (bDown->GetValue() == true)
 			elevator->MoveDown();
 		else
-			elevator->StopMove();
+			elevator->Stop(false);
 	}
 }
 
@@ -1174,10 +1180,13 @@ void editelevator::On_bDown_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
 	{
+		if (elevator->InspectionService == false)
+			return;
+
 		if (bDown->GetValue() == true)
 			elevator->MoveDown();
 		else
-			elevator->StopMove();
+			elevator->Stop(false);
 	}
 }
 

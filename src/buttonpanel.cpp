@@ -337,7 +337,7 @@ void ButtonPanel::Press(int index)
 		elev->CancelLastRoute();
 	//if (name == "run")
 	if (name == "stop")
-		elev->StopElevator();
+		elev->Stop(true);
 	if (name == "alarm")
 		elev->Alarm();
 	if (name == "fire1off")

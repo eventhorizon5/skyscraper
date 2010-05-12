@@ -118,7 +118,7 @@ public:
 	void DeleteRoute(int floor, int direction);
 	void CancelLastRoute();
 	void Alarm();
-	void StopElevator();
+	void Stop(bool emergency);
 	void OpenHatch();
 	void ProcessCallQueue();
 	int GetFloor();
@@ -163,7 +163,6 @@ public:
 	void GoToRecallFloor();
 	bool MoveUp();
 	bool MoveDown();
-	bool StopMove();
 	void SetGoButton(bool value);
 	int GetTopFloor();
 	int GetBottomFloor();

@@ -455,11 +455,6 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		Report("cannot add route while in inspection service mode");
 		return;
 	}
-	if (FireServicePhase1 == 1)
-	{
-		Report("cannot add route while in fire service phase 1 mode");
-		return;
-	}
 	if (FireServicePhase2 == 2)
 	{
 		Report("cannot add route while in held state");
@@ -584,24 +579,37 @@ void Elevator::Alarm()
 	}
 }
 
-void Elevator::StopElevator()
+void Elevator::Stop(bool emergency)
 {
 	//Tells elevator to stop moving, no matter where it is
 
 	//exit if in inspection mode
-	if (InspectionService == true)
+	if (InspectionService == true && emergency == true)
 	{
 		if (sbs->Verbose)
 			Report("cannot stop while in inspection service");
 		return;
 	}
 
-	Report("emergency stop");
+	if (IsMoving == false)
+	{
+		if (sbs->Verbose)
+			Report("Stop: not moving");
+		return;
+	}
+
 
 	EmergencyStop = true;
 
-	//clear elevator queues
-	QueueReset();
+	if (emergency == true)
+	{
+		Report("emergency stop");
+
+		//clear elevator queues
+		QueueReset();
+	}
+	else
+		Report("Stopping elevator");
 }
 
 void Elevator::OpenHatch()
@@ -644,8 +652,8 @@ void Elevator::ProcessCallQueue()
 		return;
 	}
 
-	//exit if in inspection service or fire phase 1 modes
-	if (InspectionService == true || FireServicePhase1 == 1)
+	//exit if in inspection service mode
+	if (InspectionService == true)
 		return;
 
 	//if both queues are empty
@@ -2129,15 +2137,28 @@ void Elevator::GoToRecallFloor()
 	//for fire service modes; tells the elevator to go to the recall floor (or the alternate recall floor
 	//if the other is not available)
 
+	//stop elevator if moving
+	if (IsMoving == true)
+		Stop(false);
+
+	//reset queues
+	QueueReset();
+
 	if (RecallUnavailable == false)
 	{
 		Report("Proceeding to recall floor");
-		Go(RecallFloor);
+		if (RecallFloor > GetFloor())
+			AddRoute(RecallFloor, 1, false);
+		else
+			AddRoute(RecallFloor, -1, false);
 	}
 	else
 	{
 		Report("Proceeding to alternate recall floor");
-		Go(RecallFloorAlternate);
+		if (RecallFloor > GetFloor())
+			AddRoute(RecallFloorAlternate, 1, false);
+		else
+			AddRoute(RecallFloorAlternate, -1, false);
 	}
 }
 
@@ -2298,7 +2319,10 @@ void Elevator::EnableInspectionService(bool value)
 		ResetUpQueue = true;
 		ResetDownQueue = true;
 		if (IsMoving == true)
-			StopElevator();
+		{
+			Stop(false);
+			QueueReset();
+		}
 		Report("Inspection Service mode enabled");
 	}
 	else
@@ -2333,7 +2357,7 @@ void Elevator::EnableInspectionService(bool value)
 		}
 
 		if (IsMoving == true)
-			StopMove();
+			Stop(false);
 	}
 
 	InspectionService = value;
@@ -2562,36 +2586,15 @@ bool Elevator::MoveDown()
 	return true;
 }
 
-bool Elevator::StopMove()
-{
-	//stops elevator movement if in Inspection Service mode
-	//this is almost identical to the StopElevator() function, except it reports differently. This is also to
-	//separate it from the regular Stop button
-
-	if (InspectionService == false)
-	{
-		Report("Not in inspection service mode");
-		return false;
-	}
-
-	if (IsMoving == false)
-	{
-		if (sbs->Verbose)
-			Report("StopMove: not moving");
-		return false;
-	}
-
-	EmergencyStop = true;
-	Report("Stopping elevator");
-	return true;
-}
-
 void Elevator::SetGoButton(bool value)
 {
 	//sets the value of the Go button (for Inspection Service mode)
 
+	if (InspectionService == false)
+		return;
+
 	if (ManualGo == true && value == false)
-		StopMove();
+		Stop(false);
 
 	ManualGo = value;
 
