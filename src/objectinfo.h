@@ -47,6 +47,7 @@ class ObjectInfo: public wxDialog
 		wxStaticText* StaticText9;
 		wxButton* bOK;
 		wxTreeCtrl* ObjectTree;
+		wxButton* bDelete;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText6;
 		wxTextCtrl* tContext;
@@ -76,6 +77,7 @@ class ObjectInfo: public wxDialog
 
 		//(*Identifiers(ObjectInfo)
 		static const long ID_ObjectTree;
+		static const long ID_bDelete;
 		static const long ID_bOK;
 		static const long ID_STATICTEXT1;
 		static const long ID_tNumber;
@@ -106,6 +108,7 @@ class ObjectInfo: public wxDialog
 		//(*Handlers(ObjectInfo)
 		void On_bOK_Click(wxCommandEvent& event);
 		void On_ObjectTree_SelectionChanged(wxTreeEvent& event);
+		void On_bDelete_Click(wxCommandEvent& event);
 		//*)
 		void AddChildren(Object *parent, const wxTreeItemId& treeparent);
 		bool changed;

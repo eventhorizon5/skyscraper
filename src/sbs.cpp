@@ -4147,3 +4147,120 @@ csString SBS::DumpState()
 
 	return output;
 }
+
+bool SBS::DeleteObject(Object *object)
+{
+	//object deletion routine
+	//this should be called to delete a simulator object during runtime
+
+	if (!object)
+		return false;
+
+	if (!object->GetRawObject())
+		return false;
+
+	csString number;
+	number = object->GetNumber();
+	bool deleted = false;
+
+	csString type = object->GetType();
+
+	//perform standard delete based on object type
+	if (type == "Floor")
+	{
+		//FloorArray.Delete((Floor*)object->GetRawObject());
+		delete (Floor*)object->GetRawObject();
+		deleted = true;
+	}
+	if (type == "Elevator")
+	{
+		//ElevatorArray.Delete((Elevator*)object->GetRawObject());
+		delete (Elevator*)object->GetRawObject();
+		deleted = true;
+	}
+	if (type == "ButtonPanel")
+	{
+		ButtonPanel *obj = (ButtonPanel*)object->GetRawObject();
+		((Elevator*)object->GetParent()->GetRawObject())->DeletePanel(obj);
+		delete obj;
+		deleted = true;
+	}
+	if (type == "CallButton")
+	{
+		delete (CallButton*)object->GetRawObject();
+		deleted = true;
+	}
+	if (type == "DirectionalIndicator")
+	{
+		DirectionalIndicator *obj = (DirectionalIndicator*)object->GetRawObject();
+		csString parenttype = object->GetParent()->GetType();
+		if (parenttype == "Elevator")
+			((Elevator*)object->GetParent()->GetRawObject())->DeleteDirectionalIndicator(obj);
+		delete obj;
+		deleted = true;
+	}
+	if (type == "Door")
+	{
+		Door *obj = (Door*)object->GetRawObject();
+		csString parenttype = object->GetParent()->GetType();
+		if (parenttype == "Elevator")
+			((Elevator*)object->GetParent()->GetRawObject())->DeleteDoor(obj);
+		delete obj;
+		deleted = true;
+	}
+	if (type == "ElevatorDoor")
+	{
+		ElevatorDoor *obj = (ElevatorDoor*)object->GetRawObject();
+		((Elevator*)object->GetParent()->GetRawObject())->DeleteElevatorDoor(obj);
+		delete obj;
+		deleted = true;
+	}
+	if (type == "FloorIndicator")
+	{
+		FloorIndicator *obj = (FloorIndicator*)object->GetRawObject();
+		csString parenttype = object->GetParent()->GetType();
+		if (parenttype == "Elevator")
+			((Elevator*)object->GetParent()->GetRawObject())->DeleteFloorIndicator(obj);
+		delete obj;
+		deleted = true;
+	}
+	if (type == "Shaft")
+	{
+		//ShaftArray.Delete((Shaft*)object->GetRawObject());
+		delete (Shaft*)object->GetRawObject();
+		deleted = true;
+	}
+	if (type == "Sound")
+	{
+		delete (Sound*)object->GetRawObject();
+		deleted = true;
+	}
+	if (type == "Stairs")
+	{
+		//StairsArray.Delete((Stairs*)object->GetRawObject());
+		delete (Stairs*)object->GetRawObject();
+		deleted = true;
+	}
+	if (type == "Wall")
+	{
+		WallObject *obj = (WallObject*)object->GetRawObject();
+		obj->DeletePolygons();
+		obj->parent_array->Delete(obj);
+		delete obj;
+		//reprepare engine
+		//engine->Prepare();
+		deleted = true;
+	}
+
+	if (deleted == true)
+	{
+		engine->Prepare();
+		sbs->Report("Deleted object " + number);
+	}
+}
+
+bool SBS::DeleteObject(int object)
+{
+	//delete object by numeric ID
+	return DeleteObject(GetObject(object));
+}

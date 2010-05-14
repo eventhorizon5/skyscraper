@@ -502,17 +502,12 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	{
 		if (obj)
 		{
-			if (csString(obj->GetType()) == "Wall")
+			if (object->GetType() == "Wall")
 			{
-				WallObject *wall = (WallObject*)obj;
-				wall->DeletePolygons();
-
-				//reprepare engine
-				sbs->engine->Prepare();
-				sbs->Report("Deleted object " + number);
+				sbs->DeleteObject(obj);
+				return;
 			}
 		}
-		return;
 	}
 
 	//check call buttons

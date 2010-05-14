@@ -44,6 +44,7 @@ WallObject::WallObject(csRef<iMeshWrapper> wrapper, Object *proxy, bool temporar
 WallObject::~WallObject()
 {
 	//wall object destructor
+
 	handles.DeleteAll();
 	//meshwrapper = 0;
 	//state = 0;

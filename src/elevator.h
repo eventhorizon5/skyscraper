@@ -220,6 +220,11 @@ public:
 	void CloseDoor(int number);
 	bool IsDoorOpen(int number);
 	bool IsDoorMoving(int number);
+	void DeletePanel(ButtonPanel* panel);
+	void DeleteDirectionalIndicator(DirectionalIndicator *indicator);
+	void DeleteElevatorDoor(ElevatorDoor *door);
+	void DeleteFloorIndicator(FloorIndicator *indicator);
+	void DeleteDoor(Door *door);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

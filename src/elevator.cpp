@@ -3580,3 +3580,33 @@ bool Elevator::IsDoorMoving(int number)
 		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
 }
+
+void Elevator::DeletePanel(ButtonPanel* panel)
+{
+	//delete a button panel reference (does not delete the object itself)
+	PanelArray.Delete(panel);
+}
+
+void Elevator::DeleteDirectionalIndicator(DirectionalIndicator* indicator)
+{
+	//delete a directional indicator reference (does not delete the object itself)
+	DirIndicatorArray.Delete(indicator);
+}
+
+void Elevator::DeleteElevatorDoor(ElevatorDoor* door)
+{
+	//delete an elevator door reference (does not delete the object itself)
+	DoorArray.Delete(door);
+}
+
+void Elevator::DeleteFloorIndicator(FloorIndicator* indicator)
+{
+	//delete a floor indicator reference (does not delete the object itself)
+	FloorIndicatorArray.Delete(indicator);
+}
+
+void Elevator::DeleteDoor(Door* door)
+{
+	//delete a door reference (does not delete the object itself)
+	StdDoorArray.Delete(door);
+}

@@ -303,6 +303,8 @@ public:
 	csString TruncateNumber(const char *number, int decimals);
 	bool IsValidFloor(int floor);
 	csString DumpState();
+	bool DeleteObject(Object *object);
+	bool DeleteObject(int object);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

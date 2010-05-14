@@ -36,6 +36,7 @@ extern SBS *Simcore; //external pointer to the SBS engine
 
 //(*IdInit(ObjectInfo)
 const long ObjectInfo::ID_ObjectTree = wxNewId();
+const long ObjectInfo::ID_bDelete = wxNewId();
 const long ObjectInfo::ID_bOK = wxNewId();
 const long ObjectInfo::ID_STATICTEXT1 = wxNewId();
 const long ObjectInfo::ID_tNumber = wxNewId();
@@ -72,6 +73,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	wxFlexGridSizer* FlexGridSizer3;
 	wxFlexGridSizer* FlexGridSizer5;
 	wxFlexGridSizer* FlexGridSizer2;
+	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer1;
 	wxFlexGridSizer* FlexGridSizer1;
 	
@@ -80,8 +82,12 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
 	ObjectTree = new wxTreeCtrl(this, ID_ObjectTree, wxDefaultPosition, wxSize(300,350), wxTR_DEFAULT_STYLE|wxSUNKEN_BORDER|wxVSCROLL, wxDefaultValidator, _T("ID_ObjectTree"));
 	FlexGridSizer4->Add(ObjectTree, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+	bDelete = new wxButton(this, ID_bDelete, _("Delete"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDelete"));
+	BoxSizer2->Add(bDelete, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
-	FlexGridSizer4->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer2->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer4->Add(BoxSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(FlexGridSizer4, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer1 = new wxFlexGridSizer(0, 2, 0, 0);
@@ -140,6 +146,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	Center();
 	
 	Connect(ID_ObjectTree,wxEVT_COMMAND_TREE_SEL_CHANGED,(wxObjectEventFunction)&ObjectInfo::On_ObjectTree_SelectionChanged);
+	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bDelete_Click);
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
 	//*)
 	//OnInit();
@@ -258,4 +265,15 @@ void ObjectInfo::AddChildren(Object *parent, const wxTreeItemId& treeparent)
 void ObjectInfo::On_ObjectTree_SelectionChanged(wxTreeEvent& event)
 {
 	changed = true;
+}
+
+void ObjectInfo::On_bDelete_Click(wxCommandEvent& event)
+{
+	TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(ObjectTree->GetSelection());
+	wxString num;
+	num = data->GetDesc();
+	int number = atoi(num.ToAscii());
+
+	//call SBS to delete object
+	Simcore->DeleteObject(number);
 }
