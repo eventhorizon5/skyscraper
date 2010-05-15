@@ -4256,7 +4256,9 @@ bool SBS::DeleteObject(Object *object)
 	{
 		engine->Prepare();
 		sbs->Report("Deleted object " + number);
+		return true;
 	}
+	return false;
 }
 
 bool SBS::DeleteObject(int object)
