@@ -276,4 +276,7 @@ void ObjectInfo::On_bDelete_Click(wxCommandEvent& event)
 
 	//call SBS to delete object
 	Simcore->DeleteObject(number);
+
+	//delete object from tree
+	ObjectTree->Delete(ObjectTree->GetSelection());
 }

@@ -4020,7 +4020,7 @@ WallObject* SBS::CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrappe
 	array[array.GetSize() - 1] = new WallObject(mesh);
 	array[array.GetSize() - 1]->name = name;
 	array[array.GetSize() - 1]->parent_array = &array;
-	array[array.GetSize() - 1]->SetValues(0, parent, "Wall", name, false);
+	array[array.GetSize() - 1]->SetValues(array[array.GetSize() - 1], parent, "Wall", name, false);
 	return array[array.GetSize() - 1];
 }
 
