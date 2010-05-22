@@ -256,10 +256,27 @@
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
-												<object class="wxCheckBox" name="ID_CHECKBOX1" variable="chkVisible" member="yes">
-													<label>Visible</label>
+												<object class="wxBoxSizer" variable="BoxSizer4" member="no">
+													<object class="sizeritem">
+														<object class="wxCheckBox" name="ID_CHECKBOX1" variable="chkVisible" member="yes">
+															<label>Visible</label>
+															<handler function="On_chkVisible_Click" entry="EVT_CHECKBOX" />
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxCheckBox" name="ID_chkRun" variable="chkRun" member="yes">
+															<label>Run</label>
+															<handler function="On_chkRun_Click" entry="EVT_CHECKBOX" />
+														</object>
+														<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
 												</object>
-												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -1515,6 +1532,32 @@
 											</object>
 											<object class="spacer">
 												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT59" variable="StaticText59" member="yes">
+													<label>Notify:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtNotifyEarly" variable="txtNotifyEarly" member="yes">
+													<size>75,-1</size>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bNotifyEarly" variable="bNotifyEarly" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bNotifyEarly_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>

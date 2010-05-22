@@ -62,6 +62,7 @@ const long editelevator::ID_bRefresh = wxNewId();
 const long editelevator::ID_bDumpFloors = wxNewId();
 const long editelevator::ID_bDumpQueues = wxNewId();
 const long editelevator::ID_CHECKBOX1 = wxNewId();
+const long editelevator::ID_chkRun = wxNewId();
 const long editelevator::ID_bCall = wxNewId();
 const long editelevator::ID_bGo = wxNewId();
 const long editelevator::ID_bOpen = wxNewId();
@@ -196,6 +197,9 @@ const long editelevator::ID_STATICTEXT36 = wxNewId();
 const long editelevator::ID_txtTempDecel = wxNewId();
 const long editelevator::ID_STATICTEXT37 = wxNewId();
 const long editelevator::ID_txtErrorOffset = wxNewId();
+const long editelevator::ID_STATICTEXT59 = wxNewId();
+const long editelevator::ID_txtNotifyEarly = wxNewId();
+const long editelevator::ID_bNotifyEarly = wxNewId();
 const long editelevator::ID_STATICTEXT45 = wxNewId();
 const long editelevator::ID_txtACPFloor = wxNewId();
 const long editelevator::ID_bSetACPFloor = wxNewId();
@@ -221,6 +225,7 @@ END_EVENT_TABLE()
 editelevator::editelevator(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(editelevator)
+	wxBoxSizer* BoxSizer4;
 	wxFlexGridSizer* FlexGridSizer4;
 	wxBoxSizer* BoxSizer5;
 	wxBoxSizer* BoxSizer7;
@@ -295,9 +300,14 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer8->Add(bDumpFloors, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bDumpQueues = new wxButton(this, ID_bDumpQueues, _("Dump Queues"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDumpQueues"));
 	FlexGridSizer8->Add(bDumpQueues, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
 	chkVisible = new wxCheckBox(this, ID_CHECKBOX1, _("Visible"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
 	chkVisible->SetValue(false);
-	FlexGridSizer8->Add(chkVisible, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer4->Add(chkVisible, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkRun = new wxCheckBox(this, ID_chkRun, _("Run"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRun"));
+	chkRun->SetValue(false);
+	BoxSizer4->Add(chkRun, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer8->Add(BoxSizer4, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(FlexGridSizer8, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer6->Add(FlexGridSizer4, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer6, 2, wxTOP|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
@@ -628,6 +638,12 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	txtErrorOffset = new wxTextCtrl(this, ID_txtErrorOffset, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtErrorOffset"));
 	FlexGridSizer7->Add(txtErrorOffset, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer7->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText59 = new wxStaticText(this, ID_STATICTEXT59, _("Notify:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT59"));
+	FlexGridSizer7->Add(StaticText59, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtNotifyEarly = new wxTextCtrl(this, ID_txtNotifyEarly, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtNotifyEarly"));
+	FlexGridSizer7->Add(txtNotifyEarly, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bNotifyEarly = new wxButton(this, ID_bNotifyEarly, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bNotifyEarly"));
+	FlexGridSizer7->Add(bNotifyEarly, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer8->Add(FlexGridSizer7, 0, wxALIGN_LEFT|wxALIGN_TOP, 5);
 	BoxSizer7->Add(StaticBoxSizer8, 0, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer4 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Modes"));
@@ -688,6 +704,8 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bRefresh,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bRefresh_Click);
 	Connect(ID_bDumpFloors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDumpFloors_Click);
 	Connect(ID_bDumpQueues,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDumpQueues_Click);
+	Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&editelevator::On_chkVisible_Click);
+	Connect(ID_chkRun,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&editelevator::On_chkRun_Click);
 	Connect(ID_bCall,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bCall_Click);
 	Connect(ID_bGo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bGo_Click);
 	Connect(ID_bOpen,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bOpen_Click);
@@ -716,6 +734,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bSetLevelingSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingSpeed_Click);
 	Connect(ID_bSetLevelingOffset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingOffset_Click);
 	Connect(ID_bSetLevelingOpen,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingOpen_Click);
+	Connect(ID_bNotifyEarly,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bNotifyEarly_Click);
 	Connect(ID_bSetACPFloor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetACPFloor_Click);
 	Connect(ID_bSetRecallFloor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetRecallFloor_Click);
 	Connect(ID_bSetRecallAlternate,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetRecallAlternate_Click);
@@ -950,6 +969,7 @@ void editelevator::SetMainValues()
 	txtAccelJerk->SetValue(TruncateNumber(elevator->AccelJerk, 4));
 	txtDecelJerk->SetValue(TruncateNumber(elevator->DecelJerk, 4));
 	chkVisible->SetValue(elevator->IsEnabled);
+	chkRun->SetValue(elevator->IsRunning());
 	bACPMode->SetValue(elevator->ACP);
 	bUpPeak->SetValue(elevator->UpPeak);
 	bDownPeak->SetValue(elevator->DownPeak);
@@ -964,6 +984,7 @@ void editelevator::SetMainValues()
 	txtLevelingSpeed->SetValue(TruncateNumber(elevator->LevelingSpeed, 4));
 	txtLevelingOffset->SetValue(TruncateNumber(elevator->LevelingOffset, 4));
 	txtLevelingOpen->SetValue(TruncateNumber(elevator->LevelingOpen, 4));
+	txtNotifyEarly->SetValue(wxVariant((int)elevator->NotifyEarly).GetString());
 	if (elevator->FireServicePhase2 == 0)
 		Fire2Off->SetValue(true);
 	if (elevator->FireServicePhase2 == 1)
@@ -1238,4 +1259,16 @@ void editelevator::On_bSetLevelingOpen_Click(wxCommandEvent& event)
 {
 	if (elevator)
 		elevator->LevelingOpen = atof(txtLevelingOpen->GetValue().ToAscii());
+}
+
+void editelevator::On_bNotifyEarly_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->NotifyEarly = atoi(txtNotifyEarly->GetValue().ToAscii());
+}
+
+void editelevator::On_chkRun_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->SetRunState(chkRun->GetValue());
 }

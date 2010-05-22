@@ -1385,6 +1385,11 @@
   <p align="left"><strong>41. LevelingOpen</strong> - distance in feet from the 
     destination floor that the elevator will open the doors. Default is 0.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">LevelingOpen = <em>distance</em></font></p>
+  <p align="left"><strong>42. NotifyEarly</strong> - changes behavior of arrival 
+    notifications (chime and lighting of directional indicator). 0 is the default 
+    and notifies when the elevator stops on the floor. 1 notifies when the elevator 
+    starts the leveling process, and 2 notifies when the elevator starts decelerating.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">NotifyEarly = <em>value</em></font></p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
@@ -1512,13 +1517,14 @@
     and example 4 shows a fire service mode knob being created with 3 positions.</p>
   <p align="left">Available action names: <em>Off</em> (no action), [floor number], 
     <em>Open</em> (open doors), <em>Close</em> (close doors), <em>Cancel</em> 
-    (call cancel), <em>Stop</em> (stop elevator), <em>Alarm</em>, <em>Fire1Off</em> 
-    (fire service phase 1 off), <em>Fire1On</em> (fire service phase 1 on), <em>Fire1Bypass</em> 
-    (fire service phase 1 bypass), <em>Fire2Off</em> (fire service phase 2 off), 
-    <em>Fire2On</em> (fire service phase 2 on), <em>Fire2Hold</em> (fire service 
-    phase 2 hold), <em>UpPeakOn</em> (enable up peak), <em>UpPeakOff</em> (disable 
-    up peak), <em>DownPeakOn</em> (enable down peak), <em>DownPeakOff</em> (disable 
-    down peak), <em>IndOn</em> (enable independent service mode), <em>IndOff</em> 
+    (call cancel), <em>Run</em> (put elevator in run state), <em></em><em>Stop</em> 
+    (put elevator in stop state), <em>EStop</em> (emergency stop), <em></em><em>Alarm</em>, 
+    <em>Fire1Off</em> (fire service phase 1 off), <em>Fire1On</em> (fire service 
+    phase 1 on), <em>Fire1Bypass</em> (fire service phase 1 bypass), <em>Fire2Off</em> 
+    (fire service phase 2 off), <em>Fire2On</em> (fire service phase 2 on), <em>Fire2Hold</em> 
+    (fire service phase 2 hold), <em>UpPeakOn</em> (enable up peak), <em>UpPeakOff</em> 
+    (disable up peak), <em>DownPeakOn</em> (enable down peak), <em>DownPeakOff</em> 
+    (disable down peak), <em>IndOn</em> (enable independent service mode), <em>IndOff</em> 
     (disable independent service), <em>InsOn</em> (enable inspection service mode), 
     <em>InsOff</em> (disable inspection service), <em>AcpOn</em> (enable ACP mode), 
     <em>AcpOff</em> (disable ACP mode), <em>FanOn</em> (enable fan/idle sound), 

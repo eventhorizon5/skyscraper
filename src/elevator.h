@@ -109,7 +109,8 @@ public:
 	int RandomProbability; //probability ratio of random calls, starting with 1 - higher is less frequent
 	float RandomFrequency; //speed in seconds to make each random call
 	bool Fan; //fan enabled status
-	bool ChimeEarly; //play chime and light up indicator at start of leveling instead of end of movement
+	int NotifyEarly; //perform arrival notification earlier (0 for normal, 1 for at start of leveling, 2 for at start of decel)
+	bool Notified; //true if arrival notification has been performed
 
 	//functions
 	Elevator(int number);
@@ -230,6 +231,7 @@ public:
 	void NotifyArrival(int floor);
 	void SetRunState(bool value);
 	bool IsRunning();
+	bool GetArrivalDirection(int floor);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object

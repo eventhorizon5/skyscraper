@@ -413,43 +413,58 @@ void CallButton::Loop(bool direction)
 			if (sbs->Verbose)
 				Report("Checking elevator " + csString(_itoa(elevator->Number, intbuffer, 10)));
 
-			//if elevator is closer than the previously checked one or we're starting the checks
-			if (abs(current - floor) < closest || check == false)
+			//if elevator is running
+			if (elevator->IsRunning() == true)
 			{
-				//and if it's above the current floor and should be called down, or below the
-				//current floor and called up, or on the same floor, or idle
-				if ((current > floor && direction == false) || (current < floor && direction == true) || current == floor || elevator->IsIdle())
+				//if elevator is closer than the previously checked one or we're starting the checks
+				if (abs(current - floor) < closest || check == false)
 				{
-					//and if it's either going the same direction as the call or idle
-					if (elevator->QueuePositionDirection == tmpdirection || elevator->IsIdle())
+					//and if it's above the current floor and should be called down, or below the
+					//current floor and called up, or on the same floor, or idle
+					if ((current > floor && direction == false) || (current < floor && direction == true) || current == floor || elevator->IsIdle())
 					{
-						//and if it's not in any service mode
-						if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
+						//and if it's either going the same direction as the call or idle
+						if (elevator->QueuePositionDirection == tmpdirection || elevator->IsIdle())
 						{
-							if (sbs->Verbose)
-								Report("Marking - closest so far");
-							closest = abs(current - floor);
-							closest_elev = i;
-							check = true;
+							//and if it's not in any service mode
+							if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
+							{
+								if (sbs->Verbose)
+									Report("Marking - closest so far");
+								closest = abs(current - floor);
+								closest_elev = i;
+								check = true;
+							}
+							else if (sbs->Verbose == true)
+								Report("Skipping - in service mode");
 						}
 						else if (sbs->Verbose == true)
-							Report("Skipping - in service mode");
+							Report("Skipping - going a different direction and is not idle");
 					}
 					else if (sbs->Verbose == true)
-						Report("Skipping - going a different direction and is not idle");
+						Report("Skipping - position/direction wrong for call");
 				}
 				else if (sbs->Verbose == true)
-					Report("Skipping - position/direction wrong for call");
+					Report("Skipping - not closer than previous");
 			}
 			else if (sbs->Verbose == true)
-				Report("Skipping - not closer than previous");
+				Report("Skipping - elevator not running");
 		}
 	}
 	else
 	{
-		//set elevator to first elevator if call button only serves one
-		closest_elev = 0;
-		check = true;
+		//set elevator to first elevator if call button only serves one, only if elevator is running
+		if (sbs->GetElevator(Elevators[0])->IsRunning() == true)
+		{
+			closest_elev = 0;
+			check = true;
+		}
+		else
+		{
+			//otherwise turn off call buttons
+			UpLight(false);
+			DownLight(false);
+		}
 	}
 
 	if (check == false)

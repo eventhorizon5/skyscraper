@@ -69,6 +69,7 @@ class editelevator: public wxDialog
 		static const long ID_bDumpFloors;
 		static const long ID_bDumpQueues;
 		static const long ID_CHECKBOX1;
+		static const long ID_chkRun;
 		static const long ID_bCall;
 		static const long ID_bGo;
 		static const long ID_bOpen;
@@ -203,6 +204,9 @@ class editelevator: public wxDialog
 		static const long ID_txtTempDecel;
 		static const long ID_STATICTEXT37;
 		static const long ID_txtErrorOffset;
+		static const long ID_STATICTEXT59;
+		static const long ID_txtNotifyEarly;
+		static const long ID_bNotifyEarly;
 		static const long ID_STATICTEXT45;
 		static const long ID_txtACPFloor;
 		static const long ID_bSetACPFloor;
@@ -280,6 +284,8 @@ class editelevator: public wxDialog
 		void On_bSetLevelingSpeed_Click(wxCommandEvent& event);
 		void On_bSetLevelingOffset_Click(wxCommandEvent& event);
 		void On_bSetLevelingOpen_Click(wxCommandEvent& event);
+		void On_bNotifyEarly_Click(wxCommandEvent& event);
+		void On_chkRun_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -320,6 +326,7 @@ class editelevator: public wxDialog
 		wxBoxSizer* BoxSizer9;
 		wxButton* bSetParkingDelay;
 		wxStaticText* StaticText42;
+		wxCheckBox* chkRun;
 		wxStaticText* StaticText48;
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText25;
@@ -378,6 +385,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText16;
 		wxTextCtrl* txtOriginFloor;
 		wxTextCtrl* txtStopDistance;
+		wxTextCtrl* txtNotifyEarly;
 		wxButton* bRefresh;
 		wxStaticText* StaticText57;
 		wxStaticText* StaticText47;
@@ -426,9 +434,11 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText4;
 		wxButton* bGo;
 		wxButton* bSetLevelingOffset;
+		wxStaticText* StaticText59;
 		wxRadioButton* Fire1Bypass;
 		wxTextCtrl* txtUseSkipFloor;
 		wxBoxSizer* BoxSizer8;
+		wxButton* bNotifyEarly;
 		wxScrollBar* sDoor;
 		wxTextCtrl* txtDirection;
 		wxStaticText* tElevator;

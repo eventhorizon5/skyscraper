@@ -138,20 +138,27 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	//open = Open Doors
 	//close = Close Doors
 	//cancel = Call Cancel
-	//stop = Stop
+	//stop = Emergency Stop
 	//alarm = Alarm
 
 	csArray<csString> textures, names;
+	csString newtype = type;
+	newtype.Downcase();
+
+	//switch 'stop' to 'estop' for compatibility
+	if (newtype == "stop")
+		newtype = "estop";
+
 	int positions = 1;
 	textures.Push(texture);
 	textures.Push(texture_lit);
-	if (IsNumeric(type) == true)
+	if (IsNumeric(newtype) == true)
 	{
 		names.Push("off");
-		names.Push(type);
+		names.Push(newtype);
 	}
 	else
-		names.Push(type);
+		names.Push(newtype);
 	AddControl(sound, row, column, width, height, hoffset, voffset, names, textures);
 
 }
@@ -168,6 +175,7 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	//Cancel = Call Cancel
 	//Run
 	//Stop
+	//EStop (emergency stop)
 	//Alarm
 	//Fire1Off
 	//Fire1On
@@ -350,6 +358,8 @@ void ButtonPanel::Press(int index)
 		elev->SetRunState(true);
 	if (name == "stop")
 		elev->SetRunState(false);
+	if (name == "estop")
+		elev->Stop(true);
 	if (name == "alarm")
 		elev->Alarm();
 	if (name == "fire1off")

@@ -147,8 +147,9 @@ Elevator::Elevator(int number)
 	floorsound = 0;
 	OriginFloor = 0;
 	Fan = true;
-	ChimeEarly = sbs->confman->GetBool("Skyscraper.SBS.Elevator.ChimeEarly", false);
+	NotifyEarly = sbs->confman->GetInt("Skyscraper.SBS.Elevator.NotifyEarly", 0);
 	Running = sbs->confman->GetBool("Skyscraper.SBS.Elevator.Run", true);
+	Notified = false;
 
 	//create timers
 	timer = new Timer(this, true);
@@ -1115,6 +1116,8 @@ void Elevator::MoveElevatorToFloor()
 		FinishedMove = false;
 		csString dir_string;
 
+		Notified = false;
+
 		//get elevator's current altitude
 		elevposition = GetPosition();
 		ElevatorStart = elevposition.y;
@@ -1507,6 +1510,9 @@ void Elevator::MoveElevatorToFloor()
 			else
 				motorsound->Reset();
 			motorsound->Play(false);
+
+			if (NotifyEarly == 2)
+				NotifyArrival(GotoFloor);
 		}
 	}
 	else if (Leveling == false && EmergencyStop == false)
@@ -1518,7 +1524,7 @@ void Elevator::MoveElevatorToFloor()
 				Report("leveling enabled");
 			Leveling = true;
 
-			if (ChimeEarly == true)
+			if (NotifyEarly == 1)
 				NotifyArrival(GotoFloor);
 		}
 	}
@@ -1712,7 +1718,7 @@ void Elevator::FinishMove()
 		else if (sbs->Verbose)
 			Report("user not in elevator - not turning on objects");
 
-		//change directional indicator and disable call button light
+		//notify arrival and disable call button light
 		if (InServiceMode() == false)
 		{
 			//reverse queue if at end of current queue, and if elevator was moving in the correct direction (not moving up for a down call, etc)
@@ -1733,8 +1739,11 @@ void Elevator::FinishMove()
 				}
 			}
 
-			if (ChimeEarly == false)
+			if (NotifyEarly == 0 || Notified == false)
 				NotifyArrival(GotoFloor);
+
+			//disable call button lights
+			SetCallButtons(GotoFloor, GetArrivalDirection(GotoFloor), false);
 		}
 
 		//open doors
@@ -3752,16 +3761,9 @@ void Elevator::RemoveSound(Sound *sound)
 
 void Elevator::NotifyArrival(int floor)
 {
-	bool LightDirection = false; //true for up, false for down
+	//notify on elevator arrival (play chime and turn on related directional indicator lantern)
 
-	if (floor == GetTopFloor())
-		LightDirection = false; //turn on down light if on top floor
-	else if (floor == GetBottomFloor())
-		LightDirection = true; //turn on up light if on bottom floor
-	else if (QueuePositionDirection == 1)
-		LightDirection = true; //turn on up light if queue direction is up
-	else if (QueuePositionDirection == -1)
-		LightDirection = false; //turn on down light if queue direction is down
+	bool LightDirection = GetArrivalDirection(floor); //true for up, false for down
 
 	//play chime sound and change indicator
 	if (LightDirection == true)
@@ -3777,8 +3779,25 @@ void Elevator::NotifyArrival(int floor)
 		SetDirectionalIndicators(false, true);
 	}
 
-	//disable call button lights
-	SetCallButtons(floor, LightDirection, false);
+	Notified = true;
+}
+
+bool Elevator::GetArrivalDirection(int floor)
+{
+	//determine if the directional lantern should show up or down on arrival to the specified floor
+
+	bool LightDirection = false; //true for up, false for down
+
+	if (floor == GetTopFloor())
+		LightDirection = false; //turn on down light if on top floor
+	else if (floor == GetBottomFloor())
+		LightDirection = true; //turn on up light if on bottom floor
+	else if (QueuePositionDirection == 1)
+		LightDirection = true; //turn on up light if queue direction is up
+	else if (QueuePositionDirection == -1)
+		LightDirection = false; //turn on down light if queue direction is down
+
+	return LightDirection;
 }
 
 void Elevator::SetRunState(bool value)
@@ -3795,6 +3814,11 @@ void Elevator::SetRunState(bool value)
 		else
 			Stop(true);
 	}
+
+	if (value == false)
+		Report("Elevator stopped");
+	else
+		Report("Elevator running");
 
 	Running = value;
 }

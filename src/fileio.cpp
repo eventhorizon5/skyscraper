@@ -4474,14 +4474,20 @@ int ScriptProcessor::ProcElevators()
 		}
 		elev->LevelingOpen = leveling;
 	}
-	if (LineData.Slice(0, 10).CompareNoCase("chimeearly") == true)
+	if (LineData.Slice(0, 10).CompareNoCase("notifyearly") == true)
 	{
 		if (temp2check < 0)
 		{
 			ScriptError("Syntax error");
 			return sError;
 		}
-		elev->ChimeEarly = csString(temp2).CompareNoCase("true");
+		float notify;
+		if (!IsNumeric(temp2.GetData(), notify))
+		{
+			ScriptError("Invalid value");
+			return sError;
+		}
+		elev->NotifyEarly = notify;
 	}
 
 	//Print command

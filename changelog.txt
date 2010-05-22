@@ -19,6 +19,9 @@ Version 1.7 (2.0 Alpha 6)
 -elevator parking fixes
 -call cancel now only works in fire phase 2 mode
 -elevators now reroute properly if switched to fire phase 1 mode while moving
+-added object deletion support
+-added elevator run/stop states
+-arrival notification can now be performed at the start of leveling or at deceleration
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------
