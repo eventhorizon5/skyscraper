@@ -4474,6 +4474,15 @@ int ScriptProcessor::ProcElevators()
 		}
 		elev->LevelingOpen = leveling;
 	}
+	if (LineData.Slice(0, 10).CompareNoCase("chimeearly") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		elev->ChimeEarly = csString(temp2).CompareNoCase("true");
+	}
 
 	//Print command
 	if (LineData.Slice(0, 5).CompareNoCase("print") == true)

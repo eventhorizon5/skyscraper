@@ -37,6 +37,7 @@ public:
 	csString command_processed; //processed command used to create object
 	csString context; //script context object was created in
 	int linenum; //script line number where object was created
+	bool parent_deleting; //true if object's parent is deleting object
 
 	//functions
 	Object(bool temporary = false);

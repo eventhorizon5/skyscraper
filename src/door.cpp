@@ -112,7 +112,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	DoorMesh_movable->UpdateMove();
 
 	//create sound object
-	sound = new Sound(object, "DoorSound");
+	sound = new Sound(object, "DoorSound", true);
 	sound->SetPosition(origin);
 
 	//create door
@@ -132,10 +132,29 @@ Door::~Door()
 	//destructor
 
 	if (sound)
+	{
+		sound->object->parent_deleting = true;
 		delete sound;
+	}
 	sound = 0;
 	DoorMesh_movable = 0;
 	DoorMesh_state = 0;
+	if (sbs->FastDelete == false)
+	{
+		sbs->engine->WantToDie(DoorMesh);
+
+		//unregister from parent
+		if (object->parent_deleting == false)
+		{
+			if (csString(object->GetParent()->GetType()) == "Elevator")
+				((Elevator*)object->GetParent()->GetRawObject())->RemoveDoor(this);
+			if (csString(object->GetParent()->GetType()) == "Floor")
+				((Floor*)object->GetParent()->GetRawObject())->RemoveDoor(this);
+			if (csString(object->GetParent()->GetType()) == "Stairs")
+				((Stairs*)object->GetParent()->GetRawObject())->RemoveDoor(this);
+		}
+		sbs->UnregisterDoorCallback(this);
+	}
 	DoorMesh = 0;
 	delete object;
 }

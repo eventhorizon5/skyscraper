@@ -37,6 +37,7 @@ Object::Object(bool temporary)
 	linenum = 0;
 	Number = -1;
 	Temporary = temporary;
+	parent_deleting = false;
 
 	//register object with engine
 	if (temporary == false)

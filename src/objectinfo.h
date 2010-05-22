@@ -49,9 +49,11 @@ class ObjectInfo: public wxDialog
 		wxTreeCtrl* ObjectTree;
 		wxButton* bDelete;
 		wxStaticText* StaticText2;
+		wxTextCtrl* tPermanent;
 		wxStaticText* StaticText6;
 		wxTextCtrl* tContext;
 		wxStaticText* StaticText8;
+		wxStaticText* StaticText11;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText3;
 		wxTextCtrl* tType;
@@ -85,6 +87,8 @@ class ObjectInfo: public wxDialog
 		static const long ID_tName;
 		static const long ID_STATICTEXT2;
 		static const long ID_tType;
+		static const long ID_STATICTEXT11;
+		static const long ID_tPermanent;
 		static const long ID_STATICTEXT3;
 		static const long ID_tParent;
 		static const long ID_STATICTEXT6;

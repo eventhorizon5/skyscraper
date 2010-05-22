@@ -305,6 +305,11 @@ public:
 	csString DumpState();
 	bool DeleteObject(Object *object);
 	bool DeleteObject(int object);
+	void RemoveFloor(Floor *floor);
+	void RemoveElevator(Elevator *elevator);
+	void RemoveShaft(Shaft *shaft);
+	void RemoveStairs(Stairs *stairs);
+	void RemoveSound(Sound *sound);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

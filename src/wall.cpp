@@ -45,9 +45,10 @@ WallObject::~WallObject()
 {
 	//wall object destructor
 
+	if (sbs->FastDelete == false && parent_array && parent_deleting == false && Temporary == false)
+		parent_array->Delete(this);
+
 	handles.DeleteAll();
-	//meshwrapper = 0;
-	//state = 0;
 }
 
 int WallObject::AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)

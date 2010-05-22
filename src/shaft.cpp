@@ -109,7 +109,10 @@ Shaft::~Shaft()
 		for (int j = 0; j < shaft_walls[i].GetSize(); j++)
 		{
 			if (shaft_walls[i][j])
+			{
+				shaft_walls[i][j]->parent_deleting = true;
 				delete shaft_walls[i][j];
+			}
 			shaft_walls[i][j] = 0;
 		}
 	}
@@ -118,9 +121,18 @@ Shaft::~Shaft()
 	for (int i = 0; i < ShaftArray_state.GetSize(); i++)
 		ShaftArray_state[i] = 0;
 	for (int i = 0; i < ShaftArray.GetSize(); i++)
+	{
+		if (sbs->FastDelete == false)
+			sbs->engine->WantToDie(ShaftArray[i]);
 		ShaftArray[i] = 0;
+	}
 	ShaftArray_state.DeleteAll();
 	ShaftArray.DeleteAll();
+
+	//unregister from parent
+	if (sbs->FastDelete == false && object->parent_deleting == false)
+		sbs->RemoveShaft(this);
+
 	delete object;
 }
 

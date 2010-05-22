@@ -44,6 +44,8 @@ const long ObjectInfo::ID_STATICTEXT5 = wxNewId();
 const long ObjectInfo::ID_tName = wxNewId();
 const long ObjectInfo::ID_STATICTEXT2 = wxNewId();
 const long ObjectInfo::ID_tType = wxNewId();
+const long ObjectInfo::ID_STATICTEXT11 = wxNewId();
+const long ObjectInfo::ID_tPermanent = wxNewId();
 const long ObjectInfo::ID_STATICTEXT3 = wxNewId();
 const long ObjectInfo::ID_tParent = wxNewId();
 const long ObjectInfo::ID_STATICTEXT6 = wxNewId();
@@ -103,6 +105,10 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	FlexGridSizer1->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tType = new wxTextCtrl(this, ID_tType, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tType"));
 	FlexGridSizer1->Add(tType, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText11 = new wxStaticText(this, ID_STATICTEXT11, _("Permanent:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
+	FlexGridSizer1->Add(StaticText11, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tPermanent = new wxTextCtrl(this, ID_tPermanent, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPermanent"));
+	FlexGridSizer1->Add(tPermanent, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Parent:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	FlexGridSizer1->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tParent = new wxTextCtrl(this, ID_tParent, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tParent"));
@@ -138,7 +144,6 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	FlexGridSizer2->Add(StaticText9, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tScriptCommand2 = new wxTextCtrl(this, ID_tScriptCommand2, wxEmptyString, wxDefaultPosition, wxSize(-1,40), wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tScriptCommand2"));
 	FlexGridSizer2->Add(tScriptCommand2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer2->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
@@ -202,6 +207,7 @@ void ObjectInfo::Loop()
 	tContext->Clear();
 	tName->Clear();
 	tType->Clear();
+	tPermanent->Clear();
 	tParent->Clear();
 	tParentName->Clear();
 	tParentType->Clear();
@@ -214,6 +220,7 @@ void ObjectInfo::Loop()
 		tScriptCommand->SetValue(wxString::FromAscii(object->command));
 		tScriptCommand2->SetValue(wxString::FromAscii(object->command_processed));
 		tContext->SetValue(wxString::FromAscii(object->context));
+		tPermanent->SetValue(wxString::FromAscii(BoolToString(object->IsPermanent())));
 
 		Object *parent = object->GetParent();
 		if (parent)

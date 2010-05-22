@@ -87,7 +87,10 @@ Stairs::~Stairs()
 	for (int i = 0; i < DoorArray.GetSize(); i++)
 	{
 		if (DoorArray[i].object)
+		{
+			DoorArray[i].object->object->parent_deleting = true;
 			delete DoorArray[i].object;
+		}
 		DoorArray[i].object = 0;
 	}
 	DoorArray.DeleteAll();
@@ -98,7 +101,10 @@ Stairs::~Stairs()
 		for (int j = 0; j < stairs_walls[i].GetSize(); j++)
 		{
 			if (stairs_walls[i][j])
+			{
+				stairs_walls[i][j]->parent_deleting = true;
 				delete stairs_walls[i][j];
+			}
 			stairs_walls[i][j] = 0;
 		}
 	}
@@ -107,15 +113,28 @@ Stairs::~Stairs()
 	for (int i = 0; i < StairArray_state.GetSize(); i++)
 		StairArray_state[i] = 0;
 	for (int i = 0; i < StairArray.GetSize(); i++)
+	{
+		if (sbs->FastDelete == false)
+			sbs->engine->WantToDie(StairArray[i]);
 		StairArray[i] = 0;
+	}
 	for (int i = 0; i < StairDoorArray_state.GetSize(); i++)
 		StairDoorArray_state[i] = 0;
 	for (int i = 0; i < StairDoorArray.GetSize(); i++)
+	{
+		if (sbs->FastDelete == false)
+			sbs->engine->WantToDie(StairDoorArray[i]);
 		StairDoorArray[i] = 0;
+	}
 	StairArray_state.DeleteAll();
 	StairArray.DeleteAll();
 	StairDoorArray_state.DeleteAll();
 	StairDoorArray.DeleteAll();
+
+	//unregister from parent
+	if (sbs->FastDelete == false && object->parent_deleting == false)
+		sbs->RemoveStairs(this);
+
 	delete object;
 }
 
@@ -604,4 +623,17 @@ void Stairs::ReportError(const char *message)
 {
 	//general reporting function
 	sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
+}
+
+void Stairs::RemoveDoor(Door *door)
+{
+	//remove a door from the array (this does not delete the object)
+	for (int i = 0; i < DoorArray.GetSize(); i++)
+	{
+		if (DoorArray[i].object == door)
+		{
+			DoorArray.DeleteIndex(i);
+			return;
+		}
+	}
 }

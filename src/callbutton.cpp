@@ -199,6 +199,20 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 CallButton::~CallButton()
 {
 	CallButton_back_state = 0;
+
+	if (sbs->FastDelete == false)
+	{
+		sbs->engine->WantToDie(CallButtonMeshDown);
+		sbs->engine->WantToDie(CallButtonMeshUp);
+		sbs->engine->WantToDie(CallButtonBackMesh);
+
+		//unregister with parent floor object
+		if (object->parent_deleting == false)
+			sbs->GetFloor(floor)->RemoveCallButton(this);
+
+		sbs->UnregisterCallButtonCallback(this);
+	}
+
 	CallButtonMeshDown = 0;
 	CallButtonMeshUp = 0;
 	CallButtonBackMesh = 0;

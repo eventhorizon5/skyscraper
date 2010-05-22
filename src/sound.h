@@ -37,7 +37,7 @@ public:
 	Object *object; //SBS object
 	csVector3 PositionOffset; //optional position offset, used only by other objects
 
-	Sound(Object *parent, const char *name);
+	Sound(Object *parent, const char *name, bool permanent);
 	~Sound();
 	void SetPosition(csVector3 position);
 	void SetPositionY(float position);

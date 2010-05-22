@@ -66,6 +66,7 @@ public:
 	bool IsDoorMoving(int number);
 	void Report(const char *message);
 	void ReportError(const char *message);
+	void RemoveDoor(Door *door);
 
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array

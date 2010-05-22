@@ -108,10 +108,20 @@ ButtonPanel::~ButtonPanel()
 	for (int i = 0; i < controls.GetSize(); i++)
 	{
 		if (controls[i])
+		{
+			controls[i]->object->parent_deleting = true;
 			delete controls[i];
+		}
 		controls[i] = 0;
 	}
 	//delete panel
+	if (sbs->FastDelete == false)
+	{
+		sbs->engine->WantToDie(ButtonPanelMesh);
+		//unregister with parent floor object
+		if (object->parent_deleting == false)
+			sbs->GetElevator(elevator)->RemovePanel(this);
+	}
 	ButtonPanel_state = 0;
 	ButtonPanelMesh = 0;
 	delete object;
@@ -156,6 +166,7 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	//Open = Open Doors
 	//Close = Close Doors
 	//Cancel = Call Cancel
+	//Run
 	//Stop
 	//Alarm
 	//Fire1Off
@@ -335,9 +346,10 @@ void ButtonPanel::Press(int index)
 	}
 	if (name == "cancel" && elev->FireServicePhase2 == 1)
 		elev->CancelLastRoute();
-	//if (name == "run")
+	if (name == "run")
+		elev->SetRunState(true);
 	if (name == "stop")
-		elev->Stop(true);
+		elev->SetRunState(false);
 	if (name == "alarm")
 		elev->Alarm();
 	if (name == "fire1off")
@@ -491,4 +503,10 @@ int ButtonPanel::GetFloorButtonIndex(int floor)
 		}
 	}
 	return -1;
+}
+
+void ButtonPanel::RemoveControl(Control *control)
+{
+	//remove a control from the array (does not delete the object)
+	controls.Delete(control);
 }

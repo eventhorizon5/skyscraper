@@ -32,14 +32,14 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator
 	//if InElevator is true, the floor parameter is ignored
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->GetFloor(floor)->object, "DirectionalIndicator", "", false);
+	object->SetValues(this, parent, "DirectionalIndicator", "", false);
 
 	IsEnabled = true;
 	elevator_num = elevator;
@@ -266,6 +266,23 @@ DirectionalIndicator::DirectionalIndicator(int elevator, int floor, bool active_
 DirectionalIndicator::~DirectionalIndicator()
 {
 	Directional_back_state = 0;
+
+	if (sbs->FastDelete == false)
+	{
+		sbs->engine->WantToDie(DirectionalMeshBack);
+		sbs->engine->WantToDie(DirectionalMesh);
+		sbs->engine->WantToDie(DirectionalMeshUp);
+		sbs->engine->WantToDie(DirectionalMeshDown);
+
+		//unregister from parent
+		if (object->parent_deleting == false)
+		{
+			if (csString(object->GetParent()->GetType()) == "Elevator")
+				((Elevator*)object->GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
+			if (csString(object->GetParent()->GetType()) == "Floor")
+				((Floor*)object->GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
+		}
+	}
 	DirectionalMeshBack = 0;
 	DirectionalMesh = 0;
 	DirectionalMeshUp = 0;

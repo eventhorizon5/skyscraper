@@ -3730,7 +3730,7 @@ Object* SBS::AddSound(const char *name, const char *filename, csVector3 position
 	//create a looping sound object
 	sounds.SetSize(sounds.GetSize() + 1);
 	Sound *sound = sounds[sounds.GetSize() - 1];
-	sound = new Sound(this->object, name);
+	sound = new Sound(this->object, name, false);
 
 	//set parameters and play sound
 	sound->SetPosition(position);
@@ -4153,15 +4153,28 @@ bool SBS::DeleteObject(Object *object)
 	//object deletion routine
 	//this should be called to delete a simulator object during runtime
 
-	if (!object)
-		return false;
-
-	if (!object->GetRawObject())
-		return false;
-
 	csString number;
 	number = object->GetNumber();
 	bool deleted = false;
+
+	if (!object)
+	{
+		sbs->Report("Invalid object " + number);
+		return false;
+	}
+
+	if (!object->GetRawObject())
+	{
+		sbs->Report("Invalid raw object " + number);
+		return false;
+	}
+
+	//don't delete permanent objects
+	if (object->IsPermanent() == true)
+	{
+		sbs->Report("Cannot delete permanent object " + number);
+		return false;
+	}
 
 	csString type = object->GetType();
 
@@ -4180,9 +4193,7 @@ bool SBS::DeleteObject(Object *object)
 	}
 	if (type == "ButtonPanel")
 	{
-		ButtonPanel *obj = (ButtonPanel*)object->GetRawObject();
-		((Elevator*)object->GetParent()->GetRawObject())->DeletePanel(obj);
-		delete obj;
+		delete (ButtonPanel*)object->GetRawObject();
 		deleted = true;
 	}
 	if (type == "CallButton")
@@ -4192,36 +4203,22 @@ bool SBS::DeleteObject(Object *object)
 	}
 	if (type == "DirectionalIndicator")
 	{
-		DirectionalIndicator *obj = (DirectionalIndicator*)object->GetRawObject();
-		csString parenttype = object->GetParent()->GetType();
-		if (parenttype == "Elevator")
-			((Elevator*)object->GetParent()->GetRawObject())->DeleteDirectionalIndicator(obj);
-		delete obj;
+		delete (DirectionalIndicator*)object->GetRawObject();
 		deleted = true;
 	}
 	if (type == "Door")
 	{
-		Door *obj = (Door*)object->GetRawObject();
-		csString parenttype = object->GetParent()->GetType();
-		if (parenttype == "Elevator")
-			((Elevator*)object->GetParent()->GetRawObject())->DeleteDoor(obj);
-		delete obj;
+		delete (Door*)object->GetRawObject();
 		deleted = true;
 	}
 	if (type == "ElevatorDoor")
 	{
-		ElevatorDoor *obj = (ElevatorDoor*)object->GetRawObject();
-		((Elevator*)object->GetParent()->GetRawObject())->DeleteElevatorDoor(obj);
-		delete obj;
+		delete (ElevatorDoor*)object->GetRawObject();
 		deleted = true;
 	}
 	if (type == "FloorIndicator")
 	{
-		FloorIndicator *obj = (FloorIndicator*)object->GetRawObject();
-		csString parenttype = object->GetParent()->GetType();
-		if (parenttype == "Elevator")
-			((Elevator*)object->GetParent()->GetRawObject())->DeleteFloorIndicator(obj);
-		delete obj;
+		delete (FloorIndicator*)object->GetRawObject();
 		deleted = true;
 	}
 	if (type == "Shaft")
@@ -4245,10 +4242,7 @@ bool SBS::DeleteObject(Object *object)
 	{
 		WallObject *obj = (WallObject*)object->GetRawObject();
 		obj->DeletePolygons();
-		obj->parent_array->Delete(obj);
 		delete obj;
-		//reprepare engine
-		//engine->Prepare();
 		deleted = true;
 	}
 
@@ -4265,4 +4259,63 @@ bool SBS::DeleteObject(int object)
 {
 	//delete object by numeric ID
 	return DeleteObject(GetObject(object));
+}
+
+void SBS::RemoveFloor(Floor *floor)
+{
+	//remove a floor (does not delete the object)
+	for (int i = 0; i < FloorArray.GetSize(); i++)
+	{
+		if (FloorArray[i].object == floor)
+		{
+			FloorArray.DeleteIndex(i);
+			return;
+		}
+	}
+}
+
+void SBS::RemoveElevator(Elevator *elevator)
+{
+	//remove an elevator (does not delete the object)
+	for (int i = 0; i < ElevatorArray.GetSize(); i++)
+	{
+		if (ElevatorArray[i].object == elevator)
+		{
+			ElevatorArray.DeleteIndex(i);
+			return;
+		}
+	}
+}
+
+void SBS::RemoveShaft(Shaft *shaft)
+{
+	//remove a shaft (does not delete the object)
+	for (int i = 0; i < ShaftArray.GetSize(); i++)
+	{
+		if (ShaftArray[i].object == shaft)
+		{
+			ShaftArray.DeleteIndex(i);
+			return;
+		}
+	}
+}
+
+void SBS::RemoveStairs(Stairs *stairs)
+{
+	//remove a stairs object (does not delete the object)
+	for (int i = 0; i < StairsArray.GetSize(); i++)
+	{
+		if (StairsArray[i].object == stairs)
+		{
+			StairsArray.DeleteIndex(i);
+			return;
+		}
+	}
+}
+
+void SBS::RemoveSound(Sound *sound)
+{
+	//remove a sound from the array
+	//this does not delete the object
+	sounds.Delete(sound);
 }

@@ -109,6 +109,7 @@ public:
 	int RandomProbability; //probability ratio of random calls, starting with 1 - higher is less frequent
 	float RandomFrequency; //speed in seconds to make each random call
 	bool Fan; //fan enabled status
+	bool ChimeEarly; //play chime and light up indicator at start of leveling instead of end of movement
 
 	//functions
 	Elevator(int number);
@@ -220,11 +221,15 @@ public:
 	void CloseDoor(int number);
 	bool IsDoorOpen(int number);
 	bool IsDoorMoving(int number);
-	void DeletePanel(ButtonPanel* panel);
-	void DeleteDirectionalIndicator(DirectionalIndicator *indicator);
-	void DeleteElevatorDoor(ElevatorDoor *door);
-	void DeleteFloorIndicator(FloorIndicator *indicator);
-	void DeleteDoor(Door *door);
+	void RemovePanel(ButtonPanel* panel);
+	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);
+	void RemoveElevatorDoor(ElevatorDoor *door);
+	void RemoveFloorIndicator(FloorIndicator *indicator);
+	void RemoveDoor(Door *door);
+	void RemoveSound(Sound *sound);
+	void NotifyArrival(int floor);
+	void SetRunState(bool value);
+	bool IsRunning();
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -267,6 +272,7 @@ private:
 	int ActiveCallDirection; //direction of active call (that the elevator's currently responding too)
 	bool FirstRun; //used for setting first-run items in the run loop
 	int RandomLobby; //lobby level of elevator to use for random predictions
+	bool Running; //is elevator in run mode?
 
 	//functions
 	void MoveElevatorToFloor();
@@ -298,7 +304,7 @@ private:
 	csArray<ButtonPanel*> PanelArray; //elevator button panel objects
 
 	//standard door array
-	csArray<Door*> StdDoorArray; //pointer array to standard oor objects
+	csArray<Door*> StdDoorArray; //pointer array to standard door objects
 
 	//elevator misc internals
 	bool ElevatorIsRunning;

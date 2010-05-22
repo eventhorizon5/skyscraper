@@ -106,6 +106,23 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT11" variable="StaticText11" member="yes">
+									<label>Permanent:</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_tPermanent" variable="tPermanent" member="yes">
+									<size>125,-1</size>
+									<style>wxTE_READONLY|wxTE_CENTRE</style>
+								</object>
+								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
 								<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
 									<label>Parent:</label>
 								</object>
@@ -249,11 +266,6 @@
 							<style>wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE</style>
 						</object>
 						<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-						<border>5</border>
-						<option>1</option>
-					</object>
-					<object class="spacer">
-						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>

@@ -31,11 +31,11 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Sound::Sound(Object *parent, const char *name)
+Sound::Sound(Object *parent, const char *name, bool permanent)
 {
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, parent, "Sound", name, false);
+	object->SetValues(this, parent, "Sound", name, permanent);
 
 	//first set default values
 	PositionOffset = 0;
@@ -58,6 +58,17 @@ Sound::~Sound()
 	sbs->sndrenderer->RemoveStream(sndstream);
 	sbs->sndmanager->RemoveSound(sndwrapper);
 	sbs->DecrementSoundCount();
+
+	//unregister from parent
+	if (object->parent_deleting == false)
+	{
+		if (csString(object->GetParent()->GetType()) == "Elevator")
+			((Elevator*)object->GetParent()->GetRawObject())->RemoveSound(this);
+		if (csString(object->GetParent()->GetType()) == "Floor")
+			((Floor*)object->GetParent()->GetRawObject())->RemoveSound(this);
+		if (csString(object->GetParent()->GetType()) == "SBS")
+			sbs->RemoveSound(this);
+	}
 
 	//destructor
 	directional = 0;

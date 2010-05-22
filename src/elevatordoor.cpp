@@ -75,9 +75,9 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 		ShaftDoors[i] = new DoorWrapper(this, true);
 
 	//create sound object
-	doorsound = new Sound(this->object, "Door Sound");
+	doorsound = new Sound(this->object, "Door Sound", true);
 	doorsound->SetPosition(elevator->Origin);
-	chime = new Sound(this->object, "Chime");
+	chime = new Sound(this->object, "Chime", true);
 }
 
 ElevatorDoor::~ElevatorDoor()
@@ -86,7 +86,10 @@ ElevatorDoor::~ElevatorDoor()
 	for (int i = 0; i < ShaftDoors.GetSize(); i++)
 	{
 		if (ShaftDoors[i])
+		{
+			ShaftDoors[i]->object->parent_deleting = true;
 			delete ShaftDoors[i];
+		}
 		ShaftDoors[i] = 0;
 	}
 
@@ -98,16 +101,29 @@ ElevatorDoor::~ElevatorDoor()
 	}
 	timer = 0;
 	if (doorsound)
+	{
+		doorsound->object->parent_deleting = true;
 		delete doorsound;
+	}
 	doorsound = 0;
 	if (chime)
+	{
+		chime->object->parent_deleting = true;
 		delete chime;
+	}
 	chime = 0;
 
 	//delete main doors
 	if (Doors)
+	{
+		Doors->object->parent_deleting = true;
 		delete Doors;
+	}
 	Doors = 0;
+
+	//unregister from parent
+	if (object->parent_deleting == false)
+		elev->RemoveElevatorDoor(this);
 
 	delete object;
 }
@@ -1254,6 +1270,8 @@ ElevatorDoor::DoorObject::~DoorObject()
 	//clear references
 	movable = 0;
 	state = 0;
+	if (sbs->FastDelete == false)
+		sbs->engine->WantToDie(mesh);
 	mesh = 0;
 }
 

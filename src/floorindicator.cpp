@@ -27,22 +27,23 @@
 #include "sbs.h"
 #include "floorindicator.h"
 #include "elevator.h"
+#include "floor.h"
 
 #include <iengine/movable.h>
 #include <cstool/genmeshbuilder.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-FloorIndicator::FloorIndicator(int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude)
+FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude)
 {
 	//creates a new floor indicator at the specified position
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->GetElevator(elevator)->object, "FloorIndicator", "", false);
+	object->SetValues(this, parent, "FloorIndicator", "", false);
 
 	IsEnabled = true;
-	Elevator = elevator;
+	elev = elevator;
 	Prefix = texture_prefix;
 
 	csString buffer, buffer2;
@@ -73,6 +74,19 @@ FloorIndicator::FloorIndicator(int elevator, const char *texture_prefix, const c
 FloorIndicator::~FloorIndicator()
 {
 	FloorIndicator_movable = 0;
+	if (sbs->FastDelete == false)
+	{
+		sbs->engine->WantToDie(FloorIndicatorMesh);
+
+		//unregister from parent
+		if (object->parent_deleting == false)
+		{
+			if (csString(object->GetParent()->GetType()) == "Elevator")
+				((Elevator*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
+			if (csString(object->GetParent()->GetType()) == "Floor")
+				((Floor*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
+		}
+	}
 	FloorIndicatorMesh = 0;
 	delete object;
 }

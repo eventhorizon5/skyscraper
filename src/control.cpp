@@ -70,7 +70,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, 0, width, height, voffset, 1, 1);
 
 	//create sound object
-	sound = new Sound(this->object, "Control");
+	sound = new Sound(this->object, "Control", true);
 	sound->Load(sound_file);
 }
 
@@ -78,8 +78,24 @@ Control::~Control()
 {
 	TextureArray.DeleteAll();
 	if (sound)
+	{
+		sound->object->parent_deleting = true;
 		delete sound;
+	}
 	sound = 0;
+
+	if (sbs->FastDelete == false)
+	{
+		sbs->engine->WantToDie(ControlMesh);
+
+		//unregister from parent
+		if (object->parent_deleting == false)
+		{
+			if (csString(object->GetParent()->GetType()) == "ButtonPanel")
+				((ButtonPanel*)object->GetParent()->GetRawObject())->RemoveControl(this);
+		}
+	}
+
 	ControlMesh = 0;
 	delete object;
 }

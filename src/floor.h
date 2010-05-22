@@ -102,6 +102,11 @@ public:
 	void CloseDoor(int number);
 	bool IsDoorOpen(int number);
 	bool IsDoorMoving(int number);
+	void RemoveCallButton(CallButton *callbutton);
+	void RemoveFloorIndicator(FloorIndicator *indicator);
+	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);
+	void RemoveDoor(Door *door);
+	void RemoveSound(Sound *sound);
 
 private:
 	char intbuffer[65];

@@ -92,7 +92,10 @@ Floor::~Floor()
 	for (int i = 0; i < CallButtonArray.GetSize(); i++)
 	{
 		if (CallButtonArray[i])
+		{
+			CallButtonArray[i]->object->parent_deleting = true;
 			delete CallButtonArray[i];
+		}
 		CallButtonArray[i] = 0;
 	}
 	CallButtonArray.DeleteAll();
@@ -101,7 +104,10 @@ Floor::~Floor()
 	for (int i = 0; i < DoorArray.GetSize(); i++)
 	{
 		if (DoorArray[i])
+		{
+			DoorArray[i]->object->parent_deleting = true;
 			delete DoorArray[i];
+		}
 		DoorArray[i] = 0;
 	}
 	DoorArray.DeleteAll();
@@ -110,7 +116,10 @@ Floor::~Floor()
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
 		if (FloorIndicatorArray[i])
+		{
+			FloorIndicatorArray[i]->object->parent_deleting = true;
 			delete FloorIndicatorArray[i];
+		}
 	}
 	FloorIndicatorArray.DeleteAll();
 
@@ -118,7 +127,10 @@ Floor::~Floor()
 	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
 	{
 		if (DirIndicatorArray[i])
+		{
+			DirIndicatorArray[i]->object->parent_deleting = true;
 			delete DirIndicatorArray[i];
+		}
 	}
 	DirIndicatorArray.DeleteAll();
 
@@ -126,7 +138,10 @@ Floor::~Floor()
 	for (int i = 0; i < sounds.GetSize(); i++)
 	{
 		if (sounds[i])
+		{
+			sounds[i]->object->parent_deleting = true;
 			delete sounds[i];
+		}
 		sounds[i] = 0;
 	}
 	sounds.DeleteAll();
@@ -135,20 +150,40 @@ Floor::~Floor()
 	for (int i = 0; i < level_walls.GetSize(); i++)
 	{
 		if (level_walls[i])
+		{
+			level_walls[i]->parent_deleting = true;
 			delete level_walls[i];
+		}
 		level_walls[i] = 0;
 	}
 	for (int i = 0; i < interfloor_walls.GetSize(); i++)
 	{
 		if (interfloor_walls[i])
+		{
+			interfloor_walls[i]->parent_deleting = true;
 			delete interfloor_walls[i];
+		}
 		interfloor_walls[i] = 0;
 	}
 	for (int i = 0; i < columnframe_walls.GetSize(); i++)
 	{
 		if (columnframe_walls[i])
+		{
+			columnframe_walls[i]->parent_deleting = true;
 			delete columnframe_walls[i];
+		}
 		columnframe_walls[i] = 0;
+	}
+
+	if (sbs->FastDelete == false)
+	{
+		sbs->engine->WantToDie(ColumnFrame);
+		sbs->engine->WantToDie(Interfloor);
+		sbs->engine->WantToDie(Level);
+
+		//unregister from parent
+		if (object->parent_deleting == false)
+			sbs->RemoveFloor(this);
 	}
 
 	ColumnFrame_state = 0;
@@ -564,7 +599,7 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 
 	if (relative == false)
 	{
-		FloorIndicatorArray[size] = new FloorIndicator(elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
+		FloorIndicatorArray[size] = new FloorIndicator(object, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
 		return FloorIndicatorArray[size]->object;
 	}
 	else
@@ -572,7 +607,7 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicatorArray[size] = new FloorIndicator(elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset);
+			FloorIndicatorArray[size] = new FloorIndicator(object, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset);
 			return FloorIndicatorArray[size]->object;
 		}
 		else
@@ -589,7 +624,7 @@ void Floor::UpdateFloorIndicators(int elevator)
 	{
 		if (FloorIndicatorArray[i])
 		{
-			if (FloorIndicatorArray[i]->Elevator == elevator)
+			if (FloorIndicatorArray[i]->elev == elevator)
 			{
 				Elevator *elev = sbs->GetElevator(elevator);
 				if (elev->UseFloorSkipText == true && elev->IsServicedFloor(elev->GetFloor()) == false)
@@ -612,7 +647,7 @@ void Floor::UpdateFloorIndicators()
 	{
 		if (FloorIndicatorArray[i])
 		{
-			Elevator *elevator = sbs->GetElevator(FloorIndicatorArray[i]->Elevator);
+			Elevator *elevator = sbs->GetElevator(FloorIndicatorArray[i]->elev);
 			if (elevator->UseFloorSkipText == true && elevator->IsServicedFloor(elevator->GetFloor()) == false)
 				value = elevator->GetFloorSkipText();
 			else
@@ -711,7 +746,7 @@ Object* Floor::AddSound(const char *name, const char *filename, csVector3 positi
 	//create a looping sound object
 	sounds.SetSize(sounds.GetSize() + 1);
 	Sound *sound = sounds[sounds.GetSize() - 1];
-	sound = new Sound(this->object, name);
+	sound = new Sound(this->object, name, false);
 
 	//set parameters and play sound
 	sound->SetPosition(csVector3(position.x, GetBase() + position.y, position.z));
@@ -794,7 +829,7 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 
 	int index = DirIndicatorArray.GetSize();
 	DirIndicatorArray.SetSize(index + 1);
-	DirIndicatorArray[index] = new DirectionalIndicator(elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirIndicatorArray[index] = new DirectionalIndicator(object, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	return DirIndicatorArray[index]->object;
 }
 
@@ -923,4 +958,39 @@ bool Floor::IsDoorMoving(int number)
 	else
 		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
+}
+
+void Floor::RemoveCallButton(CallButton *callbutton)
+{
+	//remove a call button object from the array
+	//this does not delete the object
+	CallButtonArray.Delete(callbutton);
+}
+
+void Floor::RemoveFloorIndicator(FloorIndicator *indicator)
+{
+	//remove a floor indicator from the array
+	//this does not delete the object
+	FloorIndicatorArray.Delete(indicator);
+}
+
+void Floor::RemoveDirectionalIndicator(DirectionalIndicator *indicator)
+{
+	//remove a directional indicator from the array
+	//this does not delete the object
+	DirIndicatorArray.Delete(indicator);
+}
+
+void Floor::RemoveDoor(Door *door)
+{
+	//remove a door from the array
+	//this does not delete the object
+	DoorArray.Delete(door);
+}
+
+void Floor::RemoveSound(Sound *sound)
+{
+	//remove a sound from the array
+	//this does not delete the object
+	sounds.Delete(sound);
 }

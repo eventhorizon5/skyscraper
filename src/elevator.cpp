@@ -147,6 +147,8 @@ Elevator::Elevator(int number)
 	floorsound = 0;
 	OriginFloor = 0;
 	Fan = true;
+	ChimeEarly = sbs->confman->GetBool("Skyscraper.SBS.Elevator.ChimeEarly", false);
+	Running = sbs->confman->GetBool("Skyscraper.SBS.Elevator.Run", true);
 
 	//create timers
 	timer = new Timer(this, true);
@@ -194,7 +196,10 @@ Elevator::~Elevator()
 	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
 	{
 		if (DirIndicatorArray[i])
+		{
+			DirIndicatorArray[i]->object->parent_deleting = true;
 			delete DirIndicatorArray[i];
+		}
 	}
 	DirIndicatorArray.DeleteAll();
 
@@ -207,7 +212,10 @@ Elevator::~Elevator()
 		for (int i = 0; i < DoorArray.GetSize(); i++)
 		{
 			if (DoorArray[i])
+			{
+				DoorArray[i]->object->parent_deleting = true;
 				delete DoorArray[i];
+			}
 		}
 	}
 
@@ -218,7 +226,10 @@ Elevator::~Elevator()
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
 		if (FloorIndicatorArray[i])
+		{
+			FloorIndicatorArray[i]->object->parent_deleting = true;
 			delete FloorIndicatorArray[i];
+		}
 	}
 	FloorIndicatorArray.DeleteAll();
 
@@ -229,7 +240,10 @@ Elevator::~Elevator()
 	for (int i = 0; i < PanelArray.GetSize(); i++)
 	{
 		if (PanelArray[i])
+		{
+			PanelArray[i]->object->parent_deleting = true;
 			delete PanelArray[i];
+		}
 		PanelArray[i] = 0;
 	}
 	PanelArray.DeleteAll();
@@ -241,7 +255,10 @@ Elevator::~Elevator()
 	for (int i = 0; i < StdDoorArray.GetSize(); i++)
 	{
 		if (StdDoorArray[i])
+		{
+			StdDoorArray[i]->object->parent_deleting = true;
 			delete StdDoorArray[i];
+		}
 		StdDoorArray[i] = 0;
 	}
 	StdDoorArray.DeleteAll();
@@ -250,22 +267,40 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting objects");
 	if (mainsound)
+	{
+		mainsound->object->parent_deleting = true;
 		delete mainsound;
+	}
 	mainsound = 0;
 	if (alarm)
+	{
+		alarm->object->parent_deleting = true;
 		delete alarm;
+	}
 	alarm = 0;
 	if (floorbeep)
+	{
+		floorbeep->object->parent_deleting = true;
 		delete floorbeep;
+	}
 	floorbeep = 0;
 	if (floorsound)
+	{
+		floorsound->object->parent_deleting = true;
 		delete floorsound;
+	}
 	floorsound = 0;
 	if (motorsound)
+	{
+		motorsound->object->parent_deleting = true;
 		delete motorsound;
+	}
 	motorsound = 0;
 	if (idlesound)
+	{
+		idlesound->object->parent_deleting = true;
 		delete idlesound;
+	}
 	idlesound = 0;
 
 	//delete sounds
@@ -275,7 +310,10 @@ Elevator::~Elevator()
 	for (int i = 0; i < sounds.GetSize(); i++)
 	{
 		if (sounds[i])
+		{
+			sounds[i]->object->parent_deleting = true;
 			delete sounds[i];
+		}
 		sounds[i] = 0;
 	}
 	sounds.DeleteAll();
@@ -284,12 +322,23 @@ Elevator::~Elevator()
 	for (int i = 0; i < elevator_walls.GetSize(); i++)
 	{
 		if (elevator_walls[i])
+		{
+			elevator_walls[i]->parent_deleting = true;
 			delete elevator_walls[i];
+		}
 		elevator_walls[i] = 0;
 	}
 
 	Elevator_movable = 0;
 	Elevator_state = 0;
+	if (sbs->FastDelete == false)
+	{
+		sbs->engine->WantToDie(ElevatorMesh);
+
+		//unregister from parent
+		if (object->parent_deleting == false)
+			sbs->RemoveElevator(this);
+	}
 	ElevatorMesh = 0;
 	delete object;
 }
@@ -406,12 +455,12 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//create sound objects
 	if (sbs->Verbose)
 		Report("creating sound objects");
-	mainsound = new Sound(this->object, "Main");
+	mainsound = new Sound(this->object, "Main", true);
 	mainsound->SetPosition(Origin);
-	idlesound = new Sound(this->object, "Idle");
+	idlesound = new Sound(this->object, "Idle", true);
 	idlesound->SetPosition(Origin);
 	idlesound->Load(CarIdleSound.GetData());
-	motorsound = new Sound(this->object, "Motor");
+	motorsound = new Sound(this->object, "Motor", true);
 	motorsound->SetPosition(Origin);
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != csVector3(0, 0, 0))
@@ -419,11 +468,11 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	else
 		motorsound->SetPositionY(sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->GetBase());
 	MotorPosition = csVector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
-	alarm = new Sound(this->object, "Alarm");
+	alarm = new Sound(this->object, "Alarm", true);
 	alarm->SetPosition(Origin);
-	floorbeep = new Sound(this->object, "Floor Beep");
+	floorbeep = new Sound(this->object, "Floor Beep", true);
 	floorbeep->SetPosition(Origin);
-	floorsound = new Sound(this->object, "Floor Sound");
+	floorsound = new Sound(this->object, "Floor Sound", true);
 	floorsound->SetPosition(Origin);
 
 	//set elevator's floor
@@ -439,6 +488,12 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
 
 	//if doors are open or moving in independent service mode, quit
 	if (IndependentService == true && (AreDoorsOpen() == false || CheckOpenDoor() == true))
@@ -513,6 +568,12 @@ void Elevator::DeleteRoute(int floor, int direction)
 	//Delete call route from elevator routing table
 	//directions are either 1 for up, or -1 for down
 
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
 	if (direction == 1)
 	{
 		//delete floor entry from up queue
@@ -538,6 +599,12 @@ void Elevator::CancelLastRoute()
 	//cancels the last added route
 
 	//LastQueueFloor holds the floor and direction of the last route; array element 0 is the floor and 1 is the direction
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
 
 	if (LastQueueFloor[1] == 0)
 	{
@@ -596,7 +663,6 @@ void Elevator::Stop(bool emergency)
 		return;
 	}
 
-
 	EmergencyStop = true;
 
 	if (emergency == true)
@@ -620,6 +686,10 @@ void Elevator::OpenHatch()
 void Elevator::ProcessCallQueue()
 {
 	//Processes the elevator's call queue, and sends elevators to called floors
+
+	//exit if elevator is not running
+	if (Running == false)
+		return;
 
 	//exit if in inspection service mode
 	if (InspectionService == true)
@@ -918,7 +988,7 @@ void Elevator::MonitorLoop()
 		SetRandomLobby(GetBottomFloor());
 
 	//perform first-run tasks
-	if (FirstRun == true)
+	if (FirstRun == true && Running == true)
 	{
 		FirstRun = false;
 
@@ -998,18 +1068,17 @@ void Elevator::MonitorLoop()
 	}
 
 	//enable auto-park timer if specified
-	if (ParkingDelay > 0)
+	if (ParkingDelay > 0 && Running == true)
 	{
 		if (timer->IsRunning() == false)
 			timer->Start(ParkingDelay * 1000, true);
 	}
 
 	//enable random call timer
-	if (random_timer->IsRunning() == false && RandomActivity == true)
+	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true)
 		random_timer->Start(RandomFrequency * 1000, false);
 
 	//elevator movement
-	//if (MoveElevator == true && (AreDoorsOpen() == false || InspectionService == true))
 	if (MoveElevator == true)
 		MoveElevatorToFloor();
 
@@ -1033,6 +1102,12 @@ void Elevator::MoveElevatorToFloor()
 
 	if (ElevatorIsRunning == false)
 	{
+		if (Running == false)
+		{
+			Report("Elevator not running");
+			return;
+		}
+
 		if (sbs->Verbose)
 			Report("starting elevator movement procedure");
 
@@ -1442,6 +1517,9 @@ void Elevator::MoveElevatorToFloor()
 			if (sbs->Verbose)
 				Report("leveling enabled");
 			Leveling = true;
+
+			if (ChimeEarly == true)
+				NotifyArrival(GotoFloor);
 		}
 	}
 
@@ -1655,33 +1733,8 @@ void Elevator::FinishMove()
 				}
 			}
 
-			bool LightDirection = false; //true for up, false for down
-
-			if (GotoFloor == GetTopFloor())
-				LightDirection = false; //turn on down light if on top floor
-			else if (GotoFloor == GetBottomFloor())
-				LightDirection = true; //turn on up light if on bottom floor
-			else if (QueuePositionDirection == 1)
-				LightDirection = true; //turn on up light if queue direction is up
-			else if (QueuePositionDirection == -1)
-				LightDirection = false; //turn on down light if queue direction is down
-
-			//play chime sound and change indicator
-			if (LightDirection == true)
-			{
-				Chime(0, GotoFloor, true);
-				sbs->GetFloor(GotoFloor)->SetDirectionalIndicators(Number, true, false);
-				SetDirectionalIndicators(true, false);
-			}
-			else
-			{
-				Chime(0, GotoFloor, false);
-				sbs->GetFloor(GotoFloor)->SetDirectionalIndicators(Number, false, true);
-				SetDirectionalIndicators(false, true);
-			}
-
-			//disable call button lights
-			SetCallButtons(GotoFloor, LightDirection, false);
+			if (ChimeEarly == false)
+				NotifyArrival(GotoFloor);
 		}
 
 		//open doors
@@ -1781,7 +1834,7 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 
 	int size = FloorIndicatorArray.GetSize();
 	FloorIndicatorArray.SetSize(size + 1);
-	FloorIndicatorArray[size] = new FloorIndicator(Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
+	FloorIndicatorArray[size] = new FloorIndicator(object, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
 	FloorIndicatorArray[size]->SetPosition(Origin);
 	return FloorIndicatorArray[size]->object;
 }
@@ -2089,6 +2142,12 @@ void Elevator::Go(int floor)
 {
 	//go to specified floor, bypassing the queuing system
 
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
 	//exit if in inspection mode
 	if (InspectionService == true)
 	{
@@ -2109,6 +2168,12 @@ void Elevator::GoToRecallFloor()
 {
 	//for fire service modes; tells the elevator to go to the recall floor (or the alternate recall floor
 	//if the other is not available)
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
 
 	//stop elevator if moving
 	if (IsMoving == true)
@@ -2139,6 +2204,12 @@ void Elevator::EnableACP(bool value)
 {
 	//enable Anti-Crime Protection (ACP) mode
 
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
 	//exit if no change
 	if (ACP == value)
 	{
@@ -2165,6 +2236,12 @@ void Elevator::EnableACP(bool value)
 void Elevator::EnableUpPeak(bool value)
 {
 	//enable Up-Peak mode
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
 
 	//exit if no change
 	if (UpPeak == value)
@@ -2202,6 +2279,12 @@ void Elevator::EnableDownPeak(bool value)
 {
 	//enable Down-Peak mode
 
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
 	//exit if no change
 	if (DownPeak == value)
 	{
@@ -2237,6 +2320,12 @@ void Elevator::EnableDownPeak(bool value)
 void Elevator::EnableIndependentService(bool value)
 {
 	//enable Independent Service (ISC) mode
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
 
 	//exit if no change
 	if (IndependentService == value)
@@ -2336,6 +2425,12 @@ void Elevator::EnableFireService1(int value)
 	//enable Fire Service Phase 1 mode
 	//valid values are 0 (off), 1 (on) or 2 (bypass)
 
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
 	//exit if no change
 	if (FireServicePhase1 == value)
 	{
@@ -2380,6 +2475,12 @@ void Elevator::EnableFireService2(int value)
 {
 	//enable Fire Service Phase 2 mode
 	//valid values are 0 (off), 1 (on) or 2 (hold)
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
 
 	//exit if no change
 	if (FireServicePhase2 == value)
@@ -2489,6 +2590,12 @@ bool Elevator::SetACPFloor(int floor)
 
 bool Elevator::MoveUp()
 {
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
 	//moves elevator upwards if in Inspection Service mode
 	if (InspectionService == false)
 	{
@@ -2521,6 +2628,12 @@ bool Elevator::MoveUp()
 
 bool Elevator::MoveDown()
 {
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
 	//moves elevator downwards if in Inspection Service mode
 	if (InspectionService == false)
 	{
@@ -2554,6 +2667,12 @@ bool Elevator::MoveDown()
 void Elevator::SetGoButton(bool value)
 {
 	//sets the value of the Go button (for Inspection Service mode)
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
 
 	if (InspectionService == false)
 		return;
@@ -2607,7 +2726,7 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 
 	int index = DirIndicatorArray.GetSize();
 	DirIndicatorArray.SetSize(index + 1);
-	DirIndicatorArray[index] = new DirectionalIndicator(Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirIndicatorArray[index] = new DirectionalIndicator(object, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	return DirIndicatorArray[index]->object;
 }
 
@@ -3183,7 +3302,7 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 bool Elevator::IsIdle()
 {
 	//return true if elevator is idle (not moving, doors are closed (unless in a peak mode) and not moving)
-	if (MoveElevator == false && (AreDoorsOpen() == false || UpPeak == true || DownPeak == true) && CheckOpenDoor() == false)
+	if (MoveElevator == false && (AreDoorsOpen() == false || UpPeak == true || DownPeak == true) && CheckOpenDoor() == false && Running == true)
 		return true;
 	else
 		return false;
@@ -3240,7 +3359,7 @@ Object* Elevator::AddSound(const char *name, const char *filename, csVector3 pos
 	//create a looping sound object
 	sounds.SetSize(sounds.GetSize() + 1);
 	Sound *sound = sounds[sounds.GetSize() - 1];
-	sound = new Sound(this->object, name);
+	sound = new Sound(this->object, name, false);
 
 	//set parameters and play sound
 	sound->PositionOffset = position;
@@ -3261,6 +3380,12 @@ Object* Elevator::AddSound(const char *name, const char *filename, csVector3 pos
 
 void Elevator::DeleteActiveRoute()
 {
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
 	//deletes the active route
 	if (sbs->Verbose)
 		Report("deleting active route");
@@ -3271,7 +3396,6 @@ void Elevator::DeleteActiveRoute()
 
 bool Elevator::IsQueueActive()
 {
-	//if ((QueuePositionDirection == 1 && UpQueue.GetSize() != 0) || (QueuePositionDirection == -1 && DownQueue.GetSize() != 0))
 	if (QueuePositionDirection != 0)
 		return true;
 	return false;
@@ -3372,6 +3496,9 @@ bool Elevator::FinishShaftDoors(int number)
 
 void Elevator::Timer::Notify()
 {
+	if (Running == false)
+		return;
+
 	if (IsParkingTimer == true)
 	{
 		//parking timer
@@ -3436,6 +3563,12 @@ void Elevator::SetRandomLobby(int floor)
 void Elevator::SelectFloor(int floor)
 {
 	//press a floor button
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
 
 	int index = 0;
 
@@ -3581,32 +3714,93 @@ bool Elevator::IsDoorMoving(int number)
 	return false;
 }
 
-void Elevator::DeletePanel(ButtonPanel* panel)
+void Elevator::RemovePanel(ButtonPanel* panel)
 {
-	//delete a button panel reference (does not delete the object itself)
+	//remove a button panel reference (does not delete the object itself)
 	PanelArray.Delete(panel);
 }
 
-void Elevator::DeleteDirectionalIndicator(DirectionalIndicator* indicator)
+void Elevator::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 {
-	//delete a directional indicator reference (does not delete the object itself)
+	//remove a directional indicator reference (does not delete the object itself)
 	DirIndicatorArray.Delete(indicator);
 }
 
-void Elevator::DeleteElevatorDoor(ElevatorDoor* door)
+void Elevator::RemoveElevatorDoor(ElevatorDoor* door)
 {
-	//delete an elevator door reference (does not delete the object itself)
+	//remove an elevator door reference (does not delete the object itself)
 	DoorArray.Delete(door);
 }
 
-void Elevator::DeleteFloorIndicator(FloorIndicator* indicator)
+void Elevator::RemoveFloorIndicator(FloorIndicator* indicator)
 {
-	//delete a floor indicator reference (does not delete the object itself)
+	//remove a floor indicator reference (does not delete the object itself)
 	FloorIndicatorArray.Delete(indicator);
 }
 
-void Elevator::DeleteDoor(Door* door)
+void Elevator::RemoveDoor(Door* door)
 {
-	//delete a door reference (does not delete the object itself)
+	//remove a door reference (does not delete the object itself)
 	StdDoorArray.Delete(door);
+}
+
+void Elevator::RemoveSound(Sound *sound)
+{
+	//remove a sound reference (does not delete the object itself)
+	sounds.Delete(sound);
+}
+
+void Elevator::NotifyArrival(int floor)
+{
+	bool LightDirection = false; //true for up, false for down
+
+	if (floor == GetTopFloor())
+		LightDirection = false; //turn on down light if on top floor
+	else if (floor == GetBottomFloor())
+		LightDirection = true; //turn on up light if on bottom floor
+	else if (QueuePositionDirection == 1)
+		LightDirection = true; //turn on up light if queue direction is up
+	else if (QueuePositionDirection == -1)
+		LightDirection = false; //turn on down light if queue direction is down
+
+	//play chime sound and change indicator
+	if (LightDirection == true)
+	{
+		Chime(0, floor, true);
+		sbs->GetFloor(floor)->SetDirectionalIndicators(Number, true, false);
+		SetDirectionalIndicators(true, false);
+	}
+	else
+	{
+		Chime(0, floor, false);
+		sbs->GetFloor(floor)->SetDirectionalIndicators(Number, false, true);
+		SetDirectionalIndicators(false, true);
+	}
+
+	//disable call button lights
+	SetCallButtons(floor, LightDirection, false);
+}
+
+void Elevator::SetRunState(bool value)
+{
+	//set elevator run state (true for run, false for stop)
+
+	if (Running == value)
+		return;
+
+	if (value == false && IsMoving == true)
+	{
+		if (InspectionService == true)
+			Stop(false);
+		else
+			Stop(true);
+	}
+
+	Running = value;
+}
+
+bool Elevator::IsRunning()
+{
+	//return elevator running state
+	return Running;
 }

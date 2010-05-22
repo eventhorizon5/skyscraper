@@ -61,6 +61,7 @@ public:
 	Control* GetControl(int index);
 	void ChangeLight(int floor, bool value);
 	int GetFloorButtonIndex(int floor);
+	void RemoveControl(Control *control);
 
 private:
 	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
