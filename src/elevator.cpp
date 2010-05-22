@@ -2593,7 +2593,7 @@ bool Elevator::MoveUp()
 	if (Running == false)
 	{
 		Report("Elevator not running");
-		return;
+		return false;
 	}
 
 	//moves elevator upwards if in Inspection Service mode
@@ -2631,7 +2631,7 @@ bool Elevator::MoveDown()
 	if (Running == false)
 	{
 		Report("Elevator not running");
-		return;
+		return false;
 	}
 
 	//moves elevator downwards if in Inspection Service mode
@@ -3496,7 +3496,7 @@ bool Elevator::FinishShaftDoors(int number)
 
 void Elevator::Timer::Notify()
 {
-	if (Running == false)
+	if (elevator->IsRunning() == false)
 		return;
 
 	if (IsParkingTimer == true)
