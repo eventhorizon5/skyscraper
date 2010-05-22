@@ -4474,7 +4474,7 @@ int ScriptProcessor::ProcElevators()
 		}
 		elev->LevelingOpen = leveling;
 	}
-	if (LineData.Slice(0, 10).CompareNoCase("notifyearly") == true)
+	if (LineData.Slice(0, 11).CompareNoCase("notifyearly") == true)
 	{
 		if (temp2check < 0)
 		{
