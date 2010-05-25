@@ -474,13 +474,18 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		object_number = atoi(polyname.Slice(1, index - 1));
 		polyname.DeleteAt(0, index + 1);
 	}
-	else if (meshname.Find("(") == 0)
+	if (meshname.Find("(") == 0)
 	{
 		int index = meshname.Find(")");
-		object_number = atoi(meshname.Slice(1, index - 1));
+		if (object_number == 0)
+			object_number = atoi(meshname.Slice(1, index - 1));
 		meshname.DeleteAt(0, index + 1);
 	}
 	number = object_number;
+
+	//exit if object not found
+	if (object_number == 0)
+		return;
 
 	//store parameters of object
 	Object *obj = sbs->GetObject(object_number);
@@ -502,11 +507,11 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	{
 		if (obj)
 		{
-			if (object->GetType() == "Wall")
-			{
+			if (csString(obj->GetType()) == "Wall")
 				sbs->DeleteObject(obj);
-				return;
-			}
+			else
+				sbs->Report("Cannot delete object " + number);
+			return;
 		}
 	}
 
