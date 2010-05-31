@@ -97,9 +97,9 @@
   <p align="left">Information about a certain floor can be obtained elsewhere 
     in the script, by referencing the floor in this manner:</p>
   <p align="left"><font size="2" face="Courier New, Courier, mono">Floor(<em>number</em>).<em>parameter</em></font></p>
-  <p align="left">Available parameters are Altitude, Height, FullHeight and InterfloorHeight. 
+  <p align="left">Available parameters are Base, Altitude, Height, FullHeight and InterfloorHeight. 
     Note that this function must only be called after the specified floor has 
-    been created.</p>
+    been created.<br>If the InterfloorOnTop parameter in the globals section is set to 'false' (the default), then Base refers to the floor's altitude plus interfloor height; otherwise it refers to the altitude.</p>
   <p align="left">Example:<font size="2" face="Courier New, Courier, mono"><br>
     Set 1 = Floor(5).Altitude</font></p>
   <p align="left"><strong><font size="2" face="Courier New, Courier, mono"><br>
@@ -661,6 +661,8 @@
     In the following example, the chosen pack is &quot;noon&quot;, and the file 
     &quot;sky-noon.zip&quot; will be loaded.  Default is "noon".<br>
     <font size="2" face="Courier New, Courier, mono">Sky = noon</font></p>
+  <p align="left"><strong>11. InterfloorOnTop</strong> - determines if the interfloor area should be located at the bottom or top of each floor. Default is false.<br>
+    <font size="2" face="Courier New, Courier, mono">InterfloorOnTop = true</font></p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong> <font size="+1"><a name="Textures"></a>4. The <em>Textures</em> 
     Section</font></strong></p>
@@ -798,6 +800,8 @@
     - contains the current floor's interfloor height (spacing between floors)<br>
     <font size="2" face="Courier New, Courier, mono"><strong>%fullheight%</strong></font> 
     - contains the current floor's total height, including the interfloor height<br>
+    <font size="2" face="Courier New, Courier, mono"><strong>%base%</strong></font>
+    - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default), then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude<br>
   </p>
   <p align="left"><strong>Parameters:</strong></p>
   <p align="left"><strong>1. Name</strong> - the name of the current floor, required<br>
@@ -1130,8 +1134,7 @@
     If cutwalls is true, the function will cut walls; if cutfloors is true, it'll 
     cut floors.</p>
   <p align="left"><strong>21. CutAll</strong> - performs a manual box cut on all 
-    objects associated with the current floor (the level itself, interfloor, shafts 
-    and stairs)<br>
+    objects associated with the current floor (the level itself, interfloor, shafts, stairs and external)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">CutAll x1, y1, z1, 
     x2, y2, z2, cutwalls, cutfloors<br>
     </font>Example: <font size="2" face="Courier New, Courier, mono">CutAll -5, 
