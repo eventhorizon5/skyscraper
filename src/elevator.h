@@ -111,6 +111,7 @@ public:
 	bool Fan; //fan enabled status
 	int NotifyEarly; //perform arrival notification earlier (0 for normal, 1 for at start of leveling, 2 for at start of decel)
 	bool Notified; //true if arrival notification has been performed
+	bool Parking; //is elevator parking?
 
 	//functions
 	Elevator(int number);

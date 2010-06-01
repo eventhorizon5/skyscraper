@@ -150,6 +150,7 @@ Elevator::Elevator(int number)
 	NotifyEarly = sbs->confman->GetInt("Skyscraper.SBS.Elevator.NotifyEarly", 0);
 	Running = sbs->confman->GetBool("Skyscraper.SBS.Elevator.Run", true);
 	Notified = false;
+	Parking = false;
 
 	//create timers
 	timer = new Timer(this, true);
@@ -1069,7 +1070,7 @@ void Elevator::MonitorLoop()
 	}
 
 	//enable auto-park timer if specified
-	if (ParkingDelay > 0 && Running == true)
+	if (ParkingDelay > 0 && Running == true && IsIdle() == true)
 	{
 		if (timer->IsRunning() == false)
 			timer->Start(ParkingDelay * 1000, true);
@@ -1511,7 +1512,7 @@ void Elevator::MoveElevatorToFloor()
 				motorsound->Reset();
 			motorsound->Play(false);
 
-			if (NotifyEarly == 2)
+			if (NotifyEarly == 2 && Parking == false)
 				NotifyArrival(GotoFloor);
 		}
 	}
@@ -1524,7 +1525,7 @@ void Elevator::MoveElevatorToFloor()
 				Report("leveling enabled");
 			Leveling = true;
 
-			if (NotifyEarly == 1)
+			if (NotifyEarly == 1 && Parking == false)
 				NotifyArrival(GotoFloor);
 		}
 	}
@@ -1739,7 +1740,7 @@ void Elevator::FinishMove()
 				}
 			}
 
-			if (NotifyEarly == 0 || Notified == false)
+			if ((NotifyEarly == 0 || Notified == false) && Parking == false)
 				NotifyArrival(GotoFloor);
 
 			//disable call button lights
@@ -1750,7 +1751,8 @@ void Elevator::FinishMove()
 		//do not automatically open doors if in fire service phase 2
 		if (FireServicePhase2 == 0)
 		{
-			OpenDoors();
+			if (Parking == false)
+				OpenDoors();
 
 			//play floor sound if not empty
 			if (FloorSound != "" && UseFloorSounds == true)
@@ -1786,6 +1788,7 @@ void Elevator::FinishMove()
 	//update elevator's floor number
 	ElevatorFloor = GotoFloor;
 
+	Parking = false;
 	FinishedMove = true;
 }
 
@@ -3516,9 +3519,16 @@ void Elevator::Timer::Notify()
 		{
 			int floor = elevator->GetFloor();
 			if (elevator->ParkingFloor > floor)
+			{
 				elevator->AddRoute(elevator->ParkingFloor, 1, false);
+				elevator->Parking = true;
+			}
 			else if (elevator->ParkingFloor < floor)
+			{
 				elevator->AddRoute(elevator->ParkingFloor, -1, false);
+				elevator->Parking = true;
+			}
+			Stop();
 		}
 	}
 	else if (elevator->RandomActivity == true)

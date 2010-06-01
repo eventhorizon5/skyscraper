@@ -181,6 +181,8 @@ const long editelevator::ID_bSetLevelingOffset = wxNewId();
 const long editelevator::ID_STATICTEXT58 = wxNewId();
 const long editelevator::ID_txtLevelingOpen = wxNewId();
 const long editelevator::ID_bSetLevelingOpen = wxNewId();
+const long editelevator::ID_STATICTEXT60 = wxNewId();
+const long editelevator::ID_txtParking = wxNewId();
 const long editelevator::ID_STATICTEXT30 = wxNewId();
 const long editelevator::ID_txtDestFloor = wxNewId();
 const long editelevator::ID_STATICTEXT43 = wxNewId();
@@ -593,6 +595,11 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer6->Add(txtLevelingOpen, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetLevelingOpen = new wxButton(this, ID_bSetLevelingOpen, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetLevelingOpen"));
 	FlexGridSizer6->Add(bSetLevelingOpen, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText60 = new wxStaticText(this, ID_STATICTEXT60, _("Parking:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT60"));
+	FlexGridSizer6->Add(StaticText60, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtParking = new wxTextCtrl(this, ID_txtParking, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtParking"));
+	FlexGridSizer6->Add(txtParking, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer7->Add(FlexGridSizer6, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	BoxSizer3->Add(StaticBoxSizer7, 0, wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	BoxSizer7 = new wxBoxSizer(wxVERTICAL);
@@ -953,6 +960,7 @@ void editelevator::Loop()
 	txtCameraOffset->SetValue(TruncateNumber(elevator->CameraOffset, 2));
 	txtManualGo->SetValue(wxString::FromAscii(BoolToString(elevator->ManualGo)));
 	txtLeveling->SetValue(wxString::FromAscii(BoolToString(elevator->Leveling)));
+	txtParking->SetValue(wxString::FromAscii(BoolToString(elevator->Parking)));
 }
 
 void editelevator::SetMainValues()
