@@ -522,19 +522,44 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, const ch
 	return DoorArray[DoorArray.GetSize() - 1]->object;
 }
 
-float Floor::CalculateAltitude()
+float Floor::CalculateAltitude(bool &check)
 {
 	//calculate the floor's altitude in relation to floor below (or above it, if it's a basement level)
 	//and return the altitude value
+	//if the related floor does not have an adjacent floor, check returns false
 
 	if (Altitude == 0)
 	{
 		if (Number > 0)
-			Altitude = sbs->GetFloor(Number - 1)->Altitude + sbs->GetFloor(Number - 1)->FullHeight();
+		{
+			if (sbs->GetFloor(Number - 1))
+			{
+				Altitude = sbs->GetFloor(Number - 1)->Altitude + sbs->GetFloor(Number - 1)->FullHeight();
+				check = true;
+			}
+			else
+				check = false;
+		}
 		if (Number == -1)
-			Altitude = -FullHeight();
+		{
+			if (sbs->GetFloor(0))
+			{
+				Altitude = -FullHeight();
+				check = true;
+			}
+			else
+				check = false;
+		}
 		if (Number < -1)
-			Altitude = sbs->GetFloor(Number + 1)->Altitude - FullHeight();
+		{
+			if (sbs->GetFloor(Number + 1))
+			{
+				Altitude = sbs->GetFloor(Number + 1)->Altitude - FullHeight();
+				check = true;
+			}
+			else
+				check = false;
+		}
 	}
 	return Altitude;
 }

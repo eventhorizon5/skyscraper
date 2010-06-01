@@ -2595,7 +2595,13 @@ int ScriptProcessor::ProcFloors()
 	if (FloorCheck == 3)
 	{
 		FloorCheck = 0;
-		floor->CalculateAltitude();
+		bool check;
+		floor->CalculateAltitude(check);
+		if (check == false)
+		{
+			ScriptError("Invalid floor number specified - no adjacent floor");
+			return sError;
+		}
 	}
 
 	//Print command

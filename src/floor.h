@@ -80,7 +80,7 @@ public:
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
 	Object* AddDoor(const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
-	float CalculateAltitude();
+	float CalculateAltitude(bool &check);
 	void EnableColumnFrame(bool value);
 	WallObject* ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 	WallObject* ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
