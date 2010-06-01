@@ -522,7 +522,7 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, const ch
 	return DoorArray[DoorArray.GetSize() - 1]->object;
 }
 
-float Floor::CalculateAltitude(bool &check)
+bool Floor::CalculateAltitude()
 {
 	//calculate the floor's altitude in relation to floor below (or above it, if it's a basement level)
 	//and return the altitude value
@@ -533,35 +533,26 @@ float Floor::CalculateAltitude(bool &check)
 		if (Number > 0)
 		{
 			if (sbs->GetFloor(Number - 1))
-			{
 				Altitude = sbs->GetFloor(Number - 1)->Altitude + sbs->GetFloor(Number - 1)->FullHeight();
-				check = true;
-			}
 			else
-				check = false;
+				return false;
 		}
 		if (Number == -1)
 		{
 			if (sbs->GetFloor(0))
-			{
 				Altitude = -FullHeight();
-				check = true;
-			}
 			else
-				check = false;
+				return false;
 		}
 		if (Number < -1)
 		{
 			if (sbs->GetFloor(Number + 1))
-			{
 				Altitude = sbs->GetFloor(Number + 1)->Altitude - FullHeight();
-				check = true;
-			}
 			else
-				check = false;
+				return false;
 		}
 	}
-	return Altitude;
+	return true;
 }
 
 void Floor::EnableColumnFrame(bool value)
