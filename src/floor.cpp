@@ -526,7 +526,7 @@ bool Floor::CalculateAltitude()
 {
 	//calculate the floor's altitude in relation to floor below (or above it, if it's a basement level)
 	//and return the altitude value
-	//if the related floor does not have an adjacent floor, check returns false
+	//if the related floor does not have an adjacent floor, return false
 
 	if (Altitude == 0)
 	{
