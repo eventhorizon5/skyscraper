@@ -1903,14 +1903,14 @@ void Elevator::EnableObjects(bool value)
 	}
 
 	//floor indicators
-	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	/*for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Enabled(value);
-	}
+	}*/
 
 	//interior directional indicators
-	EnableDirectionalIndicators(value);
+	//EnableDirectionalIndicators(value);
 
 	//panels
 	for (int i = 0; i < PanelArray.GetSize(); i++)

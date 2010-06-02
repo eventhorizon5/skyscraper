@@ -477,7 +477,18 @@ void Floor::EnableGroup(bool value)
 	{
 		for (size_t i = 0; i < Group.GetSize(); i++)
 		{
+			//enable other floor
 			sbs->GetFloor(Group[i])->Enabled(value);
+
+			//enable shafts and stairs for other floor
+			for (size_t j = 1; j <= sbs->Shafts(); j++)
+			{
+				sbs->GetShaft(j)->Enabled(Group[i], value, true);
+			}
+			for (size_t j = 1; j <= sbs->StairsNum(); j++)
+			{
+				sbs->GetStairs(j)->Enabled(Group[i], value);
+			}
 		}
 	}
 }
