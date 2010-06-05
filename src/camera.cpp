@@ -483,10 +483,6 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 	number = object_number;
 
-	//exit if object not found
-	if (object_number == 0)
-		return;
-
 	//store parameters of object
 	Object *obj = sbs->GetObject(object_number);
 	if (obj)

@@ -46,7 +46,9 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 	object = new Object();
 	object->SetValues(this, parent, "Control", name, false);
 
-	Name = name;
+	csString objnum;
+	objnum = object->GetNumber();
+	Name = "(" + objnum + ")" + name;
 	Actions = action_names;
 	Direction = direction;
 	IsEnabled = true;
