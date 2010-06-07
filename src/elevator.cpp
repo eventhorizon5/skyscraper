@@ -1575,8 +1575,11 @@ void Elevator::MoveElevatorToFloor()
 		{
 			if (sbs->Verbose)
 				Report("playing floor beep sound");
+			csString newsound = BeepSound;
+			//change the asterisk into the current floor number
+			newsound.ReplaceAll("*", csString(_itoa(GetFloor(), intbuffer, 10)).Trim());
 			floorbeep->Stop();
-			floorbeep->Load(BeepSound);
+			floorbeep->Load(newsound);
 			floorbeep->Loop(false);
 			floorbeep->Play();
 		}
