@@ -92,6 +92,8 @@ Elevator::Elevator(int number)
 	MotorIdleSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.MotorIdleSound", "");
 	AlarmSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.AlarmSound", "bell1.wav");
 	AlarmSoundStop = sbs->confman->GetStr("Skyscraper.SBS.Elevator.AlarmSoundStop", "bell1-stop.wav");
+	UpMessageSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.UpMessage", "");
+	DownMessageSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.DownMessage", "");
 	UseFloorSkipText = false;
 	ACP = sbs->confman->GetBool("Skyscraper.SBS.Elevator.ACP", false);
 	ACPFloor = sbs->confman->GetInt("Skyscraper.SBS.Elevator.ACPFloor", 0);
@@ -304,6 +306,12 @@ Elevator::~Elevator()
 		delete idlesound;
 	}
 	idlesound = 0;
+	if (messagesnd)
+	{
+		messagesnd->object->parent_deleting = true;
+		delete messagesnd;
+	}
+	messagesnd = 0;
 
 	//delete sounds
 	if (sbs->Verbose)
@@ -476,6 +484,8 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	floorbeep->SetPosition(Origin);
 	floorsound = new Sound(this->object, "Floor Sound", true);
 	floorsound->SetPosition(Origin);
+	messagesnd = new Sound(this->object, "Message Sound", true);
+	messagesnd->SetPosition(Origin);
 
 	//set elevator's floor
 	ElevatorFloor = floor;
