@@ -401,8 +401,12 @@ void Camera::CheckStairwell()
 				//if user walked to a different floor, enable new floor and disable previous
 				if (CurrentFloor != FloorTemp)
 				{
-					sbs->GetFloor(FloorTemp)->Enabled(false);
-					sbs->GetFloor(FloorTemp)->EnableGroup(false);
+					if (sbs->GetFloor(CurrentFloor)->IsInGroup(FloorTemp) == false)
+					{
+						//only disable other floor if it's not in a group list
+						sbs->GetFloor(FloorTemp)->Enabled(false);
+						sbs->GetFloor(FloorTemp)->EnableGroup(false);
+					}
 					sbs->GetFloor(CurrentFloor)->Enabled(true);
 					sbs->GetFloor(CurrentFloor)->EnableGroup(true);
 				}

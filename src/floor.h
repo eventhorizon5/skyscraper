@@ -79,6 +79,7 @@ public:
 	void AddGroupFloor(int number);
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
+	bool IsInGroup(int floor);
 	Object* AddDoor(const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	bool CalculateAltitude();
 	void EnableColumnFrame(bool value);

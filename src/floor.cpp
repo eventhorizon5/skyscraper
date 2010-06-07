@@ -493,6 +493,21 @@ void Floor::EnableGroup(bool value)
 	}
 }
 
+bool Floor::IsInGroup(int floor)
+{
+	//return true if the specified floor is in the group listing
+
+	if (Group.GetSize() > 0)
+	{
+		for (size_t i = 0; i < Group.GetSize(); i++)
+		{
+			if (Group[i] == floor)
+				return true;
+		}
+	}
+	return false;
+}
+
 Object* Floor::AddDoor(const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
@@ -548,13 +563,10 @@ bool Floor::CalculateAltitude()
 			else
 				return false;
 		}
+
 		if (Number == -1)
-		{
-			if (sbs->GetFloor(0))
-				Altitude = -FullHeight();
-			else
-				return false;
-		}
+			Altitude = -FullHeight();
+
 		if (Number < -1)
 		{
 			if (sbs->GetFloor(Number + 1))

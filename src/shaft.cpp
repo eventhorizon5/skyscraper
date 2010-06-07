@@ -381,9 +381,15 @@ void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
 	if (value == true)
 	{
 		if (floor - additionalfloors - 1 >= startfloor && floor - additionalfloors - 1 <= endfloor)
-			Enabled(floor - additionalfloors - 1, false, EnableShaftDoors);
+		{
+			if (sbs->GetFloor(floor)->IsInGroup(floor - additionalfloors - 1) == false) //only disable if not in group
+				Enabled(floor - additionalfloors - 1, false, EnableShaftDoors);
+		}
 		if (floor + additionalfloors + 1 >= startfloor && floor + additionalfloors + 1 <= endfloor)
-			Enabled(floor + additionalfloors + 1, false, EnableShaftDoors);
+		{
+			if (sbs->GetFloor(floor)->IsInGroup(floor + additionalfloors + 1) == false) //only disable if not in group
+				Enabled(floor + additionalfloors + 1, false, EnableShaftDoors);
+		}
 	}
 
 	//enable floors within range
