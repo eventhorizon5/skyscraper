@@ -1025,6 +1025,7 @@ void Elevator::MonitorLoop()
 			ACPFloor = 0;
 			SetACPFloor(tmp);
 		}
+		UpdateFloorIndicators();
 	}
 
 	//play idle sound if in elevator, or if doors open
@@ -1571,8 +1572,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//update floor indicators
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-			UpdateFloorIndicators();
+		UpdateFloorIndicators();
 
 		//update floor indicators on current camera floor
 		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
@@ -1691,13 +1691,13 @@ void Elevator::FinishMove()
 		//update floor indicators on current camera floor
 		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
 
+		UpdateFloorIndicators();
+
 		//turn on objects if user is in elevator
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && CameraOffset < Height)
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning on objects");
-
-			UpdateFloorIndicators();
 
 			//turn on floor
 			sbs->GetFloor(GotoFloor)->Enabled(true);
@@ -2399,13 +2399,13 @@ void Elevator::EnableInspectionService(bool value)
 		ResetDoorTimer();
 		Report("Inspection Service mode disabled");
 
+		UpdateFloorIndicators();
+
 		//turn on objects if user is in elevator
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && IsMoving == false)
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning on objects");
-
-			UpdateFloorIndicators();
 
 			//turn on floor
 			sbs->GetFloor(GetFloor())->Enabled(true);
