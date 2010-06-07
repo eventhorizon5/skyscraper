@@ -591,6 +591,10 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		ResetDoorTimer();
 	}
 
+	//play direction message sound
+	if (manual == false && elev->InServiceMode() == false)
+		elev->PlayMessageSound(elev->GetArrivalDirection(elev->GetFloor()));
+
 	DoorIsRunning = false;
 }
 

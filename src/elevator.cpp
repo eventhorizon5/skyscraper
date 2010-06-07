@@ -118,6 +118,7 @@ Elevator::Elevator(int number)
 	checkfirstrun = true;
 	UseFloorBeeps = false;
 	UseFloorSounds = false;
+	UseMessageSounds = false;
 	MotorPosition = csVector3(0, 0, 0);
 	ActiveCallFloor = 0;
 	ActiveCallDirection = 0;
@@ -1378,6 +1379,7 @@ void Elevator::MoveElevatorToFloor()
 	alarm->SetPosition(elevposition);
 	floorbeep->SetPosition(elevposition);
 	floorsound->SetPosition(elevposition);
+	messagesnd->SetPosition(elevposition);
 	for (int i = 0; i < sounds.GetSize(); i++)
 	{
 		if (sounds[i])
@@ -1570,19 +1572,9 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->Verbose)
 			Report("on floor " + csString(_itoa(GetFloor(), intbuffer, 10)));
 
-		//play floor beep sound if not empty
-		if (BeepSound != "" && IsServicedFloor(GetFloor()) == true && UseFloorBeeps == true)
-		{
-			if (sbs->Verbose)
-				Report("playing floor beep sound");
-			csString newsound = BeepSound;
-			//change the asterisk into the current floor number
-			newsound.ReplaceAll("*", csString(_itoa(GetFloor(), intbuffer, 10)).Trim());
-			floorbeep->Stop();
-			floorbeep->Load(newsound);
-			floorbeep->Loop(false);
-			floorbeep->Play();
-		}
+		//play floor beep sound if floor is a serviced floor
+		if (IsServicedFloor(GetFloor()) == true)
+			PlayFloorBeep();
 
 		//update floor indicators
 		UpdateFloorIndicators();
@@ -1648,6 +1640,7 @@ void Elevator::MoveElevatorToFloor()
 		alarm->SetPosition(GetPosition());
 		floorbeep->SetPosition(GetPosition());
 		floorsound->SetPosition(GetPosition());
+		messagesnd->SetPosition(GetPosition());
 		for (int i = 0; i < sounds.GetSize(); i++)
 		{
 			if (sounds[i])
@@ -1767,19 +1760,7 @@ void Elevator::FinishMove()
 			if (Parking == false)
 				OpenDoors();
 
-			//play floor sound if not empty
-			if (FloorSound != "" && UseFloorSounds == true)
-			{
-				if (sbs->Verbose)
-					Report("playing floor sound");
-				csString newsound = FloorSound;
-				//change the asterisk into the current floor number
-				newsound.ReplaceAll("*", csString(_itoa(GotoFloor, intbuffer, 10)).Trim());
-				floorsound->Stop();
-				floorsound->Load(newsound);
-				floorsound->Loop(false);
-				floorsound->Play();
-			}
+			PlayFloorSound();
 		}
 	}
 	else
@@ -3379,6 +3360,27 @@ void Elevator::SetFloorSound(const char *prefix)
 	UseFloorSounds = true;
 }
 
+void Elevator::SetMessageSound(bool direction, const char *filename)
+{
+	//if direction is true, set up message sound; otherwise set down message sound
+
+	if (direction == true)
+	{
+		if (sbs->Verbose)
+			Report("setting up message sound");
+		UpMessageSound = filename;
+		UpMessageSound.Trim();
+	}
+	else
+	{
+		if (sbs->Verbose)
+			Report("setting down message sound");
+		DownMessageSound = filename;
+		DownMessageSound.Trim();
+	}
+	UseMessageSounds = true;
+}
+
 Object* Elevator::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
 {
 	//create a looping sound object
@@ -3850,4 +3852,82 @@ bool Elevator::IsRunning()
 {
 	//return elevator running state
 	return Running;
+}
+
+bool Elevator::PlayFloorBeep()
+{
+	//play floor beep sound
+
+	if (BeepSound == "" || UseFloorBeeps == false)
+		return false;
+
+	if (sbs->Verbose)
+		Report("playing floor beep sound");
+
+	csString newsound = BeepSound;
+	//change the asterisk into the current floor number
+	newsound.ReplaceAll("*", csString(_itoa(GetFloor(), intbuffer, 10)).Trim());
+	floorbeep->Stop();
+	floorbeep->Load(newsound);
+	floorbeep->Loop(false);
+	floorbeep->Play();
+	return true;
+}
+
+bool Elevator::PlayFloorSound()
+{
+	//play floor sound
+
+	if (FloorSound == "" || UseFloorSounds == false)
+		return false;
+
+	if (sbs->Verbose)
+		Report("playing floor sound");
+
+	csString newsound = FloorSound;
+	//change the asterisk into the current floor number
+	newsound.ReplaceAll("*", csString(_itoa(GotoFloor, intbuffer, 10)).Trim());
+	floorsound->Stop();
+	floorsound->Load(newsound);
+	floorsound->Loop(false);
+	floorsound->Play();
+	return true;
+}
+
+bool Elevator::PlayMessageSound(bool direction)
+{
+	//play message sound
+	//if direction is true, play up sound; otherwise play down sound
+
+	if (UseMessageSounds == false)
+		return false;
+	if (direction == true && UpMessageSound == "")
+		return false;
+	if (direction == false && DownMessageSound == "")
+		return false;
+
+	csString newsound;
+
+	if (direction == true)
+	{
+		if (sbs->Verbose)
+			Report("playing up message sound");
+
+		newsound = UpMessageSound;
+	}
+	else
+	{
+		if (sbs->Verbose)
+			Report("playing down message sound");
+
+		newsound = DownMessageSound;
+	}
+
+	//change the asterisk into the current floor number
+	newsound.ReplaceAll("*", csString(_itoa(GetFloor(), intbuffer, 10)).Trim());
+	messagesnd->Stop();
+	messagesnd->Load(newsound);
+	messagesnd->Loop(false);
+	messagesnd->Play();
+	return true;
 }

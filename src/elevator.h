@@ -95,6 +95,7 @@ public:
 	bool AlarmActive; //true if alarm is active
 	bool UseFloorBeeps; //true if floor beeps should be used
 	bool UseFloorSounds; //true if floor sounds should be used
+	bool UseMessageSounds; //true if direction message sounds should be used
 	csVector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
 	csArray<WallObject*> elevator_walls;
@@ -203,6 +204,7 @@ public:
 	void ResetQueue(bool up, bool down);
 	void SetBeepSound(const char *filename);
 	void SetFloorSound(const char *prefix);
+	void SetMessageSound(bool direction, const char *filename);
 	Object* AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
 	void DeleteActiveRoute();
 	bool IsQueueActive();
@@ -235,6 +237,9 @@ public:
 	void SetRunState(bool value);
 	bool IsRunning();
 	bool GetArrivalDirection(int floor);
+	bool PlayFloorBeep();
+	bool PlayFloorSound();
+	bool PlayMessageSound(bool direction);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
