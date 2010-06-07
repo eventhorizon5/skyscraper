@@ -1319,32 +1319,44 @@
     be automatically enabled. If an asterisk (*) is specified, it is replaced 
     with the current floor number.<br>
     Example: <font size="2" face="Courier New, Courier, mono">FloorSound = floor*.wav</font></p>
-  <p align="left"><strong>26. FloorSkipText</strong> - sets the text that will 
+  <p align="left"><strong>26. UpMessage</strong> - the sound file(s) to play after 
+    the elevator arrives at a floor and the doors open - this tells the passengers 
+    that the elevator is going up. There is no default; if this is set, the sounds 
+    will be automatically enabled. If an asterisk (*) is specified, it is replaced 
+    with the current floor number.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">UpMessage = goingup.wav</font></p>
+  <p align="left"><strong>27. DownMessage</strong> - the sound file(s) to play 
+    after the elevator arrives at a floor and the doors open - this tells the 
+    passengers that the elevator is going down. There is no default; if this is 
+    set, the sounds will be automatically enabled. If an asterisk (*) is specified, 
+    it is replaced with the current floor number.<br>
+    Example: <font size="2" face="Courier New, Courier, mono">DownMessage = goingdown.wav</font></p>
+  <p align="left"><strong>28. FloorSkipText</strong> - sets the text that will 
     be shown in the floor indicator when passing non-serviced floors. The texture 
     for this must be loaded for it to show - of you set this to EX for example, 
     the texture it'll load is ButtonEX.jpg. Common values for this are EZ, X, 
     and EX (which stand for Express Zone).<br>
     Example: <font size="2" face="Courier New, Courier, mono">FloorSkipText = 
     EZ </font></p>
-  <p align="left"><strong>27. RecallFloor</strong> - sets the floor the elevator 
+  <p align="left"><strong>29. RecallFloor</strong> - sets the floor the elevator 
     will recall to during fire service phase 1 mode. Default is the lowest serviced 
     floor. <br>
     Example: <font size="2" face="Courier New, Courier, mono">RecallFloor = 5</font></p>
-  <p align="left"><strong>28. AlternateRecallFloor</strong> - sets the alternate 
+  <p align="left"><strong>30. AlternateRecallFloor</strong> - sets the alternate 
     floor the elevator will recall to during fire service phase 1 mode. Default 
     is the highest serviced floor. <br>
     Example: <font size="2" face="Courier New, Courier, mono">AlternateRecallFloor 
     = 6</font></p>
-  <p align="left"><strong>29. ACP</strong> - enables ACP (Anti-Crime Protection) 
+  <p align="left"><strong>31. ACP</strong> - enables ACP (Anti-Crime Protection) 
     mode<br>
     Example: <font size="2" face="Courier New, Courier, mono">ACP = true</font></p>
-  <p align="left"><strong>30. ACPFloor</strong> - sets the floor the elevator 
+  <p align="left"><strong>32. ACPFloor</strong> - sets the floor the elevator 
     will stop at while in ACP mode. Default is the lowest serviced floor. <br>
     Example: <font size="2" face="Courier New, Courier, mono">ACPFloor = 5</font></p>
-  <p align="left"><strong>31. Doors</strong> - sets the number of doors the elevator 
+  <p align="left"><strong>33. Doors</strong> - sets the number of doors the elevator 
     will have. The default is 1. Set to 0 in order to have a doorless elevator.<br>
     Example: <font size="2" face="Courier New, Courier, mono">Doors = 2</font></p>
-  <p align="left"><strong>32. MotorPosition</strong> - sets the position of the 
+  <p align="left"><strong>34. MotorPosition</strong> - sets the position of the 
     motor sound emitter; if this command is not specified, it'll be placed at 
     the base (altitude + interfloor) of the highest floor in the corresponding 
     shaft. The X and Z values are relative of the elevator center.<br>
@@ -1352,44 +1364,44 @@
     y, z<br>
     </font>Example: <font size="2" face="Courier New, Courier, mono">MotorPosition 
     = 2</font></p>
-  <p align="left"><strong>33. QueueResets</strong> - set this to true if you want 
+  <p align="left"><strong>35. QueueResets</strong> - set this to true if you want 
     the elevator to reset the related queue (up or down) after it reaches the 
     last valid entry. If the elevator is moving up for example with this setting 
     on, and you press buttons for floors below you, the elevator will remove those 
     entries after it reaches the highest selected floor.<br>
     Example: <font size="2" face="Courier New, Courier, mono">QueueResets = true</font></p>
-  <p align="left"><strong>34. UpPeak</strong> - enables up peak mode for this 
+  <p align="left"><strong>36. UpPeak</strong> - enables up peak mode for this 
     elevator.<br>
     Example: <font size="2" face="Courier New, Courier, mono">UpPeak = true</font></p>
-  <p align="left"><strong>35. DownPeak</strong> - enables down peak mode for this 
+  <p align="left"><strong>37. DownPeak</strong> - enables down peak mode for this 
     elevator.<br>
     Example: <font size="2" face="Courier New, Courier, mono">DownPeak = true</font></p>
-  <p align="left"><strong>36. IndependentService</strong> - enables independent 
+  <p align="left"><strong>38. IndependentService</strong> - enables independent 
     service mode for this elevator.<br>
     Example: <font size="2" face="Courier New, Courier, mono">IndependentService 
     = true</font></p>
-  <p align="left"><strong>37. InspectionService</strong> - enables inspection 
+  <p align="left"><strong>39. InspectionService</strong> - enables inspection 
     service mode for this elevator.<br>
     Example: <font size="2" face="Courier New, Courier, mono">InspectionService 
     = true</font></p>
-  <p align="left"><strong>38. Parking</strong> - enables automatic elevator parking. 
+  <p align="left"><strong>40. Parking</strong> - enables automatic elevator parking. 
     If this option is used, the elevator will automatically send itself to the 
     specified parking floor after the number of seconds specified in <em>delay</em>. 
     <br>
     Syntax: <font size="2" face="Courier New, Courier, mono">Parking = <em>floor, 
     delay</em></font></p>
-  <p align="left"><strong>39. LevelingSpeed</strong> - elevator's leveling speed. 
+  <p align="left"><strong>41. LevelingSpeed</strong> - elevator's leveling speed. 
     Default is 0.2<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">LevelingSpeed = <em>speed</em></font></p>
-  <p align="left"><strong>40. LevelingOffset</strong> - distance in feet from 
+  <p align="left"><strong>42. LevelingOffset</strong> - distance in feet from 
     the destination floor that the elevator will switch into leveling mode. Default 
     is 0.5<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">LevelingOffset = 
     <em>distance</em></font></p>
-  <p align="left"><strong>41. LevelingOpen</strong> - distance in feet from the 
+  <p align="left"><strong>43. LevelingOpen</strong> - distance in feet from the 
     destination floor that the elevator will open the doors. Default is 0.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">LevelingOpen = <em>distance</em></font></p>
-  <p align="left"><strong>42. NotifyEarly</strong> - changes behavior of arrival 
+  <p align="left"><strong>44. NotifyEarly</strong> - changes behavior of arrival 
     notifications (chime and lighting of directional indicator). 0 is the default 
     and notifies when the elevator stops on the floor. 1 notifies when the elevator 
     starts the leveling process, and 2 notifies when the elevator starts decelerating.<br>

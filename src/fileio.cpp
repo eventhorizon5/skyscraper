@@ -4262,6 +4262,24 @@ int ScriptProcessor::ProcElevators()
 		}
 		elev->SetFloorSound(temp2);
 	}
+	if (LineData.Slice(0, 9).CompareNoCase("upmessage") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		elev->SetMessageSound(true, temp2);
+	}
+	if (LineData.Slice(0, 11).CompareNoCase("downmessage") == true)
+	{
+		if (temp2check < 0)
+		{
+			ScriptError("Syntax error");
+			return sError;
+		}
+		elev->SetMessageSound(false, temp2);
+	}
 	if (LineData.Slice(0, 13).CompareNoCase("floorskiptext") == true)
 	{
 		if (temp2check < 0)
