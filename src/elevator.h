@@ -305,7 +305,7 @@ private:
 	Sound *floorsound;
 	csArray<Sound*> sounds; //generic sounds
 	Sound *messagesnd;
-	Sound *music;
+	Sound *musicsnd;
 
 	//interior directional indicators
 	csArray<DirectionalIndicator*> DirIndicatorArray;

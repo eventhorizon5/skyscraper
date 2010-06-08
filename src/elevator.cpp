@@ -311,13 +311,13 @@ Elevator::~Elevator()
 		delete messagesnd;
 	}
 	messagesnd = 0;
-	if (music)
+	if (musicsnd)
 	{
 		EnableMusic(false);
-		music->object->parent_deleting = true;
-		delete music;
+		musicsnd->object->parent_deleting = true;
+		delete musicsnd;
 	}
-	music = 0;
+	musicsnd = 0;
 
 	//delete sounds
 	if (sbs->Verbose)
@@ -492,8 +492,8 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	floorsound->SetPosition(Origin);
 	messagesnd = new Sound(this->object, "Message Sound", true);
 	messagesnd->SetPosition(Origin);
-	music = new Sound(this->object, "Music Sound", true);
-	music->SetPosition(Origin + MusicPosition);
+	musicsnd = new Sound(this->object, "Music Sound", true);
+	musicsnd->SetPosition(Origin + MusicPosition);
 
 	//set elevator's floor
 	ElevatorFloor = floor;
@@ -1390,7 +1390,7 @@ void Elevator::MoveElevatorToFloor()
 	floorbeep->SetPosition(elevposition);
 	floorsound->SetPosition(elevposition);
 	messagesnd->SetPosition(elevposition);
-	music->SetPosition(elevposition + MusicPosition);
+	musicsnd->SetPosition(elevposition + MusicPosition);
 	for (int i = 0; i < sounds.GetSize(); i++)
 	{
 		if (sounds[i])
@@ -1652,7 +1652,7 @@ void Elevator::MoveElevatorToFloor()
 		floorbeep->SetPosition(GetPosition());
 		floorsound->SetPosition(GetPosition());
 		messagesnd->SetPosition(GetPosition());
-		music->SetPosition(GetPosition() + MusicPosition);
+		musicsnd->SetPosition(GetPosition() + MusicPosition);
 		for (int i = 0; i < sounds.GetSize(); i++)
 		{
 			if (sounds[i])
@@ -3962,21 +3962,21 @@ bool Elevator::EnableMusic(bool value)
 	if (MusicPosition == 0 && Height > 0)
 		MusicPosition = csVector3(0, Height, 0); //set default music position to elevator height
 
-	if (music->IsPlaying() == true && value == false)
+	if (musicsnd->IsPlaying() == true && value == false)
 	{
 		if (sbs->Verbose)
 			Report("stopping music");
-		music->Stop();
+		musicsnd->Stop();
 		return true;
 	}
-	if (music->IsPlaying() == false && value == true)
+	if (musicsnd->IsPlaying() == false && value == true)
 	{
 		if (sbs->Verbose)
 			Report("playing music");
-		music->SetPosition(GetPosition() + MusicPosition);
-		music->Load(Music);
-		music->Loop(true);
-		music->Play(true);
+		musicsnd->SetPosition(GetPosition() + MusicPosition);
+		musicsnd->Load(Music);
+		musicsnd->Loop(true);
+		musicsnd->Play(true);
 		return true;
 	}
 
