@@ -79,6 +79,7 @@ public:
 	csString FloorSound; //prefix of sounds played when reaching a certain floor; usually used for voices
 	csString UpMessageSound; //sound to play with message of elevator's direction if going up
 	csString DownMessageSound; //sound to play with message of elevator's direction if going down
+	csString MusicSound; //elevator music sound to play
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
 	int ACPFloor; //floor to stop at in ACP mode
@@ -115,6 +116,7 @@ public:
 	int NotifyEarly; //perform arrival notification earlier (0 for normal, 1 for at start of leveling, 2 for at start of decel)
 	bool Notified; //true if arrival notification has been performed
 	bool Parking; //is elevator parking?
+	csVector3 MusicPosition; //music emitter position, relative of elevator center
 
 	//functions
 	Elevator(int number);
@@ -205,6 +207,7 @@ public:
 	void SetBeepSound(const char *filename);
 	void SetFloorSound(const char *prefix);
 	void SetMessageSound(bool direction, const char *filename);
+	void SetMusic(const char *filename);
 	Object* AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
 	void DeleteActiveRoute();
 	bool IsQueueActive();
@@ -240,6 +243,7 @@ public:
 	bool PlayFloorBeep();
 	bool PlayFloorSound();
 	bool PlayMessageSound(bool direction);
+	bool EnableMusic(bool value);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -301,6 +305,7 @@ private:
 	Sound *floorsound;
 	csArray<Sound*> sounds; //generic sounds
 	Sound *messagesnd;
+	Sound *music;
 
 	//interior directional indicators
 	csArray<DirectionalIndicator*> DirIndicatorArray;

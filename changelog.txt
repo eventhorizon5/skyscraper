@@ -30,6 +30,8 @@ Version 1.7 (2.0 Alpha 6)
 -Elevator beep sounds now support floor number substitution
 -added support for direction message sounds
 -added separate folder for screenshots, and switched format to jpeg
+-added support for elevator music
+-ShaftCut and CutStairwell commands now cut external objects
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------

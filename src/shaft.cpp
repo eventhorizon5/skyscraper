@@ -330,6 +330,14 @@ void Shaft::CutFloors(bool relative, const csVector2 &start, const csVector2 &en
 			floorptr->Cut(csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, false);
 		floorptr = 0;
 	}
+
+	//cut external
+	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
+	voffset2 = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight() + endvoffset;
+	if (relative == true)
+		sbs->Cut(sbs->External, sbs->External_walls, csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, csVector3(0, 0, 0), csVector3(0, 0, 0));
+	else
+		sbs->Cut(sbs->External, sbs->External_walls, csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, csVector3(0, 0, 0), csVector3(0, 0, 0));
 }
 
 bool Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber, const char *checkstring)

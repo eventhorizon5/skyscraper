@@ -398,6 +398,11 @@ void ButtonPanel::Press(int index)
 		elev->Fan = true;
 	if (name == "fanoff")
 		elev->Fan = false;
+	if (name == "musicon")
+		elev->EnableMusic(true);
+	if (name == "musicoff")
+		elev->EnableMusic(false);
+
 	if (name.StartsWith("hold", false) == true && elev->Direction == 0)
 	{
 		int number = 0;
