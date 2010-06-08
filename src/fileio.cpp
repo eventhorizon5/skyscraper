@@ -4280,14 +4280,14 @@ int ScriptProcessor::ProcElevators()
 		}
 		elev->SetMessageSound(false, temp2);
 	}
-	if (LineData.Slice(0, 10).CompareNoCase("musicsound") == true)
+	if (LineData.Slice(0, 5).CompareNoCase("music") == true)
 	{
 		if (temp2check < 0)
 		{
 			ScriptError("Syntax error");
 			return sError;
 		}
-		elev->MusicSound = temp2;
+		elev->Music = temp2;
 	}
 	if (LineData.Slice(0, 13).CompareNoCase("floorskiptext") == true)
 	{

@@ -79,7 +79,7 @@ public:
 	csString FloorSound; //prefix of sounds played when reaching a certain floor; usually used for voices
 	csString UpMessageSound; //sound to play with message of elevator's direction if going up
 	csString DownMessageSound; //sound to play with message of elevator's direction if going down
-	csString MusicSound; //elevator music sound to play
+	csString Music; //elevator music sound to play
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
 	int ACPFloor; //floor to stop at in ACP mode

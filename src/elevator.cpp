@@ -3956,7 +3956,7 @@ bool Elevator::EnableMusic(bool value)
 {
 	//start or stop elevator music
 
-	if (MusicSound == "")
+	if (Music == "")
 		return false;
 
 	if (MusicPosition == 0 && Height > 0)
@@ -3974,7 +3974,7 @@ bool Elevator::EnableMusic(bool value)
 		if (sbs->Verbose)
 			Report("playing music");
 		music->SetPosition(GetPosition() + MusicPosition);
-		music->Load(MusicSound);
+		music->Load(Music);
 		music->Loop(true);
 		music->Play(true);
 		return true;
