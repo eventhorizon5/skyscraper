@@ -22,6 +22,14 @@ Version 1.7 (2.0 Alpha 6)
 -added object deletion support
 -added elevator run/stop states
 -arrival notification can now be performed at the start of leveling or at deceleration
+-Added adjacent floor check - eliminates crashes related to trying to create floors in the wrong order
+-Elevator doors no longer open when parking
+-some interior elevator objects now stay enabled while user is outside elevator
+-grouped floors now also enable stairwells and shafts
+-Added braille callbuttons
+-Elevator beep sounds now support floor number substitution
+-added support for direction message sounds
+-added separate folder for screenshots, and switched format to jpeg
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------
