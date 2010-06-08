@@ -227,7 +227,7 @@ bool Sound::IsPaused()
 			return false;
 	}
 	else
-		return false;
+		return true;
 }
 
 bool Sound::IsPlaying()

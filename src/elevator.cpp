@@ -117,7 +117,7 @@ Elevator::Elevator(int number)
 	UseFloorBeeps = false;
 	UseFloorSounds = false;
 	UseMessageSounds = false;
-	MotorPosition = csVector3(0, 0, 0);
+	MotorPosition = 0;
 	ActiveCallFloor = 0;
 	ActiveCallDirection = 0;
 	lastdoor_result = 0;
@@ -152,6 +152,7 @@ Elevator::Elevator(int number)
 	Running = sbs->confman->GetBool("Skyscraper.SBS.Elevator.Run", true);
 	Notified = false;
 	Parking = false;
+	MusicPosition = 0;
 
 	//create timers
 	timer = new Timer(this, true);
