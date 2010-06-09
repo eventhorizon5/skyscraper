@@ -1090,7 +1090,7 @@ void Elevator::MonitorLoop()
 
 				musicsound->SetPosition(GetPosition() + MusicPosition);
 				musicsound->Loop(true);
-				musicsound->Play(true);
+				musicsound->Play(false);
 			}
 		}
 	}
