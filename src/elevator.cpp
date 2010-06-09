@@ -153,6 +153,7 @@ Elevator::Elevator(int number)
 	Notified = false;
 	Parking = false;
 	MusicPosition = 0;
+	MusicOn = true;
 
 	//create timers
 	timer = new Timer(this, true);
@@ -312,13 +313,12 @@ Elevator::~Elevator()
 		delete messagesnd;
 	}
 	messagesnd = 0;
-	if (musicsnd)
+	if (musicsound)
 	{
-		EnableMusic(false);
-		musicsnd->object->parent_deleting = true;
-		delete musicsnd;
+		musicsound->object->parent_deleting = true;
+		delete musicsound;
 	}
-	musicsnd = 0;
+	musicsound = 0;
 
 	//delete sounds
 	if (sbs->Verbose)
@@ -476,7 +476,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	mainsound->SetPosition(Origin);
 	idlesound = new Sound(this->object, "Idle", true);
 	idlesound->SetPosition(Origin);
-	idlesound->Load(CarIdleSound.GetData());
+	idlesound->Load(CarIdleSound);
 	motorsound = new Sound(this->object, "Motor", true);
 	motorsound->SetPosition(Origin);
 	//move motor to top of shaft if location not specified, or to location
@@ -493,8 +493,9 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	floorsound->SetPosition(Origin);
 	messagesnd = new Sound(this->object, "Message Sound", true);
 	messagesnd->SetPosition(Origin);
-	musicsnd = new Sound(this->object, "Music Sound", true);
-	musicsnd->SetPosition(Origin + MusicPosition);
+	musicsound = new Sound(this->object, "Music Sound", true);
+	musicsound->SetPosition(Origin + MusicPosition);
+	musicsound->Load(Music);
 
 	//set elevator's floor
 	ElevatorFloor = floor;
@@ -1045,9 +1046,6 @@ void Elevator::MonitorLoop()
 			SetACPFloor(tmp);
 		}
 		UpdateFloorIndicators();
-
-		if (InServiceMode() == false)
-			EnableMusic(true); //turn on elevator music if file is specified
 	}
 
 	//play idle sound if in elevator, or if doors open
@@ -1074,6 +1072,41 @@ void Elevator::MonitorLoop()
 			if (sbs->Verbose)
 				Report("stopping idle sound");
 			idlesound->Stop();
+		}
+	}
+
+	//play music sound if in elevator, or if doors open
+	if (musicsound->IsPlaying() == false && MusicOn == true)
+	{
+		if (InServiceMode() == false)
+		{
+			if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true)
+			{
+				if (sbs->Verbose)
+					Report("playing music");
+		
+				if (MusicPosition == 0 && Height > 0)
+					MusicPosition = csVector3(0, Height, 0); //set default music position to elevator height
+
+				musicsound->SetPosition(GetPosition() + MusicPosition);
+				musicsound->Loop(true);
+				musicsound->Play(true);
+			}
+		}
+	}
+	else
+	{
+		if ((MusicOn == false || InServiceMode() == true) && musicsound->IsPlaying() == true)
+		{
+			if (sbs->Verbose)
+				Report("stopping music");
+			musicsound->Stop();
+		}
+		else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
+		{
+			if (sbs->Verbose)
+				Report("stopping music");
+			musicsound->Stop();
 		}
 	}
 
@@ -1391,7 +1424,7 @@ void Elevator::MoveElevatorToFloor()
 	floorbeep->SetPosition(elevposition);
 	floorsound->SetPosition(elevposition);
 	messagesnd->SetPosition(elevposition);
-	musicsnd->SetPosition(elevposition + MusicPosition);
+	musicsound->SetPosition(elevposition + MusicPosition);
 	for (int i = 0; i < sounds.GetSize(); i++)
 	{
 		if (sounds[i])
@@ -1653,7 +1686,7 @@ void Elevator::MoveElevatorToFloor()
 		floorbeep->SetPosition(GetPosition());
 		floorsound->SetPosition(GetPosition());
 		messagesnd->SetPosition(GetPosition());
-		musicsnd->SetPosition(GetPosition() + MusicPosition);
+		musicsound->SetPosition(GetPosition() + MusicPosition);
 		for (int i = 0; i < sounds.GetSize(); i++)
 		{
 			if (sounds[i])
@@ -2367,13 +2400,11 @@ void Elevator::EnableIndependentService(bool value)
 		ResetQueue(true, true);
 		if (IsMoving == false)
 			OpenDoors();
-		EnableMusic(false);
 		Report("Independent Service mode enabled");
 	}
 	else
 	{
 		ResetDoorTimer();
-		EnableMusic(true);
 		Report("Independent Service mode disabled");
 	}
 }
@@ -2401,7 +2432,6 @@ void Elevator::EnableInspectionService(bool value)
 		ResetQueue(true, true);
 		if (IsMoving == true)
 			Stop(false);
-		EnableMusic(false);
 		Report("Inspection Service mode enabled");
 	}
 	else
@@ -2437,7 +2467,6 @@ void Elevator::EnableInspectionService(bool value)
 
 		if (IsMoving == true)
 			Stop(false);
-		EnableMusic(true);
 	}
 
 	InspectionService = value;
@@ -2482,7 +2511,6 @@ void Elevator::EnableFireService1(int value)
 		if (value == 1)
 		{
 			Report("Fire Service Phase 1 mode set to On");
-			EnableMusic(false);
 			GoToRecallFloor();
 		}
 		else
@@ -2491,7 +2519,6 @@ void Elevator::EnableFireService1(int value)
 	else
 	{
 		ResetDoorTimer();
-		EnableMusic(true);
 		Report("Fire Service Phase 1 mode set to Off");
 	}
 }
@@ -2533,7 +2560,6 @@ void Elevator::EnableFireService2(int value)
 		EnableInspectionService(false);
 		EnableFireService1(0);
 		ResetQueue(true, true);
-		EnableMusic(false);
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
 		else
@@ -2546,7 +2572,6 @@ void Elevator::EnableFireService2(int value)
 	else
 	{
 		ResetDoorTimer();
-		EnableMusic(true);
 		Report("Fire Service Phase 2 mode set to Off");
 		GoToRecallFloor();
 	}
@@ -3951,35 +3976,4 @@ bool Elevator::PlayMessageSound(bool direction)
 	messagesnd->Loop(false);
 	messagesnd->Play();
 	return true;
-}
-
-bool Elevator::EnableMusic(bool value)
-{
-	//start or stop elevator music
-
-	if (Music == "")
-		return false;
-
-	if (MusicPosition == 0 && Height > 0)
-		MusicPosition = csVector3(0, Height, 0); //set default music position to elevator height
-
-	if (musicsnd->IsPlaying() == true && value == false)
-	{
-		if (sbs->Verbose)
-			Report("stopping music");
-		musicsnd->Stop();
-		return true;
-	}
-	if (musicsnd->IsPlaying() == false && value == true)
-	{
-		if (sbs->Verbose)
-			Report("playing music");
-		musicsnd->SetPosition(GetPosition() + MusicPosition);
-		musicsnd->Load(Music);
-		musicsnd->Loop(true);
-		musicsnd->Play(true);
-		return true;
-	}
-
-	return false;
 }

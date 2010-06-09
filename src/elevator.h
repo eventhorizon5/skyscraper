@@ -117,6 +117,7 @@ public:
 	bool Notified; //true if arrival notification has been performed
 	bool Parking; //is elevator parking?
 	csVector3 MusicPosition; //music emitter position, relative of elevator center
+	bool MusicOn; //music enabled status
 
 	//functions
 	Elevator(int number);
@@ -243,7 +244,6 @@ public:
 	bool PlayFloorBeep();
 	bool PlayFloorSound();
 	bool PlayMessageSound(bool direction);
-	bool EnableMusic(bool value);
 
 private:
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -305,7 +305,7 @@ private:
 	Sound *floorsound;
 	csArray<Sound*> sounds; //generic sounds
 	Sound *messagesnd;
-	Sound *musicsnd;
+	Sound *musicsound;
 
 	//interior directional indicators
 	csArray<DirectionalIndicator*> DirIndicatorArray;
