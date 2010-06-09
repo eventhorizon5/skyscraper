@@ -1100,13 +1100,13 @@ void Elevator::MonitorLoop()
 		{
 			if (sbs->Verbose)
 				Report("stopping music");
-			musicsound->Stop();
+			musicsound->Pause();
 		}
 		else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
 		{
 			if (sbs->Verbose)
 				Report("stopping music");
-			musicsound->Stop();
+			musicsound->Pause();
 		}
 	}
 
