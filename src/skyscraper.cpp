@@ -753,7 +753,7 @@ void Skyscraper::GetInput()
 void Skyscraper::Report (const char* msg, ...)
 {
 	csString message = msg;
-	message.ReplaceAll("%", "%%");
+	message.ReplaceAll("%", "%%"); //allow percent signs
 
 	if (rep)
 		rep->ReportNotify("skyscraper", message);
@@ -768,7 +768,7 @@ void Skyscraper::Report (const char* msg, ...)
 bool Skyscraper::ReportError (const char* msg, ...)
 {
 	csString message = msg;
-	message.ReplaceAll("%", "%%");
+	message.ReplaceAll("%", "%%"); //allow percent signs
 
 	if (rep)
 		rep->ReportError("skyscraper", message);
