@@ -1331,32 +1331,32 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 void SBS::Report (const char* msg, ...)
 {
-	va_list arg;
-	va_start (arg, msg);
+	csString message = msg;
+	message.ReplaceAll("%", "%%"); //allow percent signs
+
 	if (rep)
-		rep->ReportV (CS_REPORTER_SEVERITY_NOTIFY, "sbs", msg, arg);
+		rep->ReportNotify("sbs", message);
 	else
 	{
-		csPrintfV (msg, arg);
-		csPrintf ("\n");
+		csPrintf(message);
+		csPrintf("\n");
 		fflush (stdout);
 	}
-	va_end (arg);
 }
 
 bool SBS::ReportError (const char* msg, ...)
 {
-	va_list arg;
-	va_start (arg, msg);
+	csString message = msg;
+	message.ReplaceAll("%", "%%"); //allow percent signs
+
 	if (rep)
-		rep->ReportV (CS_REPORTER_SEVERITY_ERROR, "sbs", msg, arg);
+		rep->ReportError("sbs", message);
 	else
 	{
-		csPrintfV (msg, arg);
-		csPrintf ("\n");
+		csPrintf(message);
+		csPrintf("\n");
 		fflush (stdout);
 	}
-	va_end (arg);
 	return false;
 }
 

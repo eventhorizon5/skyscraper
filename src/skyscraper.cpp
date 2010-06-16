@@ -752,32 +752,32 @@ void Skyscraper::GetInput()
 
 void Skyscraper::Report (const char* msg, ...)
 {
-	va_list arg;
-	va_start (arg, msg);
+	csString message = msg;
+	message.ReplaceAll("%", "%%");
+
 	if (rep)
-		rep->ReportV (CS_REPORTER_SEVERITY_NOTIFY, "skyscraper", msg, arg);
+		rep->ReportNotify("skyscraper", message);
 	else
 	{
-		csPrintfV (msg, arg);
-		csPrintf ("\n");
-		fflush (stdout);
+		csPrintf(message);
+		csPrintf("\n");
+		fflush(stdout);
 	}
-	va_end (arg);
 }
 
 bool Skyscraper::ReportError (const char* msg, ...)
 {
-	va_list arg;
-	va_start (arg, msg);
+	csString message = msg;
+	message.ReplaceAll("%", "%%");
+
 	if (rep)
-		rep->ReportV (CS_REPORTER_SEVERITY_ERROR, "skyscraper", msg, arg);
+		rep->ReportError("skyscraper", message);
 	else
 	{
-		csPrintfV (msg, arg);
-		csPrintf ("\n");
-		fflush (stdout);
+		csPrintf(message);
+		csPrintf("\n");
+		fflush(stdout);
 	}
-	va_end (arg);
 	return false;
 }
 
