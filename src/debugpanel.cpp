@@ -59,6 +59,7 @@ const long DebugPanel::ID_STATICTEXT8 = wxNewId();
 const long DebugPanel::ID_STATICTEXT3 = wxNewId();
 const long DebugPanel::ID_STATICTEXT4 = wxNewId();
 const long DebugPanel::ID_STATICTEXT5 = wxNewId();
+const long DebugPanel::ID_STATICTEXT10 = wxNewId();
 const long DebugPanel::ID_STATICTEXT9 = wxNewId();
 const long DebugPanel::ID_STATICTEXT6 = wxNewId();
 const long DebugPanel::ID_t_camerafloor = wxNewId();
@@ -67,6 +68,7 @@ const long DebugPanel::ID_t_rotation = wxNewId();
 const long DebugPanel::ID_t_elevnumber = wxNewId();
 const long DebugPanel::ID_t_elevfloor = wxNewId();
 const long DebugPanel::ID_t_object = wxNewId();
+const long DebugPanel::ID_t_clickposition = wxNewId();
 const long DebugPanel::ID_t_collision = wxNewId();
 const long DebugPanel::ID_STATICTEXT7 = wxNewId();
 const long DebugPanel::ID_STATICTEXT11 = wxNewId();
@@ -119,6 +121,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer6->Add(StaticText4, 0, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText5 = new wxStaticText(Panel1, ID_STATICTEXT5, _("Selected Object:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
 	BoxSizer6->Add(StaticText5, 0, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText9 = new wxStaticText(Panel1, ID_STATICTEXT10, _("Clicked Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
+	BoxSizer6->Add(StaticText9, 1, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText8 = new wxStaticText(Panel1, ID_STATICTEXT9, _("Last Collision:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
 	BoxSizer6->Add(StaticText8, 1, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText6 = new wxStaticText(Panel1, ID_STATICTEXT6, _("Framerate:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
@@ -137,6 +141,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer7->Add(t_elevfloor, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t_object = new wxStaticText(Panel1, ID_t_object, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_object"));
 	BoxSizer7->Add(t_object, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	t_clickposition = new wxStaticText(Panel1, ID_t_clickposition, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_clickposition"));
+	BoxSizer7->Add(t_clickposition, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t_collision = new wxStaticText(Panel1, ID_t_collision, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_collision"));
 	BoxSizer7->Add(t_collision, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t_framerate = new wxStaticText(Panel1, ID_STATICTEXT7, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_STATICTEXT7"));
@@ -312,6 +318,7 @@ void DebugPanel::Timer::Notify()
 	dp->t_object->SetLabel(wxString::FromAscii(Simcore->camera->GetClickedMeshName()));
 	dp->t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
 	dp->t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh));
+	dp->t_clickposition->SetLabel(TruncateNumber(Simcore->camera->HitPosition.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.z, 2));
 
 	if (Simcore->Elevators() > 0)
 	{

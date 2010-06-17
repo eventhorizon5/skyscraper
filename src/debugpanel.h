@@ -57,6 +57,7 @@ class DebugPanel: public wxFrame
 		static const long ID_STATICTEXT3;
 		static const long ID_STATICTEXT4;
 		static const long ID_STATICTEXT5;
+		static const long ID_STATICTEXT10;
 		static const long ID_STATICTEXT9;
 		static const long ID_STATICTEXT6;
 		static const long ID_t_camerafloor;
@@ -65,6 +66,7 @@ class DebugPanel: public wxFrame
 		static const long ID_t_elevnumber;
 		static const long ID_t_elevfloor;
 		static const long ID_t_object;
+		static const long ID_t_clickposition;
 		static const long ID_t_collision;
 		static const long ID_STATICTEXT7;
 		static const long ID_STATICTEXT11;
@@ -119,6 +121,7 @@ class DebugPanel: public wxFrame
 
 		//(*Declarations(DebugPanel)
 		wxBoxSizer* BoxSizer4;
+		wxStaticText* StaticText9;
 		wxBoxSizer* BoxSizer6;
 		wxCheckBox* chkGravity;
 		wxBoxSizer* BoxSizer5;
@@ -149,6 +152,7 @@ class DebugPanel: public wxFrame
 		wxStaticText* t_object;
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText7;
+		wxStaticText* t_clickposition;
 		wxBoxSizer* BoxSizer1;
 		wxStaticText* t_camerap;
 		wxStaticText* t_camerafloor;

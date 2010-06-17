@@ -75,6 +75,7 @@ public:
 	csString LastHitMesh; //name of last hit mesh
 	bool Freelook; //freelook (mouselook) is enabled/disabled
 	float Freelook_speed; //freelook speed
+	csVector3 HitPosition; //last hit position
 
 	//functions
 	Camera();

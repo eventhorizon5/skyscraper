@@ -93,6 +93,7 @@ Camera::Camera()
 	ResetOnGround = sbs->confman->GetBool("Skyscraper.SBS.Camera.ResetOnGround", false);
 	object_number = 0;
 	object_line = 0;
+	HitPosition = 0;
 }
 
 Camera::~Camera()
@@ -461,6 +462,9 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 
 	//get mesh name
 	meshname = result.mesh->QueryObject()->GetName();
+
+	//get hit/intersection position
+	HitPosition = result.isect;
 
 	//get polygon name
 	csRef<iThingFactoryState> state = scfQueryInterface<iThingFactoryState> (result.mesh->GetMeshObject()->GetFactory());
