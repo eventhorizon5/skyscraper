@@ -464,7 +464,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	meshname = result.mesh->QueryObject()->GetName();
 
 	//get hit/intersection position
-	HitPosition = result.isect;
+	HitPosition = sbs->ToLocal(result.isect);
 
 	//get polygon name
 	csRef<iThingFactoryState> state = scfQueryInterface<iThingFactoryState> (result.mesh->GetMeshObject()->GetFactory());
