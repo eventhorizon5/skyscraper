@@ -3335,7 +3335,7 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 	if (sbs->Verbose)
 		Report("SetCallButtons: getting associated call buttons");
 
-	csArray<int> buttons = sbs->GetFloor(GetFloor())->GetCallButtons(Number);
+	csArray<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
 
 	for (int i = 0; i < buttons.GetSize(); i++)
 	{
