@@ -3339,7 +3339,9 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 
 	for (int i = 0; i < buttons.GetSize(); i++)
 	{
-		CallButton *button = sbs->GetFloor(floor)->CallButtonArray[buttons[i]];
+		CallButton *button = 0;
+		if (sbs->GetFloor(floor)->CallButtonArray.GetSize() > buttons[i])
+			button = sbs->GetFloor(floor)->CallButtonArray[buttons[i]];
 		if (button)
 		{
 			if (direction == true)
@@ -3703,7 +3705,7 @@ void Elevator::HoldDoors(int number)
 	}
 }
 
-Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -3740,7 +3742,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, const
 	StdDoorArray.SetSize(StdDoorArray.GetSize() + 1);
 	csString elevnum = _itoa(Number, intbuffer, 10);
 	csString num = _itoa(StdDoorArray.GetSize() - 1, intbuffer, 10);
-	StdDoorArray[StdDoorArray.GetSize() - 1] = new Door(this->object, "Elevator " + elevnum + ":Door " + num, open_sound, close_sound, texture, thickness, direction, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	StdDoorArray[StdDoorArray.GetSize() - 1] = new Door(this->object, "Elevator " + elevnum + ":Door " + num, open_sound, close_sound, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
 	return StdDoorArray[StdDoorArray.GetSize() - 1]->object;
 }
 

@@ -41,10 +41,11 @@ public:
 	bool OpenDoor; //open or close door?
 	bool Clockwise; //if door should rotate clockwise
 	bool IsEnabled;
+	float Speed; //rotation speed
 	csString OpenSound; //opening sound
 	csString CloseSound; //closing sound
 
-	Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
+	Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	~Door();
 	void Open();
 	void Close();

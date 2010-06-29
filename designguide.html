@@ -557,8 +557,9 @@
     location, and performs a wall cut on that area (this must be called after 
     the associated wall is created)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor <em> opensound, 
-    closesound, texturename, thickness</em>, <em>direction, CenterX</em>, <em>CenterZ</em>, 
-    <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
+    closesound, texturename, thickness</em>, <em>direction, speed, CenterX</em>, 
+    <em>CenterZ</em>, <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, 
+    <em>th</em></font></p>
   <p align="left">Direction specifies the direction the door faces (the side in 
     which the handle is on the left) and also the direction it opens. These are 
     the values:<br>
@@ -569,7 +570,9 @@
     5 - faces front, opens front<br>
     6 - faces front, opens back<br>
     7 - faces back, opens back<br>
-    8 - faces back, opens front<br>
+    8 - faces back, opens front</p>
+  <p align="left">The default door speed is 75; you can also specify 0 for the 
+    speed to use the system default.<br>
   </p>
   <p align="left"><strong>16. AddStairsDoor</strong> - adds a textured door for 
     the specified stairwell, in a location relative to the stairwell's center. 
@@ -577,7 +580,7 @@
     associated wall is created)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsDoor <em> 
     number, opensound, closesound, texturename, thickness</em>, <em>direction, 
-    CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>, <em>voffset</em>, 
+    speed, CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>, <em>voffset</em>, 
     <em>tw</em>, <em>th</em></font></p>
   <p align="left">Number specifies the stairwell number. Direction specifies the 
     direction the door faces and also the direction it opens. For values of this, 
@@ -1284,8 +1287,9 @@
   <p align="left"><strong>19. AddDoor</strong> - adds a textured door in the specified 
     location, which moves with the elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor <em> opensound, 
-    closesound, texturename, thickness</em>, <em>direction, CenterX</em>, <em>CenterZ</em>, 
-    <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
+    closesound, texturename, thickness</em>, <em>direction, speed, CenterX</em>, 
+    <em>CenterZ</em>, <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, 
+    <em>th</em></font></p>
   <p align="left">Direction specifies the direction the door faces (the side in 
     which the handle is on the left) and also the direction it opens. These are 
     the values:<br>

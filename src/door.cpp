@@ -33,7 +33,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -62,6 +62,14 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	OpenDoor = false;
 	OpenSound = open_sound;
 	CloseSound = close_sound;
+	Speed = speed;
+
+	//set speed to default value if invalid
+	if (Speed <= 0)
+		Speed = sbs->confman->GetFloat("Skyscraper.SBS.DoorSpeed", 75.0);
+
+	if (Speed <= 0)
+		Speed = 75;
 
 	//set origin to location of the door's hinge/pivot point and set up door coordinates
 	if (Direction == 1 || Direction == 2)
@@ -203,16 +211,16 @@ void Door::MoveDoor()
 	if (Clockwise == true)
 	{
 		if (OpenDoor == true)
-			rotation += 75 * sbs->delta;
+			rotation += Speed * sbs->delta;
 		else
-			rotation -= 75 * sbs->delta;
+			rotation -= Speed * sbs->delta;
 	}
 	else
 	{
 		if (OpenDoor == true)
-			rotation -= 75 * sbs->delta;
+			rotation -= Speed * sbs->delta;
 		else
-			rotation += 75 * sbs->delta;
+			rotation += Speed * sbs->delta;
 	}
 
 	//if opened fully, set state to opened
