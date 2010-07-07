@@ -34,6 +34,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
+#include "revsbs.h"
 
 #ifdef _WIN32
 	CS_IMPLEMENT_FOREIGN_DLL
@@ -44,7 +45,7 @@ SBS *sbs; //self reference
 SBS::SBS()
 {
 	sbs = this;
-	version = "0.7";
+	version = "0.7.0." + csString(SVN_REVSTR);
 	version_state = "Alpha";
 
 	//set up SBS object

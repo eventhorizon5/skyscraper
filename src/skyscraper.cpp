@@ -31,6 +31,7 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
+#include "revmain.h"
 
 CS_IMPLEMENT_APPLICATION
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
@@ -76,6 +77,7 @@ int main (int argc, char* argv[])
 bool Skyscraper::OnInit(void)
 {
 	version = "1.7";
+	version_rev = SVN_REVSTR;
 	version_state = "Alpha";
 	skyscraper = this;
 	MouseDown = false;
@@ -179,11 +181,11 @@ void Skyscraper::UnloadSim()
 	Simcore = 0;
 }
 
-MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT("Skyscraper 1.7 Alpha"), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
+MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
 {
 	this->Center();
+	this->SetTitle(wxString("Skyscraper ") + wxString(skyscraper->version) + wxString(" ") + wxString(skyscraper->version_state) + wxString(" (rev ") + wxString(skyscraper->version_rev) + wxString(")"));
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
-	//this->SetTitle(wxString::FromAscii(windowtitle));
 }
 
 MainScreen::~MainScreen()
