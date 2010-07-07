@@ -4,6 +4,7 @@ BUILDTOP ?= "@top_builddir@" ;
 SubDir TOP ;
 
 IncludeDir ;
+IncludeDir svnrev ;
 IncludeDir src ;
 IncludeDir $(BUILDTOP) : : literal transient ;
 
@@ -114,4 +115,5 @@ MsvcGenConfig WX.LIBS.DEBUG : "wxbase28d.lib wxmsw28d_core.lib" ;
 #MsvcGenConfig SUPERCOOL.LIBS : supercool.lib ;
 #MsvcGenConfig SUPERCOOL.LIBS.DEBUG : supercooldebug.lib ;
 
+SubInclude TOP svnrev ;
 SubInclude TOP src ;
