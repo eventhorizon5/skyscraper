@@ -24,7 +24,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="..\svnrev\svnrev.exe -o..\src\revmain.h -i ..\src\cameracontrol.* ..\src\console.* ..\src\debugpanel.* ..\src/editelevator.* ..\src\fileio.* ..\src\keydialog.* ..\src\meshcontrol.* ..\src\objectinfo.* ..\src\skyscraper.* ..\src\stackwalker.* ..\src\stats.* ..\src\textwindow.* ..\src\uexception.h"
+				CommandLine="kill ..\src\revmain.h&#x0D;&#x0A;..\svnrev\svnrev.exe -o..\src\revmain.h -i ..\src\cameracontrol.* ..\src\console.* ..\src\debugpanel.* ..\src/editelevator.* ..\src\fileio.* ..\src\keydialog.* ..\src\meshcontrol.* ..\src\objectinfo.* ..\src\skyscraper.* ..\src\stackwalker.* ..\src\stats.* ..\src\textwindow.* ..\src\uexception.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -131,7 +131,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="..\svnrev\svnrev.exe -o..\src\revmain.h -i ..\src\cameracontrol.* ..\src\console.* ..\src\debugpanel.* ..\src/editelevator.* ..\src\fileio.* ..\src\keydialog.* ..\src\meshcontrol.* ..\src\objectinfo.* ..\src\skyscraper.* ..\src\stackwalker.* ..\src\stats.* ..\src\textwindow.* ..\src\uexception.h"
+				CommandLine="kill ..\src\revmain.h&#x0D;&#x0A;..\svnrev\svnrev.exe -o..\src\revmain.h -i ..\src\cameracontrol.* ..\src\console.* ..\src\debugpanel.* ..\src/editelevator.* ..\src\fileio.* ..\src\keydialog.* ..\src\meshcontrol.* ..\src\objectinfo.* ..\src\skyscraper.* ..\src\stackwalker.* ..\src\stats.* ..\src\textwindow.* ..\src\uexception.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"

@@ -25,7 +25,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="..\svnrev\svnrev.exe -o..\src\revsbs.h -i ..\src\buttonpanel.* ..\src\callbutton.* ..\src\camera.* ..\src\control.* ..\src\directional.* ..\src\door.* ..\src\elevator.* ..\src\elevatordoor.* ..\src\floor.* ..\src\floorindicator.* ..\src\globals.* ..\src\object.* ..\src\sbs.* ..\src\shaft.* ..\src\sound.* ..\src\stairs.* ..\src\unix.* ..\src\wall.*"
+				CommandLine="kill ..\src\revsbs.h&#x0D;&#x0A;..\svnrev\svnrev.exe -o..\src\revsbs.h -i ..\src\buttonpanel.* ..\src\callbutton.* ..\src\camera.* ..\src\control.* ..\src\directional.* ..\src\door.* ..\src\elevator.* ..\src\elevatordoor.* ..\src\floor.* ..\src\floorindicator.* ..\src\globals.* ..\src\object.* ..\src\sbs.* ..\src\shaft.* ..\src\sound.* ..\src\stairs.* ..\src\unix.* ..\src\wall.*"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -117,7 +117,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="..\svnrev\svnrev.exe -o..\src\revsbs.h -i ..\src\buttonpanel.* ..\src\callbutton.* ..\src\camera.* ..\src\control.* ..\src\directional.* ..\src\door.* ..\src\elevator.* ..\src\elevatordoor.* ..\src\floor.* ..\src\floorindicator.* ..\src\globals.* ..\src\object.* ..\src\sbs.* ..\src\shaft.* ..\src\sound.* ..\src\stairs.* ..\src\unix.* ..\src\wall.*"
+				CommandLine="kill ..\src\revsbs.h&#x0D;&#x0A;..\svnrev\svnrev.exe -o..\src\revsbs.h -i ..\src\buttonpanel.* ..\src\callbutton.* ..\src\camera.* ..\src\control.* ..\src\directional.* ..\src\door.* ..\src\elevator.* ..\src\elevatordoor.* ..\src\floor.* ..\src\floorindicator.* ..\src\globals.* ..\src\object.* ..\src\sbs.* ..\src\shaft.* ..\src\sound.* ..\src\stairs.* ..\src\unix.* ..\src\wall.*"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
