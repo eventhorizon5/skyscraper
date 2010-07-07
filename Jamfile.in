@@ -116,4 +116,30 @@ MsvcGenConfig WX.LIBS.DEBUG : "wxbase28d.lib wxmsw28d_core.lib" ;
 #MsvcGenConfig SUPERCOOL.LIBS.DEBUG : supercooldebug.lib ;
 
 SubInclude TOP svnrev ;
+
+rule GetVersionsSBS1
+{
+    Depends files : $(<) ;
+    GetVersionsSBS $(<) ;
+}
+
+rule GetVersionsMain1
+{
+    Depends files : $(<) ;
+    GetVersionsMain $(<) ;
+}
+
+actions GetVersionsSBS
+{
+    svnrev/svnrev -o$(<) -i src/buttonpanel.* src/callbutton.* src/camera.* src/control.* src/directional.* src/door.* src/elevator.* src/elevatordoor.* src/floor.* src/floorindicator.* src/globals.* src/object.* src/sbs.* src/shaft.* src/sound.* src/stairs.* src/unix.* src/wall.*
+}
+
+actions GetVersionsMain
+{
+    svnrev/svnrev -o$(<) -i src/cameracontrol.* src/console.* src/debugpanel.* src/editelevator.* src/fileio.* src/keydialog.* src/meshcontrol.* src/objectinfo.* src/skyscraper.* src/stackwalker.* src/stats.* src/textwindow.* src/uexception.h
+}
+
+GetVersionsSBS1 src/revsbs.h ;
+GetVersionsMain1 src/revmain.h ;
+
 SubInclude TOP src ;
