@@ -1,5 +1,6 @@
 SubDir TOP src ;
 
+Depends skyscraper : svnrev ;
 Description skyscraper : "Skyscraper" ;
 Application skyscraper :
   [ Wildcard *.h *.hpp *.hxx *.H *.c *.cc *.cpp *.cxx *.C *.m *.mm *.M ] ;
