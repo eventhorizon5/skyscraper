@@ -184,7 +184,7 @@ void Skyscraper::UnloadSim()
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
 {
 	this->Center();
-	this->SetTitle(wxString("Skyscraper ") + wxString(skyscraper->version) + wxString(" ") + wxString(skyscraper->version_state) + wxString(" (rev ") + wxString(skyscraper->version_rev) + wxString(")"));
+	this->SetTitle(wxString("Skyscraper " + skyscraper->version + " " + skyscraper->version_state));
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
 }
 
