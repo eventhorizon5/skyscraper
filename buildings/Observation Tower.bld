@@ -1,0 +1,254 @@
+# $Id$
+
+#The Observation Tower
+#Copyright (C)2010 Ryan Thoryk
+
+#This program is free software; you can redistribute it and/or
+#modify it under the terms of the GNU General Public License
+#as published by the Free Software Foundation; either version 2
+#of the License, or (at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+<Globals>
+    Name = Observation Tower
+    Designer = Ryan Thoryk
+    Location = 
+    Description = 
+    Version = 1
+    CameraFloor = 0
+    CameraPosition = 0, -41.6
+    CameraRotation = 0, 0, 0
+<EndGlobals>
+
+<Textures>
+    Load data/brick1.jpg, Brick, 0.269, 0.25
+    Load data/windows11h.jpg, MainWindows, 0.05, 1
+    Load data/windows11h_black.jpg, MainWindows2, 0.05, 1
+    Load data/windows11h_black_mid2.jpg, MainWindows2b, 0.05, 1
+    Load data/windows11h_black_double.jpg, MainWindowsDouble, 0.05, 1
+    Load data/windows11h_inside.gif, MainWindowsInt, 1, 1
+    Load data/windows11h_mid_int2.gif, MainWindowsInt2, 0.05, 1
+    Load data/windows11h_inside_double.gif, MainWindowsIntDouble, 0.05, 1
+    Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
+    Load data/symb5.jpg, Wood3, 0.269, 0.25
+    Load data/marb047.jpg, Marble4, 0.269, 0.25
+    Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
+    Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
+    Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 0.5, 0.5
+    Load data/MetalBare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
+    Load data/metal080.jpg, ServiceElevPanelMain, 0.5, 0.5
+    Load data/diamond18h.jpg, OfficeElevWall, 0.333, 0.333
+    Load data/diamond18b.jpg, ExpressElevWall, 0.333, 0.333
+    Load data/diamond18i.jpg, HotelElevWall, 0.333, 0.333
+    Load data/diamond18g.jpg, ResidentialElevWall, 0.333, 0.333
+    Load data/metal080.jpg, ColumnTex, 0.5, 0.5
+    Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/stucco4c.jpg, Stucco4, 0.25, 0.25
+    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/grndroad1mid.jpg, ParkingFloor, 0.25, 0.25
+    Load data/stucco4c.jpg, ParkingCeiling, 0.25, 0.25
+    Load data/stucco4e.jpg, ParkingWalls, 0.269, 0.25
+    Load data/stucco4b.jpg, LowerLevelWalls, 0.25, 0.25
+    Load data/intext.jpg, InterExt, 0.269, 0.25
+    Load data/intext.jpg, InterInt, 0.269, 0.25
+    Load data/metal1.jpg, ElevExt, 0.25, 0.25
+    Load data/text16.jpg, ElevDoors, 1, 1
+    Load data/door1.jpg, ServiceElevDoors, 1, 1
+    Load data/door1.jpg, ServiceElevDoors2, -1, 1
+    Load data/panel-back2.jpg, ElevExtPanels, 1, 1
+    Load data/panel-back2.jpg, ElevExtPanels2, 1, 1
+    Load data/marb148.jpg, ElevPanel, 1, 1
+    Load data/diamond18j.jpg, ElevPanelMain, 1, 1
+    Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
+    Load data/cinderblocks.jpg, StairsWall, 0.25, 1
+    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/servicedoor2.jpg, StairsDoor, 1, 1
+    Load data/miscdoor8.jpg, StairsDoor2, 1, 1
+    Load data/miscdoor9b.jpg, HotelDoor, 1, 1
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/bracing1.jpg, VentsInt, 1, 1
+    Load data/vents1.jpg, VentsExt, 1, 1
+    Load data/stucco22b.jpg, HotelWalls, 0.269, 0.25
+    Load data/Carpet0013b_S.jpg, HotelFloor, 0.25, 0.25
+    Load data/stucco2f.jpg, HotelCeiling, 0.269, 0.25
+    #Load data/plaque.jpg, Plaque, 1, 1
+    Load data/callbutton.gif, ButtonUp, 1, 1
+    Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
+    Load data/callbutton.gif, ButtonDown, 1, -1
+    Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
+    Load data/floorsign.jpg, FloorSign, 1, 1
+    Load data/darrow_unlit.gif, ArrowUp, 1, 1
+    Load data/darrow_unlit.gif, ArrowDown, 1, -1
+    Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
+    Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
+    Load data/darrow_single_up.jpg, ArrowUpSingle, 1, 1
+    Load data/darrow_single_down.jpg, ArrowDownSingle, 1, 1
+    Load data/metal080.jpg, MainPanelBack, 0.5, 0.5
+    Load data/daley.jpg, Daley, 0.04, 1
+    Load data/searstower.jpg, SearsTower, 0.067, 1
+
+    #floor indicator/button pictures
+    Load data/black.jpg, Black, 1, 1
+    Load data/black_lit.jpg, BlackLit, 1, 1
+    AddText Black, ButtonC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonLL, nimbus_sans.ttf, 47, LL, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonEZ, nimbus_sans.ttf, 47, EZ, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitLL, nimbus_sans.ttf, 47, LL, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonAlarm, nimbus_sans.ttf, 28, Alarm, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
+    AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
+    AddTextRange 1, 105, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddTextRange 1, 105, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
+<EndTextures>
+
+# Ground
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
+
+# Basements
+<Floor -1>
+    ID = LL
+    Name = Lower Level
+    Type = Basement
+    Height = 10
+    InterfloorHeight = 2.24
+    Altitude = -13.98
+<EndFloor>
+
+<Floor 0>
+    ID = C
+    Name = Concourse
+    Type = Lobby
+    Description = Concourse
+    Height = 15
+    InterfloorHeight = 2.24
+    Altitude = -2.24
+
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Marble4, 0.5, -50, -50, 50, 50, 0, 0, 0, 0, False
+
+    #Ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -50, -50, 50, 50, %height%, %height%, 0, 0, False
+
+    DrawWalls = true, true, false, false, false, false
+
+    WallOrientation = right
+    SetAutoSize = false, false
+    AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %height%, %height%, 2.24, 2.24, 3, 1, True
+    AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %height%, %height%, 2.24, 2.24, 3, 1, True
+    WallOrientation = left
+    AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %height%, %height%, 2.24, 2.24, 3, 1, True
+    AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %height%, %height%, 2.24, 2.24, 3, 1, True
+
+<EndFloor>
+
+<Floors 1 to 9>
+    ID = %floor% + 1
+    Name = %floor% + 1
+    Type = Floor
+    Description = %floor% + 1
+    Height = 10
+    InterfloorHeight = 2.24
+
+    DrawWalls = true, true, false, false, false, false
+
+    WallOrientation = right
+    SetAutoSize = false, false
+    AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    WallOrientation = left
+    AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+<EndFloors>
+
+<Floor 9>
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Marble4, 0.5, -50, -50, 50, 50, 0, 0, 0, 0, False
+
+    #Ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -50, -50, 50, 50, %height%, %height%, 0, 0, False
+<EndFloor>
+
+<Floors 10 to 102>
+    ID = %floor% + 1
+    Name = %floor% + 1
+    Type = Floor
+    Description = %floor% + 1
+    Height = 10
+    InterfloorHeight = 2.24
+
+    DrawWalls = true, true, false, false, false, false
+
+    WallOrientation = right
+    SetAutoSize = false, false
+    AddWall Front, MainWindowsInt, 0.1, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
+    AddWall Left, MainWindowsInt, 0.1, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
+    WallOrientation = left
+    AddWall Right, MainWindowsInt, 0.1, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
+    AddWall Back, MainWindowsInt, 0.1, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
+<EndFloors>
+
+<Floors 103 to 104>
+    ID = %floor% + 1
+    Name = %floor% + 1
+    Type = Observatory
+    Description = Observatory
+    Height = 10
+    InterfloorHeight = 2.24
+
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Marble4, 0.5, -50, -50, 50, 50, 0, 0, 0, 0, False
+
+    #Ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, Ceiling1, 0.5, -50, -50, 50, 50, %height%, %height%, 0, 0, False
+
+    DrawWalls = true, true, false, false, false, false
+
+    WallOrientation = right
+    SetAutoSize = false, false
+    AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    WallOrientation = left
+    AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+<EndFloors>
+
+<Floor 105>
+    ID = R
+    Name = Roof
+    Type = Roof
+    Description = Roof
+    Height = 10
+    InterfloorHeight = 2.24
+
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, Marble4, 0.5, -50, -50, 50, 50, 0, 0, 0, 0, False
+
+<EndFloor>
+
