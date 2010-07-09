@@ -119,6 +119,10 @@ public:
 	csVector3 MusicPosition; //music emitter position, relative of elevator center
 	bool MusicOn; //music enabled status
 
+	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
+		csRef<iThingFactoryState> Elevator_state;
+		csRef<iMovable> Elevator_movable;
+
 	//functions
 	Elevator(int number);
 	~Elevator();
@@ -246,9 +250,6 @@ public:
 	bool PlayMessageSound(bool direction);
 
 private:
-	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
-		csRef<iThingFactoryState> Elevator_state;
-		csRef<iMovable> Elevator_movable;
 
 	//elevator parking timer
 	class Timer : public wxTimer
