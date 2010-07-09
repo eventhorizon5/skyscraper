@@ -129,6 +129,12 @@ rule GetVersionsMain1
     GetVersionsMain $(<) ;
 }
 
+rule DeleteFile1
+{
+    ALWAYS $(<) ;
+    DeleteFile $(<) ;
+}
+
 actions GetVersionsSBS
 {
     svnrev/svnrev -o$(<) -i src/buttonpanel.* src/callbutton.* src/camera.* src/control.* src/directional.* src/door.* src/elevator.* src/elevatordoor.* src/floor.* src/floorindicator.* src/globals.* src/object.* src/sbs.* src/shaft.* src/sound.* src/stairs.* src/unix.* src/wall.*
@@ -139,6 +145,13 @@ actions GetVersionsMain
     svnrev/svnrev -o$(<) -i src/cameracontrol.* src/console.* src/debugpanel.* src/editelevator.* src/fileio.* src/keydialog.* src/meshcontrol.* src/objectinfo.* src/skyscraper.* src/stackwalker.* src/stats.* src/textwindow.* src/uexception.h
 }
 
+actions DeleteFile
+{
+    rm $(<)
+}
+
+DeleteFile1 src/revsbs.h ;
+DeleteFile1 src/revmain.h ;
 GetVersionsSBS1 src/revsbs.h ;
 GetVersionsMain1 src/revmain.h ;
 
