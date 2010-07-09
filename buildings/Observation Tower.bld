@@ -30,13 +30,8 @@
 
 <Textures>
     Load data/brick1.jpg, Brick, 0.269, 0.25
-    Load data/windows11h.jpg, MainWindows, 0.05, 1
-    Load data/windows11h_black.jpg, MainWindows2, 0.05, 1
-    Load data/windows11h_black_mid2.jpg, MainWindows2b, 0.05, 1
-    Load data/windows11h_black_double.jpg, MainWindowsDouble, 0.05, 1
+    Load data/windows11h.jpg, MainWindows, 1, 1
     Load data/windows11h_inside.gif, MainWindowsInt, 1, 1
-    Load data/windows11h_mid_int2.gif, MainWindowsInt2, 0.05, 1
-    Load data/windows11h_inside_double.gif, MainWindowsIntDouble, 0.05, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     Load data/symb5.jpg, Wood3, 0.269, 0.25
     Load data/marb047.jpg, Marble4, 0.269, 0.25
@@ -150,11 +145,20 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
 
     WallOrientation = right
     SetAutoSize = false, false
-    AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %height%, %height%, 2.24, 2.24, 3, 1, True
-    AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %height%, %height%, 2.24, 2.24, 3, 1, True
+    AddWall Front, MainWindows, 0.1, -50, -50, 50, -50, %height%, %height%, 2.24, 2.24, 3, 1, True
+    AddWall Left, MainWindows, 0.1, -50, 50, -50, -50, %height%, %height%, 2.24, 2.24, 3, 1, True
     WallOrientation = left
-    AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %height%, %height%, 2.24, 2.24, 3, 1, True
-    AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %height%, %height%, 2.24, 2.24, 3, 1, True
+    AddWall Right, MainWindows, 0.1, 50, -50, 50, 50, %height%, %height%, 2.24, 2.24, 3, 1, True
+    AddWall Back, MainWindows, 0.1, 50, 50, -50, 50, %height%, %height%, 2.24, 2.24, 3, 1, True
+
+    WallOrientation = left
+    AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %height%, %height%, 0, 0, 3, 1, False
+    AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %height%, %height%, 0, 0, 3, 1, False
+    WallOrientation = right
+    AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %height%, %height%, 0, 0, 3, 1, False
+    AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %height%, %height%, 0, 0, 3, 1, False
+
+    SetAutoSize = true, true
 
 <EndFloor>
 
@@ -170,11 +174,21 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
 
     WallOrientation = right
     SetAutoSize = false, false
-    AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
-    AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Front, MainWindows, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Left, MainWindows, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
     WallOrientation = left
-    AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
-    AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Right, MainWindows, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Back, MainWindows, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+
+    WallOrientation = left
+    AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    WallOrientation = right
+    AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+
+    SetAutoSize = true, true
+
 <EndFloors>
 
 <Floor 9>
@@ -201,11 +215,22 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
 
     WallOrientation = right
     SetAutoSize = false, false
-    AddWall Front, MainWindowsInt, 0.1, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
-    AddWall Left, MainWindowsInt, 0.1, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
+    AddWall Front, MainWindows, 0.1, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
+    AddWall Left, MainWindows, 0.1, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
     WallOrientation = left
-    AddWall Right, MainWindowsInt, 0.1, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
-    AddWall Back, MainWindowsInt, 0.1, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
+    AddWall Right, MainWindows, 0.1, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
+    AddWall Back, MainWindows, 0.1, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
+
+    WallOrientation = left
+    SetAutoSize = false, false
+    AddWall Front, MainWindowsInt, 0.1, -20, -20, 20, -20, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 1, 1, False
+    AddWall Left, MainWindowsInt, 0.1, -20, 20, -20, -20, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 1, 1, False
+    WallOrientation = right
+    AddWall Right, MainWindowsInt, 0.1, 20, -20, 20, 20, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 1, 1, False
+    AddWall Back, MainWindowsInt, 0.1, 20, 20, -20, 20, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 1, 1, False
+
+    SetAutoSize = true, true
+
 <EndFloors>
 
 <Floors 103 to 104>
@@ -230,11 +255,21 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
 
     WallOrientation = right
     SetAutoSize = false, false
-    AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
-    AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Front, MainWindows, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Left, MainWindows, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
     WallOrientation = left
-    AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
-    AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Right, MainWindows, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Back, MainWindows, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+
+    WallOrientation = left
+    AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    WallOrientation = right
+    AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+
+    SetAutoSize = true, true
+
 <EndFloors>
 
 <Floor 105>
