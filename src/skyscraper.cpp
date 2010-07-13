@@ -1055,8 +1055,11 @@ void Skyscraper::StopSound()
 	//stop and unload sound
 	if (sndstream)
 		sndstream->Pause();
-	sndrenderer->RemoveSource(sndsource);
-	sndrenderer->RemoveStream(sndstream);
+	if (sndrenderer)
+	{
+		sndrenderer->RemoveSource(sndsource);
+		sndrenderer->RemoveStream(sndstream);
+	}
 	sndsource = 0;
 	sndstream = 0;
 }

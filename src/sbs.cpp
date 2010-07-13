@@ -503,10 +503,10 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 		return ReportError("No reporter plugin found");
 	sndrenderer = csQueryRegistry<iSndSysRenderer> (object_reg);
 	if (!sndrenderer)
-		return ReportError("No sound renderer plugin found");
+		ReportError("No sound renderer plugin found");
 	sndloader = csQueryRegistry<iSndSysLoader> (object_reg);
 	if (!sndloader)
-		return ReportError("No sound loader plugin found");
+		ReportError("No sound loader plugin found");
 	sndmanager = csQueryRegistry<iSndSysManager> (object_reg);
 	if (!sndmanager)
 		return ReportError("No sound manager plugin found");
@@ -516,10 +516,6 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 	this->view = view;
 	if (!this->view)
 		return ReportError("No iView object available");
-
-	//disable sound if renderer or loader are not available
-	if (!sndrenderer || !sndloader)
-		DisableSound = true;
 
 	//create default sector
 	area = engine->CreateSector("area");
@@ -550,6 +546,10 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 	Verbose = confman->GetBool("Skyscraper.SBS.Verbose", true);
 	DefaultMapper = confman->GetInt("Skyscraper.SBS.TextureMapper", 0);
 	ResetTextureMapping(true); //set default texture map values
+
+	//disable sound if renderer or loader are not available
+	if (!sndrenderer || !sndloader)
+		DisableSound = true;
 
 	//mount sign texture packs
 	Mount("signs-sans.zip", "/root/signs/sans");

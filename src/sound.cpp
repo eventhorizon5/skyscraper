@@ -53,11 +53,14 @@ Sound::Sound(Object *parent, const char *name, bool permanent)
 
 Sound::~Sound()
 {
-	Stop();
-	sbs->sndrenderer->RemoveSource(sndsource);
-	sbs->sndrenderer->RemoveStream(sndstream);
-	sbs->sndmanager->RemoveSound(sndwrapper);
-	sbs->DecrementSoundCount();
+	if (sbs->DisableSound == false)
+	{
+		Stop();
+		sbs->sndrenderer->RemoveSource(sndsource);
+		sbs->sndrenderer->RemoveStream(sndstream);
+		sbs->sndmanager->RemoveSound(sndwrapper);
+		sbs->DecrementSoundCount();
+	}
 
 	//unregister from parent
 	if (object->parent_deleting == false)
