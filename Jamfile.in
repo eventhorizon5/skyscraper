@@ -147,6 +147,7 @@ actions GetVersionsMain
 
 actions DeleteFile
 {
+    touch $(<)
     rm $(<)
 }
 
