@@ -49,6 +49,7 @@ class Stats: public wxDialog
 		wxTextCtrl* tDesigner;
 		wxButton* bOK;
 		wxTextCtrl* tBasements;
+		wxTextCtrl* tSBSVersion;
 		wxTextCtrl* tMaterials;
 		wxStaticText* StaticText13;
 		wxStaticText* StaticText2;
@@ -67,6 +68,7 @@ class Stats: public wxDialog
 		wxStaticText* StaticText3;
 		wxTextCtrl* tTextures;
 		wxStaticText* StaticText21;
+		wxStaticText* StaticText23;
 		wxTextCtrl* tFloors;
 		wxTextCtrl* tName;
 		wxStaticText* StaticText5;
@@ -79,9 +81,9 @@ class Stats: public wxDialog
 		wxStaticText* StaticText12;
 		wxTextCtrl* tLocation;
 		wxTextCtrl* tInStairwell;
-		wxTextCtrl* tHorizScale;
 		wxStaticText* StaticText17;
 		wxStaticText* StaticText4;
+		wxTextCtrl* tFrontendVersion;
 		wxTextCtrl* tMeshes;
 		wxStaticText* StaticText16;
 		wxTextCtrl* tFactories;
@@ -115,7 +117,9 @@ class Stats: public wxDialog
 		static const long ID_STATICTEXT19;
 		static const long ID_tStartTime;
 		static const long ID_STATICTEXT20;
-		static const long ID_tHorizScale;
+		static const long ID_tFrontendVersion;
+		static const long ID_STATICTEXT23;
+		static const long ID_tSBSVersion;
 		static const long ID_STATICTEXT18;
 		static const long ID_tName;
 		static const long ID_STATICTEXT17;

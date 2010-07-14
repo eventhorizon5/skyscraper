@@ -79,6 +79,7 @@ bool Skyscraper::OnInit(void)
 	version = "1.7";
 	version_rev = SVN_REVSTR;
 	version_state = "Alpha";
+	version_frontend = version + ".0." + version_rev;
 	skyscraper = this;
 	MouseDown = false;
 	RenderOnly = false;

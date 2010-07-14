@@ -124,7 +124,7 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 	if (skyscraper)
 	{
 		twindow->tMain->WriteText("\nSimulator State Dump\n--------------------------\n");
-		twindow->tMain->WriteText(wxString("Frontend version: " + skyscraper->version + "." + skyscraper->version_rev + "\n"));
+		twindow->tMain->WriteText(wxString("Frontend version: " + skyscraper->version_frontend + "\n"));
 	}
 
 	//print out simulator state

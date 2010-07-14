@@ -79,6 +79,8 @@ public:
 	csString version;
 	csString version_rev;
 	csString version_state;
+	csString version_frontend;
+
 	bool RenderOnly; //skip sim processing and only render graphics
 	bool InputOnly; //skip sim processing and only run input and rendering code
 	bool IsRunning;

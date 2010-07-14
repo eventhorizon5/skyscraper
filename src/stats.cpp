@@ -30,8 +30,10 @@
 #include "stats.h"
 #include "globals.h"
 #include "sbs.h"
+#include "skyscraper.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
+extern Skyscraper *skyscraper;
 
 //(*IdInit(Stats)
 const long Stats::ID_STATICTEXT1 = wxNewId();
@@ -57,7 +59,9 @@ const long Stats::ID_tRunningTime = wxNewId();
 const long Stats::ID_STATICTEXT19 = wxNewId();
 const long Stats::ID_tStartTime = wxNewId();
 const long Stats::ID_STATICTEXT20 = wxNewId();
-const long Stats::ID_tHorizScale = wxNewId();
+const long Stats::ID_tFrontendVersion = wxNewId();
+const long Stats::ID_STATICTEXT23 = wxNewId();
+const long Stats::ID_tSBSVersion = wxNewId();
 const long Stats::ID_STATICTEXT18 = wxNewId();
 const long Stats::ID_tName = wxNewId();
 const long Stats::ID_STATICTEXT17 = wxNewId();
@@ -145,10 +149,14 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	FlexGridSizer2->Add(StaticText19, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tStartTime = new wxTextCtrl(this, ID_tStartTime, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tStartTime"));
 	FlexGridSizer2->Add(tStartTime, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText20 = new wxStaticText(this, ID_STATICTEXT20, _("Horiz Scale:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT20"));
+	StaticText20 = new wxStaticText(this, ID_STATICTEXT20, _("Frontend Ver:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT20"));
 	FlexGridSizer2->Add(StaticText20, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	tHorizScale = new wxTextCtrl(this, ID_tHorizScale, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tHorizScale"));
-	FlexGridSizer2->Add(tHorizScale, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	tFrontendVersion = new wxTextCtrl(this, ID_tFrontendVersion, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tFrontendVersion"));
+	FlexGridSizer2->Add(tFrontendVersion, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText23 = new wxStaticText(this, ID_STATICTEXT23, _("SBS Version:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT23"));
+	FlexGridSizer2->Add(StaticText23, 1, wxLEFT|wxALIGN_CENTER_VERTICAL, 5);
+	tSBSVersion = new wxTextCtrl(this, ID_tSBSVersion, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tSBSVersion"));
+	FlexGridSizer2->Add(tSBSVersion, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(FlexGridSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Building Information"));
@@ -226,7 +234,8 @@ void Stats::OnInit()
 	tTextures->SetValue(wxVariant(Simcore->GetTextureCount()).GetString());
 	tMaterials->SetValue(wxVariant(Simcore->GetMaterialCount()).GetString());
 	tSounds->SetValue(wxVariant(Simcore->GetSoundCount()).GetString());
-	tHorizScale->SetValue(TruncateNumber(Simcore->HorizScale, 2));
+	tFrontendVersion->SetValue(wxString::FromAscii(skyscraper->version_frontend));
+	tSBSVersion->SetValue(wxString::FromAscii(Simcore->version));
 
 	tName->SetValue(wxString::FromAscii(Simcore->BuildingName.GetData()));
 	tDesigner->SetValue(wxString::FromAscii(Simcore->BuildingDesigner.GetData()));
