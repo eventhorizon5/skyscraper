@@ -191,14 +191,30 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT20" variable="StaticText20" member="yes">
-											<label>Horiz Scale:</label>
+											<label>Frontend Ver:</label>
 										</object>
 										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tHorizScale" variable="tHorizScale" member="yes">
+										<object class="wxTextCtrl" name="ID_tFrontendVersion" variable="tFrontendVersion" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT23" variable="StaticText23" member="yes">
+											<label>SBS Version:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tSBSVersion" variable="tSBSVersion" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
