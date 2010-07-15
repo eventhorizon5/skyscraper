@@ -310,6 +310,7 @@ public:
 	void RemoveShaft(Shaft *shaft);
 	void RemoveStairs(Stairs *stairs);
 	void RemoveSound(Sound *sound);
+	const char* VerifyFile(const char *filename);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

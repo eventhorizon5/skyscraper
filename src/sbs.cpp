@@ -572,8 +572,11 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
+	//first verify the filename
+	csString filename2 = VerifyFile(filename);
+
 	// Load a texture
-	csRef<iTextureWrapper> wrapper = loader->LoadTexture(name, filename, CS_TEXTURE_3D, 0, true, true, false);
+	csRef<iTextureWrapper> wrapper = loader->LoadTexture(name, filename2, CS_TEXTURE_3D, 0, true, true, false);
 
 	if (!wrapper)
 		return ReportError("Error loading texture");
@@ -680,8 +683,10 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	csString hAlign = h_align;
 	csString vAlign = v_align;
 
+	csString font_filename2 = VerifyFile(font_filename);
+
 	//load font
-	csRef<iFont> font = g2d->GetFontServer()->LoadFont(font_filename, font_size);
+	csRef<iFont> font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
 	if (!font)
 	{
 		ReportError("AddTextToTexture: Invalid font");
@@ -4319,4 +4324,34 @@ void SBS::RemoveSound(Sound *sound)
 	//remove a sound from the array
 	//this does not delete the object
 	sounds.Delete(sound);
+}
+
+const char* SBS::VerifyFile(const char *filename)
+{
+	//verify if a file exists
+	//if it does, return the same filename
+	//otherwise search the related folder and find a matching filename with a different
+	//case (fixes case-sensitivity issues mainly on Linux)
+
+	csString file = filename;
+	if (vfs->Exists(filename))
+		return filename;
+
+	csString directory;
+	int loc1 = file.FindLast("/");
+	int loc2 = file.FindLast("\\");
+	int loc = loc1;
+	if (loc2 > 0)
+		loc = loc2;
+
+	directory = file.Slice(0, loc + 1);
+
+	csRef<iStringArray> array = vfs->FindFiles(directory);
+	for (int i = 0; i < array->GetSize(); i++)
+	{
+		csString check = array->Get(i);
+		if (check.CompareNoCase(filename) == true)
+			return check;
+	}
+	return filename;
 }

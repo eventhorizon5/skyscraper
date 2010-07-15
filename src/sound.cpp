@@ -308,8 +308,10 @@ void Sound::Load(const char *filename, bool force)
 
 	//load new sound
 	Filename = filename;
-	csString full_filename = "/root/data/";
-	full_filename.Append(filename);
+	csString full_filename1 = "/root/data/";
+	full_filename1.Append(filename);
+	csString full_filename = sbs->VerifyFile(full_filename1);
+
 	csRef<iDataBuffer> sndbuffer = sbs->vfs->ReadFile(full_filename.GetData());
 	if (!sndbuffer)
 	{
