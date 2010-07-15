@@ -149,6 +149,7 @@ Alt + PgDown - Spin left
 Plus - Zoom in (decrease FOV angle)
 Minus - Zoom out (increase FOV angle)
 Esc - exit to main menu
+Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 
 --- Mouse actions ---
 -elevator shaft doors can be manually opened and closed by holding down the Shift key and clicking on them
