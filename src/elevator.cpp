@@ -1123,6 +1123,19 @@ void Elevator::MonitorLoop()
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
 			door->Loop();
+
+		//reset door timer if peak mode is enabled and a movement is pending
+		if ((UpPeak == true || DownPeak == true))
+		{
+			if ((UpQueue.GetSize() != 0 || DownQueue.GetSize() != 0) && (AreDoorsOpen() == true && CheckOpenDoor() == false))
+			{
+				if (door)
+				{
+					if (door->TimerIsRunning() == false)
+						door->ResetDoorTimer();
+				}
+			}
+		}
 	}
 
 	//enable auto-park timer if specified
@@ -1366,7 +1379,7 @@ void Elevator::MoveElevatorToFloor()
 		motorsound->Play(false);
 	}
 
-	if (mainsound->IsPlaying() == false && Brakes == false)
+	if (mainsound->IsPlaying() == false && Brakes == false && CarMoveSound.IsEmpty() == false)
 	{
 		//Movement sound
 		if (sbs->Verbose)
@@ -1376,7 +1389,7 @@ void Elevator::MoveElevatorToFloor()
 		mainsound->Play();
 	}
 
-	if (motorsound->IsPlaying() == false && Brakes == false)
+	if (motorsound->IsPlaying() == false && Brakes == false && MotorRunSound.IsEmpty() == false)
 	{
 		//Motor sound
 		if (sbs->Verbose)

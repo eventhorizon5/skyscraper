@@ -1132,6 +1132,12 @@ void ElevatorDoor::ResetDoorTimer()
 	quick_close = false;
 }
 
+bool ElevatorDoor::TimerIsRunning()
+{
+	//return status of timer
+	return timer->IsRunning();
+}
+
 bool ElevatorDoor::DoorsStopped()
 {
 	return doors_stopped;

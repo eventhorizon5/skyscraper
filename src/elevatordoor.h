@@ -146,6 +146,7 @@ public:
 	Object* FinishShaftDoor(int floor);
 	bool FinishShaftDoors();
 	DoorWrapper* GetDoorWrapper();
+	bool TimerIsRunning();
 
 private:
 
