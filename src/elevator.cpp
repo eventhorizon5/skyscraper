@@ -2791,7 +2791,7 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 
 	int index = DirIndicatorArray.GetSize();
 	DirIndicatorArray.SetSize(index + 1);
-	DirIndicatorArray[index] = new DirectionalIndicator(object, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirIndicatorArray[index] = new DirectionalIndicator(object, Number, OriginFloor, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	return DirIndicatorArray[index]->object;
 }
 
