@@ -32,6 +32,14 @@ Version 1.7 (2.0 Alpha 6)
 -added separate folder for screenshots, and switched format to jpeg
 -added support for elevator music
 -ShaftCut and CutStairwell commands now cut external objects
+-Added support for displaying last clicked 3D position
+-Added Housing Estate building
+-Added support for changing door speeds
+-added SVN versioning info
+-Elevator objects can now be used in certain global commands
+-fixed a peak mode dispatch issue
+-Added case insensitivity support for file loading
+-Internal indicator vertical positioning fix
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------
