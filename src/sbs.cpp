@@ -4355,3 +4355,18 @@ const char* SBS::VerifyFile(const char *filename)
 	}
 	return filename;
 }
+
+bool SBS::FileExists(const char *filename, bool relative)
+{
+	//check to see if the specified file exists
+	//the name must begin with the "/root/" suffix if relative is false
+
+	if (relative == false)
+		return vfs->Exists(filename);
+	else
+	{
+		csString file = filename;
+		file.Insert(0, "/root/");
+		return vfs->Exists(file);
+	}
+}

@@ -37,6 +37,7 @@ class ScriptProcessor
 	bool LoadBuilding();
 	bool LoadDataFile(const char *filename, bool insert = false, int insert_line = 0);
 	bool LoadFromText(const char *text);
+	bool ReportMissingFiles();
 
 	private:
 	int line; //line number
@@ -72,6 +73,7 @@ class ScriptProcessor
 	csString FunctionCallLineData;
 	csArray<csString> FunctionParams;
 	bool ReplaceLine;
+	csStringArray nonexistent_files;
 
 	bool ScriptError(const char *message);
 	csString Calc(const char *expression);
@@ -83,6 +85,7 @@ class ScriptProcessor
 	int ProcElevators();
 	int ProcTextures();
 	bool FunctionProc();
+	void CheckFile(const char *filename, bool relative = false);
 
 	struct FunctionInfo
 	{

@@ -1155,6 +1155,9 @@ bool Skyscraper::Start()
 		}
 	}
 
+	//report on missing files, if any
+	processor->ReportMissingFiles();
+
 	//unload script processor
 	delete processor;
 	processor = 0;

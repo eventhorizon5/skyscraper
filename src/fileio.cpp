@@ -34,6 +34,7 @@
 #include "shaft.h"
 #include "callbutton.h"
 #include "unix.h"
+#include "textwindow.h"
 
 #include <csutil/filereadhelper.h>
 
@@ -87,6 +88,7 @@ bool ScriptProcessor::LoadBuilding()
 	InFunction = false;
 	FunctionCallLine = 0;
 	ReplaceLine = false;
+	nonexistent_files.DeleteAll();
 
 	while (line < BuildingData.GetSize() - 1)
 	{
@@ -629,7 +631,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 			return false;
 
 	//make sure file exists
-	if (Simcore->vfs->Exists(Filename) == false)
+	if (Simcore->FileExists(Filename) == false)
 		return false;
 
 	//load file
@@ -954,6 +956,41 @@ bool ScriptProcessor::ScriptError(const char *message)
 	delete dialog;
 	dialog = 0;
 	return false;
+}
+
+bool ScriptProcessor::ReportMissingFiles()
+{
+	//report on missing files
+	//returns true if any files are missing
+
+	if (nonexistent_files.GetSize() > 0)
+	{
+		for (int i = 0; i < nonexistent_files.GetSize(); i++)
+			Simcore->Report(nonexistent_files[i]);
+
+		//create text window
+		TextWindow *twindow = new TextWindow(NULL, -1);
+		twindow->SetSize(-1, -1, 400, 400);
+		twindow->SetTitle(wxT("Missing Files"));
+		twindow->Show(true);
+		wxString message;
+		message = wxT("Skyscraper was unable to load the following files.\nThis will result in texture and/or sound problems:\n\n");
+		for (int i = 0; i < nonexistent_files.GetSize(); i++)
+		{
+			message.Append(wxString::FromAscii(nonexistent_files[i]));
+			message.Append(wxT("\n"));
+		}
+		twindow->tMain->WriteText(message);
+		/*twindow->ShowModal();
+
+		if (twindow)
+			delete twindow;
+		twindow = 0;*/
+
+		return true;
+	}
+	else
+		return false;
 }
 
 int ScriptProcessor::ProcCommands()
@@ -2324,6 +2361,9 @@ int ScriptProcessor::ProcCommands()
 			}
 		}
 
+		//check to see if file exists
+		CheckFile(csString("data/") + tempdata[1], true);
+
 		if (partial == true)
 			StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]))));
 		else
@@ -2647,6 +2687,7 @@ int ScriptProcessor::ProcFloors()
 			LineData = "<endfloor>";
 	}
 
+	//Break command
 	if (LineData.Slice(0, 7).CompareNoCase("<break>") == true)
 		return sBreak;
 
@@ -3218,6 +3259,13 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 
+		//check to see if file exists
+		if (compat == 0 || compat == 2)
+		{
+			CheckFile(csString("data/") + tempdata[0], true);
+			CheckFile(csString("data/") + tempdata[1], true);
+		}
+
 		//create door
 		if (compat == 1)
 			StoreCommand(floor->AddDoor("", "", tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), 0, atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9])));
@@ -3291,6 +3339,13 @@ int ScriptProcessor::ProcFloors()
 					return sError;
 				}
 			}
+		}
+
+		//check to see if file exists
+		if (compat == 0 || compat == 2)
+		{
+			CheckFile(csString("data/") + tempdata[1], true);
+			CheckFile(csString("data/") + tempdata[2], true);
 		}
 
 		//create door
@@ -3444,6 +3499,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptError("Invalid elevator");
 			return sError;
 		}
+
 		if (compat == false)
 			StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5])));
 		else
@@ -3590,6 +3646,9 @@ int ScriptProcessor::ProcFloors()
 				}
 			}
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + tempdata[1], true);
 
 		if (partial == true)
 			StoreCommand(floor->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]))));
@@ -4061,6 +4120,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Invalid door number");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->GetDoor(temp3)->OpenSound = temp2;
 	}
 	if (LineData.Slice(0, 10).CompareNoCase("closesound") == true)
@@ -4085,6 +4148,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Invalid door number");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->GetDoor(temp3)->CloseSound = temp2;
 	}
 	if (LineData.Slice(0, 10).CompareNoCase("startsound") == true)
@@ -4095,6 +4162,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->CarStartSound = temp2;
 		//turn off motor sounds
 		elev->MotorStartSound = "";
@@ -4110,6 +4181,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->CarMoveSound = temp2;
 		//turn off motor sounds
 		elev->MotorStartSound = "";
@@ -4125,6 +4200,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->CarStopSound = temp2;
 		//turn off motor sounds
 		elev->MotorStartSound = "";
@@ -4140,6 +4219,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->CarIdleSound = temp2;
 		//turn off motor sounds
 		elev->MotorStartSound = "";
@@ -4154,6 +4237,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->CarStartSound = temp2;
 	}
 	if (LineData.Slice(0, 12).CompareNoCase("carmovesound") == true)
@@ -4163,6 +4250,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->CarMoveSound = temp2;
 	}
 	if (LineData.Slice(0, 12).CompareNoCase("carstopsound") == true)
@@ -4172,6 +4263,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->CarStopSound = temp2;
 	}
 	if (LineData.Slice(0, 12).CompareNoCase("caridlesound") == true)
@@ -4181,6 +4276,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->CarIdleSound = temp2;
 	}
 	if (LineData.Slice(0, 15).CompareNoCase("motorstartsound") == true)
@@ -4190,6 +4289,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->MotorStartSound = temp2;
 	}
 	if (LineData.Slice(0, 13).CompareNoCase("motorrunsound") == true)
@@ -4199,6 +4302,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->MotorRunSound = temp2;
 	}
 	if (LineData.Slice(0, 14).CompareNoCase("motorstopsound") == true)
@@ -4208,6 +4315,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->MotorStopSound = temp2;
 	}
 	if (LineData.Slice(0, 10).CompareNoCase("chimesound") == true)
@@ -4232,6 +4343,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Invalid door number");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
 	}
@@ -4257,6 +4372,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Invalid door number");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 	}
 	if (LineData.Slice(0, 14).CompareNoCase("downchimesound") == true)
@@ -4281,6 +4400,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Invalid door number");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
 	}
 	if (LineData.Slice(0, 10).CompareNoCase("alarmsound") == true)
@@ -4290,6 +4413,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->AlarmSound = temp2;
 	}
 	if (LineData.Slice(0, 14).CompareNoCase("alarmsoundstop") == true)
@@ -4299,6 +4426,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->AlarmSoundStop = temp2;
 	}
 	if (LineData.Slice(0, 9).CompareNoCase("beepsound") == true)
@@ -4308,6 +4439,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->SetBeepSound(temp2);
 	}
 	if (LineData.Slice(0, 10).CompareNoCase("floorsound") == true)
@@ -4317,6 +4452,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->SetFloorSound(temp2);
 	}
 	if (LineData.Slice(0, 9).CompareNoCase("upmessage") == true)
@@ -4326,6 +4465,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->SetMessageSound(true, temp2);
 	}
 	if (LineData.Slice(0, 11).CompareNoCase("downmessage") == true)
@@ -4335,6 +4478,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->SetMessageSound(false, temp2);
 	}
 	if (LineData.Slice(0, 5).CompareNoCase("music") == true)
@@ -4344,6 +4491,10 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Syntax error");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
 		elev->Music = temp2;
 	}
 	if (LineData.Slice(0, 13).CompareNoCase("floorskiptext") == true)
@@ -5024,7 +5175,10 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == 0)
+		{
+			CheckFile(csString("data/") + tempdata[1], true);
 			elev->GetPanel(atoi(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
+		}
 		if (compat == 1)
 			elev->GetPanel(atoi(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 		if (compat == 2)
@@ -5143,7 +5297,10 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == 0)
+		{
+			CheckFile(csString("data/") + tempdata[1], true);
 			elev->GetPanel(atoi(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
+		}
 		if (compat == 1)
 			elev->GetPanel(atoi(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
 		if (compat == 2)
@@ -5196,6 +5353,9 @@ int ScriptProcessor::ProcElevators()
 			ScriptError("Invalid panel number");
 			return sError;
 		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + tempdata[1], true);
 
 		elev->GetPanel(atoi(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
 
@@ -5256,6 +5416,9 @@ int ScriptProcessor::ProcElevators()
 			action_array.Push(tempdata[temp3]);
 		for (temp3 = slength - (params / 2); temp3 < slength; temp3++)
 			tex_array.Push(tempdata[temp3]);
+
+		//check to see if file exists
+		CheckFile(csString("data/") + tempdata[1], true);
 
 		elev->GetPanel(atoi(tempdata[0]))->AddControl(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), action_array, tex_array);
 
@@ -5490,6 +5653,9 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
+		//check to see if file exists
+		CheckFile(csString("data/") + tempdata[1], true);
+
 		if (partial == true)
 			StoreCommand(elev->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]))));
 		else
@@ -5715,6 +5881,9 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
+		CheckFile(csString("data/") + tempdata[0], true);
+		CheckFile(csString("data/") + tempdata[1], true);
+
 		//create door
 		if (compat == true)
 			StoreCommand(elev->AddDoor(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atoi(tempdata[4]), 0, atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
@@ -5797,6 +5966,7 @@ int ScriptProcessor::ProcTextures()
 		}
 		buffer = tempdata[0];
 		buffer.Insert(0, "/root/");
+		CheckFile(buffer);
 		if (tempdata.GetSize() == 4)
 			Simcore->LoadTexture(buffer.GetData(), tempdata[1], atof(tempdata[2]), atof(tempdata[3]));
 		else
@@ -5836,6 +6006,7 @@ int ScriptProcessor::ProcTextures()
 			temp2.ReplaceAll("%number%", buffer.Trim());
 			temp6 = tempdata[3];
 			temp6.ReplaceAll("%number%", buffer.Trim());
+			CheckFile(temp2, true);
 			if (tempdata.GetSize() == 6)
 				Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]));
 			else
@@ -5872,6 +6043,7 @@ int ScriptProcessor::ProcTextures()
 		}
 		buffer = tempdata[2];
 		buffer.Insert(0, "/root/data/fonts/");
+		CheckFile(buffer);
 		if (tempdata.GetSize() == 14)
 			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]));
 		else
@@ -5926,6 +6098,7 @@ int ScriptProcessor::ProcTextures()
 
 			buffer = tempdata[4];
 			buffer.Insert(0, "/root/data/fonts/");
+			CheckFile(buffer);
 			if (tempdata.GetSize() == 16)
 				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, atof(tempdata[5]), tempdata[6], atoi(tempdata[7]), atoi(tempdata[8]), atoi(tempdata[9]), atoi(tempdata[10]), tempdata[11], tempdata[12], atoi(tempdata[13]), atoi(tempdata[14]), atoi(tempdata[15]));
 			else
@@ -5957,6 +6130,7 @@ int ScriptProcessor::ProcTextures()
 		}
 		buffer = tempdata[0];
 		buffer.Insert(0, "/root/");
+		CheckFile(buffer);
 		if (tempdata.GetSize() == 8)
 			Simcore->LoadTextureCropped(buffer, tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
 		else
@@ -6205,4 +6379,34 @@ bool ScriptProcessor::FunctionProc()
 		}
 	}
 	return false;
+}
+
+void ScriptProcessor::CheckFile(const char *filename, bool relative)
+{
+	//check to see if the specified file exists.
+	//if not, add to nonexistent_files array
+
+	csString file = filename;
+
+	if (file == "")
+		return;
+
+	int loc = file.FindLast("/");
+	if (loc > 0)
+	{
+		if (file.Length() == loc + 1)
+			return;
+	}
+	loc = file.FindLast("\\");
+	if (loc > 0)
+	{
+		if (file.Length() == loc + 1)
+			return;
+	}
+
+	if (Simcore->FileExists(file, relative) == false)
+	{
+		file.ReplaceAll("/root/", "");
+		nonexistent_files.PushSmart(file);
+	}
 }
