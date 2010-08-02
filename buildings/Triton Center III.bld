@@ -32,77 +32,85 @@
     Description = This project is focused on realism, code organization, and efficiency.
     Version = 1
     HorizScale = 1
-    CameraFloor = 44
-    CameraPosition = 0, -30
-    CameraRotation = 0, 0, 0
+    CameraFloor = -1
+    CameraPosition = 0, -55
+    CameraRotation = 0, 90, 0
 <EndGlobals>
 
 #Textures
 <Textures>
-    Load data/grndroad1mid.jpg, Road, 0.25, 0.25
+    #Parking Ramp Pavement
+    Load data/grndroad1mid.jpg, ParkingRoad, 0.04, 0.04
+    Load data/2lanez_doubleline.jpg, ParkingRoadZ, 1, 1
+    Load data/2lanex_doubleline.jpg, ParkingRoadX, 1, 1
+    Load data/2lane_shortcurve.jpg, ParkingRoadCurve1, 1, 1
+    Load data/2lane_shortcurve.jpg, ParkingRoadCurve2, -1, 1
+    Load data/2lane_shortcurve.jpg, ParkingRoadCurve3, 1, -1
+    Load data/2lane_shortcurve.jpg, ParkingRoadCurve4, -1, -1
 
     #Exterior and Interior
     Load data/brick1.jpg, Brick1, 0.269, 0.25
-    Load data/brick021.jpg, Brick2, 0.269, 0.25
-    Load data/brick040+.jpg, Brick3, 0.269, 0.25
-    Load data/brick102.jpg, Brick4, 0.269, 0.25
+    #Load data/brick021.jpg, Brick2, 0.269, 0.25
+    #Load data/brick040+.jpg, Brick3, 0.269, 0.25
+    #Load data/brick102.jpg, Brick4, 0.269, 0.25
 
-    Load data/lobbyfront.jpg, LobbyFront, 0.022, 1
+    #Load data/lobbyfront.jpg, LobbyFront, 0.022, 1
 
     Load data/windows11g.jpg, MainWindows, 0.05, 1
     Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
+    Load data/windows11h_inside.gif, Window, 1, 1
 
     Load data/Carpet0002_S.jpg, Carpet1, 0.2, 0.2
-    Load data/Carpet0006_S.jpg, Carpet2, 0.2, 0.2
+    #Load data/Carpet0006_S.jpg, Carpet2, 0.2, 0.2
     Load data/Carpet0012_S.jpg, Carpet3, 0.2, 0.2
-    Load data/Carpet0013_S.jpg, Carpet4, 0.2, 0.2
-    Load data/Carpet0013b_S.jpg, Carpet5, 0.2, 0.2
-    Load data/Carpet0021_S.jpg, Carpet6, 0.2, 0.2
-    Load data/Carpet0021b_S.jpg, Carpet7, 0.2, 0.2
-    Load data/Carpet0021c_S.jpg, Carpet8, 0.2, 0.2
-    Load data/Carpet0021d_S.jpg, Carpet9, 0.2, 0.2
-    Load data/Carpet0034_S.jpg, Carpet10, 0.2, 0.2
+    #Load data/Carpet0013_S.jpg, Carpet4, 0.2, 0.2
+    #Load data/Carpet0013b_S.jpg, Carpet5, 0.2, 0.2
+    #Load data/Carpet0021_S.jpg, Carpet6, 0.2, 0.2
+    #Load data/Carpet0021b_S.jpg, Carpet7, 0.2, 0.2
+    #Load data/Carpet0021c_S.jpg, Carpet8, 0.2, 0.2
+    #Load data/Carpet0021d_S.jpg, Carpet9, 0.2, 0.2
+    #Load data/Carpet0034_S.jpg, Carpet10, 0.2, 0.2
 
-    Load data/wall3.jpg, Wall3, 0.269, 0.25
-    Load data/wall5.jpg, Wall5, 0.269, 0.25
-    Load data/wall5b.jpg, Wall5b,0.269, 0.25
-    Load data/wall5c.jpg, Wall5c, 0.269, 0.25
+    #Load data/wall3.jpg, Wall3, 0.269, 0.25
+    #Load data/wall5.jpg, Wall5, 0.269, 0.25
+    #Load data/wall5b.jpg, Wall5b,0.269, 0.25
+    #Load data/wall5c.jpg, Wall5c, 0.269, 0.25
 
-    Load data/symb5.jpg, Wood1, 0.269, 0.25
-    Load data/text12.jpg, Wood2, 0.269, 0.25
-    Load data/text13.jpg, Wood3, 0.269, 0.25
-    Load data/text16.jpg, Wood4, 0.269, 0.25
-    Load data/wood1.jpg, Wood5, 0.269, 0.25
-    Load data/wood085.jpg, Wood6, 0.269, 0.25
+    #Load data/symb5.jpg, Wood1, 0.269, 0.25
+    #Load data/text12.jpg, Wood2, 0.269, 0.25
+    #Load data/text13.jpg, Wood3, 0.269, 0.25
+    #Load data/text16.jpg, Wood4, 0.269, 0.25
+    #Load data/wood1.jpg, Wood5, 0.269, 0.25
+    #Load data/wood085.jpg, Wood6, 0.269, 0.25
     Load data/lopacwall1.jpg, Wood7, 0.2, 1
 
     Load data/floor065.jpg, Marble1, 0.269, 0.25
-    Load data/marbl3.jpg, Marble2, 0.269, 0.25
-    Load data/marb148.jpg, Marble3, 0.269, 0.25
+    #Load data/marbl3.jpg, Marble2, 0.269, 0.25
+    #Load data/marb148.jpg, Marble3, 0.269, 0.25
     Load data/marb047.jpg, Marble4, 0.269, 0.25
     Load data/marb123.jpg, Marble5, 0.269, 0.25
-    Load data/marble22.jpg, Marble6, 0.269, 0.25
-    Load data/MarbleWhite0047b_S.jpg, Marble7, 0.269, 0.25
-    Load data/marbletile.jpg, MarbleTile1, 0.169, 0.4
-    Load data/floor065.jpg, MarbleTile2, 0.269, 0.25
+    #Load data/marble22.jpg, Marble6, 0.269, 0.25
+    #Load data/MarbleWhite0047b_S.jpg, Marble7, 0.269, 0.25
+    #Load data/marbletile.jpg, MarbleTile1, 0.169, 0.4
+    #Load data/floor065.jpg, MarbleTile2, 0.269, 0.25
 
     Load data/black_granite.jpg, Granite1, 0.1, 0.1
 
-    Load data/stucco1.jpg, Stucco1, 0.25, 0.25
-    Load data/stucco2.jpg, Stucco2, 0.25, 0.25
+    #Load data/stucco1.jpg, Stucco1, 0.25, 0.25
+    #Load data/stucco2.jpg, Stucco2, 0.25, 0.25
     Load data/stucco2f.jpg, Stucco2f, 0.25, 0.25
-    Load data/stucco3.jpg, Stucco3, 0.25, 0.25
-    Load data/stucco4.jpg, Stucco4, 0.25, 0.25
-    Load data/stucco4b.jpg, Stucco4b, 0.25, 0.25
-    Load data/stucco4c.jpg, Stucco4c, 0.25, 0.25
-    Load data/stucco4d.jpg, Stucco4d, 0.25, 0.25
+    #Load data/stucco3.jpg, Stucco3, 0.25, 0.25
+    #Load data/stucco4.jpg, Stucco4, 0.25, 0.25
+    #Load data/stucco4b.jpg, Stucco4b, 0.25, 0.25
+    #Load data/stucco4c.jpg, Stucco4c, 0.25, 0.25
+    #Load data/stucco4d.jpg, Stucco4d, 0.25, 0.25
     Load data/stucco4e.jpg, Stucco4e, 0.25, 0.25
-    Load data/stucco5.jpg, Stucco5, 0.25, 0.25
+    #Load data/stucco5.jpg, Stucco5, 0.25, 0.25
     Load data/stucco22.jpg, Stucco22, 0.25, 0.25
-    Load data/stucco22b.jpg, Stucco22b, 0.25, 0.25
-    Load data/stucco22c.jpg, Stucco22c, 0.25, 0.25
-    Load data/stucco22d.jpg, Stucco22d, 0.25, 0.25
-    Load data/stucco30.jpg, Stucco30, 0.25, 0.25
+    #Load data/stucco22b.jpg, Stucco22b, 0.25, 0.25
+    #Load data/stucco22c.jpg, Stucco22c, 0.25, 0.25
+    #Load data/stucco22d.jpg, Stucco22d, 0.25, 0.25
+    #Load data/stucco30.jpg, Stucco30, 0.25, 0.25
 
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
 
@@ -111,7 +119,6 @@
     Load data/cem_tr.jpg, Concrete3, 0.269, 0.25
 
     Load data/metal1.jpg, Decor1, 0.25, 0.25
-    Load data/brassdoor.jpg, Decor2, 1, 1
 
     Load data/cutston.jpg, InterExt, 1, 1
     Load data/intext.jpg, InterExt2, 1, 1
@@ -137,24 +144,23 @@
 
     #Miscellaneous
     Load data/metal080.jpg, ColumnTex, 0.5, 0.5
-    Load data/miscdoor1.jpg, Door1, 1, 1
-    Load data/miscdoor2.jpg, Door2, 1, 1
-    Load data/miscdoor3.jpg, Door3, 1, 1
-    Load data/miscdoor4.jpg, Door4, 1, 1
-    Load data/miscdoor5.jpg, Door5, 1, 1
-    Load data/miscdoor6.jpg, Door6, 1, 1
-    Load data/miscdoor7.jpg, Door7, 1, 1
+    #Load data/miscdoor1.jpg, Door1, 1, 1
+    #Load data/miscdoor2.jpg, Door2, 1, 1
+    #Load data/miscdoor3.jpg, Door3, 1, 1
+    #Load data/miscdoor4.jpg, Door4, 1, 1
+    #Load data/miscdoor5.jpg, Door5, 1, 1
+    #Load data/miscdoor6.jpg, Door6, 1, 1
+    #Load data/miscdoor7.jpg, Door7, 1, 1
     Load data/miscdoor8.jpg, Door8, 1, 1
     Load data/miscdoor9.jpg, Door9, 1, 1
     Load data/miscdoor9b.jpg, Door9b, 1, 1
-    Load data/door068.jpg, Door10, 1, 1
-    Load data/exitdoor.jpg, EmergencyExitDoor, 1, 1
+    #Load data/door068.jpg, Door10, 1, 1
+    #Load data/exitdoor.jpg, EmergencyExitDoor, 1, 1
     Load data/servicedoor1.jpg, ServiceDoor1, -1, 1
-    Load data/servicedoor2.jpg, ServiceDoor2, 1, 1
-    Load data/servicedoor3.jpg, ServiceDoor3, 1, 1
+    #Load data/servicedoor2.jpg, ServiceDoor2, 1, 1
+    #Load data/servicedoor3.jpg, ServiceDoor3, 1, 1
     Load data/downtown.jpg, Downtown, 1, 1
-    Load data/bracing1.jpg, VentsInt, 1, 1
-    Load data/vents1.jpg, VentsExt, 1, 1
+    Load data/grass2.jpg, Grass, 0.5, 0.5
 
     #Elevators and Stairwells
     Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
@@ -166,24 +172,24 @@
     Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 0.5, 0.5
     Load data/MetalBare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
     Load data/metal080.jpg, ServiceElevPanelMain, 0.5, 0.5
-    Load data/diamond18h.jpg, OfficeElevWall, 0.333, 0.333
-    Load data/diamond18b.jpg, ExpressElevWall, 0.333, 0.333
-    Load data/diamond18i.jpg, HotelElevWall, 0.333, 0.333
-    Load data/diamond18g.jpg, ResidentialElevWall, 0.333, 0.333
+    #Load data/diamond18h.jpg, OfficeElevWall, 0.333, 0.333
+    #Load data/diamond18b.jpg, ExpressElevWall, 0.333, 0.333
+    #Load data/diamond18i.jpg, HotelElevWall, 0.333, 0.333
+    #Load data/diamond18g.jpg, ResidentialElevWall, 0.333, 0.333
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/door2.jpg, ElevDoorsL, -1, 1
     Load data/door2.jpg, ElevDoorsR, 1, 1
     Load data/door2.jpg, ElevDoorsL2, 1, 1
     Load data/door2.jpg, ElevDoorsR2, -1, 1
-    Load data/text16.jpg, ElevDoors2, 1, 1
+    #Load data/text16.jpg, ElevDoors2, 1, 1
     Load data/aluminumdoor.jpg, ElevDoors3L, -1, 1
     Load data/aluminumdoor.jpg, ElevDoors3R, 1, 1
     Load data/aluminumdoor.jpg, ElevDoors3L2, 1, 1
     Load data/aluminumdoor.jpg, ElevDoors3R2, -1, 1
-    Load data/door1.jpg, ElevDoors4L, -1, 1
-    Load data/door1.jpg, ElevDoors4R, 1, 1
-    Load data/door1.jpg, ElevDoors4L2, 1, 1
-    Load data/door1.jpg, ElevDoors4R2, -1, 1
+    #Load data/door1.jpg, ElevDoors4L, -1, 1
+    #Load data/door1.jpg, ElevDoors4R, 1, 1
+    #Load data/door1.jpg, ElevDoors4L2, 1, 1
+    #Load data/door1.jpg, ElevDoors4R2, -1, 1
     Load data/brassdoor.jpg, ElevDoors5L, -1, 1
     Load data/brassdoor.jpg, ElevDoors5R, 1, 1
     Load data/brassdoor.jpg, ElevDoors5L2, 1, 1
@@ -215,18 +221,18 @@
     Load data/callbutton2_litamber.gif, SAmberDown_Lit, 1, -1
     Load data/callbutton2.gif, ButtonUp, 1, 1
     Load data/callbutton2.gif, ButtonDown, 1, -1
-    Load data/darrow_single.jpg, ArrowUp, 1, 1
-    Load data/darrow_single.jpg, ArrowDown, 1, 1
-    Load data/darrow_single_otis_upgreen.jpg, ArrowUp_Lit, 1, 1
-    Load data/darrow_single_otis_downgreen.jpg, ArrowDown_Lit, 1, 1
-    Load data/darrow_single_otis_upred.jpg, ArrowUp_Lit2, 1, 1
-    Load data/darrow_single_otis_downred.jpg, ArrowDown_Lit2, 1, 1
-    Load data/darrow_single.jpg, ArrowUn_Lit, 1, 1
-    Load data/darrow_double_otis_upgreen.jpg, ArrowUp2, 1, 1
-    Load data/darrow_double_otis_downred.jpg, ArrowDown2, 1, 1
-    Load data/darrow_double_otis_upgreen2.jpg, ArrowUp3, 1, 1
-    Load data/darrow_double_otis_downred2.jpg, ArrowDown3, 1, 1
-    Load data/darrow_single.jpg, ButtonBlank, 1, 1
+    #Load data/darrow_single.jpg, ArrowUp, 1, 1
+    #Load data/darrow_single.jpg, ArrowDown, 1, 1
+    #Load data/darrow_single_otis_upgreen.jpg, ArrowUp_Lit, 1, 1
+    #Load data/darrow_single_otis_downgreen.jpg, ArrowDown_Lit, 1, 1
+    #Load data/darrow_single_otis_upred.jpg, ArrowUp_Lit2, 1, 1
+    #Load data/darrow_single_otis_downred.jpg, ArrowDown_Lit2, 1, 1
+    #Load data/darrow_single.jpg, ArrowUn_Lit, 1, 1
+    #Load data/darrow_double_otis_upgreen.jpg, ArrowUp2, 1, 1
+    #Load data/darrow_double_otis_downred.jpg, ArrowDown2, 1, 1
+    #Load data/darrow_double_otis_upgreen2.jpg, ArrowUp3, 1, 1
+    #Load data/darrow_double_otis_downred2.jpg, ArrowDown3, 1, 1
+    #Load data/darrow_single.jpg, ButtonBlank, 1, 1
     Load data/dcircle_unlit.gif, IndCircle, 1, 1
     Load data/dcircle_lit.gif, IndCircleLit, 1, 1
 
@@ -247,8 +253,17 @@
     AddText Black, ButtonP5, nimbus_sans.ttf, 47, P5, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonP6, nimbus_sans.ttf, 47, P6, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonP7, nimbus_sans.ttf, 47, P7, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonIC, nimbus_sans.ttf, 47, IC, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonSB, nimbus_sans.ttf, 47, SB, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonLL, nimbus_sans.ttf, 47, LL, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonSP, nimbus_sans.ttf, 47, SP, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonLSP, nimbus_sans.ttf, 47, LSP, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonST, nimbus_sans.ttf, 47, ST, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonA, nimbus_sans.ttf, 47, A, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonB, nimbus_sans.ttf, 47, B, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonD, nimbus_sans.ttf, 47, D, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonE, nimbus_sans.ttf, 47, E, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonF, nimbus_sans.ttf, 47, F, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonG, nimbus_sans.ttf, 47, G, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitM, nimbus_sans.ttf, 47, M, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitMU, nimbus_sans.ttf, 47, MU, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -261,8 +276,17 @@
     AddText BlackLit, ButtonLitP5, nimbus_sans.ttf, 47, P5, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitP6, nimbus_sans.ttf, 47, P6, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitP7, nimbus_sans.ttf, 47, P7, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText BlackLit, ButtonLitIC, nimbus_sans.ttf, 47, IC, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText BlackLit, ButtonLitSB, nimbus_sans.ttf, 47, SB, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitLL, nimbus_sans.ttf, 47, LL, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitSP, nimbus_sans.ttf, 47, SP, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitLSP, nimbus_sans.ttf, 47, LSP, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitST, nimbus_sans.ttf, 47, ST, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitA, nimbus_sans.ttf, 47, A, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitB, nimbus_sans.ttf, 47, B, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitC, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitD, nimbus_sans.ttf, 47, D, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitE, nimbus_sans.ttf, 47, E, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitF, nimbus_sans.ttf, 47, F, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitG, nimbus_sans.ttf, 47, G, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpenFrontTemp, nimbus_sans.ttf, 28, Open, -1, 30, -1, 54, center, center, 255, 255, 255
@@ -292,40 +316,40 @@
     AddText Black, Ind_ButtonP5, nimbus_sans.ttf, 47, P5, -1, -1, -1, -1, center, center, 0, 255, 0
     AddText Black, Ind_ButtonP6, nimbus_sans.ttf, 47, P6, -1, -1, -1, -1, center, center, 0, 255, 0
     AddText Black, Ind_ButtonP7, nimbus_sans.ttf, 47, P7, -1, -1, -1, -1, center, center, 0, 255, 0
-    AddText Black, Ind_ButtonIC, nimbus_sans.ttf, 47, IC, -1, -1, -1, -1, center, center, 0, 255, 0
-    AddText Black, Ind_ButtonSB, nimbus_sans.ttf, 47, SB, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonLL, nimbus_sans.ttf, 47, LL, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonSP, nimbus_sans.ttf, 47, SP, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonLSP, nimbus_sans.ttf, 47, LSP, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonA, nimbus_sans.ttf, 47, A, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind_ButtonB, nimbus_sans.ttf, 47, B, -1, -1, -1, -1, center, center, 0, 255, 0
     AddText Black, Ind_ButtonEZ, nimbus_sans.ttf, 47, EZ, -1, -1, -1, -1, center, center, 0, 255, 0
 
-    #AddTextRange 1, 166, Black, Ind_Button%number%, otis.ttf, 72, %number%, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonL, otis.ttf, 72, L, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonM, otis.ttf, 72, M, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonMU, otis.ttf, 72, MU, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonRF, otis.ttf, 72, RF, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonRP, otis.ttf, 72, RP, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP1, otis.ttf, 72, P1, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP2, otis.ttf, 72, P2, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP3, otis.ttf, 72, P3, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP4, otis.ttf, 72, P4, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP5, otis.ttf, 72, P5, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP6, otis.ttf, 72, P6, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonP7, otis.ttf, 72, P7, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonIC, otis.ttf, 72, IC, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonSB, otis.ttf, 72, SB, -1, -1, -1, -1, center, center, 0, 255, 0
-    #AddText Black, Ind_ButtonEZ, otis.ttf, 72, EZ, -1, -1, -1, -1, center, center, 0, 255, 0
+    Load data/black.jpg, Ind2_ButtonBlank, 1, 1
+    AddText Black, Ind2_ButtonL, nimbus_sans.ttf, 47, ST, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind2_ButtonLL, nimbus_sans.ttf, 47, A, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind2_ButtonP1, nimbus_sans.ttf, 47, B, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind2_ButtonP2, nimbus_sans.ttf, 47, C, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind2_ButtonP5, nimbus_sans.ttf, 47, D, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind2_ButtonSP, nimbus_sans.ttf, 47, E, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind2_ButtonLSP, nimbus_sans.ttf, 47, F, -1, -1, -1, -1, center, center, 0, 255, 0
+    AddText Black, Ind2_ButtonG, nimbus_sans.ttf, 47, G, -1, -1, -1, -1, center, center, 0, 255, 0
 <EndTextures>
 
 Set 1 = 110 #building x length
 Set 2 = 110 #building z length
 
 #Landscape, Other Buildings, and Scenery
-AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
-Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
+#AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+#Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
 
 #Exterior and Interior
 #Zone 1
+
+Set 1 = 140 #building x length (Floor LL)
+Set 2 = 140 #building z length (Floor LL)
+
 <Floor -1>
-    ID = IC
-    Name = Interconnection Floor
+    ID = LL
+    Name = Lower Level
     Type = Basement
     Height = 9.5
     InterfloorHeight = 1.5
@@ -338,60 +362,67 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, %3%, 1.5, -%1%, -%2%, %1%, %2%, 0, 0, 0, 0, False
+    AddFloor Floor, %3%, 1.5, -%1%, -11, %1%, %2%, 0, 0, 0, 0, False
+    AddFloor Floor, Concrete3, 1.5, -%1%, -%2%, %1%, -11, 0, 0, 0, 0, False
+    AddFloor Floor, Concrete3, 1.5, -158.42 + 6.25 - 0.33, -88, -%1%, -29.66 - 18 - 0.33, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, %5%, 1.5, -%1%, -%2%, %1%, %2%, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, %5%, 1.5, -%1%, -11, %1%, %2%, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, Concrete3, 1.5, -%1%, -%2%, %1%, -11, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, Concrete3, 1.5, -158.42 + 6.25 - 0.33, -88, -%1%, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, False
 
     #Internal Walls
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Front, %4%, 0, -%1%, -%2%, %1%, -%2%, %height%, %height%, 0, 0, 0, 1, False
-    AddWall Left, %4%, 0, -%1%, -%2%, -%1%, %2%, %height%, %height%, 0, 0, 0, 1, False
+    AddWall Front, Concrete1, 0, -%1%, -%2%, %1%, -%2%, %height%, %height%, 0, 0, 0, 1, False
+    AddWall Front, Concrete1, 0, -158.42 + 6.25 + 0.33, -84.67, -%1%, -88, %height%, %height%, 0, 0, 0, 1, False
+    AddWall Left, %4%, 0, -%1%, -11.33, -%1%, %2%, %height%, %height%, 0, 0, 0, 1, False
+    AddWall Left, Concrete1, 0, -%1%, -%2%, -%1%, -88, %height%, %height%, 0, 0, 0, 1, False
+    AddWall Left, Concrete1, 0, -%1%, -29.66 - 18 - 0.33, -%1%, -11.33, %height%, %height%, 0, 0, 0, 1, False
+    AddWall Left, Concrete1, 0, -158.42 + 6.25 + 0.33, -84.67, -158.42 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Right, %4%, 0, %1%, -%2%, %1%, %2%, %height%, %height%, 0, 0, 0, 1, False
+    AddWall Right, %4%, 0, %1%, -11.33, %1%, %2%, %height%, %height%, 0, 0, 0, 1, False
+    AddWall Right, Concrete1, 0, %1%, -%2%, %1%, -11.33, %height%, %height%, 0, 0, 0, 1, False
     AddWall Back, %4%, 0, -%1%, %2%, %1%, %2%, %height%, %height%, 0, 0, 0, 1, False
 
     WallOrientation = center
     DrawWalls = true, true, false, false, false, false
-    AddWall Wall1, %4%, 0.66, 15.83, -11.33, 77.48 + 4.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall1, %4%, 0.66, -77.48 - 4.25 - 0.33, -11.33, -15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
-    TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
-    AddWall Wall1, %4%, 0.66, -15.83, -11.33, 15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    TextureOverride Concrete1, %4%, Concrete1, Concrete1, Concrete1, Concrete1
+    AddWall Wall1, Concrete1, 0.66, 15.83, -11.33, %1%, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    TextureOverride Concrete1, %4%, Concrete1, Concrete1, Concrete1, Concrete1
+    AddWall Wall1, Concrete1, 0.66, -%1%, -11.33, -15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, Concrete1, 0.66, -15.83, -11.33, 15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall Wall1, %4%, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall2, %4%, 0.33, -56.82 - 4.25 - 0.33, -29.66 - 18 - 0.33, -56.82 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall3, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -27 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall4, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall5, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall6, %4%, 0.33, 77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, Concrete1, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall2, Concrete1, 0.33, -56.82 - 4.25 - 0.33, -29.66 - 18 - 0.33, -56.82 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall3, Concrete1, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -27 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, Concrete1, 0.33, 15.83 - 6.25 - 0.33, -68, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall5, Concrete1, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall6, Concrete1, 0.33, 77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall7, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall8, %4%, 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall9, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.33, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall24, %4%, 0.33, 77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall25, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall26, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall27, %4%, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall28, %4%, 0.33, -56.82 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall29, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall29, Concrete1, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall31, %4%, 0.33, -22.66 - 4.25 - 0.33, 11.33, -22.66 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall33, %4%, 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall33, Concrete1, 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall36, %4%, 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -10.17 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall38, %4%, 0.33, -22.66 - 4.25 - 0.33, 43.66 + 10.67, -10.17 - 4.25 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall39, Concrete1, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 110, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall40, Concrete1, 0.33, -110, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall Wall10, %4%, 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall11, %4%, 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18 - 0.33, 56.82 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall12, %4%, 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall13, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall14, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall15, %4%, 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall10, Concrete1, 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall11, Concrete1, 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18 - 0.33, 56.82 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12, Concrete1, 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall13, Concrete1, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, Concrete1, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall15, Concrete1, 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
@@ -400,22 +431,217 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall23, %4%, 0.33, -57.83 - 5.25 - 0.33, 33.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall24, Concrete1, 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18, 110, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall25, Concrete1, 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18, 77.48 - 4.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall26, Concrete1, 0.33, 27 + 4.25 + 0.33, -29.66 - 18, 47.66 - 4.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall27, Concrete1, 0.33, -110, -29.66 - 18, -77.48 - 4.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall28, Concrete1, 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18, -56.82 - 4.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall30, %4%, 0.33, -22.66 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall32, %4%, 0.33, -27 - 4.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall34, %4%, 0.33, -27 - 4.25, -34.16 + 13.5 + 0.33, -27 - 4.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall32, Concrete1, 0.33, -27 - 4.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall34, Concrete1, 0.33, -27 - 4.25, -34.16 + 13.5 + 0.33, -27 - 4.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall35, %4%, 0.33, -22.66 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall37, %4%, 0.33, -22.66 - 4.25, 22.16 + 10.5 + 0.33, -22.66 - 4.25, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall46, Concrete1, 0.33, 15.83 - 6.25, -68.33, 15.83 - 6.25, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall41, Concrete1, 0.33, 110, -29.66 - 18 - 0.33, 110, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall45, Concrete1, 0.33, -%1%, -68, 15.83 - 6.25, -68, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall46, Concrete1, 0.33, 35, -68, %1%, -68, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall48, Concrete1, 0.33, -%1%, -88, 35.33, -88, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall50, Concrete1, 0.33, -16.58, -140, -16.58, -88, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall54, Concrete1, 0.33, 50, -98, 50, -68, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall55, Concrete1, 0.33, 35, -98, 100.33, -98, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall57, Concrete1, 0.33, 49.67, -105, 57.33, -105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall58, Concrete1, 0.33, 50, -140, 50, -105, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall60, Concrete1, 0.33, 65, -140, 65, -118, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall63, Concrete1, 0.33, -158.42 + 6.25 + 0.33, -64.67, -%1%, -68, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall Wall42, Concrete1, 0.33, -110, -29.66 - 18 - 0.33, -110, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall47, Concrete1, 0.33, 35, -%2%, 35, -68, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall53, Concrete1, 0.33, -31.58, -124, -31.58, -112, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall54, Concrete1, 0.33, 100, -118, 100, -68, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall56, Concrete1, 0.33, 57, -105.33, 57, -98, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall59, Concrete1, 0.33, 35, -118, 100.33, -118, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall61, Concrete1, 0.33, 110, -140, 110, -68, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall62, Concrete1, 0.33, 110, -81, %1%, -81, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = center
+    AddWall Wall43, Concrete1, 0.33, -96.03, -29.66 - 18 - 0.33, -96.03, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall44, Concrete1, 0.33, 96.03, -29.66 - 18 - 0.33, 96.03, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall49, Concrete1, 0.33, -31.58, -118, -16.58, -118, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = left
+    AddWall Wall51Bottom, Concrete1, 0.33, -31.58, -112, -31.58, -88.33, 2.5, 2.5, 0, 0, 0, 0, False
+    AddWall Wall51Top, Concrete1, 0.33, -31.58, -112, -31.58, -88.33, 2.5, 2.5, 7, 7, 0, 0, False
+    AddWall Wall52Bottom, Concrete1, 0.33, -31.58, -140, -31.58, -124, 2.5, 2.5, 0, 0, 0, 0, False
+    AddWall Wall52Top, Concrete1, 0.33, -31.58, -140, -31.58, -124, 2.5, 2.5, 7, 7, 0, 0, False
+    AddWall FillerSide, Concrete1, 0.33, -31.58, -124, -31.58 + 0.33, -124, 4.5, 4.5, 2.5, 2.5, 0, 0, False
+    WallOrientation = right
+    AddWall FillerSide, Concrete1, 0.33, -31.58, -112, -31.58 + 0.33, -112, 4.5, 4.5, 2.5, 2.5, 0, 0, False
+
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor FillerBottom, Concrete1, 1.5, -31.58, -112, -31.58 + 0.33, -88.33, 2.5, 2.5, 0, 0, False
+    AddFloor FillerBottom, Concrete1, 1.5, -31.58, -140, -31.58 + 0.33, -124, 2.5, 2.5, 0, 0, False
+
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor FillerTop, Concrete1, 1.5, -31.58, -112, -31.58 + 0.33, -88.33, 7, 7, 0, 0, False
+    AddFloor FillerTop, Concrete1, 1.5, -31.58, -140, -31.58 + 0.33, -124, 7, 7, 0, 0, False
+
+    WallOrientation = center
+    DrawWalls = true, true, false, false, false, false
+    SetAutoSize = false, false
+    AddWall Wall51Window, Window, 0, -31.58 + 0.165, -112, -31.58 + 0.165, -88.33, 4.5, 4.5, 2.5, 2.5, 2, 1, False
+    AddWall Wall52Window, Window, 0, -31.58 + 0.165, -140, -31.58 + 0.165, -124, 4.5, 4.5, 2.5, 2.5, 1, 1, False
+    SetAutoSize = true, true
 
     #Core Doors
     WallOrientation = center
+
+    #To Service Elevators
     AddDoor Door8, 0.2, 5, 1.75, -11.33, 3.5, 8, 0, 1, 1
     AddDoor Door8, 0.2, 8, -1.75, -11.33, 3.5, 8, 0, 1, 1
-    AddDoor Door8, 0.2, 2, -31.415, -15.83, 3.5, 8, 0, 1, 1
-    AddDoor Door8, 0.2, 2, -27.075, 36.565, 3.5, 8, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.66, 0, -11.33, 7, 8, 0, true, 0, 0
+    
+    #Stairwell Exit
+    AddDoor Door8, 0.2, 4, -31.415, -15.83, 3.5, 8, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.33, -31.415, -15.83, 3.5, 8, 0, false, 0, 0
+
+    #Door to Conference Service Elevator
+    AddDoor Door8, 0.2, 2, -27.075, 36.565, 3.5, 8, 0, 1, 1
     AddFillerWalls ConnectionWall, 0.33, -27.075, 36.565, 3.5, 8, 0, false, 0, 0
+
+    #East Corridor Entrance
+    AddDoor Door8, 0.2, 6, 125 + 1.75, -11.33, 3.5, 8, 0, 1, 1
+    AddDoor Door8, 0.2, 7, 125 - 1.75, -11.33, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.66, 125, -11.33, 7, 8, 0, true, 0, 0
+
+    #West Corridor Entrance
+    AddDoor Door8, 0.2, 5, -125 + 1.75, -11.33, 3.5, 8, 0, 1, 1
+    AddDoor Door8, 0.2, 8, -125 - 1.75, -11.33, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.66, -125, -11.33, 7, 8, 0, true, 0, 0
+
+    #Corridor Access Door 1
+    AddDoor Door8, 0.2, 4, 9.25 + 0.165, -58 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor Door8, 0.2, 1, 9.25 + 0.165, -58 - 1.75, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 9.25 + 0.165, -58, 7, 8, 0, false, 0, 0
+
+    #Corridor Access Door 2
+    AddDoor Door8, 0.2, 6, -125 + 1.75, -68.165, 3.5, 8, 0, 1, 1
+    AddDoor Door8, 0.2, 7, -125 - 1.75, -68.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -125, -68.165, 7, 8, 0, true, 0, 0
+
+    #Room LL01 West
+    AddDoor Door8, 0.2, 5, -125 + 1.75, -88.165, 3.5, 8, 0, 1, 1
+    AddDoor Door8, 0.2, 8, -125 - 1.75, -88.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -125, -88.165, 7, 8, 0, true, 0, 0
+
+    #Room LL01 East
+    AddDoor Door8, 0.2, 5, -36.08 + 1.75, -88.165, 3.5, 8, 0, 1, 1
+    AddDoor Door8, 0.2, 8, -36.08 - 1.75, -88.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -36.08, -88.165, 7, 8, 0, true, 0, 0
+
+    #Room LL01A Corridor Entrance
+    AddDoor Door8, 0.2, 8, -28.58, -88.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -28.58, -88.165, 3.5, 8, 0, true, 0, 0
+
+    #Room LL01A
+    AddDoor Door8, 0.2, 2, -31.58 + 0.165, -115, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -31.58 + 0.165, -115, 3.5, 8, 0, false, 0, 0
+
+    #Room LL01B
+    AddDoor Door8, 0.2, 3, -31.58 + 0.165, -121, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -31.58 + 0.165, -121, 3.5, 8, 0, false, 0, 0
+
+    #Room LL02
+    AddDoor Door8, 0.2, 7, -67.15, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -67.15, -29.66 - 18 - 0.165, 3.5, 8, 0, true, 0, 0
+
+    #Room LL03
+    AddDoor Door8, 0.2, 5, 30.25 + 1.75, -88.165, 3.5, 8, 0, 1, 1
+    AddDoor Door8, 0.2, 8, 30.25 - 1.75, -88.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 30.25, -88.165, 7, 8, 0, true, 0, 0
+
+    #Room LL03A
+    AddDoor Door8, 0.2, 2, 35 + 0.165, -95, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 35 + 0.165, -95, 3.5, 8, 0, false, 0, 0
+
+    #Room LL03B Corridor Entrance
+    AddDoor Door8, 0.2, 5, 47, -68.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 47, -68.165, 3.5, 8, 0, true, 0, 0
+
+    #Room LL03B
+    AddDoor Door8, 0.2, 3, 35 + 0.165, -121, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 35 + 0.165, -121, 3.5, 8, 0, false, 0, 0
+
+    #Room LL04
+    AddDoor Door8, 0.2, 7, 37.33, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 37.33, -29.66 - 18 - 0.165, 3.5, 8, 0, true, 0, 0
+
+    #Room LL05
+    AddDoor Door8, 0.2, 5, 75 + 1.75, -68.165, 3.5, 8, 0, 1, 1
+    AddDoor Door8, 0.2, 8, 75 - 1.75, -68.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 75, -68.165, 7, 8, 0, true, 0, 0
+
+    #Room LL05A
+    AddDoor Door8, 0.2, 5, 53.5, -98.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 53.5, -98.165, 3.5, 8, 0, true, 0, 0
+
+    #Room LL06
+    AddDoor Door8, 0.2, 6, 67.15, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 67.15, -29.66 - 18 - 0.165, 3.5, 8, 0, true, 0, 0
+
+    #Room LL07
+    AddDoor Door8, 0.2, 5, 105, -68.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 105, -68.165, 3.5, 8, 0, true, 0, 0
+
+    #Room LL07A
+    AddDoor Door8, 0.2, 3, 110.165, -71, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 110.165, -71, 3.5, 8, 0, false, 0, 0
+
+    #Room LL07A Entrance from LL07B
+    AddDoor Door8, 0.2, 7, 113, -81 + 0.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 113, -81 + 0.165, 3.5, 8, 0, true, 0, 0
+
+    #Room LL07B
+    AddDoor Door8, 0.2, 2, 110.165, -137, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 110.165, -137, 3.5, 8, 0, false, 0, 0
+
+    #Room LL07C
+    AddDoor Door8, 0.2, 6, 97, -118 + 0.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 97, -118 + 0.165, 3.5, 8, 0, true, 0, 0
+
+    #Room LL07D
+    AddDoor Door8, 0.2, 1, 65 - 0.165, -137, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 65 - 0.165, -137, 3.5, 8, 0, false, 0, 0
+
+    #Room LL07D Entrance from LL07C
+    AddDoor Door8, 0.2, 5, 62, -118 + 0.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, 62, -118 + 0.165, 3.5, 8, 0, true, 0, 0
+
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick1, 0.5, -%1%, -%2%, %1%, %2%, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick1, 0.5, -%1%, -%2%, %1%, %2%, %interfloorheight%, %interfloorheight%, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFrontInt, InterInt, 0.5, -%1%, -%2%, -%1%, %2%, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeftInt, InterInt, 0.5, %1%, -%2%, -%1%, -%2%, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRightInt, InterInt, 0.5, -%1%, %2%, %1%, %2%, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBackInt, InterInt, 0.5, %1%, %2%, %1%, -%2%, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloor>
+
+Set 1 = 110 #building x length
+Set 2 = 110 #building z length
 
 <Floor -2>
     ID = P1
@@ -474,22 +700,111 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
 <EndFloor>
 
 <Floor -9>
-    ID = SB
-    Name = Service Basement
+    ID = SP
+    Name = Staff Parking
     Type = Basement
     Height = 8.5
     InterfloorHeight = 1.5
 <EndFloor>
 
 <Floor -10>
-    ID = SB
-    Name = Service Basement
+    ID = LSP
+    Name = Lower Staff Parking
     Type = Basement
     Height = 8.5
     InterfloorHeight = 1.5
 <EndFloor>
 
-<Floors -9 to -2>
+<Floor -11>
+    ID = G
+    Name = Level G
+    Type = Basement
+    Height = 8.5
+    InterfloorHeight = 1.5
+<EndFloor>
+
+<Floor -12>
+    ID = G
+    Name = Level G
+    Type = Basement
+    Height = 8.5
+    InterfloorHeight = 1.5
+<EndFloor>
+
+#Parking Garage Entrance/Exit
+
+#Entrance/Exit Ramps
+    #Ramps
+    SetAutoSize = false, false
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Landscape, P1Ramp, ParkingRoadZ, 1.5, -190, -85, -165, 190, Floor(-2).Altitude + Floor(-2).InterfloorHeight, 0, 1, 4
+    AddFloor Landscape, Entrance/Exit, ParkingRoadZ, 1.5, -190, 190, -165, 220, 0, 0, 1, 4
+    AddFloor Landscape, P1Ramp, ParkingRoadZ, 1.5, 165, -190, 190, 85, 0, Floor(-2).Altitude + Floor(-2).InterfloorHeight, 1, 4
+    AddFloor Landscape, Entrance/Exit, ParkingRoadZ, 1.5, 165, -220, 190, -190, 0, 0, 1, 4
+    SetAutoSize = true, true
+
+    #Ramp Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Landscape, Left, Concrete1, 0, 165, -190, 165, 85, Floor(-2).Height, Floor(-2).Height, 0, Floor(-2).Altitude + Floor(-2).InterfloorHeight, 0, 0
+    AddWall Landscape, Left, Concrete1, 0, 165, -200, 165, -190, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Left, Concrete1, 0, -190, 190, -190, 200, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Left, Concrete1, 0, -190, -85, -190, 190, Floor(-2).Height, Floor(-2).Height, Floor(-2).Altitude + Floor(-2).InterfloorHeight, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Landscape, Right, Concrete1, 0, 190, -200, 190, -190, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Right, Concrete1, 0, 190, -190, 190, 85, Floor(-2).Height, Floor(-2).Height, 0, Floor(-2).Altitude + Floor(-2).InterfloorHeight, 0, 0
+    AddWall Landscape, Right, Concrete1, 0, -165, -85, -165, 190, Floor(-2).Height, Floor(-2).Height, Floor(-2).Altitude + Floor(-2).InterfloorHeight, 0, 0, 0
+    AddWall Landscape, Right, Concrete1, 0, -165, 190, -165, 200, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+
+    #Ceilings
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Landscape, Ceiling, Concrete3, 1.5, -190, -85, -165, 190, Floor(-2).Altitude + Floor(-2).FullHeight, 0 + Floor(-2).Height, 0, 0
+    AddFloor Landscape, Ceiling, Concrete3, 1.5, 165, -190, 190, 85, 0 + Floor(-2).Height, Floor(-2).Altitude + Floor(-2).FullHeight, 0, 0
+
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride Concrete3, Concrete2, Concrete3, Concrete3, Concrete3, Concrete3
+    AddFloor Landscape, BoothCeiling, Concrete3, 1, -191, 70, -164, 200, 0 + Floor(-2).Height, 0 + Floor(-2).Height, 0, 0
+    TextureOverride Concrete3, Concrete2, Concrete3, Concrete3, Concrete3, Concrete3
+    AddFloor Landscape, BoothCeiling, Concrete3, 1, 164, -200, 191, -70, 0 + Floor(-2).Height, 0 + Floor(-2).Height, 0, 0
+
+    #Entrance/Exit Walls
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Landscape, Wall1, Concrete1, 0.33, 164, -200, 164, -70, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Wall4, Concrete1, 0.33, 164, -200, 165, -200, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Wall5, Concrete1, 0.33, 165, -200, 190, -200, 1, 1, Floor(-2).Height, Floor(-2).Height, 0, 0
+    AddWall Landscape, Wall6, Concrete1, 0.33, 190, -200, 191, -200, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Wall7, Concrete1, 0.33, -191, 70, -191, 200, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Wall8, Concrete1, 0.33, -191, 70, -164, 70, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall Landscape, Wall2, Concrete1, 0.33, 191, -200, 191, -70, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Wall3, Concrete1, 0.33, 164, -70, 191, -70, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Wall9, Concrete1, 0.33, -164, 70, -164, 200, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Wall10, Concrete1, 0.33, -165, 200, -164, 200, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+    AddWall Landscape, Wall11, Concrete1, 0.33, -190, 200, -165, 200, 1, 1, Floor(-2).Height, Floor(-2).Height, 0, 0
+    AddWall Landscape, Wall12, Concrete1, 0.33, -191, 200, -190, 200, Floor(-2).Height + 1, Floor(-2).Height + 1, 0, 0, 0, 0
+
+#Landscaping
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Landscape, Grass, Grass, 1.5, 190, -220, 220, -70, 0, 0, 0, 0
+    AddFloor Landscape, Grass, Grass, 1.5, %1%, -%2%, 165, -70, 0, 0, 0, 0
+    AddFloor Landscape, Grass, Grass, 1.5, %1%, -70, 220, %2%, 0, 0, 0, 0
+    AddFloor Landscape, Grass, Grass, 1.5, 44, -220, 165, -%2%, 0, 0, 0, 0
+    AddFloor Landscape, South Entrance Walkway, Marble1, 1.5, -44, -220, 44, -%2%, 0, 0, 0, 0
+    AddFloor Landscape, Grass, Grass, 1.5, -220, -220, -44, -%2%, 0, 0, 0, 0
+    AddFloor Landscape, Grass, Grass, 1.5, -220, 70, -190, 220, 0, 0, 0, 0
+    AddFloor Landscape, Grass, Grass, 1.5, -165, 70, -%1%, %2%, 0, 0, 0, 0
+    AddFloor Landscape, Grass, Grass, 1.5, -220, -%2%, -%1%, 70, 0, 0, 0, 0
+    AddFloor Landscape, Grass, Grass, 1.5, -165, %2%, -44, 220, 0, 0, 0, 0
+    AddFloor Landscape, South Entrance Walkway, Marble1, 1.5, -44, %2%, 44, 220, 0, 0, 0, 0
+    AddFloor Landscape, Grass, Grass, 1.5, 44, %2%, 220, 220, 0, 0, 0, 0
+
+<Floors -10 to -2>
     Set 3 = Concrete3 #Floor Texture
     Set 4 = Concrete1 #Wall Texture
     Set 5 = Concrete3 #Ceiling Texture
@@ -503,16 +818,6 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     AddFloor Ceiling, %5%, 1.5, -%1%, -%2%, %1%, %2%, %height%, %height%, 0, 0, False
-
-    #Internal Walls
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Front, %4%, 0, -%1%, -%2%, %1%, -%2%, %height%, %height%, 0, 0, 0, 1, False
-    AddWall Left, %4%, 0, -%1%, -%2%, -%1%, %2%, %height%, %height%, 0, 0, 0, 1, False
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddWall Right, %4%, 0, %1%, -%2%, %1%, %2%, %height%, %height%, 0, 0, 0, 1, False
-    AddWall Back, %4%, 0, -%1%, %2%, %1%, %2%, %height%, %height%, 0, 0, 0, 1, False
 
     WallOrientation = left
     Drawwalls = true, true, false, false, false, false
@@ -545,6 +850,727 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddFillerWalls ConnectionWall, 0.33, 0, -11.165, 7, 8, 0, true, 0, 0
     if[%floor% ! -2] AddFillerWalls ConnectionWall, 0.33, -14.585, 48.73, 3.5, 8, 0, false, 0, 0
 <EndFloors>
+
+#Parking Ramps and Main Walls
+#The ring to the north entrance is Ring 1.
+#The ring to the south entrance is Ring 2.
+
+<Floors -10 to -2>
+Set 12 = (%fullheight% + Floor(%floor% + 1).InterfloorHeight) / 2
+<EndFloors>
+
+<Floor -9>
+    #Internal Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -%1%, -%2%, 165, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Front, %4%, 0, -165, 85, -%1%, 85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -%1%, -%2%, -%1%, 85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, %1%, -85, %1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, %1%, -85, 190, -85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, -165, %2%, %1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+
+    #Ring 1
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, -190, 85, -%1%, %2%, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    AddFloor Ring1_SPRamp1, ParkingRoadZ, 1.5, -190, %2%, -165, 165, %interfloorheight%, %12%, 1, 1, True
+    AddFloor Ring1_SPMid, ParkingRoadCurve1, 1.5, -190, 165, -165, 190, %12%, %12%, 1, 1, True
+    ReverseAxis = true
+    AddFloor Ring1_SPRamp2, ParkingRoadX, 1.5, -165, 190, -%1%, 165, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 1, 1, True
+    ReverseAxis = false
+    SetAutoSize = true, true
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left, %4%, 0, -190, 85, -190, %1%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -190, %1%, -190, 165, %height%, %height%, %interfloorheight%, %12%, 0, 1, True
+    AddWall Left, %4%, 0, -190, 165, -190, 190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Front, %4%, 0, -165, 165, -%1%, 165, %height%, %height%, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Back, %4%, 0, -190, 190, -165, 190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Back, %4%, 0, -165, 190, -%1%, 190, %height%, %height%, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+    AddWall Right, %4%, 0, -165, %1%, -165, 165, %height%, %height%, %interfloorheight%, %12%, 0, 1, True
+
+    #Ring 2
+    SetAutoSize = false, false
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoadX, 1.5, %1%, -%2%, 165, -85, %interfloorheight%, %interfloorheight%, 1, 1, True
+    AddFloor Floor, ParkingRoadCurve2, 1.5, 165, -%2%, 190, -85, %interfloorheight%, %interfloorheight%, 1, 1, True
+
+    AddFloor Ring2_SPRamp1, ParkingRoadZ, 1.5, 165, -165, 190, -%2%, %12%, %interfloorheight%, 1, 1, True
+    AddFloor Ring2_SPMid, ParkingRoadCurve4, 1.5, 165, -190, 190, -165, %12%, %12%, 1, 1, True
+    ReverseAxis = true
+    AddFloor Ring2_SPRamp2, ParkingRoadX, 1.5, %1%, -165, 165, -190, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 1, 1, True
+    ReverseAxis = false
+    SetAutoSize = true, true
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, 165, -190, 190, -190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Front, %4%, 0, %1%, -190, 165, -190, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 0, 1, True
+    AddWall Left, %4%, 0, 165, -165, 165, -%1%, %height%, %height%, %12%, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, 190, -%1%, 190, -85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, 190, -165, 190, -%1%, %height%, %height%, %12%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, 190, -190, 190, -165, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Back, %4%, 0, %1%, -165, 165, -165, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 0, 1, True
+<EndFloor>
+
+<Floor -8>
+    #Internal Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -%1%, -%2%, 85, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -%1%, -%2%, -%1%, 165, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, 85, -165, 85, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, -85, %2%, -85, 165, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, %1%, -165, %1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, -85, %2%, %1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+
+    #Ring 1
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, -%1%, %2%, -85, 190, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    ReverseAxis = true
+    AddFloor Ring1_P7Ramp, ParkingRoadX, 1.5, -85, 190, 85, 165, %interfloorheight%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 2, 1, True
+    ReverseAxis = false
+    SetAutoSize = true, true
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -85, 165, 85, 165, %height%, %height%, %interfloorheight%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Back, %4%, 0, -%1%, 190, -85, 190, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, -85, 190, 85, 190, %height%, %height%, %interfloorheight%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+
+    #Ring 2
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, 85, -190, %1%, -%2%, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    ReverseAxis = true
+    AddFloor Ring2_P7Ramp, ParkingRoadX, 1.5, -85, -165, 85, -190, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %interfloorheight%, 2, 1, True
+    ReverseAxis = false
+    SetAutoSize = true, true
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, 85, -190, %1%, -190, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Front, %4%, 0, -85, -190, 85, -190, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Back, %4%, 0, -85, -165, 85, -165, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %interfloorheight%, 0, 1, True
+<EndFloor>
+
+<Floor -7>
+    #Internal Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -85, -%2%, %1%, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -%1%, -165, -%1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, 85, %2%, 85, 165, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, -85, -165, -85, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, %1%, -%2%, %1%, 165, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, -%1%, %2%, 85, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+
+    #Ring 1
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, 85, %2%, %1%, 190, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    ReverseAxis = true
+    AddFloor Ring1_P6Ramp1, ParkingRoadX, 1.5, %1%, 190, 165, 165, %interfloorheight%, %12%, 0, 0, True
+    ReverseAxis = false
+    AddFloor Ring1_P6Mid, ParkingRoadCurve2, 1.5, 165, 165, 190, 190, %12%, %12%, 0, 0, True
+    AddFloor Ring1_P6Ramp2, ParkingRoadZ, 1.5, 165, %2%, 190, 165, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 0, 0, True
+    SetAutoSize = true, true
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, %1%, 165, 165, 165, %height%, %height%, %interfloorheight%, %12%, 0, 1, True
+    AddWall Left, %4%, 0, 165, %2%, 165, 165, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Back, %4%, 0, 85, 190, %1%, 190, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, %1%, 190, 165, 190, %height%, %height%, %interfloorheight%, %12%, 0, 1, True
+    AddWall Back, %4%, 0, 165, 190, 190, 190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Right, %4%, 0, 190, 165, 190, 190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Right, %4%, 0, 190, %2%, 190, 165, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 0, 1, True
+
+    #Ring 2
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, -%1%, -190, -85, -%2%, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    ReverseAxis = true
+    AddFloor Ring2_P6Ramp1, ParkingRoadX, 1.5, -165, -165, -%1%, -190, %12%, %interfloorheight%, 1, 1, True
+    ReverseAxis = false
+    AddFloor Ring2_P6Mid, ParkingRoadCurve3, 1.5, -190, -190, -165, -165, %12%, %12%, 1, 1, True
+    AddFloor Ring2_P6Ramp2, ParkingRoadZ, 1.5, -190, -165, -165, -%2%, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 1, 1, True
+    SetAutoSize = true, true
+
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -%1%, -190, -85, -190, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Front, %4%, 0, -165, -190, -%1%, -190, %height%, %height%, %12%, %interfloorheight%, 0, 1, True
+    AddWall Front, %4%, 0, -190, -190, -165, -190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Left, %4%, 0, -190, -190, -190, -165, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Left, %4%, 0, -190, -165, -190, -%2%, %height%, %height%, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Back, %4%, 0, -165, -165, -%1%, -165, %height%, %height%, %12%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, -165, -165, -165, -%2%, %height%, %height%, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+<EndFloor>
+
+<Floor -6>
+    #Internal Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -165, -%2%, %1%, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -%1%, -85, -%1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, %1%, 85, 165, 85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, %1%, -%2%, %1%, 85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, -165, -85, -%1%, -85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, -%1%, %2%, 165, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+
+    #Ring 1
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, %1%, 85, 190, %2%, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    AddFloor Ring1_P5Ramp, ParkingRoadZ, 1.5, 165, -85, 190, 85, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %interfloorheight%, 1, 2, True
+    SetAutoSize = true, true
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left, %4%, 0, 165, -85, 165, 85, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, 190, 85, 190, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, 190, -85, 190, 85, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %interfloorheight%, 0, 1, True
+
+    #Ring 2
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, -190, -%2%, -%1%, -85, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    AddFloor Ring2_P5Ramp, ParkingRoadZ, 1.5, -190, -85, -165, 85, %interfloorheight%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 1, 2, True
+    SetAutoSize = true, true
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left, %4%, 0, -190, -%2%, -190, -85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -190, -85, -190, 85, %height%, %height%, %interfloorheight%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, -165, -85, -165, 85, %height%, %height%, %interfloorheight%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+
+<EndFloor>
+
+<Floor -5>
+    #Internal Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -%1%, -%2%, 165, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Front, %4%, 0, -165, 85, -%1%, 85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -%1%, -%2%, -%1%, 85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, %1%, -85, %1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, %1%, -85, 165, -85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, -165, %2%, %1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+
+    #Ring 1
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, %1%, -%2%, 190, -85, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    AddFloor Ring1_P4Ramp1, ParkingRoadZ, 1.5, 165, -165, 190, -%2%, %12%, %interfloorheight%, 1, 1, True
+    AddFloor Ring1_P4Mid, ParkingRoadCurve4, 1.5, 165, -190, 190, -165, %12%, %12%, 1, 1, True
+    ReverseAxis = true
+    AddFloor Ring1_P4Ramp2, ParkingRoadX, 1.5, %1%, -165, 165, -190, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 1, 1, True
+    ReverseAxis = false
+    SetAutoSize = true, true
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, 165, -190, 190, -190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Front, %4%, 0, %1%, -190, 165, -190, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 0, 1, True
+    AddWall Left, %4%, 0, 165, -165, 165, -%1%, %height%, %height%, %12%, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, 190, -%1%, 190, -85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, 190, -165, 190, -%1%, %height%, %height%, %12%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, 190, -190, 190, -165, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Back, %4%, 0, %1%, -165, 165, -165, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 0, 1, True
+
+    #Ring 2
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, -190, 85, -%1%, %2%, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    AddFloor Ring2_P4Ramp1, ParkingRoadZ, 1.5, -190, %2%, -165, 165, %interfloorheight%, %12%, 1, 1, True
+    AddFloor Ring2_P4Mid, ParkingRoadCurve1, 1.5, -190, 165, -165, 190, %12%, %12%, 1, 1, True
+    ReverseAxis = true
+    AddFloor Ring2_P4Ramp2, ParkingRoadX, 1.5, -165, 190, -%1%, 165, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 1, 1, True
+    ReverseAxis = false
+    SetAutoSize = true, true
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left, %4%, 0, -190, 85, -190, %1%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -190, %1%, -190, 165, %height%, %height%, %interfloorheight%, %12%, 0, 1, True
+    AddWall Left, %4%, 0, -190, 165, -190, 190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Front, %4%, 0, -165, 165, -%1%, 165, %height%, %height%, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Back, %4%, 0, -190, 190, -165, 190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Back, %4%, 0, -165, 190, -%1%, 190, %height%, %height%, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+    AddWall Right, %4%, 0, -165, %1%, -165, 165, %height%, %height%, %interfloorheight%, %12%, 0, 1, True
+<EndFloor>
+
+<Floor -4>
+    #Internal Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -%1%, -%2%, 85, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -%1%, -%2%, -%1%, 165, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, 85, -165, 85, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, -85, %2%, -85, 165, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, %1%, -165, %1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, -85, %2%, %1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+
+    #Ring 1
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, 85, -190, %1%, -%2%, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    ReverseAxis = true
+    AddFloor Ring1_P3Ramp, ParkingRoadX, 1.5, -85, -165, 85, -190, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %interfloorheight%, 2, 1, True
+    ReverseAxis = false
+    SetAutoSize = true, true
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, 85, -190, %1%, -190, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Front, %4%, 0, -85, -190, 85, -190, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Back, %4%, 0, -85, -165, 85, -165, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %interfloorheight%, 0, 1, True
+
+    #Ring 2
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, -%1%, %2%, -85, 190, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    ReverseAxis = true
+    AddFloor Ring2_P3Ramp, ParkingRoadX, 1.5, -85, 190, 85, 165, %interfloorheight%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 2, 1, True
+    ReverseAxis = false
+    SetAutoSize = true, true
+
+    #Internal Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -85, 165, 85, 165, %height%, %height%, %interfloorheight%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Back, %4%, 0, -%1%, 190, -85, 190, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, -85, 190, 85, 190, %height%, %height%, %interfloorheight%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+<EndFloor>
+
+<Floor -3>
+    #Internal Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -85, -%2%, %1%, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -%1%, -165, -%1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, 85, %2%, 85, 165, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, -85, -165, -85, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, %1%, -%2%, %1%, 165, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, -%1%, %2%, 85, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+
+    #Ring 1
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, -%1%, -190, -85, -%2%, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    ReverseAxis = true
+    AddFloor Ring1_P2Ramp1, ParkingRoadX, 1.5, -165, -165, -%1%, -190, %12%, %interfloorheight%, 0, 0, True
+    ReverseAxis = false
+    AddFloor Ring1_P2Mid, ParkingRoadCurve3, 1.5, -190, -190, -165, -165, %12%, %12%, 0, 0, True
+    AddFloor Ring1_P2Ramp2, ParkingRoadZ, 1.5, -190, -165, -165, -%2%, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 0, True
+    SetAutoSize = true, true
+
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -%1%, -190, -85, -190, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Front, %4%, 0, -165, -190, -%1%, -190, %height%, %height%, %12%, %interfloorheight%, 0, 1, True
+    AddWall Front, %4%, 0, -190, -190, -165, -190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Left, %4%, 0, -190, -190, -190, -165, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Left, %4%, 0, -190, -165, -190, -%2%, %height%, %height%, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Back, %4%, 0, -165, -165, -%1%, -165, %height%, %height%, %12%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, -165, -165, -165, -%2%, %height%, %height%, %12%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 1, True
+
+    #Ring 2
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, 85, %2%, %1%, 190, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    SetAutoSize = false, false
+    ReverseAxis = true
+    AddFloor Ring2_P2Ramp1, ParkingRoadX, 1.5, %1%, 190, 165, 165, %interfloorheight%, %12%, 1, 1, True
+    ReverseAxis = false
+    AddFloor Ring2_P2Mid, ParkingRoadCurve2, 1.5, 165, 165, 190, 190, %12%, %12%, 1, 1, True
+    AddFloor Ring2_P2Ramp2, ParkingRoadZ, 1.5, 165, %2%, 190, 165, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 1, 1, True
+    SetAutoSize = true, true
+
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, %1%, 165, 165, 165, %height%, %height%, %interfloorheight%, %12%, 0, 1, True
+    AddWall Left, %4%, 0, 165, %2%, 165, 165, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Back, %4%, 0, 85, 190, %1%, 190, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, %1%, 190, 165, 190, %height%, %height%, %interfloorheight%, %12%, 0, 1, True
+    AddWall Back, %4%, 0, 165, 190, 190, 190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Right, %4%, 0, 190, 165, 190, 190, %height%, %height%, %12%, %12%, 0, 1, True
+    AddWall Right, %4%, 0, 190, %2%, 190, 165, %height%, %height%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %12%, 0, 1, True
+<EndFloor>
+
+<Floor -2>
+    #Internal Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, %4%, 0, -165, -%2%, %1%, -%2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, -%1%, -85, -%1%, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Left, %4%, 0, %1%, 85, 165, 85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, %1%, -%2%, %1%, 85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Right, %4%, 0, -165, -85, -%1%, -85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+    AddWall Back, %4%, 0, -%1%, %2%, 165, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+
+    #Ring 1
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, -190, -%2%, -%1%, -85, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    #AddFloor Ring1_P1Ramp, ParkingRoadZ, 1.5, -190, -85, -165, 190, %interfloorheight%, %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 0, True
+
+    #Walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left, %4%, 0, -190, -%2%, -190, -85, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+
+    #Ring 2
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, ParkingRoad, 1.5, %1%, 85, 190, %2%, %interfloorheight%, %interfloorheight%, 0, 0, True
+
+    #AddFloor Ring2_P1Ramp, %3%, 1.5, 165, -85, 190, 85, %fullheight% + Floor(%floor% + 1).InterfloorHeight, %interfloorheight%, 0, 0, True
+
+    #Walls
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right, %4%, 0, 190, 85, 190, %2%, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 1, True
+<EndFloor>
+
+#Parking Ramp Ceilings
+<Floor -9>
+    #Ring 1
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -190, 85, -%1%, %2%, %fullheight%, %fullheight%, 0, 0, True
+
+    AddFloor Ring1_SPRamp1, %3%, 1.5, -190, %2%, -165, 165, %fullheight%, %height% + %12%, 0, 0, True
+    AddFloor Ring1_SPMid, %3%, 1.5, -190, 165, -165, 190, %height% + %12%, %height% + %12%, 0, 0, True
+    ReverseAxis = true
+    AddFloor Ring1_SPRamp2, %3%, 1.5, -165, 190, -%1%, 165, %height% + %12%, %height% + (%fullheight% + Floor(%floor% + 1).InterfloorHeight), 0, 0, True
+    ReverseAxis = false
+
+    #Ring 2
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, %1%, -%2%, 190, -85, %fullheight%, %fullheight%, 0, 0, True
+
+    AddFloor Ring2_SPRamp1, %3%, 1.5, 165, -165, 190, -%2%, %height% + %12%, %fullheight%, 0, 0, True
+    AddFloor Ring2_SPMid, %3%, 1.5, 165, -190, 190, -165, %height% + %12%, %height% + %12%, 0, 0, True
+    ReverseAxis = true
+    AddFloor Ring2_SPRamp2, %3%, 1.5, %1%, -165, 165, -190, %height% + (%fullheight% + Floor(%floor% + 1).InterfloorHeight), %height% + %12%, 0, 0, True
+    ReverseAxis = false
+<EndFloor>
+
+<Floor -8>
+    #Ring 1
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -%1%, %2%, -85, 190, %fullheight%, %fullheight%, 0, 0, True
+
+    ReverseAxis = true
+    AddFloor Ring1_P7Ramp, %3%, 1.5, -85, 190, 85, 165, %fullheight%, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 0, True
+    ReverseAxis = false
+
+    #Ring 2
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, 85, -190, %1%, -%2%, %fullheight%, %fullheight%, 0, 0, True
+
+    ReverseAxis = true
+    AddFloor Ring2_P7Ramp, %3%, 1.5, -85, -165, 85, -190, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, %fullheight%, 0, 0, True
+    ReverseAxis = false
+<EndFloor>
+
+<Floor -7>
+    #Ring 1
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, 85, %2%, %1%, 190, %fullheight%, %fullheight%, 0, 0, True
+
+    ReverseAxis = true
+    AddFloor Ring1_P6Ramp1, %3%, 1.5, %1%, 190, 165, 165, %fullheight%, %height% + %12%, 0, 0, True
+    ReverseAxis = false
+    AddFloor Ring1_P6Mid, %3%, 1.5, 165, 165, 190, 190, %height% + %12%, %height% + %12%, 0, 0, True
+    AddFloor Ring1_P6Ramp2, %3%, 1.5, 165, %2%, 190, 165, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, %height% + %12%, 0, 0, True
+
+    #Ring 2
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -%1%, -190, -85, -%2%, %fullheight%, %fullheight%, 0, 0, True
+
+    ReverseAxis = true
+    AddFloor Ring2_P6Ramp1, %3%, 1.5, -165, -165, -%1%, -190, %height% + %12%, %fullheight%, 0, 0, True
+    ReverseAxis = false
+    AddFloor Ring2_P6Mid, %3%, 1.5, -190, -190, -165, -165, %height% + %12%, %height% + %12%, 0, 0, True
+    AddFloor Ring2_P6Ramp2, %3%, 1.5, -190, -165, -165, -%2%, %height% + %12%, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 0, True
+<EndFloor>
+
+<Floor -6>
+    #Ring 1
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, %1%, 85, 190, %2%, %fullheight%, %fullheight%, 0, 0, True
+
+    AddFloor Ring1_P5Ramp, %3%, 1.5, 165, -85, 190, 85, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, %fullheight%, 0, 0, True
+
+    #Ring 2
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -190, -%2%, -%1%, -85, %fullheight%, %fullheight%, 0, 0, True
+
+    AddFloor Ring2_P5Ramp, %3%, 1.5, -190, -85, -165, 85, %fullheight%, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 0, True
+<EndFloor>
+
+<Floor -5>
+    #Ring 1
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, %1%, -%2%, 190, -85, %fullheight%, %fullheight%, 0, 0, True
+
+    AddFloor Ring1_P4Ramp1, %3%, 1.5, 165, -165, 190, -%2%, %height% + %12%, %fullheight%, 0, 0, True
+    AddFloor Ring1_P4Mid, %3%, 1.5, 165, -190, 190, -165, %height% + %12%, %height% + %12%, 0, 0, True
+    ReverseAxis = true
+    AddFloor Ring1_P4Ramp2, %3%, 1.5, %1%, -165, 165, -190, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, %height% + %12%, 0, 0, True
+    ReverseAxis = false
+
+    #Ring 2
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -190, 85, -%1%, %2%, %fullheight%, %fullheight%, 0, 0, True
+
+    AddFloor Ring2_P4Ramp1, %3%, 1.5, -190, %2%, -165, 165, %fullheight%, %height% + %12%, 0, 0, True
+    AddFloor Ring2_P4Mid, %3%, 1.5, -190, 165, -165, 190, %height% + %12%, %height% + %12%, 0, 0, True
+    ReverseAxis = true
+    AddFloor Ring2_P4Ramp2, %3%, 1.5, -165, 190, -%1%, 165, %height% + %12%, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 0, True
+    ReverseAxis = false
+<EndFloor>
+
+<Floor -4>
+    #Ring 1
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, 85, -190, %1%, -%2%, %fullheight%, %fullheight%, 0, 0, True
+
+    ReverseAxis = true
+    AddFloor Ring1_P3Ramp, %3%, 1.5, -85, -165, 85, -190, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, %fullheight%, 0, 0, True
+    ReverseAxis = false
+
+    #Ring 2
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -%1%, %2%, -85, 190, %fullheight%, %fullheight%, 0, 0, True
+
+    ReverseAxis = true
+    AddFloor Ring2_P3Ramp, %3%, 1.5, -85, 190, 85, 165, %fullheight%, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 0, True
+    ReverseAxis = false
+<EndFloor>
+
+<Floor -3>
+    #Ring 1
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -%1%, -190, -85, -%2%, %fullheight%, %fullheight%, 0, 0, True
+
+    ReverseAxis = true
+    AddFloor Ring1_P2Ramp1, %3%, 1.5, -165, -165, -%1%, -190, %height% + %12%, %fullheight%, 0, 0, True
+    ReverseAxis = false
+    AddFloor Ring1_P2Mid, %3%, 1.5, -190, -190, -165, -165, %height% + %12%, %height% + %12%, 0, 0, True
+    AddFloor Ring1_P2Ramp2, %3%, 1.5, -190, -165, -165, -%2%, %height% + %12%, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 0, True
+
+    #Ring 2
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, 85, %2%, %1%, 190, %fullheight%, %fullheight%, 0, 0, True
+
+    ReverseAxis = true
+    AddFloor Ring2_P2Ramp1, %3%, 1.5, %1%, 190, 165, 165, %fullheight%, %height% + %12%, 0, 0, True
+    ReverseAxis = false
+    AddFloor Ring2_P2Mid, %3%, 1.5, 165, 165, 190, 190, %height% + %12%, %height% + %12%, 0, 0, True
+    AddFloor Ring2_P2Ramp2, %3%, 1.5, 165, %2%, 190, 165, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, %height% + %12%, 0, 0, True
+<EndFloor>
+
+<Floor -2>
+    #Ring 1
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -190, -%2%, -%1%, -85, %fullheight%, %fullheight%, 0, 0, True
+
+    #AddFloor Ring1_P1Ramp, %3%, 1.5, -190, -85, -165, 85, %fullheight%, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, 0, 0, True
+
+    #Ring 2
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Floor, %3%, 1.5, %1%, 85, 190, %2%, %fullheight%, %fullheight%, 0, 0, True
+
+    #AddFloor Ring2_P1Ramp, %3%, 1.5, 165, -85, 190, 85, %height% + %fullheight% + Floor(%floor% + 1).InterfloorHeight, %fullheight%, 0, 0, True
+<EndFloor>
+
+#Entrances to Underground Service Elevators, and P2 Tunnel
+<Floor -2>
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -158.42 + 6.25 - 0.33, -85, -158.42 + 6.25 + 0.33 + 10.5, -64.34, 0, 0, 0, 0, False
+
+    #Ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, %5%, 1.5, -158.42 + 6.25 - 0.33, -85, -158.42 + 6.25 + 0.33 + 10.5, -64.34, %height%, %height%, 0, 0, False
+
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall1, %4%, 0.33, -158.42 + 6.25 + 0.33 + 10.5, -85, -158.42 + 6.25 + 0.33 + 10.5, -64.34, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall2, %4%, 0.33, -158.42 + 6.25 + 0.33, -64.34, -158.42 + 6.25 + 0.33 + 10.5, -64.34, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall Wall3, %4%, 0.33, -158.42 + 6.25 + 0.33, -85, -158.42 + 6.25 + 0.33, -64.34, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, -158.42 + 6.25 + 0.33, -84.67, -158.42 + 6.25 + 0.33 + 10.5, -84.67, %height%, %height%, 0, 0, 0, 0, False
+
+    #Door
+    WallOrientation = center
+    AddDoor ServiceDoor1, 0.2, 5, -158.42 + 6.25 + 0.33 + 5.25 + 1.75, -85 + 0.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 8, -158.42 + 6.25 + 0.33 + 5.25 - 1.75, -85 + 0.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -158.42 + 6.25 + 0.33 + 5.25, -85 + 0.165, 7, 8, 0, true, 0, 0
+<EndFloor>
+
+<Floor -6>
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -158.42 + 6.25 - 0.33, -85, -158.42 + 6.25 + 0.33 + 10.5, -64.34, 0, 0, 0, 0, False
+
+    #Ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, %5%, 1.5, -158.42 + 6.25 - 0.33, -85, -158.42 + 6.25 + 0.33 + 10.5, -64.34, %height%, %height%, 0, 0, False
+
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall1, %4%, 0.33, -158.42 + 6.25 + 0.33 + 10.5, -85, -158.42 + 6.25 + 0.33 + 10.5, -64.34, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall2, %4%, 0.33, -158.42 + 6.25 + 0.33, -64.34, -158.42 + 6.25 + 0.33 + 10.5, -64.34, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall Wall3, %4%, 0.33, -158.42 + 6.25 + 0.33, -85, -158.42 + 6.25 + 0.33, -64.34, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, -158.42 + 6.25 + 0.33, -84.67, -158.42 + 6.25 + 0.33 + 10.5, -84.67, %height%, %height%, 0, 0, 0, 0, False
+
+    #Door
+    WallOrientation = center
+    AddDoor ServiceDoor1, 0.2, 5, -158.42 + 6.25 + 0.33 + 5.25 + 1.75, -85 + 0.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 8, -158.42 + 6.25 + 0.33 + 5.25 - 1.75, -85 + 0.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -158.42 + 6.25 + 0.33 + 5.25, -85 + 0.165, 7, 8, 0, true, 0, 0
+<EndFloor>
+
+<Floor -10>
+    #Floor
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor Floor, %3%, 1.5, -158.42 + 6.25 - 0.33, -85, -158.42 + 6.25 + 0.33 + 10.5, -64.34, 0, 0, 0, 0, False
+
+    #Ceiling
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddFloor Ceiling, %5%, 1.5, -158.42 + 6.25 - 0.33, -85, -158.42 + 6.25 + 0.33 + 10.5, -64.34, %height%, %height%, 0, 0, False
+
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall1, %4%, 0.33, -158.42 + 6.25 + 0.33 + 10.5, -85, -158.42 + 6.25 + 0.33 + 10.5, -64.34, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall2, %4%, 0.33, -158.42 + 6.25 + 0.33, -64.34, -158.42 + 6.25 + 0.33 + 10.5, -64.34, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall Wall3, %4%, 0.33, -158.42 + 6.25 + 0.33, -85, -158.42 + 6.25 + 0.33, -64.34, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, -158.42 + 6.25 + 0.33, -84.67, -158.42 + 6.25 + 0.33 + 10.5, -84.67, %height%, %height%, 0, 0, 0, 0, False
+
+    #Door
+    WallOrientation = center
+    AddDoor ServiceDoor1, 0.2, 5, -158.42 + 6.25 + 0.33 + 5.25 + 1.75, -85 + 0.165, 3.5, 8, 0, 1, 1
+    AddDoor ServiceDoor1, 0.2, 8, -158.42 + 6.25 + 0.33 + 5.25 - 1.75, -85 + 0.165, 3.5, 8, 0, 1, 1
+    AddFillerWalls ConnectionWall, 0.33, -158.42 + 6.25 + 0.33 + 5.25, -85 + 0.165, 7, 8, 0, true, 0, 0
+<EndFloor>
 
 <Floor 0>
     ID = L
@@ -681,6 +1707,21 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddFillerWalls ConnectionWall, 0.33, -31.415, -15.83, 3.5, 8, 0, false, 0, 0
 <EndFloor>
 
+#Auto Areas for Parking Ramps and Ground
+#There are four of them so that the auto area is only covering the ring sections and not the entire building.
+
+#West
+AddFloorAutoArea -190, Floor(-11).Altitude, -190, -%1%, 15, 190
+
+#North
+AddFloorAutoArea -%1%, Floor(-11).Altitude, %2%, %1%, 15, 190
+
+#East
+AddFloorAutoArea %1%, Floor(-11).Altitude, -190, 190, 15, 190
+
+#South
+AddFloorAutoArea -%1%, Floor(-11).Altitude, -190, %1%, 15, -%2%
+
 <Floor 1>
     Set 3 = Marble1 #Floor Texture
     Set 4 = Marble5 #Wall Texture
@@ -782,61 +1823,429 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
 
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall Wall1, %4%, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, %4%, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall2, %4%, 0.33, -56.82 - 4.25 - 0.33, -29.66 - 18 - 0.33, -56.82 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall3, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -27 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall4, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall5, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall6, %4%, 0.33, 77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall7, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall7, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 77.48 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall8, %4%, 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall9, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.33, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall24, %4%, 0.33, 77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall25, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall26, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall27, %4%, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall28, %4%, 0.33, -56.82 - 4.25 - 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall29, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall31, %4%, 0.33, -22.66 - 4.25 - 0.33, 11.33, -22.66 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall27, %4%, 0.33, -56.82 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall28, %4%, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall31, %4%, 0.33, -22.66 - 4.25 - 0.33, 11.33, -22.66 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall33, %4%, 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall36, %4%, 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -10.17 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall38, %4%, 0.33, -22.66 - 4.25 - 0.33, 43.66 + 10.67, -10.17 - 4.25 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall39, %4%, 0.33, 53.65 + 4.25, -11.33, 53.65 + 4.25, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall39, %4%, 0.33, 77.48 + 4.25, -11.33, 77.48 + 4.25, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall46, %4%, 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92, 77.48 + 4.25 + 0.33, 27.08 + 4.92, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall48, %4%, 0.33, 77.48 + 4.25, 5.75 - 5.25 - 0.33, 77.48 + 4.25, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall49A, Concrete1, 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67, 43.99 + 5.25 + 0.33 + 23, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall49B, %4%, 0.33, 43.99 + 5.25 + 0.33 + 23, 43.66 + 10.67, 77.48 + 4.25 + 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall51, Concrete1, 0.33, 43.99 + 5.25 + 23, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 23, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall53, %4%, 0.33, -77.48 - 4.25 - 0.33, 33, -57.83 - 5.25 - 0.33, 33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall55, %4%, 0.33, -77.48 - 4.25 - 0.33, 43.66 + 10.67, -22.66 - 4.25 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall56, %4%, 0.33, -57.83 + 5.25, 33.33, -57.83 + 5.25, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall58, %4%, 0.33, -57.83 + 5.25 + 0.33 + 10.5, 11, -24.33 - 5.92 - 0.33, 11, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall Wall10, %4%, 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall10, %4%, 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall11, %4%, 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18 - 0.33, 56.82 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall12, %4%, 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall13, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall14, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall15, %4%, 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, -11.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall20, %4%, 0.33, -24.33 - 5.92 - 0.33, 11.33, -22.66 - 4.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall18A, %4%, 0.33, 43.99 + 5.25 + 0.33 + 23, 27.08 + 4.92 + 0.33, 77.48 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall18B, Concrete1, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 0.33 + 23, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, Concrete1, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall20, %4%, 0.33, -57.83 + 5.25 + 0.33 + 10.5, 11.33, -22.66 - 4.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall21, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall23, %4%, 0.33, -57.83 - 5.25 - 0.33, 33.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall30, %4%, 0.33, -22.66 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall22, %4%, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall23, %4%, 0.33, -77.48 - 4.25 - 0.33, 33.33, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall24, %4%, 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18, 77.48 - 4.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall25, %4%, 0.33, 27 + 4.25 + 0.33, -29.66 - 18, 47.66 - 4.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall26, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18, 15.83 - 6.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall29, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18, -27 - 4.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall30, %4%, 0.33, -77.48 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, 77.48 + 4.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall32, %4%, 0.33, -27 - 4.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall34, %4%, 0.33, -27 - 4.25, -34.16 + 13.5 + 0.33, -27 - 4.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
     AddWall Wall35, %4%, 0.33, -22.66 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Wall37, %4%, 0.33, -22.66 - 4.25, 22.16 + 10.5 + 0.33, -22.66 - 4.25, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Wall37, %4%, 0.33, -77.48 - 4.25 - 0.33, 33.33, -24.33 - 5.92 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall47, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25, 77.48 + 4.25 + 0.33, 5.75 - 5.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall50, %4%, 0.33, 43.99 + 5.25 + 0.33 + 23, 27.08 + 4.92 + 0.33, 43.99 + 5.25 + 0.33 + 23, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall52, %4%, 0.33, -77.48 - 4.25, -11.33, -77.48 - 4.25, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall57, %4%, 0.33, -77.48 - 4.25, 33.33, -77.48 - 4.25, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
 
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall41, %4%, 0.33, -%1%, -29.66 - 18 - 0.33 - 20, %1%, -29.66 - 18 - 0.33 - 20, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = center
+    AddWall Wall42, %4%, 0.33, -66, -%2%, -66, -29.66 - 18 - 0.33 - 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall43, %4%, 0.33, -22, -%2%, -22, -29.66 - 18 - 0.33 - 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall44, %4%, 0.33, 22, -%2%, 22, -29.66 - 18 - 0.33 - 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall45, %4%, 0.33, 66, -%2%, 66, -29.66 - 18 - 0.33 - 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall54, %4%, 0.66, -77.48 - 4.25 - 0.33, 11, -57.83 - 5.25 - 0.33, 11, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall61, %4%, 0.33, -66, 43.66 + 10.67 + 0.33 + 20, -66, %2%, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall62, %4%, 0.33, -22, 43.66 + 10.67 + 0.33 + 20, -22, %2%, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall63, %4%, 0.33, 22, 43.66 + 10.67 + 0.33 + 20, 22, %2%, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall64, %4%, 0.33, 66, 43.66 + 10.67 + 0.33 + 20, 66, %2%, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall65, Concrete1, 0.33, 43.99 + 5.25 + 0.33 + 23, 43.495, 43.99 + 5.25 + 0.33, 43.495, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    AddWall Wall59, %4%, 0.33, -57.83 + 5.25 + 0.33 + 10.5, 11, -57.83 + 5.25 + 0.33 + 10.5, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall60, %4%, 0.33, -%1%,  43.66 + 10.67 + 0.33 + 20, %1%,  43.66 + 10.67 + 0.33 + 20, %height%, %height%, 0, 0, 0, 0, False
+
+    #Doors (* = Floor Number)
+    WallOrientation = center
+
+    #Closet in Room 202
     AddDoor Door9b, 0.2, 4, -31.415, -15.83, 3.5, 8, 0, 1, 1
-    AddDoor Door9b, 0.2, 2, -27.075, 36.565, 3.5, 8, 0, 1, 1
+
+    #Utility Closet in East Branch Hallway
     AddDoor ServiceDoor1, 0.2, 2, 33, -5.415, 3.5, 8, 0, 1, 1
-    AddDoor Door9b, 0.2, 1, 53.65 + 4.25 + 0.165, -5.415, 3.5, 8, 0, 1, 1
+
+    #Door to East Branch Hallway
+    AddDoor Door9b, 0.2, 1, 77.48 + 4.25 + 0.165, -5.415, 3.5, 8, 0, 1, 1
+
+    #Door to Restroom Entrance Hallway
+    AddDoor Door9b, 0.2, 5, 77.15, 43.66 + 10.67 + 0.165, 3.5, 8, 0, 1, 1
+
+    #Door to West Branch Hallway
+    AddDoor Door9b, 0.2, 8, -47, 43.66 + 10.67 + 0.165, 3.5, 8, 0, 1, 1
+
+    #Room 201
+    AddDoor Door9b, 0.2, 5, -88 + 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, -88 - 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+
+    #Room 203
+    AddDoor Door9b, 0.2, 5, -44 + 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, -44 - 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+
+    #Room 205
+    AddDoor Door9b, 0.2, 5, 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, -1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+
+    #Room 207
+    AddDoor Door9b, 0.2, 5, 44 + 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, 44 - 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+
+    #Room 209
+    AddDoor Door9b, 0.2, 5, 88 + 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, 88 - 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+
+    #Room 211
+    AddDoor Door9b, 0.2, 6, 88 + 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, 88 - 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+
+    #Room 213
+    AddDoor Door9b, 0.2, 6, 44 + 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, 44 - 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+
+    #Room 215
+    AddDoor Door9b, 0.2, 6, 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, -1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+
+    #Room 217
+    AddDoor Door9b, 0.2, 6, -44 + 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, -44 - 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+
+    #Room 219
+    AddDoor Door9b, 0.2, 6, -88 + 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, -88 - 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+
+    #Restrooms
+    AddDoor Door9b, 0.2, 4, 43.99 + 5.25 + 0.165 + 23, 43.495 - 2.25, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 1, 43.99 + 5.25 + 0.165 + 23, 43.495 + 2.25, 3.5, 8, 0, 1, 1
+
+    #Room 202
+    AddDoor Door9b, 0.2, 6, -37.33 + 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, -37.33 - 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+
+    #Room 204
+    AddDoor Door9b, 0.2, 6, 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, -1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+
+    #Room 206
+    AddDoor Door9b, 0.2, 6, 37.33 + 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, 37.33 - 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+
+    #Room 208
+    AddDoor Door9b, 0.2, 6, 67.15 + 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, 67.15 - 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+
+    #Room 210
+    AddDoor Door9b, 0.2, 4, 77.48 + 4.25 + 0.165, 16.25 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 1, 77.48 + 4.25 + 0.165, 16.25 - 1.75, 3.5, 8, 0, 1, 1
+
+    #Room 212
+    AddDoor Door9b, 0.2, 5, -36.04 + 1.75, 43.66 + 10.67 + 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, -36.04 - 1.75, 43.66 + 10.67 + 0.165, 3.5, 8, 0, 1, 1
+
+    #Room 214
+    AddDoor Door9b, 0.2, 3, -77.48 - 4.25 - 0.165, 43.83 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 2, -77.48 - 4.25 - 0.165, 43.83 - 1.75, 3.5, 8, 0, 1, 1
+
+    #Room 216
+    AddDoor Door9b, 0.2, 3, -77.48 - 4.25 - 0.165, 22.165 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 2, -77.48 - 4.25 - 0.165, 22.165 - 1.75, 3.5, 8, 0, 1, 1
+
+    #Room 218
+    AddDoor Door9b, 0.2, 3, -77.48 - 4.25 - 0.165, -0.165 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 2, -77.48 - 4.25 - 0.165, -0.165 - 1.75, 3.5, 8, 0, 1, 1
+
+    #Room 214 Emergency Exit
+    AddDoor Door9b, 0.2, 3, -57.83 + 5.25 + 0.165, 33.33 + 2.25, 3.5, 8, 0, 1, 1
+
+    #Filler Walls
     AddFillerWalls ConnectionWall, 0.66, 33, -5.415, 3.5, 8, 0, false, 0, 0
-    AddFillerWalls ConnectionWall, 0.33, 53.65 + 4.25 + 0.165, -5.415, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 77.48 + 4.25 + 0.165, -5.415, 3.5, 8, 0, false, 0, 0
     AddFillerWalls ConnectionWall, 0.33, -31.415, -15.83, 3.5, 8, 0, false, 0, 0
-    AddFillerWalls ConnectionWall, 0.33, -27.075, 36.565, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 77.15, 43.66 + 10.67 + 0.165, 3.5, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -47, 43.66 + 10.67 + 0.165, 3.5, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -88, -29.66 - 18 - 0.495 - 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -44, -29.66 - 18 - 0.495 - 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 0, -29.66 - 18 - 0.495 - 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 44, -29.66 - 18 - 0.495 - 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 88, -29.66 - 18 - 0.495 - 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -88, 43.66 + 10.67 + 0.495 + 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -44, 43.66 + 10.67 + 0.495 + 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 0, 43.66 + 10.67 + 0.495 + 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 44, 43.66 + 10.67 + 0.495 + 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 88, 43.66 + 10.67 + 0.495 + 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 43.99 + 5.25 + 0.165 + 23, 43.495 - 2.25, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 43.99 + 5.25 + 0.165 + 23, 43.495 + 2.25, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -36.04, 43.66 + 10.67 + 0.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -37.33, -29.66 - 18 - 0.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 0, -29.66 - 18 - 0.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 37.33, -29.66 - 18 - 0.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 67.15, -29.66 - 18 - 0.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 77.48 + 4.25 + 0.165, 16.25, 7, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -77.48 - 4.25 - 0.165, -0.165, 7, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -77.48 - 4.25 - 0.165, 22.165, 7, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -77.48 - 4.25 - 0.165, 43.83, 7, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -57.83 + 5.25 + 0.165, 33.33 + 2.25, 3.5, 8, 0, false, 0, 0
 <EndFloor>
 
-<Floors 3 to 8>
+<Floors 3 to 6>
+    WallOrientation = center
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall1, %4%, 0.66, 15.83, -11.33, 77.48 + 4.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall1, %4%, 0.66, -77.48 - 4.25 - 0.33, -11.33, -15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    TextureOverride %4%, Concrete1, %4%, %4%, %4%, %4%
+    AddWall Wall1, %4%, 0.66, -15.83, -11.33, 15.83, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall40, %4%, 0.66, 33, -11.33, 33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = left
+    DrawWalls = true, false, false, false, false, false
+    AddWall Wall1, %4%, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall2, %4%, 0.33, -56.82 - 4.25 - 0.33, -29.66 - 18 - 0.33, -56.82 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall3, %4%, 0.33, -27 - 4.25 - 0.33, -29.66 - 18 - 0.33, -27 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall4, %4%, 0.33, 15.83 - 6.25 - 0.33, -29.66 - 18 - 0.33, 15.83 - 6.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall5, %4%, 0.33, 47.66 - 4.25 - 0.33, -29.66 - 18 - 0.33, 47.66 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall6, %4%, 0.33, 77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 - 4.25 - 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall7, %4%, 0.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, 77.48 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8A, Concrete1, 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, 23.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall8B, %4%, 0.33, -24.33 - 5.92 - 0.33, 33.33, -24.33 - 5.92 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall9, %4%, 0.33, -57.83 - 5.25 - 0.33, -11.33, -57.83 - 5.25 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall27, %4%, 0.33, -56.82 - 4.25 - 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall28, %4%, 0.33, -77.48 - 4.25 - 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall31, %4%, 0.33, -11.83 - 6.25 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 22.16 + 10.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall33, %4%, 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall36, %4%, 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -10.17 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall38, %4%, 0.33, -24.33 - 5.92 - 0.33, 43.66 + 10.67, -10.17 - 4.25 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall39, %4%, 0.33, 77.48 + 4.25, -11.33, 77.48 + 4.25, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall46, %4%, 0.33, -77.48 - 4.25 - 0.33, 43.66 + 10.67, -24.33 - 5.92 - 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall48, %4%, 0.33, 77.48 + 4.25, 5.75 - 5.25 - 0.33, 77.48 + 4.25, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall50, %4%, 0.33, -77.48 - 4.25 - 0.33, 33, -57.83 - 5.25 - 0.33, 33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall52, %4%, 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67, 77.48 + 4.25 + 0.33, 43.66 + 10.67, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall53, Concrete1, 0.33, -57.83 + 5.25 + 0.33, 23.5 - 0.33, -24.33 - 5.92 - 0.33, 23.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall53, %4%, 0.33, -57.83 + 5.25 + 0.33, 23.5 - 0.33, -11.83 - 6.25 - 0.33, 23.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall57, %4%, 0.33, -57.83 + 5.25 + 0.33, 33, -24.33 - 5.92, 33, %height%, %height%, 0, 0, 0, 0, False
+
+    WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
+    AddWall Wall10, %4%, 0.33, 77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, 77.48 + 4.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall11, %4%, 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18 - 0.33, 56.82 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall12, %4%, 0.33, 27 + 4.25 + 0.33, -29.66 - 18 - 0.33, 27 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall13, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18 - 0.33, -15.83 + 6.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall14, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18 - 0.33, -47.66 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall15, %4%, 0.33, -77.48 + 4.25 + 0.33, -29.66 - 18 - 0.33, -77.48 + 4.25 + 0.33, -29.66 + 18 + 0.66, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall16, %4%, 0.33, 11.83 + 6.25 + 0.33, -11.33, 11.83 + 6.25 + 0.33, 5.75 - 5.25 - 0.33, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Wall17, %4%, 0.33, 53.65 + 4.25 + 0.33, 5.75 - 5.25 - 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    #AddWall Wall18, %4%, 0.33, 43.99 + 5.25 + 0.33, 27.08 + 4.92 + 0.33, 53.65 + 4.25 + 0.33, 27.08 + 4.92 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall19, %4%, 0.33, 43.99 + 5.25 + 0.33, 5.75 - 5.25 - 0.33, 43.99 + 5.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall20, %4%, 0.33, -24.33 - 5.92 - 0.33, 11.33, -11.83 - 6.25 - 0.33, 11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall21, Concrete1, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -24.33 - 5.92 - 0.33, -5.75 + 5.25 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall22A, Concrete1, 0.33, -57.83 + 5.25 + 0.33, -5.75 + 5.25 + 0.33, -57.83 + 5.25 + 0.33, 23.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall22B, %4%, 0.33, -57.83 + 5.25 + 0.33, 23.5, -57.83 + 5.25 + 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall23, %4%, 0.33, -77.48 - 4.25 - 0.33, 33.33, -24.33 - 5.92 - 0.33, 33.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall24, %4%, 0.33, 56.82 + 4.25 + 0.33, -29.66 - 18, 77.48 - 4.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall25, %4%, 0.33, 27 + 4.25 + 0.33, -29.66 - 18, 47.66 - 4.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall26, %4%, 0.33, -15.83 + 6.25 + 0.33, -29.66 - 18, 15.83 - 6.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall29, %4%, 0.33, -47.66 + 4.25 + 0.33, -29.66 - 18, -27 - 4.25 - 0.33, -29.66 - 18, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall30, %4%, 0.33, -77.48 - 4.25 - 0.33, 43.66 + 10.67 + 0.33, 77.48 + 4.25 + 0.33, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall32, %4%, 0.33, -27 - 4.25 - 0.33, -34.16 + 13.5 + 0.33, -15.83 - 6.25 - 0.33, -34.16 + 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall34, %4%, 0.33, -27 - 4.25, -34.16 + 13.5 + 0.33, -27 - 4.25, -11.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall35, %4%, 0.33, -10.17 - 4.25 - 0.33, 22.16 + 10.5 + 0.33, -11.83 - 6.25 - 0.33, 22.16 + 10.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall37A, %4%, 0.33, -24.33 - 5.92, 11.33, -24.33 - 5.92, 23.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall37B, %4%, 0.33, -24.33 - 5.92, 33, -24.33 - 5.92, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall47, %4%, 0.33, -77.48 - 4.25, -29.66 + 18 + 0.33, -77.48 - 4.25, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall51, %4%, 0.33, 43.99 + 5.25 + 0.33, 5.75 - 5.25, 77.48 + 4.25 + 0.33, 5.75 - 5.25, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall55, %4%, 0.33, -57.83 + 5.25 + 0.33, 23.5, -11.83 - 6.25 - 0.33, 23.5, %height%, %height%, 0, 0, 0, 0, False
+
+    DrawWalls = true, true, false, false, false, false
+    AddWall Wall41, %4%, 0.33, -%1%, -29.66 - 18 - 0.33 - 20, %1%, -29.66 - 18 - 0.33 - 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall49, %4%, 0.33, -57.83 + 5.25, 33.33, -57.83 + 5.25, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = center
+    AddWall Wall42, %4%, 0.33, -66, -%2%, -66, -29.66 - 18 - 0.33 - 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall43, %4%, 0.33, -22, -%2%, -22, -29.66 - 18 - 0.33 - 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall44, %4%, 0.33, 22, -%2%, 22, -29.66 - 18 - 0.33 - 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall45, %4%, 0.33, 66, -%2%, 66, -29.66 - 18 - 0.33 - 20, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall54, %4%, 0.33, -77.48 - 4.25 - 0.33, 11, -57.83 - 5.25 - 0.33, 11, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall56, Concrete1, 0.33, -41.415, -5.75 + 5.25 + 0.33, -41.415, 23.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall61, %4%, 0.33, -66, 43.66 + 10.67 + 0.33 + 20, -66, %2%, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall62, %4%, 0.33, -22, 43.66 + 10.67 + 0.33 + 20, -22, %2%, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall63, %4%, 0.33, 22, 43.66 + 10.67 + 0.33 + 20, 22, %2%, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall64, %4%, 0.33, 66, 43.66 + 10.67 + 0.33 + 20, 66, %2%, %height%, %height%, 0, 0, 0, 0, False
+    WallOrientation = left
+    #AddWall Wall59, %4%, 0.33, -57.83 + 5.25 + 0.33 + 10.5, 11, -57.83 + 5.25 + 0.33 + 10.5, 43.66 + 10.67 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall60, %4%, 0.33, -%1%,  43.66 + 10.67 + 0.33 + 20, %1%,  43.66 + 10.67 + 0.33 + 20, %height%, %height%, 0, 0, 0, 0, False
+
+    #Doors (* = Floor Number)
+    WallOrientation = center
+
+    #Closet in Room *02
+    AddDoor Door9b, 0.2, 4, -31.415, -15.83, 3.5, 8, 0, 1, 1
+
+    #Utility Closet in East Branch Hallway
+    AddDoor ServiceDoor1, 0.2, 2, 33, -5.415, 3.5, 8, 0, 1, 1
+
+    #Door to East Branch Hallway
+    AddDoor Door9b, 0.2, 1, 77.48 + 4.25 + 0.165, -5.415, 3.5, 8, 0, 1, 1
+
+    #Door to Restroom Entrance Hallway
+    #AddDoor Door9b, 0.2, 5, 77.15, 43.66 + 10.67 + 0.165, 3.5, 8, 0, 1, 1
+
+    #Access Door to Core and West Stairwell
+    AddDoor Door9b, 0.2, 8, -24.33 - 2.96, 23.5 - 0.165, 3.5, 8, 0, 1, 1
+
+    #Room *01
+    AddDoor Door9b, 0.2, 5, -88 + 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, -88 - 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+
+    #Room *03
+    AddDoor Door9b, 0.2, 5, -44 + 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, -44 - 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+
+    #Room *05
+    AddDoor Door9b, 0.2, 5, 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, -1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+
+    #Room *07
+    AddDoor Door9b, 0.2, 5, 44 + 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, 44 - 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+
+    #Room *09
+    AddDoor Door9b, 0.2, 5, 88 + 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, 88 - 1.75, -29.66 - 18 - 0.495 - 20, 3.5, 8, 0, 1, 1
+
+    #Room *11
+    AddDoor Door9b, 0.2, 6, 88 + 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, 88 - 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+
+    #Room *13
+    AddDoor Door9b, 0.2, 6, 44 + 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, 44 - 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+
+    #Room *15
+    AddDoor Door9b, 0.2, 6, 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, -1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+
+    #Room *17
+    AddDoor Door9b, 0.2, 6, -44 + 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, -44 - 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+
+    #Room *19
+    AddDoor Door9b, 0.2, 6, -88 + 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, -88 - 1.75, 43.66 + 10.67 + 0.495 + 20, 3.5, 8, 0, 1, 1
+
+    #Restrooms
+    AddDoor Door9b, 0.2, 5, -41.415 - 2.25, 23.5 - 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, -41.415 + 2.25, 23.5 - 0.165, 3.5, 8, 0, 1, 1
+
+    #Room *02
+    AddDoor Door9b, 0.2, 6, -37.33 + 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, -37.33 - 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+
+    #Room *04
+    AddDoor Door9b, 0.2, 6, 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, -1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+
+    #Room *06
+    AddDoor Door9b, 0.2, 6, 37.33 + 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, 37.33 - 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+
+    #Room *08
+    AddDoor Door9b, 0.2, 6, 67.15 + 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 7, 67.15 - 1.75, -29.66 - 18 - 0.165, 3.5, 8, 0, 1, 1
+
+    #Room *10
+    AddDoor Door9b, 0.2, 4, 77.48 + 4.25 + 0.165, 16.25 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 1, 77.48 + 4.25 + 0.165, 16.25 - 1.75, 3.5, 8, 0, 1, 1
+
+    #Room *12 Entrance 1
+    AddDoor Door9b, 0.2, 5, -36.04 + 1.75, 43.66 + 10.67 + 0.165, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 8, -36.04 - 1.75, 43.66 + 10.67 + 0.165, 3.5, 8, 0, 1, 1
+
+    #Room *12 Entrance 2
+    AddDoor Door9b, 0.2, 4, -24.33 - 5.92 - 0.165, 43.83 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 1, -24.33 - 5.92 - 0.165, 43.83 - 1.75, 3.5, 8, 0, 1, 1
+
+    #Room *14
+    AddDoor Door9b, 0.2, 4, -77.48 - 4.25 - 0.165, 43.83 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 1, -77.48 - 4.25 - 0.165, 43.83 - 1.75, 3.5, 8, 0, 1, 1
+
+    #Room *16
+    AddDoor Door9b, 0.2, 3, -77.48 - 4.25 - 0.165, 22.165 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 2, -77.48 - 4.25 - 0.165, 22.165 - 1.75, 3.5, 8, 0, 1, 1
+
+    #Room *18
+    AddDoor Door9b, 0.2, 3, -77.48 - 4.25 - 0.165, -0.165 + 1.75, 3.5, 8, 0, 1, 1
+    AddDoor Door9b, 0.2, 2, -77.48 - 4.25 - 0.165, -0.165 - 1.75, 3.5, 8, 0, 1, 1
+
+    #Filler Walls
+    AddFillerWalls ConnectionWall, 0.66, 33, -5.415, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 77.48 + 4.25 + 0.165, -5.415, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -31.415, -15.83, 3.5, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -24.33 - 5.92 - 0.165, 43.83, 7, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -24.33 - 2.96, 23.5 - 0.165, 3.5, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -88, -29.66 - 18 - 0.495 - 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -44, -29.66 - 18 - 0.495 - 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 0, -29.66 - 18 - 0.495 - 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 44, -29.66 - 18 - 0.495 - 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 88, -29.66 - 18 - 0.495 - 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -88, 43.66 + 10.67 + 0.495 + 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -44, 43.66 + 10.67 + 0.495 + 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 0, 43.66 + 10.67 + 0.495 + 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 44, 43.66 + 10.67 + 0.495 + 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 88, 43.66 + 10.67 + 0.495 + 20, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -41.415 - 2.25, 23.5 - 0.165, 3.5, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -41.415 + 2.25, 23.5 - 0.165, 3.5, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -36.04, 43.66 + 10.67 + 0.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -37.33, -29.66 - 18 - 0.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 0, -29.66 - 18 - 0.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 37.33, -29.66 - 18 - 0.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 67.15, -29.66 - 18 - 0.165, 7, 8, 0, true, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 77.48 + 4.25 + 0.165, 16.25, 7, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -77.48 - 4.25 - 0.165, -0.165, 7, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -77.48 - 4.25 - 0.165, 22.165, 7, 8, 0, false, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, -77.48 - 4.25 - 0.165, 43.83, 7, 8, 0, false, 0, 0
+    #AddFillerWalls ConnectionWall, 0.33, -57.83 + 5.25 + 0.165, 33.33 + 2.25, 3.5, 8, 0, false, 0, 0
+<EndFloors>
+
+<Floors 7 to 8>
     WallOrientation = center
     DrawWalls = true, true, false, false, false, false
     AddWall Wall1, %4%, 0.66, 15.83, -11.33, 77.48 + 4.25 + 0.33, -11.33, %height%, %height%, 0, 0, 0, 0, False
@@ -1093,7 +2502,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
 <EndFloors>
 
 #Core Walls
-<Floors -9 to 1>
+<Floors -10 to 1>
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
     AddWall Wall4, Concrete1, 0.33, -11.83 + 6.25, 11.33, -11.83 + 6.25, 32.405 - 10.665 - 0.33, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
@@ -1390,7 +2799,7 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
 <EndFloor>
 
 #Zone 1 Interfloor
-<Floors -9 to 0>
+<Floors -9 to -2>
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
@@ -1411,6 +2820,28 @@ Cut Landscape, -%1%, -1, -%2%, %1%, 1, %2%, false, true
     AddInterfloorWall IRightInt, InterInt, 0.5, -%1%, %2%, %1%, %2%, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall IBackInt, InterInt, 0.5, %1%, %2%, %1%, -%2%, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
+
+<Floor 0>
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick1, 0.5, -%1%, -%2%, %1%, %2%, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick1, 0.5, -%1%, -%2%, %1%, %2%, %interfloorheight%, %interfloorheight%, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFrontInt, InterInt, 0.5, -%1%, -%2%, -%1%, %2%, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeftInt, InterInt, 0.5, %1%, -%2%, -%1%, -%2%, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRightInt, InterInt, 0.5, -%1%, %2%, %1%, %2%, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBackInt, InterInt, 0.5, %1%, %2%, %1%, -%2%, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+<EndFloor>
 
 <Floors 2 to 41>
     #Interfloor bottom
@@ -3681,11 +5112,11 @@ Group = 162, 163
 <EndFloors>
 
 #Shaftwork and Elevators
-#Office Service Elevators (SB - M, 42 - 87)
-AddShaft 1, 2, -11.83, 0, -10, 88
+#Office Service Elevators (LSP - M, 42 - 87)
+AddShaft 1, 2, -11.83, 0, -11, 88
 ShaftCut 1, -6.25 + 0.33, -11, 6.25 - 0.33, 11, 0, 5
 
-<Floors -10 to 88>
+<Floors -11 to 88>
     Set 6 = -11.83 #shaft x
     Set 7 = 0 #shaft z
     Set 8 = 6.25 #shaftcut x
@@ -3695,7 +5126,7 @@ ShaftCut 1, -6.25 + 0.33, -11, 6.25 - 0.33, 11, 0, 5
     #shaft 1
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    if[%floor% = -11] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 88] AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, %fullheight% - 0.1, %fullheight% - 0.1, 0, 0
@@ -3709,11 +5140,11 @@ ShaftCut 1, -6.25 + 0.33, -11, 6.25 - 0.33, 11, 0, 5
 <EndFloors>
 
 
-#Office Service Elevators (SB - M, 2 - 42)
-AddShaft 2, 2, 11.83, 0, -10, 43
+#Office Service Elevators (LSP - M, 2 - 42)
+AddShaft 2, 2, 11.83, 0, -11, 43
 ShaftCut 2, -6.25 + 0.33, -11, 6.25 - 0.33, 11, 0, 5
 
-<Floors -10 to 43>
+<Floors -11 to 43>
     Set 6 = 11.83 #shaft x
     Set 7 = 0 #shaft z
     Set 8 = 6.25 #shaftcut x
@@ -3723,7 +5154,7 @@ ShaftCut 2, -6.25 + 0.33, -11, 6.25 - 0.33, 11, 0, 5
     #shaft 2
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    if[%floor% = -11] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 43] AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, %fullheight% - 0.1, %fullheight% - 0.1, 0, 0
@@ -4024,10 +5455,10 @@ ShaftCut 13, -4.25 + 0.33, -18, 4.25 - 0.33, 18, 0, 5
 <EndFloors>
 
 #East Parking Elevators
-AddShaft 14, 2, 53.65, 16.25, -10, 2
+AddShaft 14, 2, 53.65, 16.25, -11, 2
 ShaftCut 14, -4.25 + 0.33, -15.75, 4.25 - 0.33, 15.75, 0, 5
 
-<Floors -10 to 2>
+<Floors -11 to 2>
     Set 6 = 53.65 #shaft x
     Set 7 = 16.25 #shaft z
     Set 8 = 4.25 #shaftcut x
@@ -4037,7 +5468,7 @@ ShaftCut 14, -4.25 + 0.33, -15.75, 4.25 - 0.33, 15.75, 0, 5
     #shaft 14
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    if[%floor% = -11] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 2] AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, %fullheight% - 0.1, %fullheight% - 0.1, 0, 0
@@ -4051,10 +5482,10 @@ ShaftCut 14, -4.25 + 0.33, -15.75, 4.25 - 0.33, 15.75, 0, 5
 <EndFloors>
 
 #West Parking Elevators
-AddShaft 15, 2, -22.66, 22.16, -10, 2
+AddShaft 15, 2, -22.66, 22.16, -11, 2
 ShaftCut 15, -4.25 + 0.33, -10.5, 4.25 - 0.33, 10.5, 0, 5
 
-<Floors -10 to 2>
+<Floors -11 to 2>
     Set 6 = -22.66 #shaft x
     Set 7 = 22.16 #shaft z
     Set 8 = 4.25 #shaftcut x
@@ -4064,7 +5495,7 @@ ShaftCut 15, -4.25 + 0.33, -10.5, 4.25 - 0.33, 10.5, 0, 5
     #shaft 15
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    if[%floor% = -11] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
     if[%floor% = 2] AddShaftFloor %10%, Shaft%10%MachineryFloor, Brick1, 0.5, -%8% + 0.33, -%9% + 0.33, %8% - 0.33, %9% - 0.33, %interfloorheight%, %interfloorheight%, 0, 0
     FloorOrientation = bottom
@@ -4086,10 +5517,10 @@ ShaftCut 15, -4.25 + 0.33, -10.5, 4.25 - 0.33, 10.5, 0, 5
 <EndFloors>
 
 #Zone 1 Air Shaft
-AddShaft 16, 1, 43.99, 27.08, -10, 42
+AddShaft 16, 1, 43.99, 27.08, -11, 42
 ShaftCut 16, -5.25 + 0.33, -5.25 + 0.33, 5.25 - 0.33, 5.25 - 0.33, 0, 5
 
-<Floors -10 to 42>
+<Floors -11 to 42>
     Set 6 = 43.99 #shaft x
     Set 7 = 27.08 #shaft z
     Set 8 = 5.25 #shaftcut x
@@ -4099,7 +5530,7 @@ ShaftCut 16, -5.25 + 0.33, -5.25 + 0.33, 5.25 - 0.33, 5.25 - 0.33, 0, 5
     #shaft 16
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    if[%floor% = -11] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 42] AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, %fullheight% - 0.1, %fullheight% - 0.1, 0, 0
@@ -4113,10 +5544,10 @@ ShaftCut 16, -5.25 + 0.33, -5.25 + 0.33, 5.25 - 0.33, 5.25 - 0.33, 0, 5
 <EndFloors>
 
 #Core Utility Shaft 1
-AddShaft 17, 1, -11.83, 27.08, -10, 166
+AddShaft 17, 1, -11.83, 27.08, -11, 166
 ShaftCut 17, -6.25 + 0.33, -5.25, 6.25 - 0.33, 5.25, 0, 5
 
-<Floors -10 to 166>
+<Floors -11 to 166>
     Set 6 = -11.83 #shaft x
     Set 7 = 27.08 #shaft z
     Set 8 = 6.25 #shaftcut x
@@ -4126,7 +5557,7 @@ ShaftCut 17, -6.25 + 0.33, -5.25, 6.25 - 0.33, 5.25, 0, 5
     #shaft 17
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    if[%floor% = -11] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 166] AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, %fullheight% - 0.1, %fullheight% - 0.1, 0, 0
@@ -4140,10 +5571,10 @@ ShaftCut 17, -6.25 + 0.33, -5.25, 6.25 - 0.33, 5.25, 0, 5
 <EndFloors>
 
 #Freight Elevator
-AddShaft 18, 2, 5.75, 32.495, -10, 166
+AddShaft 18, 2, 5.75, 32.495, -11, 166
 ShaftCut 18, -11.33, -10.665 + 0.33, 11.33, 10.665 - 0.33, 0, 5
 
-<Floors -10 to 166>
+<Floors -11 to 166>
     Set 6 = 5.75 #shaft x
     Set 7 = 32.495 #shaft z
     Set 8 = 11.33 #shaftcut x
@@ -4153,7 +5584,7 @@ ShaftCut 18, -11.33, -10.665 + 0.33, 11.33, 10.665 - 0.33, 0, 5
     #shaft 18
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    if[%floor% = -11] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 166] AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, %fullheight% - 0.1, %fullheight% - 0.1, 0, 0
@@ -4167,10 +5598,10 @@ ShaftCut 18, -11.33, -10.665 + 0.33, 11.33, 10.665 - 0.33, 0, 5
 <EndFloors>
 
 #Main Service Elevators and Skydeck Elevator
-AddShaft 19, 2, 22.08, 48.745, -10, 166
+AddShaft 19, 2, 22.08, 48.745, -11, 166
 ShaftCut 19, -16.33, -5.255 + 0.33, 16.33, 5.255 - 0.33, 0, 5
 
-<Floors -10 to 166>
+<Floors -11 to 166>
     Set 6 = 22.08 #shaft x
     Set 7 = 48.745 #shaft z
     Set 8 = 16.33 #shaftcut x
@@ -4180,7 +5611,7 @@ ShaftCut 19, -16.33, -5.255 + 0.33, 16.33, 5.255 - 0.33, 0, 5
     #shaft 19
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    if[%floor% = -11] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 166] AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, %fullheight% - 0.1, %fullheight% - 0.1, 0, 0
@@ -4221,10 +5652,10 @@ ShaftCut 20, -5.25 + 0.33, -10.67, 5.25 - 0.33, 10.67, 0, 5
 <EndFloors>
 
 #Core Utility Shaft 2
-AddShaft 21, 1, -0.08, 48.475, -10, 166
+AddShaft 21, 1, -0.08, 48.475, -11, 166
 ShaftCut 21, -5.5, -5.255, 5.5, 5.255, 0, 5
 
-<Floors -10 to 166>
+<Floors -11 to 166>
     Set 6 = -0.08 #shaft x
     Set 7 = 48.475 #shaft z
     Set 8 = 5.5 #shaftcut x
@@ -4234,7 +5665,7 @@ ShaftCut 21, -5.5, -5.255, 5.5, 5.255, 0, 5
     #shaft 21
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    if[%floor% = -11] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 166] AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, %fullheight% - 0.1, %fullheight% - 0.1, 0, 0
@@ -4302,10 +5733,10 @@ ShaftCut 23, -5.25 + 0.33, -22, 5.25 - 0.33, 22, 0, 5
 <EndFloors>
 
 #Zone 1 Pipe Shaft
-AddShaft 24, 1, -10.17, 37.91, -10, 41
+AddShaft 24, 1, -10.17, 37.91, -11, 41
 ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
 
-<Floors -10 to 41>
+<Floors -11 to 41>
     Set 6 = -10.17 #shaft x
     Set 7 = 37.91 #shaft z
     Set 8 = 4.25 #shaftcut x
@@ -4315,7 +5746,7 @@ ShaftCut 24, -4.25 + 0.33, -5.25 + 0.33, 4.25 - 0.33, 5.25 - 0.33, 0, 5
     #shaft 24
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -10] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    if[%floor% = -11] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 41] AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, %fullheight% - 0.1, %fullheight% - 0.1, 0, 0
@@ -4674,6 +6105,50 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddShaftWall %10%, Shaft%10%Back, Brick1, 0.33, -%8%, %9%, %8%, %9%, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall %10%, Shaft%10%Right, Brick1, 0.33, %8%, -%9%, %8%, %9%, %fullheight%, %fullheight%, 0, 0, 0, 0
 <EndFloors>
+
+#Underground Service Elevators
+AddShaft 38, 2, -158.42, -74.67, -12, 1
+ShaftCut 38, -6.25 + 0.33, -10, 6.25 - 0.33, 10, 0, 5
+
+<Floors -12 to 0>
+    Set 6 = -158.42 #shaft x
+    Set 7 = -74.67 #shaft z
+    Set 8 = 6.25 #shaftcut x
+    Set 9 = 10 #shaftcut z
+    Set 10 = 38 #shaft number
+
+    #shaft 38
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = -12] AddShaftFloor %10%, Shaft%10%Base, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick1, 0.33, -%8%, -%9%, %8%, -%9%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick1, 0.33, -%8%, -%9%, -%8%, %9%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick1, 0.33, -%8%, %9%, %8%, %9%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick1, 0.33, %8%, -%9%, %8%, %9%, %fullheight%, %fullheight%, 0, 0, 0, 0
+<EndFloors>
+
+<Floor 1>
+    Set 6 = -158.42 #shaft x
+    Set 7 = -74.67 #shaft z
+    Set 8 = 6.25 #shaftcut x
+    Set 9 = 10 #shaftcut z
+    Set 10 = 38 #shaft number
+
+    #shaft 38
+    FloorOrientation = bottom
+    DrawWalls = true, false, false, false, false, false
+    AddShaftFloor %10%, Shaft%10%Top, Brick1, 0.5, -%8%, -%9%, %8%, %9%, 8.9, 8.9, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick1, 0.33, -%8%, -%9%, %8%, -%9%, 9, 9, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick1, 0.33, -%8%, -%9%, -%8%, %9%, 9, 9, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick1, 0.33, -%8%, %9%, %8%, %9%, 9, 9, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick1, 0.33, %8%, -%9%, %8%, %9%, 9, 9, 0, 0, 0, 0
+<EndFloor>
 
 #Office Zone 1 Conference Elevators (2 - 6)
 <Elevator 1>
@@ -6765,7 +8240,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     #panel
     CreatePanel ElevPanel, 10, 5, right, -3.125 + 0.2 + 0.01, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonL, ButtonLitL, 2, 3, 0, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonIC, ButtonLitIC, 3, 4, -1, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 3, 4, -1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP1, ButtonLitP1, 3, 2, -2, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP2, ButtonLitP2, 4, 4, -3, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP3, ButtonLitP3, 4, 2, -4, 1, 1
@@ -6921,7 +8396,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     #panel
     CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonL, ButtonLitL, 2, 3, 0, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonIC, ButtonLitIC, 3, 4, -1, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 3, 4, -1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP1, ButtonLitP1, 3, 2, -2, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP2, ButtonLitP2, 4, 4, -3, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP3, ButtonLitP3, 4, 2, -4, 1, 1
@@ -7411,7 +8886,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, -41.25, -5.75 - 5.25 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
-#Office Zone 1 Service Elevators (SB - M, 2 - 42)
+#Office Zone 1 Service Elevators (LSP - M, 2 - 42)
 <Elevator 46>
     Name = Office Zone 1 Service Elevator 1
     Doors = 1
@@ -7420,7 +8895,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = -9 - 42
+    ServicedFloors = -10 - 42
     FloorSkipText = EZ
     AssignedShaft = 2
     IdleSound = otis4_elevidle.wav
@@ -7449,7 +8924,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = -9 - 42
+    ServicedFloors = -10 - 42
     FloorSkipText = EZ
     AssignedShaft = 2
     IdleSound = otis4_elevidle.wav
@@ -7631,7 +9106,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 1, otisbuttonpress1.wav, Button2, ButtonLit2, 8, 6, 2, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonM, ButtonLitM, 8, 5, 1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonL, ButtonLitL, 8, 4, 0, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonIC, ButtonLitIC, 8, 3, -1, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 8, 3, -1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP1, ButtonLitP1, 8, 2, -2, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP2, ButtonLitP2, 9, 8, -3, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP3, ButtonLitP3, 9, 7, -4, 1, 1
@@ -7639,7 +9114,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP5, ButtonLitP5, 9, 5, -6, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP6, ButtonLitP6, 9, 4, -7, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP7, ButtonLitP7, 9, 3, -8, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonSB, ButtonLitSB, 9, 2, -9, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonSP, ButtonLitSP, 9, 2, -9, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLSP, ButtonLitLSP, 11, 4, -10, 1, 1
     AddControlButton 1, ButtonOpen, 11, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 11, 8, close, 1, 1
     AddControlButton 1, ButtonCancel, 11, 3, cancel, 1, 1
@@ -7652,7 +9128,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     SetAutoSize = true, true
 <EndElevators>
 
-<Floors -9 to 42>
+<Floors -10 to 42>
     CallButtonElevators = 46, 47
     CreateCallButtons ElevExtPanels, ButtonUp, SAmberUp_Lit, ButtonDown, SAmberDown_Lit, 11.83 - 6.25 - 0.33 - 0.01, 0, 4, left, 0.5, 1, true, 0, 0
 
@@ -7663,7 +9139,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddShaftWall 2, ElevDoorGapFiller, ElevExt, 0.2, -6.25 + 0.33, -1.5, -6.25 + 0.33, 1.5, 10, 10, %interfloorheight% - 1, %interfloorheight% - 1, 0, 0
 <EndFloors>
 
-#Office Zone 2 Service Elevators (SB - M, 43 - 87)
+#Office Zone 2 Service Elevators (LSP - M, 43 - 87)
 <Elevator 48>
     Name = Office Zone 2 Service Elevator 1
     Doors = 2
@@ -7672,7 +9148,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     Deceleration = 0.2
     AccelJerk = 0.2
     DecelJerk = 0.2
-    ServicedFloors = -9 - 1, 42 - 87
+    ServicedFloors = -10 - 1, 42 - 87
     FloorSkipText = EZ
     AssignedShaft = 1
     IdleSound = otis4_elevidle.wav
@@ -7703,7 +9179,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     Deceleration = 0.2
     AccelJerk = 0.2
     DecelJerk = 0.2
-    ServicedFloors = -9 - 1, 42 - 87
+    ServicedFloors = -10 - 1, 42 - 87
     FloorSkipText = EZ
     AssignedShaft = 1
     IdleSound = otis4_elevidle.wav
@@ -7916,7 +9392,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 1, otisbuttonpress1.wav, Button42, ButtonLit42, 9, 6, 42, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonM, ButtonLitM, 9, 5, 1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonL, ButtonLitL, 9, 4, 0, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonIC, ButtonLitIC, 9, 3, -1, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 9, 3, -1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP1, ButtonLitP1, 9, 2, -2, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP2, ButtonLitP2, 10, 8, -3, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP3, ButtonLitP3, 10, 7, -4, 1, 1
@@ -7924,7 +9400,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP5, ButtonLitP5, 10, 5, -6, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP6, ButtonLitP6, 10, 4, -7, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP7, ButtonLitP7, 10, 3, -8, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonSB, ButtonLitSB, 10, 2, -9, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonSP, ButtonLitSP, 10, 2, -9, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLSP, ButtonLitLSP, 12, 4, -10, 1, 1
     AddControlButton 1, ButtonOpen, 12, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 12, 8, close, 1, 1
     AddControlButton 1, ButtonCancel, 12, 3, cancel, 1, 1
@@ -7982,7 +9459,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 2, otisbuttonpress1.wav, Button42, ButtonLit42, 9, 6, 42, 1, 1
     AddFloorButton 2, otisbuttonpress1.wav, ButtonM, ButtonLitM, 9, 5, 1, 1, 1
     AddFloorButton 2, otisbuttonpress1.wav, ButtonL, ButtonLitL, 9, 4, 0, 1, 1
-    AddFloorButton 2, otisbuttonpress1.wav, ButtonIC, ButtonLitIC, 9, 3, -1, 1, 1
+    AddFloorButton 2, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 9, 3, -1, 1, 1
     AddFloorButton 2, otisbuttonpress1.wav, ButtonP1, ButtonLitP1, 9, 2, -2, 1, 1
     AddFloorButton 2, otisbuttonpress1.wav, ButtonP2, ButtonLitP2, 10, 8, -3, 1, 1
     AddFloorButton 2, otisbuttonpress1.wav, ButtonP3, ButtonLitP3, 10, 7, -4, 1, 1
@@ -7990,7 +9467,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 2, otisbuttonpress1.wav, ButtonP5, ButtonLitP5, 10, 5, -6, 1, 1
     AddFloorButton 2, otisbuttonpress1.wav, ButtonP6, ButtonLitP6, 10, 4, -7, 1, 1
     AddFloorButton 2, otisbuttonpress1.wav, ButtonP7, ButtonLitP7, 10, 3, -8, 1, 1
-    AddFloorButton 2, otisbuttonpress1.wav, ButtonSB, ButtonLitSB, 10, 2, -9, 1, 1
+    AddFloorButton 2, otisbuttonpress1.wav, ButtonSP, ButtonLitSP, 10, 2, -9, 1, 1
+    AddFloorButton 2, otisbuttonpress1.wav, ButtonLSP, ButtonLitLSP, 12, 4, -10, 1, 1
     AddControlButton 2, ButtonOpen, 12, 2, open, 1, 1
     AddControlButton 2, ButtonClose, 12, 8, close, 1, 1
     AddControlButton 2, ButtonCancel, 12, 3, cancel, 1, 1
@@ -8006,7 +9484,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     SetAutoSize = true, true
 <EndElevators>
 
-<Floors -9 to 1>
+<Floors -10 to 1>
     CallButtonElevators = 48, 49
     CreateCallButtons ElevExtPanels, ButtonUp, SAmberUp_Lit, ButtonDown, SAmberDown_Lit, -11.83 + 6.25 + 0.33 + 0.01, 0, 4, right, 0.5, 1, true, 0, 0
 
@@ -9018,7 +10496,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     Deceleration = 0.1
     AccelJerk = 0.2
     DecelJerk = 0.2
-    ServicedFloors = -9 - 1, 42 - 44, 87 - 165
+    ServicedFloors = -10 - 1, 42 - 44, 87 - 165
     FloorSkipText = EZ
     AssignedShaft = 19
     IdleSound = otis4_elevidle.wav
@@ -9049,7 +10527,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     Deceleration = 0.1
     AccelJerk = 0.2
     DecelJerk = 0.2
-    ServicedFloors = -9 - 1, 42 - 44, 87 - 165
+    ServicedFloors = -10 - 1, 42 - 44, 87 - 165
     FloorSkipText = EZ
     AssignedShaft = 19
     IdleSound = otis4_elevidle.wav
@@ -9162,7 +10640,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 1, otisbuttonpress1.wav, Button42, ButtonLit42, 8, 7, 42, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonM, ButtonLitM, 8, 6, 1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonL, ButtonLitL, 8, 5, 0, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonIC, ButtonLitIC, 8, 4, -1, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 8, 4, -1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP1, ButtonLitP1, 8, 3, -2, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP2, ButtonLitP2, 8, 2, -3, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP3, ButtonLitP3, 9, 7, -4, 1, 1
@@ -9170,7 +10648,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP5, ButtonLitP5, 9, 5, -6, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP6, ButtonLitP6, 9, 4, -7, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP7, ButtonLitP7, 9, 3, -8, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonSB, ButtonLitSB, 9, 2, -9, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonSP, ButtonLitSP, 9, 2, -9, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLSP, ButtonLitLSP, 11, 5, -10, 1, 1
     AddControlButton 1, ButtonOpen, 11, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 11, 7, close, 1, 1
     AddControlButton 1, ButtonCancel, 11, 3, cancel, 1, 1
@@ -9234,7 +10713,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     SetAutoSize = true, true
 <EndElevators>
 
-<Floors -9 to 1>
+<Floors -10 to 1>
     CallButtonElevators = 66, 67
     CreateCallButtons ElevExtPanels, ButtonUp, SAmberUp_Lit, ButtonDown, SAmberDown_Lit, 27.91, 48.745 - 5.225 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 
@@ -9664,7 +11143,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 1, otisbuttonpress1.wav, Button2, ButtonLit2, 4, 4, 2, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonM, ButtonLitM, 4, 2, 1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonL, ButtonLitL, 5, 4, 0, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonIC, ButtonLitIC, 5, 2, -1, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 5, 2, -1, 1, 1
     AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
     AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
@@ -9762,7 +11241,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     #panel
     CreatePanel ElevPanel, 10, 5, left, 3.125 - 0.2 - 0.01, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonL, ButtonLitL, 2, 3, 0, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonIC, ButtonLitIC, 3, 4, -1, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 3, 4, -1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP1, ButtonLitP1, 3, 2, -2, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP2, ButtonLitP2, 4, 4, -3, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP3, ButtonLitP3, 4, 2, -4, 1, 1
@@ -9814,7 +11293,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     Deceleration = 0.1
     AccelJerk = 0.2
     DecelJerk = 0.2
-    ServicedFloors = -9 - 165
+    ServicedFloors = -10 - 165
     FloorSkipText = EZ
     AssignedShaft = 18
     IdleSound = otis4_elevidle.wav
@@ -9884,7 +11363,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
 
     #floor panel
     SetAutoSize = false, false
-    CreatePanel ElevPanel, 12, 20, right, -7.5 + 0.2 + 0.01, 0, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
+    CreatePanel ElevPanel, 13, 20, right, -7.5 + 0.2 + 0.01, 0, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonRF, ButtonLitRF, 2, 14, 165, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonRP, ButtonLitRP, 2, 13, 164, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, Button163, ButtonLit163, 2, 12, 163, 1, 1
@@ -10051,7 +11530,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 1, otisbuttonpress1.wav, Button2, ButtonLit2, 11, 13, 2, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonM, ButtonLitM, 11, 12, 1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonL, ButtonLitL, 11, 11, 0, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonIC, ButtonLitIC, 11, 10, -1, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 11, 10, -1, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP1, ButtonLitP1, 11, 9, -2, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP2, ButtonLitP2, 11, 8, -3, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP3, ButtonLitP3, 11, 7, -4, 1, 1
@@ -10059,7 +11538,8 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP5, ButtonLitP5, 11, 5, -6, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP6, ButtonLitP6, 11, 4, -7, 1, 1
     AddFloorButton 1, otisbuttonpress1.wav, ButtonP7, ButtonLitP7, 11, 3, -8, 1, 1
-    AddFloorButton 1, otisbuttonpress1.wav, ButtonSB, ButtonLitIC, 11, 2, -9, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonSP, ButtonLitSP, 11, 2, -9, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLSP, ButtonLitLSP, 12, 2, -10, 1, 1
 
     #control panel
     SetAutoSize = false, false
@@ -10080,8 +11560,9 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddFloorButton 2, otisbuttonpress1.wav, Button42, ButtonLit42, 4, 6, 42, 1, 1
     AddFloorButton 2, otisbuttonpress1.wav, ButtonM, ButtonLitM, 4, 5, 1, 1, 1
     AddFloorButton 2, otisbuttonpress1.wav, ButtonL, ButtonLitL, 4, 4, 0, 1, 1
-    AddFloorButton 2, otisbuttonpress1.wav, ButtonIC, ButtonLitIC, 4, 3, -1, 1, 1
-    AddFloorButton 2, otisbuttonpress1.wav, ButtonSB, ButtonLitSB, 4, 2, -9, 1, 1
+    AddFloorButton 2, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 4, 3, -1, 1, 1
+    AddFloorButton 2, otisbuttonpress1.wav, ButtonSP, ButtonLitSP, 4, 2, -9, 1, 1
+    AddFloorButton 2, otisbuttonpress1.wav, ButtonLSP, ButtonLitLSP, 5, 5, -10, 1, 1
     AddControlButton 2, ButtonOpen, 5, 2, open, 1, 1
     AddControlButton 2, ButtonClose, 5, 7, close, 1, 1
     AddControlButton 2, ButtonCancel, 5, 3, cancel, 1, 1
@@ -10094,7 +11575,7 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     SetAutoSize = true, true
 <EndElevator>
 
-<Floors -9 to 43>
+<Floors -10 to 43>
     CallButtonElevators = 74
     CreateCallButtons ElevExtPanels, ButtonUp, SAmberUp_Lit, ButtonDown, SAmberDown_Lit, 5.75 + 4.5 + 1, 32.405 - 10.665 - 0.33 - 0.01, 4, front, 0.5, 1, true, 0, 0
 
@@ -10134,6 +11615,586 @@ ShaftCut 37, -4.25 + 0.33, -5.57, 4.25 - 0.33, 5.57, 0, 5
     AddShaftDoorComponent 74, 1, right1, ElevDoors3L, ElevDoors3L2, 0.1, right, 0.15, 2.25, -6.401, 4.5, -6.401, 8, 0, 0, 0, 0, 0
     AddShaftDoorComponent 74, 1, right2, ElevDoors3L, ElevDoors3L2, 0.1, right, 0.3, 0, -6.301, 2.25, -6.301, 8, 0, 0, 0, 0, 0
     FinishShaftDoor 74, 1, 0, -6.301
+<EndFloors>
+
+#Residential Express elevators
+<Elevator 75>
+    Name = Residential Express Elevator 1
+    Doors = 1
+    Speed = 26
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 0, 113
+    FloorSkipText = EZ
+    AssignedShaft = 23
+    IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
+    CreateElevator true, -0.298, 15, 0
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
+    CarStartSound = elevstart7.wav
+    CarMoveSound = elevmove7.wav
+    CarStopSound = elevstop7.wav
+
+
+
+<EndElevator>
+
+<Elevator 76>
+    Name = Residential Express Elevator 2
+    Doors = 1
+    Speed = 26
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0, 113
+    FloorSkipText = EZ
+    AssignedShaft = 23
+    IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
+    CreateElevator true, -0.298, 5, 113
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
+    CarStartSound = elevstart7.wav
+    CarMoveSound = elevmove7.wav
+    CarStopSound = elevstop7.wav
+
+
+
+<EndElevator>
+
+<Elevator 77>
+    Name = Residential Express Elevator 3
+    Doors = 1
+    Speed = 26
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0, 113
+    FloorSkipText = EZ
+    AssignedShaft = 23
+    IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
+    CreateElevator true, -0.298, -5, 0
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
+    CarStartSound = elevstart7.wav
+    CarMoveSound = elevmove7.wav
+    CarStopSound = elevstop7.wav
+
+
+
+<EndElevator>
+
+<Elevator 78>
+    Name = Residential Express Elevator 4
+    Doors = 1
+    Speed = 26
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0, 113
+    FloorSkipText = EZ
+    AssignedShaft = 23
+    IdleSound = otis4_elevidle2.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
+    CreateElevator true, -0.298, -15, 113
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
+    CarStartSound = elevstart7.wav
+    CarMoveSound = elevmove7.wav
+    CarStopSound = elevstop7.wav
+
+
+
+<EndElevator>
+
+<Elevators 75 to 78>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, Marble1, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, Marble1, 0.2, -4.125, -4.75, 4.125, 4.75, 0, 0, 0, 0
+
+    #ceiling
+    SetAutoSize = false, false
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling2_3x2, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_3x2, 0.2, -4.125, -4.75, 4.125, 4.75, 8, 8, 1, 1
+
+    #front wall
+    WallOrientation = left
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1B, 0.2, -4.125, -4.75, 4.125, -4.75, 8, 8, 0, 0, 0, 0
+
+    #back and right walls
+    WallOrientation = right
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall1B, 0.2, -4.125, 4.75, 4.125, 4.75, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall1A, 0.2, 4.125, -4.75, 4.125, 4.75, 8, 8, 0, 0, 0, 0
+
+    #panels
+    WallOrientation = left
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -4.125, -4.75, -4.125, -2.25, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, -4.125, 2.25, -4.125, 4.75, 8, 8, 0, 0, 0, 0
+
+    #doors
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    AddDoors 1, ElevDoors3L2, ElevDoors3R2, 0.2, -4.126, 0, 4.5, 8, false, 0, 0 #doors
+    SetShaftDoors 1, 0.2, -4.426, 0
+
+    #floor signs
+    #AddFloorSigns 0, true, Button, front, -4.426 - 0.2 - 0.33, 4.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    #AddFloorSigns 0, true, Button, back, -4.426 - 0.2 - 0.33, -4.5 / 2 + 0.01, 0.5, 0.42, 5.5
+
+    #panel
+    CreatePanel ElevPanel, 8, 5, right, -4.125 + 0.2 + 0.01, 3.5, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonL, ButtonLitL, 4, 3, 0, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, Button113, ButtonLit113, 2, 3, 113, 1, 1
+    AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 7, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 7, 4, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator Ind_Button, right, -4.125 + 0.2 + 0.01, 3.5, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
+<EndElevators>
+
+<Floor 0>
+    CallButtonElevators = 75, 76, 77, 78
+    CreateCallButtons ElevExtPanels2, BrassButtonUp, BrassButtonUp_Lit, BrassButtonDown, BrassButtonDown_Lit, -57.83 - 5.25 - 0.33 - 0.01, 11, 4, left, 0.5, 1, true, 0, 0
+
+    WallOrientation = right
+    AddShaftDoor 75, 1, ElevDoors5L, ElevDoors5R, 0, 0
+    AddShaftDoor 76, 1, ElevDoors5L, ElevDoors5R, 0, 0
+    AddShaftDoor 77, 1, ElevDoors5L, ElevDoors5R, 0, 0
+    AddShaftDoor 78, 1, ElevDoors5L, ElevDoors5R, 0, 0
+<EndFloor>
+
+<Floor 113>
+    CallButtonElevators = 75, 76, 77, 78
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, -57.83 - 5.25 - 0.33 - 0.01, 11, 4, left, 0.5, 1, true, 0, 0
+
+    WallOrientation = right
+    AddShaftDoor 75, 1, ElevDoors3L, ElevDoors3R, 0, 0
+    AddShaftDoor 76, 1, ElevDoors3L, ElevDoors3R, 0, 0
+    AddShaftDoor 77, 1, ElevDoors3L, ElevDoors3R, 0, 0
+    AddShaftDoor 78, 1, ElevDoors3L, ElevDoors3R, 0, 0
+<EndFloor>
+
+#Observation Deck Elevator
+<Elevator 79>
+    Name = Observation Deck Elevator
+    Doors = 1
+    Speed = 30
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = -1, 159, 161
+    FloorSkipText = EZ
+    AssignedShaft = 19
+    IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.1
+    LevelingOpen = 0.3
+    CreateElevator true, -11.08, 1.273, -1
+    OpenSpeed 1 = 0.8
+    OpenSound 1 = elevopenquick.wav
+    CloseSound 1 = elevclosequick.wav
+    BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
+    CarStartSound = elevstart3.wav
+    CarMoveSound = elevmove3.wav
+    CarStopSound = elevstop3.wav
+
+
+<EndElevator>
+
+<Elevator 79>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, Marble1, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, Marble1, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+
+    #ceiling
+    SetAutoSize = false, false
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling2_2x3, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling2_2x3, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 1, 1 #ceiling
+
+    #right wall
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall1B, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 1, 1 #right wall
+
+    #front and left walls
+    WallOrientation = left
+    TextureOverride ElevExt, ElevWall1A, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall1A, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 1, 1 #front wall
+    TextureOverride ElevExt, ElevWall1B, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall1B, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 1, 1 #left wall
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.75, 3.125, -1.75, 3.125, 8, 8, 0, 0, 1, 1 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevPanelMain, ElevPanelMain, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, 3.125, 3.75, 3.125, 8, 8, 0, 0, 1, 1 #right panel
+
+    #doors
+    WallOrientation = left
+    DrawWalls = true, true, true, true, true, true
+    AddDoors 1, ElevDoors3L2, ElevDoors3R2, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    SetShaftDoors 1, 0.2, 0, 3.426 #shaft doors
+    WallOrientation = right
+
+    #floor signs
+    #AddFloorSigns true, left, 3.5 / 2 - 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 5.5
+    #AddFloorSigns true, right, -3.5 / 2 + 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 5.5
+
+    #panel
+    CreatePanel ElevPanel, 8, 5, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, Button161, ButtonLit161, 2, 3, 161, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, Button159, ButtonLit159, 3, 3, 159, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonLL, ButtonLitLL, 4, 3, -1, 1, 1
+    AddControlButton 1, ButtonOpen, 6, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 6, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 7, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 7, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 7, 4, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator Ind_Button, front, 1.75 + 1 - 0.1, 3.125 - 0.2 - 0.001, 0.7, 0.5, 6.5
+    SetAutoSize = true, true
+<EndElevator>
+
+<Floor -1>
+    CallButtonElevators = 79
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 22.08 - 11.08 - 3, 43.66 + 10.67 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+
+    WallOrientation = left
+    AddShaftDoor 79, 1, ElevDoors3L, ElevDoors3R, 0, 0
+<EndFloor>
+
+<Floor 159>
+    CallButtonElevators = 79
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 22.08 - 11.08 - 3, 43.66 + 10.67 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+
+    WallOrientation = left
+    AddShaftDoor 79, 1, ElevDoors3L, ElevDoors3R, 0, 0
+<EndFloor>
+
+<Floor 161>
+    CallButtonElevators = 79
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUp_Lit, ButtonDown, ButtonDown_Lit, 22.08 - 11.08 - 3, 43.66 + 10.67 + 0.33 + 0.01, 4, back, 0.5, 1, true, 0, 0
+
+    WallOrientation = left
+    AddShaftDoor 79, 1, ElevDoors3L, ElevDoors3R, 0, 0
+<EndFloor>
+
+#Underground Service Elevators
+<Elevator 80>
+    Name = Underground Service Elevator 1
+    Doors = 1
+    Speed = 6
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = -11 - -9, -6, -3 - 0
+    FloorSkipText = Blank
+    AssignedShaft = 38
+    IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.3
+    LevelingOpen = 0.3
+    CreateElevator true, -0.298, 6, -10
+    #BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
+    CarStartSound = elevstart6.wav
+    CarMoveSound = elevmove6.wav
+    CarStopSound = elevstop6.wav
+
+
+
+<EndElevator>
+
+<Elevator 81>
+    Name = Underground Service Elevator 2
+    Doors = 1
+    Speed = 6
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = -11 - -9, -6, -3 - 0
+    FloorSkipText = Blank
+    AssignedShaft = 38
+    IdleSound = otis4_elevidle.wav
+    LevelingOffset = 0.3
+    LevelingOpen = 0.3
+    CreateElevator true, -0.298, -6, 0
+    #BeepSound = beep1.wav
+    UpChimeSound 1 = otis4_Series1_chimeup.wav
+    DownChimeSound 1 = otis4_Series1_chimedown.wav
+    MotorStartSound = motor_start2.wav
+    MotorRunSound = motor_running2.wav
+    MotorStopSound = motor_stop2.wav
+    CarStartSound = elevstart6.wav
+    CarMoveSound = elevmove6.wav
+    CarStopSound = elevstop6.wav
+
+
+
+<EndElevator>
+
+<Elevator 80>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ServiceElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ServiceElevFloor, 0.2, -5.125, -4.75, 5.721, 3.75, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -5.125, -4.75, 5.721, 3.75, 9, 9, 0, 0
+
+    #front wall
+    WallOrientation = left
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ServiceElevWall, 0.2, -5.125, -4.75, 5.721, -4.75, 9, 9, 0, 0, 0, 0
+
+    #back wall
+    WallOrientation = right
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ServiceElevWall, 0.2, -5.125, 3.75, 5.721, 3.75, 9, 9, 0, 0, 0, 0
+
+    #left wall
+    WallOrientation = left
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevWall, 0.2, -5.125, -4.75, -5.125, 3.75, 9, 9, 0, 0, 0, 0
+
+    #rear panels
+    WallOrientation = right
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevPanelMain, 0.2, 5.721, -4.75, 5.721, -4.5, 9, 9, 0, 0, 0, 0
+    DrawWalls = true, true, true, true, true, true
+    AddWall Door Gap Cover, ElevExt, 0.2, 5.921, -4.77, 5.921, -4.5, 9.4, 9.4, -0.2, -0.2, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevPanelMain, 0.2, 5.721, 0, 5.721, 3.75, 9, 9, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, true
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Top Panel, ServiceElevPanelMain, 0.2, 5.721, -4.5, 5.721, 0, 1, 1, 8, 8, 0, 0
+
+    #doors
+    WallOrientation = left
+    DrawWalls = true, true, true, true, true, true
+    AddDoorComponent 1, half, ElevDoors3L2, ElevDoors3L2, 0.1, right, 0.15, 5.722, -2.25, 5.722, 0, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, full, ElevDoors3L2, ElevDoors3L2, 0.1, right, 0.3, 5.822, -4.5, 5.822, -2.25, 8, 0, 0, 0, 0, 0
+    FinishDoors 1, 5.722, 0
+<EndElevator>
+
+<Elevator 81>
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ServiceElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ServiceElevFloor, 0.2, -5.125, -3.75, 5.721, 4.75, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -5.125, -3.75, 5.721, 4.75, 9, 9, 0, 0
+
+    #front wall
+    WallOrientation = left
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ServiceElevWall, 0.2, -5.125, -3.75, 5.721, -3.75, 9, 9, 0, 0, 0, 0
+
+    #back wall
+    WallOrientation = right
+    TextureOverride ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ServiceElevWall, 0.2, -5.125, 4.75, 5.721, 4.75, 9, 9, 0, 0, 0, 0
+
+    #left wall
+    WallOrientation = left
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevExt, ServiceElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevWall, 0.2, -5.125, -3.75, -5.125, 4.75, 9, 9, 0, 0, 0, 0
+
+    #rear panels
+    WallOrientation = right
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ServiceElevPanelMain, 0.2, 5.721, -3.75, 5.721, 0, 9, 9, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ServiceElevPanelMain, 0.2, 5.721, 4.5, 5.721, 4.75, 9, 9, 0, 0, 0, 0
+    DrawWalls = true, true, true, true, true, true
+    AddWall Door Gap Cover, ElevExt, 0.2, 5.921, 4.5, 5.921, 4.77, 9.4, 9.4, -0.2, -0.2, 0, 0
+    DrawWalls = true, true, false, false, false, true
+    TextureOverride ServiceElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Top Panel, ServiceElevPanelMain, 0.2, 5.721, 0, 5.721, 4.5, 1, 1, 8, 8, 0, 0
+
+    #doors
+    WallOrientation = left
+    DrawWalls = true, true, true, true, true, true
+    AddDoorComponent 1, half, ElevDoors3L, ElevDoors3L2, 0.1, left, 0.15, 5.722, 0, 5.722, 2.25, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, full, ElevDoors3L, ElevDoors3L2, 0.1, left, 0.3, 5.822, 2.25, 5.822, 4.5, 8, 0, 0, 0, 0, 0
+    FinishDoors 1, 5.722, 0
+<EndElevator>
+
+<Elevators 80 to 81>
+    #floor signs
+    #AddFloorSigns 1, true, Button, front, -5.426 - 0.2 - 0.33, 4.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    #AddFloorSigns 1, true, Button, back, -5.426 - 0.2 - 0.33, -4.5 / 2 + 0.01, 0.5, 0.42, 5.5
+
+    #AddFloorSigns 2, true, Button, front, 5.721 + 0.2 + 0.33, 4.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    #AddFloorSigns 2, true, Button, back, 5.721 + 0.2 + 0.33, -4.5 / 2 + 0.01, 0.5, 0.42, 5.5
+
+    #panels
+    SetAutoSize = false, false
+    if[%elevator% = 80] CreatePanel ElevPanel, 8, 9, left, 5.721 - 0.2 - 0.001, 1.875, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
+    if[%elevator% = 81] CreatePanel ElevPanel, 8, 9, left, 5.721 - 0.2 - 0.001, -1.875, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonST, ButtonLitST, 2, 7, 0, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonA, ButtonLitA, 2, 3, -1, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonB, ButtonLitB, 3, 7, -2, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonC, ButtonLitC, 3, 3, -3, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonD, ButtonLitD, 4, 7, -6, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonE, ButtonLitE, 4, 3, -9, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonF, ButtonLitF, 5, 7, -10, 1, 1
+    AddFloorButton 1, otisbuttonpress1.wav, ButtonG, ButtonLitG, 5, 3, -11, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 8, close, 1, 1
+    AddControlButton 1, ButtonCancel, 7, 3, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 7, 5, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 7, 7, alarm, 1, 1
+
+
+    #Floor Indicator
+    if[%elevator% = 80] AddFloorIndicator Ind2_Button, left, 5.721 - 0.2 - 0.001, -2.25, 0.7, 0.5, 8.25
+    if[%elevator% = 81] AddFloorIndicator Ind2_Button, left, 5.721 - 0.2 - 0.001, 2.25, 0.7, 0.5, 8.25
+    SetAutoSize = true, true
+<EndElevators>
+
+<Floors -11 to -9>
+    CallButtonElevators = 80, 81
+    CreateCallButtons ElevExtPanels, ButtonUp, SAmberUp_Lit, ButtonDown, SAmberDown_Lit, -158.42 + 6.25 + 0.33 + 0.01, -74.67, 4, right, 0.5, 1, true, 0, 0
+
+    #shaft doors
+    WallOrientation = left
+    DrawWalls = true, true, true, true, true, true
+    AddShaftDoorComponent 80, 1, half, ElevDoors3L, ElevDoors3L, 0.1, right, 0.15, 6.122, -2.25, 6.122, 0, 8, 0, 0, 0, 0, 0
+    AddShaftDoorComponent 80, 1, full, ElevDoors3L, ElevDoors3L, 0.1, right, 0.3, 6.022, -4.5, 6.022, -2.25, 8, 0, 0, 0, 0, 0
+    FinishShaftDoor 80, 1, 6.022, 0
+
+    DrawWalls = true, true, true, true, true, true
+    AddShaftDoorComponent 81, 1, half, ElevDoors3L2, ElevDoors3L, 0.1, left, 0.15, 6.122, 0, 6.122, 2.25, 8, 0, 0, 0, 0, 0
+    AddShaftDoorComponent 81, 1, full, ElevDoors3L2, ElevDoors3L, 0.1, left, 0.3, 6.022, 2.25, 6.022, 4.5, 8, 0, 0, 0, 0, 0
+    FinishShaftDoor 81, 1, 6.022, 0
+
+    #Gap Filler for Two-Speed Doors
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevExt, ConnectionWall, ConnectionWall, ElevExt, ElevExt
+    AddShaftWall 38, ElevDoorGapFiller, ElevExt, 0.2, 6.25 - 0.33, -1.5, 6.25 - 0.33, 1.5, 10, 10, %interfloorheight% - 1, %interfloorheight% - 1, 0, 0
+<EndFloors>
+
+<Floor -6>
+    CallButtonElevators = 80, 81
+    CreateCallButtons ElevExtPanels, ButtonUp, SAmberUp_Lit, ButtonDown, SAmberDown_Lit, -158.42 + 6.25 + 0.33 + 0.01, -74.67, 4, right, 0.5, 1, true, 0, 0
+
+    #shaft doors
+    WallOrientation = left
+    DrawWalls = true, true, true, true, true, true
+    AddShaftDoorComponent 80, 1, half, ElevDoors3L, ElevDoors3L, 0.1, right, 0.15, 6.122, -2.25, 6.122, 0, 8, 0, 0, 0, 0, 0
+    AddShaftDoorComponent 80, 1, full, ElevDoors3L, ElevDoors3L, 0.1, right, 0.3, 6.022, -4.5, 6.022, -2.25, 8, 0, 0, 0, 0, 0
+    FinishShaftDoor 80, 1, 6.022, 0
+
+    DrawWalls = true, true, true, true, true, true
+    AddShaftDoorComponent 81, 1, half, ElevDoors3L2, ElevDoors3L, 0.1, left, 0.15, 6.122, 0, 6.122, 2.25, 8, 0, 0, 0, 0, 0
+    AddShaftDoorComponent 81, 1, full, ElevDoors3L2, ElevDoors3L, 0.1, left, 0.3, 6.022, 2.25, 6.022, 4.5, 8, 0, 0, 0, 0, 0
+    FinishShaftDoor 81, 1, 6.022, 0
+
+    #Gap Filler for Two-Speed Doors
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevExt, ConnectionWall, ConnectionWall, ElevExt, ElevExt
+    AddShaftWall 38, ElevDoorGapFiller, ElevExt, 0.2, 6.25 - 0.33, -1.5, 6.25 - 0.33, 1.5, 10, 10, %interfloorheight% - 1, %interfloorheight% - 1, 0, 0
+<EndFloor>
+
+<Floors -3 to 0>
+    CallButtonElevators = 80, 81
+    CreateCallButtons ElevExtPanels, ButtonUp, SAmberUp_Lit, ButtonDown, SAmberDown_Lit, -158.42 + 6.25 + 0.33 + 0.01, -74.67, 4, right, 0.5, 1, true, 0, 0
+
+    #shaft doors
+    WallOrientation = left
+    DrawWalls = true, true, true, true, true, true
+    AddShaftDoorComponent 80, 1, half, ElevDoors3L, ElevDoors3L, 0.1, right, 0.15, 6.122, -2.25, 6.122, 0, 8, 0, 0, 0, 0, 0
+    AddShaftDoorComponent 80, 1, full, ElevDoors3L, ElevDoors3L, 0.1, right, 0.3, 6.022, -4.5, 6.022, -2.25, 8, 0, 0, 0, 0, 0
+    FinishShaftDoor 80, 1, 6.022, 0
+
+    DrawWalls = true, true, true, true, true, true
+    AddShaftDoorComponent 81, 1, half, ElevDoors3L2, ElevDoors3L, 0.1, left, 0.15, 6.122, 0, 6.122, 2.25, 8, 0, 0, 0, 0, 0
+    AddShaftDoorComponent 81, 1, full, ElevDoors3L2, ElevDoors3L, 0.1, left, 0.3, 6.022, 2.25, 6.022, 4.5, 8, 0, 0, 0, 0, 0
+    FinishShaftDoor 81, 1, 6.022, 0
+
+    #Gap Filler for Two-Speed Doors
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevExt, ConnectionWall, ConnectionWall, ElevExt, ElevExt
+    AddShaftWall 38, ElevDoorGapFiller, ElevExt, 0.2, 6.25 - 0.33, -1.5, 6.25 - 0.33, 1.5, 10, 10, %interfloorheight% - 1, %interfloorheight% - 1, 0, 0
 <EndFloors>
 
 #Stairwells
@@ -10182,7 +12243,7 @@ CutStairwell 1, -5.165, -10.165, 5, 10, 0, 5
     DrawWalls = true, false, false, false, false, false
     AddStairsWall 1, SignTop, FloorSign, 0, -2.5, 9.99, -1.5, 9.99, 0.25, 0.25, 5, 5, 1, 1
     if[%floor% = 0] AddStairsWall 1, SignTop, ButtonL, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
-    if[%floor% = -1] AddStairsWall 1, SignTop, ButtonIC, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -1] AddStairsWall 1, SignTop, ButtonLL, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -2] AddStairsWall 1, SignTop, ButtonP1, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -3] AddStairsWall 1, SignTop, ButtonP2, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -4] AddStairsWall 1, SignTop, ButtonP3, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
@@ -10190,7 +12251,7 @@ CutStairwell 1, -5.165, -10.165, 5, 10, 0, 5
     if[%floor% = -6] AddStairsWall 1, SignTop, ButtonP5, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -7] AddStairsWall 1, SignTop, ButtonP6, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -8] AddStairsWall 1, SignTop, ButtonP7, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
-    if[%floor% = -9] AddStairsWall 1, SignTop, ButtonSB, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -9] AddStairsWall 1, SignTop, ButtonA, 0, -2.5, 9.99, -1.5, 9.99, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 0] AddStairsWall 1, SignTop, FloorSignLobby, 0, -2.5, 9.99, -1.5, 9.99, 0.25, 0.25, 4, 4, 1, 1
     SetAutoSize = true, true
 <EndFloors>
@@ -10384,7 +12445,7 @@ CutStairwell 2, -6.085, -11, 6.085, 11, 0, 5
     DrawWalls = false, true, false, false, false, false
     AddStairsWall 2, SignTop, FloorSign, 0, 0.5, -10.66, 1.5, -10.66, 0.25, 0.25, 5, 5, 1, 1
     if[%floor% = 0] AddStairsWall 2, SignTop, ButtonL, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
-    if[%floor% = -1] AddStairsWall 2, SignTop, ButtonIC, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -1] AddStairsWall 2, SignTop, ButtonLL, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -2] AddStairsWall 2, SignTop, ButtonP1, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -3] AddStairsWall 2, SignTop, ButtonP2, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -4] AddStairsWall 2, SignTop, ButtonP3, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
@@ -10392,7 +12453,7 @@ CutStairwell 2, -6.085, -11, 6.085, 11, 0, 5
     if[%floor% = -6] AddStairsWall 2, SignTop, ButtonP5, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -7] AddStairsWall 2, SignTop, ButtonP6, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = -8] AddStairsWall 2, SignTop, ButtonP7, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
-    if[%floor% = -9] AddStairsWall 2, SignTop, ButtonSB, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = -9] AddStairsWall 2, SignTop, ButtonA, 0, 0.5, -10.66, 1.5, -10.66, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 0] AddStairsWall 2, SignTop, FloorSignLobby, 0, 0.5, -10.66, 1.5, -10.66, 0.25, 0.25, 4, 4, 1, 1
     SetAutoSize = true, true
 <EndFloors>
@@ -10590,7 +12651,8 @@ CutStairwell 2, -6.085, -11, 6.085, 11, 0, 5
 <Floors -9 to 0>
     #Stairwell Door
     WallOrientation = center
-    AddStairsDoor 2, StairsDoor, 0.2, 7, -2.96, -11, 3.5, 8, 0, 1, 1
+    if[%floor% ! -1] AddStairsDoor 2, StairsDoor, 0.2, 7, -2.96, -11, 3.5, 8, 0, 1, 1
+    if[%floor% = -1] AddStairsDoor 2, StairsDoor, 0.2, 5, -2.96, -11, 3.5, 8, 0, 1, 1
     Cut -24.33 - 2.96 - 1.75, %interfloorheight%, -11.33 - 0.66, -24.33 - 2.96 + 1.75, %interfloorheight% + 8, -11.33 + 0.66, true, false
     if[%floor% > -2] AddFillerWalls ConnectionWall, 0.66, -24.33 - 2.96, -11.33, 3.5, 8, 0, true, 0, 0
 <EndFloors>
