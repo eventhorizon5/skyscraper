@@ -73,7 +73,7 @@ class ScriptProcessor
 	csString FunctionCallLineData;
 	csArray<csString> FunctionParams;
 	bool ReplaceLine;
-	csStringArray nonexistent_files;
+	csArray<csString> nonexistent_files;
 
 	bool ScriptError(const char *message);
 	csString Calc(const char *expression);

@@ -4328,11 +4328,11 @@ void SBS::RemoveSound(Sound *sound)
 
 const char* SBS::VerifyFile(const char *filename)
 {
-	//verify if a file exists
+	//verify a filename
 	//if it does, return the same filename
 	//otherwise search the related folder and find a matching filename with a different
 	//case (fixes case-sensitivity issues mainly on Linux)
-	//returns zero if not found
+	//returns the original string if not found
 
 	csString file = filename;
 	if (vfs->Exists(filename))
@@ -4354,7 +4354,7 @@ const char* SBS::VerifyFile(const char *filename)
 		if (check.CompareNoCase(filename) == true)
 			return check;
 	}
-	return 0;
+	return filename;
 }
 
 bool SBS::FileExists(const char *filename, bool relative)
@@ -4364,12 +4364,13 @@ bool SBS::FileExists(const char *filename, bool relative)
 
 	csString file = filename;
 
-	if (relative == false)
+	if (relative == true)
 		file.Insert(0, "/root/");
 
 	if (vfs->Exists(filename))
 		return true;
-	if (VerifyFile(filename) != 0)
+	csString verify = VerifyFile(filename);
+	if (verify != file)
 		return true;
 	return false;
 }

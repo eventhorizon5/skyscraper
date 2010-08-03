@@ -965,6 +965,7 @@ bool ScriptProcessor::ReportMissingFiles()
 
 	if (nonexistent_files.GetSize() > 0)
 	{
+		nonexistent_files.Sort();
 		for (int i = 0; i < nonexistent_files.GetSize(); i++)
 			Simcore->Report(nonexistent_files[i]);
 
@@ -985,12 +986,6 @@ bool ScriptProcessor::ReportMissingFiles()
 		}
 		twindow->tMain->WriteText(message);
 		twindow->tMain->SetInsertionPoint(0);
-		twindow->ShowModal();
-
-		if (twindow)
-			delete twindow;
-		twindow = 0;
-
 		return true;
 	}
 	else
@@ -6407,6 +6402,8 @@ void ScriptProcessor::CheckFile(const char *filename, bool relative)
 		if (file.Length() == loc + 1)
 			return;
 	}
+
+	file.ReplaceAll("\\", "/");
 
 	if (Simcore->FileExists(file, relative) == false)
 	{
