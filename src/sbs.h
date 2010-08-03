@@ -311,7 +311,7 @@ public:
 	void RemoveStairs(Stairs *stairs);
 	void RemoveSound(Sound *sound);
 	const char* VerifyFile(const char *filename);
-	bool FileExists(const char *filename, bool relative);
+	bool FileExists(const char *filename, bool relative = false);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
