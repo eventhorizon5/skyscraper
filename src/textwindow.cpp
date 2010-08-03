@@ -42,9 +42,6 @@ END_EVENT_TABLE()
 TextWindow::TextWindow(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(TextWindow)
-	wxBoxSizer* BoxSizer1;
-	wxFlexGridSizer* FlexGridSizer1;
-	
 	Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
 	SetClientSize(wxDefaultSize);
 	Move(wxDefaultPosition);

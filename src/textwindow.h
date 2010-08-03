@@ -40,6 +40,8 @@ class TextWindow: public wxDialog
 		virtual ~TextWindow();
 
 		//(*Declarations(TextWindow)
+		wxBoxSizer* BoxSizer1;
+		wxFlexGridSizer* FlexGridSizer1;
 		wxButton* bOK;
 		wxTextCtrl* tMain;
 		//*)

@@ -4332,6 +4332,7 @@ const char* SBS::VerifyFile(const char *filename)
 	//if it does, return the same filename
 	//otherwise search the related folder and find a matching filename with a different
 	//case (fixes case-sensitivity issues mainly on Linux)
+	//returns zero if not found
 
 	csString file = filename;
 	if (vfs->Exists(filename))
@@ -4353,7 +4354,7 @@ const char* SBS::VerifyFile(const char *filename)
 		if (check.CompareNoCase(filename) == true)
 			return check;
 	}
-	return filename;
+	return 0;
 }
 
 bool SBS::FileExists(const char *filename, bool relative)
@@ -4361,12 +4362,14 @@ bool SBS::FileExists(const char *filename, bool relative)
 	//check to see if the specified file exists
 	//the name must begin with the "/root/" suffix if relative is false
 
+	csString file = filename;
+
 	if (relative == false)
-		return vfs->Exists(filename);
-	else
-	{
-		csString file = filename;
 		file.Insert(0, "/root/");
-		return vfs->Exists(file);
-	}
+
+	if (vfs->Exists(filename))
+		return true;
+	if (VerifyFile(filename) != 0)
+		return true;
+	return false;
 }
