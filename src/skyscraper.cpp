@@ -1107,6 +1107,7 @@ bool Skyscraper::Start()
 	g2d->Clear(0);
 	g2d->FinishDraw();
 	g2d->Print(0);
+	g2d->ClearAll(0);
 
 	//resize main window
 	window->SetBackgroundColour(*wxBLACK);
