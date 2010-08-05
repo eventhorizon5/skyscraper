@@ -40,6 +40,8 @@ Version 1.7 (2.0 Alpha 6)
 -fixed a peak mode dispatch issue
 -Added case insensitivity support for file loading
 -Internal indicator vertical positioning fix
+-App now displays missing files after building load
+-Texture rendering fixes
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------
