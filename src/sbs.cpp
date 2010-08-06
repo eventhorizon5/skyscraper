@@ -772,8 +772,8 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		return false;
 	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
 
-	//clear buffer and enable double buffering
-	g2d->ClearAll(0);
+	//clear buffer with alpha mask and enable double buffering
+	g2d->ClearAll(g2d->FindRGB(0, 0, 0, 0));
 	g2d->DoubleBuffer(true);
 
 	//draw original image onto backbuffer
