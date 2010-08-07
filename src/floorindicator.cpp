@@ -52,8 +52,6 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	buffer.Insert(0, "(" + buffer2 + ")FloorIndicator ");
 	buffer.Trim();
 	FloorIndicatorMesh = sbs->CreateMesh(buffer);
-	FloorIndicatorMesh->SetZBufMode(CS_ZBUF_USE);
-	FloorIndicatorMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	FloorIndicator_movable = FloorIndicatorMesh->GetMovable();
 
 	csString texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;

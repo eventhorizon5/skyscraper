@@ -62,27 +62,19 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	buffer.Trim();
 	object->SetName("Directional Indicator " + buffer2 + ":" + buffer3);
 	DirectionalMeshBack = sbs->CreateMesh(buffer);
-	DirectionalMeshBack->SetZBufMode(CS_ZBUF_USE);
-	DirectionalMeshBack->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	if (Single == false)
 	{
 		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Up";
 		DirectionalMeshUp = sbs->CreateMesh(buffer);
-		DirectionalMeshUp->SetZBufMode(CS_ZBUF_USE);
-		DirectionalMeshUp->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Down";
 		DirectionalMeshDown = sbs->CreateMesh(buffer);
-		DirectionalMeshDown->SetZBufMode(CS_ZBUF_USE);
-		DirectionalMeshDown->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	}
 	else
 	{
 		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Arrow";
 		DirectionalMesh = sbs->CreateMesh(buffer);
-		DirectionalMesh->SetZBufMode(CS_ZBUF_USE);
-		DirectionalMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	}
 
 	sbs->ResetTextureMapping(true);

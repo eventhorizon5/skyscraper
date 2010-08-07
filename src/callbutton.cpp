@@ -65,18 +65,12 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	buffer.Trim();
 	object->SetName("Call Panel " + buffer2 + ":" + buffer3);
 	CallButtonBackMesh = sbs->CreateMesh(buffer);
-	CallButtonBackMesh->SetZBufMode(CS_ZBUF_USE);
-	CallButtonBackMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	buffer = "(" + buffer4 + ")Call Button " + buffer2 + ":" + buffer3 + ":Up";
 	CallButtonMeshUp = sbs->CreateMesh(buffer);
-	CallButtonMeshUp->SetZBufMode(CS_ZBUF_USE);
-	CallButtonMeshUp->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	buffer = "(" + buffer4 + ")Call Button " + buffer2 + ":" + buffer3 + ":Down";
 	CallButtonMeshDown = sbs->CreateMesh(buffer);
-	CallButtonMeshDown->SetZBufMode(CS_ZBUF_USE);
-	CallButtonMeshDown->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	//set variables
 	floor = floornum;

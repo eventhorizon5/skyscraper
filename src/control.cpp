@@ -56,8 +56,6 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 
 	//create object mesh
 	ControlMesh = sbs->CreateMesh(Name);
-	ControlMesh->SetZBufMode(CS_ZBUF_USE);
-	ControlMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	if (Direction == "front")
 		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, width, 0, height, voffset, 1, 1);

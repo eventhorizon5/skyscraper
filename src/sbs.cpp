@@ -4911,6 +4911,12 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 	//create mesh wrapper and factory
 	csRef<iMeshWrapper> mesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(engine, area, name, factname);
 
+	//set zbuf mode to "USE" by default
+	mesh->SetZBufMode(CS_ZBUF_USE);
+
+	//set render priority to "object" by default
+	mesh->SetRenderPriority(engine->GetObjectRenderPriority());
+
 	//create a default material (otherwise the system complains if a mesh is used without a material)
 	mesh->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
 
