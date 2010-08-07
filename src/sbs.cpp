@@ -1029,67 +1029,61 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 
 	if (DrawMainN == true)
 	{
-		tmpindex = wallobject->AddQuad(v1, v2, v3, v4); //front wall
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.Append(":front");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v1, v2, v3, v4); //front wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawMainP == true)
 	{
-		tmpindex = wallobject->AddQuad(v6, v5, v8, v7); //back wall
 		NewName = name;
 		NewName.Append(":back");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v6, v5, v8, v7); //back wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawSideN == true)
 	{
-		if (axis == 1)
-			tmpindex = wallobject->AddQuad(v5, v1, v4, v8); //left wall
-		else
-			tmpindex = wallobject->AddQuad(v2, v6, v7, v3); //left wall
 		NewName = name;
 		NewName.Append(":left");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		if (axis == 1)
+			tmpindex = wallobject->AddQuad(NewName, v5, v1, v4, v8); //left wall
+		else
+			tmpindex = wallobject->AddQuad(NewName, v2, v6, v7, v3); //left wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawSideP == true)
 	{
-		if (axis == 1)
-			tmpindex = wallobject->AddQuad(v2, v6, v7, v3); //right wall
-		else
-			tmpindex = wallobject->AddQuad(v5, v1, v4, v8); //right wall
 		NewName = name;
 		NewName.Append(":right");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		if (axis == 1)
+			tmpindex = wallobject->AddQuad(NewName, v2, v6, v7, v3); //right wall
+		else
+			tmpindex = wallobject->AddQuad(NewName, v5, v1, v4, v8); //right wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawTop == true)
 	{
-		tmpindex = wallobject->AddQuad(v5, v6, v2, v1); //top wall
 		NewName = name;
 		NewName.Append(":top");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v5, v6, v2, v1); //top wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawBottom == true)
 	{
-		tmpindex = wallobject->AddQuad(v4, v3, v7, v8); //bottom wall
 		NewName = name;
 		NewName.Append(":bottom");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v4, v3, v7, v8); //bottom wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
@@ -1261,67 +1255,61 @@ int SBS::AddWallMain(WallObject2* wallobject, const char *name, const char *text
 
 	if (DrawMainN == true)
 	{
-		tmpindex = wallobject->AddQuad(v1, v2, v3, v4); //front wall
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.Append(":front");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v1, v2, v3, v4); //front wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawMainP == true)
 	{
-		tmpindex = wallobject->AddQuad(v6, v5, v8, v7); //back wall
 		NewName = name;
 		NewName.Append(":back");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v6, v5, v8, v7); //back wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawSideN == true)
 	{
-		if (axis == 1)
-			tmpindex = wallobject->AddQuad(v5, v1, v4, v8); //left wall
-		else
-			tmpindex = wallobject->AddQuad(v2, v6, v7, v3); //left wall
 		NewName = name;
 		NewName.Append(":left");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		if (axis == 1)
+			tmpindex = wallobject->AddQuad(NewName, v5, v1, v4, v8); //left wall
+		else
+			tmpindex = wallobject->AddQuad(NewName, v2, v6, v7, v3); //left wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawSideP == true)
 	{
-		if (axis == 1)
-			tmpindex = wallobject->AddQuad(v2, v6, v7, v3); //right wall
-		else
-			tmpindex = wallobject->AddQuad(v5, v1, v4, v8); //right wall
 		NewName = name;
 		NewName.Append(":right");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		if (axis == 1)
+			tmpindex = wallobject->AddQuad(NewName, v2, v6, v7, v3); //right wall
+		else
+			tmpindex = wallobject->AddQuad(NewName, v5, v1, v4, v8); //right wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawTop == true)
 	{
-		tmpindex = wallobject->AddQuad(v5, v6, v2, v1); //top wall
 		NewName = name;
 		NewName.Append(":top");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v5, v6, v2, v1); //top wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawBottom == true)
 	{
-		tmpindex = wallobject->AddQuad(v4, v3, v7, v8); //bottom wall
 		NewName = name;
 		NewName.Append(":bottom");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v4, v3, v7, v8); //bottom wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
@@ -1487,61 +1475,55 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 	if (DrawMainN == true)
 	{
-		tmpindex = wallobject->AddQuad(v1, v2, v3, v4); //bottom wall
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.Append(":front");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v1, v2, v3, v4); //bottom wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawMainP == true)
 	{
-		tmpindex = wallobject->AddQuad(v8, v7, v6, v5); //top wall
 		NewName = name;
 		NewName.Append(":back");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v8, v7, v6, v5); //top wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawSideN == true)
 	{
-		tmpindex = wallobject->AddQuad(v8, v5, v1, v4); //left wall
 		NewName = name;
 		NewName.Append(":left");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v8, v5, v1, v4); //left wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawSideP == true)
 	{
-		tmpindex = wallobject->AddQuad(v6, v7, v3, v2); //right wall
 		NewName = name;
 		NewName.Append(":right");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v6, v7, v3, v2); //right wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawTop == true)
 	{
-		tmpindex = wallobject->AddQuad(v5, v6, v2, v1); //front wall
 		NewName = name;
 		NewName.Append(":top");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v5, v6, v2, v1); //front wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawBottom == true)
 	{
-		tmpindex = wallobject->AddQuad(v7, v8, v4, v3); //back wall
 		NewName = name;
 		NewName.Append(":bottom");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v7, v8, v4, v3); //back wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
@@ -1691,61 +1673,55 @@ int SBS::AddFloorMain(WallObject2* wallobject, const char *name, const char *tex
 
 	if (DrawMainN == true)
 	{
-		tmpindex = wallobject->AddQuad(v1, v2, v3, v4); //bottom wall
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.Append(":front");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v1, v2, v3, v4); //bottom wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawMainP == true)
 	{
-		tmpindex = wallobject->AddQuad(v8, v7, v6, v5); //top wall
 		NewName = name;
 		NewName.Append(":back");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v8, v7, v6, v5); //top wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawSideN == true)
 	{
-		tmpindex = wallobject->AddQuad(v8, v5, v1, v4); //left wall
 		NewName = name;
 		NewName.Append(":left");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v8, v5, v1, v4); //left wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawSideP == true)
 	{
-		tmpindex = wallobject->AddQuad(v6, v7, v3, v2); //right wall
 		NewName = name;
 		NewName.Append(":right");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v6, v7, v3, v2); //right wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawTop == true)
 	{
-		tmpindex = wallobject->AddQuad(v5, v6, v2, v1); //front wall
 		NewName = name;
 		NewName.Append(":top");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v5, v6, v2, v1); //front wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
 
 	if (DrawBottom == true)
 	{
-		tmpindex = wallobject->AddQuad(v7, v8, v4, v3); //back wall
 		NewName = name;
 		NewName.Append(":bottom");
-		wallobject->SetPolygonName(tmpindex, NewName);
+		tmpindex = wallobject->AddQuad(NewName, v7, v8, v4, v3); //back wall
 	}
 	if (tmpindex > index && index == -1)
 		index = tmpindex;
@@ -1836,25 +1812,29 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 	{
 		//generate a box visible from the inside
 		csBox3 box (csVector3(ToRemote(x1) * HorizScale, ToRemote(voffset), ToRemote(z1) * HorizScale), csVector3(ToRemote(x2) * HorizScale, ToRemote(voffset + height_in), ToRemote(z2) * HorizScale));
-		firstidx = wallobject->state->AddQuad( //front
+		firstidx = wallobject->AddQuad( //front
+			name,
 			box.GetCorner(CS_BOX_CORNER_xyz),
 			box.GetCorner(CS_BOX_CORNER_Xyz),
 			box.GetCorner(CS_BOX_CORNER_XYz),
 			box.GetCorner(CS_BOX_CORNER_xYz));
 		range++;
-		wallobject->state->AddQuad( //right
+		wallobject->AddQuad( //right
+			name,
 			box.GetCorner(CS_BOX_CORNER_Xyz),
 			box.GetCorner(CS_BOX_CORNER_XyZ),
 			box.GetCorner(CS_BOX_CORNER_XYZ),
 			box.GetCorner(CS_BOX_CORNER_XYz));
 		range++;
-		wallobject->state->AddQuad( //back
+		wallobject->AddQuad( //back
+			name,
 			box.GetCorner(CS_BOX_CORNER_XyZ),
 			box.GetCorner(CS_BOX_CORNER_xyZ),
 			box.GetCorner(CS_BOX_CORNER_xYZ),
 			box.GetCorner(CS_BOX_CORNER_XYZ));
 		range++;
-		wallobject->state->AddQuad( //left
+		wallobject->AddQuad( //left
+			name,
 			box.GetCorner(CS_BOX_CORNER_xyZ),
 			box.GetCorner(CS_BOX_CORNER_xyz),
 			box.GetCorner(CS_BOX_CORNER_xYz),
@@ -1863,6 +1843,7 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		if (bottom == true)
 		{
 			wallobject->AddQuad( //bottom
+				name,
 				box.GetCorner(CS_BOX_CORNER_xyZ),
 				box.GetCorner(CS_BOX_CORNER_XyZ),
 				box.GetCorner(CS_BOX_CORNER_Xyz),
@@ -1872,6 +1853,7 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		if (top == true)
 		{
 			wallobject->AddQuad( //top
+				name,
 				box.GetCorner(CS_BOX_CORNER_xYz),
 				box.GetCorner(CS_BOX_CORNER_XYz),
 				box.GetCorner(CS_BOX_CORNER_XYZ),
@@ -1884,6 +1866,7 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 	{
 		csBox3 box (csVector3(ToRemote(x1) * HorizScale, ToRemote(voffset), ToRemote(z1) * HorizScale), csVector3(ToRemote(x2) * HorizScale, ToRemote(voffset + height_in), ToRemote(z2) * HorizScale));
 		tmpidx = wallobject->AddQuad( //front
+			name,
 			box.GetCorner(CS_BOX_CORNER_xYz),
 			box.GetCorner(CS_BOX_CORNER_XYz),
 			box.GetCorner(CS_BOX_CORNER_Xyz),
@@ -1892,18 +1875,21 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		if (inside == false)
 			firstidx = tmpidx;
 		wallobject->AddQuad( //right
+			name,
 			box.GetCorner(CS_BOX_CORNER_XYz),
 			box.GetCorner(CS_BOX_CORNER_XYZ),
 			box.GetCorner(CS_BOX_CORNER_XyZ),
 			box.GetCorner(CS_BOX_CORNER_Xyz));
 		range2++;
 		wallobject->AddQuad( //back
+			name,
 			box.GetCorner(CS_BOX_CORNER_XYZ),
 			box.GetCorner(CS_BOX_CORNER_xYZ),
 			box.GetCorner(CS_BOX_CORNER_xyZ),
 			box.GetCorner(CS_BOX_CORNER_XyZ));
 		range2++;
 		wallobject->AddQuad( //left
+			name,
 			box.GetCorner(CS_BOX_CORNER_xYZ),
 			box.GetCorner(CS_BOX_CORNER_xYz),
 			box.GetCorner(CS_BOX_CORNER_xyz),
@@ -1912,6 +1898,7 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		if (bottom == true)
 		{
 			wallobject->AddQuad( //bottom
+				name,
 				box.GetCorner(CS_BOX_CORNER_xyz),
 				box.GetCorner(CS_BOX_CORNER_Xyz),
 				box.GetCorner(CS_BOX_CORNER_XyZ),
@@ -1921,6 +1908,7 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		if (top == true)
 		{
 			wallobject->AddQuad( //top
+				name,
 				box.GetCorner(CS_BOX_CORNER_xYZ),
 				box.GetCorner(CS_BOX_CORNER_XYZ),
 				box.GetCorner(CS_BOX_CORNER_XYz),
@@ -2039,12 +2027,18 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 	//add the polygons
 	if (DrawMainN == true)
 	{
-		firstidx = wallobject->AddPolygon(varray1.GetVertices(), num);
+		csString NewName;
+		NewName = name;
+		NewName.Append(":0");
+		firstidx = wallobject->AddPolygon(NewName, varray1.GetVertices(), num);
 		numindices++;
 	}
 	if (DrawMainP == true)
 	{
-		tmpindex = wallobject->AddPolygon(varray2.GetVertices(), num);
+		csString NewName;
+		NewName = name;
+		NewName.Append(":1");
+		tmpindex = wallobject->AddPolygon(NewName, varray2.GetVertices(), num);
 		if (DrawMainN == false)
 			firstidx = tmpindex;
 		numindices++;
@@ -2070,22 +2064,6 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 
 	//apply UV texture mapping
 	ApplyTextureMapping(wallobject->state, firstidx, firstidx + (numindices - 1), tw2, th2);
-
-	//set polygon names
-	csString NewName;
-	NewName = name;
-	NewName.Append(":0");
-	if (DrawMainN == true)
-		wallobject->SetPolygonName(firstidx, NewName);
-	NewName = name;
-	NewName.Append(":1");
-	if (DrawMainP == true)
-	{
-		if (DrawMainN == true)
-			wallobject->SetPolygonName(firstidx + 1, NewName);
-		else
-			wallobject->SetPolygonName(firstidx, NewName);
-	}
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)
@@ -3453,8 +3431,7 @@ void SBS::Cut(csRef<iMeshWrapper> mesh, csArray<WallObject*> &wallarray, csVecto
 				if (temppoly.GetVertexCount() > 2)
 				{
 					addpolys++;
-					tmpindex_tmp = wallobject->AddPolygon(temppoly.GetVertices(), temppoly.GetVertexCount());
-					wallobject->SetPolygonName(tmpindex_tmp, name);
+					tmpindex_tmp = wallobject->AddPolygon(name, temppoly.GetVertices(), temppoly.GetVertexCount());
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
@@ -3462,8 +3439,7 @@ void SBS::Cut(csRef<iMeshWrapper> mesh, csArray<WallObject*> &wallarray, csVecto
 				if (temppoly2.GetVertexCount() > 2)
 				{
 					addpolys++;
-					tmpindex_tmp = wallobject->AddPolygon(temppoly2.GetVertices(), temppoly2.GetVertexCount());
-					wallobject->SetPolygonName(tmpindex_tmp, name);
+					tmpindex_tmp = wallobject->AddPolygon(name, temppoly2.GetVertices(), temppoly2.GetVertexCount());
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
@@ -3471,8 +3447,7 @@ void SBS::Cut(csRef<iMeshWrapper> mesh, csArray<WallObject*> &wallarray, csVecto
 				if (temppoly3.GetVertexCount() > 2)
 				{
 					addpolys++;
-					tmpindex_tmp = wallobject->AddPolygon(temppoly3.GetVertices(), temppoly3.GetVertexCount());
-					wallobject->SetPolygonName(tmpindex_tmp, name);
+					tmpindex_tmp = wallobject->AddPolygon(name, temppoly3.GetVertices(), temppoly3.GetVertexCount());
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}
@@ -3480,8 +3455,7 @@ void SBS::Cut(csRef<iMeshWrapper> mesh, csArray<WallObject*> &wallarray, csVecto
 				if (temppoly4.GetVertexCount() > 2)
 				{
 					addpolys++;
-					tmpindex_tmp = wallobject->AddPolygon(temppoly4.GetVertices(), temppoly4.GetVertexCount());
-					wallobject->SetPolygonName(tmpindex_tmp, name);
+					tmpindex_tmp = wallobject->AddPolygon(name, temppoly4.GetVertices(), temppoly4.GetVertexCount());
 					if (tmpindex == -1)
 						tmpindex = tmpindex_tmp;
 				}

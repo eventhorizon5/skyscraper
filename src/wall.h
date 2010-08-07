@@ -34,8 +34,8 @@ public:
 	//functions
 	WallObject(csRef<iMeshWrapper> wrapper, Object *proxy = 0, bool temporary = false);
 	~WallObject();
-	int AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4);
-	int AddPolygon(csVector3 *vertices, int num);
+	int AddQuad(const char *name, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4);
+	int AddPolygon(const char *name, csVector3 *vertices, int num);
 	void CreateHandle(int index);
 	void SetPolygonName(int index, const char *name);
 	void DeletePolygons();
@@ -66,8 +66,8 @@ public:
 	//functions
 	WallObject2(csRef<iMeshWrapper> wrapper, Object *proxy = 0, bool temporary = false);
 	~WallObject2();
-	int AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4);
-	int AddPolygon(csVector3 *vertices, int num);
+	int AddQuad(const char *name, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4);
+	int AddPolygon(const char *name, csVector3 *vertices, int num);
 	void CreateHandle(int index);
 	void SetPolygonName(int index, const char *name);
 	void DeletePolygons();

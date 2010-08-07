@@ -51,19 +51,21 @@ WallObject::~WallObject()
 	handles.DeleteAll();
 }
 
-int WallObject::AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)
+int WallObject::AddQuad(const char *name, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)
 {
 	//add a quad polygon
 	int index = state->AddQuad(v1, v2, v3, v4);
 	CreateHandle(index);
+	SetPolygonName(index, name);
 	return index;
 }
 
-int WallObject::AddPolygon(csVector3 *vertices, int num)
+int WallObject::AddPolygon(const char *name, csVector3 *vertices, int num)
 {
 	//create a generic polygon
 	int index = state->AddPolygon(vertices, num);
 	CreateHandle(index);
+	SetPolygonName(index, name);
 	return index;
 }
 
@@ -175,19 +177,21 @@ WallObject2::~WallObject2()
 	handles.DeleteAll();
 }
 
-int WallObject2::AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)
+int WallObject2::AddQuad(const char *name, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)
 {
 	//add a quad polygon
 	int index = state->AddQuad(v1, v2, v3, v4);
 	CreateHandle(index);
+	SetPolygonName(index, name);
 	return index;
 }
 
-int WallObject2::AddPolygon(csVector3 *vertices, int num)
+int WallObject2::AddPolygon(const char *name, csVector3 *vertices, int num)
 {
 	//create a generic polygon
 	int index = state->AddPolygon(vertices, num);
 	CreateHandle(index);
+	SetPolygonName(index, name);
 	return index;
 }
 
