@@ -56,7 +56,6 @@ private:
 	csRef<iMeshWrapper> CallButtonBackMesh; //call button mesh object
 	csRef<iMeshWrapper> CallButtonMeshUp; //call button mesh object
 	csRef<iMeshWrapper> CallButtonMeshDown; //call button mesh object
-	csRef<iThingFactoryState> CallButton_back_state;
 
 	csString UpTexture, UpTextureLit;
 	csString DownTexture, DownTextureLit;

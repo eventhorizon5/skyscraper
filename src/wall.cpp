@@ -151,3 +151,127 @@ void WallObject::ReindexPolygons(int deleted_index)
 		}
 	}
 }
+
+/////////////////////////
+
+WallObject2::WallObject2(csRef<iMeshWrapper> wrapper, Object *proxy, bool temporary) : Object(temporary)
+{
+	//wall object constructor
+	meshwrapper = wrapper;
+	state = scfQueryInterface<iThingFactoryState> (wrapper->GetMeshObject()->GetFactory());
+
+	//if proxy object is set, set object's number as proxy object's number
+	if (proxy)
+		Number = proxy->GetNumber();
+}
+
+WallObject2::~WallObject2()
+{
+	//wall object destructor
+
+	if (sbs->FastDelete == false && parent_array && parent_deleting == false && Temporary == false)
+		parent_array->Delete(this);
+
+	handles.DeleteAll();
+}
+
+int WallObject2::AddQuad(const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)
+{
+	//add a quad polygon
+	int index = state->AddQuad(v1, v2, v3, v4);
+	CreateHandle(index);
+	return index;
+}
+
+int WallObject2::AddPolygon(csVector3 *vertices, int num)
+{
+	//create a generic polygon
+	int index = state->AddPolygon(vertices, num);
+	CreateHandle(index);
+	return index;
+}
+
+void WallObject2::CreateHandle(int index)
+{
+	//create a polygon handle
+	handles.Push(index);
+}
+
+void WallObject2::SetPolygonName(int index, const char *name)
+{
+	//set polygon name
+	csString name_modified = name;
+
+	//strip off object ID from name if it exists
+	if (name_modified.Find("(") == 0)
+		name_modified.DeleteAt(0, name_modified.Find(")") + 1);
+
+	//construct name
+	csString newname = "(";
+	csString num;
+	num = Number;
+	newname.Append(num + ")");
+	newname.Append(name_modified);
+
+	//set polygon name
+	state->SetPolygonName(csPolygonRange(index, index), newname);
+}
+
+void WallObject2::DeletePolygons()
+{
+	//delete polygons and handles
+	
+	for (int i = 0; i < handles.GetSize(); i++)
+	{
+		if (handles[i] > -1)
+		{
+			state->RemovePolygon(handles[i]);
+			int tmphandle = handles[i];
+			handles[i] = -1;
+			ReindexPolygons(tmphandle);
+		}
+	}
+	handles.DeleteAll();
+
+	//recreate colliders
+	sbs->DeleteColliders(meshwrapper);
+	sbs->CreateColliders(meshwrapper);
+}
+
+void WallObject2::DeletePolygon(int index, bool recreate_colliders)
+{
+	//delete a single polygon
+
+	for (int i = 0; i < handles.GetSize(); i++)
+	{
+		if (handles[i] == index)
+		{
+			state->RemovePolygon(index);
+			handles[i] = -1;
+			ReindexPolygons(index);
+			handles.DeleteIndex(i);
+			return;
+		}
+	}
+
+	//recreate colliders if specified
+	if (recreate_colliders == true)
+	{
+		sbs->DeleteColliders(meshwrapper);
+		sbs->CreateColliders(meshwrapper);
+	}
+}
+
+void WallObject2::ReindexPolygons(int deleted_index)
+{
+	//reindex all polygon indices in the given wall array
+
+	for (int i = 0; i < parent_array->GetSize(); i++)
+	{
+		for (int j = 0; j < parent_array->Get(i)->handles.GetSize(); j++)
+		{
+			if (parent_array->Get(i)->handles[j] >= deleted_index)
+				parent_array->Get(i)->handles[j]--;
+		}
+	}
+}

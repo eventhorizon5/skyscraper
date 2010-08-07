@@ -30,7 +30,6 @@
 #include "floor.h"
 
 #include <iengine/movable.h>
-#include <cstool/genmeshbuilder.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 
@@ -52,7 +51,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	object->SetName("Floor Indicator " + buffer);
 	buffer.Insert(0, "(" + buffer2 + ")FloorIndicator ");
 	buffer.Trim();
-	FloorIndicatorMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
+	FloorIndicatorMesh = sbs->CreateMesh(buffer);
 	FloorIndicatorMesh->SetZBufMode(CS_ZBUF_USE);
 	FloorIndicatorMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	FloorIndicator_movable = FloorIndicatorMesh->GetMovable();

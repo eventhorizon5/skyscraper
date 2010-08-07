@@ -28,8 +28,6 @@
 #include "directional.h"
 #include "elevator.h"
 
-#include <cstool/genmeshbuilder.h>
-
 extern SBS *sbs; //external pointer to the SBS engine
 
 DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
@@ -63,35 +61,28 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Back";
 	buffer.Trim();
 	object->SetName("Directional Indicator " + buffer2 + ":" + buffer3);
-	DirectionalMeshBack = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	Directional_back_state = scfQueryInterface<iThingFactoryState> (DirectionalMeshBack->GetMeshObject()->GetFactory());
+	DirectionalMeshBack = sbs->CreateMesh(buffer);
 	DirectionalMeshBack->SetZBufMode(CS_ZBUF_USE);
 	DirectionalMeshBack->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	if (Single == false)
 	{
 		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Up";
-		DirectionalMeshUp = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
+		DirectionalMeshUp = sbs->CreateMesh(buffer);
 		DirectionalMeshUp->SetZBufMode(CS_ZBUF_USE);
 		DirectionalMeshUp->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-		csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTextureUnlit);
-		DirectionalMeshUp->GetMeshObject()->SetMaterialWrapper(mat);
 
 		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Down";
-		DirectionalMeshDown = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
+		DirectionalMeshDown = sbs->CreateMesh(buffer);
 		DirectionalMeshDown->SetZBufMode(CS_ZBUF_USE);
 		DirectionalMeshDown->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-		mat = sbs->engine->GetMaterialList()->FindByName(DownTextureUnlit);
-		DirectionalMeshDown->GetMeshObject()->SetMaterialWrapper(mat);
 	}
 	else
 	{
 		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Arrow";
-		DirectionalMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
+		DirectionalMesh = sbs->CreateMesh(buffer);
 		DirectionalMesh->SetZBufMode(CS_ZBUF_USE);
 		DirectionalMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-		csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTextureUnlit);
-		DirectionalMesh->GetMeshObject()->SetMaterialWrapper(mat);
 	}
 
 	sbs->ResetTextureMapping(true);
@@ -101,20 +92,35 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	{
 		if (Direction == "front" || Direction == "back")
 		{
+			float x1, x2;
 			if (Direction == "front")
-				sbs->DrawWalls(true, false, false, false, false, false);
+			{
+				x1 = CenterX - (BackWidth / 2);
+				x2 = CenterX + (BackWidth / 2);
+			}
 			else
-				sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddWallMain(object, DirectionalMeshBack, "Panel", BackTexture, 0, CenterX - (BackWidth / 2), CenterZ, CenterX + (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
+			{
+				x2 = CenterX - (BackWidth / 2);
+				x1 = CenterX + (BackWidth / 2);
+			}
+			sbs->AddGenWall(DirectionalMeshBack, BackTexture, x1, CenterZ, x2, CenterZ, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
 			sbs->ResetWalls();
 		}
 		if (Direction == "left" || Direction == "right")
 		{
+			float z1, z2;
 			if (Direction == "left")
-				sbs->DrawWalls(true, false, false, false, false, false);
+			{
+				z2 = CenterZ - (BackWidth / 2);
+				z1 = CenterZ + (BackWidth / 2);
+			}
 			else
-				sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddWallMain(object, DirectionalMeshBack, "Panel", BackTexture, 0, CenterX, CenterZ + (BackWidth / 2), CenterX, CenterZ - (BackWidth / 2), BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
+			{
+				//right
+				z1 = CenterZ - (BackWidth / 2);
+				z2 = CenterZ + (BackWidth / 2);
+			}
+			sbs->AddGenWall(DirectionalMeshBack, BackTexture, CenterX, z1, CenterX, z2, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
 			sbs->ResetWalls();
 		}
 	}
@@ -265,8 +271,6 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 
 DirectionalIndicator::~DirectionalIndicator()
 {
-	Directional_back_state = 0;
-
 	if (sbs->FastDelete == false)
 	{
 		sbs->engine->WantToDie(DirectionalMeshBack);

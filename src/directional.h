@@ -61,7 +61,6 @@ private:
 	csRef<iMeshWrapper> DirectionalMeshUp; //indicator mesh up object
 	csRef<iMeshWrapper> DirectionalMeshDown; //indicator mesh down object
 	csRef<iMeshWrapper> DirectionalMesh; //indicator mesh single object
-	csRef<iThingFactoryState> Directional_back_state;
 };
 
 #endif

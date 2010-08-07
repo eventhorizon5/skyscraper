@@ -30,8 +30,6 @@
 #include "elevator.h"
 #include "unix.h"
 
-#include <cstool/genmeshbuilder.h>
-
 extern SBS *sbs; //external pointer to the SBS engine
 
 CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
@@ -66,24 +64,19 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	buffer = "(" + buffer4 + ")Call Panel " + buffer2 + ":" + buffer3;
 	buffer.Trim();
 	object->SetName("Call Panel " + buffer2 + ":" + buffer3);
-	CallButtonBackMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	CallButton_back_state = scfQueryInterface<iThingFactoryState> (CallButtonBackMesh->GetMeshObject()->GetFactory());
+	CallButtonBackMesh = sbs->CreateMesh(buffer);
 	CallButtonBackMesh->SetZBufMode(CS_ZBUF_USE);
 	CallButtonBackMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	buffer = "(" + buffer4 + ")Call Button " + buffer2 + ":" + buffer3 + ":Up";
-	CallButtonMeshUp = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
+	CallButtonMeshUp = sbs->CreateMesh(buffer);
 	CallButtonMeshUp->SetZBufMode(CS_ZBUF_USE);
 	CallButtonMeshUp->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(UpTexture);
-	CallButtonMeshUp->GetMeshObject()->SetMaterialWrapper(mat);
 
 	buffer = "(" + buffer4 + ")Call Button " + buffer2 + ":" + buffer3 + ":Down";
-	CallButtonMeshDown = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, buffer, buffer + " factory");
+	CallButtonMeshDown = sbs->CreateMesh(buffer);
 	CallButtonMeshDown->SetZBufMode(CS_ZBUF_USE);
 	CallButtonMeshDown->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	mat = sbs->engine->GetMaterialList()->FindByName(DownTexture);
-	CallButtonMeshDown->GetMeshObject()->SetMaterialWrapper(mat);
 
 	//set variables
 	floor = floornum;
@@ -105,20 +98,35 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 
 		if (Direction == "front" || Direction == "back")
 		{
+			float x1, x2;
 			if (Direction == "front")
-				sbs->DrawWalls(true, false, false, false, false, false);
+			{
+				x1 = CenterX - (BackWidth / 2);
+				x2 = CenterX + (BackWidth / 2);
+			}
 			else
-				sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddWallMain(object, CallButtonBackMesh, "Panel", BackTexture, 0, CenterX - (BackWidth / 2), CenterZ, CenterX + (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
+			{
+				x2 = CenterX - (BackWidth / 2);
+				x1 = CenterX + (BackWidth / 2);
+			}
+			sbs->AddGenWall(CallButtonBackMesh, BackTexture, x1, CenterZ, x2, CenterZ, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
 			sbs->ResetWalls();
 		}
 		if (Direction == "left" || Direction == "right")
 		{
+			float z1, z2;
 			if (Direction == "left")
-				sbs->DrawWalls(true, false, false, false, false, false);
+			{
+				z2 = CenterZ - (BackWidth / 2);
+				z1 = CenterZ + (BackWidth / 2);
+			}
 			else
-				sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddWallMain(object, CallButtonBackMesh, "Panel", BackTexture, 0, CenterX, CenterZ + (BackWidth / 2), CenterX, CenterZ - (BackWidth / 2), BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
+			{
+				//right
+				z1 = CenterZ - (BackWidth / 2);
+				z2 = CenterZ + (BackWidth / 2);
+			}
+			sbs->AddGenWall(CallButtonBackMesh, BackTexture, CenterX, z1, CenterX, z2, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
 			sbs->ResetWalls();
 		}
 	}
@@ -198,8 +206,6 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 
 CallButton::~CallButton()
 {
-	CallButton_back_state = 0;
-
 	if (sbs->FastDelete == false)
 	{
 		sbs->engine->WantToDie(CallButtonMeshDown);

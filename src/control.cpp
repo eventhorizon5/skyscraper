@@ -29,7 +29,6 @@
 #include "unix.h"
 
 #include <iengine/movable.h>
-#include <cstool/genmeshbuilder.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 
@@ -56,11 +55,9 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 	current_position = 1;
 
 	//create object mesh
-	ControlMesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, Name, Name + " factory");
+	ControlMesh = sbs->CreateMesh(Name);
 	ControlMesh->SetZBufMode(CS_ZBUF_USE);
 	ControlMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-	csRef<iMaterialWrapper> mat = sbs->engine->GetMaterialList()->FindByName(textures[0]);
-	ControlMesh->GetMeshObject()->SetMaterialWrapper(mat);
 
 	if (Direction == "front")
 		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, width, 0, height, voffset, 1, 1);
