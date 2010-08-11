@@ -912,7 +912,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 		return false;
 }
 
-bool ScriptProcessor::ScriptError(const char *message)
+int ScriptProcessor::ScriptError(const char *message)
 {
 	//first see if the current line is from an included file
 
@@ -955,7 +955,17 @@ bool ScriptProcessor::ScriptError(const char *message)
 
 	delete dialog;
 	dialog = 0;
-	return false;
+	return sError;
+}
+
+int ScriptProcessor::ScriptError()
+{
+	//return automatic error message from contents of the simulator engine's LastError string
+
+	csString message = Simcore->LastError;
+	int loc = message.FindLast(":");
+
+	return ScriptError(message.Slice(loc + 1).Trim());
 }
 
 bool ScriptProcessor::ReportMissingFiles()
@@ -1035,19 +1045,13 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 3; i <= 13; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 		if (Section == 2)
 		{
@@ -1084,10 +1088,7 @@ int ScriptProcessor::ProcCommands()
 			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else
-		{
-			ScriptError("Invalid object");
-			return sError;
-		}
+			return ScriptError("Invalid object");
 
 		//store command and line info in object
 		StoreCommand(wall);
@@ -1110,18 +1111,13 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 3; i <= 13; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create wall
@@ -1142,18 +1138,13 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 3; i <= 11; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create floor
@@ -1174,18 +1165,13 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 8; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create tiled ground
@@ -1206,18 +1192,13 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 1; i <= 6; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		buffer = tempdata[0];
@@ -1239,10 +1220,7 @@ int ScriptProcessor::ProcCommands()
 			wallarray = &Simcore->Buildings_walls;
 		}
 		else
-		{
-			ScriptError("Invalid object");
-			return sError;
-		}
+			return ScriptError("Invalid object");
 
 		//perform cut
 		Simcore->Cut(tmpMesh, *wallarray, csVector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), csVector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), csString(tempdata[7]).CompareNoCase("true"), csString(tempdata[8]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
@@ -1255,11 +1233,10 @@ int ScriptProcessor::ProcCommands()
 		temp1 = LineData.Find("=", 0);
 		temp3 = atoi(LineData.Slice(4, temp1 - 5));
 		temp2 = LineData.Slice(temp1 + 1);
+
 		if (temp3 < 0 || temp3 > UserVariable.GetSize() - 1)
-		{
-			ScriptError("Invalid variable number");
-			return sError;
-		}
+			return ScriptError("Invalid variable number");
+
 		UserVariable[temp3] = Calc(temp2);
 		if (Simcore->Verbose == true)
 			skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
@@ -1284,19 +1261,13 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 15 || tempdata.GetSize() > 15)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 3; i <= 10; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		if (Section == 2)
@@ -1332,10 +1303,7 @@ int ScriptProcessor::ProcCommands()
 			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else
-		{
-			ScriptError("Invalid object");
-			return sError;
-		}
+			return ScriptError("Invalid object");
 
 		StoreCommand(wall);
 
@@ -1362,19 +1330,13 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 15 || tempdata.GetSize() > 15)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 3; i <= 10; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		if (Section == 2)
@@ -1410,10 +1372,7 @@ int ScriptProcessor::ProcCommands()
 			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else
-		{
-			ScriptError("Invalid object");
-			return sError;
-		}
+			return ScriptError("Invalid object");
 
 		StoreCommand(wall);
 
@@ -1444,10 +1403,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i < tempdata.GetSize() - 2; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		buffer = tempdata[0];
@@ -1478,10 +1434,7 @@ int ScriptProcessor::ProcCommands()
 			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
 		}
 		else
-		{
-			ScriptError("Invalid object");
-			return sError;
-		}
+			return ScriptError("Invalid object");
 
 		csPoly3D varray;
 		int alength;
@@ -1505,38 +1458,23 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		if (atoi(tempdata[4]) < -Simcore->Basements)
-		{
-			ScriptError("Invalid starting floor");
-			return sError;
-		}
+			return ScriptError("Invalid starting floor");
 		if (atoi(tempdata[5]) > Simcore->Floors - 1)
-		{
-			ScriptError("Invalid ending floor");
-			return sError;
-		}
+			return ScriptError("Invalid ending floor");
 
 		Object *object = Simcore->CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
 		if (!object)
-		{
-			ScriptError("Shaft " + csString(tempdata[0]).Trim() + " already exists");
-			return sError;
-		}
+			return ScriptError();
 
 		StoreCommand(object);
 
@@ -1553,28 +1491,19 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 0; i <= 6; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//check for existence of shaft
 		int shaftnum = atoi(tempdata[0]);
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
-		{
-			ScriptError("Invalid shaft " + csString(tempdata[0]));
-			return sError;
-		}
+			return ScriptError("Invalid shaft " + csString(tempdata[0]));
 
 		Simcore->GetShaft(shaftnum)->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
 
@@ -1587,21 +1516,14 @@ int ScriptProcessor::ProcCommands()
 		//get shaft number
 		int loc = LineData.Find("=");
 		if (loc < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		int shaftnum;
 		if (!IsNumeric(LineData.Slice(15, loc - 16).Trim().GetData(), shaftnum))
-		{
-			ScriptError("Invalid shaft number");
-			return sError;
-		}
+			return ScriptError("Invalid shaft number");
+
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
-		{
-			ScriptError("Invalid shaft number");
-			return sError;
-		}
+			return ScriptError("Invalid shaft number");
+
 		Simcore->GetShaft(shaftnum)->ShowFloors = true;
 
 		//get text after equal sign
@@ -1619,10 +1541,8 @@ int ScriptProcessor::ProcCommands()
 				int start, end;
 				//found a range marker
 				if (!IsNumeric(tmpstring.Slice(0, tmpstring.Find("-", 1)).Trim().GetData(), start) || !IsNumeric(tmpstring.Slice(tmpstring.Find("-", 1) + 1).Trim().GetData(), end))
-				{
-					ScriptError("Invalid value");
-					return sError;
-				}
+					return ScriptError("Invalid value");
+
 				if (end < start)
 				{
 					int temp = start;
@@ -1637,10 +1557,7 @@ int ScriptProcessor::ProcCommands()
 			{
 				int showfloor;
 				if (!IsNumeric(csString(tempdata[line]).Trim().GetData(), showfloor))
-				{
-					ScriptError("Invalid value");
-					return sError;
-				}
+					return ScriptError("Invalid value");
 				Simcore->GetShaft(shaftnum)->AddShowFloor(showfloor);
 			}
 		}
@@ -1653,21 +1570,12 @@ int ScriptProcessor::ProcCommands()
 		//get shaft number
 		int loc = LineData.Find("=");
 		if (loc < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		int shaftnum;
 		if (!IsNumeric(LineData.Slice(16, loc - 17).Trim().GetData(), shaftnum))
-		{
-			ScriptError("Invalid shaft number");
-			return sError;
-		}
+			return ScriptError("Invalid shaft number");
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
-		{
-			ScriptError("Invalid shaft number");
-			return sError;
-		}
+			return ScriptError("Invalid shaft number");
 		Simcore->GetShaft(shaftnum)->ShowOutside = true;
 
 		//get text after equal sign
@@ -1685,10 +1593,7 @@ int ScriptProcessor::ProcCommands()
 				int start, end;
 				//found a range marker
 				if (!IsNumeric(tmpstring.Slice(0, tmpstring.Find("-", 1)).Trim().GetData(), start) || !IsNumeric(tmpstring.Slice(tmpstring.Find("-", 1) + 1).Trim().GetData(), end))
-				{
-					ScriptError("Invalid value");
-					return sError;
-				}
+					return ScriptError("Invalid value");
 				if (end < start)
 				{
 					int temp = start;
@@ -1703,10 +1608,7 @@ int ScriptProcessor::ProcCommands()
 			{
 				int showfloor;
 				if (!IsNumeric(csString(tempdata[line]).Trim().GetData(), showfloor))
-				{
-					ScriptError("Invalid value");
-					return sError;
-				}
+					return ScriptError("Invalid value");
 				Simcore->GetShaft(shaftnum)->AddShowOutside(showfloor);
 			}
 		}
@@ -1719,21 +1621,12 @@ int ScriptProcessor::ProcCommands()
 		//get shaft number
 		int loc = LineData.Find("=");
 		if (loc < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		int shaftnum;
 		if (!IsNumeric(LineData.Slice(13, loc - 14).Trim().GetData(), shaftnum))
-		{
-			ScriptError("Invalid shaft number");
-			return sError;
-		}
+			return ScriptError("Invalid shaft number");
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
-		{
-			ScriptError("Invalid shaft number");
-			return sError;
-		}
+			return ScriptError("Invalid shaft number");
 
 		//get text after equal sign
 		temp2 = LineData.Slice(loc + 1);
@@ -1752,27 +1645,18 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 5 || tempdata.GetSize() > 5)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 0; i <= 4; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		Object *object = Simcore->CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]));
 		if (!object)
-		{
-			ScriptError("Stairwell " + csString(tempdata[0]).Trim() + " already exists");
-			return sError;
-		}
+			return ScriptError();
 
 		StoreCommand(object);
 
@@ -1789,27 +1673,18 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 7)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 0; i <= 6; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		int stairwell = atoi(tempdata[0]);
 		if (!Simcore->GetStairs(stairwell))
-		{
-			ScriptError("Invalid stairwell");
-			return sError;
-		}
+			return ScriptError("Invalid stairwell");
 
 		Simcore->GetStairs(stairwell)->CutFloors(true, csVector2(atof(tempdata[1]), atof(tempdata[2])), csVector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
 
@@ -1824,10 +1699,7 @@ int ScriptProcessor::ProcCommands()
 		temp2.Trim();
 
 		if (!Simcore->SetWallOrientation(temp2.GetData()))
-		{
-			ScriptError("Invalid wall orientation");
-			return sError;
-		}
+			return ScriptError();
 	}
 
 	//FloorOrientation command
@@ -1838,10 +1710,7 @@ int ScriptProcessor::ProcCommands()
 		temp2.Trim();
 
 		if (!Simcore->SetFloorOrientation(temp2.GetData()))
-		{
-			ScriptError("Invalid floor orientation");
-			return sError;
-		}
+			return ScriptError();
 	}
 
 	//DrawWalls command
@@ -1850,10 +1719,8 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		int loc = LineData.Find("=", 0);
 		if (loc < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
+
 		temp2 = LineData.Slice(loc + 1);
 		temp2.Trim();
 
@@ -1864,10 +1731,7 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		Simcore->DrawWalls(csString(tempdata[0]).CompareNoCase("true"),
 					csString(tempdata[1]).CompareNoCase("true"),
@@ -1889,19 +1753,13 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 9 || tempdata.GetSize() > 9)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 0; i <= 8; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		Simcore->SetTextureMapping(atoi(tempdata[0]), csVector2(atof(tempdata[1]), atof(tempdata[2])),
@@ -1920,10 +1778,7 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 15 || tempdata.GetSize() > 15)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 3; i <= 14; i++)
@@ -1933,10 +1788,7 @@ int ScriptProcessor::ProcCommands()
 			if (i == 10)
 				i = 13;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		Simcore->SetTextureMapping2(tempdata[0], tempdata[1], tempdata[2], csVector2(atof(tempdata[3]), atof(tempdata[4])),
@@ -1951,10 +1803,7 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		int loc = LineData.Find("=", 0);
 		if (loc < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		temp2 = LineData.Slice(loc + 1);
 		temp2.Trim();
 
@@ -1971,10 +1820,7 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
-		{
-			ScriptError("Incorrect number of parameters");
-			return false;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		Simcore->SetPlanarMapping(csString(tempdata[0]).CompareNoCase("true"),
 					csString(tempdata[1]).CompareNoCase("true"),
@@ -1990,10 +1836,7 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		int loc = LineData.Find("=", 0);
 		if (loc < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		temp2 = LineData.Slice(loc + 1);
 		temp2.Trim();
 
@@ -2016,10 +1859,7 @@ int ScriptProcessor::ProcCommands()
 		temp1 = LineData.Find("(", 0);
 		temp4 = LineData.Find(")", 0);
 		if (temp1 < 0 || temp4 < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		tempdata.SplitString(LineData.Slice(temp1 + 1, temp4 - temp1 - 1).GetData(), ",");
 		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 		{
@@ -2027,19 +1867,13 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 8 || tempdata.GetSize() > 8)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 2; i <= 7; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		buffer = tempdata[0];
@@ -2056,10 +1890,7 @@ int ScriptProcessor::ProcCommands()
 		else if (buffer == "buildings")
 			tmpState = Simcore->Buildings_state;
 		else
-		{
-			ScriptError("Invalid object");
-			return sError;
-		}
+			return ScriptError("Invalid object");
 
 		csVector3 isect = Simcore->GetPoint(tmpState, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 		tempdata.DeleteAll();
@@ -2079,17 +1910,11 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		if (!IsNumeric(csString(tempdata[2]).Trim().GetData()))
-		{
-			ScriptError("Invalid value: " + csString(tempdata[2]));
-			return sError;
-		}
+			return ScriptError("Invalid value: " + csString(tempdata[2]));
 
 		buffer = tempdata[0];
 		buffer.Downcase();
@@ -2105,10 +1930,7 @@ int ScriptProcessor::ProcCommands()
 		else if (buffer == "buildings")
 			tmpState = Simcore->Buildings_state;
 		else
-		{
-			ScriptError("Invalid object");
-			return sError;
-		}
+			return ScriptError("Invalid object");
 
 		MinExtent = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), false);
 		MaxExtent = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), true);
@@ -2131,10 +1953,7 @@ int ScriptProcessor::ProcCommands()
 		temp1 = LineData.Find("(", 0);
 		temp4 = LineData.Find(")", 0);
 		if (temp1 < 0 || temp4 < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		tempdata.SplitString(LineData.Slice(temp1 + 1, temp4 - temp1 - 1).GetData(), ",");
 		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 		{
@@ -2142,17 +1961,11 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		if (!IsNumeric(csString(tempdata[2]).Trim().GetData()))
-		{
-			ScriptError("Invalid value: " + csString(tempdata[2]));
-			return sError;
-		}
+			return ScriptError("Invalid value: " + csString(tempdata[2]));
 
 		buffer = tempdata[0];
 		buffer.Downcase();
@@ -2168,10 +1981,7 @@ int ScriptProcessor::ProcCommands()
 		else if (buffer == "buildings")
 			tmpState = Simcore->Buildings_state;
 		else
-		{
-			ScriptError("Invalid object");
-			return sError;
-		}
+			return ScriptError("Invalid object");
 
 		csVector3 result = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), csString(tempdata[3]).CompareNoCase("true"));
 		tempdata.DeleteAll();
@@ -2186,10 +1996,7 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		int loc = LineData.Find("=", 0);
 		if (loc < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		temp2 = LineData.Slice(loc + 1);
 		temp2.Trim();
 
@@ -2200,10 +2007,7 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 2 || tempdata.GetSize() > 2)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		Simcore->SetAutoSize(csString(tempdata[0]).CompareNoCase("true"),
 					csString(tempdata[1]).CompareNoCase("true"));
@@ -2217,10 +2021,7 @@ int ScriptProcessor::ProcCommands()
 		tempdata.SplitString(LineData.Slice(16).GetData(), ",");
 
 		if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		Simcore->SetTextureOverride(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5]);
 
@@ -2234,19 +2035,13 @@ int ScriptProcessor::ProcCommands()
 		tempdata.SplitString(LineData.Slice(12).GetData(), ",");
 
 		if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		Simcore->SetTextureFlip(atoi(tempdata[0]), atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
@@ -2265,18 +2060,12 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 2 || tempdata.GetSize() > 2)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		buffer = tempdata[1];
 		buffer.Insert(0, "/root/");
 		if (!Simcore->Mount(tempdata[0], buffer))
-		{
-				ScriptError("Error mounting file");
-				return sError;
-		}
+			return ScriptError();
 
 		tempdata.DeleteAll();
 		return sNextLine;
@@ -2295,18 +2084,13 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 6 || tempdata.GetSize() > 6)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create floor auto area
@@ -2327,10 +2111,7 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() != 5 && tempdata.GetSize() != 13)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool partial = false;
 		if (tempdata.GetSize() == 5)
@@ -2342,10 +2123,7 @@ int ScriptProcessor::ProcCommands()
 			for (int i = 2; i <= 4; i++)
 			{
 				if (!IsNumeric(tempdata[i]))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else
@@ -2353,10 +2131,7 @@ int ScriptProcessor::ProcCommands()
 			for (int i = 2; i <= 12; i++)
 			{
 				if (!IsNumeric(tempdata[i]))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -2379,10 +2154,8 @@ int ScriptProcessor::ProcGlobals()
 	//get text after equal sign
 	int loc = LineData.Find("=", 0);
 	if (loc < 0)
-	{
-		ScriptError("Syntax error");
-		return sError;
-	}
+		return ScriptError("Syntax error");
+
 	temp2 = LineData.Slice(loc + 1);
 	temp2.Trim();
 
@@ -2403,30 +2176,24 @@ int ScriptProcessor::ProcGlobals()
 	{
 		int data;
 		if (!IsNumeric(temp2.GetData(), data))
-		{
-			ScriptError("Invalid floor");
-			return sError;
-		}
+			return ScriptError("Invalid floor");
+
 		Simcore->camera->StartFloor = data;
 	}
 	if (LineData.Slice(0, 10).CompareNoCase("horizscale") == true)
 	{
 		float data;
 		if (!IsNumeric(temp2.GetData(), data))
-		{
-			ScriptError("Invalid scale");
-			return sError;
-		}
+			return ScriptError("Invalid scale");
+
 		Simcore->HorizScale = data;
 	}
 	if (LineData.Slice(0, 14).CompareNoCase("cameraposition") == true)
 	{
 		float x, z;
 		if (!IsNumeric(temp2.Slice(0, temp2.Find(",", 0)).Trim().GetData(), x) || !IsNumeric(temp2.Slice(temp2.Find(",", 0) + 1).Trim().GetData(), z))
-		{
-			ScriptError("Invalid position");
-			return sError;
-		}
+			return ScriptError("Invalid position");
+
 		Simcore->camera->StartPositionX  = x;
 		Simcore->camera->StartPositionZ  = z;
 	}
@@ -2435,10 +2202,9 @@ int ScriptProcessor::ProcGlobals()
 		temp3 = temp2.Find(",", 0);
 		temp4 = temp2.Find(",", temp3 + 1);
 		float x, y, z;
-		if (!IsNumeric(temp2.Slice(0, temp3).Trim().GetData(), x) || !IsNumeric(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).Trim().GetData(), y) || !IsNumeric(temp2.Slice(temp4 + 1).Trim().GetData(), z)){
-			ScriptError("Invalid direction");
-			return sError;
-		}
+		if (!IsNumeric(temp2.Slice(0, temp3).Trim().GetData(), x) || !IsNumeric(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).Trim().GetData(), y) || !IsNumeric(temp2.Slice(temp4 + 1).Trim().GetData(), z))
+			return ScriptError("Invalid direction");
+
 		Simcore->camera->SetStartDirection(csVector3(x, y, z));
 	}
 	if (LineData.Slice(0, 14).CompareNoCase("camerarotation") == true)
@@ -2446,10 +2212,9 @@ int ScriptProcessor::ProcGlobals()
 		temp3 = temp2.Find(",", 0);
 		temp4 = temp2.Find(",", temp3 + 1);
 		float x, y, z;
-		if (!IsNumeric(temp2.Slice(0, temp3).Trim().GetData(), x) || !IsNumeric(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).Trim().GetData(), y) || !IsNumeric(temp2.Slice(temp4 + 1).Trim().GetData(), z)){
-			ScriptError("Invalid direction");
-			return sError;
-		}
+		if (!IsNumeric(temp2.Slice(0, temp3).Trim().GetData(), x) || !IsNumeric(temp2.Slice(temp3 + 1, temp4 - temp3 - 1).Trim().GetData(), y) || !IsNumeric(temp2.Slice(temp4 + 1).Trim().GetData(), z))
+			return ScriptError("Invalid direction");
+
 		Simcore->camera->SetStartRotation(csVector3(x, y, z));
 	}
 	if (LineData.Slice(0, 15).CompareNoCase("interfloorontop") == true)
@@ -2470,8 +2235,7 @@ int ScriptProcessor::ProcFloors()
 	{
 		csString floornum;
 		floornum = Current;
-		ScriptError("Invalid floor " + floornum);
-		return sError;
+		return ScriptError("Invalid floor " + floornum);
 	}
 
 	//replace variables with actual values
@@ -2521,15 +2285,9 @@ int ScriptProcessor::ProcFloors()
 	if (LineData.Slice(0, 6).CompareNoCase("height") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (!IsNumeric(Calc(temp2.GetData()).Trim().GetData(), floor->Height))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 		if (FloorCheck < 2)
 			FloorCheck = 1;
 		else
@@ -2538,15 +2296,9 @@ int ScriptProcessor::ProcFloors()
 	if (LineData.Slice(0, 16).CompareNoCase("interfloorheight") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (!IsNumeric(Calc(temp2.GetData()).Trim().GetData(), floor->InterfloorHeight))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 		if (FloorCheck == 0)
 			FloorCheck = 2;
 		else
@@ -2555,69 +2307,45 @@ int ScriptProcessor::ProcFloors()
 	if (LineData.Slice(0, 8).CompareNoCase("altitude") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (!IsNumeric(Calc(temp2.GetData()).Trim().GetData(), floor->Altitude))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 	}
 	if (LineData.Slice(0, 2).CompareNoCase("id") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		floor->ID = Calc(temp2);
 	}
 	if (LineData.Slice(0, 4).CompareNoCase("name") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		floor->Name = Calc(temp2);
 	}
 	if (LineData.Slice(0, 4).CompareNoCase("type") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		floor->FloorType = temp2;
 	}
 	if (LineData.Slice(0, 11).CompareNoCase("description") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		floor->Description = temp2;
 	}
 	if (LineData.Slice(0, 16).CompareNoCase("indicatortexture") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		floor->IndicatorTexture = Calc(temp2);
 	}
 	if (LineData.Slice(0, 5).CompareNoCase("group") == true)
 	{
 		//copy string listing of group floors into array
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		tempdata.SplitString(temp2.GetData(), ",");
 		for (int line = 0; line < tempdata.GetSize(); line++)
 		{
@@ -2628,10 +2356,7 @@ int ScriptProcessor::ProcFloors()
 				int start, end;
 				//found a range marker
 				if (!IsNumeric(tmpstring.Slice(0, tmpstring.Find("-", 1)).Trim().GetData(), start) || !IsNumeric(tmpstring.Slice(tmpstring.Find("-", 1) + 1).Trim().GetData(), end))
-				{
-					ScriptError("Invalid value");
-					return sError;
-				}
+					return ScriptError("Invalid value");
 				if (end < start)
 				{
 					int temp = start;
@@ -2646,10 +2371,7 @@ int ScriptProcessor::ProcFloors()
 			{
 				int data;
 				if (!IsNumeric(csString(tempdata[line]).Trim().GetData(), data))
-				{
-					ScriptError("Invalid value");
-					return sError;
-				}
+					return ScriptError("Invalid value");
 				floor->AddGroupFloor(data);
 			}
 		}
@@ -2661,10 +2383,7 @@ int ScriptProcessor::ProcFloors()
 	{
 		FloorCheck = 0;
 		if (floor->CalculateAltitude() == false)
-		{
-			ScriptError("Invalid floor number specified - no adjacent floor");
-			return sError;
-		}
+			return ScriptError();
 	}
 
 	//Print command
@@ -2703,18 +2422,13 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 10; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create floor
@@ -2736,30 +2450,22 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 3; i <= 11; i++)
 		{
 			if (i == 1)
 				i = 3; //skip non-numeric parameters
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create floor
 		if (Simcore->GetShaft(atoi(tempdata[0])))
 			StoreCommand(Simcore->GetShaft(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
 		else
-		{
-			ScriptError("Invalid shaft");
-			return sError;
-		}
+			return ScriptError("Invalid shaft");
 
 		tempdata.DeleteAll();
 	}
@@ -2777,30 +2483,22 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 12 || tempdata.GetSize() > 12)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 11; i++)
 		{
 			if (i == 1)
 				i = 3; //skip non-numeric parameters
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create floor
 		if (Simcore->GetStairs(atoi(tempdata[0])))
 			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
 		else
-		{
-			ScriptError("Invalid stairwell");
-			return sError;
-		}
+			return ScriptError("Invalid stairwell");
 
 		tempdata.DeleteAll();
 	}
@@ -2818,18 +2516,13 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 11 || tempdata.GetSize() > 11)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 10; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create floor
@@ -2850,18 +2543,13 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 12; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create wall
@@ -2883,30 +2571,22 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 13; i++)
 		{
 			if (i == 1)
 				i = 3; //skip non-numeric parameters
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create wall
 		if (Simcore->GetShaft(atoi(tempdata[0])))
 			StoreCommand(Simcore->GetShaft(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
 		else
-		{
-			ScriptError("Invalid shaft");
-			return sError;
-		}
+			return ScriptError("Invalid shaft");
 
 		tempdata.DeleteAll();
 	}
@@ -2924,30 +2604,22 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 13; i++)
 		{
 			if (i == 1)
 				i = 3; //skip non-numeric parameters
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create wall
 		if (Simcore->GetStairs(atoi(tempdata[0])))
 			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
 		else
-		{
-			ScriptError("Invalid stairwell");
-			return sError;
-		}
+			return ScriptError("Invalid stairwell");
 
 		tempdata.DeleteAll();
 	}
@@ -2965,18 +2637,13 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 13 || tempdata.GetSize() > 13)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 12; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create wall
@@ -2994,18 +2661,13 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 9; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		StoreCommand(floor->ColumnWallBox(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true")));
@@ -3022,18 +2684,13 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 9; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		StoreCommand(floor->ColumnWallBox2(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csString(tempdata[10]).CompareNoCase("true"), csString(tempdata[11]).CompareNoCase("true"), csString(tempdata[12]).CompareNoCase("true"), csString(tempdata[13]).CompareNoCase("true")));
@@ -3045,21 +2702,12 @@ int ScriptProcessor::ProcFloors()
 	{
 		temp1 = LineData.Find("=", 0);
 		if (temp1 < 0)
-		{
-			ScriptError("Syntax Error");
-			return sError;
-		}
+			return ScriptError("Syntax Error");
 		if (!IsNumeric(LineData.Slice(4, temp1 - 5).Trim().GetData(), temp3))
-		{
-			ScriptError("Invalid variable number");
-			return sError;
-		}
+			return ScriptError("Invalid variable number");
 		temp2 = LineData.Slice(temp1 + 1);
 		if (temp3 < 0 || temp3 > UserVariable.GetSize() - 1)
-		{
-			ScriptError("Invalid variable number");
-			return sError;
-		}
+			return ScriptError("Invalid variable number");
 		UserVariable[temp3] = Calc(temp2);
 		if (Simcore->Verbose == true)
 			skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
@@ -3069,10 +2717,8 @@ int ScriptProcessor::ProcFloors()
 	if (LineData.Slice(0, 19).CompareNoCase("callbuttonelevators") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
+
 		//construct array containing floor numbers
 		tempdata.SplitString(temp2.GetData(), ",");
 		callbutton_elevators.DeleteAll();
@@ -3082,15 +2728,9 @@ int ScriptProcessor::ProcFloors()
 		{
 			int elevnumber;
 			if (!IsNumeric(csString(tempdata[line]).Trim().GetData(), elevnumber))
-			{
-				ScriptError("Invalid elevator number");
-				return sError;
-			}
+				return ScriptError("Invalid elevator number");
 			if (elevnumber < 1 || elevnumber > Simcore->Elevators())
-			{
-				ScriptError("Invalid elevator number");
-				return sError;
-			}
+				return ScriptError("Invalid elevator number");
 			callbutton_elevators[line] = elevnumber;
 		}
 		tempdata.DeleteAll();
@@ -3100,10 +2740,7 @@ int ScriptProcessor::ProcFloors()
 	if (LineData.Slice(0, 17).CompareNoCase("createcallbuttons") == true)
 	{
 		if (callbutton_elevators.GetSize() == 0)
-		{
-			ScriptError("No elevators specified");
-			return sError;
-		}
+			return ScriptError("No elevators specified");
 
 		tempdata.SplitString(LineData.Slice(18).GetData(), ",");
 
@@ -3125,19 +2762,13 @@ int ScriptProcessor::ProcFloors()
 				if (i == 6 || i == 9) //skip non-numeric parameters
 					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else
 		{
 			if (tempdata.GetSize() < 14 || tempdata.GetSize() > 14)
-			{
-				ScriptError("Incorrect number of parameters");
-				return sError;
-			}
+				return ScriptError("Incorrect number of parameters");
 
 			//check numeric values
 			for (int i = 5; i <= 13; i++)
@@ -3145,10 +2776,7 @@ int ScriptProcessor::ProcFloors()
 				if (i == 8 || i == 11) //skip non-numeric parameters
 					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -3174,30 +2802,22 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 13 || tempdata.GetSize() > 13)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 12; i++)
 		{
 			if (i == 1)
 				i = 4; //skip non-numeric parameters
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create stairs
 		if (Simcore->GetStairs(atoi(tempdata[0])))
 			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddStairs(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atoi(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
 		else
-		{
-			ScriptError("Invalid stairwell");
-			return sError;
-		}
+			return ScriptError("Invalid stairwell");
 		tempdata.DeleteAll();
 	}
 
@@ -3214,10 +2834,7 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 10 || tempdata.GetSize() > 13)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		int compat = 0;
 
@@ -3227,10 +2844,7 @@ int ScriptProcessor::ProcFloors()
 			for (int i = 1; i <= 9; i++)
 			{
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			compat = 1;
 		}
@@ -3239,10 +2853,7 @@ int ScriptProcessor::ProcFloors()
 			for (int i = 3; i <= 11; i++)
 			{
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			compat = 2;
 		}
@@ -3251,10 +2862,7 @@ int ScriptProcessor::ProcFloors()
 			for (int i = 3; i <= 12; i++)
 			{
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -3288,10 +2896,7 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 11 || tempdata.GetSize() > 14)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		int compat = 0;
 
@@ -3303,10 +2908,7 @@ int ScriptProcessor::ProcFloors()
 				if (i == 1)
 					i = 2; //skip non-numeric parameters
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			compat = 1;
 		}
@@ -3318,10 +2920,7 @@ int ScriptProcessor::ProcFloors()
 				if (i == 1)
 					i = 4; //skip non-numeric parameters
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			compat = 2;
 		}
@@ -3333,10 +2932,7 @@ int ScriptProcessor::ProcFloors()
 				if (i == 1)
 					i = 4; //skip non-numeric parameters
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -3358,10 +2954,7 @@ int ScriptProcessor::ProcFloors()
 				StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
 		}
 		else
-		{
-			ScriptError("Invalid stairwell");
-			return sError;
-		}
+			return ScriptError("Invalid stairwell");
 		tempdata.DeleteAll();
 	}
 
@@ -3378,10 +2971,7 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 18 || tempdata.GetSize() > 19)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool compatibility = false;
 
@@ -3397,10 +2987,7 @@ int ScriptProcessor::ProcFloors()
 				if (i == 15)
 					i = 16;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			compatibility = true;
 		}
@@ -3415,18 +3002,12 @@ int ScriptProcessor::ProcFloors()
 				if (i == 16)
 					i = 17;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
 		if (!Simcore->GetElevator(atoi(tempdata[0])))
-		{
-			ScriptError("Invalid elevator");
-			return sError;
-		}
+			return ScriptError("Invalid elevator");
 
 		if (compatibility == true)
 			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), false, csString(tempdata[2]).CompareNoCase("true"), csString(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), csString(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17])));
@@ -3441,10 +3022,7 @@ int ScriptProcessor::ProcFloors()
 	{
 		//exit if the SetShaftDoors command was never used
 		if (setshaftdoors == false)
-		{
-			ScriptError("SetShaftDoors must be used before AddShaftDoor");
-			return sError;
-		}
+			return ScriptError("SetShaftDoors must be used before AddShaftDoor");
 
 		//get data
 		tempdata.SplitString(LineData.Slice(13).GetData(), ",");
@@ -3456,10 +3034,7 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 5 || tempdata.GetSize() > 6)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
 		if (tempdata.GetSize() == 5)
@@ -3473,10 +3048,7 @@ int ScriptProcessor::ProcFloors()
 				if (i == 2)
 					i = 4;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else
@@ -3486,18 +3058,12 @@ int ScriptProcessor::ProcFloors()
 				if (i == 2)
 					i = 3;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
 		if (!Simcore->GetElevator(atoi(tempdata[0])))
-		{
-			ScriptError("Invalid elevator");
-			return sError;
-		}
+			return ScriptError("Invalid elevator");
 
 		if (compat == false)
 			StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5])));
@@ -3520,10 +3086,7 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 8 || tempdata.GetSize() > 9)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
 		if (tempdata.GetSize() == 8)
@@ -3537,10 +3100,7 @@ int ScriptProcessor::ProcFloors()
 				if (i == 1)
 					i = 4;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else
@@ -3550,10 +3110,7 @@ int ScriptProcessor::ProcFloors()
 				if (i == 1)
 					i = 3;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -3578,10 +3135,7 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 10 || tempdata.GetSize() > 10)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 1; i <= 9; i++)
@@ -3589,10 +3143,7 @@ int ScriptProcessor::ProcFloors()
 			if (i == 7)
 				i = 8;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		floor->AddFillerWalls(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), csString(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
@@ -3613,10 +3164,7 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() != 5 && tempdata.GetSize() != 13)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool partial = false;
 		if (tempdata.GetSize() == 5)
@@ -3628,10 +3176,7 @@ int ScriptProcessor::ProcFloors()
 			for (int i = 2; i <= 4; i++)
 			{
 				if (!IsNumeric(tempdata[i]))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else
@@ -3639,10 +3184,7 @@ int ScriptProcessor::ProcFloors()
 			for (int i = 2; i <= 12; i++)
 			{
 				if (!IsNumeric(tempdata[i]))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -3669,10 +3211,7 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 18 || tempdata.GetSize() > 18)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 0; i <= 17; i++)
@@ -3682,18 +3221,12 @@ int ScriptProcessor::ProcFloors()
 			if (i == 6)
 				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0]));
 		if (!elev)
-		{
-			ScriptError("Invalid elevator");
-			return sError;
-		}
+			return ScriptError("Invalid elevator");
 
 		StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
 
@@ -3713,27 +3246,18 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 2)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 0; i <= 1; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0]));
 		if (!elev)
-		{
-			ScriptError("Invalid elevator");
-			return sError;
-		}
+			return ScriptError("Invalid elevator");
 
 		StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1]), Current));
 
@@ -3753,18 +3277,13 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 8 || tempdata.GetSize() > 8)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//perform cut on floor
@@ -3785,18 +3304,13 @@ int ScriptProcessor::ProcFloors()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 8 || tempdata.GetSize() > 8)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//perform cut on all objects related to the current floor
@@ -3889,125 +3403,69 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 4).CompareNoCase("name") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		elev->Name = temp2.Trim();
 	}
 	if (LineData.Slice(0, 5).CompareNoCase("speed") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.GetData(), elev->ElevatorSpeed))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 	}
 	if (LineData.Slice(0, 12).CompareNoCase("acceleration") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.GetData(), elev->Acceleration))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 	}
 	if (LineData.Slice(0, 12).CompareNoCase("deceleration") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.GetData(), elev->Deceleration))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 	}
 	if (LineData.Slice(0, 9).CompareNoCase("openspeed") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (elev->Created == false)
-		{
-			ScriptError("Elevator not created yet");
-			return sError;
-		}
+			return ScriptError("Elevator not created yet");
 		if (!IsNumeric(LineData.Slice(9, LineData.Find("=", 0) - 9).Trim(), temp3))
-		{
-			ScriptError("No door specified");
-			return sError;
-		}
+			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
-		{
-			ScriptError("Invalid door number");
-			return sError;
-		}
+			return ScriptError("Invalid door number");
 		if (!IsNumeric(temp2.GetData(), elev->GetDoor(temp3)->OpenSpeed))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 	}
 	if (LineData.Slice(0, 5).CompareNoCase("doors") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.GetData(), elev->NumDoors))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 	}
 	if (LineData.Slice(0, 9).CompareNoCase("acceljerk") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.GetData(), elev->AccelJerk))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 	}
 	if (LineData.Slice(0, 9).CompareNoCase("deceljerk") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.GetData(), elev->DecelJerk))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 	}
 	if (LineData.Slice(0, 14).CompareNoCase("servicedfloors") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
+
 		//copy string listing of serviced floors into array
 		tempdata.SplitString(temp2.GetData(), ",");
 		for (int line = 0; line < tempdata.GetSize(); line++)
@@ -4019,10 +3477,7 @@ int ScriptProcessor::ProcElevators()
 				int start, end;
 				//found a range marker
 				if (!IsNumeric(tmpstring.Slice(0, tmpstring.Find("-", 1)).Trim().GetData(), start) || !IsNumeric(tmpstring.Slice(tmpstring.Find("-", 1) + 1).Trim().GetData(), end))
-				{
-					ScriptError("Invalid value");
-					return sError;
-				}
+					return ScriptError("Invalid value");
 				if (end < start)
 				{
 					int temp = start;
@@ -4033,25 +3488,16 @@ int ScriptProcessor::ProcElevators()
 				for (int k = start; k <= end; k++)
 				{
 					if (!elev->AddServicedFloor(k))
-					{
-						ScriptError("Invalid floor");
-						return sError;
-					}
+						return ScriptError();
 				}
 			}
 			else
 			{
 				int data;
 				if (!IsNumeric(csString(tempdata[line]).Trim().GetData(), data))
-				{
-					ScriptError("Invalid value");
-					return sError;
-				}
+					return ScriptError("Invalid value");
 				if (!elev->AddServicedFloor(data))
-				{
-					ScriptError("Invalid floor");
-					return sError;
-				}
+					return ScriptError();
 			}
 		}
 		tempdata.DeleteAll();
@@ -4059,66 +3505,33 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 13).CompareNoCase("assignedshaft") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.GetData(), elev->AssignedShaft))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 	}
 	if (LineData.Slice(0, 9).CompareNoCase("doortimer") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (elev->Created == false)
-		{
-			ScriptError("Elevator not created yet");
-			return sError;
-		}
+			return ScriptError("Elevator not created yet");
 		if (!IsNumeric(LineData.Slice(9, LineData.Find("=", 0) - 9).Trim(), temp3))
-		{
-			ScriptError("No door specified");
-			return sError;
-		}
+			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
-		{
-			ScriptError("Invalid door number");
-			return sError;
-		}
+			return ScriptError("Invalid door number");
 		if (!IsNumeric(temp2.GetData(), elev->GetDoor(temp3)->DoorTimer))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 	}
 	if (LineData.Slice(0, 9).CompareNoCase("opensound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (elev->Created == false)
-		{
-			ScriptError("Elevator not created yet");
-			return sError;
-		}
+			return ScriptError("Elevator not created yet");
 		if (!IsNumeric(LineData.Slice(9, LineData.Find("=", 0) - 9).Trim(), temp3))
-		{
-			ScriptError("No door specified");
-			return sError;
-		}
+			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
-		{
-			ScriptError("Invalid door number");
-			return sError;
-		}
+			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4128,25 +3541,13 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 10).CompareNoCase("closesound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (elev->Created == false)
-		{
-			ScriptError("Elevator not created yet");
-			return sError;
-		}
+			return ScriptError("Elevator not created yet");
 		if (!IsNumeric(LineData.Slice(10, LineData.Find("=", 0) - 10).Trim(), temp3))
-		{
-			ScriptError("No door specified");
-			return sError;
-		}
+			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
-		{
-			ScriptError("Invalid door number");
-			return sError;
-		}
+			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4157,10 +3558,7 @@ int ScriptProcessor::ProcElevators()
 	{
 		//backwards compatibility
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4176,10 +3574,7 @@ int ScriptProcessor::ProcElevators()
 	{
 		//backwards compatibility
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4195,10 +3590,7 @@ int ScriptProcessor::ProcElevators()
 	{
 		//backwards compatibility
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4214,10 +3606,7 @@ int ScriptProcessor::ProcElevators()
 	{
 		//backwards compatibility
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4232,10 +3621,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 13).CompareNoCase("carstartsound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4245,10 +3631,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 12).CompareNoCase("carmovesound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4258,10 +3641,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 12).CompareNoCase("carstopsound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4271,10 +3651,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 12).CompareNoCase("caridlesound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4284,10 +3661,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 15).CompareNoCase("motorstartsound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4297,10 +3671,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 13).CompareNoCase("motorrunsound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4310,10 +3681,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 14).CompareNoCase("motorstopsound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4323,25 +3691,13 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 10).CompareNoCase("chimesound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (elev->Created == false)
-		{
-			ScriptError("Elevator not created yet");
-			return sError;
-		}
+			return ScriptError("Elevator not created yet");
 		if (!IsNumeric(LineData.Slice(10, LineData.Find("=", 0) - 10).Trim(), temp3))
-		{
-			ScriptError("No door specified");
-			return sError;
-		}
+			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
-		{
-			ScriptError("Invalid door number");
-			return sError;
-		}
+			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4352,25 +3708,13 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 12).CompareNoCase("upchimesound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (elev->Created == false)
-		{
-			ScriptError("Elevator not created yet");
-			return sError;
-		}
+			return ScriptError("Elevator not created yet");
 		if (!IsNumeric(LineData.Slice(12, LineData.Find("=", 0) - 12).Trim(), temp3))
-		{
-			ScriptError("No door specified");
-			return sError;
-		}
+			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
-		{
-			ScriptError("Invalid door number");
-			return sError;
-		}
+			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4380,25 +3724,13 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 14).CompareNoCase("downchimesound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		if (elev->Created == false)
-		{
-			ScriptError("Elevator not created yet");
-			return sError;
-		}
+			return ScriptError("Elevator not created yet");
 		if (!IsNumeric(LineData.Slice(14, LineData.Find("=", 0) - 14).Trim(), temp3))
-		{
-			ScriptError("No door specified");
-			return sError;
-		}
+			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
-		{
-			ScriptError("Invalid door number");
-			return sError;
-		}
+			return ScriptError("Invalid door number");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4408,10 +3740,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 10).CompareNoCase("alarmsound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4421,10 +3750,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 14).CompareNoCase("alarmsoundstop") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4434,10 +3760,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 9).CompareNoCase("beepsound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4447,10 +3770,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 10).CompareNoCase("floorsound") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4460,10 +3780,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 9).CompareNoCase("upmessage") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4473,10 +3790,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 11).CompareNoCase("downmessage") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4486,10 +3800,7 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 5).CompareNoCase("music") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + temp2, true);
@@ -4499,64 +3810,40 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 13).CompareNoCase("floorskiptext") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		elev->SetFloorSkipText(temp2);
 	}
 	if (LineData.Slice(0, 11).CompareNoCase("recallfloor") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		int floortemp;
 		if (!IsNumeric(temp2.GetData(), floortemp))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 		elev->SetRecallFloor(floortemp);
 	}
 	if (LineData.Slice(0, 20).CompareNoCase("alternaterecallfloor") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		int floortemp;
 		if (!IsNumeric(temp2.GetData(), floortemp))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 		elev->SetAlternateRecallFloor(floortemp);
 	}
 	if (LineData.Slice(0, 8).CompareNoCase("acpfloor") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		int floortemp;
 		if (!IsNumeric(temp2.GetData(), floortemp))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 		elev->SetACPFloor(floortemp);
 	}
 	if (LineData.Slice(0, 13).CompareNoCase("motorposition") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		tempdata.SplitString(temp2.GetData(), ",");
 		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 		{
@@ -4564,18 +3851,13 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 2; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		elev->MotorPosition = csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
@@ -4584,64 +3866,43 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 11).CompareNoCase("queueresets") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		elev->QueueResets = csString(temp2).CompareNoCase("true");
 	}
 	if (LineData.Slice(0, 3).CompareNoCase("acp") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		elev->ACP = csString(temp2).CompareNoCase("true");
 	}
 	if (LineData.Slice(0, 6).CompareNoCase("uppeak") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		elev->UpPeak = csString(temp2).CompareNoCase("true");
 	}
 	if (LineData.Slice(0, 8).CompareNoCase("downpeak") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		elev->DownPeak = csString(temp2).CompareNoCase("true");
 	}
 	if (LineData.Slice(0, 18).CompareNoCase("independentservice") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		elev->IndependentService = csString(temp2).CompareNoCase("true");
 	}
 	if (LineData.Slice(0, 17).CompareNoCase("inspectionservice") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		elev->InspectionService = csString(temp2).CompareNoCase("true");
 	}
 	if (LineData.Slice(0, 7).CompareNoCase("parking") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		tempdata.SplitString(temp2.GetData(), ",");
 		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 		{
@@ -4649,18 +3910,12 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 2 || tempdata.GetSize() > 2)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 		//check numeric values
 		for (int i = 0; i <= 1; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		elev->ParkingFloor = atoi(tempdata[0]);
@@ -4670,70 +3925,43 @@ int ScriptProcessor::ProcElevators()
 	if (LineData.Slice(0, 13).CompareNoCase("levelingspeed") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		float leveling;
 		if (!IsNumeric(temp2.GetData(), leveling))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 		elev->LevelingSpeed = leveling;
 	}
 	if (LineData.Slice(0, 14).CompareNoCase("levelingoffset") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		float leveling;
 		if (!IsNumeric(temp2.GetData(), leveling))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 		elev->LevelingOffset = leveling;
 	}
 	if (LineData.Slice(0, 12).CompareNoCase("levelingopen") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		float leveling;
 		if (!IsNumeric(temp2.GetData(), leveling))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 		elev->LevelingOpen = leveling;
 	}
 	if (LineData.Slice(0, 11).CompareNoCase("notifyearly") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		float notify;
 		if (!IsNumeric(temp2.GetData(), notify))
-		{
-			ScriptError("Invalid value");
-			return sError;
-		}
+			return ScriptError("Invalid value");
 		elev->NotifyEarly = notify;
 	}
 	if (LineData.Slice(0, 13).CompareNoCase("musicposition") == true)
 	{
 		if (temp2check < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 		tempdata.SplitString(temp2.GetData(), ",");
 		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
 		{
@@ -4741,18 +3969,13 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 3 || tempdata.GetSize() > 3)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 2; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		elev->MusicPosition = csVector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
@@ -4782,26 +4005,18 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 1; i <= 3; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		Object *object = elev->CreateElevator(csString(tempdata[0]).CompareNoCase("true"), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]));
 		if (!object)
-		{
-			ScriptError("An error occurred while creating the elevator.  See the console output for more information");
-			return sError;
-		}
+			return ScriptError();
 		StoreCommand(object);
 
 		tempdata.DeleteAll();
@@ -4820,18 +4035,13 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 11 || tempdata.GetSize() > 11)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 10; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create floor
@@ -4853,18 +4063,13 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 13 || tempdata.GetSize() > 13)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 12; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		//create wall
@@ -4886,10 +4091,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 10 || tempdata.GetSize() > 11)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
 		if (tempdata.GetSize() == 10)
@@ -4905,10 +4107,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 8)
 					i = 9;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else
@@ -4920,10 +4119,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 7)
 					i = 8;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -4948,18 +4144,13 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 4)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 3; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		elev->SetShaftDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]));
@@ -4981,10 +4172,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 8)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
 		if (tempdata.GetSize() == 7)
@@ -4998,10 +4186,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 1)
 					i = 3;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else
@@ -5011,10 +4196,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 1)
 					i = 2;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		
@@ -5025,7 +4207,7 @@ int ScriptProcessor::ProcElevators()
 			result = elev->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
 
 		if (result == false)
-			return ScriptError("Error creating shaft doors");
+			return ScriptError();
 		tempdata.DeleteAll();
 	}
 
@@ -5042,20 +4224,15 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 13 || tempdata.GetSize() > 13)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 1; i <= 12; i++)
 		{
 			if (i == 3)
 				i = 4;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		StoreCommand(elev->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
@@ -5076,10 +4253,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 11)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		float hoffset = 0, voffset = 0;
 		int compat = 0;
@@ -5093,10 +4267,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 1)
 					i = 2;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			compat = 1;
 		}
@@ -5112,10 +4283,7 @@ int ScriptProcessor::ProcElevators()
 						i++;
 
 					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
-						return sError;
-					}
+						return ScriptError("Invalid value: " + csString(tempdata[i]));
 				}
 				hoffset = atof(tempdata[7]);
 				voffset = atof(tempdata[8]);
@@ -5133,10 +4301,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 5)
 					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			if (tempdata.GetSize() == 10)
 			{
@@ -5155,10 +4320,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 6)
 					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			if (tempdata.GetSize() == 11)
 			{
@@ -5168,10 +4330,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (!elev->GetPanel(atoi(tempdata[0])))
-		{
-			ScriptError("Invalid panel number");
-			return sError;
-		}
+			return ScriptError("Invalid panel number");
 
 		if (compat == 0)
 		{
@@ -5199,10 +4358,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 11)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		float hoffset = 0, voffset = 0;
 		int compat = 0;
@@ -5216,10 +4372,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 1 || i == 4)
 					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			compat = 1;
 		}
@@ -5234,10 +4387,7 @@ int ScriptProcessor::ProcElevators()
 					if (i == 1 || i == 4)
 						i++;
 					if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-					{
-						ScriptError("Invalid value: " + csString(tempdata[i]));
-						return sError;
-					}
+						return ScriptError("Invalid value: " + csString(tempdata[i]));
 				}
 				hoffset = atof(tempdata[7]);
 				voffset = atof(tempdata[8]);
@@ -5255,10 +4405,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 5)
 					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			if (tempdata.GetSize() == 10)
 			{
@@ -5277,10 +4424,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 6)
 					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			if (tempdata.GetSize() == 11)
 			{
@@ -5290,10 +4434,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (!elev->GetPanel(atoi(tempdata[0])))
-		{
-			ScriptError("Invalid panel number");
-			return sError;
-		}
+			return ScriptError("Invalid panel number");
 
 		if (compat == 0)
 		{
@@ -5321,10 +4462,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 9 || tempdata.GetSize() > 11)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		float hoffset = 0, voffset = 0;
 
@@ -5336,10 +4474,7 @@ int ScriptProcessor::ProcElevators()
 			if (i == 6)
 				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 		if (tempdata.GetSize() == 11)
 		{
@@ -5348,10 +4483,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (!elev->GetPanel(atoi(tempdata[0])))
-		{
-			ScriptError("Invalid panel number");
-			return sError;
-		}
+			return ScriptError("Invalid panel number");
 
 		//check to see if file exists
 		CheckFile(csString("data/") + tempdata[1], true);
@@ -5374,10 +4506,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 10)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 1; i <= 7; i++)
@@ -5385,17 +4514,11 @@ int ScriptProcessor::ProcElevators()
 			if (i == 1)
 				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		if (!elev->GetPanel(atoi(tempdata[0])))
-		{
-			ScriptError("Invalid panel number");
-			return sError;
-		}
+			return ScriptError("Invalid panel number");
 
 		csArray<csString> action_array, tex_array;
 		int slength, params;
@@ -5406,10 +4529,7 @@ int ScriptProcessor::ProcElevators()
 
 		//action & texture param number needs to be even
 		if (IsEven(params) == false)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		for (temp3 = 8; temp3 < slength - (params / 2); temp3++)
 			action_array.Push(tempdata[temp3]);
@@ -5437,10 +4557,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 6 || tempdata.GetSize() > 7)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
 		if (tempdata.GetSize() == 6)
@@ -5452,10 +4569,7 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 2; i <= 6; i++)
 			{
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else
@@ -5463,10 +4577,7 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 1; i <= 5; i++)
 			{
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -5491,10 +4602,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 17 || tempdata.GetSize() > 18)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
 		if (tempdata.GetSize() == 17)
@@ -5505,10 +4613,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 11 || i == 14)
 					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			compat = true;
 		}
@@ -5520,10 +4625,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 12 || i == 15)
 					i++;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -5548,10 +4650,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 7 || tempdata.GetSize() > 9)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		int compat = 0;
 		if (tempdata.GetSize() == 7)
@@ -5567,10 +4666,7 @@ int ScriptProcessor::ProcElevators()
 				if (i == 1)
 					i = 4;
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else if (compat == 1)
@@ -5578,10 +4674,7 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 2; i <= 6; i++)
 			{
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else if (compat == 2)
@@ -5589,15 +4682,17 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 3; i <= 7; i++)
 			{
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
 		if (compat == 0)
-			elev->AddFloorSigns(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+		{
+			bool result;
+			result = elev->AddFloorSigns(atoi(tempdata[0]), csString(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+			if (result == false)
+				return ScriptError();
+		}
 		else if (compat == 1)
 			elev->AddFloorSigns(0, csString(tempdata[0]).CompareNoCase("true"), "Button", tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
 		else if (compat == 2)
@@ -5619,10 +4714,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() != 5 && tempdata.GetSize() != 13)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool partial = false;
 		if (tempdata.GetSize() == 5)
@@ -5634,10 +4726,7 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 2; i <= 4; i++)
 			{
 				if (!IsNumeric(tempdata[i]))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 		else
@@ -5645,10 +4734,7 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 2; i <= 12; i++)
 			{
 				if (!IsNumeric(tempdata[i]))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -5675,10 +4761,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 17 || tempdata.GetSize() > 17)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 0; i <= 16; i++)
@@ -5688,10 +4771,7 @@ int ScriptProcessor::ProcElevators()
 			if (i == 5)
 				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		StoreCommand(elev->AddDoorComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16])));
@@ -5712,10 +4792,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 17 || tempdata.GetSize() > 17)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 0; i <= 16; i++)
@@ -5725,10 +4802,7 @@ int ScriptProcessor::ProcElevators()
 			if (i == 5)
 				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		elev->AddShaftDoorsComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]));
@@ -5749,17 +4823,11 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 1)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		if (!IsNumeric(csString(tempdata[0]).Trim().GetData()))
-		{
-			ScriptError("Invalid value: " + csString(tempdata[0]));
-			return sError;
-		}
+			return ScriptError("Invalid value: " + csString(tempdata[0]));
 
 		StoreCommand(elev->FinishDoors(atoi(tempdata[0])));
 
@@ -5779,23 +4847,17 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 1)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		if (!IsNumeric(csString(tempdata[0]).Trim().GetData()))
-		{
-			ScriptError("Invalid value: " + csString(tempdata[0]));
-			return sError;
-		}
+			return ScriptError("Invalid value: " + csString(tempdata[0]));
 
 		bool result;
 		result = elev->FinishShaftDoors(atoi(tempdata[0]));
 
 		if (result == false)
-			return ScriptError("Error finishing shaft doors");
+			return ScriptError();
 
 		tempdata.DeleteAll();
 	}
@@ -5813,10 +4875,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 17 || tempdata.GetSize() > 17)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
 		for (int i = 8; i <= 16; i++)
@@ -5824,10 +4883,7 @@ int ScriptProcessor::ProcElevators()
 			if (i == 11 || i == 14)
 				i++;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
 		StoreCommand(elev->AddDirectionalIndicator(csString(tempdata[0]).CompareNoCase("true"), csString(tempdata[1]).CompareNoCase("true"), csString(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), csString(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16])));
@@ -5848,10 +4904,7 @@ int ScriptProcessor::ProcElevators()
 			tempdata.Put(temp3, buffer);
 		}
 		if (tempdata.GetSize() < 12 || tempdata.GetSize() > 13)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
 
@@ -5861,10 +4914,7 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 3; i <= 11; i++)
 			{
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 			compat = true;
 		}
@@ -5873,10 +4923,7 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 3; i <= 12; i++)
 			{
 				if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-				{
-					ScriptError("Invalid value: " + csString(tempdata[i]));
-					return sError;
-				}
+					return ScriptError("Invalid value: " + csString(tempdata[i]));
 			}
 		}
 
@@ -5896,21 +4943,15 @@ int ScriptProcessor::ProcElevators()
 	{
 		temp1 = LineData.Find("=", 0);
 		if (temp1 < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
+
 		if (!IsNumeric(LineData.Slice(4, temp1 - 5).Trim().GetData(), temp3))
-		{
-			ScriptError("Invalid variable number");
-			return sError;
-		}
+			return ScriptError("Invalid variable number");
+
 		temp2 = LineData.Slice(temp1 + 1);
 		if (temp3 < 0 || temp3 > UserVariable.GetSize() - 1)
-		{
-			ScriptError("Invalid variable number");
-			return sError;
-		}
+			return ScriptError("Invalid variable number");
+
 		UserVariable[temp3] = Calc(temp2);
 		if (Simcore->Verbose == true)
 			skyscraper->Report("Variable " + csString(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
@@ -5950,18 +4991,13 @@ int ScriptProcessor::ProcTextures()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 4 || tempdata.GetSize() > 5)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 3; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 		buffer = tempdata[0];
 		buffer.Insert(0, "/root/");
@@ -5981,20 +5017,15 @@ int ScriptProcessor::ProcTextures()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 6 || tempdata.GetSize() > 7)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
 			if (i == 2)
 				i = 4;
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 		RangeL = atoi(tempdata[0]);
 		RangeH = atoi(tempdata[1]);
@@ -6022,10 +5053,8 @@ int ScriptProcessor::ProcTextures()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 14 || tempdata.GetSize() > 15)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 3; i <= 13; i++)
 		{
@@ -6035,10 +5064,7 @@ int ScriptProcessor::ProcTextures()
 				i = 11;
 
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 		buffer = tempdata[2];
 		buffer.Insert(0, "/root/data/fonts/");
@@ -6058,10 +5084,8 @@ int ScriptProcessor::ProcTextures()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 16 || tempdata.GetSize() > 17)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 0; i <= 15; i++)
 		{
@@ -6073,10 +5097,7 @@ int ScriptProcessor::ProcTextures()
 				i = 13;
 
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 		RangeL = atoi(tempdata[0]);
 		RangeH = atoi(tempdata[1]);
@@ -6114,18 +5135,13 @@ int ScriptProcessor::ProcTextures()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 8 || tempdata.GetSize() > 9)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 2; i <= 7; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 		buffer = tempdata[0];
 		buffer.Insert(0, "/root/");
@@ -6145,18 +5161,13 @@ int ScriptProcessor::ProcTextures()
 			tempdata.Put(temp3, buffer.Trim());
 		}
 		if (tempdata.GetSize() < 9 || tempdata.GetSize() > 10)
-		{
-			ScriptError("Incorrect number of parameters");
-			return sError;
-		}
+			return ScriptError("Incorrect number of parameters");
+
 		//check numeric values
 		for (int i = 3; i <= 8; i++)
 		{
 			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
-			{
-				ScriptError("Invalid value: " + csString(tempdata[i]));
-				return sError;
-			}
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 		if (tempdata.GetSize() == 9)
 			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));

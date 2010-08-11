@@ -205,7 +205,7 @@ public:
 	void MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void EnableDoors(bool value);
 	void SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
-	void AddFloorSigns(int door_number, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
+	bool AddFloorSigns(int door_number, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	void SetCallButtons(int floor, bool direction, bool value);
 	bool IsIdle();
 	void ResetQueue(bool up, bool down);
@@ -218,7 +218,7 @@ public:
 	bool IsQueueActive();
 	bool BeyondDecelMarker(int direction, float destination);
 	void Report(const char *message);
-	void ReportError(const char *message);
+	bool ReportError(const char *message);
 	Object* AddDoorComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	Object* AddShaftDoorComponent(int number, int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	void AddShaftDoorsComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
@@ -248,6 +248,7 @@ public:
 	bool PlayFloorBeep();
 	bool PlayFloorSound();
 	bool PlayMessageSound(bool direction);
+	bool DoorExists(int number);
 
 private:
 

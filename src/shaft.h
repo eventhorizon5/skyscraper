@@ -72,7 +72,7 @@ public:
 	void RemoveElevator(int number);
 	csRef<iMeshWrapper> GetMeshWrapper(int floor);
 	void Report(const char *message);
-	void ReportError(const char *message);
+	bool ReportError(const char *message);
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array

@@ -633,10 +633,10 @@ void Stairs::Report(const char *message)
 	sbs->Report("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
 }
 
-void Stairs::ReportError(const char *message)
+bool Stairs::ReportError(const char *message)
 {
 	//general reporting function
-	sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
 }
 
 void Stairs::RemoveDoor(Door *door)

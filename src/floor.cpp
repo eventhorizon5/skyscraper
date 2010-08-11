@@ -561,7 +561,9 @@ bool Floor::CalculateAltitude()
 			if (sbs->GetFloor(Number - 1))
 				Altitude = sbs->GetFloor(Number - 1)->Altitude + sbs->GetFloor(Number - 1)->FullHeight();
 			else
-				return false;
+			{
+				return ReportError("Invalid floor number specified - no adjacent floor");
+			}
 		}
 
 		if (Number == -1)
@@ -572,7 +574,7 @@ bool Floor::CalculateAltitude()
 			if (sbs->GetFloor(Number + 1))
 				Altitude = sbs->GetFloor(Number + 1)->Altitude - FullHeight();
 			else
-				return false;
+				return ReportError("Invalid floor number specified - no adjacent floor");
 		}
 	}
 	return true;
@@ -809,10 +811,10 @@ void Floor::Report(const char *message)
 	sbs->Report("Floor " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
 }
 
-void Floor::ReportError(const char *message)
+bool Floor::ReportError(const char *message)
 {
 	//general reporting function
-	sbs->ReportError("Floor " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Floor " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
 }
 
 float Floor::GetBase(bool relative)

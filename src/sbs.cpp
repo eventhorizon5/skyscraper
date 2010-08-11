@@ -1781,6 +1781,7 @@ void SBS::Report (const char* msg, ...)
 		csPrintf("\n");
 		fflush (stdout);
 	}
+	LastNotification = message;
 }
 
 bool SBS::ReportError (const char* msg, ...)
@@ -1796,6 +1797,7 @@ bool SBS::ReportError (const char* msg, ...)
 		csPrintf("\n");
 		fflush (stdout);
 	}
+	LastError = message;
 	return false;
 }
 
@@ -2322,8 +2324,15 @@ Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int
 	//create a shaft object
 
 	for (size_t i = 0; i < ShaftArray.GetSize(); i++)
+	{
 		if (ShaftArray[i].number == number)
+		{
+			csString num;
+			num = number;
+			ReportError("Shaft " + num + " already exists");
 			return 0;
+		}
+	}
 	ShaftArray.SetSize(ShaftArray.GetSize() + 1);
 	ShaftArray[ShaftArray.GetSize() - 1].number = number;
 	ShaftArray[ShaftArray.GetSize() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
@@ -2335,8 +2344,15 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	//create a stairwell object
 
 	for (size_t i = 0; i < StairsArray.GetSize(); i++)
+	{
 		if (StairsArray[i].number == number)
+		{
+			csString num;
+			num = number;
+			ReportError("Stairwell " + num + " already exists");
 			return 0;
+		}
+	}
 	StairsArray.SetSize(StairsArray.GetSize() + 1);
 	StairsArray[StairsArray.GetSize() - 1].number = number;
 	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
@@ -2695,7 +2711,10 @@ bool SBS::SetWallOrientation(const char *direction)
 	else if (temp == "right")
 		wall_orientation = 2;
 	else
+	{
+		ReportError("SetWallOrientation: Invalid wall orientation");
 		return false;
+	}
 	return true;
 }
 
@@ -2722,7 +2741,10 @@ bool SBS::SetFloorOrientation(const char *direction)
 	else if (temp == "top")
 		floor_orientation = 2;
 	else
+	{
+		ReportError("SetFloorOrientation: Invalid floor orientation");
 		return false;
+	}
 	return true;
 }
 
@@ -4108,7 +4130,6 @@ int SBS::GetCallButtonCallbackCount()
 {
 	//return the number of registered call button callbacks
 	return buttoncallbacks.GetSize();
-
 }
 
 bool SBS::Mount(const char *filename, const char *path)
@@ -4119,8 +4140,10 @@ bool SBS::Mount(const char *filename, const char *path)
 	csString Path = path;
 
 	Report("Mounting " + file + " as path " + Path);
-
-	return vfs->Mount(path, root_dir + "data" + dir_char + file);
+	bool status = vfs->Mount(path, root_dir + "data" + dir_char + file);
+	if (status == false)
+		ReportError("Error mounting file " + file);
+	return status;
 }
 
 void SBS::FreeTextureImages()

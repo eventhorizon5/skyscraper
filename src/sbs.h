@@ -167,6 +167,8 @@ public:
 	bool Verbose; //set to true to enable verbose mode
 	bool InterfloorOnTop; //set to true to have interfloor area on top (it's on the bottom by default)
 	bool FastDelete; //used internally for quick object deletion
+	csString LastError; //most recent error message, from ReportError()
+	csString LastNotification; //most recent notification message, from Report()
 
 	//mouse coordinates
 	int mouse_x, mouse_y;

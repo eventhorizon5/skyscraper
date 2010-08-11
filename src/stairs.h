@@ -65,7 +65,7 @@ public:
 	bool IsValidFloor(int floor);
 	bool IsDoorMoving(int number);
 	void Report(const char *message);
-	void ReportError(const char *message);
+	bool ReportError(const char *message);
 	void RemoveDoor(Door *door);
 
 private:

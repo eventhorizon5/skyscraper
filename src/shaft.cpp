@@ -489,8 +489,8 @@ void Shaft::Report(const char *message)
 	sbs->Report("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
 }
 
-void Shaft::ReportError(const char *message)
+bool Shaft::ReportError(const char *message)
 {
 	//general reporting function
-	sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
 }

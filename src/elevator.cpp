@@ -2095,8 +2095,7 @@ bool Elevator::AddServicedFloor(int number)
 	{
 		csString floor;
 		floor = number;
-		ReportError("AddServicedFloor: Invalid floor " + floor);
-		return false;
+		return ReportError("AddServicedFloor: Invalid floor " + floor);
 	}
 
 	if (IsServicedFloor(number) == false)
@@ -3005,7 +3004,7 @@ Object* Elevator::AddDoors(int number, const char *lefttexture, const char *righ
 	if (GetDoor(number))
 		return GetDoor(number)->AddDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, width, height, direction, tw, th);
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		ReportError("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return 0;
 }
 
@@ -3017,7 +3016,7 @@ int Elevator::AddShaftDoors(int number, const char *lefttexture, const char *rig
 	if (GetDoor(number))
 		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, tw, th);
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		ReportError("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return 0;
 }
 
@@ -3292,7 +3291,7 @@ void Elevator::SetShaftDoors(int number, float thickness, float CenterX, float C
 	}
 }
 
-void Elevator::AddFloorSigns(int door_number, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//adds floor signs at the specified position and direction for each serviced floor,
 	//depending on if the given door number services the floor or not (unless door_number is 0)
@@ -3307,6 +3306,18 @@ void Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 	{
 		x = CenterX;
 		z = CenterZ;
+	}
+
+	//make sure specified door exists before continuing
+	if (door_number != 0)
+	{
+		if (DoorExists(door_number) == false)
+		{
+			csString doornum;
+			doornum = door_number;
+			ReportError("AddFloorSigns: door " + doornum + " does not exist");
+			return false;
+		}
 	}
 
 	bool autosize_x, autosize_y;
@@ -3338,6 +3349,7 @@ void Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 		}
 	}
 	sbs->SetAutoSize(autosize_x, autosize_y);
+	return true;
 }
 
 void Elevator::SetCallButtons(int floor, bool direction, bool value)
@@ -3515,10 +3527,10 @@ void Elevator::Report(const char *message)
 
 }
 
-void Elevator::ReportError(const char *message)
+bool Elevator::ReportError(const char *message)
 {
 	//general reporting function
-	sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Elevator " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
 }
 
 Object* Elevator::AddDoorComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
@@ -3579,7 +3591,7 @@ bool Elevator::FinishShaftDoors(int number)
 	if (GetDoor(number))
 		return GetDoor(number)->FinishShaftDoors();
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		ReportError("Invalid door " + csString(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
@@ -3992,4 +4004,23 @@ bool Elevator::PlayMessageSound(bool direction)
 	messagesnd->Loop(false);
 	messagesnd->Play();
 	return true;
+}
+
+bool Elevator::DoorExists(int number)
+{
+	//check if the specified door exists
+	//if number is 0, return true if any door exists
+
+	if (number > 0)
+		return (GetDoor(number));
+
+	if (number == 0)
+	{
+		for (int i = 0; i < DoorArray.GetSize(); i++)
+		{
+			if (GetDoor(i))
+				return true;
+		}
+	}
+	return false;
 }

@@ -914,14 +914,23 @@ Object* ElevatorDoor::FinishShaftDoor(int floor)
 {
 	//finish shaft door on a specified floor
 
+	csString floornum;
+	floornum = floor;
+
 	//exit if floor is not serviced by the elevator
 	if (!elev->IsServicedFloor(floor))
+	{
+		elev->ReportError("Floor " + floornum + " not a serviced floor");
 		return 0;
+	}
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
 	if (!floorobj)
+	{
+		elev->ReportError("Floor " + floornum + " does not exist");
 		return 0;
+	}
 
 	DoorWrapper *wrapper;
 

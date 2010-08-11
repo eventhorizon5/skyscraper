@@ -548,8 +548,8 @@ void CallButton::Report(const char *message)
 
 }
 
-void CallButton::ReportError(const char *message)
+bool CallButton::ReportError(const char *message)
 {
 	//general reporting function
-	sbs->ReportError("Call button " + csString(_itoa(floor, intbuffer, 10)) + ":" + csString(_itoa(Number, intbuffer, 10)) + " - " + message);
+	return sbs->ReportError("Call button " + csString(_itoa(floor, intbuffer, 10)) + ":" + csString(_itoa(Number, intbuffer, 10)) + " - " + message);
 }
