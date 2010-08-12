@@ -4956,7 +4956,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	//set up untriangulated mesh object
 	CS::Geometry::csContour3 origmesh;
 	for (int i = 0; i < vertices.GetSize(); i++)
-		origmesh.Push(vertices[i]);
+		origmesh.Push(ToRemote(vertices[i]));
 
 	//triangulate mesh
 	csTriangleMesh trimesh;
@@ -4979,7 +4979,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	{
 		mesh_normals[i] = mesh_vertices[i] = trimesh.GetVertices()[i];
 		mesh_normals[i].Normalize();
-		mesh_texels[i] = mapper.Map(mesh_vertices[0], mesh_normals[0], 0);
+		mesh_texels[i] = mapper.Map(mesh_vertices[i], mesh_normals[i], i);
 
 		int a, c;
 		a = i - 1;
@@ -4991,12 +4991,17 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 
 		mesh_triangles[i].a = a; mesh_triangles[i].b = i; mesh_triangles[i].c = c;
 	}
+	//CS::Geometry::Primitives::GenerateTesselatedQuad(origmesh[0], origmesh[1], origmesh[2], 1, mesh_vertices, mesh_texels, mesh_normals, mesh_triangles, &mapper);
 
 	//add vertices to mesh
 	csColor4 black (0, 0, 0);
 	int count = state->GetVertexCount();
 	for (int i = 0; i < mesh_vertices.GetSize(); i++)
 		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], black);
+
+	//set up triangle buffer
+	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(mesh_triangles.GetSize() * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, state->GetVertexCount());
+	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	//add triangles to mesh
 	for (int i = 0; i < mesh_triangles.GetSize(); i++)
@@ -5006,18 +5011,14 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		tri.b += count;
 		tri.c += count;
 		state->AddTriangle(tri);
+		triangleData[i] = tri;
 	}
+	buffer->Release();
 
 	//reprocess mesh
 	state->Invalidate();
 
 	//create submesh and set material
-	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(state->GetTriangleCount() * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, state->GetVertexCount());
-	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
-	for (int i = 0; i < state->GetTriangleCount(); i++)
-		triangleData[i] = state->GetTriangles()[i];
-
-	buffer->Release();
 	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
 	//for (int i = 0; i < state->GetVertexCount(); i++)
 		//csPrintf("Vertex %d, %g %g %g\n", i, state->GetVertices()[i].x, state->GetVertices()[i].y, state->GetVertices()[i].z);
