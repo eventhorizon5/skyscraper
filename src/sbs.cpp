@@ -4920,7 +4920,7 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 	return mesh;
 }
 
-csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, csVector3 *vertices, int vertex_count, float tw, float th)
+csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, csArray<csVector3> vertices, float tw, float th)
 {
 	//create custom genmesh geometry, and apply a texture map and material
 
@@ -4955,7 +4955,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 
 	//set up untriangulated mesh object
 	CS::Geometry::csContour3 origmesh;
-	for (int i = 0; i < vertex_count; i++)
+	for (int i = 0; i < vertices.GetSize(); i++)
 		origmesh.Push(vertices[i]);
 
 	//triangulate mesh

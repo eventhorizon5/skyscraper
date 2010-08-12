@@ -322,7 +322,7 @@ public:
 	const char* VerifyFile(const char *filename);
 	bool FileExists(const char *filename, bool relative = false);
 	csRef<iMeshWrapper> CreateMesh(const char *name);
-	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, csVector3 *vertices, int vertex_count, float tw, float th);
+	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, csArray<csVector3> vertices, float tw, float th);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
