@@ -4919,3 +4919,118 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 
 	return mesh;
 }
+
+csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, csVector3 *vertices, int vertex_count, float tw, float th)
+{
+	//create custom genmesh geometry, and apply a texture map and material
+
+	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
+
+	//get texture
+	csString texname = texture;
+	bool result;
+	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
+	if (!result)
+		texname = "Default";
+
+	if (tw == 0)
+		tw = 1;
+	if (th == 0)
+		th = 1;
+
+	float tw2 = tw, th2 = th;
+
+	float mw, mh;
+	if (GetTextureTiling(texname.GetData(), mw, mh))
+	{
+		//multiply the tiling parameters (tw and th) by
+		//the stored multipliers for that texture
+		tw2 = tw * mw;
+		th2 = th * mh;
+	}
+
+	//create texture mapping table
+	csVector2 table[] = {csVector2(tw2, th2), csVector2(0, th2), csVector2(tw2, 0), csVector2(0, 0)};
+	CS::Geometry::TableTextureMapper mapper(table);
+
+	//set up untriangulated mesh object
+	CS::Geometry::csContour3 origmesh;
+	for (int i = 0; i < vertex_count; i++)
+		origmesh.Push(vertices[i]);
+
+	//triangulate mesh
+	csTriangleMesh trimesh;
+	CS::Geometry::Triangulate3D::Process(origmesh, trimesh);
+
+	//set up geometry arrays
+	csDirtyAccessArray<csVector3> mesh_vertices;
+	csDirtyAccessArray<csVector2> mesh_texels;
+	csDirtyAccessArray<csVector3> mesh_normals;
+	csDirtyAccessArray<csTriangle> mesh_triangles;
+
+	int size = trimesh.GetVertexCount();
+	mesh_vertices.SetSize(size);
+	mesh_texels.SetSize(size);
+	mesh_normals.SetSize(size);
+	mesh_triangles.SetSize(size);
+
+	//populate vertices, normals, texels and triangles for mesh data
+	for (int i = 0; i < size; i++)
+	{
+		mesh_normals[i] = mesh_vertices[i] = trimesh.GetVertices()[i];
+		mesh_normals[i].Normalize();
+		mesh_texels[i] = mapper.Map(mesh_vertices[0], mesh_normals[0], 0);
+
+		int a, c;
+		a = i - 1;
+		if (a == -1)
+			a = size - 1;
+		c = i + 1;
+		if (c == size)
+			c = 0;
+
+		mesh_triangles[i].a = a; mesh_triangles[i].b = i; mesh_triangles[i].c = c;
+	}
+
+	//add vertices to mesh
+	csColor4 black (0, 0, 0);
+	int count = state->GetVertexCount();
+	for (int i = 0; i < mesh_vertices.GetSize(); i++)
+		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], black);
+
+	//add triangles to mesh
+	for (int i = 0; i < mesh_triangles.GetSize(); i++)
+	{
+		csTriangle tri = mesh_triangles[i];
+		tri.a += count;
+		tri.b += count;
+		tri.c += count;
+		state->AddTriangle(tri);
+	}
+
+	//reprocess mesh
+	state->Invalidate();
+
+	//create submesh and set material
+	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(state->GetTriangleCount() * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, state->GetVertexCount());
+	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
+	for (int i = 0; i < state->GetTriangleCount(); i++)
+		triangleData[i] = state->GetTriangles()[i];
+
+	buffer->Release();
+	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
+	//for (int i = 0; i < state->GetVertexCount(); i++)
+		//csPrintf("Vertex %d, %g %g %g\n", i, state->GetVertices()[i].x, state->GetVertices()[i].y, state->GetVertices()[i].z);
+
+	//set lighting factor
+	mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
+
+	//recreate colliders if specified
+	if (RecreateColliders == true)
+	{
+		DeleteColliders(mesh);
+		CreateColliders(mesh);
+	}
+
+	return submesh;
+}

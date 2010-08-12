@@ -37,6 +37,7 @@
 #include <iengine/mesh.h>
 #include <imesh/object.h>
 #include <imesh/thing.h>
+#include <imesh/genmesh.h>
 #include <iutil/virtclk.h>
 #include <iutil/vfs.h>
 #include <isndsys/ss_renderer.h>
@@ -298,6 +299,7 @@ public:
 	int RegisterObject(Object *object);
 	bool UnregisterObject(int number);
 	void GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3);
+	//csVector2* GetTextureMapping(
 	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
 	csVector3 GetWallExtents(csRef<iThingFactoryState> state, const char *name, float altitude,  bool get_max);
 	csVector3 GetPolygonDirection(csPoly3D &polygon);
@@ -320,6 +322,7 @@ public:
 	const char* VerifyFile(const char *filename);
 	bool FileExists(const char *filename, bool relative = false);
 	csRef<iMeshWrapper> CreateMesh(const char *name);
+	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, csVector3 *vertices, int vertex_count, float tw, float th);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

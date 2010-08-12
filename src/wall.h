@@ -75,13 +75,13 @@ public:
 	void ReindexPolygons(int deleted_index);
 
 	//polygon index array
-	csArray<int> handles;
+	csArray<iGeneralMeshSubMesh*> handles;
 
 	//mesh wrapper
 	csRef<iMeshWrapper> meshwrapper;
 
 	//mesh factory state
-	csRef<iThingFactoryState> state;
+	csRef<iGeneralFactoryState> state;
 
 	//name
 	csString name;
