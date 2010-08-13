@@ -216,26 +216,26 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 		//half the width), plus total spacing to the left of it, plus total button spaces
 		//to the left of it, plus half of the extra width
 		xpos = (Origin.x - (Width / 2)) + (SpacingX * column) + (ButtonWidth * (column - 1)) + ((bwidth - 1) / 2);
-		zpos = Origin.z - 0.001;
+		zpos = Origin.z - 0.01;
 		xpos += hoffset * ButtonWidth;
 	}
 	if (Direction == "back")
 	{
 		//back
 		xpos = (Origin.x + (Width / 2)) - (SpacingX * column) - (ButtonWidth * (column - 1)) - ((bwidth - 1) / 2);
-		zpos = Origin.z + 0.001;
+		zpos = Origin.z + 0.01;
 		xpos -= hoffset * ButtonWidth;
 	}
 	if (Direction == "left")
 	{
-		xpos = Origin.x - 0.001;
+		xpos = Origin.x - 0.01;
 		zpos = (Origin.z + (Width / 2))  - (SpacingX * column) - (ButtonWidth * (column - 1)) - ((bwidth - 1) / 2);
 		zpos -= hoffset * ButtonWidth;
 	}
 	if (Direction == "right")
 	{
 		//right
-		xpos = Origin.x + 0.001;
+		xpos = Origin.x + 0.01;
 		zpos = (Origin.z - (Width / 2)) + (SpacingX * column) + (ButtonWidth * (column - 1)) + ((bwidth - 1) / 2);
 		zpos += hoffset * ButtonWidth;
 	}
