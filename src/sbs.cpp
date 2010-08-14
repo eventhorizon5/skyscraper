@@ -4997,12 +4997,11 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	for (int i = 0; i < mesh_vertices.GetSize(); i++)
 	{
 		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], black);
-		//csPrintf("%d - %g, %g, %g - %g, %g, - %g, %g, %g\n", i, mesh_vertices[i].x, mesh_vertices[i].y, mesh_vertices[i].z, mesh_texels[i].x, mesh_texels[i].y, mesh_normals[i].x, mesh_normals[i].y, mesh_normals[i].z);
 	}
 
 	//set up triangle buffer
-	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(trimesh.GetVertexCount(), CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, trimesh.GetVertexCount());
-	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
+	//csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(trimesh.GetVertexCount(), CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, trimesh.GetVertexCount());
+	//csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	//add triangles to mesh
 	for (int i = 0; i < trimesh.GetTriangleCount(); i++)
@@ -5012,19 +5011,16 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		tri.b += count;
 		tri.c += count;
 		state->AddTriangle(tri);
-		triangleData[i] = tri;
-		//csPrintf("Tri %d - %d, %d, %d\n", i, tri.a, tri.b, tri.c);
+		//triangleData[i] = tri;
 	}
-	buffer->Release();
+	//buffer->Release();
 
 	//reprocess mesh
 	state->Invalidate();
 
 	//create submesh and set material
-	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
-
-	//for (int i = 0; i < state->GetVertexCount(); i++)
-		//csPrintf("Vertex %d, %g %g %g\n", i, state->GetVertices()[i].x, state->GetVertices()[i].y, state->GetVertices()[i].z);
+	//csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
+	mesh->GetMeshObject()->SetMaterialWrapper(material);
 
 	//set lighting factor
 	mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
@@ -5037,5 +5033,5 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		CreateColliders(mesh);
 	}
 
-	return submesh;
+	return 0;
 }
