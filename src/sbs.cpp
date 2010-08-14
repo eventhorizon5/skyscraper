@@ -4920,7 +4920,7 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 	return mesh;
 }
 
-csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, csArray<csVector3> vertices, float tw, float th)
+csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -4955,14 +4955,9 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	csVector2 table[] = {csVector2(0, 0), csVector2(tw2, 0), csVector2(tw2, th2), csVector2(0, th2)};
 	CS::Geometry::TableTextureMapper mapper(table);
 
-	//set up untriangulated mesh object
-	CS::Geometry::csContour3 origmesh;
-	for (int i = 0; i < vertices.GetSize(); i++)
-		origmesh.Push(ToRemote(vertices[i]));
-
 	//triangulate mesh
 	csTriangleMesh trimesh;
-	CS::Geometry::Triangulate3D::Process(origmesh, trimesh);
+	CS::Geometry::Triangulate3D::Process(vertices, trimesh);
 
 	//set up geometry arrays
 	csDirtyAccessArray<csVector3> mesh_vertices;
@@ -4980,15 +4975,14 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	//populate vertices, normals, and texels for mesh data
 	for (int i = 0; i < size; i++)
 	{
-		mesh_normals[i] = mesh_vertices[i] = trimesh.GetVertices()[i];
+		mesh_normals[i] = mesh_vertices[i] = ToRemote(trimesh.GetVertices()[i]);
 		mesh_normals[i].Normalize();
 		mesh_texels[i] = mapper.Map(mesh_vertices[i], mesh_normals[i], i);
 
-		int a, c;
-		a = i - 1;
+		int a = i - 1;
 		if (a == -1)
 			a = size - 1;
-		c = i + 1;
+		int c = i + 1;
 		if (c == size)
 			c = 0;
 	}

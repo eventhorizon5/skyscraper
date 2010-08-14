@@ -61,7 +61,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, width, 0, height, voffset, 1, 1);
 	if (Direction == "back")
 	{
-		/*csArray<csVector3> array;
+		/*CS::Geometry::csContour3 array;
 		array.Push(csVector3(0, voffset + height, 0));
 		array.Push(csVector3(-width, voffset + height, 0));
 		array.Push(csVector3(-width, voffset, 0));

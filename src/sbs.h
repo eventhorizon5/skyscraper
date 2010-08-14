@@ -49,6 +49,7 @@
 #include <ivaria/reporter.h>
 #include <isndsys/ss_manager.h>
 #include <iutil/objreg.h>
+#include <csgeom/triangulate3d.h>
 
 #include "wall.h"
 #include "floor.h"
@@ -322,7 +323,7 @@ public:
 	const char* VerifyFile(const char *filename);
 	bool FileExists(const char *filename, bool relative = false);
 	csRef<iMeshWrapper> CreateMesh(const char *name);
-	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, csArray<csVector3> vertices, float tw, float th);
+	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
