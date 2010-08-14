@@ -4951,10 +4951,8 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 
 	//create texture mapping table
 	//csVector2 table[] = {csVector2(tw2, th2), csVector2(0, th2), csVector2(tw2, 0), csVector2(0, 0)};
-	//csVector2 table[] = {csVector2(tw2, 0), csVector2(0, 0), csVector2(0, th2), csVector2(tw2, th2)};
 	csVector2 table[] = {csVector2(0, 0), csVector2(tw2, 0), csVector2(tw2, th2), csVector2(0, th2)};
 	CS::Geometry::TableTextureMapper mapper(table);
-	//CS::Geometry::TableTextureMapper mapper(CS::Geometry::Primitives::quadTable);
 
 	//set up untriangulated mesh object
 	CS::Geometry::csContour3 origmesh;
@@ -4992,37 +4990,30 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		if (c == size)
 			c = 0;
 	}
-	//CS::Geometry::Primitives::GenerateTesselatedQuad(origmesh[0], origmesh[1], origmesh[2], 1, mesh_vertices, mesh_texels, mesh_normals, mesh_triangles, &mapper);
 	
-	//mesh_triangles[0].a = 2; mesh_triangles[0].b = 3; mesh_triangles[0].c = 1;
-	//mesh_triangles[1].a = 0; mesh_triangles[1].b = 1; mesh_triangles[1].c = 3;
-
 	//add vertices to mesh
 	csColor4 black (0, 0, 0);
 	int count = state->GetVertexCount();
 	for (int i = 0; i < mesh_vertices.GetSize(); i++)
 	{
 		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], black);
-		csPrintf("%d - %g, %g, %g - %g, %g, - %g, %g, %g\n", i, mesh_vertices[i].x, mesh_vertices[i].y, mesh_vertices[i].z, mesh_texels[i].x, mesh_texels[i].y, mesh_normals[i].x, mesh_normals[i].y, mesh_normals[i].z);
+		//csPrintf("%d - %g, %g, %g - %g, %g, - %g, %g, %g\n", i, mesh_vertices[i].x, mesh_vertices[i].y, mesh_vertices[i].z, mesh_texels[i].x, mesh_texels[i].y, mesh_normals[i].x, mesh_normals[i].y, mesh_normals[i].z);
 	}
 
 	//set up triangle buffer
-	//csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(mesh_triangles.GetSize() * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, state->GetVertexCount());
 	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(trimesh.GetVertexCount(), CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, trimesh.GetVertexCount());
 	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	//add triangles to mesh
-	//for (int i = 0; i < mesh_triangles.GetSize(); i++)
 	for (int i = 0; i < trimesh.GetTriangleCount(); i++)
 	{
-		//csTriangle tri = mesh_triangles[i];
 		csTriangle tri = trimesh.GetTriangle(i);
 		tri.a += count;
 		tri.b += count;
 		tri.c += count;
 		state->AddTriangle(tri);
 		triangleData[i] = tri;
-		csPrintf("Tri %d - %d, %d, %d\n", i, tri.a, tri.b, tri.c);
+		//csPrintf("Tri %d - %d, %d, %d\n", i, tri.a, tri.b, tri.c);
 	}
 	buffer->Release();
 
@@ -5031,11 +5022,13 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 
 	//create submesh and set material
 	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
+
 	//for (int i = 0; i < state->GetVertexCount(); i++)
 		//csPrintf("Vertex %d, %g %g %g\n", i, state->GetVertices()[i].x, state->GetVertices()[i].y, state->GetVertices()[i].z);
 
 	//set lighting factor
 	mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
+	CS::Lighting::SimpleStaticLighter::ConstantColor(mesh, csColor(0.5, 0.5, 0.5));
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)
