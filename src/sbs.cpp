@@ -4922,11 +4922,12 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 
 csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, csArray<csVector3> vertices, float tw, float th)
 {
-	//create custom genmesh geometry, and apply a texture map and material
+	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
+	//get genmesh factory state
 	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
 
-	//get texture
+	//get texture material
 	csString texname = texture;
 	bool result;
 	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
@@ -4938,8 +4939,8 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	if (th == 0)
 		th = 1;
 
+	//get texture tiling information
 	float tw2 = tw, th2 = th;
-
 	float mw, mh;
 	if (GetTextureTiling(texname.GetData(), mw, mh))
 	{
@@ -4969,13 +4970,14 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	csDirtyAccessArray<csVector3> mesh_normals;
 	csDirtyAccessArray<csTriangle> mesh_triangles;
 
+	//initialize geometry arrays
 	int size = trimesh.GetVertexCount();
 	mesh_vertices.SetSize(size);
 	mesh_texels.SetSize(size);
 	mesh_normals.SetSize(size);
 	mesh_triangles.SetSize(trimesh.GetTriangleCount());
 
-	//populate vertices, normals, texels and triangles for mesh data
+	//populate vertices, normals, and texels for mesh data
 	for (int i = 0; i < size; i++)
 	{
 		mesh_normals[i] = mesh_vertices[i] = trimesh.GetVertices()[i];
@@ -4991,28 +4993,27 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 			c = 0;
 	}
 	
-	//add vertices to mesh
-	csColor4 black (0, 0, 0);
-	int count = state->GetVertexCount();
+	//add vertices to mesh, from the vertex, texel, and normal arrays
 	for (int i = 0; i < mesh_vertices.GetSize(); i++)
-	{
-		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], black);
-	}
+		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], csColor4(0, 0, 0));
 
 	//set up triangle buffer
 	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(trimesh.GetTriangleCount() * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, trimesh.GetVertexCount());
 	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	//add triangles to mesh
+	int count = state->GetVertexCount();
 	for (int i = 0; i < trimesh.GetTriangleCount(); i++)
 	{
 		csTriangle tri = trimesh.GetTriangle(i);
 		tri.a += count;
 		tri.b += count;
 		tri.c += count;
-		state->AddTriangle(tri);
-		triangleData[i] = tri;
+		state->AddTriangle(tri); //add triangle to genmesh
+		triangleData[i] = tri; //add triangle to submesh buffer
 	}
+
+	//finish with submesh buffer
 	buffer->Release();
 
 	//reprocess mesh
@@ -5021,8 +5022,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	//create submesh and set material
 	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
 
-	//set lighting factor
-	mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
+	//set ambient lighting factor
 	CS::Lighting::SimpleStaticLighter::ConstantColor(mesh, csColor(0.5, 0.5, 0.5));
 
 	//recreate colliders if specified
