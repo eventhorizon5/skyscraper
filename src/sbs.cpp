@@ -5020,7 +5020,6 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 
 	//create submesh and set material
 	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
-	//mesh->GetMeshObject()->SetMaterialWrapper(material);
 
 	//set lighting factor
 	mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
