@@ -5000,8 +5000,8 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	}
 
 	//set up triangle buffer
-	//csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(trimesh.GetVertexCount(), CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, trimesh.GetVertexCount());
-	//csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
+	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(trimesh.GetTriangleCount() * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, trimesh.GetVertexCount());
+	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	//add triangles to mesh
 	for (int i = 0; i < trimesh.GetTriangleCount(); i++)
@@ -5011,16 +5011,16 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		tri.b += count;
 		tri.c += count;
 		state->AddTriangle(tri);
-		//triangleData[i] = tri;
+		triangleData[i] = tri;
 	}
-	//buffer->Release();
+	buffer->Release();
 
 	//reprocess mesh
 	state->Invalidate();
 
 	//create submesh and set material
-	//csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
-	mesh->GetMeshObject()->SetMaterialWrapper(material);
+	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
+	//mesh->GetMeshObject()->SetMaterialWrapper(material);
 
 	//set lighting factor
 	mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
@@ -5033,5 +5033,5 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		CreateColliders(mesh);
 	}
 
-	return 0;
+	return submesh;
 }
