@@ -4992,7 +4992,10 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		if (c == size)
 			c = 0;
 	}
-	
+
+	//get number of existing vertices before adding any
+	int count = state->GetVertexCount();
+
 	//add vertices to mesh, from the vertex, texel, and normal arrays
 	for (int i = 0; i < mesh_vertices.GetSize(); i++)
 		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], csColor4(0, 0, 0));
@@ -5002,7 +5005,6 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	//add triangles to mesh
-	int count = state->GetVertexCount();
 	for (int i = 0; i < trimesh.GetTriangleCount(); i++)
 	{
 		csTriangle tri = trimesh.GetTriangle(i);
