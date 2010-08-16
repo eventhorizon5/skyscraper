@@ -508,7 +508,7 @@ bool Floor::IsInGroup(int floor)
 	return false;
 }
 
-Object* Floor::AddDoor(const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -544,7 +544,7 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, const ch
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
 	csString floornum = _itoa(Number, intbuffer, 10);
 	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
-	DoorArray[DoorArray.GetSize() - 1] = new Door(this->object, "Floor " + floornum + ":Door " + num, open_sound, close_sound, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
+	DoorArray[DoorArray.GetSize() - 1] = new Door(this->object, "Floor " + floornum + ":Door " + num, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
 	return DoorArray[DoorArray.GetSize() - 1]->object;
 }
 

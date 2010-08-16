@@ -53,7 +53,7 @@ public:
 	void Enabled(int floor, bool value);
 	void EnableWholeStairwell(bool value);
 	bool IsInStairwell(const csVector3 &position);
-	Object* AddDoor(int floor, const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Object* AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void CutFloors(bool relative, const csVector2 &start, const csVector2 &end, float startvoffset, float endvoffset);
 	bool CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range);

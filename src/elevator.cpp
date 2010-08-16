@@ -154,10 +154,15 @@ Elevator::Elevator(int number)
 	Parking = false;
 	MusicPosition = 0;
 	MusicOn = true;
+	DepartureDelay = sbs->confman->GetInt("Skyscraper.SBS.Elevator.DepartureDelay", 0);
+	ArrivalDelay = sbs->confman->GetInt("Skyscraper.SBS.Elevator.ArrivalDelay", 0);
+	WaitForTimer = false;
 
 	//create timers
-	timer = new Timer(this, true);
-	random_timer = new Timer(this, false);
+	timer = new Timer(this, 0);
+	random_timer = new Timer(this, 1);
+	arrival_delay = new Timer(this, 2);
+	departure_delay = new Timer(this,3);
 
 	//create object meshes
 	buffer = Number;
@@ -178,7 +183,7 @@ Elevator::~Elevator()
 {
 	//delete timer
 	if (sbs->Verbose)
-		Report("deleting timer");
+		Report("deleting timers");
 
 	if (timer)
 	{
@@ -193,6 +198,20 @@ Elevator::~Elevator()
 		delete random_timer;
 	}
 	random_timer = 0;
+
+	if (arrival_delay)
+	{
+		arrival_delay->Stop();
+		delete arrival_delay;
+	}
+	arrival_delay = 0;
+
+	if (departure_delay)
+	{
+		departure_delay->Stop();
+		delete departure_delay;
+	}
+	departure_delay = 0;
 
 	//delete directional indicators
 	if (sbs->Verbose)
@@ -1171,12 +1190,27 @@ void Elevator::MoveElevatorToFloor()
 			WaitForDoors = false;
 	}
 
+	//exit if waiting for arrival or departure timers
+	if (WaitForTimer == true)
+		return;
+
 	if (ElevatorIsRunning == false)
 	{
 		if (Running == false)
 		{
 			Report("Elevator not running");
 			return;
+		}
+
+		//start departure timer
+		if (WaitForTimer == false && departure_delay->IsRunning() == false)
+		{
+			if (departure_delay->GetInterval() > 0)
+			{
+				WaitForTimer = true;
+				departure_delay->Start();
+				return;
+			}
 		}
 
 		if (sbs->Verbose)
@@ -1646,6 +1680,17 @@ void Elevator::MoveElevatorToFloor()
 	//exit if elevator's running
 	if (fabs(ElevatorRate) != 0)
 		return;
+
+	//start arrival timer
+	if (WaitForTimer == false && arrival_delay->IsRunning() == false)
+	{
+		if (arrival_delay->GetInterval() > 0)
+		{
+			WaitForTimer = true;
+			arrival_delay->Start();
+			return;
+		}
+	}
 
 	//finish move
 	if (EmergencyStop == false)
@@ -3600,7 +3645,7 @@ void Elevator::Timer::Notify()
 	if (elevator->IsRunning() == false)
 		return;
 
-	if (IsParkingTimer == true)
+	if (type == 0)
 	{
 		//parking timer
 
@@ -3620,7 +3665,7 @@ void Elevator::Timer::Notify()
 			Stop();
 		}
 	}
-	else if (elevator->RandomActivity == true)
+	else if (type == 1 && elevator->RandomActivity == true)
 	{
 		//random call timer
 		
@@ -3642,6 +3687,11 @@ void Elevator::Timer::Notify()
 		//if probability number matched, press selected floor button
 		if (num == 0 && elevator->IsQueued(floor) == false && floor != elevator->GetFloor())
 			elevator->SelectFloor(floor);
+	}
+	else if (type > 1)
+	{
+		//arrival and departure timers
+		elevator->WaitForTimer = false;
 	}
 }
 
@@ -3731,7 +3781,7 @@ void Elevator::HoldDoors(int number)
 	}
 }
 
-Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -3768,7 +3818,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, const
 	StdDoorArray.SetSize(StdDoorArray.GetSize() + 1);
 	csString elevnum = _itoa(Number, intbuffer, 10);
 	csString num = _itoa(StdDoorArray.GetSize() - 1, intbuffer, 10);
-	StdDoorArray[StdDoorArray.GetSize() - 1] = new Door(this->object, "Elevator " + elevnum + ":Door " + num, open_sound, close_sound, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	StdDoorArray[StdDoorArray.GetSize() - 1] = new Door(this->object, "Elevator " + elevnum + ":Door " + num, open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
 	return StdDoorArray[StdDoorArray.GetSize() - 1]->object;
 }
 

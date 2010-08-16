@@ -118,6 +118,9 @@ public:
 	bool Parking; //is elevator parking?
 	csVector3 MusicPosition; //music emitter position, relative of elevator center
 	bool MusicOn; //music enabled status
+	int DepartureDelay; //delay in seconds between door closure and elevator departure
+	int ArrivalDelay; //delay in seconds between elevator arrival and door opening
+	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
 		csRef<iThingFactoryState> Elevator_state;
@@ -230,7 +233,7 @@ public:
 	void SetRandomLobby(int floor);
 	void SelectFloor(int floor);
 	bool IsQueued(int floor);
-	Object* AddDoor(const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Object* AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void OpenDoor(int number);
 	void CloseDoor(int number);
 	bool IsDoorOpen(int number);
@@ -257,11 +260,11 @@ private:
 	{
 	public:
 		Elevator *elevator;
-		bool IsParkingTimer;
-		Timer(Elevator *elev, bool ParkingTimer)
+		int type; //0 = parking timer, 1 = random timer, 2 = arrival, 3 = departure
+		Timer(Elevator *elev, int Type)
 		{
 			elevator = elev;
-			IsParkingTimer = ParkingTimer;
+			type = Type;
 		};
 		virtual void Notify();
 	};
@@ -271,6 +274,10 @@ private:
 
 	//random call timer object
 	Timer *random_timer;
+
+	//arrival and departure delay timers
+	Timer *arrival_delay;
+	Timer *departure_delay;
 
 	//Internal elevator simulation data
 	csArray<int> UpQueue; //up call queue

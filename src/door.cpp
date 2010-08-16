@@ -33,7 +33,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -133,6 +133,10 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	sbs->AddWallMain(object, DoorMesh, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
+
+	//open door on startup (without sound) if specified
+	if (open_state == true)
+		Open(false);
 }
 
 Door::~Door()
@@ -167,27 +171,33 @@ Door::~Door()
 	delete object;
 }
 
-void Door::Open()
+void Door::Open(bool playsound)
 {
 	sbs->Report("Opening door " + Name);
 	if (!sbs->RegisterDoorCallback(this))
 		return;
 	if (IsMoving == false)
 		OpenDoor = true;
-	sound->Load(OpenSound);
-	sound->Play();
+	if (playsound == true)
+	{
+		sound->Load(OpenSound);
+		sound->Play();
+	}
 	IsMoving = true;
 }
 
-void Door::Close()
+void Door::Close(bool playsound)
 {
 	sbs->Report("Closing door " + Name);
 	if (!sbs->RegisterDoorCallback(this))
 		return;
 	if (IsMoving == false)
 		OpenDoor = false;
-	sound->Load(CloseSound);
-	sound->Play();
+	if (playsound == true)
+	{
+		sound->Load(CloseSound);
+		sound->Play();
+	}
 	IsMoving = true;
 }
 
