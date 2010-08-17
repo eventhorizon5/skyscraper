@@ -118,8 +118,8 @@ public:
 	bool Parking; //is elevator parking?
 	csVector3 MusicPosition; //music emitter position, relative of elevator center
 	bool MusicOn; //music enabled status
-	int DepartureDelay; //delay in seconds between door closure and elevator departure
-	int ArrivalDelay; //delay in seconds between elevator arrival and door opening
+	float DepartureDelay; //delay in seconds between door closure and elevator departure
+	float ArrivalDelay; //delay in seconds between elevator arrival and door opening
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
@@ -347,6 +347,7 @@ private:
 	double tmpDecelJerk;
 	bool FinishedMove;
 	bool RandomLobbySet;
+	bool SoundsQueued;
 
 	//cache objects for IsInElevator()
 	csVector3 lastposition;

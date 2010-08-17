@@ -557,9 +557,11 @@
     location, and performs a wall cut on that area (this must be called after 
     the associated wall is created)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor <em> opensound, 
-    closesound, texturename, thickness</em>, <em>direction, speed, CenterX</em>, 
+    closesound, open, texturename, thickness</em>, <em>direction, speed, CenterX</em>, 
     <em>CenterZ</em>, <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, 
-    <em>th</em></font></p>
+    <em>th<br>
+    </em></font>Example:<font size="2" face="Courier New, Courier, mono"> AddDoor 
+    1, , , False, DoorTexture, 0.2, 1, 0, -8.5, 0, 3.5, 8, 0, 1, 1</font></p>
   <p align="left">Direction specifies the direction the door faces (the side in 
     which the handle is on the left) and also the direction it opens. These are 
     the values:<br>
@@ -572,14 +574,15 @@
     7 - faces back, opens back<br>
     8 - faces back, opens front</p>
   <p align="left">The default door speed is 75; you can also specify 0 for the 
-    speed to use the system default.<br>
+    speed to use the system default. The open parameter determines if the door 
+    should be opened on start; default is false.<br>
   </p>
   <p align="left"><strong>16. AddStairsDoor</strong> - adds a textured door for 
     the specified stairwell, in a location relative to the stairwell's center. 
     This also performs a wall cut on that area (this must be called after the 
     associated wall is created)<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsDoor <em> 
-    number, opensound, closesound, texturename, thickness</em>, <em>direction, 
+    number, opensound, closesound, open, texturename, thickness</em>, <em>direction, 
     speed, CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>, <em>voffset</em>, 
     <em>tw</em>, <em>th</em></font></p>
   <p align="left">Number specifies the stairwell number. Direction specifies the 
@@ -960,6 +963,15 @@
     y, z<br>
     </font>Example: <font size="2" face="Courier New, Courier, mono">MusicPosition 
     = 0, 8, 0</font></p>
+  <p align="left"><strong>47. DepartureDelay</strong> - sets the time in seconds 
+    that the elevator waits before proceeding to the next floor. Default is 0.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">DepartureDelay = 
+    <em>1</em> </font></p>
+  <p align="left"><strong>48. ArrivalDelay</strong> - sets the time in seconds 
+    that the elevator waits before opening the doors after arriving at a floor. 
+    The default is 0. Note that a value greater than 0 will switch off the LevelingOpen 
+    setting.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">ArrivalDelay = <em>0.5</em></font></p>
   <p align="left"><strong></strong></p>
   <p align="left"><strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
@@ -1287,7 +1299,7 @@
   <p align="left"><strong>19. AddDoor</strong> - adds a textured door in the specified 
     location, which moves with the elevator<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor <em> opensound, 
-    closesound, texturename, thickness</em>, <em>direction, speed, CenterX</em>, 
+    closesound, texturename, open, thickness</em>, <em>direction, speed, CenterX</em>, 
     <em>CenterZ</em>, <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>, 
     <em>th</em></font></p>
   <p align="left">Direction specifies the direction the door faces (the side in 

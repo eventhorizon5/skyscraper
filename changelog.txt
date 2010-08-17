@@ -42,6 +42,8 @@ Version 1.7 (2.0 Alpha 6)
 -Internal indicator vertical positioning fix
 -App now displays missing files after building load
 -Texture rendering fixes
+-added "open" parameter to doors
+-added DepartureDelay and ArrivalDelay elevator parameters
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------

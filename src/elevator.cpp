@@ -154,9 +154,10 @@ Elevator::Elevator(int number)
 	Parking = false;
 	MusicPosition = 0;
 	MusicOn = true;
-	DepartureDelay = sbs->confman->GetInt("Skyscraper.SBS.Elevator.DepartureDelay", 0);
-	ArrivalDelay = sbs->confman->GetInt("Skyscraper.SBS.Elevator.ArrivalDelay", 0);
+	DepartureDelay = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.DepartureDelay", 0.0);
+	ArrivalDelay = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.ArrivalDelay", 0.0);
 	WaitForTimer = false;
+	SoundsQueued = false;
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -1202,17 +1203,6 @@ void Elevator::MoveElevatorToFloor()
 			return;
 		}
 
-		//start departure timer
-		if (WaitForTimer == false && departure_delay->IsRunning() == false)
-		{
-			if (departure_delay->GetInterval() > 0)
-			{
-				WaitForTimer = true;
-				departure_delay->Start();
-				return;
-			}
-		}
-
 		if (sbs->Verbose)
 			Report("starting elevator movement procedure");
 
@@ -1350,18 +1340,6 @@ void Elevator::MoveElevatorToFloor()
 			}
 		}
 
-		//Play starting sounds
-		if (sbs->Verbose)
-			Report("playing starting sounds");
-		mainsound->Stop();
-		mainsound->Load(CarStartSound.GetData());
-		mainsound->Loop(false);
-		mainsound->Play();
-		motorsound->Stop();
-		motorsound->Load(MotorStartSound.GetData());
-		motorsound->Loop(false);
-		motorsound->Play();
-
 		//set interior directional indicators
 		UpdateDirectionalIndicators();
 
@@ -1375,6 +1353,41 @@ void Elevator::MoveElevatorToFloor()
 			Report("moving " + dir_string);
 		IsMoving = true;
 		OnFloor = false;
+		SoundsQueued = true;
+
+		//start departure timer
+		if (DepartureDelay > 0 && WaitForTimer == false)
+		{
+			if (sbs->Verbose)
+				Report("started departure delay");
+			WaitForTimer = true;
+			departure_delay->Start(DepartureDelay * 1000, false);
+			return;
+		}
+	}
+
+	if (SoundsQueued == true)
+	{
+		SoundsQueued = false;
+
+		if (DepartureDelay > 0)
+		{
+			if (sbs->Verbose)
+				Report("finished departure delay");
+			departure_delay->Stop();
+		}
+
+		//Play starting sounds
+		if (sbs->Verbose)
+			Report("playing starting sounds");
+		mainsound->Stop();
+		mainsound->Load(CarStartSound.GetData());
+		mainsound->Loop(false);
+		mainsound->Play();
+		motorsound->Stop();
+		motorsound->Load(MotorStartSound.GetData());
+		motorsound->Loop(false);
+		motorsound->Play();
 	}
 
 	if (EmergencyStop == true && Brakes == false)
@@ -1650,7 +1663,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//open doors if leveling open offset is not zero
-		if (LevelingOpen > 0 && FinishedMove == false)
+		if (LevelingOpen > 0 && FinishedMove == false && ArrivalDelay == 0)
 		{
 			if (Direction == -1 && (Destination - elevposition.y) < LevelingOpen)
 				FinishMove();
@@ -1682,13 +1695,21 @@ void Elevator::MoveElevatorToFloor()
 		return;
 
 	//start arrival timer
-	if (WaitForTimer == false && arrival_delay->IsRunning() == false)
+	if (ArrivalDelay > 0)
 	{
-		if (arrival_delay->GetInterval() > 0)
+		if (WaitForTimer == false && arrival_delay->IsRunning() == false)
 		{
+			if (sbs->Verbose)
+				Report("started arrival delay");
 			WaitForTimer = true;
-			arrival_delay->Start();
+			arrival_delay->Start(ArrivalDelay * 1000, false);
 			return;
+		}
+		else
+		{
+			if (sbs->Verbose)
+				Report("finished arrival delay");
+			arrival_delay->Stop();
 		}
 	}
 
