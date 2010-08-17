@@ -177,55 +177,42 @@ WallObject2::~WallObject2()
 		DeletePolygons();
 }
 
-int WallObject2::AddQuad(const char *name, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)
+csRef<iGeneralMeshSubMesh> WallObject2::AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th)
 {
 	//add a quad
-/*
-	//create texture mapping table
-	csVector2 table[] = {csVector2(tw2, th2), csVector2(0, th2), csVector2(tw2, 0), csVector2(0, 0)};
 
-	//create a quad, map the texture, and append to the mesh
-	CS::Geometry::TesselatedQuad wall (csVector3(ToRemote(x2), ToRemote(altitude), ToRemote(z2)), csVector3(ToRemote(x1), ToRemote(altitude), ToRemote(z1)), csVector3(ToRemote(x2), ToRemote(altitude + height), ToRemote(z2)));
-	CS::Geometry::TableTextureMapper mapper(table);
-	wall.SetMapper(&mapper);
-	wall.Append(mesh->GetFactory());
-
-	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
-	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(state->GetTriangleCount() * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, state->GetVertexCount());
-	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
-	for (int i = 0; i < state->GetTriangleCount(); i++)
-	{
-		triangleData[i] = state->GetTriangles()[i];
-	}
-	buffer->Release();
-	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, "");
-
-	int index = state->AddQuad(v1, v2, v3, v4);
-	CreateHandle(index);
-	SetPolygonName(index, name);
-	return index;*/
-	return 0;
+	CS::Geometry::csContour3 array;
+	array.Push(v1);
+	array.Push(v2);
+	array.Push(v3);
+	array.Push(v4);
+	csString name2 = ProcessName(name);
+	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th);
+	CreateHandle(handle);
+	return handle;
 }
 
-int WallObject2::AddPolygon(const char *name, csVector3 *vertices, int num)
-{/*
+csRef<iGeneralMeshSubMesh> WallObject2::AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th)
+{
 	//create a generic polygon
-	int index = state->AddPolygon(vertices, num);
-	CreateHandle(index);
-	SetPolygonName(index, name);
-	return index;*/
-	return 0;
+	CS::Geometry::csContour3 array;
+	for (int i = 0; i < num; i++)
+		array.Push(vertices[i]);
+	csString name2 = ProcessName(name);
+	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th);
+	CreateHandle(handle);
+	return handle;
 }
 
-void WallObject2::CreateHandle(int index)
+void WallObject2::CreateHandle(csRef<iGeneralMeshSubMesh> handle)
 {
 	//create a polygon handle
-	//handles.Push(index);
+	handles.Push(handle);
 }
 
-void WallObject2::SetPolygonName(int index, const char *name)
-{/*
-	//set polygon name
+const char* WallObject2::ProcessName(const char *name)
+{
+	//process name for use
 	csString name_modified = name;
 
 	//strip off object ID from name if it exists
@@ -238,43 +225,47 @@ void WallObject2::SetPolygonName(int index, const char *name)
 	num = Number;
 	newname.Append(num + ")");
 	newname.Append(name_modified);
-
-	//set polygon name
-	state->SetPolygonName(csPolygonRange(index, index), newname);*/
+	return newname;
 }
 
+/*void WallObject2::SetPolygonName(int index, const char *name)
+{
+	//set polygon name
+	state->SetPolygonName(csPolygonRange(index, index), newname);
+}*/
+
 void WallObject2::DeletePolygons()
-{/*
+{
 	//delete polygons and handles
 	
 	for (int i = 0; i < handles.GetSize(); i++)
 	{
-		if (handles[i] > -1)
+		if (handles[i])
 		{
-			state->RemovePolygon(handles[i]);
-			int tmphandle = handles[i];
-			handles[i] = -1;
-			ReindexPolygons(tmphandle);
+			state->DeleteSubMesh(handles[i]);
+			//int tmphandle = handles[i];
+			handles[i] = 0;
+			//ReindexPolygons(tmphandle);
 		}
 	}
 	handles.DeleteAll();
 
 	//recreate colliders
 	sbs->DeleteColliders(meshwrapper);
-	sbs->CreateColliders(meshwrapper);*/
+	sbs->CreateColliders(meshwrapper);
 }
 
-void WallObject2::DeletePolygon(int index, bool recreate_colliders)
+void WallObject2::DeletePolygon(csRef<iGeneralMeshSubMesh> handle, bool recreate_colliders)
 {
 	//delete a single polygon
-/*
+
 	for (int i = 0; i < handles.GetSize(); i++)
 	{
-		if (handles[i] == index)
+		if (handles[i] == handle)
 		{
-			state->RemovePolygon(index);
-			handles[i] = -1;
-			ReindexPolygons(index);
+			state->DeleteSubMesh(handle);
+			handles[i] = 0;
+			//ReindexPolygons(index);
 			handles.DeleteIndex(i);
 			return;
 		}
@@ -292,7 +283,7 @@ void WallObject2::ReindexPolygons(int deleted_index)
 {
 	//reindex all polygon indices in the given wall array
 
-	for (int i = 0; i < parent_array->GetSize(); i++)
+	/*for (int i = 0; i < parent_array->GetSize(); i++)
 	{
 		for (int j = 0; j < parent_array->Get(i)->handles.GetSize(); j++)
 		{

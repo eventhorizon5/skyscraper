@@ -300,7 +300,7 @@ public:
 	int RegisterObject(Object *object);
 	bool UnregisterObject(int number);
 	void GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1, csVector3 &v2, csVector3 &v3);
-	//csVector2* GetTextureMapping(
+	void GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, csVector3 &v2, csVector3 &v3);
 	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
 	csVector3 GetWallExtents(csRef<iThingFactoryState> state, const char *name, float altitude,  bool get_max);
 	csVector3 GetPolygonDirection(csPoly3D &polygon);
@@ -406,6 +406,7 @@ private:
 	void PrintBanner();
 	void CheckAutoAreas();
 	void BackupMapping();
+	bool ComputeTexelMap(csVector2 *texels, int &texel_count, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3);
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;

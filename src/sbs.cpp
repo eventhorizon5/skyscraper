@@ -1250,7 +1250,8 @@ int SBS::AddWallMain(WallObject2* wallobject, const char *name, const char *text
 
 	//create polygons and set names
 	int index = -1;
-	int tmpindex = -1;
+	csRef<iGeneralMeshSubMesh> tmpindex;
+	//int tmpindex = -1;
 	csString NewName;
 
 	if (DrawMainN == true)
@@ -1258,61 +1259,61 @@ int SBS::AddWallMain(WallObject2* wallobject, const char *name, const char *text
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.Append(":front");
-		tmpindex = wallobject->AddQuad(NewName, v1, v2, v3, v4); //front wall
+		tmpindex = wallobject->AddQuad(NewName, texture, v1, v2, v3, v4, tw, th); //front wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	if (DrawMainP == true)
 	{
 		NewName = name;
 		NewName.Append(":back");
-		tmpindex = wallobject->AddQuad(NewName, v6, v5, v8, v7); //back wall
+		tmpindex = wallobject->AddQuad(NewName, texture, v6, v5, v8, v7, tw, th); //back wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	if (DrawSideN == true)
 	{
 		NewName = name;
 		NewName.Append(":left");
 		if (axis == 1)
-			tmpindex = wallobject->AddQuad(NewName, v5, v1, v4, v8); //left wall
+			tmpindex = wallobject->AddQuad(NewName, texture, v5, v1, v4, v8, tw, th); //left wall
 		else
-			tmpindex = wallobject->AddQuad(NewName, v2, v6, v7, v3); //left wall
+			tmpindex = wallobject->AddQuad(NewName, texture, v2, v6, v7, v3, tw, th); //left wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	if (DrawSideP == true)
 	{
 		NewName = name;
 		NewName.Append(":right");
 		if (axis == 1)
-			tmpindex = wallobject->AddQuad(NewName, v2, v6, v7, v3); //right wall
+			tmpindex = wallobject->AddQuad(NewName, texture, v2, v6, v7, v3, tw, th); //right wall
 		else
-			tmpindex = wallobject->AddQuad(NewName, v5, v1, v4, v8); //right wall
+			tmpindex = wallobject->AddQuad(NewName, texture, v5, v1, v4, v8, tw, th); //right wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	if (DrawTop == true)
 	{
 		NewName = name;
 		NewName.Append(":top");
-		tmpindex = wallobject->AddQuad(NewName, v5, v6, v2, v1); //top wall
+		tmpindex = wallobject->AddQuad(NewName, texture, v5, v6, v2, v1, tw, th); //top wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	if (DrawBottom == true)
 	{
 		NewName = name;
 		NewName.Append(":bottom");
-		tmpindex = wallobject->AddQuad(NewName, v4, v3, v7, v8); //bottom wall
+		tmpindex = wallobject->AddQuad(NewName, texture, v4, v3, v7, v8, tw, th); //bottom wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	//set texture
 	/*if (TextureOverride == false && FlipTexture == false)
@@ -1668,7 +1669,8 @@ int SBS::AddFloorMain(WallObject2* wallobject, const char *name, const char *tex
 
 	//create polygons and set names
 	int index = -1;
-	int tmpindex = -1;
+	//int tmpindex = -1;
+	csRef<iGeneralMeshSubMesh> tmpindex;
 	csString NewName;
 
 	if (DrawMainN == true)
@@ -1676,55 +1678,55 @@ int SBS::AddFloorMain(WallObject2* wallobject, const char *name, const char *tex
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.Append(":front");
-		tmpindex = wallobject->AddQuad(NewName, v1, v2, v3, v4); //bottom wall
+		tmpindex = wallobject->AddQuad(NewName, texture, v1, v2, v3, v4, tw, th); //bottom wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	if (DrawMainP == true)
 	{
 		NewName = name;
 		NewName.Append(":back");
-		tmpindex = wallobject->AddQuad(NewName, v8, v7, v6, v5); //top wall
+		tmpindex = wallobject->AddQuad(NewName, texture, v8, v7, v6, v5, tw, th); //top wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	if (DrawSideN == true)
 	{
 		NewName = name;
 		NewName.Append(":left");
-		tmpindex = wallobject->AddQuad(NewName, v8, v5, v1, v4); //left wall
+		tmpindex = wallobject->AddQuad(NewName, texture, v8, v5, v1, v4, tw, th); //left wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	if (DrawSideP == true)
 	{
 		NewName = name;
 		NewName.Append(":right");
-		tmpindex = wallobject->AddQuad(NewName, v6, v7, v3, v2); //right wall
+		tmpindex = wallobject->AddQuad(NewName, texture, v6, v7, v3, v2, tw, th); //right wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	if (DrawTop == true)
 	{
 		NewName = name;
 		NewName.Append(":top");
-		tmpindex = wallobject->AddQuad(NewName, v5, v6, v2, v1); //front wall
+		tmpindex = wallobject->AddQuad(NewName, texture, v5, v6, v2, v1, tw, th); //front wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	if (DrawBottom == true)
 	{
 		NewName = name;
 		NewName.Append(":bottom");
-		tmpindex = wallobject->AddQuad(NewName, v7, v8, v4, v3); //back wall
+		tmpindex = wallobject->AddQuad(NewName, texture, v7, v8, v4, v3, tw, th); //back wall
 	}
-	if (tmpindex > index && index == -1)
-		index = tmpindex;
+	//if (tmpindex > index && index == -1)
+		//index = tmpindex;
 
 	//set texture
 	/*if (TextureOverride == false && FlipTexture == false)
@@ -3083,6 +3085,259 @@ void SBS::GetTextureMapping(iThingFactoryState *state, int index, csVector3 &v1,
 					int num = state->GetPolygonVertexCount(index);
 					if (atoi(number) < num)
 						string.ReplaceAll("z" + number, _gcvt(state->GetPolygonVertex(index, atoi(number)).z, 12, buffer));
+					else
+						string.ReplaceAll("z" + number, "0"); //number value out of bounds
+				}
+
+				//store values
+				if (i == 0)
+				{
+					if (j == 0)
+						v1.x = atof(string);
+					if (j == 1)
+						v2.x = atof(string);
+					if (j == 2)
+						v3.x = atof(string);
+				}
+				if (i == 1)
+				{
+					if (j == 0)
+						v1.y = atof(string);
+					if (j == 1)
+						v2.y = atof(string);
+					if (j == 2)
+						v3.y = atof(string);
+				}
+				if (i == 2)
+				{
+					if (j == 0)
+						v1.z = atof(string);
+					if (j == 1)
+						v2.z = atof(string);
+					if (j == 2)
+						v3.z = atof(string);
+				}
+			}
+		}
+	}
+}
+
+void SBS::GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, csVector3 &v2, csVector3 &v3)
+{
+	//returns texture mapping coordinates for the specified polygon index, in the v1, v2, and v3 vectors
+	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
+
+	//new version
+
+	if (MapMethod == 0)
+	{
+		//planar method
+
+		csVector2 x, y, z;
+		csPoly3D varray1, varray2;
+		bool rev_x = false, rev_z = false;
+
+		//copy vertices into polygon object
+		for (int i = 0; i < vertices.GetSize(); i++)
+			varray1.AddVertex(vertices[i]);
+
+		//determine the largest projection dimension (the dimension that the polygon is generally on;
+		//with a floor Y would be biggest)
+		csPlane3 plane = varray1.ComputePlane();
+		csVector3 normal = varray1.ComputeNormal();
+		int projDimension = 0; //x; faces left/right
+
+		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
+			projDimension = 1; //y biggest; faces up/down
+		else if (fabsf (normal.z) > fabsf (normal.x))
+			projDimension = 2; //z biggest; faces front/back
+
+		size_t selX = CS::Math::NextModulo3(projDimension);
+		size_t selY = CS::Math::NextModulo3(selX);
+
+		for (int i = 0; i < varray1.GetVertexCount(); i++)
+		{
+			csVector3 tmpvertex = *varray1.GetVertex(i);
+			varray2.AddVertex(tmpvertex[selX], tmpvertex[selY], 0);
+		}
+
+		if (RevX == true || (normal.x < 0.001 && normal.z < 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.z < -0.999)
+			rev_x = true;
+
+		if (RevZ == true || (normal.x > 0.001 && normal.z > 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.x > 0.999)
+			rev_z = true;
+
+		//get extents of both dimensions, since the polygon is projected in 2D as X and Y coordinates
+		csVector2 a, b;
+		a = GetExtents(varray2, 1);
+		b = GetExtents(varray2, 2);
+
+		//set the result 2D coordinates
+		if (projDimension == 0)
+		{
+			if (rev_z == false)
+			{
+				v1.z = b.x; //left
+				v2.z = b.y; //right
+				v3.z = b.y; //right
+			}
+			else
+			{
+				v1.z = b.y; //right
+				v2.z = b.x; //left
+				v3.z = b.x; //left
+			}
+			if (RevY == false)
+			{
+				v1.y = a.y; //top
+				v2.y = a.y; //top
+				v3.y = a.x; //bottom
+			}
+			else
+			{
+				v1.y = a.x; //bottom
+				v2.y = a.x; //bottom
+				v3.y = a.y; //top
+			}
+		}
+		if (projDimension == 1)
+		{
+			if (rev_x == false)
+			{
+				v1.x = b.x; //left
+				v2.x = b.y; //right
+				v3.x = b.y; //right
+			}
+			else
+			{
+				v1.x = b.y; //right
+				v2.x = b.x; //left
+				v3.x = b.x; //left
+			}
+			if (rev_z == false)
+			{
+				v1.z = a.y; //top
+				v2.z = a.y; //top
+				v3.z = a.x; //bottom
+			}
+			else
+			{
+				v1.z = a.x; //bottom
+				v2.z = a.x; //bottom
+				v3.z = a.y; //top
+			}
+		}
+		if (projDimension == 2)
+		{
+			if (rev_x == false)
+			{
+				v1.x = a.x; //left
+				v2.x = a.y; //right
+				v3.x = a.y; //right
+			}
+			else
+			{
+				v1.x = a.y; //right
+				v2.x = a.x; //left
+				v3.x = a.x; //left
+			}
+			if (RevY == false)
+			{
+				v1.y = b.y; //top
+				v2.y = b.y; //top
+				v3.y = b.x; //bottom
+			}
+			else
+			{
+				v1.y = b.x; //bottom
+				v2.y = b.x; //bottom
+				v3.y = b.y; //top
+			}
+		}
+
+		//use the plane equation to get the coordinate values of the dropped dimension
+		if (projDimension == 0)
+		{
+			v1.x = -((plane.B() * v1.y) + (plane.C() * v1.z) + plane.D()) / plane.A(); //get X
+			v2.x = -((plane.B() * v2.y) + (plane.C() * v2.z) + plane.D()) / plane.A(); //get X
+			v3.x = -((plane.B() * v3.y) + (plane.C() * v3.z) + plane.D()) / plane.A(); //get X
+
+			if (PlanarFlat == true)
+				v3.x = v2.x;
+		}
+		if (projDimension == 1)
+		{
+			v1.y = -((plane.A() * v1.x) + (plane.C() * v1.z) + plane.D()) / plane.B(); //get Y
+			v2.y = -((plane.A() * v2.x) + (plane.C() * v2.z) + plane.D()) / plane.B(); //get Y
+			v3.y = -((plane.A() * v3.x) + (plane.C() * v3.z) + plane.D()) / plane.B(); //get Y
+
+			if (PlanarFlat == true)
+				v3.y = v2.y;
+		}
+		if (projDimension == 2)
+		{
+			v1.z = -((plane.A() * v1.x) + (plane.B() * v1.y) + plane.D()) / plane.C(); //get Z
+			v2.z = -((plane.A() * v2.x) + (plane.B() * v2.y) + plane.D()) / plane.C(); //get Z
+			v3.z = -((plane.A() * v3.x) + (plane.B() * v3.y) + plane.D()) / plane.C(); //get Z
+
+			if (PlanarFlat == true)
+				v3.z = v2.z;
+		}
+	}
+	if (MapMethod == 1)
+	{
+		//index method
+		v1 = vertices[MapIndex[0]];
+		v2 = vertices[MapIndex[1]];
+		v3 = vertices[MapIndex[2]];
+	}
+	if (MapMethod == 2)
+	{
+		//advanced manual vertex method
+
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				csString string;
+				if (j == 0)
+					string = MapVerts1[i];
+				if (j == 1)
+					string = MapVerts2[i];
+				if (j == 2)
+					string = MapVerts3[i];
+
+				string.Downcase();
+
+				//find X component
+				int location = string.Find("x");
+				if (location >= 0)
+				{
+					csString number = string.GetAt(location + 1);
+					if (atoi(number) < vertices.GetSize())
+						string.ReplaceAll("x" + number, _gcvt(vertices[atoi(number)].x, 12, buffer));
+					else
+						string.ReplaceAll("x" + number, "0"); //number value out of bounds
+				}
+
+				//find Y component
+				location = string.Find("y");
+				if (location >= 0)
+				{
+					csString number = string.GetAt(location + 1);
+					if (atoi(number) < vertices.GetSize())
+						string.ReplaceAll("y" + number, _gcvt(vertices[atoi(number)].y, 12, buffer));
+					else
+						string.ReplaceAll("y" + number, "0"); //number value out of bounds
+				}
+
+				//find Z component
+				location = string.Find("z");
+				if (location >= 0)
+				{
+					csString number = string.GetAt(location + 1);
+					if (atoi(number) < vertices.GetSize())
+						string.ReplaceAll("z" + number, _gcvt(vertices[atoi(number)].z, 12, buffer));
 					else
 						string.ReplaceAll("z" + number, "0"); //number value out of bounds
 				}
@@ -5029,4 +5284,85 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	}
 
 	return submesh;
+}
+
+bool SBS::ComputeTexelMap(csVector2 *texels, int &texel_count, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3)
+{
+	//this is modified code from the Crystal Space thingmesh system, from the "plugins/mesh/thing/object/polygon.cpp" file.
+	//given an array of mesh vertices, this returns an array of texels (texels and texel_count) for the specified abstract 3-vertex UV definitions.
+
+	//original description:
+	// Some explanation. We have three points for
+	// which we know the uv coordinates. This gives:
+	//     P1 -> UV1
+	//     P2 -> UV2
+	//     P3 -> UV3
+	// P1, P2, and P3 are on the same plane so we can write:
+	//     P = P1 + lambda * (P2-P1) + mu * (P3-P1)
+	// For the same lambda and mu we can write:
+	//     UV = UV1 + lambda * (UV2-UV1) + mu * (UV3-UV1)
+	// What we want is Po, Pu, and Pv (also on the same
+	// plane) so that the following uv coordinates apply:
+	//     Po -> 0,0
+	//     Pu -> 1,0
+	//     Pv -> 0,1
+	// The UV equation can be written as follows:
+	//     U = U1 + lambda * (U2-U1) + mu * (U3-U1)
+	//     V = V1 + lambda * (V2-V1) + mu * (V3-V1)
+	// This is a matrix equation (2x2 matrix):
+	//     UV = UV1 + M * PL
+	// We have UV in this case and we need PL so we
+	// need to invert this equation:
+	//     (1/M) * (UV - UV1) = PL
+
+	csMatrix2 m (uv2.x - uv1.x, uv3.x - uv1.x, uv2.y - uv1.y, uv3.y - uv1.y);
+	float det = m.Determinant();
+
+	if (ABS(det) < 0.0001f)
+	{
+		if (Verbose)
+			ReportError("Warning: bad UV coordinates");
+
+		/*if (!((p1-p2) < SMALL_EPSILON))
+			SetTextureSpace(p1, p2, 1);
+		else if (!((p1-p3) < SMALL_EPSILON))
+			SetTextureSpace(p1, p3, 1);*/
+		return false;
+	}
+	else
+		m.Invert();
+
+	csVector2 pl;
+	csVector3 po, pu, pv;
+
+	// For (0,0) and Po
+	pl = m * (csVector2(0, 0) - uv1);
+	po = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
+
+	// For (1,0) and Pu
+	pl = m * (csVector2(1, 0) - uv1);
+	pu = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
+
+	// For (0,1) and Pv
+	pl = m * (csVector2(0, 1) - uv1);
+	pv = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
+
+	csMatrix3 m_tex;
+	csVector3 v_tex;
+	csTextureTrans::compute_texture_space(m_tex, v_tex, po, pu, (pu - po).Norm(), pv, (pv - po).Norm());
+	csTransform transform(m_tex, v_tex);
+
+	//create array for texel map
+	texel_count = vertices.GetSize();
+	texels = new csVector2[texel_count];
+	csVector3 texel_temp;
+
+	//transform matrix into texel map
+	for (int i = 0; i < texel_count; i++)
+	{
+		texel_temp = transform.Other2This(vertices[i]);
+		texels[i].x = texel_temp.x;
+		texels[i].y = texel_temp.y;
+	}
+	return true;
 }
