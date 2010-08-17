@@ -4823,6 +4823,32 @@ WallObject* SBS::GetWallObject(csArray<WallObject*> &wallarray, int polygon_inde
 	return 0;
 }
 
+WallObject2* SBS::CreateWallObject(csArray<WallObject2*> &array, csRef<iMeshWrapper> mesh, Object *parent, const char *name)
+{
+	//create a new polygon object in the given array
+
+	array.SetSize(array.GetSize() + 1);
+	array[array.GetSize() - 1] = new WallObject2(mesh);
+	array[array.GetSize() - 1]->name = name;
+	array[array.GetSize() - 1]->parent_array = &array;
+	array[array.GetSize() - 1]->SetValues(array[array.GetSize() - 1], parent, "Wall2", name, false);
+	return array[array.GetSize() - 1];
+}
+
+WallObject2* SBS::GetWallObject(csArray<WallObject2*> &wallarray, int polygon_index)
+{
+	//returns the wall object that contains the specified polygon index
+	/*for (int i = 0; i < wallarray.GetSize(); i++)
+	{
+		for (int j = 0; j < wallarray[i]->handles.GetSize(); j++)
+		{
+			if (wallarray[i]->handles[j] == polygon_index)
+				return wallarray[i];
+		}
+	}*/
+	return 0;
+}
+
 csString SBS::TruncateNumber(double value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
