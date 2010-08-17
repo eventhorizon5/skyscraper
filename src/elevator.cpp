@@ -153,7 +153,7 @@ Elevator::Elevator(int number)
 	Notified = false;
 	Parking = false;
 	MusicPosition = 0;
-	MusicOn = false;
+	MusicOn = true;
 	DepartureDelay = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.DepartureDelay", 0.0);
 	ArrivalDelay = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.ArrivalDelay", 0.0);
 	WaitForTimer = false;
@@ -1096,37 +1096,40 @@ void Elevator::MonitorLoop()
 	}
 
 	//play music sound if in elevator, or if doors open
-	if (musicsound->IsPlaying() == false && MusicOn == true)
+	if (Music != "")
 	{
-		if (InServiceMode() == false)
+		if (musicsound->IsPlaying() == false && MusicOn == true)
 		{
-			if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true)
+			if (InServiceMode() == false)
 			{
-				if (sbs->Verbose)
-					Report("playing music");
-		
-				if (MusicPosition == 0 && Height > 0)
-					MusicPosition = csVector3(0, Height, 0); //set default music position to elevator height
+				if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true)
+				{
+					if (sbs->Verbose)
+						Report("playing music");
 
-				musicsound->SetPosition(GetPosition() + MusicPosition);
-				musicsound->Loop(true);
-				musicsound->Play(false);
+					if (MusicPosition == 0 && Height > 0)
+						MusicPosition = csVector3(0, Height, 0); //set default music position to elevator height
+
+					musicsound->SetPosition(GetPosition() + MusicPosition);
+					musicsound->Loop(true);
+					musicsound->Play(false);
+				}
 			}
 		}
-	}
-	else
-	{
-		if ((MusicOn == false || InServiceMode() == true) && musicsound->IsPlaying() == true)
+		else
 		{
-			if (sbs->Verbose)
-				Report("stopping music");
-			musicsound->Pause();
-		}
-		else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
-		{
-			if (sbs->Verbose)
-				Report("stopping music");
-			musicsound->Pause();
+			if ((MusicOn == false || InServiceMode() == true) && musicsound->IsPlaying() == true)
+			{
+				if (sbs->Verbose)
+					Report("stopping music");
+				musicsound->Pause();
+			}
+			else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
+			{
+				if (sbs->Verbose)
+					Report("stopping music");
+				musicsound->Pause();
+			}
 		}
 	}
 
