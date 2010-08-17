@@ -3831,6 +3831,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(csString("data/") + temp2, true);
 
 		elev->Music = temp2;
+		elev->MusicOn = true;
 	}
 	if (LineData.Slice(0, 13).CompareNoCase("floorskiptext") == true)
 	{

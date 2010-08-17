@@ -153,7 +153,7 @@ Elevator::Elevator(int number)
 	Notified = false;
 	Parking = false;
 	MusicPosition = 0;
-	MusicOn = true;
+	MusicOn = false;
 	DepartureDelay = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.DepartureDelay", 0.0);
 	ArrivalDelay = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.ArrivalDelay", 0.0);
 	WaitForTimer = false;
