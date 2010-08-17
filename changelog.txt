@@ -44,6 +44,7 @@ Version 1.7 (2.0 Alpha 6)
 -Texture rendering fixes
 -added "open" parameter to doors
 -added DepartureDelay and ArrivalDelay elevator parameters
+-Error reporting system is now more verbose about certain errors
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------
