@@ -99,7 +99,7 @@ public:
 	bool UseMessageSounds; //true if direction message sounds should be used
 	csVector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
-	csArray<WallObject*> elevator_walls;
+	csArray<WallObject2*> elevator_walls;
 	float CameraOffset; //camera vertical offset for movement
 	int ParkingFloor; //floor to automatically park the elevator on when idle
 	float ParkingDelay; //time to wait in idle mode before parking
@@ -123,7 +123,7 @@ public:
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
-		csRef<iThingFactoryState> Elevator_state;
+		csRef<iGeneralFactoryState> Elevator_state;
 		csRef<iMovable> Elevator_movable;
 
 	//functions
@@ -140,8 +140,8 @@ public:
 	int GetFloor();
 	void MonitorLoop();
 	const csVector3 GetPosition();
-	WallObject* AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
-	WallObject* AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
+	WallObject2* AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
+	WallObject2* AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
 	Object* AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	Object* CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, float spacingX, float spacingY, float tw, float th);
 	void DumpQueues();

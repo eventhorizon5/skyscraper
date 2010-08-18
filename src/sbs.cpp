@@ -896,10 +896,10 @@ int SBS::AddWallMain(Object *parent, csRef<iMeshWrapper> mesh, const char *name,
 	return result;
 }
 
-int SBS::AddWallMain2(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
+int SBS::AddWallMain2(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	WallObject2 *object = new WallObject2(mesh, parent, true);
-	int result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th);
+	int result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
 	delete object;
 	return result;
 }
@@ -1130,7 +1130,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	return index;
 }
 
-int SBS::AddWallMain(WallObject2* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
+int SBS::AddWallMain(WallObject2* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	//genmesh version
 
@@ -1238,114 +1238,109 @@ int SBS::AddWallMain(WallObject2* wallobject, const char *name, const char *text
 		}
 	}
 
-	//convert positions to remote (CS) values
-	v1 = ToRemote(v1);
-	v2 = ToRemote(v2);
-	v3 = ToRemote(v3);
-	v4 = ToRemote(v4);
-	v5 = ToRemote(v5);
-	v6 = ToRemote(v6);
-	v7 = ToRemote(v7);
-	v8 = ToRemote(v8);
-
 	//create polygons and set names
-	int index = -1;
-	csRef<iGeneralMeshSubMesh> tmpindex;
-	//int tmpindex = -1;
-	csString NewName;
+	csString NewName, texture2 = texture;
+	float tw2 = tw, th2 = th;
+
+	if (FlipTexture == true)
+		ProcessTextureFlip(tw, th);
 
 	if (DrawMainN == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[0];
+			th2 = heightscale[0];
+		}
+		if (TextureOverride == true)
+			texture2 = mainnegtex;
+
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.Append(":front");
-		tmpindex = wallobject->AddQuad(NewName, texture, v1, v2, v3, v4, tw, th); //front wall
+		wallobject->AddQuad(NewName, texture2, v1, v2, v3, v4, tw2, th2, autosize); //front wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
 
 	if (DrawMainP == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[1];
+			th2 = heightscale[1];
+		}
+		if (TextureOverride == true)
+			texture2 = mainpostex;
+
 		NewName = name;
 		NewName.Append(":back");
-		tmpindex = wallobject->AddQuad(NewName, texture, v6, v5, v8, v7, tw, th); //back wall
+		wallobject->AddQuad(NewName, texture2, v6, v5, v8, v7, tw2, th2, autosize); //back wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
 
 	if (DrawSideN == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[2];
+			th2 = heightscale[2];
+		}
+		if (TextureOverride == true)
+			texture2 = sidenegtex;
+
 		NewName = name;
 		NewName.Append(":left");
 		if (axis == 1)
-			tmpindex = wallobject->AddQuad(NewName, texture, v5, v1, v4, v8, tw, th); //left wall
+			wallobject->AddQuad(NewName, texture2, v5, v1, v4, v8, tw2, th2, autosize); //left wall
 		else
-			tmpindex = wallobject->AddQuad(NewName, texture, v2, v6, v7, v3, tw, th); //left wall
+			wallobject->AddQuad(NewName, texture2, v2, v6, v7, v3, tw2, th2, autosize); //left wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
 
 	if (DrawSideP == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[3];
+			th2 = heightscale[3];
+		}
+		if (TextureOverride == true)
+			texture2 = sidepostex;
+
 		NewName = name;
 		NewName.Append(":right");
 		if (axis == 1)
-			tmpindex = wallobject->AddQuad(NewName, texture, v2, v6, v7, v3, tw, th); //right wall
+			wallobject->AddQuad(NewName, texture2, v2, v6, v7, v3, tw2, th2, autosize); //right wall
 		else
-			tmpindex = wallobject->AddQuad(NewName, texture, v5, v1, v4, v8, tw, th); //right wall
+			wallobject->AddQuad(NewName, texture2, v5, v1, v4, v8, tw2, th2, autosize); //right wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
 
 	if (DrawTop == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[4];
+			th2 = heightscale[4];
+		}
+		if (TextureOverride == true)
+			texture2 = toptex;
+
 		NewName = name;
 		NewName.Append(":top");
-		tmpindex = wallobject->AddQuad(NewName, texture, v5, v6, v2, v1, tw, th); //top wall
+		wallobject->AddQuad(NewName, texture2, v5, v6, v2, v1, tw2, th2, autosize); //top wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
 
 	if (DrawBottom == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[5];
+			th2 = heightscale[5];
+		}
+		if (TextureOverride == true)
+			texture2 = bottomtex;
+
 		NewName = name;
 		NewName.Append(":bottom");
-		tmpindex = wallobject->AddQuad(NewName, texture, v4, v3, v7, v8, tw, th); //bottom wall
+		wallobject->AddQuad(NewName, texture2, v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
-
-	//set texture
-	/*if (TextureOverride == false && FlipTexture == false)
-		SetTexture2(wallobject->state, index, texture, true, tw, th);
-	else
-	{
-		ProcessTextureFlip(tw, th);
-		int endindex = index + GetDrawWallsCount();
-		if (TextureOverride == true)
-		{
-			for (int i = index; i < endindex; i++)
-			{
-				if (i - index == 0)
-					SetTexture2(wallobject->state, i, mainnegtex.GetData(), false, widthscale[0], heightscale[0]);
-				if (i - index == 1)
-					SetTexture2(wallobject->state, i, mainpostex.GetData(), false, widthscale[1], heightscale[1]);
-				if (i - index == 2)
-					SetTexture2(wallobject->state, i, sidenegtex.GetData(), false, widthscale[2], heightscale[2]);
-				if (i - index == 3)
-					SetTexture2(wallobject->state, i, sidepostex.GetData(), false, widthscale[3], heightscale[3]);
-				if (i - index == 4)
-					SetTexture2(wallobject->state, i, toptex.GetData(), false, widthscale[4], heightscale[4]);
-				if (i - index == 5)
-					SetTexture2(wallobject->state, i, bottomtex.GetData(), false, widthscale[5], heightscale[5]);
-			}
-		}
-		else
-		{
-			for (int i = index; i < endindex; i++)
-				SetTexture2(wallobject->state, i, texture, false, widthscale[i - index], heightscale[i - index]);
-		}
-	}*/
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)
@@ -1354,7 +1349,7 @@ int SBS::AddWallMain(WallObject2* wallobject, const char *name, const char *text
 		CreateColliders(wallobject->meshwrapper);
 	}
 
-	return index;
+	return 0;
 }
 
 int SBS::AddFloorMain(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th)
@@ -1365,10 +1360,10 @@ int SBS::AddFloorMain(Object *parent, csRef<iMeshWrapper> mesh, const char *name
 	return result;
 }
 
-int SBS::AddFloorMain2(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th)
+int SBS::AddFloorMain2(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	WallObject2 *object = new WallObject2(mesh, parent, true);
-	int result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th);
+	int result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, autosize);
 	delete object;
 	return result;
 }
@@ -1571,7 +1566,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 	return index;
 }
 
-int SBS::AddFloorMain(WallObject2* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th)
+int SBS::AddFloorMain(WallObject2* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 	//genmesh version
@@ -1657,108 +1652,103 @@ int SBS::AddFloorMain(WallObject2* wallobject, const char *name, const char *tex
 		v4.y -= thickness;
 	}
 
-	//convert positions to remote (CS) values
-	v1 = ToRemote(v1);
-	v2 = ToRemote(v2);
-	v3 = ToRemote(v3);
-	v4 = ToRemote(v4);
-	v5 = ToRemote(v5);
-	v6 = ToRemote(v6);
-	v7 = ToRemote(v7);
-	v8 = ToRemote(v8);
-
 	//create polygons and set names
-	int index = -1;
-	//int tmpindex = -1;
-	csRef<iGeneralMeshSubMesh> tmpindex;
-	csString NewName;
+	csString NewName, texture2 = texture;
+	float tw2 = tw, th2 = th;
+
+	if (FlipTexture == true)
+		ProcessTextureFlip(tw, th);
 
 	if (DrawMainN == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[0];
+			th2 = heightscale[0];
+		}
+		if (TextureOverride == true)
+			texture2 = mainnegtex;
+
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.Append(":front");
-		tmpindex = wallobject->AddQuad(NewName, texture, v1, v2, v3, v4, tw, th); //bottom wall
+		wallobject->AddQuad(NewName, texture2, v1, v2, v3, v4, tw2, th2, autosize); //bottom wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
 
 	if (DrawMainP == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[1];
+			th2 = heightscale[1];
+		}
+		if (TextureOverride == true)
+			texture2 = mainpostex;
+
 		NewName = name;
 		NewName.Append(":back");
-		tmpindex = wallobject->AddQuad(NewName, texture, v8, v7, v6, v5, tw, th); //top wall
+		wallobject->AddQuad(NewName, texture2, v8, v7, v6, v5, tw2, th2, autosize); //top wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
 
 	if (DrawSideN == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[2];
+			th2 = heightscale[2];
+		}
+		if (TextureOverride == true)
+			texture2 = sidenegtex;
+
 		NewName = name;
 		NewName.Append(":left");
-		tmpindex = wallobject->AddQuad(NewName, texture, v8, v5, v1, v4, tw, th); //left wall
+		wallobject->AddQuad(NewName, texture2, v8, v5, v1, v4, tw2, th2, autosize); //left wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
 
 	if (DrawSideP == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[3];
+			th2 = heightscale[3];
+		}
+		if (TextureOverride == true)
+			texture2 = sidepostex;
+
 		NewName = name;
 		NewName.Append(":right");
-		tmpindex = wallobject->AddQuad(NewName, texture, v6, v7, v3, v2, tw, th); //right wall
+		wallobject->AddQuad(NewName, texture2, v6, v7, v3, v2, tw2, th2, autosize); //right wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
 
 	if (DrawTop == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[4];
+			th2 = heightscale[4];
+		}
+		if (TextureOverride == true)
+			texture2 = toptex;
+
 		NewName = name;
 		NewName.Append(":top");
-		tmpindex = wallobject->AddQuad(NewName, texture, v5, v6, v2, v1, tw, th); //front wall
+		wallobject->AddQuad(NewName, texture2, v5, v6, v2, v1, tw2, th2, autosize); //front wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
 
 	if (DrawBottom == true)
 	{
+		if (FlipTexture == true)
+		{
+			tw2 = widthscale[5];
+			th2 = heightscale[5];
+		}
+		if (TextureOverride == true)
+			texture2 = bottomtex;
+
 		NewName = name;
 		NewName.Append(":bottom");
-		tmpindex = wallobject->AddQuad(NewName, texture, v7, v8, v4, v3, tw, th); //back wall
+		wallobject->AddQuad(NewName, texture2, v7, v8, v4, v3, tw2, th2, autosize); //back wall
 	}
-	//if (tmpindex > index && index == -1)
-		//index = tmpindex;
-
-	//set texture
-	/*if (TextureOverride == false && FlipTexture == false)
-		SetTexture2(wallobject->state, index, texture, true, tw, th);
-	else
-	{
-		ProcessTextureFlip(tw, th);
-		int endindex = index + GetDrawWallsCount();
-		if (TextureOverride == true)
-		{
-			for (int i = index; i < endindex; i++)
-			{
-				if (i - index == 0)
-					SetTexture2(wallobject->state, i, mainnegtex.GetData(), false, widthscale[0], heightscale[0]);
-				if (i - index == 1)
-					SetTexture2(wallobject->state, i, mainpostex.GetData(), false, widthscale[1], heightscale[1]);
-				if (i - index == 2)
-					SetTexture2(wallobject->state, i, sidenegtex.GetData(), false, widthscale[2], heightscale[2]);
-				if (i - index == 3)
-					SetTexture2(wallobject->state, i, sidepostex.GetData(), false, widthscale[3], heightscale[3]);
-				if (i - index == 4)
-					SetTexture2(wallobject->state, i, toptex.GetData(), false, widthscale[4], heightscale[4]);
-				if (i - index == 5)
-					SetTexture2(wallobject->state, i, bottomtex.GetData(), false, widthscale[5], heightscale[5]);
-			}
-		}
-		else
-		{
-			for (int i = index; i < endindex; i++)
-				SetTexture2(wallobject->state, i, texture, false, widthscale[i - index], heightscale[i - index]);
-		}
-	}*/
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)
@@ -1767,7 +1757,7 @@ int SBS::AddFloorMain(WallObject2* wallobject, const char *name, const char *tex
 		CreateColliders(wallobject->meshwrapper);
 	}
 
-	return index;
+	return 0;
 }
 
 void SBS::Report (const char* msg, ...)
@@ -1964,6 +1954,144 @@ int SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *te
 	return CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom);
 }
 
+void SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+{
+	//create 4 walls
+
+	csString NewName;
+
+	if (inside == true)
+	{
+		//generate a box visible from the inside
+
+		NewName = name;
+		NewName.Append(":inside");
+
+		csBox3 box (csVector3(ToRemote(x1) * HorizScale, ToRemote(voffset), ToRemote(z1) * HorizScale), csVector3(ToRemote(x2) * HorizScale, ToRemote(voffset + height_in), ToRemote(z2) * HorizScale));
+		wallobject->AddQuad( //front
+			NewName,
+			texture,
+			box.GetCorner(CS_BOX_CORNER_xyz),
+			box.GetCorner(CS_BOX_CORNER_Xyz),
+			box.GetCorner(CS_BOX_CORNER_XYz),
+			box.GetCorner(CS_BOX_CORNER_xYz), tw, th, true);
+		wallobject->AddQuad( //right
+			NewName,
+			texture,
+			box.GetCorner(CS_BOX_CORNER_Xyz),
+			box.GetCorner(CS_BOX_CORNER_XyZ),
+			box.GetCorner(CS_BOX_CORNER_XYZ),
+			box.GetCorner(CS_BOX_CORNER_XYz), tw, th, true);
+		wallobject->AddQuad( //back
+			NewName,
+			texture,
+			box.GetCorner(CS_BOX_CORNER_XyZ),
+			box.GetCorner(CS_BOX_CORNER_xyZ),
+			box.GetCorner(CS_BOX_CORNER_xYZ),
+			box.GetCorner(CS_BOX_CORNER_XYZ), tw, th, true);
+		wallobject->AddQuad( //left
+			NewName,
+			texture,
+			box.GetCorner(CS_BOX_CORNER_xyZ),
+			box.GetCorner(CS_BOX_CORNER_xyz),
+			box.GetCorner(CS_BOX_CORNER_xYz),
+			box.GetCorner(CS_BOX_CORNER_xYZ), tw, th, true);
+		if (bottom == true)
+		{
+			wallobject->AddQuad( //bottom
+				NewName,
+				texture,
+				box.GetCorner(CS_BOX_CORNER_xyZ),
+				box.GetCorner(CS_BOX_CORNER_XyZ),
+				box.GetCorner(CS_BOX_CORNER_Xyz),
+				box.GetCorner(CS_BOX_CORNER_xyz), tw, th, true);
+		}
+		if (top == true)
+		{
+			wallobject->AddQuad( //top
+				NewName,
+				texture,
+				box.GetCorner(CS_BOX_CORNER_xYz),
+				box.GetCorner(CS_BOX_CORNER_XYz),
+				box.GetCorner(CS_BOX_CORNER_XYZ),
+				box.GetCorner(CS_BOX_CORNER_xYZ), tw, th, true);
+		}
+	}
+
+	if (outside == true)
+	{
+		NewName = name;
+		NewName.Append(":outside");
+
+		csBox3 box (csVector3(ToRemote(x1) * HorizScale, ToRemote(voffset), ToRemote(z1) * HorizScale), csVector3(ToRemote(x2) * HorizScale, ToRemote(voffset + height_in), ToRemote(z2) * HorizScale));
+		wallobject->AddQuad( //front
+			NewName,
+			texture,
+			box.GetCorner(CS_BOX_CORNER_xYz),
+			box.GetCorner(CS_BOX_CORNER_XYz),
+			box.GetCorner(CS_BOX_CORNER_Xyz),
+			box.GetCorner(CS_BOX_CORNER_xyz), tw, th, true);
+		wallobject->AddQuad( //right
+			NewName,
+			texture,
+			box.GetCorner(CS_BOX_CORNER_XYz),
+			box.GetCorner(CS_BOX_CORNER_XYZ),
+			box.GetCorner(CS_BOX_CORNER_XyZ),
+			box.GetCorner(CS_BOX_CORNER_Xyz), tw, th, true);
+		wallobject->AddQuad( //back
+			NewName,
+			texture,
+			box.GetCorner(CS_BOX_CORNER_XYZ),
+			box.GetCorner(CS_BOX_CORNER_xYZ),
+			box.GetCorner(CS_BOX_CORNER_xyZ),
+			box.GetCorner(CS_BOX_CORNER_XyZ), tw, th, true);
+		wallobject->AddQuad( //left
+			NewName,
+			texture,
+			box.GetCorner(CS_BOX_CORNER_xYZ),
+			box.GetCorner(CS_BOX_CORNER_xYz),
+			box.GetCorner(CS_BOX_CORNER_xyz),
+			box.GetCorner(CS_BOX_CORNER_xyZ), tw, th, true);
+		if (bottom == true)
+		{
+			wallobject->AddQuad( //bottom
+				NewName,
+				texture,
+				box.GetCorner(CS_BOX_CORNER_xyz),
+				box.GetCorner(CS_BOX_CORNER_Xyz),
+				box.GetCorner(CS_BOX_CORNER_XyZ),
+				box.GetCorner(CS_BOX_CORNER_xyZ), tw, th, true);
+		}
+		if (top == true)
+		{
+			wallobject->AddQuad( //top
+				NewName,
+				texture,
+				box.GetCorner(CS_BOX_CORNER_xYZ),
+				box.GetCorner(CS_BOX_CORNER_XYZ),
+				box.GetCorner(CS_BOX_CORNER_XYz),
+				box.GetCorner(CS_BOX_CORNER_xYz), tw, th, true);
+		}
+	}
+}
+
+void SBS::CreateWallBox2(WallObject2* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+{
+	//create 4 walls from a central point
+
+	float x1;
+	float x2;
+	float z1;
+	float z2;
+
+	x1 = CenterX - (WidthX / 2);
+	x2 = CenterX + (WidthX / 2);
+	z1 = CenterZ - (LengthZ / 2);
+	z2 = CenterZ + (LengthZ / 2);
+
+	CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom);
+}
+
 void SBS::InitMeshes()
 {
 	//create object meshes
@@ -2079,7 +2207,90 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 	return firstidx;
 }
 
+int SBS::AddCustomWall(WallObject2* wallobject, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
+{
+	//Adds a wall from a specified array of 3D vectors
+
+	int num;
+	csPoly3D varray1 = varray;
+	csPoly3D varray2;
+
+	//get number of stored vertices
+	num = varray.GetVertexCount();
+
+	//create a second array with reversed vertices
+	for (int i = num - 1; i >= 0; i--)
+		varray2.AddVertex(varray1[i]);
+
+	//create 2 polygons (front and back) from the vertex array
+
+	//get polygon native direction
+	csVector3 direction = GetPolygonDirection(varray1);
+
+	//if the polygon is facing right, down or to the back, reverse faces
+	//to keep the vertices clockwise
+	csPoly3D tmppoly;
+	if (direction.x == 1 || direction.y == -1 || direction.z == 1)
+	{
+		tmppoly = varray1;
+		varray1 = varray2;
+		varray2 = tmppoly;
+	}
+
+	//get texture sizing info
+	float tw2 = tw, th2 = th;
+	float mw, mh;
+	if (GetTextureTiling(texture, mw, mh))
+	{
+		//multiply the tiling parameters (tw and th) by
+		//the stored multipliers for that texture
+		tw2 = tw * mw;
+		th2 = th * mh;
+	}
+
+	//add the polygons
+	if (DrawMainN == true)
+	{
+		csString NewName;
+		NewName = name;
+		NewName.Append(":0");
+		wallobject->AddPolygon(NewName, texture, varray1.GetVertices(), num, tw2, th2, true);
+	}
+	if (DrawMainP == true)
+	{
+		csString NewName;
+		NewName = name;
+		NewName.Append(":1");
+		wallobject->AddPolygon(NewName, texture, varray2.GetVertices(), num, tw2, th2, true);
+	}
+
+	//recreate colliders if specified
+	if (RecreateColliders == true)
+	{
+		DeleteColliders(wallobject->meshwrapper);
+		CreateColliders(wallobject->meshwrapper);
+	}
+
+	return 0;
+}
+
 int SBS::AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
+{
+	//Adds a triangular wall with the specified dimensions
+	csPoly3D varray;
+
+	//set up temporary vertex array
+	varray.AddVertex(x1, y1, z1);
+	varray.AddVertex(x2, y2, z2);
+	varray.AddVertex(x3, y3, z3);
+
+	//pass data on to AddCustomWall function
+	int firstidx = AddCustomWall(wallobject, name, texture, varray, tw, th);
+
+	return firstidx;
+}
+
+int SBS::AddTriangleWall(WallObject2* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions
 	csPoly3D varray;
@@ -2455,75 +2666,6 @@ void SBS::SetTexture(csRef<iThingFactoryState> mesh, int index, const char *text
 				csVector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
 				v3,
 				csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2));
-	}
-}
-
-void SBS::SetTexture2(csRef<iMeshWrapper> mesh, const char *texture, bool has_thickness, float tw, float th)
-{
-	//sets texture for a range of polygons
-	//genmesh version
-
-	csString texname = texture;
-	bool result;
-	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
-	if (!result)
-		texname = "Default";
-
-	if (tw == 0)
-		tw = 1;
-	if (th == 0)
-		th = 1;
-
-	float tw2 = tw, th2 = th;
-
-	float mw, mh;
-	if (GetTextureTiling(texname.GetData(), mw, mh))
-	{
-		//multiply the tiling parameters (tw and th) by
-		//the stored multipliers for that texture
-		tw2 = tw * mw;
-		th2 = th * mh;
-	}
-
-	/*int endindex;
-	if (has_thickness == true)
-		endindex = index + GetDrawWallsCount() - 1;
-	else
-		endindex = index;*/
-
-	if (TextureOverride == false)
-	{
-		//for (int i = index; i <= endindex; i++)
-		//{
-			//create texture mapping table
-			csVector2 table[] = {csVector2(tw2, th2), csVector2(0, th2), csVector2(tw2, 0), csVector2(0, 0)};
-
-			//mesh->SetPolygonMaterial(csPolygonRange(i, i), material);
-			//set UV texture mapping
-			csVector3 v1, v2, v3;
-			//GetTextureMapping(mesh, i, v1, v2, v3);
-			/*mesh->SetPolygonTextureMapping (csPolygonRange(i, i),
-				v1,
-				csVector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
-				v2,
-				csVector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
-				v3,
-				csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2));*/
-		//}
-	}
-	else
-	{
-			//mesh->SetPolygonMaterial(csPolygonRange(index, index), material);
-			//set UV texture mapping
-			csVector3 v1, v2, v3;
-			//GetTextureMapping(mesh, index, v1, v2, v3);
-			/*mesh->SetPolygonTextureMapping (csPolygonRange(index, index),
-				v1,
-				csVector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
-				v2,
-				csVector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
-				v3,
-				csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2));*/
 	}
 }
 
@@ -4756,25 +4898,37 @@ csVector2 SBS::CalculateSizing(const char *texture, csVector2 x, csVector2 y, cs
 	bool force_enable, force_mode;
 	GetTextureForce(texture, force_enable, force_mode);
 
-	if (z.x == z.y)
-		tw2 = AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
-	if (x.x == x.y)
-		tw2 = AutoSize(z.x, z.y, true, tw, force_enable, force_mode);
-	if ((z.x != z.y) && (x.x != x.y))
+	bool is_wall = true;
+	if (fabs(y.y - y.x) < fabs(x.y - x.x) && fabs(y.y - y.x) < fabs(z.y - z.x))
+	is_wall = false;
+
+	if (is_wall)
 	{
-		//calculate diagonals
-		float tempw1, tempw2;
-		if (x.x > x.y)
-			tempw1 = x.x - x.y;
-		else
-			tempw1 = x.y - x.x;
-		if (z.x > z.y)
-			tempw2 = z.x - z.y;
-		else
-			tempw2 = z.y - z.x;
-		tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
+		if (z.x == z.y)
+			tw2 = AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
+		if (x.x == x.y)
+			tw2 = AutoSize(z.x, z.y, true, tw, force_enable, force_mode);
+		if ((z.x != z.y) && (x.x != x.y))
+		{
+			//calculate diagonals
+			float tempw1, tempw2;
+			if (x.x > x.y)
+				tempw1 = x.x - x.y;
+			else
+				tempw1 = x.y - x.x;
+			if (z.x > z.y)
+				tempw2 = z.x - z.y;
+			else
+				tempw2 = z.y - z.x;
+			tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
+		}
+		th2 = AutoSize(y.x, y.y, false, th, force_enable, force_mode);
 	}
-	th2 = AutoSize(y.x, y.y, false, th, force_enable, force_mode);
+	else
+	{
+		tw2 = sbs->AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
+		th2 = sbs->AutoSize(z.x, z.y, false, th, force_enable, force_mode);
+	}
 
 	//return results
 	return csVector2(tw2, th2);
@@ -5201,7 +5355,7 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 	return mesh;
 }
 
-csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th)
+csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -5220,20 +5374,47 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	if (th == 0)
 		th = 1;
 
+	//get autosize information
+	csVector2 xextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 1);
+	csVector2 yextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 2);
+	csVector2 zextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 3);
+
+	csVector2 sizing = sbs->CalculateSizing(texture, xextents, yextents, zextents, tw, th);
+
 	//get texture tiling information
-	float tw2 = tw, th2 = th;
+	float tw2 = sizing.x, th2 = sizing.y;
 	float mw, mh;
 	if (GetTextureTiling(texname.GetData(), mw, mh))
 	{
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
-		tw2 = tw * mw;
-		th2 = th * mh;
+		tw2 = sizing.x * mw;
+		th2 = sizing.y * mh;
 	}
 
 	//create texture mapping table
-	//csVector2 table[] = {csVector2(tw2, th2), csVector2(0, th2), csVector2(tw2, 0), csVector2(0, 0)};
-	csVector2 table[] = {csVector2(0, 0), csVector2(tw2, 0), csVector2(tw2, th2), csVector2(0, th2)};
+	//convert to remote positioning
+	for (int i = 0; i < vertices.GetSize(); i++)
+	{
+		csVector3 origvert = vertices[i];
+		vertices[i] = ToRemote(origvert);
+	}
+
+	//texture mapping
+	csVector3 v1, v2, v3;
+	csVector2 *table = 0;
+	bool texel_result = false;
+	GetTextureMapping(vertices, v1, v2, v3);
+	table = ComputeTexelMap(texel_result, vertices,
+					v1,
+					csVector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
+					v2,
+					csVector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
+					v3,
+					csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2));
+	if (texel_result == false)
+		return 0;
+
 	CS::Geometry::TableTextureMapper mapper(table);
 
 	//triangulate mesh
@@ -5256,7 +5437,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	//populate vertices, normals, and texels for mesh data
 	for (int i = 0; i < size; i++)
 	{
-		mesh_normals[i] = mesh_vertices[i] = ToRemote(trimesh.GetVertices()[i]);
+		mesh_normals[i] = mesh_vertices[i] = trimesh.GetVertices()[i];
 		mesh_normals[i].Normalize();
 		mesh_texels[i] = mapper.Map(mesh_vertices[i], mesh_normals[i], i);
 
@@ -5273,7 +5454,8 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 
 	//add vertices to mesh, from the vertex, texel, and normal arrays
 	for (int i = 0; i < mesh_vertices.GetSize(); i++)
-		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], csColor4(0, 0, 0));
+		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], csColor4(1, 1, 1));
+		//state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], csColor4(0, 0, 0)); //for lighted
 
 	//set up triangle buffer
 	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(trimesh.GetTriangleCount() * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, trimesh.GetVertexCount());
@@ -5299,9 +5481,6 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	//create submesh and set material
 	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
 
-	//set ambient lighting factor
-	CS::Lighting::SimpleStaticLighter::ConstantColor(mesh, csColor(0.5, 0.5, 0.5));
-
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
@@ -5312,7 +5491,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	return submesh;
 }
 
-bool SBS::ComputeTexelMap(csVector2 *texels, int &texel_count, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3)
+csVector2* SBS::ComputeTexelMap(bool &result, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3)
 {
 	//this is modified code from the Crystal Space thingmesh system, from the "plugins/mesh/thing/object/polygon.cpp" file.
 	//given an array of mesh vertices, this returns an array of texels (texels and texel_count) for the specified abstract 3-vertex UV definitions.
@@ -5346,14 +5525,14 @@ bool SBS::ComputeTexelMap(csVector2 *texels, int &texel_count, CS::Geometry::csC
 
 	if (ABS(det) < 0.0001f)
 	{
-		if (Verbose)
-			ReportError("Warning: bad UV coordinates");
+		ReportError("Warning: bad UV coordinates");
 
 		/*if (!((p1-p2) < SMALL_EPSILON))
 			SetTextureSpace(p1, p2, 1);
 		else if (!((p1-p3) < SMALL_EPSILON))
 			SetTextureSpace(p1, p3, 1);*/
-		return false;
+		result = false;
+		return 0;
 	}
 	else
 		m.Invert();
@@ -5379,8 +5558,8 @@ bool SBS::ComputeTexelMap(csVector2 *texels, int &texel_count, CS::Geometry::csC
 	csTransform transform(m_tex, v_tex);
 
 	//create array for texel map
-	texel_count = vertices.GetSize();
-	texels = new csVector2[texel_count];
+	int texel_count = vertices.GetSize();
+	csVector2 *texels = new csVector2[texel_count];
 	csVector3 texel_temp;
 
 	//transform matrix into texel map
@@ -5390,5 +5569,6 @@ bool SBS::ComputeTexelMap(csVector2 *texels, int &texel_count, CS::Geometry::csC
 		texels[i].x = texel_temp.x;
 		texels[i].y = texel_temp.y;
 	}
-	return true;
+	result = true;
+	return texels;
 }

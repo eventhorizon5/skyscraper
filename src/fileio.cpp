@@ -1069,8 +1069,9 @@ int ScriptProcessor::ProcCommands()
 		}
 		else if (buffer == "elevator")
 		{
+			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			//wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
@@ -1284,8 +1285,9 @@ int ScriptProcessor::ProcCommands()
 		}
 		else if (buffer == "elevator")
 		{
+			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			//wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
@@ -1353,8 +1355,9 @@ int ScriptProcessor::ProcCommands()
 		}
 		else if (buffer == "elevator")
 		{
+			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			//wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
@@ -1415,8 +1418,9 @@ int ScriptProcessor::ProcCommands()
 		}
 		else if (buffer == "elevator")
 		{
+			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			//wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
@@ -1882,7 +1886,8 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 			tmpState = Simcore->GetFloor(Current)->Level_state;
 		else if (buffer == "elevator")
-			tmpState = Simcore->GetElevator(Current)->Elevator_state;
+			//tmpState = Simcore->GetElevator(Current)->Elevator_state;
+			return sNextLine;
 		else if (buffer == "external")
 			tmpState = Simcore->External_state;
 		else if (buffer == "landscape")
@@ -1922,7 +1927,8 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 			tmpState = Simcore->GetFloor(Current)->Level_state;
 		else if (buffer == "elevator")
-			tmpState = Simcore->GetElevator(Current)->Elevator_state;
+			//tmpState = Simcore->GetElevator(Current)->Elevator_state;
+			return sNextLine;
 		else if (buffer == "external")
 			tmpState = Simcore->External_state;
 		else if (buffer == "landscape")
@@ -1973,7 +1979,8 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 			tmpState = Simcore->GetFloor(Current)->Level_state;
 		else if (buffer == "elevator")
-			tmpState = Simcore->GetElevator(Current)->Elevator_state;
+			//tmpState = Simcore->GetElevator(Current)->Elevator_state;
+			return sNextLine;
 		else if (buffer == "external")
 			tmpState = Simcore->External_state;
 		else if (buffer == "landscape")

@@ -66,14 +66,14 @@ public:
 	//functions
 	WallObject2(csRef<iMeshWrapper> wrapper, Object *proxy = 0, bool temporary = false);
 	~WallObject2();
-	csRef<iGeneralMeshSubMesh> AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th);
-	csRef<iGeneralMeshSubMesh> AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th);
+	csRef<iGeneralMeshSubMesh> AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize);
+	csRef<iGeneralMeshSubMesh> AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize);
 	void CreateHandle(csRef<iGeneralMeshSubMesh> handle);
 	//void SetPolygonName(int index, const char *name);
 	void DeletePolygons();
 	void DeletePolygon(csRef<iGeneralMeshSubMesh> handle, bool recreate_colliders);
 	void ReindexPolygons(int deleted_index);
-	const char* ProcessName(const char *name);
+	csString ProcessName(const char *name);
 
 	//polygon index array
 	csArray<iGeneralMeshSubMesh*> handles;

@@ -177,7 +177,7 @@ WallObject2::~WallObject2()
 		DeletePolygons();
 }
 
-csRef<iGeneralMeshSubMesh> WallObject2::AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th)
+csRef<iGeneralMeshSubMesh> WallObject2::AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize)
 {
 	//add a quad
 
@@ -187,19 +187,19 @@ csRef<iGeneralMeshSubMesh> WallObject2::AddQuad(const char *name, const char *te
 	array.Push(v3);
 	array.Push(v4);
 	csString name2 = ProcessName(name);
-	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th);
+	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th, autosize);
 	CreateHandle(handle);
 	return handle;
 }
 
-csRef<iGeneralMeshSubMesh> WallObject2::AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th)
+csRef<iGeneralMeshSubMesh> WallObject2::AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize)
 {
 	//create a generic polygon
 	CS::Geometry::csContour3 array;
 	for (int i = 0; i < num; i++)
 		array.Push(vertices[i]);
 	csString name2 = ProcessName(name);
-	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th);
+	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th, autosize);
 	CreateHandle(handle);
 	return handle;
 }
@@ -210,7 +210,7 @@ void WallObject2::CreateHandle(csRef<iGeneralMeshSubMesh> handle)
 	handles.Push(handle);
 }
 
-const char* WallObject2::ProcessName(const char *name)
+csString WallObject2::ProcessName(const char *name)
 {
 	//process name for use
 	csString name_modified = name;

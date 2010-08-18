@@ -867,20 +867,22 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		sbs->ResetTextureMapping();
 	}
 
+	return wrapper->object;
+
 	//create connection pieces
 	sbs->ResetTextureMapping(true);
-	WallObject *wall;
+	WallObject2 *wall;
 	csString name1, name2;
 	if (ShaftDoor == false)
 	{
-		wall = new WallObject(elev->ElevatorMesh, elev->object, true);
+		wall = new WallObject2(elev->ElevatorMesh, elev->object, true);
 		name1 = "DoorF1";
 		name2 = "DoorF2";
 	}
 	else
 	{
 		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-		wall = new WallObject(shaft->GetMeshWrapper(floor), shaft->object, true);
+		wall = new WallObject2(shaft->GetMeshWrapper(floor), shaft->object, true);
 		name1 = "ShaftDoorF1";
 		name2 = "ShaftDoorF2";
 		x1 += elev->Origin.x;
