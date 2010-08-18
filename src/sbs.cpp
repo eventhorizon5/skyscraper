@@ -773,7 +773,8 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
 
 	//clear buffer with alpha mask and enable double buffering
-	g2d->ClearAll(g2d->FindRGB(0, 0, 0, 0));
+	if (confman->GetBool("Skyscraper.SBS.TextNoClear", false) == true)
+		g2d->ClearAll(g2d->FindRGB(0, 0, 0, 0));
 	g2d->DoubleBuffer(true);
 
 	//draw original image onto backbuffer
