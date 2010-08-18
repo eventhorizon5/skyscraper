@@ -249,6 +249,7 @@ public:
 	int GetDrawWallsCount();
 	csVector3 GetPoint(csRef<iThingFactoryState> mesh, const char *polyname, const csVector3 &start, const csVector3 &end);
 	void Cut(csRef<iMeshWrapper> mesh, csArray<WallObject*> &wallarray, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
+	void Cut(WallObject2 *wall, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, float th);
@@ -328,7 +329,11 @@ public:
 	const char* VerifyFile(const char *filename);
 	bool FileExists(const char *filename, bool relative = false);
 	csRef<iMeshWrapper> CreateMesh(const char *name);
-	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize);
+	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &tex_matrix, csVector3 &tex_vector);
+	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, csRef<iMaterialWrapper> material, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices = true);
+	csRef<iGeneralMeshSubMesh> FindSubMesh(csRef<iMeshWrapper> mesh, int index);
+	bool ComputeTextureMap(csMatrix3 &t_matrix, csVector3 &t_vector, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3);
+	csVector2* GetTexels(csMatrix3 &tex_matrix, csVector3 &tex_vector, CS::Geometry::csContour3 &vertices);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -411,7 +416,6 @@ private:
 	void PrintBanner();
 	void CheckAutoAreas();
 	void BackupMapping();
-	csVector2* ComputeTexelMap(bool &result, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3);
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;

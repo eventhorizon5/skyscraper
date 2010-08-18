@@ -84,35 +84,21 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	{
 		if (Direction == "front" || Direction == "back")
 		{
-			float x1, x2;
 			if (Direction == "front")
-			{
-				x1 = CenterX - (BackWidth / 2);
-				x2 = CenterX + (BackWidth / 2);
-			}
+				sbs->DrawWalls(true, false, false, false, false, false);
 			else
-			{
-				x2 = CenterX - (BackWidth / 2);
-				x1 = CenterX + (BackWidth / 2);
-			}
-			sbs->AddGenWall(DirectionalMeshBack, BackTexture, x1, CenterZ, x2, CenterZ, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
+				sbs->DrawWalls(false, true, false, false, false, false);
+			sbs->AddWallMain2(object, DirectionalMeshBack, "Panel", BackTexture, 0, CenterX - (BackWidth / 2), CenterZ, CenterX + (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
 			sbs->ResetWalls();
+
 		}
 		if (Direction == "left" || Direction == "right")
 		{
-			float z1, z2;
 			if (Direction == "left")
-			{
-				z2 = CenterZ - (BackWidth / 2);
-				z1 = CenterZ + (BackWidth / 2);
-			}
+				sbs->DrawWalls(true, false, false, false, false, false);
 			else
-			{
-				//right
-				z1 = CenterZ - (BackWidth / 2);
-				z2 = CenterZ + (BackWidth / 2);
-			}
-			sbs->AddGenWall(DirectionalMeshBack, BackTexture, CenterX, z1, CenterX, z2, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
+				sbs->DrawWalls(false, true, false, false, false, false);
+			sbs->AddWallMain2(object, DirectionalMeshBack, "Panel", BackTexture, 0, CenterX, CenterZ + (BackWidth / 2), CenterX, CenterZ - (BackWidth / 2), BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
 			sbs->ResetWalls();
 		}
 	}
