@@ -1967,7 +1967,7 @@ void SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *t
 		NewName = name;
 		NewName.Append(":inside");
 
-		csBox3 box (csVector3(ToRemote(x1) * HorizScale, ToRemote(voffset), ToRemote(z1) * HorizScale), csVector3(ToRemote(x2) * HorizScale, ToRemote(voffset + height_in), ToRemote(z2) * HorizScale));
+		csBox3 box (csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
 		wallobject->AddQuad( //front
 			NewName,
 			texture,
@@ -2023,7 +2023,7 @@ void SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *t
 		NewName = name;
 		NewName.Append(":outside");
 
-		csBox3 box (csVector3(ToRemote(x1) * HorizScale, ToRemote(voffset), ToRemote(z1) * HorizScale), csVector3(ToRemote(x2) * HorizScale, ToRemote(voffset + height_in), ToRemote(z2) * HorizScale));
+		csBox3 box (csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
 		wallobject->AddQuad( //front
 			NewName,
 			texture,
@@ -5379,7 +5379,12 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	csVector2 yextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 2);
 	csVector2 zextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 3);
 
-	csVector2 sizing = sbs->CalculateSizing(texture, xextents, yextents, zextents, tw, th);
+	csVector2 sizing;
+	sizing.x = tw;
+	sizing.y = th;
+
+	if (autosize == true)
+		sizing = sbs->CalculateSizing(texture, xextents, yextents, zextents, tw, th);
 
 	//get texture tiling information
 	float tw2 = sizing.x, th2 = sizing.y;

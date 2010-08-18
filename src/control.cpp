@@ -60,15 +60,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 	if (Direction == "front")
 		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, width, 0, height, voffset, 1, 1);
 	if (Direction == "back")
-	{
-		/*CS::Geometry::csContour3 array;
-		array.Push(csVector3(0, voffset + height, 0));
-		array.Push(csVector3(-width, voffset + height, 0));
-		array.Push(csVector3(-width, voffset, 0));
-		array.Push(csVector3(0, voffset, 0));
-		sbs->PolyMesh(ControlMesh, Name, textures[0], array, 1, 1);*/
 		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, -width, 0, height, voffset, 1, 1);
-	}
 	if (Direction == "left")
 		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, 0, -width, height, voffset, 1, 1);
 	if (Direction == "right")

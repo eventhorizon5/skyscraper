@@ -660,12 +660,12 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 
 	//add main walls
 	sbs->DrawWalls(true, true, false, false, false, false);
-	sbs->AddWallMain(wrapper->object, door->mesh, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th);
+	sbs->AddWallMain2(wrapper->object, door->mesh, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
 	sbs->ResetWalls();
 
 	//add side walls
 	sbs->DrawWalls(false, false, true, true, true, true);
-	sbs->AddWallMain(wrapper->object, door->mesh, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th);
+	sbs->AddWallMain2(wrapper->object, door->mesh, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
 	sbs->ResetWalls();
 
 	//store extents
@@ -786,7 +786,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	{
 		for (int j = 1; j <= 3; j++)
 		{
-			csVector2 extents = sbs->GetExtents(wrapper->doors[i]->state, j);
+			csVector2 extents = sbs->GetExtents(wrapper->doors[i]->state->GetVertices(), wrapper->doors[i]->state->GetVertexCount(), j);
 			extents.x = sbs->ToLocal(extents.x);
 			extents.y = sbs->ToLocal(extents.y);
 
@@ -869,29 +869,29 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 
 	//create connection pieces
 	sbs->ResetTextureMapping(true);
-	WallObject *wall1;
-	WallObject2 *wall2;
 	csString name1, name2;
 	if (ShaftDoor == false)
 	{
-		wall2 = sbs->CreateWallObject(elev->elevator_walls, elev->ElevatorMesh, elev->object, false);
+		WallObject2 *wall;
+		wall = sbs->CreateWallObject(elev->elevator_walls, elev->ElevatorMesh, elev->object, false);
 		name1 = "DoorF1";
 		name2 = "DoorF2";
-		sbs->CreateWallBox(wall2, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true);
-		sbs->CreateWallBox(wall2, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true);
+		sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true);
+		sbs->CreateWallBox(wall, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true);
 	}
 	else
 	{
+		WallObject *wall;
 		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-		wall1 = sbs->CreateWallObject(shaft->shaft_walls[floor - shaft->startfloor], shaft->GetMeshWrapper(floor), shaft->object, false);
+		wall = sbs->CreateWallObject(shaft->shaft_walls[floor - shaft->startfloor], shaft->GetMeshWrapper(floor), shaft->object, false);
 		name1 = "ShaftDoorF1";
 		name2 = "ShaftDoorF2";
 		x1 += elev->Origin.x;
 		x2 += elev->Origin.x;
 		z1 += elev->Origin.z;
 		z2 += elev->Origin.z;
-		sbs->CreateWallBox(wall1, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true);
-		sbs->CreateWallBox(wall1, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true);
+		sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true);
+		sbs->CreateWallBox(wall, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true);
 	}
 
 	sbs->ResetTextureMapping();
@@ -1252,11 +1252,9 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	parent = wrapper->parent;
 
 	//create object mesh
-	mesh = sbs->engine->CreateSectorWallsMesh (sbs->area, doorname);
-	state = scfQueryInterface<iThingFactoryState> (mesh->GetMeshObject()->GetFactory());
+	mesh = sbs->CreateMesh(doorname);
+	state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
 	movable = mesh->GetMovable();
-	mesh->SetZBufMode(CS_ZBUF_USE);
-	mesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	
 	csString direction_check = Direction;
 	direction_check.Downcase().Trim();
