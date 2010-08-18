@@ -867,32 +867,32 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		sbs->ResetTextureMapping();
 	}
 
-	return wrapper->object;
-
 	//create connection pieces
 	sbs->ResetTextureMapping(true);
-	WallObject2 *wall;
+	WallObject *wall1;
+	WallObject2 *wall2;
 	csString name1, name2;
 	if (ShaftDoor == false)
 	{
-		wall = new WallObject2(elev->ElevatorMesh, elev->object, true);
+		wall2 = sbs->CreateWallObject(elev->elevator_walls, elev->ElevatorMesh, elev->object, false);
 		name1 = "DoorF1";
 		name2 = "DoorF2";
+		sbs->CreateWallBox(wall2, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true);
+		sbs->CreateWallBox(wall2, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true);
 	}
 	else
 	{
 		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-		wall = new WallObject2(shaft->GetMeshWrapper(floor), shaft->object, true);
+		wall1 = sbs->CreateWallObject(shaft->shaft_walls[floor - shaft->startfloor], shaft->GetMeshWrapper(floor), shaft->object, false);
 		name1 = "ShaftDoorF1";
 		name2 = "ShaftDoorF2";
 		x1 += elev->Origin.x;
 		x2 += elev->Origin.x;
 		z1 += elev->Origin.z;
 		z2 += elev->Origin.z;
+		sbs->CreateWallBox(wall1, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true);
+		sbs->CreateWallBox(wall1, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true);
 	}
-	sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true);
-	sbs->CreateWallBox(wall, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true);
-	delete wall;
 
 	sbs->ResetTextureMapping();
 

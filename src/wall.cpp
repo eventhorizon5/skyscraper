@@ -173,8 +173,8 @@ WallObject2::~WallObject2()
 
 	if (sbs->FastDelete == false && parent_array && parent_deleting == false && Temporary == false)
 		parent_array->Delete(this);
-	if (sbs->FastDelete == false)
-		DeletePolygons();
+
+	handles.DeleteAll();
 }
 
 csRef<iGeneralMeshSubMesh> WallObject2::AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize)
