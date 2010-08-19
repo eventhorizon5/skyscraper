@@ -2588,16 +2588,8 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 	//mesh_origin is a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
 	//object_origin is for the object's (such as a shaft) central position, used for calculating wall offsets
 
-	return;
-
 	if (cutwalls == false && cutfloors == false)
 		return;
-
-	//convert values to remote
-	start = ToRemote(start);
-	end = ToRemote(end);
-	mesh_origin = ToRemote(mesh_origin);
-	object_origin = ToRemote(object_origin);
 
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 	int polycount;
@@ -2626,9 +2618,23 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 		csVector2 extentsx, extentsy, extentsz;
 		polycheck = false;
 
-		//copy source polygon vertices
+		//skip null handles
+		if (!wall->GetHandle(i))
+		{
+			i++;
+			continue;
+		}
 		csString name = wall->GetHandle(i)->GetName();
 		CS::Geometry::csContour3* origpoly = wall->GetGeometry(wall->GetHandle(i));
+
+		//skip null geometry
+		if (!origpoly)
+		{
+			i++;
+			continue;
+		}
+
+		//copy source polygon vertices
 		for (int j = 0; j < origpoly->GetSize(); j++)
 			temppoly.AddVertex(origpoly->Get(j));
 
@@ -2820,7 +2826,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 				wall->GetTextureMapping(i, mapping, oldvector);
 
 				//delete original polygon
-				wall->DeletePolygon(wall->GetHandle(i), false);
+				wall->DeletePolygon(i, false);
 				i--;
 				polycount--;
 
@@ -2843,6 +2849,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 			}
 		}
 	}
+
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)

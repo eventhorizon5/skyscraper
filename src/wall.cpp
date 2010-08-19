@@ -141,37 +141,40 @@ void WallObject::DeletePolygons()
 	geometry.DeleteAll();
 	t_matrix.DeleteAll();
 	t_vector.DeleteAll();
+	state->Invalidate();
 
 	//recreate colliders
 	sbs->DeleteColliders(meshwrapper);
 	sbs->CreateColliders(meshwrapper);
 }
 
-void WallObject::DeletePolygon(csRef<iGeneralMeshSubMesh> handle, bool recreate_colliders)
+void WallObject::DeletePolygon(int index, bool recreate_colliders)
 {
 	//delete a single polygon
 
-	for (int i = 0; i < handles.GetSize(); i++)
+	if (index > -1 && index < handles.GetSize())
 	{
-		if (handles[i] == handle)
+		state->DeleteSubMesh(GetHandle(index));
+		for (int i = 0; i < state->GetSubMeshCount(); i++)
 		{
-			state->DeleteSubMesh(handle);
-			handles[i] = 0;
-			geometry[i].DeleteAll();
-			//ReindexPolygons(index);
-			handles.DeleteIndex(i);
-			geometry.DeleteIndex(i);
-			t_matrix.DeleteIndex(i);
-			t_vector.DeleteIndex(i);
-			return;
+			if (state->GetSubMesh(i) == handles[index])
+				csPrintf("orig %d, size %d, %d %s\n", index, handles.GetSize(), i, state->GetSubMesh(i)->GetName());
 		}
-	}
+		handles[index] = 0;
+		geometry[index].DeleteAll();
+		//ReindexPolygons(index);
+		handles.DeleteIndex(index);
+		geometry.DeleteIndex(index);
+		t_matrix.DeleteIndex(index);
+		t_vector.DeleteIndex(index);
+		state->Invalidate();
 
-	//recreate colliders if specified
-	if (recreate_colliders == true)
-	{
-		sbs->DeleteColliders(meshwrapper);
-		sbs->CreateColliders(meshwrapper);
+		//recreate colliders if specified
+		if (recreate_colliders == true)
+		{
+			sbs->DeleteColliders(meshwrapper);
+			sbs->CreateColliders(meshwrapper);
+		}
 	}
 }
 

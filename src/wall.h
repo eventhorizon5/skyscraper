@@ -38,7 +38,7 @@ public:
 	int AddPolygon(const char *name, csRef<iMaterialWrapper> material, csVector3 *vertices, int num, csMatrix3 &tex_matrix, csVector3 &tex_vector);
 	int CreateHandle(csRef<iGeneralMeshSubMesh> handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector);
 	void DeletePolygons();
-	void DeletePolygon(csRef<iGeneralMeshSubMesh> handle, bool recreate_colliders);
+	void DeletePolygon(int index, bool recreate_colliders);
 	void ReindexPolygons(int deleted_index);
 	csString ProcessName(const char *name);
 	CS::Geometry::csContour3* GetGeometry(csRef<iGeneralMeshSubMesh> handle);
