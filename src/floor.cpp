@@ -347,8 +347,13 @@ void Floor::Cut(const csVector3 &start, const csVector3 &end, bool cutwalls, boo
 	for (int i = 0; i < level_walls.GetSize(); i++)
 	{
 		sbs->Cut(level_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
-		if (fast == false)
+	}
+	if (fast == false)
+	{
+		for (int i = 0; i < interfloor_walls.GetSize(); i++)
+		{
 			sbs->Cut(interfloor_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
+		}
 	}
 }
 

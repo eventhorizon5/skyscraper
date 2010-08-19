@@ -2588,7 +2588,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 	//mesh_origin is a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
 	//object_origin is for the object's (such as a shaft) central position, used for calculating wall offsets
 
-	//genmesh version
+	return;
 
 	if (cutwalls == false && cutfloors == false)
 		return;
