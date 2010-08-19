@@ -66,9 +66,9 @@ public:
 	//functions
 	WallObject2(csRef<iMeshWrapper> wrapper, Object *proxy = 0, bool temporary = false);
 	~WallObject2();
-	csRef<iGeneralMeshSubMesh> AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize);
-	csRef<iGeneralMeshSubMesh> AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize);
-	csRef<iGeneralMeshSubMesh> AddPolygon(const char *name, csRef<iMaterialWrapper> material, csVector3 *vertices, int num, csMatrix3 &tex_matrix, csVector3 &tex_vector);
+	int AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize);
+	int AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize);
+	int AddPolygon(const char *name, csRef<iMaterialWrapper> material, csVector3 *vertices, int num, csMatrix3 &tex_matrix, csVector3 &tex_vector);
 	int CreateHandle(csRef<iGeneralMeshSubMesh> handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector);
 	void DeletePolygons();
 	void DeletePolygon(csRef<iGeneralMeshSubMesh> handle, bool recreate_colliders);

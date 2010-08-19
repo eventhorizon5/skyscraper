@@ -180,7 +180,7 @@ WallObject2::~WallObject2()
 	t_vector.DeleteAll();
 }
 
-csRef<iGeneralMeshSubMesh> WallObject2::AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize)
+int WallObject2::AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize)
 {
 	//add a quad
 
@@ -193,11 +193,10 @@ csRef<iGeneralMeshSubMesh> WallObject2::AddQuad(const char *name, const char *te
 	csMatrix3 tm;
 	csVector3 tv;
 	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th, autosize, tm, tv);
-	CreateHandle(handle, array, tm, tv);
-	return handle;
+	return CreateHandle(handle, array, tm, tv);
 }
 
-csRef<iGeneralMeshSubMesh> WallObject2::AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize)
+int WallObject2::AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize)
 {
 	//create a generic polygon
 	CS::Geometry::csContour3 array;
@@ -207,11 +206,10 @@ csRef<iGeneralMeshSubMesh> WallObject2::AddPolygon(const char *name, const char 
 	csMatrix3 tm;
 	csVector3 tv;
 	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th, autosize, tm, tv);
-	CreateHandle(handle, array, tm, tv);
-	return handle;
+	return CreateHandle(handle, array, tm, tv);
 }
 
-csRef<iGeneralMeshSubMesh> WallObject2::AddPolygon(const char *name, csRef<iMaterialWrapper> material, csVector3 *vertices, int num, csMatrix3 &tex_matrix, csVector3 &tex_vector)
+int WallObject2::AddPolygon(const char *name, csRef<iMaterialWrapper> material, csVector3 *vertices, int num, csMatrix3 &tex_matrix, csVector3 &tex_vector)
 {
 	//create a generic polygon
 	CS::Geometry::csContour3 array;
@@ -219,8 +217,7 @@ csRef<iGeneralMeshSubMesh> WallObject2::AddPolygon(const char *name, csRef<iMate
 		array.Push(vertices[i]);
 	csString name2 = ProcessName(name);
 	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, material, array, tex_matrix, tex_vector);
-	CreateHandle(handle, array, tex_matrix, tex_vector);
-	return handle;
+	return CreateHandle(handle, array, tex_matrix, tex_vector);
 }
 
 int WallObject2::CreateHandle(csRef<iGeneralMeshSubMesh> handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
@@ -337,7 +334,7 @@ int WallObject2::GetHandleCount()
 
 csRef<iGeneralMeshSubMesh> WallObject2::GetHandle(int index)
 {
-	if (index > 0 && index < handles.GetSize())
+	if (index > -1 && index < handles.GetSize())
 		return handles[index];
 }
 
@@ -355,7 +352,7 @@ int WallObject2::FindHandleIndex(csRef<iGeneralMeshSubMesh> handle)
 void WallObject2::GetTextureMapping(int index, csMatrix3 &tm, csVector3 &tv)
 {
 	//return texture mapping matrix and vector of the specified submesh
-	if (index > 0 && index < handles.GetSize())
+	if (index > -1 && index < handles.GetSize())
 	{
 		tm = t_matrix[index];
 		tv = t_vector[index];

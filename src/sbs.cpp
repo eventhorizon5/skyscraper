@@ -1955,11 +1955,15 @@ int SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *te
 	return CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom);
 }
 
-void SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+int SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls
 
 	csString NewName;
+	int firstidx = 0;
+	int tmpidx = 0;
+	int range = 0;
+	int range2 = 0;
 
 	if (inside == true)
 	{
@@ -1969,34 +1973,34 @@ void SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *t
 		NewName.Append(":inside");
 
 		csBox3 box (csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
-		wallobject->AddQuad( //front
+		firstidx = wallobject->AddQuad( //front
 			NewName,
 			texture,
 			box.GetCorner(CS_BOX_CORNER_xyz),
 			box.GetCorner(CS_BOX_CORNER_Xyz),
 			box.GetCorner(CS_BOX_CORNER_XYz),
-			box.GetCorner(CS_BOX_CORNER_xYz), tw, th, true);
+			box.GetCorner(CS_BOX_CORNER_xYz), tw, th, autosize);
 		wallobject->AddQuad( //right
 			NewName,
 			texture,
 			box.GetCorner(CS_BOX_CORNER_Xyz),
 			box.GetCorner(CS_BOX_CORNER_XyZ),
 			box.GetCorner(CS_BOX_CORNER_XYZ),
-			box.GetCorner(CS_BOX_CORNER_XYz), tw, th, true);
+			box.GetCorner(CS_BOX_CORNER_XYz), tw, th, autosize);
 		wallobject->AddQuad( //back
 			NewName,
 			texture,
 			box.GetCorner(CS_BOX_CORNER_XyZ),
 			box.GetCorner(CS_BOX_CORNER_xyZ),
 			box.GetCorner(CS_BOX_CORNER_xYZ),
-			box.GetCorner(CS_BOX_CORNER_XYZ), tw, th, true);
+			box.GetCorner(CS_BOX_CORNER_XYZ), tw, th, autosize);
 		wallobject->AddQuad( //left
 			NewName,
 			texture,
 			box.GetCorner(CS_BOX_CORNER_xyZ),
 			box.GetCorner(CS_BOX_CORNER_xyz),
 			box.GetCorner(CS_BOX_CORNER_xYz),
-			box.GetCorner(CS_BOX_CORNER_xYZ), tw, th, true);
+			box.GetCorner(CS_BOX_CORNER_xYZ), tw, th, autosize);
 		if (bottom == true)
 		{
 			wallobject->AddQuad( //bottom
@@ -2005,7 +2009,7 @@ void SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *t
 				box.GetCorner(CS_BOX_CORNER_xyZ),
 				box.GetCorner(CS_BOX_CORNER_XyZ),
 				box.GetCorner(CS_BOX_CORNER_Xyz),
-				box.GetCorner(CS_BOX_CORNER_xyz), tw, th, true);
+				box.GetCorner(CS_BOX_CORNER_xyz), tw, th, autosize);
 		}
 		if (top == true)
 		{
@@ -2015,7 +2019,7 @@ void SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *t
 				box.GetCorner(CS_BOX_CORNER_xYz),
 				box.GetCorner(CS_BOX_CORNER_XYz),
 				box.GetCorner(CS_BOX_CORNER_XYZ),
-				box.GetCorner(CS_BOX_CORNER_xYZ), tw, th, true);
+				box.GetCorner(CS_BOX_CORNER_xYZ), tw, th, autosize);
 		}
 	}
 
@@ -2025,34 +2029,36 @@ void SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *t
 		NewName.Append(":outside");
 
 		csBox3 box (csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
-		wallobject->AddQuad( //front
+		tmpidx = wallobject->AddQuad( //front
 			NewName,
 			texture,
 			box.GetCorner(CS_BOX_CORNER_xYz),
 			box.GetCorner(CS_BOX_CORNER_XYz),
 			box.GetCorner(CS_BOX_CORNER_Xyz),
-			box.GetCorner(CS_BOX_CORNER_xyz), tw, th, true);
+			box.GetCorner(CS_BOX_CORNER_xyz), tw, th, autosize);
+		if (inside == false)
+			firstidx = tmpidx;
 		wallobject->AddQuad( //right
 			NewName,
 			texture,
 			box.GetCorner(CS_BOX_CORNER_XYz),
 			box.GetCorner(CS_BOX_CORNER_XYZ),
 			box.GetCorner(CS_BOX_CORNER_XyZ),
-			box.GetCorner(CS_BOX_CORNER_Xyz), tw, th, true);
+			box.GetCorner(CS_BOX_CORNER_Xyz), tw, th, autosize);
 		wallobject->AddQuad( //back
 			NewName,
 			texture,
 			box.GetCorner(CS_BOX_CORNER_XYZ),
 			box.GetCorner(CS_BOX_CORNER_xYZ),
 			box.GetCorner(CS_BOX_CORNER_xyZ),
-			box.GetCorner(CS_BOX_CORNER_XyZ), tw, th, true);
+			box.GetCorner(CS_BOX_CORNER_XyZ), tw, th, autosize);
 		wallobject->AddQuad( //left
 			NewName,
 			texture,
 			box.GetCorner(CS_BOX_CORNER_xYZ),
 			box.GetCorner(CS_BOX_CORNER_xYz),
 			box.GetCorner(CS_BOX_CORNER_xyz),
-			box.GetCorner(CS_BOX_CORNER_xyZ), tw, th, true);
+			box.GetCorner(CS_BOX_CORNER_xyZ), tw, th, autosize);
 		if (bottom == true)
 		{
 			wallobject->AddQuad( //bottom
@@ -2061,7 +2067,7 @@ void SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *t
 				box.GetCorner(CS_BOX_CORNER_xyz),
 				box.GetCorner(CS_BOX_CORNER_Xyz),
 				box.GetCorner(CS_BOX_CORNER_XyZ),
-				box.GetCorner(CS_BOX_CORNER_xyZ), tw, th, true);
+				box.GetCorner(CS_BOX_CORNER_xyZ), tw, th, autosize);
 		}
 		if (top == true)
 		{
@@ -2071,12 +2077,13 @@ void SBS::CreateWallBox(WallObject2* wallobject, const char *name, const char *t
 				box.GetCorner(CS_BOX_CORNER_xYZ),
 				box.GetCorner(CS_BOX_CORNER_XYZ),
 				box.GetCorner(CS_BOX_CORNER_XYz),
-				box.GetCorner(CS_BOX_CORNER_xYz), tw, th, true);
+				box.GetCorner(CS_BOX_CORNER_xYz), tw, th, autosize);
 		}
 	}
+	return firstidx;
 }
 
-void SBS::CreateWallBox2(WallObject2* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
+int SBS::CreateWallBox2(WallObject2* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls from a central point
 
@@ -2090,7 +2097,7 @@ void SBS::CreateWallBox2(WallObject2* wallobject, const char *name, const char *
 	z1 = CenterZ - (LengthZ / 2);
 	z2 = CenterZ + (LengthZ / 2);
 
-	CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom);
+	return CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
 void SBS::InitMeshes()
@@ -2397,40 +2404,68 @@ int SBS::CreateSky(const char *filenamebase)
 	vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
 
 	//load textures
-	LoadTexture("/root/sky/up.jpg", "SkyTop", 1, 1);
-	LoadTexture("/root/sky/down.jpg", "SkyBottom", 1, 1);
+	LoadTexture("/root/sky/up.jpg", "SkyTop", 1, -1);
+	LoadTexture("/root/sky/down.jpg", "SkyBottom", -1, 1);
 	LoadTexture("/root/sky/left.jpg", "SkyLeft", 1, 1);
 	LoadTexture("/root/sky/right.jpg", "SkyRight", 1, 1);
 	LoadTexture("/root/sky/front.jpg", "SkyFront", 1, 1);
 	LoadTexture("/root/sky/back.jpg", "SkyBack", 1, 1);
 
-	SkyBox = (engine->CreateSectorWallsMesh (area, "SkyBox"));
-	SkyBox_state = scfQueryInterface<iThingFactoryState> (SkyBox->GetMeshObject()->GetFactory());
+	SkyBox = CreateMesh("SkyBox");
 	SkyBox->SetZBufMode(CS_ZBUF_NONE);
 	SkyBox->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 
-	//create a skybox that extends 30 miles (30 * 5280 ft) in each direction
-	float skysize = 158400;
-	int firstidx = SkyBox_state->AddInsideBox(ToRemote(csVector3(-skysize, -skysize, -skysize)), ToRemote(csVector3(skysize, skysize, skysize)));
-	bool result;
-	csRef<iMaterialWrapper> material = GetTextureMaterial("SkyBack", result);
-	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx, firstidx), material);
-	material = GetTextureMaterial("SkyRight", result);
-	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 1, firstidx + 1), material);
-	material = GetTextureMaterial("SkyFront", result);
-	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 2, firstidx + 2), material);
-	material = GetTextureMaterial("SkyLeft", result);
-	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 3, firstidx + 3), material);
-	material = GetTextureMaterial("SkyBottom", result);
-	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 4, firstidx + 4), material);
-	material = GetTextureMaterial("SkyTop", result);
-	SkyBox_state->SetPolygonMaterial (csPolygonRange(firstidx + 5, firstidx + 5), material);
+	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
+	float skysize = confman->GetInt("Skyscraper.SBS.HorizonDistance", 30) * 5280;
+	sbs->ResetTextureMapping(true);
+	WallObject2 *wall = new WallObject2(SkyBox, object, true);
 
-	SkyBox_state->SetPolygonTextureMapping (csPolygonRange(firstidx, firstidx + 5),
-		csVector2 (0, 1),
-		csVector2 (1, 1),
-		csVector2 (1, 0));
+	csBox3 box (csVector3(-skysize, -skysize, -skysize), csVector3(skysize, skysize, skysize));
+	int firstidx = wall->AddQuad( //front
+		"SkyFront",
+		"SkyFront",
+		box.GetCorner(CS_BOX_CORNER_xyz),
+		box.GetCorner(CS_BOX_CORNER_Xyz),
+		box.GetCorner(CS_BOX_CORNER_XYz),
+		box.GetCorner(CS_BOX_CORNER_xYz), 1, 1, false);
+	wall->AddQuad( //right
+		"SkyRight",
+		"SkyRight",
+		box.GetCorner(CS_BOX_CORNER_Xyz),
+		box.GetCorner(CS_BOX_CORNER_XyZ),
+		box.GetCorner(CS_BOX_CORNER_XYZ),
+		box.GetCorner(CS_BOX_CORNER_XYz), 1, 1, false);
+	wall->AddQuad( //back
+		"SkyBack",
+		"SkyBack",
+		box.GetCorner(CS_BOX_CORNER_XyZ),
+		box.GetCorner(CS_BOX_CORNER_xyZ),
+		box.GetCorner(CS_BOX_CORNER_xYZ),
+		box.GetCorner(CS_BOX_CORNER_XYZ), 1, 1, false);
+	wall->AddQuad( //left
+		"SkyLeft",
+		"SkyLeft",
+		box.GetCorner(CS_BOX_CORNER_xyZ),
+		box.GetCorner(CS_BOX_CORNER_xyz),
+		box.GetCorner(CS_BOX_CORNER_xYz),
+		box.GetCorner(CS_BOX_CORNER_xYZ), 1, 1, false);
+	wall->AddQuad( //bottom
+		"SkyBottom",
+		"SkyBottom",
+		box.GetCorner(CS_BOX_CORNER_xyZ),
+		box.GetCorner(CS_BOX_CORNER_XyZ),
+		box.GetCorner(CS_BOX_CORNER_Xyz),
+		box.GetCorner(CS_BOX_CORNER_xyz), 1, 1, false);
+	wall->AddQuad( //top
+		"SkyTop",
+		"SkyTop",
+		box.GetCorner(CS_BOX_CORNER_xYz),
+		box.GetCorner(CS_BOX_CORNER_XYz),
+		box.GetCorner(CS_BOX_CORNER_XYZ),
+		box.GetCorner(CS_BOX_CORNER_xYZ), 1, 1, false);
 
+	sbs->ResetTextureMapping();
+	delete wall;
 	return firstidx;
 }
 
