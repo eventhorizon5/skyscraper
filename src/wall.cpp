@@ -34,7 +34,7 @@ WallObject::WallObject(csRef<iMeshWrapper> wrapper, Object *proxy, bool temporar
 {
 	//wall object constructor
 	meshwrapper = wrapper;
-	state = scfQueryInterface<iThingFactoryState> (wrapper->GetMeshObject()->GetFactory());
+	state = scfQueryInterface<iGeneralFactoryState>(wrapper->GetFactory()->GetMeshObjectFactory());
 
 	//if proxy object is set, set object's number as proxy object's number
 	if (proxy)
@@ -49,138 +49,12 @@ WallObject::~WallObject()
 		parent_array->Delete(this);
 
 	handles.DeleteAll();
-}
-
-int WallObject::AddQuad(const char *name, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4)
-{
-	//add a quad polygon
-	int index = state->AddQuad(v1, v2, v3, v4);
-	CreateHandle(index);
-	SetPolygonName(index, name);
-	return index;
-}
-
-int WallObject::AddPolygon(const char *name, csVector3 *vertices, int num)
-{
-	//create a generic polygon
-	int index = state->AddPolygon(vertices, num);
-	CreateHandle(index);
-	SetPolygonName(index, name);
-	return index;
-}
-
-void WallObject::CreateHandle(int index)
-{
-	//create a polygon handle
-	handles.Push(index);
-}
-
-void WallObject::SetPolygonName(int index, const char *name)
-{
-	//set polygon name
-	csString name_modified = name;
-
-	//strip off object ID from name if it exists
-	if (name_modified.Find("(") == 0)
-		name_modified.DeleteAt(0, name_modified.Find(")") + 1);
-
-	//construct name
-	csString newname = "(";
-	csString num;
-	num = Number;
-	newname.Append(num + ")");
-	newname.Append(name_modified);
-
-	//set polygon name
-	state->SetPolygonName(csPolygonRange(index, index), newname);
-}
-
-void WallObject::DeletePolygons()
-{
-	//delete polygons and handles
-	
-	for (int i = 0; i < handles.GetSize(); i++)
-	{
-		if (handles[i] > -1)
-		{
-			state->RemovePolygon(handles[i]);
-			int tmphandle = handles[i];
-			handles[i] = -1;
-			ReindexPolygons(tmphandle);
-		}
-	}
-	handles.DeleteAll();
-
-	//recreate colliders
-	sbs->DeleteColliders(meshwrapper);
-	sbs->CreateColliders(meshwrapper);
-}
-
-void WallObject::DeletePolygon(int index, bool recreate_colliders)
-{
-	//delete a single polygon
-
-	for (int i = 0; i < handles.GetSize(); i++)
-	{
-		if (handles[i] == index)
-		{
-			state->RemovePolygon(index);
-			handles[i] = -1;
-			ReindexPolygons(index);
-			handles.DeleteIndex(i);
-			return;
-		}
-	}
-
-	//recreate colliders if specified
-	if (recreate_colliders == true)
-	{
-		sbs->DeleteColliders(meshwrapper);
-		sbs->CreateColliders(meshwrapper);
-	}
-}
-
-void WallObject::ReindexPolygons(int deleted_index)
-{
-	//reindex all polygon indices in the given wall array
-
-	for (int i = 0; i < parent_array->GetSize(); i++)
-	{
-		for (int j = 0; j < parent_array->Get(i)->handles.GetSize(); j++)
-		{
-			if (parent_array->Get(i)->handles[j] >= deleted_index)
-				parent_array->Get(i)->handles[j]--;
-		}
-	}
-}
-
-/////////////////////////
-
-WallObject2::WallObject2(csRef<iMeshWrapper> wrapper, Object *proxy, bool temporary) : Object(temporary)
-{
-	//wall object constructor
-	meshwrapper = wrapper;
-	state = scfQueryInterface<iGeneralFactoryState>(wrapper->GetFactory()->GetMeshObjectFactory());
-
-	//if proxy object is set, set object's number as proxy object's number
-	if (proxy)
-		Number = proxy->GetNumber();
-}
-
-WallObject2::~WallObject2()
-{
-	//wall object destructor
-
-	if (sbs->FastDelete == false && parent_array && parent_deleting == false && Temporary == false)
-		parent_array->Delete(this);
-
-	handles.DeleteAll();
 	geometry.DeleteAll();
 	t_matrix.DeleteAll();
 	t_vector.DeleteAll();
 }
 
-int WallObject2::AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize)
+int WallObject::AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize)
 {
 	//add a quad
 
@@ -196,7 +70,7 @@ int WallObject2::AddQuad(const char *name, const char *texture, const csVector3 
 	return CreateHandle(handle, array, tm, tv);
 }
 
-int WallObject2::AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize)
+int WallObject::AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize)
 {
 	//create a generic polygon
 	CS::Geometry::csContour3 array;
@@ -209,7 +83,7 @@ int WallObject2::AddPolygon(const char *name, const char *texture, csVector3 *ve
 	return CreateHandle(handle, array, tm, tv);
 }
 
-int WallObject2::AddPolygon(const char *name, csRef<iMaterialWrapper> material, csVector3 *vertices, int num, csMatrix3 &tex_matrix, csVector3 &tex_vector)
+int WallObject::AddPolygon(const char *name, csRef<iMaterialWrapper> material, csVector3 *vertices, int num, csMatrix3 &tex_matrix, csVector3 &tex_vector)
 {
 	//create a generic polygon
 	CS::Geometry::csContour3 array;
@@ -220,7 +94,7 @@ int WallObject2::AddPolygon(const char *name, csRef<iMaterialWrapper> material, 
 	return CreateHandle(handle, array, tex_matrix, tex_vector);
 }
 
-int WallObject2::CreateHandle(csRef<iGeneralMeshSubMesh> handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
+int WallObject::CreateHandle(csRef<iGeneralMeshSubMesh> handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
 {
 	//create a polygon handle
 	handles.Push(handle);
@@ -230,7 +104,7 @@ int WallObject2::CreateHandle(csRef<iGeneralMeshSubMesh> handle, CS::Geometry::c
 	return handles.GetSize() - 1;
 }
 
-csString WallObject2::ProcessName(const char *name)
+csString WallObject::ProcessName(const char *name)
 {
 	//process name for use
 	csString name_modified = name;
@@ -248,7 +122,7 @@ csString WallObject2::ProcessName(const char *name)
 	return newname;
 }
 
-void WallObject2::DeletePolygons()
+void WallObject::DeletePolygons()
 {
 	//delete polygons and handles
 	
@@ -273,7 +147,7 @@ void WallObject2::DeletePolygons()
 	sbs->CreateColliders(meshwrapper);
 }
 
-void WallObject2::DeletePolygon(csRef<iGeneralMeshSubMesh> handle, bool recreate_colliders)
+void WallObject::DeletePolygon(csRef<iGeneralMeshSubMesh> handle, bool recreate_colliders)
 {
 	//delete a single polygon
 
@@ -301,7 +175,7 @@ void WallObject2::DeletePolygon(csRef<iGeneralMeshSubMesh> handle, bool recreate
 	}
 }
 
-void WallObject2::ReindexPolygons(int deleted_index)
+void WallObject::ReindexPolygons(int deleted_index)
 {
 	//reindex all polygon indices in the given wall array
 
@@ -315,7 +189,7 @@ void WallObject2::ReindexPolygons(int deleted_index)
 	}*/
 }
 
-CS::Geometry::csContour3* WallObject2::GetGeometry(csRef<iGeneralMeshSubMesh> handle)
+CS::Geometry::csContour3* WallObject::GetGeometry(csRef<iGeneralMeshSubMesh> handle)
 {
 	//get the original geometry of the specified submesh
 
@@ -327,18 +201,18 @@ CS::Geometry::csContour3* WallObject2::GetGeometry(csRef<iGeneralMeshSubMesh> ha
 	return 0;
 }
 
-int WallObject2::GetHandleCount()
+int WallObject::GetHandleCount()
 {
 	return handles.GetSize();
 }
 
-csRef<iGeneralMeshSubMesh> WallObject2::GetHandle(int index)
+csRef<iGeneralMeshSubMesh> WallObject::GetHandle(int index)
 {
 	if (index > -1 && index < handles.GetSize())
 		return handles[index];
 }
 
-int WallObject2::FindHandleIndex(csRef<iGeneralMeshSubMesh> handle)
+int WallObject::FindHandleIndex(csRef<iGeneralMeshSubMesh> handle)
 {
 	//perform a linear search to find a handle index
 
@@ -349,7 +223,7 @@ int WallObject2::FindHandleIndex(csRef<iGeneralMeshSubMesh> handle)
 	}
 }
 
-void WallObject2::GetTextureMapping(int index, csMatrix3 &tm, csVector3 &tv)
+void WallObject::GetTextureMapping(int index, csMatrix3 &tm, csVector3 &tv)
 {
 	//return texture mapping matrix and vector of the specified submesh
 	if (index > -1 && index < handles.GetSize())

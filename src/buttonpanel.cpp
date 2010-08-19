@@ -455,7 +455,7 @@ int ButtonPanel::AddWall(const char *name, const char *texture, float thickness,
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain2(object, ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw, th, true);
+	return sbs->AddWallMain(object, ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw, th, true);
 }
 
 Control* ButtonPanel::GetControl(int index)

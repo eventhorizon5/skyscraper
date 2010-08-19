@@ -47,28 +47,19 @@ Floor::Floor(int number)
 	object->SetName("Floor " + buffer);
 	buffer.Insert(0, "Level ");
 	buffer.Trim();
-	Level = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	Level_state = scfQueryInterface<iThingFactoryState> (Level->GetMeshObject()->GetFactory());
-	Level->SetZBufMode(CS_ZBUF_USE);
-	Level->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	Level = sbs->CreateMesh(buffer);
 
 	//Create interfloor mesh
 	buffer = Number;
 	buffer.Insert(0, "Interfloor ");
 	buffer.Trim();
-	Interfloor = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	Interfloor_state = scfQueryInterface<iThingFactoryState> (Interfloor->GetMeshObject()->GetFactory());
-	Interfloor->SetZBufMode(CS_ZBUF_USE);
-	Interfloor->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	Interfloor = sbs->CreateMesh(buffer);
 
 	//Create columnframe mesh
 	buffer = Number;
 	buffer.Insert(0, "ColumnFrame ");
 	buffer.Trim();
-	ColumnFrame = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
-	ColumnFrame_state = scfQueryInterface<iThingFactoryState> (ColumnFrame->GetMeshObject()->GetFactory());
-	ColumnFrame->SetZBufMode(CS_ZBUF_USE);
-	ColumnFrame->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	ColumnFrame = sbs->CreateMesh(buffer);
 
 	//set enabled flag
 	IsEnabled = true;
@@ -186,11 +177,8 @@ Floor::~Floor()
 			sbs->RemoveFloor(this);
 	}
 
-	ColumnFrame_state = 0;
 	ColumnFrame = 0;
-	Interfloor_state = 0;
 	Interfloor = 0;
-	Level_state = 0;
 	Level = 0;
 	delete object;
 }
@@ -206,33 +194,18 @@ void Floor::SetCameraFloor()
 WallObject* Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th, bool isexternal)
 {
 	//Adds a floor with the specified dimensions and vertical offset
-	float tw2;
-	float th2;
-
-	//Set horizontal scaling
-	x1 = x1 * sbs->HorizScale;
-	x2 = x2 * sbs->HorizScale;
-	z1 = z1 * sbs->HorizScale;
-	z2 = z2 * sbs->HorizScale;
-
-	//get texture force value
-	bool force_enable, force_mode;
-	sbs->GetTextureForce(texture, force_enable, force_mode);
-
-	//Call texture autosizing formulas
-	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
-	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	WallObject *wall;
+
 	if (isexternal == false)
 	{
 		wall = sbs->CreateWallObject(level_walls, Level, this->object, name);
-		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, tw2, th2);
+		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, tw, th, true);
 	}
 	else
 	{
 		wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, this->object, name);
-		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	}
 	return wall;
 }
@@ -240,25 +213,9 @@ WallObject* Floor::AddFloor(const char *name, const char *texture, float thickne
 WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
-	float tw2;
-	float th2;
-
-	//Set horizontal scaling
-	x1 = x1 * sbs->HorizScale;
-	x2 = x2 * sbs->HorizScale;
-	z1 = z1 * sbs->HorizScale;
-	z2 = z2 * sbs->HorizScale;
-
-	//get texture force value
-	bool force_enable, force_mode;
-	sbs->GetTextureForce(texture, force_enable, force_mode);
-
-	//Texture autosizing formulas
-	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
-	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, this->object, name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw2, th2);
+	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	return wall;
 }
 
@@ -266,55 +223,26 @@ WallObject* Floor::AddWall(const char *name, const char *texture, float thicknes
 {
 	//Adds a wall with the specified dimensions
 
-	//Set horizontal scaling
-	x1 = x1 * sbs->HorizScale;
-	x2 = x2 * sbs->HorizScale;
-	z1 = z1 * sbs->HorizScale;
-	z2 = z2 * sbs->HorizScale;
-
-	//calculate autosizing
-	float tmpheight;
-	if (height_in1 > height_in2)
-		tmpheight = height_in1;
-	else
-		tmpheight = height_in2;
-	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
-
 	WallObject *wall;
 	if (isexternal == false)
 	{
 		wall = sbs->CreateWallObject(level_walls, Level, this->object, name);
-		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, sizing.x, sizing.y);
-		return wall;
+		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, tw, th, true);
 	}
 	else
 	{
 		wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, this->object, name);
-		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
-		return wall;
+		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	}
+	return wall;
 }
 
 WallObject* Floor::AddInterfloorWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds an interfloor wall with the specified dimensions
 
-	//Set horizontal scaling
-	x1 = x1 * sbs->HorizScale;
-	x2 = x2 * sbs->HorizScale;
-	z1 = z1 * sbs->HorizScale;
-	z2 = z2 * sbs->HorizScale;
-
-	//calculate autosizing
-	float tmpheight;
-	if (height_in1 > height_in2)
-		tmpheight = height_in1;
-	else
-		tmpheight = height_in2;
-	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
-
 	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, this->object, name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, sizing.x, sizing.y);
+	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	return wall;
 }
 
@@ -416,9 +344,12 @@ void Floor::Cut(const csVector3 &start, const csVector3 &end, bool cutwalls, boo
 	//Y values are relative to the floor's altitude
 	//if fast is specified, skips the interfloor scan
 
-	sbs->Cut(Level, level_walls, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
-	if (fast == false)
-		sbs->Cut(Interfloor, interfloor_walls, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
+	for (int i = 0; i < level_walls.GetSize(); i++)
+	{
+		sbs->Cut(level_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
+		if (fast == false)
+			sbs->Cut(interfloor_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
+	}
 }
 
 void Floor::CutAll(const csVector3 &start, const csVector3 &end, bool cutwalls, bool cutfloors)
@@ -448,7 +379,8 @@ void Floor::CutAll(const csVector3 &start, const csVector3 &end, bool cutwalls, 
 	}
 
 	//cut external
-	sbs->Cut(sbs->External, sbs->External_walls, csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0));
+	for (int i = 0; i < sbs->External_walls.GetSize(); i++)
+		sbs->Cut(sbs->External_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0));
 }
 
 void Floor::AddGroupFloor(int number)
@@ -590,45 +522,19 @@ void Floor::EnableColumnFrame(bool value)
 WallObject* Floor::ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box
-	float tw2 = tw;
-	float th2;
-
-	//Set horizontal scaling
-	x1 = x1 * sbs->HorizScale;
-	x2 = x2 * sbs->HorizScale;
-	z1 = z1 * sbs->HorizScale;
-	z2 = z2 * sbs->HorizScale;
-
-	//get texture force value
-	bool force_enable, force_mode;
-	sbs->GetTextureForce(texture, force_enable, force_mode);
-
-	//Texture autosizing formulas
-	if (z1 == z2)
-		tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
-	if (x1 == x2)
-		tw2 = sbs->AutoSize(z1, z2, true, tw, force_enable, force_mode);
-	th2 = sbs->AutoSize(0, height_in, false, th, force_enable, force_mode);
 
 	WallObject *wall = sbs->CreateWallObject(columnframe_walls, ColumnFrame, this->object, name);
-	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom);
+	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }
 
 WallObject* Floor::ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box from a central location
-	float x1;
-	float x2;
-	float z1;
-	float z2;
 
-	x1 = CenterX - (WidthX / 2);
-	x2 = CenterX + (WidthX / 2);
-	z1 = CenterZ - (LengthZ / 2);
-	z2 = CenterZ + (LengthZ / 2);
-
-	return ColumnWallBox(name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom);
+	WallObject *wall = sbs->CreateWallObject(columnframe_walls, ColumnFrame, this->object, name);
+	sbs->CreateWallBox2(wall, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
+	return wall;
 }
 
 Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)

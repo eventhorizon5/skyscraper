@@ -26,7 +26,6 @@
 #ifndef _SBS_WALL_H
 #define _SBS_WALL_H
 
-//thing mesh version
 class WallObject : public Object
 {
 public:
@@ -34,38 +33,6 @@ public:
 	//functions
 	WallObject(csRef<iMeshWrapper> wrapper, Object *proxy = 0, bool temporary = false);
 	~WallObject();
-	int AddQuad(const char *name, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4);
-	int AddPolygon(const char *name, csVector3 *vertices, int num);
-	void CreateHandle(int index);
-	void SetPolygonName(int index, const char *name);
-	void DeletePolygons();
-	void DeletePolygon(int index, bool recreate_colliders);
-	void ReindexPolygons(int deleted_index);
-
-	//polygon index array
-	csArray<int> handles;
-
-	//mesh wrapper
-	csRef<iMeshWrapper> meshwrapper;
-
-	//mesh factory state
-	csRef<iThingFactoryState> state;
-
-	//name
-	csString name;
-
-	//parent array
-	csArray<WallObject*> *parent_array;
-};
-
-//genmesh version
-class WallObject2 : public Object
-{
-public:
-
-	//functions
-	WallObject2(csRef<iMeshWrapper> wrapper, Object *proxy = 0, bool temporary = false);
-	~WallObject2();
 	int AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize);
 	int AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize);
 	int AddPolygon(const char *name, csRef<iMaterialWrapper> material, csVector3 *vertices, int num, csMatrix3 &tex_matrix, csVector3 &tex_vector);
@@ -90,7 +57,7 @@ public:
 	csString name;
 
 	//parent array
-	csArray<WallObject2*> *parent_array;
+	csArray<WallObject*> *parent_array;
 
 private:
 	//array set holding original polygon geometry

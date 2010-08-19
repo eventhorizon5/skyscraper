@@ -37,13 +37,8 @@ class SBSIMPEXP Floor
 public:
 	Object *object; //SBS object
 	csRef<iMeshWrapper> Level; //level mesh
-	csRef<iThingFactoryState> Level_state;
-
 	csRef<iMeshWrapper> Interfloor; //interfloor mesh
-	csRef<iThingFactoryState> Interfloor_state;
-
 	csRef<iMeshWrapper> ColumnFrame; //columnframe mesh
-	csRef<iThingFactoryState> ColumnFrame_state;
 
 	int Number; //floor number
 	csString Name; //floor name

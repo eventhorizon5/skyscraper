@@ -466,14 +466,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	//get hit/intersection position
 	HitPosition = sbs->ToLocal(result.isect);
 
-	//get polygon name from a thingmesh
-	csRef<iThingFactoryState> state = scfQueryInterface<iThingFactoryState> (result.mesh->GetMeshObject()->GetFactory());
-	if (state)
-		polyname = state->GetPolygonName(result.polygon_idx);
-	else
-		polyname = "";
-
-	//get name from a general submesh
+	//get wall name
 	csRef<iGeneralMeshSubMesh> submesh = sbs->FindSubMesh(result.mesh, result.polygon_idx);
 	if (submesh)
 		polyname = submesh->GetName();
@@ -508,13 +501,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//show result
-	if (state)
+	if (submesh)
 		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Polygon: " + polyname);
 	else
 		sbs->Report("Clicked on object " + number + ": " + meshname);
 
 	//delete object if ctrl is pressed
-	if (state && ctrl == true && object_number > 0)
+	if (submesh && ctrl == true && object_number > 0)
 	{
 		if (obj)
 		{

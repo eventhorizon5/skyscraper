@@ -1071,7 +1071,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			//wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
@@ -1224,7 +1224,8 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Invalid object");
 
 		//perform cut
-		Simcore->Cut(tmpMesh, *wallarray, csVector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), csVector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), csString(tempdata[7]).CompareNoCase("true"), csString(tempdata[8]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
+		for (int i = 0; i < wallarray->GetSize(); i++)
+		Simcore->Cut(wallarray->Get(i), csVector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), csVector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), csString(tempdata[7]).CompareNoCase("true"), csString(tempdata[8]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
 		tempdata.DeleteAll();
 	}
 
@@ -1287,7 +1288,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			//wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
@@ -1357,7 +1358,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			//wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
@@ -1420,7 +1421,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			//wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
@@ -1882,22 +1883,21 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		buffer.Downcase();
-		csRef<iThingFactoryState> tmpState;
+		csRef<iMeshWrapper> tmpMesh;
 		if (buffer == "floor")
-			tmpState = Simcore->GetFloor(Current)->Level_state;
+			tmpMesh = Simcore->GetFloor(Current)->Level;
 		else if (buffer == "elevator")
-			//tmpState = Simcore->GetElevator(Current)->Elevator_state;
-			return sNextLine;
+			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
-			tmpState = Simcore->External_state;
+			tmpMesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpState = Simcore->Landscape_state;
+			tmpMesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpState = Simcore->Buildings_state;
+			tmpMesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
-		csVector3 isect = Simcore->GetPoint(tmpState, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
+		csVector3 isect = Simcore->GetPoint(tmpMesh, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 		tempdata.DeleteAll();
 
 		buffer = csString(LineData).Slice(0, temp5) + csString(wxVariant(isect.x).GetString().ToAscii()) + csString(", ") + csString(wxVariant(isect.y).GetString().ToAscii()) + csString(", ") + csString(wxVariant(isect.z).GetString().ToAscii()) + csString(LineData).Slice(temp4 + 1);
@@ -1923,23 +1923,22 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		buffer.Downcase();
-		csRef<iThingFactoryState> tmpState;
+		csRef<iMeshWrapper> tmpMesh;
 		if (buffer == "floor")
-			tmpState = Simcore->GetFloor(Current)->Level_state;
+			tmpMesh = Simcore->GetFloor(Current)->Level;
 		else if (buffer == "elevator")
-			//tmpState = Simcore->GetElevator(Current)->Elevator_state;
-			return sNextLine;
+			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
-			tmpState = Simcore->External_state;
+			tmpMesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpState = Simcore->Landscape_state;
+			tmpMesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpState = Simcore->Buildings_state;
+			tmpMesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
-		MinExtent = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), false);
-		MaxExtent = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), true);
+		MinExtent = Simcore->GetWallExtents(tmpMesh, tempdata[1], atof(tempdata[2]), false);
+		MaxExtent = Simcore->GetWallExtents(tmpMesh, tempdata[1], atof(tempdata[2]), true);
 		tempdata.DeleteAll();
 	}
 
@@ -1975,22 +1974,21 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		buffer.Downcase();
-		csRef<iThingFactoryState> tmpState;
+		csRef<iMeshWrapper> tmpMesh;
 		if (buffer == "floor")
-			tmpState = Simcore->GetFloor(Current)->Level_state;
+			tmpMesh = Simcore->GetFloor(Current)->Level;
 		else if (buffer == "elevator")
-			//tmpState = Simcore->GetElevator(Current)->Elevator_state;
-			return sNextLine;
+			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
-			tmpState = Simcore->External_state;
+			tmpMesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpState = Simcore->Landscape_state;
+			tmpMesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpState = Simcore->Buildings_state;
+			tmpMesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
-		csVector3 result = Simcore->GetWallExtents(tmpState, tempdata[1], atof(tempdata[2]), csString(tempdata[3]).CompareNoCase("true"));
+		csVector3 result = Simcore->GetWallExtents(tmpMesh, tempdata[1], atof(tempdata[2]), csString(tempdata[3]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 
 		buffer = csString(LineData).Slice(0, temp5) + csString(wxVariant(result.x).GetString().ToAscii()) + csString(", ") + csString(wxVariant(result.y).GetString().ToAscii()) + csString(", ") + csString(wxVariant(result.z).GetString().ToAscii()) + csString(LineData).Slice(temp4 + 1);
@@ -2186,14 +2184,6 @@ int ScriptProcessor::ProcGlobals()
 			return ScriptError("Invalid floor");
 
 		Simcore->camera->StartFloor = data;
-	}
-	if (LineData.Slice(0, 10).CompareNoCase("horizscale") == true)
-	{
-		float data;
-		if (!IsNumeric(temp2.GetData(), data))
-			return ScriptError("Invalid scale");
-
-		Simcore->HorizScale = data;
 	}
 	if (LineData.Slice(0, 14).CompareNoCase("cameraposition") == true)
 	{

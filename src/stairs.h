@@ -70,9 +70,7 @@ public:
 
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array
-	csRefArray<iThingFactoryState> StairArray_state; //stairwell mesh array state
 	csRefArray<iMeshWrapper> StairDoorArray; //stair door array
-	csRefArray<iThingFactoryState> StairDoorArray_state; //stair mesh array state
 	csArray<bool> EnableArray;
 
 	struct DoorMap
