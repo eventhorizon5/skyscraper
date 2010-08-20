@@ -4287,16 +4287,16 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 
 	//create texture mapping table
 	//convert to remote positioning
+
+	CS::Geometry::csContour3 vertices2;
+
 	for (int i = 0; i < vertices.GetSize(); i++)
-	{
-		csVector3 origvert = vertices[i];
-		vertices[i] = ToRemote(origvert);
-	}
+		vertices2.Push(ToRemote(vertices[i]));
 
 	//texture mapping
 	csVector3 v1, v2, v3;
-	GetTextureMapping(vertices, v1, v2, v3);
-	if (!ComputeTextureMap(t_matrix, t_vector, vertices,
+	GetTextureMapping(vertices2, v1, v2, v3);
+	if (!ComputeTextureMap(t_matrix, t_vector, vertices2,
 		v1,
 		csVector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
 		v2,
@@ -4305,7 +4305,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2)))
 		return 0;
 
-	return PolyMesh(mesh, name, material, vertices, t_matrix, t_vector, false);
+	return PolyMesh(mesh, name, material, vertices2, t_matrix, t_vector, false);
 }
 
 csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, csRef<iMaterialWrapper> material, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices)
@@ -4316,22 +4316,23 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
 
 	//convert to remote positioning
+
+	CS::Geometry::csContour3 vertices2;
 	if (convert_vertices == true)
 	{
 		for (int i = 0; i < vertices.GetSize(); i++)
-		{
-			csVector3 origvert = vertices[i];
-			vertices[i] = ToRemote(origvert);
-		}
+			vertices2.Push(ToRemote(vertices[i]));
 	}
+	else
+		vertices2 = vertices;
 
 	//texture mapping
-	csVector2 *table = GetTexels(tex_matrix, tex_vector, vertices);
+	csVector2 *table = GetTexels(tex_matrix, tex_vector, vertices2);
 	CS::Geometry::TableTextureMapper mapper(table);
 
 	//triangulate mesh
 	csTriangleMesh trimesh;
-	CS::Geometry::Triangulate3D::Process(vertices, trimesh);
+	CS::Geometry::Triangulate3D::Process(vertices2, trimesh);
 
 	//set up geometry arrays
 	csDirtyAccessArray<csVector3> mesh_vertices;
