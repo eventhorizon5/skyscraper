@@ -293,7 +293,7 @@ DrawWalls = true, true, false, false, false, false
     #0.2 feet beyond them, at -3.301.
     
     #This creates the directional indicator outside the elevator
-    AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -3.301 - 0.2 - 0.66 - 0.001, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, false, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -3.301 - 0.2 - 0.66 - 0.001, 6, front, 0.5, 1, true, 0, 0
     
     #I made the positioning more obvious in that one using math.  I positioned it horizontally (X) at -3, and
     #for the depth (Z) position, I took the shaft door position from above (-3.301), subtracted 0.2 from that
