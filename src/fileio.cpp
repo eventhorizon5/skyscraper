@@ -1225,7 +1225,7 @@ int ScriptProcessor::ProcCommands()
 
 		//perform cut
 		for (int i = 0; i < wallarray->GetSize(); i++)
-		Simcore->Cut(wallarray->Get(i), csVector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), csVector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), csString(tempdata[7]).CompareNoCase("true"), csString(tempdata[8]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
+			Simcore->Cut(wallarray->Get(i), csVector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), csVector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), csString(tempdata[7]).CompareNoCase("true"), csString(tempdata[8]).CompareNoCase("true"), csVector3(0, 0, 0), csVector3(0, 0, 0));
 		tempdata.DeleteAll();
 	}
 

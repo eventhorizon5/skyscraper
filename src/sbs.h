@@ -332,6 +332,9 @@ public:
 	csRef<iMeshWrapper> SkyBox; //skybox mesh
 		Object *Skybox_object;
 
+	csArray<iMeshWrapper*> deletestuff1;
+	csArray<iGeneralMeshSubMesh*> deletestuff2;
+
 private:
 
 	//fps
@@ -396,6 +399,7 @@ private:
 	void PrintBanner();
 	void CheckAutoAreas();
 	void BackupMapping();
+	bool ComputeTextureSpace(csMatrix3 &m, csVector3 &v, const csVector3 &v_orig, const csVector3 &v1, float len1, const csVector3 &v2, float len2);
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;

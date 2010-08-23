@@ -36,15 +36,15 @@ public:
 	int AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize);
 	int AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize);
 	int AddPolygon(const char *name, csRef<iMaterialWrapper> material, csVector3 *vertices, int num, csMatrix3 &tex_matrix, csVector3 &tex_vector);
-	int CreateHandle(csRef<iGeneralMeshSubMesh> handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector);
+	int CreateHandle(iGeneralMeshSubMesh* handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector);
 	void DeletePolygons();
 	void DeletePolygon(int index, bool recreate_colliders);
 	void ReindexPolygons(int deleted_index);
 	csString ProcessName(const char *name);
-	CS::Geometry::csContour3* GetGeometry(csRef<iGeneralMeshSubMesh> handle);
+	CS::Geometry::csContour3* GetGeometry(iGeneralMeshSubMesh *handle);
 	int GetHandleCount();
-	csRef<iGeneralMeshSubMesh> GetHandle(int index);
-	int FindHandleIndex(csRef<iGeneralMeshSubMesh> handle);
+	iGeneralMeshSubMesh* GetHandle(int index);
+	int FindHandleIndex(iGeneralMeshSubMesh *handle);
 	void GetTextureMapping(int index, csMatrix3 &t_matrix, csVector3 &t_vector);
 
 	//mesh wrapper

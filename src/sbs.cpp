@@ -770,7 +770,6 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//clear buffer with alpha mask and enable double buffering
 	if (confman->GetBool("Skyscraper.SBS.TextNoClear", false) == true)
 		g2d->ClearAll(g2d->FindRGB(0, 0, 0, 0));
-	g2d->DoubleBuffer(true);
 
 	//draw original image onto backbuffer
 	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, 0, 0, width, height);
@@ -1661,6 +1660,23 @@ csVector2 SBS::GetExtents(csRef<iMeshWrapper> mesh, int coord)
 
 int SBS::CreateSky(const char *filenamebase)
 {
+	/*for (int i = 0; i < deletestuff2.GetSize(); i++)
+	{
+		for (int j = 0; j < deletestuff1.GetSize(); j++)
+		{
+			csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(deletestuff1[j]->GetFactory()->GetMeshObjectFactory());
+			for (int k = 0; k < state->GetSubMeshCount(); k++)
+			{
+				if (state->GetSubMesh(k) == deletestuff2[i])
+				{
+					state->DeleteSubMesh(deletestuff2[i]);
+					//state->Invalidate();
+					csPrintf("Deleted %d\n", i);
+				}
+			}
+		}
+	}*/
+
 	//set up SBS object
 	Skybox_object = new Object();
 	Skybox_object->SetValues(0, this->object, "Skybox", "Skybox", false);
@@ -2592,6 +2608,8 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 		return;
 
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
+	csArray<iGeneralMeshSubMesh*> ignore_list;
+
 	int polycount;
 	bool polycheck;
 	if (checkwallnumber == 1)
@@ -2624,7 +2642,29 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 			i++;
 			continue;
 		}
-		csString name = wall->GetHandle(i)->GetName();
+
+		//skip created submeshes
+		bool ignorecheck = false;
+		for (int j = 0; j < ignore_list.GetSize(); j++)
+		{
+			if (ignore_list[j] == wall->GetHandle(i))
+				ignorecheck = true;
+		}
+		if (ignorecheck == true)
+			continue;
+
+		//skip submeshes pending deletion
+		for (int j = 0; j < sbs->deletestuff2.GetSize(); j++)
+		{
+			if (sbs->deletestuff2[j] == wall->GetHandle(i))
+				ignorecheck = true;
+		}
+		if (ignorecheck == true)
+			continue;
+
+		//get name and vertex array
+		iGeneralMeshSubMesh* handle = wall->GetHandle(i);
+		csString name = handle->GetName();
 		CS::Geometry::csContour3* origpoly = wall->GetGeometry(wall->GetHandle(i));
 
 		//skip null geometry
@@ -2826,26 +2866,48 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 				wall->GetTextureMapping(i, mapping, oldvector);
 
 				//delete original polygon
+				csPrintf("Deleted handle: %p\n", wall->GetHandle(i));
 				wall->DeletePolygon(i, false);
-				i--;
-				polycount--;
+				sbs->deletestuff1.Push(wall->meshwrapper);
+				sbs->deletestuff2.Push(wall->GetHandle(i));
 
 				//create splitted polygons
+				int handle = 0;
 				if (temppoly.GetVertexCount() > 2)
-					wall->AddPolygon(name, oldmat, temppoly.GetVertices(), temppoly.GetVertexCount(), mapping, oldvector);
+				{
+					handle = wall->AddPolygon(name, oldmat, temppoly.GetVertices(), temppoly.GetVertexCount(), mapping, oldvector);
+					csPrintf("Added handle 1: %p\n", wall->GetHandle(handle));
+					ignore_list.Push(wall->GetHandle(handle));
+				}
 				temppoly.MakeEmpty();
 
 				if (temppoly2.GetVertexCount() > 2)
-					wall->AddPolygon(name, oldmat, temppoly2.GetVertices(), temppoly2.GetVertexCount(), mapping, oldvector);
+				{
+					handle = wall->AddPolygon(name, oldmat, temppoly2.GetVertices(), temppoly2.GetVertexCount(), mapping, oldvector);
+					csPrintf("Added handle 2: %p\n", wall->GetHandle(handle));
+					ignore_list.Push(wall->GetHandle(handle));
+				}
 				temppoly2.MakeEmpty();
 
 				if (temppoly3.GetVertexCount() > 2)
-					wall->AddPolygon(name, oldmat, temppoly3.GetVertices(), temppoly3.GetVertexCount(), mapping, oldvector);
+				{
+					handle = wall->AddPolygon(name, oldmat, temppoly3.GetVertices(), temppoly3.GetVertexCount(), mapping, oldvector);
+					csPrintf("Added handle 3: %p\n", wall->GetHandle(handle));
+					ignore_list.Push(wall->GetHandle(handle));
+				}
 				temppoly3.MakeEmpty();
 
 				if (temppoly4.GetVertexCount() > 2)
-					wall->AddPolygon(name, oldmat, temppoly4.GetVertices(), temppoly4.GetVertexCount(), mapping, oldvector);
+				{
+					handle = wall->AddPolygon(name, oldmat, temppoly4.GetVertices(), temppoly4.GetVertexCount(), mapping, oldvector);
+					csPrintf("Added handle 4: %p\n", wall->GetHandle(handle));
+					ignore_list.Push(wall->GetHandle(handle));
+				}
 				temppoly4.MakeEmpty();
+
+				//reset search
+				i = 0;
+				polycount = wall->GetHandleCount();
 			}
 		}
 	}
@@ -4392,7 +4454,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	state->Invalidate();
 
 	//create submesh and set material
-	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
+	iGeneralMeshSubMesh* submesh = state->AddSubMesh(buffer, material, name);
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)
@@ -4464,7 +4526,46 @@ bool SBS::ComputeTextureMap(csMatrix3 &t_matrix, csVector3 &t_vector, CS::Geomet
 	pl = m * (csVector2(0, 1) - uv1);
 	pv = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
 
-	csTextureTrans::compute_texture_space(t_matrix, t_vector, po, pu, (pu - po).Norm(), pv, (pv - po).Norm());
+	ComputeTextureSpace(t_matrix, t_vector, po, pu, (pu - po).Norm(), pv, (pv - po).Norm());
+	return true;
+}
+
+bool SBS::ComputeTextureSpace(csMatrix3 &m, csVector3 &v, const csVector3 &v_orig, const csVector3 &v1, float len1, const csVector3 &v2, float len2)
+{
+	//from CS textrans.cpp
+	
+	float d = csSquaredDist::PointPoint(v_orig, v1);
+	float invl1 = csQisqrt(d);
+
+	d = csSquaredDist::PointPoint(v_orig, v2);
+	float invl2 = (d) ? csQisqrt (d) : 0;
+
+	csVector3 v_u = (v1 - v_orig) * len1 * invl1;
+	csVector3 v_v = (v2 - v_orig) * len2 * invl2;
+	csVector3 v_w = v_u % v_v;
+
+	m.m11 = v_u.x;
+	m.m12 = v_v.x;
+	m.m13 = v_w.x;
+	m.m21 = v_u.y;
+	m.m22 = v_v.y;
+	m.m23 = v_w.y;
+	m.m31 = v_u.z;
+	m.m32 = v_v.z;
+	m.m33 = v_w.z;
+
+	v = v_orig;
+
+	float det = m.Determinant ();
+	if (ABS (det) < SMALL_EPSILON)
+	{
+		// @@@ Warning?
+		m.Identity();
+		return false;
+	}
+	else
+		m.Invert ();
+
 	return true;
 }
 
