@@ -332,9 +332,6 @@ public:
 	csRef<iMeshWrapper> SkyBox; //skybox mesh
 		Object *Skybox_object;
 
-	csArray<iMeshWrapper*> deletestuff1;
-	csArray<iGeneralMeshSubMesh*> deletestuff2;
-
 private:
 
 	//fps

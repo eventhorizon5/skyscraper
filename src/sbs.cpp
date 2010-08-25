@@ -1660,22 +1660,7 @@ csVector2 SBS::GetExtents(csRef<iMeshWrapper> mesh, int coord)
 
 int SBS::CreateSky(const char *filenamebase)
 {
-	/*for (int i = 0; i < deletestuff2.GetSize(); i++)
-	{
-		for (int j = 0; j < deletestuff1.GetSize(); j++)
-		{
-			csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(deletestuff1[j]->GetFactory()->GetMeshObjectFactory());
-			for (int k = 0; k < state->GetSubMeshCount(); k++)
-			{
-				if (state->GetSubMesh(k) == deletestuff2[i])
-				{
-					state->DeleteSubMesh(deletestuff2[i]);
-					//state->Invalidate();
-					csPrintf("Deleted %d\n", i);
-				}
-			}
-		}
-	}*/
+	//create skybox
 
 	//set up SBS object
 	Skybox_object = new Object();
@@ -2653,15 +2638,6 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 		if (ignorecheck == true)
 			continue;
 
-		//skip submeshes pending deletion
-		for (int j = 0; j < sbs->deletestuff2.GetSize(); j++)
-		{
-			if (sbs->deletestuff2[j] == wall->GetHandle(i))
-				ignorecheck = true;
-		}
-		if (ignorecheck == true)
-			continue;
-
 		//get name and vertex array
 		iGeneralMeshSubMesh* handle = wall->GetHandle(i);
 		csString name = handle->GetName();
@@ -2866,17 +2842,13 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 				wall->GetTextureMapping(i, mapping, oldvector);
 
 				//delete original polygon
-				csPrintf("Deleted handle: %p\n", wall->GetHandle(i));
 				wall->DeletePolygon(i, false);
-				sbs->deletestuff1.Push(wall->meshwrapper);
-				sbs->deletestuff2.Push(wall->GetHandle(i));
 
 				//create splitted polygons
 				int handle = 0;
 				if (temppoly.GetVertexCount() > 2)
 				{
 					handle = wall->AddPolygon(name, oldmat, temppoly.GetVertices(), temppoly.GetVertexCount(), mapping, oldvector);
-					csPrintf("Added handle 1: %p\n", wall->GetHandle(handle));
 					ignore_list.Push(wall->GetHandle(handle));
 				}
 				temppoly.MakeEmpty();
@@ -2884,7 +2856,6 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 				if (temppoly2.GetVertexCount() > 2)
 				{
 					handle = wall->AddPolygon(name, oldmat, temppoly2.GetVertices(), temppoly2.GetVertexCount(), mapping, oldvector);
-					csPrintf("Added handle 2: %p\n", wall->GetHandle(handle));
 					ignore_list.Push(wall->GetHandle(handle));
 				}
 				temppoly2.MakeEmpty();
@@ -2892,7 +2863,6 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 				if (temppoly3.GetVertexCount() > 2)
 				{
 					handle = wall->AddPolygon(name, oldmat, temppoly3.GetVertices(), temppoly3.GetVertexCount(), mapping, oldvector);
-					csPrintf("Added handle 3: %p\n", wall->GetHandle(handle));
 					ignore_list.Push(wall->GetHandle(handle));
 				}
 				temppoly3.MakeEmpty();
@@ -2900,7 +2870,6 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 				if (temppoly4.GetVertexCount() > 2)
 				{
 					handle = wall->AddPolygon(name, oldmat, temppoly4.GetVertices(), temppoly4.GetVertexCount(), mapping, oldvector);
-					csPrintf("Added handle 4: %p\n", wall->GetHandle(handle));
 					ignore_list.Push(wall->GetHandle(handle));
 				}
 				temppoly4.MakeEmpty();

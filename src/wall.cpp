@@ -94,10 +94,9 @@ int WallObject::AddPolygon(const char *name, csRef<iMaterialWrapper> material, c
 	return CreateHandle(handle, array, tex_matrix, tex_vector);
 }
 
-int WallObject::CreateHandle(iGeneralMeshSubMesh* handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
+int WallObject::CreateHandle(csRef<iGeneralMeshSubMesh> handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
 {
 	//create a polygon handle
-	csPrintf("Added handle: %p - %s\n", handle, handle->GetName());
 	handles.Push(handle);
 	geometry.Push(vertices);
 	t_matrix.Push(tex_matrix);
