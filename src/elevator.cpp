@@ -1554,7 +1554,7 @@ void Elevator::MoveElevatorToFloor()
 	if (CalculateStoppingDistance == true)
 	{
 		if (Direction == 1)
-			//stopping distance is the distance the elevator has travelled (usually to reach max speed), times
+			//stopping distance is the distance the elevator has traveled (usually to reach max speed), times
 			//the ratio of acceleration to deceleration (so if the deceleration is half of the acceleration,
 			//it will take twice the distance to stop)
 			StoppingDistance = (elevposition.y - ElevatorStart) * (Acceleration / Deceleration);
