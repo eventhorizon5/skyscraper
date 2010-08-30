@@ -201,6 +201,7 @@ void WallObject::DeleteVertices(csArray<int> &deleted_indices)
 	csDirtyAccessArray<csVector3> mesh_vertices;
 	csDirtyAccessArray<csVector2> mesh_texels;
 	csDirtyAccessArray<csVector3> mesh_normals;
+	csDirtyAccessArray<csColor4> mesh_colors;
 
 	//copy mesh data
 	for (int i = 0; i < state->GetVertexCount(); i++)
@@ -208,6 +209,7 @@ void WallObject::DeleteVertices(csArray<int> &deleted_indices)
 		mesh_vertices.Push(state->GetVertices()[i]);
 		mesh_texels.Push(state->GetTexels()[i]);
 		mesh_normals.Push(state->GetNormals()[i]);
+		mesh_colors.Push(state->GetColors()[i]);
 	}
 
 	//construct new sorted and compressed index array
@@ -223,6 +225,7 @@ void WallObject::DeleteVertices(csArray<int> &deleted_indices)
 		mesh_vertices.DeleteIndex(index);
 		mesh_texels.DeleteIndex(index);
 		mesh_normals.DeleteIndex(index);
+		mesh_colors.DeleteIndex(index);
 	}
 
 	//refill original mesh data
@@ -232,6 +235,7 @@ void WallObject::DeleteVertices(csArray<int> &deleted_indices)
 		state->GetVertices()[i] = mesh_vertices[i];
 		state->GetTexels()[i] = mesh_texels[i];
 		state->GetNormals()[i] = mesh_normals[i];
+		state->GetColors()[i] = mesh_colors[i];
 	}
 
 	//reindex triangle indices in all submeshes
