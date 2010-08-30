@@ -467,10 +467,11 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	HitPosition = sbs->ToLocal(result.isect);
 
 	//get wall name
-	csRef<iGeneralMeshSubMesh> submesh = sbs->FindSubMesh(result.mesh, result.polygon_idx);
+	iGeneralMeshSubMesh* submesh = 0;
+	/*csRef<iGeneralMeshSubMesh> submesh = sbs->FindSubMesh(result.mesh, result.polygon_idx);
 	if (submesh)
 		polyname = submesh->GetName();
-	else
+	else*/
 		polyname = "";
 
 	//get object number

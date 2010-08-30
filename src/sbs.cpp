@@ -2829,6 +2829,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 					worker = temppoly;
 				worker.SplitWithPlaneZ(temppoly5, temppoly4, end.z);
 				worker.MakeEmpty();
+				temppoly5.MakeEmpty();
 
 				polycheck = true;
 			}
@@ -2880,7 +2881,6 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 			}
 		}
 	}
-
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)
@@ -4369,14 +4369,12 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	csDirtyAccessArray<csVector3> mesh_vertices;
 	csDirtyAccessArray<csVector2> mesh_texels;
 	csDirtyAccessArray<csVector3> mesh_normals;
-	csDirtyAccessArray<csTriangle> mesh_triangles;
 
 	//initialize geometry arrays
 	int size = trimesh.GetVertexCount();
 	mesh_vertices.SetSize(size);
 	mesh_texels.SetSize(size);
 	mesh_normals.SetSize(size);
-	mesh_triangles.SetSize(trimesh.GetTriangleCount());
 
 	//populate vertices, normals, and texels for mesh data
 	for (int i = 0; i < size; i++)
@@ -4412,7 +4410,6 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		tri.a += count;
 		tri.b += count;
 		tri.c += count;
-		state->AddTriangle(tri); //add triangle to genmesh
 		triangleData[i] = tri; //add triangle to submesh buffer
 	}
 
@@ -4563,7 +4560,7 @@ csRef<iGeneralMeshSubMesh> SBS::FindSubMesh(csRef<iMeshWrapper> mesh, int index)
 {
 	//find a submesh from the given triangle index and mesh wrapper
 
-	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetMeshObject()->GetFactory());
+	/*csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetMeshObject()->GetFactory());
 	if (state)
 	{
 		if (state->GetSubMeshCount() > 0)
@@ -4605,6 +4602,6 @@ csRef<iGeneralMeshSubMesh> SBS::FindSubMesh(csRef<iMeshWrapper> mesh, int index)
 				buffer->Release();
 			}
 		}
-	}
+	}*/
 	return 0;
 }

@@ -66,7 +66,7 @@ int WallObject::AddQuad(const char *name, const char *texture, const csVector3 &
 	csString name2 = ProcessName(name);
 	csMatrix3 tm;
 	csVector3 tv;
-	iGeneralMeshSubMesh *handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th, autosize, tm, tv);
+	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th, autosize, tm, tv);
 	return CreateHandle(handle, array, tm, tv);
 }
 
@@ -79,7 +79,7 @@ int WallObject::AddPolygon(const char *name, const char *texture, csVector3 *ver
 	csString name2 = ProcessName(name);
 	csMatrix3 tm;
 	csVector3 tv;
-	iGeneralMeshSubMesh *handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th, autosize, tm, tv);
+	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th, autosize, tm, tv);
 	return CreateHandle(handle, array, tm, tv);
 }
 
@@ -90,7 +90,7 @@ int WallObject::AddPolygon(const char *name, csRef<iMaterialWrapper> material, c
 	for (int i = 0; i < num; i++)
 		array.Push(vertices[i]);
 	csString name2 = ProcessName(name);
-	iGeneralMeshSubMesh *handle = sbs->PolyMesh(meshwrapper, name2, material, array, tex_matrix, tex_vector);
+	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, material, array, tex_matrix, tex_vector);
 	return CreateHandle(handle, array, tex_matrix, tex_vector);
 }
 
@@ -154,14 +154,33 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 
 	if (index > -1 && index < handles.GetSize())
 	{
-		state->DeleteSubMesh(GetHandle(index));
+		iGeneralMeshSubMesh *submesh = GetHandle(index);
+
+		//get submesh's triangle vertices (which will be deleted)
+		iRenderBuffer* buffer = submesh->GetIndices();
+		int* buffer2 = (int*)buffer->Lock(CS_BUF_LOCK_NORMAL);
+
+		//copy vertex indices into index array
+		csArray<int> indices;
+		for (int i = 0; i < buffer->GetElementCount(); i++)
+			indices.Push(buffer2[i]);
+		buffer->Release();
+
+		//delete submesh
+		state->DeleteSubMesh(submesh);
+
+		//reindex mesh triangles (since triangles with indices greater than the deleted ones are now invalid)
+		ReindexMesh(indices);
+
+		//clean up data
 		handles[index] = 0;
 		geometry[index].DeleteAll();
-		//ReindexPolygons(index);
 		handles.DeleteIndex(index);
 		geometry.DeleteIndex(index);
 		t_matrix.DeleteIndex(index);
 		t_vector.DeleteIndex(index);
+
+		//reprocess mesh
 		state->Invalidate();
 
 		//recreate colliders if specified
@@ -173,18 +192,65 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 	}
 }
 
-void WallObject::ReindexPolygons(int deleted_index)
+void WallObject::ReindexMesh(csArray<int> &deleted_indices)
 {
-	//reindex all polygon indices in the given wall array
+	//delete related mesh vertices using provided index array
+	//then reindex all mesh triangle indices in all submeshes
+	//this should be done after a submesh is deleted
 
-	/*for (int i = 0; i < parent_array->GetSize(); i++)
+	csDirtyAccessArray<csVector3> mesh_vertices;
+	csDirtyAccessArray<csVector2> mesh_texels;
+	csDirtyAccessArray<csVector3> mesh_normals;
+
+	//copy mesh data
+	for (int i = 0; i < state->GetVertexCount(); i++)
 	{
-		for (int j = 0; j < parent_array->Get(i)->handles.GetSize(); j++)
+		mesh_vertices.Push(state->GetVertices()[i]);
+		mesh_texels.Push(state->GetTexels()[i]);
+		mesh_normals.Push(state->GetNormals()[i]);
+	}
+
+	//construct new sorted and compressed index array
+	csArray<int> deleted2;
+	for (int i = 0; i < deleted_indices.GetSize(); i++)
+		deleted2.PushSmart(deleted_indices[i]);
+	deleted2.Sort();
+
+	//delete specified vertices
+	for (int i = deleted2.GetSize() - 1; i >= 0; i--)
+	{
+		int index = deleted2[i];
+		mesh_vertices.DeleteIndex(index);
+		mesh_texels.DeleteIndex(index);
+		mesh_normals.DeleteIndex(index);
+	}
+
+	//refill original mesh data
+	state->SetVertexCount(mesh_vertices.GetSize());
+	for (int i = 0; i < mesh_vertices.GetSize(); i++)
+	{
+		state->GetVertices()[i] = mesh_vertices[i];
+		state->GetTexels()[i] = mesh_texels[i];
+		state->GetNormals()[i] = mesh_normals[i];
+	}
+
+	//reindex triangle indices in all submeshes
+	for (int i = 0; i < state->GetSubMeshCount(); i++)
+	{
+		iRenderBuffer *indices = state->GetSubMesh(i)->GetIndices();
+		
+		int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
+
+		for (int j = 0; j < indices->GetElementCount(); j++)
 		{
-			if (parent_array->Get(i)->handles[j] >= deleted_index)
-				parent_array->Get(i)->handles[j]--;
+			for (int k = deleted2.GetSize() - 1; k >= 0; k--)
+			{
+				if (indices2[j] >= deleted2[k])
+					indices2[j]--;
+			}
 		}
-	}*/
+		indices->Release();
+	}
 }
 
 CS::Geometry::csContour3* WallObject::GetGeometry(iGeneralMeshSubMesh *handle)

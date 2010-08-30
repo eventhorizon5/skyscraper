@@ -39,7 +39,7 @@ public:
 	int CreateHandle(csRef<iGeneralMeshSubMesh> handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector);
 	void DeletePolygons();
 	void DeletePolygon(int index, bool recreate_colliders);
-	void ReindexPolygons(int deleted_index);
+	void ReindexMesh(csArray<int> &deleted_indices);
 	csString ProcessName(const char *name);
 	CS::Geometry::csContour3* GetGeometry(iGeneralMeshSubMesh *handle);
 	int GetHandleCount();
