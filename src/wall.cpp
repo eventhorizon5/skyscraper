@@ -170,7 +170,7 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 		state->DeleteSubMesh(submesh);
 
 		//delete related mesh vertices
-		DeleteVertices(indices);
+		//DeleteVertices(indices);
 
 		//clean up data
 		handles[index] = 0;
