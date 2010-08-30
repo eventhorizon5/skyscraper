@@ -169,8 +169,8 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 		//delete submesh
 		state->DeleteSubMesh(submesh);
 
-		//reindex mesh triangles (since triangles with indices greater than the deleted ones are now invalid)
-		ReindexMesh(indices);
+		//delete related mesh vertices
+		DeleteVertices(indices);
 
 		//clean up data
 		handles[index] = 0;
@@ -192,7 +192,7 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 	}
 }
 
-void WallObject::ReindexMesh(csArray<int> &deleted_indices)
+void WallObject::DeleteVertices(csArray<int> &deleted_indices)
 {
 	//delete related mesh vertices using provided index array
 	//then reindex all mesh triangle indices in all submeshes
