@@ -166,11 +166,11 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 			indices.Push(buffer2[i]);
 		buffer->Release();
 
-		//delete submesh
-		state->DeleteSubMesh(submesh);
+		//delete submesh (broken)
+		//state->DeleteSubMesh(submesh);
 
 		//delete related mesh vertices
-		//DeleteVertices(indices);
+		DeleteVertices(indices);
 
 		//clean up data
 		handles[index] = 0;
