@@ -26,7 +26,7 @@
 #ifndef _SBS_WALL_H
 #define _SBS_WALL_H
 
-class WallObject : public Object
+class SBSIMPEXP WallObject : public Object
 {
 public:
 

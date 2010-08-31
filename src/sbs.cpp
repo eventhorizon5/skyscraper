@@ -2847,6 +2847,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 
 				//create splitted polygons
 				int handle = 0;
+		
 				if (temppoly.GetVertexCount() > 2)
 				{
 					handle = wall->AddPolygon(name, oldmat, temppoly.GetVertices(), temppoly.GetVertexCount(), mapping, oldvector);
@@ -4420,7 +4421,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	state->Invalidate();
 
 	//create submesh and set material
-	iGeneralMeshSubMesh* submesh = state->AddSubMesh(buffer, material, name);
+	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)

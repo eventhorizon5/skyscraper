@@ -243,6 +243,9 @@ void WallObject::DeleteVertices(csArray<int> &deleted_indices)
 	{
 		iRenderBuffer *indices = state->GetSubMesh(i)->GetIndices();
 		
+		if (!indices)
+			continue;
+
 		int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
 
 		for (int j = 0; j < indices->GetElementCount(); j++)
