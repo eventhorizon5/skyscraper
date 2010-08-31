@@ -57,6 +57,7 @@ public:
 
 private:
 	csRef<iMeshWrapper> DoorMesh; //door mesh
+	csRef<iThingFactoryState> DoorMesh_state;
 	csRef<iMovable> DoorMesh_movable;
 
 	//sound object

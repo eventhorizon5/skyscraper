@@ -463,7 +463,6 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 		DisableSound = true;
 	}
 	csRef<iBase> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
-	//csRef<iComponent> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	plug->IncRef ();
 
@@ -503,7 +502,8 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	//initialize event queue
 	equeue = csQueryRegistry<iEventQueue> (object_reg);
 
-	//enable ambient light
+	//disable the lighting cache
+	engine->SetLightingCacheMode(0);
 	engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
 
 	//set up viewport

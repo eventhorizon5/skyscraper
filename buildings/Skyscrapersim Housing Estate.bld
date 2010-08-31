@@ -85,11 +85,6 @@
     Load data/darrow_unlit.gif, ArrowDown, 1, -1
     Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
     Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
-    Load data/darrow_single.jpg, OArrowpan, 1, 1
-    Load data/darrow_single.jpg, OArrowUp, 1, 1
-    Load data/darrow_single.jpg, OArrowDown, 1, 1
-    Load data/darrow_single_otis_upred.jpg, OArrowUp_Lit, 1, 1
-    Load data/darrow_single_otis_downred.jpg, OArrowDown_Lit, 1, 1
 
     #Lifts Buttons
     Load data/black.jpg, Black, 1, 1
@@ -110,11 +105,6 @@
     AddText BlackLit, ButtonLitR, nimbus_sans.ttf, 47, R, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitM, nimbus_sans.ttf, 47, M, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitT, nimbus_sans.ttf, 47, T, -1, -1, -1, -1, center, center, 255, 255, 255
-
-    #Floor Indicator
-    Load data/black.jpg, Ind-Button, 1, 1
-    AddTextRange 0, 40, Ind-Button, Ind-Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 0, 0
-    AddText Ind-Button, Ind-ButtonG, nimbus_sans.ttf, 47, G, -1, -1, -1, -1, center, center, 255, 0, 0
 <EndTextures>
 
 #Tower 1
@@ -148,7 +138,7 @@ Cut Landscape, -%0%, -1, -20, 20, 1, 20, false, true
     InterfloorHeight = 2.24
     if[%floor% = 0] Altitude = -2.24
     if[%floor% > 30 & %floor% < 39] Group = 31 - 33
-    if[%floor% > 38] Group = 31 - 33, 39 - 43
+    if[%floor% > 38] Group = 31 - 33, 38 - 43
 
     #Floor
     DrawWalls = false, true, false, false, false, false
@@ -791,11 +781,8 @@ DrawWalls = true, true, false, false, false, false
     #Directional indicator outside the elevator
     AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.3, -3.301 - 0.2 - 0.66 - 0.001 - 0.37, 6, front, 0.5, 1, true, 0, 0
 
-    #Directional indicator inside the elevator
-    AddDirectionalIndicator true, true, true, OArrowpan, OArrowUp, OArrowUp_Lit, OArrowDown, OArrowDown_Lit, 0.25, -3 + 0.2 + 0.001, 8.2, back, 0.5, 0.5, true, 0, 0
-
     #Floor Indicator
-    AddFloorIndicator Ind-Button, back, -0.25, -3 + 0.2 + 0.001, 0.5, 0.5, 8.2
+    AddFloorIndicator back, -1.75 - 0.875 - 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
 
     #Floor sign
     AddFloorSigns true, left, 4 / 2 - 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 4.5
@@ -977,11 +964,8 @@ DrawWalls = true, true, false, false, false, false
     #directional indicator outside the elevator
     AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.3, -3.301 + 0.2 + 0.66 + 0.001 + 7.29 + 0.4, 6, back, 0.5, 1, true, 0, 0
 
-    #Directional indicator inside the elevator
-    AddDirectionalIndicator true, true, true, OArrowpan, OArrowUp, OArrowUp_Lit, OArrowDown, OArrowDown_Lit, -0.25, 3 - 0.2 - 0.001 + 0.7, 8.2, front, 0.5, 0.5, true, 0, 0
-
     #Floor Indicator
-    AddFloorIndicator Ind-Button, front, 0.25, 3 - 0.2 - 0.001 + 0.7, 0.5, 0.5, 8.2
+    AddFloorIndicator front, 1.75 + 0.875 + 0.1, 3 - 0.2 - 0.001 + 0.7, 0.7, 0.5, 6.5
 
     #Floor sign
     AddFloorSigns true, left, 4 / 2 - 0.01, 3.301 + 0.2 + 0.33 + 0.7, 0.5, 0.42, 4.5
@@ -1766,11 +1750,8 @@ DrawWalls = true, true, false, false, false, false
     #Directional indicator outside the elevator
     AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.3, -3.301 - 0.2 - 0.66 - 0.001 - 0.37, 6, front, 0.5, 1, true, 0, 0
 
-    #Directional indicator inside the elevator
-    AddDirectionalIndicator true, true, true, OArrowpan, OArrowUp, OArrowUp_Lit, OArrowDown, OArrowDown_Lit, 0.25, -3 + 0.2 + 0.001, 8.2, back, 0.5, 0.5, true, 0, 0
-
     #Floor Indicator
-    AddFloorIndicator Ind-Button, back, -0.25, -3 + 0.2 + 0.001, 0.5, 0.5, 8.2
+    AddFloorIndicator back, -1.75 - 0.875 - 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
 
     #Floor sign
     AddFloorSigns true, left, 4 / 2 - 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 4.5
@@ -1915,11 +1896,8 @@ DrawWalls = true, true, false, false, false, false
     #directional indicator outside the elevator
     AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.3, -3.301 + 0.2 + 0.66 + 0.001 + 7.29 + 0.4, 6, back, 0.5, 1, true, 0, 0
 
-    #Directional indicator inside the elevator
-    AddDirectionalIndicator true, true, true, OArrowpan, OArrowUp, OArrowUp_Lit, OArrowDown, OArrowDown_Lit, -0.25, 3 - 0.2 - 0.001 + 0.7, 8.2, front, 0.5, 0.5, true, 0, 0
-
     #Floor Indicator
-    AddFloorIndicator Ind-Button, front, 0.25, 3 - 0.2 - 0.001 + 0.7, 0.5, 0.5, 8.2
+    AddFloorIndicator front, 1.75 + 0.875 + 0.1, 3 - 0.2 - 0.001 + 0.7, 0.7, 0.5, 6.5
 
     #Floor sign
     AddFloorSigns true, left, 4 / 2 - 0.01, 3.301 + 0.2 + 0.33 + 0.7, 0.5, 0.42, 4.5
@@ -2681,11 +2659,8 @@ DrawWalls = true, true, false, false, false, false
     #Directional indicator outside the elevator
     AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.3, -3.301 - 0.2 - 0.66 - 0.001 - 0.37, 6, front, 0.5, 1, true, 0, 0
 
-    #Directional indicator inside the elevator
-    AddDirectionalIndicator true, true, true, OArrowpan, OArrowUp, OArrowUp_Lit, OArrowDown, OArrowDown_Lit, 0.25, -3 + 0.2 + 0.001, 8.2, back, 0.5, 0.5, true, 0, 0
-
     #Floor Indicator
-    AddFloorIndicator Ind-Button, back, -0.25, -3 + 0.2 + 0.001, 0.5, 0.5, 8.2
+    AddFloorIndicator back, -1.75 - 0.875 - 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
 
     #Floor sign
     AddFloorSigns true, left, 4 / 2 - 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 4.5
@@ -2867,11 +2842,8 @@ DrawWalls = true, true, false, false, false, false
     #directional indicator outside the elevator
     AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -2.3, -3.301 + 0.2 + 0.66 + 0.001 + 7.29 + 0.4, 6, back, 0.5, 1, true, 0, 0
 
-    #Directional indicator inside the elevator
-    AddDirectionalIndicator true, true, true, OArrowpan, OArrowUp, OArrowUp_Lit, OArrowDown, OArrowDown_Lit, -0.25, 3 - 0.2 - 0.001 + 0.7, 8.2, front, 0.5, 0.5, true, 0, 0
-
     #Floor Indicator
-    AddFloorIndicator Ind-Button, front, 0.25, 3 - 0.2 - 0.001 + 0.7, 0.5, 0.5, 8.2
+    AddFloorIndicator front, 1.75 + 0.875 + 0.1, 3 - 0.2 - 0.001 + 0.7, 0.7, 0.5, 6.5
 
     #Floor sign
     AddFloorSigns true, left, 4 / 2 - 0.01, 3.301 + 0.2 + 0.33 + 0.7, 0.5, 0.42, 4.5
@@ -3020,8 +2992,3 @@ CutStairwell 3, -8.5, -3.5, 8.5, 3.5, 0, 3
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 3 - 0.7 - 200, 6 - 4.125 - 0.33 - 11.88 + 0.4, 4, back, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 3 - 9.7 - 200, 6 - 4.125 - 0.33 - 11.88 + 0.4, 4, back, 0.5, 1, true, 0, 0
 <EndFloors>
-<Elevators 1 to 18>
-    DepartureDelay = 0.5
-    ArrivalDelay = 0.5
-<EndElevators>
-

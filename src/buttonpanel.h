@@ -65,6 +65,7 @@ public:
 
 private:
 	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
+	csRef<iThingFactoryState> ButtonPanel_state;
 
 	csArray<Control*> controls; //control objects
 

@@ -170,9 +170,11 @@ Elevator::Elevator(int number)
 	buffer.Insert(0, "Elevator ");
 	buffer.Trim();
 	object->SetName(buffer);
-	ElevatorMesh = sbs->CreateMesh(buffer);
-	Elevator_state = scfQueryInterface<iGeneralFactoryState>(ElevatorMesh->GetFactory()->GetMeshObjectFactory());
+	ElevatorMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
+	Elevator_state = scfQueryInterface<iThingFactoryState> (ElevatorMesh->GetMeshObject()->GetFactory());
 	Elevator_movable = ElevatorMesh->GetMovable();
+	ElevatorMesh->SetZBufMode(CS_ZBUF_USE);
+	ElevatorMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -1018,8 +1020,8 @@ void Elevator::MonitorLoop()
 	{
 		for (int i = 0; i < Elevator_state->GetVertexCount(); i++)
 		{
-			if (sbs->ToLocal(Elevator_state->GetVertices()[i].y) > Height)
-				Height = sbs->ToLocal(Elevator_state->GetVertices()[i].y);
+			if (sbs->ToLocal(Elevator_state->GetVertex(i).y) > Height)
+				Height = sbs->ToLocal(Elevator_state->GetVertex(i).y);
 		}
 	}
 
@@ -1554,7 +1556,7 @@ void Elevator::MoveElevatorToFloor()
 	if (CalculateStoppingDistance == true)
 	{
 		if (Direction == 1)
-			//stopping distance is the distance the elevator has traveled (usually to reach max speed), times
+			//stopping distance is the distance the elevator has travelled (usually to reach max speed), times
 			//the ratio of acceleration to deceleration (so if the deceleration is half of the acceleration,
 			//it will take twice the distance to stop)
 			StoppingDistance = (elevposition.y - ElevatorStart) * (Acceleration / Deceleration);
@@ -1916,17 +1918,47 @@ WallObject* Elevator::AddWall(const char *name, const char *texture, float thick
 {
 	//Adds a wall with the specified dimensions
 
+	//Set horizontal scaling
+	x1 = x1 * sbs->HorizScale;
+	x2 = x2 * sbs->HorizScale;
+	z1 = z1 * sbs->HorizScale;
+	z2 = z2 * sbs->HorizScale;
+
+	//calculate autosizing
+	float tmpheight;
+	if (height1 > height2)
+		tmpheight = height1;
+	else
+		tmpheight = height2;
+	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
+
 	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, this->object, name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, sizing.x, sizing.y);
 	return wall;
 }
 
 WallObject* Elevator::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds a floor with the specified dimensions and vertical offset
+	float tw2;
+	float th2;
+
+	//Set horizontal scaling
+	x1 = x1 * sbs->HorizScale;
+	x2 = x2 * sbs->HorizScale;
+	z1 = z1 * sbs->HorizScale;
+	z2 = z2 * sbs->HorizScale;
+
+	//get texture force value
+	bool force_enable, force_mode;
+	sbs->GetTextureForce(texture, force_enable, force_mode);
+
+	//Call texture autosizing formulas
+	tw2 = sbs->AutoSize(x1, x2, true, tw, force_enable, force_mode);
+	th2 = sbs->AutoSize(z1, z2, false, th, force_enable, force_mode);
 
 	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, this->object, name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th, true);
+	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw2, th2);
 	return wall;
 }
 
