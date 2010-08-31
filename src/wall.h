@@ -27,7 +27,7 @@
 #define _SBS_WALL_H
 
 //thing mesh version
-class WallObject : public Object
+class SBSIMPEXP WallObject : public Object
 {
 public:
 
