@@ -26,7 +26,6 @@
 #ifndef _SBS_WALL_H
 #define _SBS_WALL_H
 
-//thing mesh version
 class SBSIMPEXP WallObject : public Object
 {
 public:
@@ -56,38 +55,6 @@ public:
 
 	//parent array
 	csArray<WallObject*> *parent_array;
-};
-
-//genmesh version
-class WallObject2 : public Object
-{
-public:
-
-	//functions
-	WallObject2(csRef<iMeshWrapper> wrapper, Object *proxy = 0, bool temporary = false);
-	~WallObject2();
-	int AddQuad(const char *name, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4);
-	int AddPolygon(const char *name, csVector3 *vertices, int num);
-	void CreateHandle(int index);
-	void SetPolygonName(int index, const char *name);
-	void DeletePolygons();
-	void DeletePolygon(int index, bool recreate_colliders);
-	void ReindexPolygons(int deleted_index);
-
-	//polygon index array
-	csArray<iGeneralMeshSubMesh*> handles;
-
-	//mesh wrapper
-	csRef<iMeshWrapper> meshwrapper;
-
-	//mesh factory state
-	csRef<iGeneralFactoryState> state;
-
-	//name
-	csString name;
-
-	//parent array
-	csArray<WallObject2*> *parent_array;
 };
 
 #endif
