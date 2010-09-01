@@ -129,19 +129,8 @@ void WallObject::DeletePolygons()
 	for (int i = 0; i < handles.GetSize(); i++)
 	{
 		if (handles[i])
-		{
-			state->DeleteSubMesh(handles[i]);
-			//int tmphandle = handles[i];
-			handles[i] = 0;
-			geometry[i].DeleteAll();
-			//ReindexPolygons(tmphandle);
-		}
+			DeletePolygon(i, false);
 	}
-	handles.DeleteAll();
-	geometry.DeleteAll();
-	t_matrix.DeleteAll();
-	t_vector.DeleteAll();
-	state->Invalidate();
 
 	//recreate colliders
 	sbs->DeleteColliders(meshwrapper);
@@ -166,8 +155,8 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 			indices.Push(buffer2[i]);
 		buffer->Release();
 
-		//delete submesh (broken)
-		//state->DeleteSubMesh(submesh);
+		//delete submesh
+		state->DeleteSubMesh(submesh);
 
 		//delete related mesh vertices
 		DeleteVertices(indices);
