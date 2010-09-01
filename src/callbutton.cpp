@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Call Button Subsystem Class
-	The Skyscraper Project - Version 1.7 Alpha
+	The Skyscraper Project - Version 1.8 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

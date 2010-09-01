@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.7 Alpha - Camera Control Form
+	Skyscraper 1.8 Alpha - Camera Control Form
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

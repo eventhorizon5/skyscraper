@@ -48,12 +48,12 @@ BEGIN
             VALUE "Comments", "http://www.skyscrapersim.com\0"
             VALUE "CompanyName", "TLI Networks\0"
             VALUE "FileDescription", "Skyscraper\0"
-            VALUE "FileVersion", "1.7.0." SVN_REVSTR "\0"
+            VALUE "FileVersion", "1.8.0." SVN_REVSTR "\0"
             VALUE "InternalName", "Skyscraper\0"
             VALUE "LegalCopyright", "©2003-2010 Ryan Thoryk, released under the GPL\0"
             VALUE "OriginalFilename", "Skyscraper.exe\0"
             VALUE "ProductName", "Skyscraper\0"
-            VALUE "ProductVersion", "1.7.0." SVN_REVSTR "\0"
+            VALUE "ProductVersion", "1.8.0." SVN_REVSTR "\0"
         END
     END
     BLOCK "VarFileInfo"

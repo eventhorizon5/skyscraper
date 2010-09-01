@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.7 Alpha - Object Information Dialog
+	Skyscraper 1.8 Alpha - Object Information Dialog
 	Copyright (C)2003-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
