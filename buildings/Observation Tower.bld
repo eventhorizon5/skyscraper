@@ -17,6 +17,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+<Include data/scripts/elevator_doors.txt>
+
 <Globals>
     Name = Observation Tower
     Designer = Ryan Thoryk
@@ -55,13 +57,14 @@
     Load data/intext.jpg, InterExt, 0.269, 0.25
     Load data/intext.jpg, InterInt, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
-    Load data/text16.jpg, ElevDoors, 1, 1
-    Load data/door1.jpg, ServiceElevDoors, 1, 1
-    Load data/door1.jpg, ServiceElevDoors2, -1, 1
+    Load data/door1.jpg, ElevDoors, 1, 1
+    Load data/door1.jpg, ElevDoors2, -1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
-    Load data/panel-back2.jpg, ElevExtPanels2, 1, 1
     Load data/marb148.jpg, ElevPanel, 1, 1
+    Load data/windows11h_inside.gif, ElevWall, 1, 1, true
     Load data/diamond18j.jpg, ElevPanelMain, 1, 1
+    Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
+    Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
     Load data/cinderblocks.jpg, StairsWall, 0.25, 1
     Load data/text13.jpg, Stairs, 0.269, 0.25
@@ -87,8 +90,7 @@
     Load data/darrow_single_up.jpg, ArrowUpSingle, 1, 1
     Load data/darrow_single_down.jpg, ArrowDownSingle, 1, 1
     Load data/metal080.jpg, MainPanelBack, 0.5, 0.5
-    Load data/daley.jpg, Daley, 0.04, 1
-    Load data/searstower.jpg, SearsTower, 0.067, 1
+    Load data/cutston.jpg, ShaftWall, 0.269, 0.25
 
     #floor indicator/button pictures
     Load data/black.jpg, Black, 1, 1
@@ -145,16 +147,20 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
 
     WallOrientation = right
     SetAutoSize = false, false
+    DrawWalls = true, false, false, false, false, false
     AddWall Front, MainWindows, 0.1, -50, -50, 50, -50, %height%, %height%, 2.24, 2.24, 3, 1, True
     AddWall Left, MainWindows, 0.1, -50, 50, -50, -50, %height%, %height%, 2.24, 2.24, 3, 1, True
     WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
     AddWall Right, MainWindows, 0.1, 50, -50, 50, 50, %height%, %height%, 2.24, 2.24, 3, 1, True
     AddWall Back, MainWindows, 0.1, 50, 50, -50, 50, %height%, %height%, 2.24, 2.24, 3, 1, True
 
     WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
     AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %height%, %height%, 0, 0, 3, 1, False
     AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %height%, %height%, 0, 0, 3, 1, False
     WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
     AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %height%, %height%, 0, 0, 3, 1, False
     AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %height%, %height%, 0, 0, 3, 1, False
 
@@ -174,16 +180,20 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
 
     WallOrientation = right
     SetAutoSize = false, false
+    DrawWalls = true, false, false, false, false, false
     AddWall Front, MainWindows, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
     AddWall Left, MainWindows, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
     WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
     AddWall Right, MainWindows, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
     AddWall Back, MainWindows, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
 
     WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
     AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
     AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
     WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
     AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
     AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
 
@@ -210,27 +220,6 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
     Description = %floor% + 1
     Height = 10
     InterfloorHeight = 2.24
-
-    DrawWalls = true, true, false, false, false, false
-
-    WallOrientation = right
-    SetAutoSize = false, false
-    AddWall Front, MainWindows, 0.1, -20, -20, 20, -20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
-    AddWall Left, MainWindows, 0.1, -20, 20, -20, -20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
-    WallOrientation = left
-    AddWall Right, MainWindows, 0.1, 20, -20, 20, 20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
-    AddWall Back, MainWindows, 0.1, 20, 20, -20, 20, %fullheight%, %fullheight%, 0, 0, 1, 1, True
-
-    WallOrientation = left
-    SetAutoSize = false, false
-    AddWall Front, MainWindowsInt, 0.1, -20, -20, 20, -20, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 1, 1, False
-    AddWall Left, MainWindowsInt, 0.1, -20, 20, -20, -20, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 1, 1, False
-    WallOrientation = right
-    AddWall Right, MainWindowsInt, 0.1, 20, -20, 20, 20, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 1, 1, False
-    AddWall Back, MainWindowsInt, 0.1, 20, 20, -20, 20, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 1, 1, False
-
-    SetAutoSize = true, true
-
 <EndFloors>
 
 <Floors 103 to 104>
@@ -255,16 +244,20 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
 
     WallOrientation = right
     SetAutoSize = false, false
+    DrawWalls = true, false, false, false, false, false
     AddWall Front, MainWindows, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
     AddWall Left, MainWindows, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
     WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
     AddWall Right, MainWindows, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
     AddWall Back, MainWindows, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
 
     WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
     AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
     AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
     WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
     AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
     AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
 
@@ -286,4 +279,332 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
     AddFloor Floor, Marble4, 0.5, -50, -50, 50, 50, 0, 0, 0, 0, False
 
 <EndFloor>
+
+#center shaft
+AddShaft 1, 2, 0, 10, 0, 105
+ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
+ShaftShowFloors 1 = 0 - 105
+ShaftShowOutside 1 = 0 - 105
+ShowFullShaft 1 = true
+
+#left shaft
+AddShaft 2, 2, -10, 0, 0, 105
+ShaftCut 2, -4.125, -4, 4.125 - 0.33, 4, 0, 5
+ShaftShowFloors 2 = 0 - 105
+ShaftShowOutside 2 = 0 - 105
+ShowFullShaft 2 = true
+
+#right shaft
+AddShaft 3, 2, 10, 0, 0, 105
+ShaftCut 3, -4.125 + 0.33, -4, 4.125, 4, 0, 5
+ShaftShowFloors 3 = 0 - 105
+ShaftShowOutside 3 = 0 - 105
+ShowFullShaft 3 = true
+
+#Center Shaft
+<Floors 0 to 105>
+	FloorOrientation = top
+	DrawWalls = false, true, false, false, false, false
+	if[%floor% = 0] AddShaftFloor 1, Shaft1Base, ShaftWall, 0.5, -5, -4.125, 5, 4.125, 0, 0, 0, 0
+	DrawWalls = true, false, false, false, false, false
+	if[%floor% = 105] AddShaftFloor 1, Shaft1Top, ShaftWall, 0.5, -5, -4.125, 5, 4.125, %fullheight%, %fullheight%, 0, 0
+	DrawWalls = true, true, false, false, false, false
+	WallOrientation = left
+	AddShaftWall 1, Shaft1Left, ShaftWall, 0.33, -5, -4.125, -5, -2, %fullheight%, %fullheight%, 0, 0, 0, 0
+	AddShaftWall 1, Shaft1Front, ShaftWall, 0.33, -5, -4.125, 5, -4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
+	WallOrientation = right
+	AddShaftWall 1, Shaft1Right, ShaftWall, 0.33, 5, -4.125, 5, -2, %fullheight%, %fullheight%, 0, 0, 0, 0
+<EndFloors>
+<Floors 0 to 9>
+	WallOrientation = right
+	DrawWalls = true, false, false, false, false, false
+	AddWall Shaft1LeftE, Wall1, 0.33, -5, -4.125 + 10 - 0.33, -5, -2 + 10 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1FrontE, Wall1, 0.33, -5 - 0.33, -4.125 + 10, 5 + 0.33, -4.125 + 10, %height%, %height%, 0, 0, 0, 0, False
+	WallOrientation = left
+	DrawWalls = false, true, false, false, false, false
+	AddWall Shaft1RightE, Wall1, 0.33, 5, -4.125 + 10 - 0.33, 5, -2 + 10 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+<Floors 103 to 104>
+	WallOrientation = right
+	DrawWalls = true, false, false, false, false, false
+	AddWall Shaft1LeftE, Wall1, 0.33, -5, -4.125 + 10 - 0.33, -5, -2 + 10 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft1FrontE, Wall1, 0.33, -5 - 0.33, -4.125 + 10, 5 + 0.33, -4.125 + 10, %height%, %height%, 0, 0, 0, 0, False
+	WallOrientation = left
+	DrawWalls = false, true, false, false, false, false
+	AddWall Shaft1RightE, Wall1, 0.33, 5, -4.125 + 10 - 0.33, 5, -2 + 10 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+#Left Shaft
+<Floors 0 to 105>
+	FloorOrientation = top
+	DrawWalls = false, true, false, false, false, false
+	if[%floor% = 0] AddShaftFloor 2, Shaft2Base, ShaftWall, 0.5, -4.125, -5, 4.125, 5, 0, 0, 0, 0
+	DrawWalls = true, false, false, false, false, false
+	if[%floor% = 105] AddShaftFloor 2, Shaft2Top, ShaftWall, 0.5, -4.125, -5, 4.125, 5, %fullheight%, %fullheight%, 0, 0
+	DrawWalls = true, true, false, false, false, false
+	WallOrientation = left
+	AddShaftWall 2, Shaft2Front, ShaftWall, 0.33, 2, -5, 4.125, -5, %fullheight%, %fullheight%, 0, 0, 0, 0
+	WallOrientation = right
+	AddShaftWall 2, Shaft2Back, ShaftWall, 0.33, 2, 5, 4.125, 5, %fullheight%, %fullheight%, 0, 0, 0, 0
+	AddShaftWall 2, Shaft2Right, ShaftWall, 0.33, 4.125, -5, 4.125, 5, %fullheight%, %fullheight%, 0, 0, 0, 0
+<EndFloors>
+<Floors 0 to 9>	
+	WallOrientation = right
+	DrawWalls = true, false, false, false, false, false
+	AddWall Shaft2FrontE, Wall1, 0.33, 2 + -10 - 0.33, -5, 4.125 + -10 + 0.33, -5, %height%, %height%, 0, 0, 0, 0, False
+	WallOrientation = left
+	DrawWalls = false, true, false, false, false, false
+	AddWall Shaft2BackE, Wall1, 0.33, 2 + -10 - 0.33, 5, 4.125 + -10 + 0.33, 5, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft2RightE, Wall1, 0.33, 4.125 + -10, -5 - 0.33, 4.125 + -10, 5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+<Floors 103 to 104>	
+	WallOrientation = right
+	DrawWalls = true, false, false, false, false, false
+	AddWall Shaft2FrontE, Wall1, 0.33, 2 + -10 - 0.33, -5, 4.125 + -10 + 0.33, -5, %height%, %height%, 0, 0, 0, 0, False
+	WallOrientation = left
+	DrawWalls = false, true, false, false, false, false
+	AddWall Shaft2BackE, Wall1, 0.33, 2 + -10 - 0.33, 5, 4.125 + -10 + 0.33, 5, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft2RightE, Wall1, 0.33, 4.125 + -10, -5 - 0.33, 4.125 + -10, 5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+#Right Shaft
+<Floors 0 to 105>
+	FloorOrientation = top
+	DrawWalls = false, true, false, false, false, false
+	if[%floor% = 0] AddShaftFloor 3, Shaft3Base, ShaftWall, 0.5, -4.125, -5, 4.125, 5, 0, 0, 0, 0
+	DrawWalls = true, false, false, false, false, false
+	if[%floor% = 105] AddShaftFloor 3, Shaft3Top, ShaftWall, 0.5, -4.125, -5, 4.125, 5, %fullheight%, %fullheight%, 0, 0
+	DrawWalls = true, true, false, false, false, false
+	WallOrientation = left
+	AddShaftWall 3, Shaft3Front, ShaftWall, 0.33, -4.125, -5, -2, -5, %fullheight%, %fullheight%, 0, 0, 0, 0
+	AddShaftWall 3, Shaft3Left, ShaftWall, 0.33, -4.125, -5, -4.125, 5, %fullheight%, %fullheight%, 0, 0, 0, 0
+	WallOrientation = right
+	AddShaftWall 3, Shaft3Back, ShaftWall, 0.33, -4.125, 5, -2, 5, %fullheight%, %fullheight%, 0, 0, 0, 0
+<EndFloors>
+<Floors 0 to 9>	
+	WallOrientation = right
+	DrawWalls = true, false, false, false, false, false
+	AddWall Shaft3FrontE, Wall1, 0.33, -4.125 + 10 - 0.33, -5, -2 + 10 + 0.33, -5, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft3LeftE, Wall1, 0.33, -4.125 + 10, -5 - 0.33, -4.125 + 10, 5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	WallOrientation = left
+	DrawWalls = false, true, false, false, false, false
+	AddWall Shaft3BackE, Wall1, 0.33, -4.125 + 10 - 0.33, 5, -2 + 10 + 0.33, 5, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+<Floors 103 to 104>	
+	WallOrientation = right
+	DrawWalls = true, false, false, false, false, false
+	AddWall Shaft3FrontE, Wall1, 0.33, -4.125 + 10 - 0.33, -5, -2 + 10 + 0.33, -5, %height%, %height%, 0, 0, 0, 0, False
+	AddWall Shaft3LeftE, Wall1, 0.33, -4.125 + 10, -5 - 0.33, -4.125 + 10, 5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	WallOrientation = left
+	DrawWalls = false, true, false, false, false, false
+	AddWall Shaft3BackE, Wall1, 0.33, -4.125 + 10 - 0.33, 5, -2 + 10 + 0.33, 5, %height%, %height%, 0, 0, 0, 0, False
+<EndFloors>
+
+<Elevator 1>
+    Speed = 20
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0 - 9, 103, 104
+    AssignedShaft = 1
+    LevelingOpen = 0.2
+    CreateElevator false, 0, 10 - 0.294, 0
+
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor, 0.2, -3.5, -3, 3.5, 3, 0, 0, 0, 0
+    
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.5, -3, 3.5, 3, 8, 8, 0, 0 #ceiling
+    
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall, 0.2, -3.5, 3, 3.5, 3, 8, 8, 0, 0, 0, 0 #back wall
+    TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall, 0.2, 3.5, -3, 3.5, 3, 8, 8, 0, 0, 0, 0 #right wall
+    
+    WallOrientation = left
+    TextureOverride ElevExt, ElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall, 0.2, -3.5, -3, -3.5, 3, 8, 8, 0, 0, 0, 0 #left wall
+
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -3.5, -3, -1.75, -3, 8, 8, 0, 0, 0, 0 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 1.75, -3, 3.5, -3, 8, 8, 0, 0, 0, 0 #right panel
+    
+    WallOrientation = right
+    elevdoor_center(1, ElevDoors, Black, 0.2, 0, -3.01, 3.5, 8, front, 0.3, false)
+    elevdoor_center(1, ElevDoors, Black, 0.2, 0, -3.301, 3.5, 8, front, 0.3, true)
+
+    WallOrientation = left
+    SetAutoSize = true, true
+
+    AddDirectionalIndicators true, false, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -3.301 - 0.2 - 0.66 - 0.001, 6, front, 0.5, 1, true, 0, 0
+
+    CreatePanel ElevPanel, 16, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddButton 1, switch.wav, Button105, ButtonLit105, 2, 3, 104, 1, 1
+    AddButton 1, switch.wav, Button104, ButtonLit104, 3, 3, 103, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 4, 3, 8, 1, 1
+    AddButton 1, switch.wav, Button9, ButtonLit9, 5, 3, 8, 1, 1
+    AddButton 1, switch.wav, Button8, ButtonLit8, 6, 3, 7, 1, 1
+    AddButton 1, switch.wav, Button7, ButtonLit7, 7, 3, 6, 1, 1
+    AddButton 1, switch.wav, Button6, ButtonLit6, 8, 3, 5, 1, 1
+    AddButton 1, switch.wav, Button5, ButtonLit5, 9, 3, 4, 1, 1
+    AddButton 1, switch.wav, Button4, ButtonLit4, 10, 3, 3, 1, 1
+    AddButton 1, switch.wav, Button3, ButtonLit3, 11, 3, 2, 1, 1
+    AddButton 1, switch.wav, Button2, ButtonLit2, 12, 3, 1, 1, 1
+    AddButton 1, switch.wav, ButtonC, ButtonLitC, 13, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 14, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 14, 4, close, 1, 1
+    AddButton 1, , ButtonCancel, ButtonCancel, 15, 2, cancel, 1, 1
+    AddButton 1, , ButtonStop, ButtonStop, 15, 3, stop, 1, 1
+    AddButton 1, , ButtonAlarm, ButtonAlarm, 15, 4, alarm, 1, 1
+
+    AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
+   
+<EndElevator>
+
+<Elevator 2>
+    Speed = 20
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0 - 9, 103, 104
+    AssignedShaft = 2
+    LevelingOpen = 0.2
+    CreateElevator false, -10 + 0.294, 0, 0
+
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor, 0.2, -3, -3.5, 3, 3.5, 0, 0, 0, 0
+    
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -3, -3.5, 3, 3.5, 8, 8, 0, 0 #ceiling
+    
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall, 0.2, -3, 3.5, 3, 3.5, 8, 8, 0, 0, 0, 0 #back wall
+    
+    WallOrientation = left
+    TextureOverride ElevExt, ElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall, 0.2, -3, -3.5, 3, -3.5, 8, 8, 0, 0, 0, 0 #left wall
+    TextureOverride ElevExt, ElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, ElevWall, 0.2, -3, -3.5, -3, 3.5, 8, 8, 0, 0, 0, 0 #right wall
+
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, 3, -3.5, 3, -1.75, 8, 8, 0, 0, 0, 0 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 3, 1.75, 3, 3.5, 8, 8, 0, 0, 0, 0 #right panel
+    
+    WallOrientation = right
+    elevdoor_center(1, ElevDoors, Black, 0.2, 3.01, 0, 3.5, 8, right, 0.3, false)
+    elevdoor_center(1, ElevDoors, Black, 0.2, 3.301, 0, 3.5, 8, right, 0.3, true)
+
+    WallOrientation = left
+    SetAutoSize = true, true
+
+    AddDirectionalIndicators true, false, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.301 + 0.2 + 0.66 + 0.001, -3, 6, right, 0.5, 1, true, 0, 0
+
+    CreatePanel ElevPanel, 16, 5, left, 3 - 0.2 - 0.001, -1.75 - 0.875 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddButton 1, switch.wav, Button105, ButtonLit105, 2, 3, 104, 1, 1
+    AddButton 1, switch.wav, Button104, ButtonLit104, 3, 3, 103, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 4, 3, 8, 1, 1
+    AddButton 1, switch.wav, Button9, ButtonLit9, 5, 3, 8, 1, 1
+    AddButton 1, switch.wav, Button8, ButtonLit8, 6, 3, 7, 1, 1
+    AddButton 1, switch.wav, Button7, ButtonLit7, 7, 3, 6, 1, 1
+    AddButton 1, switch.wav, Button6, ButtonLit6, 8, 3, 5, 1, 1
+    AddButton 1, switch.wav, Button5, ButtonLit5, 9, 3, 4, 1, 1
+    AddButton 1, switch.wav, Button4, ButtonLit4, 10, 3, 3, 1, 1
+    AddButton 1, switch.wav, Button3, ButtonLit3, 11, 3, 2, 1, 1
+    AddButton 1, switch.wav, Button2, ButtonLit2, 12, 3, 1, 1, 1
+    AddButton 1, switch.wav, ButtonC, ButtonLitC, 13, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 14, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 14, 4, close, 1, 1
+    AddButton 1, , ButtonCancel, ButtonCancel, 15, 2, cancel, 1, 1
+    AddButton 1, , ButtonStop, ButtonStop, 15, 3, stop, 1, 1
+    AddButton 1, , ButtonAlarm, ButtonAlarm, 15, 4, alarm, 1, 1
+
+    AddFloorIndicator left, 3 - 0.2 - 0.001, -1.75 - 0.875 + 0.1, 0.7, 0.5, 6.5   
+<EndElevator>
+
+<Elevator 3>
+    Speed = 20
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.2
+    DecelJerk = 0.2
+    ServicedFloors = 0 - 9, 103, 104
+    AssignedShaft = 3
+    LevelingOpen = 0.2
+    CreateElevator false, 10 - 0.294, 0, 0
+
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor, 0.2, -3, -3.5, 3, 3.5, 0, 0, 0, 0
+    
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -3, -3.5, 3, 3.5, 8, 8, 0, 0 #ceiling
+    
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, ElevWall, 0.2, -3, 3.5, 3, 3.5, 8, 8, 0, 0, 0, 0 #back wall
+    TextureOverride ElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right, ElevWall, 0.2, 3, -3.5, 3, 3.5, 8, 8, 0, 0, 0, 0 #right wall
+    
+    WallOrientation = left
+    TextureOverride ElevExt, ElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, ElevWall, 0.2, -3, -3.5, 3, -3.5, 8, 8, 0, 0, 0, 0 #left wall
+
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, -3, -3.5, -3, -1.75, 8, 8, 0, 0, 0, 0 #left panel
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevExt, ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, -3, 1.75, -3, 3.5, 8, 8, 0, 0, 0, 0 #right panel
+    
+    WallOrientation = right
+    elevdoor_center(1, ElevDoors2, Black, 0.2, -3.01, 0, 3.5, 8, left, 0.3, false)
+    elevdoor_center(1, ElevDoors2, Black, 0.2, -3.301, 0, 3.5, 8, left, 0.3, true)
+
+    WallOrientation = left
+    SetAutoSize = true, true
+
+    AddDirectionalIndicators true, false, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.301 - 0.2 - 0.66 - 0.001, 3, 6, left, 0.5, 1, true, 0, 0
+
+    CreatePanel ElevPanel, 16, 5, right, -3 + 0.2 + 0.001, 1.75 + 0.875 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddButton 1, switch.wav, Button105, ButtonLit105, 2, 3, 104, 1, 1
+    AddButton 1, switch.wav, Button104, ButtonLit104, 3, 3, 103, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 4, 3, 8, 1, 1
+    AddButton 1, switch.wav, Button9, ButtonLit9, 5, 3, 8, 1, 1
+    AddButton 1, switch.wav, Button8, ButtonLit8, 6, 3, 7, 1, 1
+    AddButton 1, switch.wav, Button7, ButtonLit7, 7, 3, 6, 1, 1
+    AddButton 1, switch.wav, Button6, ButtonLit6, 8, 3, 5, 1, 1
+    AddButton 1, switch.wav, Button5, ButtonLit5, 9, 3, 4, 1, 1
+    AddButton 1, switch.wav, Button4, ButtonLit4, 10, 3, 3, 1, 1
+    AddButton 1, switch.wav, Button3, ButtonLit3, 11, 3, 2, 1, 1
+    AddButton 1, switch.wav, Button2, ButtonLit2, 12, 3, 1, 1, 1
+    AddButton 1, switch.wav, ButtonC, ButtonLitC, 13, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 14, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 14, 4, close, 1, 1
+    AddButton 1, , ButtonCancel, ButtonCancel, 15, 2, cancel, 1, 1
+    AddButton 1, , ButtonStop, ButtonStop, 15, 3, stop, 1, 1
+    AddButton 1, , ButtonAlarm, ButtonAlarm, 15, 4, alarm, 1, 1
+
+    AddFloorIndicator right, -3 + 0.2 + 0.001, 1.75 + 0.875 - 0.1, 0.7, 0.5, 6.5   
+<EndElevator>
 
