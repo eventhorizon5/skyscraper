@@ -2595,9 +2595,6 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 	csArray<iGeneralMeshSubMesh*> ignore_list;
 
-	//permanent ignore list - used for a workaround due to the CS's broken DeleteSubMesh function
-	static csArray<iGeneralMeshSubMesh*> ignore_list2;
-
 	int polycount;
 	bool polycheck;
 	if (checkwallnumber == 1)
@@ -2636,17 +2633,6 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 			{
 				ignorecheck = true;
 				break;
-			}
-		}
-		if (ignorecheck == false)
-		{
-			for (int j = 0; j < ignore_list2.GetSize(); j++)
-			{
-				if (ignore_list2[j] == wall->GetHandle(i))
-				{
-					ignorecheck = true;
-					break;
-				}
 			}
 		}
 		if (ignorecheck == true)
@@ -2854,7 +2840,6 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 				wall->GetTextureMapping(i, mapping, oldvector);
 
 				//delete original polygon
-				ignore_list2.Push(wall->GetHandle(i));
 				wall->DeletePolygon(i, false);
 
 				//create splitted polygons
