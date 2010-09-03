@@ -2595,8 +2595,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 	csArray<iGeneralMeshSubMesh*> ignore_list;
 
-	int polycount;
-	bool polycheck;
+	bool polycheck = false;
 	if (checkwallnumber == 1)
 	{
 		wall1a = false;
@@ -2609,18 +2608,8 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 	}
 
 	//step through each polygon
-	polycount = wall->GetHandleCount();
-	for (int i = 0; i < polycount; i++)
+	for (int i = 0; i < wall->GetHandleCount(); i++)
 	{
-		temppoly.MakeEmpty();
-		temppoly2.MakeEmpty();
-		temppoly3.MakeEmpty();
-		temppoly4.MakeEmpty();
-		temppoly5.MakeEmpty();
-		worker.MakeEmpty();
-		csVector2 extentsx, extentsy, extentsz;
-		polycheck = false;
-
 		//skip null handles
 		if (!wall->GetHandle(i))
 			continue;
@@ -2641,243 +2630,270 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 		//get name and vertex array
 		iGeneralMeshSubMesh* handle = wall->GetHandle(i);
 		csString name = handle->GetName();
-		CS::Geometry::csContour3* origpoly = wall->GetGeometry(wall->GetHandle(i));
+		csArray<CS::Geometry::csContour3>* origpolys = wall->GetGeometry(wall->GetHandle(i));
+		csArray<CS::Geometry::csContour3> newpolys;
 
-		//skip null geometry
-		if (!origpoly)
+		//skip empty meshes
+		if (!origpolys)
 			continue;
 
-		//copy source polygon vertices
-		for (int j = 0; j < origpoly->GetSize(); j++)
-			temppoly.AddVertex(origpoly->Get(j));
-
-		//make sure the polygon is not outside the cut area
-		if (temppoly.ClassifyX(start.x) != CS_POL_FRONT &&
-			temppoly.ClassifyX(end.x) != CS_POL_BACK &&
-			temppoly.ClassifyY(start.y) != CS_POL_FRONT &&
-			temppoly.ClassifyY(end.y) != CS_POL_BACK &&
-			temppoly.ClassifyZ(start.z) != CS_POL_FRONT &&
-			temppoly.ClassifyZ(end.z) != CS_POL_BACK)
+		//cut all polygons within range
+		for (int j = 0; j < origpolys->GetSize(); j++)
 		{
-			if (Verbose)
-				Report("Cutting polygon " + name);
+			//skip null geometry
+			if (origpolys->Get(j).GetSize() == 0)
+				continue;
 
-			extentsx = GetExtents(temppoly, 1);
-			extentsy = GetExtents(temppoly, 2);
-			extentsz = GetExtents(temppoly, 3);
+			temppoly.MakeEmpty();
+			temppoly2.MakeEmpty();
+			temppoly3.MakeEmpty();
+			temppoly4.MakeEmpty();
+			temppoly5.MakeEmpty();
+			worker.MakeEmpty();
+			csVector2 extentsx, extentsy, extentsz;
+			bool polycheck2 = false;
 
-			//is polygon a wall?
-			if (extentsy.x != extentsy.y)
+			//copy source polygon vertices
+			for (int k = 0; k < origpolys->Get(j).GetSize(); k++)
+				temppoly.AddVertex(origpolys->Get(j)[k]);
+
+			//make sure the polygon is not outside the cut area
+			if (temppoly.ClassifyX(start.x) != CS_POL_FRONT &&
+					temppoly.ClassifyX(end.x) != CS_POL_BACK &&
+					temppoly.ClassifyY(start.y) != CS_POL_FRONT &&
+					temppoly.ClassifyY(end.y) != CS_POL_BACK &&
+					temppoly.ClassifyZ(start.z) != CS_POL_FRONT &&
+					temppoly.ClassifyZ(end.z) != CS_POL_BACK)
 			{
-				if (cutwalls == true)
+				if (Verbose)
+					Report("Cutting polygon " + name);
+
+				extentsx = GetExtents(temppoly, 1);
+				extentsy = GetExtents(temppoly, 2);
+				extentsz = GetExtents(temppoly, 3);
+
+				//is polygon a wall?
+				if (extentsy.x != extentsy.y)
 				{
-					//wall
-					if (fabs(extentsx.x - extentsx.y) > fabs(extentsz.x - extentsz.y))
+					if (cutwalls == true)
 					{
-						//wall is facing forward/backward
-
-						//get left side
-						worker = temppoly;
-						worker.SplitWithPlaneX(temppoly, temppoly2, start.x);
-						worker.MakeEmpty();
-
-						//get right side
-						if (temppoly2.GetVertexCount() > 0)
-							worker = temppoly2;
-						else
-							worker = temppoly;
-						worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
-						worker.MakeEmpty();
-
-						//get lower
-						if (temppoly3.GetVertexCount() > 0)
-							worker = temppoly3;
-						else if (temppoly2.GetVertexCount() > 0)
-							worker = temppoly2;
-						else if (temppoly.GetVertexCount() > 0)
-							worker = temppoly;
-						worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
-						worker.MakeEmpty();
-
-						//get upper
-						if (temppoly4.GetVertexCount() > 0)
-							worker = temppoly4;
-						else if (temppoly3.GetVertexCount() > 0)
-							worker = temppoly3;
-						else if (temppoly2.GetVertexCount() > 0)
-							worker = temppoly2;
-						else if (temppoly.GetVertexCount() > 0)
-							worker = temppoly;
-						worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
-						worker.MakeEmpty();
-					}
-					else
-					{
-						//wall is facing left/right
-
-						//get left side
-						worker = temppoly;
-						worker.SplitWithPlaneZ(temppoly, temppoly2, start.z);
-						worker.MakeEmpty();
-
-						//get right side
-						if (temppoly2.GetVertexCount() > 0)
-							worker = temppoly2;
-						else
-							worker = temppoly;
-						worker.SplitWithPlaneZ(temppoly3, temppoly2, end.z);
-						worker.MakeEmpty();
-
-						//get lower
-						if (temppoly3.GetVertexCount() > 0)
-							worker = temppoly3;
-						else if (temppoly2.GetVertexCount() > 0)
-							worker = temppoly2;
-						else if (temppoly.GetVertexCount() > 0)
-							worker = temppoly;
-						worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
-						worker.MakeEmpty();
-
-						//get upper
-						if (temppoly4.GetVertexCount() > 0)
-							worker = temppoly4;
-						else if (temppoly3.GetVertexCount() > 0)
-							worker = temppoly3;
-						else if (temppoly2.GetVertexCount() > 0)
-							worker = temppoly2;
-						else if (temppoly.GetVertexCount() > 0)
-							worker = temppoly;
-						worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
-						worker.MakeEmpty();
-					}
-					polycheck = true;
-					//store extents of temppoly5 for door sides if needed
-					if (checkwallnumber > 0 && checkwallnumber < 3)
-					{
-						if (name.Find(checkstring) >= 0)
+						//wall
+						if (fabs(extentsx.x - extentsx.y) > fabs(extentsz.x - extentsz.y))
 						{
-							float extent;
-							if (checkwallnumber == 2 && (wall2a == false || wall2b == false))
+							//wall is facing forward/backward
+
+							//get left side
+							worker = temppoly;
+							worker.SplitWithPlaneX(temppoly, temppoly2, start.x);
+							worker.MakeEmpty();
+
+							//get right side
+							if (temppoly2.GetVertexCount() > 0)
+								worker = temppoly2;
+							else
+								worker = temppoly;
+							worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
+							worker.MakeEmpty();
+
+							//get lower
+							if (temppoly3.GetVertexCount() > 0)
+								worker = temppoly3;
+							else if (temppoly2.GetVertexCount() > 0)
+								worker = temppoly2;
+							else if (temppoly.GetVertexCount() > 0)
+								worker = temppoly;
+							worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
+							worker.MakeEmpty();
+
+							//get upper
+							if (temppoly4.GetVertexCount() > 0)
+								worker = temppoly4;
+							else if (temppoly3.GetVertexCount() > 0)
+								worker = temppoly3;
+							else if (temppoly2.GetVertexCount() > 0)
+								worker = temppoly2;
+							else if (temppoly.GetVertexCount() > 0)
+								worker = temppoly;
+							worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
+							worker.MakeEmpty();
+						}
+						else
+						{
+							//wall is facing left/right
+
+							//get left side
+							worker = temppoly;
+							worker.SplitWithPlaneZ(temppoly, temppoly2, start.z);
+							worker.MakeEmpty();
+
+							//get right side
+							if (temppoly2.GetVertexCount() > 0)
+								worker = temppoly2;
+							else
+								worker = temppoly;
+							worker.SplitWithPlaneZ(temppoly3, temppoly2, end.z);
+							worker.MakeEmpty();
+
+							//get lower
+							if (temppoly3.GetVertexCount() > 0)
+								worker = temppoly3;
+							else if (temppoly2.GetVertexCount() > 0)
+								worker = temppoly2;
+							else if (temppoly.GetVertexCount() > 0)
+								worker = temppoly;
+							worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
+							worker.MakeEmpty();
+
+							//get upper
+							if (temppoly4.GetVertexCount() > 0)
+								worker = temppoly4;
+							else if (temppoly3.GetVertexCount() > 0)
+								worker = temppoly3;
+							else if (temppoly2.GetVertexCount() > 0)
+								worker = temppoly2;
+							else if (temppoly.GetVertexCount() > 0)
+								worker = temppoly;
+							worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
+							worker.MakeEmpty();
+						}
+						polycheck = true;
+						polycheck2 = true;
+						//store extents of temppoly5 for door sides if needed
+						if (checkwallnumber > 0 && checkwallnumber < 3)
+						{
+							if (name.Find(checkstring) >= 0)
 							{
-								//level walls
-								if (wall2a == true)
-									wall2b = true;
-								wall2a = true;
-								extent = GetExtents(temppoly5, 1).x + mesh_origin.x;
-								if (wall2b == false || (wall2b == true && fabs(extent - object_origin.x) > fabs(wall_extents_x.x - object_origin.x)))
-									wall_extents_x.x = extent;
-								extent = GetExtents(temppoly5, 3).x + mesh_origin.z;
-								if (wall2b == false || (wall2b == true && fabs(extent - object_origin.z) > fabs(wall_extents_z.x - object_origin.z)))
-									wall_extents_z.x = extent;
-								wall_extents_y = GetExtents(temppoly5, 2) + mesh_origin.y;
-							}
-							else if (wall1a == false || wall1b == false)
-							{
-								//shaft walls
-								if (wall1a == true)
-									wall1b = true;
-								wall1a = true;
-								extent = GetExtents(temppoly5, 1).y + mesh_origin.x;
-								if (wall1b == false || (wall1b == true && fabs(extent - object_origin.x) < fabs(wall_extents_x.y - object_origin.x)))
-									wall_extents_x.y = extent;
-								extent = GetExtents(temppoly5, 3).y + mesh_origin.z;
-								if (wall1b == false || (wall1b == true && fabs(extent - object_origin.z) < fabs(wall_extents_z.y - object_origin.z)))
-									wall_extents_z.y = extent;
+								float extent;
+								if (checkwallnumber == 2 && (wall2a == false || wall2b == false))
+								{
+									//level walls
+									if (wall2a == true)
+										wall2b = true;
+									wall2a = true;
+									extent = GetExtents(temppoly5, 1).x + mesh_origin.x;
+									if (wall2b == false || (wall2b == true && fabs(extent - object_origin.x) > fabs(wall_extents_x.x - object_origin.x)))
+										wall_extents_x.x = extent;
+									extent = GetExtents(temppoly5, 3).x + mesh_origin.z;
+									if (wall2b == false || (wall2b == true && fabs(extent - object_origin.z) > fabs(wall_extents_z.x - object_origin.z)))
+										wall_extents_z.x = extent;
+									wall_extents_y = GetExtents(temppoly5, 2) + mesh_origin.y;
+								}
+								else if (wall1a == false || wall1b == false)
+								{
+									//shaft walls
+									if (wall1a == true)
+										wall1b = true;
+									wall1a = true;
+									extent = GetExtents(temppoly5, 1).y + mesh_origin.x;
+									if (wall1b == false || (wall1b == true && fabs(extent - object_origin.x) < fabs(wall_extents_x.y - object_origin.x)))
+										wall_extents_x.y = extent;
+									extent = GetExtents(temppoly5, 3).y + mesh_origin.z;
+									if (wall1b == false || (wall1b == true && fabs(extent - object_origin.z) < fabs(wall_extents_z.y - object_origin.z)))
+										wall_extents_z.y = extent;
+								}
 							}
 						}
 					}
 				}
-			}
-			else if (cutfloors == true)
-			{
-				//floor
+				else if (cutfloors == true)
+				{
+					//floor
 
-				//get left side
-				worker = temppoly;
-				worker.SplitWithPlaneX(temppoly, temppoly2, start.x);
-				worker.MakeEmpty();
-
-				//get right side
-				if (temppoly2.GetVertexCount() > 0)
-					worker = temppoly2;
-				else
+					//get left side
 					worker = temppoly;
-				worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
-				worker.MakeEmpty();
+					worker.SplitWithPlaneX(temppoly, temppoly2, start.x);
+					worker.MakeEmpty();
 
-				//get lower
-				if (temppoly3.GetVertexCount() > 0)
-					worker = temppoly3;
-				else if (temppoly2.GetVertexCount() > 0)
-					worker = temppoly2;
-				else if (temppoly.GetVertexCount() > 0)
-					worker = temppoly;
-				worker.SplitWithPlaneZ(temppoly3, temppoly4, start.z);
-				worker.MakeEmpty();
+					//get right side
+					if (temppoly2.GetVertexCount() > 0)
+						worker = temppoly2;
+					else
+						worker = temppoly;
+					worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
+					worker.MakeEmpty();
 
-				//get upper
-				if (temppoly4.GetVertexCount() > 0)
-					worker = temppoly4;
-				else if (temppoly3.GetVertexCount() > 0)
-					worker = temppoly3;
-				else if (temppoly2.GetVertexCount() > 0)
-					worker = temppoly2;
-				else if (temppoly.GetVertexCount() > 0)
-					worker = temppoly;
-				worker.SplitWithPlaneZ(temppoly5, temppoly4, end.z);
-				worker.MakeEmpty();
-				temppoly5.MakeEmpty();
+					//get lower
+					if (temppoly3.GetVertexCount() > 0)
+						worker = temppoly3;
+					else if (temppoly2.GetVertexCount() > 0)
+						worker = temppoly2;
+					else if (temppoly.GetVertexCount() > 0)
+						worker = temppoly;
+					worker.SplitWithPlaneZ(temppoly3, temppoly4, start.z);
+					worker.MakeEmpty();
 
-				polycheck = true;
+					//get upper
+					if (temppoly4.GetVertexCount() > 0)
+						worker = temppoly4;
+					else if (temppoly3.GetVertexCount() > 0)
+						worker = temppoly3;
+					else if (temppoly2.GetVertexCount() > 0)
+						worker = temppoly2;
+					else if (temppoly.GetVertexCount() > 0)
+						worker = temppoly;
+					worker.SplitWithPlaneZ(temppoly5, temppoly4, end.z);
+					worker.MakeEmpty();
+					temppoly5.MakeEmpty();
+
+					polycheck = true;
+					polycheck2 = true;
+				}
+
+				//create split polygons
+				if (polycheck2 == true)
+				{
+					if (temppoly.GetVertexCount() > 2)
+					{
+						newpolys.SetSize(newpolys.GetSize() + 1);
+						for (int k = 0; k < temppoly.GetVertexCount(); k++)
+							newpolys[newpolys.GetSize() - 1].Push(temppoly[k]);
+					}
+					if (temppoly2.GetVertexCount() > 2)
+					{
+						newpolys.SetSize(newpolys.GetSize() + 1);
+						for (int k = 0; k < temppoly2.GetVertexCount(); k++)
+							newpolys[newpolys.GetSize() - 1].Push(temppoly2[k]);
+					}
+					if (temppoly3.GetVertexCount() > 2)
+					{
+						newpolys.SetSize(newpolys.GetSize() + 1);
+						for (int k = 0; k < temppoly3.GetVertexCount(); k++)
+							newpolys[newpolys.GetSize() - 1].Push(temppoly3[k]);
+					}
+					if (temppoly4.GetVertexCount() > 2)
+					{
+						newpolys.SetSize(newpolys.GetSize() + 1);
+						for (int k = 0; k < temppoly4.GetVertexCount(); k++)
+							newpolys[newpolys.GetSize() - 1].Push(temppoly4[k]);
+					}
+
+					temppoly.MakeEmpty();
+					temppoly2.MakeEmpty();
+					temppoly3.MakeEmpty();
+					temppoly4.MakeEmpty();
+				}
 			}
+		}
 
-			if (polycheck == true)
-			{
-				//get texture data from original polygon
-				iMaterialWrapper *oldmat = wall->GetHandle(i)->GetMaterial();
-				csVector3 oldvector;
-				csMatrix3 mapping;
-				wall->GetTextureMapping(i, mapping, oldvector);
+		//create new submesh
+		if (polycheck == true && newpolys.GetSize() > 0)
+		{
+			//get texture data from original polygon
+			iMaterialWrapper *oldmat = wall->GetHandle(i)->GetMaterial();
+			csVector3 oldvector;
+			csMatrix3 mapping;
+			wall->GetTextureMapping(i, mapping, oldvector);
 
-				//delete original polygon
-				wall->DeletePolygon(i, false);
+			//delete original submesh
+			wall->DeletePolygon(i, false);
 
-				//create splitted polygons
-				int handle = 0;
-		
-				if (temppoly.GetVertexCount() > 2)
-				{
-					handle = wall->AddPolygon(name, oldmat, temppoly.GetVertices(), temppoly.GetVertexCount(), mapping, oldvector);
-					ignore_list.Push(wall->GetHandle(handle));
-				}
+			//create new submesh
+			int handle = 0;
+			handle = wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
+			ignore_list.Push(wall->GetHandle(handle));
 
-				if (temppoly2.GetVertexCount() > 2)
-				{
-					handle = wall->AddPolygon(name, oldmat, temppoly2.GetVertices(), temppoly2.GetVertexCount(), mapping, oldvector);
-					ignore_list.Push(wall->GetHandle(handle));
-				}
-
-				if (temppoly3.GetVertexCount() > 2)
-				{
-					handle = wall->AddPolygon(name, oldmat, temppoly3.GetVertices(), temppoly3.GetVertexCount(), mapping, oldvector);
-					ignore_list.Push(wall->GetHandle(handle));
-				}
-
-				if (temppoly4.GetVertexCount() > 2)
-				{
-					handle = wall->AddPolygon(name, oldmat, temppoly4.GetVertices(), temppoly4.GetVertexCount(), mapping, oldvector);
-					ignore_list.Push(wall->GetHandle(handle));
-				}
-
-				temppoly.MakeEmpty();
-				temppoly2.MakeEmpty();
-				temppoly3.MakeEmpty();
-				temppoly4.MakeEmpty();
-
-				//reset search
-				i = -1;
-				polycount = wall->GetHandleCount();
-			}
+			//reset search position
+			i--;
 		}
 	}
 
@@ -4318,15 +4334,16 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	//create texture mapping table
 	//convert to remote positioning
 
-	CS::Geometry::csContour3 vertices2;
+	csArray<CS::Geometry::csContour3> vertices2;
+	vertices2.SetSize(1);
 
 	for (int i = 0; i < vertices.GetSize(); i++)
-		vertices2.Push(ToRemote(vertices[i]));
+		vertices2[0].Push(ToRemote(vertices[i]));
 
 	//texture mapping
 	csVector3 v1, v2, v3;
-	GetTextureMapping(vertices2, v1, v2, v3);
-	if (!ComputeTextureMap(t_matrix, t_vector, vertices2,
+	GetTextureMapping(vertices2[0], v1, v2, v3);
+	if (!ComputeTextureMap(t_matrix, t_vector, vertices2[0],
 		v1,
 		csVector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
 		v2,
@@ -4338,7 +4355,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	return PolyMesh(mesh, name, material, vertices2, t_matrix, t_vector, false);
 }
 
-csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, csRef<iMaterialWrapper> material, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices)
+csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -4347,11 +4364,15 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 
 	//convert to remote positioning
 
-	CS::Geometry::csContour3 vertices2;
+	csArray<CS::Geometry::csContour3> vertices2;
 	if (convert_vertices == true)
 	{
+		vertices2.SetSize(vertices.GetSize());
 		for (int i = 0; i < vertices.GetSize(); i++)
-			vertices2.Push(ToRemote(vertices[i]));
+		{
+			for (int j = 0; j < vertices[i].GetSize(); j++)
+				vertices2[i].Push(ToRemote(vertices[i][j]));
+		}
 	}
 	else
 		vertices2 = vertices;
@@ -4361,8 +4382,10 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	CS::Geometry::TableTextureMapper mapper(table);
 
 	//triangulate mesh
-	csTriangleMesh trimesh;
-	CS::Geometry::Triangulate3D::Process(vertices2, trimesh);
+	csArray<csTriangleMesh> trimesh;
+	trimesh.SetSize(vertices2.GetSize());
+	for (int i = 0; i < trimesh.GetSize(); i++)
+		CS::Geometry::Triangulate3D::Process(vertices2[i], trimesh[i]);
 
 	//set up geometry arrays
 	csDirtyAccessArray<csVector3> mesh_vertices;
@@ -4370,24 +4393,32 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	csDirtyAccessArray<csVector3> mesh_normals;
 
 	//initialize geometry arrays
-	int size = trimesh.GetVertexCount();
+	int size = 0;
+	for (int i = 0; i < trimesh.GetSize(); i++)
+		size += trimesh[i].GetVertexCount();
 	mesh_vertices.SetSize(size);
 	mesh_texels.SetSize(size);
 	mesh_normals.SetSize(size);
 
 	//populate vertices, normals, and texels for mesh data
-	for (int i = 0; i < size; i++)
+	int k = 0;
+	for (int i = 0; i < trimesh.GetSize(); i++)
 	{
-		mesh_normals[i] = mesh_vertices[i] = trimesh.GetVertices()[i];
-		mesh_normals[i].Normalize();
-		mesh_texels[i] = mapper.Map(mesh_vertices[i], mesh_normals[i], i);
+		for (int j = 0; j < trimesh[i].GetVertexCount(); j++)
+		{
+			mesh_normals[k] = mesh_vertices[k] = trimesh[i].GetVertices()[j];
+			mesh_normals[k].Normalize();
+			mesh_texels[k] = mapper.Map(mesh_vertices[k], mesh_normals[k], k);
 
-		int a = i - 1;
-		if (a == -1)
+			int a = k - 1;
+			if (a == -1)
 			a = size - 1;
-		int c = i + 1;
-		if (c == size)
+			int c = k + 1;
+			if (c == size)
 			c = 0;
+
+			k++;
+		}
 	}
 
 	//get number of existing vertices before adding any
@@ -4399,17 +4430,26 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		//state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], csColor4(0, 0, 0)); //for lighted
 
 	//set up triangle buffer
-	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(trimesh.GetTriangleCount() * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, trimesh.GetVertexCount());
+	int tricount = 0;
+	for (int i = 0; i < trimesh.GetSize(); i++)
+		tricount += trimesh[i].GetTriangleCount();
+
+	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, size);
 	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	//add triangles to mesh
-	for (int i = 0; i < trimesh.GetTriangleCount(); i++)
+	int location = 0;
+	for (int i = 0; i < trimesh.GetSize(); i++)
 	{
-		csTriangle tri = trimesh.GetTriangle(i);
-		tri.a += count;
-		tri.b += count;
-		tri.c += count;
-		triangleData[i] = tri; //add triangle to submesh buffer
+		for (int j = 0; j < trimesh[i].GetTriangleCount(); j++)
+		{
+			csTriangle tri = trimesh[i].GetTriangle(j);
+			tri.a += count;
+			tri.b += count;
+			tri.c += count;
+			triangleData[location] = tri; //add triangle to submesh buffer
+			location++;
+		}
 	}
 
 	//finish with submesh buffer
@@ -4534,23 +4574,30 @@ bool SBS::ComputeTextureSpace(csMatrix3 &m, csVector3 &v, const csVector3 &v_ori
 	return true;
 }
 
-csVector2* SBS::GetTexels(csMatrix3 &tex_matrix, csVector3 &tex_vector, CS::Geometry::csContour3 &vertices)
+csVector2* SBS::GetTexels(csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<CS::Geometry::csContour3> &vertices)
 {
 	//return texel array for specified texture transformation matrix and vector
 
 	csTransform transform(tex_matrix, tex_vector);
 
 	//create array for texel map
-	int texel_count = vertices.GetSize();
+	int texel_count = 0;
+	for (int i = 0; i < vertices.GetSize(); i++)
+		texel_count += vertices[i].GetSize();
 	csVector2 *texels = new csVector2[texel_count];
-	csVector3 texel_temp;
 
 	//transform matrix into texel map
-	for (int i = 0; i < texel_count; i++)
+	int index = 0;
+	csVector3 texel_temp;
+	for (int i = 0; i < vertices.GetSize(); i++)
 	{
-		texel_temp = transform.Other2This(vertices[i]);
-		texels[i].x = texel_temp.x;
-		texels[i].y = texel_temp.y;
+		for (int j = 0; j < vertices[i].GetSize(); j++)
+		{
+			texel_temp = transform.Other2This(vertices[i][j]);
+			texels[index].x = texel_temp.x;
+			texels[index].y = texel_temp.y;
+			index++;
+		}
 	}
 	return texels;
 }

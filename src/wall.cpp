@@ -58,43 +58,42 @@ int WallObject::AddQuad(const char *name, const char *texture, const csVector3 &
 {
 	//add a quad
 
-	CS::Geometry::csContour3 array;
-	array.Push(v1);
-	array.Push(v2);
-	array.Push(v3);
-	array.Push(v4);
+	csArray<CS::Geometry::csContour3> array;
+	array.SetSize(1);
+	array[0].Push(v1);
+	array[0].Push(v2);
+	array[0].Push(v3);
+	array[0].Push(v4);
 	csString name2 = ProcessName(name);
 	csMatrix3 tm;
 	csVector3 tv;
-	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th, autosize, tm, tv);
+	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array[0], tw, th, autosize, tm, tv);
 	return CreateHandle(handle, array, tm, tv);
 }
 
 int WallObject::AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize)
 {
 	//create a generic polygon
-	CS::Geometry::csContour3 array;
+	csArray<CS::Geometry::csContour3> array;
+	array.SetSize(1);
 	for (int i = 0; i < num; i++)
-		array.Push(vertices[i]);
+		array[0].Push(vertices[i]);
 	csString name2 = ProcessName(name);
 	csMatrix3 tm;
 	csVector3 tv;
-	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array, tw, th, autosize, tm, tv);
+	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array[0], tw, th, autosize, tm, tv);
 	return CreateHandle(handle, array, tm, tv);
 }
 
-int WallObject::AddPolygon(const char *name, csRef<iMaterialWrapper> material, csVector3 *vertices, int num, csMatrix3 &tex_matrix, csVector3 &tex_vector)
+int WallObject::AddPolygon(const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
 {
-	//create a generic polygon
-	CS::Geometry::csContour3 array;
-	for (int i = 0; i < num; i++)
-		array.Push(vertices[i]);
+	//add a set of polygons, providing the original material and texture mapping
 	csString name2 = ProcessName(name);
-	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, material, array, tex_matrix, tex_vector);
-	return CreateHandle(handle, array, tex_matrix, tex_vector);
+	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, material, vertices, tex_matrix, tex_vector);
+	return CreateHandle(handle, vertices, tex_matrix, tex_vector);
 }
 
-int WallObject::CreateHandle(csRef<iGeneralMeshSubMesh> handle, CS::Geometry::csContour3 &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
+int WallObject::CreateHandle(csRef<iGeneralMeshSubMesh> handle, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
 {
 	//create a polygon handle
 	handles.Push(handle);
@@ -163,7 +162,6 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 
 		//clean up data
 		handles[index] = 0;
-		geometry[index].DeleteAll();
 		handles.DeleteIndex(index);
 		geometry.DeleteIndex(index);
 		t_matrix.DeleteIndex(index);
@@ -249,7 +247,7 @@ void WallObject::DeleteVertices(csArray<int> &deleted_indices)
 	}
 }
 
-CS::Geometry::csContour3* WallObject::GetGeometry(iGeneralMeshSubMesh *handle)
+csArray<CS::Geometry::csContour3>* WallObject::GetGeometry(iGeneralMeshSubMesh *handle)
 {
 	//get the original geometry of the specified submesh
 
