@@ -2873,6 +2873,11 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 					temppoly4.MakeEmpty();
 				}
 			}
+			else
+			{
+				//otherwise put original polygon into array (will only be used if the related submesh is recreated)
+				newpolys.Push(origpolys->Get(j));
+			}
 		}
 
 		//create new submesh
@@ -2894,6 +2899,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 
 			//reset search position
 			i--;
+			polycheck = false;
 		}
 	}
 
@@ -4439,17 +4445,19 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 
 	//add triangles to mesh
 	int location = 0;
+	int location2 = 0;
 	for (int i = 0; i < trimesh.GetSize(); i++)
 	{
 		for (int j = 0; j < trimesh[i].GetTriangleCount(); j++)
 		{
 			csTriangle tri = trimesh[i].GetTriangle(j);
-			tri.a += count;
-			tri.b += count;
-			tri.c += count;
+			tri.a += count + location2;
+			tri.b += count + location2;
+			tri.c += count + location2;
 			triangleData[location] = tri; //add triangle to submesh buffer
 			location++;
 		}
+		location2 += trimesh[i].GetVertexCount();;
 	}
 
 	//finish with submesh buffer
