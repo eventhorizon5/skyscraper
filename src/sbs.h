@@ -196,9 +196,6 @@ public:
 	int CreateWallBox2(WallObject* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
 	int AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
 	int AddCustomWall(WallObject* wallobject, const char *name, const char *texture, csPoly3D &varray, float tw, float th);
-	csVector2 GetExtents(csPoly3D &varray, int coord);
-	csVector2 GetExtents(const csVector3 *varray, int count, int coord);
-	csVector2 GetExtents(csRef<iMeshWrapper> mesh, int coord);
 	void InitMeshes();
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
@@ -206,7 +203,6 @@ public:
 	void EnableSkybox(bool value);
 	int GetFloorNumber(float altitude, int lastfloor = 0, bool checklastfloor = false);
 	float GetDistance(float x1, float x2, float z1, float z2);
-	void DumpVertices(WallObject* wallobject);
 	void ListAltitudes();
 	Object* CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
@@ -236,8 +232,6 @@ public:
 	void SetAutoSize(bool x, bool y);
 	void GetAutoSize(bool &x, bool &y);
 	int GetDrawWallsCount();
-	csVector3 GetPoint(csRef<iMeshWrapper> mesh, const char *polyname, const csVector3 &start, const csVector3 &end);
-	void Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, float th);
@@ -262,8 +256,6 @@ public:
 	bool GetTextureForce(const char *texture, bool &enable_force, bool &force_mode);
 	bool AddTextToTexture(const char *origname, const char *name, const char *font_filename, float font_size, const char *text, int x1, int y1, int x2, int y2, const char *h_align, const char *v_align, int ColorR, int ColorG, int ColorB, bool enable_force = false, bool force_mode = false);
 	bool AddTextureOverlay(const char *orig_texture, const char *overlay_texture, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
-	void EnableMesh(csRef<iMeshWrapper> mesh, bool value);
-	iMeshWrapper* AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
 	void ProcessDoors();
 	void ProcessCallButtons();
 	int GetDoorCallbackCount();
@@ -293,8 +285,6 @@ public:
 	bool UnregisterObject(int number);
 	void GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, csVector3 &v2, csVector3 &v3);
 	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
-	csVector3 GetWallExtents(csRef<iMeshWrapper> mesh, const char *name, float altitude,  bool get_max);
-	csVector3 GetPolygonDirection(csPoly3D &polygon);
 	csVector2 CalculateSizing(const char *texture, csVector2 x, csVector2 y, csVector2 z, float tw, float th);
 	WallObject* CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrapper> mesh, Object *parent, const char *name);
 	WallObject* GetWallObject(csArray<WallObject*> &wallarray, int polygon_index);
@@ -312,6 +302,18 @@ public:
 	void RemoveSound(Sound *sound);
 	const char* VerifyFile(const char *filename);
 	bool FileExists(const char *filename, bool relative = false);
+
+	//in mesh.cpp
+	void DumpVertices(WallObject* wallobject);
+	csVector2 GetExtents(csPoly3D &varray, int coord);
+	csVector2 GetExtents(const csVector3 *varray, int count, int coord);
+	csVector2 GetExtents(csRef<iMeshWrapper> mesh, int coord);
+	csVector3 GetPoint(csRef<iMeshWrapper> mesh, const char *polyname, const csVector3 &start, const csVector3 &end);
+	void EnableMesh(csRef<iMeshWrapper> mesh, bool value);
+	iMeshWrapper* AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
+	void Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
+	csVector3 GetWallExtents(csRef<iMeshWrapper> mesh, const char *name, float altitude,  bool get_max);
+	csVector3 GetPolygonDirection(csPoly3D &polygon);
 	csRef<iMeshWrapper> CreateMesh(const char *name);
 	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &tex_matrix, csVector3 &tex_vector);
 	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices = true);
