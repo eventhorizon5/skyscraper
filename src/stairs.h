@@ -70,7 +70,7 @@ public:
 
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array
-		csArray<csRefArray<iGeneralMeshSubMesh>> stairs_submeshes;
+		csArray<csRefArray<iGeneralMeshSubMesh> > stairs_submeshes;
 	csRefArray<iMeshWrapper> StairDoorArray; //stair door array
 	csArray<bool> EnableArray;
 
