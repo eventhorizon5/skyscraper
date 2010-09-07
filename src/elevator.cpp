@@ -1916,7 +1916,7 @@ WallObject* Elevator::AddWall(const char *name, const char *texture, float thick
 {
 	//Adds a wall with the specified dimensions
 
-	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, this->object, name);
+	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, Elevator_submeshes, this->object, name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
@@ -1925,7 +1925,7 @@ WallObject* Elevator::AddFloor(const char *name, const char *texture, float thic
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
-	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, this->object, name);
+	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, Elevator_submeshes, this->object, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th, true);
 	return wall;
 }

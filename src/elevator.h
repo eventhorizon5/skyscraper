@@ -123,6 +123,7 @@ public:
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
+		csRefArray<iGeneralMeshSubMesh> Elevator_submeshes;
 		csRef<iGeneralFactoryState> Elevator_state;
 		csRef<iMovable> Elevator_movable;
 

@@ -139,7 +139,7 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	}
 
 	//create wall object
-	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], this->object, name);
+	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], stairs_submeshes[floor - startfloor], this->object, name);
 
 	csString buffer, buffer2, buffer3;
 	csString Direction = direction;
@@ -245,7 +245,7 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 		return 0;
 	}
 
-	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], this->object, name);
+	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], stairs_submeshes[floor - startfloor], this->object, name);
 	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 	return wall;
 }
@@ -264,7 +264,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 		return 0;
 	}
 
-	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], this->object, name);
+	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], stairs_submeshes[floor - startfloor], this->object, name);
 	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th);
 	return wall;
 }
@@ -391,7 +391,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	}
 
 	//create doorway walls
-	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], object, "Connection Walls");
+	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], stairs_submeshes[floor - startfloor], object, "Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 	DoorArray.SetSize(DoorArray.GetSize() + 1);

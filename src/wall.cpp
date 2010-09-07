@@ -30,11 +30,12 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-WallObject::WallObject(csRef<iMeshWrapper> wrapper, Object *proxy, bool temporary) : Object(temporary)
+WallObject::WallObject(csRef<iMeshWrapper> wrapper, csRefArray<iGeneralMeshSubMesh> &submeshes, Object *proxy, bool temporary) : Object(temporary)
 {
 	//wall object constructor
 	meshwrapper = wrapper;
 	state = scfQueryInterface<iGeneralFactoryState>(wrapper->GetFactory()->GetMeshObjectFactory());
+	submesh_array = &submeshes;
 
 	//if proxy object is set, set object's number as proxy object's number
 	if (proxy)
@@ -49,12 +50,9 @@ WallObject::~WallObject()
 		parent_array->Delete(this);
 
 	handles.DeleteAll();
-	geometry.DeleteAll();
-	t_matrix.DeleteAll();
-	t_vector.DeleteAll();
 }
 
-int WallObject::AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize)
+WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize)
 {
 	//add a quad
 
@@ -67,11 +65,15 @@ int WallObject::AddQuad(const char *name, const char *texture, const csVector3 &
 	csString name2 = ProcessName(name);
 	csMatrix3 tm;
 	csVector3 tv;
-	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array[0], tw, th, autosize, tm, tv);
-	return CreateHandle(handle, array, tm, tv);
+	csRef<iRenderBuffer> triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2, texture, array[0], tw, th, autosize, tm, tv);
+
+	if (!triangles)
+		return 0;
+	int index = CreateHandle(triangles, array, tm, tv, name2);
+	return &handles[index];
 }
 
-int WallObject::AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize)
+WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize)
 {
 	//create a generic polygon
 	csArray<CS::Geometry::csContour3> array;
@@ -81,26 +83,39 @@ int WallObject::AddPolygon(const char *name, const char *texture, csVector3 *ver
 	csString name2 = ProcessName(name);
 	csMatrix3 tm;
 	csVector3 tv;
-	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, texture, array[0], tw, th, autosize, tm, tv);
-	return CreateHandle(handle, array, tm, tv);
+	csRef<iRenderBuffer> triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2, texture, array[0], tw, th, autosize, tm, tv);
+
+	if (!triangles)
+		return 0;
+	int index = CreateHandle(triangles, array, tm, tv, name2);
+	return &handles[index];
 }
 
-int WallObject::AddPolygon(const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
+WallPolygon* WallObject::AddPolygon(const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
 	csString name2 = ProcessName(name);
-	csRef<iGeneralMeshSubMesh> handle = sbs->PolyMesh(meshwrapper, name2, material, vertices, tex_matrix, tex_vector);
-	return CreateHandle(handle, vertices, tex_matrix, tex_vector);
+	csRef<iRenderBuffer> triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2, material, vertices, tex_matrix, tex_vector);
+
+	if (!triangles)
+		return 0;
+	int index = CreateHandle(triangles, vertices, tex_matrix, tex_vector, name2);
+	return &handles[index];
 }
 
-int WallObject::CreateHandle(csRef<iGeneralMeshSubMesh> handle, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector)
+int WallObject::CreateHandle(csRef<iRenderBuffer> triangles, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, const char *name)
 {
 	//create a polygon handle
-	handles.Push(handle);
-	geometry.Push(vertices);
-	t_matrix.Push(tex_matrix);
-	t_vector.Push(tex_vector);
-	return handles.GetSize() - 1;
+	int i = handles.GetSize();
+	handles.SetSize(handles.GetSize() + 1);
+	handles[i].submeshes = submesh_array;
+	handles[i].triangles = triangles;
+	handles[i].geometry = vertices;
+	handles[i].t_matrix = tex_matrix;
+	handles[i].t_vector = tex_vector;
+	handles[i].material = submesh_array->Get(i)->GetMaterial();
+	handles[i].name = name;
+	return i;
 }
 
 csString WallObject::ProcessName(const char *name)
@@ -126,10 +141,7 @@ void WallObject::DeletePolygons()
 	//delete polygons and handles
 	
 	for (int i = 0; i < handles.GetSize(); i++)
-	{
-		if (handles[i])
-			DeletePolygon(i, false);
-	}
+		DeletePolygon(i, false);
 
 	//recreate colliders
 	sbs->DeleteColliders(meshwrapper);
@@ -142,30 +154,14 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 
 	if (index > -1 && index < handles.GetSize())
 	{
-		iGeneralMeshSubMesh *submesh = GetHandle(index);
-
-		//get submesh's triangle vertices (which will be deleted)
-		iRenderBuffer* buffer = submesh->GetIndices();
-		int* buffer2 = (int*)buffer->Lock(CS_BUF_LOCK_NORMAL);
-
-		//copy vertex indices into index array
-		csArray<int> indices;
-		for (int i = 0; i < buffer->GetElementCount(); i++)
-			indices.Push(buffer2[i]);
-		buffer->Release();
-
-		//delete submesh
-		state->DeleteSubMesh(submesh);
+		//delete triangles
+		sbs->ReindexSubMesh(state, *handles[index].submeshes, handles[index].triangles, handles[index].material, handles[index].name, false);
 
 		//delete related mesh vertices
-		DeleteVertices(indices);
+		DeleteVertices(handles[index].triangles);
 
-		//clean up data
-		handles[index] = 0;
+		//delete polygon
 		handles.DeleteIndex(index);
-		geometry.DeleteIndex(index);
-		t_matrix.DeleteIndex(index);
-		t_vector.DeleteIndex(index);
 
 		//reprocess mesh
 		state->Invalidate();
@@ -179,12 +175,25 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 	}
 }
 
-void WallObject::DeleteVertices(csArray<int> &deleted_indices)
+int WallObject::GetHandleCount()
+{
+	return handles.GetSize();
+}
+
+void WallObject::DeleteVertices(iRenderBuffer *deleted_indices)
 {
 	//delete related mesh vertices using provided index array
 	//then reindex all mesh triangle indices in all submeshes
-	//this should be done after a submesh is deleted
+	//this should be done after a polygon is deleted
 
+	//get integer array of triangle indices
+	csArray<int> indices;
+	int* buffer2 = (int*)deleted_indices->Lock(CS_BUF_LOCK_NORMAL);
+	for (int i = 0; i < deleted_indices->GetElementCount(); i++)
+		indices.Push(buffer2[i]);
+	deleted_indices->Release();
+
+	//set up new geometry arrays
 	csDirtyAccessArray<csVector3> mesh_vertices;
 	csDirtyAccessArray<csVector2> mesh_texels;
 	csDirtyAccessArray<csVector3> mesh_normals;
@@ -201,8 +210,8 @@ void WallObject::DeleteVertices(csArray<int> &deleted_indices)
 
 	//construct new sorted and compressed index array
 	csArray<int> deleted2;
-	for (int i = 0; i < deleted_indices.GetSize(); i++)
-		deleted2.PushSmart(deleted_indices[i]);
+	for (int i = 0; i < indices.GetSize(); i++)
+		deleted2.PushSmart(indices[i]);
 	deleted2.Sort();
 
 	//delete specified vertices
@@ -245,48 +254,32 @@ void WallObject::DeleteVertices(csArray<int> &deleted_indices)
 		}
 		indices->Release();
 	}
-}
 
-csArray<CS::Geometry::csContour3>* WallObject::GetGeometry(iGeneralMeshSubMesh *handle)
-{
-	//get the original geometry of the specified submesh
-
+	//reindex triangle indices in all polygons
 	for (int i = 0; i < handles.GetSize(); i++)
 	{
-		if (handles[i] == handle && i < geometry.GetSize())
-			return &geometry[i];
+		iRenderBuffer *indices = handles[i].triangles;
+		
+		if (!indices)
+			continue;
+
+		int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
+
+		for (int j = 0; j < indices->GetElementCount(); j++)
+		{
+			for (int k = deleted2.GetSize() - 1; k >= 0; k--)
+			{
+				if (indices2[j] >= deleted2[k])
+					indices2[j]--;
+			}
+		}
+		indices->Release();
 	}
+}
+
+WallPolygon* WallObject::GetHandle(int index)
+{
+	if (index > -1 && index < handles.GetSize())
+		return &handles[index];
 	return 0;
-}
-
-int WallObject::GetHandleCount()
-{
-	return handles.GetSize();
-}
-
-iGeneralMeshSubMesh* WallObject::GetHandle(int index)
-{
-	if (index > -1 && index < handles.GetSize())
-		return handles[index];
-}
-
-int WallObject::FindHandleIndex(iGeneralMeshSubMesh *handle)
-{
-	//perform a linear search to find a handle index
-
-	for (int i = 0; i < handles.GetSize(); i++)
-	{
-		if (handles[i] == handle)
-			return i;
-	}
-}
-
-void WallObject::GetTextureMapping(int index, csMatrix3 &tm, csVector3 &tv)
-{
-	//return texture mapping matrix and vector of the specified submesh
-	if (index > -1 && index < handles.GetSize())
-	{
-		tm = t_matrix[index];
-		tv = t_vector[index];
-	}
 }

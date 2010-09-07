@@ -44,6 +44,7 @@ public:
 		void Move();
 
 		csRef<iMeshWrapper> mesh;
+		csRefArray<iGeneralMeshSubMesh> mesh_submeshes;
 		csRef<iGeneralFactoryState> state;
 		csRef<iMovable> movable;
 		int direction; //direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward

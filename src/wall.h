@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Polygon Object Class
+	Scalable Building Simulator - Wall Object Class
 	The Skyscraper Project - Version 1.8 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -31,21 +31,19 @@ class SBSIMPEXP WallObject : public Object
 public:
 
 	//functions
-	WallObject(csRef<iMeshWrapper> wrapper, Object *proxy = 0, bool temporary = false);
+	WallObject(csRef<iMeshWrapper> wrapper, csRefArray<iGeneralMeshSubMesh> &submeshes, Object *proxy = 0, bool temporary = false);
 	~WallObject();
-	int AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize);
-	int AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize);
-	int AddPolygon(const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector);
-	int CreateHandle(csRef<iGeneralMeshSubMesh> handle, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector);
+	WallPolygon* AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize);
+	WallPolygon* AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize);
+	WallPolygon* AddPolygon(const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector);
+	int CreateHandle(csRef<iRenderBuffer> triangles, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, const char *name);
 	void DeletePolygons();
 	void DeletePolygon(int index, bool recreate_colliders);
 	void DeleteVertices(csArray<int> &deleted_indices);
 	csString ProcessName(const char *name);
-	csArray<CS::Geometry::csContour3>* GetGeometry(iGeneralMeshSubMesh *handle);
 	int GetHandleCount();
-	iGeneralMeshSubMesh* GetHandle(int index);
-	int FindHandleIndex(iGeneralMeshSubMesh *handle);
-	void GetTextureMapping(int index, csMatrix3 &t_matrix, csVector3 &t_vector);
+	void DeleteVertices(iRenderBuffer *deleted_indices);
+	WallPolygon* GetHandle(int index);
 
 	//mesh wrapper
 	csRef<iMeshWrapper> meshwrapper;
@@ -59,16 +57,12 @@ public:
 	//parent array
 	csArray<WallObject*> *parent_array;
 
+	//parent submesh array
+	csRefArray<iGeneralMeshSubMesh> *submesh_array;
+
 private:
-	//array set holding original polygon geometry
-	csArray<csArray<CS::Geometry::csContour3> > geometry;
 
-	//texture mapping matrix and vector
-	csArray<csMatrix3> t_matrix;
-	csArray<csVector3> t_vector;
-
-	//polygon index array
-	csRefArray<iGeneralMeshSubMesh> handles;
+	csArray<WallPolygon> handles;
 };
 
 #endif

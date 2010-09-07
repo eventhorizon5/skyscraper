@@ -136,7 +136,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 		return 0;
 	}
 
-	WallObject *wall = sbs->CreateWallObject(shaft_walls[floor - startfloor], GetMeshWrapper(floor), this->object, name);
+	WallObject *wall = sbs->CreateWallObject(shaft_walls[floor - startfloor], GetMeshWrapper(floor), shaft_submeshes[floor - startfloor], this->object, name);
 	sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th, true);
 	return wall;
 }
@@ -162,7 +162,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	WallObject *wall = sbs->CreateWallObject(shaft_walls[floor - startfloor], GetMeshWrapper(floor), this->object, name);
+	WallObject *wall = sbs->CreateWallObject(shaft_walls[floor - startfloor], GetMeshWrapper(floor), shaft_submeshes[floor - startfloor], this->object, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw, th, true);
 	return wall;
 }

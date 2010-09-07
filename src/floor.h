@@ -57,6 +57,9 @@ public:
 	csArray<WallObject*> level_walls;
 	csArray<WallObject*> interfloor_walls;
 	csArray<WallObject*> columnframe_walls;
+	csRefArray<iGeneralMeshSubMesh> level_submeshes;
+	csRefArray<iGeneralMeshSubMesh> interfloor_submeshes;
+	csRefArray<iGeneralMeshSubMesh> columnframe_submeshes;
 
 	//functions
 	Floor(int number);

@@ -199,12 +199,12 @@ WallObject* Floor::AddFloor(const char *name, const char *texture, float thickne
 
 	if (isexternal == false)
 	{
-		wall = sbs->CreateWallObject(level_walls, Level, this->object, name);
+		wall = sbs->CreateWallObject(level_walls, Level, level_submeshes, this->object, name);
 		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, tw, th, true);
 	}
 	else
 	{
-		wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, this->object, name);
+		wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, sbs->External_submeshes, this->object, name);
 		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	}
 	return wall;
@@ -214,7 +214,7 @@ WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, flo
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
-	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, this->object, name);
+	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, interfloor_submeshes, this->object, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	return wall;
 }
@@ -226,12 +226,12 @@ WallObject* Floor::AddWall(const char *name, const char *texture, float thicknes
 	WallObject *wall;
 	if (isexternal == false)
 	{
-		wall = sbs->CreateWallObject(level_walls, Level, this->object, name);
+		wall = sbs->CreateWallObject(level_walls, Level, level_submeshes, this->object, name);
 		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, tw, th, true);
 	}
 	else
 	{
-		wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, this->object, name);
+		wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, sbs->External_submeshes, this->object, name);
 		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	}
 	return wall;
@@ -241,7 +241,7 @@ WallObject* Floor::AddInterfloorWall(const char *name, const char *texture, floa
 {
 	//Adds an interfloor wall with the specified dimensions
 
-	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, this->object, name);
+	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, interfloor_submeshes, this->object, name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	return wall;
 }
@@ -528,7 +528,7 @@ WallObject* Floor::ColumnWallBox(const char *name, const char *texture, float x1
 {
 	//create columnframe wall box
 
-	WallObject *wall = sbs->CreateWallObject(columnframe_walls, ColumnFrame, this->object, name);
+	WallObject *wall = sbs->CreateWallObject(columnframe_walls, ColumnFrame, columnframe_submeshes, this->object, name);
 	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }
@@ -537,7 +537,7 @@ WallObject* Floor::ColumnWallBox2(const char *name, const char *texture, float C
 {
 	//create columnframe wall box from a central location
 
-	WallObject *wall = sbs->CreateWallObject(columnframe_walls, ColumnFrame, this->object, name);
+	WallObject *wall = sbs->CreateWallObject(columnframe_walls, ColumnFrame, columnframe_submeshes, this->object, name);
 	sbs->CreateWallBox2(wall, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }

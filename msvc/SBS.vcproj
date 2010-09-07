@@ -336,6 +336,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\mesh.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\object.h"
 				>
 			</File>

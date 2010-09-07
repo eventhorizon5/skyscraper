@@ -1065,28 +1065,28 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->level_submeshes, Simcore->GetFloor(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->Elevator_submeshes, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->External_submeshes, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->Landscape_submeshes, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->Buildings_submeshes, Simcore->object, tempdata[1]);
 		}
 		else
 			return ScriptError("Invalid object");
@@ -1282,28 +1282,28 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->level_submeshes, Simcore->GetFloor(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->Elevator_submeshes, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->External_submeshes, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->Landscape_submeshes, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->Buildings_submeshes, Simcore->object, tempdata[1]);
 		}
 		else
 			return ScriptError("Invalid object");
@@ -1352,28 +1352,28 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->level_submeshes, Simcore->GetFloor(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->Elevator_submeshes, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->External_submeshes, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->Landscape_submeshes, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->Buildings_submeshes, Simcore->object, tempdata[1]);
 		}
 		else
 			return ScriptError("Invalid object");
@@ -1415,28 +1415,28 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetFloor(Current)->level_walls, tmpMesh, Simcore->GetFloor(Current)->level_submeshes, Simcore->GetFloor(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->GetElevator(Current)->elevator_walls, tmpMesh, Simcore->GetElevator(Current)->Elevator_submeshes, Simcore->GetElevator(Current)->object, tempdata[1]);
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->External_walls, tmpMesh, Simcore->External_submeshes, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->Landscape_walls, tmpMesh, Simcore->Landscape_submeshes, Simcore->object, tempdata[1]);
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->object, tempdata[1]);
+			wall = Simcore->CreateWallObject(Simcore->Buildings_walls, tmpMesh, Simcore->Buildings_submeshes, Simcore->object, tempdata[1]);
 		}
 		else
 			return ScriptError("Invalid object");

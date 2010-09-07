@@ -660,12 +660,12 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 
 	//add main walls
 	sbs->DrawWalls(true, true, false, false, false, false);
-	sbs->AddWallMain(wrapper->object, door->mesh, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+	sbs->AddWallMain(wrapper->object, door->mesh, door->mesh_submeshes, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
 	sbs->ResetWalls();
 
 	//add side walls
 	sbs->DrawWalls(false, false, true, true, true, true);
-	sbs->AddWallMain(wrapper->object, door->mesh, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
+	sbs->AddWallMain(wrapper->object, door->mesh, door->mesh_submeshes, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
 	sbs->ResetWalls();
 
 	//store extents
@@ -860,7 +860,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		}
 
 		//create doorway walls
-		WallObject *wall = sbs->CreateWallObject(floorobj->level_walls, floorobj->Level, floorobj->object, "Connection Walls");
+		WallObject *wall = sbs->CreateWallObject(floorobj->level_walls, floorobj->Level, floorobj->level_submeshes, floorobj->object, "Connection Walls");
 		sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 		sbs->ResetWalls();
@@ -873,7 +873,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	if (ShaftDoor == false)
 	{
 		WallObject *wall;
-		wall = sbs->CreateWallObject(elev->elevator_walls, elev->ElevatorMesh, elev->object, false);
+		wall = sbs->CreateWallObject(elev->elevator_walls, elev->ElevatorMesh, elev->Elevator_submeshes, elev->object, false);
 		name1 = "DoorF1";
 		name2 = "DoorF2";
 		sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true, false);
@@ -883,7 +883,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	{
 		WallObject *wall;
 		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-		wall = sbs->CreateWallObject(shaft->shaft_walls[floor - shaft->startfloor], shaft->GetMeshWrapper(floor), shaft->object, false);
+		wall = sbs->CreateWallObject(shaft->shaft_walls[floor - shaft->startfloor], shaft->GetMeshWrapper(floor), shaft->shaft_submeshes[floor - shaft->startfloor], shaft->object, false);
 		name1 = "ShaftDoorF1";
 		name2 = "ShaftDoorF2";
 		x1 += elev->Origin.x;

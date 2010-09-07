@@ -30,6 +30,7 @@
 
 //this file includes function implementations of the low-level SBS geometry and mesh code
 
+extern SBS *sbs; //external pointer to the SBS engine
 
 void SBS::DumpVertices(WallObject* wallobject)
 {
@@ -218,7 +219,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 		return;
 
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
-	csArray<iGeneralMeshSubMesh*> ignore_list;
+	csArray<WallPolygon*> ignore_list;
 
 	bool polycheck = false;
 	if (checkwallnumber == 1)
@@ -235,10 +236,6 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 	//step through each polygon
 	for (int i = 0; i < wall->GetHandleCount(); i++)
 	{
-		//skip null handles
-		if (!wall->GetHandle(i))
-			continue;
-
 		//skip created submeshes
 		bool ignorecheck = false;
 		for (int j = 0; j < ignore_list.GetSize(); j++)
@@ -253,9 +250,9 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 			continue;
 
 		//get name and vertex array
-		iGeneralMeshSubMesh* handle = wall->GetHandle(i);
+		iGeneralMeshSubMesh* handle = wall->GetHandle(i)->GetSubMesh();
 		csString name = handle->GetName();
-		csArray<CS::Geometry::csContour3>* origpolys = wall->GetGeometry(wall->GetHandle(i));
+		csArray<CS::Geometry::csContour3>* origpolys = &wall->GetHandle(i)->geometry;
 		csArray<CS::Geometry::csContour3> newpolys;
 
 		//skip empty meshes
@@ -509,18 +506,18 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 		if (polycheck == true && newpolys.GetSize() > 0)
 		{
 			//get texture data from original polygon
-			iMaterialWrapper *oldmat = wall->GetHandle(i)->GetMaterial();
+			iMaterialWrapper *oldmat = wall->GetHandle(i)->material;
 			csVector3 oldvector;
 			csMatrix3 mapping;
-			wall->GetTextureMapping(i, mapping, oldvector);
+			wall->GetHandle(i)->GetTextureMapping(mapping, oldvector);
 
 			//delete original submesh
 			wall->DeletePolygon(i, false);
 
 			//create new submesh
-			int handle = 0;
+			WallPolygon* handle = 0;
 			handle = wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
-			ignore_list.Push(wall->GetHandle(handle));
+			ignore_list.Push(handle);
 
 			//reset search position
 			i--;
@@ -673,12 +670,12 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 	mesh->SetRenderPriority(engine->GetObjectRenderPriority());
 
 	//create a default material (otherwise the system complains if a mesh is used without a material)
-	mesh->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
+	mesh->GetMeshObject()->SetMaterialWrapper(engine->GetMaterialList()->FindByName("Default"));
 
 	return mesh;
 }
 
-csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &t_matrix, csVector3 &t_vector)
+iRenderBuffer* SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &t_matrix, csVector3 &t_vector)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -738,10 +735,10 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2)))
 		return 0;
 
-	return PolyMesh(mesh, name, material, vertices2, t_matrix, t_vector, false);
+	return PolyMesh(mesh, submeshes, name, material, vertices2, t_matrix, t_vector, false);
 }
 
-csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices)
+iRenderBuffer* SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -847,7 +844,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 	state->Invalidate();
 
 	//create submesh and set material
-	csRef<iGeneralMeshSubMesh> submesh = state->AddSubMesh(buffer, material, name);
+	ReindexSubMesh(state, submeshes, buffer, material, name, true);
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)
@@ -856,7 +853,7 @@ csRef<iGeneralMeshSubMesh> SBS::PolyMesh(csRef<iMeshWrapper> mesh, const char *n
 		CreateColliders(mesh);
 	}
 
-	return submesh;
+	return buffer;
 }
 
 bool SBS::ComputeTextureMap(csMatrix3 &t_matrix, csVector3 &t_vector, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3)
@@ -1038,4 +1035,112 @@ csRef<iGeneralMeshSubMesh> SBS::FindSubMesh(csRef<iMeshWrapper> mesh, int index)
 		}
 	}*/
 	return 0;
+}
+
+int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, iRenderBuffer* indices, iMaterialWrapper* material, const char *name, bool add)
+{
+	//adds or removes triangle indices to a submesh in the list with a matching material
+	//if append is true, adds indices; otherwise removes them
+
+	//first get related submesh
+	int index = FindMatchingSubMesh(submeshes, material);
+	if (index == -1)
+		return -1;
+
+	csRef<iGeneralMeshSubMesh> submesh = submeshes[index];
+
+	//set up buffer to original triangle indices
+	csRef<iRenderBuffer> buffer = submesh->GetIndices();
+	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
+
+	//set up buffer with triangle indices to add/remove
+	csTriangle *triangleData2 = (csTriangle*)indices->Lock(CS_BUF_LOCK_NORMAL);
+
+	int tricount;
+	int size;
+	if (add == true)
+	{
+		tricount = buffer->GetElementCount() + indices->GetElementCount();
+		size = buffer->GetSize() + indices->GetSize();
+	}
+	else
+	{
+		tricount = buffer->GetElementCount() - indices->GetElementCount();
+		size = buffer->GetSize() - indices->GetSize();
+	}
+
+	//set up new buffer for modified indices
+	csRef<iRenderBuffer> newbuffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, size);
+	csTriangle *newtriangleData = (csTriangle*)newbuffer->Lock(CS_BUF_LOCK_NORMAL);
+
+	if (add == true)
+	{
+		//add triangles
+
+		//copy old triangle indices into new buffer
+		for (int i = 0; i < buffer->GetElementCount(); i++)
+			newtriangleData[i] = triangleData[i];
+
+		//append new triangle indices into new buffer
+		for (int i = 0; i < indices->GetElementCount(); i++)
+			newtriangleData[i + buffer->GetElementCount()] = triangleData2[i];
+	}
+	else
+	{
+		//remove triangles
+
+		for (int i = 0; i < buffer->GetElementCount(); i++)
+		{
+			if (triangleData[i].a == triangleData2[0].a && triangleData[i].b == triangleData2[0].b && triangleData[i].c == triangleData2[0].c)
+				i += indices->GetElementCount() - 1; //skip matching data
+			else
+				newtriangleData[i] = triangleData[i];
+		}
+	}
+
+	//release buffers
+	buffer->Release();
+	indices->Release();
+	newbuffer->Release();
+
+	//delete old submesh
+	state->DeleteSubMesh(submesh);
+	submesh = 0;
+	submeshes[index] = 0;
+	submeshes.DeleteIndex(index);
+
+	//create submesh
+	if (add == true)
+	{
+		csRef<iGeneralMeshSubMesh> newsubmesh = state->AddSubMesh(newbuffer, material, name);
+		index = submeshes.Push(newsubmesh);
+	}
+	return index;
+}
+
+int SBS::FindMatchingSubMesh(csRefArray<iGeneralMeshSubMesh> &submeshes, iMaterialWrapper *material)
+{
+	//find a submesh with a matching material
+	//returns array index
+
+	for (int i = 0; i < submeshes.GetSize(); i++)
+	{
+		if (submeshes[i]->GetMaterial() == material)
+			return i;
+	}
+	return -1;
+}
+
+void WallPolygon::GetTextureMapping(csMatrix3 &tm, csVector3 &tv)
+{
+	//return texture mapping matrix and vector
+	tm = t_matrix;
+	tv = t_vector;
+}
+
+iGeneralMeshSubMesh* WallPolygon::GetSubMesh()
+{
+	//return the submesh this polygon is in
+	int index = sbs->FindMatchingSubMesh(*submeshes, material);
+	return submeshes->Get(index);
 }

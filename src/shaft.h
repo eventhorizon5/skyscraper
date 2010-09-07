@@ -50,6 +50,7 @@ public:
 	csArray<int> ShowOutsideList; //list of floors that the outside should be enabled on
 	bool ShowFullShaft; //if true, always show full shaft during elevator movement instead of only a selected range
 	csArray<csArray<WallObject*> > shaft_walls;
+	csArray<csRefArray<iGeneralMeshSubMesh> > shaft_submeshes;
 
 	Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
@@ -76,6 +77,7 @@ public:
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array
+
 	csArray<bool> EnableArray;
 	bool EnableCheck;
 

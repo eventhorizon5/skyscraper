@@ -57,6 +57,7 @@ public:
 
 private:
 	csRef<iMeshWrapper> DoorMesh; //door mesh
+	csRefArray<iGeneralMeshSubMesh> Door_submeshes;
 	csRef<iMovable> DoorMesh_movable;
 
 	//sound object

@@ -65,6 +65,7 @@ public:
 
 private:
 	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
+	csRefArray<iGeneralMeshSubMesh> ButtonPanel_submeshes;
 
 	csArray<Control*> controls; //control objects
 

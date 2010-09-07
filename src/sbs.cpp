@@ -883,9 +883,9 @@ void SBS::AddLight(const char *name, float x, float y, float z, float radius, fl
 	ll->Add(light);
 }
 
-int SBS::AddWallMain(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddWallMain(Object *parent, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
-	WallObject *object = new WallObject(mesh, parent, true);
+	WallObject *object = new WallObject(mesh, submeshes, parent, true);
 	int result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
 	delete object;
 	return result;
@@ -1111,9 +1111,9 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	return 0;
 }
 
-int SBS::AddFloorMain(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddFloorMain(Object *parent, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
-	WallObject *object = new WallObject(mesh, parent, true);
+	WallObject *object = new WallObject(mesh, submeshes, parent, true);
 	int result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, autosize);
 	delete object;
 	return result;
@@ -1361,7 +1361,7 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		NewName.Append(":inside");
 
 		csBox3 box (csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
-		firstidx = wallobject->AddQuad( //front
+		wallobject->AddQuad( //front
 			NewName,
 			texture,
 			box.GetCorner(CS_BOX_CORNER_xyz),
@@ -1417,15 +1417,15 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		NewName.Append(":outside");
 
 		csBox3 box (csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
-		tmpidx = wallobject->AddQuad( //front
+		wallobject->AddQuad( //front
 			NewName,
 			texture,
 			box.GetCorner(CS_BOX_CORNER_xYz),
 			box.GetCorner(CS_BOX_CORNER_XYz),
 			box.GetCorner(CS_BOX_CORNER_Xyz),
 			box.GetCorner(CS_BOX_CORNER_xyz), tw, th, autosize);
-		if (inside == false)
-			firstidx = tmpidx;
+		//if (inside == false)
+			//firstidx = tmpidx;
 		wallobject->AddQuad( //right
 			NewName,
 			texture,
@@ -1631,10 +1631,12 @@ int SBS::CreateSky(const char *filenamebase)
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	float skysize = confman->GetInt("Skyscraper.SBS.HorizonDistance", 30) * 5280;
 	sbs->ResetTextureMapping(true);
-	WallObject *wall = new WallObject(SkyBox, object, true);
+	WallObject *wall = new WallObject(SkyBox, Skybox_submeshes, object, true);
 
 	csBox3 box (csVector3(-skysize, -skysize, -skysize), csVector3(skysize, skysize, skysize));
-	int firstidx = wall->AddQuad( //front
+	//int firstidx = wall->AddQuad( //front
+	int firstidx = 0;
+	wall->AddQuad( //front
 		"SkyFront",
 		"SkyFront",
 		box.GetCorner(CS_BOX_CORNER_xyz),
@@ -2641,11 +2643,11 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 
 	WallObject *wall;
 	if (mesh.CompareNoCase("external") == true)
-		wall = CreateWallObject(External_walls, External, this->object, name);
+		wall = CreateWallObject(External_walls, External, External_submeshes, this->object, name);
 	if (mesh.CompareNoCase("buildings") == true)
-		wall = CreateWallObject(Buildings_walls, Buildings, this->object, name);
+		wall = CreateWallObject(Buildings_walls, Buildings, Buildings_submeshes, this->object, name);
 	if (mesh.CompareNoCase("landscape") == true)
-		wall = CreateWallObject(Landscape_walls, Landscape, this->object, name);
+		wall = CreateWallObject(Landscape_walls, Landscape, Landscape_submeshes, this->object, name);
 
 	AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, true);
 	return wall;
@@ -2662,11 +2664,11 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 
 	WallObject *wall;
 	if (mesh.CompareNoCase("external") == true)
-		wall = CreateWallObject(External_walls, External, this->object, name);
+		wall = CreateWallObject(External_walls, External, External_submeshes, this->object, name);
 	if (mesh.CompareNoCase("buildings") == true)
-		wall = CreateWallObject(Buildings_walls, Buildings, this->object, name);
+		wall = CreateWallObject(Buildings_walls, Buildings, Buildings_submeshes, this->object, name);
 	if (mesh.CompareNoCase("landscape") == true)
-		wall = CreateWallObject(Landscape_walls, Landscape, this->object, name);
+		wall = CreateWallObject(Landscape_walls, Landscape, Landscape_submeshes, this->object, name);
 
 	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, true);
 	return wall;
@@ -2703,7 +2705,7 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 		maxz = z1;
 	}
 
-	WallObject *wall = CreateWallObject(Landscape_walls, Landscape, this->object, name);
+	WallObject *wall = CreateWallObject(Landscape_walls, Landscape, Landscape_submeshes, this->object, name);
 
 	//create polygon tiles
 	for (float i = minx; i < maxx; i += tile_x)
@@ -3295,12 +3297,12 @@ csVector2 SBS::CalculateSizing(const char *texture, csVector2 x, csVector2 y, cs
 	return csVector2(tw2, th2);
 }
 
-WallObject* SBS::CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrapper> mesh, Object *parent, const char *name)
+WallObject* SBS::CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, Object *parent, const char *name)
 {
 	//create a new polygon object in the given array
 
 	array.SetSize(array.GetSize() + 1);
-	array[array.GetSize() - 1] = new WallObject(mesh);
+	array[array.GetSize() - 1] = new WallObject(mesh, submeshes);
 	array[array.GetSize() - 1]->name = name;
 	array[array.GetSize() - 1]->parent_array = &array;
 	array[array.GetSize() - 1]->SetValues(array[array.GetSize() - 1], parent, "Wall", name, false);

@@ -50,6 +50,7 @@
 #include <iutil/objreg.h>
 #include <csgeom/triangulate3d.h>
 
+#include "mesh.h"
 #include "wall.h"
 #include "floor.h"
 #include "elevator.h"
@@ -187,9 +188,9 @@ public:
 	int CreateSky(const char *filenamebase);
 	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
-	int AddWallMain(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
+	int AddWallMain(Object *parent, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	int AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
-	int AddFloorMain(Object *parent, csRef<iMeshWrapper> mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
+	int AddFloorMain(Object *parent, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	void CalculateFrameRate();
 	void MainLoop();
 	int CreateWallBox(WallObject* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
@@ -286,7 +287,7 @@ public:
 	void GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, csVector3 &v2, csVector3 &v3);
 	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
 	csVector2 CalculateSizing(const char *texture, csVector2 x, csVector2 y, csVector2 z, float tw, float th);
-	WallObject* CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrapper> mesh, Object *parent, const char *name);
+	WallObject* CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, Object *parent, const char *name);
 	WallObject* GetWallObject(csArray<WallObject*> &wallarray, int polygon_index);
 	csString TruncateNumber(double value, int decimals);
 	csString TruncateNumber(float value, int decimals);
@@ -315,23 +316,29 @@ public:
 	csVector3 GetWallExtents(csRef<iMeshWrapper> mesh, const char *name, float altitude,  bool get_max);
 	csVector3 GetPolygonDirection(csPoly3D &polygon);
 	csRef<iMeshWrapper> CreateMesh(const char *name);
-	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &tex_matrix, csVector3 &tex_vector);
-	csRef<iGeneralMeshSubMesh> PolyMesh(csRef<iMeshWrapper> mesh, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices = true);
+	iRenderBuffer* PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &tex_matrix, csVector3 &tex_vector);
+	iRenderBuffer* PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices = true);
 	csRef<iGeneralMeshSubMesh> FindSubMesh(csRef<iMeshWrapper> mesh, int index);
 	bool ComputeTextureMap(csMatrix3 &t_matrix, csVector3 &t_vector, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3);
 	csVector2* GetTexels(csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<CS::Geometry::csContour3> &vertices);
+	int ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, iRenderBuffer* indices, iMaterialWrapper* material, const char *name, bool add);
+	int FindMatchingSubMesh(csRefArray<iGeneralMeshSubMesh> &submeshes, iMaterialWrapper *material);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
+		csRefArray<iGeneralMeshSubMesh> Buildings_submeshes;
 		csArray<WallObject*> Buildings_walls;
 
 	csRef<iMeshWrapper> External; //external mesh
+		csRefArray<iGeneralMeshSubMesh> External_submeshes;
 		csArray<WallObject*> External_walls;
 
 	csRef<iMeshWrapper> Landscape; //landscape mesh
+		csRefArray<iGeneralMeshSubMesh> Landscape_submeshes;
 		csArray<WallObject*> Landscape_walls;
 
 	csRef<iMeshWrapper> SkyBox; //skybox mesh
+		csRefArray<iGeneralMeshSubMesh> Skybox_submeshes;
 		Object *Skybox_object;
 
 private:
