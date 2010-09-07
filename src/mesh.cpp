@@ -675,7 +675,7 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 	return mesh;
 }
 
-iRenderBuffer* SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &t_matrix, csVector3 &t_vector)
+csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &t_matrix, csVector3 &t_vector)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -738,7 +738,7 @@ iRenderBuffer* SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSu
 	return PolyMesh(mesh, submeshes, name, material, vertices2, t_matrix, t_vector, false);
 }
 
-iRenderBuffer* SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices)
+csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -1044,8 +1044,13 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 
 	//first get related submesh
 	int index = FindMatchingSubMesh(submeshes, material);
+
+	//create submesh if it doesn't exist, and exit
 	if (index == -1)
-		return -1;
+	{
+		csRef<iGeneralMeshSubMesh> newsubmesh = state->AddSubMesh(indices, material, name);
+		return submeshes.Push(newsubmesh);
+	}
 
 	csRef<iGeneralMeshSubMesh> submesh = submeshes[index];
 
