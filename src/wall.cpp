@@ -69,7 +69,11 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const cs
 
 	if (!triangles)
 		return 0;
-	int index = CreateHandle(triangles, array, tm, tv, name2);
+
+	bool result;
+	iMaterialWrapper* material = sbs->GetTextureMaterial(texture, result, name2);
+
+	int index = CreateHandle(triangles, array, tm, tv, material, name2);
 	return &handles[index];
 }
 
@@ -87,7 +91,11 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, csVec
 
 	if (!triangles)
 		return 0;
-	int index = CreateHandle(triangles, array, tm, tv, name2);
+
+	bool result;
+	iMaterialWrapper* material = sbs->GetTextureMaterial(texture, result, name2);
+
+	int index = CreateHandle(triangles, array, tm, tv, material, name2);
 	return &handles[index];
 }
 
@@ -99,11 +107,11 @@ WallPolygon* WallObject::AddPolygon(const char *name, csRef<iMaterialWrapper> ma
 
 	if (!triangles)
 		return 0;
-	int index = CreateHandle(triangles, vertices, tex_matrix, tex_vector, name2);
+	int index = CreateHandle(triangles, vertices, tex_matrix, tex_vector, material, name2);
 	return &handles[index];
 }
 
-int WallObject::CreateHandle(csRef<iRenderBuffer> triangles, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, const char *name)
+int WallObject::CreateHandle(csRef<iRenderBuffer> triangles, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, iMaterialWrapper* material, const char *name)
 {
 	//create a polygon handle
 	int i = handles.GetSize();
@@ -113,7 +121,7 @@ int WallObject::CreateHandle(csRef<iRenderBuffer> triangles, csArray<CS::Geometr
 	handles[i].geometry = vertices;
 	handles[i].t_matrix = tex_matrix;
 	handles[i].t_vector = tex_vector;
-	handles[i].material = submesh_array->Get(i)->GetMaterial();
+	handles[i].material = material;
 	handles[i].name = name;
 	return i;
 }
