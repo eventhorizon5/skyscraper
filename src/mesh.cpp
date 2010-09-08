@@ -1037,7 +1037,7 @@ csRef<iGeneralMeshSubMesh> SBS::FindSubMesh(csRef<iMeshWrapper> mesh, int index)
 	return 0;
 }
 
-int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, iRenderBuffer* indices, iMaterialWrapper* material, const char *name, bool add)
+int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, csRef<iRenderBuffer> indices, iMaterialWrapper* material, const char *name, bool add)
 {
 	//adds or removes triangle indices to a submesh in the list with a matching material
 	//if append is true, adds indices; otherwise removes them
@@ -1056,48 +1056,73 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 
 	//set up buffer to original triangle indices
 	csRef<iRenderBuffer> buffer = submesh->GetIndices();
+
+	//get new triangle count
+	int tricount;
+	if (add == true)
+		tricount = buffer->GetComponentCount() + indices->GetComponentCount();
+	else
+		tricount = buffer->GetComponentCount() - indices->GetComponentCount();
+
+	//delete submesh and exit if it's going to be emptied
+	if (tricount == 0)
+	{
+		buffer = 0;
+		submesh = 0;
+		submeshes[index] = 0;
+		submeshes.DeleteIndex(index);
+		return -1;
+	}
+
+	//get index range limits
+	int rangestart = 0, rangeend = 0;
+	if (buffer->GetRangeStart() < indices->GetRangeStart())
+		rangestart = buffer->GetRangeStart();
+	else
+		rangestart = indices->GetRangeStart();
+
+	if (buffer->GetRangeEnd() > indices->GetRangeEnd())
+		rangeend = buffer->GetRangeEnd();
+	else
+		rangeend = indices->GetRangeEnd();
+
+	//set up new buffer for modified indices
+	csRef<iRenderBuffer> newbuffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, rangestart, rangeend);
+
+	if (add == true)
+	{
+		//copy old triangle indices into new buffer
+
+		int *triangleData = (int*)buffer->Lock(CS_BUF_LOCK_NORMAL);
+		newbuffer->CopyInto(triangleData, indices->GetElementCount());
+		buffer->Release();
+	}
+	
+	//set up buffer for old data
 	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
+
+	//set up triangle buffer for new data
+	csTriangle *newtriangleData = (csTriangle*)newbuffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	//set up buffer with triangle indices to add/remove
 	csTriangle *triangleData2 = (csTriangle*)indices->Lock(CS_BUF_LOCK_NORMAL);
-
-	int tricount;
-	int size;
-	if (add == true)
-	{
-		tricount = buffer->GetElementCount() + indices->GetElementCount();
-		size = buffer->GetSize() + indices->GetSize();
-	}
-	else
-	{
-		tricount = buffer->GetElementCount() - indices->GetElementCount();
-		size = buffer->GetSize() - indices->GetSize();
-	}
-
-	//set up new buffer for modified indices
-	csRef<iRenderBuffer> newbuffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, size);
-	csTriangle *newtriangleData = (csTriangle*)newbuffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	if (add == true)
 	{
 		//add triangles
 
-		//copy old triangle indices into new buffer
-		for (int i = 0; i < buffer->GetElementCount(); i++)
-			newtriangleData[i] = triangleData[i];
-
 		//append new triangle indices into new buffer
-		for (int i = 0; i < indices->GetElementCount(); i++)
-			newtriangleData[i + buffer->GetElementCount()] = triangleData2[i];
+		for (int i = 0; i < indices->GetComponentCount(); i++)
+			newtriangleData[i + buffer->GetComponentCount()] = triangleData2[i];
 	}
 	else
 	{
 		//remove triangles
 
-		for (int i = 0; i < buffer->GetElementCount(); i++)
+		for (int i = 0; i < buffer->GetComponentCount(); i++)
 		{
 			if (triangleData[i].a == triangleData2[0].a && triangleData[i].b == triangleData2[0].b && triangleData[i].c == triangleData2[0].c)
-				i += indices->GetElementCount() - 1; //skip matching data
+				i += indices->GetComponentCount() - 1; //skip matching data
 			else
 				newtriangleData[i] = triangleData[i];
 		}

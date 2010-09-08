@@ -78,6 +78,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	ShaftArray.SetSize(endfloor - startfloor + 1);
 	EnableArray.SetSize(endfloor - startfloor + 1);
 	shaft_walls.SetSize(endfloor - startfloor + 1);
+	shaft_submeshes.SetSize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
