@@ -817,7 +817,7 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 	for (int i = 0; i < trimesh.GetSize(); i++)
 		tricount += trimesh[i].GetTriangleCount();
 
-	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, size);
+	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, count, count + size - 1);
 	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	//add triangles to mesh
@@ -1057,17 +1057,22 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 	//set up buffer to original triangle indices
 	csRef<iRenderBuffer> buffer = submesh->GetIndices();
 
+	//get triangle counts
+	int buffercount = buffer->GetElementCount() / 3;
+	int indicescount = indices->GetElementCount() / 3;
+
 	//get new triangle count
 	int tricount;
 	if (add == true)
-		tricount = buffer->GetComponentCount() + indices->GetComponentCount();
+		tricount = buffercount + indicescount;
 	else
-		tricount = buffer->GetComponentCount() - indices->GetComponentCount();
+		tricount = buffercount - indicescount;
 
 	//delete submesh and exit if it's going to be emptied
-	if (tricount == 0)
+	if (tricount <= 0)
 	{
 		buffer = 0;
+		state->DeleteSubMesh(submesh);
 		submesh = 0;
 		submeshes[index] = 0;
 		submeshes.DeleteIndex(index);
@@ -1092,9 +1097,8 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 	if (add == true)
 	{
 		//copy old triangle indices into new buffer
-
 		int *triangleData = (int*)buffer->Lock(CS_BUF_LOCK_NORMAL);
-		newbuffer->CopyInto(triangleData, indices->GetElementCount());
+		newbuffer->CopyInto(triangleData, buffer->GetElementCount());
 		buffer->Release();
 	}
 	
@@ -1112,19 +1116,34 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 		//add triangles
 
 		//append new triangle indices into new buffer
-		for (int i = 0; i < indices->GetComponentCount(); i++)
-			newtriangleData[i + buffer->GetComponentCount()] = triangleData2[i];
+		for (int i = 0; i < indicescount; i++)
+			newtriangleData[i + buffercount] = triangleData2[i];
 	}
 	else
 	{
 		//remove triangles
 
-		for (int i = 0; i < buffer->GetComponentCount(); i++)
+		int newindex = 0;
+		bool skip = false;
+		for (int i = 0; i < buffercount; i++)
 		{
-			if (triangleData[i].a == triangleData2[0].a && triangleData[i].b == triangleData2[0].b && triangleData[i].c == triangleData2[0].c)
-				i += indices->GetComponentCount() - 1; //skip matching data
-			else
-				newtriangleData[i] = triangleData[i];
+			for (int j = 0; j < indicescount; j++)
+			{
+				if (triangleData[i].a == triangleData2[j].a && triangleData[i].b == triangleData2[j].b && triangleData[i].c == triangleData2[j].c)
+				{
+					//skip matching data
+					skip = true;
+					break;
+				}
+			}
+			if (skip == false)
+			{
+				if (newindex > tricount - 1)
+					break; //removal match not found - this shouldn't happen
+				newtriangleData[newindex] = triangleData[i]; //fill new buffer with non-matching triangles
+				newindex++;
+			}
+			skip = false;
 		}
 	}
 
@@ -1140,11 +1159,8 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 	submeshes.DeleteIndex(index);
 
 	//create submesh
-	if (add == true)
-	{
-		csRef<iGeneralMeshSubMesh> newsubmesh = state->AddSubMesh(newbuffer, material, name);
-		index = submeshes.Push(newsubmesh);
-	}
+	csRef<iGeneralMeshSubMesh> newsubmesh = state->AddSubMesh(newbuffer, material, name);
+	index = submeshes.Push(newsubmesh);
 	return index;
 }
 
