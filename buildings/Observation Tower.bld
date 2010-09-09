@@ -168,7 +168,7 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
 
 <EndFloor>
 
-<Floors 1 to 9>
+<Floors 1 to 102>
     ID = %floor% + 1
     Name = %floor% + 1
     Type = Floor
@@ -178,24 +178,30 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
 
     DrawWalls = true, true, false, false, false, false
 
+    if[%floor% < 10] Set 5 = 50
+    if[%floor% > 9 & %floor% < 46] Set 5 = 45 - (%floor% - 15)
+    if[%floor% > 45] Set 5 = 15
+    if[%floor% = 101] Set 5 = 23.34
+    if[%floor% = 102] Set 5 = 35
+
     WallOrientation = right
     SetAutoSize = false, false
     DrawWalls = true, false, false, false, false, false
-    AddWall Front, MainWindows, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
-    AddWall Left, MainWindows, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Front, MainWindows, 0.1, -%5%, -%5%, %5%, -%5%, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Left, MainWindows, 0.1, -%5%, %5%, -%5%, -%5%, %fullheight%, %fullheight%, 0, 0, 3, 1, True
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Right, MainWindows, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
-    AddWall Back, MainWindows, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Right, MainWindows, 0.1, %5%, -%5%, %5%, %5%, %fullheight%, %fullheight%, 0, 0, 3, 1, True
+    AddWall Back, MainWindows, 0.1, %5%, %5%, -%5%, %5%, %fullheight%, %fullheight%, 0, 0, 3, 1, True
 
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Front, MainWindowsInt, 0.1, -50, -50, 50, -50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
-    AddWall Left, MainWindowsInt, 0.1, -50, 50, -50, -50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    AddWall Front, MainWindowsInt, 0.1, -%5%, -%5%, %5%, -%5%, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    AddWall Left, MainWindowsInt, 0.1, -%5%, %5%, -%5%, -%5%, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Right, MainWindowsInt, 0.1, 50, -50, 50, 50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
-    AddWall Back, MainWindowsInt, 0.1, 50, 50, -50, 50, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    AddWall Right, MainWindowsInt, 0.1, %5%, -%5%, %5%, %5%, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
+    AddWall Back, MainWindowsInt, 0.1, %5%, %5%, -%5%, %5%, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 3, 1, False
 
     SetAutoSize = true, true
 
@@ -212,15 +218,6 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
     DrawWalls = true, false, false, false, false, false
     AddFloor Ceiling, Ceiling1, 0.5, -50, -50, 50, 50, %height%, %height%, 0, 0, False
 <EndFloor>
-
-<Floors 10 to 102>
-    ID = %floor% + 1
-    Name = %floor% + 1
-    Type = Floor
-    Description = %floor% + 1
-    Height = 10
-    InterfloorHeight = 2.24
-<EndFloors>
 
 <Floors 103 to 104>
     ID = %floor% + 1
