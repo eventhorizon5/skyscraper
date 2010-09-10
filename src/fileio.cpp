@@ -3544,6 +3544,58 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.GetData(), elev->GetDoor(temp3)->DoorTimer))
 			return ScriptError("Invalid value");
 	}
+	if (LineData.Slice(0, 10).CompareNoCase("quickclose") == true)
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (!IsNumeric(LineData.Slice(10, LineData.Find("=", 0) - 10).Trim(), temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > elev->NumDoors)
+			return ScriptError("Invalid door number");
+		if (!IsNumeric(temp2.GetData(), elev->GetDoor(temp3)->QuickClose))
+			return ScriptError("Invalid value");
+	}
+	if (LineData.Slice(0, 10).CompareNoCase("nudgetimer") == true)
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (!IsNumeric(LineData.Slice(10, LineData.Find("=", 0) - 10).Trim(), temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > elev->NumDoors)
+			return ScriptError("Invalid door number");
+		if (!IsNumeric(temp2.GetData(), elev->GetDoor(temp3)->NudgeTimer))
+			return ScriptError("Invalid value");
+	}
+	if (LineData.Slice(0, 9).CompareNoCase("slowspeed") == true)
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (!IsNumeric(LineData.Slice(9, LineData.Find("=", 0) - 9).Trim(), temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > elev->NumDoors)
+			return ScriptError("Invalid door number");
+		if (!IsNumeric(temp2.GetData(), elev->GetDoor(temp3)->SlowSpeed))
+			return ScriptError("Invalid value");
+	}
+	if (LineData.Slice(0, 11).CompareNoCase("manualspeed") == true)
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (!IsNumeric(LineData.Slice(11, LineData.Find("=", 0) - 11).Trim(), temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > elev->NumDoors)
+			return ScriptError("Invalid door number");
+		if (!IsNumeric(temp2.GetData(), elev->GetDoor(temp3)->ManualSpeed))
+			return ScriptError("Invalid value");
+	}
 	if (LineData.Slice(0, 9).CompareNoCase("opensound") == true)
 	{
 		if (temp2check < 0)
@@ -3575,6 +3627,22 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(csString("data/") + temp2, true);
 
 		elev->GetDoor(temp3)->CloseSound = temp2;
+	}
+	if (LineData.Slice(0, 10).CompareNoCase("nudgesound") == true)
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		if (!IsNumeric(LineData.Slice(10, LineData.Find("=", 0) - 10).Trim(), temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > elev->NumDoors)
+			return ScriptError("Invalid door number");
+
+		//check to see if file exists
+		CheckFile(csString("data/") + temp2, true);
+
+		elev->GetDoor(temp3)->NudgeSound = temp2;
 	}
 	if (LineData.Slice(0, 10).CompareNoCase("startsound") == true)
 	{

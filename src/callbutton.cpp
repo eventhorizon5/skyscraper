@@ -426,17 +426,23 @@ void CallButton::Loop(bool direction)
 						//and if it's either going the same direction as the call or idle
 						if (elevator->QueuePositionDirection == tmpdirection || elevator->IsIdle())
 						{
-							//and if it's not in any service mode
-							if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
+							//and if nudge mode is off on all doors
+							if (sbs->GetElevator(Elevators[i])->IsNudgeModeActive() == false)
 							{
-								if (sbs->Verbose)
-									Report("Marking - closest so far");
-								closest = abs(current - floor);
-								closest_elev = i;
-								check = true;
+								//and if it's not in any service mode
+								if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
+								{
+									if (sbs->Verbose)
+										Report("Marking - closest so far");
+									closest = abs(current - floor);
+									closest_elev = i;
+									check = true;
+								}
+								else if (sbs->Verbose == true)
+									Report("Skipping - in service mode");
 							}
 							else if (sbs->Verbose == true)
-								Report("Skipping - in service mode");
+								Report("Skipping - in nudge mode");
 						}
 						else if (sbs->Verbose == true)
 							Report("Skipping - going a different direction and is not idle");
@@ -454,7 +460,7 @@ void CallButton::Loop(bool direction)
 	else
 	{
 		//set elevator to first elevator if call button only serves one, only if elevator is running
-		if (sbs->GetElevator(Elevators[0])->IsRunning() == true)
+		if (sbs->GetElevator(Elevators[0])->IsRunning() == true && sbs->GetElevator(Elevators[0])->IsNudgeModeActive() == false)
 		{
 			closest_elev = 0;
 			check = true;

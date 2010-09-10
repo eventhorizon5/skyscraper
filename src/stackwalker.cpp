@@ -1027,7 +1027,9 @@ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadPro
     // If no context is provided, capture the context
     if (hThread == GetCurrentThread())
     {
+#ifndef _M_X64
       GET_CURRENT_CONTEXT(c, USED_CONTEXT_FLAGS);
+#endif
     }
     else
     {

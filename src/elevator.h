@@ -253,6 +253,8 @@ public:
 	bool PlayFloorSound();
 	bool PlayMessageSound(bool direction);
 	bool DoorExists(int number);
+	bool IsNudgeModeActive(int number = 0);
+	void EnableNudgeMode(bool value, int number = 0);
 
 private:
 

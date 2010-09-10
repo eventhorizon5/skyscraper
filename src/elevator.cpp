@@ -2447,6 +2447,7 @@ void Elevator::EnableIndependentService(bool value)
 		EnableFireService1(0);
 		EnableFireService2(0);
 		ResetQueue(true, true);
+		EnableNudgeMode(false);
 		if (IsMoving == false)
 			OpenDoors();
 		Report("Independent Service mode enabled");
@@ -2478,6 +2479,7 @@ void Elevator::EnableInspectionService(bool value)
 		EnableIndependentService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
+		EnableNudgeMode(false);
 		ResetQueue(true, true);
 		if (IsMoving == true)
 			Stop(false);
@@ -2560,6 +2562,12 @@ void Elevator::EnableFireService1(int value)
 		if (value == 1)
 		{
 			Report("Fire Service Phase 1 mode set to On");
+			
+			//enable nudge mode on all doors if any are open
+			if (GetFloor() != RecallFloor)
+				EnableNudgeMode(true);
+
+			//goto recall floor
 			GoToRecallFloor();
 		}
 		else
@@ -2608,6 +2616,7 @@ void Elevator::EnableFireService2(int value)
 		EnableIndependentService(false);
 		EnableInspectionService(false);
 		EnableFireService1(0);
+		EnableNudgeMode(false);
 		ResetQueue(true, true);
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
@@ -4065,4 +4074,40 @@ bool Elevator::DoorExists(int number)
 		}
 	}
 	return false;
+}
+
+bool Elevator::IsNudgeModeActive(int number)
+{
+	//checks doors and returns true if any (or the specified door) have nudge mode active
+
+	if (number > 0 && number < DoorArray.GetSize())
+	{
+		if (DoorArray[number])
+			return DoorArray[number]->GetNudgeStatus();
+	}
+	else if (number == 0)
+	{
+		for (int i = 0; i < DoorArray.GetSize(); i++)
+		{
+			if (DoorArray[number]->GetNudgeStatus() == true)
+				return true;
+		}
+	}
+	return false;
+}
+
+void Elevator::EnableNudgeMode(bool value, int number)
+{
+	//enables nudge mode on all doors or the specified door
+
+	if (number > 0 && number < DoorArray.GetSize())
+	{
+		if (DoorArray[number])
+			DoorArray[number]->EnableNudgeMode(value);
+	}
+	else if (number == 0)
+	{
+		for (int i = 0; i < DoorArray.GetSize(); i++)
+			DoorArray[number]->EnableNudgeMode(value);
+	}
 }

@@ -59,15 +59,24 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	CloseSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.CloseSound", "elevatorclose.wav");
 	UpChimeSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.UpChimeSound", "chime1-up.wav");
 	DownChimeSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.DownChimeSound", "chime1-down.wav");
+	NudgeSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.NudgeSound", "buzz.wav");
 	doors_stopped = false;
 	ShaftDoorThickness = 0;
 	ShaftDoorOrigin = 0;
+	nudge_enabled = false;
+	ManualSpeed = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.Door.ManualSpeed", 0.2);
+	SlowSpeed = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.Door.SlowSpeed", 0.5);
+	QuickClose = sbs->confman->GetInt("Skyscraper.SBS.Elevator.Door.QuickClose", 3000);
+	NudgeTimer = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.Door.NudgeTimer", 30);
+	nudgesound_loaded = false;
+	chimesound_loaded = 0;
 
 	//create main door object
 	Doors = new DoorWrapper(this, false);
 
-	//create timer
-	timer = new Timer(this, elev);
+	//create timers
+	timer = new Timer(this, elev, 0);
+	nudgetimer = new Timer(this, elev, 1);
 
 	//create shaft door objects
 	ShaftDoors.SetSize(elev->ServicedFloors.GetSize());
@@ -78,6 +87,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	doorsound = new Sound(this->object, "Door Sound", true);
 	doorsound->SetPosition(elevator->Origin);
 	chime = new Sound(this->object, "Chime", true);
+	nudgesound = new Sound(this->object, "Nudge Sound", true);
+	nudgesound->SetPosition(elevator->Origin);
 }
 
 ElevatorDoor::~ElevatorDoor()
@@ -100,6 +111,13 @@ ElevatorDoor::~ElevatorDoor()
 		delete timer;
 	}
 	timer = 0;
+	if (nudgetimer)
+	{
+		nudgetimer->Stop();
+		delete nudgetimer;
+	}
+	nudgetimer = 0;
+
 	if (doorsound)
 	{
 		doorsound->object->parent_deleting = true;
@@ -112,6 +130,12 @@ ElevatorDoor::~ElevatorDoor()
 		delete chime;
 	}
 	chime = 0;
+	if (nudgesound)
+	{
+		nudgesound->object->parent_deleting = true;
+		delete nudgesound;
+	}
+	nudgesound = 0;
 
 	//delete main doors
 	if (Doors)
@@ -180,6 +204,13 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	if (manual == false && doors_stopped == true)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; doors manually stopped");
+		return;
+	}
+
+	//exit if in nudge mode
+	if (GetNudgeStatus() == true)
+	{
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; nudge mode enabled");
 		return;
 	}
 
@@ -299,10 +330,17 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		return;
 	}
 
-	//do not close doors while fire service mode 1 is on
-	if (manual == false && elev->FireServicePhase1 == 1 && elev->WaitForDoors == false)
+	//do not close doors while fire service mode 1 is on and the elevator is waiting at the parking floor
+	if (manual == false && elev->FireServicePhase1 == 1 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is on");
+		return;
+	}
+
+	//do not close doors while fire service mode 2 is on
+	if (manual == false && elev->FireServicePhase2 == 1 && elev->WaitForDoors == false)
+	{
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 2 is on");
 		return;
 	}
 
@@ -316,7 +354,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
 	if (OpenDoor != 0 && manual == false)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": will close doors" + doornumber + " three seconds after staying open");
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": will close doors" + doornumber + " in quick-close mode");
 		quick_close = true;
 		return;
 	}
@@ -576,6 +614,18 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			sbs->GetFloor(ShaftDoorFloor)->EnableGroup(false);
 		}
 	}
+
+	//switch off nudge mode timer if on
+	if (open == false && nudgetimer->IsRunning() == true)
+		nudgetimer->Stop();
+
+	//switch off nudge mode if on
+	if (open == false && GetNudgeStatus() == true)
+		EnableNudgeMode(false);
+
+	//turn on nudge mode timer if doors are open
+	if (open == true && NudgeTimer > 0 && nudgetimer->IsRunning() == false)
+		nudgetimer->Start(NudgeTimer * 1000, true);
 
 	//reset values
 	OpenDoor = 0;
@@ -898,7 +948,10 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 
 	//relocate sound object
 	if (ShaftDoor == false)
+	{
 		doorsound->SetPosition(csVector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
+		nudgesound->SetPosition(doorsound->GetPosition());
+	}
 	else
 		chime->SetPosition(csVector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
 
@@ -1114,20 +1167,34 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 
 void ElevatorDoor::Timer::Notify()
 {
-	//door autoclose timer
+	if (type == 0)
+	{
+		//door autoclose timer
 
-	//close doors if open
-	if (door->AreDoorsOpen() == true && (elevator->InServiceMode() == false || elevator->WaitForDoors == true))
-		door->CloseDoors();
+		//close doors if open
+		if (door->AreDoorsOpen() == true && (elevator->InServiceMode() == false || elevator->WaitForDoors == true))
+			door->CloseDoors();
+	}
+	if (type == 1)
+	{
+		//nudge mode timer
+		door->EnableNudgeMode(true);
+	}
 }
 
 void ElevatorDoor::Chime(int floor, bool direction)
 {
 	//play chime sound on specified floor
-	if (direction == false)
+	if (direction == false && chimesound_loaded != -1)
+	{
 		chime->Load(DownChimeSound);
-	else
+		chimesound_loaded = -1;
+	}
+	else if (chimesound_loaded != 1)
+	{
 		chime->Load(UpChimeSound);
+		chimesound_loaded = 1;
+	}
 	chime->Loop(false);
 	chime->SetPositionY(sbs->GetFloor(floor)->GetBase() + Doors->Height);
 	chime->Play();
@@ -1139,7 +1206,7 @@ void ElevatorDoor::ResetDoorTimer()
 	if (quick_close == false)
 		timer->Start(DoorTimer, true);
 	else
-		timer->Start(3000, true);
+		timer->Start(QuickClose, true);
 	quick_close = false;
 }
 
@@ -1230,6 +1297,7 @@ void ElevatorDoor::MoveSound(const csVector3 position, bool relative_x, bool rel
 	else
 		pos.z = Doors->Origin.z + position.z;
 	doorsound->SetPosition(pos);
+	nudgesound->SetPosition(pos);
 }
 
 bool ElevatorDoor::ShaftDoorsExist(int floor)
@@ -1427,7 +1495,11 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		//marker2 is the position to start decelerating at (runs full speed until marker 2)
 		if (manual == false)
 		{
-			openchange = speed / 50;
+			if (parent->GetNudgeStatus() == false || parent->SlowSpeed == 0)
+				openchange = speed / 50;
+			else
+				openchange = (speed * parent->SlowSpeed) / 50;
+
 			if (direction > 1)
 			{
 				//get width and offset values (offset is the distance the door component
@@ -1528,9 +1600,9 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			}
 
 			if (open == true)
-				active_speed = 0.2;
+				active_speed = parent->ManualSpeed;
 			else
-				active_speed = -0.2;
+				active_speed = -parent->ManualSpeed;
 		}
 	}
 	else if (parent->previous_open != open && parent->door_changed == true)
@@ -1772,4 +1844,43 @@ void ElevatorDoor::Hold()
 {
 	//hold door (basically turn off timer)
 	timer->Stop();
+}
+
+void ElevatorDoor::EnableNudgeMode(bool value)
+{
+	//enable or disable nudge mode
+
+	csString doornumber;
+	if (elev->NumDoors > 1)
+	{
+		doornumber = " ";
+		doornumber = doornumber + _itoa(Number, intbuffer, 10);
+	}
+
+	if (value == true && nudge_enabled == false && AreDoorsOpen() == true && (elev->InServiceMode() == false || (elev->FireServicePhase1 == 1 && elev->GetFloor() != elev->ParkingFloor)))
+	{
+		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
+			return;
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": nudge mode activated");
+		nudge_enabled = true;
+		if (nudgesound_loaded == false)
+			nudgesound->Load(NudgeSound);
+		nudgesound_loaded = true;
+		nudgesound->Loop(true);
+		nudgesound->Play();
+		CloseDoors();
+	}
+	else if (nudge_enabled == true)
+	{
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": nudge mode disabled");
+		nudge_enabled = false;
+		nudgesound->Stop();
+	}
+}
+
+bool ElevatorDoor::GetNudgeStatus()
+{
+	//get status of nudge mode
+
+	return nudge_enabled;
 }

@@ -103,13 +103,18 @@ public:
 	float OpenSpeed; //door opening/closing speed (for backwards-compatibility only)
 	bool DoorDirection; //if direction is false, doors are on the left/right side
 	int DoorTimer; //door autoclose timer value, in milliseconds
+	int QuickClose; //door quick close autotimer value, in milliseconds
+	float NudgeTimer; //wait time in seconds before enabling nudge mode
 	csString OpenSound; //door open sound
 	csString CloseSound; //door close sound
 	csString UpChimeSound; //elevator up chime sound
 	csString DownChimeSound; //elevator down chime sound
+	csString NudgeSound; //nudge mode sound
 	int OpenDoor; //1=open doors, -1=close doors
 	float ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command) - deprecated
 	csVector3 ShaftDoorOrigin; //shaft door origin (deprecated)
+	float ManualSpeed; //manual speed multiplier
+	float SlowSpeed; //slow speed multiplier, mainly for nudge mode
 
 	ElevatorDoor(int number, Elevator* elevator);
 	~ElevatorDoor();
@@ -148,6 +153,8 @@ public:
 	bool FinishShaftDoors();
 	DoorWrapper* GetDoorWrapper();
 	bool TimerIsRunning();
+	void EnableNudgeMode(bool value);
+	bool GetNudgeStatus();
 
 private:
 
@@ -171,20 +178,26 @@ private:
 	public:
 		ElevatorDoor *door;
 		Elevator *elevator;
-		Timer(ElevatorDoor *parent, Elevator *elev)
+		int type; //0 = autoclose, 1 = nudge
+		Timer(ElevatorDoor *parent, Elevator *elev, int Type)
 		{
 			door = parent;
 			elevator = elev;
+			type = Type;
 		};
 		virtual void Notify();
 	};
 
-	//timer object
+	//autoclose timer object
 	Timer *timer;
+
+	//nudge mode timer
+	Timer *nudgetimer;
 
 	//sound objects
 	Sound *doorsound;
 	Sound *chime;
+	Sound *nudgesound;
 
 	//door internals
 	bool DoorIsRunning;
@@ -193,6 +206,9 @@ private:
 	bool door_changed;
 	bool quick_close; //used if user presses close button while doors are opening; results in a faster timer length
 	bool doors_stopped;
+	bool nudge_enabled;
+	bool nudgesound_loaded;
+	int chimesound_loaded;
 };
 
 #endif
