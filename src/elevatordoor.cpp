@@ -330,10 +330,17 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		return;
 	}
 
-	//do not close doors while fire service mode 1 is on
-	if (manual == false && elev->FireServicePhase1 == 1 && elev->WaitForDoors == false)
+	//do not close doors while fire service mode 1 is on and the elevator is waiting at the parking floor
+	if (manual == false && elev->FireServicePhase1 == 1 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is on");
+		return;
+	}
+
+	//do not close doors while fire service mode 2 is on
+	if (manual == false && elev->FireServicePhase2 == 1 && elev->WaitForDoors == false)
+	{
+		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 2 is on");
 		return;
 	}
 
@@ -1850,8 +1857,10 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 		doornumber = doornumber + _itoa(Number, intbuffer, 10);
 	}
 
-	if (value == true && nudge_enabled == false && AreDoorsOpen() == true)
+	if (value == true && nudge_enabled == false && AreDoorsOpen() == true && (elev->InServiceMode() == false || (elev->FireServicePhase1 == 1 && elev->GetFloor() != elev->ParkingFloor)))
 	{
+		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
+			return;
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": nudge mode activated");
 		nudge_enabled = true;
 		if (nudgesound_loaded == false)

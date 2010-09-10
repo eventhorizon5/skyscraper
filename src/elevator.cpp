@@ -2479,6 +2479,7 @@ void Elevator::EnableIndependentService(bool value)
 		EnableFireService1(0);
 		EnableFireService2(0);
 		ResetQueue(true, true);
+		EnableNudgeMode(false);
 		if (IsMoving == false)
 			OpenDoors();
 		Report("Independent Service mode enabled");
@@ -2510,6 +2511,7 @@ void Elevator::EnableInspectionService(bool value)
 		EnableIndependentService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
+		EnableNudgeMode(false);
 		ResetQueue(true, true);
 		if (IsMoving == true)
 			Stop(false);
@@ -2594,7 +2596,8 @@ void Elevator::EnableFireService1(int value)
 			Report("Fire Service Phase 1 mode set to On");
 			
 			//enable nudge mode on all doors if any are open
-			EnableNudgeMode(true);
+			if (GetFloor() != RecallFloor)
+				EnableNudgeMode(true);
 
 			//goto recall floor
 			GoToRecallFloor();
@@ -2645,6 +2648,7 @@ void Elevator::EnableFireService2(int value)
 		EnableIndependentService(false);
 		EnableInspectionService(false);
 		EnableFireService1(0);
+		EnableNudgeMode(false);
 		ResetQueue(true, true);
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
