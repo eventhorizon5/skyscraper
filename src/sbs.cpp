@@ -1370,6 +1370,20 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 	int range = 0;
 	int range2 = 0;
 
+	//swap values if the first is greater than the second
+	if (x1 > x2)
+	{
+		float tmpx = x1;
+		x1 = x2;
+		x2 = tmpx;
+	}
+	if (z1 > z2)
+	{
+		float tmpz = z1;
+		z1 = z2;
+		z2 = tmpz;
+	}
+
 	if (inside == true)
 	{
 		//generate a box visible from the inside
