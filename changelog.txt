@@ -1,4 +1,4 @@
-Version 1.7 (2.0 Alpha 6)
+Version 1.7 (2.0 Alpha 7)
 -------------------------
 -added braille fonts
 -added support for elevator panel switches and knobs
@@ -46,6 +46,7 @@ Version 1.7 (2.0 Alpha 6)
 -added DepartureDelay and ArrivalDelay elevator parameters
 -Error reporting system is now more verbose about certain errors
 -added sign textures
+-added nudge mode
 
 Version 1.6 (2.0 Alpha 6)
 -------------------------
