@@ -641,6 +641,20 @@ void Skyscraper::GetInput()
 	}
 	else
 	{
+		if (wxGetKeyState((wxKeyCode)'v') && wait == false)
+		{
+			if (Simcore->camera->GetGravity() == false)
+			{
+				Simcore->camera->EnableGravity(true);
+	                        Simcore->camera->EnableCollisions = true;
+			}
+			else
+			{
+				Simcore->camera->EnableGravity(false);
+                                Simcore->camera->EnableCollisions = false;
+			}
+			wait = true;
+		}
 		if (Simcore->camera->Freelook == false)
 		{
 			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
