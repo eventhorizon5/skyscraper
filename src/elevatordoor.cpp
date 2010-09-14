@@ -1843,6 +1843,21 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::GetDoorWrapper()
 void ElevatorDoor::Hold()
 {
 	//hold door (basically turn off timer)
+
+	csString doornumber;
+        if (elev->NumDoors > 1)
+        {
+                doornumber = " ";
+                doornumber = doornumber + _itoa(Number, intbuffer, 10);
+        }
+
+	//exit if nudge mode is active
+	if (GetNudgeStatus() == true)
+		return;
+
+	sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": holding doors" + doornumber);
+
+	nudgetimer->Stop();
 	timer->Stop();
 }
 

@@ -4038,6 +4038,7 @@ csVector3 SBS::GetPolygonDirection(csPoly3D &polygon)
 		else
 			return csVector3(0, 0, -1);
 	}
+	return csVector3(0, 0, 0);
 }
 
 csVector2 SBS::CalculateSizing(const char *texture, csVector2 x, csVector2 y, csVector2 z, float tw, float th)
