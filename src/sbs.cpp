@@ -612,12 +612,14 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	//loads only a portion of the specified texture
 
 	iTextureManager *tm = g3d->GetTextureManager();
+	csString Name = name;
+	csString Filename = filename;
 
 	//load image
 	csRef<iImage> image = loader->LoadImage(filename, tm->GetTextureFormat());
 
 	if (!image)
-		return ReportError("LoadTextureCropped: Error loading image");
+		return ReportError("LoadTextureCropped: Error loading image '" + Filename + "'");
 
 	//set default values if specified
 	if (x == -1)
@@ -630,19 +632,19 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		height = image->GetHeight();
 
 	if (x > image->GetWidth() || y > image->GetHeight())
-		return ReportError("LoadTextureCropped: invalid coordinates");
+		return ReportError("LoadTextureCropped: invalid coordinates for '" + Filename + "'");
 	if (x + width > image->GetWidth() || y + height > image->GetHeight())
-		return ReportError("LoadTextureCropped: invalid size");
+		return ReportError("LoadTextureCropped: invalid size for '" + Filename + "'");
 
 	//crop image
 	csRef<iImage> cropped_image = csImageManipulate::Crop(image, x, y, width, height);
 	if (!cropped_image)
-		return ReportError("LoadTextureCropped: Error cropping image");
+		return ReportError("LoadTextureCropped: Error cropping image '" + Filename + "'");
 
 	//register texture
 	csRef<iTextureHandle> handle = tm->RegisterTexture(cropped_image, CS_TEXTURE_3D);
 	if (!handle)
-		return ReportError("LoadTextureCropped: Error registering texture");
+		return ReportError("LoadTextureCropped: Error registering texture '" + Name + "'");
 
 	//if texture has an alpha map, force binary alpha
 	if (handle->GetAlphaMap() == true)
@@ -682,14 +684,18 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	csString hAlign = h_align;
 	csString vAlign = v_align;
+	csString Name = name;
+	csString Origname = origname;
 
 	csString font_filename2 = VerifyFile(font_filename);
+	csString relative_filename = font_filename2;
+	relative_filename.ReplaceAll("/root/", "");
 
 	//load font
 	csRef<iFont> font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
 	if (!font)
 	{
-		ReportError("AddTextToTexture: Invalid font");
+		ReportError("AddTextToTexture: Invalid font '" + relative_filename + "'");
 		return false;
 	}
 
@@ -697,7 +703,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->FindByName(origname);
 	if (!wrapper)
 	{
-		ReportError("AddTextToTexture: Invalid original texture");
+		ReportError("AddTextToTexture: Invalid original texture '" + Origname + "'");
 		return false;
 	}
 
@@ -713,7 +719,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "argb8", CS_TEXTURE_3D);
 	if (!th)
 	{
-		ReportError("AddTextToTexture: Error creating texture");
+		ReportError("AddTextToTexture: Error creating texture '" + Name + "'");
 		th = 0;
 		return false;
 	}
@@ -728,7 +734,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
 	if (!tex)
 	{
-		ReportError("AddTextToTexture: Error creating texture wrapper");
+		ReportError("AddTextToTexture: Error creating texture wrapper for '" + Name + "'");
 		th = 0;
 		return false;
 	}
@@ -762,7 +768,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	iTextureHandle *handle = tex->GetTextureHandle();
 	if (!handle)
 	{
-		ReportError("AddTextToTexture: No texture handle available");
+		ReportError("AddTextToTexture: No texture handle available for '" + Name + "'");
 		return false;
 	}
 
@@ -813,11 +819,15 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	//draws the specified texture on top of another texture
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
 
+	csString Name = name;
+	csString Origname = orig_texture;
+	csString Overlay = overlay_texture;
+
 	//get original texture
 	csRef<iImage> image1 = engine->GetTextureList()->FindByName(orig_texture)->GetImageFile();
 	if (!image1)
 	{
-		ReportError("AddTextureOverlay: Invalid original texture");
+		ReportError("AddTextureOverlay: Invalid original texture '" + Origname + "'");
 		return false;
 	}
 
@@ -825,7 +835,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	csRef<iImage> image2 = engine->GetTextureList()->FindByName(overlay_texture)->GetImageFile();
 	if (!image2)
 	{
-		ReportError("AddTextureOverlay: Invalid overlay texture");
+		ReportError("AddTextureOverlay: Invalid overlay texture '" + Overlay + "'");
 		return false;
 	}
 
@@ -840,9 +850,9 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		height = image2->GetHeight();
 
 	if (x > image1->GetWidth() || y > image1->GetHeight())
-		return ReportError("AddTextureOverlay: invalid coordinates");
+		return ReportError("AddTextureOverlay: invalid coordinates for '" + Name + "'");
 	if (x + width > image1->GetWidth() || y + height > image1->GetHeight())
-		return ReportError("AddTextureOverlay: invalid size");
+		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
 
 	//copy overlay image onto source image
 	csRef<csImageMemory> imagemem;
@@ -853,7 +863,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	//register new texture
 	csRef<iTextureHandle> handle = g3d->GetTextureManager()->RegisterTexture(imagemem, CS_TEXTURE_3D);
 	if (!handle)
-		return ReportError("AddTextureOverlay: Error registering texture");
+		return ReportError("AddTextureOverlay: Error registering texture '" + Name + "'");
 
 	//if texture has an alpha map, force binary alpha
 	if (handle->GetAlphaMap() == true)
