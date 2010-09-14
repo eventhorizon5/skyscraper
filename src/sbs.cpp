@@ -1917,6 +1917,23 @@ Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int
 			return 0;
 		}
 	}
+
+	//verify floor range
+	if (IsValidFloor(_startfloor) == false)
+	{
+		csString num;
+		num = _startfloor;
+		ReportError("CreateShaft: Invalid starting floor " + num);
+		return 0;
+	}
+	if (IsValidFloor(_endfloor) == false)
+	{
+		csString num;
+		num = _endfloor;
+		ReportError("CreateShaft: Invalid ending floor " + num);
+		return 0;
+	}
+
 	ShaftArray.SetSize(ShaftArray.GetSize() + 1);
 	ShaftArray[ShaftArray.GetSize() - 1].number = number;
 	ShaftArray[ShaftArray.GetSize() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
@@ -1937,6 +1954,23 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 			return 0;
 		}
 	}
+
+	//verify floor range
+	if (IsValidFloor(_startfloor) == false)
+	{
+		csString num;
+		num = _startfloor;
+		ReportError("CreateStairwell: Invalid starting floor " + num);
+		return 0;
+	}
+	if (IsValidFloor(_endfloor) == false)
+	{
+		csString num;
+		num = _endfloor;
+		ReportError("CreateStairwell: Invalid ending floor " + num);
+		return 0;
+	}
+
 	StairsArray.SetSize(StairsArray.GetSize() + 1);
 	StairsArray[StairsArray.GetSize() - 1].number = number;
 	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
