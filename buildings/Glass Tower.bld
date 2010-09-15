@@ -904,7 +904,7 @@ ResetTextureMapping = true
 <Floors 0 to 1>
     DrawWalls = true, true, false, false, false, false
     AddWall Front Atrium Base Left, Backing, 0, -153.31, -49.2, -113.3, -116.47, %fullheight%, %fullheight%, 0, 0, 7.5, 0, true
-    DrawWalls = true, false, false, false, false, false
+    DrawWalls = false, true, false, false, false, false
     AddWall Front Atrium Base Front Left, MainWindowsInside, 0, -113.3, -116.47, -19.32, -134.54, %fullheight%, %fullheight%, 0, 0, 3, 0, true
     DrawWalls = true, false, false, false, false, false
     AddWall Front Atrium Base Front Left, MainWindows2, 0, -113.3, -116.47, -19.32, -134.54, %fullheight%, %fullheight%, 0, 0, 3, 0, true
