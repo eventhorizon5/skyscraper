@@ -945,6 +945,45 @@ SetAutoSize = false, false
 <EndFloors>
 
 
+#Honeycomb window functions
+#each window group is 24x24 feet, 8 feet deep
+#parameters 1, 2 and 3 are X, Y and Z center
+
+<Function hwindow_left>
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, 0, 0
+<EndFunction>
+
+<Function hwindow_left_top>
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, 0, 0
+<EndFunction>
+
+<Function hwindow_left_bottom>
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, 0, 0
+<EndFunction>
+
+<Function hwindow_right>
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, 0, 0
+<EndFunction>
+
+<Function hwindow_right_top>
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, 0, 0
+<EndFunction>
+
+<Function hwindow_right_bottom>
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows2single, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, 0, 0
+<EndFunction>
+
+
 #Right Complex
 DrawWalls = true, true, false, false, false, false
 SetAutoSize = true, true
@@ -1081,6 +1120,32 @@ SetAutoSize = true, true
     AddCustomWall floor, Right Complex Floor, Carpet1, 100.8, Floor(%floor%).Altitude, 50.87, 134.3, Floor(%floor%).Altitude, 50.87, 134.3, Floor(%floor%).Altitude, -24.2, 100.8, Floor(%floor%).Altitude, -24.2, 0, 0
 <EndFloor>
 
+SetAutoSize = false, false
+hwindow_right(158, Floor(5).Altitude, 94.4 - 24)
+hwindow_right(158, Floor(5).Altitude, 94.4 - 48)
+hwindow_right(158, Floor(5).Altitude, 94.4 - 72)
+hwindow_right(158, Floor(5).Altitude, 94.4 - 96)
+hwindow_right(158, Floor(5).Altitude, 94.4 - 120)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 12)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 36)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 60)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 84)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 108)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 132)
+hwindow_right(158, Floor(3).Altitude, 94.4 - 24)
+hwindow_right(158, Floor(3).Altitude, 94.4 - 48)
+hwindow_right(158, Floor(3).Altitude, 94.4 - 72)
+hwindow_right(158, Floor(3).Altitude, 94.4 - 96)
+hwindow_right(158, Floor(3).Altitude, 94.4 - 120)
+hwindow_right_top(158, Floor(6).Altitude, 94.4 - 36)
+hwindow_right_top(158, Floor(6).Altitude, 94.4 - 60)
+hwindow_right_top(158, Floor(6).Altitude, 94.4 - 84)
+hwindow_right_top(158, Floor(6).Altitude, 94.4 - 108)
+hwindow_right_bottom(158, Floor(2).Altitude, 94.4 - 36)
+hwindow_right_bottom(158, Floor(2).Altitude, 94.4 - 60)
+hwindow_right_bottom(158, Floor(2).Altitude, 94.4 - 84)
+hwindow_right_bottom(158, Floor(62).Altitude, 94.4 - 108)
+
 #Left Complex
 SetAutoSize = true, true
 AddCustomWall external, Left Complex Interior Ceiling, Backing2, -119.7, Floor(6).Altitude, -1.1, -112.95, Floor(6).Altitude, -11.7, -85.25, Floor(6).Altitude, 11.35, -82.85, Floor(6).Altitude, 8.8, -84.32, Floor(6).Altitude, 7.84, -79.2, Floor(6).Altitude, -15.2, -76.8, Floor(6).Altitude, -16.6, -79.36, Floor(6).Altitude, -21.92, -83.04, Floor(6).Altitude, -20.64, -100.64, Floor(6).Altitude, -46.24, -99.4, Floor(6).Altitude, -46.24, -98.44, Floor(6).Altitude, -49.2, -119.7, Floor(6).Altitude, -49.2, 0, 0
@@ -1167,6 +1232,35 @@ SetAutoSize = true, true
     AddCustomWall floor, Left Complex Floor, Carpet1, -166.3, Floor(%floor%).Altitude, 36.2, -119.7, Floor(%floor%).Altitude, 36.2, -119.7, Floor(%floor%).Altitude, -49.2, -166.3, Floor(%floor%).Altitude, -49.2, -166.3, Floor(%floor%).Altitude, 36.2, 0, 0
     AddCustomWall floor, Left Complex Floor 3, Carpet1, -166.3, Floor(%floor%).Altitude, -49.2, -119.7, Floor(%floor%).Altitude, -49.2, -119.7, Floor(%floor%).Altitude, -61.07, -166.3, Floor(%floor%).Altitude, -61.07, 0, 0
 <EndFloor>
+
+SetAutoSize = false, false
+hwindow_left(-166.3, Floor(6).Altitude, 59.6 - 36)
+hwindow_left(-166.3, Floor(6).Altitude, 59.6 - 60)
+hwindow_left(-166.3, Floor(6).Altitude, 59.6 - 84)
+hwindow_left(-166.3, Floor(6).Altitude, 59.6 - 108)
+hwindow_left(-166.3, Floor(5).Altitude, 59.6 - 24)
+hwindow_left(-166.3, Floor(5).Altitude, 59.6 - 48)
+hwindow_left(-166.3, Floor(5).Altitude, 59.6 - 72)
+hwindow_left(-166.3, Floor(5).Altitude, 59.6 - 96)
+hwindow_left(-166.3, Floor(5).Altitude, 59.6 - 120)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 12)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 36)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 60)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 84)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 108)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 132)
+hwindow_left(-166.3, Floor(3).Altitude, 59.6 - 24)
+hwindow_left(-166.3, Floor(3).Altitude, 59.6 - 48)
+hwindow_left(-166.3, Floor(3).Altitude, 59.6 - 72)
+hwindow_left(-166.3, Floor(3).Altitude, 59.6 - 96)
+hwindow_left(-166.3, Floor(3).Altitude, 59.6 - 120)
+hwindow_left_bottom(-166.3, Floor(2).Altitude, 59.6 - 36)
+hwindow_left_bottom(-166.3, Floor(2).Altitude, 59.6 - 60)
+hwindow_left_bottom(-166.3, Floor(2).Altitude, 59.6 - 84)
+hwindow_left_bottom(-166.3, Floor(2).Altitude, 59.6 - 108)
+hwindow_left_top(-166.3, Floor(7).Altitude, 59.6 - 48)
+hwindow_left_top(-166.3, Floor(7).Altitude, 59.6 - 72)
+hwindow_left_top(-166.3, Floor(7).Altitude, 59.6 - 96)
 
 ResetTextureMapping = true
 DrawWalls = true, true, false, false, false, false
