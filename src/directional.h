@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Directional Indicator Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -58,7 +58,6 @@ public:
 
 private:
 	csRef<iMeshWrapper> DirectionalMeshBack; //indicator mesh back object
-		csRefArray<iGeneralMeshSubMesh> DirectionalMeshBack_submeshes;
 	csRef<iMeshWrapper> DirectionalMeshUp; //indicator mesh up object
 	csRef<iMeshWrapper> DirectionalMeshDown; //indicator mesh down object
 	csRef<iMeshWrapper> DirectionalMesh; //indicator mesh single object

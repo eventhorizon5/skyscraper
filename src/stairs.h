@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Stairs Subsystem Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -70,8 +70,9 @@ public:
 
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array
-		csArray<csRefArray<iGeneralMeshSubMesh> > stairs_submeshes;
+	csRefArray<iThingFactoryState> StairArray_state; //stairwell mesh array state
 	csRefArray<iMeshWrapper> StairDoorArray; //stair door array
+	csRefArray<iThingFactoryState> StairDoorArray_state; //stair mesh array state
 	csArray<bool> EnableArray;
 
 	struct DoorMap

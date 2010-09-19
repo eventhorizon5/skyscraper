@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Elevator Door Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -44,8 +44,7 @@ public:
 		void Move();
 
 		csRef<iMeshWrapper> mesh;
-		csRefArray<iGeneralMeshSubMesh> mesh_submeshes;
-		csRef<iGeneralFactoryState> state;
+		csRef<iThingFactoryState> state;
 		csRef<iMovable> movable;
 		int direction; //direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
 		float speed;

@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Camera Object Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -466,12 +466,11 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	//get hit/intersection position
 	HitPosition = sbs->ToLocal(result.isect);
 
-	//get wall name
-	iGeneralMeshSubMesh* submesh = 0;
-	/*csRef<iGeneralMeshSubMesh> submesh = sbs->FindSubMesh(result.mesh, result.polygon_idx);
-	if (submesh)
-		polyname = submesh->GetName();
-	else*/
+	//get polygon name
+	csRef<iThingFactoryState> state = scfQueryInterface<iThingFactoryState> (result.mesh->GetMeshObject()->GetFactory());
+	if (state)
+		polyname = state->GetPolygonName(result.polygon_idx);
+	else
 		polyname = "";
 
 	//get object number
@@ -502,13 +501,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//show result
-	if (submesh)
+	if (state)
 		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Polygon: " + polyname);
 	else
 		sbs->Report("Clicked on object " + number + ": " + meshname);
 
 	//delete object if ctrl is pressed
-	if (submesh && ctrl == true && object_number > 0)
+	if (state && ctrl == true && object_number > 0)
 	{
 		if (obj)
 		{

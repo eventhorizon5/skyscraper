@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Door Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -57,7 +57,7 @@ public:
 
 private:
 	csRef<iMeshWrapper> DoorMesh; //door mesh
-	csRefArray<iGeneralMeshSubMesh> Door_submeshes;
+	csRef<iThingFactoryState> DoorMesh_state;
 	csRef<iMovable> DoorMesh_movable;
 
 	//sound object

@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Elevator Subsystem Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -123,8 +123,7 @@ public:
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 
 	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
-		csRefArray<iGeneralMeshSubMesh> Elevator_submeshes;
-		csRef<iGeneralFactoryState> Elevator_state;
+		csRef<iThingFactoryState> Elevator_state;
 		csRef<iMovable> Elevator_movable;
 
 	//functions

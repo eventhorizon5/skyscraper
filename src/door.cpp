@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Door Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -111,8 +111,11 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		Clockwise = true;
 
 	//Create mesh
-	DoorMesh = sbs->CreateMesh(Name);
+	DoorMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, Name.GetData());
+	DoorMesh_state = scfQueryInterface<iThingFactoryState> (DoorMesh->GetMeshObject()->GetFactory());
 	DoorMesh_movable = DoorMesh->GetMovable();
+	DoorMesh->SetZBufMode(CS_ZBUF_USE);
+	DoorMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	DoorMesh_movable->SetPosition(sbs->ToRemote(origin));
 	DoorMesh_movable->UpdateMove();
 
@@ -127,7 +130,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		sbs->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
 	if (Direction == 3 || Direction == 4 || Direction == 7 || Direction == 8)
 		sbs->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-	sbs->AddWallMain(object, DoorMesh, Door_submeshes, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
+	sbs->AddWallMain(object, DoorMesh, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
 
@@ -147,6 +150,7 @@ Door::~Door()
 	}
 	sound = 0;
 	DoorMesh_movable = 0;
+	DoorMesh_state = 0;
 	if (sbs->FastDelete == false)
 	{
 		sbs->engine->WantToDie(DoorMesh);

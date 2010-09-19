@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Elevator Button Panel Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -68,7 +68,10 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	buffer = "Button Panel " + buffer2 + ":" + buffer3;
 	buffer.Trim();
 	object->SetName(buffer);
-	ButtonPanelMesh = sbs->CreateMesh(buffer);
+	ButtonPanelMesh = sbs->engine->CreateSectorWallsMesh (sbs->area, buffer.GetData());
+	ButtonPanel_state = scfQueryInterface<iThingFactoryState> (ButtonPanelMesh->GetMeshObject()->GetFactory());
+	ButtonPanelMesh->SetZBufMode(CS_ZBUF_USE);
+	ButtonPanelMesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	//move
 	SetToElevatorAltitude();
@@ -119,6 +122,7 @@ ButtonPanel::~ButtonPanel()
 		if (object->parent_deleting == false)
 			sbs->GetElevator(elevator)->RemovePanel(this);
 	}
+	ButtonPanel_state = 0;
 	ButtonPanelMesh = 0;
 	delete object;
 }
@@ -191,6 +195,9 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	//AcpOff
 	//FanOn
 	//FanOff
+	//MusicOn
+	//MusicOff
+	//Hold
 
 	float xpos = 0, ypos = 0, zpos = 0;
 
@@ -455,7 +462,21 @@ int ButtonPanel::AddWall(const char *name, const char *texture, float thickness,
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain(object, ButtonPanelMesh, ButtonPanel_submeshes, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw, th, true);
+	//Set horizontal scaling
+	x1 = x1 * sbs->HorizScale;
+	x2 = x2 * sbs->HorizScale;
+	z1 = z1 * sbs->HorizScale;
+	z2 = z2 * sbs->HorizScale;
+
+	//calculate autosizing
+	float tmpheight;
+	if (height1 > height2)
+		tmpheight = height1;
+	else
+		tmpheight = height2;
+	csVector2 sizing = sbs->CalculateSizing(texture, csVector2(x1, x2), csVector2(0, tmpheight), csVector2(z1, z2), tw, th);
+
+	return sbs->AddWallMain(object, ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, sizing.x, sizing.y);
 }
 
 Control* ButtonPanel::GetControl(int index)

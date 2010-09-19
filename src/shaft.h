@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Shaft Subsystem Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -50,7 +50,6 @@ public:
 	csArray<int> ShowOutsideList; //list of floors that the outside should be enabled on
 	bool ShowFullShaft; //if true, always show full shaft during elevator movement instead of only a selected range
 	csArray<csArray<WallObject*> > shaft_walls;
-	csArray<csRefArray<iGeneralMeshSubMesh> > shaft_submeshes;
 
 	Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
@@ -77,7 +76,7 @@ public:
 
 private:
 	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array
-
+	csRefArray<iThingFactoryState> ShaftArray_state; //shaft mesh array state
 	csArray<bool> EnableArray;
 	bool EnableCheck;
 

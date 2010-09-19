@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.8 Alpha - Simulation Frontend
+	Skyscraper 1.7 Alpha - Simulation Frontend
 	Copyright (C)2003-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -76,7 +76,7 @@ int main (int argc, char* argv[])
 
 bool Skyscraper::OnInit(void)
 {
-	version = "1.8";
+	version = "1.7";
 	version_rev = SVN_REVSTR;
 	version_state = "Alpha";
 	version_frontend = version + ".0." + version_rev;
@@ -186,7 +186,7 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 {
 	this->Center();
 	wxString title;
-	title = wxT("Skyscraper 1.8 Alpha");
+	title = wxT("Skyscraper 2.0 Alpha 7");
 	//title = wxT("Skyscraper " + skyscraper->version.GetData() + " " + skyscraper->version_state.GetData());
 	this->SetTitle(title);
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
@@ -463,7 +463,6 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 		DisableSound = true;
 	}
 	csRef<iBase> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
-	//csRef<iComponent> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	plug->IncRef ();
 
@@ -503,7 +502,8 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	//initialize event queue
 	equeue = csQueryRegistry<iEventQueue> (object_reg);
 
-	//enable ambient light
+	//disable the lighting cache
+	engine->SetLightingCacheMode(0);
 	engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
 
 	//set up viewport
@@ -641,6 +641,22 @@ void Skyscraper::GetInput()
 	}
 	else
 	{
+		if (wxGetKeyState((wxKeyCode)'v') && wait == false)
+		{
+			if (Simcore->camera->GetGravityStatus() == false)
+			{
+				Simcore->camera->EnableGravity(true);
+	                        Simcore->camera->EnableCollisions = true;
+				Report("Gravity and collision detection on");
+			}
+			else
+			{
+				Simcore->camera->EnableGravity(false);
+                                Simcore->camera->EnableCollisions = false;
+				Report("Gravity and collision detection off");
+			}
+			wait = true;
+		}
 		if (Simcore->camera->Freelook == false)
 		{
 			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))

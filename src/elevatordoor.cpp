@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Elevator Door Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -334,13 +334,6 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	if (manual == false && elev->FireServicePhase1 == 1 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
 	{
 		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is on");
-		return;
-	}
-
-	//do not close doors while fire service mode 2 is on
-	if (manual == false && elev->FireServicePhase2 == 1 && elev->WaitForDoors == false)
-	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 2 is on");
 		return;
 	}
 
@@ -710,12 +703,12 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 
 	//add main walls
 	sbs->DrawWalls(true, true, false, false, false, false);
-	sbs->AddWallMain(wrapper->object, door->mesh, door->mesh_submeshes, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+	sbs->AddWallMain(wrapper->object, door->mesh, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th);
 	sbs->ResetWalls();
 
 	//add side walls
 	sbs->DrawWalls(false, false, true, true, true, true);
-	sbs->AddWallMain(wrapper->object, door->mesh, door->mesh_submeshes, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
+	sbs->AddWallMain(wrapper->object, door->mesh, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th);
 	sbs->ResetWalls();
 
 	//store extents
@@ -836,7 +829,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	{
 		for (int j = 1; j <= 3; j++)
 		{
-			csVector2 extents = sbs->GetExtents(wrapper->doors[i]->state->GetVertices(), wrapper->doors[i]->state->GetVertexCount(), j);
+			csVector2 extents = sbs->GetExtents(wrapper->doors[i]->state, j);
 			extents.x = sbs->ToLocal(extents.x);
 			extents.y = sbs->ToLocal(extents.y);
 
@@ -910,7 +903,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		}
 
 		//create doorway walls
-		WallObject *wall = sbs->CreateWallObject(floorobj->level_walls, floorobj->Level, floorobj->level_submeshes, floorobj->object, "Connection Walls");
+		WallObject *wall = sbs->CreateWallObject(floorobj->level_walls, floorobj->Level, floorobj->object, "Connection Walls");
 		sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 		sbs->ResetWalls();
@@ -919,30 +912,28 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 
 	//create connection pieces
 	sbs->ResetTextureMapping(true);
+	WallObject *wall;
 	csString name1, name2;
 	if (ShaftDoor == false)
 	{
-		WallObject *wall;
-		wall = sbs->CreateWallObject(elev->elevator_walls, elev->ElevatorMesh, elev->Elevator_submeshes, elev->object, false);
+		wall = new WallObject(elev->ElevatorMesh, elev->object, true);
 		name1 = "DoorF1";
 		name2 = "DoorF2";
-		sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true, false);
-		sbs->CreateWallBox(wall, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true, false);
 	}
 	else
 	{
-		WallObject *wall;
 		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-		wall = sbs->CreateWallObject(shaft->shaft_walls[floor - shaft->startfloor], shaft->GetMeshWrapper(floor), shaft->shaft_submeshes[floor - shaft->startfloor], shaft->object, false);
+		wall = new WallObject(shaft->GetMeshWrapper(floor), shaft->object, true);
 		name1 = "ShaftDoorF1";
 		name2 = "ShaftDoorF2";
 		x1 += elev->Origin.x;
 		x2 += elev->Origin.x;
 		z1 += elev->Origin.z;
 		z2 += elev->Origin.z;
-		sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true, false);
-		sbs->CreateWallBox(wall, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true, false);
 	}
+	sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true);
+	sbs->CreateWallBox(wall, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true);
+	delete wall;
 
 	sbs->ResetTextureMapping();
 
@@ -1320,9 +1311,11 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	parent = wrapper->parent;
 
 	//create object mesh
-	mesh = sbs->CreateMesh(doorname);
-	state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
+	mesh = sbs->engine->CreateSectorWallsMesh (sbs->area, doorname);
+	state = scfQueryInterface<iThingFactoryState> (mesh->GetMeshObject()->GetFactory());
 	movable = mesh->GetMovable();
+	mesh->SetZBufMode(CS_ZBUF_USE);
+	mesh->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 	
 	csString direction_check = Direction;
 	direction_check.Downcase().Trim();
@@ -1843,6 +1836,21 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::GetDoorWrapper()
 void ElevatorDoor::Hold()
 {
 	//hold door (basically turn off timer)
+
+	csString doornumber;
+        if (elev->NumDoors > 1)
+        {
+                doornumber = " ";
+                doornumber = doornumber + _itoa(Number, intbuffer, 10);
+        }
+
+	//exit if nudge mode is active
+	if (GetNudgeStatus() == true)
+		return;
+
+	sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": holding doors" + doornumber);
+
+	nudgetimer->Stop();
 	timer->Stop();
 }
 

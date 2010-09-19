@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Elevator Button Panel Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -65,7 +65,7 @@ public:
 
 private:
 	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
-	csRefArray<iGeneralMeshSubMesh> ButtonPanel_submeshes;
+	csRef<iThingFactoryState> ButtonPanel_state;
 
 	csArray<Control*> controls; //control objects
 

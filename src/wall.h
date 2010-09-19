@@ -1,8 +1,8 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Wall Object Class
-	The Skyscraper Project - Version 1.8 Alpha
+	Scalable Building Simulator - Polygon Object Class
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -31,38 +31,30 @@ class SBSIMPEXP WallObject : public Object
 public:
 
 	//functions
-	WallObject(csRef<iMeshWrapper> wrapper, csRefArray<iGeneralMeshSubMesh> &submeshes, Object *proxy = 0, bool temporary = false);
+	WallObject(csRef<iMeshWrapper> wrapper, Object *proxy = 0, bool temporary = false);
 	~WallObject();
-	WallPolygon* AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize);
-	WallPolygon* AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize);
-	WallPolygon* AddPolygon(const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector);
-	int CreateHandle(csRef<iRenderBuffer> triangles, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, iMaterialWrapper* material, const char *name);
+	int AddQuad(const char *name, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4);
+	int AddPolygon(const char *name, csVector3 *vertices, int num);
+	void CreateHandle(int index);
+	void SetPolygonName(int index, const char *name);
 	void DeletePolygons();
 	void DeletePolygon(int index, bool recreate_colliders);
-	void DeleteVertices(csArray<int> &deleted_indices);
-	csString ProcessName(const char *name);
-	int GetHandleCount();
-	void DeleteVertices(iRenderBuffer *deleted_indices);
-	WallPolygon* GetHandle(int index);
+	void ReindexPolygons(int deleted_index);
+
+	//polygon index array
+	csArray<int> handles;
 
 	//mesh wrapper
 	csRef<iMeshWrapper> meshwrapper;
 
 	//mesh factory state
-	csRef<iGeneralFactoryState> state;
+	csRef<iThingFactoryState> state;
 
 	//name
 	csString name;
 
 	//parent array
 	csArray<WallObject*> *parent_array;
-
-	//parent submesh array
-	csRefArray<iGeneralMeshSubMesh> *submesh_array;
-
-private:
-
-	csArray<WallPolygon> handles;
 };
 
 #endif

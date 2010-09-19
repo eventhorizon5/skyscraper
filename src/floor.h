@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Floor Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.7 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -37,8 +37,13 @@ class SBSIMPEXP Floor
 public:
 	Object *object; //SBS object
 	csRef<iMeshWrapper> Level; //level mesh
+	csRef<iThingFactoryState> Level_state;
+
 	csRef<iMeshWrapper> Interfloor; //interfloor mesh
+	csRef<iThingFactoryState> Interfloor_state;
+
 	csRef<iMeshWrapper> ColumnFrame; //columnframe mesh
+	csRef<iThingFactoryState> ColumnFrame_state;
 
 	int Number; //floor number
 	csString Name; //floor name
@@ -57,9 +62,6 @@ public:
 	csArray<WallObject*> level_walls;
 	csArray<WallObject*> interfloor_walls;
 	csArray<WallObject*> columnframe_walls;
-	csRefArray<iGeneralMeshSubMesh> level_submeshes;
-	csRefArray<iGeneralMeshSubMesh> interfloor_submeshes;
-	csRefArray<iGeneralMeshSubMesh> columnframe_submeshes;
 
 	//functions
 	Floor(int number);

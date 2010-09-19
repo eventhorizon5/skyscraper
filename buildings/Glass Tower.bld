@@ -41,12 +41,19 @@ SetPlanarMapping true, false, false, false
     Load data/windows11e.jpg, MainWindows2, 1, 1
     Load data/windows11e_inside.gif, MainWindowsInside, 1, 1
     Load data/windows11e-2.jpg, MainWindows2single, 1, 1
+    Load data/windows11e-2.jpg, MainWindows2double, 1, 1
     Load data/windows11e_inside2.gif, MainWindowsInsideSingle, 1, 1
+    Load data/windows11e-2.jpg, MainWindows2double, 1, 1
+    Load data/windows11e_inside3.gif, MainWindowsInsideDouble, 1, 1
+    Load data/windows11e-4.jpg, MainWindows3, 1, 1
+    Load data/windows11e_inside4.gif, MainWindows3Inside, 1, 1
+    Load data/stucco22d.jpg, EntranceColumns, 0.2, 0.2
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     Load data/symb5.jpg, Marble3, 0.269, 0.25
     Load data/marb047.jpg, Marble4, 0.269, 0.25
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
     Load data/cutston.jpg, Backing, 0.111, 1
+    Load data/cutston.jpg, Backing2, 0.1, 0.1
     Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/door1.jpg, ElevDoors, 1, 1
@@ -100,25 +107,12 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     Type = Lobby
     Height = 12
     InterfloorHeight = 0
-    Group = 1
+    Group = 0 - 12
 
     #Floor
     Set 1 = Floor(%floor%).Base
     DrawWalls = true, false, false, false, false, false
-    AddCustomWall floor, FrontFinFloor, Marble4, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
-    AddCustomWall floor, FrontDetachmentFloor, Marble4, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
-    AddCustomWall floor, MainFloor, Marble4, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 34.24, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
-    AddCustomWall floor, BackDetachmentFloor, Marble4, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
-    AddCustomWall floor, BackFinFloor, Marble4, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 40.64, %1%, 46.08, 37.92, %1%, 43.52, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, 0, 0
-
-    #Ceiling
-    #Set 1 = Floor(%floor%).Altitude + Floor(%floor%).Height
-    #DrawWalls = false, true, false, false, false, false
-    #AddCustomWall floor, FrontFinCeiling, Marble3, -100.64, %1%, -46.24, -83.04, %1%, -20.64, -79.36, %1%, -21.92, -24.48, %1%, -41.44, -21.76, %1%, -45.92, -100.64, %1%, -46.24, 0, 0
-    #AddCustomWall floor, FrontDetachmentCeiling, Marble3, -79.36, %1%, -21.92, -76.8, %1%, -16.16, -22.24, %1%, -35.68, -24.48, %1%, -41.44, -79.36, %1%, -21.92, 0, 0
-    #AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 34.24, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, 77.6, %1%, -7.84, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -22.24, %1%, -35.68, -76.8, %1%, -16.16, -79.2, %1%, -15.2, 0, 0
-    #AddCustomWall floor, BackDetachmentCeiling, Marble3, -44.96, %1%, 43.2, 34.24, %1%, 43.52, 34.24, %1%, 36.64, -43.36, %1%, 36.64, -44.96, %1%, 35.52, -44.96, %1%, 43.2, 0, 0
-    #AddCustomWall floor, BackFinCeiling, Marble3, -48.64, %1%, 43.2, -18.88, %1%, 68.8, 40.64, %1%, 46.08, 37.92, %1%, 43.52, 34.24, %1%, 43.52, -44.96, %1%, 43.2, -48.64, %1%, 43.2, 0, 0
+    AddCustomWall floor, MainFloor, Marble4, -153.31, %1%, -48.4, -166.3, %1%, -48.4, -166.3, %1%, 59.6, -136.8, %1%, 77.3, -119.7, %1%, 47.2, -13.6, %1%, 105.9, 49.6, %1%, 94.4, 62.2, %1%, 70.4, 117.5, %1%, 101.7, 140.5, %1%, 46.4, 140.5, %1%, -73.14, 85.6, %1%, -73.14, -19.32, %1%, -134.54, -113.3, %1%, -116.47, 0, 0
 
     #External windows/walls
     SetAutoSize = true, false
@@ -134,7 +128,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     Type = Lobby
     Height = 20
     InterfloorHeight = 0
-    Group = 0
+    Group = 0 - 12
 
     #Floor
     #Set 1 = Floor(%floor%).Base
@@ -200,6 +194,10 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     SetAutoSize = true, true
     
     #AddAutoFloor Test, Carpet1, 0, 0, 0
+<EndFloors>
+
+<Floors 2 to 12>
+    Group = 0 - 12
 <EndFloors>
 
 # floors 32 to 58
@@ -355,11 +353,9 @@ SetAutoSize = false, false
     if[%floor% > 0] SetTextureMapping 0, -0.333, 0, 1, 8.333, 0, 2, 8.333, 1
     if[%floor% = 0] SetTextureMapping 0, -0.333, 0, 1, 7.333, 0, 2, 7.333, 1
     DrawWalls = true, false, false, false, false, false
-    if[%floor% > 0] AddWall Front Fin Main, MainWindows2, 0, -100.64, -46.24, -21.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    if[%floor% = 0] AddWall Front Fin Main, MainWindows2, 0, -100.64, -46.24, -30.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front Fin Main, MainWindows2, 0, -100.64, -46.24, -21.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     DrawWalls = false, true, false, false, false, false
-    if[%floor% > 0] AddWall Front Fin Main, MainWindowsInside, 0, -100.64, -46.24, -21.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    if[%floor% = 0] AddWall Front Fin Main, MainWindowsInside, 0, -100.64, -46.24, -30.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front Fin Main, MainWindowsInside, 0, -100.64, -46.24, -21.76, -45.92, %fullheight%, %fullheight%, 0, 0, 0, 0, True
 
     ResetTextureMapping = True
     DrawWalls = false, true, false, false, false, false
@@ -384,13 +380,24 @@ SetAutoSize = false, false
     AddWall Right Lower, MainWindows2, 0, 18.4, -36.8, 77.6, -7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     DrawWalls = false, true, false, false, false, false
     AddWall Right Lower, MainWindowsInside, 0, 18.4, -36.8, 77.6, -7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    
-    SetTextureMapping 0, -0.666, 0, 1, 3, 0, 2, 3, 1
+<EndFloors>
+
+<Floors 6 to 84>    
     DrawWalls = false, true, false, false, false, false
-    AddWall Right Upper, MainWindows2, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    SetTextureMapping 0, 3, 0, 1, -0.666, 0, 2, -0.666, 1
+    SetTextureMapping 0, -0.7, 0, 1, 1, 0, 2, 1, 1
+    if[%floor% = 6] AddWall Right Upper, MainWindows2, 0, 67.5, 7.7, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetTextureMapping 0, -0.666, 0, 1, 3, 0, 2, 3, 1
+    if[%floor% > 6] AddWall Right Upper, MainWindows2, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetTextureMapping 0, -0.25, 0, 1, 1.3, 0, 2, 1.3, 1
+    if[%floor% = 6] AddCustomWall external, Right Upper, MainWindows2, 75.35, Floor(7).Altitude, -4.3, 67.5, Floor(7).Altitude, 7.7, 67.5, Floor(6).Altitude, 7.7, 0, 0
+
     DrawWalls = true, false, false, false, false, false
-    AddWall Right Upper, MainWindowsInside, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetTextureMapping 0, 1, 0, 1, -0.7, 0, 2, -0.7, 1
+    if[%floor% = 6] AddWall Right Upper, MainWindowsInside, 0, 67.5, 7.7, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetTextureMapping 0, 3, 0, 1, -0.666, 0, 2, -0.666, 1
+    if[%floor% > 6] AddWall Right Upper, MainWindowsInside, 0, 77.6, -7.84, 58.08, 21.44, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetTextureMapping 0, 1.3, 1, 1, 1.3, 0, 2, -0.25, 0
+    if[%floor% = 6] AddCustomWall floor, Right Upper, MainWindowsInside, 75.35, Floor(7).Altitude, -4.3, 67.5, Floor(7).Altitude, 7.7, 67.5, Floor(6).Altitude, 7.7, 0, 0
 <EndFloors>
 
 <Floors 78 to 137>
@@ -406,14 +413,14 @@ SetAutoSize = false, false
 <EndFloors>
 
 SetTextureMapping 0, -0.333, 0, 1, 2.333, 0, 2, 2.333, 1
-<Floors 0 to 109>
+<Floors 6 to 109>
     DrawWalls = true, false, false, false, false, false
     AddWall Left Lower, MainWindows2, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     DrawWalls = false, true, false, false, false, false
     AddWall Left Lower, MainWindowsInside, 0, -79.2, -15.2, -84.32, 7.84, %fullheight%, %fullheight%, 0, 0, 0, 0, True
 <EndFloors>
 
-<Floors 0 to 65>
+<Floors 6 to 65>
     DrawWalls = true, false, false, false, false, false
     SetTextureMapping 0, -0.218, 0, 1, 9.333, 0, 2, 9.333, 1
     if[%floor% < 65] AddWall Front Fin Left, MainWindows2single, 0, -100.64, -46.24, -83.04, -20.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
@@ -427,7 +434,7 @@ SetTextureMapping 0, -0.333, 0, 1, 2.333, 0, 2, 2.333, 1
     if[%floor% = 65] AddWall Front Fin Left, MainWindowsInsideSingle, 0, -100.64, -46.24, -83.04, -20.64, %fullheight% / 2, %fullheight% / 2, 0, 0, 0, 0, True
 <EndFloors>
 
-<Floors 0 to 137>
+<Floors 6 to 137>
     SetTextureMapping 0, -0.666, 0, 1, 2, 0, 2, 2, 1
     if[%floor% = 137] SetTextureMapping 0, -0.666, -1, 1, 2, -0.5, 2, 2, 1
     DrawWalls = true, false, false, false, false, false
@@ -505,7 +512,7 @@ ResetTextureMapping = True
 SetAutoSize = true, false
 DrawWalls = true, true, false, false, false, false
 
-<Floors 0 to 76>
+<Floors 6 to 76>
     AddWall Front Fin Left Detachment, Backing, 0, -79.36, -21.92, -76.8, -16.16, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = false, false
     DrawWalls = false, true, false, false, false, false
@@ -860,10 +867,686 @@ DrawWalls = true, true, false, false, false, false
     if[%floor% > 109 & %floor% < 137] AddCustomWall floor, MainFloor, Marble3, -79.2, %1%, -15.2, %6%, %1%, %7%, %8%, %1%, %9%, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
 <EndFloors>
 
+#Plaza Base
+
+SetAutoSize = false, false
+
+#Front Atrium
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x6, y6, z6, 0, 0, x5, y5, z5, 0, 9.2, x0, y0, z0, 10, 0
+AddCustomWall external, Front Atrium Main, MainWindowsInside, -19.32, Floor(2).Altitude, -134.54, -67.45, Floor(11).Altitude + 3, -51.66, -16.6, Floor(8).Altitude + 9, -52.2, -18.3, Floor(9).Altitude + 2, -48.6, 20.4, Floor(7).Altitude + 7, -44.8, 85.6, Floor(7).Altitude, -14.2, 85.6, Floor(2).Altitude, -73.14, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x0, y0, z0, 0, 0, x1, y1, z1, 0, 9.2, x6, y6, z6, 10, 0
+AddCustomWall external, Front Atrium Main, MainWindows2, -19.32, Floor(2).Altitude, -134.54, -67.45, Floor(11).Altitude + 3, -51.66, -16.6, Floor(8).Altitude + 9, -52.2, -18.3, Floor(9).Altitude + 2, -48.6, 20.4, Floor(7).Altitude + 7, -44.8, 85.6, Floor(7).Altitude, -14.2, 85.6, Floor(2).Altitude, -73.14, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x0, y0, z0, 0, 0, x5, y5, z5, -6, 6, x4, y4, z4, -6, 13.5
+AddCustomWall external, Front Atrium Main Left Temp, MainWindowsInside, -113.3, Floor(8).Altitude, -116.47, -153.31, Floor(15).Altitude + 6, -48.4, -98.44, Floor(13).Altitude, -48.4, -96.8, Floor(12).Altitude + 8, -51.37, -67.45, Floor(11).Altitude + 3, -51.66, -19.32, Floor(2).Altitude, -134.54, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x5, y5, z5, 0, 0, x0, y0, z0, -6, 6, x1, y1, z1, -6, 13.5
+AddCustomWall external, Front Atrium Main Left Temp, MainWindows2, -113.3, Floor(8).Altitude, -116.47, -153.31, Floor(15).Altitude + 6, -48.4, -98.44, Floor(13).Altitude, -48.4, -96.8, Floor(12).Altitude + 8, -51.37, -67.45, Floor(11).Altitude + 3, -51.66, -19.32, Floor(2).Altitude, -134.54, 0, 0
+
+DrawWalls = true, true, false, false, false, false
+ResetTextureMapping = true
+SetAutoSize = true, true
+AddCustomWall external, Front Atrium Left Side 1, Backing2, -153.31, Floor(7).Altitude, -48.4, -153.31, Floor(15).Altitude + 6, -48.4, -113.3, Floor(8).Altitude, -116.47, -113.3, Floor(4).Altitude, -116.47, -132, Floor(4).Altitude, -84.4, 0, 0
+AddCustomWall external, Front Atrium Left Side 2, Backing2, -142.94, Floor(2).Altitude, -60.37, -132, Floor(4).Altitude, -84.4, -113.3, Floor(4).Altitude, -116.47, -113.3, Floor(2).Altitude, -116.47, 0, 0
+AddCustomWall external, Front Atrium Front Side Temp, Backing2, -113.3, Floor(2).Altitude, -116.47, -113.3, Floor(8).Altitude, -116.47, -19.32, Floor(2).Altitude, -134.54, 0, 0
+AddCustomWall external, Front Atrium Rear, Backing2, -153.31, Floor(7).Altitude, -48.4, -153.31, Floor(15).Altitude + 6, -48.4, -98.44, Floor(13).Altitude, -48.4, -98.44, Floor(7).Altitude, -48.4, 0, 0
+AddCustomWall external, Front Atrium Rear Lower, Backing2, -98.44, Floor(7).Altitude, -48.4, -119.7, Floor(7).Altitude, -48.4, -119.7, Floor(6).Altitude, -48.4, -98.44, Floor(6).Altitude, -48.4, 0, 0
+AddCustomWall external, Front Atrium Connection Right, Backing2, 77.6, Floor(6).Altitude + 6, -7.84, 85.6, Floor(6).Altitude + 6, -14.2, 20.4, Floor(7).Altitude + 1, -44.48, 18.4, Floor(7).Altitude + 1, -36.8, 0, 0
+AddCustomWall external, Front Atrium Connection Center 1, Backing2, -18.88, Floor(8).Altitude + 8, -36.8, -18.3, Floor(8).Altitude + 8, -48.6, -21.76, Floor(8).Altitude + 8, -45.92, -24.48, Floor(8).Altitude + 8, -41.44, -22.24, Floor(8).Altitude + 8, -35.68, 0, 0
+#AddCustomWall external, Front Atrium Connection Center 2, Backing2, -18.88, Floor(8).Altitude + 8, -36.8, 18.4, Floor(7).Altitude + 1, -36.8, 20.4, Floor(7).Altitude + 1, -44.48, -18.3, Floor(8).Altitude + 8, -48.6, 0, 0
+AddCustomWall external, Front Atrium Connection Left, Backing2, -21.76, Floor(8).Altitude + 8, -45.92, -18.3, Floor(8).Altitude + 8, -48.6, -16.6, Floor(8).Altitude + 8, -52.2, -96.8, Floor(12).Altitude, -51.37, -99.66, Floor(12).Altitude, -46.23, 0, 0
+AddCustomWall external, Front Atrium Connection Left Corner, Backing2, -98.44, Floor(12).Altitude, -48.4, -99.66, Floor(12).Altitude, -46.23, -99.66, Floor(6).Altitude, -46.23, -98.44, Floor(6).Altitude, -48.4, 0, 0
+AddCustomWall external, Front Atrium Filler Right, Backing2, 20.4, Floor(7).Altitude + 1, -44.48, 20.4, Floor(7).Altitude + 7, -44.48, 85.6, Floor(7).Altitude, -14.2, 85.6, Floor(6).Altitude + 6, -14.2, 0, 0
+AddCustomWall external, Front Atrium Filler Center, Backing2, -18.3, Floor(8).Altitude + 8, -48.6, -18.3, Floor(9).Altitude + 2, -48.6, 20.4, Floor(7).Altitude + 1, -44.48, 20.4, Floor(7).Altitude + 7, -44.48, 0, 0
+AddCustomWall external, Front Atrium Filler Corner, Backing2, -18.3, Floor(8).Altitude + 8, -48.6, -18.3, Floor(9).Altitude + 2, -48.6, -16.6, Floor(8).Altitude + 9, -52.2, -16.6, Floor(8).Altitude + 3, -52.2, 0, 0
+AddCustomWall external, Front Atrium Filler Left, Backing2, -96.8, Floor(12).Altitude, -51.37, -96.8, Floor(12).Altitude + 8, -51.37, -16.6, Floor(8).Altitude + 3, -52.2, -16.6, Floor(8).Altitude + 9, -52.2, 0, 0
+AddCustomWall external, Front Atrium Filler Left Corner, Backing2, -96.8, Floor(12).Altitude, -51.37, -96.8, Floor(12).Altitude + 8, -51.37, -98.44, Floor(13).Altitude, -48.4, -98.44, Floor(12).Altitude, -48.4, 0, 0
+
+<Floor 0>
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
+    AddWall Front Atrium Base Left, Backing2, 0, -142.94, -60.37, -113.3, -116.47, 32, 32, 0, 0, 0, 0, true
+    AddWall Front Atrium Base Left 2, Backing2, 0, -142.94, -36.4, -142.94, -60.37, 32, 32, 0, 0, 0, 0, true
+    SetAutoSize = false, false
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Atrium Base Front Left, MainWindowsInside, 0, -113.3, -116.47, -19.32, -134.54, %fullheight%, %fullheight%, 0, 0, 6, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Atrium Base Front Left, MainWindows2, 0, -113.3, -116.47, -19.32, -134.54, %fullheight%, %fullheight%, 0, 0, 6, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Atrium Base Front, MainWindowsInside, 0, -19.32, -134.54, 85.6, -73.14, %fullheight%, %fullheight%, 0, 0, 5, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Atrium Base Front, MainWindows2, 0, -19.32, -134.54, 85.6, -73.14, %fullheight%, %fullheight%, 0, 0, 5, 0, true
+<EndFloor>
+<Floor 1>
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Atrium Base Front Left, MainWindowsInside, 0, -113.3, -116.47, -19.32, -134.54, 12, 12, 0, 0, 6, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Atrium Base Front Left, MainWindows2, 0, -113.3, -116.47, -19.32, -134.54, 12, 12, 0, 0, 6, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Atrium Base Front, MainWindowsInside, 0, -19.32, -134.54, 85.6, -73.14, 12, 12, 0, 0, 5, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Atrium Base Front, MainWindows2, 0, -19.32, -134.54, 85.6, -73.14, 12, 12, 0, 0, 5, 0, true
+
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Atrium Base Front Left, MainWindowsInside, 0, -113.3, -116.47, -19.32, -134.54, 8, 8, 12, 12, 6, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Atrium Base Front Left, MainWindows2, 0, -113.3, -116.47, -19.32, -134.54, 8, 8, 12, 12, 6, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Atrium Base Front, MainWindowsInside, 0, -19.32, -134.54, 85.6, -73.14, 8, 8, 12, 12, 5, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Atrium Base Front, MainWindows2, 0, -19.32, -134.54, 85.6, -73.14, 8, 8, 12, 12, 5, 0, true
+<EndFloor>
+
+#Rear Atrium
+DrawWalls = true, true, false, false, false, false
+SetAutoSize = true, true
+AddCustomWall external, Rear Atrium Interior Left, Backing2, -119.7, Floor(6).Altitude, -1.1, -112.95, Floor(7).Altitude, -11.7, -112.95, Floor(6).Altitude, -11.7, 0, 0
+AddCustomWall external, Rear Atrium Interior Center, Backing2, -112.95, Floor(6).Altitude, -11.7, -112.95, Floor(7).Altitude, -11.7, -85.25, Floor(6).Altitude + 6, 11.35, -85.25, Floor(6).Altitude, 11.35, 0, 0
+SetAutoSize = false, false
+
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x0, y0, z0, 0, 0, x1, y1, z1, 0, 5.5, x2, y2, z2, 2, 3
+AddCustomWall external, Rear Atrium Main 1, MainWindows2, -13.6, Floor(2).Altitude, 105.9, 14.25, Floor(7).Altitude + 6, 56.2, -18.88, Floor(5).Altitude, 68.8, 0, 0
+SetTextureMapping2 x6, y6, z6, 0, 0, x5, y5, z5, 2, 3, x1, y1, z1, 10, 0
+AddCustomWall external, Rear Atrium Main 2, MainWindowsInside, -13.6, Floor(2).Altitude, 105.9, -18.88, Floor(5).Altitude, 68.8, -48.64, Floor(5).Altitude + 8, 43.2, -112.95, Floor(7).Altitude, -11.7, -119.7, Floor(6).Altitude, -1.1, -119.7, Floor(2).Altitude, 47.2, -13.6, Floor(2).Altitude, 105.9, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x2, y2, z2, 0, 0, x1, y1, z1, 0, 5.5, x0, y0, z0, 2, 3
+AddCustomWall external, Rear Atrium Main 1, MainWindowsInside, -13.6, Floor(2).Altitude, 105.9, 14.25, Floor(7).Altitude + 6, 56.2, -18.88, Floor(5).Altitude, 68.8, 0, 0
+SetTextureMapping2 x0, y0, z0, 0, 0, x1, y1, z1, 2, 3, x5, y5, z5, 10, 0
+AddCustomWall external, Rear Atrium Main 2, MainWindows2, -13.6, Floor(2).Altitude, 105.9, -18.88, Floor(5).Altitude, 68.8, -48.64, Floor(5).Altitude + 8, 43.2, -112.95, Floor(7).Altitude, -11.7, -119.7, Floor(6).Altitude, -1.1, -119.7, Floor(2).Altitude, 47.2, -13.6, Floor(2).Altitude, 105.9, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x4, y4, z4, 0, 0, x0, y0, z0, 4, 4, x1, y1, z1, 4, 11.5
+AddCustomWall external, Rear Atrium Main Right Temp, MainWindows2, 49.6, Floor(6).Altitude, 94.4, 87.05, Floor(13).Altitude + 6, 27.7, 40.64, Floor(9).Altitude + 8, 46.08, 14.25, Floor(7).Altitude + 6, 56.2, -13.6, Floor(2).Altitude, 105.9, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x0, y0, z0, 0, 0, x4, y4, z4, 4, 4, x3, y3, z3, 4, 11.5
+AddCustomWall external, Rear Atrium Main Right Temp, MainWindowsInside, 49.6, Floor(6).Altitude, 94.4, 87.05, Floor(13).Altitude + 6, 27.7, 40.64, Floor(9).Altitude + 8, 46.08, 14.25, Floor(7).Altitude + 6, 56.2, -13.6, Floor(2).Altitude, 105.9, 0, 0
+
+DrawWalls = true, true, false, false, false, false
+ResetTextureMapping = true
+SetAutoSize = true, true
+AddCustomWall external, Rear Atrium Back Right, Backing2, 49.6, Floor(2).Altitude, 94.4, 49.6, Floor(6).Altitude, 94.4, -13.6, Floor(2).Altitude, 105.9, 0, 0
+AddCustomWall external, Rear Atrium Side, Backing2, 87.05, Floor(6).Altitude, 27.7, 87.05, Floor(13).Altitude + 6, 27.7, 49.6, Floor(6).Altitude, 94.4, 0, 0
+AddCustomWall external, Rear Atrium Side Filler Top, Backing2, 62.2, Floor(2).Altitude, 70.4, 49.6, Floor(4).Altitude, 94.4, 49.6, Floor(2).Altitude, 94.4, 0, 0
+AddCustomWall external, Rear Atrium Side Filler Bottom, Backing2, 62.2, Floor(6).Altitude, 70.4, 49.6, Floor(6).Altitude, 94.4, 49.6, Floor(4).Altitude, 94.4, 0, 0
+AddCustomWall external, Rear Atrium Interior, Backing2, 87.05, Floor(6).Altitude, 27.7, 87.05, Floor(13).Altitude + 6, 27.7, 40.64, Floor(9).Altitude + 8, 46.08, 40.64, Floor(6).Altitude, 46.08, 0, 0
+AddCustomWall external, Rear Atrium Connection, Backing2, -85.25, Floor(6).Altitude, 11.35, -48.64, Floor(5).Altitude + 2, 43.2, -44.96, Floor(5).Altitude + 2, 43.2, -44.96, Floor(5).Altitude + 2, 35.52, -82.85, Floor(6).Altitude, 8.8, 0, 0
+AddCustomWall external, Rear Atrium Filler, Backing2, -85.25, Floor(6).Altitude, 11.35, -85.25, Floor(6).Altitude + 6, 11.35, -48.64, Floor(5).Altitude + 8, 43.2, -48.64, Floor(5).Altitude + 2, 43.2, 0, 0
+
+<Floor 0>
+    SetAutoSize = false, false
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Main, MainWindows2, 0, -119.7, 47.2, -13.6, 105.9, %fullheight%, %fullheight%, 0, 0, 10, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Main, MainWindowsInside, 0, -119.7, 47.2, -13.6, 105.9, %fullheight%, %fullheight%, 0, 0, 10, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Right, MainWindows2, 0, -13.6, 105.9, 49.6, 94.4, %fullheight%, %fullheight%, 0, 0, 4, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Right, MainWindowsInside, 0, -13.6, 105.9, 49.6, 94.4, %fullheight%, %fullheight%, 0, 0, 4, 0, true
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
+    AddWall Rear Atrium Base Side, Backing2, 0, 62.2, 70.4, 49.6, 94.4, %fullheight% + 20, %fullheight% + 20, 0, 0, 0, 0, true
+<EndFloor>
+<Floor 1>
+    SetAutoSize = false, false
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Main, MainWindows2, 0, -119.7, 47.2, -13.6, 105.9, 12, 12, 0, 0, 10, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Main, MainWindowsInside, 0, -119.7, 47.2, -13.6, 105.9, 12, 12, 0, 0, 10, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Right, MainWindows2, 0, -13.6, 105.9, 49.6, 94.4, 12, 12, 0, 0, 4, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Right, MainWindowsInside, 0, -13.6, 105.9, 49.6, 94.4, 12, 12, 0, 0, 4, 0, true
+
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Main, MainWindows2, 0, -119.7, 47.2, -13.6, 105.9, 8, 8, 12, 12, 10, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Main, MainWindowsInside, 0, -119.7, 47.2, -13.6, 105.9, 8, 8, 12, 12, 10, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Right, MainWindows2, 0, -13.6, 105.9, 49.6, 94.4, 8, 8, 12, 12, 4, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Right, MainWindowsInside, 0, -13.6, 105.9, 49.6, 94.4, 8, 8, 12, 12, 4, 0, true
+<EndFloor>
+
+#Honeycomb window functions
+#each window group is 24x24 feet, 8 feet deep
+#parameters 1, 2 and 3 are X, Y and Z center
+
+<Function hwindow_left>
+    SetAutoSize = false, false
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, 0, 0
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, 0, 0
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
+    AddCustomWall external, Honeycomb Floor, Carpet1, %param1%, %param2%, %param3% + 12.033, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, 0, 0
+    SetAutoSize = false, false
+<EndFunction>
+
+<Function hwindow_left_top>
+    SetAutoSize = false, false
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, 0, 0
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    SetAutoSize = true, true
+    AddCustomWall external, Honeycomb Ceiling, Backing2, %param1%, %param2%, %param3% + 12.033, %param1% + 8, %param2%, %param3%, %param1% + 8, %param2%, %param3% + 12.033, 0, 0
+    AddCustomWall external, Honeycomb Ceiling, Backing2, %param1%, %param2%, %param3% - 12.033, %param1% + 8, %param2%, %param3%, %param1% + 8, %param2%, %param3% - 12.033, 0, 0
+    SetAutoSize = false, false
+<EndFunction>
+
+<Function hwindow_left_bottom>
+    SetAutoSize = false, false
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, -1, 0
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12.033, -1, 0
+    SetAutoSize = true, true
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall external, Honeycomb Floor, Backing2, %param1%, %param2%, %param3% + 12.033, %param1% + 8, %param2%, %param3%, %param1% + 8, %param2%, %param3% + 12.033, 0, 0
+    AddCustomWall external, Honeycomb Floor, Backing2, %param1%, %param2%, %param3% - 12.033, %param1% + 8, %param2%, %param3%, %param1% + 8, %param2%, %param3% - 12.033, 0, 0
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall external, Honeycomb Floor, Carpet1, %param1%, %param2%, %param3% + 12.033, %param1% + 8, %param2%, %param3%, %param1% + 8, %param2%, %param3% + 12.033, 0, 0
+    AddCustomWall external, Honeycomb Floor, Carpet1, %param1%, %param2%, %param3% - 12.033, %param1% + 8, %param2%, %param3%, %param1% + 8, %param2%, %param3% - 12.033, 0, 0
+    SetAutoSize = false, false
+<EndFunction>
+
+<Function hwindow_right>
+    SetAutoSize = false, false
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, 0, 0
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% + 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% - 12, %param3%, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, 0, 0
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
+    AddCustomWall external, Honeycomb Floor, Carpet1, %param1%, %param2%, %param3% + 12.033, %param1% + 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12.033, 0, 0
+    SetAutoSize = false, false
+<EndFunction>
+
+<Function hwindow_right_top>
+    SetAutoSize = false, false
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, 0, 0
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, -1, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% - 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    SetAutoSize = true, true
+    AddCustomWall external, Honeycomb Ceiling, Backing2, %param1%, %param2%, %param3% + 12.033, %param1% - 8, %param2%, %param3%, %param1% - 8, %param2%, %param3% + 12.033, 0, 0
+    AddCustomWall external, Honeycomb Ceiling, Backing2, %param1%, %param2%, %param3% - 12.033, %param1% - 8, %param2%, %param3%, %param1% - 8, %param2%, %param3% - 12.033, 0, 0
+    SetAutoSize = false, false
+<EndFunction>
+
+<Function hwindow_right_bottom>
+    SetAutoSize = false, false
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, -1, 0
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% - 12, 0, 0
+    AddCustomWall external, Honeycomb Window, MainWindows3Inside, %param1%, %param2% + 12, %param3%, %param1% - 8, %param2%, %param3%, %param1%, %param2%, %param3% + 12, -1, 0
+    SetAutoSize = true, true
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall external, Honeycomb Floor, Backing2, %param1%, %param2%, %param3% + 12.033, %param1% - 8, %param2%, %param3%, %param1% - 8, %param2%, %param3% + 12.033, 0, 0
+    AddCustomWall external, Honeycomb Floor, Backing2, %param1%, %param2%, %param3% - 12.033, %param1% - 8, %param2%, %param3%, %param1% - 8, %param2%, %param3% - 12.033, 0, 0
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall external, Honeycomb Floor, Carpet1, %param1%, %param2%, %param3% + 12.033, %param1% - 8, %param2%, %param3%, %param1% - 8, %param2%, %param3% + 12.033, 0, 0
+    AddCustomWall external, Honeycomb Floor, Carpet1, %param1%, %param2%, %param3% - 12.033, %param1% - 8, %param2%, %param3%, %param1% - 8, %param2%, %param3% - 12.033, 0, 0
+    SetAutoSize = false, false
+<EndFunction>
+
+<Function entrance_column>
+    SetAutoSize = true, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall external, Column 1, Entrance Columns, 0, %param1% - 2, %param2%, %param1%, %param2% - 2, 32, 32, 0, 0, 0, 0
+    AddWall external, Column 3, Entrance Columns, 0, %param1% - 2, %param2%, %param1%, %param2% + 2, 32, 32, 0, 0, 0, 0
+    DrawWalls = false, true, false, false, false, false
+    AddWall external, Column 2, Entrance Columns, 0, %param1%, %param2% - 2, %param1% + 2, %param2%, 32, 32, 0, 0, 0, 0
+    AddWall external, Column 4, Entrance Columns, 0, %param1%, %param2% + 2, %param1% + 2, %param2%, 32, 32, 0, 0, 0, 0
+<EndFunction>
+
+
+#Right Complex
+DrawWalls = true, true, false, false, false, false
+SetAutoSize = true, true
+ResetTextureMapping = true
+AddCustomWall external, Right Complex Ceiling Front 1, Backing2, 85.6, Floor(7).Altitude, -60.3, 85.6, Floor(7).Altitude, -4.3, 100.8, Floor(7).Altitude, -4.3, 100.8, Floor(7).Altitude, -60.3, 0, 0
+AddCustomWall external, Right Complex Ceiling Front 2, Backing2, 100.8, Floor(7).Altitude, -24.2, 134.3, Floor(7).Altitude, -24.2, 134.3, Floor(7).Altitude, -60.3, 100.8, Floor(7).Altitude, -60.3, 0, 0
+AddCustomWall external, Right Complex Ceiling Front 3, Backing2, 134.3, Floor(7).Altitude, -4.3, 150, Floor(7).Altitude, -4.3, 150, Floor(7).Altitude, -60.3, 134.3, Floor(7).Altitude, -60.3, 0, 0
+AddCustomWall external, Right Complex Ceiling Front 4, Backing2, 77.6, Floor(7).Altitude, -7.84, 75.35, Floor(7).Altitude, -4.3, 85.6, Floor(7).Altitude, -4.3, 85.6, Floor(7).Altitude, -14.2, 0, 0
+AddCustomWall external, Right Complex Ceiling Back 1, Backing2, 134.3, Floor(6).Altitude, 70.4, 150, Floor(6).Altitude, 70.4, 150, Floor(6).Altitude, 7.7, 134.3, Floor(6).Altitude, 7.7, 0, 0
+AddCustomWall external, Right Complex Ceiling Back 2, Backing2, 100.8, Floor(6).Altitude, 62.4, 100.8, Floor(6).Altitude, 70.4, 134.3, Floor(6).Altitude, 70.4, 134.3, Floor(6).Altitude, 62.4, 0, 0
+AddCustomWall external, Right Complex Ceiling Back 3, Backing2, 62.2, Floor(6).Altitude, 70.4, 100.8, Floor(6).Altitude, 70.4, 100.8, Floor(6).Altitude, 27.7, 87.05, Floor(6).Altitude, 27.7, 0, 0
+AddCustomWall external, Right Complex Ceiling Back 4, Backing2, 100.8, Floor(6).Altitude, 27.7, 100.8, Floor(6).Altitude, 7.7, 87.05, Floor(6).Altitude, 7.7, 87.05, Floor(6).Altitude, 27.7, 0, 0
+AddCustomWall external, Right Complex Ceiling Back 5, Backing2, 87.05, Floor(6).Altitude, 7.7, 67.5, Floor(6).Altitude, 7.7, 58.08, Floor(6).Altitude, 21.44, 37.28, Floor(6).Altitude, 36.64, 37.92, Floor(6).Altitude, 43.52, 40.64, Floor(6).Altitude, 46.08, 87.05, Floor(6).Altitude, 27.7, 87.05, Floor(6).Altitude, 7.7, 0, 0
+AddCustomWall external, Right Complex Ceiling Back 6, Backing2, 34.24, Floor(6).Altitude, 43.52, 37.92, Floor(6).Altitude, 43.52, 37.28, Floor(6).Altitude, 36.64, 34.24, Floor(6).Altitude, 36.64, 0, 0
+AddCustomWall external, Right Complex Ceiling Top, Backing2, 100.8, Floor(8).Altitude, 39.35, 134.3, Floor(8).Altitude, 39.35, 134.3, Floor(8).Altitude, -11.5, 100.8, Floor(8).Altitude, -11.5, 0, 0
+AddCustomWall external, Right Complex Rear Entrance Ceiling, Backing2, 62.2, Floor(1).Altitude + 12, 70.4, 117.5, Floor(1).Altitude + 12, 101.7, 140.5, Floor(1).Altitude + 12, 46.4, 76.24, Floor(1).Altitude + 12, 46.4, 0, 0
+AddCustomWall external, Right Complex Left Front Side 1, Backing2, 85.6, Floor(3).Altitude, -60.3, 85.6, Floor(7).Altitude, -60.3, 85.6, Floor(3).Altitude, -107.5, 85.6, Floor(2).Altitude, -95, 85.6, Floor(2).Altitude, -73.14, 0, 0
+AddCustomWall external, Right Complex Left Front Side 2, Backing2, 85.6, Floor(3).Altitude, -60.3, 85.6, Floor(7).Altitude, -14.2, 85.6, Floor(7).Altitude, -60.3, 0, 0
+AddCustomWall external, Right Complex Right Front Side 1, Backing2, 150, Floor(7).Altitude, -60.3, 150, Floor(7).Altitude, -4.3, 150, Floor(6).Altitude, 7.7, 150, Floor(6).Altitude, -25.6, 150, Floor(4).Altitude, -49.6, 150, Floor(7).Altitude, -60.3, 0, 0
+AddCustomWall external, Right Complex Right Front Side 2, Backing2, 150, Floor(3).Altitude, -107.5, 150, Floor(4).Altitude, -49.6, 150, Floor(2).Altitude, -25.6, 150, Floor(2).Altitude, -95, 0, 0
+AddCustomWall external, Right Complex Right Front Side 3, Backing2, 150, Floor(3).Altitude, -107.5, 150, Floor(7).Altitude, -60.3, 150, Floor(4).Altitude, -49.6, 0, 0
+AddCustomWall external, Right Complex Top Left Side 1, Backing2, 100.8, Floor(7).Altitude, -24.2, 100.8, Floor(7).Altitude, -4.3, 100.8, Floor(8).Altitude, -4.3, 100.8, Floor(8).Altitude, -11.5, 0, 0
+AddCustomWall external, Right Complex Top Left Side 2, Backing2, 100.8, Floor(6).Altitude, 39.35, 100.8, Floor(8).Altitude, 39.35, 100.8, Floor(8).Altitude, -4.3, 100.8, Floor(7).Altitude, -4.3, 100.8, Floor(6).Altitude, 7.7, 0, 0
+AddCustomWall external, Right Complex Top Left Side 3, Backing2, 100.8, Floor(6).Altitude, 62.4, 100.8, Floor(8).Altitude, 39.35, 100.8, Floor(6).Altitude, 39.35, 0, 0
+AddCustomWall external, Right Complex Top Right Side 1, Backing2, 134.3, Floor(7).Altitude, -24.2, 134.3, Floor(7).Altitude, -4.3, 134.3, Floor(8).Altitude, -4.3, 134.3, Floor(8).Altitude, -11.5, 0, 0
+AddCustomWall external, Right Complex Top Right Side 2, Backing2, 134.3, Floor(6).Altitude, 39.35, 134.3, Floor(8).Altitude, 39.35, 134.3, Floor(8).Altitude, -4.3, 134.3, Floor(7).Altitude, -4.3, 134.3, Floor(6).Altitude, 7.7, 0, 0
+AddCustomWall external, Right Complex Top Right Side 3, Backing2, 134.3, Floor(6).Altitude, 62.4, 134.3, Floor(8).Altitude, 39.35, 134.3, Floor(6).Altitude, 39.35, 0, 0
+AddCustomWall external, Right Complex Atrium Drop, Backing2, 77.6, Floor(7).Altitude, -7.84, 85.6, Floor(7).Altitude, -14.2, 85.6, Floor(6).Altitude, -14.2, 77.6, Floor(6).Altitude, -7.84, 0, 0
+DrawWalls = true, false, false, false, false, false
+#AddCustomWall external, Right Complex Filler Front, Backing2, 85.6, Floor(2).Altitude, -73.14, 150, Floor(2).Altitude, -73.14, 150, Floor(2).Altitude, -95, 85.6, Floor(2).Altitude, -95, 0, 0
+#AddCustomWall external, Right Complex Filler Right, Backing2, 140.5, Floor(2).Altitude, -73.14, 140.5, Floor(2).Altitude, 62.4, 150, Floor(2).Altitude, 62.4, 150, Floor(2).Altitude, -73.14, 0, 0
+#AddCustomWall external, Right Complex Filler Back, Backing2, 150, Floor(2).Altitude, 62.4, 67.5, Floor(2).Altitude, 62.4, 62.2, Floor(2).Altitude, 70.4, 150, Floor(2).Altitude, 70.4, 0, 0
+SetAutoSize = false, false
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Main Drop Left, MainWindows2double, 75.35, Floor(7).Altitude, -4.3, 67.5, Floor(6).Altitude, 7.7, 100.8, Floor(6).Altitude, 7.7, 100.8, Floor(7).Altitude, -4.3, 4, 0
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Main Drop Left, MainWindowsInsideDouble, 75.35, Floor(7).Altitude, -4.3, 67.5, Floor(6).Altitude, 7.7, 100.8, Floor(6).Altitude, 7.7, 100.8, Floor(7).Altitude, -4.3, 4, 0
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Main Drop Right, MainWindows2double, 134.3, Floor(7).Altitude, -4.3, 150, Floor(7).Altitude, -4.3, 150, Floor(6).Altitude, 7.7, 134.3, Floor(6).Altitude, 7.7, 2, 0
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Main Drop Right, MainWindowsInsideDouble, 134.3, Floor(7).Altitude, -4.3, 150, Floor(7).Altitude, -4.3, 150, Floor(6).Altitude, 7.7, 134.3, Floor(6).Altitude, 7.7, 2, 0
+
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Top Windows Front, MainWindows2double, 100.8, Floor(8).Altitude, -11.5, 134.3, Floor(8).Altitude, -11.5, 134.3, Floor(7).Altitude, -24.2, 100.8, Floor(7).Altitude, -24.2, 4, 0
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Top Windows Front, MainWindowsInsideDouble, 100.8, Floor(8).Altitude, -11.5, 134.3, Floor(8).Altitude, -11.5, 134.3, Floor(7).Altitude, -24.2, 100.8, Floor(7).Altitude, -24.2, 4, 0
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Top Windows Back, MainWindows2double, 100.8, Floor(6).Altitude, 62.4, 134.3, Floor(6).Altitude, 62.4, 134.3, Floor(8).Altitude, 39.35, 100.8, Floor(8).Altitude, 39.35, 4, 2
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Top Windows Back, MainWindowsInsideDouble, 100.8, Floor(6).Altitude, 62.4, 134.3, Floor(6).Altitude, 62.4, 134.3, Floor(8).Altitude, 39.35, 100.8, Floor(8).Altitude, 39.35, 4, 2
+
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Windows Front, MainWindows2double, 85.6, Floor(7).Altitude, -60.3, 150, Floor(7).Altitude, -60.3, 150, Floor(3).Altitude, -107.5, 85.6, Floor(3).Altitude, -107.5, 8, 4
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Windows Front, MainWindowsInsideDouble, 85.6, Floor(7).Altitude, -60.3, 150, Floor(7).Altitude, -60.3, 150, Floor(3).Altitude, -107.5, 85.6, Floor(3).Altitude, -107.5, 8, 4
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Windows Front Under, MainWindows2double, 85.6, Floor(2).Altitude, -95, 150, Floor(2).Altitude, -95, 150, Floor(3).Altitude, -107.5, 85.6, Floor(3).Altitude, -107.5, 8, 1
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Windows Front Under, MainWindowsInsideDouble, 85.6, Floor(2).Altitude, -95, 150, Floor(2).Altitude, -95, 150, Floor(3).Altitude, -107.5, 85.6, Floor(3).Altitude, -107.5, 8, 1
+
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Windows Front Side, MainWindows2double, 150, Floor(6).Altitude, -25.6, 158, Floor(6).Altitude, -25.6, 158, Floor(4).Altitude, -49.6, 150, Floor(4).Altitude, -49.6, 1, 2
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Windows Front Side, MainWindowsInsideDouble, 150, Floor(6).Altitude, -25.6, 158, Floor(6).Altitude, -25.6, 158, Floor(4).Altitude, -49.6, 150, Floor(4).Altitude, -49.6, 1, 2
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Windows Front Side Under, MainWindows2double, 150, Floor(2).Altitude, -25.6, 158, Floor(2).Altitude, -25.6, 158, Floor(4).Altitude, -49.6, 150, Floor(4).Altitude, -49.6, 1, 2
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Windows Front Side Under, MainWindowsInsideDouble, 150, Floor(2).Altitude, -25.6, 158, Floor(2).Altitude, -25.6, 158, Floor(4).Altitude, -49.6, 150, Floor(4).Altitude, -49.6, 1, 2
+
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Windows Back, MainWindows2double, 49.6, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 150, Floor(6).Altitude, 70.4, 62.2, Floor(6).Altitude, 70.4, 14, 2
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Windows Back, MainWindowsInsideDouble, 49.6, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 150, Floor(6).Altitude, 70.4, 62.2, Floor(6).Altitude, 70.4, 14, 2
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Windows Back Under, MainWindows2double, 49.6, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 150, Floor(2).Altitude, 70.4, 62.2, Floor(2).Altitude, 70.4, 14, 2
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Windows Back Under, MainWindowsInsideDouble, 49.6, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 150, Floor(2).Altitude, 70.4, 62.2, Floor(2).Altitude, 70.4, 14, 2
+
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Windows Back Side, MainWindows2double, 150, Floor(6).Altitude, 70.4, 158, Floor(6).Altitude, 70.4, 158, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 1, 2
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Windows Back Side, MainWindowsInsideDouble, 150, Floor(6).Altitude, 70.4, 158, Floor(6).Altitude, 70.4, 158, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 1, 2
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Windows Back Side Under, MainWindows2double, 150, Floor(2).Altitude, 70.4, 158, Floor(2).Altitude, 70.4, 158, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 1, 2
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Windows Back Side Under, MainWindowsInsideDouble, 150, Floor(2).Altitude, 70.4, 158, Floor(2).Altitude, 70.4, 158, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 1, 2
+
+<Floor 0>
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right Complex Rear Entrance 1, MainWindows2, 0, 62.2, 70.4, 117.5, 101.7, %fullheight% + 12, %fullheight% + 12, 0, 0, 8, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right Complex Rear Entrance 1, MainWindowsInside, 0, 62.2, 70.4, 117.5, 101.7, %fullheight% + 12, %fullheight% + 12, 0, 0, 8, 0, true
+
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right Complex Rear Entrance 2, MainWindows2, 0, 117.5, 101.7, 140.5, 46.4, %fullheight% + 12, %fullheight% + 12, 0, 0, 5, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right Complex Rear Entrance 2, MainWindowsInside, 0, 117.5, 101.7, 140.5, 46.4, %fullheight% + 12, %fullheight% + 12, 0, 0, 5, 0, true
+
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right Complex Right Entrance, MainWindows2, 0, 140.5, 46.4, 140.5, -73.14, %fullheight% + 12, %fullheight% + 12, 0, 0, 6, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right Complex Right Entrance, MainWindowsInside, 0, 140.5, 46.4, 140.5, -73.14, %fullheight% + 12, %fullheight% + 12, 0, 0, 6, 0, true
+
+    DrawWalls = true, false, false, false, false, false
+    #AddWall Right Complex Front Entrance, MainWindows2, 0, 85.6, -73.14, 140.5, -73.14, %fullheight% + 12, %fullheight% + 12, 0, 0, 3.3, 0, true
+    AddWall Right Complex Front Entrance, MainWindows2, 0, 85.6, -73.14, 108.06, -73.14, %fullheight% + 12, %fullheight% + 12, 0, 0, 1, 0, true
+    AddWall Right Complex Front Entrance, MainWindows2, 0, 127.53, -73.14, 140.5, -73.14, %fullheight% + 12, %fullheight% + 12, 0, 0, 1, 0, true
+    DrawWalls = false, true, false, false, false, false
+    #AddWall Right Complex Front Entrance, MainWindowsInside, 0, 85.6, -73.14, 140.5, -73.14, %fullheight% + 12, %fullheight% + 12, 0, 0, 3.3, 0, true
+    AddWall Right Complex Front Entrance, MainWindowsInside, 0, 85.6, -73.14, 108.06, -73.14, %fullheight% + 12, %fullheight% + 12, 0, 0, 1, 0, true
+    AddWall Right Complex Front Entrance, MainWindowsInside, 0, 127.53, -73.14, 140.5, -73.14, %fullheight% + 12, %fullheight% + 12, 0, 0, 1, 0, true
+
+    #temp doorway
+    #CutAll 117.8 - 3, 0, -72, 117.8 + 3, 8, -75, true, false
+    
+    DrawWalls = true, true, false, false, false, false
+    AddWall Right Complex Rear Entrance Top, MainWindowsInside, 0, 76.24, 46.4, 140.5, 46.4, %fullheight% + 12, %fullheight% + 12, 0, 0, 6, 0, true
+
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
+    AddWall Right Complex Rear Entrance Top 2, Backing2, 0, 62.2, 70.4, 76.24, 46.4, %fullheight% + 20, %fullheight% + 20, 0, 0, 0, 0, true
+    SetAutoSize = false, false
+<EndFloor>
+
+<Floor 1>
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right Complex Rear Entrance Top, MainWindows2, 0, 76.24, 46.4, 140.5, 46.4, 8, 8, 12, 12, 6, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right Complex Rear Entrance Top, MainWindowsInside, 0, 76.24, 46.4, 140.5, 46.4, 8, 8, 12, 12, 6, 0, true
+
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right Complex Right Entrance, MainWindows2, 0, 140.5, 46.4, 140.5, -73.14, 8, 8, 12, 12, 6, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right Complex Right Entrance, MainWindowsInside, 0, 140.5, 46.4, 140.5, -73.14, 8, 8, 12, 12, 6, 0, true
+
+    DrawWalls = true, false, false, false, false, false
+    AddWall Right Complex Front Entrance, MainWindows2, 0, 85.6, -73.14, 140.5, -73.14, 8, 8, 12, 12, 3.3, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Right Complex Front Entrance, MainWindowsInside, 0, 85.6, -73.14, 140.5, -73.14, 8, 8, 12, 12, 3.3, 0, true
+<EndFloor>
+
+SetAutoSize = true, true
+<Floor 2>
+    #Floors/ceilings
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall floor, Right Complex Floor, Carpet1, 85.6, Floor(%floor%).Altitude, -95, 85.6, Floor(%floor%).Altitude, 70.4, 150, Floor(%floor%).Altitude, 70.4, 150, Floor(%floor%).Altitude, -95, 0, 0
+    AddCustomWall floor, Right Complex Floor Back, Carpet1, 62.2, Floor(%floor%).Altitude, 70.4, 87.05, Floor(%floor%).Altitude, 70.4, 87.05, Floor(%floor%).Altitude, 27.7, 0, 0
+    AddCustomWall floor, Right Complex Floor Left, Carpet1, 40.64, Floor(%floor%).Altitude, 46.08, 87.05, Floor(%floor%).Altitude, 27.7, 85.6, Floor(%floor%).Altitude, -14.2, 77.6, Floor(%floor%).Altitude, -7.84, 58.08, Floor(%floor%).Altitude, 21.44, 37.28, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 43.52, 37.92, Floor(%floor%).Altitude, 43.52, 40.64, Floor(%floor%).Altitude, 46.08, 0, 0
+
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall floor, Right Complex Ceiling, Backing2, 85.6, Floor(%floor%).Altitude, -95, 85.6, Floor(%floor%).Altitude, 70.4, 150, Floor(%floor%).Altitude, 70.4, 150, Floor(%floor%).Altitude, -95, 0, 0
+    AddCustomWall floor, Right Complex Ceiling Back, Backing2, 62.2, Floor(%floor%).Altitude, 70.4, 87.05, Floor(%floor%).Altitude, 70.4, 87.05, Floor(%floor%).Altitude, 27.7, 0, 0
+    AddCustomWall floor, Right Complex Ceiling Left, Backing2, 40.64, Floor(%floor%).Altitude, 46.08, 87.05, Floor(%floor%).Altitude, 27.7, 85.6, Floor(%floor%).Altitude, -14.2, 77.6, Floor(%floor%).Altitude, -7.84, 58.08, Floor(%floor%).Altitude, 21.44, 37.28, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 43.52, 37.92, Floor(%floor%).Altitude, 43.52, 40.64, Floor(%floor%).Altitude, 46.08, 0, 0
+<EndFloor>
+
+<Floor 3>
+    #Floors/ceilings
+    DrawWalls = true, true, false, false, false, false
+    AddCustomWall floor, Right Complex Floor, Carpet1, 85.6, Floor(%floor%).Altitude, -107.5, 85.6, Floor(%floor%).Altitude, 82.4, 150, Floor(%floor%).Altitude, 82.4, 150, Floor(%floor%).Altitude, -107.5, 0, 0
+    AddCustomWall floor, Right Complex Floor, Carpet1, 150, Floor(%floor%).Altitude, 82.4, 158, Floor(%floor%).Altitude, 82.4, 158, Floor(%floor%).Altitude, -37.6, 150, Floor(%floor%).Altitude, -37.6, 0, 0
+    AddCustomWall floor, Right Complex Floor Back, Carpet1, 55.8, Floor(%floor%).Altitude, 82.4, 87.05, Floor(%floor%).Altitude, 82.4, 87.05, Floor(%floor%).Altitude, 27.7, 0, 0
+    AddCustomWall floor, Right Complex Floor Left, Carpet1, 40.64, Floor(%floor%).Altitude, 46.08, 87.05, Floor(%floor%).Altitude, 27.7, 85.6, Floor(%floor%).Altitude, -14.2, 77.6, Floor(%floor%).Altitude, -7.84, 58.08, Floor(%floor%).Altitude, 21.44, 37.28, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 43.52, 37.92, Floor(%floor%).Altitude, 43.52, 40.64, Floor(%floor%).Altitude, 46.08, 0, 0
+<EndFloor>
+
+<Floor 4>
+    #Floors/ceilings
+    DrawWalls = true, true, false, false, false, false
+    AddCustomWall floor, Right Complex Floor, Carpet1, 85.6, Floor(%floor%).Altitude, -95, 85.6, Floor(%floor%).Altitude, 94.4, 150, Floor(%floor%).Altitude, 94.4, 150, Floor(%floor%).Altitude, -95, 0, 0
+    AddCustomWall floor, Right Complex Floor, Carpet1, 150, Floor(%floor%).Altitude, 94.4, 158, Floor(%floor%).Altitude, 94.4, 158, Floor(%floor%).Altitude, -49.6, 150, Floor(%floor%).Altitude, -49.6, 0, 0
+    AddCustomWall floor, Right Complex Floor Back, Carpet1, 49.6, Floor(%floor%).Altitude, 94.4, 87.05, Floor(%floor%).Altitude, 94.4, 87.05, Floor(%floor%).Altitude, 27.7, 0, 0
+    AddCustomWall floor, Right Complex Floor Left, Carpet1, 40.64, Floor(%floor%).Altitude, 46.08, 87.05, Floor(%floor%).Altitude, 27.7, 85.6, Floor(%floor%).Altitude, -14.2, 77.6, Floor(%floor%).Altitude, -7.84, 58.08, Floor(%floor%).Altitude, 21.44, 37.28, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 43.52, 37.92, Floor(%floor%).Altitude, 43.52, 40.64, Floor(%floor%).Altitude, 46.08, 0, 0
+<EndFloor>
+
+<Floor 5>
+    #Floors/ceilings
+    DrawWalls = true, true, false, false, false, false
+    AddCustomWall floor, Right Complex Floor, Carpet1, 85.6, Floor(%floor%).Altitude, -83.9, 85.6, Floor(%floor%).Altitude, 82.4, 150, Floor(%floor%).Altitude, 82.4, 150, Floor(%floor%).Altitude, -83.9, 0, 0
+    AddCustomWall floor, Right Complex Floor, Carpet1, 150, Floor(%floor%).Altitude, 82.4, 158, Floor(%floor%).Altitude, 82.4, 158, Floor(%floor%).Altitude, -37.6, 150, Floor(%floor%).Altitude, -37.6, 0, 0
+    AddCustomWall floor, Right Complex Floor Back, Carpet1, 55.8, Floor(%floor%).Altitude, 82.4, 87.05, Floor(%floor%).Altitude, 82.4, 87.05, Floor(%floor%).Altitude, 27.7, 0, 0
+    AddCustomWall floor, Right Complex Floor Left, Carpet1, 40.64, Floor(%floor%).Altitude, 46.08, 87.05, Floor(%floor%).Altitude, 27.7, 85.6, Floor(%floor%).Altitude, -14.2, 77.6, Floor(%floor%).Altitude, -7.84, 58.08, Floor(%floor%).Altitude, 21.44, 37.28, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 36.64, 34.24, Floor(%floor%).Altitude, 43.52, 37.92, Floor(%floor%).Altitude, 43.52, 40.64, Floor(%floor%).Altitude, 46.08, 0, 0
+<EndFloor>
+
+<Floor 6>
+    #Floors/ceilings
+    DrawWalls = true, true, false, false, false, false
+    AddCustomWall floor, Right Complex Floor 1, Carpet1, 85.6, Floor(%floor%).Altitude, -72.09, 85.6, Floor(%floor%).Altitude, 7.7, 150, Floor(%floor%).Altitude, 7.7, 150, Floor(%floor%).Altitude, -72.09, 0, 0
+    AddCustomWall floor, Right Complex Floor 2, Carpet1, 100.8, Floor(%floor%).Altitude, 7.7, 100.8, Floor(%floor%).Altitude, 62.4, 134.3, Floor(%floor%).Altitude, 62.4, 134.3, Floor(%floor%).Altitude, 7.7, 0, 0
+    AddCustomWall floor, Right Complex Floor Left, Carpet1, 67.5, Floor(%floor%).Altitude, 7.7, 85.6, Floor(%floor%).Altitude, 7.7, 85.6, Floor(%floor%).Altitude, -14.2, 77.6, Floor(%floor%).Altitude, -7.84, 67.5, Floor(%floor%).Altitude, 7.7, 0, 0
+<EndFloor>
+
+<Floor 7>
+    #Floors/ceilings
+    #DrawWalls = true, true, false, false, false, false
+    #AddCustomWall floor, Right Complex Floor, Carpet1, 100.8, Floor(%floor%).Altitude, 50.87, 134.3, Floor(%floor%).Altitude, 50.87, 134.3, Floor(%floor%).Altitude, -24.2, 100.8, Floor(%floor%).Altitude, -24.2, 0, 0
+<EndFloor>
+
+SetAutoSize = false, false
+hwindow_right(158, Floor(5).Altitude, 94.4 - 24)
+hwindow_right(158, Floor(5).Altitude, 94.4 - 48)
+hwindow_right(158, Floor(5).Altitude, 94.4 - 72)
+hwindow_right(158, Floor(5).Altitude, 94.4 - 96)
+hwindow_right(158, Floor(5).Altitude, 94.4 - 120)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 12)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 36)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 60)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 84)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 108)
+hwindow_right(158, Floor(4).Altitude, 94.4 - 132)
+hwindow_right(158, Floor(3).Altitude, 94.4 - 24)
+hwindow_right(158, Floor(3).Altitude, 94.4 - 48)
+hwindow_right(158, Floor(3).Altitude, 94.4 - 72)
+hwindow_right(158, Floor(3).Altitude, 94.4 - 96)
+hwindow_right(158, Floor(3).Altitude, 94.4 - 120)
+hwindow_right_top(158, Floor(6).Altitude, 94.4 - 36)
+hwindow_right_top(158, Floor(6).Altitude, 94.4 - 60)
+hwindow_right_top(158, Floor(6).Altitude, 94.4 - 84)
+hwindow_right_top(158, Floor(6).Altitude, 94.4 - 108)
+hwindow_right_bottom(158, Floor(2).Altitude, 94.4 - 36)
+hwindow_right_bottom(158, Floor(2).Altitude, 94.4 - 60)
+hwindow_right_bottom(158, Floor(2).Altitude, 94.4 - 84)
+hwindow_right_bottom(158, Floor(2).Altitude, 94.4 - 108)
+
+#side columns
+entrance_column(150 - 2, 94.4 - 36)
+entrance_column(150 - 2, 94.4 - 60)
+entrance_column(150 - 2, 94.4 - 84)
+entrance_column(150 - 2, 94.4 - 108)
+entrance_column(150 - 2, 94.4 - 132)
+entrance_column(150 - 2, 94.4 - 156)
+entrance_column(150 - 2, 94.4 - 180)
+
+#front columns
+entrance_column(150 - 21.467 - 1, 94.4 - 180)
+entrance_column(150 - 42.934 + 1, 94.4 - 180)
+entrance_column(150 - 64.401 + 2, 94.4 - 180)
+
+#back columns
+entrance_column(150 - 21.467 - 1, 94.4 - 36)
+entrance_column(150 - 42.934, 94.4 - 36)
+entrance_column(150 - 64.401 + 1, 94.4 - 36)
+
+
+#Left Complex
+SetAutoSize = true, true
+DrawWalls = true, true, false, false, false, false
+AddCustomWall external, Left Complex Interior Ceiling, Backing2, -119.7, Floor(6).Altitude, -1.1, -112.95, Floor(6).Altitude, -11.7, -85.25, Floor(6).Altitude, 11.35, -82.85, Floor(6).Altitude, 8.8, -84.32, Floor(6).Altitude, 7.84, -79.2, Floor(6).Altitude, -15.2, -76.8, Floor(6).Altitude, -16.6, -79.36, Floor(6).Altitude, -21.92, -83.04, Floor(6).Altitude, -20.64, -100.64, Floor(6).Altitude, -46.24, -99.4, Floor(6).Altitude, -46.24, -98.44, Floor(6).Altitude, -48.4, -119.7, Floor(6).Altitude, -48.4, 0, 0
+AddCustomWall external, Left Complex Rear Entrance Ceiling, Backing2, -142.95, Floor(1).Altitude + 12, 23.6, -166.3, Floor(1).Altitude + 12, 59.6, -136.8, Floor(1).Altitude + 12, 77.3, -119.7, Floor(1).Altitude + 12, 47.2, -119.7, Floor(1).Altitude + 12, 23.6, 0, 0
+AddCustomWall external, Left Complex Rear Entrance Ceiling 2, Backing2, -142.95, Floor(1).Altitude + 12, 11.6, -142.95, Floor(1).Altitude + 12, 23.6, -119.7, Floor(1).Altitude + 12, 23.6, -119.7, Floor(1).Altitude + 12, 11.6, 0, 0
+AddCustomWall external, Left Complex Ceiling, Backing2, -158.3, Floor(7).Altitude, 23.6, -119.7, Floor(7).Altitude, 23.6, -119.7, Floor(7).Altitude, -48.4, -158.3, Floor(7).Altitude, -48.4, 0, 0
+AddCustomWall external, Left Complex Interior Side, Backing2, -119.7, Floor(6).Altitude, -48.4, -119.7, Floor(7).Altitude, -48.4, -119.7, Floor(7).Altitude, -1.1, -119.7, Floor(6).Altitude, -1.1, 0, 0
+AddCustomWall external, Left Complex Rear Side, Backing2, -119.7, Floor(7).Altitude, -1.1, -119.7, Floor(7).Altitude, 23.6, -119.7, Floor(4).Altitude, 59.6, -119.7, Floor(2).Altitude, 35.6, -119.7, Floor(6).Altitude, -1.1, 0, 0
+SetAutoSize = false, false
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Left Complex Windows Front, MainWindows2double, -166.3, Floor(7).Altitude, -48.4, -119.7, Floor(7).Altitude, -48.4, -119.7, Floor(4).Altitude, -84.4, -166.3, Floor(4).Altitude, -84.4, 6, 3
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Left Complex Windows Front, MainWindowsInsideDouble, -166.3, Floor(7).Altitude, -48.4, -119.7, Floor(7).Altitude, -48.4, -119.7, Floor(4).Altitude, -84.4, -166.3, Floor(4).Altitude, -84.4, 6, 3
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Left Complex Windows Front Under, MainWindows2double, -166.3, Floor(2).Altitude, -60.4, -119.7, Floor(2).Altitude, -60.4, -119.7, Floor(4).Altitude, -84.4, -166.3, Floor(4).Altitude, -84.4, 6, 2
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Left Complex Windows Front Under, MainWindowsInsideDouble, -166.3, Floor(2).Altitude, -60.4, -119.7, Floor(2).Altitude, -60.4, -119.7, Floor(4).Altitude, -84.4, -166.3, Floor(4).Altitude, -84.4, 6, 2
+
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Left Complex Windows Back, MainWindows2double, -166.3, Floor(4).Altitude, 59.6, -119.7, Floor(4).Altitude, 59.6, -119.7, Floor(7).Altitude, 23.6, -166.3, Floor(7).Altitude, 23.6, 6, 3
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Left Complex Windows Back, MainWindowsInsideDouble, -166.3, Floor(4).Altitude, 59.6, -119.7, Floor(4).Altitude, 59.6, -119.7, Floor(7).Altitude, 23.6, -166.3, Floor(7).Altitude, 23.6, 6, 3
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Left Complex Windows Back Under, MainWindows2double, -166.3, Floor(4).Altitude, 59.6, -119.7, Floor(4).Altitude, 59.6, -119.7, Floor(2).Altitude, 35.6, -166.3, Floor(2).Altitude, 35.6, 6, 2
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Left Complex Windows Back Under, MainWindowsInsideDouble, -166.3, Floor(4).Altitude, 59.6, -119.7, Floor(4).Altitude, 59.6, -119.7, Floor(2).Altitude, 35.6, -166.3, Floor(2).Altitude, 35.6, 6, 2
+
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Left Complex Windows Back Right Filler, MainWindows2, -119.7, Floor(1).Altitude + 12, 47.2, -119.7, Floor(2).Altitude, 47.2, -119.7, Floor(2).Altitude, 11.6, -119.7, Floor(1).Altitude + 12, 11.6, 3, 1
+DrawWalls = true, true, false, false, false, false
+AddCustomWall external, Left Complex Windows Back Right Filler, MainWindowsInside, -119.7, Floor(0).Altitude, 47.2, -119.7, Floor(1).Altitude + 12, 47.2, -119.7, Floor(1).Altitude + 12, 11.6, -119.7, Floor(0).Altitude, 11.6, 3, 1
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Left Complex Windows Back Right Filler, MainWindowsInside, -119.7, Floor(1).Altitude + 12, 47.2, -119.7, Floor(2).Altitude, 47.2, -119.7, Floor(2).Altitude, 11.6, -119.7, Floor(1).Altitude + 12, 11.6, 3, 1
+
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Left Complex Windows Back Right Filler Top, MainWindows2, -119.7, Floor(2).Altitude, 47.2, -119.7, Floor(2).Altitude + 6.51, 41.38, -119.7, Floor(2).Altitude, 35.6, 0.66, 0
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Left Complex Windows Back Right Filler Top, MainWindowsInside, -119.7, Floor(2).Altitude, 47.2, -119.7, Floor(2).Altitude + 6.51, 41.38, -119.7, Floor(2).Altitude, 35.6, 0.66, 0
+
+<Floor 0>
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left Complex Rear Entrance 1, MainWindows2, 0, -166.3, 59.6, -136.8, 77.3, %fullheight% + 12, %fullheight% + 12, 0, 0, 3, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Left Complex Rear Entrance 1, MainWindowsInside, 0, -166.3, 59.6, -136.8, 77.3, %fullheight% + 12, %fullheight% + 12, 0, 0, 3, 0, true
+    
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left Complex Rear Entrance 2, MainWindows2, 0, -136.8, 77.3, -119.7, 47.2, %fullheight% + 12, %fullheight% + 12, 0, 0, 3, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Left Complex Rear Entrance 2, MainWindowsInside, 0, -136.8, 77.3, -119.7, 47.2, %fullheight% + 12, %fullheight% + 12, 0, 0, 3, 0, true
+
+    DrawWalls = true, false, false, false, false, false
+    AddWall Left Complex Left Entrance Back, MainWindows2, 0, -166.3, 59.6, -142.95, 23.6, %fullheight% + 12, %fullheight% + 12, 0, 0, 3, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left Complex Left Entrance Back, MainWindowsInside, 0, -166.3, 59.6, -142.95, 23.6, %fullheight% + 12, %fullheight% + 12, 0, 0, 3, 0, true
+
+    DrawWalls = true, false, false, false, false, false
+    AddWall Left Complex Left Entrance Center, MainWindows2, 0, -142.95, 11.6, -142.95, -36.4, %fullheight% + 12, %fullheight% + 12, 0, 0, 3, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left Complex Left Entrance Center, MainWindowsInside, 0, -142.95, 11.6, -142.95, -36.4, %fullheight% + 12, %fullheight% + 12, 0, 0, 3, 0, true
+
+    DrawWalls = true, false, false, false, false, false
+    AddWall Left Complex Left Entrance Center 2, MainWindows2, 0, -142.95, 23.6, -142.95, 11.6, %fullheight% + 12, %fullheight% + 12, 0, 0, 1, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left Complex Left Entrance Center 2, MainWindowsInside, 0, -142.95, 23.6, -142.95, 11.6, %fullheight% + 12, %fullheight% + 12, 0, 0, 1, 0, true
+
+    DrawWalls = true, true, false, false, false, false
+    AddWall Left Complex Left Entrance Back 2, MainWindowsInside, 0, -142.95, 11.6, -119.7, 11.6, %fullheight% + 12, %fullheight% + 12, 0, 0, 3, 0, true
+<EndFloor>
+<Floor 1>
+    DrawWalls = true, false, false, false, false, false
+    AddWall Left Complex Left Entrance Center, MainWindows2, 0, -142.95, 11.6, -142.95, -36.4, 8, 8, 12, 12, 3, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left Complex Left Entrance Center, MainWindowsInside, 0, -142.95, 11.6, -142.95, -36.4, 8, 8, 12, 12, 3, 0, true
+
+    DrawWalls = false, true, false, false, false, false
+    AddWall Left Complex Left Entrance Back, MainWindows2, 0, -142.95, 11.6, -119.7, 11.6, 8, 8, 12, 12, 3, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Left Complex Left Entrance Back, MainWindowsInside, 0, -142.95, 11.6, -119.7, 11.6, 8, 8, 12, 12, 3, 0, true
+<EndFloor>
+
+SetAutoSize = true, true
+<Floor 2>
+    #Floors/ceilings
+    DrawWalls = true, false, false, false, false, false
+    AddCustomWall floor, Left Complex Floor, Carpet1, -158.3, Floor(%floor%).Altitude, 35.6, -119.7, Floor(%floor%).Altitude, 35.6, -119.7, Floor(%floor%).Altitude, -1.1, -112.95, Floor(%floor%).Altitude, -11.7, -158.3, Floor(%floor%).Altitude, -11.7, -158.3, Floor(%floor%).Altitude, 35.6, 0, 0
+    AddCustomWall floor, Left Complex Floor 2, Carpet1, -158.3, Floor(%floor%).Altitude, -11.7, -112.95, Floor(%floor%).Altitude, -11.7, -112.95, Floor(%floor%).Altitude, -48.4, -158.3, Floor(%floor%).Altitude, -48.4, -158.3, Floor(%floor%).Altitude, -11.7, 0, 0
+    AddCustomWall floor, Left Complex Floor 3, Carpet1, -112.95, Floor(%floor%).Altitude, -11.7, -84.32, Floor(%floor%).Altitude, 7.84, -79.2, Floor(%floor%).Altitude, -15.2, -76.8, Floor(%floor%).Altitude, -16.16, -79.36, Floor(%floor%).Altitude, -21.92, -83.04, Floor(%floor%).Altitude, -20.64, -100.64, Floor(%floor%).Altitude, -46.24, -112.95, Floor(%floor%).Altitude, -48.4, -112.95, Floor(%floor%).Altitude, -11.7, 0, 0
+    AddCustomWall floor, Left Complex Floor 4, Carpet1, -158.3, Floor(%floor%).Altitude, -48.4, -119.7, Floor(%floor%).Altitude, -48.4, -119.7, Floor(%floor%).Altitude, -60.4, -166.3, Floor(%floor%).Altitude, -60.4, 0, 0
+
+    DrawWalls = false, true, false, false, false, false
+    AddCustomWall floor, Left Complex Ceiling, Backing2, -158.3, Floor(%floor%).Altitude, 35.6, -119.7, Floor(%floor%).Altitude, 35.6, -119.7, Floor(%floor%).Altitude, -1.1, -112.95, Floor(%floor%).Altitude, -11.7, -158.3, Floor(%floor%).Altitude, -11.7, -158.3, Floor(%floor%).Altitude, 35.6, 0, 0
+    AddCustomWall floor, Left Complex Ceiling 2, Backing2, -158.3, Floor(%floor%).Altitude, -11.7, -112.95, Floor(%floor%).Altitude, -11.7, -112.95, Floor(%floor%).Altitude, -48.4, -158.3, Floor(%floor%).Altitude, -48.4, -158.3, Floor(%floor%).Altitude, -11.7, 0, 0
+    AddCustomWall floor, Left Complex Ceiling 3, Backing2, -112.95, Floor(%floor%).Altitude, -11.7, -84.32, Floor(%floor%).Altitude, 7.84, -79.2, Floor(%floor%).Altitude, -15.2, -76.8, Floor(%floor%).Altitude, -16.16, -79.36, Floor(%floor%).Altitude, -21.92, -83.04, Floor(%floor%).Altitude, -20.64, -100.64, Floor(%floor%).Altitude, -46.24, -112.95, Floor(%floor%).Altitude, -48.4, -112.95, Floor(%floor%).Altitude, -11.7, 0, 0
+    AddCustomWall floor, Left Complex Ceiling 4, Backing2, -158.3, Floor(%floor%).Altitude, -48.4, -119.7, Floor(%floor%).Altitude, -48.4, -119.7, Floor(%floor%).Altitude, -60.4, -158.3, Floor(%floor%).Altitude, -60.4, 0, 0
+<EndFloor>
+
+<Floors 3 to 5>
+    #Floors/ceilings
+    DrawWalls = true, true, false, false, false, false
+    if[%floor% = 3 | %floor% = 5] AddCustomWall floor, Left Complex Floor, Carpet1, -166.3, Floor(%floor%).Altitude, 47.2, -119.7, Floor(%floor%).Altitude, 47.2, -119.7, Floor(%floor%).Altitude, -1.1, -112.95, Floor(%floor%).Altitude, -11.7, -166.3, Floor(%floor%).Altitude, -11.7, -166.3, Floor(%floor%).Altitude, 47.2, 0, 0
+    if[%floor% = 3 | %floor% = 5] AddCustomWall floor, Left Complex Floor 2, Carpet1, -166.3, Floor(%floor%).Altitude, -11.7, -112.95, Floor(%floor%).Altitude, -11.7, -112.95, Floor(%floor%).Altitude, -48.4, -166.3, Floor(%floor%).Altitude, -48.4, -166.3, Floor(%floor%).Altitude, -11.7, 0, 0
+    if[%floor% = 3 | %floor% = 5] AddCustomWall floor, Left Complex Floor 3, Carpet1, -112.95, Floor(%floor%).Altitude, -11.7, -84.32, Floor(%floor%).Altitude, 7.84, -79.2, Floor(%floor%).Altitude, -15.2, -76.8, Floor(%floor%).Altitude, -16.16, -79.36, Floor(%floor%).Altitude, -21.92, -83.04, Floor(%floor%).Altitude, -20.64, -100.64, Floor(%floor%).Altitude, -46.24, -112.95, Floor(%floor%).Altitude, -48.4, -112.95, Floor(%floor%).Altitude, -11.7, 0, 0
+    if[%floor% = 3 | %floor% = 5] AddCustomWall floor, Left Complex Floor 4, Carpet1, -166.3, Floor(%floor%).Altitude, -48.4, -119.7, Floor(%floor%).Altitude, -48.4, -119.7, Floor(%floor%).Altitude, -72.93, -166.3, Floor(%floor%).Altitude, -72.93, 0, 0
+<EndFloors>
+
+<Floor 4>
+    #Floors/ceilings
+    DrawWalls = true, true, false, false, false, false
+    AddCustomWall floor, Left Complex Floor, Carpet1, -166.3, Floor(%floor%).Altitude, 59.6, -119.7, Floor(%floor%).Altitude, 59.6, -119.7, Floor(%floor%).Altitude, -1.1, -112.95, Floor(%floor%).Altitude, -11.7, -166.3, Floor(%floor%).Altitude, -11.7, -166.3, Floor(%floor%).Altitude, 59.6, 0, 0
+    AddCustomWall floor, Left Complex Floor 2, Carpet1, -166.3, Floor(%floor%).Altitude, -11.7, -112.95, Floor(%floor%).Altitude, -11.7, -112.95, Floor(%floor%).Altitude, -48.4, -166.3, Floor(%floor%).Altitude, -48.4, -166.3, Floor(%floor%).Altitude, -11.7, 0, 0
+    AddCustomWall floor, Left Complex Floor 3, Carpet1, -112.95, Floor(%floor%).Altitude, -11.7, -84.32, Floor(%floor%).Altitude, 7.84, -79.2, Floor(%floor%).Altitude, -15.2, -76.8, Floor(%floor%).Altitude, -16.16, -79.36, Floor(%floor%).Altitude, -21.92, -83.04, Floor(%floor%).Altitude, -20.64, -100.64, Floor(%floor%).Altitude, -46.24, -112.95, Floor(%floor%).Altitude, -48.4, -112.95, Floor(%floor%).Altitude, -11.7, 0, 0
+    AddCustomWall floor, Left Complex Floor 4, Carpet1, -166.3, Floor(%floor%).Altitude, -48.4, -119.7, Floor(%floor%).Altitude, -48.4, -119.7, Floor(%floor%).Altitude, -84.4, -166.3, Floor(%floor%).Altitude, -84.4, 0, 0
+<EndFloor>
+
+<Floor 6>
+    #Floors/ceilings
+    DrawWalls = true, true, false, false, false, false
+    AddCustomWall floor, Left Complex Floor, Carpet1, -166.3, Floor(%floor%).Altitude, 35.6, -119.7, Floor(%floor%).Altitude, 35.6, -119.7, Floor(%floor%).Altitude, -48.4, -166.3, Floor(%floor%).Altitude, -48.4, -166.3, Floor(%floor%).Altitude, 35.6, 0, 0
+    AddCustomWall floor, Left Complex Floor 3, Carpet1, -166.3, Floor(%floor%).Altitude, -48.4, -119.7, Floor(%floor%).Altitude, -48.4, -119.7, Floor(%floor%).Altitude, -60.4, -166.3, Floor(%floor%).Altitude, -60.4, 0, 0
+<EndFloor>
+
+SetAutoSize = false, false
+hwindow_left(-166.3, Floor(6).Altitude, 59.6 - 36)
+hwindow_left(-166.3, Floor(6).Altitude, 59.6 - 60)
+hwindow_left(-166.3, Floor(6).Altitude, 59.6 - 84)
+hwindow_left(-166.3, Floor(6).Altitude, 59.6 - 108)
+hwindow_left(-166.3, Floor(5).Altitude, 59.6 - 24)
+hwindow_left(-166.3, Floor(5).Altitude, 59.6 - 48)
+hwindow_left(-166.3, Floor(5).Altitude, 59.6 - 72)
+hwindow_left(-166.3, Floor(5).Altitude, 59.6 - 96)
+hwindow_left(-166.3, Floor(5).Altitude, 59.6 - 120)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 12)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 36)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 60)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 84)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 108)
+hwindow_left(-166.3, Floor(4).Altitude, 59.6 - 132)
+hwindow_left(-166.3, Floor(3).Altitude, 59.6 - 24)
+hwindow_left(-166.3, Floor(3).Altitude, 59.6 - 48)
+hwindow_left(-166.3, Floor(3).Altitude, 59.6 - 72)
+hwindow_left(-166.3, Floor(3).Altitude, 59.6 - 96)
+hwindow_left(-166.3, Floor(3).Altitude, 59.6 - 120)
+hwindow_left_bottom(-166.3, Floor(2).Altitude, 59.6 - 36)
+hwindow_left_bottom(-166.3, Floor(2).Altitude, 59.6 - 60)
+hwindow_left_bottom(-166.3, Floor(2).Altitude, 59.6 - 84)
+hwindow_left_bottom(-166.3, Floor(2).Altitude, 59.6 - 108)
+hwindow_left_top(-166.3, Floor(7).Altitude, 59.6 - 48)
+hwindow_left_top(-166.3, Floor(7).Altitude, 59.6 - 72)
+hwindow_left_top(-166.3, Floor(7).Altitude, 59.6 - 96)
+
+#side columns
+entrance_column(-158.3 + 2, 59.6 - 36)
+entrance_column(-158.3 + 2, 59.6 - 60)
+entrance_column(-158.3 + 2, 59.6 - 84)
+entrance_column(-158.3 + 2, 59.6 - 108)
+
+#back columns
+entrance_column(-139.1, 59.6 - 36)
+entrance_column(-119.7 - 2, 59.6 - 36)
+
+ResetTextureMapping = true
+DrawWalls = true, true, false, false, false, false
 
 #Glass Elevator Shaft
 AddShaft 1, 2, -0.24, -41.05, 0, 137
 ShaftCut 1, -18.64, -4.25 + 0.33, 18.64, 4.25, 0, 5
+ShaftShowFloors 1 = 0 - 12
 ShaftShowOutside 1 = 0 - 137
 ShowFullShaft 1 = true
 
