@@ -47,6 +47,7 @@ SetPlanarMapping true, false, false, false
     Load data/windows11e_inside3.gif, MainWindowsInsideDouble, 1, 1
     Load data/windows11e-4.jpg, MainWindows3, 1, 1
     Load data/windows11e_inside4.gif, MainWindows3Inside, 1, 1
+    Load data/stucco22c.jpg, EntranceColumns, 1, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     Load data/symb5.jpg, Marble3, 0.269, 0.25
     Load data/marb047.jpg, Marble4, 0.269, 0.25
@@ -1129,6 +1130,16 @@ SetAutoSize = false, false
     AddCustomWall external, Honeycomb Floor, Carpet1, %param1%, %param2%, %param3% + 12.033, %param1% - 8, %param2%, %param3%, %param1% - 8, %param2%, %param3% + 12.033, 0, 0
     AddCustomWall external, Honeycomb Floor, Carpet1, %param1%, %param2%, %param3% - 12.033, %param1% - 8, %param2%, %param3%, %param1% - 8, %param2%, %param3% - 12.033, 0, 0
     SetAutoSize = false, false
+<EndFunction>
+
+<Function entrance_column>
+    SetAutoSize = true, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall external, Column 1, Entrance Columns, %param1% - 2, %param2%, %param1%, %param2% - 2, %param3%, %param3%, %param4%, %param4%, 0, 0, True
+    AddWall external, Column 2, Entrance Columns, %param1%, %param2% - 2, %param1% + 2, %param2%, %param3%, %param3%, %param4%, %param4%, 0, 0, True
+    DrawWalls = false, true, false, false, false, false
+    AddWall external, Column 3, Entrance Columns, %param1% - 2, %param2%, %param1%, %param2% + 2, %param3%, %param3%, %param4%, %param4%, 0, 0, True
+    AddWall external, Column 4, Entrance Columns, %param1%, %param2% + 2, %param1% + 2, %param2%, %param3%, %param3%, %param4%, %param4%, 0, 0, True
 <EndFunction>
 
 
