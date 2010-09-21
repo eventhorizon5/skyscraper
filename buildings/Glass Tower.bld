@@ -860,6 +860,151 @@ DrawWalls = true, true, false, false, false, false
     if[%floor% > 109 & %floor% < 137] AddCustomWall floor, MainFloor, Marble3, -79.2, %1%, -15.2, %6%, %1%, %7%, %8%, %1%, %9%, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
 <EndFloors>
 
+#Plaza Base
+
+SetAutoSize = false, false
+
+#Front Atrium
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x6, y6, z6, 0, 0, x5, y5, z5, 0, 9.2, x0, y0, z0, 10, 0
+AddCustomWall external, Front Atrium Main, MainWindowsInside, -19.32, Floor(2).Altitude, -134.54, -67.45, Floor(11).Altitude + 3, -51.66, -16.6, Floor(8).Altitude + 9, -52.2, -18.3, Floor(9).Altitude + 2, -48.6, 20.4, Floor(7).Altitude + 7, -44.8, 85.6, Floor(7).Altitude, -14.2, 85.6, Floor(2).Altitude, -73.14, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x0, y0, z0, 0, 0, x1, y1, z1, 0, 9.2, x6, y6, z6, 10, 0
+AddCustomWall external, Front Atrium Main, MainWindows2, -19.32, Floor(2).Altitude, -134.54, -67.45, Floor(11).Altitude + 3, -51.66, -16.6, Floor(8).Altitude + 9, -52.2, -18.3, Floor(9).Altitude + 2, -48.6, 20.4, Floor(7).Altitude + 7, -44.8, 85.6, Floor(7).Altitude, -14.2, 85.6, Floor(2).Altitude, -73.14, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x0, y0, z0, 0, 0, x5, y5, z5, -6, 6, x4, y4, z4, -6, 13.5
+AddCustomWall external, Front Atrium Main Left Temp, MainWindowsInside, -113.3, Floor(8).Altitude, -116.47, -153.31, Floor(15).Altitude + 6, -47.37, -100.64, Floor(13).Altitude, -46.24, -98.45, Floor(12).Altitude + 6, -51.37, -67.45, Floor(11).Altitude + 3, -51.66, -19.32, Floor(2).Altitude, -134.54, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x5, y5, z5, 0, 0, x0, y0, z0, -6, 6, x1, y1, z1, -6, 13.5
+AddCustomWall external, Front Atrium Main Left Temp, MainWindows2, -113.3, Floor(8).Altitude, -116.47, -153.31, Floor(15).Altitude + 6, -47.37, -100.64, Floor(13).Altitude, -46.24, -98.45, Floor(12).Altitude + 6, -51.37, -67.45, Floor(11).Altitude + 3, -51.66, -19.32, Floor(2).Altitude, -134.54, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x1, y1, z1, 0, 0, x0, y0, z0, 0, 8, x2, y2, z2, -7.5, 13.5
+AddCustomWall external, Front Arium Left Side, Backing, -153.31, Floor(2).Altitude, -47.37, -153.31, Floor(15).Altitude + 6, -47.37, -113.3, Floor(8).Altitude, -116.47, -113.3, Floor(2).Altitude, -116.47, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x2, y2, z2, 0, 0, x3, y3, z3, 0, 8, x1, y1, z1, -7.5, 13.5
+AddCustomWall external, Front Arium Left Side, Backing, -153.31, Floor(2).Altitude, -47.37, -153.31, Floor(15).Altitude + 6, -47.37, -113.3, Floor(8).Altitude, -116.47, -113.3, Floor(2).Altitude, -116.47, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x2, y2, z2, 0, 0, x1, y1, z1, 0, 8, x0, y0, z0, 6, 8
+AddCustomWall external, Front Arium Front Side Temp, Backing, -113.3, Floor(2).Altitude, -116.47, -113.3, Floor(8).Altitude, -116.47, -19.32, Floor(2).Altitude, -134.54, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x0, y0, z0, 0, 0, x1, y1, z1, 0, 8, x2, y2, z2, 6, 8
+AddCustomWall external, Front Arium Front Side Temp, Backing, -113.3, Floor(2).Altitude, -116.47, -113.3, Floor(8).Altitude, -116.47, -19.32, Floor(2).Altitude, -134.54, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x3, y3, z3, 0, 0, x2, y2, z2, 0, 13.5, x0, y0, z0, 4, 0
+AddCustomWall external, Front Atrium Rear, Backing, -153.31, Floor(2).Altitude, -47.37, -153.31, Floor(15).Altitude, -47.37, -100.64, Floor(13).Altitude, -46.24, -100.64, Floor(2).Altitude, -46.24, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x0, y0, z0, 0, 0, x1, y1, z1, 0, 13.5, x3, y3, z3, 4, 0
+AddCustomWall external, Front Atrium Rear, Backing, -153.31, Floor(2).Altitude, -47.37, -153.31, Floor(15).Altitude + 6, -47.37, -100.64, Floor(13).Altitude, -46.24, -100.64, Floor(2).Altitude, -46.24, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Front Atrium Right Temp, Backing, 85.6, Floor(0).Altitude, -14.2, 85.6, Floor(7).Altitude, -14.2, 85.6, Floor(2).Altitude, -73.14, 85.6, Floor(0).Altitude, -73.14, 0, 0
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Front Atrium Right Temp, Backing, 85.6, Floor(0).Altitude, -14.2, 85.6, Floor(7).Altitude, -14.2, 85.6, Floor(2).Altitude, -73.14, 85.6, Floor(0).Altitude, -73.14, 0, 0
+
+ResetTextureMapping = true
+<Floors 0 to 1>
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Atrium Base Left, MainWindowsInside, 0, -153.31, -47.37, -113.3, -116.47, %fullheight%, %fullheight%, 0, 0, 7.5, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Atrium Base Left, MainWindows2, 0, -153.31, -47.37, -113.3, -116.47, %fullheight%, %fullheight%, 0, 0, 7.5, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Atrium Base Front Left, MainWindowsInside, 0, -113.3, -116.47, -19.32, -134.54, %fullheight%, %fullheight%, 0, 0, 6, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Atrium Base Front Left, MainWindows2, 0, -113.3, -116.47, -19.32, -134.54, %fullheight%, %fullheight%, 0, 0, 6, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Atrium Base Front, MainWindowsInside, 0, -19.32, -134.54, 85.6, -73.14, %fullheight%, %fullheight%, 0, 0, 10, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Atrium Base Front, MainWindows2, 0, -19.32, -134.54, 85.6, -73.14, %fullheight%, %fullheight%, 0, 0, 10, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front Atrium Rear, MainWindows2, 0, -153.31, -47.37, -100.64, -46.24, %fullheight%, %fullheight%, 0, 0, 4, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front Atrium Rear, MainWindowsInside, 0, -153.31, -47.37, -100.64, -46.24, %fullheight%, %fullheight%, 0, 0, 4, 0, true
+<EndFloors>
+
+#Rear Atrium
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Rear Atrium Interior Left, Backing, -119.7, Floor(2).Altitude, -1.1, -119.7, Floor(6).Altitude, -1.1, -112.95, Floor(7).Altitude + 6, -11.7, -112.95, Floor(2).Altitude, -11.7, 0, 0
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Rear Atrium Interior Left, Backing, -119.7, Floor(2).Altitude, -1.1, -119.7, Floor(6).Altitude, -1.1, -112.95, Floor(7).Altitude + 6, -11.7, -112.95, Floor(2).Altitude, -11.7, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Rear Atrium Interior Center, Backing, -112.95, Floor(2).Altitude, -11.7, -112.95, Floor(7).Altitude + 6, -11.7, -85.25, Floor(6).Altitude + 6, 11.35, -85.25, Floor(2).Altitude, 11.35, 0, 0
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Rear Atrium Interior Center, Backing, -112.95, Floor(2).Altitude, -11.7, -112.95, Floor(7).Altitude + 6, -11.7, -85.25, Floor(6).Altitude + 6, 11.35, -85.25, Floor(2).Altitude, 11.35, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Rear Atrium Interior Center Temp, Backing, -85.25, Floor(0).Altitude, 11.35, -85.25, Floor(6).Altitude + 6, 11.35, -48.64, Floor(5).Altitude + 8, 43.2, -48.64, Floor(0).Altitude, 43.2, 0, 0
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Rear Atrium Interior Center Temp, Backing, -85.25, Floor(0).Altitude, 11.35, -85.25, Floor(6).Altitude + 6, 11.35, -48.64, Floor(5).Altitude + 8, 43.2, -48.64, Floor(0).Altitude, 43.2, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Rear Atrium Left Temp, Backing, -119.7, Floor(0).Altitude, 47.2, -119.7, Floor(2).Altitude, 47.2, -119.7, Floor(6).Altitude, -1.1, -119.7, Floor(0).Altitude, -1.1, 0, 0
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Rear Atrium Left Temp, Backing, -119.7, Floor(0).Altitude, 47.2, -119.7, Floor(2).Altitude, 47.2, -119.7, Floor(6).Altitude, -1.1, -119.7, Floor(0).Altitude, -1.1, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x0, y0, z0, 0, 0, x1, y1, z1, 0, 5.5, x6, y6, z6, 10, 0
+AddCustomWall external, Rear Atrium Main, MainWindows2, -13.6, Floor(2).Altitude, 105.9, 14.25, Floor(7).Altitude + 6, 56.2, -18.88, Floor(5).Altitude, 68.8, -48.64, Floor(5).Altitude + 8, 43.2, -112.95, Floor(7).Altitude + 6, -11.7, -119.7, Floor(6).Altitude, -1.1, -119.7, Floor(2).Altitude, 47.2, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x6, y6, z6, 0, 0, x5, y5, z5, 0, 5.5, x0, y0, z0, 10, 0
+AddCustomWall external, Rear Atrium Main, MainWindowsInside, -13.6, Floor(2).Altitude, 105.9, 14.25, Floor(7).Altitude + 6, 56.2, -18.88, Floor(5).Altitude, 68.8, -48.64, Floor(5).Altitude + 8, 43.2, -112.95, Floor(7).Altitude + 6, -11.7, -119.7, Floor(6).Altitude, -1.1, -119.7, Floor(2).Altitude, 47.2, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+SetTextureMapping2 x4, y4, z4, 0, 0, x0, y0, z0, 4, 4, x1, y1, z1, 4, 11.5
+AddCustomWall external, Rear Atrium Main Right Temp, MainWindows2, 49.6, Floor(6).Altitude, 94.4, 87.05, Floor(13).Altitude + 6, 27.7, 40.64, Floor(9).Altitude + 10, 46.08, 14.25, Floor(7).Altitude + 6, 56.2, -13.6, Floor(2).Altitude, 105.9, 0, 0
+DrawWalls = true, false, false, false, false, false
+SetTextureMapping2 x0, y0, z0, 0, 0, x4, y4, z4, 4, 4, x3, y3, z3, 4, 11.5
+AddCustomWall external, Rear Atrium Main Right Temp, MainWindowsInside, 49.6, Floor(6).Altitude, 94.4, 87.05, Floor(13).Altitude + 6, 27.7, 40.64, Floor(9).Altitude + 10, 46.08, 14.25, Floor(7).Altitude + 6, 56.2, -13.6, Floor(2).Altitude, 105.9, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Rear Atrium Back Right, Backing, 49.6, Floor(2).Altitude, 94.4, 49.6, Floor(6).Altitude, 94.4, -13.6, Floor(2).Altitude, 105.9, 0, 0
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Rear Atrium Back Right, Backing, 49.6, Floor(2).Altitude, 94.4, 49.6, Floor(6).Altitude, 94.4, -13.6, Floor(2).Altitude, 105.9, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Rear Atrium Side, Backing, 87.05, Floor(2).Altitude, 27.7, 87.05, Floor(13).Altitude + 6, 27.7, 49.6, Floor(6).Altitude, 94.4, 49.6, Floor(2).Altitude, 94.4, 0, 0
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Rear Atrium Side, Backing, 87.05, Floor(2).Altitude, 27.7, 87.05, Floor(13).Altitude + 6, 27.7, 49.6, Floor(6).Altitude, 94.4, 49.6, Floor(2).Altitude, 94.4, 0, 0
+
+DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Rear Atrium Interior Right, Backing, 87.05, Floor(2).Altitude, 27.7, 87.05, Floor(13).Altitude + 6, 27.7, 40.64, Floor(9).Altitude + 10, 46.08, 40.64, Floor(2).Altitude, 46.08, 0, 0
+DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Rear Atrium Interior Right, Backing, 87.05, Floor(2).Altitude, 27.7, 87.05, Floor(13).Altitude + 6, 27.7, 40.64, Floor(9).Altitude + 10, 46.08, 40.64, Floor(2).Altitude, 46.08, 0, 0
+
+ResetTextureMapping = true
+<Floors 0 to 1>
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Interior Left, MainWindowsInside, 0, -119.7, -1.1, -112.95, -11.7, %fullheight%, %fullheight%, 0, 0, 1.5, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Interior Left, MainWindows2, 0, -119.7, -1.1, -112.95, -11.7, %fullheight%, %fullheight%, 0, 0, 1.5, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Interior Center, MainWindowsInside, 0, -112.95, -11.7, -85.25, 11.35, %fullheight%, %fullheight%, 0, 0, 3, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Interior Center, MainWindows2, 0, -112.95, -11.7, -85.25, 11.35, %fullheight%, %fullheight%, 0, 0, 3, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Interior Right, MainWindowsInside, 0, 40.64, 46.08, 87.05, 27.7, %fullheight%, %fullheight%, 0, 0, 3.5, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Interior Right, MainWindows2, 0, 40.64, 46.08, 87.05, 27.7, %fullheight%, %fullheight%, 0, 0, 3.5, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Main, MainWindows2, 0, -119.7, 47.2, -13.6, 105.9, %fullheight%, %fullheight%, 0, 0, 10, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Main, MainWindowsInside, 0, -119.7, 47.2, -13.6, 105.9, %fullheight%, %fullheight%, 0, 0, 10, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Right, MainWindows2, 0, -13.6, 105.9, 49.6, 94.4, %fullheight%, %fullheight%, 0, 0, 4, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Right, MainWindowsInside, 0, -13.6, 105.9, 49.6, 94.4, %fullheight%, %fullheight%, 0, 0, 4, 0, true
+    DrawWalls = false, true, false, false, false, false
+    AddWall Rear Atrium Base Side, MainWindows2, 0, 87.05, 27.7, 49.6, 94.4, %fullheight%, %fullheight%, 0, 0, 7.5, 0, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Rear Atrium Base Side, MainWindowsInside, 0, 87.05, 27.7, 49.6, 94.4, %fullheight%, %fullheight%, 0, 0, 7.5, 0, true
+<EndFloors>
+
+ResetTextureMapping = true
+DrawWalls = true, true, false, false, false, false
 
 #Glass Elevator Shaft
 AddShaft 1, 2, -0.24, -41.05, 0, 137
