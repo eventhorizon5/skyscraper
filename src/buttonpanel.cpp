@@ -191,6 +191,9 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	//AcpOff
 	//FanOn
 	//FanOff
+	//MusicOn
+	//MusicOff
+	//Hold
 
 	float xpos = 0, ypos = 0, zpos = 0;
 
