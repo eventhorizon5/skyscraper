@@ -323,6 +323,7 @@ public:
 	csVector2* GetTexels(csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<CS::Geometry::csContour3> &vertices);
 	int ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, csRef<iRenderBuffer> indices, iMaterialWrapper* material, const char *name, bool add);
 	int FindMatchingSubMesh(csRefArray<iGeneralMeshSubMesh> &submeshes, iMaterialWrapper *material);
+	void DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted_indices);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh

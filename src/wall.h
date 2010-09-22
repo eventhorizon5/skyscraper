@@ -42,7 +42,6 @@ public:
 	void DeleteVertices(csArray<int> &deleted_indices);
 	csString ProcessName(const char *name);
 	int GetHandleCount();
-	void DeleteVertices(iRenderBuffer *deleted_indices);
 	WallPolygon* GetHandle(int index);
 
 	//mesh wrapper
@@ -59,8 +58,6 @@ public:
 
 	//parent submesh array
 	csRefArray<iGeneralMeshSubMesh> *submesh_array;
-
-private:
 
 	csArray<WallPolygon> handles;
 };

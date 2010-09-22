@@ -250,8 +250,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 			continue;
 
 		//get name and vertex array
-		iGeneralMeshSubMesh* handle = wall->GetHandle(i)->GetSubMesh();
-		csString name = handle->GetName();
+		csString name = wall->GetHandle(i)->name;
 		csArray<CS::Geometry::csContour3>* origpolys = &wall->GetHandle(i)->geometry;
 		csArray<CS::Geometry::csContour3> newpolys;
 
@@ -1190,4 +1189,114 @@ iGeneralMeshSubMesh* WallPolygon::GetSubMesh()
 	//return the submesh this polygon is in
 	int index = sbs->FindMatchingSubMesh(*submeshes, material);
 	return submeshes->Get(index);
+}
+
+void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted_indices)
+{
+	//delete related mesh vertices using provided index array
+	//then reindex all mesh triangle indices in all submeshes.
+	//this should be done after a polygon is deleted
+	//also, all wall objects in wall arrays must have the same mesh state
+
+	//exit if wall array is empty
+	if (wallarray.GetSize() == 0)
+		return;
+
+	//get integer array of triangle indices
+	csArray<int> indices;
+	int* buffer2 = (int*)deleted_indices->Lock(CS_BUF_LOCK_NORMAL);
+	for (int i = 0; i < deleted_indices->GetElementCount(); i++)
+		indices.Push(buffer2[i]);
+	deleted_indices->Release();
+
+	iGeneralFactoryState *state = wallarray[0]->state;
+
+	//set up new geometry arrays
+	csDirtyAccessArray<csVector3> mesh_vertices;
+	csDirtyAccessArray<csVector2> mesh_texels;
+	csDirtyAccessArray<csVector3> mesh_normals;
+	csDirtyAccessArray<csColor4> mesh_colors;
+
+	//copy mesh data
+	for (int i = 0; i < state->GetVertexCount(); i++)
+	{
+		mesh_vertices.Push(state->GetVertices()[i]);
+		mesh_texels.Push(state->GetTexels()[i]);
+		mesh_normals.Push(state->GetNormals()[i]);
+		mesh_colors.Push(state->GetColors()[i]);
+	}
+
+	//construct new sorted and compressed index array
+	csArray<int> deleted2;
+	for (int i = 0; i < indices.GetSize(); i++)
+		deleted2.PushSmart(indices[i]);
+	deleted2.Sort();
+
+	//delete specified vertices
+	for (int i = deleted2.GetSize() - 1; i >= 0; i--)
+	{
+		int index = deleted2[i];
+		mesh_vertices.DeleteIndex(index);
+		mesh_texels.DeleteIndex(index);
+		mesh_normals.DeleteIndex(index);
+		mesh_colors.DeleteIndex(index);
+	}
+
+	//refill original mesh data
+	state->SetVertexCount(mesh_vertices.GetSize());
+	for (int i = 0; i < mesh_vertices.GetSize(); i++)
+	{
+		state->GetVertices()[i] = mesh_vertices[i];
+		state->GetTexels()[i] = mesh_texels[i];
+		state->GetNormals()[i] = mesh_normals[i];
+		state->GetColors()[i] = mesh_colors[i];
+	}
+
+	//reindex triangle indices in all submeshes
+	for (int i = 0; i < state->GetSubMeshCount(); i++)
+	{
+		iRenderBuffer *indices = state->GetSubMesh(i)->GetIndices();
+
+		if (!indices)
+			continue;
+
+		int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
+
+		for (int j = 0; j < indices->GetElementCount(); j++)
+		{
+			for (int k = deleted2.GetSize() - 1; k >= 0; k--)
+			{
+				if (indices2[j] >= deleted2[k])
+					indices2[j]--;
+			}
+		}
+		indices->Release();
+	}
+
+	//reindex triangle indices in all wall objects
+	for (int i = 0; i < wallarray.GetSize(); i++)
+	{
+		if (!wallarray[i])
+			continue;
+
+		for (int j = 0; j < wallarray[i]->handles.GetSize(); j++)
+		{
+			csRef<iRenderBuffer> indices = wallarray[i]->handles[j].triangles;
+
+			if (!indices)
+				continue;
+
+			int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
+
+			for (int k = 0; k < indices->GetElementCount(); k++)
+			{
+				for (int m = deleted2.GetSize() - 1; m >= 0; m--)
+				{
+					if (indices2[k] >= deleted2[m])
+						indices2[k]--;
+				}
+			}
+			indices->Release();
+		}
+	}
 }
