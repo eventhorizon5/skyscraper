@@ -3654,7 +3654,6 @@ void SBS::RemoveStairs(Stairs *stairs)
 			return;
 		}
 	}
-	return csVector3(0, 0, 0);
 }
 
 void SBS::RemoveSound(Sound *sound)

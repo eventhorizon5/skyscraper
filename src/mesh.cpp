@@ -652,6 +652,7 @@ csVector3 SBS::GetPolygonDirection(csPoly3D &polygon)
 		else
 			return csVector3(0, 0, -1);
 	}
+	return csVector3(0, 0, 0);
 }
 
 csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
