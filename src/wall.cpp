@@ -27,6 +27,7 @@
 #include "sbs.h"
 #include "wall.h"
 #include "unix.h"
+#include <csgfx/renderbuffer.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 
@@ -117,12 +118,19 @@ int WallObject::CreateHandle(csRef<iRenderBuffer> triangles, csArray<CS::Geometr
 	int i = handles.GetSize();
 	handles.SetSize(handles.GetSize() + 1);
 	handles[i].submeshes = submesh_array;
-	handles[i].triangles = triangles;
 	handles[i].geometry = vertices;
 	handles[i].t_matrix = tex_matrix;
 	handles[i].t_vector = tex_vector;
 	handles[i].material = material;
 	handles[i].name = name;
+
+	//copy triangle data into new buffer (this prevents active buffers from being stored into the handle)
+	int *data = (int*)triangles->Lock(CS_BUF_LOCK_NORMAL);
+	int size = triangles->GetElementCount();
+	handles[i].triangles = csRenderBuffer::CreateIndexRenderBuffer(size, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, triangles->GetRangeStart(), triangles->GetRangeEnd());
+	handles[i].triangles->CopyInto(data, size);
+	triangles->Release();
+
 	return i;
 }
 

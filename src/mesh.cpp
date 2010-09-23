@@ -1055,7 +1055,7 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 	csRef<iGeneralMeshSubMesh> submesh = submeshes[index];
 
 	//set up buffer to original triangle indices
-	csRef<iRenderBuffer> buffer = submesh->GetIndices();
+	iRenderBuffer *buffer = submesh->GetIndices();
 
 	//get triangle counts
 	int buffercount = buffer->GetElementCount() / 3;
