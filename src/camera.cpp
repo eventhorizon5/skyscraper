@@ -304,6 +304,10 @@ void Camera::CheckShaft()
 	for (int i = 1; i <= sbs->Shafts(); i++)
 	{
 		Shaft *shaft = sbs->GetShaft(i);
+
+		if (!shaft)
+			continue; //skip if shaft doesn't exist
+
 		if (shaft->IsInShaft(GetPosition()) == true)
 		{
 			if (shaft->InsideShaft == false && sbs->InElevator == false)
