@@ -315,14 +315,14 @@ void Sound::Load(const char *filename, bool force)
 	csRef<iDataBuffer> sndbuffer = sbs->vfs->ReadFile(full_filename.GetData());
 	if (!sndbuffer)
 	{
-		sbs->ReportError("Can't load file '%s'", filename);
+		sbs->ReportError("Can't load file '" + Filename + "'");
 		return;
 	}
 
 	csRef<iSndSysData> snddata = sbs->sndloader->LoadSound(sndbuffer);
 	if (!snddata)
 	{
-		sbs->ReportError("Can't load sound '%s'", filename);
+		sbs->ReportError("Can't load sound '" + Filename + "'");
 		return;
 	}
 	sndwrapper->SetData(snddata);
@@ -330,20 +330,20 @@ void Sound::Load(const char *filename, bool force)
 	sndstream = sbs->sndrenderer->CreateStream(sndwrapper->GetData(), CS_SND3D_ABSOLUTE);
 	if (!sndstream)
 	{
-		sbs->ReportError("Can't create stream for '%s'", filename);
+		sbs->ReportError("Can't create stream for '" + Filename + "'");
 		return;
 	}
 
 	sndsource = sbs->sndrenderer->CreateSource(sndstream);
 	if (!sndsource)
 	{
-		sbs->ReportError("Can't create source for '%s'", filename);
+		sbs->ReportError("Can't create source for '" + Filename + "'");
 		return;
 	}
 	sndsource3d = scfQueryInterface<iSndSysSource3D> (sndsource);
 	if (!sndsource3d)
 	{
-		sbs->ReportError("Can't create 3D source for '%s'", filename);
+		sbs->ReportError("Can't create 3D source for '" + Filename + "'");
 		return;
 	}
 	directional = scfQueryInterface<iSndSysSource3DDirectionalSimple> (sndsource);
