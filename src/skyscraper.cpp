@@ -27,6 +27,7 @@
 
 #include <wx/wx.h>
 #include <crystalspace.h>
+#include <csver.h>
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
@@ -462,8 +463,12 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 		ReportError("Failed to locate sound manager");
 		DisableSound = true;
 	}
+#if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 4
 	csRef<iBase> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
-	//csRef<iComponent> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
+#endif
+#if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 9
+	csRef<iComponent> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
+#endif
 	if (!plug) return ReportError ("Failed to locate BugPlug!");
 	plug->IncRef ();
 
