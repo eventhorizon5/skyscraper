@@ -672,6 +672,12 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 	//create a default material (otherwise the system complains if a mesh is used without a material)
 	mesh->GetMeshObject()->SetMaterialWrapper(engine->GetMaterialList()->FindByName("Default"));
 
+	/*csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
+	state->SetLighting(false);
+	state->SetShadowCasting(false);
+	state->SetShadowReceiving(false);
+	state->SetManualColors(false);*/
+
 	return mesh;
 }
 
@@ -834,7 +840,7 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 			triangleData[location] = tri; //add triangle to submesh buffer
 			location++;
 		}
-		location2 += trimesh[i].GetVertexCount();;
+		location2 += trimesh[i].GetVertexCount();
 	}
 
 	//finish with submesh buffer
