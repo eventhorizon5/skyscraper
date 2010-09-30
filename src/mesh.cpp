@@ -810,6 +810,11 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 		}
 	}
 
+	//delete texel array
+	if (table)
+		delete table;
+	table = 0;
+
 	//get number of existing vertices before adding any
 	int count = state->GetVertexCount();
 
