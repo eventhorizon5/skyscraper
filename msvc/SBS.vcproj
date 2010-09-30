@@ -254,6 +254,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\light.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\mesh.cpp"
 				>
 			</File>
@@ -333,6 +337,10 @@
 			</File>
 			<File
 				RelativePath="..\src\globals.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\light.h"
 				>
 			</File>
 			<File

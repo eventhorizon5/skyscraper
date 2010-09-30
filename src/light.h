@@ -23,21 +23,28 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_OBJECT_H
-#define _SBS_OBJECT_H
+#ifndef _SBS_LIGHT_H
+#define _SBS_LIGHT_H
 
 #include <csutil/csstring.h>
-#include <csutil/array.h>
+#include <iengine/light.h>
 
 class SBSIMPEXP Light
 {
 public:
 
-	//functions
-	Light();
-	~Light();
+	csString Name;
+	int Type;
 
-protected:
+	//functions
+	Light(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, bool dynamic_color, bool movable);
+	~Light();
+	void SetDirectionalCutoffRadius(float radius);
+	void SetSpotLightFalloff(float inner, float outer);
+
+private:
+
+	csRef<iLight> light;
 };
 
 #endif
