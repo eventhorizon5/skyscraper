@@ -1165,8 +1165,6 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 
 	//delete old submesh
 	state->DeleteSubMesh(submesh);
-	submesh = 0;
-	submeshes[index] = 0;
 	submeshes.DeleteIndex(index);
 
 	//create submesh
