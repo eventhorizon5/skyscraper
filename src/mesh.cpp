@@ -249,6 +249,10 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 		if (ignorecheck == true)
 			continue;
 
+		//skip if wall's geometry has been purged
+		if (wall->purged == true)
+			continue;
+
 		//get name and vertex array
 		csString name = wall->GetHandle(i)->name;
 		csArray<CS::Geometry::csContour3>* origpolys = &wall->GetHandle(i)->geometry;
@@ -823,6 +827,11 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], csColor4(1, 1, 1));
 		//state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], csColor4(0, 0, 0)); //for lighted
 
+	//delete arrays
+	mesh_vertices.DeleteAll();
+	mesh_texels.DeleteAll();
+	mesh_normals.DeleteAll();
+
 	//set up triangle buffer
 	int tricount = 0;
 	for (int i = 0; i < trimesh.GetSize(); i++)
@@ -960,7 +969,6 @@ bool SBS::ComputeTextureSpace(csMatrix3 &m, csVector3 &v, const csVector3 &v_ori
 	float det = m.Determinant ();
 	if (ABS (det) < SMALL_EPSILON)
 	{
-		// @@@ Warning?
 		m.Identity();
 		return false;
 	}
@@ -1084,8 +1092,6 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 	{
 		buffer = 0;
 		state->DeleteSubMesh(submesh);
-		submesh = 0;
-		submeshes[index] = 0;
 		submeshes.DeleteIndex(index);
 		return -1;
 	}
@@ -1241,6 +1247,8 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 		deleted2.PushSmart(indices[i]);
 	deleted2.Sort();
 
+	indices.DeleteAll();
+
 	//delete specified vertices
 	for (int i = deleted2.GetSize() - 1; i >= 0; i--)
 	{
@@ -1260,6 +1268,11 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 		state->GetNormals()[i] = mesh_normals[i];
 		state->GetColors()[i] = mesh_colors[i];
 	}
+
+	mesh_vertices.DeleteAll();
+	mesh_texels.DeleteAll();
+	mesh_normals.DeleteAll();
+	mesh_colors.DeleteAll();
 
 	//reindex triangle indices in all submeshes
 	for (int i = 0; i < state->GetSubMeshCount(); i++)

@@ -1711,6 +1711,8 @@ int SBS::CreateSky(const char *filenamebase)
 
 	sbs->ResetTextureMapping();
 	delete wall;
+
+	DeleteGeometry();
 	return firstidx;
 }
 
@@ -3716,4 +3718,23 @@ bool SBS::FileExists(const char *filename, bool relative)
 	if (verify != file)
 		return true;
 	return false;
+}
+
+void SBS::AddWallHandle(WallObject* handle)
+{
+	//add wall handle to internal array
+	WallArray.Push(handle);
+}
+
+void SBS::DeleteWallHandle(WallObject* handle)
+{
+	//delete wall handle from internal array
+	WallArray.Delete(handle);
+}
+
+void SBS::DeleteGeometry()
+{
+	//delete geometry buffers in all wall objects
+	for (int i = 0; i < WallArray.GetSize(); i++)
+		WallArray[i]->DeleteGeometry();
 }

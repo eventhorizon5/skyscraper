@@ -37,10 +37,12 @@ WallObject::WallObject(csRef<iMeshWrapper> wrapper, csRefArray<iGeneralMeshSubMe
 	meshwrapper = wrapper;
 	state = scfQueryInterface<iGeneralFactoryState>(wrapper->GetFactory()->GetMeshObjectFactory());
 	submesh_array = &submeshes;
+	purged = false;
 
 	//if proxy object is set, set object's number as proxy object's number
 	if (proxy)
 		Number = proxy->GetNumber();
+	sbs->AddWallHandle(this);
 }
 
 WallObject::~WallObject()
@@ -50,6 +52,8 @@ WallObject::~WallObject()
 	if (sbs->FastDelete == false && parent_array && parent_deleting == false && Temporary == false)
 		parent_array->Delete(this);
 
+	if (sbs->FastDelete == false)
+		sbs->DeleteWallHandle(this);
 	handles.DeleteAll();
 }
 
@@ -202,4 +206,15 @@ WallPolygon* WallObject::GetHandle(int index)
 	if (index > -1 && index < handles.GetSize())
 		return &handles[index];
 	return 0;
+}
+
+void WallObject::DeleteGeometry()
+{
+	//delete handle data for all handles
+	purged = true;
+	for (int i = 0; i < handles.GetSize(); i++)
+	{
+		handles[i].geometry.DeleteAll();
+		handles[i].triangles = 0;
+	}
 }

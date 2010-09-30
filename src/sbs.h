@@ -324,6 +324,9 @@ public:
 	int ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, csRef<iRenderBuffer> indices, iMaterialWrapper* material, const char *name, bool add);
 	int FindMatchingSubMesh(csRefArray<iGeneralMeshSubMesh> &submeshes, iMaterialWrapper *material);
 	void DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted_indices);
+	void DeleteGeometry();
+	void AddWallHandle(WallObject* handle);
+	void DeleteWallHandle(WallObject* handle);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -448,6 +451,9 @@ private:
 
 	//floor auto area array
 	csArray<AutoArea> FloorAutoArea;
+
+	//wall array
+	csArray<WallObject*> WallArray;
 
 	//generic sound objects
 	csArray<Sound*> sounds;

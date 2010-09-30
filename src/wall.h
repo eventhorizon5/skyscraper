@@ -43,6 +43,7 @@ public:
 	csString ProcessName(const char *name);
 	int GetHandleCount();
 	WallPolygon* GetHandle(int index);
+	void DeleteGeometry();
 
 	//mesh wrapper
 	csRef<iMeshWrapper> meshwrapper;
@@ -60,6 +61,8 @@ public:
 	csRefArray<iGeneralMeshSubMesh> *submesh_array;
 
 	csArray<WallPolygon> handles;
+
+	bool purged;
 };
 
 #endif
