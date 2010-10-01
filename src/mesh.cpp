@@ -98,40 +98,34 @@ csVector2 SBS::GetExtents(csRef<iMeshWrapper> mesh, int coord)
 	return GetExtents(state->GetVertices(), state->GetVertexCount(), coord);
 }
 
-csVector3 SBS::GetPoint(csRef<iMeshWrapper> mesh, const char *polyname, const csVector3 &start, const csVector3 &end)
+csVector3 SBS::GetPoint(csArray<WallObject*> &wallarray, const char *polyname, const csVector3 &start, const csVector3 &end)
 {
 	//do a line intersection with a specified mesh, and return
 	//the intersection point
-	int polyindex = -1;
 
-	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
-	for (int i = 0; i < state->GetSubMeshCount(); i++)
+	int index = -1;
+	int index2 = -1;
+	for (int i = 0; i < wallarray.GetSize(); i++)
 	{
-		csString tmpname = state->GetSubMesh(i)->GetName();
-		if (tmpname.Find("(") == 0)
+		index2 = wallarray[i]->FindPolygon(polyname);
+		if (index2 > -1)
 		{
-			//strip object number
-			int loc = tmpname.Find(")");
-			tmpname.DeleteAt(0, loc + 1);
-		}
-		if (polyname == tmpname)
-		{
-			polyindex = i;
+			index = i;
 			break;
 		}
 	}
 
-	if (polyindex >= 0)
+	if (index >= 0)
 	{
 		//do a plane intersection with a line
 		csVector3 isect;
 		float dist;
-////////////////////////////////
-//BROKEN
-////////////////////////////////
-		/*csPlane3 plane = state->GetPolygonObjectPlane(polyindex);
-		csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), plane, isect, dist);
-		return ToLocal(isect);*/
+		csPoly3D original;
+		for (int i = 0; i < wallarray[index]->GetHandle(index2)->geometry[0].GetSize(); i++)
+			original.AddVertex(wallarray[index]->GetHandle(index2)->geometry[0][i]);
+
+		csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), original.ComputePlane(), isect, dist);
+		return ToLocal(isect);
 	}
 	return 0;
 }
@@ -505,7 +499,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 			}
 		}
 
-		//create new submesh
+		//create new polygon
 		if (polycheck == true && newpolys.GetSize() > 0)
 		{
 			//get texture data from original polygon
@@ -514,10 +508,10 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 			csMatrix3 mapping;
 			wall->GetHandle(i)->GetTextureMapping(mapping, oldvector);
 
-			//delete original submesh
+			//delete original polygon
 			wall->DeletePolygon(i, false);
 
-			//create new submesh
+			//create new polygon
 			WallPolygon* handle = 0;
 			handle = wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
 			ignore_list.Push(handle);
@@ -536,11 +530,9 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 	}
 }
 
-csVector3 SBS::GetWallExtents(csRef<iMeshWrapper> mesh, const char *name, float altitude, bool get_max)
+csVector3 SBS::GetWallExtents(csArray<WallObject*> &wallarray, const char *name, float altitude, bool get_max)
 {
 	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut
-
-	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
 
 	csString newname;
 	csString name2 = name;
@@ -562,31 +554,26 @@ csVector3 SBS::GetWallExtents(csRef<iMeshWrapper> mesh, const char *name, float 
 			newname = name2 + ":right";
 
 		int index = -1;
-		for (int j = 0; j < state->GetSubMeshCount(); j++)
+		int index2 = -1;
+		for (int j = 0; j < wallarray.GetSize(); j++)
 		{
-			csString tmpname = state->GetSubMesh(j)->GetName();
-			if (tmpname.Find("(") == 0)
-			{
-				//strip object number
-				int loc = tmpname.Find(")");
-				tmpname.DeleteAt(0, loc + 1);
-			}
-			if (newname == tmpname)
+			index2 = wallarray[j]->FindPolygon(newname);
+			if (index2 > -1)
 			{
 				index = j;
 				break;
 			}
 		}
 
-		/*if (index >= 0)
+		if (index >= 0)
 		{
 			csPoly3D original, tmp1, tmp2;
-			for (int i = 0; i < state->GetPolygonVertexCount(index); i++)
-				original.AddVertex(state->GetPolygonVertex(index, i));
+			for (int i = 0; i < wallarray[index]->GetHandle(index2)->geometry[0].GetSize(); i++)
+				original.AddVertex(wallarray[index]->GetHandle(index2)->geometry[0][i]);
 
 			//if given altitude is outside of polygon's range, return 0
 			csVector2 yextents = GetExtents(original, 2);
-			float tmpaltitude = ToRemote(altitude);
+			float tmpaltitude = altitude;
 			if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
 				return 0;
 
@@ -600,18 +587,18 @@ csVector3 SBS::GetWallExtents(csRef<iMeshWrapper> mesh, const char *name, float 
 			if (get_max == false)
 			{
 				//get minimum extents
-				result.x = ToLocal(GetExtents(original, 1).x);
-				result.z = ToLocal(GetExtents(original, 3).x);
+				result.x = GetExtents(original, 1).x;
+				result.z = GetExtents(original, 3).x;
 			}
 			else
 			{
 				//get maximum extents
-				result.x = ToLocal(GetExtents(original, 1).y);
-				result.z = ToLocal(GetExtents(original, 3).y);
+				result.x = GetExtents(original, 1).y;
+				result.z = GetExtents(original, 3).y;
 			}
 			result.y = altitude;
 			return result;
-		}*/
+		}
 	}
 	return 0;
 }
@@ -777,8 +764,19 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 	//triangulate mesh
 	csArray<csTriangleMesh> trimesh;
 	trimesh.SetSize(vertices2.GetSize());
+
 	for (int i = 0; i < trimesh.GetSize(); i++)
-		CS::Geometry::Triangulate3D::Process(vertices2[i], trimesh[i]);
+	{
+		//first fill triangle mesh with polygon's vertices
+		for (int j = 0; j < vertices2[i].GetSize(); j++)
+			trimesh[i].AddVertex(vertices2[i][j]);
+
+		//then do a (very) simple triangulation
+		//this method is used because it works with non-planar polygons, and the main
+		//Crystal Space triangulation system requires planar polygons
+		for (int j = 2; j < vertices2[i].GetSize(); j++)
+			trimesh[i].AddTriangle(0, j - 1, j);
+	}
 
 	//set up geometry arrays
 	csDirtyAccessArray<csVector3> mesh_vertices;
@@ -1004,56 +1002,6 @@ csVector2* SBS::GetTexels(csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<
 		}
 	}
 	return texels;
-}
-
-csRef<iGeneralMeshSubMesh> SBS::FindSubMesh(csRef<iMeshWrapper> mesh, int index)
-{
-	//find a submesh from the given triangle index and mesh wrapper
-
-	/*csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetMeshObject()->GetFactory());
-	if (state)
-	{
-		if (state->GetSubMeshCount() > 0)
-		{
-			for (int i = 0; i < state->GetSubMeshCount(); i++)
-			{
-				//exit if submesh is invalid
-				if (!state->GetSubMesh(i))
-				{
-					if (sbs->Verbose)
-						sbs->ReportError("FindSubMesh: invalid submesh");
-					return 0;
-				}
-
-				csRef<iRenderBuffer> buffer = state->GetSubMesh(i)->GetIndices();
-				csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
-
-				//exit if index is outside of triangle range
-				if (index > state->GetTriangleCount() - 1)
-				{
-					if (sbs->Verbose)
-						sbs->ReportError("FindSubMesh: triangle index out of range");
-					buffer->Release();
-					return 0;
-				}
-
-				//look through submesh triangles and find a match
-				csTriangle comparison = state->GetTriangles()[index];
-				for (int j = 0; j < buffer->GetElementCount(); j++)
-				{
-					csTriangle comparison2 = triangleData[j];
-					if (comparison.a == comparison2.a && comparison.b == comparison2.b && comparison.c == comparison2.c)
-					{
-						//found a triangle match; release buffer and return submesh
-						buffer->Release();
-						return state->GetSubMesh(i);
-					}
-				}
-				buffer->Release();
-			}
-		}
-	}*/
-	return 0;
 }
 
 int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, csRef<iRenderBuffer> indices, iMaterialWrapper* material, const char *name, bool add)

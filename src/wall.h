@@ -44,6 +44,7 @@ public:
 	int GetHandleCount();
 	WallPolygon* GetHandle(int index);
 	void DeleteGeometry();
+	int FindPolygon(const char *name);
 
 	//mesh wrapper
 	csRef<iMeshWrapper> meshwrapper;

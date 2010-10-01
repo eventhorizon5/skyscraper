@@ -309,16 +309,15 @@ public:
 	csVector2 GetExtents(csPoly3D &varray, int coord);
 	csVector2 GetExtents(const csVector3 *varray, int count, int coord);
 	csVector2 GetExtents(csRef<iMeshWrapper> mesh, int coord);
-	csVector3 GetPoint(csRef<iMeshWrapper> mesh, const char *polyname, const csVector3 &start, const csVector3 &end);
+	csVector3 GetPoint(csArray<WallObject*> &wallarray, const char *polyname, const csVector3 &start, const csVector3 &end);
 	void EnableMesh(csRef<iMeshWrapper> mesh, bool value);
 	iMeshWrapper* AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
 	void Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
-	csVector3 GetWallExtents(csRef<iMeshWrapper> mesh, const char *name, float altitude,  bool get_max);
+	csVector3 GetWallExtents(csArray<WallObject*> &wallarray, const char *name, float altitude,  bool get_max);
 	csVector3 GetPolygonDirection(csPoly3D &polygon);
 	csRef<iMeshWrapper> CreateMesh(const char *name);
 	csRef<iRenderBuffer> PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &tex_matrix, csVector3 &tex_vector);
 	csRef<iRenderBuffer> PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices = true);
-	csRef<iGeneralMeshSubMesh> FindSubMesh(csRef<iMeshWrapper> mesh, int index);
 	bool ComputeTextureMap(csMatrix3 &t_matrix, csVector3 &t_vector, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3);
 	csVector2* GetTexels(csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<CS::Geometry::csContour3> &vertices);
 	int ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, csRef<iRenderBuffer> indices, iMaterialWrapper* material, const char *name, bool add);

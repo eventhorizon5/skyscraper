@@ -218,3 +218,23 @@ void WallObject::DeleteGeometry()
 		handles[i].triangles = 0;
 	}
 }
+
+int WallObject::FindPolygon(const char *name)
+{
+	//find a polygon object by name
+
+	csString name2 = name;
+	for (int i = 0; i < handles.GetSize(); i++)
+	{
+		csString tmpname = handles[i].name;
+		if (tmpname.Find("(") == 0)
+		{
+			//strip object number
+			int loc = tmpname.Find(")");
+			tmpname.DeleteAt(0, loc + 1);
+		}
+		if (name2 == tmpname)
+			return i;
+	}
+	return -1;
+}

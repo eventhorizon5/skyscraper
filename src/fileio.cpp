@@ -1883,21 +1883,21 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		buffer.Downcase();
-		csRef<iMeshWrapper> tmpMesh;
+		csArray<WallObject*> *wall_array;
 		if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level;
+			wall_array = &Simcore->GetFloor(Current)->level_walls;
 		else if (buffer == "elevator")
-			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
+			wall_array = &Simcore->GetElevator(Current)->elevator_walls;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External;
+			wall_array = &Simcore->External_walls;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape;
+			wall_array = &Simcore->Landscape_walls;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings;
+			wall_array = &Simcore->Buildings_walls;
 		else
 			return ScriptError("Invalid object");
 
-		csVector3 isect = Simcore->GetPoint(tmpMesh, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
+		csVector3 isect = Simcore->GetPoint(*wall_array, tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 		tempdata.DeleteAll();
 
 		buffer = csString(LineData).Slice(0, temp5) + csString(wxVariant(isect.x).GetString().ToAscii()) + csString(", ") + csString(wxVariant(isect.y).GetString().ToAscii()) + csString(", ") + csString(wxVariant(isect.z).GetString().ToAscii()) + csString(LineData).Slice(temp4 + 1);
@@ -1923,22 +1923,22 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		buffer.Downcase();
-		csRef<iMeshWrapper> tmpMesh;
+		csArray<WallObject*> *wall_array;
 		if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level;
+			wall_array = &Simcore->GetFloor(Current)->level_walls;
 		else if (buffer == "elevator")
-			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
+			wall_array = &Simcore->GetElevator(Current)->elevator_walls;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External;
+			wall_array = &Simcore->External_walls;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape;
+			wall_array = &Simcore->Landscape_walls;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings;
+			wall_array = &Simcore->Buildings_walls;
 		else
 			return ScriptError("Invalid object");
 
-		MinExtent = Simcore->GetWallExtents(tmpMesh, tempdata[1], atof(tempdata[2]), false);
-		MaxExtent = Simcore->GetWallExtents(tmpMesh, tempdata[1], atof(tempdata[2]), true);
+		MinExtent = Simcore->GetWallExtents(*wall_array, tempdata[1], atof(tempdata[2]), false);
+		MaxExtent = Simcore->GetWallExtents(*wall_array, tempdata[1], atof(tempdata[2]), true);
 		tempdata.DeleteAll();
 	}
 
@@ -1974,21 +1974,21 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		buffer.Downcase();
-		csRef<iMeshWrapper> tmpMesh;
+		csArray<WallObject*> *wall_array;
 		if (buffer == "floor")
-			tmpMesh = Simcore->GetFloor(Current)->Level;
+			wall_array = &Simcore->GetFloor(Current)->level_walls;
 		else if (buffer == "elevator")
-			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
+			wall_array = &Simcore->GetElevator(Current)->elevator_walls;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External;
+			wall_array = &Simcore->External_walls;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape;
+			wall_array = &Simcore->Landscape_walls;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings;
+			wall_array = &Simcore->Buildings_walls;
 		else
 			return ScriptError("Invalid object");
 
-		csVector3 result = Simcore->GetWallExtents(tmpMesh, tempdata[1], atof(tempdata[2]), csString(tempdata[3]).CompareNoCase("true"));
+		csVector3 result = Simcore->GetWallExtents(*wall_array, tempdata[1], atof(tempdata[2]), csString(tempdata[3]).CompareNoCase("true"));
 		tempdata.DeleteAll();
 
 		buffer = csString(LineData).Slice(0, temp5) + csString(wxVariant(result.x).GetString().ToAscii()) + csString(", ") + csString(wxVariant(result.y).GetString().ToAscii()) + csString(", ") + csString(wxVariant(result.z).GetString().ToAscii()) + csString(LineData).Slice(temp4 + 1);
